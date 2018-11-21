@@ -52,7 +52,7 @@ $clempnotaele->rotulo->label();
 $cltabrec->rotulo->label();
 if ($tela_estorno){
 
-   $operacao  = 2;//operacao a ser realizada:1 = liquidacao, 2 estorno
+   $operacao  = 2;//operacao a ser realizada:1 = liquidacao, 2 estorno/
    $labelVal  = "SALDO A ESTORNAR";
    $metodo    = "estornarLiquidacaoAJAX";
 
@@ -197,7 +197,7 @@ if (USE_PCASP) {
      </td>
      <td valign='top' style='padding:0px'>
     <fieldset ><legend><b>&nbsp;Valores do Empenho&nbsp;</b></legend>
-    <table style="width:200px;height:100%" >
+    <table style="width:200px;" >
           <tr><td nowrap><?=@$Le60_vlremp?></td><td align=right><? db_input('e60_vlremp', 12, $Ie60_vlremp, true, 'text', 3, '','','','text-align:right')?></td></tr>
           <tr><td nowrap><?=@$Le60_vlranu?></td><td align=right><? db_input('e60_vlranu', 12, $Ie60_vlranu, true, 'text', 3, '','','','text-align:right')?></td></tr>
           <tr><td nowrap><?=@$Le60_vlrliq?></td><td align=right><? db_input('e60_vlrliq', 12, $Ie60_vlrliq, true, 'text', 3, '','','','text-align:right')?></td></tr>
@@ -562,7 +562,7 @@ function js_saida(oAjax) {
     $('e60_vlrliq').value  = obj.e60_vlrliq;
     $('historico').value   = obj.e60_resumo.urlDecode();
     $('saldodis').value    = obj.saldo_dis;
-    $('e69_numnota').value = 'S/N';
+    $('e69_numnota').value = '';
     $('e69_dtnota').value  = '<?=$db_data;?>';
     saida = '';
     $('dados').innerHTML   = '';
@@ -814,6 +814,7 @@ function js_liquidar(metodo) {
        valorTotal = valorTotal.toFixed(2);
      }
    }
+    
    if (aNotas.length != 0){
 
 
@@ -903,7 +904,11 @@ function js_liquidar(metodo) {
          oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico'));
          oParam.pars       = $F('e60_numemp');
          oParam.z01_credor = $F('e49_numcgm');
+         oParam.cgm = $F('e60_numcgm');
          oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
+         oParam.tipo = $F('e69_notafiscaleletronica');
+         oParam.verificaChave = 1;
+         
 
      var oInfoNota                      = new Object();
          oInfoNota.iCfop                = iCfop;
@@ -916,10 +921,6 @@ function js_liquidar(metodo) {
          oInfoNota.sSerieFiscal         = sSerieFiscal;
 
      oParam.oInfoNota = oInfoNota;
-
-
-
-
 
      url      = 'emp4_liquidacao004.php';
      oAjax    = new Ajax.Request(
@@ -1235,20 +1236,62 @@ function js_tipoChave(iTipoNfe) {
   }else{
     $('e69_chaveacesso').readOnly          = true;
     $('e69_chaveacesso').style.background  = "#DEB887";
+    $('e69_numnota').value = "S/N";
+    $('e69_nfserie').value = "S/N";
   }
 
   // codições para a Nf serie
   if (iTipoNfe == 2 || iTipoNfe == 3) {
     $('e69_nfserie').readOnly           = false;
     $('e69_nfserie').style.background   = "#FFFFFF";
+    if (iTipoNfe == 3) {
+      $('e69_numnota').value = "S/N";
+      $('e69_nfserie').value = "S/N";
+    } else {
+        $('e69_numnota').value = "";
+        $('e69_nfserie').value = "S/N";//
+    }
   }else{
     $('e69_nfserie').readOnly          = true;
     $('e69_nfserie').style.background  = "#DEB887";
+    $('e69_nfserie').value = "";
+    $('e69_numnota').value = "";
   }
 
   $('e69_chaveacesso').value         = "";
-  $('e69_nfserie').value             = "";
 
+}
+
+function novoAjax(params, onComplete) {
+
+  var request = new Ajax.Request('emp4_chaveacessonfe004.RPC.php', {
+    method:'post',
+    parameters:'json='+Object.toJSON(params),
+    onComplete: onComplete
+  });
+
+}
+
+function verificaChave() {
+
+  if ($('e69_notafiscaleletronica').value != 2) {
+      var params = {
+        exec: 'validachave',
+        cgm: $('e60_numcgm').value,
+        chave: $('e69_chaveacesso').value,
+        data: $('e69_dtnota').value,
+        tipo: $('e69_notafiscaleletronica').value,
+        nfe: $('e69_numnota').value
+      };
+      
+      novoAjax(params, function(e) {//31181004930131000129550010000123431322590654 12343
+        var oRetorno = JSON.parse(e.responseText);
+          if (oRetorno.status == 0) {
+            alert(oRetorno.erro);
+            $('e69_chaveacesso').value = '';
+          } 
+      });
+  }
 }
 
 
@@ -1273,9 +1316,9 @@ function js_verificaChaveAcesso(iChaveAcesso) {
     }
   }
 
-  var resto = soma_ponderada % 11;
+  var resto = soma_ponderada % 11;//
   if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
-    return true;
+    return verificaChave();
   } else {
     alert("Chave de Acesso inválida");
     $('e69_chaveacesso').value = '';

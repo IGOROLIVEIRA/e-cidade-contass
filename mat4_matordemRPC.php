@@ -569,7 +569,6 @@ if ($method == "getDados") {
   $_SESSION["matordem{$objJson->m51_codordem}"][$objJson->iCodLanc][$objJson->iIndice]->checked = "";
 
 } else if ($method == "confirmarEntrada") {
-
   try {
 
     db_inicio_transacao();
@@ -685,6 +684,50 @@ if ($method == "getDados") {
         throw new Exception("Saída de material não atendida.");
       }
     }
+    
+    if ($objJson->verificaChave == 1) {
+      $ufs = array(
+
+        11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
+        23 => "CE", 24 => "RN", 25 => "PB", 26 => "PE", 27 => "AL", 28 => "SE", 29 => "BA", 31 => "MG", 32 => "ES",
+        33 => "RJ", 35 => "SP", 41 => "PR", 42 => "SC", 43 => "RS", 50 => "MS", 51 => "MT", 52 => "GO", 53 => "DF"
+      
+      );
+
+      $ufKey   = substr($objJson->sChaveAcesso,0,2);
+      $dataKey = substr($objJson->sChaveAcesso,2,4);
+      $cnpjKey = substr($objJson->sChaveAcesso,6,14);
+      $nfKey   = substr($objJson->sChaveAcesso,25,9);
+
+      $oDaoCgm   = db_utils::getDao("cgm");
+      $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->m51_numcgm);
+      $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
+      $oDadosCgm = db_utils::fieldsMemory($rsCgm,0);
+
+
+      $key  = (array_key_exists($ufKey, $ufs)) ? $ufKey : 0;
+      $data = substr(implode("",array_reverse(explode("/", $objJson->dtDataNota))), 2, 4);
+      
+      if ($ufs[$key] != $oDadosCgm->z01_uf) {
+        throw new Exception("Chave de acesso inválida!\nVerifique a Cidade e o Estado do Fornecedor!");
+      }
+
+      else if (strcmp($data, $dataKey)) {
+        throw new Exception("Chave de acesso inválida!\nVerifique a data da Nota Fiscal!");
+      }
+
+      else if (strcmp(str_pad($objJson->sNumero, 9, "0", STR_PAD_LEFT), $nfKey)) {
+        throw new Exception("Chave de acesso inválida!\nVerifique o Número da Nota!");
+      }
+
+      else if ($objJson->sNotaFiscalEletronica == 1) {
+        if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
+
+          throw new Exception("Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!");
+        }
+      }
+    }
+
     db_fim_transacao(false);
     echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
   }

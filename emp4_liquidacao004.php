@@ -305,6 +305,7 @@ switch ($objJson->method) {
     $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);
     $objEmpenho->setEmpenho($objJson->iEmpenho);
     $objEmpenho->setCredor($z01_credor);
+    $chave = true;
 
     /**
      * Pode ser que o método gerarOrdemCompra retorne false ou um JSON
@@ -321,35 +322,87 @@ switch ($objJson->method) {
       $objJson->e69_notafiscaleletronica,
       $objJson->e69_chaveacesso,
       $objJson->e69_nfserie
+    );
+
+    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1) {
+      $ufs = array(
+
+        11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
+        23 => "CE", 24 => "RN", 25 => "PB", 26 => "PE", 27 => "AL", 28 => "SE", 29 => "BA", 31 => "MG", 32 => "ES",
+        33 => "RJ", 35 => "SP", 41 => "PR", 42 => "SC", 43 => "RS", 50 => "MS", 51 => "MT", 52 => "GO", 53 => "DF"
+      
       );
 
-    if ($oRetorno !== false) {
+      $ufKey   = substr($objJson->e69_chaveacesso,0,2);
+      $dataKey = substr($objJson->e69_chaveacesso,2,4);
+      $cnpjKey = substr($objJson->e69_chaveacesso,6,14);
+      $nfKey   = substr($objJson->e69_chaveacesso,25,9);
+
+      $oDaoCgm   = db_utils::getDao("cgm");
+      $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
+      $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
+      $oDadosCgm = db_utils::fieldsMemory($rsCgm,0);
 
 
-      //caso procedimento com sucesso  vincula o processo administrativo
-      $sProcessoAdministrativo = addslashes(stripslashes(utf8_decode($objJson->e03_numeroprocesso)));
-      $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+      $key  = (array_key_exists($ufKey, $ufs)) ? $ufKey : 0;
+      $data = substr(implode("",array_reverse(explode("/", $objJson->e69_dtnota))), 2, 4);
 
-      if ($oDadosRetorno->erro != 2) {
-
-        if (!empty($sProcessoAdministrativo)) {
-
-          $oDaoPagordemProcesso = new cl_pagordemprocesso();
-          $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
-          $oDaoPagordemProcesso->e03_pagordem = $oDadosRetorno->e50_codord;
-          $oDaoPagordemProcesso->incluir(null);
-          if ($oDaoPagordemProcesso->erro_status == 0) {
-            throw new Exception($oDaoPagordemProcesso->erro_msg);
-          }
-
-        }
-        /**[Extensao OrdenadorDespesa] inclusao_ordenador_2*/
+      if ($ufs[$key] != $oDadosCgm->z01_uf) {
+        $chave = false;
+        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a Cidade e o Estado do Fornecedor!";
       }
 
-      echo $oRetorno;
-    }
-    else {
+      else if (strcmp($data, $dataKey)) {
+        $chave = false;
+        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a data da Nota Fiscal!";
+      }
 
+      else if (strcmp(str_pad($objJson->e69_nota, 9, "0", STR_PAD_LEFT), $nfKey)) {
+        $chave = false;
+        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o Número da Nota!";
+      }
+
+      else if ($objJson->tipo == 1) {
+        if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
+          $chave = false;
+          $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!";
+        }
+      }
+    }
+
+    if ($chave !== false) {
+
+      if ($oRetorno !== false) {
+
+
+        //caso procedimento com sucesso  vincula o processo administrativo
+        $sProcessoAdministrativo = addslashes(stripslashes(utf8_decode($objJson->e03_numeroprocesso)));
+        $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+
+        if ($oDadosRetorno->erro != 2) {
+
+          if (!empty($sProcessoAdministrativo)) {
+
+            $oDaoPagordemProcesso = new cl_pagordemprocesso();
+            $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
+            $oDaoPagordemProcesso->e03_pagordem = $oDadosRetorno->e50_codord;
+            $oDaoPagordemProcesso->incluir(null);
+            if ($oDaoPagordemProcesso->erro_status == 0) {
+              throw new Exception($oDaoPagordemProcesso->erro_msg);
+            }
+
+          }
+          /**[Extensao OrdenadorDespesa] inclusao_ordenador_2*/
+        }
+
+        echo $oRetorno;
+      }
+      else {
+
+        $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
+        echo $json->encode($retorno);
+      }
+    } else {
       $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
       echo $json->encode($retorno);
     }

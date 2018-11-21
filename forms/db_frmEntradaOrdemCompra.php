@@ -194,7 +194,7 @@ if (count($aParametrosEmpenho) > 0) {
      * Acrescentado por causa do sicom
      */
     $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal ou outra',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
-    db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);'");
+    db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);' style='width:315px'");//
     ?>
     </td>
 
@@ -223,7 +223,7 @@ if (count($aParametrosEmpenho) > 0) {
     /**
      * Acrescentado por causa do sicom
      */
-    db_input('e69_chaveacesso', 40, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
+    db_input('e69_chaveacesso', 43, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
     ?>
     </td>
 
@@ -266,7 +266,7 @@ if (count($aParametrosEmpenho) > 0) {
      <td nowrap align="left" title=""><b><?=$Le70_valor;?></b></td>
 	   <td>
 	   <?
-	     db_input('e70_valor', 10, $Ie70_valor, true, 'text', 3, "onblur='js_setValorAlancar()' onKeyUp=\"js_ValidaCampos(this,4,'','','',event)\" ");
+	     db_input('e70_valor', 15, $Ie70_valor, true, 'text', 3, "onblur='js_setValorAlancar()' onKeyUp=\"js_ValidaCampos(this,4,'','','',event)\" ");
 	   ?>
 	   </td>
 
@@ -278,7 +278,7 @@ if (count($aParametrosEmpenho) > 0) {
     <td align='left'><b>Obs:</b></td>
     <td colspan='3' align='left'>
          <?
-        db_textarea("m53_obs", "", "90", '', true, 'text', 1);
+        db_textarea("m53_obs", "", "85", '', true, 'text', 1);
         ?>
     </td>
   </tr>
@@ -1442,12 +1442,46 @@ function js_calculaValor() {
 }
 
 
+function novoAjax(params, onComplete) {
+
+  var request = new Ajax.Request('emp4_chaveacessonfe004.RPC.php', {
+    method:'post',
+    parameters:'json='+Object.toJSON(params),
+    onComplete: onComplete
+  });
+
+}
+
+function verificaChave() {
+  if ($('e69_notafiscaleletronica').value != 2) {
+      var params = {
+        exec: 'validachave',
+        cgm: $('m51_numcgm').value,
+        chave: $('e69_chaveacesso').value,
+        data: $('e69_dtnota').value,
+        tipo: $('e69_notafiscaleletronica').value,
+        nfe: $('e69_numero').value
+      };
+
+      novoAjax(params, function(e) {
+        var oRetorno = JSON.parse(e.responseText);
+          if (oRetorno.status == 0) {
+            alert(oRetorno.erro);
+            $('e69_chaveacesso').value = '';
+          } 
+      });
+  }
+}
+
 /**
  * Confirma a entrada dos itens no estoque.
  * faz algumas verificações antes de realmente fazer o envio.
  */
 function js_confirmaEntrada() {
-  //alert($F('m51_data'));
+
+  /*if(verificaChave()){
+    return false;
+  }*/
   if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
    //Número da nota, é obrigatorio
@@ -1458,6 +1492,16 @@ function js_confirmaEntrada() {
       return false;
 
    }*/
+
+   if ($F('e69_notafiscaleletronica') == 2) {
+      if ($F('e69_nfserie') == '') {
+        alert('O número de série deve ser preenchido!');
+        $('e69_nfserie').focus();
+        return false;
+      }  
+   }
+
+
    if ($F('e69_numero').trim() == '') {
 
       alert('Número nota deve ser preenchida!');
@@ -1618,7 +1662,8 @@ function js_confirmaEntrada() {
     sJson     += '"oInfoNota":{"iCfop":"'+iCfop+'","iTipoDocumentoFiscal":"'+iTipoDocumentoFiscal+'","iInscrSubstituto":"'+iInscrSubstituto+'",';
     sJson     += '"nBaseCalculoICMS":"'+nBaseCalculoICMS+'","n;ValorICMS":"'+nValorICMS+'","nBaseCalculoSubst":"'+nBaseCalculoSubst+'",';
     sJson     += '"nValorICMSSubst":"'+nValorICMSSubst+'","sSerieFiscal":"'+sSerieFiscal+'"},';
-    sJson     += '"dtRecebeNota":"'+$F('e69_dtrecebe')+'","sObs":"'+sObservacao+'","aItens":['+sJsonItens+'],"nValorNota":"'+$F('e70_valor')+'"}';
+    sJson     += '"dtRecebeNota":"'+$F('e69_dtrecebe')+'","sObs":"'+sObservacao+'","aItens":['+sJsonItens+'],"nValorNota":"'+$F('e70_valor')+'",';
+    sJson     += '"m51_numcgm":"'+$F('m51_numcgm')+'","verificaChave":"1"}';
 
     url     = 'mat4_matordemRPC.php';
     oAjax   = new Ajax.Request(
@@ -2043,28 +2088,37 @@ function js_retornoVerificaNota(oAjax) {
 // Função para liberar o campo e69_chaveacesso caso seja Nota Fiscal Eletrônica
 // Acrescentado por causa do sicom
 function js_tipoChave(iTipoNfe) {
-
   // codições para a chave de acesso
   if (iTipoNfe == 1 || iTipoNfe == 2 || iTipoNfe == 4) {
     $('e69_chaveacesso').readOnly           = false;
     $('e69_chaveacesso').style.background   = "#FFFFFF";
     iTipoNfe == 2 ? document.getElementById("e69_chaveacesso").maxLength = 60 : document.getElementById("e69_chaveacesso").maxLength = 44;
-  }else{
+  } else {
     $('e69_chaveacesso').readOnly          = true;
     $('e69_chaveacesso').style.background  = "#DEB887";
+    $('e69_numero').value = "S/N";
+    $('e69_nfserie').value = "S/N";
   }
 
   // codições para a Nf serie
   if (iTipoNfe == 2 || iTipoNfe == 3) {
     $('e69_nfserie').readOnly           = false;
     $('e69_nfserie').style.background   = "#FFFFFF";
-  }else{
+    if (iTipoNfe == 3) {
+      $('e69_numero').value = "S/N";
+      $('e69_nfserie').value = "S/N";
+    } else {
+        $('e69_numero').value = "";
+        $('e69_nfserie').value = "S/N";
+    }
+  } else {
     $('e69_nfserie').readOnly          = true;
     $('e69_nfserie').style.background  = "#DEB887";
+    $('e69_numero').value = "";
+    $('e69_nfserie').value = "";
   }
 
   $('e69_chaveacesso').value         = "";
-  $('e69_nfserie').value             = "";
 
 }
 
@@ -2092,7 +2146,7 @@ function js_verificaChaveAcesso(iChaveAcesso) {
 
   var resto = soma_ponderada % 11;
   if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
-    return true;
+    return verificaChave();
   } else {
     alert("Chave de Acesso inválida ");
     $('e69_chaveacesso').value = '';
