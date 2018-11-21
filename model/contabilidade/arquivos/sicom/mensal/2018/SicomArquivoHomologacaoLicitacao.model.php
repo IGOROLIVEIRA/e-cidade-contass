@@ -299,7 +299,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	cgm.z01_cgccpf as nroDocumento,
 	aberlic112018.si47_nrolote as nroLote,
 	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-	pcorcamval.pc23_percentualdesconto as percDesconto
+	pcorcamval.pc23_perctaxadesctabela as percDesconto
 	FROM liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -313,9 +313,6 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
   INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
   INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
   INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
-	INNER JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
-		and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
-		and descontotabela.l204_item=solicitempcmater.pc16_codmater)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
