@@ -85,7 +85,7 @@ class ESocial
         
         $data = json_encode($this->dados);
 
-        $this->httpRequest->send($this->recurso, 'POST', array(
+        $resultSend = $this->httpRequest->send($this->recurso, 'POST', array(
             'body' => $data
         ));
 
@@ -95,7 +95,7 @@ class ESocial
             throw new Exception($result->message);
         }
         
-        return $result;
+        return $resultSend;
     }
 
     /**

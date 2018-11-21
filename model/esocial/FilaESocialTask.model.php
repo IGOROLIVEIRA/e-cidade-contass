@@ -59,7 +59,7 @@ class FilaESocialTask extends Task implements iTarefa
                     die("Certificado nao encontrado. \n");
                 }
                 $dadosCertificado = \db_utils::fieldsMemory($rsEsocialCertificado, 0);
-                $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao); 
+                $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao);
                 $dados = array($dadosCertificado,json_decode($dadosEnvio->rh213_dados));
 
                 // $sRecurso = Recurso::getRecursoByEvento($dadosEnvio->rh213_evento);
@@ -68,13 +68,17 @@ class FilaESocialTask extends Task implements iTarefa
                 $exportar->setDados($dados);
                 $retorno = $exportar->request();
                 echo "<br> \n ";
-            $dao->rh213_situacao = 2;
-            $dao->rh213_sequencial = $dadosEnvio->rh213_sequencial;
-            $dao->alterar($dadosEnvio->rh213_sequencial);
+                if($retorno) {
+                    $dao->rh213_situacao = 2;
+                    $dao->rh213_sequencial = $dadosEnvio->rh213_sequencial;
+                    $dao->alterar($dadosEnvio->rh213_sequencial);
 
-            if ($dao->erro_status == 0) {
-                die("Não foi possível alterar situação da fila. \n");
-            }
+                    if ($dao->erro_status == 0) {
+                        die("Não foi possível alterar situação da fila. \n");
+                    }
+                } else {
+                    die("Erro no envio das informações.");
+                }
             }
         } catch (\Exception $e) {
             $this->log("Erro na execução:\n{$e->getMessage()} - ");

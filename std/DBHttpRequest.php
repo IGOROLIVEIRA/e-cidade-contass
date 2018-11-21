@@ -106,7 +106,9 @@ class DBHttpRequest
         $options = DBArray::merge($this->options, $options);
 
         $this->body = $this->__sendFileWrapper($options['baseUrl'] . $url, $method, $options);
-        //echo 'body: '.$this->body;
+        if(!strpos($this->body,"Lote Recebido com Sucesso")) {
+            return false;
+        }
         return true;
     }
 
