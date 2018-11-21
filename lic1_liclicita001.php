@@ -61,44 +61,40 @@ if(isset($incluir)){
 
   $oPost = db_utils::postmemory($_POST);
 
-  // ID's dos options campo "Modalidade"
+  // ID's do l03_pctipocompratribunal com base no l20_codtipocom escolhido pelo usuário
+  $sSql = $clcflicita->sql_query_file((int)$oPost->l20_codtipocom,'distinct(l03_pctipocompratribunal)');
+  $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+  $iTipoCompraTribunal = (int)$aCf[0]->l03_pctipocompratribunal;
 
-  $validaLic = array('3','32','1','40','6','41');
-  $validaLic2 = array('37','7','36','34');
+  //Casos em que o Tipo de Licitação e Natureza do Procedimento devem ser verificados
+  $aTipoLicNatProc = array(50,48,49,53,52,54);
+
   $erro = false;
-
+  $msg = '';
 
   /*
-    Verifica se os Campos "Tipo de Licitação", "Natureza do Procedimento" e "Natureza do Objeto"
-    não foram selecionados.
+    Verifica se os Campos "Tipo de Licitação", "Natureza do Procedimento" não foram selecionados.
   */
+  if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
 
-  if(in_array($oPost->l20_codtipocomdescr,$validaLic)){
-    if($oPost->l20_naturezaobjeto == '0'){
-      $msg = 'Campo Natureza do Objeto não informado';
+    if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
+      $msg .= 'Campo Tipo de Licitação não informado\n\n';
       $erro = true;
     }
-    if($oPost->l20_tipnaturezaproced == '0'){
-      $msg = 'Campo Natureza do Procedimento não informado';
+    if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
+      $msg .= 'Campo Natureza do Procedimento não informado\n\n';
       $erro = true;
     }
-    if($oPost->l20_tipliticacao == '0'){
-      $msg = 'Campo Tipo de Licitação não informado';
-      $erro = true;
-    }
+
   }
 
   /*
-    Verifica se os Campos "Natureza do Objeto" não foi selecionado.
+    Verifica se o Campo "Natureza do Objeto" não foi selecionado.
   */
-
-  if(in_array($oPost->l20_codtipocomdescr,$validaLic2)){
-    if($oPost->l20_naturezaobjeto == '0'){
-      $msg = 'Campo Natureza do Objeto não informado';
-      $erro = true;
-    }
+  if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
+    $msg .= 'Campo Natureza do Objeto não informado\n\n';
+    $erro = true;
   }
-
 
   db_inicio_transacao();
 
