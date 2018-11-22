@@ -70,11 +70,9 @@ td.linhagrid {padding: 1px}
   oViewGeracaoAutorizacao.show();
 
 
-  function js_preencheCaracteristica(iCodigo, sDescricao) {
-  
-    $('oTxtCaractPeculiarCod').value  = iCodigo;
-    $('oTxtCaractPeculiarDesc').value = sDescricao
-    db_iframe_concarpeculiar.hide();  
+  function js_preencheCaracteristica() {
+    $('oTxtCaractPeculiarCod').value  = '000';
+    $('oTxtCaractPeculiarDesc').value = 'NÃO SE APLICA'
   }
   
   function js_completaCaracteristica (sDescricao, lErro) {
@@ -87,4 +85,48 @@ td.linhagrid {padding: 1px}
       $('oTxtCaractPeculiarDesc').value = sDescricao
     }
   }
+  js_preencheCaracteristica();
+
+  function js_buscalicoutrosorgaos(codigo,responsavel,processo,modalidade,ano) {
+      $('oTxtLicoutrosorgaosCod').value = codigo;
+      $('oTxtLicoutrosorgaosResp').value = responsavel;
+      $('oTxtNumeroLicitacao').value = processo+'/'+ano;
+      $('oTxtModalidade').value = modalidade;
+
+      db_iframe_liclicitaoutrosorgaos.hide();
+  }
+
+  function js_mostrarlicoutroorgao(responsavel,tipo,processo,modalidade,ano,erro) {
+      $('oTxtLicoutrosorgaosResp').value = responsavel;
+      $('oTxtNumeroLicitacao').value = processo+'/'+ano;
+      $('oTxtModalidade').value = modalidade;
+
+      if(erro==true){
+          if(erro==true){
+              $('oTxtLicoutrosorgaosResp').focus();
+          }
+      }
+  }
+
+  function js_buscaadesaoregpreco(codigo,objeto,processo,modalidade,ano) {
+      $('oTxtAdesaoRegPrecoCod').value = codigo;
+      $('oTxtAdesaoRegPrecoObj').value = objeto;
+      $('oTxtNumeroLicitacao').value = processo+'/'+ano;
+      $('oTxtModalidade').value = modalidade;
+
+      db_iframe_adesaoregpreco.hide();
+  }
+
+  function js_mostraradesao(objeto,processo,modalidade,ano,erro) {
+      $('oTxtAdesaoRegPrecoObj').value = objeto;
+      $('oTxtNumeroLicitacao').value = processo+'/'+ano;
+      $('oTxtModalidade').value = modalidade;
+
+      if(erro==true){
+          if(erro==true){
+              $('oTxtAdesaoRegPrecoObj').focus();
+          }
+      }
+  }
+
 </script>

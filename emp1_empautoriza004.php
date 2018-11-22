@@ -31,9 +31,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
-
 require_once("dbforms/db_funcoes.php");
-
 require_once("classes/db_empautpresta_classe.php");
 require_once("classes/db_empprestatip_classe.php");
 require_once("classes/db_empautoriza_classe.php");
@@ -47,10 +45,8 @@ require_once("classes/db_pctipocompra_classe.php");
 require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_concarpeculiar_classe.php");
-
 require_once("model/CgmFactory.model.php");
 require_once("model/fornecedor.model.php");
-
 require_once("classes/db_empautorizaprocesso_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -159,16 +155,20 @@ if (isset($incluir)) {
     $clempautoriza->e54_login   = db_getsession("DB_id_usuario") ;
     $clempautoriza->e54_resumo  = $e54_resumo;
     $clempautoriza->e54_anousu  = $iAnoUsu;
-    ;
     $clempautoriza->e54_codcom  = $e54_codcom;
     $clempautoriza->e54_destin  = $e54_destin;
-    $clempautoriza->e54_tipol   = $e54_tipol ;
+    $clempautoriza->e54_tipol   = '' ;
     $clempautoriza->e54_numerl  = $e54_numerl;
+    $clempautoriza->e54_nummodalidade  = $e54_nummodalidade;
+    $clempautoriza->e54_codlicitacao = $e54_licitacao;
+    $clempautoriza->e54_licoutrosorgaos = $e54_licoutrosorgaos;
+    $clempautoriza->e54_tipoautorizacao = $tipodeautorizacao;
+    $clempautoriza->e54_adesaoregpreco = $e54_adesaoregpreco;
+    $clempautoriza->e54_tipoorigem = $e54_tipoorigem;
     $clempautoriza->e54_emiss   = date("Y-m-d",db_getsession("DB_datausu"));
     $clempautoriza->e54_codtipo = $e54_codtipo;
     $clempautoriza->e54_instit  = db_getsession("DB_instit");
     $clempautoriza->e54_depto   = db_getsession("DB_coddepto");
-
     $clempautoriza->e54_valor  = '';
     $clempautoriza->e54_praent = '';
     $clempautoriza->e54_entpar = '';
@@ -180,8 +180,6 @@ if (isset($incluir)) {
     $clempautoriza->e54_anulad = null;
     $clempautoriza->e54_concarpeculiar = $e54_concarpeculiar;
     $clempautoriza->e54_tipodespesa = $e54_tipodespesa;
-
-
     $clempautoriza->incluir(null);
     if ($clempautoriza->erro_status == 0) {
 
@@ -254,9 +252,15 @@ if (isset($incluir)) {
 
 	  $clempautoriza->e54_codcom = $e54_codcom;
 	  $clempautoriza->e54_destin = $e54_destin;
-	  $clempautoriza->e54_tipol  = $e54_tipol ;
-    $clempautoriza->e54_numerl = $e54_numerl;
-	  $clempautoriza->e54_emiss  = date("Y-m-d",db_getsession("DB_datausu"));
+	  $clempautoriza->e54_tipol  = '';
+      $clempautoriza->e54_numerl = $e54_numerl;
+      $clempautoriza->e54_codlicitacao = $e54_codlicitacao;
+      $clempautoriza->e54_nummodalidade = $e54_nummodalidade;
+      $clempautoriza->e54_licoutrosorgaos = $e54_licoutrosorgaos;
+      $clempautoriza->e54_adesaoregpreco = $e54_adesaoregpreco;
+      $clempautoriza->e54_tipoautorizacao = $e54_tipoautorizacao;
+      $clempautoriza->e54_tipoorigem = $e54_tipoorigem;
+      $clempautoriza->e54_emiss  = date("Y-m-d",db_getsession("DB_datausu"));
 	  //db_msgbox(date("Y-m-d",db_getsession("DB_datausu")));
 	  $clempautoriza->e54_codtipo = $e54_codtipo;
 	  $clempautoriza->e54_instit = db_getsession("DB_instit");
@@ -272,7 +276,6 @@ if (isset($incluir)) {
 	  $clempautoriza->e54_anulad = null;
 	  $clempautoriza->e54_depto  = db_getsession("DB_coddepto");
 	  $clempautoriza->e54_concarpeculiar = $e54_concarpeculiar;
-
 	  $clempautoriza->incluir(null);
 	  if ($clempautoriza->erro_status==0) {
 	    $sqlerro=true;

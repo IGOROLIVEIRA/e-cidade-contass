@@ -1885,6 +1885,7 @@ class Acordo
      * retorna todas as posicões de Apostilamento do acordo
      * @return AcordoPosicao[]
      */
+
     function getPosicoesApostilamentos()
     {
 
@@ -1931,6 +1932,7 @@ class Acordo
      */
     public function processarAutorizacoes(array $aItens, $lProcessar = false, $oDadosAutorizacao = null)
     {
+
 
       $aAutorizacoes = array();
 
@@ -2084,7 +2086,6 @@ class Acordo
             foreach ($oAutorizacaoItens->aItens as $oItemAutorizacao) {
               $nValorAutorizacao += round($oItemAutorizacao->valorunitario * $oItemAutorizacao->quantidade, 2);
             }
-
                 /**
                  * Gera a autorização de empenho
                  */
@@ -2099,6 +2100,9 @@ class Acordo
                 $oAutorizacaoEmpenho->setTipoEmpenho($oDadosAutorizacao->tipoempenho);
                 $oAutorizacaoEmpenho->setTipoCompra($oDadosAutorizacao->tipocompra);
                 $oAutorizacaoEmpenho->setTipoLicitacao($oDadosAutorizacao->tipolicitacao);
+                $oAutorizacaoEmpenho->setModalidade($oDadosAutorizacao->iNumModalidade);
+                $oAutorizacaoEmpenho->setSTipoorigem($oDadosAutorizacao->sTipoorigem);
+                $oAutorizacaoEmpenho->setSTipoautorizacao($oDadosAutorizacao->sTipoautorizacao);
                 $oAutorizacaoEmpenho->setValor($nValorAutorizacao);
                 $iSeq        = 1;
                 $nValorTotal = 0;

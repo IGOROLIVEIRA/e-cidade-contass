@@ -70,7 +70,6 @@ switch ($oParam->exec) {
     $rsProcesso   = $oDaoSolicitaProtProcesso->sql_record($sSqlProcesso);
     $oRetorno->pc90_numeroprocesso = '';
     if ($oDaoSolicitaProtProcesso->numrows > 0) {
-     die($sSqlProcesso);
       $sProcesso = urlencode(db_utils::fieldsMemory($rsProcesso, 0)->pc90_numeroprocesso);
       $oRetorno->pc90_numeroprocesso = $sProcesso;
     }
@@ -243,6 +242,20 @@ switch ($oParam->exec) {
     $oRetorno->aItens = $oLicitacao->getItensParaAutorizacao();
 
   break;
+
+    case "getDados":
+        $oDaoLicLicita       = db_utils::getDao('liclicita');
+        $sSqlDadoslicitacao = $oDaoLicLicita->sql_query_file($oParam->iCodigo,"l20_numero,l20_edital as numerolicitacao,l20_anousu,l20_codtipocom as tipocompra");
+        $rsResult   = $oDaoLicLicita->sql_record($sSqlDadoslicitacao);
+        $oDados = db_utils::fieldsMemory($rsResult,0);
+
+        $oRetorno->numerolicitacao = $oDados->numerolicitacao;
+        $oRetorno->l20_numero = $oDados->l20_numero;
+        $oRetorno->l20_anousu = $oDados->l20_anousu;
+        $oRetorno->tipocompra = $oDados->tipocompra;
+        $oRetorno->licitacao = 't';
+
+    break;
 
   /**
    * Gera Autorização

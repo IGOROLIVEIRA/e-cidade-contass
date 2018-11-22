@@ -64,15 +64,12 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     if (isset($this->contrapartida) && $this->contrapartida != "") {
         $this->objpdf->text($xcol + 30, $xlin + 40.5, 'CP');
     }
-    $this->objpdf->text($xcol + 2, $xlin + 43, 'Licitação');
-    $this->objpdf->text($xcol + 32, $xlin + 43, 'Modalidade');
-    $this->objpdf->text($xcol + 2, $xlin + 50, 'Solicitação');
-
+    $this->objpdf->text($xcol + 2, $xlin + 43, 'Processo');
+    $this->objpdf->text($xcol + 32, $xlin + 43, 'Nº da Modalidade');
+    $this->objpdf->text($xcol + 2, $xlin + 50, 'Tipo de Compra');
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 2, $xlin + 47, 'Prazo Entrega');
     }
-
-    //$this->objpdf->text($xcol +2, $xlin +51, "Característica Peculiar");
 
     $this->objpdf->Setfont('Arial', '', 8);
     $this->objpdf->text($xcol + 17, $xlin + 5, ':  ' . db_formatar($this->orgao, 'orgao') . ' - ' . substr($this->descr_orgao, 0, 42));
@@ -100,15 +97,13 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->text($xcol + 35, $xlin + 40.5, ':' . $this->contrapartida);
     }
 
-    $this->objpdf->text($xcol + 17, $xlin + 43, ':  ' . ($this->num_licitacao != null ? $this->num_licitacao . '' : '') . $this->ano_licitacao);
-    $this->objpdf->text($xcol + 48, $xlin + 43, ':  ' . ($this->edital_licitacao != null ? $this->edital_licitacao . ' - ' : '') . $this->descr_licitacao);
-    $this->objpdf->text($xcol + 18, $xlin + 49, ':  ' . $this->pc10_numero);
-    $this->objpdf->text($xcol + 18, $xlin + 50, ':  ' . pg_result($this->recorddositens, $ii, $this->Snumero));
+    $this->objpdf->text($xcol + 17, $xlin + 43, ':  ' . $this->edital_licitacao);
+    $this->objpdf->text($xcol + 56, $xlin + 43, ': ' . $this->modalidade);
+    $this->objpdf->text($xcol + 24, $xlin + 50, ':  ' . $this->descr_tipocompra);
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 22, $xlin + 47, ':  ' . $this->prazo_ent);
     }
 
-    //$this->objpdf->text($xcol +35, $xlin +51, ":  ". $this->cod_concarpeculiar." - ".$this->descr_concarpeculiar);
 
     // retangulo dos dados do credor
     $this->objpdf->rect($xcol + 106, $xlin + 2, 96, 21, 2, 'DF', '1234');

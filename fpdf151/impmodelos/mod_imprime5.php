@@ -83,7 +83,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->Setfont('Arial', 'B', 8);
 
     $this->objpdf->text($xcol + 2, $xlin + 7, 'Licitação');
-    $this->objpdf->text($xcol + 2, $xlin + 10.5, 'Modalidade da Licitação');
+    $this->objpdf->text($xcol + 2, $xlin + 10.5, 'Nº da Modalidade');
     $this->objpdf->text($xcol + 2, $xlin + 14.5, 'Tipo de Compra');
     $this->objpdf->text($xcol + 2, $xlin + 18.5, 'Prazo de Entrega');
     $this->objpdf->text($xcol + 2, $xlin + 22.5, 'Observações');
@@ -94,7 +94,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->Setfont('Arial', '', 8);
 
     $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao . '/' . $this->ano_licitacao);
-    $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->num_licitacao . '  -  ' . substr($this->descr_licitacao, 0, 30));
+    $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->modalidade);
     $this->objpdf->text($xcol + 35, $xlin + 14.5, ':  ' . $this->descr_tipocompra);
     $this->objpdf->text($xcol + 35, $xlin + 18.5, ':  ' . stripslashes($this->prazo_ent));
     $this->objpdf->text($xcol + 35, $xlin + 22.5, ':  ' . stripslashes($this->obs));
@@ -542,13 +542,12 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text(40, $xlin - 6, $this->telefpref);
     $this->objpdf->text(40, $xlin - 3, $this->emailpref);
     $this->objpdf->text(40, $xlin, db_formatar($this->cgcpref, 'cnpj'));
-
     $this->objpdf->rect($xcol, $xlin + 2, $xcol + 100, 33.2, 2, 'DF', '1234');
     $this->objpdf->Setfont('Arial', '', 8);
     $this->objpdf->text($xcol + 2, $xlin + 4, 'Dados da Compra');
     $this->objpdf->Setfont('Arial', 'B', 8);
-    $this->objpdf->text($xcol + 2, $xlin + 7, 'Licitação');
-    $this->objpdf->text($xcol + 2, $xlin + 10.5, 'Modalidade da Licitação');
+    $this->objpdf->text($xcol + 2, $xlin + 7,    'Processo');
+    $this->objpdf->text($xcol + 2, $xlin + 10.5, 'Nº da Modalidade');
     $this->objpdf->text($xcol + 2, $xlin + 14.5, 'Tipo de Compra');
     $this->objpdf->text($xcol + 2, $xlin + 18.5, 'Prazo de Entrega');
     $this->objpdf->text($xcol + 2, $xlin + 22.5, 'Observações');
@@ -556,12 +555,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 2, $xlin + 30.5, 'Outras Condições');
     $this->objpdf->text($xcol + 2, $xlin + 34.5, 'Proc. Administrativo');
     $this->objpdf->Setfont('Arial', '', 8);
-    if(!empty($this->ano_licitacao)) {
-        $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao . '/' . $this->ano_licitacao);
-    }else {
-        $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao);
-    }
-    $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->num_licitacao . '  -  ' . $this->descr_licitacao);
+    $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao);
+    $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->modalidade);
     $this->objpdf->text($xcol + 35, $xlin + 14.5, ':  ' . $this->descr_tipocompra);
     $this->objpdf->text($xcol + 35, $xlin + 18.5, ':  ' . stripslashes($this->prazo_ent));
     $this->objpdf->text($xcol + 35, $xlin + 22.5, ':  ' . stripslashes($this->obs));

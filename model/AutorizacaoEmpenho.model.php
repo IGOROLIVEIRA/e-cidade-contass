@@ -69,6 +69,12 @@ class AutorizacaoEmpenho {
 
   protected $dtAnulacao;
 
+  protected $Modalidade;
+
+  protected $sTipoorigem;
+
+  protected $sTipoautorizacao;
+
   /**
    * @var string
    */
@@ -247,7 +253,6 @@ class AutorizacaoEmpenho {
    * @param object $oTipoCompra objeto com o tipo da compra
    */
   public function setTipoCompra($oTipoCompra) {
-
     $this->oTipoCompra = $oTipoCompra;
   }
 
@@ -266,6 +271,54 @@ class AutorizacaoEmpenho {
 
     $this->sCodigoLicitacao = $sCodigoLicitacao;
   }
+
+    /**
+     * @return mixed
+     */
+    public function getModalidade()
+    {
+        return $this->Modalidade;
+    }
+
+    /**
+     * @param mixed $Modalidade
+     */
+    public function setModalidade($Modalidade)
+    {
+        $this->Modalidade = $Modalidade;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSTipoorigem()
+    {
+        return $this->sTipoorigem;
+    }
+
+    /**
+     * @param mixed $sTipoorigem
+     */
+    public function setSTipoorigem($sTipoorigem)
+    {
+        $this->sTipoorigem = $sTipoorigem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSTipoautorizacao()
+    {
+        return $this->sTipoautorizacao;
+    }
+
+    /**
+     * @param mixed $sTipoautorizacao
+     */
+    public function setSTipoautorizacao($sTipoautorizacao)
+    {
+        $this->sTipoautorizacao = $sTipoautorizacao;
+    }
 
   /**
    * @return string
@@ -383,8 +436,6 @@ class AutorizacaoEmpenho {
     $oDaoAutori->e54_numcgm         = $this->getCredor()->getCodigo();
     $oDaoAutori->e54_tipol          = $this->getTipoLicitacao();
     $oDaoAutori->e54_valor          = "0";
-
-    //echo ("<pre>".print_r($oDaoAutori, 1)."</pre>"); die();
 
     if (empty($this->iCodigo)) {
 

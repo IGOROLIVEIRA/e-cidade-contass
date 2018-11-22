@@ -35,682 +35,817 @@ require_once("std/DBDate.php");
  */
 class AutorizacaoEmpenho {
 
-  /**
-   * Código da Autorização
-   *
-   * @var integer
-   */
-  protected $iAutorizacao;
+    /**
+     * Código da Autorização
+     *
+     * @var integer
+     */
+    protected $iAutorizacao;
 
-  /**
-   * Código da Dotação
-   *
-   * @var integer
-   */
-  protected $iDotacao;
+    /**
+     * Código da Dotação
+     *
+     * @var integer
+     */
+    protected $iDotacao;
 
-  /**
-   * Código da Reserva
-   *
-   * @var integer
-   */
-  protected $iCodigoReserva;
+    /**
+     * Código da Reserva
+     *
+     * @var integer
+     */
+    protected $iCodigoReserva;
 
-  /**
-   * Array de Itens de uma Autorização
-   *
-   * @var array
-   */
-  protected $aItens;
+    /**
+     * Array de Itens de uma Autorização
+     *
+     * @var array
+     */
+    protected $aItens;
 
-  /**
-   * Desdobramento
-   *
-   * @var integer
-   */
-  protected $iDesdobramento;
+    /**
+     * Desdobramento
+     *
+     * @var integer
+     */
+    protected $iDesdobramento;
 
-  /**
-   * Valor de uma autorização
-   *
-   * @var integer
-   */
-  protected $nValor;
+    /**
+     * Valor de uma autorização
+     *
+     * @var integer
+     */
+    protected $nValor;
 
-  /**
-   * Resumo da Autorização
-   *
-   * @var string
-   */
-  protected $sResumo;
+    /**
+     * Resumo da Autorização
+     *
+     * @var string
+     */
+    protected $sResumo;
 
-  /**
-   * Código do Tipo de Compra
-   *
-   * @var integer
-   */
-  protected $iTipoCompra;
+    /**
+     * Código do Tipo de Compra
+     *
+     * @var integer
+     */
+    protected $iTipoCompra;
 
-  /**
-   * Código do Tipo de Empenho
-   *
-   * @var integer
-   */
-  protected $iTipoEmpenho;
+    /**
+     * Código do Tipo de Empenho
+     *
+     * @var integer
+     */
+    protected $iTipoEmpenho;
 
-  /**
-   * Objeto Fornecedor
-   *
-   * @var cgm_base
-   */
-  protected $oFornecedor;
+    /**
+     * Objeto Fornecedor
+     *
+     * @var cgm_base
+     */
+    protected $oFornecedor;
 
-  /**
-   * Destino da Autorização
-   *
-   * @var string
-   */
-  protected $sDestino;
+    /**
+     * Destino da Autorização
+     *
+     * @var string
+     */
+    protected $sDestino;
 
-  /**
-   * Ano da Autorização
-   *
-   * @var integer
-   */
-  protected $iAno;
+    /**
+     * Ano da Autorização
+     *
+     * @var integer
+     */
+    protected $iAno;
 
-  /**
-   * Código da Característica Peculiar
-   *
-   * @var string
-   */
-  protected $sCaracteristicaPeculiar;
+    /**
+     * Código da Característica Peculiar
+     *
+     * @var string
+     */
+    protected $sCaracteristicaPeculiar;
 
-  /**
-   * Codigo da Contrapartida da Autorizacao
-   */
-  protected $iContraPartida;
+    /**
+     * Codigo da Contrapartida da Autorizacao
+     */
+    protected $iContraPartida;
 
-  /**
-   * Condição de pagamento
-   * @var string
-   */
-  protected $sCondicaoPagamento;
+    /**
+     * Condição de pagamento
+     * @var string
+     */
+    protected $sCondicaoPagamento;
 
-  /**
-   * dados do prazo de entrega de icitação
-   * @var string
-   */
-  protected $sPrazoEntrega;
+    /**
+     * dados do prazo de entrega de icitação
+     * @var string
+     */
+    protected $sPrazoEntrega;
 
-  /**
-   * Numero da licitação
-   * @var string
-   */
-  protected $sNumeroLicitacao;
+    /**
+     * Numero da licitação
+     * @var string
+     */
+    protected $sNumeroLicitacao;
 
-  /**
-   * tipo da licitação
-   * @var string
-   */
-  protected $sTipoLicitacao;
+    /**
+     * tipo da licitação
+     * @var string
+     */
+    protected $sTipoLicitacao;
 
-  /**
-   * Telefone para contato
-   * @var String
-   * @access protected
-   */
-  protected $sTelefone;
+    /**
+     * Codigo da licitação l20_codigo
+     * @var int4
+     */
+    protected $sCodigoLicitacao;
 
-  /**
-   * Contato da autorização
-   * @var String
-   * @access protected
-   */
-  protected $sContato;
+    /**
+     * numero da Modalidade
+     * @var int4
+     */
+    protected $Modalidade;
 
-  /**
-   * Outras condições para a autorização
-   * @var String
-   * @access protected
-   */
-  protected $sOutrasCondicoes;
+    /**
+     * numero da Tipo de Origem
+     * @var int4
+     */
+    protected $sTipoorigem;
 
-  /**
-   * @var string
-   */
-  protected $sProcessoAdministrativo;
+    /**
+     * numero da Tipo de Autorização
+     * @var int4
+     */
+    protected $sTipoautorizacao;
 
-  /**
-   *
-   */
-  function __construct($iAutorizacao = null) {
+    /**
+     * codigo da licitação de outro orgão
+     * @var int4
+     */
+    protected $sLicoutrosorgaos;
 
-    if (!empty($iAutorizacao)) {
+    /**
+     * codigo da adesao de registro de preço
+     * @var int4
+     */
+    protected $sAdesaoregpreco;
+    /**
+     * Telefone para contato
+     * @var String
+     * @access protected
+     */
+    protected $sTelefone;
 
-      $oDaoEmpAutoriza = db_utils::getDao("empautoriza");
-      $this->iAutorizacao = $iAutorizacao;
-      $sSqlDadosAutorizacao = $oDaoEmpAutoriza->sql_query_deptoautori($this->iAutorizacao);
-      $rsDadosAutorizacao = $oDaoEmpAutoriza->sql_record($sSqlDadosAutorizacao);
-      if ($oDaoEmpAutoriza->numrows > 0) {
+    /**
+     * Contato da autorização
+     * @var String
+     * @access protected
+     */
+    protected $sContato;
 
-        $oDadosAutorizacao = db_utils::fieldsMemory($rsDadosAutorizacao, 0);
-        $oCgm = CgmFactory::getInstanceByCgm($oDadosAutorizacao->e54_numcgm);
-        $this->iAno = $oDadosAutorizacao->e54_anousu;
-        $this->iCodigoReserva = $oDadosAutorizacao->o80_codres;
-        $this->sTelefone = $oDadosAutorizacao->e54_telef;
-        $this->sContato = $oDadosAutorizacao->e54_contat;
-        $this->sOutrasCondicoes = $oDadosAutorizacao->e54_codout;
+    /**
+     * Outras condições para a autorização
+     * @var String
+     * @access protected
+     */
+    protected $sOutrasCondicoes;
 
-        $this->setFornecedor($oCgm);
-        $this->setValor($oDadosAutorizacao->e54_valor);
-        $this->setResumo($oDadosAutorizacao->e54_resumo);
-        $this->setDestino($oDadosAutorizacao->e54_destin);
-        $this->setDotacao($oDadosAutorizacao->e56_coddot);
-        $this->setTipoCompra($oDadosAutorizacao->e54_codcom);
-        $this->setTipoEmpenho($oDadosAutorizacao->e54_codtipo);
-        $this->setTipoLicitacao($oDadosAutorizacao->e54_tipol);
-        $this->setPrazoEntrega($oDadosAutorizacao->e54_praent);
-        $this->setNumeroLicitacao($oDadosAutorizacao->e54_numerl);
-        $this->setCondicaoPagamento($oDadosAutorizacao->e54_conpag);
-        $this->setContraPartida($oDadosAutorizacao->e56_orctiporec);
-        $this->setCaracteristicaPeculiar($oDadosAutorizacao->e54_concarpeculiar);
-        $this->setProcessoAdministrativo($oDadosAutorizacao->e150_numeroprocesso);
-      }
-    }
-  }
-  /**
-   * Retorna um array de itens
-   * @return array
-   */
-  public function getItens() {
+    /**
+     * @var string
+     */
+    protected $sProcessoAdministrativo;
 
-    if (count($this->aItens) == 0 && !empty($this->iAutorizacao)) {
+    function __construct($iAutorizacao = null) {
 
-      $oDaoEmpAutItem = db_utils::getDao("empautitem");
-      $sSqlItensAutorizacao = $oDaoEmpAutItem->sql_query_file($this->iAutorizacao, null, "*", 'e55_sequen');
-      $rsItensAutorizacao = $oDaoEmpAutItem->sql_record($sSqlItensAutorizacao);
-      if ($oDaoEmpAutItem->numrows > 0) {
+        if (!empty($iAutorizacao)) {
 
-        for ($iItem = 0; $iItem < $oDaoEmpAutItem->numrows; $iItem++) {
+            $oDaoEmpAutoriza = db_utils::getDao("empautoriza");
+            $this->iAutorizacao = $iAutorizacao;
+            $sSqlDadosAutorizacao = $oDaoEmpAutoriza->sql_query_deptoautori($this->iAutorizacao);
+            $rsDadosAutorizacao = $oDaoEmpAutoriza->sql_record($sSqlDadosAutorizacao);
+            if ($oDaoEmpAutoriza->numrows > 0) {
 
-          $oDadosItem = db_utils::fieldsMemory($rsItensAutorizacao, $iItem);
-          $oItem = new stdClass();
-          $oItem->codigomaterial = $oDadosItem->e55_item;
-          $oItem->quantidade = $oDadosItem->e55_quant;
-          $oItem->valortotal = $oDadosItem->e55_vltot;
-          $oItem->observacao = $oDadosItem->e55_descr;
-          $oItem->codigoelemento = $oDadosItem->e55_codele;
-          $oItem->valorunitario = $oDadosItem->e55_vlrun;
-          $oItem->sequencial = $oDadosItem->e55_sequen;
-          $oItem->marca = $oDadosItem->e55_marca;
-          $this->aItens[] = $oItem;
+                $oDadosAutorizacao = db_utils::fieldsMemory($rsDadosAutorizacao, 0);
+                $oCgm = CgmFactory::getInstanceByCgm($oDadosAutorizacao->e54_numcgm);
+                $this->iAno = $oDadosAutorizacao->e54_anousu;
+                $this->iCodigoReserva = $oDadosAutorizacao->o80_codres;
+                $this->sTelefone = $oDadosAutorizacao->e54_telef;
+                $this->sContato = $oDadosAutorizacao->e54_contat;
+                $this->sOutrasCondicoes = $oDadosAutorizacao->e54_codout;
+
+                $this->setFornecedor($oCgm);
+                $this->setValor($oDadosAutorizacao->e54_valor);
+                $this->setResumo($oDadosAutorizacao->e54_resumo);
+                $this->setDestino($oDadosAutorizacao->e54_destin);
+                $this->setDotacao($oDadosAutorizacao->e56_coddot);
+                $this->setTipoCompra($oDadosAutorizacao->e54_codcom);
+                $this->setTipoEmpenho($oDadosAutorizacao->e54_codtipo);
+                $this->setTipoLicitacao($oDadosAutorizacao->e54_tipol);
+                $this->setPrazoEntrega($oDadosAutorizacao->e54_praent);
+                $this->setNumeroLicitacao($oDadosAutorizacao->e54_numerl);
+                $this->setCondicaoPagamento($oDadosAutorizacao->e54_conpag);
+                $this->setContraPartida($oDadosAutorizacao->e56_orctiporec);
+                $this->setCaracteristicaPeculiar($oDadosAutorizacao->e54_concarpeculiar);
+                $this->setProcessoAdministrativo($oDadosAutorizacao->e150_numeroprocesso);
+            }
         }
-      }
     }
-
-    return $this->aItens;
-  }
-
-  /**
-   * Seta o número do telefone para a autorização
-   * @param String $sTelefone
-   * @access public
-   * @return void
-   */
-  public function setTelefone($sTelefone) {
-    $this->sTelefone = $sTelefone;
-  }
-
-  /**
-   * Retorna o número do telefone da autorização
-   * @access public
-   * @return void
-   */
-  public function getTelefone() {
-    return $this->sTelefone;
-  }
-
-  /**
-   * Seta o contato para a autorização
-   * @param String $sContato
-   * @access public
-   * @return void
-   */
-  public function setContato($sContato) {
-    $this->sContato = $sContato;
-  }
-
-  /**
-   * Retorna o contato da autorização
-   * @access public
-   * @return void
-   */
-  public function getContato() {
-    return $this->sContato;
-  }
-
-  /**
-   * Seta as outras condições da autorização
-   * @param mixed $sOutrasCondicoes
-   * @access public
-   * @return void
-   */
-  public function setOutrasCondicoes($sOutrasCondicoes) {
-    $this->sOutrasCondicoes = $sOutrasCondicoes;
-  }
-
-  /**
-   * Retorna as outras condições da autorização
-   * @access public
-   * @return void
-   */
-  public function getOutrasCondicoes() {
-    return $this->sOutrasCondicoes;
-  }
-
-  /**
-   * Retorna o ano setado
-   * @return integer
-   */
-  public function getAno() {
-    return $this->iAno;
-  }
-
-  /**
-   * Retorna o ID da Autorização
-   * @return integer
-   */
-  public function getAutorizacao() {
-    return $this->iAutorizacao;
-  }
-
-  /**
-   * Retorna o Código da Reserva
-   * @return integer
-   */
-  public function getCodigoReserva() {
-
-    return $this->iCodigoReserva;
-  }
-
-  public function setCodigoReserva($iCodigoReserva) {
-    $this->iCodigoReserva = $iCodigoReserva;
-  }
-
-  /**
-   * Retorna o Desdobramento
-   * @return integer
-   */
-  public function getDesdobramento() {
-    return $this->iDesdobramento;
-  }
-
-  /**
-   * Seta o código do desdobramento
-   * @param integer $iDesdobramento
-   */
-  public function setDesdobramento($iDesdobramento) {
-    $this->iDesdobramento = $iDesdobramento;
-  }
-
-  /**
-   * Retorna a Dotação setada
-   * @return integer
-   */
-  public function getDotacao() {
-    return $this->iDotacao;
-  }
-
-  /**
-   * Seta a Dotação
-   * @param integer $iDotacao
-   */
-  public function setDotacao($iDotacao) {
-    $this->iDotacao = $iDotacao;
-  }
-
-  /**
-   * Define a contrapartida da Dotacao
-   * Define a contrapartida da Dotacao, que deve sempre ser um código de Recurso.
-   * @param integer $iContraPartida Código da Contrapartida
-   */
-  public function setContraPartida($iContraPartida) {
-    $this->iContraPartida = $iContraPartida;
-  }
-
-  /**
-   * Retorna a contrapartida do recurso
-   * @return integer codigo da contrapartida
-   */
-  public function getContraPartida() {
-    return $this->iContraPartida;
-  }
-  /**
-   * Retorna o código do tipo de compra
-   * @return integer
-   */
-  public function getTipoCompra() {
-    return $this->iTipoCompra;
-  }
-
-  /**
-   * Seta o código do tipo de compra
-   * @param integer $iTipoCompra
-   */
-  public function setTipoCompra($iTipoCompra) {
-    $this->iTipoCompra = $iTipoCompra;
-  }
-
-  /**
-   * Retorna o código do tipo de empenho
-   * @return integer
-   */
-  public function getTipoEmpenho() {
-    return $this->iTipoEmpenho;
-  }
-
-  /**
-   * Seta o código do tipo de empenho
-   * @param integer $iTipoEmpenho
-   */
-  public function setTipoEmpenho($iTipoEmpenho) {
-    $this->iTipoEmpenho = $iTipoEmpenho;
-  }
-
-  /**
-   * Retorna o valor setado
-   * @return float
-   */
-  public function getValor() {
-    return $this->nValor;
-  }
-
-  /**
-   * Seta o valor
-   * @param float $nValor
-   */
-  public function setValor($nValor) {
-    $this->nValor = $nValor;
-  }
-
-  /**
-   * Retorna um objeto com os dados do fornecedor
-   * @return CgmBase
-   */
-  public function getFornecedor() {
-    return $this->oFornecedor;
-  }
-
-  /**
-   * Seta o fornecedor
-   * @param object $oFornecedor
-   */
-  public function setFornecedor(cgmbase $oFornecedor) {
-    $this->oFornecedor = $oFornecedor;
-  }
-
-  /**
-   * Retorna o Destino setado
-   * @return string
-   */
-  public function getDestino() {
-    return $this->sDestino;
-  }
-
-  /**
-   * Seta o Destino
-   * @param string $sDestino
-   */
-  public function setDestino($sDestino) {
-    $this->sDestino = $sDestino;
-  }
-
-  /**
-   * Retorna o Resumo
-   * @return string
-   */
-  public function getResumo() {
-    return $this->sResumo;
-  }
-
-  /**
-   * Seta o Resumo
-   * @param string $sResumo
-   */
-  public function setResumo($sResumo) {
-    $this->sResumo = $sResumo;
-  }
-  /**
-   * Retorna o prazo de entregas
-   * @return string
-   */
-  public function getPrazoEntrega() {
-
-    return $this->sPrazoEntrega;
-  }
-
-  /**
-   * Define o prazo da entrega dos itens da Autorizacao
-   * @param string $sPrazoEntrega
-   */
-  public function setPrazoEntrega($sPrazoEntrega) {
-    $this->sPrazoEntrega = $sPrazoEntrega;
-  }
-
-  /**
-   * retorna o numero da licitação.
-   * @return string
-   */
-  public function getNumeroLicitacao() {
-
-    return $this->sNumeroLicitacao;
-  }
-
-  /**
-   * Define o Número da Licitaççao ue gerou a autorização
-   * @param string $sNumeroLicitacao
-   */
-  public function setNumeroLicitacao($sNumeroLicitacao) {
-    $this->sNumeroLicitacao = $sNumeroLicitacao;
-  }
-
-  /**
-   * retorna o tipo da licitação.
-   * @return string
-   */
-  public function getTipoLicitacao() {
-    return $this->sTipoLicitacao;
-  }
-
-  /**
-   * Define o tipo da Licitaçao ue gerou a autorização
-   * @param string $sNumeroLicitacao
-   */
-  public function setTipoLicitacao($sNumeroLicitacao) {
-    $this->sTipoLicitacao = $sNumeroLicitacao;
-  }
-  /**
-   * Adiciona um item a Autorizacao
-   *
-   * @param stdClass $oItem objeto com os dados do item
-   */
-  public function addItem($oItem) {
-    $this->aItens[] = $oItem;
-  }
-
-  /**
-   * Retorna a Característica Peculiar
-   * @return string
-   */
-  public function getCaracteristicaPeculiar() {
-    return $this->sCaracteristicaPeculiar;
-  }
-
-  /**
-   * Seta a Característica Peculiar
-   * @param string $sCaracteristicaPeculiar
-   */
-  public function setCaracteristicaPeculiar($sCaracteristicaPeculiar) {
-    $this->sCaracteristicaPeculiar = $sCaracteristicaPeculiar;
-  }
-
-  /**
-   * Seta valor em Condição de Pagamento
-   * @param string $sCondicaoPagamento
-   */
-  public function setCondicaoPagamento($sCondicaoPagamento) {
-    $this->sCondicaoPagamento = $sCondicaoPagamento;
-  }
-
-  /**
-   * Retorna a condição de pagamento.
-   * @return string
-   */
-  public function getCondicaoPagamento() {
-    return $this->sCondicaoPagamento;
-  }
-
-  public static function getServicoControladoQuantidade($iSolicitem) {
-
-    if (empty($iSolicitem)) {
-      return 'false';
-    }
-
-    $oDaoSolicitem = db_utils::getDao("solicitem");
-
-    $sSqlServico = $oDaoSolicitem->sql_query_file(null, "pc11_servicoquantidade", null, "pc11_codigo = {$iSolicitem}");
-    $rsServico = $oDaoSolicitem->sql_record($sSqlServico);
-    $sControleServico = db_utils::fieldsMemory($rsServico, 0)->pc11_servicoquantidade;
-
-    if ($sControleServico == 'f') {
-
-      $sControleServico = 'false';
-    }
-    if ($sControleServico == 't') {
-
-      $sControleServico = 'true';
-    }
-
-    return $sControleServico;
-
-  }
-
-  public static function getUnidadeItemSolicitacao($iSolicitem) {
-
-    if (empty($iSolicitem)) {
-      return 0;
-    }
-
-    $oDaoSolicitemUnid = db_utils::getDao("solicitemunid");
-
-    $sSqlUnidade = $oDaoSolicitemUnid->sql_query_file(null, "pc17_unid", null, "pc17_codigo = {$iSolicitem}");
-    $rsUnidade = $oDaoSolicitemUnid->sql_record($sSqlUnidade);
-    $iUnidade = db_utils::fieldsMemory($rsUnidade, 0)->pc17_unid;
-
-    return $iUnidade;
-
-  }
-
-  /**
-   * Salva os dados de uma autorização
-   */
-  public function salvar() {
-
     /**
-     * Geramos a autorizacao de empenho
+     * Retorna um array de itens
+     * @return array
      */
-    AutorizacaoEmpenho::bloqueioTabela();
-    $this->iAno                   = db_getsession("DB_anousu");
-    $oDaoEmpAutoriza              = db_utils::getDao("empautoriza");
-    $oDaoEmpAutoriza->e54_anousu  = db_getsession("DB_anousu");
-    $oDaoEmpAutoriza->e54_valor   = $this->getValor();
-    $oDaoEmpAutoriza->e54_concarpeculiar = $this->getCaracteristicaPeculiar();
-    $oDaoEmpAutoriza->e54_codtipo = $this->getTipoEmpenho();
-    $oDaoEmpAutoriza->e54_codcom  = $this->getTipoCompra();
-    $oDaoEmpAutoriza->e54_destin  = $this->getDestino();
-    $oDaoEmpAutoriza->e54_tipol   = $this->getTipoLicitacao();
-    $oDaoEmpAutoriza->e54_numerl  = $this->getNumeroLicitacao();
-    $oDaoEmpAutoriza->e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
-    $oDaoEmpAutoriza->e54_instit  = db_getsession("DB_instit");
-    $oDaoEmpAutoriza->e54_depto   = db_getsession("DB_coddepto");
-    $oDaoEmpAutoriza->e54_praent  = $this->getPrazoEntrega();
-    $oDaoEmpAutoriza->e54_entpar  = '';
-    $oDaoEmpAutoriza->e54_conpag  = $this->getCondicaoPagamento();
-    $oDaoEmpAutoriza->e54_codout  = $this->sOutrasCondicoes;
-    $oDaoEmpAutoriza->e54_contat  = $this->sContato;
-    $oDaoEmpAutoriza->e54_telef   = $this->sTelefone;
-    $oDaoEmpAutoriza->e54_numsol  = '';
-    $oDaoEmpAutoriza->e54_resumo  = $this->getResumo();
-    $oDaoEmpAutoriza->e54_numcgm  = $this->getFornecedor()->getCodigo();
-    $oDaoEmpAutoriza->e54_login   = db_getsession("DB_id_usuario");
-    $oDaoEmpAutoriza->e54_anulad  = null;
+    public function getItens() {
 
-    /**
-     * Verifica se a propriedade iAutorizacao está setada. Se não estiver
-     * é incluido um novo registro, do contrários é feita a alteração
-     */
-    if ($this->iAutorizacao == "") {
+        if (count($this->aItens) == 0 && !empty($this->iAutorizacao)) {
 
-      $oDaoEmpAutoriza->incluir(null);
-      $this->iAutorizacao = $oDaoEmpAutoriza->e54_autori;
-    } else {
+            $oDaoEmpAutItem = db_utils::getDao("empautitem");
+            $sSqlItensAutorizacao = $oDaoEmpAutItem->sql_query_file($this->iAutorizacao, null, "*", 'e55_sequen');
+            $rsItensAutorizacao = $oDaoEmpAutItem->sql_record($sSqlItensAutorizacao);
+            if ($oDaoEmpAutItem->numrows > 0) {
 
-      $oDaoEmpAutoriza->e54_autori = $this->iAutorizacao;
-      $oDaoEmpAutoriza->alterar($this->iAutorizacao);
-    }
+                for ($iItem = 0; $iItem < $oDaoEmpAutItem->numrows; $iItem++) {
 
-    if ($oDaoEmpAutoriza->erro_status == 0) {
+                    $oDadosItem = db_utils::fieldsMemory($rsItensAutorizacao, $iItem);
+                    $oItem = new stdClass();
+                    $oItem->codigomaterial = $oDadosItem->e55_item;
+                    $oItem->quantidade = $oDadosItem->e55_quant;
+                    $oItem->valortotal = $oDadosItem->e55_vltot;
+                    $oItem->observacao = $oDadosItem->e55_descr;
+                    $oItem->codigoelemento = $oDadosItem->e55_codele;
+                    $oItem->valorunitario = $oDadosItem->e55_vlrun;
+                    $oItem->sequencial = $oDadosItem->e55_sequen;
+                    $oItem->marca = $oDadosItem->e55_marca;
+                    $this->aItens[] = $oItem;
+                }
+            }
+        }
 
-      $sMsgErro = "Não foi possivel gerar Autorização de empenho.\n";
-      $sMsgErro .= $oDaoEmpAutoriza->erro_msg;
-      throw new Exception($sMsgErro);
+        return $this->aItens;
     }
 
     /**
-     * Inclui dados da Dotacao
+     * Seta o número do telefone para a autorização
+     * @param String $sTelefone
+     * @access public
+     * @return void
      */
-    $oDaoAutorizaDotacao                 = db_utils::getDao("empautidot");
-    $oDaoAutorizaDotacao->e56_anousu     = $this->getAno();
-    $oDaoAutorizaDotacao->e56_autori     = $this->getAutorizacao();
-    $oDaoAutorizaDotacao->e56_coddot     = $this->getDotacao();
-    $oDaoAutorizaDotacao->e56_orctiporec = $this->getContraPartida();
-    $oDaoAutorizaDotacao->incluir($this->getAutorizacao());
-
-    if ($oDaoAutorizaDotacao->erro_status == 0) {
-
-      $sMsgErro = "Não foi possível inserir os dados da Dotação.\n\n";
-      $sMsgErro .= $oDaoAutorizaDotacao->erro_msg;
-      throw new Exception($sMsgErro);
+    public function setTelefone($sTelefone) {
+        $this->sTelefone = $sTelefone;
     }
 
     /**
-     * incluir os itens
+     * Retorna o número do telefone da autorização
+     * @access public
+     * @return void
      */
-    $iContaAutItem          = 1;
-    $oDaoEmpAutItem         = db_utils::getDao("empautitem");
-    $oDaoEmpAutItemProcesso = db_utils::getDao("empautitempcprocitem");
+    public function getTelefone() {
+        return $this->sTelefone;
+    }
 
-    foreach ($this->getItens() as $oItem) {
+    /**
+     * Seta o contato para a autorização
+     * @param String $sContato
+     * @access public
+     * @return void
+     */
+    public function setContato($sContato) {
+        $this->sContato = $sContato;
+    }
 
-      if (empty($oItem->solicitem)) {
+    /**
+     * Retorna o contato da autorização
+     * @access public
+     * @return void
+     */
+    public function getContato() {
+        return $this->sContato;
+    }
 
-        $sWhere = "";
-        if (!empty($oItem->liclicitem)) {
-          $sWhere = "l21_codigo = {$oItem->liclicitem}";
+    /**
+     * Seta as outras condições da autorização
+     * @param mixed $sOutrasCondicoes
+     * @access public
+     * @return void
+     */
+    public function setOutrasCondicoes($sOutrasCondicoes) {
+        $this->sOutrasCondicoes = $sOutrasCondicoes;
+    }
+
+    /**
+     * Retorna as outras condições da autorização
+     * @access public
+     * @return void
+     */
+    public function getOutrasCondicoes() {
+        return $this->sOutrasCondicoes;
+    }
+
+    /**
+     * Retorna o ano setado
+     * @return integer
+     */
+    public function getAno() {
+        return $this->iAno;
+    }
+
+    /**
+     * Retorna o ID da Autorização
+     * @return integer
+     */
+    public function getAutorizacao() {
+        return $this->iAutorizacao;
+    }
+
+    /**
+     * Retorna o Código da Reserva
+     * @return integer
+     */
+    public function getCodigoReserva() {
+
+        return $this->iCodigoReserva;
+    }
+
+    public function setCodigoReserva($iCodigoReserva) {
+        $this->iCodigoReserva = $iCodigoReserva;
+    }
+
+    /**
+     * Retorna o Desdobramento
+     * @return integer
+     */
+    public function getDesdobramento() {
+        return $this->iDesdobramento;
+    }
+
+    /**
+     * Seta o código do desdobramento
+     * @param integer $iDesdobramento
+     */
+    public function setDesdobramento($iDesdobramento) {
+        $this->iDesdobramento = $iDesdobramento;
+    }
+
+    /**
+     * Retorna a Dotação setada
+     * @return integer
+     */
+    public function getDotacao() {
+        return $this->iDotacao;
+    }
+
+    /**
+     * Seta a Dotação
+     * @param integer $iDotacao
+     */
+    public function setDotacao($iDotacao) {
+        $this->iDotacao = $iDotacao;
+    }
+
+    /**
+     * Define a contrapartida da Dotacao
+     * Define a contrapartida da Dotacao, que deve sempre ser um código de Recurso.
+     * @param integer $iContraPartida Código da Contrapartida
+     */
+    public function setContraPartida($iContraPartida) {
+        $this->iContraPartida = $iContraPartida;
+    }
+
+    /**
+     * Retorna a contrapartida do recurso
+     * @return integer codigo da contrapartida
+     */
+    public function getContraPartida() {
+        return $this->iContraPartida;
+    }
+    /**
+     * Retorna o código do tipo de compra
+     * @return integer
+     */
+    public function getTipoCompra() {
+        return $this->iTipoCompra;
+    }
+
+    /**
+     * Seta o código do tipo de compra
+     * @param integer $iTipoCompra
+     */
+    public function setTipoCompra($iTipoCompra) {
+        $this->iTipoCompra = $iTipoCompra;
+    }
+
+    /**
+     * Retorna o código do tipo de empenho
+     * @return integer
+     */
+    public function getTipoEmpenho() {
+        return $this->iTipoEmpenho;
+    }
+
+    /**
+     * Seta o código do tipo de empenho
+     * @param integer $iTipoEmpenho
+     */
+    public function setTipoEmpenho($iTipoEmpenho) {
+        $this->iTipoEmpenho = $iTipoEmpenho;
+    }
+
+    /**
+     * Retorna o valor setado
+     * @return float
+     */
+    public function getValor() {
+        return $this->nValor;
+    }
+
+    /**
+     * Seta o valor
+     * @param float $nValor
+     */
+    public function setValor($nValor) {
+        $this->nValor = $nValor;
+    }
+
+    /**
+     * Retorna um objeto com os dados do fornecedor
+     * @return CgmBase
+     */
+    public function getFornecedor() {
+        return $this->oFornecedor;
+    }
+
+    /**
+     * Seta o fornecedor
+     * @param object $oFornecedor
+     */
+    public function setFornecedor(cgmbase $oFornecedor) {
+        $this->oFornecedor = $oFornecedor;
+    }
+
+    /**
+     * Retorna o Destino setado
+     * @return string
+     */
+    public function getDestino() {
+        return $this->sDestino;
+    }
+
+    /**
+     * Seta o Destino
+     * @param string $sDestino
+     */
+    public function setDestino($sDestino) {
+        $this->sDestino = $sDestino;
+    }
+
+    /**
+     * Retorna o Resumo
+     * @return string
+     */
+    public function getResumo() {
+        return $this->sResumo;
+    }
+
+    /**
+     * Seta o Resumo
+     * @param string $sResumo
+     */
+    public function setResumo($sResumo) {
+        $this->sResumo = $sResumo;
+    }
+    /**
+     * Retorna o prazo de entregas
+     * @return string
+     */
+    public function getPrazoEntrega() {
+
+        return $this->sPrazoEntrega;
+    }
+
+    /**
+     * Define o prazo da entrega dos itens da Autorizacao
+     * @param string $sPrazoEntrega
+     */
+    public function setPrazoEntrega($sPrazoEntrega) {
+        $this->sPrazoEntrega = $sPrazoEntrega;
+    }
+
+    /**
+     * retorna o numero da licitação.
+     * @return string
+     */
+    public function getNumeroLicitacao() {
+
+        return $this->sNumeroLicitacao;
+    }
+
+    /**
+     * Define o Número da Licitaççao que gerou a autorização
+     * @param string $sNumeroLicitacao
+     */
+    public function setNumeroLicitacao($sNumeroLicitacao) {
+        $this->sNumeroLicitacao = $sNumeroLicitacao;
+    }
+
+    /**
+     * retorna o tipo da licitação.
+     * @return string
+     */
+    public function getTipoLicitacao() {
+        return $this->sTipoLicitacao;
+    }
+
+    /**
+     * Define o tipo da Licitaçao ue gerou a autorização
+     * @param string $sNumeroLicitacao
+     */
+    public function setTipoLicitacao($sNumeroLicitacao) {
+        $this->sTipoLicitacao = $sNumeroLicitacao;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodigoLicitacao() {
+
+        return $this->sCodigoLicitacao;
+    }
+
+    /**
+     * @param string $sCodigoLicitacao
+     */
+    public function setCodigoLicitacao($sCodigoLicitacao) {
+
+        $this->sCodigoLicitacao = $sCodigoLicitacao;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModalidade()
+    {
+        return $this->Modalidade;
+    }
+
+    /**
+     * @param mixed $Modalidade
+     */
+    public function setModalidade($Modalidade)
+    {
+        $this->Modalidade = $Modalidade;
+    }
+
+    /**
+     * @return int4
+     */
+    public function getSTipoorigem()
+    {
+        return $this->sTipoorigem;
+    }
+
+    /**
+     * @param int4 $sTipoorigem
+     */
+    public function setSTipoorigem($sTipoorigem)
+    {
+        $this->sTipoorigem = $sTipoorigem;
+    }
+
+    /**
+     * @return int4
+     */
+    public function getSTipoautorizacao()
+    {
+        return $this->sTipoautorizacao;
+    }
+
+    /**
+     * @param int4 $sTipoautorizacao
+     */
+    public function setSTipoautorizacao($sTipoautorizacao)
+    {
+        $this->sTipoautorizacao = $sTipoautorizacao;
+    }
+
+    /**
+     * @return int4
+     */
+    public function getSLicoutrosorgaos()
+    {
+        return $this->sLicoutrosorgaos;
+    }
+
+    /**
+     * @param int4 $sLicoutrosorgaos
+     */
+    public function setSLicoutrosorgaos($sLicoutrosorgaos)
+    {
+        $this->sLicoutrosorgaos = $sLicoutrosorgaos;
+    }
+
+    /**
+     * @return int4
+     */
+    public function getSAdesaoregpreco()
+    {
+        return $this->sAdesaoregpreco;
+    }
+
+    /**
+     * @param int4 $sAdesaoregpreco
+     */
+    public function setSAdesaoregpreco($sAdesaoregpreco)
+    {
+        $this->sAdesaoregpreco = $sAdesaoregpreco;
+    }
+
+    /**
+     * Adiciona um item a Autorizacao
+     *
+     * @param stdClass $oItem objeto com os dados do item
+     */
+    public function addItem($oItem) {
+        $this->aItens[] = $oItem;
+    }
+
+    /**
+     * Retorna a Característica Peculiar
+     * @return string
+     */
+    public function getCaracteristicaPeculiar() {
+        return $this->sCaracteristicaPeculiar;
+    }
+
+    /**
+     * Seta a Característica Peculiar
+     * @param string $sCaracteristicaPeculiar
+     */
+    public function setCaracteristicaPeculiar($sCaracteristicaPeculiar) {
+        $this->sCaracteristicaPeculiar = $sCaracteristicaPeculiar;
+    }
+
+    /**
+     * Seta valor em Condição de Pagamento
+     * @param string $sCondicaoPagamento
+     */
+    public function setCondicaoPagamento($sCondicaoPagamento) {
+        $this->sCondicaoPagamento = $sCondicaoPagamento;
+    }
+
+    /**
+     * Retorna a condição de pagamento.
+     * @return string
+     */
+    public function getCondicaoPagamento() {
+        return $this->sCondicaoPagamento;
+    }
+
+    public static function getServicoControladoQuantidade($iSolicitem) {
+
+        if (empty($iSolicitem)) {
+            return 'false';
         }
 
-        if (!empty($oItem->empempitem)) {
-          $sWhere = "e62_sequencial = {$oItem->empempitem}";
+        $oDaoSolicitem = db_utils::getDao("solicitem");
+
+        $sSqlServico = $oDaoSolicitem->sql_query_file(null, "pc11_servicoquantidade", null, "pc11_codigo = {$iSolicitem}");
+        $rsServico = $oDaoSolicitem->sql_record($sSqlServico);
+        $sControleServico = db_utils::fieldsMemory($rsServico, 0)->pc11_servicoquantidade;
+
+        if ($sControleServico == 'f') {
+
+            $sControleServico = 'false';
+        }
+        if ($sControleServico == 't') {
+
+            $sControleServico = 'true';
         }
 
-        if (!empty($oItem->pcprocitem)) {
-          $sWhere = "pc81_codprocitem = {$oItem->pcprocitem}";
+        return $sControleServico;
+
+    }
+
+    public static function getUnidadeItemSolicitacao($iSolicitem) {
+
+        if (empty($iSolicitem)) {
+            return 0;
         }
 
-        if (!empty($sWhere)) {
+        $oDaoSolicitemUnid = db_utils::getDao("solicitemunid");
 
-          $sSqlBuscaSolicitem = "select pc11_codigo
+        $sSqlUnidade = $oDaoSolicitemUnid->sql_query_file(null, "pc17_unid", null, "pc17_codigo = {$iSolicitem}");
+        $rsUnidade = $oDaoSolicitemUnid->sql_record($sSqlUnidade);
+        $iUnidade = db_utils::fieldsMemory($rsUnidade, 0)->pc17_unid;
+
+        return $iUnidade;
+
+    }
+
+    /**
+     * Salva os dados de uma autorização
+     */
+    public function salvar() {
+
+        /**
+         * Geramos a autorizacao de empenho
+         */
+        AutorizacaoEmpenho::bloqueioTabela();
+        $this->iAno                   = db_getsession("DB_anousu");
+        $oDaoEmpAutoriza              = db_utils::getDao("empautoriza");
+        $oDaoEmpAutoriza->e54_anousu  = db_getsession("DB_anousu");
+        $oDaoEmpAutoriza->e54_valor   = $this->getValor();
+        $oDaoEmpAutoriza->e54_concarpeculiar = $this->getCaracteristicaPeculiar();
+        $oDaoEmpAutoriza->e54_codtipo = $this->getTipoEmpenho();
+        $oDaoEmpAutoriza->e54_codcom  = $this->getTipoCompra();
+        $oDaoEmpAutoriza->e54_destin  = $this->getDestino();
+        $oDaoEmpAutoriza->e54_tipol   = $this->getTipoLicitacao();
+        $oDaoEmpAutoriza->e54_numerl  = $this->getNumeroLicitacao();
+        $oDaoEmpAutoriza->e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoEmpAutoriza->e54_instit  = db_getsession("DB_instit");
+        $oDaoEmpAutoriza->e54_depto   = db_getsession("DB_coddepto");
+        $oDaoEmpAutoriza->e54_praent  = $this->getPrazoEntrega();
+        $oDaoEmpAutoriza->e54_entpar  = '';
+        $oDaoEmpAutoriza->e54_conpag  = $this->getCondicaoPagamento();
+        $oDaoEmpAutoriza->e54_codout  = $this->sOutrasCondicoes;
+        $oDaoEmpAutoriza->e54_contat  = $this->sContato;
+        $oDaoEmpAutoriza->e54_telef   = $this->sTelefone;
+        $oDaoEmpAutoriza->e54_numsol  = '';
+        $oDaoEmpAutoriza->e54_resumo  = $this->getResumo();
+        $oDaoEmpAutoriza->e54_numcgm  = $this->getFornecedor()->getCodigo();
+        $oDaoEmpAutoriza->e54_login   = db_getsession("DB_id_usuario");
+        $oDaoEmpAutoriza->e54_anulad  = null;
+        $oDaoEmpAutoriza->e54_codlicitacao = $this->getCodigoLicitacao();
+        $oDaoEmpAutoriza->e54_nummodalidade = $this->getModalidade();
+        $oDaoEmpAutoriza->e54_tipoorigem = $this->getSTipoorigem();
+        $oDaoEmpAutoriza->e54_tipoautorizacao = $this->getSTipoautorizacao();
+        $oDaoEmpAutoriza->e54_licoutrosorgaos = $this->getSLicoutrosorgaos();
+        $oDaoEmpAutoriza->e54_adesaoregpreco = $this->getSAdesaoregpreco();
+
+        /**
+         * Verifica se a propriedade iAutorizacao está setada. Se não estiver
+         * é incluido um novo registro, do contrários é feita a alteração
+         */
+        if ($this->iAutorizacao == "") {
+
+            $oDaoEmpAutoriza->incluir(null);
+            $this->iAutorizacao = $oDaoEmpAutoriza->e54_autori;
+        } else {
+
+            $oDaoEmpAutoriza->e54_autori = $this->iAutorizacao;
+            $oDaoEmpAutoriza->alterar($this->iAutorizacao);
+        }
+
+        if ($oDaoEmpAutoriza->erro_status == 0) {
+
+            $sMsgErro = "Não foi possivel gerar Autorização de empenho.\n";
+            $sMsgErro .= $oDaoEmpAutoriza->erro_msg;
+            throw new Exception($sMsgErro);
+        }
+
+        /**
+         * Inclui dados da Dotacao
+         */
+        $oDaoAutorizaDotacao                 = db_utils::getDao("empautidot");
+        $oDaoAutorizaDotacao->e56_anousu     = $this->getAno();
+        $oDaoAutorizaDotacao->e56_autori     = $this->getAutorizacao();
+        $oDaoAutorizaDotacao->e56_coddot     = $this->getDotacao();
+        $oDaoAutorizaDotacao->e56_orctiporec = $this->getContraPartida();
+        $oDaoAutorizaDotacao->incluir($this->getAutorizacao());
+
+        if ($oDaoAutorizaDotacao->erro_status == 0) {
+
+            $sMsgErro = "Não foi possível inserir os dados da Dotação.\n\n";
+            $sMsgErro .= $oDaoAutorizaDotacao->erro_msg;
+            throw new Exception($sMsgErro);
+        }
+
+        /**
+         * incluir os itens
+         */
+        $iContaAutItem          = 1;
+        $oDaoEmpAutItem         = db_utils::getDao("empautitem");
+        $oDaoEmpAutItemProcesso = db_utils::getDao("empautitempcprocitem");
+
+        foreach ($this->getItens() as $oItem) {
+
+            if (empty($oItem->solicitem)) {
+
+                $sWhere = "";
+                if (!empty($oItem->liclicitem)) {
+                    $sWhere = "l21_codigo = {$oItem->liclicitem}";
+                }
+
+                if (!empty($oItem->empempitem)) {
+                    $sWhere = "e62_sequencial = {$oItem->empempitem}";
+                }
+
+                if (!empty($oItem->pcprocitem)) {
+                    $sWhere = "pc81_codprocitem = {$oItem->pcprocitem}";
+                }
+
+                if (!empty($sWhere)) {
+
+                    $sSqlBuscaSolicitem = "select pc11_codigo
                                    from solicitem
                                         left join pcprocitem   on  pc81_solicitem   = pc11_codigo
                                         left join empautitempcprocitem on e73_pcprocitem = pcprocitem.pc81_codprocitem
@@ -722,281 +857,281 @@ class AutorizacaoEmpenho {
                                         left join liclicitem   on l21_codpcprocitem = pc81_codprocitem
                                   where {$sWhere}";
 
-          $rsBuscaSolicitem = db_query($sSqlBuscaSolicitem);
-          if (!$rsBuscaSolicitem) {
-            throw new Exception("Não localizou o código do item na solicitação de compras.");
-          }
-          $oItem->solicitem = db_utils::fieldsMemory($rsBuscaSolicitem, 0)->pc11_codigo;
+                    $rsBuscaSolicitem = db_query($sSqlBuscaSolicitem);
+                    if (!$rsBuscaSolicitem) {
+                        throw new Exception("Não localizou o código do item na solicitação de compras.");
+                    }
+                    $oItem->solicitem = db_utils::fieldsMemory($rsBuscaSolicitem, 0)->pc11_codigo;
+                }
+            }
+            if (!isset($oItem->solicitem)) {
+                $lServicoQuantidade = $oItem->controlaquantidade;
+                $iUnidade           = $oItem->unidade;
+            } else {
+                $lServicoQuantidade = AutorizacaoEmpenho::getServicoControladoQuantidade($oItem->solicitem);
+                $iUnidade           = AutorizacaoEmpenho::getUnidadeItemSolicitacao($oItem->solicitem);
+            }
+
+            $oDaoEmpAutItem->e55_autori = $this->getAutorizacao();
+            $oDaoEmpAutItem->e55_item   = $oItem->codigomaterial;
+            $oDaoEmpAutItem->e55_sequen = $iContaAutItem;
+            $oDaoEmpAutItem->e55_quant  = $oItem->quantidade;
+            $oDaoEmpAutItem->e55_vltot  = number_format((float) $oItem->valortotal, 2, '.', '');
+            $oDaoEmpAutItem->e55_descr  = $oItem->observacao;
+            $oDaoEmpAutItem->e55_codele = $oItem->codigoelemento;
+            $oDaoEmpAutItem->e55_vlrun  = $oItem->valorunitario;
+            $oDaoEmpAutItem->e55_marca  = $oItem->marca;
+            $oDaoEmpAutItem->e55_servicoquantidade = $lServicoQuantidade;
+            $oDaoEmpAutItem->e55_unid   = $iUnidade;
+
+            $oItem->sequencial = $iContaAutItem;
+            $oDaoEmpAutItem->incluir($this->getAutorizacao(), $iContaAutItem);
+
+            if ($oDaoEmpAutItem->erro_status == 0) {
+
+                $sMsgErro = "ERRO [ 1 ] - Não foi possivel incluir item {$oItem->codigomaterial} para a autorização ";
+                $sMsgErro .= "{$this->getAutorizacao()}.\n";
+                $sMsgErro .= "Erro Técnico:{$oDaoEmpAutItem->erro_msg}";
+                throw new Exception($sMsgErro);
+            }
+
+            /**
+             * vinculamos o item do processo de compras a autorizacao
+             */
+            if (isset($oItem->codigoprocesso) && $oItem->codigoprocesso != '') {
+
+                $oDaoEmpAutItemProcesso->e73_autori = $this->getAutorizacao();
+                $oDaoEmpAutItemProcesso->e73_sequen = $iContaAutItem;
+                $oDaoEmpAutItemProcesso->e73_pcprocitem = $oItem->codigoprocesso;
+                $oDaoEmpAutItemProcesso->incluir(null);
+                if ($oDaoEmpAutItemProcesso->erro_status == 0) {
+
+                    $sMsgErro = "ERRO [ 2 ] - Não foi possivel incluir item {$oItem->codigomaterial} para a autorização ";
+                    $sMsgErro .= "{$this->getAutorizacao()}.";
+                    $sMsgErro .= "Erro Técnico:{$oDaoEmpAutItemProcesso->erro_msg}";
+                    throw new Exception($sMsgErro);
+                }
+            }
+            $iContaAutItem++;
         }
-      }
-      if (!isset($oItem->solicitem)) {
-        $lServicoQuantidade = $oItem->controlaquantidade;
-        $iUnidade           = $oItem->unidade;
-      } else {
-        $lServicoQuantidade = AutorizacaoEmpenho::getServicoControladoQuantidade($oItem->solicitem);
-        $iUnidade           = AutorizacaoEmpenho::getUnidadeItemSolicitacao($oItem->solicitem);
-      }
 
-      $oDaoEmpAutItem->e55_autori = $this->getAutorizacao();
-      $oDaoEmpAutItem->e55_item   = $oItem->codigomaterial;
-      $oDaoEmpAutItem->e55_sequen = $iContaAutItem;
-      $oDaoEmpAutItem->e55_quant  = $oItem->quantidade;
-      $oDaoEmpAutItem->e55_vltot  = number_format((float) $oItem->valortotal, 2, '.', '');
-      $oDaoEmpAutItem->e55_descr  = $oItem->observacao;
-      $oDaoEmpAutItem->e55_codele = $oItem->codigoelemento;
-      $oDaoEmpAutItem->e55_vlrun  = $oItem->valorunitario;
-      $oDaoEmpAutItem->e55_marca  = $oItem->marca;
-      $oDaoEmpAutItem->e55_servicoquantidade = $lServicoQuantidade;
-      $oDaoEmpAutItem->e55_unid   = $iUnidade;
-
-      $oItem->sequencial = $iContaAutItem;
-      $oDaoEmpAutItem->incluir($this->getAutorizacao(), $iContaAutItem);
-
-      if ($oDaoEmpAutItem->erro_status == 0) {
-
-        $sMsgErro = "ERRO [ 1 ] - Não foi possivel incluir item {$oItem->codigomaterial} para a autorização ";
-        $sMsgErro .= "{$this->getAutorizacao()}.\n";
-        $sMsgErro .= "Erro Técnico:{$oDaoEmpAutItem->erro_msg}";
-        throw new Exception($sMsgErro);
-      }
-
-      /**
-       * vinculamos o item do processo de compras a autorizacao
-       */
-      if (isset($oItem->codigoprocesso) && $oItem->codigoprocesso != '') {
-
-        $oDaoEmpAutItemProcesso->e73_autori = $this->getAutorizacao();
-        $oDaoEmpAutItemProcesso->e73_sequen = $iContaAutItem;
-        $oDaoEmpAutItemProcesso->e73_pcprocitem = $oItem->codigoprocesso;
-        $oDaoEmpAutItemProcesso->incluir(null);
-        if ($oDaoEmpAutItemProcesso->erro_status == 0) {
-
-          $sMsgErro = "ERRO [ 2 ] - Não foi possivel incluir item {$oItem->codigomaterial} para a autorização ";
-          $sMsgErro .= "{$this->getAutorizacao()}.";
-          $sMsgErro .= "Erro Técnico:{$oDaoEmpAutItemProcesso->erro_msg}";
-          throw new Exception($sMsgErro);
+        /**
+         * reservar saldo dotacao
+         * TODO fazer método na classe Dotacao para reservar saldo
+         */
+        if (empty($this->iCodigoReserva)) {
+            $this->reservarSaldo();
         }
-      }
-      $iContaAutItem++;
     }
 
     /**
-     * reservar saldo dotacao
-     * TODO fazer método na classe Dotacao para reservar saldo
+     * Método responsável por reservar saldo de uma dotação.
+     * @return true
      */
-    if (empty($this->iCodigoReserva)) {
-      $this->reservarSaldo();
-    }
-  }
+    public function reservarSaldo() {
 
-  /**
-   * Método responsável por reservar saldo de uma dotação.
-   * @return true
-   */
-  public function reservarSaldo() {
+        $oDaoOrcReserva = db_utils::getDao("orcreserva");
+        $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
+        $oDaoOrcReserva->o80_coddot = $this->getDotacao();
+        $oDaoOrcReserva->o80_dtfim = db_getsession("DB_anousu") . "-12-31";
+        $oDaoOrcReserva->o80_dtini = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoOrcReserva->o80_valor = $this->getValor();
+        $oDaoOrcReserva->o80_descr = "Reserva item Solicitacao";
+        $oDaoOrcReserva->o80_justificativa = "Reserva item Solicitacao";
+        $oDaoOrcReserva->incluir(null);
 
-    $oDaoOrcReserva = db_utils::getDao("orcreserva");
-    $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
-    $oDaoOrcReserva->o80_coddot = $this->getDotacao();
-    $oDaoOrcReserva->o80_dtfim = db_getsession("DB_anousu") . "-12-31";
-    $oDaoOrcReserva->o80_dtini = date("Y-m-d", db_getsession("DB_datausu"));
-    $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
-    $oDaoOrcReserva->o80_valor = $this->getValor();
-    $oDaoOrcReserva->o80_descr = "Reserva item Solicitacao";
-    $oDaoOrcReserva->o80_justificativa = "Reserva item Solicitacao";
-    $oDaoOrcReserva->incluir(null);
+        if ($oDaoOrcReserva->erro_status == 0) {
 
-    if ($oDaoOrcReserva->erro_status == 0) {
+            $sMsgErro = "Não foi possivel gerar reserva para a autorização, na dotação {$this->getDotacao()}.\n";
+            $sMsgErro .= str_replace("\\n", "\n", $oDaoOrcReserva->erro_msg);
+            throw new Exception($sMsgErro);
+        }
 
-      $sMsgErro = "Não foi possivel gerar reserva para a autorização, na dotação {$this->getDotacao()}.\n";
-      $sMsgErro .= str_replace("\\n", "\n", $oDaoOrcReserva->erro_msg);
-      throw new Exception($sMsgErro);
-    }
+        $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
+        $oDaoOrcReservaAut->o83_autori = $this->getAutorizacao();
+        $oDaoOrcReservaAut->o83_codres = $oDaoOrcReserva->o80_codres;
+        $oDaoOrcReservaAut->incluir($oDaoOrcReserva->o80_codres);
 
-    $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
-    $oDaoOrcReservaAut->o83_autori = $this->getAutorizacao();
-    $oDaoOrcReservaAut->o83_codres = $oDaoOrcReserva->o80_codres;
-    $oDaoOrcReservaAut->incluir($oDaoOrcReserva->o80_codres);
+        if ($oDaoOrcReservaAut->erro_status == 0) {
 
-    if ($oDaoOrcReservaAut->erro_status == 0) {
-
-      $sMsgErro = "Não foi possivel gerar reserva para a autorização, na dotação {$this->getDotacao()}.\n";
-      $sMsgErro .= $oDaoOrcReservaAut->erro_msg;
-      throw new Exception($sMsgErro);
-    }
-    $this->iCodigoReserva = $oDaoOrcReserva->o80_codres;
-    return true;
-  }
-
-  /**
-   * Remove a reserva de saldo da Autorização
-   * @return AutorizacaoEmpenho
-   */
-  public function excluirReservaSaldo() {
-
-    if (!db_utils::inTransaction()) {
-      throw new Exception('Operação cancelada. Não existe transação com o banco de dados.');
-    }
-    if ($this->getCodigoReserva() != null) {
-
-      $oDaoOrcReserva = db_utils::getDao("orcreserva");
-      $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
-      $oDaoOrcReservaAut->excluir($this->getCodigoReserva());
-
-      if ($oDaoOrcReservaAut->erro_status == 0) {
-        throw new Exception("Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
-      }
-
-      $oDaoOrcReserva->excluir($this->getCodigoReserva());
-      if ($oDaoOrcReserva->erro_status == 0) {
-        throw new Exception( "Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
-      }
-    }
-    $this->iCodigoReserva = null;
-    return true;
-  }
-
-  /**
-   * Método que altera os parâmetros da autoriza anulando a autorização de empenho
-   * Ex: $oAutorizacao = new AutorizacaoEmpenho(1234);
-   *     $oAutorizacao->excluirReservaSaldo();
-   *     $oAutorizacao->anularAutorizacaoEmpenho(new DBDate('19/02/2013'));
-   * @param  DBDate $oDataAnulacao
-   * @return boolean true
-   */
-  public function anularAutorizacaoEmpenho(DBDate $oDataAnulacao) {
-
-    $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
-    $sSqlBuscaReserva  = $oDaoOrcReservaAut->sql_query_file(null, "1", null, "o83_autori = {$this->iAutorizacao}");
-    $rsBuscaReserva    = $oDaoOrcReservaAut->sql_record($sSqlBuscaReserva);
-    if ($oDaoOrcReservaAut->numrows != 0) {
-      throw new BusinessException("Não foi feita a exclusão da reserva de saldo.");
+            $sMsgErro = "Não foi possivel gerar reserva para a autorização, na dotação {$this->getDotacao()}.\n";
+            $sMsgErro .= $oDaoOrcReservaAut->erro_msg;
+            throw new Exception($sMsgErro);
+        }
+        $this->iCodigoReserva = $oDaoOrcReserva->o80_codres;
+        return true;
     }
 
-    $oDaoAutoriza             = db_utils::getDao("empautoriza");
-    $oDaoAutoriza->e54_anulad = $oDataAnulacao->getDate();
-    $oDaoAutoriza->e54_autori = $this->iAutorizacao;
-    $oDaoAutoriza->alterar($this->iAutorizacao);
-    if ($oDaoAutoriza->erro_status == 0) {
+    /**
+     * Remove a reserva de saldo da Autorização
+     * @return AutorizacaoEmpenho
+     */
+    public function excluirReservaSaldo() {
 
-      $sErro  = "Erro ao anular autorizacao {$this->getCodigo()}\n";
-      $sErro .= "{$oDaoAutoriza->erro_msg}";
-    }
-    return true;
-  }
+        if (!db_utils::inTransaction()) {
+            throw new Exception('Operação cancelada. Não existe transação com o banco de dados.');
+        }
+        if ($this->getCodigoReserva() != null) {
 
-  /**
-   * Método para bloquear a tabela empautoriza
-   * Bloqueio necessário para, por exemplo, não gerar duas autorizações para mesma licitação de forma simultanea,
-   * o que poderia acarretar erros na base de dados.
-   * @throws BusinessException
-   * @throws DBException
-   */
-  public static function bloqueioTabela() {
+            $oDaoOrcReserva = db_utils::getDao("orcreserva");
+            $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
+            $oDaoOrcReservaAut->excluir($this->getCodigoReserva());
 
-    if (!db_utils::inTransaction()) {
+            if ($oDaoOrcReservaAut->erro_status == 0) {
+                throw new Exception("Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
+            }
 
-      $sMensagem  = 'Para utilizar o método bloqueioTabela, o bloco de código ';
-      $sMensagem .= ' deve estar em transação.';
-      throw new BusinessException($sMensagem);
-    }
-
-    $sSQL        = " LOCK TABLE empautoriza in SHARE ROW EXCLUSIVE MODE ";
-    $rsResultado = db_query($sSQL);
-
-    if (!$rsResultado) {
-      throw new DBException('Erro ao bloquear Autorização de Empenho');
-    }
-  }
-
-  /**
-   * Retorna a licitação de origem
-   * @return \licitacao
-   */
-  public function getLicitacao() {
-
-    if (empty($this->iAutorizacao)) {
-      return null;
+            $oDaoOrcReserva->excluir($this->getCodigoReserva());
+            if ($oDaoOrcReserva->erro_status == 0) {
+                throw new Exception( "Erro ao cancelar Reserva de saldo da Autorizacao {$this->iAutorizacao}");
+            }
+        }
+        $this->iCodigoReserva = null;
+        return true;
     }
 
-    $oDaoEmpautitem = new cl_empautitem();
-    $sSqlLicitacao  = $oDaoEmpautitem->sql_query_lic($this->getAutorizacao(), null, "l21_codliclicita");
-    $rsLicitacao    = $oDaoEmpautitem->sql_record( "{$sSqlLicitacao} limit 1" );
+    /**
+     * Método que altera os parâmetros da autoriza anulando a autorização de empenho
+     * Ex: $oAutorizacao = new AutorizacaoEmpenho(1234);
+     *     $oAutorizacao->excluirReservaSaldo();
+     *     $oAutorizacao->anularAutorizacaoEmpenho(new DBDate('19/02/2013'));
+     * @param  DBDate $oDataAnulacao
+     * @return boolean true
+     */
+    public function anularAutorizacaoEmpenho(DBDate $oDataAnulacao) {
 
-    if ($oDaoEmpautitem->numrows > 0) {
-      return new licitacao( db_utils::fieldsMemory($rsLicitacao, 0)->l21_codliclicita );
+        $oDaoOrcReservaAut = db_utils::getDao("orcreservaaut");
+        $sSqlBuscaReserva  = $oDaoOrcReservaAut->sql_query_file(null, "1", null, "o83_autori = {$this->iAutorizacao}");
+        $rsBuscaReserva    = $oDaoOrcReservaAut->sql_record($sSqlBuscaReserva);
+        if ($oDaoOrcReservaAut->numrows != 0) {
+            throw new BusinessException("Não foi feita a exclusão da reserva de saldo.");
+        }
+
+        $oDaoAutoriza             = db_utils::getDao("empautoriza");
+        $oDaoAutoriza->e54_anulad = $oDataAnulacao->getDate();
+        $oDaoAutoriza->e54_autori = $this->iAutorizacao;
+        $oDaoAutoriza->alterar($this->iAutorizacao);
+        if ($oDaoAutoriza->erro_status == 0) {
+
+            $sErro  = "Erro ao anular autorizacao {$this->getCodigo()}\n";
+            $sErro .= "{$oDaoAutoriza->erro_msg}";
+        }
+        return true;
     }
 
-    return null;
-  }
+    /**
+     * Método para bloquear a tabela empautoriza
+     * Bloqueio necessário para, por exemplo, não gerar duas autorizações para mesma licitação de forma simultanea,
+     * o que poderia acarretar erros na base de dados.
+     * @throws BusinessException
+     * @throws DBException
+     */
+    public static function bloqueioTabela() {
 
-  /**
-   * Retorna o processo de compras de origem
-   * @return \ProcessoCompras
-   */
-  public function getProcessoCompras() {
+        if (!db_utils::inTransaction()) {
 
-    if (empty($this->iAutorizacao)) {
-      return null;
+            $sMensagem  = 'Para utilizar o método bloqueioTabela, o bloco de código ';
+            $sMensagem .= ' deve estar em transação.';
+            throw new BusinessException($sMensagem);
+        }
+
+        $sSQL        = " LOCK TABLE empautoriza in SHARE ROW EXCLUSIVE MODE ";
+        $rsResultado = db_query($sSQL);
+
+        if (!$rsResultado) {
+            throw new DBException('Erro ao bloquear Autorização de Empenho');
+        }
     }
 
-    $oDaoEmpautitem = new cl_empautitem();
-    $sSqlProcesso   = $oDaoEmpautitem->sql_query_processocompras($this->getAutorizacao(), null, "pc81_codproc");
-    $rsProcesso     = $oDaoEmpautitem->sql_record( "{$sSqlProcesso} limit 1" );
+    /**
+     * Retorna a licitação de origem
+     * @return \licitacao
+     */
+    public function getLicitacao() {
 
-    if ($oDaoEmpautitem->numrows > 0) {
-      return new ProcessoCompras( db_utils::fieldsMemory($rsProcesso, 0)->pc81_codproc );
+        if (empty($this->iAutorizacao)) {
+            return null;
+        }
+
+        $oDaoEmpautitem = new cl_empautitem();
+        $sSqlLicitacao  = $oDaoEmpautitem->sql_query_lic($this->getAutorizacao(), null, "l21_codliclicita");
+        $rsLicitacao    = $oDaoEmpautitem->sql_record( "{$sSqlLicitacao} limit 1" );
+
+        if ($oDaoEmpautitem->numrows > 0) {
+            return new licitacao( db_utils::fieldsMemory($rsLicitacao, 0)->l21_codliclicita );
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    /**
+     * Retorna o processo de compras de origem
+     * @return \ProcessoCompras
+     */
+    public function getProcessoCompras() {
 
-  /**
-   * @return string
-   */
-  public function getProcessoAdministrativo() {
-    return $this->sProcessoAdministrativo;
-  }
+        if (empty($this->iAutorizacao)) {
+            return null;
+        }
 
-  /**
-   * @param string $sProcessoAdministrativo
-   */
-  public function setProcessoAdministrativo($sProcessoAdministrativo) {
-    $this->sProcessoAdministrativo = $sProcessoAdministrativo;
-  }
+        $oDaoEmpautitem = new cl_empautitem();
+        $sSqlProcesso   = $oDaoEmpautitem->sql_query_processocompras($this->getAutorizacao(), null, "pc81_codproc");
+        $rsProcesso     = $oDaoEmpautitem->sql_record( "{$sSqlProcesso} limit 1" );
 
-  /**
-   * metodo que retorna se o item da dotacao possui uma autorizacao
-   * @param integer codigo do material
-   * @return boolean
-   *
-   */
-  public static function verificaItemAutorizado($iCodigoItem, $iDotacao = null, $iSolicitacao) {
+        if ($oDaoEmpautitem->numrows > 0) {
+            return new ProcessoCompras( db_utils::fieldsMemory($rsProcesso, 0)->pc81_codproc );
+        }
 
-    // e55_item = $iCodigoItem
-    // e56_coddot = $iDotacao
-    // pc11_numero = $iSolicitacao
-
-    if (!isset($iDotacao) || empty($iDotacao)) {
-
-      return false;
+        return null;
     }
 
-    $oDaoSolicitem = db_utils::getDao("solicitem");
-
-    $sWhereSolicitem  = "    pc11_codigo = {$iCodigoItem}  ";
-    $sWhereSolicitem .= "and e56_coddot  = {$iDotacao}     ";
-    $sWhereSolicitem .= "and pc11_numero = {$iSolicitacao} ";
-    $sWhereSolicitem .= "and e54_anulad is null            ";
-
-    $sSqlEmpAutItem = $oDaoSolicitem->sql_query_verificaItemAutorizado( null, "e55_autori", null, $sWhereSolicitem);
-
-    $rsEmpAutItem   = db_query($sSqlEmpAutItem);
-    if (pg_numrows($rsEmpAutItem) > 0) {
-      return true;
+    /**
+     * @return string
+     */
+    public function getProcessoAdministrativo() {
+        return $this->sProcessoAdministrativo;
     }
-    return false;
 
-  }
+    /**
+     * @param string $sProcessoAdministrativo
+     */
+    public function setProcessoAdministrativo($sProcessoAdministrativo) {
+        $this->sProcessoAdministrativo = $sProcessoAdministrativo;
+    }
+
+    /**
+     * metodo que retorna se o item da dotacao possui uma autorizacao
+     * @param integer codigo do material
+     * @return boolean
+     *
+     */
+    public static function verificaItemAutorizado($iCodigoItem, $iDotacao = null, $iSolicitacao) {
+
+        // e55_item = $iCodigoItem
+        // e56_coddot = $iDotacao
+        // pc11_numero = $iSolicitacao
+
+        if (!isset($iDotacao) || empty($iDotacao)) {
+
+            return false;
+        }
+
+        $oDaoSolicitem = db_utils::getDao("solicitem");
+
+        $sWhereSolicitem  = "    pc11_codigo = {$iCodigoItem}  ";
+        $sWhereSolicitem .= "and e56_coddot  = {$iDotacao}     ";
+        $sWhereSolicitem .= "and pc11_numero = {$iSolicitacao} ";
+        $sWhereSolicitem .= "and e54_anulad is null            ";
+
+        $sSqlEmpAutItem = $oDaoSolicitem->sql_query_verificaItemAutorizado( null, "e55_autori", null, $sWhereSolicitem);
+
+        $rsEmpAutItem   = db_query($sSqlEmpAutItem);
+        if (pg_numrows($rsEmpAutItem) > 0) {
+            return true;
+        }
+        return false;
+
+    }
 }
 ?>

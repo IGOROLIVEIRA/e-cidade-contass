@@ -1221,9 +1221,30 @@ class licitacao {
             $oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
             $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
-            $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_numero}/{$oDadosLicitacao->l20_anousu}");
+            $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_edital}/{$oDadosLicitacao->l20_anousu}");
+            $oAutorizacao->setModalidade($oDadosLicitacao->l20_numero);
+            /**
+             * Verifico o tipo de origem da compra pelo codigo do tribunal
+             *  @OC7425
+             *  1 ? Não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
+             *  2 ? Licitação;
+             *  3 ? Dispensa ou Inexigibilidade;
+             *  4 ? Adesão à ata de registro de preços;
+             *  5 ? Licitação realizada por outro órgão ou entidade;
+             *  6 ? Dispensa ou Inexigibilidade realizada por outro órgão ou entidade;
+             *  7 ? Licitação - Regime Diferenciado de Contratações Públicas ? RDC, conforme Lei no 12.462/2011
+             *  8 ? Licitação realizada por consorcio público
+             *  9 ? Licitação realizada por outro ente da federação
+             */
+            $tipoLicitacao = array(52,48,49,50,51,53,54);
+            $tipoDispensaInex = array(100,101,102);
+            if(in_array($oDadosLicitacao->l44_sequencial, $tipoLicitacao)){
+                $oAutorizacao->setSTipoorigem(2);
+            }elseif (in_array($oDadosLicitacao->l44_sequencial, $tipoDispensaInex)){
+                $oAutorizacao->setSTipoorigem(3);
+            }
+            $oAutorizacao->setSTipoautorizacao(2);
             $oAutorizacao->salvar();
-
 
             $sProcessoAdministrativo = null;
 

@@ -157,7 +157,10 @@ if (isset($incluir)) {
     $clempautoriza->e54_codcom  = $e54_codcom;
     $clempautoriza->e54_destin  = $e54_destin;
     $clempautoriza->e54_tipol   = $e54_tipol ;
-    $clempautoriza->e54_numerl  = $e54_numerl;
+    $clempautoriza->e54_numerl  = $e54_numerll;
+    $clempautoriza->e54_nummodalidade  = $e54_nummodalidade;
+    $clempautoriza->e54_tipoautorizacao = 3;
+    $clempautoriza->e54_tipoorigem = 2;
     $clempautoriza->e54_emiss   = date("Y-m-d",db_getsession("DB_datausu"));
     $clempautoriza->e54_codtipo = $e54_codtipo;
     $clempautoriza->e54_instit  = db_getsession("DB_instit");

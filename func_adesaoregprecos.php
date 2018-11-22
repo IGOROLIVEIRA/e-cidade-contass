@@ -40,7 +40,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
            if(file_exists("funcoes/db_func_adesaoregprecos.php")==true){
              include("funcoes/db_func_adesaoregprecos.php");
            }else{
-           $campos = "si06_sequencial,cgm.z01_nome as dl_Orgao_Gerenciador,si06_numeroprc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
+           $campos = "si06_sequencial,cgm.z01_nome as dl_Orgao_Gerenciador,si06_numeroprc,si06_anoproc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
                       c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm";
            }
         }
@@ -51,7 +51,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
             if(isset($par) && $par = true){
-              $sSQL = "select si06_objetoadesao from adesaoregprecos where si06_sequencial = {$pesquisa_chave}";
+              $sSQL = "select si06_objetoadesao,si06_numeroprc,si06_numlicitacao,si06_anoproc from adesaoregprecos where si06_sequencial = {$pesquisa_chave}";
               $result = $cladesaoregprecos->sql_record($sSQL);
           }else {
                 $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave, "*", "", "si06_instit = " . db_getsession("DB_instit")));
@@ -60,7 +60,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
           if($cladesaoregprecos->numrows!=0){
             db_fieldsmemory($result,0);
               if(isset($par) && $par = true){
-                  echo "<script>".$funcao_js."('$si06_objetoadesao',false);</script>";
+                  echo "<script>".$funcao_js."('$si06_objetoadesao','$si06_numeroprc','$si06_numlicitacao','$si06_anoproc',false);</script>";
               }else {
                   echo "<script>" . $funcao_js . "('$oid',false);</script>";
               }

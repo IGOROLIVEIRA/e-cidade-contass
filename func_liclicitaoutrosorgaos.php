@@ -46,7 +46,7 @@ $clliclicitaoutrosorgaos = new cl_liclicitaoutrosorgaos;
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           if (isset($poo) && $poo = true) {
-              $sSQL = "select z01_nome from liclicitaoutrosorgaos inner join cgm on z01_numcgm = lic211_orgao where lic211_sequencial = {$pesquisa_chave}";
+              $sSQL = "select z01_nome,lic211_tipo,lic211_processo,lic211_numero,lic211_anousu from liclicitaoutrosorgaos inner join cgm on z01_numcgm = lic211_orgao where lic211_sequencial = {$pesquisa_chave}";
               $result = $clliclicitaoutrosorgaos->sql_record($sSQL);
           } else {
               $result = $clliclicitaoutrosorgaos->sql_record($clliclicitaoutrosorgaos->sql_query($pesquisa_chave));
@@ -55,7 +55,7 @@ $clliclicitaoutrosorgaos = new cl_liclicitaoutrosorgaos;
           if($clliclicitaoutrosorgaos->numrows!=0){
             db_fieldsmemory($result,0);
             if (isset($poo) && $poo = true) {
-                echo "<script>".$funcao_js."('$z01_nome',false);</script>";
+                echo "<script>".$funcao_js."('$z01_nome','$lic211_tipo','$lic211_processo','$lic211_numero','$lic211_anousu',false);</script>";
             } else {
                 echo "<script>" . $funcao_js . "('$oid',false);</script>";
             }

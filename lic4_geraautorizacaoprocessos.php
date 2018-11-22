@@ -24,14 +24,13 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 require("libs/db_utils.php");
-require("model/licitacao.model.php");
+require_once("model/licitacao.model.php");
 
 $oPost = db_utils::postMemory($_POST);
 if ($oPost->lSelecionaPc == "f") {

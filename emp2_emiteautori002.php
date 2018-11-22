@@ -41,21 +41,21 @@ $oGet = db_utils::postMemory($_GET);
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
 if ($oConfiguracaoGed->utilizaGED()) {
 
-  if (empty($oGet->e54_autori_ini) && !empty($oGet->e54_autori)) {
-    $oGet->e54_autori_ini = $oGet->e54_autori;
-  }
+    if (empty($oGet->e54_autori_ini) && !empty($oGet->e54_autori)) {
+        $oGet->e54_autori_ini = $oGet->e54_autori;
+    }
 
-  if (empty($oGet->e54_autori_fim) && !empty($oGet->e54_autori)) {
-    $oGet->e54_autori_fim = $oGet->e54_autori;
-  }
+    if (empty($oGet->e54_autori_fim) && !empty($oGet->e54_autori)) {
+        $oGet->e54_autori_fim = $oGet->e54_autori;
+    }
 
-  if ( !empty($oGet->dtInicial) || !empty($oGet->dtFinal) || $oGet->e54_autori_ini != $oGet->e54_autori_fim) {
+    if ( !empty($oGet->dtInicial) || !empty($oGet->dtFinal) || $oGet->e54_autori_ini != $oGet->e54_autori_fim) {
 
-    $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
-    $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
-    db_redireciona("db_erros.php?fechar=true&db_erro={$sMsgErro}");
-    exit;
-  }
+        $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
+        $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
+        db_redireciona("db_erros.php?fechar=true&db_erro={$sMsgErro}");
+        exit;
+    }
 }
 
 
@@ -81,47 +81,47 @@ $dbwhere = '1=1 ';
 
 if (isset($e54_autori)) {
 
-  $dbwhere = "   e54_autori  = $e54_autori";
+    $dbwhere = "   e54_autori  = $e54_autori";
 
 } else if (isset($e54_autori_ini) && $e54_autori_ini != "" || isset($e54_autori_fim) && $e54_autori_fim != "") {
 
-  $dbwhereautori = "";
-  if (isset($e54_autori_ini) && $e54_autori_ini != "") {
-   $dbwhereautori .= " and  e54_autori>$e54_autori_ini";
-  }
-
-  if (isset($e54_autori_fim) && $e54_autori_fim != "") {
-
-    if( trim($dbwhereautori) == "") {
-      $dbwhereautori = " and  e54_autori<$e54_autori_fim";
-    } else {
-      if ($e54_autori_fim != $e54_autori_ini) {
-        $dbwhereautori = " and  e54_autori between $e54_autori_ini and  $e54_autori_fim";
-      } else {
-        $dbwhereautori = " and  e54_autori=$e54_autori_ini ";
-      }
+    $dbwhereautori = "";
+    if (isset($e54_autori_ini) && $e54_autori_ini != "") {
+        $dbwhereautori .= " and  e54_autori>$e54_autori_ini";
     }
-  }
-  $dbwhere .= $dbwhereautori;
+
+    if (isset($e54_autori_fim) && $e54_autori_fim != "") {
+
+        if( trim($dbwhereautori) == "") {
+            $dbwhereautori = " and  e54_autori<$e54_autori_fim";
+        } else {
+            if ($e54_autori_fim != $e54_autori_ini) {
+                $dbwhereautori = " and  e54_autori between $e54_autori_ini and  $e54_autori_fim";
+            } else {
+                $dbwhereautori = " and  e54_autori=$e54_autori_ini ";
+            }
+        }
+    }
+    $dbwhere .= $dbwhereautori;
 
 } else if (isset($sDocAutorizacoes) && trim($sDocAutorizacoes) != "") {
-  /**
-   * Adicionado para recupearar uma STRING já tratada para ser utilizada como IN na busca das autorizações.
-   */
-  $dbwhere .= " and e54_autori in ({$sDocAutorizacoes}) ";
+    /**
+     * Adicionado para recupearar uma STRING já tratada para ser utilizada como IN na busca das autorizações.
+     */
+    $dbwhere .= " and e54_autori in ({$sDocAutorizacoes}) ";
 
 } else {
 
-  if( isset($dtini_dia) ){
-    $dbwhere .= " and e54_emiss>='$dtini_ano-$dtini_mes-$dtini_dia'";
-  }
-  if( isset($dtfim_dia) ){
-    $dbwhere .= " and e54_emiss<='$dtfim_ano-$dtfim_mes-$dtfim_dia'";
-  }
+    if( isset($dtini_dia) ){
+        $dbwhere .= " and e54_emiss>='$dtini_ano-$dtini_mes-$dtini_dia'";
+    }
+    if( isset($dtfim_dia) ){
+        $dbwhere .= " and e54_emiss<='$dtfim_ano-$dtfim_mes-$dtfim_dia'";
+    }
 }
 //$dbwhere .= " and e54_anulad is null";
 
- $sqlmater = "
+$sqlmater = "
 	select empautoriza.*,
 		pc50_descr,
 		o58_orgao,
@@ -190,24 +190,24 @@ if (isset($e54_autori)) {
 	  ";
 $result = db_query($sqlmater);
 if (pg_numrows($result)==0){
-  db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado ! ");
-  exit;
+    db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado ! ");
+    exit;
 }else{
-  db_fieldsmemory($result,0);
+    db_fieldsmemory($result,0);
 
-  $sResumo = db_utils::fieldsMemory($result,0)->e54_resumo;
+    $sResumo = db_utils::fieldsMemory($result,0)->e54_resumo;
 
-  //echo " [3] " . db_criatabela($result). "<br>------------------<br>";
-  //echo $e54_resumo. "<br>";
-  if ($e54_anulad!=""){
-  	db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Anulada !");
-  	exit;
-  }
-  $result_item = $clempautitem->sql_record($clempautitem->sql_query_file($e54_autori));
-  if ($clempautitem->numrows==0){
-  	db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Sem Itens !");
-  	exit;
-  }
+    //echo " [3] " . db_criatabela($result). "<br>------------------<br>";
+    //echo $e54_resumo. "<br>";
+    if ($e54_anulad!=""){
+        db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Anulada !");
+        exit;
+    }
+    $result_item = $clempautitem->sql_record($clempautitem->sql_query_file($e54_autori));
+    if ($clempautitem->numrows==0){
+        db_redireciona("db_erros.php?fechar=true&db_erro=Autorização Sem Itens !");
+        exit;
+    }
 }
 
 
@@ -220,8 +220,8 @@ if (pg_numrows($result)==0){
 $result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_nroviaaut,e30_numdec"));
 
 if($clempparametro->numrows>0){
-  db_fieldsmemory($result02,0);
-  //echo " [4] " . db_criatabela($result02). "<br>------------------<br>";
+    db_fieldsmemory($result02,0);
+    //echo " [4] " . db_criatabela($result02). "<br>------------------<br>";
 
 }
 
@@ -234,10 +234,10 @@ $pdf1->objpdf->SetTextColor(0,0,0);
 
 for ($i = 0;$i < pg_numrows($result);$i++) {
 
-   db_fieldsmemory($result,$i);
-   // echo " [5] " . db_criatabela($result). "<br>------------------<br>";
+    db_fieldsmemory($result, $i);
+    // echo " [5] " . db_criatabela($result). "<br>------------------<br>";
 
-   $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
+    $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
@@ -283,7 +283,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 		                   'Marca: '||coalesce(trim(pc23_obs),'') as pc23_obs
 	   									 from empautitem
                       		  inner join pcmater        			on pc01_codmater = e55_item
-                            inner join orcelemento          on e55_codele    = o56_codele and o56_anousu = ".db_getsession("DB_anousu")."
+                            inner join orcelemento          on e55_codele    = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
                             left join empautitempcprocitem  on empautitempcprocitem.e73_autori = empautitem.e55_autori
                                                            and empautitempcprocitem.e73_sequen = empautitem.e55_sequen
                             left join pcprocitem            on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem
@@ -296,258 +296,270 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
                       		  															 and pcorcamval.pc23_orcamforne     = pcorcamjulg.pc24_orcamforne
                             left  join empautidot     		  on e56_autori                     = e55_autori
 	   						 where e55_autori = $e54_autori
-	   						   and o56_anousu =".db_getsession("DB_anousu")."
+	   						   and o56_anousu =" . db_getsession("DB_anousu") . "
 	   				  order by e55_sequen,o56_elemento,e55_item
 	   					";
 
 
-   $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
-   $resulttot = db_query($sqltot);
-   db_fieldsmemory($resulttot,0);
-   $resultitem = db_query($sqlitem);
+    $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
+    $resulttot = db_query($sqltot);
+    db_fieldsmemory($resulttot, 0);
+    $resultitem = db_query($sqlitem);
 
-   //echo " [6] " . db_criatabela($resulttot). "<br>------------------<br>";
+    //echo " [6] " . db_criatabela($resulttot). "<br>------------------<br>";
 
-   $sSqlPacto  = " SELECT distinct pactoplano.* ";
-   $sSqlPacto .= "   from empautitem ";
-   $sSqlPacto .= "        inner join empautitempcprocitem       on empautitempcprocitem.e73_autori = empautitem.e55_autori";
-   $sSqlPacto .= "                                             and empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
-   $sSqlPacto .= "        inner join pcprocitem                 on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem";
-   $sSqlPacto .= "        inner join solicitem                  on pc81_solicitem                  = pc11_codigo";
-   $sSqlPacto .= "        inner join orctiporecconveniosolicita on pc11_numero                     = o78_solicita";
-   $sSqlPacto .= "        inner join pactoplano                 on o78_pactoplano                  = o74_sequencial";
-   $sSqlPacto .= "  where e55_autori= {$e54_autori}";
-   $rsPacto    = db_query($sSqlPacto);
-   $o74_descricao  = null;
-   $o78_pactoplano = null;
-   if (pg_num_rows($rsPacto) > 0) {
+    $sSqlPacto = " SELECT distinct pactoplano.* ";
+    $sSqlPacto .= "   from empautitem ";
+    $sSqlPacto .= "        inner join empautitempcprocitem       on empautitempcprocitem.e73_autori = empautitem.e55_autori";
+    $sSqlPacto .= "                                             and empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
+    $sSqlPacto .= "        inner join pcprocitem                 on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem";
+    $sSqlPacto .= "        inner join solicitem                  on pc81_solicitem                  = pc11_codigo";
+    $sSqlPacto .= "        inner join orctiporecconveniosolicita on pc11_numero                     = o78_solicita";
+    $sSqlPacto .= "        inner join pactoplano                 on o78_pactoplano                  = o74_sequencial";
+    $sSqlPacto .= "  where e55_autori= {$e54_autori}";
+    $rsPacto = db_query($sSqlPacto);
+    $o74_descricao = null;
+    $o78_pactoplano = null;
+    if (pg_num_rows($rsPacto) > 0) {
 
-     //echo " [7] " . db_criatabela($rsPacto). "<br>------------------<br>";
+        //echo " [7] " . db_criatabela($rsPacto). "<br>------------------<br>";
 
-     $oPacto         = db_utils::fieldsMemory($rsPacto, 0);
-     $o74_descricao  = $oPacto->o74_descricao;
-     $o78_pactoplano = $oPacto->o74_sequencial;
-   }
-   //  db_criatabela($resulttot);exit;
-
-   /**
-    * Busca o processo
-    */
-   $oDaoEmpAutorizaProcesso  = db_utils::getDao("empautorizaprocesso");
-   $sWhereBuscaProcessoAdmin = " e150_empautoriza = {$e54_autori}";
-   $sSqlBuscaProcessoAdmin   = $oDaoEmpAutorizaProcesso->sql_query_file(null, "e150_numeroprocesso", null, $sWhereBuscaProcessoAdmin);
-   $rsBuscaProcessoAdmin     = $oDaoEmpAutorizaProcesso->sql_record($sSqlBuscaProcessoAdmin);
-   $sProcessoAdministrativo  = "";
-
-   if ($rsBuscaProcessoAdmin && $oDaoEmpAutorizaProcesso->numrows > 0) {
-     $sProcessoAdministrativo = db_utils::fieldsMemory($rsBuscaProcessoAdmin, 0)->e150_numeroprocesso;
-
-     //echo " [8] " . db_criatabela($rsBuscaProcessoAdmin). "<br>------------------<br>";
-   }
-
-   $pdf1->subfuncao              = $o53_subfuncao;
-   $pdf1->logo	                 = $logo;
-   $pdf1->descr_subfuncao        = $o53_descr;
-   $pdf1->programa               = $o54_programa;
-   $pdf1->descr_programa         = $o54_descr;
-   $pdf1->casadec    	           = @$e30_numdec;
-   $pdf1->usa_sub    	           = $usa_sub;
-   $pdf1->prefeitura 	           = $nomeinst;
-   $pdf1->enderpref  	           = trim($ender).",".$numero;
-   $pdf1->municpref  	           = $munic;
-   $pdf1->telefpref  	           = $telef;
-   $pdf1->cgcpref    	           = $cgc;
-   $pdf1->emailpref  	           = $email;
-   $pdf1->numaut     	           = $e54_autori;
-   $pdf1->numcgm     	           = $e54_numcgm;
-   $pdf1->nome       	           = $z01_nome;
-   $pdf1->telefone   	           = $z01_telef;
-   $pdf1->ender      	           = $z01_ender.', '.$z01_numero;
-   $pdf1->munic      	           = $z01_munic;
-   $pdf1->ufFornecedor           = $z01_uf;
-   $pdf1->dotacao    	           = $estrutural;
-   $pdf1->recurso    	           = $o15_codigo;
-   $pdf1->descr_recurso          = $o15_descr;
-   $pdf1->projativ   	           = $o55_projativ;
-   $pdf1->descr_projativ         = $o55_descr;
-   $pdf1->descrdotacao           = $o56_descr;
-   $pdf1->numsol     	           = $e54_numsol;
-   $pdf1->coddot     	           = $o58_coddot;
-   $pdf1->destino   	           = $e54_destin;
-   $pdf1->prazo_ent  	           = $e54_praent;
-   $pdf1->obs        	           = $e54_entpar;
-   $pdf1->cond_pag   	           = $e54_conpag;
-   $pdf1->out_cond   	           = $e54_codout;
-   $pdf1->contato    	           = $z01_contato;
-   $pdf1->telef_cont 	           = $e54_telef;
-   $pdf1->SdescrPacto            = $o74_descricao;
-   $pdf1->iPlanoPacto            = $o78_pactoplano;
-   $pdf1->cod_concarpeculiar     = $e54_concarpeculiar;
-   $pdf1->descr_concarpeculiar   = $c58_descr;
-
-   $pdf1->valtotal   	           = $tot_item;
-   $pdf1->recorddositens         = $resultitem;
-   $pdf1->linhasdositens         = pg_numrows($resultitem);
-   $pdf1->item	      	         = 'e55_item';
-   $pdf1->quantitem              = 'e55_quant';
-   $pdf1->valoritem              = 'e55_vltot';
-   $pdf1->valor                  = 'e55_vlrun';
-   $pdf1->descricaoitem          = 'pc01_descrmater';
-   $pdf1->marca                  = 'e55_marca';
-
-
-   $pdf1->processoadministrativo = $sProcessoAdministrativo;
-
-   $pdf1->numero                 = $z01_numero;
-   $pdf1->bairro                 = $z01_bairro;
-   $pdf1->fax                    = $z01_fax;
-   $pdf1->cep                    = $z01_cep;
-   $pdf1->compl                  = $z01_compl;
-
-   $arr_numerl = split("/",$e54_numerl);
-   //var_dump($arr_numerl);die;
-   if (sizeof($arr_numerl) > 1) {
-        $numerl = db_formatar($arr_numerl[0],"s","0",strlen($arr_numerl[0])+1,"e",0)."/".$arr_numerl[1];
-        $pdf1->edital_licitacao = $arr_numerl[0];
-        $pdf1->ano_licitacao    = $arr_numerl[1];
-   } else {
-        if (sizeof($arr_numerl) == 1){
-          $numerl = $arr_numerl[0];
-          $pdf1->edital_licitacao = $e54_numerl;
-          $pdf1->ano_licitacao    = $e54_anousu;
-        } else {
-              $numerl = $e54_numerl;
-        }
-   }
-
-   //$pdf1->num_licitacao    = $l03_codcom." - ".$l03_descr;
-   $pdf1->descr_tipocompra = $pc50_descr;
-   $pdf1->orgao            = $o58_orgao;
-   $pdf1->descr_orgao      = $o40_descr;
-   $pdf1->unidade          = $o58_unidade;
-   $pdf1->descr_unidade    = $o41_descr;
-   $pdf1->emissao          = $e54_emiss;
-   $pdf1->emissaoextenso   = db_dataextenso(db_strtotime($e54_emiss));
-   $pdf1->dataatual        = db_dataextenso(db_strtotime(db_getsession("DB_datausu")));
-   $pdf1->resumo_item      = "e55_descr";
-
-
-
-
-   $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct l20_edital, l20_anousu, l20_objeto,l03_descr",null,"e55_autori = $e54_autori "));
-
-   if ($clempautitem->numrows>0){
-      db_fieldsmemory($result_licita,0);
-      //echo " [9] " . db_criatabela($result_licita). "<br>------------------<br>";
-
-      $pdf1->edital_licitacao     = $l20_edital;
-      $pdf1->ano_licitacao        = $l20_anousu;
-      $resumo_lic                 =$l20_objeto;
-  	  $pdf1->observacaoitem       = "pc23_obs";
-   }else{
-
-       $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null,null,"distinct e54_numerl",null,"e55_autori = $e54_autori "));
-       if ($clempautitem->numrows>0) {
-           db_fieldsmemory($result_empaut, 0);
-           $pdf1->edital_licitacao     = '';
-           $pdf1->ano_licitacao        = '';
-           $pdf1->edital_licitacao     = $e54_numerl;
-       }
-   }
-
-
-
-
-
-
-
-   //echo $e54_resumo . "<br>";
-
-   if (isset($resumo_lic)&&$resumo_lic!=""){
-    if (isset($e54_resumo) && trim($e54_resumo) != ""){
-   		$pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
-		} else {
-   		$pdf1->resumo     = trim($resumo_lic);
-		}
-
-   } else {
-
-    if (isset($e54_resumo) && trim($e54_resumo) != "") {
-      $pdf1->resumo = trim($e54_resumo);
-    } else {
-   	  $pdf1->resumo = trim($sResumo);
+        $oPacto = db_utils::fieldsMemory($rsPacto, 0);
+        $o74_descricao = $oPacto->o74_descricao;
+        $o78_pactoplano = $oPacto->o74_sequencial;
     }
 
-		$pdf1->observacaoitem  = 'e55_descr';
-   }
+    /**
+     * Busca o processo
+     */
+    $oDaoEmpAutorizaProcesso = db_utils::getDao("empautorizaprocesso");
+    $sWhereBuscaProcessoAdmin = " e150_empautoriza = {$e54_autori}";
+    $sSqlBuscaProcessoAdmin = $oDaoEmpAutorizaProcesso->sql_query_file(null, "e150_numeroprocesso", null, $sWhereBuscaProcessoAdmin);
+    $rsBuscaProcessoAdmin = $oDaoEmpAutorizaProcesso->sql_record($sSqlBuscaProcessoAdmin);
+    $sProcessoAdministrativo = "";
 
-	 //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
-	 $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
+    if ($rsBuscaProcessoAdmin && $oDaoEmpAutorizaProcesso->numrows > 0) {
+        $sProcessoAdministrativo = db_utils::fieldsMemory($rsBuscaProcessoAdmin, 0)->e150_numeroprocesso;
+    }
 
+    $pdf1->subfuncao = $o53_subfuncao;
+    $pdf1->logo = $logo;
+    $pdf1->descr_subfuncao = $o53_descr;
+    $pdf1->programa = $o54_programa;
+    $pdf1->descr_programa = $o54_descr;
+    $pdf1->casadec = @$e30_numdec;
+    $pdf1->usa_sub = $usa_sub;
+    $pdf1->prefeitura = $nomeinst;
+    $pdf1->enderpref = trim($ender) . "," . $numero;
+    $pdf1->municpref = $munic;
+    $pdf1->telefpref = $telef;
+    $pdf1->cgcpref = $cgc;
+    $pdf1->emailpref = $email;
+    $pdf1->numaut = $e54_autori;
+    $pdf1->numcgm = $e54_numcgm;
+    $pdf1->nome = $z01_nome;
+    $pdf1->telefone = $z01_telef;
+    $pdf1->ender = $z01_ender . ', ' . $z01_numero;
+    $pdf1->munic = $z01_munic;
+    $pdf1->ufFornecedor = $z01_uf;
+    $pdf1->dotacao = $estrutural;
+    $pdf1->recurso = $o15_codigo;
+    $pdf1->descr_recurso = $o15_descr;
+    $pdf1->projativ = $o55_projativ;
+    $pdf1->descr_projativ = $o55_descr;
+    $pdf1->descrdotacao = $o56_descr;
+    $pdf1->numsol = $e54_numsol;
+    $pdf1->coddot = $o58_coddot;
+    $pdf1->destino = $e54_destin;
+    $pdf1->prazo_ent = $e54_praent;
+    $pdf1->obs = $e54_entpar;
+    $pdf1->cond_pag = $e54_conpag;
+    $pdf1->out_cond = $e54_codout;
+    $pdf1->contato = $z01_contato;
+    $pdf1->telef_cont = $e54_telef;
+    $pdf1->SdescrPacto = $o74_descricao;
+    $pdf1->iPlanoPacto = $o78_pactoplano;
+    $pdf1->cod_concarpeculiar = $e54_concarpeculiar;
+    $pdf1->descr_concarpeculiar = $c58_descr;
+    $pdf1->valtotal = $tot_item;
+    $pdf1->recorddositens = $resultitem;
+    $pdf1->linhasdositens = pg_numrows($resultitem);
+    $pdf1->item = 'e55_item';
+    $pdf1->quantitem = 'e55_quant';
+    $pdf1->valoritem = 'e55_vltot';
+    $pdf1->valor = 'e55_vlrun';
+    $pdf1->descricaoitem = 'pc01_descrmater';
+    $pdf1->marca = 'e55_marca';
+    $pdf1->processoadministrativo = $sProcessoAdministrativo;
+    $pdf1->numero = $z01_numero;
+    $pdf1->bairro = $z01_bairro;
+    $pdf1->fax = $z01_fax;
+    $pdf1->cep = $z01_cep;
+    $pdf1->compl = $z01_compl;
+    $pdf1->orgao = $o58_orgao;
+    $pdf1->descr_orgao = $o40_descr;
+    $pdf1->unidade = $o58_unidade;
+    $pdf1->descr_unidade = $o41_descr;
+    $pdf1->emissao = $e54_emiss;
+    $pdf1->emissaoextenso = db_dataextenso(db_strtotime($e54_emiss));
+    $pdf1->dataatual = db_dataextenso(db_strtotime(db_getsession("DB_datausu")));
+    $pdf1->resumo_item = "e55_descr";
 
-	 //echo $pdf1->resumo; die();
+    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
+    if ($clempautitem->numrows > 0) {
+        db_fieldsmemory($result_licita, 0);
+        $pdf1->edital_licitacao = $l20_edital . '/' . $l20_anousu;
+        $pdf1->ano_licitacao = $l20_anousu;
+        $pdf1->modalidade = $l20_numero . '/' . $l20_anousu;
+        $resumo_lic = $l20_objeto;
+        $pdf1->observacaoitem = "pc23_obs";
+    }
 
-   if (isset($l03_descr)&&($l03_descr!="")) {
-   	$pdf1->descr_licitacao = $l03_descr;
-   } else {
+    /**
+     * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
+     * @MarioJunior OC 7425
+     */
+
+    //funcao para deixar tipo de compra minusculo
+    function strtolower_slovenian($string)
+    {
+        $low = array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú" => "ú", "Á" => "á", "p");
+        return strtolower(strtr($string, $low));
+    }
+
+    //tipo Direta
+    if($e54_tipoautorizacao == 1) {
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = '';
+    }
+
+    //tipo licitacao de outros orgaos
+
+    if($e54_tipoautorizacao == 2){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = substr($pc50_descr,0,36);
+        $pdf1->descr_modalidade = '';
+    }
+
+    //tipo licitacao
+    if($e54_tipoautorizacao == 3){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $pdf1->edital_licitacao = $e54_numerl;
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$e54_anousu;
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = '';
+    }
+
+    //tipo Adesao regpreco
+    if($e54_tipoautorizacao == 4){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = '';
+    }
+
+    if (isset($resumo_lic)&&$resumo_lic!=""){
+        if (isset($e54_resumo) && trim($e54_resumo) != ""){
+            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
+        } else {
+            $pdf1->resumo     = trim($resumo_lic);
+        }
+
+    } else {
+
+        if (isset($e54_resumo) && trim($e54_resumo) != "") {
+            $pdf1->resumo = trim($e54_resumo);
+        } else {
+            $pdf1->resumo = trim($sResumo);
+        }
+
+        $pdf1->observacaoitem  = 'e55_descr';
+    }
+
+    //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
+    $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
+
         // autorização manual
-	// seleciona o tipo de licitação
-	$rpc = db_query("select l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
-	if (pg_numrows($rpc) > 0 ){
-           $pdf1->num_licitacao   = pg_result($rpc,0,0);
-           $pdf1->descr_licitacao = pg_result($rpc,0,1);
+        // seleciona o tipo de licitação
+        $rpc = db_query("select l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
+        if (pg_numrows($rpc) > 0 ){
+            $result = pg_result($rpc,0,0);
 
-	} else {
-     	   $pdf1->descr_licitacao = $pc50_descr;
-	}
-   }
-   $pdf1->cnpj            = $z01_cgccpf;
-   $pdf1->analitico       = "o56_elemento";
-   $pdf1->descr_analitico = "o56_descr";
-   $pdf1->Snumeroproc     = "pc81_codproc";
-   $pdf1->Snumero         = "pc11_numero";
-   if(!empty($e60_numemp))
-     $pdf1->Scodemp         = trim($e60_codemp)."/$e60_anousu";
-   else
-     $pdf1->Scodemp         = "";
+            if($e54_tipoautorizacao == 2 || $e54_tipoautorizacao == 4){
+                $pdf1->descr_licitacao = '';
+            }else {
+                $pdf1->descr_licitacao = pg_result($rpc, 0, 0);
+            }
+        }
 
-   if(!isset($informa_adic) || trim($informa_adic)=="" || $informa_adic == null){
-       $informa_adic = "AM";
-   }
+    $pdf1->cnpj            = $z01_cgccpf;
+    $pdf1->analitico       = "o56_elemento";
+    $pdf1->descr_analitico = "o56_descr";
+    $pdf1->Snumeroproc     = "pc81_codproc";
+    $pdf1->Snumero         = "pc11_numero";
+    if(!empty($e60_numemp))
+        $pdf1->Scodemp         = trim($e60_codemp)."/$e60_anousu";
+    else
+        $pdf1->Scodemp         = "";
 
-   $pdf1->informa_adic = $informa_adic;
-   $pdf1->imprime();
+    if(!isset($informa_adic) || trim($informa_adic)=="" || $informa_adic == null){
+        $informa_adic = "AM";
+    }
+
+    $pdf1->informa_adic = $informa_adic;
+    $pdf1->imprime();
 }
 
 if(isset($argv[1])){
-  $pdf1->objpdf->Output("/tmp/teste.pdf");
+    $pdf1->objpdf->Output("/tmp/teste.pdf");
 }else{
 
-  if ($oConfiguracaoGed->utilizaGED()) {
+    if ($oConfiguracaoGed->utilizaGED()) {
 
-    try {
+        try {
 
-      if (!empty($oGet->e54_autori)) {
-        $e54_autori_ini = $oGet->e54_autori;
-      }
+            if (!empty($oGet->e54_autori)) {
+                $e54_autori_ini = $oGet->e54_autori;
+            }
 
-      $sTipoDocumento = GerenciadorEletronicoDocumentoConfiguracao::AUTORIZACAO_EMPENHO;
-      $oGerenciador   = new GerenciadorEletronicoDocumento();
-      $oGerenciador->setLocalizacaoOrigem("tmp/");
-      $oGerenciador->setNomeArquivo("{$sTipoDocumento}_{$e54_autori_ini}.pdf");
+            $sTipoDocumento = GerenciadorEletronicoDocumentoConfiguracao::AUTORIZACAO_EMPENHO;
+            $oGerenciador   = new GerenciadorEletronicoDocumento();
+            $oGerenciador->setLocalizacaoOrigem("tmp/");
+            $oGerenciador->setNomeArquivo("{$sTipoDocumento}_{$e54_autori_ini}.pdf");
 
-      $oStdDadosGED        = new stdClass();
-      $oStdDadosGED->nome  = $sTipoDocumento;
-      $oStdDadosGED->tipo  = "NUMERO";
-      $oStdDadosGED->valor = $e54_autori_ini;
-      $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e54_autori_ini}.pdf");
-      $oGerenciador->moverArquivo(array($oStdDadosGED));
+            $oStdDadosGED        = new stdClass();
+            $oStdDadosGED->nome  = $sTipoDocumento;
+            $oStdDadosGED->tipo  = "NUMERO";
+            $oStdDadosGED->valor = $e54_autori_ini;
+            $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e54_autori_ini}.pdf");
+            $oGerenciador->moverArquivo(array($oStdDadosGED));
 
-    } catch (Exception $eErro) {
-      db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+        } catch (Exception $eErro) {
+            db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+        }
+    } else {
+        $pdf1->objpdf->Output();
     }
-  } else {
-    $pdf1->objpdf->Output();
-  }
 }

@@ -114,8 +114,8 @@ if(isset($tipocompra) || isset($chavepesquisa) ){
   $db_botao = false;
 }  
 if(isset($alterar) && !$sqlerro ){
-  
-  if($sqlerro == false){  
+
+  if($sqlerro == false){
 	  $res_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_fornecdeb"));
 	  if ($clpcparam->numrows > 0){
 	       db_fieldsmemory($res_pcparam,0);
@@ -147,6 +147,13 @@ if(isset($alterar) && !$sqlerro ){
   if ($sqlerro == false){
        $clempautoriza->e54_autori = $e54_autori;
        $clempautoriza->e54_tipodespesa = $e54_tipodespesa;
+       $clempautoriza->e54_codcom = $e54_codcom;
+       $clempautoriza->e54_codlicitacao = $e54_codlicitacao;
+       $clempautoriza->e54_nummodalidade = $e54_nummodalidade;
+       $clempautoriza->e54_licoutrosorgaos = $e54_licoutrosorgaos;
+       $clempautoriza->e54_adesaoregpreco = $e54_adesaoregpreco;
+       $clempautoriza->e54_tipoorigem = $e54_tipoorigem;
+       $clempautoriza->e54_tipoautorizacao = $e54_tipoautorizacao;
        $clempautoriza->alterar($e54_autori);
        if($clempautoriza->erro_status=='0'){
            $erro_msg = $clempautoriza->erro_msg;
@@ -233,8 +240,8 @@ if(isset($alterar) && !$sqlerro ){
   
   db_fim_transacao($sqlerro);
 } else if(isset($chavepesquisa)) {
-  
-  $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa)); 
+
+  $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
   if($e54_login != db_getsession("DB_id_usuario")) {
     

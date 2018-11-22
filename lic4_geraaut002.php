@@ -75,11 +75,10 @@ td.linhagrid {padding: 1px}
   oViewGeracaoAutorizacao.show();
 
 
-  function js_preencheCaracteristica(iCodigo, sDescricao) {
+  function js_preencheCaracteristica() {
   
-    $('oTxtCaractPeculiarCod').value  = iCodigo;
-    $('oTxtCaractPeculiarDesc').value = sDescricao
-    db_iframe_concarpeculiar.hide();  
+    $('oTxtCaractPeculiarCod').value  = '000';
+    $('oTxtCaractPeculiarDesc').value = 'NÃO SE APLICA';
   }
   
   function js_completaCaracteristica (sDescricao, lErro) {
@@ -92,7 +91,7 @@ td.linhagrid {padding: 1px}
       $('oTxtCaractPeculiarDesc').value = sDescricao
     }
   }
-  
+  js_preencheCaracteristica();
 </script>
 
 <?

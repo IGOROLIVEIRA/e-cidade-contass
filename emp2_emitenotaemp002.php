@@ -151,10 +151,17 @@ $sqlemp .= "        fc_estruturaldotacao(o58_anousu,o58_coddot) AS estrutural, "
 $sqlemp .= "        e41_descr, ";
 $sqlemp .= "        c58_descr, ";
 $sqlemp .= "        e56_orctiporec, ";
-//$sqlemp .= "        e55_marca, ";
+$sqlemp .= "        e54_anousu, ";
 $sqlemp .= "        e54_praent, ";
+$sqlemp .= "        e54_tipoautorizacao, ";
+$sqlemp .= "        e54_tipoorigem, ";
+$sqlemp .= "        e54_nummodalidade, ";
+$sqlemp .= "        e54_licoutrosorgaos, ";
+$sqlemp .= "        e54_adesaoregpreco, ";
+$sqlemp .= "        e54_numerl, ";
 $sqlemp .= "        e54_codout, ";
 $sqlemp .= "        e54_conpag, ";
+$sqlemp .= "        e54_autori, ";
 /*OC4401*/
 $sqlemp .= "        e60_id_usuario, ";
 $sqlemp .= "        db_usuarios.nome, ";
@@ -448,81 +455,195 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->Snumero              = "pc11_numero";
     $pdf1->marca                = "e55_marca";
     $pdf1->processo_administrativo = $sProcessoAdministrativo;
-
-    //Zera as variáveis
-    $pdf1->resumo = "";
-    $resumo_lic   = "";
-
-    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct l20_edital, l20_anousu, l20_objeto, l03_descr",null,"e55_autori = $e61_autori "));
-    if ($clempautitem->numrows>0){
-        db_fieldsmemory($result_licita,0);
-
-        $pdf1->edital_licitacao     = $l20_edital;
-        $pdf1->ano_licitacao        = $l20_anousu;
-        $resumo_lic                 = $l20_objeto;
-
-    } else {
-
-        $l03_descr                  = '';
-        $l20_objeto                 = '';
-        $pdf1->edital_licitacao     = '';
-        $pdf1->ano_licitacao        = '';
-
-    }
-
-    if (isset($resumo_lic) && $resumo_lic!=""){
-        if ($e30_impobslicempenho=='t') {
-            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
-        } else {
-            $pdf1->resumo = $e60_resumo;
-        }
-    } else {
-        $pdf1->resumo = $e60_resumo;
-    }
-
-
-    $Sresumo = $pdf1->resumo;
-    $vresumo = split("\n",$Sresumo);
-
-    if (count($vresumo) > 1){
-        $Sresumo   = "";
-        $separador = "";
-        for ($x = 0; $x < count($vresumo); $x++){
-            if (trim($vresumo[$x]) != ""){
-                $separador = ". ";
-                $Sresumo  .= $vresumo[$x].$separador;
-            }
-        }
-    }
-
-    if (count($vresumo) == 0){
-        $Sresumo = str_replace("\n",". ",$Sresumo);
-    }
-
-    $Sresumo = str_replace("\r","",$Sresumo);
-
-    $pdf1->resumo = substr($Sresumo,0,730);
-
-    if (isset($l03_descr)&&($l03_descr!="")){
-        $pdf1->descr_licitacao = $l03_descr;
-    } else {
-        $sqllic = "select l03_descr||' - '||l20_numero as l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e60_codcom and l03_tipo='$e60_tipol'";
-        $rpc    = db_query($sqllic);
-
-        if (pg_numrows($rpc) > 0 ){
-            $pdf1->descr_licitacao = pg_result($rpc,0,0);
-        } else {
-            $pdf1->descr_licitacao = $pc50_descr;
-
-        }
-
-
-    }
     $pdf1->coddot           = $o58_coddot;
     $pdf1->destino          = $e60_destin;
     $pdf1->licitacao        = $e60_codtipo;
     $pdf1->recorddositens   = $resultitem;
     $pdf1->linhasdositens   = pg_numrows($resultitem);
+    //Zera as variáveis
+    $pdf1->resumo = "";
+    $resumo_lic   = "";
+
+//    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct l20_edital, l20_anousu, l20_objeto, l03_descr",null,"e55_autori = $e61_autori "));
+//    if ($clempautitem->numrows>0){
+//        db_fieldsmemory($result_licita,0);
+//
+//        $pdf1->edital_licitacao     = $l20_edital;
+//        $pdf1->ano_licitacao        = $l20_anousu;
+//        $resumo_lic                 = $l20_objeto;
+//
+//    } else {
+//
+//        $l03_descr                  = '';
+//        $l20_objeto                 = '';
+//        $pdf1->edital_licitacao     = '';
+//        $pdf1->ano_licitacao        = '';
+//
+//    }
+//
+//    if (isset($resumo_lic) && $resumo_lic!=""){
+//        if ($e30_impobslicempenho=='t') {
+//            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
+//        } else {
+//            $pdf1->resumo = $e60_resumo;
+//        }
+//    } else {
+//        $pdf1->resumo = $e60_resumo;
+//    }
+//
+//
+//    $Sresumo = $pdf1->resumo;
+//    $vresumo = split("\n",$Sresumo);
+//
+//    if (count($vresumo) > 1){
+//        $Sresumo   = "";
+//        $separador = "";
+//        for ($x = 0; $x < count($vresumo); $x++){
+//            if (trim($vresumo[$x]) != ""){
+//                $separador = ". ";
+//                $Sresumo  .= $vresumo[$x].$separador;
+//            }
+//        }
+//    }
+//
+//    if (count($vresumo) == 0){
+//        $Sresumo = str_replace("\n",". ",$Sresumo);
+//    }
+//
+//    $Sresumo = str_replace("\r","",$Sresumo);
+//
+//    $pdf1->resumo = substr($Sresumo,0,730);
+//
+//    function strtolower_slovenian($string)
+//    {
+//        $low=array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú"=>"ú", "Á"=>"á");
+//        return strtolower(strtr($string,$low));
+//    }
+//
+//    if (isset($l03_descr)&&($l03_descr!="")){
+//        $pdf1->descr_licitacao = substr($l03_descr,0,36);
+//    } else {
+//        $sqllic = "select l03_descr as l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e60_codcom and l03_tipo='$e60_tipol'";
+//        $rpc    = db_query($sqllic);
+//
+//        if (pg_numrows($rpc) > 0 ){
+//            $pdf1->descr_licitacao = substr(pg_result($rpc,0,0),0,36);
+//        } else {
+//            $pdf1->descr_licitacao = substr($pc50_descr,0,36);
+//
+//        }
+//    }
+//
+//    if(in_array($e54_tipoautorizacao, array(1,2,3,4))){
+//        if($e54_nummodalidade== "" || $e54_nummodalidade == null){
+//            $pdf1->e54_modalidade = "";
+//            $pdf1->edital_licitacao = "";
+//        }else {
+//            $pdf1->e54_modalidade = $e54_nummodalidade . "/" . $e54_anousu;
+//            $pdf1->edital_licitacao = $e54_numerl;
+//        }
+//    }
+    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
+
+    if ($clempautitem->numrows > 0) {
+        db_fieldsmemory($result_licita, 0);
+        $pdf1->edital_licitacao = $l20_edital . '/' . $l20_anousu;
+        $pdf1->ano_licitacao = $l20_anousu;
+        $pdf1->modalidade = $l20_numero . '/' . $l20_anousu;
+        $resumo_lic = $l20_objeto;
+        $pdf1->observacaoitem = "pc23_obs";
+    }
+
+    /**
+     * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
+     * @MarioJunior OC 7425
+     */
+
+    //funcao para deixar tipo de compra minusculo
+    function strtolower_slovenian($string)
+    {
+        $low = array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú" => "ú", "Á" => "á", "p");
+        return strtolower(strtr($string, $low));
+    }
+
+    //tipo Direta
+    if($e54_tipoautorizacao == 1) {
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            if($e54_numerl != "") {
+                $arr_numerl = split("/", $e54_numerl);
+                $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
+                $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
+            }else{
+                $pdf1->edital_licitacao = "";
+                $pdf1->modalidade = "";
+            }
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = $pc50_descr;
+    }
+
+    //tipo licitacao de outros orgaos
+
+    if($e54_tipoautorizacao == 2){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = substr($pc50_descr,0,36);
+        $pdf1->descr_modalidade = '';
+    }
+
+    //tipo licitacao
+    if($e54_tipoautorizacao == 3){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = $pc50_descr;
+    }
+
+    //tipo Adesao regpreco
+    if($e54_tipoautorizacao == 4){
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        if ($clempautitem->numrows > 0) {
+            db_fieldsmemory($result_empaut, 0);
+            $arr_numerl = split("/", $e54_numerl);
+            $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
+            $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+        }
+        $pdf1->descr_tipocompra = $pc50_descr;
+        $pdf1->descr_modalidade = '';
+    }
+
+    if (isset($resumo_lic)&&$resumo_lic!=""){
+        if (isset($e54_resumo) && trim($e54_resumo) != ""){
+            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
+        } else {
+            $pdf1->resumo     = trim($resumo_lic);
+        }
+
+    } else {
+
+        if (isset($e54_resumo) && trim($e54_resumo) != "") {
+            $pdf1->resumo = trim($e54_resumo);
+        } else {
+            $pdf1->resumo = trim($sResumo);
+        }
+
+        $pdf1->observacaoitem  = 'e55_descr';
+    }
+
+    //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
+    $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
 
     if (!empty($e54_praent)) {
         $pdf1->prazo_ent              = $e54_praent;

@@ -2214,6 +2214,7 @@ class cl_liclicita
                 $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
                 $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
                 $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+                $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
                 $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
                 $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
                 $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
