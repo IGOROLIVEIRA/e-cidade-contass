@@ -685,7 +685,7 @@ if ($method == "getDados") {
       }
     }
     
-    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->sNotaFiscalEletronica != 2) {
+    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->sNotaFiscalEletronica != 2 && $objJson->sNotaFiscalEletronica != 3) {
       $ufs = array(
 
         11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
@@ -722,7 +722,6 @@ if ($method == "getDados") {
 
       else if ($objJson->sNotaFiscalEletronica == 1) {
         if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
-
           throw new Exception("Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!");
         }
       }

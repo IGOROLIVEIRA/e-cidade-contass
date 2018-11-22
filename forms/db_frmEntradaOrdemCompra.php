@@ -1453,7 +1453,7 @@ function novoAjax(params, onComplete) {
 }
 
 function verificaChave() {
-  if ($('e69_notafiscaleletronica').value != 2) {
+  if ($('e69_notafiscaleletronica').value != 2 && $('e69_notafiscaleletronica').value != 3) {
       var params = {
         exec: 'validachave',
         cgm: $('m51_numcgm').value,
@@ -1655,7 +1655,7 @@ function js_confirmaEntrada() {
     var sObservacao             = encodeURIComponent(tagString($F('m53_obs')));
     var sNumero                 = encodeURIComponent(tagString($F('e69_numero')));
     var sProcessoAdministrativo = encodeURIComponent(tagString($F('e04_numeroprocesso')));
-
+    
     var sJson  = '{"method":"confirmarEntrada","m51_codordem":"'+$F('m51_codordem')+'","m51_depto":"'+$F('m51_depto')+'",';
     sJson     += '"sNumero":"'+sNumero+'","dtDataNota":"'+$F('e69_dtnota')+'", "e04_numeroprocesso": "'+sProcessoAdministrativo+'",';
     sJson     += '"sNotaFiscalEletronica":"'+$F('e69_notafiscaleletronica')+'","sChaveAcesso":"'+$F('e69_chaveacesso')+'", "sNumeroSerie": "'+$F('e69_nfserie')+'",';

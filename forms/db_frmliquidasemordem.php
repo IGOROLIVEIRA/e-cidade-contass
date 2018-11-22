@@ -888,7 +888,7 @@ function js_liquidar(metodo) {
      strJson += '"oInfoNota":{"iCfop":"'+iCfop+'","iTipoDocumentoFiscal":"'+iTipoDocumentoFiscal+'","iInscrSubstituto":"'+iInscrSubstituto+'",';
      strJson += '"nBaseCalculoICMS":"'+nBaseCalculoICMS+'","nValorICMS":"'+nValorICMS+'","nBaseCalculoSubst":"'+nBaseCalculoSubst+'",';
      strJson += '"nValorICMSSubst":"'+nValorICMSSubst+'","sSerieFiscal":"'+sSerieFiscal+'"},';
-     strJson += '"pars":"'+$F('e60_numemp')+'","z01_credor":"'+$F('e49_numcgm')+'"}';
+     strJson += '"pars":"'+$F('e60_numemp')+'","z01_credor":"'+$F('e49_numcgm')+'"}';//
      */
 
      var oParam            = new Object();
@@ -1273,7 +1273,7 @@ function novoAjax(params, onComplete) {
 
 function verificaChave() {
 
-  if ($('e69_notafiscaleletronica').value != 2) {
+  if ($('e69_notafiscaleletronica').value != 2 && $('e69_notafiscaleletronica').value != 3) {
       var params = {
         exec: 'validachave',
         cgm: $('e60_numcgm').value,

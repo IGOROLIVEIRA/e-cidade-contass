@@ -27,7 +27,7 @@ $ufs = array(
 );
 
 
-switch ($oParam->exec) {
+switch ($oParam->exec) {//
 
   case 'validachave' :
 

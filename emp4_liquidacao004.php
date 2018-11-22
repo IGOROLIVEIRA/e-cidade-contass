@@ -324,7 +324,7 @@ switch ($objJson->method) {
       $objJson->e69_nfserie
     );
 
-    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2) {
+    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
       $ufs = array(
 
         11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
@@ -364,7 +364,7 @@ switch ($objJson->method) {
 
       else if ($objJson->e69_notafiscaleletronica == 1) {
         if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
-          $chave = false;
+          $chave = false;//
           $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!";
         }
       }
