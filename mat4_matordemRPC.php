@@ -685,7 +685,7 @@ if ($method == "getDados") {
       }
     }
     
-    if ($objJson->verificaChave == 1) {
+    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->sNotaFiscalEletronica != 2) {
       $ufs = array(
 
         11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",

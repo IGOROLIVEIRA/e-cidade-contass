@@ -906,7 +906,6 @@ function js_liquidar(metodo) {
          oParam.z01_credor = $F('e49_numcgm');
          oParam.cgm = $F('e60_numcgm');
          oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
-         oParam.tipo = $F('e69_notafiscaleletronica');
          oParam.verificaChave = 1;
          
 

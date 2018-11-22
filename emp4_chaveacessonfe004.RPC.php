@@ -60,12 +60,12 @@ switch ($oParam->exec) {
     $oRetorno->erro   = "Chave de acesso inválida!\nVerifique o Número da Nota!";
   }
 
-  /*else if ($oParam->tipo == 1) {///04930131000129-04930131000129 / 11636961000103
+  else if ($oParam->tipo == 1) {///04930131000129-04930131000129 / 11636961000103
     if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
       $oRetorno->status = 0;
       $oRetorno->erro   = "Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!";
    }
-  }*/
+  }
 
   break;
 
