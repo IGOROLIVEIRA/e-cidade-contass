@@ -113,7 +113,7 @@ $clrotulo->label("l03_descr");
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $dbwhere_instit = " and l20_instit = ".db_getsession("DB_instit");
+      $dbwhere_instit = " l20_instit = ".db_getsession("DB_instit");
 
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -125,23 +125,23 @@ $clrotulo->label("l03_descr");
         }
 
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_codigo=$chave_l20_codigo and l08_altera is true $dbwhere_instit");
+	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_codigo=$chave_l20_codigo and $dbwhere_instit");
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_numero=$chave_l20_numero and l08_altera is true $dbwhere_instit");
+	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_numero=$chave_l20_numero and $dbwhere_instit");
 	      }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' and l08_altera is true $dbwhere_instit");
+	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' and $dbwhere_instit");
         }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l03_codigo=$chave_l03_codigo and l08_altera is true $dbwhere_instit");       
+	         $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l03_codigo=$chave_l03_codigo and $dbwhere_instit");
         }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-           $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_edital=$chave_l20_edital and l08_altera is true $dbwhere_instit");
+           $sql = $clliclicita->sql_query(null,$campos,"l20_codigo","l20_edital=$chave_l20_edital and $dbwhere_instit");
         }else{
-           $sql = $clliclicita->sql_query("",$campos,"l20_codigo","l08_altera is true $dbwhere_instit");
+           $sql = $clliclicita->sql_query("",$campos,"l20_codigo","$dbwhere_instit");
         }
 
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-            $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"l20_codigo=$pesquisa_chave and l08_altera is true $dbwhere_instit"));
+            $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"l20_codigo=$pesquisa_chave and $dbwhere_instit"));
             if($clliclicita->numrows!=0){
                 db_fieldsmemory($result,0);
                 echo "<script>".$funcao_js."('$l20_codigo',false);</script>";
