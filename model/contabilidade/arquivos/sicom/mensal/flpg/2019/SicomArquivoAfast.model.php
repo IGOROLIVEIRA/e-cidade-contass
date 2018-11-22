@@ -92,12 +92,24 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         }
 
 
-        $sSql = "select r45_regist
-                     from afasta 
-WHERE 
-     DATE_PART('YEAR',r45_dtreto) = 2019
-    AND r45_situac <> 5    
-    group by 1";
+        $sSql = "SELECT r45_regist,
+       CASE
+           WHEN r45_situac = 4 THEN 2
+           WHEN r45_situac = 4 OR r45_codafa = 'R' THEN 2
+           WHEN r45_situac = 7 OR r45_codafa = 'X' THEN 3
+           WHEN r45_codafa = 'W' THEN 4
+           WHEN r45_situac = 6 AND rh02_tbprev <> 1 THEN 7 
+           WHEN r45_situac = 6 AND rh02_tbprev = 1 THEN 8
+           ELSE 99
+       END AS si199_tipoafastamento
+FROM afasta
+join rhpessoal on r45_regist = rh01_regist
+join rhpessoalmov on rh02_regist = rh01_regist and rh02_anousu = 2019
+WHERE DATE_PART('YEAR',r45_dtreto) = 2019
+    AND r45_situac <> 5
+
+GROUP BY r45_regist,si199_tipoafastamento
+";
 
         $rsResult = db_query($sSql);//db_criatabela($rsResult);exit;
 
@@ -108,7 +120,7 @@ WHERE
             if($this->sDataFinal['5'] . $this->sDataFinal['6'] == 01) {
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
-                  10||r45_regist as si199_codafastamento,
+                  10||r45_codigo as si199_codafastamento,
                   
                   case when r45_dtreto >
 				             (SELECT si199_dtretornoafastamento
@@ -123,11 +135,15 @@ WHERE
                   
                   
                   r45_dtreto as si199_dtretornoafastamento,
-                  case when r45_situac = 4 and r45_codafa <> 'W' then 2 
-                  when r45_situac in (2,7) and r45_codafa <> 'W' then 3
-                  when r45_codafa = 'W' then 4
-                  else 99
-                  end as si199_tipoafastamento,
+                         CASE
+           WHEN r45_situac = 4 THEN 2
+           WHEN r45_situac = 4 OR r45_codafa = 'R' THEN 2
+           WHEN r45_situac = 7 OR r45_codafa = 'X' THEN 3
+           WHEN r45_codafa = 'W' THEN 4
+           WHEN r45_situac = 6 AND rh02_tbprev <> 1 THEN 7 
+           WHEN r45_situac = 6 AND rh02_tbprev = 1 THEN 8
+           ELSE 99
+       END AS si199_tipoafastamento,
                   
                   case when r45_situac = 4 and r45_codafa <> 'W' then '' 
                   when r45_situac in (2,7) and r45_codafa <> 'W' then ''
@@ -136,7 +152,9 @@ WHERE
                   end as si199_dscoutrosafastamentos,
                   r45_situac
                      FROM afasta
-                     join rhpessoal on r45_regist = rh01_regist 
+                     join rhpessoal on r45_regist = rh01_regist
+                     join rhpessoalmov on rh02_regist = rh01_regist and rh02_anousu = 2019
+
                         WHERE r45_regist = $oDados->r45_regist
                             AND 
                             (  r45_regist NOT IN
@@ -182,7 +200,7 @@ WHERE
             }else{
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
-                  10||r45_regist as si199_codafastamento,
+                  10||r45_codigo as si199_codafastamento,
                   
                   case when r45_dtreto >
 				             (SELECT si199_dtretornoafastamento
@@ -197,11 +215,15 @@ WHERE
                   
                   
                   r45_dtreto as si199_dtretornoafastamento,
-                  case when r45_situac = 4 and r45_codafa <> 'W' then 2 
-                  when r45_situac in (2,7) and r45_codafa <> 'W' then 3
-                  when r45_codafa = 'W' then 4
-                  else 99
-                  end as si199_tipoafastamento,
+                         CASE
+           WHEN r45_situac = 4 THEN 2
+           WHEN r45_situac = 4 OR r45_codafa = 'R' THEN 2
+           WHEN r45_situac = 7 OR r45_codafa = 'X' THEN 3
+           WHEN r45_codafa = 'W' THEN 4
+           WHEN r45_situac = 6 AND rh02_tbprev <> 1 THEN 7 
+           WHEN r45_situac = 6 AND rh02_tbprev = 1 THEN 8
+           ELSE 99
+       END AS si199_tipoafastamento,
                   
                   case when r45_situac = 4 and r45_codafa <> 'W' then '' 
                   when r45_situac in (2,7) and r45_codafa <> 'W' then ''
@@ -210,7 +232,9 @@ WHERE
                   end as si199_dscoutrosafastamentos,
                   r45_situac
                      FROM afasta
-                     join rhpessoal on r45_regist = rh01_regist 
+                     join rhpessoal on r45_regist = rh01_regist
+                     join rhpessoalmov on rh02_regist = rh01_regist and rh02_anousu = 2019
+ 
                         WHERE r45_regist = $oDados->r45_regist
                             AND 
                             (  r45_regist NOT IN
@@ -307,7 +331,7 @@ WHERE
 
 
             $sSql = "SELECT distinct r45_regist as codvinculopessoa,
-                  10||r45_regist as codafastamento,
+                  10||r45_codigo as codafastamento,
                   r45_dtafas as dtinicioafastamento,
                   r45_dtreto as dtretornoafastamento,
                   case when r45_situac = 4 and r45_codafa <> 'W' then 2 
@@ -346,13 +370,13 @@ WHERE
                             AND DATE_PART('YEAR',r45_dtreto) = 2019
                             AND r45_situac <> 5";
 
-            $rsResult3 = db_query($sSql);//echo $sSql;db_criatabela($rsResult3);
+            $rsResult2 = db_query($sSql);//echo $sSql;db_criatabela($rsResult2);
 
-            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult3); $iCont2++) {
+            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult2); $iCont2++) {
 
-                $oDadosAfast2 = db_utils::fieldsMemory($rsResult3, $iCont2);
+                $oDadosAfast2 = db_utils::fieldsMemory($rsResult2, $iCont2);
 
-                if ( pg_num_rows($rsResult3) > 0 ) {
+                if ( pg_num_rows($rsResult2) > 0 ) {
 
                     $clafast = new cl_afast202019();
 
@@ -370,7 +394,61 @@ WHERE
 
                 }
             }
+//            echo $oDados->r45_regist."tipoafast: ".$oDados->si199_tipoafastamento;echo"<br>";
 
+            if($oDados->si199_tipoafastamento == 8 || $oDados->si199_tipoafastamento == 7){
+
+                $sSql = "SELECT distinct r45_regist as codvinculopessoa,
+                  10||r45_codigo as codafastamento,
+                  r45_dtafas as dtinicioafastamento,
+                  r45_dtreto as dtretornoafastamento
+                     FROM afasta 
+                        WHERE r45_regist = $oDados->r45_regist
+                            AND 
+                            (
+                                          r45_regist IN
+                                                (SELECT si199_codvinculopessoa
+                                                 FROM afast102019
+                                                 WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                     and si199_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+
+                                                    and
+
+                                                 r45_dtreto <= (SELECT si199_dtretornoafastamento
+                                                 FROM afast102019
+                                                 WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                     and si199_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
+                            )
+                            
+                            AND r45_regist::varchar||r45_dtreto not in (select si200_codvinculopessoa::varchar||si200_dtterminoafastamento from afast202019 )
+                            
+                            AND DATE_PART('DAY',r45_dtreto) >= 2
+                            AND DATE_PART('MONTH',r45_dtreto) >= 1
+                            AND DATE_PART('YEAR',r45_dtreto) = 2019
+                            AND r45_situac <> 5";
+
+                $rsResult3 = db_query($sSql);//echo $sSql;db_criatabela($rsResult3);
+
+                    $oDadosAfast3 = db_utils::fieldsMemory($rsResult3, $iCont2);
+
+                    if ( pg_num_rows($rsResult3) > 0 ) {
+
+                        $clafast = new cl_afast302019();
+
+                        $clafast->si201_tiporegistro = 30;
+                        $clafast->si201_codvinculopessoa = $oDadosAfast3->codvinculopessoa;
+                        $clafast->si201_codafastamento = $oDadosAfast3->codafastamento;
+                        $clafast->si201_dtretornoafastamento = $oDadosAfast3->dtretornoafastamento;
+                        $clafast->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                        $clafast->si201_inst = db_getsession("DB_instit");
+
+                        $clafast->incluir(null);
+                        if ($clafast->erro_status == 0) {
+                            throw new Exception($clafast->erro_msg);
+                        }
+
+                    }
+            }
 
             db_fim_transacao();
 

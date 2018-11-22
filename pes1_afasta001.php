@@ -114,7 +114,14 @@ if (isset($incluir)) {
     $clafasta->r45_regist = $r45_regist;
     $clafasta->r45_dtafas = $r45_dtafas;
     $clafasta->r45_dtreto = $r45_dtreto;
-    $clafasta->r45_situac = $r45_situac;
+
+    if($r45_situac == 22){
+        $clafasta->r45_situac = 2;
+    }else{
+        $clafasta->r45_situac = $r45_situac;
+    }
+
+    $clafasta->r45_situacaux = $r45_situacaux;
     $clafasta->r45_dtlanc = date("Y-m-d",db_getsession("DB_datausu"));
     $clafasta->r45_codafa = $r45_codafa;
     $clafasta->r45_codret = $r45_codret;

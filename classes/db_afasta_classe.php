@@ -61,7 +61,8 @@ class cl_afasta {
    var $r45_dtlanc = null; 
    var $r45_codafa = null; 
    var $r45_codret = null; 
-   var $r45_obs = null; 
+   var $r45_obs = null;
+   var $r45_situacaux = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  r45_codigo = int8 = Código 
@@ -75,6 +76,7 @@ class cl_afasta {
                  r45_codafa = varchar(2) = Afastamento Sefip 
                  r45_codret = varchar(2) = Retorno Sefip 
                  r45_obs = text = Observação 
+                 r45_situacaux = int4 = campo auxiliar para sicom
                  ";
    //funcao construtor da classe 
    function cl_afasta() { 
@@ -115,6 +117,7 @@ class cl_afasta {
          }
        }
        $this->r45_situac = ($this->r45_situac == ""?@$GLOBALS["HTTP_POST_VARS"]["r45_situac"]:$this->r45_situac);
+       $this->r45_situacaux = ($this->r45_situacaux == ""?@$GLOBALS["HTTP_POST_VARS"]["r45_situacaux"]:$this->r45_situacaux);
        if($this->r45_dtlanc == ""){
          $this->r45_dtlanc_dia = ($this->r45_dtlanc_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["r45_dtlanc_dia"]:$this->r45_dtlanc_dia);
          $this->r45_dtlanc_mes = ($this->r45_dtlanc_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["r45_dtlanc_mes"]:$this->r45_dtlanc_mes);
@@ -252,6 +255,7 @@ class cl_afasta {
                                       ,r45_codafa 
                                       ,r45_codret 
                                       ,r45_obs 
+                                      ,r45_situacaux
                        )
                 values (
                                 $this->r45_codigo 
@@ -263,8 +267,10 @@ class cl_afasta {
                                ,$this->r45_situac 
                                ,".($this->r45_dtlanc == "null" || $this->r45_dtlanc == ""?"null":"'".$this->r45_dtlanc."'")." 
                                ,'$this->r45_codafa' 
-                               ,'$this->r45_codret' 
-                               ,'$this->r45_obs' 
+                               ,'$this->r45_codret'
+                               ,'$this->r45_obs'
+                               ,".($this->r45_situacaux == "null" || $this->r45_situacaux == ""?"null":"'".$this->r45_situacaux."'")." 
+ 
                       )";
      $result = db_query($sql);
      if($result==false){ 

@@ -101,11 +101,19 @@ $clrotulo->label('z01_nome');
                          "6" => "6 - Afastado doença +15 dias",
                          "7" => "7 - Licença sem vencimento, cessão sem ônus",
                          "8" => "8 - Afastado doença +30 dias",
+                         "22" => "9 - Licença por Motivo de Afastamento do Cônjuge"
                         );
-      db_select('r45_situac', $db_situac, true, ($db_opcao==1?1:3));
+      db_select('r45_situac', $db_situac, true, ($db_opcao==1?1:3),"onChange = 'js_verificasituac(this.value)'");
       ?>
     </td>
   </tr>
+    <tr style="display: none">
+        <td>
+            <?
+            db_input('r45_situacaux',6,"",true,'text',$db_opcao);
+            ?>
+        </td>
+    </tr>
   <tr>
     <td nowrap title="<?=@$Tr45_codafa?>">
       <?=@$Lr45_codafa?>
@@ -439,5 +447,15 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function js_verificasituac(value) {
+    let r45_situac = value;
+
+    if(r45_situac == 22){
+        document.getElementById('r45_situacaux').value = 9;
+    }else{
+        document.getElementById('r45_situacaux').value = '';
+    }
 }
 </script>
