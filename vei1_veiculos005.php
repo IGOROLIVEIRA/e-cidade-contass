@@ -40,6 +40,7 @@ include("classes/db_veiccentral_classe.php");
 include("classes/db_tipoveiculos_classe.php");
 include("classes/db_pcforne_classe.php");
 include("classes/db_cgm_classe.php");
+require_once ("classes/db_condataconf_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -58,7 +59,22 @@ $clcgm = new cl_cgm;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  $sqlerro=false;
+
+    $clcondataconf = new cl_condataconf;
+
+    if($sqlerro==false){
+        $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+        $datecadastro = implode("-",array_reverse(explode("/",$ve01_dtaquis)));
+
+        if($c99_datapat != "" && $datecadastro <= $c99_datapat){
+            $sqlerro = true;
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+        }else{
+            $sqlerro=false;
+        }
+    }
   db_inicio_transacao();
   $db_opcao = 2;
 

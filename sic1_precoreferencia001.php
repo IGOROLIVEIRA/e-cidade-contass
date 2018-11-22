@@ -1,4 +1,4 @@
-    <?
+<?
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -14,36 +14,40 @@ $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $db_opcao = 1;
 $db_botao = true;
-
 if(isset($incluir)){
+    db_inicio_transacao();
+    $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
+    if($si01_datacotacao > $datesistema){
+        $msg = "Data da Cotação maior que data do Sistema";
+        unset($incluir);
+        db_msgbox($msg);
+    }else {
+        $processoValidado = true;
+        $sqlProc = $clprecoreferencia->sql_query("",'si01_processocompra',null,"si01_processocompra='".$si01_processocompra."'");
+        $procReferencia = db_query($sqlProc);
+        $procReferencia = db_utils::fieldsMemory($procReferencia,0);
 
-  db_inicio_transacao();
+        if($procReferencia->si01_processocompra != ''){
+            echo "<script>alert('Já existe preço referência para esse processo de compra');</script>";
+            $processoValidado = false;
+        }
 
-  $processoValidado = true;
-  $sqlProc = $clprecoreferencia->sql_query("",'si01_processocompra',null,"si01_processocompra='".$si01_processocompra."'");
-  $procReferencia = db_query($sqlProc);
-  $procReferencia = db_utils::fieldsMemory($procReferencia,0);
-
-  if($procReferencia->si01_processocompra != ''){
-      echo "<script>alert('Já existe preço referência para esse processo de compra');</script>";
-      $processoValidado = false;
-  }
-
-  if($processoValidado){
-    $clprecoreferencia->incluir(null);
-  }
+        if($processoValidado) {
+            $clprecoreferencia->incluir(null);
+        }
+    }
 
   if ($clprecoreferencia->erro_status != 0 && $processoValidado) {
 
-    if ($si01_tipoprecoreferencia == 1) {
-     	$sFuncao = "avg";
-     } else if ($si01_tipoprecoreferencia == 2) {
-     	$sFuncao = "max";
-     } else {
-     	$sFuncao = "min";
-     }
+        if ($si01_tipoprecoreferencia == 1) {
+            $sFuncao = "avg";
+        } else if ($si01_tipoprecoreferencia == 2) {
+            $sFuncao = "max";
+        } else {
+            $sFuncao = "min";
+        }
 
-     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),$quant_casas) as valor,
+        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),$quant_casas) as valor,
                       round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                       round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                         from pcproc
@@ -53,50 +57,47 @@ if(isset($incluir)){
                         join pcorcamval on pc22_orcamitem = pc23_orcamitem
                         where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem";
 
-     $rsResult = db_query($sSql);
+        $rsResult = db_query($sSql);
 
 
-     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-       $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
-       $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
-       $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
+            $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
+            $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
+            $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
+            $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
+            if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
+                $clitemprecoreferencia->si02_vlpercreferencia = 0;
+            }
+            else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
+                $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
+            } else {
+                $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
+            }
+            $clitemprecoreferencia->incluir(null);
 
+        }
+        if ($clitemprecoreferencia->erro_status == 0) {
 
-       $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
-       if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
-        $clitemprecoreferencia->si02_vlpercreferencia = 0;
-       }
-       else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
-        $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
-       } else {
-          $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
-       }
+            $sqlerro = true;
+            $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
+            $clprecoreferencia->erro_status = "0";
 
-       $clitemprecoreferencia->incluir(null);
+        }
 
-     }
-     if ($clitemprecoreferencia->erro_status == 0) {
-
-       $sqlerro = true;
-       $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
-       $clprecoreferencia->erro_status = "0";
-
-     }
-
-     if (pg_num_rows($rsResult) == 0) {
+        if (pg_num_rows($rsResult) == 0) {
 
      	 $clprecoreferencia->erro_msg = "Não existe orçamentos cadastrados.";
-     	 $sqlerro = true;
-     	 $clprecoreferencia->erro_status = "0";
+            $sqlerro = true;
+            $clprecoreferencia->erro_status = "0";
 
-     }
+        }
 
-  }
+    }
 
-  db_fim_transacao($sqlerro);
-  if ($clprecoreferencia->erro_status != 0){
-    echo "<script>
+    db_fim_transacao($sqlerro);
+    if ($clprecoreferencia->erro_status != 0){
+        echo "<script>
     jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas
     +'&tipoprecoreferencia='+$si01_tipoprecoreferencia,
 
@@ -105,37 +106,37 @@ if(isset($incluir)){
 	   jan.moveTo(0,0);
     </script>";
 
-  }
+    }
 
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
+    <tr>
+        <td width="360" height="18">&nbsp;</td>
+        <td width="263">&nbsp;</td>
+        <td width="25">&nbsp;</td>
+        <td width="140">&nbsp;</td>
+    </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmprecoreferencia.php");
-	?>
-    </center>
-	</td>
-  </tr>
+    <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+            <center>
+                <?
+                include("forms/db_frmprecoreferencia.php");
+                ?>
+            </center>
+        </td>
+    </tr>
 </table>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -143,20 +144,20 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </body>
 </html>
 <script>
-js_tabulacaoforms("form1","si01_processocompra",true,1,"si01_processocompra",true);
+    js_tabulacaoforms("form1","si01_processocompra",true,1,"si01_processocompra",true);
 </script>
 <?
 if(isset($incluir)){
-  if($clprecoreferencia->erro_status=="0"){
-    $clprecoreferencia->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clprecoreferencia->erro_campo!=""){
-      echo "<script> document.form1.".$clprecoreferencia->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clprecoreferencia->erro_campo.".focus();</script>";
+    if($clprecoreferencia->erro_status=="0"){
+        $clprecoreferencia->erro(true,false);
+        $db_botao=true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if($clprecoreferencia->erro_campo!=""){
+            echo "<script> document.form1.".$clprecoreferencia->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clprecoreferencia->erro_campo.".focus();</script>";
+        }
+    }else{
+        $clprecoreferencia->erro(true,true);
     }
-  }else{
-    $clprecoreferencia->erro(true,true);
-  }
 }
 ?>

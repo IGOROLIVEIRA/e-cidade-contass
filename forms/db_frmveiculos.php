@@ -361,8 +361,8 @@ db_selectrecord("ve01_veiccadtipocapacidade",$result_tipocapacidade,true,$db_opc
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tve01_dtaquis?>">
-       <?=@$Lve01_dtaquis?>
+    <td nowrap title="Data de Cadastro">
+        <strong>Data de Cadastro:</strong>
     </td>
     <td> 
 <?

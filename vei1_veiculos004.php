@@ -40,6 +40,7 @@ include("classes/db_veiccentral_classe.php");
 include("classes/db_tipoveiculos_classe.php");
 include("classes/db_pcforne_classe.php");
 include("classes/db_cgm_classe.php");
+require_once ("classes/db_condataconf_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -56,205 +57,218 @@ $clpcforne       = new cl_pcforne;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  $sqlerro=false;
-  db_inicio_transacao();
+    $clcondataconf = new cl_condataconf;
 
-  if ($sqlerro == false){
-    $clveiculos->ve01_ativo = 1;
+    if($sqlerro==false){
+        $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+        $datecadastro = implode("-",array_reverse(explode("/",$ve01_dtaquis)));
 
-    if ($si04_tipoveiculo == 3 && $ve01_placa != '') {
-      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_placa = '$ve01_placa'"));
-      if ($clveiculos->numrows > 0){
-        $sqlerro  = true;
-        $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_placa";
-      }
+        if($c99_datapat != "" && $datecadastro <= $c99_datapat){
+            $sqlerro = true;
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+        }else{
+            $sqlerro=false;
+        }
     }
 
-    if ($si04_tipoveiculo == 3 && $ve01_ranavam != '') {
-      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_ranavam = $ve01_ranavam"));
-      if ($clveiculos->numrows > 0){
-        $sqlerro  = true;
-        $erro_msg = "Renavam já cadastrado para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_ranavam";
-      }
-    }
+    db_inicio_transacao();
 
-    if ($si04_tipoveiculo == 3 && $ve01_chassi != '') {
-      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_chassi = '$ve01_chassi'"));
-      if ($clveiculos->numrows > 0){
-        $sqlerro  = true;
-        $erro_msg = "Chassi já cadastrado para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_chassi";
-      }
-    }
+    if ($sqlerro == false){
+        $clveiculos->ve01_ativo = 1;
 
-    if ($sqlerro==false){
-      $clveiculos->incluir(null,$si04_tipoveiculo);
-      $erro_msg=$clveiculos->erro_msg;
-      if ($clveiculos->erro_status=="0"){
-      	$sqlerro=true;
-      }
-
-      if ($sqlerro == false){
-      	if ($cod_comb == '') {
-      		$sqlerro  = true;
-          $erro_msg = "Nenhum combustível selecionado";
-          $clveiculos->erro_campo = "ve06_veiccadcomb";
-      	} else {
-        $ve01_codigo       = $clveiculos->ve01_codigo;
-        $vetor_comb        = split(",",$cod_comb);
-        $vetor_comb_padrao = split(",",$comb_padrao);
-
-        $inc_comb          = array(array("ve06_veiculos","ve06_veiccadcomb","ve06_padrao"));
-        $inc_contador      = 0;
-
-        for($x = 0; $x < count($vetor_comb); $x++){
-          $inc_comb["ve06_veiculos"][$inc_contador]    = $ve01_codigo;
-          $inc_comb["ve06_veiccadcomb"][$inc_contador] = $vetor_comb[$x];
-          for($xx = $x; $xx < count($vetor_comb_padrao); $xx++){
-            $inc_comb["ve06_padrao"][$inc_contador] = $vetor_comb_padrao[$xx];
-            break;
-          }
-
-          $inc_contador++;
+        if ($si04_tipoveiculo == 3 && $ve01_placa != '') {
+            $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_placa = '$ve01_placa'"));
+            if ($clveiculos->numrows > 0){
+                $sqlerro  = true;
+                $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
+                $clveiculos->erro_campo = "ve01_placa";
+            }
         }
 
-        for($x = 0; $x < $inc_contador; $x++){
-          $clveiculoscomb->ve06_veiculos    = $inc_comb["ve06_veiculos"][$x];
-          $clveiculoscomb->ve06_veiccadcomb = $inc_comb["ve06_veiccadcomb"][$x];
-
-          if ($inc_comb["ve06_padrao"][$x] == 1){
-            $padrao = "true";
-          } else {
-            $padrao = "false";
-          }
-
-          $clveiculoscomb->ve06_padrao = $padrao;
-          $clveiculoscomb->incluir(null);
-          if ($clveiculoscomb->erro_status == 0){
-            $sqlerro  = true;
-            $erro_msg = $clveiculoscomb->erro_msg;
-            break;
-          }
+        if ($si04_tipoveiculo == 3 && $ve01_ranavam != '') {
+            $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_ranavam = $ve01_ranavam"));
+            if ($clveiculos->numrows > 0){
+                $sqlerro  = true;
+                $erro_msg = "Renavam já cadastrado para outro veículo. Verifique.";
+                $clveiculos->erro_campo = "ve01_ranavam";
+            }
         }
-      }
-      }
 
+        if ($si04_tipoveiculo == 3 && $ve01_chassi != '') {
+            $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_chassi = '$ve01_chassi'"));
+            if ($clveiculos->numrows > 0){
+                $sqlerro  = true;
+                $erro_msg = "Chassi já cadastrado para outro veículo. Verifique.";
+                $clveiculos->erro_campo = "ve01_chassi";
+            }
+        }
 
+        if ($sqlerro==false){
+            $clveiculos->incluir(null,$si04_tipoveiculo);
+            $erro_msg=$clveiculos->erro_msg;
+            if ($clveiculos->erro_status=="0"){
+                $sqlerro=true;
+            }
+
+            if ($sqlerro == false){
+                if ($cod_comb == '') {
+                    $sqlerro  = true;
+                    $erro_msg = "Nenhum combustível selecionado";
+                    $clveiculos->erro_campo = "ve06_veiccadcomb";
+                } else {
+                    $ve01_codigo       = $clveiculos->ve01_codigo;
+                    $vetor_comb        = split(",",$cod_comb);
+                    $vetor_comb_padrao = split(",",$comb_padrao);
+
+                    $inc_comb          = array(array("ve06_veiculos","ve06_veiccadcomb","ve06_padrao"));
+                    $inc_contador      = 0;
+
+                    for($x = 0; $x < count($vetor_comb); $x++){
+                        $inc_comb["ve06_veiculos"][$inc_contador]    = $ve01_codigo;
+                        $inc_comb["ve06_veiccadcomb"][$inc_contador] = $vetor_comb[$x];
+                        for($xx = $x; $xx < count($vetor_comb_padrao); $xx++){
+                            $inc_comb["ve06_padrao"][$inc_contador] = $vetor_comb_padrao[$xx];
+                            break;
+                        }
+
+                        $inc_contador++;
+                    }
+
+                    for($x = 0; $x < $inc_contador; $x++){
+                        $clveiculoscomb->ve06_veiculos    = $inc_comb["ve06_veiculos"][$x];
+                        $clveiculoscomb->ve06_veiccadcomb = $inc_comb["ve06_veiccadcomb"][$x];
+
+                        if ($inc_comb["ve06_padrao"][$x] == 1){
+                            $padrao = "true";
+                        } else {
+                            $padrao = "false";
+                        }
+
+                        $clveiculoscomb->ve06_padrao = $padrao;
+                        $clveiculoscomb->incluir(null);
+                        if ($clveiculoscomb->erro_status == 0){
+                            $sqlerro  = true;
+                            $erro_msg = $clveiculoscomb->erro_msg;
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        if ($sqlerro==false){
+            $clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
+            $clveicresp->incluir(null);
+            if ($clveicresp->erro_status=="0"){
+                $sqlerro=true;
+                $erro_msg=$clveicresp->erro_msg;
+            }
+        }
+        /*
+            if ($sqlerro==false){
+              $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
+              $clveiccentral->ve40_veiccadcentral = $ve40_veiccadcentral;
+
+              $clveiccentral->incluir(null);
+              if ($clveiccentral->erro_status=="0"){
+                $sqlerro  = true;
+                $erro_msg = $clveiccentral->erro_msg;
+              }
+            }
+         */
+
+        if ($sqlerro==false){
+            if (isset($ve03_bem)&&$ve03_bem){
+                $clveicpatri->ve03_veiculo=$clveiculos->ve01_codigo;
+                $clveicpatri->incluir(null);
+                if ($clveicresp->erro_status=="0"){
+                    $sqlerro=true;
+                    $erro_msg=$clveicresp->erro_msg;
+                }
+            }
+        }
     }
 
-    if ($sqlerro==false){
-    	$clveicresp->ve02_veiculo=$clveiculos->ve01_codigo;
-    	$clveicresp->incluir(null);
-    	if ($clveicresp->erro_status=="0"){
-    		$sqlerro=true;
-    		$erro_msg=$clveicresp->erro_msg;
-    	}
+    if ($sqlerro==false) {
+        $cltipoveiculos->si04_veiculos=$clveiculos->ve01_codigo;
+        $cltipoveiculos->si04_numcgm = $si04_numcgm;
+        $cltipoveiculos->incluir(null);
+        if ($cltipoveiculos->erro_status=="0") {
+            $sqlerro=true;
+            $erro_msg=$cltipoveiculos->erro_msg;
+        }
     }
-/*
-    if ($sqlerro==false){
-      $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
-      $clveiccentral->ve40_veiccadcentral = $ve40_veiccadcentral;
 
-      $clveiccentral->incluir(null);
-      if ($clveiccentral->erro_status=="0"){
-        $sqlerro  = true;
-        $erro_msg = $clveiccentral->erro_msg;
-      }
-    }
- */
+    if ($sqlerro == false){
 
-    if ($sqlerro==false){
-    	if (isset($ve03_bem)&&$ve03_bem){
-    		$clveicpatri->ve03_veiculo=$clveiculos->ve01_codigo;
-    		$clveicpatri->incluir(null);
-    		if ($clveicresp->erro_status=="0"){
-    		  $sqlerro=true;
-    		  $erro_msg=$clveicresp->erro_msg;
-    		}
-    	}
-    }
-  }
-
-  if ($sqlerro==false) {
-    $cltipoveiculos->si04_veiculos=$clveiculos->ve01_codigo;
-    $cltipoveiculos->si04_numcgm = $si04_numcgm;
-  	$cltipoveiculos->incluir(null);
-    if ($cltipoveiculos->erro_status=="0") {
-      $sqlerro=true;
-      $erro_msg=$cltipoveiculos->erro_msg;
-    }
-  }
-
-  if ($sqlerro == false){
-
-  $rsResultado = db_query("
+        $rsResultado = db_query("
     select ve36_sequencial
       from veiccadcentral
         where ve36_coddepto = ".db_getsession("DB_coddepto")."
     ");
 
-    $veiccent = db_utils::fieldsMemory($rsResultado, 0);
-    $clveiccentral->ve40_veiccadcentral = $veiccent->ve36_sequencial;
-    $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
-    $clveiccentral->incluir(null);
-    if ($clveiccentral->erro_status == 0){
-      $sqlerro = true;
-      $erro_msg = $clveiccentral->erro_msg;
+        $veiccent = db_utils::fieldsMemory($rsResultado, 0);
+        $clveiccentral->ve40_veiccadcentral = $veiccent->ve36_sequencial;
+        $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
+        $clveiccentral->incluir(null);
+        if ($clveiccentral->erro_status == 0){
+            $sqlerro = true;
+            $erro_msg = $clveiccentral->erro_msg;
+        }
     }
-  }
 
 
-  db_fim_transacao($sqlerro);
+    db_fim_transacao($sqlerro);
 }
 
 if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
-  $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query($codveictipoabast,"ve07_sigla"));
-  if ($clveictipoabast->numrows > 0){
-    db_fieldsmemory($result_veictipoabast,0);
-  }
+    $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query($codveictipoabast,"ve07_sigla"));
+    if ($clveictipoabast->numrows > 0){
+        db_fieldsmemory($result_veictipoabast,0);
+    }
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmveiculos.php");
-	?>
-    </center>
-	</td>
-  </tr>
+    <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+            <center>
+                <?
+                include("forms/db_frmveiculos.php");
+                ?>
+            </center>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
 <script>
-js_tabulacaoforms("form1","ve01_placa",true,1,"ve01_placa",true);
+    js_tabulacaoforms("form1","ve01_placa",true,1,"ve01_placa",true);
 </script>
 <?
 if(isset($incluir)){
-  if($clveiculos->erro_status=="0"||$sqlerro==true){
-    db_msgbox($erro_msg);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clveiculos->erro_campo!=""){
-      echo "<script> document.form1.".$clveiculos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clveiculos->erro_campo.".focus();</script>";
+    if($clveiculos->erro_status=="0"||$sqlerro==true){
+        db_msgbox($erro_msg);
+        $db_botao=true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if($clveiculos->erro_campo!=""){
+            echo "<script> document.form1.".$clveiculos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clveiculos->erro_campo.".focus();</script>";
+        }
+        unset($incluir);
+    }else{
+        db_msgbox($erro_msg);
+        db_redireciona("vei1_veiculos005.php?chavepesquisa=$ve01_codigo&liberaaba=true");
     }
-    unset($incluir);
-  }else{
-    db_msgbox($erro_msg);
-    db_redireciona("vei1_veiculos005.php?chavepesquisa=$ve01_codigo&liberaaba=true");
-  }
 }
 ?>
