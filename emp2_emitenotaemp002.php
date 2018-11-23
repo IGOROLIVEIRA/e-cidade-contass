@@ -481,68 +481,6 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 //
 //    }
 //
-//    if (isset($resumo_lic) && $resumo_lic!=""){
-//        if ($e30_impobslicempenho=='t') {
-//            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
-//        } else {
-//            $pdf1->resumo = $e60_resumo;
-//        }
-//    } else {
-//        $pdf1->resumo = $e60_resumo;
-//    }
-//
-//
-//    $Sresumo = $pdf1->resumo;
-//    $vresumo = split("\n",$Sresumo);
-//
-//    if (count($vresumo) > 1){
-//        $Sresumo   = "";
-//        $separador = "";
-//        for ($x = 0; $x < count($vresumo); $x++){
-//            if (trim($vresumo[$x]) != ""){
-//                $separador = ". ";
-//                $Sresumo  .= $vresumo[$x].$separador;
-//            }
-//        }
-//    }
-//
-//    if (count($vresumo) == 0){
-//        $Sresumo = str_replace("\n",". ",$Sresumo);
-//    }
-//
-//    $Sresumo = str_replace("\r","",$Sresumo);
-//
-//    $pdf1->resumo = substr($Sresumo,0,730);
-//
-//    function strtolower_slovenian($string)
-//    {
-//        $low=array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú"=>"ú", "Á"=>"á");
-//        return strtolower(strtr($string,$low));
-//    }
-//
-//    if (isset($l03_descr)&&($l03_descr!="")){
-//        $pdf1->descr_licitacao = substr($l03_descr,0,36);
-//    } else {
-//        $sqllic = "select l03_descr as l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e60_codcom and l03_tipo='$e60_tipol'";
-//        $rpc    = db_query($sqllic);
-//
-//        if (pg_numrows($rpc) > 0 ){
-//            $pdf1->descr_licitacao = substr(pg_result($rpc,0,0),0,36);
-//        } else {
-//            $pdf1->descr_licitacao = substr($pc50_descr,0,36);
-//
-//        }
-//    }
-//
-//    if(in_array($e54_tipoautorizacao, array(1,2,3,4))){
-//        if($e54_nummodalidade== "" || $e54_nummodalidade == null){
-//            $pdf1->e54_modalidade = "";
-//            $pdf1->edital_licitacao = "";
-//        }else {
-//            $pdf1->e54_modalidade = $e54_nummodalidade . "/" . $e54_anousu;
-//            $pdf1->edital_licitacao = $e54_numerl;
-//        }
-//    }
     $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
     if ($clempautitem->numrows > 0) {
@@ -553,6 +491,41 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $resumo_lic = $l20_objeto;
         $pdf1->observacaoitem = "pc23_obs";
     }
+
+
+    if (isset($resumo_lic) && $resumo_lic!=""){
+        if ($e30_impobslicempenho=='t') {
+            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
+        } else {
+            $pdf1->resumo = $e60_resumo;
+        }
+    } else {
+        $pdf1->resumo = $e60_resumo;
+    }
+
+
+    $Sresumo = $pdf1->resumo;
+    $vresumo = split("\n",$Sresumo);
+
+    if (count($vresumo) > 1){
+        $Sresumo   = "";
+        $separador = "";
+        for ($x = 0; $x < count($vresumo); $x++){
+            if (trim($vresumo[$x]) != ""){
+                $separador = ". ";
+                $Sresumo  .= $vresumo[$x].$separador;
+            }
+        }
+    }
+
+    if (count($vresumo) == 0){
+        $Sresumo = str_replace("\n",". ",$Sresumo);
+    }
+
+    $Sresumo = str_replace("\r","",$Sresumo);
+
+    $pdf1->resumo = substr($Sresumo,0,730);
+
 
     /**
      * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
@@ -567,8 +540,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     }
 
     //tipo Direta
-    if($e54_tipoautorizacao == 1) {
-        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+    if($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             if($e54_numerl != "") {
