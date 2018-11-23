@@ -421,13 +421,6 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
      * @MarioJunior OC 7425
      */
 
-    //funcao para deixar tipo de compra minusculo
-    function strtolower_slovenian($string)
-    {
-        $low = array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú" => "ú", "Á" => "á", "p");
-        return strtolower(strtr($string, $low));
-    }
-
     //tipo Direta
     if($e54_tipoautorizacao == 1) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
