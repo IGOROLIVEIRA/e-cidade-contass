@@ -160,8 +160,10 @@ try {
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
                 $dateassinatura = implode("-",array_reverse(explode("/",$oParam->dataassinatura)));
 
-                if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                    throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                if($dateassinatura != "") {
+                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                    }
                 }
             }
 
@@ -195,6 +197,20 @@ try {
             $oRetorno->itens = $aUnidades;
             break;
         case "salvaAssinatura":
+
+            $clcondataconf = new cl_condataconf;
+
+            if($sqlerro==false) {
+                $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit')));
+                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+                $dateassinatura = implode("-",array_reverse(explode("/",$oParam->sData)));
+
+                if($dateassinatura != "") {
+                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                    }
+                }
+            }
 
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
             //seta variaveis
