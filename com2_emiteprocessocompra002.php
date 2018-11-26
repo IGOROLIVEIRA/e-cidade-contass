@@ -126,7 +126,7 @@ if ($iTotalLinhasProcessoDeCompras == 0) {
 
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf, '77');
+$pdf1 = new db_impcarne($pdf, '93');
 $pdf1->objpdf->SetTextColor(0,0,0);
 $pdf1->Snumero_ant = "";
 $pdf1->logo        = $logo;
@@ -300,7 +300,6 @@ if ($oConfiguracaoGed->utilizaGED()) {
     $oGerenciador = new GerenciadorEletronicoDocumento();
     $oGerenciador->setLocalizacaoOrigem("tmp/");
     $oGerenciador->setNomeArquivo("{$sTipoDocumento}_{$pc80_codproc_inicial}.pdf");
-
     $oStdDadosGED        = new stdClass();
     $oStdDadosGED->nome  = $sTipoDocumento;
     $oStdDadosGED->tipo  = "NUMERO";
