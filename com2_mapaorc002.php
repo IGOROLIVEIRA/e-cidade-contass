@@ -242,7 +242,7 @@ if ($modelo == 1) {
       }
 
       $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc23_perctaxadesctabela,pc23_percentualdesconto,pc24_pontuacao", null,
-          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
+          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem {$condCriterioadj} and pc23_vlrun <> 0");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
         continue;
