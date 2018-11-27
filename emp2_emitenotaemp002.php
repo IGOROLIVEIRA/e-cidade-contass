@@ -481,7 +481,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 //
 //    }
 //
-    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
+        $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
     if ($clempautitem->numrows > 0) {
         db_fieldsmemory($result_licita, 0);
@@ -531,15 +531,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
      * Crio os campos PROCESSO/ANO,MODALIDADE/ANO e DESCRICAO MODALIDADE de acordo com solicitação
      * @MarioJunior OC 7425
      */
-
-    //funcao para deixar tipo de compra minusculo
-    function strtolower_slovenian($string)
-    {
-        $low = array("Ç" => "ç", "Ã" => "ã", "Ó" => "ó", "Ú" => "ú", "Á" => "á", "p");
-        return strtolower(strtr($string, $low));
-    }
-
     //tipo Direta
+
     if($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
         $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
@@ -548,6 +541,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
                 $arr_numerl = split("/", $e54_numerl);
                 $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
                 $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
+                $pdf1->resumo     = $e54_resumo;
             }else{
                 $pdf1->edital_licitacao = "";
                 $pdf1->modalidade = "";
@@ -560,12 +554,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     //tipo licitacao de outros orgaos
 
     if($e54_tipoautorizacao == 2){
-        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->resumo     = $e54_resumo;
         }
         $pdf1->descr_tipocompra = substr($pc50_descr,0,36);
         $pdf1->descr_modalidade = '';
@@ -573,12 +568,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     //tipo licitacao
     if($e54_tipoautorizacao == 3){
-        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->resumo     = $e54_resumo;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = $pc50_descr;
@@ -586,12 +582,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     //tipo Adesao regpreco
     if($e54_tipoautorizacao == 4){
-        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
+        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu,e54_resumo", null, "e55_autori = $e54_autori "));
         if ($clempautitem->numrows > 0) {
             db_fieldsmemory($result_empaut, 0);
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
+            $pdf1->resumo     = $e54_resumo;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
