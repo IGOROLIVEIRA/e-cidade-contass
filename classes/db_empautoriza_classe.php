@@ -650,9 +650,13 @@ class cl_empautoriza {
             }
         }
         if(trim($this->e54_nummodalidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e54_nummodalidade"])){
-            $sql  .= $virgula." e54_nummodalidade = '$this->e54_nummodalidade' ";
+            if(trim($this->e54_nummodalidade == "") || trim($this->e54_nummodalidade == null)){
+                $sql  .= $virgula." e54_nummodalidade = null ";
+            }else{
+                $sql  .= $virgula." e54_nummodalidade = '$this->e54_nummodalidade' ";
+            }
             $virgula = ",";
-            if(trim($this->e54_nummodalidade) == null && in_array($this->e54_tipoautorizacao, array(1,3,2,4))){
+            if(trim($this->e54_nummodalidade) == null && in_array($this->e54_tipoautorizacao, array(3,2,4))){
                 $this->erro_sql = " Campo Modalidade não Informado.";
                 $this->erro_campo = "e54_gestaut";
                 $this->erro_banco = "";
