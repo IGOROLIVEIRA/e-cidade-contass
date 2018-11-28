@@ -134,20 +134,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
                       r45_codigo as si199_codafastamento,
-                      
-                      case when r45_dtreto >
-                                 (SELECT si199_dtretornoafastamento
-                                  FROM afast102019
-                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                      AND si199_mes < 02 limit 1) then (SELECT si199_dtretornoafastamento+1
-                                                                              FROM afast102019
-                                                                              WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                                                  AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1)
-                         else r45_dtafas
-                         end as si199_dtinicioafastamento,
-                      
+                      r45_dtafas AS si199_dtinicioafastamento,     
                       r45_dtreto as si199_dtretornoafastamento,
-                      
                       CASE
                            WHEN r45_situac = 4 THEN 2
                            WHEN r45_situac = 4 OR r45_codafa = 'R' THEN 2
@@ -173,14 +161,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 AND 
                                 
                                 (  
-                                
-                                              r45_regist NOT IN
-                                                     (SELECT si199_codvinculopessoa
-                                                      FROM afast102019
-                                                      WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                          AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) 
-                
-                                                     and 
            
                                                 r45_dtafas NOT IN           
                                                      (SELECT si199_dtinicioafastamento
@@ -221,7 +201,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 
                                 AND DATE_PART('DAY',r45_dtreto) >= 1
                                 AND DATE_PART('MONTH',r45_dtreto) >= 1
-                                AND DATE_PART('YEAR',r45_dtreto) = 2019
+                                AND DATE_PART('YEAR',r45_dtreto) >= 2019
                                 AND r45_situac <> 5 
                                 AND rh01_instit =  " . db_getsession("DB_instit") . "
                                 AND   rh01_sicom = 1
@@ -230,20 +210,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
                       r45_codigo as si199_codafastamento,
-                      
-                      case when r45_dtreto >
-                                 (SELECT si199_dtretornoafastamento
-                                  FROM afast102019
-                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                      AND si199_mes < 02 limit 1) then (SELECT si199_dtretornoafastamento+1
-                                                                              FROM afast102019
-                                                                              WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                                                  AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1)
-                         else r45_dtafas
-                         end as si199_dtinicioafastamento,
-                      
+                      r45_dtafas AS si199_dtinicioafastamento,     
                       r45_dtreto as si199_dtretornoafastamento,
-                      
                       CASE
                            WHEN r45_situac = 4 THEN 2
                            WHEN r45_situac = 4 OR r45_codafa = 'R' THEN 2
@@ -269,15 +237,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 AND 
                                 
                                 (  
-                                
-                                              r45_regist NOT IN
-                                                     (SELECT si199_codvinculopessoa
-                                                      FROM afast102019
-                                                      WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                          AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) 
-                
-                                                     and 
-           
                                                 r45_dtafas NOT IN           
                                                      (SELECT si199_dtinicioafastamento
                                                       FROM afast102019
@@ -301,7 +260,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                 
                                 AND DATE_PART('DAY',r45_dtreto) >= 1
                                 AND DATE_PART('MONTH',r45_dtreto) >= 1
-                                AND DATE_PART('YEAR',r45_dtreto) = 2019
+                                AND DATE_PART('YEAR',r45_dtreto) >= 2019
                                 AND r45_situac <> 5 
                                 AND rh01_instit =  " . db_getsession("DB_instit") . "
                                 AND   rh01_sicom = 1
