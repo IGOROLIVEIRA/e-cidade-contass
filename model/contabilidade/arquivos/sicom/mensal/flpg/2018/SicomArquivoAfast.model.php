@@ -94,6 +94,10 @@
             $sSql = "   SELECT r45_regist
                         FROM afasta
                         WHERE DATE_PART('YEAR', r45_dtreto) = 2018
+                          AND (
+                                        (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+                                        
+                                    )
                           AND r45_situac <> 5
                           AND r45_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                         GROUP BY 1  
@@ -176,7 +180,7 @@
                                         (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                     ) 
                                 
-                                AND DATE_PART('DAY',r45_dtreto) >= 2
+                                AND DATE_PART('DAY',r45_dtreto) >= 1
                                 AND DATE_PART('MONTH',r45_dtreto) >= 1
                                 AND DATE_PART('YEAR',r45_dtreto) = 2018
                                 AND r45_situac <> 5 
@@ -225,33 +229,33 @@
                                             	r45_regist NOT IN
                                                      (SELECT si199_codvinculopessoa
                                                       FROM afast102018
-                                                      WHERE si199_codvinculopessoa = 111450
-                                                          AND si199_mes < 10 ) 
+                                                      WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                          AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) 
                 
                                                      and 
            
                                                 r45_dtafas NOT IN           
                                                      (SELECT si199_dtinicioafastamento
                                                       FROM afast102018
-                                                      WHERE si199_codvinculopessoa = 111450
-                                                          AND si199_mes < 10 )  
+                                                      WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                          AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
                  
                                                     and
                                         
                                                 r45_dtreto NOT IN
                                                      (SELECT si199_dtretornoafastamento
                                                       FROM afast102018
-                                                      WHERE si199_codvinculopessoa = 111450
-                                                          AND si199_mes < 10 )    
+                                                      WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                          AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )    
                                 )  
                                 
                                 
                                 AND (
-                                        (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+                                        (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
                                         
                                     ) 
                                 
-                                AND DATE_PART('DAY',r45_dtreto) >= 2
+                                AND DATE_PART('DAY',r45_dtreto) >= 1
                                 AND DATE_PART('MONTH',r45_dtreto) >= 1
                                 AND DATE_PART('YEAR',r45_dtreto) = 2018
                                 AND r45_situac <> 5 
