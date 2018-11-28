@@ -311,7 +311,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       foreach ($oDados10->Reg11 as $aDados11) {
         foreach ($aDados11 as $oDados11) {
           if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
-            ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '') &&
+            ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '') &&
             ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
           ) {
 
