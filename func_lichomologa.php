@@ -144,17 +144,17 @@ $sWhereContratos = " and 1 = 1 ";
         $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
         
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l20_numero=$chave_l20_numero $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null," " .$campos,"l20_codigo","l20_numero=$chave_l20_numero $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
 	      }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null," " .$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l03_codigo=$chave_l03_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null," " .$campos,"l20_codigo","l03_codigo=$chave_l03_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l20_edital=$chave_l20_edital $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+         $sql = $clliclicita->sql_queryContratosContass(null," " .$campos,"l20_codigo","l20_edital=$chave_l20_edital $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else{
-                 $sql = $clliclicita->sql_queryContratosContass("","distinct " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
+                 $sql = $clliclicita->sql_queryContratosContass(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }
 
         if (isset($param) && trim($param) != ""){
