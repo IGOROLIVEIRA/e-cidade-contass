@@ -213,6 +213,7 @@ $sqlemp .= " WHERE $dbwhere ";
 $sqlemp .= " order by e60_codemp::bigint ";
 
 $result = db_query($sqlemp);
+//die($sqlemp); db_criatabela($result);exit;
 
 if (pg_numrows($result)==0){
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado !  ");
@@ -541,7 +542,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
                 $arr_numerl = split("/", $e54_numerl);
                 $pdf1->edital_licitacao = $arr_numerl[0] . '/' . $arr_numerl[1];
                 $pdf1->modalidade = $e54_nummodalidade . '/' . $arr_numerl[1];
-                $pdf1->resumo     = $e54_resumo;
+                $pdf1->resumo     = $e60_resumo;
             }else{
                 $pdf1->edital_licitacao = "";
                 $pdf1->modalidade = "";
@@ -560,7 +561,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-            $pdf1->resumo     = $e54_resumo;
+            $pdf1->resumo     = $e60_resumo;
         }
         $pdf1->descr_tipocompra = substr($pc50_descr,0,36);
         $pdf1->descr_modalidade = '';
@@ -574,7 +575,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-            $pdf1->resumo     = $e54_resumo;
+            $pdf1->resumo     = $e60_resumo;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = $pc50_descr;
@@ -588,31 +589,31 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
             $arr_numerl = split("/", $e54_numerl);
             $pdf1->edital_licitacao = $arr_numerl[0].'/'.$arr_numerl[1];
             $pdf1->modalidade = $e54_nummodalidade.'/'.$arr_numerl[1];
-            $pdf1->resumo     = $e54_resumo;
+            $pdf1->resumo     = $e60_resumo;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
     }
 
-    if (isset($resumo_lic)&&$resumo_lic!=""){
-        if (isset($e54_resumo) && trim($e54_resumo) != ""){
-            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
-        } else {
-            $pdf1->resumo     = trim($resumo_lic);
-        }
-
-    } else {
-
-        if (isset($e54_resumo) && trim($e54_resumo) != "") {
-            $pdf1->resumo = trim($e54_resumo);
-        } else {
-            $pdf1->resumo = trim($sResumo);
-        }
-
-        $pdf1->observacaoitem  = 'e55_descr';
-    }
-
-    //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
+//    if (isset($resumo_lic)&&$resumo_lic!=""){
+//        if (isset($e54_resumo) && trim($e54_resumo) != ""){
+//            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
+//        } else {
+//            $pdf1->resumo     = trim($resumo_lic);
+//        }
+//
+//    } else {
+//
+//        if (isset($e54_resumo) && trim($e54_resumo) != "") {
+//            $pdf1->resumo = trim($e54_resumo);
+//        } else {
+//            $pdf1->resumo = trim($sResumo);
+//        }
+//
+//        $pdf1->observacaoitem  = 'e55_descr';
+//    }
+//
+//$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
     $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
 
     if (!empty($e54_praent)) {
