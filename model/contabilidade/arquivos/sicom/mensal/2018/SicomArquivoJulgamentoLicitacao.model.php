@@ -316,7 +316,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
     LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
-	WHERE db_config.codigo = " . db_getsession("DB_instit") . "
+	WHERE db_config.codigo = " . db_getsession("DB_instit") . " AND liclicita.l20_criterioadjudicacao = 1
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
     if (count($aLicitacoes) > 0) {

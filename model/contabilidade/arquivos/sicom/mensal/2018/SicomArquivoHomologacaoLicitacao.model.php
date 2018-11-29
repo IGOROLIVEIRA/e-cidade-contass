@@ -318,7 +318,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
 	LEFT JOIN aberlic112018 on (liclicitemlote.l04_descricao = aberlic112018.si47_dsclote  and aberlic112018.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
-	WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
+	WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1 AND liclicita.l20_criterioadjudicacao = 1
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);
