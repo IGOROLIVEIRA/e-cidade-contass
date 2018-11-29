@@ -529,7 +529,7 @@ class cl_controleext {
                         JOIN conlancamslip ON c84_slip = k17_codigo
                         JOIN conlancam ON c70_codlan = c84_conlancam
                         JOIN contabilidade.conlancamdoc ON c71_codlan = c70_codlan
-                        WHERE c71_coddoc IN (101, 131, 141, 151, 161) ) ) slipsNaoEstornados
+                        WHERE c71_coddoc IN (101, 131, 141, 151, 161, 162, 163) ) ) slipsNaoEstornados
           WHERE k17_credito IN
                   (SELECT c61_reduz FROM contabilidade.conplanoreduz
                    JOIN conplano ON c60_codcon = c61_codcon
