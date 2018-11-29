@@ -143,7 +143,7 @@ $clrotulo->label("l03_descr");
 */
 //        if (isset($param) && trim($param) != ""){
 //	     $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
-       $campos  = "distinct ".$campos;
+       $campos  = "".$campos;
 
        if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
 	         $sql = $clliclicitem->sql_query_inf(null,$campos,"l20_codigo","l20_codigo = $chave_l20_codigo$dbwhere");
