@@ -30,7 +30,7 @@ require_once("libs/smtp.class.php");
 
 $oSkin = new SkinService();
 $oSkin->setCookie();
-echo("Recomenda-se utilizar o Mozila FireFox Versão 36.0 para garantia da plena execução do sistema");
+//echo("Recomenda-se utilizar o Mozila FireFox Versão 36.0 para garantia da plena execução do sistema");
 /**
  * Busca preferencias para verificar qual class
  * de imagem de fundo será utilizada
