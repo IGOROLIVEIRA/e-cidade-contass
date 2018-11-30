@@ -2463,10 +2463,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
           $sqlcalc .= "                 inner join iptucalh        on iptucalh.j17_codhis        = j21_codhis    ";
           $sqlcalc .= "                 left  join iptucalhconf    on iptucalhconf.j89_codhispai = j21_codhis    ";
           $sqlcalc .= "                 inner join tabrec          on tabrec.k02_codigo          = j21_receit    ";
-//          $sqlcalc .= "                 left  JOIN iptutaxamatric on j21_matric = j09_matric                     ";
-//          $sqlcalc .= "                 inner JOIN iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
-//          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
-//          $sqlcalc .= "                         and iptucadtaxaexe.j08_iptucadtaxaexe = j09_iptucadtaxaexe       ";
+          $sqlcalc .= "                 left  join iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
+          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
           $sqlcalc .= "           where j21_anousu = $anousu                                                     ";
           $sqlcalc .= "                 $whereMatric                                                             ";
           $sqlcalc .= "             and j17_codhis not in (select j89_codhis from iptucalhconf)                  ";
@@ -2943,10 +2941,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
           $sqlcalc .= "                 inner join iptucalh        on iptucalh.j17_codhis        = j21_codhis    ";
           $sqlcalc .= "                 left  join iptucalhconf    on iptucalhconf.j89_codhispai = j21_codhis    ";
           $sqlcalc .= "                 inner join tabrec          on tabrec.k02_codigo          = j21_receit    ";
-//          $sqlcalc .= "                 left  JOIN iptutaxamatric on j21_matric = j09_matric                     ";
-//          $sqlcalc .= "                 inner JOIN iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
-//          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
-//          $sqlcalc .= "                         and iptucadtaxaexe.j08_iptucadtaxaexe = j09_iptucadtaxaexe       ";
+          $sqlcalc .= "                 left  join iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
+          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
           $sqlcalc .= "           where j21_anousu = $anousu                                                     ";
           $sqlcalc .= "                 $whereMatric                                                             ";
           $sqlcalc .= "           group by k02_codigo,                                                           ";
