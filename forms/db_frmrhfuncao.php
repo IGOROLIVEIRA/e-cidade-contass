@@ -223,10 +223,8 @@ if ($db_opcao == 2) {
     }
 
     function validaCampos() {
-
-        if (document.form1.rh37_reqcargo.value == 4) {
-            console.log(document.getElementById('rh37_atividadedocargo'));
-            if(document.getElementById('rh37_atividadedocargo').value == "") {
+        if (document.form1.rh37_reqcargo.value == 3) {
+            if(document.getElementById('rh37_exerceatividade').value == "") {
                 alert("O campo Atividade do cargo é obrigatório");
                 return false;
             }

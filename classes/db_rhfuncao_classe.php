@@ -189,7 +189,7 @@ class cl_rhfuncao {
                                ,'$this->rh37_ativo' 
                                ,$this->rh37_funcaogrupo 
                                ,'$this->rh37_atividadedocargo'
-                               ,'$this->rh37_exerceatividade'
+                               ,".($this->rh37_exerceatividade == "null" || $this->rh37_exerceatividade == ""?"null":"'".$this->rh37_exerceatividade."'")." 
                       )";
         $result = db_query($sql);
         if($result==false){
