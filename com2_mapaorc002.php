@@ -194,7 +194,7 @@ if ($modelo == 1) {
   $condCriterioadj = "";
   for($x = 0; $x < $numrows_itens; $x ++) {
 
-    $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor <> 0 " : "";
+    $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor > 0 " : "";
     $troca = 1;
     db_fieldsmemory($result_itens, $x);
     if ($pdf->gety() > $pdf->h - 60 || $troca != 0) {
@@ -210,7 +210,9 @@ if ($modelo == 1) {
       $p = 0;
       $troca = 0;
     }
-    $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as vlrunit,pc23_quant as quant,pc24_pontuacao,pc23_obs", null,
+	$sSql = $clpcorcamval->sql_query_julg(null, null, "min(pc23_vlrun) as menor_valor", null,
+		  "pc23_orcamitem=$pc22_orcamitem and pc23_vlrun > 0");
+	$sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "($sSql) as vlrunit, pc23_quant as quant, pc24_pontuacao, pc23_obs", null,
         "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
     $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor_item);
