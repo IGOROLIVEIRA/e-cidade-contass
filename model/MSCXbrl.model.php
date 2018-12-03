@@ -308,7 +308,7 @@ class MSCXbrl extends XMLWriter {
         $oRegistros = $this->getConsulta($ano, $mes);
         for($iRow = 0; $iRow < pg_num_rows($oRegistros); $iRow++) {
           $aRow = pg_fetch_array($oRegistros, $iRow, PGSQL_NUM);
-          $this->aRegistros += $this->gerarLinhas($aRow);
+          $this->aRegistros += $this->gerarColunas($aRow);
         }
 
         $this->startElement("gl-cor:entryHeader");
@@ -321,7 +321,7 @@ class MSCXbrl extends XMLWriter {
           foreach($this->aRegistros as $aRegistros) {     
             foreach ($aRegistros->registros as $account) {
               $this->setRegistrosContas($account);
-              $this->addLinhas();//Registros
+              $this->addColunas();//Registros
             }
           }
           $this->endElement();//gl-cor:entryDetail
@@ -341,7 +341,7 @@ class MSCXbrl extends XMLWriter {
     
   }
   
-  public function addLinhas() {
+  public function addColunas() {
   
     $this->startElement("gl-cor:account");
           
@@ -422,12 +422,12 @@ class MSCXbrl extends XMLWriter {
   
   }
 
-  public function gerarLinhas($oRegistro) {
+  public function gerarColunas($oRegistro) {//
     /*'conta'=>'0', 'po'=>'1', 'fr'=>'2', 'nd'=>'3', 'fs'=>'4', 'fp'=>'5', 'nr'=>'6', 'al'=>'7'
     'valor'=>'8', 'tipovalor'=>'9' , 'nat_vlr'=>'10', 'valor'=>'11', 'tipovalor'=>'12'
     'valor'=>'13', 'tipovalor'=>'14', 'valor'=>'15', 'tipovalor'=>'16', 'nat_vlr'=>'17'*/
 
-    $aLinhas = array('beginning_balance','period_change_deb','period_change_cred','ending_balance');
+    $aColunas = array('beginning_balance','period_change_deb','period_change_cred','ending_balance');
     $aRegistros = array();
     $indice = "";
 
@@ -440,19 +440,19 @@ class MSCXbrl extends XMLWriter {
     $aRegistros[$indice] = $oContas;
 
     for ($i=0; $i < 4; $i++) {
-      if (in_array($aLinhas[$i], $oRegistro)) {
+      if (in_array($aColunas[$i], $oRegistro)) {
         $oNovoResgistro = new stdClass;
         $oNovoResgistro->conta = $oRegistro[0];
-        if ($aLinhas[$i] == 'beginning_balance' || $aLinhas[$i] == 'ending_balance') {
-          $key = array_search($aLinhas[$i], $oRegistro);
-          $oNovoResgistro->tipoValor = $aLinhas[$i];
+        if ($aColunas[$i] == 'beginning_balance' || $aColunas[$i] == 'ending_balance') {
+          $key = array_search($aColunas[$i], $oRegistro);
+          $oNovoResgistro->tipoValor = $aColunas[$i];
           $oNovoResgistro->valor     = $oRegistro[$key-1];
           $oNovoResgistro->nat_vlr   = $oRegistro[$key+1];
         } 
 
-        if ($aLinhas[$i] == 'period_change_deb' || $aLinhas[$i] == 'period_change_cred') {
-          $key = array_search($aLinhas[$i], $oRegistro);
-          $nat_valor = explode("_", $aLinhas[$i]);
+        if ($aColunas[$i] == 'period_change_deb' || $aColunas[$i] == 'period_change_cred') {
+          $key = array_search($aColunas[$i], $oRegistro);
+          $nat_valor = explode("_", $aColunas[$i]);
           $oNovoResgistro->nat_vlr = $nat_valor[2] == 'deb' ? 'D' : 'C'; 
           $oNovoResgistro->tipoValor = 'period_change';
           $oNovoResgistro->valor     = $oRegistro[$key-1];
