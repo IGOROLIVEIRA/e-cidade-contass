@@ -1,0 +1,48 @@
+<?
+//MODULO: contabilidade
+$clvinculopcaspmsc->rotulo->label();
+?>
+<form name="form1" method="post" action="">
+<center>  
+<fieldset style="margin-top:10px; margin-bottom:10px; ">
+  <legend>Vínculo Pcasp MSC</legend>
+  <table border="0" style="">
+  <tr>
+    <td nowrap title="<?=@$Tc210_pcaspestrut?>">
+       <?=@$Lc210_pcaspestrut?>
+    </td>
+    <td> 
+      <?
+      db_input('c210_pcaspestrut',9,$Ic210_pcaspestrut,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tc210_mscestrut?>">
+       <?=@$Lc210_mscestrut?>
+    </td>
+    <td> 
+      <?
+      db_input('c210_mscestrut',9,$Ic210_mscestrut,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
+  </table>
+</fieldset>
+<center> 
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+</form>
+<script>
+function js_pesquisa(){
+  js_OpenJanelaIframe('top.corpo','db_iframe_vinculopcaspmsc','func_vinculopcaspmsc.php?funcao_js=parent.js_preenchepesquisa|c210_pcaspestrut|c210_mscestrut','Pesquisa',true);
+}
+function js_preenchepesquisa(chave,chave1){
+  db_iframe_vinculopcaspmsc.hide();
+  <?
+  if($db_opcao!=1){
+    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
+  }
+  ?>
+}
+</script>
