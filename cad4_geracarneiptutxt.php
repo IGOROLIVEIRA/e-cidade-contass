@@ -1363,10 +1363,6 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad($j39_compl, 20));
               fputs($clabre_arquivo->arquivo, str_pad($j13_descr, 40));
 
-              if (trim($j23_cxpostal) != "" and $j23_cxpostal > 0) {
-                $j23_ender = "CAIXA POSTAL: $j23_cxpostal";
-              }
-
               fputs($clabre_arquivo->arquivo, str_pad((trim($j23_ender )==""?addslashes($nomepri):addslashes($j23_ender)), 50));
               fputs($clabre_arquivo->arquivo, str_pad((trim($j23_ender)==""?$j39_numero:$j23_numero), 10));
               fputs($clabre_arquivo->arquivo, str_pad((trim($j23_ender)==""?$j39_compl:$j23_compl), 20));
