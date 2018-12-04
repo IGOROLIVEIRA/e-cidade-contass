@@ -1600,6 +1600,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     aLinha[13].setValue(0);
                     aLinha[13].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 14) {
+
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
+                    aLinha[5] = oInputUnitario.toInnerHtml();
+                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
                     aLinha[13].setValue(0);
                     aLinha[13].setDisable(true);
                 }
