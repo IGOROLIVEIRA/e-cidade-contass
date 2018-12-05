@@ -14,7 +14,7 @@ if (($this->qtdcarne % 3 ) == 0 ){
   $this->objpdf->Image('imagens/files/'.$this->logo,12,$top+2,8);
   $this->objpdf->Text(25,$top+4,"P R E F E I T U R A");
   $this->objpdf->SetFont('Arial','B',11);
-  $this->objpdf->Text(22,$top+7,$this->munic);
+  $this->objpdf->Text(22,$top+7,$this->municpref);
   $this->objpdf->SetFont('Arial','B',8);
   $this->objpdf->Text(50,$top+3,$this->prefeitura);
   $this->objpdf->Text(65,$top+6,$this->cnpjprefeitura);
