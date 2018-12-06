@@ -161,6 +161,7 @@ function js_verquant(nome,val,max,param,flag){
 }
 
 function js_calcvaltot(valor,param,nome){
+
   if(!isNaN(valor)){
     dec = 2;
     pos = valor.indexOf('.');
@@ -174,14 +175,14 @@ function js_calcvaltot(valor,param,nome){
     }
     quant = eval("document.form1.qtde_"+param+".value");
     valortotal = new Number(eval("document.form1.valor_"+param+".value"));
-    if(valor!='' && quant!=''){
+
+    if(quant!=''){
+
+      if(valor == "")
+          valor = 0;
       valor = new Number(valor);
       quant = new Number(quant);
       valortotal = new Number(quant*valor);
-      // valortotal = 3;
-    }
-    if(valor==""){
-      valor = 0;
     }
 
     eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
@@ -207,6 +208,7 @@ function js_calcvalunit(valor,param,nome){
     }
     quant = eval("document.form1.qtde_"+param+".value");
     valorunit = new Number(eval("document.form1.vlrun_"+param+".value"));
+
     if(valor!='' && quant!=''){
       valor = new Number(valor);
       quant = new Number(quant);
@@ -217,7 +219,7 @@ function js_calcvalunit(valor,param,nome){
     }
     eval("document.form1.vlrun_"+param+".value='"+valorunit.toFixed(<?=$numdec?>)+"'");
     eval("document.form1."+nome+".value='"+valor.toFixed(2)+"'");
-    if(valorunit==0){
+    if(valorunit==0 || valorunit==''){
       eval("document.form1.vlrun_"+param+".value='0'");
     }
   }else{
