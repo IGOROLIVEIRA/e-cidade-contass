@@ -124,6 +124,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oPrazoEntrega.iMaxLength      = 30;
     me.oCondicaoPagamento.iMaxLength = 30;
     me.oTelefone.setMaxLength(12);
+    me.oNumeroLicitacao.setMaxLength(16);
 
     me.oCaractPeculiarDesc.setReadOnly(true);
     me.oAdesaoRegPrecoObj.setReadOnly(true);
@@ -621,6 +622,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         if (oRetorno.status == 1) {
 
             me.aItens = oRetorno.aItens;
+            // console.log(me.aItens);
             me.oDataGridItens.clearAll(true);
 
             /**
@@ -666,7 +668,6 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                 aRow[10]  = eval(sNomeQuant+" = new DBTextField('"+sNomeQuant+"', '"+sNomeQuant+"', '"+oItem.saldoquantidade+"', 3);");
                 aRow[10].addEvent('onKeyPress', ';return '+me.sInstancia+'.validaValor(event);');
                 aRow[10].addStyle('text-align', 'right');
-
 
 
                 /*
@@ -1163,6 +1164,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             /**
              * Fazemos o parse para float do valor unitario
              */
+            // console.log(oItemLicitacao);
             oItemAutorizacao.valorunitario     = parseFloat( oItemAutorizacao.valorunitario );
             oItemAutorizacao.descricaomaterial = oItemLicitacao.descricaomaterial;
             oItemAutorizacao.codigoprocesso    = oItemLicitacao.codigoitemprocesso;
@@ -1173,6 +1175,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             oItemAutorizacao.pcdotac           = iPcDotac.valueOf();
             oItemAutorizacao.fornecedor        = oItemLicitacao.fornecedor.urlDecode();
             oItemAutorizacao.solicitem         = oItemLicitacao.codigoitemsolicitacao;
+            // cgccpf = oItemLicitacao.cgccpf;
             aAutorizacoes[iIndiceAutorizacao].itens.push(oItemAutorizacao);
             aAutorizacoes[iIndiceAutorizacao].valortotal += new Number(oItemAutorizacao.valortotal);
 
@@ -1261,7 +1264,6 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                 me.oDataGridAuth.aRows[iLinha].aCells[6].sStyle += 'text-align:right';
                 iLinha++;
                 itens.each(function(oItem, id) {
-
                     var aLinha    = new Array();
                     aLinha[0] = oItem.codigomaterial;
                     aLinha[1] = oItem.descricaomaterial.urlDecode();
@@ -1306,7 +1308,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         });
 
         $('btnGerarAutorizacao').observe('click', function() {
-            me.processarAutorizacoes();
+            // var [mensagem, retorno] = js_checaCpfCnpj(cgccpf);
+            // if(retorno)
+                me.processarAutorizacoes();
+            // else alert(mensagem);
         });
     }
 
@@ -1530,7 +1535,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                     }
                 });
                 oParamAutorizacao.aAutorizacoes.push(oAutorizacao);
-                console.log(oParamAutorizacao);
+                // console.log(oParamAutorizacao);
             }
         });
         if (oParamAutorizacao.aAutorizacoes.length == 0) {
