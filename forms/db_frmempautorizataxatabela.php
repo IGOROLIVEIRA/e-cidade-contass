@@ -82,7 +82,7 @@ db_app::load("DBFormCache.js");
         width: 200px;
     }
     #e54_nummodalidade{
-        width: 381px;
+        width: 370px;
     }
     #e54_destin{
         width: 369px;
@@ -187,8 +187,8 @@ db_app::load("DBFormCache.js");
                     <strong>Número do Processo:</strong>
                 </td>
                 <td>
-                    <? db_input('e54_numerll',51,"",true,'text',3,''); ?>
-                    <? db_input('e54_numerl',8,1,true,'hidden'); ?>
+                    <? db_input('e54_numerll',51,"",true,'text',3,'',"","","",16); ?>
+                    <? db_input('e54_numerl',8,1,true,'hidden',""); ?>
                 </td>
             </tr>
             <tr>

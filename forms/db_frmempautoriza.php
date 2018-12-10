@@ -193,10 +193,10 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <strong>Número do Processo:</strong>
-                    <? db_input('e54_numerl', 7,"",true,'text',1); ?>
+                    <? db_input('e54_numerl', 16,"",true,'text',1, "", "", "", "", 16); ?>
 
                     <strong>Modalidade:</strong>
-                    <?db_input('e54_nummodalidade',7,"",true,'text',1,"onkeyup='somenteNumeros(this)';"); ?>
+                    <?db_input('e54_nummodalidade',16,"",true,'text',1,"onkeyup='somenteNumeros(this)';","","","",10); ?>
                 </td>
             </tr>
             <tr>

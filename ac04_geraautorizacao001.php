@@ -135,9 +135,9 @@ if($x->consultarDataDoSistema == true){
     ?>
 </head>
 <style>
-    #e54_numerl{
-        width: 98px;
-    }
+    /*#e54_numerl{*/
+        /*width: 98px;*/
+    /*}*/
     #e54_nummodalidade{
         width: 110px;
     }
@@ -254,7 +254,7 @@ if($x->consultarDataDoSistema == true){
                                         ?>
                                         <?=@$Le54_numerl?>
                                         <?
-                                        db_input('e54_numerl',8,$Ie54_numerl,true,'text',$dop);
+                                        db_input('e54_numerl',16,$Ie54_numerl,true,'text',$dop, "", "", "","",16);
                                         ?>
                                     </td>
                                 </tr>
