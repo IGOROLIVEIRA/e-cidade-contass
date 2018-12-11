@@ -859,5 +859,98 @@ class cl_acordoitem {
 
     return $sSql;
   }
+
+
+  /**
+   * Retorna os dados dos itens para uma execução de contratos
+   *
+   * @param  string $sWhere
+   * @param  string $sOrder
+   * @return string
+   */
+  public function sql_query_execucaoDeContratos($sWhere = "", $sOrder = "") {
+
+    $sSql = "SELECT
+              ac16_sequencial as acordo,
+              ac26_sequencial as posicao_acordo,
+              ac29_acordoitem as item,
+              l20_edital as licitacao,
+              ac02_descricao as natureza,
+              z01_nome as nome_contratado,
+              descrdepto as departamento,
+              coddepto as codigo_dpto,
+              ac26_data as data_posicao,
+              ac16_datainicio as datainicio,
+              ac16_datafim as datafim,
+              pc01_codmater as codigomaterial,
+              pc01_descrmater as material,
+              pc01_servico as servico,
+              e62_servicoquantidade as servicoquantidade,
+              ac20_quantidade as qtd_total,
+              ac20_valorunitario as vlrunitario,
+              ac20_valortotal as total,
+              ac16_valor as valor_contrato,
+              l20_anousu as ano_processo_licitatorio,
+              ac16_numero,
+              ac16_anousu,
+              ac16_dataassinatura,
+              l20_codtipocom,
+              
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_valor END), 0) AS valorAutorizado,
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_quantidade END), 0) AS quantidadeautorizada,
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN (ac20_quantidade - ac29_quantidade) END), 0) AS restante,
+              coalesce(sum(CASE WHEN ac29_tipo = 2 THEN ac29_valor END),0) AS valorExecutado,
+              coalesce(sum(CASE WHEN ac29_tipo = 2 THEN ac29_quantidade END),0) AS quantidadeexecutada,
+              coalesce(sum(CASE WHEN ac29_tipo = 1
+              AND ac29_automatico IS FALSE THEN ac29_valor END), 0) AS valorAutorizadoManual,
+              coalesce(sum(CASE WHEN ac29_tipo = 1
+              AND ac29_automatico IS FALSE THEN ac29_quantidade END), 0) AS quantidadeautorizadaManual
+              
+              FROM acordoitem
+              LEFT JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+              JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+              JOIN acordo ON ac16_sequencial = ac26_acordo
+              JOIN pcmater ON pc01_codmater = ac20_pcmater
+              JOIN db_depart ON coddepto = ac16_deptoresponsavel
+              JOIN cgm ON ac16_contratado = z01_numcgm
+              LEFT JOIN liclicita ON l20_codigo = ac16_licitacao
+              LEFT JOIN empempitem ON e62_item = pc01_codmater
+              LEFT JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
+              JOIN acordocategoria ON ac16_acordocategoria = ac50_sequencial 
+          
+              $sWhere
+              GROUP BY
+              ac20_quantidade,
+              ac20_valorunitario,
+              ac20_valortotal,
+              ac16_datainicio,
+              ac16_valor,
+              ac16_dataassinatura,
+              ac16_licitacao,
+              ac16_datafim,
+              z01_nome,
+              pc01_descrmater,
+              descrdepto,
+              ac29_acordoitem,
+              ac16_sequencial,
+              ac26_sequencial,
+              ac26_data,
+              coddepto,
+              pc01_codmater,
+              l20_edital,
+              l20_anousu,
+              ac02_descricao,
+              ac16_numero,
+              ac16_anousu,
+              ac20_ordem,
+              l20_codtipocom,
+              pc01_servico,
+              e62_servicoquantidade
+              $sOrder";
+
+    return $sSql;
+  }
+
+
 }
-?>
+

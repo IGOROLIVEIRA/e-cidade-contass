@@ -409,6 +409,19 @@ class OrdemDeCompra {
     return $this->aItens;
   }
 
+  public function getItem($iOrdemCompra, $iCodEmpenho, $iCodMaterial){
+
+    $oDaoMatOrdemItem  = db_utils::getDao('matordemitem');
+    $sCamposMatOrdemItem  = "m52_quant as quantidade, ";
+    $sCamposMatOrdemItem .= "(select coalesce(sum(m36_qtd), 0) from matordemitemanu where m36_matordemitem = m52_codlanc) as qtdanulada";
+    $sWhere = "m52_codordem = $iOrdemCompra AND pc01_codmater = $iCodMaterial AND e60_numemp = $iCodEmpenho";
+    $oSqlOrdemCompra = $oDaoMatOrdemItem->sql_query_ordcons(null, $sCamposMatOrdemItem, null, $sWhere);
+    $oOrdemCompra = $oDaoMatOrdemItem->sql_record($oSqlOrdemCompra);
+
+    return db_utils::fieldsMemory($oOrdemCompra);
+
+  }
+
   /**
    * @return EmpenhoFinanceiro
    */

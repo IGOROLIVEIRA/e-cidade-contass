@@ -2671,30 +2671,102 @@ class Acordo
       $sSqlAutorizacoes .= "  e60_numemp,  ";
       $sSqlAutorizacoes .= "  e54_anulad";
 
-        /**
-         * pesquisa os empenhos vicnulados por baixa Manual
-         */
-        $sSqlAutorizacoes .= " UNION ";
-        $sSqlAutorizacoes .= "select  distinct e54_autori as codigo,";
-        $sSqlAutorizacoes .= "        e54_valor as valor,e54_valor,";
-        $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
-        $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
-        $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
-        $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
-        $sSqlAutorizacoes .= "   from acordoposicao ";
-        $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
-        $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";
-        $sSqlAutorizacoes .= "        inner join acordoitemexecutadoperiodo on ac29_sequencial = ac38_acordoitemexecutado";
-        $sSqlAutorizacoes .= "        inner join acordoitemexecutadoempenho on  ac38_sequencial = ac39_acordoitemexecutadoperiodo";
-        $sSqlAutorizacoes .= "        inner join empempenho    on ac39_numemp = e60_numemp ";
-        $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
-        $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
-        $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
-        $sSqlAutorizacoes .= "  order by codigo";
-        $rsAutorizacoes = db_query($sSqlAutorizacoes);
+      /**
+       * pesquisa os empenhos vicnulados por baixa Manual
+       */
+      $sSqlAutorizacoes .= " UNION ";
+      $sSqlAutorizacoes .= "select  distinct e54_autori as codigo,";
+      $sSqlAutorizacoes .= "        e54_valor as valor,e54_valor,";
+      $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
+      $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
+      $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
+      $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
+      $sSqlAutorizacoes .= "   from acordoposicao ";
+      $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
+      $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";
+      $sSqlAutorizacoes .= "        inner join acordoitemexecutadoperiodo on ac29_sequencial = ac38_acordoitemexecutado";
+      $sSqlAutorizacoes .= "        inner join acordoitemexecutadoempenho on  ac38_sequencial = ac39_acordoitemexecutadoperiodo";
+      $sSqlAutorizacoes .= "        inner join empempenho    on ac39_numemp = e60_numemp ";
+      $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
+      $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
+      $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+      $sSqlAutorizacoes .= "  order by codigo";
+      $rsAutorizacoes = db_query($sSqlAutorizacoes);
 
-        return db_utils::getCollectionByRecord($rsAutorizacoes);
-      }
+      return db_utils::getCollectionByRecord($rsAutorizacoes);
+    }
+
+  /**
+   * Retorna as autorizacoes realizadas para o acordo dentro de um intervalo de datas
+   * @param integer [$iAutoriza] codigo da Autorizacao
+   * @return array
+   */
+  public function getAutorizacoesEntreDatas($sDataInicial, $sDataFinal)
+  {
+
+    $sSqlDataDeEmissao = '';
+    if( empty($sDataInicial) && !empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND e54_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
+    }
+    if( !empty($sDataInicial) && empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND e54_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+    }
+    if( !empty($sDataInicial) && !empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND (e54_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+      $sSqlDataDeEmissao .= "                   AND '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."') ";
+    }
+
+    $sSqlAutorizacoes =  "select  e54_autori as codigo,";
+    $sSqlAutorizacoes .= "        sum(e54_valor) as valor,e54_valor,";
+    $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
+    $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
+    $sSqlAutorizacoes .= "        e60_anousu||e60_codemp as codemp, ";
+    $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
+    $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
+    $sSqlAutorizacoes .= "   from acordoposicao ";
+    $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
+    $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";
+    $sSqlAutorizacoes .= "        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado ";
+    $sSqlAutorizacoes .= "        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori ";
+    $sSqlAutorizacoes .= "        inner join empautoriza on e54_autori = e55_autori ";
+    $sSqlAutorizacoes .= "        left join empempaut on e61_autori = e54_autori ";
+    $sSqlAutorizacoes .= "        left join empempenho on e61_numemp = e60_numemp ";
+    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+    $sSqlAutorizacoes .= $sSqlDataDeEmissao;
+    $sSqlAutorizacoes .= "  group by e54_autori,";
+    $sSqlAutorizacoes .= "  e54_emiss,  ";
+    $sSqlAutorizacoes .= "  e60_codemp, ";
+    $sSqlAutorizacoes .= "  e60_anousu, ";
+    $sSqlAutorizacoes .= "  e60_numemp,  ";
+    $sSqlAutorizacoes .= "  e54_anulad";
+
+    /**
+     * pesquisa os empenhos vinculados por baixa Manual
+     */
+    $sSqlAutorizacoes .= " UNION ";
+    $sSqlAutorizacoes .= "select  distinct e54_autori as codigo,";
+    $sSqlAutorizacoes .= "        e54_valor as valor,e54_valor,";
+    $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
+    $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
+    $sSqlAutorizacoes .= "        e60_anousu||e60_codemp as codemp, ";
+    $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
+    $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
+    $sSqlAutorizacoes .= "   from acordoposicao ";
+    $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
+    $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";
+    $sSqlAutorizacoes .= "        inner join acordoitemexecutadoperiodo on ac29_sequencial = ac38_acordoitemexecutado";
+    $sSqlAutorizacoes .= "        inner join acordoitemexecutadoempenho on  ac38_sequencial = ac39_acordoitemexecutadoperiodo";
+    $sSqlAutorizacoes .= "        inner join empempenho    on ac39_numemp = e60_numemp ";
+    $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
+    $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
+    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+    $sSqlAutorizacoes .= $sSqlDataDeEmissao ;
+    $sSqlAutorizacoes .= "  order by codemp asc";
+
+    $rsAutorizacoes = db_query($sSqlAutorizacoes);
+
+    return db_utils::getCollectionByRecord($rsAutorizacoes);
+  }
 
     /**
      * retorna os itens do acordo que estão na autorizacao passada por parametro

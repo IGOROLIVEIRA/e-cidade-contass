@@ -788,5 +788,42 @@ class cl_acordoposicao {
       }
       return $sSql;
   }
+
+  public function getEmpenhosDeUmaPosicao($iCodPosicao,$sDataInicial,$sDataFinal)
+  {
+    $sSqlDataDeEmissao = '';
+    if( empty($sDataInicial) && !empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND e60_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
+    }
+    if( !empty($sDataInicial) && empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND e60_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+    }
+    if( !empty($sDataInicial) && !empty($sDataFinal) ){
+      $sSqlDataDeEmissao = " AND (e60_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+      $sSqlDataDeEmissao .= "                   AND '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."') ";
+    }
+
+    $sSql = "   SELECT  DISTINCT(e61_numemp), e60_emiss, e60_codemp, e60_anousu
+                  FROM  empempaut
+            INNER JOIN  empempenho
+                    ON  e60_numemp = e61_numemp
+                 WHERE  e61_autori
+                    IN  (SELECT  ac19_autori
+                           FROM  acordoitemexecutadoempautitem
+                          WHERE  ac19_acordoitemexecutado
+                             IN  (SELECT  ac29_sequencial
+                                    FROM  acordoitemexecutado
+                                   WHERE  ac29_acordoitem
+                                      IN  (SELECT  ac20_sequencial
+                                             FROM  acordoitem
+                                            WHERE  ac20_acordoposicao
+                                               IN  ( $iCodPosicao ))))
+    $sSqlDataDeEmissao
+              ORDER BY  e60_codemp;";
+
+    return $sSql;
+
+  }
+
 }
 ?>
