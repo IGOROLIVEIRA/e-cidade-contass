@@ -40,11 +40,12 @@ $sMsg = null;
 
 try {
 
-	$sSqlCGM  = '     select distinct z01_numcgm as cgm,                 ';
+	$sSqlCGM  = '     select distinct z01_numcgm as cgm, codigo,         ';
 	$sSqlCGM .= '            z01_cgccpf||\' - \'||z01_nome as empregador ';
 	$sSqlCGM .= '       from rhlota                                      ';
 	$sSqlCGM .= ' inner join cgm                                         ';
-	$sSqlCGM .= '         on rhlota.r70_numcgm = cgm.z01_numcgm          ';
+  $sSqlCGM .= '         on rhlota.r70_numcgm = cgm.z01_numcgm          ';
+	$sSqlCGM .= ' inner join db_config on cgm.z01_numcgm = db_config.numcgm ';
   $sSqlCGM .= '      where r70_instit = '. db_getsession("DB_instit")   ;
 	$sSqlCGM .= '   order by z01_numcgm '                                 ;
 
@@ -56,7 +57,7 @@ try {
 
 	if(pg_num_rows($rsSqlCGM) > 0) {
 		$aCGM = db_utils::makeCollectionFromRecord($rsSqlCGM, function ($oItemCGM) {
-			return (object)array('cgm'=>$oItemCGM->cgm,'empregador'=>$oItemCGM->empregador);
+			return (object)array('cgm'=>$oItemCGM->cgm,'empregador'=>$oItemCGM->empregador,'codigo'=>$oItemCGM->codigo);
 		});
 	}
 
@@ -107,7 +108,10 @@ try {
 	      <legend><label for="cgm">Escolha o Empregador</label></legend>
 	      <select id = 'cgm' style="width:100%" onchange="buscarAvaliacao(event)">
 	      	<?php foreach($aCGM as $oCGM):?>
-	      		<option value="<?php echo $oCGM->cgm; ?>"><?php echo $oCGM->empregador; ?></option>
+	      		<option value="<?php echo $oCGM->cgm; ?>" 
+             <?php if($oCGM->codigo == db_getsession("DB_instit")) { echo "selected='true'"; } ?>>
+            <?php echo $oCGM->empregador; ?>
+            </option>
 	      	<?php endforeach;?>
 	      </select>
 	    </fieldset>
