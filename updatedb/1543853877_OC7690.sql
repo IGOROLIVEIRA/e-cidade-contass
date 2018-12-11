@@ -46,13 +46,9 @@ INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rot
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c210_pcaspestrut'), 1, (select max(codsequencia) from db_syssequencia));
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c210_mscestrut'), 2, 0);
 
-INSERT INTO db_sysindices (codind, nomeind, codarq, campounico) VALUES ((select max(codind)+1 from db_sysindices), 'vinculopcaspmsc_index', select max(codarq) from db_sysarquivo), '0');
+INSERT INTO db_sysindices (codind, nomeind, codarq, campounico) VALUES ((select max(codind)+1 from db_sysindices), 'vinculopcaspmsc_index', (select max(codarq) from db_sysarquivo), '0');
 
 -- Fim do script
 
 COMMIT;
-
-
-
-
 
