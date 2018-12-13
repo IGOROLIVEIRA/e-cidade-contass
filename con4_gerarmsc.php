@@ -109,8 +109,10 @@ $aMeses = array(
             js_removeObj('div_aguarde');
             alert("Processo concluído com sucesso!");
             var sArquivo = document.getElementById('arquivo');
-            var sLink = " <strong>Arquivo Gerado:&nbsp;</strong>"; 
-            sLink += "<a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
+            var sLink = " <fieldset><legend>Arquivos Gerados</legend>"; 
+            sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
+            sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
+            sLink += "</fieldset>"; 
             sArquivo.innerHTML = sLink;
             sArquivo.style.display = "inline-block";
           } else {
