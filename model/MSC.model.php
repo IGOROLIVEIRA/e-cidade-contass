@@ -269,7 +269,7 @@ class MSC {
       $this->aRegistros += array_merge($this->gerarLinhas($reg));
     }
 
-    switch ($formato) {//
+    switch ($formato) {
 
       case 'xbrl' :
         
@@ -280,7 +280,7 @@ class MSC {
           $xbrl->setPeriodDescription($this->getPeriodDescription());
           $xbrl->setPeriodStart($this->getPeriodStart());
           $xbrl->setPeriodEnd($this->getPeriodEnd());
-          $xbrl->setLineNumberCounter($this->iLineNumberCounter);
+          $xbrl->setLineNumberCounter($this->getLineNumberCounter());
           $xbrl->setNomeArq($this->getNomeArq());
           $xbrl->gerarArquivoXBRL($this->aRegistros);
 
@@ -417,7 +417,7 @@ class MSC {
 
   }
 
-  public function getDadosIC01($iAno, $DataInicio, $DataFim){
+  public function getDadosIC01($iAno, $DataInicio, $DataFim) {
       
     $sSQL = "select * from ( 
         select estrut as conta,
@@ -463,7 +463,7 @@ class MSC {
 	         left outer join consistema on c60_codsis = c52_codsis  
 	         left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
 	         where (c60_infcompmsc is null or c60_infcompmsc = 0 or c60_infcompmsc = 1) and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
-	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) order by po";
+	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
       $rsResult = db_query($sSQL);//echo "<pre>"; print_r($sSQL);die;
 
@@ -471,7 +471,7 @@ class MSC {
       
   }
 
-    public function getDadosIC02($iAno, $DataInicio, $DataFim){
+    public function getDadosIC02($iAno, $DataInicio, $DataFim) {
 
         $sSQL = "select * from ( 
         select estrut as conta,
@@ -523,43 +523,43 @@ class MSC {
 	         where c60_infcompmsc = 2 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
 	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
         
-        $rsResult = db_query($sSQL);
+        $rsResult = db_query($sSQL);die($sSQL);
 
         return $this->getDadosIC(2, $rsResult);
 
     }
 
-    public function getDadosIC03(){
+    public function getDadosIC03() {
         $aDadosIC03 = array();
         return $aDadosIC03;
     }
 
-    public function getDadosIC04(){
+    public function getDadosIC04() {
         $aDadosIC04 = array();
         return $aDadosIC04;
     }
 
-    public function getDadosIC05(){
+    public function getDadosIC05() {
         $aDadosIC05 = array();
         return $aDadosIC05;
     }
 
-    public function getDadosIC06(){
+    public function getDadosIC06() {
         $aDadosIC06 = array();
         return $aDadosIC06;
     }
 
-    public function getDadosIC07(){
+    public function getDadosIC07() {
         $aDadosIC07 = array();
         return $aDadosIC07;
     }
 
-    public function getDadosIC08(){
+    public function getDadosIC08() {
         $aDadosIC08 = array();
         return $aDadosIC08;
     }
 
-    public function getDadosIC09(){
+    public function getDadosIC09() {
         $aDadosIC09 = array();
         return $aDadosIC09;
     }
