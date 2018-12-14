@@ -523,7 +523,7 @@ class MSC {
 	         where c60_infcompmsc = 2 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
 	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
         
-        $rsResult = db_query($sSQL);die($sSQL);
+        $rsResult = db_query($sSQL);
 
         return $this->getDadosIC(2, $rsResult);
 
