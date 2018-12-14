@@ -288,16 +288,18 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao ";
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes ";
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo  ";
-   $sSqlFuncaoOrdenaPagamento.="where rh01_numcgm = $cgmpaga  order by rh02_seqpes desc limit 1 ";
+   $sSqlFuncaoOrdenaPagamento.="where rh01_numcgm = $cgmpaga and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmpaga)";
+   $sSqlFuncaoOrdenaPagamento.=" order by rh02_seqpes desc limit 1 ";
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
-
+   
    $sSqlFuncaoOrdenadespesa =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
    $sSqlFuncaoOrdenadespesa.=" from rhpessoal ";
    $sSqlFuncaoOrdenadespesa.=" LEFT join rhpessoalmov on rh02_regist=rh01_regist ";
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao";
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
-   $sSqlFuncaoOrdenadespesa.=" where rh01_numcgm = $cgmordenadespesa order by rh02_seqpes desc limit 1";
+   $sSqlFuncaoOrdenadespesa.=" where rh01_numcgm = $cgmordenadespesa and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmordenadespesa)";
+   $sSqlFuncaoOrdenadespesa.=" order by rh02_seqpes desc limit 1 ";
    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
 
    $sSqlFuncaoLiquida =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoliquida";
@@ -306,9 +308,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $sSqlFuncaoLiquida.=" LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao";
    $sSqlFuncaoLiquida.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
    $sSqlFuncaoLiquida.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
-   $sSqlFuncaoLiquida.=" where rh01_numcgm = $cgmliquida order by rh02_seqpes desc limit 1";
+   $sSqlFuncaoLiquida.=" where rh01_numcgm = $cgmliquida and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmliquida)"; 
+   $sSqlFuncaoLiquida.=" order by rh02_seqpes desc limit 1 ";
 
-   $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
+   $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida; 
 
   /*OC4401*/
   $pdf1->usuario = $usuario;
@@ -350,7 +353,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->dotacao          = $estrutural;
    $pdf1->outrasordens     = $outrasordens;
    $pdf1->recorddositens   = $resultitem;
-   $pdf1->ano		   = $e60_anousu;
+   $pdf1->ano		           = $e60_anousu;
    $pdf1->linhasdositens   = pg_numrows($resultitem);
    $pdf1->elementoitem     = "o56_elemento";
    $pdf1->descr_elementoitem = "o56_descr";
