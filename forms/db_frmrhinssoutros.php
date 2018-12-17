@@ -34,6 +34,7 @@ $clrotulo->label("z01_nome");
 ?>
 <form name="form1" method="post" action="">
 <center>
+<fieldset style="width: 550px; margin-top:10px; margin-bottom:10px"><legend>Desconto Externo de Previdência</legend>
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Trh01_regist?>">
@@ -105,7 +106,7 @@ $clrotulo->label("z01_nome");
        ?>
     </td>
   </tr>
-</table>
+</table></fieldset>
 <?
 if($db_opcao == 1){
 ?>
