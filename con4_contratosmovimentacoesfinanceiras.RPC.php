@@ -103,12 +103,12 @@ switch($oParam->exec) {
 //       }
             $iTipoPosicao =  $oPosicaoContrato->getTipo();
 
-            /**
-             * Mostrará apenas as posições de tipo inclusão ou vigência, para acordos de origem empenho
-             */
-            if ($lGeraAutorizacao && $lOrigemEmpenho && ($iTipoPosicao == AcordoPosicao::TIPO_INCLUSAO || $iTipoPosicao == AcordoPosicao::TIPO_VIGENCIA) ) {
-                continue;
-            }
+//            /**
+//             * Mostrará apenas as posições de tipo inclusão ou vigência, para acordos de origem empenho
+//             */
+//            if ($lGeraAutorizacao && $lOrigemEmpenho && ($iTipoPosicao == AcordoPosicao::TIPO_INCLUSAO || $iTipoPosicao == AcordoPosicao::TIPO_VIGENCIA) ) {
+//                continue;
+//            }
 
             $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
             $oPosicao->codigoaditivo  = $oPosicaoContrato->getCodigoAditivo();
