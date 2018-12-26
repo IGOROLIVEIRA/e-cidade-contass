@@ -45,7 +45,7 @@ $clrotulo->label('r14_valor');
 
 $iInstituicao = db_getsession("DB_instit");
 
-$sRubrica 			= $oParametros->iRubrica;
+$sRubrica 		= $oParametros->iRubrica;
 $iMes           = $oParametros->iMes;
 $iAno           = $oParametros->iAno;
 $sPonto         = $oParametros->sPonto;
@@ -56,9 +56,7 @@ $sPagina        = $oParametros->sPagina;
 $sTipo          = $oParametros->sTipo;
 $sOrdem         = $oParametros->sOrdem;
 $sTipoOrdem     = $oParametros->sTipoOrdem;
-
-$sDescricaoRubrica = '';
-
+$sQuebra		= $oParametros->sQuebra == 'nao' ? false : true;
 
 $head2 = "FINANCEIRA POR RUBRICA";
 $head3 = "RUBRICA : ".$sRubrica." - ".$sDescricaoRubrica;
@@ -107,7 +105,13 @@ if($sPonto == 's'){
   $sSigla  = 'r14_';
   $head5   = 'PONTO : SUPLEMENTAR';
   $sTabela = sql_gerfsal_ficticio(FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR, $sSigla);
-  
+}
+
+if($sQuebra){
+	if($sOrdem == 'l')
+		$sigla = "LOTAÇÃO";
+	else $sigla = "RECURSO";
+	$head7 = "QUEBRAR POR: ".$sigla;
 }
 
 $sWhere = "";
@@ -183,6 +187,7 @@ if($sOrdem == 'a'){
 $oDaoRhPessoalMov = db_utils::getDao('rhpessoalmov');
 
 $sSqlFinanceiro   = $oDaoRhPessoalMov->sql_queryFinanceiroPeloCodigo($iAno, $iMes, $sTabela, $sSigla, $sWhere, $sOrderBy, $lPeriodoAtual);
+//print_r($sSqlFinanceiro);die();
 $rsFinanceiro     = $oDaoRhPessoalMov->sql_record($sSqlFinanceiro);
 
 if ($oDaoRhPessoalMov->numrows == 0 ) {
@@ -197,7 +202,7 @@ if ($oDaoRhPessoalMov->numrows == 0 ) {
 
 db_fieldsmemory($rsFinanceiro, 0);
 
-$xxrubrica       = $rubric;
+$xxrubrica       = '';
 
 if($sTipo == 'r'){
 
@@ -223,19 +228,16 @@ if($sTipo == 'r'){
 	$tr_func  = 0;
 
 	if($sPagina == 'p'){
-
 		$tot_espaco = 229;
-
 	}else{
-
 		$tot_espaco = 152;
-
 	}
   
 	for($x = 0; $x < pg_numrows($rsFinanceiro);$x++){
-		
+
+
 		db_fieldsmemory($rsFinanceiro,$x);
-    
+		$tamanho = 23;
 		/**
 		 * pd = 2 = registro de desconto
 		 * Caso seja desconto é abatido o valor do somatório
@@ -244,106 +246,281 @@ if($sTipo == 'r'){
 			$valor *= -1;
 		}
 
-		if($quebra != $rh25_recurso && $sOrdem == 'r'){
-			
-			$iProximoRecurso = db_utils::fieldsMemory($rsFinanceiro, $x + 1)->rh25_recurso;
-			
-			$pdf->setfont('arial','b',8);
-			
+		if($sOrdem == 'l' && $sQuebra){
+			$iLotacaoAnterior = db_utils::fieldsMemory($rsFinanceiro, $x - 1)->lotacao;
+
 			if($x != 0){
-				
-				$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$t_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
-				$pdf->cell(15,$alt,db_formatar($t_quant,'f'),'T',0,"R",0);
-				$pdf->cell(25,$alt,db_formatar(abs($t_valor),'f'),'T',1,"R",0);
-			}			
-			
-					
+				if($iLotacaoAnterior != $lotacao ){
+					$pdf->ln(5);
+					$pdf->setfont('arial', 'b', 10);
+					$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$t_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
+					$pdf->cell(15,$alt,db_formatar($t_quant,'f'),'T',0,"R",0);
+					$pdf->cell(25,$alt,db_formatar(abs($t_valor),'f'),'T',1,"R",0);
+					$t_quant = 0;
+					$t_valor = 0;
+					$t_func  = 0;
+				}
+			}
+
+
+
+			if($iLotacaoAnterior != $lotacao && $rubric == $xxrubrica) {
+				if($sPagina == 'p'){
+					$pdf->AddPage('L');
+				}
+				else {
+					$pdf->AddPage('');
+				}
+
+				$pdf->setfont('arial', 'b', 8);
+				$pdf->cell(15, $alt, "Matrícula", 1, 0, "C", 1);
+				$pdf->cell(58, $alt, $RLz01_nome, 1, 0, "C", 1);
+				$pdf->cell(15, $alt, 'LOTAÇÃO', 1, 0, "C", 1);
+				$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+				if($sPagina == 'p'){
+					$pdf->cell(15, $alt, 'CARGO', 1, 0, "C", 1);
+					$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+				}
+				$pdf->cell(15, $alt, 'QUANT', 1, 0, "C", 1);
+				$pdf->cell(25, $alt, 'VALOR', 1, 1, "C", 1);
+				$pdf->setfont('arial', 'b', 10);
+				$pdf->cell(20, $alt, 'RUBRICA : ', 0, 0, "L", 0);
+				$pdf->cell(10, $alt, $rubric, 0, 0, "R", 0);
+				$pdf->cell(60, $alt, $rh27_descr, 0, 1, "L", 0);
+				$pdf->cell(20, $alt, 'Lotação :   ', 0, 0, "L", 0);
+				$pdf->cell(10, $alt, $lotacao, 0, 1, "L", 0);
+			}
+		}
+
+
+
+		if($quebra != $rh25_recurso && $sOrdem == 'r'){
+
+			$irecursoAnterior = db_utils::fieldsMemory($rsFinanceiro, $x - 1)->rh25_recurso;
+			$pdf->setfont('arial','b',8);
+
+			if($x != 0){
+				if($sQuebra){
+					$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$t_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
+					$pdf->cell(15,$alt,db_formatar($t_quant,'f'),'T',0,"R",0);
+					$pdf->cell(25,$alt,db_formatar(abs($t_valor),'f'),'T',1,"R",0);
+				}
+			}
+
 			$quebra = $rh25_recurso;
-			$pdf->ln(3);
-			
-			if ($iProximoRecurso == $rh25_recurso) {
-				$pdf->cell(20,$alt,'RECURSO: ', 0,0,"L",0);
+
+			if($sQuebra){
+				if($rh25_recurso != $irecursoAnterior && $irecursoAnterior != '' && $xxrubrica == $rubric){
+					if($sPagina == 'p'){
+						$pdf->AddPage('L');
+					}
+					else {
+						$pdf->AddPage('');
+					}
+
+					$pdf->setfont('arial','b',8);
+					$pdf->cell(15,$alt,"Matrícula",1,0,"C",1);
+					$pdf->cell(58,$alt,$RLz01_nome,1,0,"C",1);
+					$pdf->cell(15,$alt,'LOTAÇÃO',1,0,"C",1);
+					$pdf->cell(62,$alt,'DESCRICAO',1,0,"C",1);
+					if($sPagina == 'p'){
+						$pdf->cell(15,$alt,'CARGO',1,0,"C",1);
+						$pdf->cell(62,$alt,'DESCRICAO',1,0,"C",1);
+					}
+					$pdf->cell(15,$alt,'QUANT',1,0,"C",1);
+					$pdf->cell(25,$alt,'VALOR',1,1,"C",1);
+					$pdf->setfont('arial','b',10);
+					$pdf->cell(20,$alt,'RUBRICA : ', 0,0,"L",0);
+					$pdf->cell(10,$alt,$rubric,0,0,"R",0);
+					$pdf->cell(60,$alt,$rh27_descr,   0,1,"L",0);
+					if($sOrdem == 'r'){
+						$pdf->setfont('arial','b',10);
+						$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
+						$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
+						$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+					}
+					if($sOrdem == 'l'){
+						$pdf->cell(20, $alt, 'Lotação : ', 0, 0, "L", 0);
+						$pdf->cell(10, $alt, $lotacao, 0, 1, "L", 0);
+					}
+
+				}
+			}else{
+
+				if($sPagina == 'p'){
+					if($pdf->GetY() + 2 > 180) // Verifica se o tamanho passa a altura utilizada na página
+						$pdf->AddPage('L');
+				}
+
+				$pdf->ln(3);
+				$pdf->setfont('arial','b',10);
+				$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
 				$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
 				$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+				$pdf->ln(2);
 			}
-			
+
 			$t_quant = 0;
 			$t_valor = 0;
 			$t_func  = 0;
 
 		}
-		
-		if($xxrubrica != $rubric ){
-			
-			$troca = 1;
-			$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$tr_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
-			$pdf->cell(15,$alt,db_formatar($tr_quant,'f'),'T',0,"R",0);
-			$pdf->cell(25,$alt,db_formatar(abs($tr_valor),'f'),'T',1,"R",0);
+
+		if($xxrubrica != $rubric){	// Insere o valor total ao final de cada recurso
+			if($sQuebra){
+				if($sOrdem == 'l' || $sOrdem == 'r'){
+					$pdf->ln(4);
+					$pdf->setfont('arial','b',8);
+					$pdf->cell(20,$alt,'RUBRICA : ', 0,0,"L",0);
+					$pdf->cell(10,$alt,$xxrubrica,0,0,"R",0);
+					$pdf->cell(60,$alt,$sDescriRubrica,   0,1,"L",0);
+				}
+			}
+				$pdf->setfont('arial','b',8);
+				$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$tr_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
+				$pdf->cell(15,$alt,db_formatar($tr_quant,'f'),'T',0,"R",0);
+				$pdf->cell(25,$alt,db_formatar(abs($tr_valor),'f'),'T',1,"R",0);
+				$pdf->ln(3);
+
+
+
+			if($xxrubrica != ''){
+				if($sQuebra && ($sOrdem == 'l' || $sOrdem == 'r')){
+					if($sPagina == 'p'){
+						$pdf->AddPage('L');
+					}
+					else {
+						$pdf->AddPage('');
+					}
+
+					$pdf->setfont('arial', 'b', 8);
+					$pdf->cell(15, $alt, "Matrícula", 1, 0, "C", 1);
+					$pdf->cell(58, $alt, $RLz01_nome, 1, 0, "C", 1);
+					$pdf->cell(15, $alt, 'LOTAÇÃO', 1, 0, "C", 1);
+					$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+					if($sPagina == 'p'){
+						$pdf->cell(15, $alt, 'CARGO', 1, 0, "C", 1);
+						$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+					}
+					$pdf->cell(15, $alt, 'QUANT', 1, 0, "C", 1);
+					$pdf->cell(25, $alt, 'VALOR', 1, 1, "C", 1);
+				}
+
+				$pdf->setfont('arial', 'b', 10);
+
+				if(!$sQuebra)
+					$pdf->ln(4);
+
+				$pdf->cell(20, $alt, 'RUBRICA : ', 0, 0, "L", 0);
+				$pdf->cell(10, $alt, $rubric, 0, 0, "R", 0);
+				$pdf->cell(60, $alt, $rh27_descr, 0, 1, "L", 0);
+
+				if(!$sQuebra && $sOrdem != 'l' && $sOrdem != 'a'){
+					$pdf->cell(20, $alt, 'RECURSO : ', 0, 0, "L", 0);
+					$pdf->cell(10, $alt, $rh25_recurso, 0, 0, "R", 0);
+					$pdf->cell(60, $alt, $o15_descr, 0, 1, "L", 0);
+				}
+
+				if($sQuebra && $sOrdem != 'l'){
+					$pdf->cell(20, $alt, 'RECURSO : ', 0, 0, "L", 0);
+					$pdf->cell(10, $alt, $rh25_recurso, 0, 0, "R", 0);
+					$pdf->cell(60, $alt, $o15_descr, 0, 1, "L", 0);
+				}else if($sQuebra && $sOrdem == 'l'){
+					$pdf->cell(20, $alt, 'Lotação : ', 0, 0, "L", 0);
+					$pdf->cell(10, $alt, $lotacao, 0, 1, "L", 0);
+				}
+
+			}
+
 			$tr_quant  = 0;
 			$tr_valor  = 0;
 			$tr_func   = 0;
 			$xxrubrica = $rubric;
-			
+			$sDescriRubrica = $rh27_descr;
+		}else {
+			$troca = 0;
 		}
-		
-		if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
-			
+
+		if ($pdf->gety() > $pdf->h - $tamanho || $troca != 0 ){
+
 			if($sPagina == 'p'){
 				$pdf->addpage("L");
+				$pdf->setfont('arial','b',8);
 			}else{
 				$pdf->addpage();
-			}
-			
-			if($sTotalizacao == 'a'){
-				
 				$pdf->setfont('arial','b',8);
-				$pdf->cell(15,$alt,"Matrícula",1,0,"C",1);
-				$pdf->cell(60,$alt,$RLz01_nome,1,0,"C",1);
-				$pdf->cell(15,$alt,'LOTAÇÃO',1,0,"C",1);
-				$pdf->cell(62,$alt,'DESCRICAO',1,0,"C",1);
-
-				if($sPagina == 'p'){
-					
-					$pdf->cell(15,$alt,'CARGO',1,0,"C",1);
-					$pdf->cell(62,$alt,'DESCRICAO',1,0,"C",1);
-					
-				}
-				
-				$pdf->cell(15,$alt,'QUANT',1,0,"C",1);
-				$pdf->cell(25,$alt,'VALOR',1,1,"C",1);
 			}
-
-      $pdf->setfont('arial','b',10);
-      $pdf->cell(20,$alt,'RUBRICA : ', 0,0,"L",0);
-      $pdf->cell(10,$alt,$rubric,0,0,"R",0);
-      $pdf->cell(60,$alt,$rh27_descr,   0,1,"L",0);
-      $pdf->setfont('arial','b',8);
 			
-			if($sOrdem == 'r'){
-				$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
-				$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
-				$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+			if($sTotalizacao == 'a') {
+				if ($sQuebra && ($sOrdem == 'l' || $sOrdem == 'r') || $x == 0) {
+					$pdf->setfont('arial', 'b', 8);
+					$pdf->cell(15, $alt, "Matrícula", 1, 0, "C", 1);
+					$pdf->cell(58, $alt, $RLz01_nome, 1, 0, "C", 1);
+					$pdf->cell(15, $alt, 'LOTAÇÃO', 1, 0, "C", 1);
+					$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+
+					if ($sPagina == 'p') {
+						$pdf->cell(15, $alt, 'CARGO', 1, 0, "C", 1);
+						$pdf->cell(62, $alt, 'DESCRICAO', 1, 0, "C", 1);
+					}
+
+					$pdf->cell(15, $alt, 'QUANT', 1, 0, "C", 1);
+					$pdf->cell(25, $alt, 'VALOR', 1, 1, "C", 1);
+				}
 			}
+
+			if($sQuebra) {
+				$pdf->setfont('arial', 'b', 10);
+				$pdf->cell(20, $alt, 'RUBRICA : ', 0, 0, "L", 0);
+				$pdf->cell(10, $alt, $rubric, 0, 0, "R", 0);
+				$pdf->cell(60, $alt, $rh27_descr, 0, 1, "L", 0);
+				$pdf->setfont('arial', 'b', 10);
+
+				if($sOrdem == 'l'){
+					$pdf->setfont('arial','b',10);
+					$pdf->cell(20,$alt,'Lotação : ', 0,0,"L",0);
+					$pdf->cell(10,$alt,$lotacao,0,1,"L",0);
+
+				}else if($sOrdem == 'r'){
+					$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
+					$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
+					$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+				}
+			}
+
 			$troca = 0;
 			$pre = 1;
 		}
-		
+
 		if($sTotalizacao == 'a'){
-			
 			if($pre == 1)
-				
 				$pre = 0;
 			
-			else
-				
-				$pre = 1;
-			
+			else $pre = 1;
+
+			if($x == 0 ){	//Insere o cabeçalho na primeira ocorrência
+				$pdf->setfont('arial','b',10);
+				if(!$sQuebra){
+					$pdf->cell(20, $alt, 'RUBRICA : ', 0, 0, "L", 0);
+					$pdf->cell(10, $alt, $rubric, 0, 0, "R", 0);
+					$pdf->cell(60, $alt, $rh27_descr, 0, 1, "L", 0);
+
+				if($sOrdem != 'a' && $sOrdem != 'l'){
+					$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
+					$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
+					$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+				}
+
+				}
+			}
+
 			$pdf->setfont('arial','',7);
 			$pdf->cell(15,$alt,$regist,0,0,"C",$pre);
-			$pdf->cell(60,$alt,$z01_nome,0,0,"L",$pre);
+			$pdf->cell(58,$alt,$z01_nome,0,0,"L",$pre);
 			$pdf->cell(15,$alt,$lotacao,0,0,"C",$pre);
 			$pdf->cell(62,$alt,substr(trim($descricao),0,40),0,0,"L",$pre);
-			
+
+
 			if($sPagina == 'p'){
 				$pdf->cell(15,$alt,$cargo,0,0,"C",$pre);
 				$pdf->cell(62,$alt,substr(trim($desc_cargo),0,40),0,0,"L",$pre);
@@ -364,10 +541,12 @@ if($sTipo == 'r'){
 		$total   += 1;
 	}
 	
-	if( $sOrdem == 'r' && $x != 0){
+	if(( $sOrdem == 'r' || $sOrdem == 'l') && $x != 0){
 		
 		$pdf->setfont('arial','b',8);
 		$quebra = $rh25_recurso;
+
+		$pdf->setfont('arial','b',8);
 		$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$t_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
 		$pdf->cell(15,$alt,db_formatar($t_quant,'f'),'T',0,"R",0);
 		$pdf->cell(25,$alt,db_formatar(abs($t_valor),'f'),'T',1,"R",0);
@@ -377,11 +556,19 @@ if($sTipo == 'r'){
 		$t_func  = 0;
 
 	}
-	
+
+	$pdf->ln(2);
+	$pdf->setfont('arial','b',8);
+	$pdf->cell(20,$alt,'RUBRICA : ', 0,0,"L",0);
+	$pdf->cell(10,$alt,$rubric,0,0,"R",0);
+	$pdf->cell(60,$alt,$rh27_descr,   0,1,"L",0);
+	$pdf->setfont('arial','b',8);
+
 	$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$tr_func.'  FUNCIONÁRIO(S)','T',0,"L",0);
 	$pdf->cell(15,$alt,db_formatar($tr_quant,'f'),'T',0,"R",0);
 	$pdf->cell(25,$alt,db_formatar(abs($tr_valor),'f'),'T',1,"R",0);
-	$pdf->ln(5);
+	$pdf->ln(10);
+
 	$pdf->setfont('arial','b',8);
 	$pdf->cell($tot_espaco,$alt,'TOTAL  :  '.$total.'  FUNCIONÁRIO(S)',"T",0,"C",0);
 	$pdf->cell(15,$alt,db_formatar($xquant,'f'),"T",0,"R",0);

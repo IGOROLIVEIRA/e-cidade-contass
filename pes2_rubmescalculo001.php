@@ -191,6 +191,15 @@ $oPost = db_utils::postMemory($_POST);
                ?>
               </td>
             </tr>
+            <tr>
+              <td><b>Quebrar por página:</b></td>
+              <td>
+              <?
+                $options = array('sim'=>"Sim",'nao'=>"Não");
+                db_select('opcao', array_reverse($options),true, 4,"");
+              ?>
+              </td>
+            </tr>
         </table>
       </fieldset>
       <center>
@@ -327,7 +336,8 @@ $oPost = db_utils::postMemory($_POST);
         oDados.iAno             = $F(DBtxt23);
         oDados.iMes             = $F(DBtxt25);
         oDados.sDadosCadastrais = $F(mes_dados);
-        
+        oDados.sQuebra          = $F(opcao);
+
         if ( $F(tipo) == 'a' || $F(tipo) == 'p' ) {
           js_OpenJanelaIframe('top.corpo','db_iframe_bbrubmescalculo','pes2_rubmescalculo002.php?sParametros='+Object.toJSON(oDados),'Gerando Arquivo',false);
         } else {
