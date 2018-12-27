@@ -206,22 +206,32 @@ if ($sqlerro==false) {
           }
 
           //contranslr
-          $sqlcontranslr  = "select * from contranslr where  c47_seqtranslan = $c46_seqtranslan_antigo ";
-          $sqlcontranslr .= "and case when c47_debito <> 0 and c47_credito = 0 then ";
-          $sqlcontranslr .= "           exists (select * from conplanoreduz where c61_anousu=$anodestino and c61_instit=c47_instit and c61_reduz=c47_debito) ";
-          $sqlcontranslr .= "         when c47_debito = 0 and c47_credito <> 0 then ";
-          $sqlcontranslr .= "           exists (select * from conplanoreduz where c61_anousu=$anodestino and c61_instit=c47_instit and c61_reduz=c47_credito) ";
-          $sqlcontranslr .= "         else ";
-          $sqlcontranslr .= "           exists (select * from conplanoreduz where c61_anousu=$anodestino and c61_instit=c47_instit and c61_reduz=c47_debito) and ";
-          $sqlcontranslr .= "           exists (select * from conplanoreduz where c61_anousu=$anodestino and c61_instit=c47_instit and c61_reduz=c47_credito) ";
-          $sqlcontranslr .= "    end ";
+          $sqlcontranslr = "SELECT * FROM contranslr
+                            WHERE c47_seqtranslan = $c46_seqtranslan_antigo
+                                AND CASE
+                                        WHEN c47_debito <> 0 AND c47_credito = 0 
+                                            THEN EXISTS
+                                                 (SELECT * FROM conplanoreduz
+                                                  WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_debito)
+                                        WHEN c47_debito = 0 AND c47_credito <> 0 
+                                            THEN EXISTS
+                                                 (SELECT * FROM conplanoreduz
+                                                  WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_credito)
+                                        WHEN c47_debito = 0 AND c47_credito = 0 THEN 'true'
+                                        ELSE EXISTS
+                                                 (SELECT * FROM conplanoreduz
+                                                  WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_debito)
+                                             AND EXISTS
+                                                 (SELECT * FROM conplanoreduz
+                                                  WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_credito)
+                                    END";
           $resultcontranslr = db_query($sqlcontranslr);
           $linhascontranslr = pg_num_rows($resultcontranslr);
           if ($linhascontranslr > 0) {
             for ($h=0; $h < $linhascontranslr; $h++) {
               db_fieldsmemory($resultcontranslr,$h);
 
-              if ($c45_coddoc!=31 && $c45_coddoc!=32 && $c45_coddoc!=33 && $c45_coddoc!=34 && $c45_coddoc!=35 && $c45_coddoc!=36 ) {
+              if ($c45_coddoc!=31 && $c45_coddoc!=32 && $c45_coddoc!=33 && $c45_coddoc!=34 && $c45_coddoc!=35 && $c45_coddoc!=36 && $c45_coddoc!=37 && $c45_coddoc!=38) {
                 $c47_anousu = $anodestino;
               }
               
