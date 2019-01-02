@@ -4,7 +4,7 @@ require_once("model/MSC.model.php");
 
 class MSCXbrl extends MSC { 
   
-  public function gerarArquivoXBRL($aMscRegistros) {
+  public function gerarArquivoXBRL($aXbrlRegistros) {
     
     $xbrl = new XMLWriter;
 
@@ -67,7 +67,7 @@ class MSCXbrl extends MSC {
             $xbrl->writeAttribute("decimals", "0");
             $xbrl->writeAttribute("unitRef", "u");
 
-          foreach($aMscRegistros as $aRegistros) {     
+          foreach($aXbrlRegistros as $aRegistros) {     
             foreach ($aRegistros->registros as $account) {
               $this->setRegistrosContas($account);
               $this->addLinhas($xbrl);//Registros
@@ -82,7 +82,7 @@ class MSCXbrl extends MSC {
     $xbrl->endDocument();
     
     $this->setCaminhoArq($this->getNomeArq());
-    $file = fopen("{$this->getNomeArq()}.xml",'w');
+    $file = fopen("{$this->getNomeArq()}.xml",'rw');
     fwrite($file,$xbrl->outputMemory(true));
     fclose($file);
     
@@ -95,7 +95,7 @@ class MSCXbrl extends MSC {
       $xbrl->writeElement("gl-cor:accountMainID", $this->getConta());
         $xbrl->writeAttribute("contextRef", "C1");        
             
-        for ($ic = 1; $ic < 8; $ic++) {         
+        for ($ic = 1; $ic <= 6; $ic++) {         
             $IC = "iIC".$ic;
             $getIC = "getIC".$ic;
             $getTipoIC = "getTipoIC".$ic;
@@ -130,7 +130,7 @@ class MSCXbrl extends MSC {
 
     $this->setConta($oRegistro->conta);
 
-    for ($ic = 1; $ic < 8; $ic++) {         
+    for ($ic = 1; $ic <= 6; $ic++) {         
       $IC = "IC".$ic;
       $TipoIC = "TipoIC".$ic;
       $setIC = "setIC".$ic;
