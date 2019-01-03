@@ -8,7 +8,6 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("std/DBDate.php");
-//echo "<pre>"; ini_set("display_errors", true);
 require_once('model/MSC.model.php');
 db_postmemory($_POST);
 
@@ -24,7 +23,10 @@ $iMes     = (!empty($oParam->mes))     ? $oParam->mes     : '';
 $sMatriz  = (!empty($oParam->matriz))  ? $oParam->matriz  : '';
 $sFormato = (!empty($oParam->formato)) ? $oParam->formato : '';
 
-$sIndetifier = "4214805EX";//
+$sSQL = "select si09_instsiconfi from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit");
+
+
+$sIndetifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
 $sEntriesType = "trialbalance";
 $sPeriodIdentifier = "$iAnoUsu-$iMes";
 $sPeriodStart = $sPeriodDescription = "$iAnoUsu-$iMes-01";
@@ -47,6 +49,10 @@ switch ($oParam->exec) {
       $msc->setPeriodEnd($sPeriodEnd);
       $msc->setNomeArq($sNomeArq."$iAnoUsu$iMes");
       $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
+      
+      if ($msc->getErroSQL()) {
+        throw new Exception ("Ocorreu um erro na consulta!");
+      }
 
       $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
       
@@ -58,7 +64,7 @@ switch ($oParam->exec) {
 
       $oRetorno->status  = 2;
       $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \\n \\n {$eErro->getMessage()}";
-      $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+      $oRetorno->message = $sGetMessage;
 
     }
 
