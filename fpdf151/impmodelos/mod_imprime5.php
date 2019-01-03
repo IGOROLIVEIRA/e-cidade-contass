@@ -247,7 +247,10 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             if (pg_result($this->recorddositens, $ii, 'e56_orctiporec') != "") {
                 $descricaoitem .= "\n" . 'CP: ' . pg_result($this->recorddositens, $ii, 'e56_orctiporec');
             }
-            $descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
+
+			if(pg_result($this->recorddositens, $ii, $this->marca) != '') {
+				$descricaoitem .= ' - Marca: ' . pg_result($this->recorddositens, $ii, $this->marca);
+			}
             $this->objpdf->Row(array(
 
                 db_formatar($seq_item, "s", "0", (strlen($seq_item) + 1), "e", 0),
@@ -711,7 +714,11 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
                 }
             }
-            $descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
+
+            if(pg_result($this->recorddositens, $ii, $this->marca) != ''){
+				$descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
+			}
+
             $this->objpdf->Setfont('Arial', '', 7);
             $this->objpdf->Row(array(
 

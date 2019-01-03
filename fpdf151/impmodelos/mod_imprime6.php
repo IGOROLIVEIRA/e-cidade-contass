@@ -222,7 +222,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $xtotal += pg_result($this->recorddositens, $ii, $this->valoritem);
             $quantitem     = pg_result($this->recorddositens, $ii, $this->quantitem);
             $descricaoitem = pg_result($this->recorddositens, $ii, $this->descricaoitem);
-            $descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
+            if(pg_result($this->recorddositens, $ii, $this->marca)!='')
+            	$descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
 
 //            if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
 ////                $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);

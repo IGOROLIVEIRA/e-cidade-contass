@@ -245,7 +245,7 @@ inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcpr
 inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
 inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen
 inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
-where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (coalesce((SELECT DISTINCT 'Marca: '||pc23_obs
+where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (coalesce((SELECT DISTINCT (CASE WHEN pc23_obs IS NOT NULL and pc23_obs <> '' THEN 'Marca: '||pc23_obs ELSE pc23_obs END)
 FROM empautitem empautiteminter
 inner JOIN empautitempcprocitem ON empautiteminter.e55_autori = empautitempcprocitem.e73_autori
 AND e73_sequen = e55_sequen
@@ -280,7 +280,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 		                   pc81_codproc,
 		                   pc11_numero,
 		                   e56_orctiporec,
-		                   'Marca: '||coalesce(trim(pc23_obs),'') as pc23_obs
+		                   (CASE WHEN pc23_obs IS NOT NULL and pc23_obs <> '' THEN 'Marca: ' ELSE '' END)||coalesce(trim(pc23_obs),'') as pc23_obs
 	   									 from empautitem
                       		  inner join pcmater        			on pc01_codmater = e55_item
                             inner join orcelemento          on e55_codele    = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
@@ -299,7 +299,6 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 	   						   and o56_anousu =" . db_getsession("DB_anousu") . "
 	   				  order by e55_sequen,o56_elemento,e55_item
 	   					";
-
 
     $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
     $resulttot = db_query($sqltot);
