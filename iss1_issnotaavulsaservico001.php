@@ -72,8 +72,13 @@ $oPar                   = db_utils::fieldsMemory($rsPar,0);
  * @todo criar um parametro para guardar o tipo de debito para nota avulsa.
  */
 $oInstit = new Instituicao(db_getsession('DB_instit'));
-if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-  $oPar->q60_tipo = 61;
+switch ($oInstit->getCodigoCliente()){
+    case Instituicao::COD_CLI_PMPIRAPORA:
+        $oPar->q60_tipo = 61;
+        break;
+    case Instituicao::COD_CLI_PMLUISLANDIA:
+        $oPar->q60_tipo = 38;
+        break;
 }
 if(isset($post->alterar) || isset($post->excluir) || isset($post->incluir)){
   $sqlerro = false;
