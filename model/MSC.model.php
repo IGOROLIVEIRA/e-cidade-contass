@@ -64,6 +64,8 @@ class MSC {
   public $sNomeArq;
   //@var string
   public $sCaminhoArq;
+  //@var integer
+  public $iErroSQL;
   
   //NumberCounter
   public function setLineNumberCounter($iLineNumberCounter) {
@@ -249,14 +251,20 @@ class MSC {
     return $this->sCaminhoArq;
   }
   
+  public function getErroSQL() {
+    return $this->iErroSQL;
+  }
+
+  public function setErroSQL($iErroSQL) {
+    $this->iErroSQL = $iErroSQL;
+  }
   public function gerarMSC($ano, $mes, $formato) {
 
     $aRegis = $this->getConsulta($ano, $mes);
-    //ksort($aRegis);
     foreach ($aRegis as $aRegistro){
-      $this->aRegistros += array_merge($this->gerarLinhas($aRegistro));
+      $this->aRegistros += $this->gerarLinhas($aRegistro);
     }
-    
+
     switch ($formato) {
 
       case 'xbrl' :
@@ -300,7 +308,7 @@ class MSC {
     $indice = "";
 
     for ($ind = 0; $ind <= 6; $ind++) {
-      $indice .= ($oRegistro[$ind] != "_null") ? $oRegistro[$ind] : '';
+      $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
     $oContas = new stdClass;
@@ -333,7 +341,7 @@ class MSC {
               $IC = "IC".$ii;
               $TipoIC = "TipoIC".$ii;
         
-              if ($oRegistro[$ii] != "_null") {
+              if ($oRegistro[$ii] != "null") {
                 $cIC = explode("_", $oRegistro[$ii]);
                 if (in_array($cIC[1], $aTipoIC, true)) {
                   $oNovoResgistro->{$IC}     = $cIC[0];
@@ -352,68 +360,77 @@ class MSC {
   }
   
   public function getConsulta($ano, $mes) {
-      /*
-       * Definindo o periodo em que serao selecionado os dados
-       */
-      $iUltimoDiaMes = date("d", mktime(0,0,0,$mes+1,0,db_getsession("DB_anousu")));
-      $data_incio = db_getsession("DB_anousu")."-{$mes}-01";
-      $data_fim   = db_getsession("DB_anousu")."-{$mes}-{$iUltimoDiaMes}";
-
-      $aDadosAgrupados = array();
-      $aDadosAgrupados = array_merge( $this->getDadosIC01($ano, $data_incio, $data_fim), $this->getDadosIC02($ano, $data_incio, $data_fim),
-          $this->getDadosIC03($ano, $data_incio, $data_fim), $this->getDadosIC04($ano, $data_incio, $data_fim), $this->getDadosIC05($ano, $data_incio, $data_fim),
-          $this->getDadosIC06($ano, $data_incio, $data_fim), $this->getDadosIC07($ano, $data_incio, $data_fim),  $this->getDadosIC08($ano, $data_incio, $data_fim),
-          $this->getDadosIC09($ano, $data_incio, $data_fim) );
-          
-          return $aDadosAgrupados; 
+    /*
+      * Definindo o periodo em que serao selecionado os dados
+      */
+    $this->setErroSQL(0);
+    $iUltimoDiaMes = date("d", mktime(0,0,0,$mes+1,0,db_getsession("DB_anousu")));
+    $data_incio = db_getsession("DB_anousu")."-{$mes}-01";
+    $data_fim   = db_getsession("DB_anousu")."-{$mes}-{$iUltimoDiaMes}";
+    
+    $aDadosAgrupados = array();
+    $aDadosAgrupados = array_merge( 
+      (array)$this->getDadosIC01($ano, $data_incio, $data_fim), 
+      (array)$this->getDadosIC02($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC03($ano, $data_incio, $data_fim), 
+      (array)$this->getDadosIC04($ano, $data_incio, $data_fim), 
+      (array)$this->getDadosIC05($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC06($ano, $data_incio, $data_fim), 
+      (array)$this->getDadosIC07EMP($ano, $data_incio, $data_fim),  
+      (array)$this->getDadosIC07RSP($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC08($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC09EMP($ano, $data_incio, $data_fim), 
+      (array)$this->getDadosIC09RSP($ano, $data_incio, $data_fim));
+     
+    return $aDadosAgrupados; 
   }
 
   public function getDadosIC($IC, $aCampos, $rsResult) {
+    
+    $aDadosIC  = "aDadosIC{$IC}"; 
+    $$aDadosIC = array();
+    $aIC       = "aIC{$IC}";
+    
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+        $oReg = db_utils::fieldsMemory($rsResult, $iCont);
+        $sHash = "";
+        for ($ind = 0; $ind <= 6; $ind++) {
+          $sHash .= isset($oReg->{$aCampos[$ind]}) ? $oReg->{$aCampos[$ind]} : '';
+        }
+        if (!isset(${$aDadosIC}[$sHash])) {
+            $$aIC = array();
+            for ($i = 0; $i < 17; $i++) {
+              ${$aIC}[$i] = ($i > 0 && $i <= 6) ? isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}" : $oReg->{$aCampos[$i]};
+            }
+            ${$aDadosIC}[$sHash] = $$aIC;
+        } else {
+            ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C' ? $oReg->saldoinicial * -1 : $oReg->saldoinicial);
+            ${$aDadosIC}[$sHash][10]  += $oReg->debito;
+            ${$aDadosIC}[$sHash][12] += $oReg->credito;
+            ${$aDadosIC}[$sHash][14] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
+        }
+    }
+    
+    $aDadosICFinal  = "aDadosIC{$IC}Final";
+    $$aDadosICFinal = array();
 
-      $aDadosIC  = "aDadosIC{$IC}"; 
-      $$aDadosIC = array();
-      $aIC       = "aIC{$IC}";
-      
-      for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-          $oReg = db_utils::fieldsMemory($rsResult, $iCont);
-          $sHash = "";
-          for ($ind = 0; $ind <= 6; $ind++) {
-            $sHash .= isset($oReg->{$aCampos[$ind]}) ? $oReg->{$aCampos[$ind]} : '';
-          }
-          if (!isset(${$aDadosIC}[$sHash])) {
-              $$aIC = array();
-              for ($i = 0; $i < 17; $i++) {
-                ${$aIC}[$i] = ($i > 0 && $i <= 6) ? $oReg->{$aCampos[$i]}."_{$aCampos[$i]}" : $oReg->{$aCampos[$i]};
-              }
-              ${$aDadosIC}[$sHash] = $$aIC;
-          } else {
-              ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C' ? $oReg->saldoinicial * -1 : $oReg->saldoinicial);
-              ${$aDadosIC}[$sHash][10]  += $oReg->debito;
-              ${$aDadosIC}[$sHash][12] += $oReg->credito;
-              ${$aDadosIC}[$sHash][14] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
-          }
-      }
-      
-      $aDadosICFinal  = "aDadosIC{$IC}Final";
-      $$aDadosICFinal = array();
-
-      foreach ($$aDadosIC as $obj) {
-          $sHash = "";
-          for ($ind = 0; $ind < 6; $ind++) {
-            $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
-          }
-          $oIC = $obj;
-          $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
-          $oIC[7]  = abs($obj[7]);
-          $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
-          $oIC[14] = abs($oIC[14]);
-          ${$aDadosICFinal}[$sHash] = $oIC;
-      }
-      return $$aDadosICFinal;
-
+    foreach ($$aDadosIC as $obj) {
+        $sHash = "";
+        for ($ind = 0; $ind < 6; $ind++) {
+          $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
+        }
+        $oIC = $obj;
+        $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
+        $oIC[7]  = abs($obj[7]);
+        $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
+        $oIC[14] = abs($oIC[14]);
+        ${$aDadosICFinal}[$sHash] = $oIC;
+    }
+    
+    return $$aDadosICFinal;
   }
 
-  public function getDadosIC01($iAno, $DataInicio, $DataFim) {
+  public function getDadosIC01($iAno, $dataInicio, $dataFim) {
       
     $sSQL = "select * from ( 
         select estrut as conta,
@@ -445,7 +462,7 @@ class MSC {
 				  c61_codcon,
 				  c61_codigo,
 				  r.c61_instit,                                   
-				  fc_planosaldonovo(".$iAno.", c61_reduz, '".$DataInicio."', '".$DataFim."', false)
+				  fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
              from conplanoexe e
 		     inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
 		     inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
@@ -456,13 +473,18 @@ class MSC {
 	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
       $rsResult = db_query($sSQL);
+
       $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
-      return $this->getDadosIC(1, $aCampos, $rsResult);
+      if ($rsResult) {
+        return $this->getDadosIC(1, $aCampos, $rsResult);
+      } else {
+        $this->setErroSQL(1);
+      }
       
   }
 
-    public function getDadosIC02($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC02($iAno, $dataInicio, $dataFim) {
 
         $sSQL = "select * from ( 
         select estrut as conta,
@@ -471,7 +493,7 @@ class MSC {
             WHEN db21_tipoinstit IN (2) THEN 20231
             ELSE 10131
             END AS po, 
-            c60_identificadorfinanceiro as fp,
+            case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
 		      round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
 		      'beginning_balance' AS tipovalor_si,
 		      substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
@@ -499,7 +521,7 @@ class MSC {
 				  c61_codcon,
 				  c61_codigo,
 				  r.c61_instit, c60_identificadorfinanceiro,                                  
-				  fc_planosaldonovo(".$iAno.", c61_reduz, '".$DataInicio."', '".$DataFim."', false)
+				  fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
              from conplanoexe e
 		     inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
 		     inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
@@ -509,71 +531,25 @@ class MSC {
 	         where c60_infcompmsc = 2 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
 	       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
         
-        $rsResult = db_query($sSQL);
+        $rsResult = db_query($sSQL) ;
+
         $aCampos  = array("conta", "po", "fp", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
-        return $this->getDadosIC(2, $aCampos, $rsResult);
+        if ($rsResult) {
+          return $this->getDadosIC(2, $aCampos, $rsResult);
+        } else {
+          $this->setErroSQL(2);
+        }
 
     }
 
-    public function getDadosIC03($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC03($iAno, $dataInicio, $dataFim) {
 
-      $sSQL = "select * from ( 
-      select estrut as conta,
-          CASE
-          WHEN db21_tipoinstit IN (6) THEN 10132
-          WHEN db21_tipoinstit IN (2) THEN 20231
-          ELSE 10131
-          END AS po, 
-          null as fp
-          null as dc 
-        round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
-        'beginning_balance' AS tipovalor_si,
-        substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
-        round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 AS debito,
-        CASE
-            WHEN round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_deb'
-        END AS tipovalordeb,
-        round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS credito,
-        CASE
-            WHEN round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_cred'
-        END AS tipovalorcred,
-        round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldofinal,
-        'ending_balance' AS tipovalor_sf,
-          substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_sf,
-        c61_reduz,
-        c61_codcon,
-        c61_codigo,
-        c61_instit
-        from 	
-      (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-              db21_tipoinstit,
-        c61_reduz,
-        c61_codcon,
-        c61_codigo,
-        r.c61_instit, c60_identificadorfinanceiro,                                  
-        fc_planosaldonovo(".$iAno.", c61_reduz, '".$DataInicio."', '".$DataFim."', false)
-            from conplanoexe e
-        inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
-        inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
-            inner join db_config ON codigo = r.c61_instit
-          left outer join consistema on c60_codsis = c52_codsis  
-          left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
-          where c60_infcompmsc = 3 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
-        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
-      
-      $rsResult = db_query($sSQL);
-      $aCampos  = array("conta", "po", "fp", "dc", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
-      return $this->getDadosIC(3, $aCampos, $rsResult);
     }
 
-    public function getDadosIC04($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC04($iAno, $dataInicio, $dataFim) {
 
       $iMes = date('m',strtotime($dataInicio));
-      // sql retorna todas as fontes de recursos que teve movimentação para as contas de ics igual 4
       // todo trocar o o15_codtri pelo campo criado para ser a fonte do msc
       $sSQL = "select * from ( 
       select estrut as conta,
@@ -582,8 +558,8 @@ class MSC {
           WHEN db21_tipoinstit IN (2) THEN 20231
           ELSE 10131
           END AS po, 
-          c60_identificadorfinanceiro as fp,
-          o15_codtri as fr,
+          case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
+          o15_codstn as fr,
         round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
         'beginning_balance' AS tipovalor_si,
         substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
@@ -611,7 +587,7 @@ class MSC {
         c61_codcon,
         c61_codigo,
         r.c61_instit, 
-              c60_identificadorfinanceiro,o15_codtri,
+              c60_identificadorfinanceiro,o15_codstn,
               fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
             from conplanoexe e
         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
@@ -625,15 +601,19 @@ class MSC {
         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
       $rsResult = db_query($sSQL);
+
       $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
-      return  $this->getDadosIC(4, $aCampos, $rsResult);
+      if ($rsResult) {
+        return $this->getDadosIC(4, $aCampos, $rsResult);
+      } else {
+        $this->setErroSQL(4);
+      }
     }
 
-    public function getDadosIC05($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC05($iAno, $dataInicio, $dataFim) {
 
       $iMes = date('m',strtotime($dataInicio));
-      // sql retorna todas as fontes de recursos que teve movimentação para as contas de ics igual 4
       // todo trocar o o15_codtri pelo campo criado para ser a fonte do msc
       $sSQL = "select * from ( 
       select estrut as conta,
@@ -642,7 +622,7 @@ class MSC {
           WHEN db21_tipoinstit IN (2) THEN 20231
           ELSE 10131
           END AS po, 
-          o15_codtri as fr,
+          o15_codstn as fr,
         round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
         'beginning_balance' AS tipovalor_si,
         substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
@@ -670,7 +650,7 @@ class MSC {
         c61_codcon,
         c61_codigo,
         r.c61_instit, 
-              c60_identificadorfinanceiro,o15_codtri,
+              c60_identificadorfinanceiro,o15_codstn,
               fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
             from conplanoexe e
         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
@@ -682,127 +662,225 @@ class MSC {
           left join orctiporec on c19_orctiporec = o15_codigo
           where c60_infcompmsc = 5 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+      $rsResult = db_query($sSQL);
 
       $aCampos  = array("conta", "po", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
-      return  $this->getDadosIC(5, $aCampos, $rsResult);
+      if ($rsResult) {
+        return $this->getDadosIC(5, $aCampos, $rsResult);
+      } else {
+        $this->setErroSQL(5);
+      }
     }
 
-    public function getDadosIC06($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC06($iAno, $dataInicio, $dataFim) {
 
       $iMes = date('m',strtotime($dataInicio));
-      // sql retorna todas as fontes de recursos que teve movimentação para as contas de ics igual 4
-      // todo trocar o o15_codtri pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
-      $sSQL = "select * from ( 
-      select estrut as conta,
-          CASE
-          WHEN db21_tipoinstit IN (6) THEN 10132
-          WHEN db21_tipoinstit IN (2) THEN 20231
-          ELSE 10131
-          END AS po, 
-          o15_codtri as fr,
-          null as nr
-        round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
-        'beginning_balance' AS tipovalor_si,
-        substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
-        round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
-        CASE
-            WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_deb'
-        END AS tipovalordeb,
-        round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
-        CASE
-            WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_cred'
-        END AS tipovalorcred,
-        round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
-        'ending_balance' AS tipovalor_sf,
-          substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
-        c61_reduz,
-        c61_codcon,
-        c61_codigo,
-        c61_instit
-        from 	
-      (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-              db21_tipoinstit,
-        c61_reduz,
-        c61_codcon,
-        c61_codigo,
-        r.c61_instit, 
-              c60_identificadorfinanceiro,o15_codtri,
-              fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo)
-            from conplanoexe e
-        inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
-        inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
-            inner join db_config ON codigo = r.c61_instit  
-          inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
-          left outer join consistema on c60_codsis = c52_codsis  
-          left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut 
-          left join orctiporec on c19_orctiporec = o15_codigo
-          where c60_infcompmsc = 6 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
-        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
-
-      $rsResult = db_query($sSQL);
-      $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
-      return  $this->getDadosIC(6, $aCampos, $rsResult);
-    }
-
-    public function getDadosIC07($iAno, $DataInicio, $DataFim) {
-
-        // todo trocar o o15_codtri pelo campo criado para ser a fonte do msc
+        
+        //trocar o FONTE e NATUREZA RECEITA pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
         $sSQL = "select * from ( 
         select estrut as conta,
-                CASE
-                WHEN db21_tipoinstit IN (6) THEN 10132
-                WHEN db21_tipoinstit IN (2) THEN 20231
-                ELSE 10131
+            CASE
+            WHEN db21_tipoinstit IN (6) THEN 10132
+            WHEN db21_tipoinstit IN (2) THEN 20231
+            ELSE 10131
             END AS po, 
-            null as fs,
-            100 as fr,
-            null AS nd,
-            null as es
-          round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
+            o15_codstn as fr,
+            natreceita AS nr,
+          round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
           'beginning_balance' AS tipovalor_si,
-          substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
-          round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 AS debito,
+          substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+          round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
           CASE
-              WHEN round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 = 0 THEN NULL
+              WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
               ELSE 'period_change_deb'
           END AS tipovalordeb,
-          round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS credito,
+          round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
           CASE
-              WHEN round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 = 0 THEN NULL
+              WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
               ELSE 'period_change_cred'
           END AS tipovalorcred,
-          round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldofinal,
+          round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
           'ending_balance' AS tipovalor_sf,
-            substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_sf
-          from 	
+           substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          c61_instit
+         from   
         (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
                 db21_tipoinstit,
           c61_reduz,
           c61_codcon,
           c61_codigo,
-          r.c61_instit,                                   
-          fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
-              from conplanoexe e
-          inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
-          inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
-              inner join db_config ON codigo = r.c61_instit
-            left outer join consistema on c60_codsis = c52_codsis  
-            left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
-            where c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
-          ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+          r.c61_instit, 
+                c60_identificadorfinanceiro,o15_codstn,substr(c19_estrutural,1,9) as natreceita,
+                fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo)
+             from conplanoexe e
+         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
+         inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+             inner join db_config ON codigo = r.c61_instit  
+           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
+           left outer join consistema on c60_codsis = c52_codsis  
+           left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut 
+           left join orctiporec on c19_orctiporec = o15_codigo
+           where c60_infcompmsc = 6 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
+         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
-        $rsResult = db_query($sSQL);
-        $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+      $rsResult = db_query($sSQL);
 
-        return $this->getDadosIC(7, $aCampos, $rsResult);
+      $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+
+      if ($rsResult) {
+          return $this->getDadosIC(6, $aCampos, $rsResult);
+      } else {
+          $this->setErroSQL(6);
+      }
     }
 
-    public function getDadosIC08($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC07EMP($iAno, $dataInicio, $dataFim) {
 
+        $iMes = date('m',strtotime($dataInicio));
+        
+        //trocar o FONTE e NATUREZA DESPESAS pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
+        $sSQL = "select * from ( 
+        select estrut as conta,
+            CASE
+            WHEN db21_tipoinstit IN (6) THEN 10132
+            WHEN db21_tipoinstit IN (2) THEN 20231
+            ELSE 10131
+            END AS po, 
+            funsub AS fs,
+            o15_codstn as fr,
+            natdespesa AS nd,
+            null AS es,
+          round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+          'beginning_balance' AS tipovalor_si,
+          substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+          round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_deb'
+          END AS tipovalordeb,
+          round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_cred'
+          END AS tipovalorcred,
+          round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+          'ending_balance' AS tipovalor_sf,
+           substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          c61_instit
+         from   
+        (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
+        case when c211_mscestrut is null then substr(c19_estrutural,1,9) else c211_mscestrut end as natdespesa,
+                db21_tipoinstit,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          r.c61_instit, 
+                c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo)
+             from conplanoexe e
+              inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
+              inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+              inner join db_config ON codigo = r.c61_instit  
+              inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
+              inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
+              left join elemdespmsc on substr(p.c60_estrut,1,9) = c211_elemdespestrut
+              left outer join consistema on c60_codsis = c52_codsis  
+              left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut 
+              left join orctiporec on c19_orctiporec = o15_codigo
+           where c19_contacorrente=102 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
+         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+
+        $rsResult = db_query($sSQL); 
+        
+        $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+
+        if ($rsResult) {
+            return $this->getDadosIC(7, $aCampos, $rsResult);
+        } else {
+            $this->setErroSQL(7);
+        }
+    }
+
+    public function getDadosIC07RSP($iAno, $dataInicio, $dataFim) {
+
+        $iMes = date('m',strtotime($dataInicio));
+        
+        //trocar o FONTE e NATUREZA RECEITA pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
+        $sSQL = "select * from ( 
+        select estrut as conta,
+            CASE
+            WHEN db21_tipoinstit IN (6) THEN 10132
+            WHEN db21_tipoinstit IN (2) THEN 20231
+            ELSE 10131
+            END AS po, 
+            funsub AS fs,
+            o15_codstn as fr,
+            natdespesa AS nd,
+            null AS es,
+          round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+          'beginning_balance' AS tipovalor_si,
+          substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+          round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_deb'
+          END AS tipovalordeb,
+          round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_cred'
+          END AS tipovalorcred,
+          round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+          'ending_balance' AS tipovalor_sf,
+           substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          c61_instit
+         from   
+        (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
+        case when c211_mscestrut is null then substr(c19_estrutural,1,9) else c211_mscestrut end as natdespesa,
+                db21_tipoinstit,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          r.c61_instit, 
+                c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                fc_saldocontacorrente($iAno,c19_sequencial,101,$iMes,codigo)
+             from conplanoexe e
+         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
+         inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+             inner join db_config ON codigo = r.c61_instit  
+           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
+           inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
+           left join elemdespmsc on  substr(p.c60_estrut,1,9) = c211_elemdespestrut
+           left outer join consistema on c60_codsis = c52_codsis  
+           left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut 
+           left join orctiporec on c19_orctiporec = o15_codigo
+           where c19_contacorrente=101 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
+         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+
+        $rsResult = db_query($sSQL);
+        
+        $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+
+        if ($rsResult) {
+            return $this->getDadosIC(7, $aCampos, $rsResult);
+        } else {
+            $this->setErroSQL(7);
+        }
+    }
+
+    public function getDadosIC08($iAno, $dataInicio, $dataFim) {
+
+      $iMes = date('m',strtotime($dataInicio));
       $sSQL = "select * from ( 
       select estrut as conta,
               CASE
@@ -810,9 +888,9 @@ class MSC {
               WHEN db21_tipoinstit IN (2) THEN 20231
               ELSE 10131
           END AS po, 
-          c60_identificadorfinanceiro as fp,
+          case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
           null as dc,
-          null AS fr,
+          o15_codstn AS fr,
         round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
         'beginning_balance' AS tipovalor_si,
         substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
@@ -830,145 +908,173 @@ class MSC {
         'ending_balance' AS tipovalor_sf,
           substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_sf
         from 	
-      (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
+      (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,p.c60_identificadorfinanceiro as c60_identificadorfinanceiro,
               db21_tipoinstit,
         c61_reduz,
         c61_codcon,
         c61_codigo,
-        r.c61_instit,                                   
+        r.c61_instit,o15_codstn,                                   
         fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
             from conplanoexe e
         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
         inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+        inner join orctiporec on o15_codigo = c61_codigo
             inner join db_config ON codigo = r.c61_instit
           left outer join consistema on c60_codsis = c52_codsis  
           left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
           where c60_infcompmsc = 8 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
-      $rsResult = db_query($sSQL);
+      $rsResult = db_query($sSQL); 
+      
       $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
       
-      return $this->getDadosIC(8, $aCampos, $rsResult);
+      if ($rsResult) {
+            return $this->getDadosIC(8, $aCampos, $rsResult);
+        } else {
+            $this->setErroSQL(8);
+        }
     }
 
-    public function getDadosIC09($iAno, $DataInicio, $DataFim) {
+    public function getDadosIC09EMP($iAno, $dataInicio, $dataFim) {
 
-      $sSQL = "select * from ( 
-      select estrut as conta,
-              CASE
-              WHEN db21_tipoinstit IN (6) THEN 10132
-              WHEN db21_tipoinstit IN (2) THEN 20231
-              ELSE 10131
-          END AS po, 
-          null as fs,
-          null AS fr,
-          null AS nd,
-          null AS es,
-          null AS ai,
-        round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
-        'beginning_balance' AS tipovalor_si,
-        substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
-        round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 AS debito,
-        CASE
-            WHEN round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_deb'
-        END AS tipovalordeb,
-        round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS credito,
-        CASE
-            WHEN round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 = 0 THEN NULL
-            ELSE 'period_change_cred'
-        END AS tipovalorcred,
-        round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldofinal,
-        'ending_balance' AS tipovalor_sf,
-          substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_sf
-        from 	
-      (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-              db21_tipoinstit,
-        c61_reduz,
-        c61_codcon,
-        c61_codigo,
-        r.c61_instit,                                   
-        fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
-            from conplanoexe e
-        inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
-        inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
-            inner join db_config ON codigo = r.c61_instit
-          left outer join consistema on c60_codsis = c52_codsis  
-          left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
-          where c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
-        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+      $iMes = date('m',strtotime($dataInicio));
+        
+        //trocar o FONTE e NATUREZA DESPESA pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
+        $sSQL = "select * from ( 
+        select estrut as conta,
+            CASE
+            WHEN db21_tipoinstit IN (6) THEN 10132
+            WHEN db21_tipoinstit IN (2) THEN 20231
+            ELSE 10131
+            END AS po, 
+            funsub AS fs,
+            o15_codstn as fr,
+            natdespesa AS nd,
+            null AS es,
+            e60_anousu as ai,
+          round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+          'beginning_balance' AS tipovalor_si,
+          substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+          round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_deb'
+          END AS tipovalordeb,
+          round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_cred'
+          END AS tipovalorcred,
+          round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+          'ending_balance' AS tipovalor_sf,
+           substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          c61_instit
+         from   
+        (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
+        case when c211_mscestrut is null then substr(c19_estrutural,1,9) else c211_mscestrut end as natdespesa,
+                db21_tipoinstit,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          r.c61_instit, e60_anousu,
+                p.c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo)
+             from conplanoexe e
+         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
+         inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+             inner join db_config ON codigo = r.c61_instit  
+           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
+           inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
+           inner join empempenho on c19_numemp=e60_numemp
+           left join elemdespmsc on substr(p.c60_estrut,1,9) = c211_elemdespestrut
+           left outer join consistema on c60_codsis = c52_codsis  
+           left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut 
+           left join orctiporec on c19_orctiporec = o15_codigo
+           where c19_contacorrente=102 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
+         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
       $rsResult = db_query($sSQL);
       $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
-      return $this->getDadosIC(9, $aCampos, $rsResult);
+      if ($rsResult) {
+            return $this->getDadosIC(9, $aCampos, $rsResult);
+        } else {
+            $this->setErroSQL(9);
+        }
     }
-  
-    /*$aDadosIC01 = array();
-      for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-          $oReg = db_utils::fieldsMemory($rsResult, $iCont);
-          $sHash = $oReg->conta.$oReg->po;
-          if (!isset($aDadosIC01[$sHash])) {
-              $aIC01 = array();
-              $aIC01[0]  = $oReg->conta;
-              $aIC01[1]  = $oReg->po;
-              $aIC01[2]  = $oReg->fp;
-              $aIC01[3]  = $oReg->fr;
-              $aIC01[4]  = $oReg->nr;
-              $aIC01[5]  = $oReg->nd;
-              $aIC01[6]  = $oReg->fs;
-              $aIC01[7]  = $oReg->ai;
-              $aIC01[8]  = $oReg->saldoinicial;
-              $aIC01[9]  = $oReg->tipovalor_si;
-              $aIC01[10] = $oReg->nat_vlr_si;
-              $aIC01[11] = $oReg->debito;
-              $aIC01[12] = $oReg->tipovalordeb;
-              $aIC01[13] = $oReg->credito;
-              $aIC01[14] = $oReg->tipovalorcred;
-              $aIC01[15] = $oReg->saldofinal;
-              $aIC01[16] = $oReg->tipovalor_sf;
-              $aIC01[17] = $oReg->nat_vlr_sf;
-              $aDadosIC01[$sHash] = $aIC01;
-          } else {
-              $aDadosIC01[$sHash][8]  += ($oReg->nat_vlr_si == 'C' ? $oReg->saldoinicial * -1 : $oReg->saldoinicial);
-              $aDadosIC01[$sHash][11] += $oReg->debito;
-              $aDadosIC01[$sHash][13] += $oReg->credito;
-              $aDadosIC01[$sHash][15] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
-          }
-      }
-      $aDadosIC01Final = array();
 
-      foreach ($aDadosIC01 as $obj) {
-          $sHash = $obj[0].$obj[1];
-          $oIC = $obj;
-          $oIC[10] = $obj[8] > 0 ? 'D' : 'C';
-          $oIC[8] = abs($obj[8]);
-          $oIC[17] = $oIC[15] > 0 ? 'D' : 'C';
-          $oIC[15] = abs($oIC[15]);
-          $aDadosIC01Final[$sHash] = $oIC;
-      }  
-      return $aDadosIC01Final;
-      
-      $aIC01 = array();
-              $aIC01[0]  = $oReg->conta;
-              $aIC01[1]  = $oReg->po;
-              $aIC01[2]  = $oReg->fp;
-              $aIC01[3]  = $oReg->fr;
-              $aIC01[4]  = $oReg->nr;
-              $aIC01[5]  = $oReg->saldoinicial;
-              $aIC01[6]  = $oReg->tipovalor_si;
-              $aIC01[7] = $oReg->nat_vlr_si;
-              $aIC01[8] = $oReg->debito;
-              $aIC01[9] = $oReg->tipovalordeb;
-              $aIC01[10] = $oReg->credito;
-              $aIC01[11] = $oReg->tipovalorcred;
-              $aIC01[12] = $oReg->saldofinal;
-              $aIC01[13] = $oReg->tipovalor_sf;
-              $aIC01[14] = $oReg->nat_vlr_sf;
-      
-      */
-      
+    public function getDadosIC09RSP($iAno, $dataInicio, $dataFim) {
 
+      $iMes = date('m',strtotime($dataInicio));
+        
+        //trocar o FONTE e NATUREZA DESPESA pelo campo criado para ser a fonte do msc e colocar o natureza de receita segundo STN
+        $sSQL = "select * from ( 
+        select estrut as conta,
+            CASE
+            WHEN db21_tipoinstit IN (6) THEN 10132
+            WHEN db21_tipoinstit IN (2) THEN 20231
+            ELSE 10131
+            END AS po, 
+            funsub AS fs,
+            o15_codstn as fr,
+            natdespesa AS nd,
+            null AS es,
+            e60_anousu as ai,
+          round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
+          'beginning_balance' AS tipovalor_si,
+          substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
+          round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 AS debito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,59,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_deb'
+          END AS tipovalordeb,
+          round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 AS credito,
+          CASE
+              WHEN round(substr(fc_saldocontacorrente,75,15)::float8,2)::float8 = 0 THEN NULL
+              ELSE 'period_change_cred'
+          END AS tipovalorcred,
+          round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
+          'ending_balance' AS tipovalor_sf,
+           substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          c61_instit
+         from   
+        (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
+                case when c211_mscestrut is null then substr(c19_estrutural,1,9) else c211_mscestrut end as natdespesa,
+                db21_tipoinstit,
+          c61_reduz,
+          c61_codcon,
+          c61_codigo,
+          r.c61_instit, e60_anousu,
+                p.c60_identificadorfinanceiro,o15_codstn, lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                fc_saldocontacorrente($iAno,c19_sequencial,106,$iMes,codigo)
+             from conplanoexe e
+         inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz 
+         inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+             inner join db_config ON codigo = r.c61_instit  
+           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
+           inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
+           inner join empempenho on c19_numemp=e60_numemp
+           left join elemdespmsc on substr(p.c60_estrut,1,9) = c211_elemdespestrut
+           left outer join consistema on c60_codsis = c52_codsis  
+           left join vinculopcaspmsc on substr(c19_estrutural,1,9) = c211_elemdespestrut 
+           left join orctiporec on c19_orctiporec = o15_codigo
+           where c19_contacorrente=106 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut 
+         ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
+
+      $rsResult = db_query($sSQL);
+      $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    
+      if ($rsResult) {
+          return $this->getDadosIC(9, $aCampos, $rsResult);
+        } else {
+            $this->setErroSQL(9);
+        }
+    }
 }
-

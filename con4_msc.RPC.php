@@ -50,8 +50,8 @@ switch ($oParam->exec) {
       $msc->setNomeArq($sNomeArq."$iAnoUsu$iMes");
       $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
       
-      if ($msc->getErroSQL()) {
-        throw new Exception ("Ocorreu um erro na consulta!");
+      if ($msc->getErroSQL() > 0 ) {
+        throw new Exception ("Ocorreu um erro ao gerar IC ".$msc->getErroSQL());
       }
 
       $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";

@@ -78,7 +78,7 @@ class MSCCsv extends MSC {
     $aMscCsv[0] = $this->getConta();  
 
     $iIC = 1;
-    for ($ic = 1; $ic <= 12; $ic+=2) {  //for ($ic = 1; $ic < 15; $ic+=2) {         
+    for ($ic = 1; $ic <= 12; $ic+=2) {    
       $IC        = "iIC".$iIC;
       $getIC     = "getIC".$iIC;
       $getTipoIC = "getTipoIC".$iIC;

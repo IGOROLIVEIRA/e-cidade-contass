@@ -2,9 +2,9 @@
 
 require_once("model/MSC.model.php");
 
-class MSCXbrl extends MSC { 
+class MSCXbrl extends MSC {
   
-  public function gerarArquivoXBRL($aXbrlRegistros) {
+  public function gerarArquivoXBRL($aXbrlRegistros) {//echo "<pre>";ini_set("display_errors",true);
     
     $xbrl = new XMLWriter;
 
@@ -80,9 +80,9 @@ class MSCXbrl extends MSC {
         
         $xbrl->endElement();//xbrli:xbrl
     $xbrl->endDocument();
-    
+
     $this->setCaminhoArq($this->getNomeArq());
-    $file = fopen("{$this->getNomeArq()}.xml",'rw');
+    $file = fopen("{$this->getNomeArq()}.xml",'w');
     fwrite($file,$xbrl->outputMemory(true));
     fclose($file);
     
