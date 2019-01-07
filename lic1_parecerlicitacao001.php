@@ -8,12 +8,35 @@ include("classes/db_parecerlicitacao_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clparecerlicitacao = new cl_parecerlicitacao;
+$pctipocompra = new cl_pctipocompra();
 $db_opcao = 1;
 $db_botao = true;
+
+if($_POST['json']){
+    $oLicitacao = str_replace('\\','',$_POST);
+    $oLicitacao = json_decode($oLicitacao['json']);
+    $sqlDescricao = $pctipocompra->sql_buscaDescricao(""," DISTINCT pc50_descr, l20_anousu, l20_codigo ", " l20_anousu DESC ",
+        " l20_edital = $oLicitacao->edital ",'1');
+    $sqlNumber = db_query($sqlDescricao);
+	$descricao = db_utils::fieldsMemory($sqlNumber, 0);
+	$valores = array();
+	$valores[] = utf8_encode($descricao->pc50_descr);
+	$valores[] = $descricao->l20_codigo;
+	echo json_encode($valores);
+    die();
+}
+
+
 if(isset($incluir)){
-  db_inicio_transacao();
-  $clparecerlicitacao->incluir($l200_sequencial);
-  db_fim_transacao();
+  $sql = db_query("select z01_cgccpf as cpf from cgm where z01_numcgm = $l200_numcgm");
+  $cgm = db_utils::fieldsMemory($sql, 0)->cpf;
+  if(strlen($cgm) <= 11){
+	  db_inicio_transacao();
+	  $clparecerlicitacao->incluir($l200_sequencial);
+	  db_fim_transacao();
+  }else {
+      echo "<script>alert('O CGM selecionado deverá ser de Pessoa Física.');</script>";
+  }
 }
 ?>
 <html>

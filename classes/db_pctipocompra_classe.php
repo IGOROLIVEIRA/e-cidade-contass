@@ -402,5 +402,59 @@ class cl_pctipocompra {
      }
      return $sql;
   }
+
+	function sql_buscaDescricao ( $pc50_codcom=null,$campos="*",$ordem=null,$dbwhere="",$limite=""){
+		$sql = "select ";
+		if($campos != "*" ){
+			$campos_sql = split("#",$campos);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}else{
+			$sql .= $campos;
+		}
+
+		$sql .= " 		FROM liclicita";
+		$sql .= " INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit";
+		$sql .= " INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria";
+		$sql .= " INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom";
+		$sql .= " INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal";
+		$sql .= " INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao";
+		$sql .= " INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao";
+		$sql .= " INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm";
+		$sql .= " INNER JOIN db_config AS dbconfig ON dbconfig.codigo = cflicita.l03_instit";
+		$sql .= " INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom";
+		$sql .= " INNER JOIN bairro ON bairro.j13_codi = liclocal.l26_bairro";
+		$sql .= " INNER JOIN ruas ON ruas.j14_codigo = liclocal.l26_lograd";
+		$sql .= " LEFT JOIN liclicitaproc ON liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+		$sql .= " LEFT JOIN protprocesso ON protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+		$sql .= " LEFT JOIN liclicitem ON liclicita.l20_codigo = l21_codliclicita";
+		$sql .= " LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem";
+
+		$sql .= "      inner join pctipocompratribunal  on  pctipocompratribunal.l44_sequencial = pctipocompra.pc50_pctipocompratribunal";
+		$sql2 = "";
+		if($dbwhere==""){
+			if($pc50_codcom!=null ){
+				$sql2 .= " where pctipocompra.pc50_codcom = $pc50_codcom ";
+			}
+		}else if($dbwhere != ""){
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if($ordem != null ){
+			$sql .= " order by ";
+			$campos_sql = split("#",$ordem);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}
+		if($limite != '')
+			$sql .= " LIMIT ".$limite;
+		return $sql;
+	}
 }
 ?>
