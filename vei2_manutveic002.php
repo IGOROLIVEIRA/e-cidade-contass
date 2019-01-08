@@ -170,7 +170,7 @@ HTML;
                            ve62_vlrpecas,
                            ve28_descr,
                            cgm.z01_numcgm||'-'||cgm.z01_nome as fornecedor,
-                           sum(ve63_vlruni) as valortotalpecas,
+                           (ve63_vlruni * ve63_quant) as valortotalpecas,
                            CASE ve62_tipogasto
                                 WHEN 6 THEN 'ÓLEO LUBRIFICANTE'
                                 WHEN 7 THEN 'GRAXA (QUILOGRAMA)'
@@ -223,7 +223,9 @@ HTML;
                                    veiculos.ve01_veiccadmarca,
                                    veiccadtiposervico.ve28_descr,
                                    veiccadmodelo,
-                                   ve62_descr
+                                   ve62_descr,
+                                   ve63_vlruni,
+                                   ve63_quant
                                    order by ve62_dtmanut
                                    ";
                     }else{
@@ -236,12 +238,14 @@ HTML;
                                    veiculos.ve01_veiccadmarca,
                                    veiccadtiposervico.ve28_descr,
                                    veiccadmodelo,
-                                   ve62_descr
+                                   ve62_descr,
+                                   ve63_vlruni,
+                                   ve63_quant
                                    order by ve62_dtmanut
                                    ";
                     }
 
-//                      echo $sSql2;
+//                      echo $sSql2;die();
                       $rsResult2 = db_query($sSql2) or die(pg_last_error());//db_criatabela($rsResult2);exit;
                       $valor = 0;
                       for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult2); $iCont2++) {
