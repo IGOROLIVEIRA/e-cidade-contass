@@ -42,13 +42,13 @@ class MSCCsv extends MSC {
     $this->sArquivo = $this->getNomeArq();
     $this->abreArquivo();
 
-    $aCSV['indetifier']       = $this->getIndetifier();
+    $aCSV['identifier']       = $this->getIdentifier();
     $aCSV['periodIdentifier'] = $this->getPeriodIdentifier();
     $this->sLinha = $aCSV;
     $this->adicionaLinha();
 
     $aCabecalhoCSV['ContaContabil'] = 'ContaContabil';
-    
+
     for ($ic = 1; $ic <= 6; $ic++) {
       $IC     = 'IC'.$ic;
       $TipoIC = "TipoIC".$ic;
@@ -61,24 +61,24 @@ class MSCCsv extends MSC {
     $aCabecalhoCSV['NaturezaValor'] = 'NaturezaValor';
     $this->sLinha = $aCabecalhoCSV;
     $this->adicionaLinha();
-    
-    foreach($aMscRegistros as $aRegistros) {     
+
+    foreach($aMscRegistros as $aRegistros) {
       foreach ($aRegistros->registros as $account) {
         $this->setRegistrosContas($account);
         $this->addLinhas();
       }
     }
-    
+
     $this->fechaArquivo();
-    
+
   }
-  
+
   public function addLinhas() {
-  
-    $aMscCsv[0] = $this->getConta();  
+
+    $aMscCsv[0] = $this->getConta();
 
     $iIC = 1;
-    for ($ic = 1; $ic <= 12; $ic+=2) {    
+    for ($ic = 1; $ic <= 12; $ic+=2) {
       $IC        = "iIC".$iIC;
       $getIC     = "getIC".$iIC;
       $getTipoIC = "getTipoIC".$iIC;
@@ -91,20 +91,20 @@ class MSCCsv extends MSC {
       }
       $iIC++;
     }
-    
+
     $aMscCsv[13] = $this->getValor();
     $aMscCsv[14] = $this->getTipoValor();
     $aMscCsv[15] = $this->getNaturezaValor();
     $this->sLinha = $aMscCsv;
     $this->adicionaLinha();
-  
+
   }
 
   public function setRegistrosContas($oRegistro) {
 
     $this->setConta($oRegistro->conta);
 
-    for ($ic = 1; $ic <= 6; $ic++) {    
+    for ($ic = 1; $ic <= 6; $ic++) {
       $IC     = "IC".$ic;
       $TipoIC = "TipoIC".$ic;
       $setIC  = "setIC".$ic;
@@ -117,9 +117,9 @@ class MSCCsv extends MSC {
 
     $this->setValor($oRegistro->valor);
     $this->setTipoValor($oRegistro->tipoValor);
-    $this->setNaturezaValor($oRegistro->nat_vlr); 
+    $this->setNaturezaValor($oRegistro->nat_vlr);
 
   }
-  
+
 }
 

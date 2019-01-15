@@ -25,41 +25,41 @@ $sFormato = (!empty($oParam->formato)) ? $oParam->formato : '';
 
 $sSQL = "select si09_instsiconfi from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit");
 
-
-$sIndetifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
+$sIdentifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
 $sEntriesType = "trialbalance";
 $sPeriodIdentifier = "$iAnoUsu-$iMes";
 $sPeriodStart = $sPeriodDescription = "$iAnoUsu-$iMes-01";
-$sPeriodEnd = "$iAnoUsu-$iMes-".cal_days_in_month(CAL_GREGORIAN, $iMes, $iAnoUsu);
+$sInstant = $sPeriodEnd = "$iAnoUsu-$iMes-".cal_days_in_month(CAL_GREGORIAN, $iMes, $iAnoUsu);
 $sNomeArq = "MSC";
 
 switch ($oParam->exec) {
-  
+
   case 'gerarMsc':
 
     try {
-      
+
       $msc = new MSC;
 
-      $msc->setIndetifier($sIndetifier);
+      $msc->setIdentifier($sIdentifier);
       $msc->setEntriesType($sEntriesType);
       $msc->setPeriodIdentifier($sPeriodIdentifier);
       $msc->setPeriodDescription($sPeriodDescription);
       $msc->setPeriodStart($sPeriodStart);
       $msc->setPeriodEnd($sPeriodEnd);
+      $msc->setInstant($sInstant);
       $msc->setNomeArq($sNomeArq."$iAnoUsu$iMes");
       $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
-      
+
       if ($msc->getErroSQL() > 0 ) {
         throw new Exception ("Ocorreu um erro ao gerar IC ".$msc->getErroSQL());
       }
 
       $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
-      
+
       system("rm -f {$msc->getNomeArq()}.zip");
       system("bin/zip -q {$msc->getNomeArq()}.zip $oRetorno->caminho");
       $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$msc->getNomeArq()}.zip";
-    
+
     } catch(Exception $eErro) {
 
       $oRetorno->status  = 2;
