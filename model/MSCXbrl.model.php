@@ -181,6 +181,8 @@ class MSCXbrl extends MSC {
 
   public function setRegistrosContas($oRegistro) {
 
+    $this->limpaRegistrosContas();
+
     $this->setConta($oRegistro->conta);
 
     for ($ic = 1; $ic <= 6; $ic++) {
@@ -197,6 +199,23 @@ class MSCXbrl extends MSC {
     $this->setValor($oRegistro->valor);
     $this->setTipoValor($oRegistro->tipoValor);
     $this->setNaturezaValor($oRegistro->nat_vlr);
+
+  }
+
+  public function limpaRegistrosContas() {
+
+    $this->iConta = "";
+
+    for ($ic = 1; $ic <= 6; $ic++) {
+      $IC     = "iIC".$ic;
+      $TipoIC = "sTipoIC".$ic;
+      $this->{$IC} = "";
+      $this->{$TipoIC} = "";
+    }
+
+    $this->iValor = "";
+    $this->sTipoValor = "";
+    $this->sNaturezaValor = "";
 
   }
 

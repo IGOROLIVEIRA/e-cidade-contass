@@ -37,7 +37,7 @@ class MSCCsv extends MSC {
     fputs($this->_arquivo, "\r\n");
   }
 
-  public function gerarArquivoCSV($aMscRegistros) {//
+  public function gerarArquivoCSV($aMscRegistros) {
 
     $this->sArquivo = $this->getNomeArq();
     $this->abreArquivo();
@@ -102,6 +102,8 @@ class MSCCsv extends MSC {
 
   public function setRegistrosContas($oRegistro) {
 
+    $this->limpaRegistrosContas();
+
     $this->setConta($oRegistro->conta);
 
     for ($ic = 1; $ic <= 6; $ic++) {
@@ -118,6 +120,24 @@ class MSCCsv extends MSC {
     $this->setValor($oRegistro->valor);
     $this->setTipoValor($oRegistro->tipoValor);
     $this->setNaturezaValor($oRegistro->nat_vlr);
+
+
+  }
+
+  public function limpaRegistrosContas() {
+
+    $this->iConta = "";
+
+    for ($ic = 1; $ic <= 6; $ic++) {
+      $IC     = "iIC".$ic;
+      $TipoIC = "sTipoIC".$ic;
+      $this->{$IC} = "";
+      $this->{$TipoIC} = "";
+    }
+
+    $this->iValor = "";
+    $this->sTipoValor = "";
+    $this->sNaturezaValor = "";
 
   }
 

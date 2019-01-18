@@ -33,10 +33,6 @@ class MSC {
   //@var string
   public $sTipoIC6;
   //@var integer
-  public $iIC7;
-  //@var string
-  public $sTipoIC7;
-  //@var integer
   public $iValor;
   //@var string
   public $sTipoValor;
@@ -252,9 +248,11 @@ class MSC {
   public function gerarMSC($ano, $mes, $formato) {
 
     $aRegis = $this->getConsulta($ano, $mes);
-    foreach ($aRegis as $aRegistro){
-      $this->aRegistros += $this->gerarLinhas($aRegistro);
+    ksort($aRegis);
+    foreach ($aRegis as $key => $value){
+      $this->aRegistros += $this->gerarLinhas($value);
     }
+
 
     switch ($formato) {
 
@@ -268,7 +266,6 @@ class MSC {
           $xbrl->setPeriodStart($this->getPeriodStart());
           $xbrl->setPeriodEnd($this->getPeriodEnd());
           $xbrl->setInstant($this->getInstant());
-          $xbrl->setLineNumberCounter($this->getLineNumberCounter());
           $xbrl->setNomeArq($this->getNomeArq());
           $xbrl->gerarArquivoXBRL($this->aRegistros);
 
@@ -358,17 +355,18 @@ class MSC {
 
     $aDadosAgrupados = array();
     $aDadosAgrupados = array_merge(
-      (array)$this->getDadosIC01($ano, $data_incio, $data_fim),
+      /*(array)$this->getDadosIC01($ano, $data_incio, $data_fim),
       (array)$this->getDadosIC02($ano, $data_incio, $data_fim),
       (array)$this->getDadosIC03($ano, $data_incio, $data_fim),
       (array)$this->getDadosIC04($ano, $data_incio, $data_fim),
       (array)$this->getDadosIC05($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC06($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC06($ano, $data_incio, $data_fim),*/
       (array)$this->getDadosIC07EMP($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC07RSP($ano, $data_incio, $data_fim),
+      (array)$this->getDadosIC07RSP($ano, $data_incio, $data_fim)/*,
       (array)$this->getDadosIC08($ano, $data_incio, $data_fim),
       (array)$this->getDadosIC09EMP($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC09RSP($ano, $data_incio, $data_fim));
+      (array)$this->getDadosIC09RSP($ano, $data_incio, $data_fim)*/
+    );
 
     return $aDadosAgrupados;
   }
@@ -383,16 +381,36 @@ class MSC {
       $oReg = db_utils::fieldsMemory($rsResult, $iCont);
       $sHash = "";
       for ($ind = 0; $ind <= 6; $ind++) {
-        $sHash .= isset($oReg->{$aCampos[$ind]}) ? $oReg->{$aCampos[$ind]} : '';
+        $sHash .= (isset($oReg->{$aCampos[$ind]}) && !empty($oReg->{$aCampos[$ind]})) ? $oReg->{$aCampos[$ind]} : '';
       }
+
       if (!isset(${$aDadosIC}[$sHash])) {
           $$aIC = array();
           for ($i = 0; $i < 17; $i++) {
-            ${$aIC}[$i] = ($i > 0 && $i <= 6) ? isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}" : $oReg->{$aCampos[$i]};
+            //${$aIC}[$i] =  ($i > 0 && $i <= 6) ? isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}" : $oReg->{$aCampos[$i]};
+            if ($i > 0 && $i <= 6) {
+              ${$aIC}[$i] = isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}";
+            }
+            else if ($i == 7) {
+              ${$aIC}[$i] += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
+            }
+            else if ($i == 10) {
+              ${$aIC}[$i] += $oReg->debito;
+            }
+            else if ($i == 12) {
+              ${$aIC}[$i] += $oReg->credito;
+            }
+            else if ($i == 14) {
+              ${$aIC}[$i] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
+            }
+            else {
+              ${$aIC}[$i] = $oReg->{$aCampos[$i]};
+            }
           }
+
           ${$aDadosIC}[$sHash] = $$aIC;
       } else {
-          ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C' ? $oReg->saldoinicial * -1 : $oReg->saldoinicial);
+          ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
           ${$aDadosIC}[$sHash][10] += $oReg->debito;
           ${$aDadosIC}[$sHash][12] += $oReg->credito;
           ${$aDadosIC}[$sHash][14] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
@@ -403,16 +421,17 @@ class MSC {
     $$aDadosICFinal = array();
 
     foreach ($$aDadosIC as $obj) {
-        $sHash = "";
-        for ($ind = 0; $ind < 6; $ind++) {
-          $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
-        }
-        $oIC = $obj;
-        $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
-        $oIC[7]  = abs($obj[7]);
-        $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
-        $oIC[14] = abs($oIC[14]);
-        ${$aDadosICFinal}[$sHash] = $oIC;
+      $sHash = "";
+      for ($ind = 0; $ind < 6; $ind++) {
+        $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
+      }
+      $oIC = $obj;
+      $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
+      $oIC[7]  = abs($obj[7]);
+      $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
+      $oIC[14] = abs($oIC[14]);
+      ${$aDadosICFinal}[$sHash] = $oIC;
+
     }
 
     return $$aDadosICFinal;
@@ -696,7 +715,7 @@ class MSC {
       c61_codigo,
       c61_instit
      from
-    (select case when c210_mscestrut is null then substr(p.c60_estrut,2,8) else c210_mscestrut end as estrut,
+    (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
             db21_tipoinstit,
       c61_reduz,
       c61_codcon,
@@ -762,7 +781,7 @@ class MSC {
       c61_codigo,
       c61_instit
      from
-    (select case when c210_mscestrut is null then substr(p.c60_estrut,2,8) else c210_mscestrut end as estrut,
+    (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
     case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
             db21_tipoinstit,
       c61_reduz,
@@ -784,7 +803,7 @@ class MSC {
        where c19_contacorrente=102 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
-    $rsResult = db_query($sSQL);
+    $rsResult = db_query($sSQL);//db_criatabela($rsResult);die;
 
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
@@ -831,7 +850,7 @@ class MSC {
       c61_codigo,
       c61_instit
      from
-    (select case when c210_mscestrut is null then substr(p.c60_estrut,2,8) else c210_mscestrut end as estrut,
+    (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
     case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
             db21_tipoinstit,
       c61_reduz,
