@@ -273,8 +273,10 @@ if (!isset($lReemissao)) {
   $oDaoArrepaga = db_utils::getDao("arrepaga");
   $sSqlPagamento = $oDaoArrepaga->sql_query_file(null,"k00_numpre",null,"k00_numpre = {$iNumpre}");
   $rsPagamento   = $oDaoArrepaga->sql_record($sSqlPagamento);
+  $bGuiapaga = false;
   if ($oDaoArrepaga->numrows > 0) {
     $historico   .= "\nRecibo já pago. Não Receber";
+    $bGuiapaga = true;
   }
   
 }
@@ -750,6 +752,7 @@ $pdf1->dreceita         = 'k02_drecei';
 $pdf1->ddreceita	      = 'k07_descr';
 $pdf1->valor 	   	      = 'valor';
 $pdf1->historico	      = $k00_descr;
+$pdf1->bGuiaPaga	      = $bGuiapaga;
 $pdf1->histparcel	      = @$histparcela;
 $pdf1->dtvenc  		      = $datavencimento;
 $pdf1->numpre	  	      = $numpre;

@@ -183,19 +183,30 @@ class convenio {
       }
       
     } else if($this->iModalidadeConvenio == 2) {
-    	
+
+      $sCampoLivre = "";
+
+      /**
+       * Customizado para PREVMOC pois fez-se necessário exibir um valor no campo livre
+       */
+      $oInstit = new Instituicao(db_getsession('DB_instit'));
+      if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PREVMOC) {
+        $sCampoLivre = $this->getCampoLivreArrecadacao($iNumpre);
+      }
+
       if ( $this->iFormatoVenc == 1 ) {
-        $sVencBar	       = $sDataVencimento.'000000';
+        $sCampoLivre = str_pad($sCampoLivre,6,'0',STR_PAD_LEFT);
+        $sVencBar	       = $sDataVencimento.$sCampoLivre;
       } else if ($this->iFormatoVenc == 2) {
-        
+        $sCampoLivre = str_pad($sCampoLivre,8,'0',STR_PAD_LEFT);
         $sDataVencimento = substr($sDataVencimento, 6, 2).substr($sDataVencimento, 4, 2).substr($sDataVencimento, 2, 2);
-        $sVencBar  	     = $sDataVencimento.'00000000';
+        $sVencBar  	     = $sDataVencimento.$sCampoLivre;
       }
     
       $sInibar      = "8".$this->sSegmento.$iTercDig;
       $iNumpre      = db_numpre($iNumpre,0).db_formatar($iNumpar, 's', "0", 3, "e");
       $sSqlFebraban = " select fc_febraban('$sInibar'||'$sVlrbar'||'".$this->sConvenioArrecadacao."'||'".$sVencBar."'||'$iNumpre')";
-      
+
       $rsFebraban   = pg_query($sSqlFebraban);
       $oFebraban    = db_utils::fieldsMemory($rsFebraban,0);
         
@@ -387,6 +398,26 @@ class convenio {
    */
   function getEspecieDocumento() {
     return $this->sEspecie;
+  }
+
+  /**
+   * Gera o campo livre para o convenio de arrecadacao
+   * @param $iNumnov numpre do recibo
+   * @return string
+   */
+  public function getCampoLivreArrecadacao($iNumnov){
+
+    $sCampoLivre = "";
+    $oDaoArretipo           = db_utils::getDao("arretipo");
+    $oDaoRecibopaga         = db_utils::getDao("recibopaga");
+    $oReciboPaga            = db_utils::fieldsMemory($oDaoRecibopaga->sql_record($oDaoRecibopaga->sql_query_file(null, "k00_numpre",null," k00_numnov = {$iNumnov} ")),0);
+
+    if(!empty($oReciboPaga->k00_numpre)){
+      $oArretipo = db_utils::fieldsMemory($oDaoArretipo->sql_query_numpre($oReciboPaga->k00_numpre, "k00_codage"),0);
+      $sCampoLivre = $oArretipo->k00_codage;
+    }
+
+    return $sCampoLivre;
   }
 }
 
