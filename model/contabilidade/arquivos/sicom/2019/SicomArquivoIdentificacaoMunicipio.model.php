@@ -65,16 +65,20 @@ class SicomArquivoIdentificacaoMunicipio extends SicomArquivoBase implements iPa
       "exercicioInicialPPA",
       "exercicioFinalPPA",
       "opcaoSemestralidade",
+      "contaUnicaTesouMunicipal",
+	  "nroLeiCute",
+	  "dataLeiCute",
       "dataGeracao",
       "codControleRemessa"
+
     );
-    
+
     return $aElementos;
   }
   
   /**
    * selecionar os dados do municipio para serem gravados no arquivo a ser gerado
-   * no sicom anaul semente envia neste arquivo o orgao prefeitura por definicao do tce-mg
+   * no sicom anual somente envia neste arquivo o orgao prefeitura por definicao do tce-mg
    */
   public function gerarDados()
   {
@@ -86,13 +90,13 @@ class SicomArquivoIdentificacaoMunicipio extends SicomArquivoBase implements iPa
     /**
      * Realizar a seleção dos dados de cada orgao retornado
      **/
-    $sSql = "SELECT db21_codigomunicipoestado,cgc,prefeitura,si09_codorgaotce,si09_opcaosemestralidade,si09_tipoinstit FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
+    $sSql = "SELECT db21_codigomunicipoestado,cgc,prefeitura,si09_codorgaotce,si09_opcaosemestralidade,si09_tipoinstit, 
+			 si09_nroleicute, si09_dataleicute, si09_contaunicatesoumunicipal FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
     $sSql .= "	WHERE prefeitura = 't'";
-    
-    $rsInst = db_query($sSql);
-    
-    $oInst = db_utils::fieldsMemory($rsInst, 0);
-    
+
+	$rsInst = db_query($sSql);
+	$oInst = db_utils::fieldsMemory($rsInst, 0);
+
     $oDadosMunicipio = new stdClass();
     
     $oDadosMunicipio->codMunicipio            = str_pad($oInst->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
@@ -103,8 +107,20 @@ class SicomArquivoIdentificacaoMunicipio extends SicomArquivoBase implements iPa
     $oDadosMunicipio->exercicioInicialPPA     = $oPPAVersao->getAnoinicio();
     $oDadosMunicipio->exercicioFinalPPA       = $oPPAVersao->getAnofim();
     $oDadosMunicipio->opcaoSemestralidade     = str_pad($oInst->si09_opcaosemestralidade, 1, "0", STR_PAD_LEFT);
-    $oDadosMunicipio->dataGeracao             = implode(explode("-", date("d-m-Y")));
-    $oDadosMunicipio->codControleRemessa      = " ";
+
+    if($oInst->si09_nroleicute != null){
+		$oDadosMunicipio->nroLeiCute		  = $oInst->si09_nroleicute;
+	}else $oDadosMunicipio->nroLeiCute		  = "";
+
+    if($oInst->si09_dataleicute != null){
+		$oDadosMunicipio->dataLeiCute		  = str_pad(str_replace('-', '', date('d-m-Y', strtotime($oInst->si09_dataleicute))), 8, "0", STR_PAD_LEFT);//implode(explode("-", date("d-m-Y", strtotime($oInst->si09_dataleicute))));
+	}else $oDadosMunicipio->dataLeiCute		  = "";
+
+	if($oInst->si09_nroleicute != null && $oInst->si09_dataleicute != null){
+	  $oDadosMunicipio->contaUnicaTesouMunicipal = '1';
+	}else $oDadosMunicipio->contaUnicaTesouMunicipal = '2';
+	$oDadosMunicipio->dataGeracao             = implode(explode("-", date("d-m-Y")));
+	$oDadosMunicipio->codControleRemessa      = "";
     $this->aDados[] = $oDadosMunicipio;
 
   }

@@ -731,7 +731,7 @@ if ($db_opcao == 1) {
 	      ?>
 	    </td>
 	  </tr>
-	  <tr id="cgmAssessoria">
+      <tr id="cgmAssessoria">
 		    <td nowrap title="Cgm Assessoria Contábil">
 		       <?
 		        db_ancora("Cgm Assessoria Contábil","js_pesquisanumcgmassessoria(true);",$db_opcao);
@@ -746,7 +746,40 @@ if ($db_opcao == 1) {
 		        db_input('nomeassessoriacontabil',40,'',true,'text',3,'')
 		      ?>
 		    </td>
-		</tr>
+	  </tr>
+      <tr>
+          <td nowrap>
+              <strong>Possui CUTE:</strong>
+          </td>
+          <td>
+			  <?
+				  $x = array('2' =>'NÃO','1' =>'SIM');
+				  db_select('possuiCute',$x,true,$db_opcao,"onchange='js_habilitaCamposCute()'");
+				  db_input('si09_contaunicatesoumunicipal',1,'',true,'hidden',1,'','','','',1);
+			  ?>
+          </td>
+      </tr>
+      <tr id="leiCute">
+          <td nowrap >
+              <strong>Nº da Lei CUTE: </strong>
+          </td>
+          <td>
+			  <?
+		        db_input('si09_nroleicute',10,'',true,'text',1,'','','','',6);
+		      ?>
+		  </td>
+      </tr>
+      <tr id="dataCute">
+          <td nowrap>
+              <strong>Data da Lei CUTE:</strong>
+          </td>
+          <td>
+			  <?
+                db_inputdata('si09_dataleicute',@$si09_dataleicute_dia,@$si09_dataleicute_mes,@$si09_dataleicute_ano,true,'text',$db_opcao,"")
+	          ?>
+		  </td>
+      </tr>
+
   </table>
   </fieldset>
   </td>
@@ -767,8 +800,35 @@ if ($db_opcao == 1) {
 
 <script>
 
+var opcao = "<?= $db_opcao;?>";
+
+if(opcao == 1){
+    // $('si09_nroleicute').value = '';
+    // $('si09_dataleicute').value = '';
+    // $('si09_dataleicute_dia').value = '';
+    // $('si09_dataleicute_mes').value = '';
+    // $('si09_dataleicute_ano').value = '';
+    document.form1.si09_contaunicatesoumunicipal.value = 2;
+    document.getElementById('possuiCute').value = 2;
+}else{
+    if($('si09_nroleicute').value != '' && $('si09_dataleicute').value != ''){
+        document.getElementById('possuiCute').value = 1;
+        $('si09_contaunicatesoumunicipal').value = 1;
+    }else{
+        if(document.getElementById('possuiCute').value == 2){
+            $('si09_nroleicute').value = '';
+            $('si09_dataleicute').value = '';
+            $('si09_dataleicute_dia').value = '';
+            $('si09_dataleicute_mes').value = '';
+            $('si09_dataleicute_ano').value = '';
+            $('si09_contaunicatesoumunicipal').value = 2;
+        }
+    }
+}
+
+
+
 function js_buscaLocalidade(){
-  //alert($('uf').value);
   var oUf = new Object();
   oUf.cp05_sigla = $('uf').value;
   oUf.acao       = "pesquisar";
@@ -990,10 +1050,34 @@ function js_validaForm(){
     $('diario').focus();
     return false;
   }
+
+  if($('possuiCute').value == 1){
+    return js_verificaCute();
+  }
            
   return true;
   //document.form1.submit();
 
+}
+
+function js_verificaCute(){
+    if($('si09_nroleicute').value == '' && $('si09_dataleicute').value == ''){
+        alert("usuário:\n\n Campo Nº da Lei CUTE e Data da Lei CUTE não Informado!\n\n");
+        $('si09_nroleicute').focus();
+        // $('si09_dataleicute').focus();
+        return false;
+    }else{
+        if($('si09_nroleicute').value == ''){
+            alert("usuário:\n\n Campo Nº da Lei CUTE não Informado!\n\n");
+            $('si09_nroleicute').focus();
+            return false;
+        }
+        if($('si09_dataleicute').value == ''){
+            alert("usuário:\n\n Campo Data da Lei CUTE não Informado!\n\n");
+            $('si09_dataleicute').focus();
+            return false;
+        }
+    }
 }
 
 function js_pesquisanumcgm(mostra){
@@ -1019,6 +1103,8 @@ function js_mostracgm1(chave1,chave2){
   document.form1.z01_nome.value = chave2;
   func_nome.hide();
 }
+
+
 
 function js_pesquisanumcgmgestor(mostra){
 	  if(mostra==true){
@@ -1258,8 +1344,27 @@ function js_mostra_cgm_assessoria() {
 	
 }
 
+
+function js_habilitaCamposCute(){
+
+    if($('possuiCute').value == 1){
+       $('leiCute').style.display = '';
+       $('dataCute').style.display = '';
+       $('si09_contaunicatesoumunicipal').value = 1;
+    }else{
+       $('leiCute').style.display = 'none';
+       $('dataCute').style.display = 'none';
+       $('si09_nroleicute').value = '';
+       $('si09_dataleicute').value = '';
+       $('si09_dataleicute_dia').value = '';
+       $('si09_dataleicute_mes').value = '';
+       $('si09_dataleicute_ano').value = '';
+       $('si09_contaunicatesoumunicipal').value = 2;
+    }
+}
+
 function js_pesquisanumcgmassessoria(mostra){
-	  if(mostra==true){
+      if(mostra==true){
 	    js_OpenJanelaIframe('','func_nome','func_cgm.php?funcao_js=parent.js_mostracgmassessoria1|z01_numcgm|z01_nome','Pesquisa',true);
 	  }else{
 	     if(document.form1.si09_cgmassessoriacontabil.value != ''){ 
@@ -1285,6 +1390,7 @@ function js_pesquisanumcgmassessoria(mostra){
 $('nomeinst').focus();
 
 js_mostra_cnpjprefeitura();
-
+js_habilitaCamposCute();
 js_mostra_cgm_assessoria();
+
 </script>

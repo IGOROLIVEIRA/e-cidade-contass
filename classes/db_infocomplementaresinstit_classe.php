@@ -26,6 +26,12 @@ class cl_infocomplementaresinstit {
    var $si09_instit = 0;
    var $si09_assessoriacontabil = 0;
    var $si09_cgmassessoriacontabil = 0;
+   var $si09_nroleicute = null;
+   var $si09_dataleicute_dia = null;
+   var $si09_dataleicute_mes = null;
+   var $si09_dataleicute_ano = null;
+   var $si09_dataleicute = null;
+   var $si09_contaunicatesoumunicipal = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si09_sequencial = int8 = Código Sequencial
@@ -38,6 +44,9 @@ class cl_infocomplementaresinstit {
                  si09_instit = float8 = Intituição
                  si09_assessoriacontabil = int8 = Assessoria Contabil
                  si09_cgmassessoriacontabil = int8 = Cgm Assessoria Contabil
+                 si09_nroleicute = int8 = Número da Lei CUTE
+                 si09_dataleicute = date = Data da Lei CUTE
+                 si09_contaunicatesoumunicipal = int8 = Conta Única do Tesouro Municipal
                  ";
    //funcao construtor da classe
    function cl_infocomplementaresinstit() {
@@ -67,6 +76,16 @@ class cl_infocomplementaresinstit {
        $this->si09_instit = ($this->si09_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_instit"]:$this->si09_instit);
        $this->si09_assessoriacontabil = ($this->si09_assessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"]:$this->si09_assessoriacontabil);
        $this->si09_cgmassessoriacontabil = ($this->si09_cgmassessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"]:$this->si09_cgmassessoriacontabil);
+	   $this->si09_nroleicute = ($this->si09_nroleicute == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_nroleicute"]:$this->si09_nroleicute);
+	   $this->si09_contaunicatesoumunicipal = ($this->si09_contaunicatesoumunicipal == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_contaunicatesoumunicipal"]:$this->si09_contaunicatesoumunicipal);
+	   if($this->si09_dataleicute == ""){
+		 $this->si09_dataleicute_dia = ($this->si09_dataleicute_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_dia"] : $this->si09_dataleicute_dia);
+		 $this->si09_dataleicute_mes = ($this->si09_dataleicute_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_mes"] : $this->si09_dataleicute_mes);
+		 $this->si09_dataleicute_ano = ($this->si09_dataleicute_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_ano"] : $this->si09_dataleicute_ano);
+		 if ($this->si09_dataleicute_dia != "") {
+			 $this->si09_dataleicute = $this->si09_dataleicute_ano . "-" . $this->si09_dataleicute_mes . "-" . $this->si09_dataleicute_dia;
+		 }
+	   }
      }else{
        $this->si09_sequencial = ($this->si09_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_sequencial"]:$this->si09_sequencial);
      }
@@ -150,6 +169,15 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
+	 if($this->si09_contaunicatesoumunicipal == 1 && empty($this->si09_contaunicatesoumunicipal)){
+	   $this->erro_sql = " Campo Conta Unica do Tesouro Municipal nao Informado.";
+	   $this->erro_campo = "si09_contaunicatesoumunicipal";
+	   $this->erro_banco = "";
+	   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	   $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	   $this->erro_status = "0";
+	   return false;
+	 }
      if($si09_sequencial == "" || $si09_sequencial == null ){
        $result = db_query("select nextval('infocomplementaresinstit_si09_sequencial_seq')");
        if($result==false){
@@ -193,6 +221,9 @@ class cl_infocomplementaresinstit {
                                       ,si09_assessoriacontabil
                                       ,si09_cgmassessoriacontabil
                                       ,si09_codunidadesubunidade
+                                      ,si09_nroleicute
+                                      ,si09_dataleicute
+                                      ,si09_contaunicatesoumunicipal
                        )
                 values (
                                 $this->si09_sequencial
@@ -205,6 +236,9 @@ class cl_infocomplementaresinstit {
                                ,$this->si09_assessoriacontabil
                                ,".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil)."
                                ,".($this->si09_codunidadesubunidade == '' ? 0 : $this->si09_codunidadesubunidade)."
+                               ,$this->si09_nroleicute
+                               ,". ($this->si09_dataleicute == "null" || $this->si09_dataleicute == "" ? "null" : "'" . $this->si09_dataleicute . "'") . "
+                               ,$this->contaunicatesoumunicipal
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -231,19 +265,19 @@ class cl_infocomplementaresinstit {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $resaco = $this->sql_record($this->sql_query_file($this->si09_sequencial));
-     if(($resaco!=false)||($this->numrows!=0)){
-       $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-       $acount = pg_result($resac,0,0);
-       $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-       $resac = db_query("insert into db_acountkey values($acount,2009466,'$this->si09_sequencial','I')");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009466,'','".AddSlashes(pg_result($resaco,0,'si09_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009468,'','".AddSlashes(pg_result($resaco,0,'si09_tipoinstit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009469,'','".AddSlashes(pg_result($resaco,0,'si09_codorgaotce'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009470,'','".AddSlashes(pg_result($resaco,0,'si09_opcaosemestralidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009471,'','".AddSlashes(pg_result($resaco,0,'si09_gestor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009472,'','".AddSlashes(pg_result($resaco,0,'si09_cnpjprefeitura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010228,2009473,'','".AddSlashes(pg_result($resaco,0,'si09_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+//     if(($resaco!=false)||($this->numrows!=0)){
+//       $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//       $acount = pg_result($resac,0,0);
+//       $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//       $resac = db_query("insert into db_acountkey values($acount,2009466,'$this->si09_sequencial','I')");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009466,'','".AddSlashes(pg_result($resaco,0,'si09_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009468,'','".AddSlashes(pg_result($resaco,0,'si09_tipoinstit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009469,'','".AddSlashes(pg_result($resaco,0,'si09_codorgaotce'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009470,'','".AddSlashes(pg_result($resaco,0,'si09_opcaosemestralidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009471,'','".AddSlashes(pg_result($resaco,0,'si09_gestor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009472,'','".AddSlashes(pg_result($resaco,0,'si09_cnpjprefeitura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       $resac = db_query("insert into db_acount values($acount,2010228,2009473,'','".AddSlashes(pg_result($resaco,0,'si09_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//     }
      return true;
    }
    // funcao para alteracao
@@ -378,33 +412,69 @@ class cl_infocomplementaresinstit {
          $this->erro_status = "0";
          return false;
        }
-     }
-     $sql .= " where ";
+    }
+
+	if(trim($this->si09_nroleicute)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_nroleicute"])){
+		$sql  .= $virgula." si09_nroleicute = ".($this->si09_nroleicute == '' ? 'null' : $this->si09_nroleicute);
+		$virgula = ",";
+		if($this->si09_nroleicute == 1 && empty($this->si09_nroleicute)){
+			$this->erro_sql = " Campo Número da Lei não Informado.";
+			$this->erro_campo = "si09_nroleicute";
+			$this->erro_banco = "";
+			$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
+	}
+	if (trim($this->si09_dataleicute) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si09_dataleicute"]) && ($GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_dia"] != "")) {
+		$sql .= $virgula . " si09_dataleicute = '$this->si09_dataleicute' ";
+	}else {
+		if (isset($GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_dia"])) {
+			$sql .= $virgula . " si09_dataleicute = null ";
+		}
+	}
+
+   if(trim($this->si09_contaunicatesoumunicipal!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_contaunicatesoumunicipal"]))){
+	   $sql  .= $virgula." si09_contaunicatesoumunicipal = ".($this->si09_contaunicatesoumunicipal == '' ? 'null' : $this->si09_contaunicatesoumunicipal);
+	   $virgula = ",";
+	   if($this->si09_contaunicatesoumunicipal == 1 && empty($this->si09_contaunicatesoumunicipal)){
+		   $this->erro_sql = " Campo Número da Lei não Informado.";
+		   $this->erro_campo = "si09_contaunicatesoumunicipal";
+		   $this->erro_banco = "";
+		   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+		   $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+		   $this->erro_status = "0";
+		   return false;
+	   }
+   }
+
+	  $sql .= " where ";
      if($si09_sequencial!=null){
        $sql .= " si09_sequencial = $this->si09_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->si09_sequencial));
      if($this->numrows>0){
-       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,2009466,'$this->si09_sequencial','A')");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_sequencial"]) || $this->si09_sequencial != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009466,'".AddSlashes(pg_result($resaco,$conresaco,'si09_sequencial'))."','$this->si09_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_tipoinstit"]) || $this->si09_tipoinstit != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009468,'".AddSlashes(pg_result($resaco,$conresaco,'si09_tipoinstit'))."','$this->si09_tipoinstit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_codorgaotce"]) || $this->si09_codorgaotce != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009469,'".AddSlashes(pg_result($resaco,$conresaco,'si09_codorgaotce'))."','$this->si09_codorgaotce',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_opcaosemestralidade"]) || $this->si09_opcaosemestralidade != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009470,'".AddSlashes(pg_result($resaco,$conresaco,'si09_opcaosemestralidade'))."','$this->si09_opcaosemestralidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_gestor"]) || $this->si09_gestor != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009471,'".AddSlashes(pg_result($resaco,$conresaco,'si09_gestor'))."','$this->si09_gestor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"]) || $this->si09_cnpjprefeitura != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009472,'".AddSlashes(pg_result($resaco,$conresaco,'si09_cnpjprefeitura'))."','$this->si09_cnpjprefeitura',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_instit"]) || $this->si09_instit != "")
-           $resac = db_query("insert into db_acount values($acount,2010228,2009473,'".AddSlashes(pg_result($resaco,$conresaco,'si09_instit'))."','$this->si09_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+//       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+//         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//         $acount = pg_result($resac,0,0);
+//         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//         $resac = db_query("insert into db_acountkey values($acount,2009466,'$this->si09_sequencial','A')");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_sequencial"]) || $this->si09_sequencial != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009466,'".AddSlashes(pg_result($resaco,$conresaco,'si09_sequencial'))."','$this->si09_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_tipoinstit"]) || $this->si09_tipoinstit != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009468,'".AddSlashes(pg_result($resaco,$conresaco,'si09_tipoinstit'))."','$this->si09_tipoinstit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_codorgaotce"]) || $this->si09_codorgaotce != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009469,'".AddSlashes(pg_result($resaco,$conresaco,'si09_codorgaotce'))."','$this->si09_codorgaotce',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_opcaosemestralidade"]) || $this->si09_opcaosemestralidade != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009470,'".AddSlashes(pg_result($resaco,$conresaco,'si09_opcaosemestralidade'))."','$this->si09_opcaosemestralidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_gestor"]) || $this->si09_gestor != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009471,'".AddSlashes(pg_result($resaco,$conresaco,'si09_gestor'))."','$this->si09_gestor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"]) || $this->si09_cnpjprefeitura != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009472,'".AddSlashes(pg_result($resaco,$conresaco,'si09_cnpjprefeitura'))."','$this->si09_cnpjprefeitura',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//         if(isset($GLOBALS["HTTP_POST_VARS"]["si09_instit"]) || $this->si09_instit != "")
+//           $resac = db_query("insert into db_acount values($acount,2010228,2009473,'".AddSlashes(pg_result($resaco,$conresaco,'si09_instit'))."','$this->si09_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+//       }
      }
      $result = db_query($sql);
      if($result==false){

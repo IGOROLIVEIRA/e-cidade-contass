@@ -3,16 +3,35 @@
 $sNomeCampo = $_GET['nome_campo'];
 $iAnoReferencia = $_GET['ano_usu'];
 
-
-if($sNomeCampo == "PPA"){
-	$sNomeArquivo = "PPA{$iAnoReferencia}.pdf";
-}else{
-	if($sNomeCampo == "LDO"){
-		$sNomeArquivo = "LDO{$iAnoReferencia}.pdf";
-	}else{
-		$sNomeArquivo = "LOA{$iAnoReferencia}.pdf";
+switch ($sNomeCampo){
+	case "PPA":{
+		$sNomeArquivo = "PPA{$iAnoReferencia}.pdf";
+		break;
 	}
+	case "LDO":{
+		$sNomeArquivo = "LDO{$iAnoReferencia}.pdf";
+		break;
+	}
+	case "LOA":{
+		$sNomeArquivo = "LOA{$iAnoReferencia}.pdf";
+		break;
+	}
+	case "ANEXOS_LOA":{
+		$sNomeArquivo = "ANEXOS_LOA.pdf";
+		break;
+	}
+
 }
+
+//if($sNomeCampo == "PPA"){
+//	$sNomeArquivo = "PPA{$iAnoReferencia}.pdf";
+//}else{
+//	if($sNomeCampo == "LDO"){
+//		$sNomeArquivo = "LDO{$iAnoReferencia}.pdf";
+//	}else{
+//		$sNomeArquivo = "LOA{$iAnoReferencia}.pdf";
+//	}
+//}
 
 if (strtolower(end(explode('.', $_FILES["$sNomeCampo"]['name']))) != "pdf") {
 	echo "<div style=\"color: red;\">Envie arquivos somente com extensão .pdf</div>";

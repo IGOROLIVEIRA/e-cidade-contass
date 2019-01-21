@@ -34,6 +34,7 @@ $clrotulo->label("o15_codigo");
   <script language="JavaScript" type="text/javascript"
   src="scripts/micoxUpload.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+
 </head>
 <body bgcolor="#cccccc" style="margin-top: 25px;">
   <center>
@@ -91,52 +92,67 @@ $clrotulo->label("o15_codigo");
                   <legend>
             			<b>Selecionar Arquivos de Leis</b>
           				</legend>
-                    <table>
-                      <tr>
-                      	<td>
-                      	Lei PPA:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="PPA" />
-    <div id="recebe_up_ppa" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=PPA&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_ppa','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </tr>
-                      <tr>
-                      	<td>
-                      	Lei LDO:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="LDO" />
-    <div id="recebe_up_ldo" class="recebe">&nbsp;</div>
-    
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=LDO&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_ldo','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </tr>
-                                            <tr>
-                      	<td>
-                      	Lei LOA:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="LOA" />
-    <div id="recebe_up_loa" class="recebe">&nbsp;</div>
-    
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=LOA&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_loa','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </tr>
-                    </table>
+                            <table>
+                              <tr>
+                                <td class="rotulo">
+                                Lei PPA:
+                                <div>&nbsp;</div>
+                                </td>
+                                <td class="file-submit">
+                                    <input type="file" name="PPA" />
+                                    <div id="recebe_up_ppa" class="recebe">&nbsp;</div>
+                                </td>
+                                <td>
+                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=PPA&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_ppa','Carregando...','Erro ao carregar')" />
+                                <div>&nbsp;</div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="rotulo">
+                                Lei LDO:
+                                <div>&nbsp;</div>
+                                </td>
+                                <td class="file-submit">
+                                    <input type="file" name="LDO" />
+                                    <div id="recebe_up_ldo" class="recebe">&nbsp;</div>
+                                </td>
+                                <td>
+                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=LDO&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_ldo','Carregando...','Erro ao carregar')" />
+                                <div>&nbsp;</div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="rotulo">
+                                Lei LOA:
+                                <div>&nbsp;</div>
+                                </td>
+                                <td class="file-submit">
+                                    <input type="file" name="LOA" />
+                                    <div id="recebe_up_loa" class="recebe">&nbsp;</div>
+                                </td>
+                                <td>
+                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=LOA&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_loa','Carregando...','Erro ao carregar')" />
+                                <div>&nbsp;</div>
+                                </td>
+                              </tr>
+                                  <tr>
+                                    <td style="">
+                                      Anexos LOA:
+                                    <div>&nbsp;</div>
+                                    </td>
+                                    <td class="file-submit">
+                                      <input type="file" name="ANEXOS_LOA" />
+                                      <div id="recebe_up_anexos" class="recebe">&nbsp;</div>
+                                    </td>
+                                    <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=ANEXOS_LOA','recebe_up_anexos','Carregando...','Erro ao carregar')" />
+                                         <div>&nbsp;</div>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </div>
+                      </div>
+
                   </fieldset>
                   </form>
                 </div>
@@ -270,7 +286,7 @@ function js_processar() {
 }
 
 function js_retornoProcessamento(oAjax) {
-
+     console.log(oAjax);
 	 js_removeObj('msgBox');
 	    $('debug').innerHTML = oAjax.responseText;
 	  var oRetorno = eval("("+oAjax.responseText+")");
