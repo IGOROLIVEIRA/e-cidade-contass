@@ -54,9 +54,10 @@ $clpccflicitapar->l25_numero = $l25_numero;
 
 if (isset($incluir)) {
   if ($sqlerro==false) {
-       $result_verifica = $clliclicita->sql_record($clliclicita->sql_query_file(null,"*",null,"l20_codtipocom=$l25_codcflicita and l20_instit =$instit and l20_anousu=$l25_anousu" ));
-
-      if ($clliclicita->numrows>0) {
+       //$result_verifica = $clliclicita->sql_record($clliclicita->sql_query_file(null,"*",null,"l20_codtipocom=$l25_codcflicita and l20_instit =$instit and l20_anousu=$l25_anousu" ));
+       $sSQL = "select l25_codigo from pccflicitapar where l25_anousu = {$anousu} and l25_codcflicita = {$l25_codcflicita}";
+       $rsResult = db_query($sSQL);
+      if (pg_num_rows($rsResult) > 0) {
         $erro_msg    = "Já existe licitação cadastrada com essa modalidade.Não foi possível incluir.";
         $clliclicita->erro_status = 0;
         $sqlerro  = true;
