@@ -39,6 +39,7 @@ class Instituicao {
   CONST COD_CLI_PMPIRAPORA = 58;
   CONST COD_CLI_PREVMOC = 35;
   CONST COD_CLI_PMLUISLANDIA = 48;
+  CONST COD_CLI_PMCAPITAOENEAS = 62;
 
   /**
    * Código da Instituicao
