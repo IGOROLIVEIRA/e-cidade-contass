@@ -165,271 +165,168 @@ ob_start();
         <td class="s6">(R$)</td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s7 bdleft" colspan="3">A -  Impostos:</td>
+        <td class="s7 bdleft" colspan="3">A -  Tributária:</td>
+      </tr>
+
+      <?php
+      $aGrupoReceita = array(
+                        array('Imposto sobre a Propriedade Territorial Rural - ITR', '41112011%'),
+                        array('Imposto sobre a Renda - Retido na Fonte - Trabalho', '41113031%'),
+                        array('Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos', '41113034%'),
+                        array('Imposto sobre a Propriedade Predial e Territorial Urbana - IPTU', '41118011%'),
+                        array('Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais s/ Imóveis - ITBI', '41118014%'),
+                        array('Imposto sobre Serviços de Qualquer Natureza - ISS', '41118023%'),
+                        array('Taxas', '4112%'),
+      );
+      $aPrefixosDeducoes = array('491','492','493','496','498','499');
+
+      $fSubTotalImpostos = 0.0;
+      foreach($aGrupoReceita as $iK => $aGrupo){
+
+        $aDadosReceita = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '$aGrupo[1]'");
+        $dDadosReceita = 0.0;
+        $sDeducao = '';
+
+        foreach($aDadosReceita as $oReceita) {
+
+          $dTotalDeducoes = 0.0;
+          // Busca deduções
+          foreach($aPrefixosDeducoes as $sPrefixo){
+            $sDeducao = '';
+            $sDeducao = $sPrefixo.substr($oReceita->o57_fonte,1,strlen($oReceita->o57_fonte)-3);
+
+            $aDadosDeducao = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte = '$sDeducao'");
+
+            foreach ($aDadosDeducao as $oDeducao){
+              $dTotalDeducoes += (double)$oDeducao->saldo_arrecadado_acumulado >= 0 ? (double)$oDeducao->saldo_arrecadado_acumulado : (-1 * (double)$oDeducao->saldo_arrecadado_acumulado);
+            }
+          }
+
+          $dDadosReceita += (double)$oReceita->saldo_arrecadado_acumulado - $dTotalDeducoes;
+
+        }
+        $fSubTotalImpostos += $dDadosReceita;
+        ?>
+
+      <tr style='height:20px;'>
+        <td class="s9 softmerge" colspan="2" style="border-left: 1px solid #000;">
+          <div class="softmerge-inner"><?=$aGrupo[0]?></div>
+        </td>
+        <td class="s10" colspan="1">
+          <?=db_formatar($dDadosReceita,"f")?>
+        </td>
+      </tr>
+      <tr style='height:20px;'>
+        <td class="s8 bdleft" colspan="3">&nbsp;</td>
+      </tr>
+
+      <?php } ?>
+
+<!--      Subtotal    -->
+      <tr style='height:20px;'>
+        <td class="s5 bdleft" colspan="2">Subtotal</td>
+        <td class="s16"><?=db_formatar($fSubTotalImpostos,"f"); ?></td>
+      </tr>
+
+
+<!--      TRANFERÊNCIAS     -->
+      <tr style='height:20px;'>
+        <td class="s7 bdleft" colspan="3">B -  Transferências:</td>
       </tr>
       <?php
-      $fSubTotalImposto = 0;
-      $aDadosReceita = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '4111%'");
-      foreach($aDadosReceita as $oReceita){
-        $fSubTotalImposto += $oReceita->saldo_arrecadado_acumulado;
+      $aGrupoTransferencias = array(
+        array('Cota-Parte do FPM - Cota Mensal', '41718012%'),
+        array('Cota-Parte do FPM - 1% dezembro', '41718013%'),
+        array('Cota-Parte do FPM - 1% julho', '41718014%'),
+        array('Cota-Parte do ITR', '41718015%'),
+        array('Transferência Financeira do ICMS - Desoneração - LC 87/96', '41718061%'),
+        array('Cota-Parte do ICMS', '41728011%'),
+        array('Cota-Parte do IPVA', '41728012%'),
+        array('Cota-Parte do IPI - Municípios', '41728013%'),
+        array('Cota-Parte da CIDE', '41728014%'),
+      );
+
+      $fSubTotalTransferencias = 0.0;
+      foreach($aGrupoTransferencias as $iK => $aGrupo){
+
+        $aDadosReceita = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '$aGrupo[1]'");
+        $dDadosReceita = 0.0;
+        foreach($aDadosReceita as $oReceita) {
+          $dDadosReceita += (double)$oReceita->saldo_arrecadado_acumulado;
+        }
+        $fSubTotalTransferencias += $dDadosReceita;
+        ?>
+
+        <tr style='height:20px;'>
+          <td class="s9 softmerge" colspan="2" style="border-left: 1px solid #000;">
+            <div class="softmerge-inner"><?=$aGrupo[0]?></div>
+          </td>
+          <td class="s10" colspan="1">
+            <?=db_formatar($dDadosReceita,"f")?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s8 bdleft" colspan="3">&nbsp;</td>
+        </tr>
+
+      <?php } ?>
+
+      <!--      Subtotal    -->
+      <tr style='height:20px;'>
+        <td class="s5 bdleft" colspan="2">Subtotal</td>
+        <td class="s16"><?=db_formatar($fSubTotalTransferencias,"f"); ?></td>
+      </tr>
+
+
+<!--      TOTAL     -->
+      <?php
+      $dPorcentagem = 0.0;
+      if ((int)$oInstit->getHabitantes() < 100000){
+        $dPorcentagem = 0.07;
+        $sPorcentagem = '7.00 %';
+      }
+      if ((int)$oInstit->getHabitantes() >= 100000 && (int)$oInstit->getHabitantes() <= 300000 ){
+        $dPorcentagem = 0.06;
+        $sPorcentagem = '6.00 %';
+      }
+      if ((int)$oInstit->getHabitantes() >= 300001 && (int)$oInstit->getHabitantes() <= 500000 ){
+        $dPorcentagem = 0.05;
+        $sPorcentagem = '5.00 %';
+      }
+      if ((int)$oInstit->getHabitantes() >= 500001 && (int)$oInstit->getHabitantes() <= 3000000 ){
+        $dPorcentagem = 0.045;
+        $sPorcentagem = '4.50 %';
+      }
+      if ((int)$oInstit->getHabitantes() >= 3000001 && (int)$oInstit->getHabitantes() <= 8000000 ){
+        $dPorcentagem = 0.04;
+        $sPorcentagem = '4.00 %';
+      }
+      if ((int)$oInstit->getHabitantes() > 8000001){
+        $dPorcentagem = 0.035;
+        $sPorcentagem = '3.50 %';
+      }
+
       ?>
       <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar($oReceita->o57_fonte,"sistema")?></td>
-        <td class="s9 softmerge">
-          <div class="softmerge-inner" style="width: 436px; left: -1px;"><?=$oReceita->o57_descr?></div>
-        </td>
-        <td class="s10">
-          <?=db_formatar($oReceita->saldo_arrecadado_acumulado,"f")?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-        <?php } ?>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">Subtotal</td>
-        <td class="s16"><?=db_formatar($fSubTotalImposto,"f"); ?></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s7 bdleft" colspan="3">B - Taxas:</td>
-      </tr>
-      <?php
-      $fSubTotalTaxas = 0;
-      $aDadosTaxas = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '4112%'");
-      foreach($aDadosTaxas as $oTaxa){
-        $fSubTotalTaxas += $oTaxa->saldo_arrecadado_acumulado;
-        ?>
-        <tr style='height:20px;'>
-          <td class="s9 bdleft"><?=db_formatar($oTaxa->o57_fonte,"sistema")?></td>
-          <td class="s9 softmerge">
-            <div class="softmerge-inner" style="width: 436px; left: -1px;"><?=$oTaxa->o57_descr?></div>
-          </td>
-          <td class="s10">
-            <?=db_formatar($oTaxa->saldo_arrecadado_acumulado,"f")?>
-          </td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s8 bdleft" colspan="3">&nbsp;</td>
-        </tr>
-      <?php } ?>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">Subtotal</td>
-        <td class="s16"><?=db_formatar($fSubTotalTaxas,"f"); ?></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s17 bdleft" colspan="3">C - Outras Receitas:</td>
-      </tr>
-      <?php
-      $fSubTotalOutras = 0;
-      $aDadosOutras1 = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '41911%'");
-      foreach($aDadosOutras1 as $oOutras1){
-        $fSubTotalOutras += $oOutras1->saldo_arrecadado_acumulado;
-        ?>
-        <tr style='height:20px;'>
-          <td class="s9 bdleft"><?=db_formatar($oOutras1->o57_fonte,"sistema")?></td>
-          <td class="s9 softmerge">
-            <div class="softmerge-inner" style="width: 436px; left: -1px;"><?=$oOutras1->o57_descr?></div>
-          </td>
-          <td class="s10">
-            <?=db_formatar($oOutras1->saldo_arrecadado_acumulado,"f")?>
-          </td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s8 bdleft" colspan="3">&nbsp;</td>
-        </tr>
-      <?php }
-      $aDadosOutras2 = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '41913%'");
-      foreach($aDadosOutras2 as $oOutras2){
-        $fSubTotalOutras += $oOutras2->saldo_arrecadado_acumulado;
-        ?>
-        <tr style='height:20px;'>
-          <td class="s9 bdleft"><?=db_formatar($oOutras2->o57_fonte,"sistema")?></td>
-          <td class="s9 softmerge">
-            <div class="softmerge-inner" style="width: 436px; left: -1px;"><?=$oOutras2->o57_descr?></div>
-          </td>
-          <td class="s10">
-            <?=db_formatar($oOutras2->saldo_arrecadado_acumulado,"f")?>
-          </td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s8 bdleft" colspan="3">&nbsp;</td>
-        </tr>
-      <?php }
-      $aDadosOutras3 = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '41931%'");
-      foreach($aDadosOutras3 as $oOutras3){
-        $fSubTotalOutras += $oOutras3->saldo_arrecadado_acumulado;
-        ?>
-        <tr style='height:20px;'>
-          <td class="s9 bdleft"><?=db_formatar($oOutras3->o57_fonte,"sistema")?></td>
-          <td class="s9 softmerge">
-            <div class="softmerge-inner" style="width: 436px; left: -1px;"><?=$oOutras3->o57_descr?></div>
-          </td>
-          <td class="s10">
-            <?=db_formatar($oOutras3->saldo_arrecadado_acumulado,"f")?>
-          </td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s8 bdleft" colspan="3">&nbsp;</td>
-        </tr>
-      <?php } ?>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">Subtotal</td>
-        <td class="s16"><?=db_formatar($fSubTotalOutras,"f"); ?></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s17 bdleft" colspan="3">D -  Transferências Correntes:</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172101030000","sistema")?></td>
-        <td class="s9">Cota-parte do FPM - 1%  de Dezembro</td>
-        <td class="s10">
-          <?php
-          $aDadosFPM1DEZ = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210103%'");
-          $fFPM1DEZ = count($aDadosFPM1DEZ) > 0 ? $aDadosFPM1DEZ[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fFPM1DEZ, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172101040000","sistema")?></td>
-        <td class="s9">Cota-parte do FPM - 1%  de Julho</td>
-        <td class="s10">
-          <?php
-          $aDadosFPM1JUL = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210104%'");
-          $fFPM1JUL = count($aDadosFPM1JUL) > 0 ? $aDadosFPM1JUL[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fFPM1JUL, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172101020000","sistema")?></td>
-        <td class="s9">Cota-Parte do Fundo de Participação dos Municípios</td>
-        <td class="s10">
-          <?php
-          $aDadosFPM = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210102%'");
-          $fFPM = count($aDadosFPM) > 0 ? $aDadosFPM[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fFPM, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172101050000","sistema")?></td>
-        <td class="s9">Cota-Parte do Imposto sobre a Propriedade Territorial Rural</td>
-        <td class="s10">
-          <?php
-          $aDadosITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210105%'");
-          $fITR = count($aDadosITR) > 0 ? $aDadosITR[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fITR, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172136000000","sistema")?></td>
-        <td class="s9">Transferência Financeira do ICMS - Desoneração - LC 87/96</td>
-        <td class="s10">
-          <?php
-          $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4172136%'");
-          $fICMS = count($aDadosICMS) > 0 ? $aDadosICMS[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fICMS, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172201010000","sistema")?></td>
-        <td class="s9">Cota-Parte do ICMS</td>
-        <td class="s10">
-          <?php
-          $aDadosPARTICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220101%'");
-          $fPARTICMS = count($aDadosPARTICMS) > 0 ? $aDadosPARTICMS[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fPARTICMS, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172201020000","sistema")?></td>
-        <td class="s9">Cota-Parte do Imposto sobre a Propriedade de Veículos</td>
-        <td class="s12"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s13 bdleft"></td>
-        <td class="s9">Automotores</td>
-        <td class="s10">
-          <?php
-          $aDadosIPVA = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220102%'");
-          $fIPVA = count($aDadosIPVA) > 0 ? $aDadosIPVA[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fIPVA, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172201040000","sistema")?></td>
-        <td class="s9">Cota-Parte do IPI sobre Exportação</td>
-        <td class="s10">
-          <?php
-          $aDadosIPI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220104%'");
-          $fIPI = count($aDadosIPI) > 0 ? $aDadosIPI[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fIPI, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s9 bdleft"><?=db_formatar("4172201130000","sistema")?></td>
-        <td class="s9">Cota-Parte da CIDE</td>
-        <td class="s10">
-          <?php
-          $aDadosCIDE = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220113%'");
-          $fCIDE = count($aDadosCIDE) > 0 ? $aDadosCIDE[0]->saldo_arrecadado_acumulado : 0;
-          echo db_formatar($fCIDE, "f");
-          ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s18 bdleft" colspan="3">&nbsp;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">Subtotal</td>
-        <td class="s16">
-          <?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI,$fCIDE)); echo db_formatar($fSubTotalCorrentes,"f"); ?>
-        </td>
-      </tr>
-      <tr style='height:20px;'>
         <td class="s19 bdleft" colspan="2">TOTAL:</td>
-        <td class="s20"><?=db_formatar($fSubTotalCorrentes+$fSubTotalImposto+$fSubTotalTaxas+$fSubTotalOutras,"f") ?></td>
+        <td class="s20"><?=db_formatar($fSubTotalTransferencias+$fSubTotalImpostos,"f") ?></td>
       </tr>
       <tr style='height:20px;'>
         <td class="s5 bdleft" colspan="2">2 - População do Município: <?=$oInstit->getHabitantes()?> habitantes.</td>
         <td class="s18"></td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">3 - Percentual conforme população: 7,00 %</td>
+        <td class="s5 bdleft" colspan="2">3 - Percentual conforme população: <?=$sPorcentagem?></td>
         <td class="s18"></td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="2">4- Limite conforme art. 29A, CF/88</td>
-        <td class="s16"><?=db_formatar(($fSubTotalCorrentes+$fSubTotalImposto+$fSubTotalTaxas+$fSubTotalOutras)*0.07,"f")?></td>
+        <td class="s5 bdleft" colspan="2">4 - Limite conforme art. 29A, CF/88</td>
+        <td class="s16"><?=db_formatar(($fSubTotalTransferencias+$fSubTotalImpostos)*$dPorcentagem,"f")?></td>
       </tr>
       <tr style='height:20px;'>
         <td class="s21 bdleft" colspan="2">REPASSE MENSAL ==&gt;</td>
         <td class="s22">
-          <?=db_formatar((($fSubTotalCorrentes+$fSubTotalImposto+$fSubTotalTaxas+$fSubTotalOutras)*0.07)/12,"f")?>
+          <?=db_formatar((($fSubTotalTransferencias+$fSubTotalImpostos)*$dPorcentagem)/12,"f")?>
         </td>
       </tr>
       </tbody>
