@@ -84,22 +84,24 @@ switch($oParam->exec) {
     	$sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
 
       $iAnoReferencia = db_getsession('DB_anousu');
+      $ano = substr($iAnoReferencia, -2);
 
       $oEscritorCSV = new padArquivoEscritorCSV();
       /**
        * Verificar se existe pelo menos um pdf de leis antes de tentar processar
        */
-      if (!file_exists("PPA{$iAnoReferencia}.pdf") && !file_exists("LDO{$iAnoReferencia}.pdf")
-            && !file_exists("LOA{$iAnoReferencia}.pdf")) {
+      if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
+            && !file_exists("LOA{$ano}.pdf")) {
       	$oRetorno->status  = 2;
         $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
         $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
         break;
     	}
-      $oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia}.pdf", "PPA{$iAnoReferencia}.pdf");
-      $oEscritorCSV->adicionarArquivo("LDO{$iAnoReferencia}.pdf", "LDO{$iAnoReferencia}.pdf");
-    	$oEscritorCSV->adicionarArquivo("LOA{$iAnoReferencia}.pdf", "LOA{$iAnoReferencia}.pdf");
-    	$oEscritorCSV->zip("LEIS_{$sInst}_{$iAnoReferencia}");
+      	$oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
+      	$oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
+    	$oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
+    	$oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
+    	$oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
 
     	$oEscritorCSV = new padArquivoEscritorCSV();
 
@@ -136,7 +138,7 @@ switch($oParam->exec) {
       }
 
       $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
-      $oEscritorCSV->adicionarArquivo("tmp/LEIS_{$sInst}_{$iAnoReferencia}.zip", "LEIS_{$sInst}_{$iAnoReferencia}.zip");
+      $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
       $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
     }
