@@ -58,7 +58,7 @@ $nomeTipoMod  = "Carnes";
 $impmodelo    = 1;
 
 $wherecidbranco = "where 1 = 1 ";
-$debugar = false;
+$debugar = true;
 
 $sqlTipo  = " select q92_tipo  as tipo_debito 					  ";
 $sqlTipo .= "   from cadvencdesc 								  ";
@@ -121,6 +121,7 @@ if($debugar ==true){
     filtro princ......= $filtroprinc   <br>
     parc obrigat .....= $parcobrig     <br>
     intervalo ........= $intervalo     <br>
+    CGM ........= $j01_numcgm          <br>
     ";
 }
 
@@ -224,6 +225,10 @@ if(isset($quantidade) and $quantidade!=0 and $quantidade!=""){
 }else{
   $quantidade = "";
 }
+$sWhereCgm = "";
+if(!empty($j01_numcgm)){
+  $sWhereCgm = " and j01_numcgm = {$j01_numcgm} ";
+}
 $sqlprinc  = "select distinct ";
 $sqlprinc .= "       j23_matric, ";
 $sqlprinc .= "       j23_vlrter, ";
@@ -271,7 +276,7 @@ $sqlprinc .= "              left  join imobil 	          on imobil.j44_matric = 
 $sqlprinc .= "              left  join loteloteam 	      on loteloteam.j34_idbql = lote.j34_idbql                                    ";
 $sqlprinc .= "              left  join iptuant     	      on iptuant.j40_matric   = iptubase.j01_matric                               ";
 $sqlprinc .= "        where iptucalc.j23_anousu = $anousu                                                                             ";
-$sqlprinc .= "        $whereimobil {$whereloteam} {$sWhereMatriculas} {$sWhereSetor} ) as x                                           ";
+$sqlprinc .= "        $whereimobil {$whereloteam} {$sWhereMatriculas} {$sWhereSetor} {$sWhereCgm}) as x                                           ";
 $sqlprinc .= " $wherecidbranco";
 $sqlprinc .= " order by {$sOrder}";
 $sqlprinc .= "    $quantidade ";

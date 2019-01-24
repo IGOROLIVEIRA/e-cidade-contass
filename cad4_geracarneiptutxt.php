@@ -721,6 +721,10 @@ switch ($ordem)  {
   $sOrder = "z01_nome";
   break;
 }
+$sWhereCgm = "";
+if(!empty($j01_numcgm)){
+  $sWhereCgm = " and j01_numcgm = {$j01_numcgm} ";
+}
 $sqlprinc  = "";
 
 $sqlprinc .= "select * from ( ";
@@ -773,7 +777,7 @@ $sqlprinc .= "              left  join imobil             on imobil.j44_matric =
 $sqlprinc .= "              left  join loteloteam         on loteloteam.j34_idbql = lote.j34_idbql ";
 $sqlprinc .= "              left  join iptuant            on iptuant.j40_matric   = iptubase.j01_matric ";
 $sqlprinc .= "        where iptucalc.j23_anousu = $anousu ";
-$sqlprinc .= "        {$whereimobil} {$wherelistamatrics} {$whereloteam}" . ($quantidade != ""?" limit {$quantidade}":"") . ") as x ";
+$sqlprinc .= "        {$whereimobil} {$wherelistamatrics} {$whereloteam}" . ($quantidade != ""?" limit {$quantidade}":"") . " {$sWhereCgm}) as x ";
 
 $sqlprinc .= "        ) as y ";
 

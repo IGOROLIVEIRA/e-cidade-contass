@@ -67,6 +67,7 @@ $cldb_layouttxtgeracao = new cl_db_layouttxtgeracao;
 $clrotulo = new rotulocampo();
 $cllote->rotulo->label();
 $clsetor->rotulo->label();
+$clrotulo->label("j01_numcgm");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -280,6 +281,16 @@ db_postmemory($HTTP_POST_VARS);
         <legend>Outros Filtros</legend>
 
         <table border="0" class="form-container">
+        <tr>
+            <td title="<?=@$Tj01_numcgm?>"><?
+                db_ancora(@$Lj01_numcgm,"js_pesquisaj01_numcgm(true);",1);
+                ?></td>
+            <td><?
+                db_input('j01_numcgm',10,$Ij01_numcgm,true,'text',1," onchange='js_pesquisaj01_numcgm(false);'")
+                ?> <?
+                db_input('z01_nome',56,$Iz01_nome,true,'text',3,'')
+                ?></td>
+        </tr>
 
          <tr id="tercDigBarrasUnica" style="display: none;">
            <td width="45%">
@@ -469,7 +480,25 @@ db_postmemory($HTTP_POST_VARS);
  </body>
 </html>
 <script type="text/javascript">
-
+    function js_pesquisaj01_numcgm(mostra){
+        if(mostra==true){
+            js_OpenJanelaIframe('','func_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&testanome=true','Pesquisa',true);
+        }else{
+            js_OpenJanelaIframe('','func_nome','func_nome.php?pesquisa_chave='+document.form1.j01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa', false);
+        }
+    }
+    function js_mostracgm(erro,chave){
+        document.form1.z01_nome.value = chave;
+        if(erro==true){
+            document.form1.j01_numcgm.focus();
+            document.form1.j01_numcgm.value = '';
+        }
+    }
+    function js_mostracgm1(chave1,chave2,chave3){
+        document.form1.j01_numcgm.value = chave1;
+        document.form1.z01_nome.value = chave2;
+        func_nome.hide();
+    }
 function js_pesquisaj34_setor(mostra){
 
   if(mostra==true){
@@ -936,7 +965,7 @@ if(isset($geracarnes)){
           break;
     }
 
-    $querystring="proc=".@$proc."&entregavalido=".@$entregavalido."&zerado=$zerado&local=$local&cidadebranco=".@$cidadebranco."&parcobrig=$parcobrig&quantidadeparcelas=$quantidadeparcelas&listamatrics=$listamatrics&unica=$unica&anousu=$anousu&quantidade=$quantidade&quantidade_registros_real=$quantidade_registros_real&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&especie=$especie&imobiliaria=$imobiliaria&loteamento=$loteamento&filtroprinc=$filtroprinc&barrasparc=$barrasparc&barrasunica=$barrasunica&totcheck=$totcheck&vlrminunica=$vlrminunica&intervalo=$intervalo&vlrmaxunica=$vlrmaxunica&vlrmin=$vlrmin&vlrmax=$vlrmax&tipo=$tipo&opVenc=$opVenc";
+    $querystring="proc=".@$proc."&entregavalido=".@$entregavalido."&zerado=$zerado&local=$local&cidadebranco=".@$cidadebranco."&parcobrig=$parcobrig&quantidadeparcelas=$quantidadeparcelas&listamatrics=$listamatrics&unica=$unica&anousu=$anousu&quantidade=$quantidade&quantidade_registros_real=$quantidade_registros_real&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&especie=$especie&imobiliaria=$imobiliaria&loteamento=$loteamento&filtroprinc=$filtroprinc&barrasparc=$barrasparc&barrasunica=$barrasunica&totcheck=$totcheck&vlrminunica=$vlrminunica&intervalo=$intervalo&vlrmaxunica=$vlrmaxunica&vlrmin=$vlrmin&vlrmax=$vlrmax&tipo=$tipo&opVenc=$opVenc&j01_numcgm=$j01_numcgm";
 
     echo " <script>  ";
     echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarneiptutxt{$sNomeFonte}.php?$querystring','Gerando Arquivo TXT ...',true); ";
@@ -976,7 +1005,8 @@ if(isset($geracarnes)){
 	      }
 
 	      echo " <script> ";
-	      echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarnesiptu_geral.php?anousu=$anousu&quantidade=$quantidade&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&tipo=$especie&txtNumpreUnicaSelecionados=$dtVencUnica$querystring','Emitindo carnes ...',true); ";
+
+        echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarnesiptu_geral.php?anousu=$anousu&quantidade=$quantidade&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&tipo=$especie&txtNumpreUnicaSelecionados=$dtVencUnica$querystring&j01_numcgm=$j01_numcgm','Emitindo carnes ...',true); ";
 	      echo " </script> ";
 
       }
