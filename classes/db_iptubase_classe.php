@@ -482,10 +482,14 @@ class cl_iptubase {
    }
    function sqlmatriculas_bairros($pesquisaBairro=0){
   $sql = "
-  select iptubase.j01_matric, cgm.z01_nome,cgm.z01_ender,cgm.z01_munic,cgm.z01_cep,cgm.z01_uf ,lote.*
+  select iptubase.j01_matric, cgm.z01_nome,j88_descricao||' '||j14_nome as z01_ender, j39_numero, j39_compl, lote.j34_setor, j34_quadra, j34_lote, j34_area, j34_totcon
           from lote
           inner join iptubase on j34_idbql = j01_idbql
           inner join cgm on z01_numcgm = j01_numcgm
+          left join testpri on j34_idbql = j49_idbql
+          left join ruas on j14_codigo = j49_codigo
+          left join ruastipo on j14_tipo = j88_codigo
+          left join iptuconstr on j39_matric = j01_matric and j39_idprinc is true and j39_dtdemo is null
    ";
   if($pesquisaBairro!=0){
        $sql .= "where j34_bairro = $pesquisaBairro";
