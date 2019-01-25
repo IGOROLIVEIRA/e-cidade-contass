@@ -463,7 +463,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
               AND r48_regist = " . $oDados10->rh02_regist . "
               ";
               $rsResultRubricaCom = db_query($sSqlRubricaCom);
-              db_criatabela($rsResultRubricaCom);
+              //db_criatabela($rsResultRubricaCom);
               $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
               $aTiposPagamento[$i]['si195_dsctipopagextra'] = $rsResultRubricaCom->rh27_descr;
           }
