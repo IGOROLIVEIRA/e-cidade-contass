@@ -381,8 +381,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    ";
 
    $rsResult10 = db_query($sSql);
-		//echo $sSql;
-		//db_criatabela($rsResult10);exit;
+   //echo $sSql;
+   //db_criatabela($rsResult10);
 
    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -442,47 +442,56 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'tipo'=>'4',
      );
   }
-  //Descrição do tipo de pagamento extra
-  if($aTiposPagamento[$iQuantTipoPagamento]['si195_indtipopagamento'] == 'E'){
-    //Consulta se o servidor possui ferias cadastradas no mes
-    $sSqlFerias = "SELECT *
-    FROM cadferia
-    WHERE r30_proc1 = '".db_getsession("DB_anousu")."/".$this->sDataFinal['5'].$this->sDataFinal['6']."'
-    AND r30_regist = ".$oDados10->rh02_regist."
-    ORDER BY r30_perai";
-    $rsResultFerias = db_query($sSqlFerias);
-    if(pg_num_rows($rsResultFerias)>0){
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = 'FERIAS';
-    }else{
 
-      $sSqlRubricaCom = "SELECT rh27_descr
-      FROM gerfcom
-      INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
-      AND r48_instit = rh27_instit
-      WHERE r48_anousu = ".db_getsession("DB_anousu")."
-      AND r48_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
-      AND r48_regist = ".$oDados10->rh02_regist."
-      ";
-      $rsResultRubricaCom = db_query($sSqlRubricaCom);
-      $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = $rsResultRubricaCom->rh27_descr;
-    }
+  for ($i = 1; $i <= $iQuantTipoPagamento; $i++) {
 
+      if ($aTiposPagamento[$i]['si195_indtipopagamento'] == 'E') {
+
+          //Consulta se o servidor possui ferias cadastradas no mes
+          $sSqlFerias = "SELECT * FROM cadferia WHERE r30_proc1 = '" . db_getsession("DB_anousu") . "/" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "' AND r30_regist = " . $oDados10->rh02_regist . " ORDER BY r30_perai";
+          $rsResultFerias = db_query($sSqlFerias);
+          if (pg_num_rows($rsResultFerias) > 0) {
+              $aTiposPagamento[$i]['si195_dsctipopagextra'] = 'FERIAS';
+          } else {
+
+              $sSqlRubricaCom = "SELECT rh27_descr
+              FROM gerfcom
+              INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
+              AND r48_instit = rh27_instit
+              WHERE r48_anousu = " . db_getsession("DB_anousu") . "
+              AND r48_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+              AND r48_regist = " . $oDados10->rh02_regist . "
+              ";
+              $rsResultRubricaCom = db_query($sSqlRubricaCom);
+              db_criatabela($rsResultRubricaCom);
+              $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
+              $aTiposPagamento[$i]['si195_dsctipopagextra'] = $rsResultRubricaCom->rh27_descr;
+          }
+
+      }
   }
+
   $dscAPO = ' ';
 
   if($oDados10->si195_sglcargo == 'APO'){
       $dscAPO = $oDados10->h13_dscapo;
   }
-
+  //echo '<pre>';
+//  print_r($aTiposPagamento);
+//  ini_set('display_errors', 'On');
+//  error_reporting(E_ALL);
   for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
 
         $clflpgo10                                          = new cl_flpgo102018();
         $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
-				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
-				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
-        $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
+        $clflpgo10->si195_regime             		            = $oDados10->si195_regime;
+		$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
+		if($iContEx == 2) {
+          $clflpgo10->si195_dsctipopagextra = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
+        }else{
+          $clflpgo10->si195_dsctipopagextra = ' ';
+        }
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
         $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
@@ -509,12 +518,12 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
         $clflpgo10->incluir(null);
         if ($clflpgo10->erro_status == 0) {
-         echo $clflpgo10->erro_msg;
-         exit;
+         //echo $clflpgo10->erro_msg;
+         //exit;
          throw new Exception($clflpgo10->erro_msg);
        }
+	   //print_r($clflpgo10);
 
-				//print_r($clflpgo10);
        $sSql2 = "select
        x.si196_tiporegistro,
        CASE
