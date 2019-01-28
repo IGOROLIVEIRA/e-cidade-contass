@@ -394,7 +394,6 @@ function js_mostratipoalvara(chave1,chave2,chave3,chave4,erro){
   if(chave3 == 3){
 
     document.form1.q120_validadealvara.readOnly = 'readyonly';
-    document.form1.q120_validadealvara.value    = 0;
   } else if(chave3 == 1) {
 
     document.form1.q120_validadealvara.readOnly = 'readyonly';
@@ -411,7 +410,6 @@ function js_mostratipoalvara1(chave1,chave2,chave3,chave4){
   if(chave3 == 3){
 
     document.form1.q120_validadealvara.readOnly = 'readyonly';
-    document.form1.q120_validadealvara.value    = 0;
   } else if(chave3 == 1) {
 
     document.form1.q120_validadealvara.readOnly = 'readyonly';
