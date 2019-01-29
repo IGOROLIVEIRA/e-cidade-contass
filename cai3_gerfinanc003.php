@@ -1182,6 +1182,11 @@ if (isset($tipo_debito)) {
         $histparcela .= pg_result($result,$xy,1).", ";
         $parcelamento = pg_result($result,$xy,0);
       }
+
+      /**
+       * Histórico da origem do parcelamento
+       */
+      $histparcela .= getHistoricoOrigemParcelamento($numpre);
     }
 
   } else if ($k03_tipo==13 && $k00_tipoagrup<>2) {
@@ -1414,7 +1419,7 @@ if (isset($tipo_debito)) {
   }
 
   if ($lHistLimitado == true) {
-    $historico = substr($histparcela,0,210);
+    $historico = substr($histparcela,0,810);
   } else {
     $historico = $histparcela.$sHistoricoDesconto;
   }
@@ -2276,6 +2281,76 @@ function recibodesconto($numpre, $numpar, $tipo, $tipo_debito, $whereloteador, $
 
   return $desconto;
 
+}
+
+/**
+ * Busca o historico da origem de um parcelamento
+ * @param int $iNumpreParcelamento
+ * @return string $sHistorico
+ */
+function getHistoricoOrigemParcelamento($iNumpreParcelamento){
+
+  $sqlhist = "SELECT v01_coddiv,
+                     v01_numpre,
+                     v01_numpar,
+                     'a' AS db_parametro,
+                     v01_exerc,
+                     v03_descr,
+                     sum(v01_vlrhis) AS v01_vlrhis,
+                     sum(v01_valor) AS v01_valor
+              FROM
+                  (SELECT v01_coddiv,
+                          v01_numpre,
+                          v01_numpar,
+                          'a' AS db_parametro,
+                          v01_exerc,
+                          v03_descr,
+                          v01_vlrhis,
+                          v01_valor,
+                          rdtlanc
+                   FROM fc_origemparcelamento({$iNumpreParcelamento}) AS origemparcelamento
+                   INNER JOIN termo ON termo.v07_parcel = riparcel
+                   INNER JOIN termodiv ON termodiv.parcel = riparcel
+                   INNER JOIN divida ON divida.v01_coddiv = termodiv.coddiv
+                   AND v01_instit = ".db_getsession('DB_instit')."
+                   INNER JOIN proced ON proced.v03_codigo = divida.v01_proced
+                   UNION SELECT v01_coddiv,
+                                v01_numpre,
+                                v01_numpar,
+                                'a' AS db_parametro,
+                                v01_exerc,
+                                v03_descr,
+                                v01_vlrhis,
+                                v01_valor,
+                                rdtlanc
+                   FROM fc_origemparcelamento({$iNumpreParcelamento}) AS origemparcelamento
+                   INNER JOIN termo ON termo.v07_parcel = riparcel
+                   INNER JOIN termoini ON termoini.parcel = riparcel
+                   INNER JOIN inicialcert ON inicial = v51_inicial
+                   INNER JOIN certdiv ON v14_certid = v51_certidao
+                   INNER JOIN divida ON v01_coddiv = v14_coddiv
+                   AND v01_instit = ".db_getsession('DB_instit')."
+                   INNER JOIN proced ON proced.v03_codigo = divida.v01_proced) AS x
+              GROUP BY v01_coddiv,
+                       v01_numpre,
+                       v01_numpar,
+                       v01_exerc,
+                       v03_descr,
+                       rdtlanc
+              ORDER BY v01_coddiv,
+                       v01_numpre,
+                       v01_numpar,
+                       v01_exerc,
+                       v03_descr,
+                       rdtlanc";
+  $result = db_query($sqlhist);
+
+  $aResults = db_utils::getCollectionByRecord($result);
+  $sHistorico = "\n Referência: \n";
+  foreach($aResults as $obj){
+    $sHistorico .= "{$obj->v03_descr}/{$obj->v01_exerc}, ";
+  }
+  return $sHistorico;
 }
 
 ?>
