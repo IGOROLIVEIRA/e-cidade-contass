@@ -4,7 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
 
 /**
  * Sicom Acompanhamento Mensal
- * @author marcelo
+ * @author Mario Junior
  * @package Contabilidade
  */
 class GerarIDERP extends GerarAM
@@ -32,113 +32,59 @@ class GerarIDERP extends GerarAM
     $sSql3 = "select * from iderp202018 where si181_mes = " . $this->iMes . " and si181_instit = " . db_getsession("DB_instit");
     $rsiderp20 = db_query($sSql3);
 
-    if (pg_num_rows($rsiderp10) == 0 && pg_num_rows($rsiderp11) == 0 && pg_num_rows($rsiderp20) == 0 ) {
+    if (pg_num_rows($rsiderp10) == 0 && pg_num_rows($rsiderp11) == 0 && pg_num_rows($rsiderp20) == 0 || $this->iMes != 12 ) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
 
     } else {
-      /*
+
       for ($iCont = 0; $iCont < pg_num_rows($rsiderp10); $iCont++) {
 
-        $aconge10 = pg_fetch_array($rsconge10, $iCont);
+          $oiderp10 = pg_fetch_array($rsiderp10, $iCont);
 
-        $aCSVconge10['si182_tiporegistro']    = $this->padLeftZero($aconge10['si182_tiporegistro'], 2);
-        $aCSVconge10['si182_codconvenioconge']        = $this->padLeftZero($aconge10['si182_codconvenioconge'], 2);
-        $aCSVconge10['si182_codorgao']   = $this->padLeftZero($aconge10['si182_codorgao'], 2);
-        $aCSVconge10['si182_codunidadesub']     = $this->padLeftZero($aconge10['si182_codunidadesub'], 5);
-        $aCSVconge10['si182_nroconvenioconge'] = $aconge10['si182_nroconvenioconge'];
-        $aCSVconge10['si182_dscinstrumento'] = $aconge10['si182_dscinstrumento'];
-        $aCSVconge10['si182_dataassinaturaconge'] = $aconge10['si182_dataassinaturaconge'];
-        $aCSVconge10['si182_datapublicconge'] = $aconge10['si182_datapublicconge'];
-        $aCSVconge10['si182_nrocpfrespconge'] = $aconge10['si182_nrocpfrespconge'];
-        $aCSVconge10['si182_dsccargorespconge'] = $aconge10['si182_dsccargorespconge'];
-        $aCSVconge10['si182_objetoconvenioconge'] = $aconge10['si182_objetoconvenioconge'];
-        $aCSVconge10['si182_datainiciovigenciaconge'] = $aconge10['si182_datainiciovigenciaconge'];
-        $aCSVconge10['si182_datafinalvigenciaconge'] = $aconge10['si182_datafinalvigenciaconge'];
-        $aCSVconge10['si182_formarepasse'] = $aconge10['si182_formarepasse'];
-        $aCSVconge10['ai182_tipodocumentoincentivador'] = $aconge10['ai182_tipodocumentoincentivador'];
-        $aCSVconge10['si182_nrodocumentoincentivador'] = $aconge10['si182_nrodocumentoincentivador'];
-        $aCSVconge10['si182_quantparcelas'] = $aconge10['si182_quantparcelas'];
-        $aCSVconge10['si182_vltotalconvenioconge'] = $aconge10['si182_vltotalconvenioconge'];
-        $aCSVconge10['si182_vlcontrapartidaconge'] = $aconge10['si182_vlcontrapartidaconge'];
-        $aCSVconge10['si182_tipodocumentobeneficiario'] = $aconge10['si182_tipodocumentobeneficiario'];
-        $aCSVconge10['si182_nrodocumentobeneficiario'] = $aconge10['si182_nrodocumentobeneficiario'];
+          $aIDERP10['si179_tiporegistro'] = $this->padLeftZero($oiderp10['si179_tiporegistro'], 2);
+          $aIDERP10['si179_codreduzidoiderp'] = $oiderp10['si179_codreduzidoiderp'];
+          $aIDERP10['si179_codorgao'] = $this->padLeftZero($oiderp10['si179_codorgao'], 2);
+          $aIDERP10['si179_codunidadesub'] = $this->padLeftZero($oiderp10['si179_codunidadesub'], 5);
+          $aIDERP10['si179_nroempenho'] = $oiderp10['si179_nroempenho'];
+          $aIDERP10['si179_tiporestospagar'] = $oiderp10['si179_tiporestospagar'];
+          $aIDERP10['si179_disponibilidadecaixa'] = $oiderp10['si179_disponibilidadecaixa'];
+          $aIDERP10['si179_vlinscricao'] = $this->sicomNumberReal($oiderp10['si179_vlinscricao'], 2);
+          $this->sLinha = $aIDERP10;
+          $this->adicionaLinha();
 
 
-        $this->sLinha = $aCSVconge10;
+          for ($iCont2 = 0; $iCont2 < pg_num_rows($rsiderp11); $iCont2++) {
+
+              $oiderp11 = pg_fetch_array($rsiderp11, $iCont2);
+              if ($oiderp10['si179_sequencial'] == $oiderp11['si180_reg10']) {
+                  $aIDERP11['si180_tiporegistro'] = $this->padLeftZero($oiderp11['si180_tiporegistro'], 2);
+                  $aIDERP11['si180_codreduzidoiderp'] = $oiderp11['si180_codreduzidoiderp'];
+                  $aIDERP11['si180_codfontrecursos'] = $oiderp11['si180_codfontrecursos'];
+                  $aIDERP11['si180_vlinscricaofonte'] = $this->sicomNumberReal($oiderp11['si180_vlinscricaofonte'], 2);
+                  $this->sLinha = $aIDERP11;
+                  $this->adicionaLinha();
+              }
+          }
+      }
+      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsiderp20); $iCont3++) {
+
+        $oiderp20 = pg_fetch_array($rsiderp20, $iCont3);
+
+        $aIDERP20['si181_tiporegistro']             = $this->padLeftZero($oiderp20['si181_tiporegistro'], 2);
+        $aIDERP20['si181_codorgao']                 = $this->padLeftZero($oiderp20['si181_codorgao'],2);
+        $aIDERP20['si181_codfontrecursos']          = $oiderp20['si181_codfontrecursos'];
+        $aIDERP20['si181_vlcaixabruta']             = $this->sicomNumberReal($oiderp20['si181_vlcaixabruta'], 2);
+        $aIDERP20['si181_vlrspexerciciosanteriores']= $this->sicomNumberReal($oiderp20['si181_vlrspexerciciosanteriores'], 2);
+        $aIDERP20['si181_vlrestituiveisrecolher']   = $this->sicomNumberReal($oiderp20['si181_vlrestituiveisrecolher'], 2);
+        $aIDERP20['si181_vlrestituiveisativofinanceiro']= $this->sicomNumberReal($oiderp20['si181_vlrestituiveisativofinanceiro'], 2);
+        $aIDERP20['si181_vlsaldodispcaixa']             = $this->sicomNumberReal($oiderp20['si181_vlsaldodispcaixa'], 2);
+        $this->sLinha = $aIDERP20;
         $this->adicionaLinha();
 
       }
-
-      for ($iCont2 = 0; $iCont2 < pg_num_rows($rsconge20); $iCont2++) {
-
-        $aconge20 = pg_fetch_array($rsconge20, $iCont2);
-
-        $aCSVconge20['si17_tiporegistro']    = $this->padLeftZero($aconge20['si17_tiporegistro'], 2);
-        $aCSVconge20['si17_codorgao']        = $this->padLeftZero($aconge20['si17_codorgao'], 2);
-        $aCSVconge20['si17_cnpjcongecio']   = $this->padLeftZero($aconge20['si17_cnpjcongecio'], 14);
-        $aCSVconge20['si17_codfontrecursos'] = $this->padLeftZero($aconge20['si17_codfontrecursos'], 3);
-        $aCSVconge20['si17_vltransfrateio']  = $this->sicomNumberReal($aconge20['si17_vltransfrateio'], 2);
-        $aCSVconge20['si17_prestcontas']     = $aconge20['si17_prestcontas'];
-
-        $this->sLinha = $aCSVconge20;
-        $this->adicionaLinha();
-      }
-      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsconge30); $iCont3++) {
-
-        $aconge30 = pg_fetch_array($rsconge30, $iCont3);
-
-        $aCSVconge30['si18_tiporegistro']              = $this->padLeftZero($aconge30['si18_tiporegistro'], 2);
-        $aCSVconge30['si18_cnpjcongecio']             = $this->padLeftZero($aconge30['si18_cnpjcongecio'], 14);
-        $aCSVconge30['si18_mesreferencia']             = $this->padLeftZero($aconge30['si18_mes'], 2);
-        $aCSVconge30['si18_codfuncao']                 = $this->padLeftZero($aconge30['si18_codfuncao'], 2);
-        $aCSVconge30['si18_codsubfuncao']              = $this->padLeftZero($aconge30['si18_codsubfuncao'], 3);
-        $aCSVconge30['si18_naturezadespesa']           = $this->padLeftZero($aconge30['si18_naturezadespesa'], 6);
-        $aCSVconge30['si18_subelemento']               = $this->padLeftZero($aconge30['si18_subelemento'], 2);
-        $aCSVconge30['si18_codfontrecursos']           = $this->padLeftZero($aconge30['si18_codfontrecursos'], 3);
-        $aCSVconge30['si18_vlempenhadofonte']          = $this->sicomNumberReal($aconge30['si18_vlempenhadofonte'], 2);
-        $aCSVconge30['si18_vlanulacaoempenhofonte']    = $this->sicomNumberReal($aconge30['si18_vlanulacaoempenhofonte'], 2);
-        $aCSVconge30['si18_vlliquidadofonte']          = $this->sicomNumberReal($aconge30['si18_vlliquidadofonte'], 2);
-        $aCSVconge30['si18_vlanulacaoliquidacaofonte'] = $this->sicomNumberReal($aconge30['si18_vlanulacaoliquidacaofonte'], 2);
-        $aCSVconge30['si18_vlpagofonte']               = $this->sicomNumberReal($aconge30['si18_vlpagofonte'], 2);
-        $aCSVconge30['si18_vlanulacaopagamentofonte']  = $this->sicomNumberReal($aconge30['si18_vlanulacaopagamentofonte'], 2);
-
-        $this->sLinha = $aCSVconge30;
-        $this->adicionaLinha();
-
-      }
-
-      for ($iCont4 = 0; $iCont4 < pg_num_rows($rsconge40); $iCont4++) {
-
-        $aconge40 = pg_fetch_array($rsconge40, $iCont4);
-
-        $aCSVconge40['si19_tiporegistro']    = $this->padLeftZero($aconge40['si19_tiporegistro'], 2);
-        $aCSVconge40['si19_cnpjcongecio']   = $this->padLeftZero($aconge40['si19_cnpjcongecio'], 14);
-        $aCSVconge40['si19_codfontrecursos'] = $this->padLeftZero($aconge40['si19_codfontrecursos'], 3);
-        $aCSVconge40['si19_vldispcaixa']     = $this->sicomNumberReal($aconge40['si19_vldispcaixa'], 2);
-
-        $this->sLinha = $aCSVconge40;
-        $this->adicionaLinha();
-
-      }
-
-
-      for ($iCont5 = 0; $iCont5 < pg_num_rows($rsconge50); $iCont5++) {
-
-        $aconge50 = pg_fetch_array($rsconge50, $iCont5);
-
-        $aCSVconge50['si20_tiporegistro']      = $this->padLeftZero($aconge50['si20_tiporegistro'], 2);
-        $aCSVconge50['si20_codorgao']          = $this->padLeftZero($aconge50['si20_codorgao'], 2);
-        $aCSVconge50['si20_cnpjcongecio']     = $this->padLeftZero($aconge50['si20_cnpjcongecio'], 14);
-        $aCSVconge50['si20_tipoencerramento']  = $this->padLeftZero($aconge50['si20_tipoencerramento'], 1);
-        $aCSVconge50['si20_dtencerramento']    = $this->sicomDate($aconge50['si20_dtencerramento']);
-
-        $this->sLinha = $aCSVconge50;
-        $this->adicionaLinha();
-
-      }*/
 
     }
 
