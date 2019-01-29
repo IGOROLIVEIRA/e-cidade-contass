@@ -21,16 +21,16 @@ class cl_balancete132019
   var $si180_sequencial = 0;
   var $si180_tiporegistro = 0;
   var $si180_contacontabil = 0;
-  var $si180_codfundo = 0;
+  var $si180_codfundo = null;
   var $si180_codprograma = null;
   var $si180_idacao = null;
   var $si180_idsubacao = null;
-  var $si180_saldoIniciaipa = 0;
-  var $si180_naturezasaldoIniciaipa = null;
+  var $si180_saldoinicialpa = 0;
+  var $si180_naturezasaldoinicialpa = null;
   var $si180_totaldebitospa = 0;
   var $si180_totalcreditospa = 0;
-  var $si180_saldofinaipa = 0;
-  var $si180_naturezasaldofinaipa = null;
+  var $si180_saldofinalpa = 0;
+  var $si180_naturezasaldofinalpa = null;
   var $si180_mes = 0;
   var $si180_instit = 0;
   var $si180_reg10;
@@ -39,16 +39,16 @@ class cl_balancete132019
                  si180_sequencial = int8 = si180_sequencial 
                  si180_tiporegistro = int8 = si180_tiporegistro 
                  si180_contacontabil = int8 = si180_contacontabil 
-                 si180_codfundo = int8 = si180_codfundo 
+                 si180_codfundo = varchar(8) = si180_codfundo 
                  si180_codprograma = varchar(4) = si180_codprograma 
-                 si180_idacao = text = si180_idacao 
+                 si180_idacao = varchar(4) = si180_idacao 
                  si180_idsubacao = varchar(4) = si180_idsubacao 
-                 si180_saldoIniciaipa = float8 = si180_saldoIniciaipa 
-                 si180_naturezasaldoIniciaipa = varchar(1) = si180_naturezasaldoIniciaipa 
+                 si180_saldoinicialpa = float8 = si180_saldoinicialpa 
+                 si180_naturezasaldoinicialpa = varchar(1) = si180_naturezasaldoinicialpa 
                  si180_totaldebitospa = float8 = si180_totaldebitospa 
                  si180_totalcreditospa = float8 = si180_totalcreditospa 
-                 si180_saldofinaipa = float8 = si180_saldofinaipa 
-                 si180_naturezasaldofinaipa = varchar(1) = si180_naturezasaldofinaipa 
+                 si180_saldofinalpa = float8 = si180_saldofinalpa 
+                 si180_naturezasaldofinalpa = varchar(1) = si180_naturezasaldofinalpa 
                  si180_mes = int8 = si180_mes 
                  si180_instit = int8 = si180_instit 
                  ";
@@ -83,12 +83,12 @@ class cl_balancete132019
       $this->si180_codprograma = ($this->si180_codprograma == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_codprograma"] : $this->si180_codprograma);
       $this->si180_idacao = ($this->si180_idacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_idacao"] : $this->si180_idacao);
       $this->si180_idsubacao = ($this->si180_idsubacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_idsubacao"] : $this->si180_idsubacao);
-      $this->si180_saldoIniciaipa = ($this->si180_saldoIniciaipa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_saldoIniciaipa"] : $this->si180_saldoIniciaipa);
-      $this->si180_naturezasaldoIniciaipa = ($this->si180_naturezasaldoIniciaipa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoIniciaipa"] : $this->si180_naturezasaldoIniciaipa);
+      $this->si180_saldoinicialpa = ($this->si180_saldoinicialpa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_saldoinicialpa"] : $this->si180_saldoinicialpa);
+      $this->si180_naturezasaldoinicialpa = ($this->si180_naturezasaldoinicialpa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoinicialpa"] : $this->si180_naturezasaldoinicialpa);
       $this->si180_totaldebitospa = ($this->si180_totaldebitospa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_totaldebitospa"] : $this->si180_totaldebitospa);
       $this->si180_totalcreditospa = ($this->si180_totalcreditospa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_totalcreditospa"] : $this->si180_totalcreditospa);
-      $this->si180_saldofinaipa = ($this->si180_saldofinaipa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_saldofinaipa"] : $this->si180_saldofinaipa);
-      $this->si180_naturezasaldofinaipa = ($this->si180_naturezasaldofinaipa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinaipa"] : $this->si180_naturezasaldofinaipa);
+      $this->si180_saldofinalpa = ($this->si180_saldofinalpa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_saldofinalpa"] : $this->si180_saldofinalpa);
+      $this->si180_naturezasaldofinalpa = ($this->si180_naturezasaldofinalpa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinalpa"] : $this->si180_naturezasaldofinalpa);
       $this->si180_mes = ($this->si180_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mes"] : $this->si180_mes);
       $this->si180_instit = ($this->si180_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_instit"] : $this->si180_instit);
     } else {
@@ -140,9 +140,9 @@ class cl_balancete132019
       
       return false;
     }
-    if ($this->si180_saldoIniciaipa == null) {
-      $this->erro_sql = " Campo si180_saldoIniciaipa não informado.";
-      $this->erro_campo = "si180_saldoIniciaipa";
+    if ($this->si180_saldoinicialpa == null) {
+      $this->erro_sql = " Campo si180_saldoinicialpa não informado.";
+      $this->erro_campo = "si180_saldoinicialpa";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -150,9 +150,9 @@ class cl_balancete132019
       
       return false;
     }
-    if ($this->si180_naturezasaldoIniciaipa == null) {
-      $this->erro_sql = " Campo si180_naturezasaldoIniciaipa não informado.";
-      $this->erro_campo = "si180_naturezasaldoIniciaipa";
+    if ($this->si180_naturezasaldoinicialpa == null) {
+      $this->erro_sql = " Campo si180_naturezasaldoinicialpa não informado.";
+      $this->erro_campo = "si180_naturezasaldoinicialpa";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -180,9 +180,9 @@ class cl_balancete132019
       
       return false;
     }
-    if ($this->si180_saldofinaipa == null) {
-      $this->erro_sql = " Campo si180_saldofinaipa não informado.";
-      $this->erro_campo = "si180_saldofinaipa";
+    if ($this->si180_saldofinalpa == null) {
+      $this->erro_sql = " Campo si180_saldofinalpa não informado.";
+      $this->erro_campo = "si180_saldofinalpa";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -190,9 +190,9 @@ class cl_balancete132019
       
       return false;
     }
-    if ($this->si180_naturezasaldofinaipa == null) {
-      $this->erro_sql = " Campo si180_naturezasaldofinaipa não informado.";
-      $this->erro_campo = "si180_naturezasaldofinaipa";
+    if ($this->si180_naturezasaldofinalpa == null) {
+      $this->erro_sql = " Campo si180_naturezasaldofinalpa não informado.";
+      $this->erro_campo = "si180_naturezasaldofinalpa";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -270,12 +270,12 @@ class cl_balancete132019
                                       ,si180_codprograma 
                                       ,si180_idacao 
                                       ,si180_idsubacao 
-                                      ,si180_saldoIniciaipa 
-                                      ,si180_naturezasaldoIniciaipa 
+                                      ,si180_saldoinicialpa 
+                                      ,si180_naturezasaldoinicialpa 
                                       ,si180_totaldebitospa 
                                       ,si180_totalcreditospa 
-                                      ,si180_saldofinaipa 
-                                      ,si180_naturezasaldofinaipa 
+                                      ,si180_saldofinalpa 
+                                      ,si180_naturezasaldofinalpa 
                                       ,si180_mes 
                                       ,si180_instit
                                       ,si180_reg10
@@ -288,12 +288,12 @@ class cl_balancete132019
                                ,'$this->si180_codprograma' 
                                ,'$this->si180_idacao' 
                                ,'$this->si180_idsubacao' 
-                               ,$this->si180_saldoIniciaipa 
-                               ,'$this->si180_naturezasaldoIniciaipa' 
+                               ,$this->si180_saldoinicialpa 
+                               ,'$this->si180_naturezasaldoinicialpa' 
                                ,$this->si180_totaldebitospa 
                                ,$this->si180_totalcreditospa 
-                               ,$this->si180_saldofinaipa 
-                               ,'$this->si180_naturezasaldofinaipa' 
+                               ,$this->si180_saldofinalpa 
+                               ,'$this->si180_naturezasaldofinalpa' 
                                ,$this->si180_mes 
                                ,$this->si180_instit
                                ,$this->si180_reg10
@@ -340,12 +340,12 @@ class cl_balancete132019
         $resac = db_query("insert into db_acount values($acount,1010195,2011749,'','".AddSlashes(pg_result($resaco,0,'si180_codprograma'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011750,'','".AddSlashes(pg_result($resaco,0,'si180_idacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011751,'','".AddSlashes(pg_result($resaco,0,'si180_idsubacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010195,2011752,'','".AddSlashes(pg_result($resaco,0,'si180_saldoIniciaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010195,2011753,'','".AddSlashes(pg_result($resaco,0,'si180_naturezasaldoIniciaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010195,2011752,'','".AddSlashes(pg_result($resaco,0,'si180_saldoinicialpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010195,2011753,'','".AddSlashes(pg_result($resaco,0,'si180_naturezasaldoinicialpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011754,'','".AddSlashes(pg_result($resaco,0,'si180_totaldebitospa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011755,'','".AddSlashes(pg_result($resaco,0,'si180_totalcreditospa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010195,2011756,'','".AddSlashes(pg_result($resaco,0,'si180_saldofinaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010195,2011757,'','".AddSlashes(pg_result($resaco,0,'si180_naturezasaldofinaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010195,2011756,'','".AddSlashes(pg_result($resaco,0,'si180_saldofinalpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010195,2011757,'','".AddSlashes(pg_result($resaco,0,'si180_naturezasaldofinalpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011758,'','".AddSlashes(pg_result($resaco,0,'si180_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010195,2011759,'','".AddSlashes(pg_result($resaco,0,'si180_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
       }
@@ -448,12 +448,12 @@ class cl_balancete132019
       $sql .= $virgula . " si180_idsubacao = '$this->si180_idsubacao' ";
       $virgula = ",";
     }
-    if (trim($this->si180_saldoIniciaipa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_saldoIniciaipa"])) {
-      $sql .= $virgula . " si180_saldoIniciaipa = $this->si180_saldoIniciaipa ";
+    if (trim($this->si180_saldoinicialpa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_saldoinicialpa"])) {
+      $sql .= $virgula . " si180_saldoinicialpa = $this->si180_saldoinicialpa ";
       $virgula = ",";
-      if (trim($this->si180_saldoIniciaipa) == null) {
-        $this->erro_sql = " Campo si180_saldoIniciaipa não informado.";
-        $this->erro_campo = "si180_saldoIniciaipa";
+      if (trim($this->si180_saldoinicialpa) == null) {
+        $this->erro_sql = " Campo si180_saldoinicialpa não informado.";
+        $this->erro_campo = "si180_saldoinicialpa";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -462,12 +462,12 @@ class cl_balancete132019
         return false;
       }
     }
-    if (trim($this->si180_naturezasaldoIniciaipa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoIniciaipa"])) {
-      $sql .= $virgula . " si180_naturezasaldoIniciaipa = '$this->si180_naturezasaldoIniciaipa' ";
+    if (trim($this->si180_naturezasaldoinicialpa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoinicialpa"])) {
+      $sql .= $virgula . " si180_naturezasaldoinicialpa = '$this->si180_naturezasaldoinicialpa' ";
       $virgula = ",";
-      if (trim($this->si180_naturezasaldoIniciaipa) == null) {
-        $this->erro_sql = " Campo si180_naturezasaldoIniciaipa não informado.";
-        $this->erro_campo = "si180_naturezasaldoIniciaipa";
+      if (trim($this->si180_naturezasaldoinicialpa) == null) {
+        $this->erro_sql = " Campo si180_naturezasaldoinicialpa não informado.";
+        $this->erro_campo = "si180_naturezasaldoinicialpa";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -504,12 +504,12 @@ class cl_balancete132019
         return false;
       }
     }
-    if (trim($this->si180_saldofinaipa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_saldofinaipa"])) {
-      $sql .= $virgula . " si180_saldofinaipa = $this->si180_saldofinaipa ";
+    if (trim($this->si180_saldofinalpa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_saldofinalpa"])) {
+      $sql .= $virgula . " si180_saldofinalpa = $this->si180_saldofinalpa ";
       $virgula = ",";
-      if (trim($this->si180_saldofinaipa) == null) {
-        $this->erro_sql = " Campo si180_saldofinaipa não informado.";
-        $this->erro_campo = "si180_saldofinaipa";
+      if (trim($this->si180_saldofinalpa) == null) {
+        $this->erro_sql = " Campo si180_saldofinalpa não informado.";
+        $this->erro_campo = "si180_saldofinalpa";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -518,12 +518,12 @@ class cl_balancete132019
         return false;
       }
     }
-    if (trim($this->si180_naturezasaldofinaipa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinaipa"])) {
-      $sql .= $virgula . " si180_naturezasaldofinaipa = '$this->si180_naturezasaldofinaipa' ";
+    if (trim($this->si180_naturezasaldofinalpa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinalpa"])) {
+      $sql .= $virgula . " si180_naturezasaldofinalpa = '$this->si180_naturezasaldofinalpa' ";
       $virgula = ",";
-      if (trim($this->si180_naturezasaldofinaipa) == null) {
-        $this->erro_sql = " Campo si180_naturezasaldofinaipa não informado.";
-        $this->erro_campo = "si180_naturezasaldofinaipa";
+      if (trim($this->si180_naturezasaldofinalpa) == null) {
+        $this->erro_sql = " Campo si180_naturezasaldofinalpa não informado.";
+        $this->erro_campo = "si180_naturezasaldofinalpa";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -588,18 +588,18 @@ class cl_balancete132019
             $resac = db_query("insert into db_acount values($acount,1010195,2011750,'".AddSlashes(pg_result($resaco,$conresaco,'si180_idacao'))."','$this->si180_idacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si180_idsubacao"]) || $this->si180_idsubacao != "")
             $resac = db_query("insert into db_acount values($acount,1010195,2011751,'".AddSlashes(pg_result($resaco,$conresaco,'si180_idsubacao'))."','$this->si180_idsubacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_saldoIniciaipa"]) || $this->si180_saldoIniciaipa != "")
-            $resac = db_query("insert into db_acount values($acount,1010195,2011752,'".AddSlashes(pg_result($resaco,$conresaco,'si180_saldoIniciaipa'))."','$this->si180_saldoIniciaipa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoIniciaipa"]) || $this->si180_naturezasaldoIniciaipa != "")
-            $resac = db_query("insert into db_acount values($acount,1010195,2011753,'".AddSlashes(pg_result($resaco,$conresaco,'si180_naturezasaldoIniciaipa'))."','$this->si180_naturezasaldoIniciaipa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_saldoinicialpa"]) || $this->si180_saldoinicialpa != "")
+            $resac = db_query("insert into db_acount values($acount,1010195,2011752,'".AddSlashes(pg_result($resaco,$conresaco,'si180_saldoinicialpa'))."','$this->si180_saldoinicialpa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldoinicialpa"]) || $this->si180_naturezasaldoinicialpa != "")
+            $resac = db_query("insert into db_acount values($acount,1010195,2011753,'".AddSlashes(pg_result($resaco,$conresaco,'si180_naturezasaldoinicialpa'))."','$this->si180_naturezasaldoinicialpa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si180_totaldebitospa"]) || $this->si180_totaldebitospa != "")
             $resac = db_query("insert into db_acount values($acount,1010195,2011754,'".AddSlashes(pg_result($resaco,$conresaco,'si180_totaldebitospa'))."','$this->si180_totaldebitospa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si180_totalcreditospa"]) || $this->si180_totalcreditospa != "")
             $resac = db_query("insert into db_acount values($acount,1010195,2011755,'".AddSlashes(pg_result($resaco,$conresaco,'si180_totalcreditospa'))."','$this->si180_totalcreditospa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_saldofinaipa"]) || $this->si180_saldofinaipa != "")
-            $resac = db_query("insert into db_acount values($acount,1010195,2011756,'".AddSlashes(pg_result($resaco,$conresaco,'si180_saldofinaipa'))."','$this->si180_saldofinaipa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinaipa"]) || $this->si180_naturezasaldofinaipa != "")
-            $resac = db_query("insert into db_acount values($acount,1010195,2011757,'".AddSlashes(pg_result($resaco,$conresaco,'si180_naturezasaldofinaipa'))."','$this->si180_naturezasaldofinaipa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_saldofinalpa"]) || $this->si180_saldofinalpa != "")
+            $resac = db_query("insert into db_acount values($acount,1010195,2011756,'".AddSlashes(pg_result($resaco,$conresaco,'si180_saldofinalpa'))."','$this->si180_saldofinalpa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si180_naturezasaldofinalpa"]) || $this->si180_naturezasaldofinalpa != "")
+            $resac = db_query("insert into db_acount values($acount,1010195,2011757,'".AddSlashes(pg_result($resaco,$conresaco,'si180_naturezasaldofinalpa'))."','$this->si180_naturezasaldofinalpa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si180_mes"]) || $this->si180_mes != "")
             $resac = db_query("insert into db_acount values($acount,1010195,2011758,'".AddSlashes(pg_result($resaco,$conresaco,'si180_mes'))."','$this->si180_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si180_instit"]) || $this->si180_instit != "")
@@ -671,12 +671,12 @@ class cl_balancete132019
           $resac  = db_query("insert into db_acount values($acount,1010195,2011749,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_codprograma'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011750,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_idacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011751,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_idsubacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010195,2011752,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_saldoIniciaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010195,2011753,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_naturezasaldoIniciaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010195,2011752,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_saldoinicialpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010195,2011753,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_naturezasaldoinicialpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011754,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_totaldebitospa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011755,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_totalcreditospa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010195,2011756,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_saldofinaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010195,2011757,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_naturezasaldofinaipa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010195,2011756,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_saldofinalpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010195,2011757,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_naturezasaldofinalpa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011758,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010195,2011759,'','".AddSlashes(pg_result($resaco,$iresaco,'si180_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
         }

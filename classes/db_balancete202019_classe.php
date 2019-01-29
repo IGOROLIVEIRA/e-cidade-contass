@@ -20,7 +20,7 @@ class cl_balancete202019
   var $si187_sequencial = 0;
   var $si187_tiporegistro = 0;
   var $si187_contacontabil = 0;
-  var $si187_codfundo = 0;
+  var $si187_codfundo = null;
   var $si187_cnpjconsorcio = 0;
   var $si187_tiporecurso = 0;
   var $si187_codfuncao = null;
@@ -42,7 +42,7 @@ class cl_balancete202019
                  si187_sequencial = int8 = si187_sequencial 
                  si187_tiporegistro = int8 = si187_tiporegistro 
                  si187_contacontabil = int8 = si187_contacontabil 
-                 si187_codfundo = int8 = si187_codfundo 
+                 si187_codfundo = varchar(8) = si187_codfundo 
                  si187_cnpjconsorcio = int8 = si187_cnpjconsorcio 
                  si187_tiporecurso = int4 = si187_tiporecurso 
                  si187_codfuncao = varchar(2) = si187_codfuncao 

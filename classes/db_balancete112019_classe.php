@@ -20,7 +20,7 @@ class cl_balancete112019
   var $si178_sequencial = 0;
   var $si178_tiporegistro = 0;
   var $si178_contacontaabil = 0;
-  var $si178_codfundo = 0;
+  var $si178_codfundo = null;
   var $si178_codorgao = null;
   var $si178_codunidadesub = null;
   var $si178_codfuncao = null;
@@ -45,7 +45,7 @@ class cl_balancete112019
                  si178_sequencial = int8 = si178_sequencial 
                  si178_tiporegistro = int8 = si178_tiporegistro 
                  si178_contacontaabil = int8 = si178_contacontaabil 
-                 si178_codfundo = int8 = si178_codfundo 
+                 si178_codfundo = varchar(8) = si178_codfundo 
                  si178_codorgao = varchar(2) = si178_codorgao 
                  si178_codunidadesub = varchar(8) = si178_codunidadesub 
                  si178_codfuncao = varchar(2) = si178_codfuncao 

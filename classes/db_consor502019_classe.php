@@ -18,9 +18,9 @@ class cl_consor502019
   var $pagina_retorno = null;
   // cria variaveis do arquivo
   var $si20_sequencial = 0;
+  var $si20_tiporegistro = 0;
   var $si20_codorgao = 0;
   var $si20_cnpjconsorcio = 0;
-  var $si20_tiporegistro = 0;
   var $si20_tipoencerramento = 0;
   var $si20_dtencerramento = null;
   var $si20_mes = 0;
@@ -61,9 +61,9 @@ class cl_consor502019
   {
     if ($exclusao == false) {
       $this->si20_sequencial = ($this->si20_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_sequencial"] : $this->si20_sequencial);
-      $this->si20_codorgao = ($this->si20_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_codorgao"] : $this->si20_codorgao);
-      $this->si20_cnpjconsorcio = ($this->si20_cnpjconsorcio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_cnpjconsorcio"] : $this->si20_cnpjconsorcio);
-      $this->si20_tiporegistro = ($this->si20_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_tiporegistro"] : $this->si20_tiporegistro);
+	  $this->si20_tiporegistro = ($this->si20_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_tiporegistro"] : $this->si20_tiporegistro);
+	  $this->si20_codorgao = ($this->si20_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_codorgao"] : $this->si20_codorgao);
+	  $this->si20_cnpjconsorcio = ($this->si20_cnpjconsorcio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_cnpjconsorcio"] : $this->si20_cnpjconsorcio);
       $this->si20_tipoencerramento = ($this->si20_tipoencerramento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_tipoencerramento"] : $this->si20_tipoencerramento);
       $this->si20_dtencerramento = ($this->si20_dtencerramento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento"] : $this->si20_dtencerramento);
       $this->si20_mes = ($this->si20_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si20_mes"] : $this->si20_mes);

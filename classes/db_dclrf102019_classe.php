@@ -3,40 +3,41 @@
 //CLASSE DA ENTIDADE dclrf102019
 class cl_dclrf102019 {
    // cria variaveis de erro
-   var $rotulo     = null;
-   var $query_sql  = null;
-   var $numrows    = 0;
-   var $erro_status= null;
-   var $erro_sql   = null;
-   var $erro_banco = null;
-   var $erro_msg   = null;
-   var $erro_campo = null;
-   var $pagina_retorno = null;
+	var $rotulo     = null;
+	var $query_sql  = null;
+	var $numrows    = 0;
+	var $erro_status= null;
+	var $erro_sql   = null;
+	var $erro_banco = null;
+	var $erro_msg   = null;
+	var $erro_campo = null;
+	var $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $si190_sequencial = 0;
-   var $si190_codorgao = null;
-   var $si190_passivosreconhecidos = 0;
-   var $si190_vlsaldoatualconcgarantiainterna = 0;
-   var $si190_vlsaldoatualconcgarantia = 0;
-   var $si190_vlsaldoatualcontragarantiainterna = 0;
-   var $si190_vlsaldoatualcontragarantiaexterna = 0;
-   var $si190_medidascorretivas = null;
-   var $si190_recalieninvpermanente = 0;
-   var $si190_vldotatualizadaincentcontrib = 0;
-   var $si190_vlempenhadoicentcontrib = 0;
-   var $si190_vldotatualizadaincentinstfinanc = 0;
-   var $si190_vlempenhadoincentinstfinanc = 0;
-   var $si190_vlliqincentcontrib = 0;
-   var $si190_vlliqincentinstfinanc = 0;
-   var $si190_vlirpnpincentcontrib = 0;
-   var $si190_vlirpnpincentinstfinanc = 0;
-   var $si190_vlrecursosnaoaplicados = 0;
-   var $si190_vlapropiacaodepositosjudiciais = 0;
-   var $si190_vloutrosajustes = 0;
-   var $si190_metarrecada = 0;
-   var $si190_dscmedidasadotadas = null;
-   var $si190_tiporegistro = 0;
-   var $si190_mes = 0;
+ 	var $si190_sequencial = 0;
+	var $si190_tiporegistro = 0;
+	var $si190_codorgao = null;
+	var $si190_passivosreconhecidos = 0;
+	var $si190_vlsaldoatualconcgarantiainterna = 0;
+	var $si190_vlsaldoatualconcgarantia = 0;
+	var $si190_vlsaldoatualcontragarantiainterna = 0;
+	var $si190_vlsaldoatualcontragarantiaexterna = 0;
+	var $si190_medidascorretivas = null;
+	var $si190_recalieninvpermanente = 0;
+	var $si190_vldotatualizadaincentcontrib = 0;
+	var $si190_vlempenhadoicentcontrib = 0;
+	var $si190_vldotatualizadaincentinstfinanc = 0;
+	var $si190_vlempenhadoincentinstfinanc = 0;
+	var $si190_vlliqincentcontrib = 0;
+	var $si190_vlliqincentinstfinanc = 0;
+	var $si190_vlirpnpincentcontrib = 0;
+	var $si190_vlirpnpincentinstfinanc = 0;
+	var $si190_vlrecursosnaoaplicados = 0;
+	var $si190_vlapropiacaodepositosjudiciais = 0;
+	var $si190_vloutrosajustes = 0;
+	var $si190_metarrecada = 0;
+	var $si190_dscmedidasadotadas = null;
+	var $si190_mes = 0;
+	var $si190_instit = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si190_sequencial = int4 = Sequencial DCLRF
@@ -63,6 +64,7 @@ class cl_dclrf102019 {
                  si190_dscmedidasadotadas = text = Medidas adotadas e a adotar
                  si190_tiporegistro = int4 = Tipo registro
                  si190_mes = int2 = Mes de Referencia
+                 si190_instit = int8 = Instituição
                  ";
    //funcao construtor da classe
    function cl_dclrf102019() {
@@ -106,6 +108,7 @@ class cl_dclrf102019 {
        $this->si190_dscmedidasadotadas = ($this->si190_dscmedidasadotadas == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_dscmedidasadotadas"]:$this->si190_dscmedidasadotadas);
        $this->si190_tiporegistro = ($this->si190_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_tiporegistro"]:$this->si190_tiporegistro);
        $this->si190_mes = ($this->si190_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_mes"]:$this->si190_mes);
+	   $this->si190_instit = ($this->si190_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si190_instit"]:$this->si190_instit);
      }else{
      }
    }
@@ -304,6 +307,15 @@ class cl_dclrf102019 {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si190_mes == null ){
+       $this->erro_sql = " Campo Instituição nao Informado.";
+       $this->erro_campo = "si190_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($si190_sequencial == "" || $si190_sequencial == null ){
        $result = @pg_query("select nextval('dclrf102019_si190_sequencial_seq')");
        if($result==false){
@@ -353,6 +365,7 @@ class cl_dclrf102019 {
                                       ,si190_dscmedidasadotadas
                                       ,si190_tiporegistro
                                       ,si190_mes
+                                      ,si190_instit
                        )
                 values (
                                 $this->si190_sequencial
@@ -379,6 +392,7 @@ class cl_dclrf102019 {
                                ,'$this->si190_dscmedidasadotadas'
                                ,$this->si190_tiporegistro
                                ,$this->si190_mes
+                               ,$this->si190_instit
                       )");
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -724,6 +738,22 @@ class cl_dclrf102019 {
        if(trim($this->si190_mes) == null ){
          $this->erro_sql = " Campo Mes de Referencia nao Informado.";
          $this->erro_campo = "si190_mes";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si190_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si190_instit"])){
+        if(trim($this->si190_instit)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si190_instit"])){
+           $this->si190_instit = "0" ;
+        }
+       $sql  .= $virgula." si190_instit = $this->si190_instit ";
+       $virgula = ",";
+       if(trim($this->si190_instit) == null ){
+         $this->erro_sql = " Campo Mes de Referencia nao Informado.";
+         $this->erro_campo = "si190_instit";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

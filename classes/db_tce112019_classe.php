@@ -18,6 +18,11 @@ class cl_tce112019 {
   // cria variaveis do arquivo
   public $si188_sequencial = 0;
   public $si188_tiporegistro = 0;
+  public $si188_numprocessotce = null;
+  public $si188_datainstauracaotce_dia = null;
+  public $si188_datainstauracaotce_mes = null;
+  public $si188_datainstauracaotce_ano = null;
+  public $si188_datainstauracaotce = null;
   public $si188_tipodocumentorespdano = 0;
   public $si188_nrodocumentorespdano = null;
   public $si188_reg10 = 0;
@@ -27,6 +32,8 @@ class cl_tce112019 {
   public $campos = "
                  si188_sequencial = int8 = Sequencial
                  si188_tiporegistro = int8 = Tipo do Registro
+                 si188_numprocessotce = varchar(12) = Número do processo
+                 si188_datainstauracaotce = date = Data da instauração
                  si188_tipodocumentorespdano = int8 = Tipo do documento do responsável
                  si188_nrodocumentorespdano = varchar(14) = Número do  documento do responsável
                  si188_reg10 = int8 = Registro 10
@@ -57,6 +64,17 @@ class cl_tce112019 {
        $this->si188_sequencial = ($this->si188_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_sequencial"]:$this->si188_sequencial);
        $this->si188_tiporegistro = ($this->si188_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_tiporegistro"]:$this->si188_tiporegistro);
        $this->si188_tipodocumentorespdano = ($this->si188_tipodocumentorespdano == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_tipodocumentorespdano"]:$this->si188_tipodocumentorespdano);
+       $this->si188_numprocessotce = ($this->si188_numprocessotce == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_numprocessotce"]:$this->si188_numprocessotce);
+
+       if ($this->si188_datainstauracaotce == "") {
+         $this->si188_datainstauracaotce_dia = ($this->si188_datainstauracaotce_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_datainstauracaotce_dia"]:$this->si188_datainstauracaotce_dia);
+         $this->si188_datainstauracaotce_mes = ($this->si188_datainstauracaotce_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_datainstauracaotce_mes"]:$this->si188_datainstauracaotce_mes);
+         $this->si188_datainstauracaotce_ano = ($this->si188_datainstauracaotce_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_datainstauracaotce_ano"]:$this->si188_datainstauracaotce_ano);
+         if ($this->si188_datainstauracaotce_dia != "") {
+            $this->si188_datainstauracaotce = $this->si188_datainstauracaotce_ano."-".$this->si188_datainstauracaotce_mes."-".$this->si187_dataassinaturaconvoriginalconge_dia;
+         }
+       }
+
        $this->si188_nrodocumentorespdano = ($this->si188_nrodocumentorespdano == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_nrodocumentorespdano"]:$this->si188_nrodocumentorespdano);
        $this->si188_reg10 = ($this->si188_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_reg10"]:$this->si188_reg10);
        $this->si188_mes = ($this->si188_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si188_mes"]:$this->si188_mes);
@@ -135,6 +153,8 @@ class cl_tce112019 {
      $sql = "insert into tce112019(
                                        si188_sequencial
                                       ,si188_tiporegistro
+                                      ,si188_numprocessotce
+                                      ,si188_datainstauracaotce
                                       ,si188_tipodocumentorespdano
                                       ,si188_nrodocumentorespdano
                                       ,si188_reg10
@@ -144,6 +164,8 @@ class cl_tce112019 {
                 values (
                                 $this->si188_sequencial
                                ,$this->si188_tiporegistro
+                               ,'$this->si188_numprocessotce'
+                               ,".($this->si188_datainstauracaotce == "null" || $this->si188_datainstauracaotce == ""?"null":"'".$this->si188_datainstauracaotce."'")."
                                ,$this->si188_tipodocumentorespdano
                                ,'$this->si188_nrodocumentorespdano'
                                ,$this->si188_reg10

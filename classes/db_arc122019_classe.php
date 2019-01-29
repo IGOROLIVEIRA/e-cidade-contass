@@ -21,6 +21,13 @@ class cl_arc122019
   var $si30_tiporegistro = 0;
   var $si30_codcorrecao = 0;
   var $si30_codfonteacrescida = 0;
+  var $si30_tipodocumento = 0;
+  var $si30_nrodocumento = "";
+  var $si30_nroconvenio = "";
+  var $si30_dataassinatura_dia = null;
+  var $si30_dataassinatura_mes = null;
+  var $si30_dataassinatura_ano = null;
+  var $si30_dataassinatura = null;
   var $si30_vlacrescidofonte = 0;
   var $si30_reg10 = 0;
   var $si30_mes = 0;
@@ -30,7 +37,11 @@ class cl_arc122019
                  si30_sequencial = int8 = sequencial 
                  si30_tiporegistro = int8 = Tipo do  registro 
                  si30_codcorrecao = int8 = Código que  identifica 
-                 si30_codfonteacrescida = int8 = Código da fonte 
+                 si30_codfonteacrescida = int8 = Código da fonte
+                 si30_tipodocumento = int8 = Tipo do documento
+                 si30_nrodocumento = varchar(14) = Numero do documento
+                 si30_nroconvenio = varchar(30) = Número do convênio
+                 si30_dataassinatura = date = Data da assinatura do convenio 
                  si30_vlacrescidofonte = float8 = Valor acrescido 
                  si30_reg10 = int8 = reg10 
                  si30_mes = int8 = Mês 
@@ -64,6 +75,19 @@ class cl_arc122019
       $this->si30_tiporegistro = ($this->si30_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_tiporegistro"] : $this->si30_tiporegistro);
       $this->si30_codcorrecao = ($this->si30_codcorrecao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_codcorrecao"] : $this->si30_codcorrecao);
       $this->si30_codfonteacrescida = ($this->si30_codfonteacrescida == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_codfonteacrescida"] : $this->si30_codfonteacrescida);
+	  $this->si30_tipodocumento = ($this->si30_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_tipodocumento"] : $this->si30_tipodocumento);
+	  $this->si30_nrodocumento = ($this->si30_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_nrodocumento"] : $this->si30_nrodocumento);
+	  $this->si30_nroconvenio = ($this->si30_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_nroconvenio"] : $this->si30_nroconvenio);
+
+	  if($this->si30_dataassinatura == ""){
+	  	$this->si30_dataassinatura_dia = ($this->si30_dataassinatura_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura_dia"] : $this->si30_dataassinatura_dia);
+		$this->si30_dataassinatura_mes = ($this->si30_dataassinatura_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura_mes"] : $this->si30_dataassinatura_mes);
+		$this->si30_dataassinatura_ano = ($this->si30_dataassinatura_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura_ano"] : $this->si30_dataassinatura_ano);
+		if ($this->si30_dataassinatura_dia != "") {
+			$this->si30_dataassinatura = $this->si30_dataassinatura_ano . "-" . $this->si30_dataassinatura_mes . "-" . $this->si30_dataassinatura_dia;
+		}
+	  }
+
       $this->si30_vlacrescidofonte = ($this->si30_vlacrescidofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_vlacrescidofonte"] : $this->si30_vlacrescidofonte);
       $this->si30_reg10 = ($this->si30_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_reg10"] : $this->si30_reg10);
       $this->si30_mes = ($this->si30_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si30_mes"] : $this->si30_mes);
@@ -93,6 +117,18 @@ class cl_arc122019
     if ($this->si30_codfonteacrescida == null) {
       $this->si30_codfonteacrescida = "0";
     }
+	if ($this->si30_tipodocumento == null) {
+		$this->si30_tipodocumento = "0";
+	}
+	if ($this->si30_nrodocumento == null) {
+		$this->si30_nrodocumento = "0";
+	}
+	if ($this->si30_nroconvenio == null){
+		$this->si30_nroconvenio = "0";
+	}
+	if ($this->si30_dataassinatura == null){
+		$this->si30_dataassinatura = "0";
+	}
     if ($this->si30_vlacrescidofonte == null) {
       $this->si30_vlacrescidofonte = "0";
     }
@@ -132,8 +168,12 @@ class cl_arc122019
     $sql = "insert into arc122019(
                                        si30_sequencial 
                                       ,si30_tiporegistro 
-                                      ,si30_codcorrecao 
+                                      ,si30_codcorrecao
                                       ,si30_codfonteacrescida 
+                                      ,si30_tipodocumento
+                                      ,si30_nrodocumento
+                                      ,si30_nroconvenio
+                                      ,si30_dataassinatura 
                                       ,si30_vlacrescidofonte 
                                       ,si30_reg10 
                                       ,si30_mes 
@@ -143,7 +183,11 @@ class cl_arc122019
                                 $this->si30_sequencial 
                                ,$this->si30_tiporegistro 
                                ,$this->si30_codcorrecao 
-                               ,$this->si30_codfonteacrescida 
+                               ,$this->si30_codfonteacrescida
+                               ,$this->si30_tipodocumento
+                               ,$this->si30_nrodocumento
+                               ,$this->si30_nroconvenio
+                               ," . ($this->si30_dataassinatura == "null" || $this->si30_dataassinatura == "" ? "null" : "'" . $this->si30_dataassinatura . "'") . " 
                                ,$this->si30_vlacrescidofonte 
                                ,$this->si30_reg10 
                                ,$this->si30_mes 
@@ -235,7 +279,43 @@ class cl_arc122019
       $sql .= $virgula . " si30_codfonteacrescida = $this->si30_codfonteacrescida ";
       $virgula = ",";
     }
-    if (trim($this->si30_vlacrescidofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_vlacrescidofonte"])) {
+
+    if (trim($this->si30_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_tipodocumento"])) {
+		if (trim($this->si30_tipodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si30_tipodocumento"])) {
+			$this->si30_tipodocumento = "0";
+		}
+		$sql .= $virgula . " si30_tipodocumento = $this->si30_tipodocumento ";
+		$virgula = ",";
+	}
+
+	if (trim($this->si30_nrodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_nrodocumento"])) {
+		if (trim($this->si30_nrodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si30_nrodocumento"])) {
+			$this->si30_nrodocumento = "0";
+		}
+		$sql .= $virgula . " si30_nrodocumento = $this->si30_nrodocumento ";
+		$virgula = ",";
+	}
+
+	if (trim($this->si30_nroconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_nroconvenio"])) {
+		if (trim($this->si30_nroconvenio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si30_nroconvenio"])) {
+			$this->si30_nroconvenio = "0";
+		}
+		$sql .= $virgula . " si30_nroconvenio = $this->si30_nroconvenio ";
+		$virgula = ",";
+	}
+
+
+	if (trim($this->si30_dataassinatura) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura_dia"] != "")) {
+		$sql .= $virgula . " si30_dataassinatura = '$this->si30_dataassinatura' ";
+		$virgula = ",";
+	}else {
+		if (isset($GLOBALS["HTTP_POST_VARS"]["si30_dataassinatura"])) {
+			$sql .= $virgula . " si30_dataassinatura = null ";
+			$virgula = ",";
+		}
+	}
+
+	if (trim($this->si30_vlacrescidofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si30_vlacrescidofonte"])) {
       if (trim($this->si30_vlacrescidofonte) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si30_vlacrescidofonte"])) {
         $this->si30_vlacrescidofonte = "0";
       }

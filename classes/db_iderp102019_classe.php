@@ -18,7 +18,7 @@ class cl_iderp102019 {
   // cria variaveis do arquivo
   public $si179_sequencial = 0;
   public $si179_tiporegistro = 0;
-  public $si179_codreduzidoiderp = 0;
+  public $si179_codiderp = 0;
   public $si179_codorgao = null;
   public $si179_codunidadesub = null;
   public $si179_nroempenho = 0;
@@ -31,7 +31,7 @@ class cl_iderp102019 {
   public $campos = "
                  si179_sequencial = int8 = Sequencial
                  si179_tiporegistro = int8 = Tipo do Registro
-                 si179_codreduzidoiderp = int8 = Código identificador dos  restos a pagar
+                 si179_codiderp = int8 = Código identificador dos  restos a pagar
                  si179_codorgao = varchar(2) = Código do órgão
                  si179_codunidadesub = varchar(8) = Código da unidade ou subunidade orçam
                  si179_nroempenho = int8 = Número do empenho
@@ -64,7 +64,7 @@ class cl_iderp102019 {
     if ($exclusao==false) {
        $this->si179_sequencial = ($this->si179_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_sequencial"]:$this->si179_sequencial);
        $this->si179_tiporegistro = ($this->si179_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_tiporegistro"]:$this->si179_tiporegistro);
-       $this->si179_codreduzidoiderp = ($this->si179_codreduzidoiderp == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_codreduzidoiderp"]:$this->si179_codreduzidoiderp);
+       $this->si179_codiderp = ($this->si179_codiderp == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_codiderp"]:$this->si179_codiderp);
        $this->si179_codorgao = ($this->si179_codorgao == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_codorgao"]:$this->si179_codorgao);
        $this->si179_codunidadesub = ($this->si179_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_codunidadesub"]:$this->si179_codunidadesub);
        $this->si179_nroempenho = ($this->si179_nroempenho == ""?@$GLOBALS["HTTP_POST_VARS"]["si179_nroempenho"]:$this->si179_nroempenho);
@@ -90,9 +90,9 @@ class cl_iderp102019 {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->si179_codreduzidoiderp == null ) {
+     if ($this->si179_codiderp == null ) {
        $this->erro_sql = " Campo Código identificador dos  restos a pagar não informado.";
-       $this->erro_campo = "si179_codreduzidoiderp";
+       $this->erro_campo = "si179_codiderp";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -206,7 +206,7 @@ class cl_iderp102019 {
      $sql = "insert into iderp102019(
                                        si179_sequencial
                                       ,si179_tiporegistro
-                                      ,si179_codreduzidoiderp
+                                      ,si179_codiderp
                                       ,si179_codorgao
                                       ,si179_codunidadesub
                                       ,si179_nroempenho
@@ -219,7 +219,7 @@ class cl_iderp102019 {
                 values (
                                 $this->si179_sequencial
                                ,$this->si179_tiporegistro
-                               ,$this->si179_codreduzidoiderp
+                               ,$this->si179_codiderp
                                ,'$this->si179_codorgao'
                                ,'$this->si179_codunidadesub'
                                ,$this->si179_nroempenho
@@ -266,7 +266,7 @@ class cl_iderp102019 {
          $resac = db_query("insert into db_acountkey values($acount,2011897,'$this->si179_sequencial','I')");
          $resac = db_query("insert into db_acount values($acount,1010192,2011897,'','".AddSlashes(pg_result($resaco,0,'si179_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,1009244,'','".AddSlashes(pg_result($resaco,0,'si179_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010192,2011852,'','".AddSlashes(pg_result($resaco,0,'si179_codreduzidoiderp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010192,2011852,'','".AddSlashes(pg_result($resaco,0,'si179_codiderp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,2011853,'','".AddSlashes(pg_result($resaco,0,'si179_codorgao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,2011855,'','".AddSlashes(pg_result($resaco,0,'si179_codunidadesub'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,2011856,'','".AddSlashes(pg_result($resaco,0,'si179_nroempenho'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -311,12 +311,12 @@ class cl_iderp102019 {
          return false;
        }
      }
-     if (trim($this->si179_codreduzidoiderp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si179_codreduzidoiderp"])) {
-       $sql  .= $virgula." si179_codreduzidoiderp = $this->si179_codreduzidoiderp ";
+     if (trim($this->si179_codiderp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si179_codiderp"])) {
+       $sql  .= $virgula." si179_codiderp = $this->si179_codiderp ";
        $virgula = ",";
-       if (trim($this->si179_codreduzidoiderp) == null ) {
+       if (trim($this->si179_codiderp) == null ) {
          $this->erro_sql = " Campo Código identificador dos  restos a pagar não informado.";
-         $this->erro_campo = "si179_codreduzidoiderp";
+         $this->erro_campo = "si179_codiderp";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -449,8 +449,8 @@ class cl_iderp102019 {
              $resac = db_query("insert into db_acount values($acount,1010192,2011897,'".AddSlashes(pg_result($resaco,$conresaco,'si179_sequencial'))."','$this->si179_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si179_tiporegistro"]) || $this->si179_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010192,1009244,'".AddSlashes(pg_result($resaco,$conresaco,'si179_tiporegistro'))."','$this->si179_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si179_codreduzidoiderp"]) || $this->si179_codreduzidoiderp != "")
-             $resac = db_query("insert into db_acount values($acount,1010192,2011852,'".AddSlashes(pg_result($resaco,$conresaco,'si179_codreduzidoiderp'))."','$this->si179_codreduzidoiderp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si179_codiderp"]) || $this->si179_codiderp != "")
+             $resac = db_query("insert into db_acount values($acount,1010192,2011852,'".AddSlashes(pg_result($resaco,$conresaco,'si179_codiderp'))."','$this->si179_codiderp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si179_codorgao"]) || $this->si179_codorgao != "")
              $resac = db_query("insert into db_acount values($acount,1010192,2011853,'".AddSlashes(pg_result($resaco,$conresaco,'si179_codorgao'))."','$this->si179_codorgao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si179_codunidadesub"]) || $this->si179_codunidadesub != "")
@@ -526,7 +526,7 @@ class cl_iderp102019 {
            $resac  = db_query("insert into db_acountkey values($acount,2011897,'$si179_sequencial','E')");
            $resac  = db_query("insert into db_acount values($acount,1010192,2011897,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,1009244,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010192,2011852,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_codreduzidoiderp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010192,2011852,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_codiderp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,2011853,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_codorgao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,2011855,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_codunidadesub'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,2011856,'','".AddSlashes(pg_result($resaco,$iresaco,'si179_nroempenho'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");

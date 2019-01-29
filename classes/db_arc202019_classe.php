@@ -24,7 +24,6 @@ class cl_arc202019
   var $si31_ededucaodereceita = 0;
   var $si31_identificadordeducao = 0;
   var $si31_naturezareceitaestornada = 0;
-  var $si31_especificacaoestornada = null;
   var $si31_vlestornado = 0;
   var $si31_mes = 0;
   var $si31_instit = 0;
@@ -37,7 +36,6 @@ class cl_arc202019
                  si31_ededucaodereceita = int8 = Identifica 
                  si31_identificadordeducao = int8 = Identificador 
                  si31_naturezareceitaestornada = int8 = Natureza da receita 
-                 si31_especificacaoestornada = varchar(100) = Especificação 
                  si31_vlestornado = float8 = Valor estornado 
                  si31_mes = int8 = Mês 
                  si31_instit = int8 = Instituição 
@@ -73,7 +71,6 @@ class cl_arc202019
       $this->si31_ededucaodereceita = ($this->si31_ededucaodereceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_ededucaodereceita"] : $this->si31_ededucaodereceita);
       $this->si31_identificadordeducao = ($this->si31_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_identificadordeducao"] : $this->si31_identificadordeducao);
       $this->si31_naturezareceitaestornada = ($this->si31_naturezareceitaestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_naturezareceitaestornada"] : $this->si31_naturezareceitaestornada);
-      $this->si31_especificacaoestornada = ($this->si31_especificacaoestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_especificacaoestornada"] : $this->si31_especificacaoestornada);
       $this->si31_vlestornado = ($this->si31_vlestornado == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"] : $this->si31_vlestornado);
       $this->si31_mes = ($this->si31_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_mes"] : $this->si31_mes);
       $this->si31_instit = ($this->si31_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_instit"] : $this->si31_instit);
@@ -175,7 +172,6 @@ class cl_arc202019
                                       ,si31_ededucaodereceita 
                                       ,si31_identificadordeducao 
                                       ,si31_naturezareceitaestornada 
-                                      ,si31_especificacaoestornada 
                                       ,si31_vlestornado 
                                       ,si31_mes 
                                       ,si31_instit 
@@ -188,7 +184,6 @@ class cl_arc202019
                                ,$this->si31_ededucaodereceita 
                                ,$this->si31_identificadordeducao 
                                ,$this->si31_naturezareceitaestornada 
-                               ,'$this->si31_especificacaoestornada' 
                                ,$this->si31_vlestornado 
                                ,$this->si31_mes 
                                ,$this->si31_instit 
@@ -219,24 +214,24 @@ class cl_arc202019
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $resaco = $this->sql_record($this->sql_query_file($this->si31_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2009715,'$this->si31_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009715,'','" . AddSlashes(pg_result($resaco, 0, 'si31_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009716,'','" . AddSlashes(pg_result($resaco, 0, 'si31_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009717,'','" . AddSlashes(pg_result($resaco, 0, 'si31_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009718,'','" . AddSlashes(pg_result($resaco, 0, 'si31_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009719,'','" . AddSlashes(pg_result($resaco, 0, 'si31_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009720,'','" . AddSlashes(pg_result($resaco, 0, 'si31_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009721,'','" . AddSlashes(pg_result($resaco, 0, 'si31_naturezareceitaestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009722,'','" . AddSlashes(pg_result($resaco, 0, 'si31_especificacaoestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009723,'','" . AddSlashes(pg_result($resaco, 0, 'si31_vlestornado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2009748,'','" . AddSlashes(pg_result($resaco, 0, 'si31_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010259,2011546,'','" . AddSlashes(pg_result($resaco, 0, 'si31_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+//    $resaco = $this->sql_record($this->sql_query_file($this->si31_sequencial));
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//      $acount = pg_result($resac, 0, 0);
+//      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//      $resac = db_query("insert into db_acountkey values($acount,2009715,'$this->si31_sequencial','I')");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009715,'','" . AddSlashes(pg_result($resaco, 0, 'si31_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009716,'','" . AddSlashes(pg_result($resaco, 0, 'si31_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009717,'','" . AddSlashes(pg_result($resaco, 0, 'si31_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009718,'','" . AddSlashes(pg_result($resaco, 0, 'si31_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009719,'','" . AddSlashes(pg_result($resaco, 0, 'si31_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009720,'','" . AddSlashes(pg_result($resaco, 0, 'si31_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009721,'','" . AddSlashes(pg_result($resaco, 0, 'si31_naturezareceitaestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009722,'','" . AddSlashes(pg_result($resaco, 0, 'si31_especificacaoestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009723,'','" . AddSlashes(pg_result($resaco, 0, 'si31_vlestornado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2009748,'','" . AddSlashes(pg_result($resaco, 0, 'si31_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010259,2011546,'','" . AddSlashes(pg_result($resaco, 0, 'si31_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//    }
 
     return true;
   }
@@ -300,10 +295,6 @@ class cl_arc202019
       $sql .= $virgula . " si31_naturezareceitaestornada = $this->si31_naturezareceitaestornada ";
       $virgula = ",";
     }
-    if (trim($this->si31_especificacaoestornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_especificacaoestornada"])) {
-      $sql .= $virgula . " si31_especificacaoestornada = '$this->si31_especificacaoestornada' ";
-      $virgula = ",";
-    }
     if (trim($this->si31_vlestornado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"])) {
       if (trim($this->si31_vlestornado) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"])) {
         $this->si31_vlestornado = "0";
@@ -343,37 +334,37 @@ class cl_arc202019
     if ($si31_sequencial != null) {
       $sql .= " si31_sequencial = $this->si31_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si31_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009715,'$this->si31_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_sequencial"]) || $this->si31_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009715,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_sequencial')) . "','$this->si31_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_tiporegistro"]) || $this->si31_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009716,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_tiporegistro')) . "','$this->si31_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_codorgao"]) || $this->si31_codorgao != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009717,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_codorgao')) . "','$this->si31_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_codestorno"]) || $this->si31_codestorno != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009718,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_codestorno')) . "','$this->si31_codestorno'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_ededucaodereceita"]) || $this->si31_ededucaodereceita != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009719,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_ededucaodereceita')) . "','$this->si31_ededucaodereceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_identificadordeducao"]) || $this->si31_identificadordeducao != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009720,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_identificadordeducao')) . "','$this->si31_identificadordeducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_naturezareceitaestornada"]) || $this->si31_naturezareceitaestornada != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009721,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_naturezareceitaestornada')) . "','$this->si31_naturezareceitaestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_especificacaoestornada"]) || $this->si31_especificacaoestornada != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009722,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_especificacaoestornada')) . "','$this->si31_especificacaoestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"]) || $this->si31_vlestornado != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009723,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_vlestornado')) . "','$this->si31_vlestornado'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_mes"]) || $this->si31_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2009748,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_mes')) . "','$this->si31_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_instit"]) || $this->si31_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010259,2011546,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_instit')) . "','$this->si31_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    $resaco = $this->sql_record($this->sql_query_file($this->si31_sequencial));
+//    if ($this->numrows > 0) {
+//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009715,'$this->si31_sequencial','A')");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_sequencial"]) || $this->si31_sequencial != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009715,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_sequencial')) . "','$this->si31_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_tiporegistro"]) || $this->si31_tiporegistro != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009716,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_tiporegistro')) . "','$this->si31_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_codorgao"]) || $this->si31_codorgao != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009717,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_codorgao')) . "','$this->si31_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_codestorno"]) || $this->si31_codestorno != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009718,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_codestorno')) . "','$this->si31_codestorno'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_ededucaodereceita"]) || $this->si31_ededucaodereceita != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009719,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_ededucaodereceita')) . "','$this->si31_ededucaodereceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_identificadordeducao"]) || $this->si31_identificadordeducao != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009720,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_identificadordeducao')) . "','$this->si31_identificadordeducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_naturezareceitaestornada"]) || $this->si31_naturezareceitaestornada != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009721,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_naturezareceitaestornada')) . "','$this->si31_naturezareceitaestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_especificacaoestornada"]) || $this->si31_especificacaoestornada != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009722,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_especificacaoestornada')) . "','$this->si31_especificacaoestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"]) || $this->si31_vlestornado != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009723,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_vlestornado')) . "','$this->si31_vlestornado'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_mes"]) || $this->si31_mes != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2009748,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_mes')) . "','$this->si31_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si31_instit"]) || $this->si31_instit != "")
+//          $resac = db_query("insert into db_acount values($acount,2010259,2011546,'" . AddSlashes(pg_result($resaco, $conresaco, 'si31_instit')) . "','$this->si31_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -419,25 +410,25 @@ class cl_arc202019
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009715,'$si31_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009715,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009716,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009717,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009718,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009719,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009720,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009721,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_naturezareceitaestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009722,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_especificacaoestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009723,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_vlestornado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2009748,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010259,2011546,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009715,'$si31_sequencial','E')");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009715,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009716,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009717,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009718,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009719,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009720,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009721,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_naturezareceitaestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009722,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_especificacaoestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009723,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_vlestornado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2009748,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010259,2011546,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si31_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $sql = " delete from arc202019
                     where ";
     $sql2 = "";

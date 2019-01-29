@@ -32,8 +32,6 @@ class cl_idedcasp2019 {
    var $si200_codcontroleremessa = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si200_anousu = int4 = si200_anousu
-                 si200_instit = int4 = si200_instit
                  si200_sequencial = int4 = si200_sequencial
                  si200_codmunicipio = varchar(5) = si200_codmunicipio
                  si200_cnpjorgao = varchar(14) = si200_cnpjorgao
@@ -43,6 +41,8 @@ class cl_idedcasp2019 {
                  si200_exercicioreferencia = int4 = si200_exercicioreferencia
                  si200_datageracao = date = si200_datageracao
                  si200_codcontroleremessa = varchar(20) = si200_codcontroleremessa
+                 si200_anousu = int4 = si200_anousu
+                 si200_instit = int4 = si200_instit
                  ";
    //funcao construtor da classe
    function cl_idedcasp2019() {
@@ -193,8 +193,6 @@ class cl_idedcasp2019 {
      }
 
      $sql = "insert into idedcasp2019(
-                                       si200_anousu
-                                      ,si200_instit
                                       ,si200_sequencial
                                       ,si200_codmunicipio
                                       ,si200_cnpjorgao
@@ -204,10 +202,10 @@ class cl_idedcasp2019 {
                                       ,si200_exercicioreferencia
                                       ,si200_datageracao
                                       ,si200_codcontroleremessa
+                                      ,si200_anousu
+                                      ,si200_instit
                        )
                 values (
-                                {$this->si200_anousu}
-                               ,{$this->si200_instit}
                                ,$this->si200_sequencial
                                ,'$this->si200_codmunicipio'
                                ,'$this->si200_cnpjorgao'
@@ -217,6 +215,8 @@ class cl_idedcasp2019 {
                                ,$this->si200_exercicioreferencia
                                ,".($this->si200_datageracao == "null" || $this->si200_datageracao == ""?"null":"'".$this->si200_datageracao."'")."
                                ,'$this->si200_codcontroleremessa'
+                               ,{$this->si200_anousu}
+                               ,{$this->si200_instit}
                       )";
      $result = db_query($sql);
      if($result==false){

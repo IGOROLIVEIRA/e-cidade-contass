@@ -441,8 +441,7 @@ class cl_aberlic112019
     }
     $result = db_query($sql . $sql2);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "aberlic112019 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si47_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";

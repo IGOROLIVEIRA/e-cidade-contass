@@ -18,6 +18,7 @@ class cl_flpgo102019 {
     // cria variaveis do arquivo
     var $si195_sequencial = 0;
     var $si195_tiporegistro = 0;
+    var $si195_codvinculopessoa = 0;
     var $si195_regime = null;
     var $si195_indtipopagamento = null;
     var $si195_dsctipopagextra = null;
@@ -70,13 +71,14 @@ class cl_flpgo102019 {
     var $campos = "
                  si195_sequencial = int8 = si195_sequencial
                  si195_tiporegistro = int8 = Tipo registro
+                 si195_codvinculopessoa = int8 = Código do vínculo do agente público
                  si195_regime = varchar(1) = Civil (C) ou Militar (M)
                  si195_indtipopagamento = varchar(1) = Tipo de pagamento
                  si195_dsctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
                  si195_indsituacaoservidorpensionista = varchar(1) = Indica a situação do servidor público
                  si195_nrocpfinstituidor = varchar(11) = Número do CPF do instituidor da pensão
                  si195_datobitoinstituidor = date = Data de óbito do instituidor
-                 si195_tipodependencia = int8 = Tipo de dependência do pensionista 
+                 si195_tipodependencia = int8 = Tipo de dependência do pensionista
                  si195_dscsituacao = varchar(150) = Descrição da situação do servidor público
                  si195_datconcessaoaposentadoriapensao = date = Data de concessão da aposentadoria
                  si195_dsccargo = varchar(120) = Nome do cargo
@@ -87,7 +89,7 @@ class cl_flpgo102019 {
                  si195_natcargo = int8 = Natureza do Cargo
                  si195_dscnatcargo = varchar(150) = Descrição do Cargo
                  si195_indcessao = varchar(3) = Servidor Cedido com ônus
-                 si195_dsclotacao = varchar(120) = Descrição da lotação
+                 si195_dsclotacao = varchar(250) = Descrição da lotação
                  si195_indsalaaula = varchar(1) = Atividade em sala de aula para o professor
                  si195_vlrcargahorariasemanal = int8 = Valor da carga horaria
                  si195_datefetexercicio = date = Data de exercício no cargo
@@ -95,9 +97,9 @@ class cl_flpgo102019 {
                  si195_datexclusao = date = Data de exclusão
                  si195_datcomissionadoexclusao = date = Data de término do exercício no cargo comissionado
                  si195_vlrremuneracaobruta = float8 = Valor total dos rendimentos
-                 si195_natsaldoliquido = varchar(1) = Natureza do saldo remuneratório liquido
-                 si195_vlrremuneracaoliquida = float8 = Valor total dos rendimentos liquidos
                  si195_vlrdescontos = float8 = Valor das deduções obrigatórias
+                 si195_vlrremuneracaoliquida = float8 = Valor total dos rendimentos liquidos
+                 si195_natsaldoliquido = varchar(1) = Natureza do saldo remuneratório liquido
                  si195_mes = int8 = si195_mes
                  si195_inst = int8 = si195_inst
                  ";
@@ -120,8 +122,8 @@ class cl_flpgo102019 {
     function atualizacampos($exclusao=false) {
         if($exclusao==false){
             $this->si195_sequencial = ($this->si195_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sequencial"]:$this->si195_sequencial);
-            $this->si195_codvinculopessoa = ($this->si195_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codvinculopessoa"]:$this->si195_codvinculopessoa);
             $this->si195_tiporegistro = ($this->si195_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_tiporegistro"]:$this->si195_tiporegistro);
+            $this->si195_codvinculopessoa = ($this->si195_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codvinculopessoa"]:$this->si195_codvinculopessoa);
             $this->si195_regime = ($this->si195_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_regime"]:$this->si195_regime);
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
             $this->si195_dsctipopagextra = ($this->si195_dsctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsctipopagextra"]:$this->si195_dsctipopagextra);
@@ -348,8 +350,8 @@ class cl_flpgo102019 {
 
         $sql = "insert into flpgo102019(
                                        si195_sequencial
-                                      ,si195_tiporegistro
                                       ,si195_codvinculopessoa
+                                      ,si195_tiporegistro
                                       ,si195_regime
                                       ,si195_indtipopagamento
                                       ,si195_dsctipopagextra
@@ -383,8 +385,8 @@ class cl_flpgo102019 {
                        )
                 values (
                                 $this->si195_sequencial
-                               ,$this->si195_tiporegistro
                                ,$this->si195_codvinculopessoa
+                               ,$this->si195_tiporegistro
                                ,'$this->si195_regime'
                                ,'$this->si195_indtipopagamento'
                                ,'$this->si195_dsctipopagextra'

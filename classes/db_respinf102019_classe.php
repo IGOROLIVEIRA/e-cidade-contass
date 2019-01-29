@@ -2,7 +2,7 @@
 //MODULO: sicom
 //CLASSE DA ENTIDADE respinf102019
 class cl_respinf102019 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo     = null;
   var $query_sql  = null;
   var $numrows    = 0;
@@ -15,12 +15,9 @@ class cl_respinf102019 {
   var $erro_msg   = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si197_sequencial = 0;
-  var $si197_nomeresponsavel = null;
-  var $si197_cartident = null;
-  var $si197_orgemissorci = null;
-  var $si197_cpf = null;
+  var $si197_nrodocumento = null;
   var $si197_dtinicio_dia = null;
   var $si197_dtinicio_mes = null;
   var $si197_dtinicio_ano = null;
@@ -31,25 +28,22 @@ class cl_respinf102019 {
   var $si197_dtfinal = null;
   var $si197_mes = 0;
   var $si197_inst = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si197_sequencial = int8 = si197_sequencial 
-                 si197_nomeresponsavel = varchar(120) = Nome do Responsavel 
-                 si197_cartident = varchar(10) = Identidade do responsável 
-                 si197_orgemissorci = varchar(10) = Órgão emissor da carteira de identidade 
-                 si197_cpf = varchar(11) = Número do CPF do responsável 
-                 si197_dtinicio = date = Data inicial 
-                 si197_dtfinal = date = Data final 
-                 si197_mes = int8 = si197_mes 
-                 si197_inst = int8 = si197_inst 
+                 si197_sequencial = int8 = si197_sequencial
+                 si197_nrodocumento = varchar(11) = Número do documento da pessoa física
+                 si197_dtinicio = date = Data inicial
+                 si197_dtfinal = date = Data final
+                 si197_mes = int8 = si197_mes
+                 si197_inst = int8 = si197_inst
                  ";
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function cl_respinf102019() {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("respinf102019");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  //funcao erro 
+  //funcao erro
   function erro($mostra,$retorna) {
     if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
       echo "<script>alert(\"".$this->erro_msg."\");</script>";
@@ -62,10 +56,7 @@ class cl_respinf102019 {
   function atualizacampos($exclusao=false) {
     if($exclusao==false){
       $this->si197_sequencial = ($this->si197_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_sequencial"]:$this->si197_sequencial);
-      $this->si197_nomeresponsavel = ($this->si197_nomeresponsavel == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nomeresponsavel"]:$this->si197_nomeresponsavel);
-      $this->si197_cartident = ($this->si197_cartident == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_cartident"]:$this->si197_cartident);
-      $this->si197_orgemissorci = ($this->si197_orgemissorci == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_orgemissorci"]:$this->si197_orgemissorci);
-      $this->si197_cpf = ($this->si197_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_cpf"]:$this->si197_cpf);
+      $this->si197_nrodocumento = ($this->si197_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"]:$this->si197_nrodocumento);
       if($this->si197_dtinicio == ""){
         $this->si197_dtinicio_dia = ($this->si197_dtinicio_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_dtinicio_dia"]:$this->si197_dtinicio_dia);
         $this->si197_dtinicio_mes = ($this->si197_dtinicio_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_dtinicio_mes"]:$this->si197_dtinicio_mes);
@@ -91,36 +82,9 @@ class cl_respinf102019 {
   // funcao para inclusao
   function incluir ($si197_sequencial){
     $this->atualizacampos();
-    if($this->si197_nomeresponsavel == null ){
-      $this->erro_sql = " Campo Nome do Responsavel não informado.";
-      $this->erro_campo = "si197_nomeresponsavel";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si197_cartident == null ){
-      $this->erro_sql = " Campo Identidade do responsável não informado.";
-      $this->erro_campo = "si197_cartident";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si197_orgemissorci == null ){
-      $this->erro_sql = " Campo Órgão emissor da carteira de identidade não informado.";
-      $this->erro_campo = "si197_orgemissorci";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si197_cpf == null ){
-      $this->erro_sql = " Campo Número do CPF do responsável não informado.";
-      $this->erro_campo = "si197_cpf";
+    if($this->si197_nrodocumento == null ){
+      $this->erro_sql = " Campo Número do documento da pessoa física não informado.";
+      $this->erro_campo = "si197_nrodocumento";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -197,26 +161,20 @@ class cl_respinf102019 {
       return false;
     }
     $sql = "insert into respinf102019(
-                                       si197_sequencial 
-                                      ,si197_nomeresponsavel 
-                                      ,si197_cartident 
-                                      ,si197_orgemissorci 
-                                      ,si197_cpf 
-                                      ,si197_dtinicio 
-                                      ,si197_dtfinal 
-                                      ,si197_mes 
-                                      ,si197_inst 
+                                       si197_sequencial
+                                      ,si197_nrodocumento
+                                      ,si197_dtinicio
+                                      ,si197_dtfinal
+                                      ,si197_mes
+                                      ,si197_inst
                        )
                 values (
-                                $this->si197_sequencial 
-                               ,'$this->si197_nomeresponsavel' 
-                               ,'$this->si197_cartident' 
-                               ,'$this->si197_orgemissorci' 
-                               ,'$this->si197_cpf' 
-                               ,".($this->si197_dtinicio == "null" || $this->si197_dtinicio == ""?"null":"'".$this->si197_dtinicio."'")." 
-                               ,".($this->si197_dtfinal == "null" || $this->si197_dtfinal == ""?"null":"'".$this->si197_dtfinal."'")." 
-                               ,$this->si197_mes 
-                               ,$this->si197_inst 
+                                $this->si197_sequencial
+                               ,'$this->si197_nrodocumento'
+                               ,".($this->si197_dtinicio == "null" || $this->si197_dtinicio == ""?"null":"'".$this->si197_dtinicio."'")."
+                               ,".($this->si197_dtfinal == "null" || $this->si197_dtfinal == ""?"null":"'".$this->si197_dtfinal."'")."
+                               ,$this->si197_mes
+                               ,$this->si197_inst
                       )";
     $result = db_query($sql);
     if($result==false){
@@ -258,7 +216,7 @@ class cl_respinf102019 {
         $resac = db_query("insert into db_acount values($acount,1010197,1009309,'','".AddSlashes(pg_result($resaco,0,'si197_nomeresponsavel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010197,1009310,'','".AddSlashes(pg_result($resaco,0,'si197_cartident'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010197,1009311,'','".AddSlashes(pg_result($resaco,0,'si197_orgemissorci'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,0,'si197_cpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,0,'si197_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010197,1009313,'','".AddSlashes(pg_result($resaco,0,'si197_dtinicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010197,1009314,'','".AddSlashes(pg_result($resaco,0,'si197_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010197,1009315,'','".AddSlashes(pg_result($resaco,0,'si197_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -324,12 +282,12 @@ class cl_respinf102019 {
         return false;
       }
     }
-    if(trim($this->si197_cpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_cpf"])){
-      $sql  .= $virgula." si197_cpf = '$this->si197_cpf' ";
+    if(trim($this->si197_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"])){
+      $sql  .= $virgula." si197_nrodocumento = '$this->si197_nrodocumento' ";
       $virgula = ",";
-      if(trim($this->si197_cpf) == null ){
-        $this->erro_sql = " Campo Número do CPF do responsável não informado.";
-        $this->erro_campo = "si197_cpf";
+      if(trim($this->si197_nrodocumento) == null ){
+        $this->erro_sql = " Campo Número do nrodocumento do responsável não informado.";
+        $this->erro_campo = "si197_nrodocumento";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -442,8 +400,8 @@ class cl_respinf102019 {
             $resac = db_query("insert into db_acount values($acount,1010197,1009310,'".AddSlashes(pg_result($resaco,$conresaco,'si197_cartident'))."','$this->si197_cartident',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si197_orgemissorci"]) || $this->si197_orgemissorci != "")
             $resac = db_query("insert into db_acount values($acount,1010197,1009311,'".AddSlashes(pg_result($resaco,$conresaco,'si197_orgemissorci'))."','$this->si197_orgemissorci',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si197_cpf"]) || $this->si197_cpf != "")
-            $resac = db_query("insert into db_acount values($acount,1010197,1009312,'".AddSlashes(pg_result($resaco,$conresaco,'si197_cpf'))."','$this->si197_cpf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"]) || $this->si197_nrodocumento != "")
+            $resac = db_query("insert into db_acount values($acount,1010197,1009312,'".AddSlashes(pg_result($resaco,$conresaco,'si197_nrodocumento'))."','$this->si197_nrodocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si197_dtinicio"]) || $this->si197_dtinicio != "")
             $resac = db_query("insert into db_acount values($acount,1010197,1009313,'".AddSlashes(pg_result($resaco,$conresaco,'si197_dtinicio'))."','$this->si197_dtinicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si197_dtfinal"]) || $this->si197_dtfinal != "")
@@ -488,7 +446,7 @@ class cl_respinf102019 {
       }
     }
   }
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir ($si197_sequencial=null,$dbwhere=null) {
 
     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
@@ -513,7 +471,7 @@ class cl_respinf102019 {
           $resac  = db_query("insert into db_acount values($acount,1010197,1009309,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_nomeresponsavel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009310,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_cartident'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009311,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_orgemissorci'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_cpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009313,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_dtinicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009314,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009315,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -567,7 +525,7 @@ class cl_respinf102019 {
       }
     }
   }
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql) {
     $result = db_query($sql);
     if($result==false){
@@ -591,7 +549,7 @@ class cl_respinf102019 {
     }
     return $result;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query ( $si197_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
@@ -625,7 +583,7 @@ class cl_respinf102019 {
     }
     return $sql;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query_file ( $si197_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){

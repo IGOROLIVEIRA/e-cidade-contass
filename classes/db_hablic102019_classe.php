@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE hablic102019
 class cl_hablic102019
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo = null;
   var $query_sql = null;
   var $numrows = 0;
@@ -16,7 +16,7 @@ class cl_hablic102019
   var $erro_msg = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si57_sequencial = 0;
   var $si57_tiporegistro = 0;
   var $si57_codorgao = null;
@@ -74,49 +74,49 @@ class cl_hablic102019
   var $si57_renunciarecurso = 0;
   var $si57_mes = 0;
   var $si57_instit = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si57_sequencial = int8 = sequencial 
-                 si57_tiporegistro = int8 = Tipo do  registro 
-                 si57_codorgao = varchar(2) = Código do órgão 
-                 si57_codunidadesub = varchar(8) = Código da unidade 
-                 si57_exerciciolicitacao = int8 = Exercício em que  foi instaurado 
-                 si57_nroprocessolicitatorio = varchar(12) = Número sequencial do processo 
-                 si57_tipodocumento = int8 = Tipo do  documento 
-                 si57_nrodocumento = varchar(14) = Número do  documento do  participante 
-                 si57_objetosocial = varchar(2000) = Objeto Social 
-                 si57_orgaorespregistro = int8 = Órgão responsável 
-                 si57_dataregistro = date = Data do Registro 
-                 si57_nroregistro = varchar(20) = Número do  Registro 
-                 si57_dataregistrocvm = date = Data do Registro 
-                 si57_nroregistrocvm = varchar(20) = Número do  Registro 
-                 si57_nroinscricaoestadual = varchar(30) = Número da  inscrição estadual 
-                 si57_ufinscricaoestadual = varchar(2) = Sigla da unidade  da Federação 
-                 si57_nrocertidaoregularidadeinss = varchar(30) = Número da certidão 
-                 si57_dtemissaocertidaoregularidadeinss = date = Data de emissão  da certidão 
-                 si57_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão 
-                 si57_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade FGTS 
-                 si57_dtemissaocertidaoregularidadefgts = date = Data de emissão  da certidão r fgts 
-                 si57_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidão FGTS 
-                 si57_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos 
-                 si57_dtemissaocndt = date = Data de emissão  da certidão Negativa 
-                 si57_dtvalidadecndt = date = Data de validade  da C.N.D.T 
-                 si57_dthabilitacao = date = Data da habilitação 
-                 si57_presencalicitantes = int8 = Presença Licitantes 
-                 si57_renunciarecurso = int8 = Informar a  existência de  renúncia 
-                 si57_mes = int8 = Mês 
-                 si57_instit = int8 = Instituição 
+                 si57_sequencial = int8 = sequencial
+                 si57_tiporegistro = int8 = Tipo do  registro
+                 si57_codorgao = varchar(2) = Código do órgão
+                 si57_codunidadesub = varchar(8) = Código da unidade
+                 si57_exerciciolicitacao = int8 = Exercício em que  foi instaurado
+                 si57_nroprocessolicitatorio = varchar(12) = Número sequencial do processo
+                 si57_tipodocumento = int8 = Tipo do  documento
+                 si57_nrodocumento = varchar(14) = Número do  documento do  participante
+                 si57_objetosocial = varchar(2000) = Objeto Social
+                 si57_orgaorespregistro = int8 = Órgão responsável
+                 si57_dataregistro = date = Data do Registro
+                 si57_nroregistro = varchar(20) = Número do  Registro
+                 si57_dataregistrocvm = date = Data do Registro
+                 si57_nroregistrocvm = varchar(20) = Número do  Registro
+                 si57_nroinscricaoestadual = varchar(30) = Número da  inscrição estadual
+                 si57_ufinscricaoestadual = varchar(2) = Sigla da unidade  da Federação
+                 si57_nrocertidaoregularidadeinss = varchar(30) = Número da certidão
+                 si57_dtemissaocertidaoregularidadeinss = date = Data de emissão  da certidão
+                 si57_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão
+                 si57_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade FGTS
+                 si57_dtemissaocertidaoregularidadefgts = date = Data de emissão  da certidão r fgts
+                 si57_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidão FGTS
+                 si57_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos
+                 si57_dtemissaocndt = date = Data de emissão  da certidão Negativa
+                 si57_dtvalidadecndt = date = Data de validade  da C.N.D.T
+                 si57_dthabilitacao = date = Data da habilitação
+                 si57_presencalicitantes = int8 = Presença Licitantes
+                 si57_renunciarecurso = int8 = Informar a  existência de  renúncia
+                 si57_mes = int8 = Mês
+                 si57_instit = int8 = Instituição
                  ";
-  
-  //funcao construtor da classe 
+
+  //funcao construtor da classe
   function cl_hablic102019()
   {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("hablic102019");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
-  //funcao erro 
+
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -126,7 +126,7 @@ class cl_hablic102019
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -228,7 +228,7 @@ class cl_hablic102019
       $this->si57_sequencial = ($this->si57_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si57_sequencial"] : $this->si57_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si57_sequencial)
   {
@@ -240,7 +240,7 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si57_exerciciolicitacao == null) {
@@ -292,7 +292,7 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si57_instit == null) {
@@ -302,7 +302,7 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si57_sequencial == "" || $si57_sequencial == null) {
@@ -314,7 +314,7 @@ class cl_hablic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si57_sequencial = pg_result($result, 0, 0);
@@ -326,7 +326,7 @@ class cl_hablic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si57_sequencial = $si57_sequencial;
@@ -338,72 +338,72 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into hablic102019(
-                                       si57_sequencial 
-                                      ,si57_tiporegistro 
-                                      ,si57_codorgao 
-                                      ,si57_codunidadesub 
-                                      ,si57_exerciciolicitacao 
-                                      ,si57_nroprocessolicitatorio 
-                                      ,si57_tipodocumento 
-                                      ,si57_nrodocumento 
-                                      ,si57_objetosocial 
-                                      ,si57_orgaorespregistro 
-                                      ,si57_dataregistro 
-                                      ,si57_nroregistro 
-                                      ,si57_dataregistrocvm 
-                                      ,si57_nroregistrocvm 
-                                      ,si57_nroinscricaoestadual 
-                                      ,si57_ufinscricaoestadual 
-                                      ,si57_nrocertidaoregularidadeinss 
-                                      ,si57_dtemissaocertidaoregularidadeinss 
-                                      ,si57_dtvalidadecertidaoregularidadeinss 
-                                      ,si57_nrocertidaoregularidadefgts 
-                                      ,si57_dtemissaocertidaoregularidadefgts 
-                                      ,si57_dtvalidadecertidaoregularidadefgts 
-                                      ,si57_nrocndt 
-                                      ,si57_dtemissaocndt 
-                                      ,si57_dtvalidadecndt 
-                                      ,si57_dthabilitacao 
-                                      ,si57_presencalicitantes 
-                                      ,si57_renunciarecurso 
-                                      ,si57_mes 
-                                      ,si57_instit 
+                                       si57_sequencial
+                                      ,si57_tiporegistro
+                                      ,si57_codorgao
+                                      ,si57_codunidadesub
+                                      ,si57_exerciciolicitacao
+                                      ,si57_nroprocessolicitatorio
+                                      ,si57_tipodocumento
+                                      ,si57_nrodocumento
+                                      ,si57_objetosocial
+                                      ,si57_orgaorespregistro
+                                      ,si57_dataregistro
+                                      ,si57_nroregistro
+                                      ,si57_dataregistrocvm
+                                      ,si57_nroregistrocvm
+                                      ,si57_nroinscricaoestadual
+                                      ,si57_ufinscricaoestadual
+                                      ,si57_nrocertidaoregularidadeinss
+                                      ,si57_dtemissaocertidaoregularidadeinss
+                                      ,si57_dtvalidadecertidaoregularidadeinss
+                                      ,si57_nrocertidaoregularidadefgts
+                                      ,si57_dtemissaocertidaoregularidadefgts
+                                      ,si57_dtvalidadecertidaoregularidadefgts
+                                      ,si57_nrocndt
+                                      ,si57_dtemissaocndt
+                                      ,si57_dtvalidadecndt
+                                      ,si57_dthabilitacao
+                                      ,si57_presencalicitantes
+                                      ,si57_renunciarecurso
+                                      ,si57_mes
+                                      ,si57_instit
                        )
                 values (
-                                $this->si57_sequencial 
-                               ,$this->si57_tiporegistro 
-                               ,'$this->si57_codorgao' 
-                               ,'$this->si57_codunidadesub' 
-                               ,$this->si57_exerciciolicitacao 
-                               ,'$this->si57_nroprocessolicitatorio' 
-                               ,$this->si57_tipodocumento 
-                               ,'$this->si57_nrodocumento' 
-                               ,'$this->si57_objetosocial' 
-                               ,$this->si57_orgaorespregistro 
-                               ," . ($this->si57_dataregistro == "null" || $this->si57_dataregistro == "" ? "null" : "'" . $this->si57_dataregistro . "'") . " 
-                               ,'$this->si57_nroregistro' 
-                               ," . ($this->si57_dataregistrocvm == "null" || $this->si57_dataregistrocvm == "" ? "null" : "'" . $this->si57_dataregistrocvm . "'") . " 
-                               ,'$this->si57_nroregistrocvm' 
-                               ,'$this->si57_nroinscricaoestadual' 
-                               ,'$this->si57_ufinscricaoestadual' 
-                               ,'$this->si57_nrocertidaoregularidadeinss' 
-                               ," . ($this->si57_dtemissaocertidaoregularidadeinss == "null" || $this->si57_dtemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si57_dtemissaocertidaoregularidadeinss . "'") . " 
-                               ," . ($this->si57_dtvalidadecertidaoregularidadeinss == "null" || $this->si57_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si57_dtvalidadecertidaoregularidadeinss . "'") . " 
-                               ,'$this->si57_nrocertidaoregularidadefgts' 
-                               ," . ($this->si57_dtemissaocertidaoregularidadefgts == "null" || $this->si57_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si57_dtemissaocertidaoregularidadefgts . "'") . " 
-                               ," . ($this->si57_dtvalidadecertidaoregularidadefgts == "null" || $this->si57_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si57_dtvalidadecertidaoregularidadefgts . "'") . " 
-                               ,'$this->si57_nrocndt' 
-                               ," . ($this->si57_dtemissaocndt == "null" || $this->si57_dtemissaocndt == "" ? "null" : "'" . $this->si57_dtemissaocndt . "'") . " 
-                               ," . ($this->si57_dtvalidadecndt == "null" || $this->si57_dtvalidadecndt == "" ? "null" : "'" . $this->si57_dtvalidadecndt . "'") . " 
-                               ," . ($this->si57_dthabilitacao == "null" || $this->si57_dthabilitacao == "" ? "null" : "'" . $this->si57_dthabilitacao . "'") . " 
-                               ,$this->si57_presencalicitantes 
-                               ,$this->si57_renunciarecurso 
-                               ,$this->si57_mes 
-                               ,$this->si57_instit 
+                                $this->si57_sequencial
+                               ,$this->si57_tiporegistro
+                               ,'$this->si57_codorgao'
+                               ,'$this->si57_codunidadesub'
+                               ,$this->si57_exerciciolicitacao
+                               ,'$this->si57_nroprocessolicitatorio'
+                               ,$this->si57_tipodocumento
+                               ,'$this->si57_nrodocumento'
+                               ,'$this->si57_objetosocial'
+                               ,$this->si57_orgaorespregistro
+                               ," . ($this->si57_dataregistro == "null" || $this->si57_dataregistro == "" ? "null" : "'" . $this->si57_dataregistro . "'") . "
+                               ,'$this->si57_nroregistro'
+                               ," . ($this->si57_dataregistrocvm == "null" || $this->si57_dataregistrocvm == "" ? "null" : "'" . $this->si57_dataregistrocvm . "'") . "
+                               ,'$this->si57_nroregistrocvm'
+                               ,'$this->si57_nroinscricaoestadual'
+                               ,'$this->si57_ufinscricaoestadual'
+                               ,'$this->si57_nrocertidaoregularidadeinss'
+                               ," . ($this->si57_dtemissaocertidaoregularidadeinss == "null" || $this->si57_dtemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si57_dtemissaocertidaoregularidadeinss . "'") . "
+                               ," . ($this->si57_dtvalidadecertidaoregularidadeinss == "null" || $this->si57_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si57_dtvalidadecertidaoregularidadeinss . "'") . "
+                               ,'$this->si57_nrocertidaoregularidadefgts'
+                               ," . ($this->si57_dtemissaocertidaoregularidadefgts == "null" || $this->si57_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si57_dtemissaocertidaoregularidadefgts . "'") . "
+                               ," . ($this->si57_dtvalidadecertidaoregularidadefgts == "null" || $this->si57_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si57_dtvalidadecertidaoregularidadefgts . "'") . "
+                               ,'$this->si57_nrocndt'
+                               ," . ($this->si57_dtemissaocndt == "null" || $this->si57_dtemissaocndt == "" ? "null" : "'" . $this->si57_dtemissaocndt . "'") . "
+                               ," . ($this->si57_dtvalidadecndt == "null" || $this->si57_dtvalidadecndt == "" ? "null" : "'" . $this->si57_dtvalidadecndt . "'") . "
+                               ," . ($this->si57_dthabilitacao == "null" || $this->si57_dthabilitacao == "" ? "null" : "'" . $this->si57_dthabilitacao . "'") . "
+                               ,$this->si57_presencalicitantes
+                               ,$this->si57_renunciarecurso
+                               ,$this->si57_mes
+                               ,$this->si57_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -421,7 +421,7 @@ class cl_hablic102019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -468,10 +468,10 @@ class cl_hablic102019
       $resac = db_query("insert into db_acount values($acount,2010286,2010042,'','" . AddSlashes(pg_result($resaco, 0, 'si57_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010286,2011569,'','" . AddSlashes(pg_result($resaco, 0, 'si57_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si57_sequencial = null)
   {
@@ -495,21 +495,51 @@ class cl_hablic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
     if (trim($this->si57_codorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_codorgao"])) {
       $sql .= $virgula . " si57_codorgao = '$this->si57_codorgao' ";
       $virgula = ",";
+      if (trim($this->si57_codorgao) == null) {
+        $this->erro_sql = " Campo Tipo do  registro nao Informado.";
+        $this->erro_campo = "si57_codorgao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
     if (trim($this->si57_codunidadesub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_codunidadesub"])) {
       $sql .= $virgula . " si57_codunidadesub = '$this->si57_codunidadesub' ";
       $virgula = ",";
+      if (trim($this->si57_codunidadesub) == null) {
+        $this->erro_sql = " Campo Tipo do  registro nao Informado.";
+        $this->erro_campo = "si57_codunidadesub";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
     if (trim($this->si57_exerciciolicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_exerciciolicitacao"])) {
       if (trim($this->si57_exerciciolicitacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si57_exerciciolicitacao"])) {
         $this->si57_exerciciolicitacao = "0";
+        if (trim($this->si57_exerciciolicitacao) == null) {
+          $this->erro_sql = " Campo Tipo do  registro nao Informado.";
+          $this->erro_campo = "si57_exerciciolicitacao";
+          $this->erro_banco = "";
+          $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+          $this->erro_status = "0";
+
+        return false;
+      }
       }
       $sql .= $virgula . " si57_exerciciolicitacao = $this->si57_exerciciolicitacao ";
       $virgula = ",";
@@ -517,6 +547,16 @@ class cl_hablic102019
     if (trim($this->si57_nroprocessolicitatorio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_nroprocessolicitatorio"])) {
       $sql .= $virgula . " si57_nroprocessolicitatorio = '$this->si57_nroprocessolicitatorio' ";
       $virgula = ",";
+      if (trim($this->si57_nroprocessolicitatorio) == null) {
+        $this->erro_sql = " Campo Número sequencial por ano não Informado.";
+        $this->erro_campo = "si57_nroprocessolicitatorio";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
     if (trim($this->si57_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_tipodocumento"])) {
       if (trim($this->si57_tipodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si57_tipodocumento"])) {
@@ -524,10 +564,30 @@ class cl_hablic102019
       }
       $sql .= $virgula . " si57_tipodocumento = $this->si57_tipodocumento ";
       $virgula = ",";
+      if (trim($this->si57_tipodocumento) == null) {
+        $this->erro_sql = " Campo Tipo do documento não Informado.";
+        $this->erro_campo = "si57_tipodocumento";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
     if (trim($this->si57_nrodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_nrodocumento"])) {
       $sql .= $virgula . " si57_nrodocumento = '$this->si57_nrodocumento' ";
       $virgula = ",";
+      if (trim($this->si57_nrodocumento) == null) {
+        $this->erro_sql = " Campo Número do documento não Informado.";
+        $this->erro_campo = "si57_nrodocumento";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
     }
     if (trim($this->si57_objetosocial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_objetosocial"])) {
       $sql .= $virgula . " si57_objetosocial = '$this->si57_objetosocial' ";
@@ -651,14 +711,28 @@ class cl_hablic102019
     }
     if (trim($this->si57_presencalicitantes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_presencalicitantes"])) {
       if (trim($this->si57_presencalicitantes) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si57_presencalicitantes"])) {
-        $this->si57_presencalicitantes = "0";
+        $this->erro_sql = " Campo Presença dos Licitantes não Informado.";
+        $this->erro_campo = "si57_tiporegistro";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
       }
       $sql .= $virgula . " si57_presencalicitantes = $this->si57_presencalicitantes ";
       $virgula = ",";
     }
     if (trim($this->si57_renunciarecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si57_renunciarecurso"])) {
       if (trim($this->si57_renunciarecurso) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si57_renunciarecurso"])) {
-        $this->si57_renunciarecurso = "0";
+        $this->erro_sql = " Campo Renuncia recurso não Informado.";
+        $this->erro_campo = "si57_tiporegistro";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
       }
       $sql .= $virgula . " si57_renunciarecurso = $this->si57_renunciarecurso ";
       $virgula = ",";
@@ -673,7 +747,7 @@ class cl_hablic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -687,7 +761,7 @@ class cl_hablic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -696,74 +770,74 @@ class cl_hablic102019
       $sql .= " si57_sequencial = $this->si57_sequencial";
     }
     $resaco = $this->sql_record($this->sql_query_file($this->si57_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2010011,'$this->si57_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_sequencial"]) || $this->si57_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010011,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_sequencial')) . "','$this->si57_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_tiporegistro"]) || $this->si57_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010012,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_tiporegistro')) . "','$this->si57_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_codorgao"]) || $this->si57_codorgao != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010013,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_codorgao')) . "','$this->si57_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_codunidadesub"]) || $this->si57_codunidadesub != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010014,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_codunidadesub')) . "','$this->si57_codunidadesub'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_exerciciolicitacao"]) || $this->si57_exerciciolicitacao != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010015,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_exerciciolicitacao')) . "','$this->si57_exerciciolicitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroprocessolicitatorio"]) || $this->si57_nroprocessolicitatorio != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010016,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroprocessolicitatorio')) . "','$this->si57_nroprocessolicitatorio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_tipodocumento"]) || $this->si57_tipodocumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010017,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_tipodocumento')) . "','$this->si57_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrodocumento"]) || $this->si57_nrodocumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010018,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrodocumento')) . "','$this->si57_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_objetosocial"]) || $this->si57_objetosocial != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010019,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_objetosocial')) . "','$this->si57_objetosocial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_orgaorespregistro"]) || $this->si57_orgaorespregistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010020,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_orgaorespregistro')) . "','$this->si57_orgaorespregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dataregistro"]) || $this->si57_dataregistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010021,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dataregistro')) . "','$this->si57_dataregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroregistro"]) || $this->si57_nroregistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010022,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroregistro')) . "','$this->si57_nroregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dataregistrocvm"]) || $this->si57_dataregistrocvm != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010023,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dataregistrocvm')) . "','$this->si57_dataregistrocvm'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroregistrocvm"]) || $this->si57_nroregistrocvm != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010024,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroregistrocvm')) . "','$this->si57_nroregistrocvm'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroinscricaoestadual"]) || $this->si57_nroinscricaoestadual != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010025,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroinscricaoestadual')) . "','$this->si57_nroinscricaoestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_ufinscricaoestadual"]) || $this->si57_ufinscricaoestadual != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010026,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_ufinscricaoestadual')) . "','$this->si57_ufinscricaoestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocertidaoregularidadeinss"]) || $this->si57_nrocertidaoregularidadeinss != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010027,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocertidaoregularidadeinss')) . "','$this->si57_nrocertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocertidaoregularidadeinss"]) || $this->si57_dtemissaocertidaoregularidadeinss != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010028,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocertidaoregularidadeinss')) . "','$this->si57_dtemissaocertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecertidaoregularidadeinss"]) || $this->si57_dtvalidadecertidaoregularidadeinss != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010029,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecertidaoregularidadeinss')) . "','$this->si57_dtvalidadecertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocertidaoregularidadefgts"]) || $this->si57_nrocertidaoregularidadefgts != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010030,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocertidaoregularidadefgts')) . "','$this->si57_nrocertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocertidaoregularidadefgts"]) || $this->si57_dtemissaocertidaoregularidadefgts != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010032,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocertidaoregularidadefgts')) . "','$this->si57_dtemissaocertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecertidaoregularidadefgts"]) || $this->si57_dtvalidadecertidaoregularidadefgts != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010033,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecertidaoregularidadefgts')) . "','$this->si57_dtvalidadecertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocndt"]) || $this->si57_nrocndt != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010034,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocndt')) . "','$this->si57_nrocndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocndt"]) || $this->si57_dtemissaocndt != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010036,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocndt')) . "','$this->si57_dtemissaocndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecndt"]) || $this->si57_dtvalidadecndt != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010038,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecndt')) . "','$this->si57_dtvalidadecndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dthabilitacao"]) || $this->si57_dthabilitacao != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010039,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dthabilitacao')) . "','$this->si57_dthabilitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_presencalicitantes"]) || $this->si57_presencalicitantes != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010040,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_presencalicitantes')) . "','$this->si57_presencalicitantes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_renunciarecurso"]) || $this->si57_renunciarecurso != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010041,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_renunciarecurso')) . "','$this->si57_renunciarecurso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_mes"]) || $this->si57_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2010042,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_mes')) . "','$this->si57_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si57_instit"]) || $this->si57_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010286,2011569,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_instit')) . "','$this->si57_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // if ($this->numrows > 0) {
+    //   for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2010011,'$this->si57_sequencial','A')");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_sequencial"]) || $this->si57_sequencial != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010011,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_sequencial')) . "','$this->si57_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_tiporegistro"]) || $this->si57_tiporegistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010012,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_tiporegistro')) . "','$this->si57_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_codorgao"]) || $this->si57_codorgao != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010013,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_codorgao')) . "','$this->si57_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_codunidadesub"]) || $this->si57_codunidadesub != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010014,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_codunidadesub')) . "','$this->si57_codunidadesub'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_exerciciolicitacao"]) || $this->si57_exerciciolicitacao != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010015,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_exerciciolicitacao')) . "','$this->si57_exerciciolicitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroprocessolicitatorio"]) || $this->si57_nroprocessolicitatorio != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010016,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroprocessolicitatorio')) . "','$this->si57_nroprocessolicitatorio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_tipodocumento"]) || $this->si57_tipodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010017,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_tipodocumento')) . "','$this->si57_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrodocumento"]) || $this->si57_nrodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010018,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrodocumento')) . "','$this->si57_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_objetosocial"]) || $this->si57_objetosocial != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010019,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_objetosocial')) . "','$this->si57_objetosocial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_orgaorespregistro"]) || $this->si57_orgaorespregistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010020,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_orgaorespregistro')) . "','$this->si57_orgaorespregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dataregistro"]) || $this->si57_dataregistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010021,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dataregistro')) . "','$this->si57_dataregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroregistro"]) || $this->si57_nroregistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010022,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroregistro')) . "','$this->si57_nroregistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dataregistrocvm"]) || $this->si57_dataregistrocvm != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010023,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dataregistrocvm')) . "','$this->si57_dataregistrocvm'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroregistrocvm"]) || $this->si57_nroregistrocvm != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010024,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroregistrocvm')) . "','$this->si57_nroregistrocvm'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nroinscricaoestadual"]) || $this->si57_nroinscricaoestadual != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010025,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nroinscricaoestadual')) . "','$this->si57_nroinscricaoestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_ufinscricaoestadual"]) || $this->si57_ufinscricaoestadual != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010026,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_ufinscricaoestadual')) . "','$this->si57_ufinscricaoestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocertidaoregularidadeinss"]) || $this->si57_nrocertidaoregularidadeinss != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010027,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocertidaoregularidadeinss')) . "','$this->si57_nrocertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocertidaoregularidadeinss"]) || $this->si57_dtemissaocertidaoregularidadeinss != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010028,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocertidaoregularidadeinss')) . "','$this->si57_dtemissaocertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecertidaoregularidadeinss"]) || $this->si57_dtvalidadecertidaoregularidadeinss != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010029,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecertidaoregularidadeinss')) . "','$this->si57_dtvalidadecertidaoregularidadeinss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocertidaoregularidadefgts"]) || $this->si57_nrocertidaoregularidadefgts != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010030,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocertidaoregularidadefgts')) . "','$this->si57_nrocertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocertidaoregularidadefgts"]) || $this->si57_dtemissaocertidaoregularidadefgts != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010032,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocertidaoregularidadefgts')) . "','$this->si57_dtemissaocertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecertidaoregularidadefgts"]) || $this->si57_dtvalidadecertidaoregularidadefgts != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010033,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecertidaoregularidadefgts')) . "','$this->si57_dtvalidadecertidaoregularidadefgts'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_nrocndt"]) || $this->si57_nrocndt != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010034,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_nrocndt')) . "','$this->si57_nrocndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtemissaocndt"]) || $this->si57_dtemissaocndt != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010036,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtemissaocndt')) . "','$this->si57_dtemissaocndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dtvalidadecndt"]) || $this->si57_dtvalidadecndt != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010038,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dtvalidadecndt')) . "','$this->si57_dtvalidadecndt'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_dthabilitacao"]) || $this->si57_dthabilitacao != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010039,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_dthabilitacao')) . "','$this->si57_dthabilitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_presencalicitantes"]) || $this->si57_presencalicitantes != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010040,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_presencalicitantes')) . "','$this->si57_presencalicitantes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_renunciarecurso"]) || $this->si57_renunciarecurso != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010041,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_renunciarecurso')) . "','$this->si57_renunciarecurso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_mes"]) || $this->si57_mes != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2010042,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_mes')) . "','$this->si57_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si57_instit"]) || $this->si57_instit != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010286,2011569,'" . AddSlashes(pg_result($resaco, $conresaco, 'si57_instit')) . "','$this->si57_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -774,7 +848,7 @@ class cl_hablic102019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -785,7 +859,7 @@ class cl_hablic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -795,13 +869,13 @@ class cl_hablic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao para exclusao 
+
+  // funcao para exclusao
   function excluir($si57_sequencial = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -809,44 +883,44 @@ class cl_hablic102019
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2010011,'$si57_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010011,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010012,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010013,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010014,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010015,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_exerciciolicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010016,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010017,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010018,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010019,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_objetosocial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010020,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_orgaorespregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010021,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dataregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010022,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010023,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dataregistrocvm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010024,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroregistrocvm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010025,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroinscricaoestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010026,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_ufinscricaoestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010027,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010028,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010029,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010030,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010032,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010033,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010034,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010036,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010038,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010039,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dthabilitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010040,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_presencalicitantes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010041,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_renunciarecurso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2010042,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010286,2011569,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // if (($resaco != false) || ($this->numrows != 0)) {
+    //   for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2010011,'$si57_sequencial','E')");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010011,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010012,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010013,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010014,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010015,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_exerciciolicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010016,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010017,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010018,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010019,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_objetosocial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010020,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_orgaorespregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010021,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dataregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010022,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroregistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010023,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dataregistrocvm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010024,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroregistrocvm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010025,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nroinscricaoestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010026,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_ufinscricaoestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010027,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010028,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010029,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecertidaoregularidadeinss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010030,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010032,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010033,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecertidaoregularidadefgts')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010034,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_nrocndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010036,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtemissaocndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010038,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dtvalidadecndt')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010039,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_dthabilitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010040,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_presencalicitantes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010041,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_renunciarecurso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2010042,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010286,2011569,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si57_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $sql = " delete from hablic102019
                     where ";
     $sql2 = "";
@@ -870,7 +944,7 @@ class cl_hablic102019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -881,7 +955,7 @@ class cl_hablic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -891,13 +965,13 @@ class cl_hablic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao do recordset 
+
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -909,7 +983,7 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -919,14 +993,14 @@ class cl_hablic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query($si57_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -959,11 +1033,11 @@ class cl_hablic102019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query_file($si57_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -996,7 +1070,7 @@ class cl_hablic102019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

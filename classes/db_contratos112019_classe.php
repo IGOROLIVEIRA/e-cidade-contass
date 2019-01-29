@@ -116,8 +116,7 @@ class cl_contratos112019 {
      if($si84_sequencial == "" || $si84_sequencial == null ){
        $result = db_query("select nextval('contratos112019_si84_sequencial_seq')"); 
        if($result==false){
-         $this->erro_banco = str_replace("
-","",@pg_last_error());
+         $this->erro_banco = str_replace("","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: contratos112019_si84_sequencial_seq do campo: si84_sequencial"; 
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -170,8 +169,7 @@ class cl_contratos112019 {
                       )";
      $result = db_query($sql); 
      if($result==false){ 
-       $this->erro_banco = str_replace("
-","",@pg_last_error());
+       $this->erro_banco = str_replace("","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "contratos112019 ($this->si84_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -188,7 +186,7 @@ class cl_contratos112019 {
      }
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\n";
-         $this->erro_sql .= "Valores : ".$this->si84_sequencial;
+     $this->erro_sql .= "Valores : ".$this->si84_sequencial;
      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
      $this->erro_status = "1";
@@ -218,7 +216,7 @@ class cl_contratos112019 {
      $virgula = "";
      if(trim($this->si84_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si84_sequencial"])){ 
         if(trim($this->si84_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si84_sequencial"])){ 
-           $this->si84_sequencial = "0" ; 
+           $this->si84_sequencial = "0";
         } 
        $sql  .= $virgula." si84_sequencial = $this->si84_sequencial ";
        $virgula = ",";
@@ -330,10 +328,9 @@ class cl_contratos112019 {
      }
      $result = db_query($sql);
      if($result==false){ 
-       $this->erro_banco = str_replace("
-","",@pg_last_error());
+       $this->erro_banco = str_replace("","",@pg_last_error());
        $this->erro_sql   = "contratos112019 nao Alterado. Alteracao Abortada.\n";
-         $this->erro_sql .= "Valores : ".$this->si84_sequencial;
+       $this->erro_sql .= "Valores : ".$this->si84_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        $this->erro_status = "0";
@@ -400,8 +397,7 @@ class cl_contratos112019 {
      }
      $result = db_query($sql.$sql2);
      if($result==false){ 
-       $this->erro_banco = str_replace("
-","",@pg_last_error());
+       $this->erro_banco = str_replace("","",@pg_last_error());
        $this->erro_sql   = "contratos112019 nao Excluído. Exclusão Abortada.\n";
        $this->erro_sql .= "Valores : ".$si84_sequencial;
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -436,8 +432,7 @@ class cl_contratos112019 {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
-       $this->erro_banco = str_replace("
-","",@pg_last_error());
+       $this->erro_banco = str_replace("","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

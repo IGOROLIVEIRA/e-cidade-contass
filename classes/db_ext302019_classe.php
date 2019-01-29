@@ -37,23 +37,23 @@ class cl_ext302019
   var $si126_codunidadesub = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si126_sequencial = int8 = sequencial 
-                 si126_tiporegistro = int8 = Tipo do  registro 
+                 si126_sequencial = int8 = sequencial
+                 si126_tiporegistro = int8 = Tipo do  registro
                  si126_codext = int8 = Código  identificador ExtraOrçamentária
                  si126_codfontrecursos = int8 = Código da fonte de recursos
-                 si126_codreduzidoop = int8 = Código  Identificador do  pagamento 
+                 si126_codreduzidoop = int8 = Código  Identificador do  pagamento
                  si126_nroop = int8 = Número da  Ordem de  Pagamento
                  si126_codunidadesub = varchar(8) = Código da unidade ou subunidade orçamentária
-                 si126_dtpagamento = date = Data de  pagamento da  OP 
-                 si126_tipodocumentocredor = int8 = Tipo de  Documento do  credor 
+                 si126_dtpagamento = date = Data de  pagamento da  OP
+                 si126_tipodocumentocredor = int8 = Tipo de  Documento do  credor
                  si126_nrodocumentocredor = varchar(14) = Número do documento do credor
-                 si126_vlop = float8 = Valor da OP 
-                 si126_especificacaoop = varchar(200) = Especificação da  OP 
-                 si126_cpfresppgto = varchar(11) = CPF do  responsável 
+                 si126_vlop = float8 = Valor da OP
+                 si126_especificacaoop = varchar(200) = Especificação da  OP
+                 si126_cpfresppgto = varchar(11) = CPF do  responsável
                  si126_mes = int8 = Mês
-                 si126_instit = int8 = Instituição 
+                 si126_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_ext302019()
   {
@@ -61,7 +61,7 @@ class cl_ext302019
     $this->rotulo = new rotulo("ext302019");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -72,7 +72,7 @@ class cl_ext302019
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -102,7 +102,7 @@ class cl_ext302019
       $this->si126_sequencial = ($this->si126_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si126_sequencial"] : $this->si126_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si126_sequencial)
   {
@@ -114,26 +114,81 @@ class cl_ext302019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si126_codext == null) {
-      $this->si126_codext = "0";
+      $this->erro_sql = " Campo Código do identificador não Informado.";
+      $this->erro_campo = "si126_codext";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si126_codreduzidoop == null) {
-      $this->si126_codreduzidoop = "0";
+      $this->erro_sql = " Campo Código do Identificador não Informado.";
+      $this->erro_campo = "si126_codreduzidoop";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si126_nroop == null) {
-      $this->si126_nroop = "0";
+      $this->erro_sql = " Campo Número da Ordem não Informado.";
+      $this->erro_campo = "si126_nroop";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si126_dtpagamento == null) {
-      $this->si126_dtpagamento = "null";
+      $this->erro_sql = " Campo data de pagamento não Informado.";
+      $this->erro_campo = "si126_dtpagamento";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si126_tipodocumentocredor == null) {
       $this->si126_tipodocumentocredor = "0";
     }
     if ($this->si126_vlop == null) {
-      $this->si126_vlop = "0";
+      $this->erro_sql = " Campo valor da op não Informado.";
+      $this->erro_campo = "si126_vlop";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si126_especificacaoop == null) {
+      $this->erro_sql = " Campo especificação da op não Informado.";
+      $this->erro_campo = "si126_especificacaoop";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si126_cpfresppgto == null) {
+      $this->erro_sql = " Campo CPF do responsável não Informado.";
+      $this->erro_campo = "si126_cpfresppgto";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si126_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -142,7 +197,7 @@ class cl_ext302019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si126_instit == null) {
@@ -152,19 +207,18 @@ class cl_ext302019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si126_sequencial == "" || $si126_sequencial == null) {
       $result = db_query("select nextval('ext302019_si126_sequencial_seq')");
       if ($result == false) {
-        $this->erro_banco = str_replace("
-", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: ext302019_si126_sequencial_seq do campo: si126_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si126_sequencial = pg_result($result, 0, 0);
@@ -176,7 +230,7 @@ class cl_ext302019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si126_sequencial = $si126_sequencial;
@@ -188,49 +242,48 @@ class cl_ext302019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into ext302019(
-                                       si126_sequencial 
-                                      ,si126_tiporegistro 
-                                      ,si126_codext 
-                                      ,si126_codreduzidoop 
-                                      ,si126_nroop
+                                       si126_sequencial
+                                      ,si126_tiporegistro
+                                      ,si126_codext
                                       ,si126_codfontrecursos
-                                      ,si126_dtpagamento 
-                                      ,si126_tipodocumentocredor 
+                                      ,si126_codreduzidoop
+                                      ,si126_nroop
+                                      ,si126_codunidadesub
+                                      ,si126_dtpagamento
+                                      ,si126_tipodocumentocredor
                                       ,si126_nrodocumentocredor
-                                      ,si126_vlop 
-                                      ,si126_especificacaoop 
-                                      ,si126_cpfresppgto 
+                                      ,si126_vlop
+                                      ,si126_especificacaoop
+                                      ,si126_cpfresppgto
                                       ,si126_mes
                                       ,si126_instit
-                                      ,si126_codunidadesub
                        )
                 values (
-                                $this->si126_sequencial 
-                               ,$this->si126_tiporegistro 
-                               ,$this->si126_codext 
-                               ,$this->si126_codreduzidoop 
-                               ,$this->si126_nroop
+                                $this->si126_sequencial
+                               ,$this->si126_tiporegistro
+                               ,$this->si126_codext
                                ,$this->si126_codfontrecursos
-                               ," . ($this->si126_dtpagamento == "null" || $this->si126_dtpagamento == "" ? "null" : "'" . $this->si126_dtpagamento . "'") . " 
-                               ,$this->si126_tipodocumentocredor 
-                               ,'$this->si126_nrodocumentocredor' 
-                               ,$this->si126_vlop 
-                               ,'$this->si126_especificacaoop' 
-                               ,'$this->si126_cpfresppgto' 
+                               ,$this->si126_codreduzidoop
+                               ,'$this->si126_codunidadesub'
+                               ," . ($this->si126_dtpagamento == "null" || $this->si126_dtpagamento == "" ? "null" : "'" . $this->si126_dtpagamento . "'") . "
+                               ,$this->si126_nroop
+                               ,$this->si126_tipodocumentocredor
+                               ,'$this->si126_nrodocumentocredor'
+                               ,$this->si126_vlop
+                               ,'$this->si126_especificacaoop'
+                               ,'$this->si126_cpfresppgto'
                                ,$this->si126_mes
                                ,$this->si126_instit
-                               ,'$this->si126_codunidadesub'
                       )";
     $result = db_query($sql);
     if ($result == false) {
       echo pg_last_error();
       die($sql);
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "ext302019 ($this->si126_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -243,7 +296,7 @@ class cl_ext302019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -273,10 +326,10 @@ class cl_ext302019
 //      $resac = db_query("insert into db_acount values($acount,2010355,2010876,'','" . AddSlashes(pg_result($resaco, 0, 'si126_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //      $resac = db_query("insert into db_acount values($acount,2010355,2011639,'','" . AddSlashes(pg_result($resaco, 0, 'si126_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //    }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si126_sequencial = null)
   {
@@ -300,7 +353,7 @@ class cl_ext302019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -370,7 +423,7 @@ class cl_ext302019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -391,7 +444,7 @@ class cl_ext302019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -452,15 +505,14 @@ class cl_ext302019
     }
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "ext302019 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si126_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -471,7 +523,7 @@ class cl_ext302019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -481,12 +533,12 @@ class cl_ext302019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si126_sequencial = null, $dbwhere = null)
   {
@@ -532,15 +584,14 @@ class cl_ext302019
     }
     $result = db_query($sql . $sql2);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "ext302019 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si126_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -551,7 +602,7 @@ class cl_ext302019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -561,25 +612,24 @@ class cl_ext302019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
     if ($result == false) {
       $this->numrows = 0;
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "Erro ao selecionar os registros.";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -589,13 +639,13 @@ class cl_ext302019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si126_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -633,10 +683,10 @@ class cl_ext302019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si126_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -672,7 +722,7 @@ class cl_ext302019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

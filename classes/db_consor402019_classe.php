@@ -20,15 +20,16 @@ class cl_consor402019
   var $si19_sequencial = 0;
   var $si19_tiporegistro = 0;
   var $si19_cnpjconsorcio = null;
+  var $si19_codfontrecursos = null;
   var $si19_vldispcaixa = 0;
   var $si19_mes = 0;
-  var $si19_codfontrecursos = null;
   var $si19_instit = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si19_sequencial = int8 = sequencial 
                  si19_tiporegistro = int8 = Tipo do registro
                  si19_cnpjconsorcio = varchar(2) = Código do  Consórcio
+                 si19_codfontrecursos = int8 = Código da fonte de recursos
                  si19_vldispcaixa = float8 = Valor da  disponibilidade 
                  si19_mes = int8 = Mês 
                  si19_instit = int8 = Instit
@@ -60,6 +61,7 @@ class cl_consor402019
       $this->si19_sequencial = ($this->si19_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_sequencial"] : $this->si19_sequencial);
       $this->si19_tiporegistro = ($this->si19_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_tiporegistro"] : $this->si19_tiporegistro);
       $this->si19_cnpjconsorcio = ($this->si19_cnpjconsorcio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_cnpjconsorcio"] : $this->si19_cnpjconsorcio);
+      $this->si19_codfontrecursos = ($this->si19_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_codfontrecursos"] : $this->si19_codfontrecursos);
       $this->si19_vldispcaixa = ($this->si19_vldispcaixa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"] : $this->si19_vldispcaixa);
       $this->si19_mes = ($this->si19_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_mes"] : $this->si19_mes);
       $this->si19_instit = ($this->si19_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si19_instit"] : $this->si19_instit);
@@ -116,6 +118,16 @@ class cl_consor402019
     if ($this->si19_cnpjconsorcio == null) {
       $this->erro_sql = " Campo CNPJ nao Informado.";
       $this->erro_campo = "si19_cnpjconsorcio";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si19_codfontrecursos == null) {
+      $this->erro_sql = " Campo Código da fonte de recursos nao Informado.";
+      $this->erro_campo = "si19_codfontrecursos";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -204,17 +216,17 @@ class cl_consor402019
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->si19_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2009646,'$this->si19_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010247,2009646,'','" . AddSlashes(pg_result($resaco, 0, 'si19_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010247,2009643,'','" . AddSlashes(pg_result($resaco, 0, 'si19_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010247,2009644,'','" . AddSlashes(pg_result($resaco, 0, 'si19_codconsorcio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010247,2009645,'','" . AddSlashes(pg_result($resaco, 0, 'si19_vldispcaixa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010247,2009739,'','" . AddSlashes(pg_result($resaco, 0, 'si19_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//      $acount = pg_result($resac, 0, 0);
+//      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//      $resac = db_query("insert into db_acountkey values($acount,2009646,'$this->si19_sequencial','I')");
+//      $resac = db_query("insert into db_acount values($acount,2010247,2009646,'','" . AddSlashes(pg_result($resaco, 0, 'si19_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010247,2009643,'','" . AddSlashes(pg_result($resaco, 0, 'si19_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010247,2009644,'','" . AddSlashes(pg_result($resaco, 0, 'si19_codconsorcio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010247,2009645,'','" . AddSlashes(pg_result($resaco, 0, 'si19_vldispcaixa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010247,2009739,'','" . AddSlashes(pg_result($resaco, 0, 'si19_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//    }
 
     return true;
   }
@@ -257,6 +269,10 @@ class cl_consor402019
       $sql .= $virgula . " si19_cnpjconsorcio = '$this->si19_cnpjconsorcio' ";
       $virgula = ",";
     }
+    if (trim($this->si19_codfontrecursos) != "" && isset($GLOBALS["HTTP_POST_VARS"]["si19_codfontrecursos"])) {
+      $sql .= $virgula . " si19_codfontrecursos = '$this->si19_codfontrecursos' ";
+      $virgula = ",";
+    }
     if (trim($this->si19_vldispcaixa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"])) {
       $sql .= $virgula . " si19_vldispcaixa = $this->si19_vldispcaixa ";
       $virgula = ",";
@@ -290,24 +306,24 @@ class cl_consor402019
       $sql .= " si19_sequencial = $this->si19_sequencial";
     }
     $resaco = $this->sql_record($this->sql_query_file($this->si19_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009646,'$this->si19_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_sequencial"]) || $this->si19_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010247,2009646,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_sequencial')) . "','$this->si19_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_tiporegistro"]) || $this->si19_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010247,2009643,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_tiporegistro')) . "','$this->si19_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"]) || $this->si19_codconsorcio != "")
-          $resac = db_query("insert into db_acount values($acount,2010247,2009644,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_codconsorcio')) . "','$this->si19_codconsorcio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"]) || $this->si19_vldispcaixa != "")
-          $resac = db_query("insert into db_acount values($acount,2010247,2009645,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_vldispcaixa')) . "','$this->si19_vldispcaixa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_mes"]) || $this->si19_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010247,2009739,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_mes')) . "','$this->si19_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if ($this->numrows > 0) {
+//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009646,'$this->si19_sequencial','A')");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_sequencial"]) || $this->si19_sequencial != "")
+//          $resac = db_query("insert into db_acount values($acount,2010247,2009646,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_sequencial')) . "','$this->si19_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_tiporegistro"]) || $this->si19_tiporegistro != "")
+//          $resac = db_query("insert into db_acount values($acount,2010247,2009643,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_tiporegistro')) . "','$this->si19_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"]) || $this->si19_codconsorcio != "")
+//          $resac = db_query("insert into db_acount values($acount,2010247,2009644,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_codconsorcio')) . "','$this->si19_codconsorcio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"]) || $this->si19_vldispcaixa != "")
+//          $resac = db_query("insert into db_acount values($acount,2010247,2009645,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_vldispcaixa')) . "','$this->si19_vldispcaixa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si19_mes"]) || $this->si19_mes != "")
+//          $resac = db_query("insert into db_acount values($acount,2010247,2009739,'" . AddSlashes(pg_result($resaco, $conresaco, 'si19_mes')) . "','$this->si19_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -353,19 +369,19 @@ class cl_consor402019
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009646,'$si19_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010247,2009646,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010247,2009643,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010247,2009644,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_codconsorcio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010247,2009645,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_vldispcaixa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010247,2009739,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009646,'$si19_sequencial','E')");
+//        $resac = db_query("insert into db_acount values($acount,2010247,2009646,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010247,2009643,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010247,2009644,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_codconsorcio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010247,2009645,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_vldispcaixa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010247,2009739,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si19_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $sql = " delete from consor402019
                     where ";
     $sql2 = "";

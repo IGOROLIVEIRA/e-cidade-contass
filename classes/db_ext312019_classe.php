@@ -35,21 +35,21 @@ class cl_ext312019
   var $si127_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si127_sequencial = int8 = sequencial 
-                 si127_tiporegistro = int8 = Tipo do  registro 
-                 si127_codreduzidoop = int8 = Código  Identificador da  Ordem 
-                 si127_tipodocumentoop = varchar(2) = Tipo do  documento 
-                 si127_nrodocumento = varchar(15) = Número do  Documento 
-                 si127_codctb = int8 = Identificador da Conta Bancária 
-                 si127_codfontectb = int8 = Código da fonte de recursos ctb 
-                 si127_dtemissao = date = Data de emissão  do documento 
+                 si127_sequencial = int8 = sequencial
+                 si127_tiporegistro = int8 = Tipo do  registro
+                 si127_codreduzidoop = int8 = Código  Identificador da  Ordem
+                 si127_tipodocumentoop = varchar(2) = Tipo do  documento
+                 si127_nrodocumento = varchar(15) = Número do  Documento
+                 si127_codctb = int8 = Identificador da Conta Bancária
+                 si127_codfontectb = int8 = Código da fonte de recursos ctb
+                 si127_dtemissao = date = Data de emissão  do documento
                  si127_vldocumento = float8 = Valor da OP
-                 si127_desctipodocumentoop = varchar(50) = Descrição  
-                 si127_mes = int8 = Mês 
-                 si127_reg30 = int8 = reg22 
-                 si127_instit = int8 = Instituição 
+                 si127_desctipodocumentoop = varchar(50) = Descrição
+                 si127_mes = int8 = Mês
+                 si127_reg30 = int8 = reg22
+                 si127_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_ext312019()
   {
@@ -57,7 +57,7 @@ class cl_ext312019
     $this->rotulo = new rotulo("ext312019");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -68,7 +68,7 @@ class cl_ext312019
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -97,7 +97,7 @@ class cl_ext312019
       $this->si127_sequencial = ($this->si127_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si127_sequencial"] : $this->si127_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si127_sequencial)
   {
@@ -109,11 +109,18 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si127_codreduzidoop == null) {
-      $this->si127_codreduzidoop = "0";
+      $this->erro_sql = " Campo Código do Identificador não Informado.";
+      $this->erro_campo = "si127_codreduzidoop";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si127_codctb == null) {
       $this->si127_codctb = "0";
@@ -125,7 +132,14 @@ class cl_ext312019
       $this->si127_dtemissao = "null";
     }
     if ($this->si127_vldocumento == null) {
-      $this->si127_vldocumento = "0";
+      $this->erro_sql = " Campo Valor da op não Informado.";
+      $this->erro_campo = "si127_vldocumento";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si127_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -134,7 +148,7 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si127_reg30 == null) {
@@ -147,19 +161,19 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si127_sequencial == "" || $si127_sequencial == null) {
       $result = db_query("select nextval('ext312019_si127_sequencial_seq')");
       if ($result == false) {
         $this->erro_banco = str_replace("
-", "", @pg_last_error());
+          ", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: ext312019_si127_sequencial_seq do campo: si127_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si127_sequencial = pg_result($result, 0, 0);
@@ -171,7 +185,7 @@ class cl_ext312019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si127_sequencial = $si127_sequencial;
@@ -183,38 +197,38 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into ext312019(
-                                       si127_sequencial 
-                                      ,si127_tiporegistro 
-                                      ,si127_codreduzidoop 
-                                      ,si127_tipodocumentoop 
-                                      ,si127_nrodocumento 
-                                      ,si127_codctb 
-                                      ,si127_codfontectb 
-                                      ,si127_dtemissao 
+                                       si127_sequencial
+                                      ,si127_tiporegistro
+                                      ,si127_codreduzidoop
+                                      ,si127_tipodocumentoop
+                                      ,si127_nrodocumento
+                                      ,si127_codctb
+                                      ,si127_codfontectb
+                                      ,si127_desctipodocumentoop
+                                      ,si127_dtemissao
                                       ,si127_vldocumento
-                                      ,si127_desctipodocumentoop 
-                                      ,si127_mes 
-                                      ,si127_reg30 
-                                      ,si127_instit 
+                                      ,si127_mes
+                                      ,si127_reg30
+                                      ,si127_instit
                        )
                 values (
-                                $this->si127_sequencial 
-                               ,$this->si127_tiporegistro 
-                               ,$this->si127_codreduzidoop 
-                               ,'$this->si127_tipodocumentoop' 
-                               ,'$this->si127_nrodocumento' 
-                               ,$this->si127_codctb 
-                               ,$this->si127_codfontectb 
-                               ," . ($this->si127_dtemissao == "null" || $this->si127_dtemissao == "" ? "null" : "'" . $this->si127_dtemissao . "'") . " 
-                               ,$this->si127_vldocumento 
+                                $this->si127_sequencial
+                               ,$this->si127_tiporegistro
+                               ,$this->si127_codreduzidoop
+                               ,'$this->si127_tipodocumentoop'
+                               ,'$this->si127_nrodocumento'
+                               ,$this->si127_codctb
+                               ,$this->si127_codfontectb
                                ,'$this->si127_desctipodocumentoop'
-                               ,$this->si127_mes 
-                               ,$this->si127_reg30 
-                               ,$this->si127_instit 
+                               ," . ($this->si127_dtemissao == "null" || $this->si127_dtemissao == "" ? "null" : "'" . $this->si127_dtemissao . "'") . "
+                               ,$this->si127_vldocumento
+                               ,$this->si127_mes
+                               ,$this->si127_reg30
+                               ,$this->si127_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -232,7 +246,7 @@ class cl_ext312019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -261,10 +275,10 @@ class cl_ext312019
 //      $resac = db_query("insert into db_acount values($acount,2010356,2010887,'','" . AddSlashes(pg_result($resaco, 0, 'si127_reg30')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //      $resac = db_query("insert into db_acount values($acount,2010356,2011640,'','" . AddSlashes(pg_result($resaco, 0, 'si127_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si127_sequencial = null)
   {
@@ -288,7 +302,7 @@ class cl_ext312019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -351,7 +365,7 @@ class cl_ext312019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -372,7 +386,7 @@ class cl_ext312019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -435,7 +449,7 @@ class cl_ext312019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -446,7 +460,7 @@ class cl_ext312019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -456,12 +470,12 @@ class cl_ext312019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si127_sequencial = null, $dbwhere = null)
   {
@@ -513,7 +527,7 @@ class cl_ext312019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -524,7 +538,7 @@ class cl_ext312019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -534,12 +548,12 @@ class cl_ext312019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -552,7 +566,7 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -562,13 +576,13 @@ class cl_ext312019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si127_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -585,7 +599,6 @@ class cl_ext312019
     }
     $sql .= " from ext312019 ";
     $sql .= "      left  join ext222019  on  ext222019.si126_sequencial = ext312019.si127_reg30";
-    $sql .= "      left  join ext212019  on  ext212019.si125_sequencial = ext222019.si126_reg21";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si127_sequencial != null) {
@@ -606,10 +619,10 @@ class cl_ext312019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si127_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -645,9 +658,10 @@ class cl_ext312019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }
 
 ?>
+S

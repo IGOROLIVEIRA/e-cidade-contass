@@ -20,7 +20,7 @@ class cl_balancete222019
   var $si189_sequencial = 0;
   var $si189_tiporegistro = 0;
   var $si189_contacontabil = 0;
-  var $si189_codfundo = 0;
+  var $si189_codfundo = null;
   var $si189_atributosf = null;
   var $si189_codctb = 0;
   var $si189_saldoInicialctbsf = 0;
@@ -37,7 +37,7 @@ class cl_balancete222019
                  si189_sequencial = int8 = si189_sequencial 
                  si189_tiporegistro = int8 = si189_tiporegistro 
                  si189_contacontabil = int8 = si189_contacontabil 
-                 si189_codfundo = int8 = si189_codfundo 
+                 si189_codfundo = varchar(8) = si189_codfundo 
                  si189_atributosf = varchar(1) = si189_atributosf 
                  si189_codctb = int8 = si189_codctb 
                  si189_saldoInicialctbsf = float8 = si189_saldoInicialctbsf 

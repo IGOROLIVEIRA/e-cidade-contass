@@ -20,7 +20,7 @@ class cl_balancete162019
   var $si183_sequencial = 0;
   var $si183_tiporegistro = 0;
   var $si183_contacontabil = 0;
-  var $si183_codfundo = 0;
+  var $si183_codfundo = null;
   var $si183_atributosf = null;
   var $si183_codfontrecursos = 0;
   var $si183_saldoinicialfontsf = 0;
@@ -37,7 +37,7 @@ class cl_balancete162019
                  si183_sequencial = int8 = si183_sequencial 
                  si183_tiporegistro = int8 = si183_tiporegistro 
                  si183_contacontabil = int8 = si183_contacontabil 
-                 si183_codfundo = int8 = si183_codfundo 
+                 si183_codfundo = varchar(8) = si183_codfundo 
                  si183_atributosf = varchar(1) = si183_atributosf 
                  si183_codfontrecursos = int8 = si183_codfontrecursos 
                  si183_saldoinicialfontsf = float8 = si183_saldoinicialfontsf 

@@ -20,7 +20,7 @@ class cl_balancete262019
   var $si193_sequencial = 0;
   var $si193_tiporegistro = 0;
   var $si193_contacontabil = 0;
-  var $si193_codfundo = 0;
+  var $si193_codfundo = null;
   var $si193_tipodocumentopessoaatributosf = 0;
   var $si193_nrodocumentopessoaatributosf = null;
   var $si193_atributosf = null;
@@ -38,7 +38,7 @@ class cl_balancete262019
                  si193_sequencial = int8 = si193_sequencial 
                  si193_tiporegistro = int8 = si193_tiporegistro 
                  si193_contacontabil = int8 = si193_contacontabil 
-                 si193_codfundo = int8 = si193_codfundo 
+                 si193_codfundo = varchar(8) = si193_codfundo 
                  si193_tipodocumentopessoaatributosf = int8 = si193_tipodocumentopessoaatributosf
                  si193_nrodocumentopessoaatributosf = varchar(14) = si193_nrodocumentopessoaatributosf
                  si193_atributosf = varchar(1) = si193_atributosf 

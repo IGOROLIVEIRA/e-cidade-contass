@@ -21,6 +21,13 @@ class cl_arc212019
   var $si32_tiporegistro = 0;
   var $si32_codestorno = 0;
   var $si32_codfonteestornada = 0;
+  var $si32_tipodocumento = 0;
+  var $si32_nrodocumento = "";
+  var $si32_nroconvenio = "";
+  var $si32_dataassinatura_dia = null;
+  var $si32_dataassinatura_mes = null;
+  var $si32_dataassinatura_ano = null;
+  var $si32_dataassinatura = null;
   var $si32_vlestornadofonte = 0;
   var $si32_reg20 = 0;
   var $si32_instit = 0;
@@ -29,7 +36,11 @@ class cl_arc212019
                  si32_sequencial = int8 = sequencial 
                  si32_tiporegistro = int8 = Tipo do  registro 
                  si32_codestorno = int8 = Código identificador 
-                 si32_codfonteestornada = int8 = Código da fonte 
+                 si32_codfonteestornada = int8 = Código da fonte
+                 si32_tipodocumento = int8 = Tipo do documento
+                 si32_nrodocumento = varchar(14) = Número do documento
+                 si32_nroconvenio = varchar(30) = Número do convênio
+                 si32_dataassinatura = date = Data da assinatura 
                  si32_vlestornadofonte = float8 = Valor estornado 
                  si32_reg20 = int8 = reg20 
                  si32_instit = int8 = Instituição 
@@ -62,6 +73,18 @@ class cl_arc212019
       $this->si32_tiporegistro = ($this->si32_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tiporegistro"] : $this->si32_tiporegistro);
       $this->si32_codestorno = ($this->si32_codestorno == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codestorno"] : $this->si32_codestorno);
       $this->si32_codfonteestornada = ($this->si32_codfonteestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codfonteestornada"] : $this->si32_codfonteestornada);
+	  $this->si32_tipodocumento = ($this->si32_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"] : $this->si32_tipodocumento);
+	  $this->si32_nrodocumento = ($this->si32_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"] : $this->si32_nrodocumento);
+	  $this->si32_nroconvenio = ($this->si32_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"] : $this->si32_nroconvenio);
+   	  if($this->si32_dataassinatura == ""){
+	  	$this->si32_dataassinatura_dia = ($this->si32_dataassinatura_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_dia"] : $this->si32_dataassinatura_dia);
+		$this->si32_dataassinatura_mes = ($this->si32_dataassinatura_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_mes"] : $this->si32_dataassinatura_mes);
+		$this->si32_dataassinatura_ano = ($this->si32_dataassinatura_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_ano"] : $this->si32_dataassinatura_ano);
+		if ($this->si32_dataassinatura_dia != "") {
+			$this->si32_dataassinatura = $this->si32_dataassinatura_ano . "-" . $this->si32_dataassinatura_mes . "-" . $this->si32_dataassinatura_dia;
+		}
+	  }
+
       $this->si32_vlestornadofonte = ($this->si32_vlestornadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"] : $this->si32_vlestornadofonte);
       $this->si32_reg20 = ($this->si32_reg20 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_reg20"] : $this->si32_reg20);
       $this->si32_instit = ($this->si32_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_instit"] : $this->si32_instit);
@@ -85,11 +108,23 @@ class cl_arc212019
       return false;
     }
     if ($this->si32_codestorno == null) {
-      $this->si32_codestorno = "0";
+    	$this->si32_codestorno = "0";
     }
     if ($this->si32_codfonteestornada == null) {
-      $this->si32_codfonteestornada = "0";
+    	$this->si32_codfonteestornada = "0";
     }
+	if ($this->si32_tipodocumento == null) {
+		$this->si32_tipodocumento = "0";
+	}
+	if ($this->si32_nrodocumento == null) {
+		$this->si32_nrodocumento = "0";
+	}
+	if ($this->si32_nroconvenio == null){
+		$this->si32_nroconvenio = "0";
+	}
+	if ($this->si32_dataassinatura == null){
+		$this->si32_dataassinatura = "0";
+	}
     if ($this->si32_vlestornadofonte == null) {
       $this->si32_vlestornadofonte = "0";
     }
@@ -109,8 +144,7 @@ class cl_arc212019
     if ($si32_sequencial == "" || $si32_sequencial == null) {
       $result = db_query("select nextval('arc212019_si32_sequencial_seq')");
       if ($result == false) {
-        $this->erro_banco = str_replace("
-", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: arc212019_si32_sequencial_seq do campo: si32_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -146,7 +180,11 @@ class cl_arc212019
                                        si32_sequencial 
                                       ,si32_tiporegistro 
                                       ,si32_codestorno 
-                                      ,si32_codfonteestornada 
+                                      ,si32_codfonteestornada
+                                      ,si32_tipodocumento
+                                      ,si32_nrodocumento
+                                      ,si32_nroconvenio
+                                      ,si32_dataassinatura 
                                       ,si32_vlestornadofonte 
                                       ,si32_reg20 
                                       ,si32_instit 
@@ -155,15 +193,18 @@ class cl_arc212019
                                 $this->si32_sequencial 
                                ,$this->si32_tiporegistro 
                                ,$this->si32_codestorno 
-                               ,$this->si32_codfonteestornada 
+                               ,$this->si32_codfonteestornada
+                               ,$this->si32_tipodocumento
+                               ,$this->si32_nrodocumento
+                               ,$this->si32_nroconvenio
+                               ," . ($this->si32_dataassinatura == "null" || $this->si32_dataassinatura == "" ? "null" : "'" . $this->si32_dataassinatura . "'") . " 
                                ,$this->si32_vlestornadofonte 
                                ,$this->si32_reg20 
                                ,$this->si32_instit 
                       )";
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "arc212019 ($this->si32_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -187,19 +228,19 @@ class cl_arc212019
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->si32_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2009724,'$this->si32_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009724,'','" . AddSlashes(pg_result($resaco, 0, 'si32_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009725,'','" . AddSlashes(pg_result($resaco, 0, 'si32_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009726,'','" . AddSlashes(pg_result($resaco, 0, 'si32_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009727,'','" . AddSlashes(pg_result($resaco, 0, 'si32_codfonteestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009728,'','" . AddSlashes(pg_result($resaco, 0, 'si32_vlestornadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2009729,'','" . AddSlashes(pg_result($resaco, 0, 'si32_reg20')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010260,2011547,'','" . AddSlashes(pg_result($resaco, 0, 'si32_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//      $acount = pg_result($resac, 0, 0);
+//      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//      $resac = db_query("insert into db_acountkey values($acount,2009724,'$this->si32_sequencial','I')");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009724,'','" . AddSlashes(pg_result($resaco, 0, 'si32_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009725,'','" . AddSlashes(pg_result($resaco, 0, 'si32_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009726,'','" . AddSlashes(pg_result($resaco, 0, 'si32_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009727,'','" . AddSlashes(pg_result($resaco, 0, 'si32_codfonteestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009728,'','" . AddSlashes(pg_result($resaco, 0, 'si32_vlestornadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2009729,'','" . AddSlashes(pg_result($resaco, 0, 'si32_reg20')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010260,2011547,'','" . AddSlashes(pg_result($resaco, 0, 'si32_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//    }
 
     return true;
   }
@@ -245,6 +286,40 @@ class cl_arc212019
       $sql .= $virgula . " si32_codfonteestornada = $this->si32_codfonteestornada ";
       $virgula = ",";
     }
+	  if (trim($this->si32_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"])) {
+		  if (trim($this->si32_tipodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"])) {
+			  $this->si32_tipodocumento = "0";
+		  }
+		  $sql .= $virgula . " si32_tipodocumento = $this->si32_tipodocumento ";
+		  $virgula = ",";
+	  }
+
+	  if (trim($this->si32_nrodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"])) {
+		  if (trim($this->si32_nrodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"])) {
+			  $this->si32_nrodocumento = "0";
+		  }
+		  $sql .= $virgula . " si32_nrodocumento = $this->si32_nrodocumento ";
+		  $virgula = ",";
+	  }
+
+	  if (trim($this->si32_nroconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"])) {
+		  if (trim($this->si32_nroconvenio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"])) {
+			  $this->si32_nroconvenio = "0";
+		  }
+		  $sql .= $virgula . " si32_nroconvenio = $this->si32_nroconvenio ";
+		  $virgula = ",";
+	  }
+
+
+	  if (trim($this->si32_dataassinatura) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_dia"] != "")) {
+		  $sql .= $virgula . " si32_dataassinatura = '$this->si32_dataassinatura' ";
+		  $virgula = ",";
+	  }else {
+		  if (isset($GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura"])) {
+			  $sql .= $virgula . " si32_dataassinatura = null ";
+			  $virgula = ",";
+		  }
+	  }
     if (trim($this->si32_vlestornadofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"])) {
       if (trim($this->si32_vlestornadofonte) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"])) {
         $this->si32_vlestornadofonte = "0";
@@ -278,32 +353,31 @@ class cl_arc212019
       $sql .= " si32_sequencial = $this->si32_sequencial";
     }
     $resaco = $this->sql_record($this->sql_query_file($this->si32_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009724,'$this->si32_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_sequencial"]) || $this->si32_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009724,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_sequencial')) . "','$this->si32_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_tiporegistro"]) || $this->si32_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009725,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_tiporegistro')) . "','$this->si32_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_codestorno"]) || $this->si32_codestorno != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009726,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_codestorno')) . "','$this->si32_codestorno'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_codfonteestornada"]) || $this->si32_codfonteestornada != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009727,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_codfonteestornada')) . "','$this->si32_codfonteestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"]) || $this->si32_vlestornadofonte != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009728,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_vlestornadofonte')) . "','$this->si32_vlestornadofonte'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_reg20"]) || $this->si32_reg20 != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2009729,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_reg20')) . "','$this->si32_reg20'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_instit"]) || $this->si32_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010260,2011547,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_instit')) . "','$this->si32_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if ($this->numrows > 0) {
+//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009724,'$this->si32_sequencial','A')");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_sequencial"]) || $this->si32_sequencial != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009724,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_sequencial')) . "','$this->si32_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_tiporegistro"]) || $this->si32_tiporegistro != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009725,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_tiporegistro')) . "','$this->si32_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_codestorno"]) || $this->si32_codestorno != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009726,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_codestorno')) . "','$this->si32_codestorno'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_codfonteestornada"]) || $this->si32_codfonteestornada != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009727,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_codfonteestornada')) . "','$this->si32_codfonteestornada'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"]) || $this->si32_vlestornadofonte != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009728,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_vlestornadofonte')) . "','$this->si32_vlestornadofonte'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_reg20"]) || $this->si32_reg20 != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2009729,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_reg20')) . "','$this->si32_reg20'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si32_instit"]) || $this->si32_instit != "")
+//          $resac = db_query("insert into db_acount values($acount,2010260,2011547,'" . AddSlashes(pg_result($resaco, $conresaco, 'si32_instit')) . "','$this->si32_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "arc212019 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si32_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -345,21 +419,21 @@ class cl_arc212019
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009724,'$si32_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009724,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009725,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009726,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009727,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_codfonteestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009728,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_vlestornadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2009729,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_reg20')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010260,2011547,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009724,'$si32_sequencial','E')");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009724,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009725,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009726,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_codestorno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009727,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_codfonteestornada')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009728,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_vlestornadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2009729,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_reg20')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010260,2011547,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si32_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $sql = " delete from arc212019
                     where ";
     $sql2 = "";

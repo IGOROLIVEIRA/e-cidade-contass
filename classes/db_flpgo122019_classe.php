@@ -18,11 +18,10 @@ class cl_flpgo122019 {
     // cria variaveis do arquivo
     var $si197_sequencial = 0;
     var $si197_tiporegistro = 0;
-
     var $si197_indtipopagamento = 0;
     var $si197_codvinculopessoa = 0;
-    var $si197_desctiporubricadesconto = 0;
     var $si197_codrubricadesconto = 0;
+    var $si197_desctiporubricadesconto = 0;
     var $si197_vlrdescontodetalhado = 0;
     var $si197_mes = 0;
     var $si197_inst = 0;
@@ -32,7 +31,6 @@ class cl_flpgo122019 {
     var $campos = "
                  si197_sequencial = int8 = si197_sequencial
                  si197_tiporegistro = int8 = Tipo registro
-
                  si197_indtipopagamento = varchar(1) = Tipo de pagamento
                  si197_codvinculopessoa = bigint = Código do vinculo do agente público
                  si197_codrubricadesconto = int8 = Código da rubrica das parcelas de desconto
@@ -62,7 +60,6 @@ class cl_flpgo122019 {
         if($exclusao==false){
             $this->si197_sequencial = ($this->si197_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_sequencial"]:$this->si197_sequencial);
             $this->si197_tiporegistro = ($this->si197_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tiporegistro"]:$this->si197_tiporegistro);
-
             $this->si197_indtipopagamento = ($this->si197_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_indtipopagamento"]:$this->si197_indtipopagamento);
             $this->si197_codvinculopessoa = ($this->si197_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codvinculopessoa"]:$this->si197_codvinculopessoa);
             $this->si197_codrubricadesconto = ($this->si197_codrubricadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codrubricadesconto"]:$this->si197_codrubricadesconto);

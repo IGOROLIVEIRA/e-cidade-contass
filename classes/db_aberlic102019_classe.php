@@ -62,7 +62,7 @@ class cl_aberlic102019
   var $si46_prazoexecucao = 0;
   var $si46_formapagamento = null;
   var $si46_criterioaceitabilidade = null;
-  var $si46_descontotabela = 0;
+  var $si46_criterioadjudicacao = 0;
   var $si46_processoporlote = 0;
   var $si46_criteriodesempate = 0;
   var $si46_destinacaoexclusiva = 0;
@@ -99,7 +99,7 @@ class cl_aberlic102019
                  si46_prazoexecucao = int8 = Prazo para entrega  do objeto 
                  si46_formapagamento = varchar(80) = Descrição da forma    de pagamento 
                  si46_criterioaceitabilidade = varchar(80) = Descrição do critério de aceitabilidade 
-                 si46_descontotabela = int8 = Informar critério de adjudicação 
+                 si46_criterioadjudicacao = int8 = Informar critério de adjudicação 
                  si46_processoporlote = int8 = Informar 
                  si46_criteriodesempate = int8 = Licitação com    preferência 
                  si46_destinacaoexclusiva = int8 = Destinação exclusiva 
@@ -201,7 +201,7 @@ class cl_aberlic102019
       $this->si46_prazoexecucao = ($this->si46_prazoexecucao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_prazoexecucao"] : $this->si46_prazoexecucao);
       $this->si46_formapagamento = ($this->si46_formapagamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_formapagamento"] : $this->si46_formapagamento);
       $this->si46_criterioaceitabilidade = ($this->si46_criterioaceitabilidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_criterioaceitabilidade"] : $this->si46_criterioaceitabilidade);
-      $this->si46_descontotabela = ($this->si46_descontotabela == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_descontotabela"] : $this->si46_descontotabela);
+      $this->si46_criterioadjudicacao = ($this->si46_criterioadjudicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"] : $this->si46_criterioadjudicacao);
       $this->si46_processoporlote = ($this->si46_processoporlote == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_processoporlote"] : $this->si46_processoporlote);
       $this->si46_criteriodesempate = ($this->si46_criteriodesempate == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_criteriodesempate"] : $this->si46_criteriodesempate);
       $this->si46_destinacaoexclusiva = ($this->si46_destinacaoexclusiva == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_destinacaoexclusiva"] : $this->si46_destinacaoexclusiva);
@@ -276,8 +276,8 @@ class cl_aberlic102019
     if ($this->si46_prazoexecucao == null) {
       $this->si46_prazoexecucao = "0";
     }
-    if ($this->si46_descontotabela == null) {
-      $this->si46_descontotabela = "0";
+    if ($this->si46_criterioadjudicacao == null) {
+      $this->si46_criterioadjudicacao = "0";
     }
     if ($this->si46_processoporlote == null) {
       $this->si46_processoporlote = "0";
@@ -378,7 +378,7 @@ class cl_aberlic102019
                                       ,si46_prazoexecucao 
                                       ,si46_formapagamento 
                                       ,si46_criterioaceitabilidade 
-                                      ,si46_descontotabela 
+                                      ,si46_criterioadjudicacao 
                                       ,si46_processoporlote 
                                       ,si46_criteriodesempate 
                                       ,si46_destinacaoexclusiva 
@@ -415,7 +415,7 @@ class cl_aberlic102019
                                ,$this->si46_prazoexecucao 
                                ,'$this->si46_formapagamento' 
                                ,'$this->si46_criterioaceitabilidade' 
-                               ,$this->si46_descontotabela 
+                               ,$this->si46_criterioadjudicacao 
                                ,$this->si46_processoporlote 
                                ,$this->si46_criteriodesempate 
                                ,$this->si46_destinacaoexclusiva 
@@ -483,7 +483,7 @@ class cl_aberlic102019
       $resac = db_query("insert into db_acount values($acount,2010275,2009888,'','" . AddSlashes(pg_result($resaco, 0, 'si46_prazoexecucao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2009889,'','" . AddSlashes(pg_result($resaco, 0, 'si46_formapagamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2009891,'','" . AddSlashes(pg_result($resaco, 0, 'si46_criterioaceitabilidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010275,2009892,'','" . AddSlashes(pg_result($resaco, 0, 'si46_descontotabela')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010275,2009892,'','" . AddSlashes(pg_result($resaco, 0, 'si46_criterioadjudicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2009893,'','" . AddSlashes(pg_result($resaco, 0, 'si46_processoporlote')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2009894,'','" . AddSlashes(pg_result($resaco, 0, 'si46_criteriodesempate')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2009895,'','" . AddSlashes(pg_result($resaco, 0, 'si46_destinacaoexclusiva')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -683,11 +683,11 @@ class cl_aberlic102019
       $sql .= $virgula . " si46_criterioaceitabilidade = '$this->si46_criterioaceitabilidade' ";
       $virgula = ",";
     }
-    if (trim($this->si46_descontotabela) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_descontotabela"])) {
-      if (trim($this->si46_descontotabela) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si46_descontotabela"])) {
-        $this->si46_descontotabela = "0";
+    if (trim($this->si46_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"])) {
+      if (trim($this->si46_criterioadjudicacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"])) {
+        $this->si46_criterioadjudicacao = "0";
       }
-      $sql .= $virgula . " si46_descontotabela = $this->si46_descontotabela ";
+      $sql .= $virgula . " si46_criterioadjudicacao = $this->si46_criterioadjudicacao ";
       $virgula = ",";
     }
     if (trim($this->si46_processoporlote) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_processoporlote"])) {
@@ -818,8 +818,8 @@ class cl_aberlic102019
           $resac = db_query("insert into db_acount values($acount,2010275,2009889,'" . AddSlashes(pg_result($resaco, $conresaco, 'si46_formapagamento')) . "','$this->si46_formapagamento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioaceitabilidade"]) || $this->si46_criterioaceitabilidade != "")
           $resac = db_query("insert into db_acount values($acount,2010275,2009891,'" . AddSlashes(pg_result($resaco, $conresaco, 'si46_criterioaceitabilidade')) . "','$this->si46_criterioaceitabilidade'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si46_descontotabela"]) || $this->si46_descontotabela != "")
-          $resac = db_query("insert into db_acount values($acount,2010275,2009892,'" . AddSlashes(pg_result($resaco, $conresaco, 'si46_descontotabela')) . "','$this->si46_descontotabela'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"]) || $this->si46_criterioadjudicacao != "")
+          $resac = db_query("insert into db_acount values($acount,2010275,2009892,'" . AddSlashes(pg_result($resaco, $conresaco, 'si46_criterioadjudicacao')) . "','$this->si46_criterioadjudicacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si46_processoporlote"]) || $this->si46_processoporlote != "")
           $resac = db_query("insert into db_acount values($acount,2010275,2009893,'" . AddSlashes(pg_result($resaco, $conresaco, 'si46_processoporlote')) . "','$this->si46_processoporlote'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si46_criteriodesempate"]) || $this->si46_criteriodesempate != "")
@@ -914,7 +914,7 @@ class cl_aberlic102019
         $resac = db_query("insert into db_acount values($acount,2010275,2009888,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_prazoexecucao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010275,2009889,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_formapagamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010275,2009891,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_criterioaceitabilidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010275,2009892,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_descontotabela')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010275,2009892,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_criterioadjudicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010275,2009893,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_processoporlote')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010275,2009894,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_criteriodesempate')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010275,2009895,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si46_destinacaoexclusiva')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

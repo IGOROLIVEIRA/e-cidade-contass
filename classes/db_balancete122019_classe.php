@@ -20,7 +20,7 @@ class cl_balancete122019
   var $si179_sequencial = 0;
   var $si179_tiporegistro = 0;
   var $si179_contacontabil = 0;
-  var $si179_codfundo = 0;
+  var $si179_codfundo = null;
   var $si179_naturezareceita = 0;
   var $si179_codfontrecursos = 0;
   var $si179_saldoinicialcr = 0;
@@ -37,7 +37,7 @@ class cl_balancete122019
                  si179_sequencial = int8 = si179_sequencial 
                  si179_tiporegistro = int8 = si179_tiporegistro 
                  si179_contacontabil = int8 = si179_contacontabil 
-                 si179_codfundo = int8 = si179_codfundo 
+                 si179_codfundo = varchar(8) = si179_codfundo 
                  si179_naturezareceita = int8 = si179_naturezareceita 
                  si179_codfontrecursos = int8 = si179_codfontrecursos 
                  si179_saldoinicialcr = float8 = si179_saldoinicialcr 

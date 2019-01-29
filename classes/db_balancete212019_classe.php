@@ -19,7 +19,7 @@ class cl_balancete212019 {
    var $si188_sequencial = 0; 
    var $si188_tiporegistro = 0; 
    var $si188_contacontabil = 0; 
-   var $si188_codfundo = 0;
+   var $si188_codfundo = null;
    var $si188_cnpjconsorcio = 0;
    var $si188_codfontrecursos = 0; 
    var $si188_saldoinicialconsorfr = 0; 
@@ -36,7 +36,7 @@ class cl_balancete212019 {
                  si188_sequencial = int8 = si188_sequencial 
                  si188_tiporegistro = int8 = si188_tiporegistro 
                  si188_contacontabil = int8 = si188_contacontabil 
-                 si188_codfundo = int8 = si188_codfundo 
+                 si188_codfundo = varchar(8) = si188_codfundo 
                  si188_cnpjconsorcio = int8 = si188_cnpjconsorcio 
                  si188_codfontrecursos = int8 = si188_codfontrecursos 
                  si188_saldoinicialconsorfr = float8 = si188_saldoinicialconsorfr 

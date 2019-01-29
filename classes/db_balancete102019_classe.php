@@ -20,7 +20,7 @@ class cl_balancete102019
   var $si177_sequencial = 0;
   var $si177_tiporegistro = 0;
   var $si177_contacontaabil = 0;
-  var $si177_codfundo = 0;
+  var $si177_codfundo = null;
   var $si177_saldoinicial = 0;
   var $si177_naturezasaldoinicial = null;
   var $si177_totaldebitos = 0;
@@ -34,7 +34,7 @@ class cl_balancete102019
                  si177_sequencial = int8 = si177_sequencial 
                  si177_tiporegistro = int8 = si177_tiporegistro 
                  si177_contacontaabil = int8 = si177_contacontaabil 
-                 si177_codfundo = int8 = si177_codfundo 
+                 si177_codfundo = varchar(8) = si177_codfundo 
                  si177_saldoinicial = float8 = si177_saldoinicial 
                  si177_naturezasaldoinicial = varchar(1) = si177_naturezasaldoinicial 
                  si177_totaldebitos = float8 = si177_totaldebitos 

@@ -17,9 +17,9 @@ class cl_balancete242019
   var $si191_sequencial = 0;
   var $si191_tiporegistro = 0;
   var $si191_contacontabil = 0;
-  var $si191_codfundo = 0;
-  var $si191_codorgao = 0;
-  var $si191_codunidadesub = 0;
+  var $si191_codfundo = null;
+  var $si191_codorgao = null;
+  var $si191_codunidadesub = null;
   var $si191_saldoinicialorgao = 0;
   var $si191_naturezasaldoinicialorgao = null;
   var $si191_totaldebitosorgao = 0;
@@ -34,9 +34,9 @@ class cl_balancete242019
                  si191_sequencial = int8 = si191_sequencial 
                  si191_tiporegistro = int8 = si191_tiporegistro 
                  si191_contacontabil = int8 = si191_contacontabil 
-                 si191_codfundo = int8 = si191_codfundo 
-                 si191_codorgao = int8 = si191_codorgao 
-                 si191_codunidadesub = int8 = si191_codunidadesub 
+                 si191_codfundo = varchar(8) = si191_codfundo 
+                 si191_codorgao = varchar(2) = si191_codorgao 
+                 si191_codunidadesub = varchar(8) = si191_codunidadesub 
                  si191_saldoinicialorgao = float8 = si191_saldoinicialorgao 
                  si191_naturezasaldoinicialorgao = varchar(1) = si191_naturezasaldoinicialorgao 
                  si191_totaldebitosorgao = float8 = si191_totaldebitosorgao 

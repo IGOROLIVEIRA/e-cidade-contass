@@ -21,22 +21,25 @@ class cl_rec112019
   var $si26_tiporegistro = 0;
   var $si26_codreceita = 0;
   var $si26_codfontrecursos = 0;
-  var $si26_cnpjorgaocontribuinte = null;
+  var $si26_nrodocumento = null;
   var $si26_vlarrecadadofonte = 0;
   var $si26_reg10 = 0;
   var $si26_mes = 0;
   var $si26_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si26_sequencial = int8 = sequencial 
-                 si26_tiporegistro = int8 = Tipo do  registro 
-                 si26_codreceita = int8 = Código identificador 
+                 si26_sequencial = int8 = sequencial
+                 si26_tiporegistro = int8 = Tipo do  registro
+                 si26_codreceita = int8 = Código identificador
                  si26_codfontrecursos = int8 = Código da fonte de  recursos
-                 si26_cnpjorgaocontribuinte = character varying(14) = cnpj do contribuinte;
-                 si26_vlarrecadadofonte = float8 = Valor arrecadado 
-                 si26_reg10 = int8 = reg10 
-                 si26_mes = int8 = Mês 
-                 si26_instit = int8 = Instituição 
+                 si26_tipodocumento = int8 = Tipo do documento
+                 si26_nrodocumento = character varying(14) = CNPJ do contribuinte;
+                 si26_nroconvenio = varchar(30) = Número do convênio
+                 si26_dataassinatura = date = Data da assinatura
+                 si26_vlarrecadadofonte = float8 = Valor arrecadado
+                 si26_reg10 = int8 = reg10
+                 si26_mes = int8 = Mês
+                 si26_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -66,7 +69,17 @@ class cl_rec112019
       $this->si26_tiporegistro = ($this->si26_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_tiporegistro"] : $this->si26_tiporegistro);
       $this->si26_codreceita = ($this->si26_codreceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codreceita"] : $this->si26_codreceita);
       $this->si26_codfontrecursos = ($this->si26_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codfontrecursos"] : $this->si26_codfontrecursos);
-      $this->si26_cnpjorgaocontribuinte = ($this->si26_cnpjorgaocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_cnpjorgaocontribuinte"] : $this->si26_cnpjorgaocontribuinte);
+      $this->si26_tipodocumento = ($this->si26_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_tipodocumento"] : $this->si26_tipodocumento);
+      $this->si26_nrodocumento = ($this->si26_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_nrodocumento"] : $this->si26_nrodocumento);
+      $this->si26_nroconvenio = ($this->si26_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_nroconvenio"] : $this->si26_nroconvenio);
+      if($this->si26_dataassinatura == ""){
+        $this->si26_dataassinatura_dia = ($this->si26_dataassinatura_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinatura_dia"]:$this->si26_dataassinatura_dia);
+        $this->si26_dataassinatura_mes = ($this->si26_dataassinatura_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinatura_mes"]:$this->si26_dataassinatura_mes);
+        $this->si26_dataassinatura_ano = ($this->si26_dataassinatura_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si26_dataassinatura_ano"]:$this->si26_dataassinatura_ano);
+        if($this->si26_dataassinatura_dia != ""){
+          $this->si26_dataassinatura = $this->si26_dataassinatura_ano."-".$this->si26_dataassinatura_mes."-".$this->si26_dataassinatura_dia;
+        }
+      }
       $this->si26_vlarrecadadofonte = ($this->si26_vlarrecadadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_vlarrecadadofonte"] : $this->si26_vlarrecadadofonte);
       $this->si26_reg10 = ($this->si26_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_reg10"] : $this->si26_reg10);
       $this->si26_mes = ($this->si26_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_mes"] : $this->si26_mes);
@@ -96,8 +109,17 @@ class cl_rec112019
     if ($this->si26_codfontrecursos == null) {
       $this->si26_codfontrecursos = "0";
     }
+    if ($this->si26_tipodocumento == null) {
+      $this->si26_tipodocumento = "0";
+    }
+    if ($this->si26_nrodocumento == null) {
+      $this->si26_nrodocumento = "0";
+    }
     if ($this->si26_vlarrecadadofonte == null) {
       $this->si26_vlarrecadadofonte = "0";
+    }
+    if ($this->si26_dataassinatura == null) {
+      $this->si26_dataassinatura = "0";
     }
     if ($this->si26_reg10 == null) {
       $this->si26_reg10 = "0";
@@ -159,22 +181,27 @@ class cl_rec112019
       return false;
     }
     $sql = "insert into rec112019(
-                                       si26_sequencial 
-                                      ,si26_tiporegistro 
-                                      ,si26_codreceita 
+                                       si26_sequencial
+                                      ,si26_tiporegistro
+                                      ,si26_codreceita
                                       ,si26_codfontrecursos
-                                      ,si26_cnpjorgaocontribuinte
-                                      ,si26_vlarrecadadofonte 
-                                      ,si26_reg10 
-                                      ,si26_mes 
-                                      ,si26_instit 
+                                      ,si26_tipodocumento
+                                      ,si26_nrodocumento
+                                      ,si26_nroconvenio
+                                      ,si26_dataassinatura
+                                      ,si26_vlarrecadadofonte
+                                      ,si26_reg10
+                                      ,si26_mes
+                                      ,si26_instit
                        )
                 values (
                                 $this->si26_sequencial
                                ,$this->si26_tiporegistro
                                ,$this->si26_codreceita
                                ,$this->si26_codfontrecursos
-                               ,'$this->si26_cnpjorgaocontribuinte'
+                               ,'$this->si26_nrodocumento'
+                               ,'$this->si26_nroconvenio'
+                               ,".($this->si26_dataassinatura == "null" || $this->si26_dataassinatura == ""?"null":"'".$this->si26_dataassinatura."'")."
                                ,$this->si26_vlarrecadadofonte
                                ,$this->si26_reg10
                                ,$this->si26_mes
@@ -207,20 +234,20 @@ class cl_rec112019
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->si26_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2009682,'$this->si26_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009682,'','" . AddSlashes(pg_result($resaco, 0, 'si26_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009683,'','" . AddSlashes(pg_result($resaco, 0, 'si26_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009684,'','" . AddSlashes(pg_result($resaco, 0, 'si26_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009685,'','" . AddSlashes(pg_result($resaco, 0, 'si26_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009686,'','" . AddSlashes(pg_result($resaco, 0, 'si26_vlarrecadadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009687,'','" . AddSlashes(pg_result($resaco, 0, 'si26_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2009744,'','" . AddSlashes(pg_result($resaco, 0, 'si26_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010254,2011542,'','" . AddSlashes(pg_result($resaco, 0, 'si26_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+    // if (($resaco != false) || ($this->numrows != 0)) {
+    //   $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //   $acount = pg_result($resac, 0, 0);
+    //   $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //   $resac = db_query("insert into db_acountkey values($acount,2009682,'$this->si26_sequencial','I')");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009682,'','" . AddSlashes(pg_result($resaco, 0, 'si26_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009683,'','" . AddSlashes(pg_result($resaco, 0, 'si26_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009684,'','" . AddSlashes(pg_result($resaco, 0, 'si26_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009685,'','" . AddSlashes(pg_result($resaco, 0, 'si26_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009686,'','" . AddSlashes(pg_result($resaco, 0, 'si26_vlarrecadadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009687,'','" . AddSlashes(pg_result($resaco, 0, 'si26_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2009744,'','" . AddSlashes(pg_result($resaco, 0, 'si26_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010254,2011542,'','" . AddSlashes(pg_result($resaco, 0, 'si26_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    // }
 
     return true;
   }
@@ -313,30 +340,30 @@ class cl_rec112019
       $sql .= " si26_sequencial = $this->si26_sequencial";
     }
     $resaco = $this->sql_record($this->sql_query_file($this->si26_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009682,'$this->si26_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_sequencial"]) || $this->si26_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009682,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_sequencial')) . "','$this->si26_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_tiporegistro"]) || $this->si26_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009683,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_tiporegistro')) . "','$this->si26_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_codreceita"]) || $this->si26_codreceita != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009684,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_codreceita')) . "','$this->si26_codreceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_codfontrecursos"]) || $this->si26_codfontrecursos != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009685,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_codfontrecursos')) . "','$this->si26_codfontrecursos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_vlarrecadadofonte"]) || $this->si26_vlarrecadadofonte != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009686,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_vlarrecadadofonte')) . "','$this->si26_vlarrecadadofonte'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_reg10"]) || $this->si26_reg10 != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009687,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_reg10')) . "','$this->si26_reg10'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_mes"]) || $this->si26_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2009744,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_mes')) . "','$this->si26_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si26_instit"]) || $this->si26_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010254,2011542,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_instit')) . "','$this->si26_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // if ($this->numrows > 0) {
+    //   for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2009682,'$this->si26_sequencial','A')");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_sequencial"]) || $this->si26_sequencial != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009682,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_sequencial')) . "','$this->si26_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_tiporegistro"]) || $this->si26_tiporegistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009683,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_tiporegistro')) . "','$this->si26_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_codreceita"]) || $this->si26_codreceita != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009684,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_codreceita')) . "','$this->si26_codreceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_codfontrecursos"]) || $this->si26_codfontrecursos != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009685,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_codfontrecursos')) . "','$this->si26_codfontrecursos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_vlarrecadadofonte"]) || $this->si26_vlarrecadadofonte != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009686,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_vlarrecadadofonte')) . "','$this->si26_vlarrecadadofonte'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_reg10"]) || $this->si26_reg10 != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009687,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_reg10')) . "','$this->si26_reg10'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_mes"]) || $this->si26_mes != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2009744,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_mes')) . "','$this->si26_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si26_instit"]) || $this->si26_instit != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010254,2011542,'" . AddSlashes(pg_result($resaco, $conresaco, 'si26_instit')) . "','$this->si26_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -382,22 +409,22 @@ class cl_rec112019
     } else {
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009682,'$si26_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009682,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009683,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009684,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009685,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009686,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_vlarrecadadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009687,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2009744,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010254,2011542,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // if (($resaco != false) || ($this->numrows != 0)) {
+    //   for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2009682,'$si26_sequencial','E')");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009682,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009683,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009684,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009685,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009686,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_vlarrecadadofonte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009687,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2009744,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010254,2011542,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si26_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $sql = " delete from rec112019
                     where ";
     $sql2 = "";

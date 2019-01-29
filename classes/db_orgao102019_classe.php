@@ -32,19 +32,19 @@ class cl_orgao102019
   var $si14_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si14_sequencial = int8 = sequencial 
-                 si14_tiporegistro = int8 = Tipo do  registro 
-                 si14_codorgao = varchar(2) = cod Orgão 
-                 si14_tipoorgao = varchar(2) = Tipo do órgão 
-                 si14_cnpjorgao = varchar(14) = Número do CNPJ 
+                 si14_sequencial = int8 = sequencial
+                 si14_tiporegistro = int8 = Tipo do  registro
+                 si14_codorgao = varchar(2) = cod Orgão
+                 si14_tipoorgao = varchar(2) = Tipo do órgão
+                 si14_cnpjorgao = varchar(14) = Número do CNPJ
                  si14_tipodocumentofornsoftware = int8 = Tipo de documento do fornecedor
                  si14_nrodocumentofornsoftware = varchar(14) = Número do documento do fornecedor
                  si14_versaosoftware = varchar(50) = Versão do Software
                  si14_assessoriacontabil = int8 = Assessoria Contabil
                  si14_tipodocumentoassessoria = int8 = Tipo Documento
-                 si14_nrodocumentoassessoria = int8 = Numero Documento
-                 si14_mes = int8 = Mês 
-                 si14_instit = int8 = Instituição 
+                 si14_nrodocumentoassessoria = varchar(14) = Numero Documento
+                 si14_mes = int8 = Mês
+                 si14_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -179,33 +179,33 @@ class cl_orgao102019
       return false;
     }
     $sql = "insert into orgao102019(
-                                       si14_sequencial 
-                                      ,si14_tiporegistro 
-                                      ,si14_codorgao 
-                                      ,si14_tipoorgao 
+                                       si14_sequencial
+                                      ,si14_tiporegistro
+                                      ,si14_codorgao
+                                      ,si14_tipoorgao
                                       ,si14_cnpjorgao
                                       ,si14_tipodocumentofornsoftware
                                       ,si14_nrodocumentofornsoftware
-                                      ,si14_versaosoftware 
-                                      ,si14_mes 
+                                      ,si14_versaosoftware
+                                      ,si14_mes
                                       ,si14_instit
                                       ,si14_assessoriacontabil
                                       ,si14_tipodocumentoassessoria
-                                      ,si14_nrodocumentoassessoria 
+                                      ,si14_nrodocumentoassessoria
                        )
                 values (
-                                $this->si14_sequencial 
-                               ,$this->si14_tiporegistro 
-                               ,'$this->si14_codorgao' 
-                               ,'$this->si14_tipoorgao' 
+                                $this->si14_sequencial
+                               ,$this->si14_tiporegistro
+                               ,'$this->si14_codorgao'
+                               ,'$this->si14_tipoorgao'
                                ,'$this->si14_cnpjorgao'
-                               ,'$this->si14_tipodocumentofornsoftware' 
-                               ,'$this->si14_nrodocumentofornsoftware' 
-                               ,'$this->si14_versaosoftware' 
-                               ,$this->si14_mes 
+                               ,'$this->si14_tipodocumentofornsoftware'
+                               ,'$this->si14_nrodocumentofornsoftware'
+                               ,'$this->si14_versaosoftware'
+                               ,$this->si14_mes
                                ,$this->si14_instit
                                ,$this->si14_assessoriacontabil
-                               ,".($this->si14_tipodocumentoassessoria == '' ? 'null' : $this->si14_tipodocumentoassessoria)."
+                               ,$this->si14_tipodocumentoassessoria
                                ,".($this->si14_nrodocumentoassessoria == '' ? "null" : $this->si14_nrodocumentoassessoria)."
                       )";
     $result = db_query($sql);

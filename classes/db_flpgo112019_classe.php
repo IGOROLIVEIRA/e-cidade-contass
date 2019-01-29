@@ -18,7 +18,6 @@ class cl_flpgo112019 {
   // cria variaveis do arquivo
   var $si196_sequencial = 0;
   var $si196_tiporegistro = 0;
-
   var $si196_indtipopagamento = null;
   var $si196_codvinculopessoa = null;
   var $si196_codrubricaremuneracao = null;
@@ -61,7 +60,6 @@ class cl_flpgo112019 {
     if($exclusao==false){
       $this->si196_sequencial = ($this->si196_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]:$this->si196_sequencial);
       $this->si196_tiporegistro = ($this->si196_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]:$this->si196_tiporegistro);
-
       $this->si196_indtipopagamento = ($this->si196_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_indtipopagamento"]:$this->si196_indtipopagamento);
       $this->si196_codvinculopessoa = ($this->si196_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codvinculopessoa"]:$this->si196_codvinculopessoa);
       $this->si196_codrubricaremuneracao = ($this->si196_codrubricaremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codrubricaremuneracao"]:$this->si196_codrubricaremuneracao);

@@ -23,7 +23,8 @@ class cl_ctb212019 {
    var $si97_codreduzidomov = 0; 
    var $si97_tipomovimentacao = 0; 
    var $si97_tipoentrsaida = null; 
-   var $si97_valorentrsaida = 0; 
+   var $si97_valorentrsaida = 0;
+   var $si97_dscoutrasmov = null;
    var $si97_codctbtransf = 0; 
    var $si97_codfontectbtransf = 0; 
    var $si97_mes = 0; 
@@ -38,7 +39,8 @@ class cl_ctb212019 {
                  si97_codreduzidomov = int8 = Código Identificador da Movimentação 
                  si97_tipomovimentacao = int8 = Tipo de  movimentação 
                  si97_tipoentrsaida = varchar(2) = Tipo de entrada ou  saída 
-                 si97_valorentrsaida = float8 = Valor correspondente à entrada/saída 
+                 si97_valorentrsaida = float8 = Valor correspondente à entrada/saída
+                 si97_dscoutrasmov = varchar(50) = Descrição de outras movimentações 
                  si97_codctbtransf = int8 = Código Identificador da Conta Bancária 
                  si97_codfontectbtransf = int8 = Código da fonte de recursos ctb 
                  si97_mes = int8 = Mês 
@@ -70,6 +72,7 @@ class cl_ctb212019 {
        $this->si97_codreduzidomov = ($this->si97_codreduzidomov == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codreduzidomov"]:$this->si97_codreduzidomov);
        $this->si97_tipomovimentacao = ($this->si97_tipomovimentacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_tipomovimentacao"]:$this->si97_tipomovimentacao);
        $this->si97_tipoentrsaida = ($this->si97_tipoentrsaida == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_tipoentrsaida"]:$this->si97_tipoentrsaida);
+       $this->si97_dscoutrasmov = ($this->si97_dscoutrasmov == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_dscoutrasmov"]:$this->si97_dscoutrasmov);
        $this->si97_valorentrsaida = ($this->si97_valorentrsaida == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_valorentrsaida"]:$this->si97_valorentrsaida);
        $this->si97_codctbtransf = ($this->si97_codctbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codctbtransf"]:$this->si97_codctbtransf);
        $this->si97_codfontectbtransf = ($this->si97_codfontectbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codfontectbtransf"]:$this->si97_codfontectbtransf);
@@ -175,6 +178,7 @@ class cl_ctb212019 {
                                       ,si97_codreduzidomov 
                                       ,si97_tipomovimentacao 
                                       ,si97_tipoentrsaida 
+                                	  ,si97_dscoutrasmov
                                       ,si97_valorentrsaida 
                                       ,si97_codctbtransf 
                                       ,si97_codfontectbtransf 
@@ -190,6 +194,7 @@ class cl_ctb212019 {
                                ,$this->si97_codreduzidomov 
                                ,$this->si97_tipomovimentacao 
                                ,'$this->si97_tipoentrsaida' 
+                               ,'$this->si97_dscoutrasmov'
                                ,$this->si97_valorentrsaida 
                                ,$this->si97_codctbtransf 
                                ,$this->si97_codfontectbtransf 
@@ -299,6 +304,10 @@ class cl_ctb212019 {
      }
      if(trim($this->si97_tipoentrsaida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_tipoentrsaida"])){ 
        $sql  .= $virgula." si97_tipoentrsaida = '$this->si97_tipoentrsaida' ";
+       $virgula = ",";
+     }
+     if(trim($this->si97_dscoutrasmov)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_dscoutrasmov"])){
+       $sql  .= $virgula." si97_dscoutrasmov = '$this->si97_dscoutrasmov' ";
        $virgula = ",";
      }
      if(trim($this->si97_valorentrsaida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_valorentrsaida"])){ 

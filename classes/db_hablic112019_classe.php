@@ -33,20 +33,20 @@ class cl_hablic112019
   var $si58_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si58_sequencial = int8 = sequencial 
-                 si58_tiporegistro = int8 = Tipo do  registro 
-                 si58_codorgao = varchar(2) = Código do órgão 
-                 si58_codunidadesub = varchar(8) = Código da unidade 
-                 si58_exerciciolicitacao = int8 = Exercício em que foi instaurado 
-                 si58_nroprocessolicitatorio = varchar(12) = Número sequencial  por ano Processo 
-                 si58_tipodocumentocnpjempresahablic = int8 = Tipo do documento da empresa 
-                 si58_cnpjempresahablic = varchar(14) = Número do CNPJ  da empresa 
-                 si58_tipodocumentosocio = int8 = Tipo de documento  do sócio 
-                 si58_nrodocumentosocio = varchar(14) = Número do  documento do  sócio 
-                 si58_tipoparticipacao = int8 = Tipo de  Participação 
-                 si58_mes = int8 = Mês 
-                 si58_reg10 = int8 = reg10 
-                 si58_instit = int8 = Instituição 
+                 si58_sequencial = int8 = sequencial
+                 si58_tiporegistro = int8 = Tipo do  registro
+                 si58_codorgao = varchar(2) = Código do órgão
+                 si58_codunidadesub = varchar(8) = Código da unidade
+                 si58_exerciciolicitacao = int8 = Exercício em que foi instaurado
+                 si58_nroprocessolicitatorio = varchar(12) = Número sequencial  por ano Processo
+                 si58_tipodocumentocnpjempresahablic = int8 = Tipo do documento da empresa
+                 si58_cnpjempresahablic = varchar(14) = Número do CNPJ  da empresa
+                 si58_tipodocumentosocio = int8 = Tipo de documento  do sócio
+                 si58_nrodocumentosocio = varchar(14) = Número do  documento do  sócio
+                 si58_tipoparticipacao = int8 = Tipo de  Participação
+                 si58_mes = int8 = Mês
+                 si58_reg10 = int8 = reg10
+                 si58_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -177,36 +177,36 @@ class cl_hablic112019
       return false;
     }
     $sql = "insert into hablic112019(
-                                       si58_sequencial 
-                                      ,si58_tiporegistro 
-                                      ,si58_codorgao 
-                                      ,si58_codunidadesub 
-                                      ,si58_exerciciolicitacao 
-                                      ,si58_nroprocessolicitatorio 
-                                      ,si58_tipodocumentocnpjempresahablic 
-                                      ,si58_cnpjempresahablic 
-                                      ,si58_tipodocumentosocio 
-                                      ,si58_nrodocumentosocio 
-                                      ,si58_tipoparticipacao 
-                                      ,si58_mes 
-                                      ,si58_reg10 
-                                      ,si58_instit 
+                                       si58_sequencial
+                                      ,si58_tiporegistro
+                                      ,si58_codorgao
+                                      ,si58_codunidadesub
+                                      ,si58_exerciciolicitacao
+                                      ,si58_nroprocessolicitatorio
+                                      ,si58_tipodocumentocnpjempresahablic
+                                      ,si58_cnpjempresahablic
+                                      ,si58_tipodocumentosocio
+                                      ,si58_nrodocumentosocio
+                                      ,si58_tipoparticipacao
+                                      ,si58_mes
+                                      ,si58_reg10
+                                      ,si58_instit
                        )
                 values (
-                                $this->si58_sequencial 
-                               ,$this->si58_tiporegistro 
-                               ,'$this->si58_codorgao' 
-                               ,'$this->si58_codunidadesub' 
-                               ,$this->si58_exerciciolicitacao 
-                               ,'$this->si58_nroprocessolicitatorio' 
-                               ,$this->si58_tipodocumentocnpjempresahablic 
-                               ,'$this->si58_cnpjempresahablic' 
-                               ,$this->si58_tipodocumentosocio 
-                               ,'$this->si58_nrodocumentosocio' 
-                               ,$this->si58_tipoparticipacao 
-                               ,$this->si58_mes 
-                               ,$this->si58_reg10 
-                               ,$this->si58_instit 
+                                $this->si58_sequencial
+                               ,$this->si58_tiporegistro
+                               ,'$this->si58_codorgao'
+                               ,'$this->si58_codunidadesub'
+                               ,$this->si58_exerciciolicitacao
+                               ,'$this->si58_nroprocessolicitatorio'
+                               ,$this->si58_tipodocumentocnpjempresahablic
+                               ,'$this->si58_cnpjempresahablic'
+                               ,$this->si58_tipodocumentosocio
+                               ,'$this->si58_nrodocumentosocio'
+                               ,$this->si58_tipoparticipacao
+                               ,$this->si58_mes
+                               ,$this->si58_reg10
+                               ,$this->si58_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

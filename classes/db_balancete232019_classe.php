@@ -17,7 +17,7 @@ class cl_balancete232019
   var $si190_sequencial = 0;
   var $si190_tiporegistro = 0;
   var $si190_contacontabil = 0;
-  var $si190_codfundo = 0;
+  var $si190_codfundo = null;
   var $si190_naturezareceita = 0;
   var $si190_saldoinicialnatreceita = 0;
   var $si190_naturezasaldoinicialnatreceita = null;
@@ -33,7 +33,7 @@ class cl_balancete232019
                  si190_sequencial = int8 = si190_sequencial 
                  si190_tiporegistro = int8 = si190_tiporegistro 
                  si190_contacontabil = int8 = si190_contacontabil 
-                 si190_codfundo = int8 = si190_codfundo 
+                 si190_codfundo = varchar(8) = si190_codfundo 
                  si190_naturezareceita = int8 = si190_naturezareceita 
                  si190_saldoinicialnatreceita = float8 = si190_saldoinicialnatreceita 
                  si190_naturezasaldoinicialnatreceita = varchar(1) = si190_naturezasaldoinicialnatreceita 

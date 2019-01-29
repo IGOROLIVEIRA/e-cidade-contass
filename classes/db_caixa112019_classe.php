@@ -19,7 +19,7 @@ class cl_caixa112019
   // cria variaveis do arquivo
   var $si166_sequencial = 0;
   var $si166_tiporegistro = 0;
-  var $si166_codfontecaixa = null;
+  var $si166_codfontecaixa = 0;
   var $si166_vlsaldoinicialfonte = 0;
   var $si166_vlsaldofinalfonte = 0;
   var $si166_mes = 0;
@@ -29,7 +29,7 @@ class cl_caixa112019
   var $campos = "
                  si166_sequencial = int8 = sequencial 
                  si166_tiporegistro = int8 = Tipo do  registro 
-                 si166_codfontecaixa = varchar(2) = Código do órgão 
+                 si166_codfontecaixa = int8 = Código da fonte de recursos 
                  si166_vlsaldoinicialfonte = float8 = Valor do saldo no  início do mês 
                  si166_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês 
                  si166_mes = int8 = Mês 
@@ -164,7 +164,7 @@ class cl_caixa112019
                 values (
                                 $this->si166_sequencial 
                                ,$this->si166_tiporegistro 
-                               ,'$this->si166_codfontecaixa' 
+                               ,$this->si166_codfontecaixa 
                                ,$this->si166_vlsaldoinicialfonte 
                                ,$this->si166_vlsaldofinalfonte 
                                ,$this->si166_mes 

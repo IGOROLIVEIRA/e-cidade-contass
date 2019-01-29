@@ -20,8 +20,8 @@ class cl_aoc142019
   var $si42_sequencial = 0;
   var $si42_tiporegistro = 0;
   var $si42_codreduzidodecreto = 0;
-  var $si42_origemrecalteracao = 0;
-  var $si42_tipoalteracao = 0;
+  var $si42_origemrecalteracao = "";
+  var $si42_codorigem = 0;
   var $si42_codorgao = null;
   var $si42_codunidadesub = null;
   var $si42_codfuncao = null;
@@ -31,7 +31,7 @@ class cl_aoc142019
   var $si42_idsubacao = null;
   var $si42_naturezadespesa = 0;
   var $si42_codfontrecursos = 0;
-  var $si42_vlacrescimoreducao = 0;
+  var $si42_vlacrescimo = 0;
   var $si42_mes = 0;
   var $si42_reg10 = 0;
   var $si42_instit = 0;
@@ -39,8 +39,9 @@ class cl_aoc142019
   var $campos = "
                  si42_sequencial = int8 = sequencial 
                  si42_tiporegistro = int8 = Tipo do registro 
-                 si42_codreduzidodecreto = int8 = Código do decreto 
-                 si42_tipoalteracao = int8 = Tipo de alteração 
+                 si42_codreduzidodecreto = int8 = Código do decreto
+                 si42_origemrecalteracao = varchar(2) = Origem do recurso  
+                 si42_codorigem = int8 = Código da Origem
                  si42_codorgao = varchar(2) = Código do órgão 
                  si42_codunidadesub = varchar(8) = Código da unidade 
                  si42_codfuncao = varchar(2) = Código da função 
@@ -50,11 +51,10 @@ class cl_aoc142019
                  si42_idsubacao = varchar(4) = Identifica a Sub ação 
                  si42_naturezadespesa = int8 = Natureza de  Despesa 
                  si42_codfontrecursos = int8 = Código da fonte de recursos 
-                 si42_vlacrescimoreducao = float8 = Valor do acréscimo   ou redução 
+                 si42_vlacrescimo = float8 = Valor do acréscimo   ou redução 
                  si42_mes = int8 = Mês 
                  si42_reg10 = int8 = reg10 
                  si42_instit = int8 = Instituição 
-                 si42_origemrecalteracao = int8 = Origem do recurso utilizado
                  ";
 
   //funcao construtor da classe
@@ -83,7 +83,7 @@ class cl_aoc142019
       $this->si42_sequencial = ($this->si42_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_sequencial"] : $this->si42_sequencial);
       $this->si42_tiporegistro = ($this->si42_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_tiporegistro"] : $this->si42_tiporegistro);
       $this->si42_codreduzidodecreto = ($this->si42_codreduzidodecreto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codreduzidodecreto"] : $this->si42_codreduzidodecreto);
-      $this->si42_tipoalteracao = ($this->si42_tipoalteracao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_tipoalteracao"] : $this->si42_tipoalteracao);
+      $this->si42_codorigem = ($this->si42_codorigem == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codorigem"] : $this->si42_codorigem);
       $this->si42_codorgao = ($this->si42_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codorgao"] : $this->si42_codorgao);
       $this->si42_codunidadesub = ($this->si42_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codunidadesub"] : $this->si42_codunidadesub);
       $this->si42_codfuncao = ($this->si42_codfuncao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codfuncao"] : $this->si42_codfuncao);
@@ -93,7 +93,7 @@ class cl_aoc142019
       $this->si42_idsubacao = ($this->si42_idsubacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_idsubacao"] : $this->si42_idsubacao);
       $this->si42_naturezadespesa = ($this->si42_naturezadespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_naturezadespesa"] : $this->si42_naturezadespesa);
       $this->si42_codfontrecursos = ($this->si42_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_codfontrecursos"] : $this->si42_codfontrecursos);
-      $this->si42_vlacrescimoreducao = ($this->si42_vlacrescimoreducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimoreducao"] : $this->si42_vlacrescimoreducao);
+      $this->si42_vlacrescimo = ($this->si42_vlacrescimo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimo"] : $this->si42_vlacrescimo);
       $this->si42_mes = ($this->si42_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_mes"] : $this->si42_mes);
       $this->si42_reg10 = ($this->si42_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_reg10"] : $this->si42_reg10);
       $this->si42_instit = ($this->si42_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si42_instit"] : $this->si42_instit);
@@ -122,8 +122,8 @@ class cl_aoc142019
     if ($this->si42_origemrecalteracao == null) {
       $this->si42_origemrecalteracao = "0";
     }
-    if ($this->si42_tipoalteracao == null) {
-      $this->si42_tipoalteracao = "0";
+    if ($this->si42_codorigem == null) {
+      $this->si42_codorigem = "0";
     }
     if ($this->si42_naturezadespesa == null) {
       $this->si42_naturezadespesa = "0";
@@ -131,8 +131,8 @@ class cl_aoc142019
     if ($this->si42_codfontrecursos == null) {
       $this->si42_codfontrecursos = "0";
     }
-    if ($this->si42_vlacrescimoreducao == null) {
-      $this->si42_vlacrescimoreducao = "0";
+    if ($this->si42_vlacrescimo == null) {
+      $this->si42_vlacrescimo = "0";
     }
     if ($this->si42_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -198,7 +198,7 @@ class cl_aoc142019
                                       ,si42_tiporegistro 
                                       ,si42_codreduzidodecreto 
                                       ,si42_origemrecalteracao
-                                      ,si42_tipoalteracao 
+                                      ,si42_codorigem 
                                       ,si42_codorgao 
                                       ,si42_codunidadesub 
                                       ,si42_codfuncao 
@@ -208,7 +208,7 @@ class cl_aoc142019
                                       ,si42_idsubacao 
                                       ,si42_naturezadespesa 
                                       ,si42_codfontrecursos 
-                                      ,si42_vlacrescimoreducao 
+                                      ,si42_vlacrescimo 
                                       ,si42_mes 
                                       ,si42_reg10 
                                       ,si42_instit 
@@ -218,7 +218,7 @@ class cl_aoc142019
                                ,$this->si42_tiporegistro 
                                ,$this->si42_codreduzidodecreto 
                                ,$this->si42_origemrecalteracao
-                               ,$this->si42_tipoalteracao 
+                               ,$this->si42_codorigem 
                                ,'$this->si42_codorgao' 
                                ,'$this->si42_codunidadesub' 
                                ,'$this->si42_codfuncao' 
@@ -228,7 +228,7 @@ class cl_aoc142019
                                ,'$this->si42_idsubacao' 
                                ,$this->si42_naturezadespesa 
                                ,$this->si42_codfontrecursos 
-                               ,$this->si42_vlacrescimoreducao 
+                               ,$this->si42_vlacrescimo 
                                ,$this->si42_mes 
                                ,$this->si42_reg10 
                                ,$this->si42_instit
@@ -268,7 +268,7 @@ class cl_aoc142019
       $resac = db_query("insert into db_acount values($acount,2010271,2009807,'','" . AddSlashes(pg_result($resaco, 0, 'si42_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009808,'','" . AddSlashes(pg_result($resaco, 0, 'si42_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009809,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codreduzidodecreto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010271,2009810,'','" . AddSlashes(pg_result($resaco, 0, 'si42_tipoalteracao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010271,2009810,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codorigem')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009811,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009812,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009813,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codfuncao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -278,7 +278,7 @@ class cl_aoc142019
       $resac = db_query("insert into db_acount values($acount,2010271,2009817,'','" . AddSlashes(pg_result($resaco, 0, 'si42_idsubacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009818,'','" . AddSlashes(pg_result($resaco, 0, 'si42_naturezadespesa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009819,'','" . AddSlashes(pg_result($resaco, 0, 'si42_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, 0, 'si42_vlacrescimoreducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, 0, 'si42_vlacrescimo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009821,'','" . AddSlashes(pg_result($resaco, 0, 'si42_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009831,'','" . AddSlashes(pg_result($resaco, 0, 'si42_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2011556,'','" . AddSlashes(pg_result($resaco, 0, 'si42_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -321,11 +321,11 @@ class cl_aoc142019
       $sql .= $virgula . " si42_codreduzidodecreto = $this->si42_codreduzidodecreto ";
       $virgula = ",";
     }
-    if (trim($this->si42_tipoalteracao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_tipoalteracao"])) {
-      if (trim($this->si42_tipoalteracao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si42_tipoalteracao"])) {
-        $this->si42_tipoalteracao = "0";
+    if (trim($this->si42_codorigem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_codorigem"])) {
+      if (trim($this->si42_codorigem) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si42_codorigem"])) {
+        $this->si42_codorigem = "0";
       }
-      $sql .= $virgula . " si42_tipoalteracao = $this->si42_tipoalteracao ";
+      $sql .= $virgula . " si42_codorigem = $this->si42_codorigem ";
       $virgula = ",";
     }
     if (trim($this->si42_codorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_codorgao"])) {
@@ -370,11 +370,11 @@ class cl_aoc142019
       $sql .= $virgula . " si42_codfontrecursos = $this->si42_codfontrecursos ";
       $virgula = ",";
     }
-    if (trim($this->si42_vlacrescimoreducao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimoreducao"])) {
-      if (trim($this->si42_vlacrescimoreducao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimoreducao"])) {
-        $this->si42_vlacrescimoreducao = "0";
+    if (trim($this->si42_vlacrescimo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimo"])) {
+      if (trim($this->si42_vlacrescimo) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimo"])) {
+        $this->si42_vlacrescimo = "0";
       }
-      $sql .= $virgula . " si42_vlacrescimoreducao = $this->si42_vlacrescimoreducao ";
+      $sql .= $virgula . " si42_vlacrescimo = $this->si42_vlacrescimo ";
       $virgula = ",";
     }
     if (trim($this->si42_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si42_mes"])) {
@@ -429,8 +429,8 @@ class cl_aoc142019
           $resac = db_query("insert into db_acount values($acount,2010271,2009808,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_tiporegistro')) . "','$this->si42_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_codreduzidodecreto"]) || $this->si42_codreduzidodecreto != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009809,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_codreduzidodecreto')) . "','$this->si42_codreduzidodecreto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si42_tipoalteracao"]) || $this->si42_tipoalteracao != "")
-          $resac = db_query("insert into db_acount values($acount,2010271,2009810,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_tipoalteracao')) . "','$this->si42_tipoalteracao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si42_codorigem"]) || $this->si42_codorigem != "")
+          $resac = db_query("insert into db_acount values($acount,2010271,2009810,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_codorigem')) . "','$this->si42_codorigem'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_codorgao"]) || $this->si42_codorgao != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009811,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_codorgao')) . "','$this->si42_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_codunidadesub"]) || $this->si42_codunidadesub != "")
@@ -449,8 +449,8 @@ class cl_aoc142019
           $resac = db_query("insert into db_acount values($acount,2010271,2009818,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_naturezadespesa')) . "','$this->si42_naturezadespesa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_codfontrecursos"]) || $this->si42_codfontrecursos != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009819,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_codfontrecursos')) . "','$this->si42_codfontrecursos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimoreducao"]) || $this->si42_vlacrescimoreducao != "")
-          $resac = db_query("insert into db_acount values($acount,2010271,2009820,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_vlacrescimoreducao')) . "','$this->si42_vlacrescimoreducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si42_vlacrescimo"]) || $this->si42_vlacrescimo != "")
+          $resac = db_query("insert into db_acount values($acount,2010271,2009820,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_vlacrescimo')) . "','$this->si42_vlacrescimo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_mes"]) || $this->si42_mes != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009821,'" . AddSlashes(pg_result($resaco, $conresaco, 'si42_mes')) . "','$this->si42_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si42_reg10"]) || $this->si42_reg10 != "")
@@ -513,7 +513,7 @@ class cl_aoc142019
         $resac = db_query("insert into db_acount values($acount,2010271,2009807,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009808,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009809,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codreduzidodecreto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010271,2009810,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_tipoalteracao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010271,2009810,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codorigem')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009811,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009812,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codunidadesub')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009813,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codfuncao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -523,7 +523,7 @@ class cl_aoc142019
         $resac = db_query("insert into db_acount values($acount,2010271,2009817,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_idsubacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009818,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_naturezadespesa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009819,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_vlacrescimoreducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_vlacrescimo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009821,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009831,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2011556,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si42_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

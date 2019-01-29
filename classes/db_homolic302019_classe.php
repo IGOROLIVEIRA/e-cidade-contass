@@ -102,6 +102,16 @@ class cl_homolic302019
 
       return false;
     }
+    if ($this->si65_codorgao == null) {
+      $this->erro_sql = " Campo Código do Órgão não Informado.";
+      $this->erro_campo = "si65_codorgao";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
     if ($this->si65_exerciciolicitacao == null) {
       $this->si65_exerciciolicitacao = "0";
     }
