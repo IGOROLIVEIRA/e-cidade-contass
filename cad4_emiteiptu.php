@@ -159,10 +159,10 @@ db_postmemory($HTTP_POST_VARS);
 
          <tr>
            <td>
-             <strong>Solicitar Local para Gravar:</strong>
+             <strong>Taxa de Expediente:</strong>
            </td>
            <td>
-             <input type='checkbox' name='local' checked/>
+               <input type='text' size="20px;" value="0" id='tx_banc' name='tx_banc' onblur="js_ValidaMaiusculo(this,'f',event);" oninput="js_ValidaCampos(this,4,'Percentual de Correção','t','f',event);" onkeydown="return js_controla_tecla_enter(this,event);">
            </td>
          </tr>
 
@@ -965,7 +965,7 @@ if(isset($geracarnes)){
           break;
     }
 
-    $querystring="proc=".@$proc."&entregavalido=".@$entregavalido."&zerado=$zerado&local=$local&cidadebranco=".@$cidadebranco."&parcobrig=$parcobrig&quantidadeparcelas=$quantidadeparcelas&listamatrics=$listamatrics&unica=$unica&anousu=$anousu&quantidade=$quantidade&quantidade_registros_real=$quantidade_registros_real&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&especie=$especie&imobiliaria=$imobiliaria&loteamento=$loteamento&filtroprinc=$filtroprinc&barrasparc=$barrasparc&barrasunica=$barrasunica&totcheck=$totcheck&vlrminunica=$vlrminunica&intervalo=$intervalo&vlrmaxunica=$vlrmaxunica&vlrmin=$vlrmin&vlrmax=$vlrmax&tipo=$tipo&opVenc=$opVenc&j01_numcgm=$j01_numcgm";
+    $querystring="proc=".@$proc."&entregavalido=".@$entregavalido."&zerado=$zerado&local=$local&cidadebranco=".@$cidadebranco."&parcobrig=$parcobrig&quantidadeparcelas=$quantidadeparcelas&listamatrics=$listamatrics&unica=$unica&anousu=$anousu&quantidade=$quantidade&quantidade_registros_real=$quantidade_registros_real&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&especie=$especie&imobiliaria=$imobiliaria&loteamento=$loteamento&filtroprinc=$filtroprinc&barrasparc=$barrasparc&barrasunica=$barrasunica&totcheck=$totcheck&vlrminunica=$vlrminunica&intervalo=$intervalo&vlrmaxunica=$vlrmaxunica&vlrmin=$vlrmin&vlrmax=$vlrmax&tipo=$tipo&opVenc=$opVenc&j01_numcgm=$j01_numcgm&tx_banc=$tx_banc";
 
     echo " <script>  ";
     echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarneiptutxt{$sNomeFonte}.php?$querystring','Gerando Arquivo TXT ...',true); ";
@@ -1006,7 +1006,7 @@ if(isset($geracarnes)){
 
 	      echo " <script> ";
 
-        echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarnesiptu_geral.php?anousu=$anousu&quantidade=$quantidade&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&tipo=$especie&txtNumpreUnicaSelecionados=$dtVencUnica$querystring&j01_numcgm=$j01_numcgm','Emitindo carnes ...',true); ";
+        echo "   js_OpenJanelaIframe('','db_iframe_carne','cad4_geracarnesiptu_geral.php?anousu=$anousu&quantidade=$quantidade&processarmovimentacao=$processarmovimentacao&mensagemanosanteriores=$mensagemanosanteriores&ordem=$ordem&tipo=$especie&txtNumpreUnicaSelecionados=$dtVencUnica$querystring&j01_numcgm=$j01_numcgm&tx_banc=$tx_banc','Emitindo carnes ...',true); ";
 	      echo " </script> ";
 
       }

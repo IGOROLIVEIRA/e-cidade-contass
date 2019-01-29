@@ -29,6 +29,7 @@ require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
+require_once("libs/db_stdlib.php");
 require_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS );
@@ -58,7 +59,7 @@ $nomeTipoMod  = "Carnes";
 $impmodelo    = 1;
 
 $wherecidbranco = "where 1 = 1 ";
-$debugar = true;
+$debugar = false;
 
 $sqlTipo  = " select q92_tipo  as tipo_debito 					  ";
 $sqlTipo .= "   from cadvencdesc 								  ";
@@ -545,7 +546,7 @@ if($linhasIptunump >0 ){
       $datasUnicas = "";
     }
 
-    $sqlpref = "select logo,db12_extenso,db12_uf,nomeinst as prefeitura, munic, to_char(tx_banc,'99.99') as tx_banc
+    $sqlpref = "select logo,db12_extenso,db12_uf,nomeinst as prefeitura, munic
 	            from db_config
 				inner join cgm on cgm.z01_numcgm = db_config.numcgm
 				inner join db_uf on db12_uf=uf
@@ -585,6 +586,8 @@ if($linhasIptunump >0 ){
 
     $pdf1->uf_config  = $db12_uf;
     $pdf1->prefeitura = $nomeinst;
+    $pdf1->munic = $munic;
+    $pdf1->cnpjprefeitura = db_formatar($cgc,"cnpj");
 
     // coloquei esse sql la em cima fora do for
     if (pg_numrows($resparag) == 0) {
@@ -754,7 +757,16 @@ if($linhasIptunump >0 ){
         if($debugar==true){
           echo "<br> IF MATRICULA <br>";
         }
-        $Identificacao = db_query("select * from proprietario where j01_matric = $origem limit 1");
+        $sSqlIdentificacao  = "select p.*,iptuant.j40_refant, iptuender.j43_bairro,iptubase.j01_fracao,";
+        $sSqlIdentificacao .= "iptubaseregimovel.j04_quadraregimo,iptubaseregimovel.j04_loteregimo";
+        $sSqlIdentificacao .= "  from proprietario p        ";
+        $sSqlIdentificacao .= "  left join iptuant on p.j01_matric = iptuant.j40_matric ";
+        $sSqlIdentificacao .= "  left join iptuender on p.j01_matric = iptuender.j43_matric ";
+        $sSqlIdentificacao .= "  left join iptubase on p.j01_matric = iptubase.j01_matric ";
+        $sSqlIdentificacao .= "  left join iptubaseregimovel on p.j01_matric = iptubaseregimovel.j04_matric ";
+        $sSqlIdentificacao .= " where p.j01_matric = $origem ";
+        $sSqlIdentificacao .= " limit 1                    ";
+        $Identificacao = db_query($sSqlIdentificacao);
 
         if(pg_numrows($Identificacao)==0) {
 
@@ -769,6 +781,71 @@ if($linhasIptunump >0 ){
         $pdf1->prebairropri = $z01_bairro;
         $pdf1->nomepriimo   = $nomepri;
 
+        $sqlIptucalc = "select distinct iptucalc.j23_anousu,         iptucalc.j23_matric ,
+                            iptucalc.j23_testad ,
+                            iptucalc.j23_arealo ,
+                            iptucalc.j23_areafr ,
+                            iptucalc.j23_areaed ,
+                            iptucalc.j23_m2terr ,
+                            iptucalc.j23_vlrter ,
+                            iptucalc.j23_aliq   ,
+                            iptucalc.j23_vlrisen,
+                            j22_pontos,
+                   sum(j22_valor) as j22_valor,
+                   sum(j22_vm2) as j22_vm2,
+                   (select j21_valor from iptucalv
+inner join cfiptu on j21_anousu = j18_anousu and j21_receit = j18_rpredi
+where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limit 1) as totaliptu
+          from iptucalc
+           left outer join iptucale on j22_matric = j23_matric and j22_anousu = j23_anousu
+      where j23_matric = $origem and j23_anousu = $anousu
+      group by iptucalc.j23_anousu,
+                            iptucalc.j23_matric ,
+                            iptucalc.j23_testad ,
+                            iptucalc.j23_arealo ,
+                            iptucalc.j23_areafr ,
+                            iptucalc.j23_areaed ,
+                            iptucalc.j23_m2terr ,
+                            iptucalc.j23_vlrter ,
+                            iptucalc.j23_aliq   ,
+                            iptucalc.j23_vlrisen,
+                            j22_pontos
+      order by iptucalc.j23_anousu desc limit 1
+     ";
+        $Iptucalc = db_query($sqlIptucalc);
+        $oIptucalc = db_utils::fieldsMemory($Iptucalc, 0);
+
+        $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv
+                                    inner join cfiptu on j21_anousu = j18_anousu inner join iptucalh on j21_codhis = j17_codhis
+                                    where j18_anousu = {$anousu} and j21_matric = {$j01_matric}");
+
+        $pdf1->matricula    = $j01_matric;
+        $pdf1->inscricao    = $j40_refant;
+        $pdf1->endercorrespondencia = "$j43_ender, $j43_numimo - $j43_bairro $j43_comple - $j43_munic - ".db_formatar($j43_cep, "cep")." $j43_uf";
+        $pdf1->enderimovel = "$tipopri . $nomepri, $j39_numero ".($j39_compl != ""?"/":"" )." $j39_compl - $j13_descr";
+        $pdf1->area   = $j34_area;
+        $pdf1->lote   = empty($j04_loteregimo) ? '0000' : $j04_loteregimo;
+        $pdf1->quadra = empty($j04_quadraregimo) ? '0000' : $j04_quadraregimo;
+        $pdf1->totcon =  trim(db_formatar($oIptucalc->j23_areaed,'f'));;
+        $pdf1->testad = trim(db_formatar($oIptucalc->j23_testad,'f'));
+        $pdf1->m2terr = trim(db_formatar($oIptucalc->j23_m2terr,'f'));
+        $pdf1->vlcons = trim(db_formatar($oIptucalc->j22_valor,'f'));
+        $pdf1->vlrter = trim(db_formatar($oIptucalc->j23_vlrter,'f'));
+        $pdf1->vm2 = trim(db_formatar($oIptucalc->j22_vm2,'f'));
+        $pdf1->vlvenaltot = trim(db_formatar($oIptucalc->j23_vlrter+$oIptucalc->j22_valor,'f'));
+        $pdf1->fatorconstr= trim(db_formatar($oIptucalc->j22_pontos,'f'));
+        $pdf1->fracao  = trim(db_formatar($j01_fracao,'f'));
+        $pdf1->fatorterr  = "-";
+        $pdf1->aliqterr   = "-";
+        $pdf1->imppred    = "-";
+        $pdf1->impterr    = "-";
+        $pdf1->iptj23_aliq = $oIptucalc->j23_aliq;
+
+        $pdf1->totaliptu  = trim(db_formatar($oIptucalc->totaliptu,'f'));
+        $pdf1->descrquadro = "";
+        for ($iCont=0; $iCont < pg_num_rows($rsDescrQuadro); $iCont++) {
+          $pdf1->descrquadro .= db_utils::fieldsMemory($rsDescrQuadro, $iCont)->descrquadro."\n";
+        }
         // trocado porque bage pediu
         if($oRegraEmissao->isCobranca()){
           $xender = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl);
@@ -1049,9 +1126,9 @@ if($linhasIptunump >0 ){
             }
 
             $pdf1->descr5 	   = 'UNICA';
-            $pdf1->descr6 	   = $dtvencunic;
-            $pdf1->predescr6   = $dtvencunic;
-            $pdf1->predatacalc = $dtvencunic;
+            $pdf1->descr6 	   = db_formatar($dtvencunic,'d');
+            $pdf1->predescr6   = db_formatar($dtvencunic,'d');
+            $pdf1->predatacalc = db_formatar($dtvencunic,'d');
             $pdf1->titulo8 	   = $descr;
             $pdf1->pretitulo8  = $descr;
             $pdf1->descr8 	   = $numero;
@@ -1077,6 +1154,8 @@ if($linhasIptunump >0 ){
             $pdf1->premunic      = $j23_munic;
             $pdf1->uf            = $j23_uf;
             $pdf1->descr3_1      = $z01_numcgm." - ".$nome_contri;
+            $pdf1->cgmpessoa     = $z01_cgmpri;
+            $pdf1->nomepessoa    = $z01_nome;
             $pdf1->descr3_2      = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl) . " - " . $j23_bairro;
             $pdf1->predescr3_1   = $z01_numcgm." - ".$nome_contri;
             $pdf1->predescr3_2   = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl);
@@ -1172,9 +1251,10 @@ if($linhasIptunump >0 ){
             }
 
             ///////// PEGA A MSG DE PAGAMENTO E AS INSTRUÇÕES DA TABELA NUMPREF
-            $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu"));
+            $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu")." order by k03_msgbanco desc");
             if (pg_numrows($rsmsgcarne) > 0) {
               db_fieldsmemory($rsmsgcarne, 0);
+              $pdf1->msgbanco  = $k03_msgbanco;
             }
             /* busca as mensagens da arretipo */
             $sqlMsgCarne = " select k00_msguni2 from arretipo where k00_tipo = $k00_tipo ";
@@ -1189,7 +1269,7 @@ if($linhasIptunump >0 ){
               //          $pdf1->descr12_1 = $k03_msgbanco." Não aceitar apos vencimento "; //msg unica, via contribuinte
             }
 
-            $pdf1->descr14   = $dtvencunic;//.db_formatar($dtvencunic,'d');
+            $pdf1->descr14   = db_formatar($dtvencunic,'d');
             $pdf1->dtparapag = db_formatar($dtvencunic,'d');
 
             if ($terceiro == '7') {
@@ -1655,6 +1735,8 @@ if($oRegraEmissao->isCobranca()){
         $pdf1->descr11_3     = $j23_bairro;
         $pdf1->descr17       = $j23_munic . "/" . $j23_uf . (trim($j23_cep) != ""?" - CEP: " . $j23_cep:"");
         $pdf1->descr3_1      = $z01_numcgm." - ".$nome_contri;
+        $pdf1->cgmpessoa     = $z01_cgmpri;
+        $pdf1->nomepessoa    = $z01_nome;
         $pdf1->descr3_2      = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl) . " - " . $j23_bairro;
         $pdf1->predescr3_1   = $z01_numcgm." - ".$nome_contri;
         $pdf1->predescr3_2   = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl);
@@ -1778,7 +1860,7 @@ if($oRegraEmissao->isCobranca()){
             (isset($obsdiver)&&$obsdiver!=""?$obsdiver:"")."\n";
         }
 
-        $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu"));
+        $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu")." order by k03_msgbanco desc");
         if (pg_numrows($rsmsgcarne) > 0) {
           db_fieldsmemory($rsmsgcarne, 0);
         }
@@ -1813,6 +1895,7 @@ if($oRegraEmissao->isCobranca()){
             $pdf1->descr12_1 .= '- O PAGAMENTO DEVERÁ SER EFETUADO SOMENTE NA PREFEITURA.'." ".$histinf." ".$msgvencida;
           }
         }
+        $pdf1->msgbanco  = $k03_msgbanco;
 
         $sqlparag = "select db02_texto
           from db_documento
