@@ -51,8 +51,10 @@ class SicomArquivoInscDespesasExercicioRestoAPagar extends SicomArquivoBase impl
     }
 
     public function getSeqEmpenho($codemp,$anousu){
-        $sql = "select e60_numemp from empempenho where e60_codemp = '$codemp' and e60_anousu = $anousu";
+        $instint = db_getsession("DB_instit");
+        $sql = "select e60_numemp from empempenho where e60_codemp = '$codemp' and e60_anousu = $anousu and e60_instit = $instint";
         $result = db_query($sql);
+//        echo $sql; db_criatabela($result);exit;
         $SequencialEmp = db_utils::fieldsMemory($result, 0)->e60_numemp;
 
         return $SequencialEmp;
@@ -84,7 +86,7 @@ JOIN orcprojativ ON o58_anousu = o55_anousu
 AND o58_projativ = o55_projativ
 LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
 LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal
-AND l03_instit = 1
+AND l03_instit = ".db_getsession("DB_instit")."
 LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
 LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_edital::varchar
 AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
@@ -110,7 +112,7 @@ AND e60_instit = ".db_getsession("DB_instit")."
 AND e60_codemp = '$codemp'";
 
         $result = db_query($sql);
-//        echo $sql;exit;
+//        echo $sql;db_criatabela($result);
         $CodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
 
         return $CodUnidadeSub;
@@ -121,7 +123,6 @@ AND e60_codemp = '$codemp'";
         $sSql = "select si179_sequencial from iderp102018 where si179_codreduzidoiderp = $seqEmp";
         $result = db_query($sSql);
         $codSeqReg10 = db_utils::fieldsMemory($result, 0)->si179_sequencial;
-
         return $codSeqReg10;
     }
 
@@ -199,7 +200,7 @@ AND e60_codemp = '$codemp'";
          * selecionar informacoes registro 10
          */
 
-        $sSql = "SELECT * FROM despesasinscritasRP WHERE c223_anousu = ". db_getsession("DB_anousu");
+        $sSql = "SELECT * FROM despesasinscritasRP WHERE c223_instit = ".db_getsession("DB_instit")." and  c223_anousu = ". db_getsession("DB_anousu");
         $rsResult10 = db_query($sSql);
 //db_criatabela($rsResult10);
         $empLiqMaiorque0 = array();
@@ -397,7 +398,7 @@ AND e60_codemp = '$codemp'";
             $recurso[] = $oRecurso->o15_codtri;
 
         }
-
+//echo "<pre>"; print_r($recurso);exit;
         foreach ($recurso as $fonte) {
 
             /**
@@ -415,10 +416,13 @@ AND e60_codemp = '$codemp'";
                             LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
                             LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
                             LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
-                            WHERE (k13_limite IS NULL OR k13_limite > '$anousu-12-31') AND c61_instit = 1 AND o15_codtri::int = {$fonte}
+                            WHERE (k13_limite IS NULL OR k13_limite > '$anousu-12-31') 
+                            and o15_codtri != ''
+                            AND c61_instit = ".db_getsession('DB_instit')." 
+                            AND trim(o15_codtri)::int = {$fonte}
                             ORDER BY k13_reduz";
 
-            $rsCtbfonte = db_query($sqlCtbfonte); //echo($sqlCtbfonte); db_criatabela($rsCtbfonte);die();
+            $rsCtbfonte = db_query($sqlCtbfonte); //echo($sqlCtbfonte); db_criatabela($rsCtbfonte);
 
             $aContasAgrupadosFonte = array();
 
@@ -536,9 +540,11 @@ AND e60_codemp = '$codemp'";
                             $iFonte as fonte";
 
                         $rsTotalMov = db_query($sSqlMov);
+//                        db_criatabela($rsTotalMov);
 
                         $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
-                        //echo "<pre>"; print_r($oTotalMov);
+//                        echo "<pre>"; print_r($oTotalMov);
+
                         $aHash = $iFonte;
                         $saldos = new stdClass();
                         if(!$aSaldoAgrupadosFonte[$aHash]){
@@ -659,6 +665,7 @@ AND e60_codemp = '$codemp'";
                                 INNER JOIN orcprojativ ON o55_projativ = o58_projativ AND o55_anousu = orcdotacao.o58_anousu
                                 INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu AND 1=1
                                 AND o15_codtri::int4 IN($fonte)
+                                AND o15_codtri != ''
                                 ORDER BY e91_recurso,e60_anousu,e60_codemp::bigint";
 
             $resultMovFonte = db_query($sql);
@@ -706,7 +713,7 @@ AND e60_codemp = '$codemp'";
                 }
             }
         }
-
+//exit;
         //echo "<pre>";print_r($vlRspExerciciosAnteriores);die();
         /**
          * Busco todas as contas ext com movimento 1,2,99
@@ -717,7 +724,7 @@ AND e60_codemp = '$codemp'";
                    FROM conplano
                    INNER JOIN conplanoreduz ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
                    LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
-                   WHERE c60_anousu = 2018 AND c60_codsis = 7 AND c61_instit = 1
+                   WHERE c60_anousu = 2018 AND c60_codsis = 7 AND c61_instit = ".db_getsession('DB_instit')."
                    AND c60_tipolancamento in (1,2,3,99)
                    ORDER BY c61_reduz";
 

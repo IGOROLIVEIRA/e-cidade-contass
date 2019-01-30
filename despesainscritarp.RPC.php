@@ -191,7 +191,7 @@ try{
                             LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
                             LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
                             LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
-                            WHERE (k13_limite IS NULL OR k13_limite > '$anousu-12-31') AND c61_instit = 1 AND o15_codtri::int = {$fonte}
+                            WHERE (k13_limite IS NULL OR k13_limite > '$anousu-12-31') AND c61_instit = $instit AND o15_codtri::int = {$fonte}
                             ORDER BY k13_reduz";
 
                 $rsCtbfonte = db_query($sqlCtbfonte); //echo($sqlCtbfonte); db_criatabela($rsCtbfonte);die();
@@ -493,7 +493,7 @@ try{
                    FROM conplano
                    INNER JOIN conplanoreduz ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
                    LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
-                   WHERE c60_anousu = 2018 AND c60_codsis = 7 AND c61_instit = 1
+                   WHERE c60_anousu = 2018 AND c60_codsis = 7 AND c61_instit = $instit
                    AND c60_tipolancamento in (1,2,3,99)
                    ORDER BY c61_reduz";
 
