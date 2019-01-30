@@ -128,6 +128,11 @@ class cl_inventariomaterial {
        }
        $this->i77_sequencial = pg_result($result,0,0);
      }
+
+     if(empty($this->i77_valorinicial)) {
+       $this->i77_valorinicial = "null";
+     }
+
      $sql = "insert into inventariomaterial(
                                        i77_sequencial
                                       ,i77_inventario
