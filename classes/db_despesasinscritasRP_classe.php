@@ -244,8 +244,8 @@ class cl_despesasinscritasRP {
                                ,".($this->c223_vlrliquidado   == "null" || $this->c223_vlrliquidado    == ""? 0 : "'".$this->c223_vlrliquidado."'")." 
                                ,".($this->c223_vlrdisRPNP     == "null" || $this->c223_vlrdisRPNP      == ""? 0 : "'".$this->c223_vlrdisRPNP."'")." 
                                ,".($this->c223_vlrdisRPP      == "null" || $this->c223_vlrdisRPP       == ""? 0 : "'".$this->c223_vlrdisRPP."'")." 
-                               ,".($this->c223_vlrsemdisRPNP  == 0 || $this->c223_vlrsemdisRPNP   == ""? $this->c223_vlrnaoliquidado : "'".$this->c223_vlrsemdisRPNP."'")." 
-                               ,".($this->c223_vlrsemdisRPP   == 0 || $this->c223_vlrsemdisRPP    == ""? $this->c223_vlrliquidado : "'".$this->c223_vlrsemdisRPP."'")." 
+                               ,".($this->c223_vlrdisRPNP  == 0 || $this->c223_vlrdisRPNP   == ""? $this->c223_vlrnaoliquidado : "'".$this->c223_vlrsemdisRPNP."'")." 
+                               ,".($this->c223_vlrdisRPP   == 0 || $this->c223_vlrdisRPP    == ""? $this->c223_vlrliquidado : "'".$this->c223_vlrsemdisRPP."'")." 
                                ,".($this->c223_vlrdisptotal   == "null" || $this->c223_vlrdisptotal    == ""? 0 : "'".$this->c223_vlrdisptotal."'")." 
                                ,".($this->c223_vlrutilizado   == "null" || $this->c223_vlrutilizado    == ""? 0 : "'".$this->c223_vlrutilizado."'")." 
                                ,".($this->c223_vlrdisponivel  == "null" || $this->c223_vlrdisponivel   == ""? 0 : "'".$this->c223_vlrdisponivel."'")." 
@@ -381,7 +381,7 @@ class cl_despesasinscritasRP {
             }
         }
         if (trim($this->c223_vlrsemdisRPNP)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c223_vlrsemdisRPNP"])) {
-            if($this->c223_vlrsemdisRPNP == 0 || $this->c223_vlrsemdisRPNP == ""){
+            if($this->c223_vlrdisRPNP == 0 || $this->c223_vlrdisRPNP == ""){
                 $sql  .= $virgula." c223_vlrsemdisRPNP = $this->c223_vlrnaoliquidado ";
             }else{
                 $sql  .= $virgula." c223_vlrsemdisRPNP = $this->c223_vlrsemdisRPNP ";
@@ -398,7 +398,7 @@ class cl_despesasinscritasRP {
             }
         }
         if (trim($this->c223_vlrsemdisRPP)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c223_vlrsemdisRPP"])) {
-            if($this->c223_vlrsemdisRPP == 0 || $this->c223_vlrsemdisRPP == ""){
+            if($this->c223_vlrdisRPP == 0 || $this->c223_vlrdisRPP == ""){
                 $sql  .= $virgula." c223_vlrsemdisRPP = $this->c223_vlrliquidado ";
             }else{
                 $sql  .= $virgula." c223_vlrsemdisRPP = $this->c223_vlrsemdisRPP ";
