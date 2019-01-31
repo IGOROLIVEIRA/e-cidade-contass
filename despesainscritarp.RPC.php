@@ -39,7 +39,7 @@ try{
             foreach ($oParam->itens as $oItem) {
 
                 $cldespesainscritarp->c223_codemp          = $oItem->c223_codemp;
-                $cldespesainscritarp->c223_credor          = $oItem->c223_credor;
+                $cldespesainscritarp->c223_credor          = str_replace("'", "",$oItem->c223_credor);
                 $cldespesainscritarp->c223_fonte           = $oItem->c223_fonte;
                 $cldespesainscritarp->c223_vlrnaoliquidado = $oItem->c223_vlrnaoliquidado;
                 $cldespesainscritarp->c223_vlrliquidado    = $oItem->c223_vlrliquidado;
