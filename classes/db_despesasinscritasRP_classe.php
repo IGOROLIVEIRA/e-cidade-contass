@@ -118,6 +118,8 @@ class cl_despesasinscritasRP {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
+        }else{
+            $this->c223_credor = str_replace("'","",$this->c223_credor);
         }
         if ($this->c223_fonte == null ) {
             $this->erro_sql = " Campo Fonte não informado.";
