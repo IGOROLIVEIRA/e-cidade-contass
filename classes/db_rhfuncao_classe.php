@@ -306,9 +306,14 @@ class cl_rhfuncao {
             $virgula = ",";
         }
         if(trim($this->rh37_exerceatividade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_exerceatividade"])){
-            $sql  .= $virgula." rh37_exerceatividade = '$this->rh37_exerceatividade' ";
+            if (!empty($this->rh37_exerceatividade)) {
+                $sql  .= $virgula." rh37_exerceatividade = '$this->rh37_exerceatividade' ";
+            } else {
+                $sql  .= $virgula." rh37_exerceatividade = null ";
+            }
+            
             $virgula = ",";
-        }
+        } 
         if(trim($this->rh37_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_ativo"])){
             $sql  .= $virgula." rh37_ativo = '$this->rh37_ativo' ";
             $virgula = ",";
@@ -335,6 +340,7 @@ class cl_rhfuncao {
                 return false;
             }
         }
+
         $sql .= " where ";
         if($rh37_funcao!=null){
             $sql .= " rh37_funcao = $this->rh37_funcao";
@@ -374,7 +380,7 @@ class cl_rhfuncao {
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             $this->erro_sql   = "Cadastro de funções nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$this->rh37_funcao."-".$this->rh37_instit;
+            $this->erro_sql .= "Valores : ".$this->rh37_funcao."-".$this->rh37_instit;//
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
@@ -384,7 +390,7 @@ class cl_rhfuncao {
             if(pg_affected_rows($result)==0){
                 $this->erro_banco = "";
                 $this->erro_sql = "Cadastro de funções nao foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : ".$this->rh37_funcao."-".$this->rh37_instit;
+                $this->erro_sql .= "Valores : ".$this->rh37_funcao."-".$this->rh37_instit;//
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
                 $this->erro_status = "1";
