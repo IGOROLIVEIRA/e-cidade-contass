@@ -423,5 +423,8 @@ for($i = 0; $i < $iTotalLinhas; $i ++) {
 
 }
 
+$oUsuario = new UsuarioSistema(db_getsession('DB_id_usuario'));
+$pdf1->nome_usuario = $oUsuario->getNome();
+
 $pdf1->imprime();
 $pdf1->objpdf->Output();
