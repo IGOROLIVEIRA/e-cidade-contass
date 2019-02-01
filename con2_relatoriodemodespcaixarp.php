@@ -276,7 +276,7 @@ ORDER BY e91_recurso,
           JOIN orcdotacao ON (e60_anousu, e60_coddot) = (o58_anousu, o58_coddot)
           JOIN orctiporec ON o15_codigo = o58_codigo
           JOIN cgm ON (e60_numcgm) = (z01_numcgm)
-          WHERE e60_instit = $xinstit and e60_anousu = $anousu
+          WHERE e60_instit IN ($xinstit) and e60_anousu = $anousu
               AND c75_data BETWEEN '$perini' AND '$perfim'
               AND o15_codtri::INT = $fonte
           GROUP BY 1,2,3,4,c53_tipo,c70_valor,e60_anousu
