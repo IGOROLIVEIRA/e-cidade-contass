@@ -1084,7 +1084,26 @@ class Bem {
     $oDaoBensBaixa->t55_motivo = $iMotivoBaixa;
     $oDaoBensBaixa->t55_obs    = $sObservacao;
     $oDaoBensBaixa->t55_destino = $iDestino;
-    $oDaoBensBaixa->incluir($this->getCodigoBem());
+
+      /**
+       * Verificamos se existe regra pra fazer o lançamento contábil pelo Motivo da Baixa do Bem.
+       */
+
+      $oEventoContabilRegra = new EventoContabil(701, db_getsession('DB_anousu'));
+
+      $sSqlRegraDoc = "SELECT c47_ref FROM contranslr
+                       JOIN contranslan ON (c46_seqtranslan, c46_seqtrans) = (c47_seqtranslan, {$oEventoContabilRegra->getSequencialTransacao()} )
+                       WHERE c47_ref = $iMotivoBaixa";
+      $rsRegraDoc = db_query($sSqlRegraDoc);
+      $sRegraDoc = db_utils::fieldsMemory($rsRegraDoc,0)->c47_ref;
+
+      if (!empty($sRegraDoc)) {
+
+     $oDaoBensBaixa->incluir($this->getCodigoBem());
+
+      } else {
+          throw new Exception("Erro ao baixar. Sem regras definidas no Doc. 701 para o Motivo da Baixa!");
+      }
     if ($oDaoBensBaixa->erro_status == 0) {
       throw new Exception(_M('patrimonial.patrimonio.Bem.erro_baixar_bem'));
     }
@@ -1132,7 +1151,7 @@ class Bem {
       // caso nao tenha nota, verificamos o tipo de aquisição, se for doação, realizamos o lançamento
     }
 
-    if (USE_PCASP && empty($oNota) && $lIntegracaoFinanceiro) {
+    if (USE_PCASP && $lIntegracaoFinanceiro) {
 
       /**
        *  Realiza acerto nas contas de depreciação e classificação, caso seja necessário
