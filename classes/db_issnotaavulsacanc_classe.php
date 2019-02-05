@@ -470,7 +470,7 @@ class cl_issnotaavulsacanc {
      $sql .= " from issnotaavulsacanc ";
      $sql .= "      inner join issnotaavulsa  on  issnotaavulsa.q51_sequencial = issnotaavulsacanc.q63_issnotaavulsa";
      $sql .= "      inner join issbase  on  issbase.q02_inscr = issnotaavulsa.q51_inscr";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = issnotaavulsa.q51_usuario";
+     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = issnotaavulsacanc.q63_usuario";
      $sql2 = "";
      if($dbwhere==""){
        if($q63_sequencial!=null ){
