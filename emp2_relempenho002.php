@@ -496,7 +496,7 @@ if ($lSepararGestor) {
 					z01_nome,
 					z01_cgccpf,
 					z01_munic,
-					empempenho.e60_vlremp as e60_vlremp,
+					yyy.e60_vlremp as e60_vlremp,
 					yyy.e60_vlranu,
 					yyy.e60_vlrliq,
 					e63_codhist,
@@ -520,7 +520,7 @@ if ($lSepararGestor) {
           e54_gestaut,
           descrdepto
 			   from (
-			  select e60_numemp,
+			  select e60_numemp, e60_vlremp,
 
 					sum(case when c53_tipo = 11 then c70_valor else 0 end) as e60_vlranu,
 					sum(case when c53_tipo = 20 then c70_valor else 0 end) - sum(case when c53_tipo = 21 then c70_valor else 0 end) as e60_vlrliq,
@@ -529,11 +529,13 @@ if ($lSepararGestor) {
 
 				select  e60_numemp,
 						c53_tipo,
+						e60_vlremp,
 						sum(c70_valor) as c70_valor
 				from (
 				      select e60_numemp,
 						    e60_anousu,
-						    e60_coddot
+						    e60_coddot,
+						    e60_vlremp
 				      from empempenho
 				      where 	e60_instit in ($instits) and
 						e60_emiss between '$datacredor' and '$datacredor1'
@@ -546,9 +548,9 @@ if ($lSepararGestor) {
 					      inner join conlancamdoc 	on c71_codlan = c70_codlan
 					      inner join conhistdoc 	on c53_coddoc = c71_coddoc and c53_tipo in (10,11,20,21,30,31)
 					      inner join conlancamdot   on c73_codlan = c75_codlan
-					 group by e60_numemp, c53_tipo
+					 group by e60_numemp, c53_tipo, e60_vlremp
 				) as xxx
-			group by e60_numemp) as yyy
+			group by e60_numemp, e60_vlremp) as yyy
 					inner join empempenho		on empempenho.e60_numemp	= yyy.e60_numemp
 					inner join cgm 			on cgm.z01_numcgm 		= empempenho.e60_numcgm
 					inner join db_config 		on db_config.codigo 		= empempenho.e60_instit
