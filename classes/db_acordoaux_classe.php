@@ -783,6 +783,20 @@ class cl_acordoaux {
        }
      }
 
+     if(trim($this->ac16_acordocomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_acordocomissao"])){
+       $sql  .= $virgula." ac16_acordocomissao = $this->ac16_acordocomissao ";
+       $virgula = ",";
+       if(trim($this->ac16_acordocomissao) == null ){
+         $this->erro_sql = " Campo Acordo Comissão não informado.";
+         $this->erro_campo = "ac16_acordocomissao";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
      if(trim($this->ac16_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_lei"])){
        $sql  .= $virgula." ac16_lei = ".($this->ac16_lei == "" || $this->ac16_lei == 0 ? 'null' : $this->ac16_lei);
        $virgula = ",";

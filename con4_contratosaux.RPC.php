@@ -593,7 +593,11 @@ switch($oParam->exec) {
                 $oContrato->setVeiculoDivulgacao($oParam->contrato->sVeiculoDivulgacao);
                 $oContrato->setFormaPagamento($oParam->contrato->sFormaPagamento);
                 $oContrato->setCpfsignatariocontratante();
-                $oContrato->setComissao(new AcordoComissao(1));
+                if(!empty($oParam->contrato->iComissao)){
+                  $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
+                }else{
+                  $oContrato->setComissao(new AcordoComissao(1));
+                }
                 $oContrato->setPeriodoComercial($oParam->contrato->lPeriodoComercial);
                 $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
                 $oContrato->setTipoUnidadeTempoVigencia($oParam->contrato->iTipoUnidadeTempoVigencia);
