@@ -62,6 +62,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     public function gerarDados()
     {
 
+
         $cEmp10 = new cl_emp102019();
         $cEmp11 = new cl_emp112019();
         $cEmp12 = new cl_emp122019();
@@ -85,6 +86,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             . " and si106_instit = " . db_getsession("DB_instit"));
 
         if (pg_num_rows($result) > 0) {
+
             $cEmp12->excluir(null, "si108_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
                 . " and si108_instit = " . db_getsession("DB_instit"));
             $cEmp11->excluir(null, "si107_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
@@ -102,6 +104,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
          * selecionar arquivo xml de dados elemento da despesa
          */
         $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+        // print_r('enter');
+        // print_r($sArquivo);
         if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
         }

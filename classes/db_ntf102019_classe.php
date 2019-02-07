@@ -31,7 +31,7 @@ class cl_ntf102019
   var $si143_cepmunicipio = 0;
   var $si143_ufcredor = null;
   var $si143_notafiscaleletronica = 0;
-  var $si143_chaveacesso = 0;
+  var $si143_chaveacesso = null;
   var $si143_outraChaveAcesso = null;
   var $si143_nfaidf = null;
   var $si143_dtemissaonf_dia = null;
@@ -63,7 +63,7 @@ class cl_ntf102019
                  si143_cepmunicipio = int8 = CEP do Município
                  si143_ufcredor = varchar(2) = UF da Inscrição  do Credor
                  si143_notafiscaleletronica = int8 = Identifica se a  nota fiscal
-                 si143_chaveacesso = int8 = Chave para  consulta
+                 si143_chaveacesso = varchar(44) = Chave para  consulta
                  si143_outraChaveAcesso = varchar(60) = Chave Nota Fiscal  Eletrônica
                  si143_nfaidf = varchar(15) = Número da  Autorização
                  si143_dtemissaonf = date = Data de emissão  da nota fiscal
@@ -171,7 +171,7 @@ class cl_ntf102019
       $this->si143_notafiscaleletronica = "0";
     }
     if ($this->si143_chaveacesso == null) {
-      $this->si143_chaveacesso = "0";
+      $this->si143_chaveacesso = "null";
     }
     if ($this->si143_dtemissaonf == null) {
       $this->si143_dtemissaonf = "null";
@@ -297,6 +297,7 @@ class cl_ntf102019
                                ,$this->si143_instit
                       )";
     $result = db_query($sql);
+    // print_r($result);
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
@@ -322,37 +323,37 @@ class cl_ntf102019
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $resaco = $this->sql_record($this->sql_query_file($this->si143_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2011048,'$this->si143_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011048,'','" . AddSlashes(pg_result($resaco, 0, 'si143_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011049,'','" . AddSlashes(pg_result($resaco, 0, 'si143_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011050,'','" . AddSlashes(pg_result($resaco, 0, 'si143_codnotafiscal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011051,'','" . AddSlashes(pg_result($resaco, 0, 'si143_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011052,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfnumero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011053,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfserie')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011054,'','" . AddSlashes(pg_result($resaco, 0, 'si143_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011055,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011056,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nroinscestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011057,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nroinscmunicipal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011058,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nomemunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011059,'','" . AddSlashes(pg_result($resaco, 0, 'si143_cepmunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011060,'','" . AddSlashes(pg_result($resaco, 0, 'si143_ufcredor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011061,'','" . AddSlashes(pg_result($resaco, 0, 'si143_notafiscaleletronica')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011062,'','" . AddSlashes(pg_result($resaco, 0, 'si143_chaveacesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011063,'','" . AddSlashes(pg_result($resaco, 0, 'si143_outraChaveAcesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011064,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfaidf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011065,'','" . AddSlashes(pg_result($resaco, 0, 'si143_dtemissaonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011066,'','" . AddSlashes(pg_result($resaco, 0, 'si143_dtvencimentonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011067,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalortotal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011068,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalordesconto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011069,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalorliquido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011070,'','" . AddSlashes(pg_result($resaco, 0, 'si143_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010372,2011656,'','" . AddSlashes(pg_result($resaco, 0, 'si143_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+    // $resaco = $this->sql_record($this->sql_query_file($this->si143_sequencial));
+    // if (($resaco != false) || ($this->numrows != 0)) {
+    //   $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //   $acount = pg_result($resac, 0, 0);
+    //   $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //   $resac = db_query("insert into db_acountkey values($acount,2011048,'$this->si143_sequencial','I')");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011048,'','" . AddSlashes(pg_result($resaco, 0, 'si143_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011049,'','" . AddSlashes(pg_result($resaco, 0, 'si143_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011050,'','" . AddSlashes(pg_result($resaco, 0, 'si143_codnotafiscal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011051,'','" . AddSlashes(pg_result($resaco, 0, 'si143_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011052,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfnumero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011053,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfserie')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011054,'','" . AddSlashes(pg_result($resaco, 0, 'si143_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011055,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011056,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nroinscestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011057,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nroinscmunicipal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011058,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nomemunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011059,'','" . AddSlashes(pg_result($resaco, 0, 'si143_cepmunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011060,'','" . AddSlashes(pg_result($resaco, 0, 'si143_ufcredor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011061,'','" . AddSlashes(pg_result($resaco, 0, 'si143_notafiscaleletronica')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011062,'','" . AddSlashes(pg_result($resaco, 0, 'si143_chaveacesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011063,'','" . AddSlashes(pg_result($resaco, 0, 'si143_outraChaveAcesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011064,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfaidf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011065,'','" . AddSlashes(pg_result($resaco, 0, 'si143_dtemissaonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011066,'','" . AddSlashes(pg_result($resaco, 0, 'si143_dtvencimentonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011067,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalortotal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011068,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalordesconto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011069,'','" . AddSlashes(pg_result($resaco, 0, 'si143_nfvalorliquido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011070,'','" . AddSlashes(pg_result($resaco, 0, 'si143_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   $resac = db_query("insert into db_acount values($acount,2010372,2011656,'','" . AddSlashes(pg_result($resaco, 0, 'si143_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    // }
 
     return true;
   }
@@ -419,7 +420,63 @@ class cl_ntf102019
     }
     if (trim($this->si143_nroinscestadual) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscestadual"])) {
       $sql .= $virgula . " si143_nroinscestadual = '$this->si143_nroinscestadual' ";
-      $virgula = ",";
+      $aco = $this->sql_record($this->sql_query_file($this->si143_sequencial));
+    // if ($this->numrows > 0) {
+    //   for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2011048,'$this->si143_sequencial','A')");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_sequencial"]) || $this->si143_sequencial != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011048,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_sequencial')) . "','$this->si143_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tiporegistro"]) || $this->si143_tiporegistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011049,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tiporegistro')) . "','$this->si143_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codnotafiscal"]) || $this->si143_codnotafiscal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011050,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codnotafiscal')) . "','$this->si143_codnotafiscal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codorgao"]) || $this->si143_codorgao != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011051,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codorgao')) . "','$this->si143_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfnumero"]) || $this->si143_nfnumero != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011052,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfnumero')) . "','$this->si143_nfnumero'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfserie"]) || $this->si143_nfserie != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011053,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfserie')) . "','$this->si143_nfserie'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tipodocumento"]) || $this->si143_tipodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011054,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tipodocumento')) . "','$this->si143_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nrodocumento"]) || $this->si143_nrodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011055,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nrodocumento')) . "','$this->si143_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscestadual"]) || $this->si143_nroinscestadual != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011056,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscestadual')) . "','$this->si143_nroinscestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscmunicipal"]) || $this->si143_nroinscmunicipal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011057,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscmunicipal')) . "','$this->si143_nroinscmunicipal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nomemunicipio"]) || $this->si143_nomemunicipio != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011058,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nomemunicipio')) . "','$this->si143_nomemunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_cepmunicipio"]) || $this->si143_cepmunicipio != "")
+    //       $sql2$resac = db_query("insert into db_acount values($acount,2010372,2011059,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_cepmunicipio')) . "','$this->si143_cepmunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_ufcredor"]) || $this->si143_ufcredor != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011060,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_ufcredor')) . "','$this->si143_ufcredor'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_notafiscaleletronica"]) || $this->si143_notafiscaleletronica != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011061,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_notafiscaleletronica')) . "','$this->si143_notafiscaleletronica'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"]) || $this->si143_chaveacesso != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011062,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_chaveacesso')) . "','$this->si143_chaveacesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_outraChaveAcesso"]) || $this->si143_outraChaveAcesso != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011063,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_outraChaveAcesso')) . "','$this->si143_outraChaveAcesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfaidf"]) || $this->si143_nfaidf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011064,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfaidf')) . "','$this->si143_nfaidf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtemissaonf"]) || $this->si143_dtemissaonf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011065,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtemissaonf')) . "','$this->si143_dtemissaonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtvencimentonf"]) || $this->si143_dtvencimentonf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011066,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtvencimentonf')) . "','$this->si143_dtvencimentonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalortotal"]) || $this->si143_nfvalortotal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011067,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalortotal')) . "','$this->si143_nfvalortotal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalordesconto"]) || $this->si143_nfvalordesconto != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011068,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalordesconto')) . "','$this->si143_nfvalordesconto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalorliquido"]) || $this->si143_nfvalorliquido != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011069,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalorliquido')) . "','$this->si143_nfvalorliquido'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_mes"]) || $this->si143_mes != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011070,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_mes')) . "','$this->si143_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_instit"]) || $this->si143_instit != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011656,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_instit')) . "','$this->si143_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }virgula = ",";
     }
     if (trim($this->si143_nroinscmunicipal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscmunicipal"])) {
       $sql .= $virgula . " si143_nroinscmunicipal = '$this->si143_nroinscmunicipal' ";
@@ -449,7 +506,7 @@ class cl_ntf102019
     }
     if (trim($this->si143_chaveacesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"])) {
       if (trim($this->si143_chaveacesso) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"])) {
-        $this->si143_chaveacesso = "0";
+        $this->si143_chaveacesso = "null";
       }
       $sql .= $virgula . " si143_chaveacesso = '$this->si143_chaveacesso' ";
       $virgula = ",";
@@ -533,63 +590,63 @@ class cl_ntf102019
     if ($si143_sequencial != null) {
       $sql .= " si143_sequencial = $this->si143_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si143_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2011048,'$this->si143_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_sequencial"]) || $this->si143_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011048,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_sequencial')) . "','$this->si143_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tiporegistro"]) || $this->si143_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011049,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tiporegistro')) . "','$this->si143_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codnotafiscal"]) || $this->si143_codnotafiscal != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011050,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codnotafiscal')) . "','$this->si143_codnotafiscal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codorgao"]) || $this->si143_codorgao != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011051,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codorgao')) . "','$this->si143_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfnumero"]) || $this->si143_nfnumero != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011052,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfnumero')) . "','$this->si143_nfnumero'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfserie"]) || $this->si143_nfserie != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011053,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfserie')) . "','$this->si143_nfserie'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tipodocumento"]) || $this->si143_tipodocumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011054,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tipodocumento')) . "','$this->si143_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nrodocumento"]) || $this->si143_nrodocumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011055,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nrodocumento')) . "','$this->si143_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscestadual"]) || $this->si143_nroinscestadual != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011056,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscestadual')) . "','$this->si143_nroinscestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscmunicipal"]) || $this->si143_nroinscmunicipal != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011057,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscmunicipal')) . "','$this->si143_nroinscmunicipal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nomemunicipio"]) || $this->si143_nomemunicipio != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011058,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nomemunicipio')) . "','$this->si143_nomemunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_cepmunicipio"]) || $this->si143_cepmunicipio != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011059,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_cepmunicipio')) . "','$this->si143_cepmunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_ufcredor"]) || $this->si143_ufcredor != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011060,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_ufcredor')) . "','$this->si143_ufcredor'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_notafiscaleletronica"]) || $this->si143_notafiscaleletronica != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011061,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_notafiscaleletronica')) . "','$this->si143_notafiscaleletronica'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"]) || $this->si143_chaveacesso != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011062,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_chaveacesso')) . "','$this->si143_chaveacesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_outraChaveAcesso"]) || $this->si143_outraChaveAcesso != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011063,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_outraChaveAcesso')) . "','$this->si143_outraChaveAcesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfaidf"]) || $this->si143_nfaidf != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011064,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfaidf')) . "','$this->si143_nfaidf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtemissaonf"]) || $this->si143_dtemissaonf != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011065,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtemissaonf')) . "','$this->si143_dtemissaonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtvencimentonf"]) || $this->si143_dtvencimentonf != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011066,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtvencimentonf')) . "','$this->si143_dtvencimentonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalortotal"]) || $this->si143_nfvalortotal != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011067,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalortotal')) . "','$this->si143_nfvalortotal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalordesconto"]) || $this->si143_nfvalordesconto != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011068,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalordesconto')) . "','$this->si143_nfvalordesconto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalorliquido"]) || $this->si143_nfvalorliquido != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011069,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalorliquido')) . "','$this->si143_nfvalorliquido'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_mes"]) || $this->si143_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011070,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_mes')) . "','$this->si143_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si143_instit"]) || $this->si143_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010372,2011656,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_instit')) . "','$this->si143_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // $resaco = $this->sql_record($this->sql_query_file($this->si143_sequencial));
+    // if ($this->numrows > 0) {
+    //   for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2011048,'$this->si143_sequencial','A')");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_sequencial"]) || $this->si143_sequencial != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011048,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_sequencial')) . "','$this->si143_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tiporegistro"]) || $this->si143_tiporegistro != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011049,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tiporegistro')) . "','$this->si143_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codnotafiscal"]) || $this->si143_codnotafiscal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011050,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codnotafiscal')) . "','$this->si143_codnotafiscal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_codorgao"]) || $this->si143_codorgao != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011051,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_codorgao')) . "','$this->si143_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfnumero"]) || $this->si143_nfnumero != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011052,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfnumero')) . "','$this->si143_nfnumero'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfserie"]) || $this->si143_nfserie != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011053,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfserie')) . "','$this->si143_nfserie'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_tipodocumento"]) || $this->si143_tipodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011054,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_tipodocumento')) . "','$this->si143_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nrodocumento"]) || $this->si143_nrodocumento != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011055,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nrodocumento')) . "','$this->si143_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscestadual"]) || $this->si143_nroinscestadual != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011056,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscestadual')) . "','$this->si143_nroinscestadual'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nroinscmunicipal"]) || $this->si143_nroinscmunicipal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011057,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nroinscmunicipal')) . "','$this->si143_nroinscmunicipal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nomemunicipio"]) || $this->si143_nomemunicipio != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011058,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nomemunicipio')) . "','$this->si143_nomemunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_cepmunicipio"]) || $this->si143_cepmunicipio != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011059,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_cepmunicipio')) . "','$this->si143_cepmunicipio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_ufcredor"]) || $this->si143_ufcredor != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011060,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_ufcredor')) . "','$this->si143_ufcredor'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_notafiscaleletronica"]) || $this->si143_notafiscaleletronica != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011061,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_notafiscaleletronica')) . "','$this->si143_notafiscaleletronica'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"]) || $this->si143_chaveacesso != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011062,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_chaveacesso')) . "','$this->si143_chaveacesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_outraChaveAcesso"]) || $this->si143_outraChaveAcesso != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011063,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_outraChaveAcesso')) . "','$this->si143_outraChaveAcesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfaidf"]) || $this->si143_nfaidf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011064,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfaidf')) . "','$this->si143_nfaidf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtemissaonf"]) || $this->si143_dtemissaonf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011065,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtemissaonf')) . "','$this->si143_dtemissaonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_dtvencimentonf"]) || $this->si143_dtvencimentonf != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011066,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_dtvencimentonf')) . "','$this->si143_dtvencimentonf'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalortotal"]) || $this->si143_nfvalortotal != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011067,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalortotal')) . "','$this->si143_nfvalortotal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalordesconto"]) || $this->si143_nfvalordesconto != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011068,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalordesconto')) . "','$this->si143_nfvalordesconto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_nfvalorliquido"]) || $this->si143_nfvalorliquido != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011069,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_nfvalorliquido')) . "','$this->si143_nfvalorliquido'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_mes"]) || $this->si143_mes != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011070,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_mes')) . "','$this->si143_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     if (isset($GLOBALS["HTTP_POST_VARS"]["si143_instit"]) || $this->si143_instit != "")
+    //       $resac = db_query("insert into db_acount values($acount,2010372,2011656,'" . AddSlashes(pg_result($resaco, $conresaco, 'si143_instit')) . "','$this->si143_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -630,43 +687,43 @@ class cl_ntf102019
   // funcao para exclusao
   function excluir($si143_sequencial = null, $dbwhere = null)
   {
-    if ($dbwhere == null || $dbwhere == "") {
-      $resaco = $this->sql_record($this->sql_query_file($si143_sequencial));
-    } else {
-      $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-    }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2011048,'$si143_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011048,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011049,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011050,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_codnotafiscal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011051,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011052,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfnumero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011053,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfserie')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011054,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011055,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011056,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nroinscestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011057,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nroinscmunicipal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011058,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nomemunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011059,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_cepmunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011060,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_ufcredor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011061,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_notafiscaleletronica')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011062,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_chaveacesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011063,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_outraChaveAcesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011064,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfaidf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011065,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_dtemissaonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011066,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_dtvencimentonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011067,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalortotal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011068,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalordesconto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011069,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalorliquido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011070,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010372,2011656,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+    // if ($dbwhere == null || $dbwhere == "") {
+    //   $resaco = $this->sql_record($this->sql_query_file($si143_sequencial));
+    // } else {
+    //   $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
+    // }
+    // if (($resaco != false) || ($this->numrows != 0)) {
+    //   for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+    //     $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //     $acount = pg_result($resac, 0, 0);
+    //     $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+    //     $resac = db_query("insert into db_acountkey values($acount,2011048,'$si143_sequencial','E')");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011048,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011049,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011050,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_codnotafiscal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011051,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011052,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfnumero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011053,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfserie')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011054,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011055,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011056,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nroinscestadual')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011057,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nroinscmunicipal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011058,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nomemunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011059,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_cepmunicipio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011060,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_ufcredor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011061,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_notafiscaleletronica')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011062,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_chaveacesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011063,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_outraChaveAcesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011064,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfaidf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011065,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_dtemissaonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011066,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_dtvencimentonf')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011067,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalortotal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011068,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalordesconto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011069,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_nfvalorliquido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011070,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //     $resac = db_query("insert into db_acount values($acount,2010372,2011656,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si143_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+    //   }
+    // }
     $sql = " delete from ntf102019
                     where ";
     $sql2 = "";
@@ -681,6 +738,7 @@ class cl_ntf102019
       $sql2 = $dbwhere;
     }
     $result = db_query($sql . $sql2);
+
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());

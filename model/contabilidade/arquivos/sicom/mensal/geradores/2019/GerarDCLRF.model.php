@@ -30,10 +30,10 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
     $this->abreArquivo();
 
     $sSql = "select * from dclrf102019  ";
-    $sSql .= " left join dclrf202019 on si190_sequencial = si191_reg10 ";
-    $sSql .= " left join dclrf302019 on si190_sequencial = si192_reg10 ";
-    $sSql .= " left join dclrf402019 on si190_sequencial = si193_reg10 ";
-    $sSql .= " where si190_mes = '".$this->iMes."' and si190_codorgao = '".$this->iOrgao."'";
+    $sSql .= " left join dclrf202019 on si157_sequencial = si191_reg10 ";
+    $sSql .= " left join dclrf302019 on si157_sequencial = si192_reg10 ";
+    $sSql .= " left join dclrf402019 on si157_sequencial = si193_reg10 ";
+    $sSql .= " where si157_mes = '".$this->iMes."' and si157_codorgao = '".$this->iOrgao."'";
     $rsDCLRF    = db_query($sSql);
 
     if (pg_num_rows($rsDCLRF) == 0) {
@@ -48,28 +48,28 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
 
         $aDCLRF  = pg_fetch_array($rsDCLRF,$iCont);
         if($this->iTipoIntint == 2):
-          $aCSVDCLRF10['si190_tiporegistro']                      = str_pad($aDCLRF['si190_tiporegistro'], 2, "0", STR_PAD_LEFT);
-          $aCSVDCLRF10['si190_codorgao']                          = str_pad((int)$aDCLRF['si190_codorgao'], 2, "0", STR_PAD_LEFT);
-          $aCSVDCLRF10['si190_passivosreconhecidos']              = number_format($aDCLRF['si190_passivosreconhecidos'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlsaldoatualconcgarantiainterna']   = number_format($aDCLRF['si190_vlsaldoatualconcgarantiainterna'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlsaldoatualconcgarantia']          = number_format($aDCLRF['si190_vlsaldoatualconcgarantia'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlsaldoatualcontragarantiainterna'] = number_format($aDCLRF['si190_vlsaldoatualcontragarantiainterna'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlsaldoatualcontragarantiaexterna'] = number_format($aDCLRF['si190_vlsaldoatualcontragarantiaexterna'], 2, ",", "");
-          $aCSVDCLRF10['si190_medidascorretivas']                 = $aDCLRF['si190_medidascorretivas'] == '' ? ' ': substr($aDCLRF['si190_medidascorretivas'], 0, 4000) ;
-          $aCSVDCLRF10['si190_recalieninvpermanente']             = number_format($aDCLRF['si190_recalieninvpermanente'], 2, ",", "");
-          $aCSVDCLRF10['si190_vldotatualizadaincentcontrib']      = number_format($aDCLRF['si190_vldotatualizadaincentcontrib'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlempenhadoicentcontrib']           = number_format($aDCLRF['si190_vlempenhadoicentcontrib'], 2, ",", "");
-          $aCSVDCLRF10['si190_vldotatualizadaincentinstfinanc']   = number_format($aDCLRF['si190_vldotatualizadaincentinstfinanc'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlempenhadoincentinstfinanc']       = number_format($aDCLRF['si190_vlempenhadoincentinstfinanc'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlliqincentcontrib']                = number_format($aDCLRF['si190_vlliqincentcontrib'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlliqincentinstfinanc']             = number_format($aDCLRF['si190_vlliqincentinstfinanc'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlirpnpincentcontrib']              = number_format($aDCLRF['si190_vlirpnpincentcontrib'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlirpnpincentinstfinanc']           = number_format($aDCLRF['si190_vlirpnpincentinstfinanc'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlrecursosnaoaplicados']            = number_format($aDCLRF['si190_vlrecursosnaoaplicados'], 2, ",", "");
-          $aCSVDCLRF10['si190_vlapropiacaodepositosjudiciais']    = number_format($aDCLRF['si190_vlapropiacaodepositosjudiciais'], 2, ",", "");
-          $aCSVDCLRF10['si190_vloutrosajustes']                   = number_format($aDCLRF['si190_vloutrosajustes'], 2, ",", "");
-          $aCSVDCLRF10['si190_metarrecada']                       = ($aDCLRF['si190_metarrecada'] == 0 || $aDCLRF['si190_metarrecada'] == "") ? ' ' : $aDCLRF['si190_metarrecada'] ;
-          $aCSVDCLRF10['si190_dscmedidasadotadas']                = $aDCLRF['si190_dscmedidasadotadas'] == '' ? ' ' : substr($aDCLRF['si190_dscmedidasadotadas'], 0, 4000);
+          $aCSVDCLRF10['si157_tiporegistro']                      = str_pad($aDCLRF['si157_tiporegistro'], 2, "0", STR_PAD_LEFT);
+          $aCSVDCLRF10['si157_codorgao']                          = str_pad((int)$aDCLRF['si157_codorgao'], 2, "0", STR_PAD_LEFT);
+          $aCSVDCLRF10['si157_passivosreconhecidos']              = number_format($aDCLRF['si157_passivosreconhecidos'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlsaldoatualconcgarantiainterna']   = number_format($aDCLRF['si157_vlsaldoatualconcgarantiainterna'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlsaldoatualconcgarantia']          = number_format($aDCLRF['si157_vlsaldoatualconcgarantia'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlsaldoatualcontragarantiainterna'] = number_format($aDCLRF['si157_vlsaldoatualcontragarantiainterna'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlsaldoatualcontragarantiaexterna'] = number_format($aDCLRF['si157_vlsaldoatualcontragarantiaexterna'], 2, ",", "");
+          $aCSVDCLRF10['si157_medidascorretivas']                 = $aDCLRF['si157_medidascorretivas'] == '' ? ' ': substr($aDCLRF['si157_medidascorretivas'], 0, 4000) ;
+          $aCSVDCLRF10['si157_recalieninvpermanente']             = number_format($aDCLRF['si157_recalieninvpermanente'], 2, ",", "");
+          $aCSVDCLRF10['si157_vldotatualizadaincentcontrib']      = number_format($aDCLRF['si157_vldotatualizadaincentcontrib'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlempenhadoicentcontrib']           = number_format($aDCLRF['si157_vlempenhadoicentcontrib'], 2, ",", "");
+          $aCSVDCLRF10['si157_vldotatualizadaincentinstfinanc']   = number_format($aDCLRF['si157_vldotatualizadaincentinstfinanc'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlempenhadoincentinstfinanc']       = number_format($aDCLRF['si157_vlempenhadoincentinstfinanc'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlliqincentcontrib']                = number_format($aDCLRF['si157_vlliqincentcontrib'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlliqincentinstfinanc']             = number_format($aDCLRF['si157_vlliqincentinstfinanc'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlirpnpincentcontrib']              = number_format($aDCLRF['si157_vlirpnpincentcontrib'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlirpnpincentinstfinanc']           = number_format($aDCLRF['si157_vlirpnpincentinstfinanc'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlrecursosnaoaplicados']            = number_format($aDCLRF['si157_vlrecursosnaoaplicados'], 2, ",", "");
+          $aCSVDCLRF10['si157_vlapropiacaodepositosjudiciais']    = number_format($aDCLRF['si157_vlapropiacaodepositosjudiciais'], 2, ",", "");
+          $aCSVDCLRF10['si157_vloutrosajustes']                   = number_format($aDCLRF['si157_vloutrosajustes'], 2, ",", "");
+          $aCSVDCLRF10['si157_metarrecada']                       = ($aDCLRF['si157_metarrecada'] == 0 || $aDCLRF['si157_metarrecada'] == "") ? ' ' : $aDCLRF['si157_metarrecada'] ;
+          $aCSVDCLRF10['si157_dscmedidasadotadas']                = $aDCLRF['si157_dscmedidasadotadas'] == '' ? ' ' : substr($aDCLRF['si157_dscmedidasadotadas'], 0, 4000);
           $this->sLinha = $aCSVDCLRF10;
           $this->adicionaLinha();
         endif;

@@ -89,15 +89,15 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarDCL
     // $this->sDataFinal['5'].$this->sDataFinal['6']
 
     //LIMPA AS TABELAS
-    $cldclrf40->excluir("(SELECT si190_sequencial FROM dclrf102019 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    $cldclrf40->excluir("(SELECT si157_sequencial FROM dclrf102019 WHERE si157_codorgao = '{$iCodOrgao}' AND si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
     if($cldclrf40->erro_status == 0){
       throw new Exception($cldclrf40->erro_msg);
     }
-    $cldclrf30->excluir("(SELECT si190_sequencial FROM dclrf102019 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    $cldclrf30->excluir("(SELECT si157_sequencial FROM dclrf102019 WHERE si157_codorgao = '{$iCodOrgao}' AND si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
     if($cldclrf30->erro_status == 0){
       throw new Exception($cldclrf30->erro_msg);
     }
-    $cldclrf20->excluir("(SELECT si190_sequencial FROM dclrf102019 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    $cldclrf20->excluir("(SELECT si157_sequencial FROM dclrf102019 WHERE si157_codorgao = '{$iCodOrgao}' AND si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
     if($cldclrf20->erro_status == 0){
       throw new Exception($cldclrf20->erro_msg);
     }
@@ -118,29 +118,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarDCL
     foreach ($rsDadoscomplementares as $dados) {
 
       $cldclrf10 = new cl_dclrf102019();
-      $cldclrf10->si190_tiporegistro = 10;
-      $cldclrf10->si190_codorgao = $dados->c218_codorgao;
-      $cldclrf10->si190_passivosreconhecidos = $dados->c218_passivosreconhecidos;
-      $cldclrf10->si190_vlsaldoatualconcgarantiainterna = $dados->c218_vlsaldoatualconcgarantiainterna;
-      $cldclrf10->si190_vlsaldoatualconcgarantia = $dados->c218_vlsaldoatualconcgarantia;
-      $cldclrf10->si190_vlsaldoatualcontragarantiainterna = $dados->c218_vlsaldoatualcontragarantiainterna;
-      $cldclrf10->si190_vlsaldoatualcontragarantiaexterna = $dados->c218_vlsaldoatualcontragarantiaexterna;
-      $cldclrf10->si190_medidascorretivas = $this->removeCaracteres($dados->c218_medidascorretivas);
-      $cldclrf10->si190_recalieninvpermanente = $dados->c218_recalieninvpermanente;
-      $cldclrf10->si190_vldotatualizadaincentcontrib = $dados->c218_vldotatualizadaincentcontrib;
-      $cldclrf10->si190_vlempenhadoicentcontrib = $dados->c218_vlempenhadoicentcontrib;
-      $cldclrf10->si190_vldotatualizadaincentinstfinanc = $dados->c218_vldotatualizadaincentinstfinanc;
-      $cldclrf10->si190_vlempenhadoincentinstfinanc = $dados->c218_vlempenhadoincentinstfinanc;
-      $cldclrf10->si190_vlliqincentcontrib = $dados->c218_vlliqincentcontrib;
-      $cldclrf10->si190_vlliqincentinstfinanc = $dados->c218_vlliqincentinstfinanc;
-      $cldclrf10->si190_vlirpnpincentcontrib = $dados->c218_vlirpnpincentcontrib;
-      $cldclrf10->si190_vlirpnpincentinstfinanc = $dados->c218_vlirpnpincentinstfinanc;
-      $cldclrf10->si190_vlrecursosnaoaplicados = $dados->c218_vlrecursosnaoaplicados;
-      $cldclrf10->si190_vlapropiacaodepositosjudiciais = $dados->c218_vlapropiacaodepositosjudiciais;
-      $cldclrf10->si190_vloutrosajustes = $dados->c218_vloutrosajustes;
-      $cldclrf10->si190_metarrecada = $dados->c218_metarrecada;
-      $cldclrf10->si190_dscmedidasadotadas = $this->removeCaracteres($dados->c218_dscmedidasadotadas);
-      $cldclrf10->si190_mes = $dados->c218_mesusu;
+      $cldclrf10->si157_tiporegistro = 10;
+      $cldclrf10->si157_codorgao = $dados->c218_codorgao;
+      $cldclrf10->si157_passivosreconhecidos = $dados->c218_passivosreconhecidos;
+      $cldclrf10->si157_vlsaldoatualconcgarantiainterna = $dados->c218_vlsaldoatualconcgarantiainterna;
+      $cldclrf10->si157_vlsaldoatualconcgarantia = $dados->c218_vlsaldoatualconcgarantia;
+      $cldclrf10->si157_vlsaldoatualcontragarantiainterna = $dados->c218_vlsaldoatualcontragarantiainterna;
+      $cldclrf10->si157_vlsaldoatualcontragarantiaexterna = $dados->c218_vlsaldoatualcontragarantiaexterna;
+      $cldclrf10->si157_medidascorretivas = $this->removeCaracteres($dados->c218_medidascorretivas);
+      $cldclrf10->si157_recalieninvpermanente = $dados->c218_recalieninvpermanente;
+      $cldclrf10->si157_vldotatualizadaincentcontrib = $dados->c218_vldotatualizadaincentcontrib;
+      $cldclrf10->si157_vlempenhadoicentcontrib = $dados->c218_vlempenhadoicentcontrib;
+      $cldclrf10->si157_vldotatualizadaincentinstfinanc = $dados->c218_vldotatualizadaincentinstfinanc;
+      $cldclrf10->si157_vlempenhadoincentinstfinanc = $dados->c218_vlempenhadoincentinstfinanc;
+      $cldclrf10->si157_vlliqincentcontrib = $dados->c218_vlliqincentcontrib;
+      $cldclrf10->si157_vlliqincentinstfinanc = $dados->c218_vlliqincentinstfinanc;
+      $cldclrf10->si157_vlirpnpincentcontrib = $dados->c218_vlirpnpincentcontrib;
+      $cldclrf10->si157_vlirpnpincentinstfinanc = $dados->c218_vlirpnpincentinstfinanc;
+      $cldclrf10->si157_vlrecursosnaoaplicados = $dados->c218_vlrecursosnaoaplicados;
+      $cldclrf10->si157_vlapropiacaodepositosjudiciais = $dados->c218_vlapropiacaodepositosjudiciais;
+      $cldclrf10->si157_vloutrosajustes = $dados->c218_vloutrosajustes;
+      $cldclrf10->si157_metarrecada = $dados->c218_metarrecada;
+      $cldclrf10->si157_dscmedidasadotadas = $this->removeCaracteres($dados->c218_dscmedidasadotadas);
+      $cldclrf10->si157_mes = $dados->c218_mesusu;
 
       $cldclrf10->incluir(null);
       if ($cldclrf10->erro_status == 0) {
@@ -151,7 +151,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarDCL
         if($this->sDataFinal['5'].$this->sDataFinal['6'] == '12'){
           $cldclrf20 = new cl_dclrf202019();
           $cldclrf20->si191_tiporegistro = 20;
-          $cldclrf20->si191_reg10 = $cldclrf10->si190_sequencial;
+          $cldclrf20->si191_reg10 = $cldclrf10->si157_sequencial;
           $cldclrf20->si191_contopcredito = $dados->c219_contopcredito;
           $cldclrf20->si191_dsccontopcredito = $this->removeCaracteres($dados->c219_dsccontopcredito);
           $cldclrf20->si191_realizopcredito = $dados->c219_realizopcredito;
@@ -168,7 +168,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarDCL
         }
         $cldclrf30 = new cl_dclrf302019();
         $cldclrf30->si192_tiporegistro = 30;
-        $cldclrf30->si192_reg10 = $cldclrf10->si190_sequencial;
+        $cldclrf30->si192_reg10 = $cldclrf10->si157_sequencial;
         $cldclrf30->si192_publiclrf = $dados->c220_publiclrf;
         $cldclrf30->si192_dtpublicacaorelatoriolrf = $dados->c220_dtpublicacaorelatoriolrf;
         $cldclrf30->si192_localpublicacao = $this->removeCaracteres($dados->c220_localpublicacao);
@@ -183,7 +183,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarDCL
       }
       $cldclrf40 = new cl_dclrf402019();
       $cldclrf40->si193_tiporegistro = 40;
-      $cldclrf40->si193_reg10 = $cldclrf10->si190_sequencial;
+      $cldclrf40->si193_reg10 = $cldclrf10->si157_sequencial;
       $cldclrf40->si193_publicrgf = $dados->c221_publicrgf;
       $cldclrf40->si193_dtpublicacaorelatoriorgf = $dados->c221_dtpublicacaorelatoriorgf;
       $cldclrf40->si193_localpublicacaorgf = $this->removeCaracteres($dados->c221_localpublicacaorgf);

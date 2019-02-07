@@ -155,7 +155,7 @@ class cl_dclrf302019 {
 	 }
 
      $result = @pg_query("insert into dclrf302019(
-                                      ,si192_sequencial
+                                      si192_sequencial
                                       ,si192_tiporegistro
                                       ,si192_publiclrf
                                       ,si192_dtpublicacaorelatoriolrf
@@ -164,10 +164,10 @@ class cl_dclrf302019 {
                                       ,si192_exerciciotpbimestre
                                       ,si192_mes
                                       ,si192_instit
-                                       si192_reg10
+                                      ,si192_reg10
                        )
                 values (
-                               ,$this->si192_sequencial
+                               $this->si192_sequencial
                                ,$this->si192_tiporegistro
                                ,$this->si192_publiclrf
                                ,".($this->si192_dtpublicacaorelatoriolrf == "null" || $this->si192_dtpublicacaorelatoriolrf == "" ? "null" : "'".$this->si192_dtpublicacaorelatoriolrf."'")."
@@ -317,6 +317,7 @@ class cl_dclrf302019 {
      if($si192_sequencial != null) {
 	 	$sql .= " si192_sequencial = $this->si192_sequencial";
      }
+     print_r($sql);die();
 //     	si192_reg10 = $si192_reg10 ";
      $result = @pg_exec($sql);
      if($result==false){
@@ -345,20 +346,17 @@ class cl_dclrf302019 {
      }
    }
    // funcao para exclusao
-   function excluir ( $si192_sequencial=null, $dbwhere=null) {
+   function excluir ($si192_reg10=null, $dbwhere=null) {
 	 if($dbwhere==null || $dbwhere==""){
 	 	$resaco = $this->sql_record($this->sql_query_file($si192_sequencial));
 	 }else{
 	 	$resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
 	 }
-//     $this->atualizacampos(true);
      $sql = " delete from dclrf302019
                     where ";
      $sql2 = "";
-     $sql2 = "si192_sequencial = $si192_sequencial";
-	 if($si192_sequencial!=null){
-		$sql .= " si192_sequencial = $this->si192_sequencial";
-	 }
+     $sql2 = "si192_reg10 = $si192_reg10";
+
 	 $resaco = $this->sql_record($this->sql_query_file($this->si192_sequencial));
      $result = @pg_exec($sql.$sql2);
      if($result==false){
@@ -423,7 +421,7 @@ class cl_dclrf302019 {
        $sql .= $campos;
      }
      $sql .= " from dclrf302019 ";
-     $sql .= " 		left join dclrf102019 on dclrf102019.si190_sequencial = dclrf302019.si192_reg10 ";
+     $sql .= " 		left join dclrf102019 on dclrf102019.si157_sequencial = dclrf302019.si192_reg10 ";
      $sql2 = "";
      if($dbwhere==""){
        if( $si192_sequencial != null){

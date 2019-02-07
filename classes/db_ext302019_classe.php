@@ -268,9 +268,9 @@ class cl_ext302019
                                ,$this->si126_codext
                                ,$this->si126_codfontrecursos
                                ,$this->si126_codreduzidoop
+                               ,$this->si126_nroop
                                ,'$this->si126_codunidadesub'
                                ," . ($this->si126_dtpagamento == "null" || $this->si126_dtpagamento == "" ? "null" : "'" . $this->si126_dtpagamento . "'") . "
-                               ,$this->si126_nroop
                                ,$this->si126_tipodocumentocredor
                                ,'$this->si126_nrodocumentocredor'
                                ,$this->si126_vlop
@@ -378,15 +378,15 @@ class cl_ext302019
       $sql .= $virgula . " si126_nroop = $this->si126_nroop ";
       $virgula = ",";
     }
-    if (trim($this->si126_dtpagamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"] != "")) {
-      $sql .= $virgula . " si126_dtpagamento = '$this->si126_dtpagamento' ";
-      $virgula = ",";
-    } else {
-      if (isset($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"])) {
-        $sql .= $virgula . " si126_dtpagamento = null ";
-        $virgula = ",";
-      }
-    }
+    // if (trim($this->si126_dtpagamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"] != "")) {
+    //   $sql .= $virgula . " si126_dtpagamento = '$this->si126_dtpagamento' ";
+    //   $virgula = ",";
+    // } else {
+    //   if (isset($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento_dia"])) {
+    //     $sql .= $virgula . " si126_dtpagamento = null ";
+    //     $virgula = ",";
+    //   }
+    // }
     if (trim($this->si126_tipodocumentocredor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si126_tipodocumentocredor"])) {
       if (trim($this->si126_tipodocumentocredor) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si126_tipodocumentocredor"])) {
         $this->si126_tipodocumentocredor = "0";

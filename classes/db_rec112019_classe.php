@@ -22,6 +22,11 @@ class cl_rec112019
   var $si26_codreceita = 0;
   var $si26_codfontrecursos = 0;
   var $si26_nrodocumento = null;
+  var $si26_nroconvenio = null;
+  var $si26_dataassinaturarec10_dia = null;
+  var $si26_dataassinatura_mes = null;
+  var $si26_dataassinatura_ano = null;
+  var $si26_dataassinatura = null;
   var $si26_vlarrecadadofonte = 0;
   var $si26_reg10 = 0;
   var $si26_mes = 0;
@@ -119,7 +124,7 @@ class cl_rec112019
       $this->si26_vlarrecadadofonte = "0";
     }
     if ($this->si26_dataassinatura == null) {
-      $this->si26_dataassinatura = "0";
+      $this->si26_dataassinatura = "null";
     }
     if ($this->si26_reg10 == null) {
       $this->si26_reg10 = "0";
@@ -199,6 +204,7 @@ class cl_rec112019
                                ,$this->si26_tiporegistro
                                ,$this->si26_codreceita
                                ,$this->si26_codfontrecursos
+                               ,$this->si26_tipodocumento
                                ,'$this->si26_nrodocumento'
                                ,'$this->si26_nroconvenio'
                                ,".($this->si26_dataassinatura == "null" || $this->si26_dataassinatura == ""?"null":"'".$this->si26_dataassinatura."'")."

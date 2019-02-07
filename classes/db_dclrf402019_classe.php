@@ -150,7 +150,7 @@ class cl_dclrf402019 {
 		   return false;
        }
 	 $result = @pg_query("insert into dclrf402019(
-                                	   si193_sequencial	
+                                	   si193_sequencial
                                       ,si193_tiporegistro
                                       ,si193_publicrgf
                                       ,si193_dtpublicacaorgf
@@ -166,7 +166,7 @@ class cl_dclrf402019 {
                                ,$this->si193_tiporegistro
                                ,$this->si193_publicrgf
                                ,".($this->si193_dtpublicacaorgf == "null" || $this->si193_dtpublicacaorgf == "" ? "null" : "'".$this->si193_dtpublicacaorgf."'")."
-                               ,".($this->si193_localpublicacaorgf == "null" || $this->si193_localpublicacaorgf == "" ? "null" : "'".$this->si193_localpublicacaorgf."'")."
+                               ,$this->si193_localpublicacaorgf
                                ,$this->si193_tpperiodo
                                ,$this->si193_exerciciotpperiodo
                                ,$this->si193_mes
@@ -353,20 +353,22 @@ class cl_dclrf402019 {
    }
    // funcao para exclusao
    function excluir ($si193_sequencial = null, $dbwhere = null) {
-//     $this->atualizacampos(true);
+    // $this->atualizacampos(true);
      $sql = " delete from dclrf402019
                     where ";
      $sql2 = "";
      if($dbwhere == null || $dbwhere == ''){
      	if($si193_sequencial != ""){
-     		$sql2 .= " and ";
-		}
-		$sql2 .= " si193_sequencial = $si193_sequencial ";
+        if($sql2!='')
+     		 $sql2 .= " and ";
+		    }
+		    $sql2 .= " si193_sequencial = $si193_sequencial ";
 	 }else{
      	$sql2 = $dbwhere;
 	 }
 //     $sql2 = "si193_reg10 = $si193_reg10";
      $result = @pg_exec($sql.$sql2);
+     // print_r($sql2);die();
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "dclrf402019 não Excluído. Exclusão Abortada.\\n";
@@ -428,8 +430,9 @@ class cl_dclrf402019 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dclrf402019 ";
-     $sql .= "      inner join  dclrf102019 on  dclrf102019.si190_sequencial = dclrf402019.si193_reg10 ";
+     $sql .= " from dclrf402018 ";
+     $sql .= "      inner join  dclrf102019 on  dclrf102019.si157_sequencial = dclrf402019.si193_reg10 ";
+     // $sql .= "      inner join   on  . = dclrf402019.si191_reg10 and  . = dclrf402019.si192_reg10 and  . = dclrf402019.si193_reg10";
      $sql2 = "";
      if($dbwhere==""){
        if( $si193_sequencial != "" && $si193_sequencial != null){

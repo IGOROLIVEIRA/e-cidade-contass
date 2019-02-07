@@ -23,7 +23,7 @@ class cl_ntf202019
   var $si145_nfserie = 0;
   var $si145_tipodocumento = 0;
   var $si145_nrodocumento = 0;
-  var $si145_chaveacesso = 0;
+  var $si145_chaveacesso = null;
   var $si145_dtemissaonf_dia = null;
   var $si145_dtemissaonf_mes = null;
   var $si145_dtemissaonf_ano = null;
@@ -50,7 +50,7 @@ class cl_ntf202019
                  si145_nfserie = varchar(8) = Numero de serie
                  si145_tipodocumento = int8 = Tipo do documento
                  si145_nrodocumento = varchar(14) = Numero do documento
-                 si145_chaveacesso = int8 = Chave de acesso
+                 si145_chaveacesso = varchar(44) = Chave de acesso
                  si145_dtemissaonf = date = Data da nota
                  si145_codunidadesub = varchar(8) = Código da unidade
                  si145_dtempenho = date = Data do empenho
@@ -156,7 +156,7 @@ class cl_ntf202019
       $this->si145_nrodocumento = "0";
     }
     if ($this->si145_chaveacesso == null) {
-      $this->si145_chaveacesso = "0";
+      $this->si145_chaveacesso = "null";
     }
     if ($this->si145_dtemissaonf == null) {
       $this->si145_dtemissaonf = "0";
@@ -258,7 +258,7 @@ class cl_ntf202019
                                ,'$this->si145_nfserie'
                                ,$this->si145_tipodocumento
                                ,'$this->si145_nrodocumento'
-                               ,$this->si145_chaveacesso
+                               ,'$this->si145_chaveacesso'
                                ," . ($this->si145_dtemissaonf == "null" || $this->si145_dtemissaonf == "" ? "null" : "'" . $this->si145_dtemissaonf . "'") . "
                                ,'$this->si145_codunidadesub'
                                ," . ($this->si145_dtempenho == "null" || $this->si145_dtempenho == "" ? "null" : "'" . $this->si145_dtempenho . "'") . "
@@ -374,7 +374,7 @@ class cl_ntf202019
     }
     if (trim($this->si145_chaveacesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si145_chaveacesso"])) {
       if (trim($this->si145_chaveacesso) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si145_chaveacesso"])) {
-        $this->si145_chaveacesso = "0";
+        $this->si145_chaveacesso = "";
       }
       $sql .= $virgula . " si145_chaveacesso = '$this->si145_chaveacesso' ";
       $virgula = ",";

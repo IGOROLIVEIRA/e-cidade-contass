@@ -212,16 +212,16 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
             $sSql = "
           SELECT k02_estorc,
-                 CASE 
-                     WHEN substr(k02_estorc,2,6) IN ('121004','721004') 
+                 CASE
+                     WHEN substr(k02_estorc,2,6) IN ('121004','721004')
                         THEN z01_cgccpf
                      ELSE ''
                  END AS z01_cgccpf,
                  o70_codrec,
                  o15_codtri,
-                 SUM( CASE  WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8 
-                            WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8                      
-                      ELSE 0::FLOAT8 
+                 SUM( CASE  WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
+                            WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
+                      ELSE 0::FLOAT8
                       END ) AS c70_valor
           FROM conlancamrec
           INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
@@ -236,7 +236,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           LEFT JOIN cgm ON conlancamcgm.c76_numcgm = z01_numcgm
           WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
             AND o70_instit = " . db_getsession('DB_instit') . "
-            AND (CASE 
+            AND (CASE
                     WHEN substr(k02_estorc,1,2) = '49'
                         THEN substr(k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
                     ELSE substr(k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'

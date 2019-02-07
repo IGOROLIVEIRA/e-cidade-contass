@@ -356,7 +356,7 @@ class cl_dclrf112019 {
        $sql .= $campos;
      }
      $sql .= " from dclrf112019 ";
-	 $sql .= " 		left join dclrf102019 on dclrf102019.si190_sequencial = dclrf112019.si205_reg10 ";
+	 $sql .= " 		left join dclrf102019 on dclrf102019.si157_sequencial = dclrf112019.si205_reg10 ";
 	 $sql2 = "";
      if($dbwhere==""){
        if( $si205_sequencial != "" && $si205_sequencial != null){

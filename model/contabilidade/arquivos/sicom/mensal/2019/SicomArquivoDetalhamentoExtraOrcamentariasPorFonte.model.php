@@ -6,6 +6,7 @@ require_once ("classes/db_ext202019_classe.php");
 require_once ("classes/db_ext302019_classe.php");
 require_once ("classes/db_ext312019_classe.php");
 
+
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarEXT.model.php");
 
  /**
@@ -73,8 +74,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
   	    db_inicio_transacao();
 
-
-	      $cExt31->excluir(NULL,"si127_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+        $cExt31->excluir(NULL,"si127_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 	    								and si127_instit = ".db_getsession("DB_instit"));
 	      if ($cExt31->erro_status == 0) {
 	    	  throw new Exception($cExt31->erro_msg);
@@ -97,7 +97,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 		    	  throw new Exception($cExt10->erro_msg);
 		  }
 
-	   echo pg_last_error();
+	   // echo pg_last_error();
 
 	   db_fim_transacao();
 
@@ -119,11 +119,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 				  from conplano
 				  inner join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
 				   left join infocomplementaresinstit on si09_instit = c61_instit
-				  where c60_anousu = ".db_getsession("DB_anousu")." and c60_codsis = 7 and c61_instit = ".db_getsession("DB_instit")." 
+				  where c60_anousu = ".db_getsession("DB_anousu")." and c60_codsis = 7 and c61_instit = ".db_getsession("DB_instit")."
   				order by c61_reduz  ";
 
   	    $rsContasExtra = db_query($sSqlExt) or die($sSqlExt);
-		//db_criatabela($rsContasExtra);
+		// db_criatabela($rsContasExtra);
 	    // matriz de entrada
     	$what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô',
     			'ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
@@ -202,7 +202,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                             AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."' ";
 
 		       		$rsResulVerifica = db_query($sSqlVerifica) or die ($sSqlVerifica);
-//					echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
+					// echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
 
 		       		if ((pg_num_rows($rsResulVerifica) == 0) || (pg_num_rows($rsResulVerifica) != 0 && $this->sDataFinal['5'].$this->sDataFinal['6'] == 1)  ) {
 
@@ -280,7 +280,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 								  ) as extfonte order by codext,fonte";
 
 				$rsExt20FonteRecurso = db_query($sSql20Fonte);// or die($sSql20Fonte);
-				//echo "Movimento";db_criatabela($rsExt20FonteRecurso);
+				// echo "Movimento";db_criatabela($rsExt20FonteRecurso);
 				for ($iC = 0;$iC < pg_num_rows($rsExt20FonteRecurso); $iC++) {
 					$Hash20 = '';
 					$oContaExtraFonte = db_utils::fieldsMemory($rsExt20FonteRecurso, $iC);
@@ -370,7 +370,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						   and orctiporec.o15_codigo = {$oExtRecurso}";
 
 					$rsExtMov = db_query($sSqlMov);
-					//echo "Reg30";db_criatabela($rsExtMov);
+					// echo "Reg30";db_criatabela($rsExtMov);
 					/*FOR PARA PEGAR O REGISTRO 21 E COLOCAR NO 20*/
 					for ($linha = 0; $linha < pg_num_rows($rsExtMov); $linha++) {
 
@@ -414,7 +414,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 									inner join cgm cc on cc.z01_numcgm = slipnum.k17_numcgm
 									 LEFT JOIN corconf ON corlanc.k12_id = corconf.k12_id
 										   AND corlanc.k12_data = corconf.k12_data
-										   AND corlanc.k12_autent = corconf.k12_autent										   
+										   AND corlanc.k12_autent = corconf.k12_autent
 									 LEFT JOIN empageconfche ON k12_codmov = e91_codcheque
 									 LEFT JOIN empagemovforma ON e91_codmov = e97_codmov
 									 LEFT JOIN empageforma ON e97_codforma = e96_codigo
@@ -426,7 +426,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 										   AND c86_autent = {$oExtMov->autent} ";
 
 							    $rsExt30 = db_query($sSql30) or die($sSql30);
-								//db_criatabela($rsExt30);
+								// db_criatabela($rsExt30);
 								for ($linha30 = 0; $linha30 < pg_num_rows($rsExt30); $linha30++) {
 
 									$oExt30 = db_utils::fieldsMemory($rsExt30, $linha30);

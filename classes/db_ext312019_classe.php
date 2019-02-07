@@ -167,8 +167,7 @@ class cl_ext312019
     if ($si127_sequencial == "" || $si127_sequencial == null) {
       $result = db_query("select nextval('ext312019_si127_sequencial_seq')");
       if ($result == false) {
-        $this->erro_banco = str_replace("
-          ", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: ext312019_si127_sequencial_seq do campo: si127_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -231,6 +230,8 @@ class cl_ext312019
                                ,$this->si127_instit
                       )";
     $result = db_query($sql);
+
+
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
@@ -664,4 +665,3 @@ class cl_ext312019
 }
 
 ?>
-S
