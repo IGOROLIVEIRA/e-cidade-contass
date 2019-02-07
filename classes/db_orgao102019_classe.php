@@ -178,6 +178,11 @@ class cl_orgao102019
 
       return false;
     }
+
+    if(($this->si14_tipodocumentoassessoria == null) || ($this->si14_tipodocumentoassessoria=='')){
+      $this->si14_tipodocumentoassessoria = '0';
+    }
+
     $sql = "insert into orgao102019(
                                        si14_sequencial
                                       ,si14_tiporegistro
