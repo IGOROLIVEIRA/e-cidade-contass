@@ -109,7 +109,8 @@ if(isset($incluir)){
   }
   if(!$lErro){
   
-    $clinfocomplementaresinstit->si09_instit  = $cldb_config->codigo;
+    $clinfocomplementaresinstit->si09_instit      = $cldb_config->codigo;
+    $clinfocomplementaresinstit->si09_instsiconfi = $si09_instsiconfi;
     $clinfocomplementaresinstit->incluir(null);
     if($clinfocomplementaresinstit->erro_status == "0"){
       $lErro = true;

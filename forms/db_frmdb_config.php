@@ -644,7 +644,7 @@ if ($db_opcao == 1) {
   <td>
   <fieldset><legend>
      <a  id='esconderinfocomplementar' style="-moz-user-select: none;cursor: pointer" onClick="js_escondeInfocomplamentar('');">
-       <b>Dados para TCE/MG</b>
+       <b>Dados para TCE/MG e STN</b>
        <img src='imagens/seta.gif' id='toggleinfocomplementar' border='0'>
      </a>
   </legend>
@@ -729,6 +729,14 @@ if ($db_opcao == 1) {
 	      $x = array('2'=>'NÃO','1'=>'SIM');
 	      db_select('si09_assessoriacontabil',$x,true,$db_opcao,"onchange='js_mostra_cgm_assessoria()'");
 	      ?>
+	    </td>
+		</tr>
+		<tr>
+			<td nowrap title="<?=@$Tsi09_instsiconfi?>" id="cnpjprefeitura">
+				<?=@$Lsi09_instsiconfi?>
+			</td>
+	    <td> 
+	      <? db_input('si09_instsiconfi',14,$Isi09_instsiconfi,true,'text',$db_opcao,""); ?>
 	    </td>
 	  </tr>
       <tr id="cgmAssessoria">

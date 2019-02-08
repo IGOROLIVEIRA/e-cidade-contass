@@ -104,7 +104,8 @@ if(isset($alterar)){
   if (!$lErro) {
   		
 		  $result = db_query($clinfocomplementaresinstit->sql_query(null,"si09_sequencial",null,"si09_instit = {$codigo}"));
-		  $clinfocomplementaresinstit->si09_instit = $codigo;
+      $clinfocomplementaresinstit->si09_instit = $codigo;
+      $clinfocomplementaresinstit->si09_instsiconfi = $si09_instsiconfi;
   		if (pg_num_rows($result) > 0) {
   			$clinfocomplementaresinstit->si09_sequencial = db_utils::fieldsMemory($result, 0)->si09_sequencial;
 		    $clinfocomplementaresinstit->alterar($clinfocomplementaresinstit->si09_sequencial);
