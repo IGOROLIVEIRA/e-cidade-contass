@@ -27,7 +27,7 @@ class cl_respinf102019 {
   var $si197_dtfinal_ano = null;
   var $si197_dtfinal = null;
   var $si197_mes = 0;
-  var $si197_inst = 0;
+  var $si197_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si197_sequencial = int8 = si197_sequencial
@@ -35,13 +35,15 @@ class cl_respinf102019 {
                  si197_dtinicio = date = Data inicial
                  si197_dtfinal = date = Data final
                  si197_mes = int8 = si197_mes
-                 si197_inst = int8 = si197_inst
+                 si197_instit = int8 = si197_instit
                  ";
   //funcao construtor da classe
   function cl_respinf102019() {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("respinf102019");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
   }
   //funcao erro
   function erro($mostra,$retorna) {
@@ -74,7 +76,7 @@ class cl_respinf102019 {
         }
       }
       $this->si197_mes = ($this->si197_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_mes"]:$this->si197_mes);
-      $this->si197_inst = ($this->si197_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_inst"]:$this->si197_inst);
+      $this->si197_instit = ($this->si197_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_instit"]:$this->si197_instit);
     }else{
       $this->si197_sequencial = ($this->si197_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_sequencial"]:$this->si197_sequencial);
     }
@@ -118,9 +120,9 @@ class cl_respinf102019 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si197_inst == null ){
-      $this->erro_sql = " Campo si197_inst não informado.";
-      $this->erro_campo = "si197_inst";
+    if($this->si197_instit == null ){
+      $this->erro_sql = " Campo si197_instit não informado.";
+      $this->erro_campo = "si197_instit";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -128,11 +130,11 @@ class cl_respinf102019 {
       return false;
     }
     if($si197_sequencial == "" || $si197_sequencial == null ){
-      $result = db_query("select nextval('respinf102019_si197_sequencial_seq')");
+      $result = db_query("select nextval('respinf2019_si197_sequencial_seq')");
       if($result==false){
         $this->erro_banco = str_replace("
 ","",@pg_last_error());
-        $this->erro_sql   = "Verifique o cadastro da sequencia: respinf102019_si197_sequencial_seq do campo: si197_sequencial";
+        $this->erro_sql   = "Verifique o cadastro da sequencia: respinf2019";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
         $this->erro_status = "0";
@@ -140,7 +142,7 @@ class cl_respinf102019 {
       }
       $this->si197_sequencial = pg_result($result,0,0);
     }else{
-      $result = db_query("select last_value from respinf102019_si197_sequencial_seq");
+      $result = db_query("select last_value from respinf2019");
       if(($result != false) && (pg_result($result,0,0) < $si197_sequencial)){
         $this->erro_sql = " Campo si197_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -160,13 +162,13 @@ class cl_respinf102019 {
       $this->erro_status = "0";
       return false;
     }
-    $sql = "insert into respinf102019(
+    $sql = "insert into respinf2019 (
                                        si197_sequencial
                                       ,si197_nrodocumento
                                       ,si197_dtinicio
                                       ,si197_dtfinal
                                       ,si197_mes
-                                      ,si197_inst
+                                      ,si197_instit
                        )
                 values (
                                 $this->si197_sequencial
@@ -174,19 +176,20 @@ class cl_respinf102019 {
                                ,".($this->si197_dtinicio == "null" || $this->si197_dtinicio == ""?"null":"'".$this->si197_dtinicio."'")."
                                ,".($this->si197_dtfinal == "null" || $this->si197_dtfinal == ""?"null":"'".$this->si197_dtfinal."'")."
                                ,$this->si197_mes
-                               ,$this->si197_inst
+                               ,$this->si197_instit
                       )";
     $result = db_query($sql);
+
     if($result==false){
       $this->erro_banco = str_replace("
 ","",@pg_last_error());
       if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-        $this->erro_sql   = "respinf102019 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "respinf2019";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-        $this->erro_banco = "respinf102019 já Cadastrado";
+        $this->erro_banco = "respinf2019";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
       }else{
-        $this->erro_sql   = "respinf102019 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "respinf2019";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
       }
@@ -205,30 +208,30 @@ class cl_respinf102019 {
     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
             && ($lSessaoDesativarAccount === false))) {
 
-      $resaco = $this->sql_record($this->sql_query_file($this->si197_sequencial  ));
-      if(($resaco!=false)||($this->numrows!=0)){
+      // $resaco = $this->sql_record($this->sql_query_file($this->si197_sequencial  ));
+      // if(($resaco!=false)||($this->numrows!=0)){
 
-        /*$resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac,0,0);
-        $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-        $resac = db_query("insert into db_acountkey values($acount,1009308,'$this->si197_sequencial','I')");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009308,'','".AddSlashes(pg_result($resaco,0,'si197_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009309,'','".AddSlashes(pg_result($resaco,0,'si197_nomeresponsavel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009310,'','".AddSlashes(pg_result($resaco,0,'si197_cartident'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009311,'','".AddSlashes(pg_result($resaco,0,'si197_orgemissorci'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,0,'si197_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009313,'','".AddSlashes(pg_result($resaco,0,'si197_dtinicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009314,'','".AddSlashes(pg_result($resaco,0,'si197_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009315,'','".AddSlashes(pg_result($resaco,0,'si197_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010197,1009316,'','".AddSlashes(pg_result($resaco,0,'si197_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
-      }
+      //   $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+      //   $acount = pg_result($resac,0,0);
+      //   $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+      //   $resac = db_query("insert into db_acountkey values($acount,1009308,'$this->si197_sequencial','I')");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009308,'','".AddSlashes(pg_result($resaco,0,'si197_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009309,'','".AddSlashes(pg_result($resaco,0,'si197_nomeresponsavel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009310,'','".AddSlashes(pg_result($resaco,0,'si197_cartident'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009311,'','".AddSlashes(pg_result($resaco,0,'si197_orgemissorci'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009312,'','".AddSlashes(pg_result($resaco,0,'si197_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009313,'','".AddSlashes(pg_result($resaco,0,'si197_dtinicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009314,'','".AddSlashes(pg_result($resaco,0,'si197_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009315,'','".AddSlashes(pg_result($resaco,0,'si197_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      //   $resac = db_query("insert into db_acount values($acount,1010197,1009316,'','".AddSlashes(pg_result($resaco,0,'si197_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      // }
     }
     return true;
   }
   // funcao para alteracao
   function alterar ($si197_sequencial=null) {
     $this->atualizacampos();
-    $sql = " update respinf102019 set ";
+    $sql = " update respinf2019 ";
     $virgula = "";
     if(trim($this->si197_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_sequencial"])){
       $sql  .= $virgula." si197_sequencial = $this->si197_sequencial ";
@@ -362,12 +365,12 @@ class cl_respinf102019 {
         return false;
       }
     }
-    if(trim($this->si197_inst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_inst"])){
-      $sql  .= $virgula." si197_inst = $this->si197_inst ";
+    if(trim($this->si197_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_instit"])){
+      $sql  .= $virgula." si197_instit = $this->si197_instit ";
       $virgula = ",";
-      if(trim($this->si197_inst) == null ){
-        $this->erro_sql = " Campo si197_inst não informado.";
-        $this->erro_campo = "si197_inst";
+      if(trim($this->si197_instit) == null ){
+        $this->erro_sql = " Campo si197_instit não informado.";
+        $this->erro_campo = "si197_instit";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -408,8 +411,8 @@ class cl_respinf102019 {
             $resac = db_query("insert into db_acount values($acount,1010197,1009314,'".AddSlashes(pg_result($resaco,$conresaco,'si197_dtfinal'))."','$this->si197_dtfinal',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si197_mes"]) || $this->si197_mes != "")
             $resac = db_query("insert into db_acount values($acount,1010197,1009315,'".AddSlashes(pg_result($resaco,$conresaco,'si197_mes'))."','$this->si197_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si197_inst"]) || $this->si197_inst != "")
-            $resac = db_query("insert into db_acount values($acount,1010197,1009316,'".AddSlashes(pg_result($resaco,$conresaco,'si197_inst'))."','$this->si197_inst',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si197_instit"]) || $this->si197_instit != "")
+            $resac = db_query("insert into db_acount values($acount,1010197,1009316,'".AddSlashes(pg_result($resaco,$conresaco,'si197_instit'))."','$this->si197_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
         }
       }
     }
@@ -417,7 +420,7 @@ class cl_respinf102019 {
     if($result==false){
       $this->erro_banco = str_replace("
 ","",@pg_last_error());
-      $this->erro_sql   = "respinf102019 nao Alterado. Alteracao Abortada.\n";
+      $this->erro_sql   = "respinf2019";
       $this->erro_sql .= "Valores : ".$this->si197_sequencial;
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -427,7 +430,7 @@ class cl_respinf102019 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "respinf102019 nao foi Alterado. Alteracao Executada.\n";
+        $this->erro_sql = "respinf2019";
         $this->erro_sql .= "Valores : ".$this->si197_sequencial;
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -475,11 +478,11 @@ class cl_respinf102019 {
           $resac  = db_query("insert into db_acount values($acount,1010197,1009313,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_dtinicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009314,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010197,1009315,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010197,1009316,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
+          $resac  = db_query("insert into db_acount values($acount,1010197,1009316,'','".AddSlashes(pg_result($resaco,$iresaco,'si197_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
         }
       }
     }
-    $sql = " delete from respinf102019
+    $sql = " delete from respinf2019
                     where ";
     $sql2 = "";
     if($dbwhere==null || $dbwhere ==""){
@@ -496,7 +499,7 @@ class cl_respinf102019 {
     if($result==false){
       $this->erro_banco = str_replace("
 ","",@pg_last_error());
-      $this->erro_sql   = "respinf102019 nao Excluído. Exclusão Abortada.\n";
+      $this->erro_sql   = "respinf2019";
       $this->erro_sql .= "Valores : ".$si197_sequencial;
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -506,7 +509,7 @@ class cl_respinf102019 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "respinf102019 nao Encontrado. Exclusão não Efetuada.\n";
+        $this->erro_sql = "respinf2019";
         $this->erro_sql .= "Valores : ".$si197_sequencial;
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -541,7 +544,7 @@ class cl_respinf102019 {
     $this->numrows = pg_numrows($result);
     if($this->numrows==0){
       $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:respinf102019";
+      $this->erro_sql   = "Record Vazio na Tabela:respinf2019";
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
       $this->erro_status = "0";
@@ -562,11 +565,11 @@ class cl_respinf102019 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from respinf102019 ";
+    $sql .= " from respinf2019 ";
     $sql2 = "";
     if($dbwhere==""){
       if($si197_sequencial!=null ){
-        $sql2 .= " where respinf102019.si197_sequencial = $si197_sequencial ";
+        $sql2 .= " where respinf2019.si197_sequencial = $si197_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
@@ -596,11 +599,11 @@ class cl_respinf102019 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from respinf102019 ";
+    $sql .= " from respinf2019";
     $sql2 = "";
     if($dbwhere==""){
       if($si197_sequencial!=null ){
-        $sql2 .= " where respinf102019.si197_sequencial = $si197_sequencial ";
+        $sql2 .= " where respinf2019.si197_sequencial = $si197_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";

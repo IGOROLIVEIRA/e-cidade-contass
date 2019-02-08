@@ -64,13 +64,17 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $clconsid10->sql_record($clconsid10->sql_query(NULL,"*",NULL,"si158_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']));
-    if (pg_num_rows($result) > 0) {
-      $clconsid10->excluir(NULL,"si158_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
-      if ($clconsid10->erro_status == 0) {
-        throw new Exception($clconsid10->erro_msg);
+
+    $result = $clconsid10->sql_query(NULL,"*",NULL,"si158_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+    $result = $clconsid10->sql_record($result);
+
+    if($result != false)
+      if (pg_num_rows($result) > 0) {
+        $clconsid10->excluir(NULL,"si158_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+        if ($clconsid10->erro_status == 0) {
+          throw new Exception($clconsid10->erro_msg);
+        }
       }
-    }
 
     /*
      * selecionar informacoes registro 10

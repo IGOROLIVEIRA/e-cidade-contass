@@ -76,10 +76,10 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
      * selecionar informacoes registro 10
      */
 
-    $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
+    $sSql = "SELECT z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
     $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 5 and DATE_PART('YEAR',si166_dataini) <= ". db_getsession('DB_anousu')." and DATE_PART('YEAR',si166_datafim) >= ". db_getsession('DB_anousu');
     $sSql .= " and (DATE_PART('month',si166_dataini) <= ". $this->sDataInicial['5'].$this->sDataInicial['6'] ." or DATE_PART('month',si166_datafim) <= ". $this->sDataFinal['5'].$this->sDataFinal['6'].")";
-
+    // print_r($sSql);
     $mes = $this->sDataFinal['5'].$this->sDataFinal['6'];      // Mês desejado, pode ser por ser obtido por POST, GET, etc.
     $ano = db_getsession('DB_anousu'); // Ano atual
     $ultimo_dia = date("t", mktime(0,0,0,$mes,'01',$ano)); // Mágica, plim!
@@ -89,20 +89,24 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
     $dtFinal   = $ano.'-'.$mes.'-'.$ultimo_dia;
 
     $rsResult10 = db_query($sSql);
+    // db_criatabela($rsResult10);die();
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clrespinf10 = new cl_respinf102019();
-      $clrespinf10->si197_nomeresponsavel       = $oDados10->z01_nome;
-      $clrespinf10->si197_cartident             = 'mg99999999';//$oDados10->z01_ident;
-      $clrespinf10->si197_orgemissorci          = 'SSP';//$oDados10->z01_identorgao;
-      $clrespinf10->si197_cpf                   = $oDados10->z01_cgccpf;
+      // $clrespinf10->si197_nomeresponsavel       = $oDados10->z01_nome;
+      // $clrespinf10->si197_cartident             = 'mg99999999';//$oDados10->z01_ident;
+      // $clrespinf10->si197_orgemissorci          = 'SSP';//$oDados10->z01_identorgao;
+      // $clrespinf10->si197_cpf                   = $oDados10->z01_cgccpf;
+      // var_dump($oDados10);
+      $clrespinf10->si197_nrodocumento          = $oDados10->z01_cgccpf;
       $clrespinf10->si197_dtinicio              = $dtInicial;
       $clrespinf10->si197_dtfinal               = $dtFinal;
       $clrespinf10->si197_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clrespinf10->si197_inst                  = db_getsession("DB_instit");
+      $clrespinf10->si197_instit                  = db_getsession("DB_instit");
+      // var_dump($clrespinf10);
 
       $clrespinf10->incluir(null);
       if ($clrespinf10->erro_status == 0) {
