@@ -189,6 +189,7 @@ $sqlmater = "
 	  order by e54_autori
 	  ";
 $result = db_query($sqlmater);
+$newResult = $result;
 if (pg_numrows($result)==0){
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado ! ");
     exit;
@@ -233,14 +234,8 @@ $pdf1->nvias= @$e30_nroviaaut;
 $pdf1->objpdf->SetTextColor(0,0,0);
 $autorizacoes = array();
 
-for ($i = 0;$i < pg_numrows($result);$i++) {
-    db_fieldsmemory($result, $i);
-    $autorizacoes[$i] = $e54_autori;
-}
-
-foreach ($autorizacoes as $autorizacao){
-    $e54_autori = $autorizacao;
-    // echo " [5] " . db_criatabela($result). "<br>------------------<br>";
+for ($i = 0;$i < pg_numrows($newResult);$i++) {
+    db_fieldsmemory($newResult, $i);
 
     $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
