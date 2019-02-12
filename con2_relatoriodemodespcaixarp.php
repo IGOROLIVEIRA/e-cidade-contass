@@ -65,6 +65,7 @@ foreach ($recurso as $fonte) {
      WHERE c62_anousu = $anousu
          AND c61_instit IN ($xinstit)
          AND o15_codtri::int = $fonte
+         AND o15_codtri != ''
          AND (p.c60_estrut LIKE '$estrut_inicial%') ) AS x";
 
     $result = db_query($sql);
@@ -182,6 +183,7 @@ INNER JOIN orcelemento ON o58_codele = o56_codele
 AND o58_anousu = o56_anousu
 AND 1=1
 AND o15_codtri::int4 IN($fonte)
+AND o15_codtri != ''
 ORDER BY e91_recurso,
          e60_anousu,
          e60_codemp::bigint";
@@ -279,6 +281,7 @@ ORDER BY e91_recurso,
           WHERE e60_instit IN ($xinstit) and e60_anousu = $anousu
               AND c75_data BETWEEN '$perini' AND '$perfim'
               AND o15_codtri::INT = $fonte
+              AND o15_codtri != ''
           GROUP BY 1,2,3,4,c53_tipo,c70_valor,e60_anousu
           ORDER BY 2, 3) AS x
      GROUP BY 1, 2, 3,z01_numcgm, e60_anousu
@@ -309,7 +312,8 @@ JOIN orctiporec ON o15_codigo = o58_codigo
 LEFT JOIN empanulado ON e94_numemp = e60_numemp
 WHERE e60_anousu = $anousu
     AND e60_instit IN ($xinstit)
-    AND o15_codtri::INT4 IN ($fonte) ";
+    AND o15_codtri::INT4 IN ($fonte)
+    AND o15_codtri != '' ";
 
     $result = db_query($sql);
 //  echo $sql; db_criatabela($result);
@@ -348,6 +352,7 @@ WHERE e60_anousu = $anousu
      WHERE c62_anousu = $anousu
          AND c61_instit IN ($xinstit)
          AND o15_codtri::INT = $fonte
+         AND o15_codtri != ''
          AND (p.c60_estrut LIKE '$estrut_inicial2%') ) AS x";
 
     $result = db_query($sql);
@@ -391,6 +396,7 @@ WHERE e60_anousu = $anousu
      WHERE c62_anousu = $anousu
          AND c61_instit IN ($xinstit)
          AND o15_codtri::INT = $fonte
+         AND o15_codtri != ''
          AND (p.c60_estrut LIKE '$estrut_inicial3%') ) AS x";
 
     $result = db_query($sSql);
