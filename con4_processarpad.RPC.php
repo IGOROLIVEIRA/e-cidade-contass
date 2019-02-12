@@ -196,7 +196,7 @@ switch($oParam->exec) {
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
       $aArrayArquivos = array();
-      
+
       foreach ($oParam->arquivos as $sArquivo) {
         if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SuperavitFinanceiro") {
           continue;
@@ -382,7 +382,8 @@ switch($oParam->exec) {
      */
     $bEncerramento = false;
     if($oParam->mesReferencia == 13){
-      $oParam->mesReferencia = 12;
+      // $oParam->mesReferencia = 12;
+      // $novoMesReferencia = 12;
       $bEncerramento = true;
     }
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
@@ -471,6 +472,7 @@ switch($oParam->exec) {
       $oRetorno->itens  = $aArrayArquivos;
       if($bEncerramento)
         $oRetorno->calculos = getCalculoEncerramento();
+        // var_dump($oRetorno);
     }
 
 
@@ -778,6 +780,7 @@ function getCalculoEncerramento(){
                             FROM balancete10".db_getsession('DB_anousu')."
                             WHERE si177_mes = 13";
 
+  // print_r($sSqlEncerramento);
   $rsSqlEncerramento = db_query($sSqlEncerramento) or die(pg_last_error());
   $aEncerramentos = db_utils::getColectionByRecord($rsSqlEncerramento);
 
