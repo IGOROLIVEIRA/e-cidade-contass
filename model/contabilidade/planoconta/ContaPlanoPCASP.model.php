@@ -118,6 +118,7 @@ class ContaPlanoPCASP extends ContaPlano {
         $oDaoConPlano->c60_desdobramneto           = $this->getDesdobramento();
         $oDaoConPlano->c60_cgmpessoa               = $this->getCgmPessoa();
         $oDaoConPlano->c60_naturezadareceita       = $this->getNaturezadareceita();
+        $oDaoConPlano->c60_infcompmsc              = $this->getInfCompMSC();
 
 
 

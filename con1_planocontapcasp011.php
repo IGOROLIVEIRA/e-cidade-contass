@@ -201,8 +201,8 @@ $iOpcao = 1;
                     <td><b>Tipo de Conta</b></td>
                     <td>
                         <?php
-                        $aTipoConta = array(0 => "Sintética", 1 => "Analítica");
-                        db_select("iTipoConta", $aTipoConta, true, $db_opcao,"onchange='js_verificaEstrutural();'");
+                            $aTipoConta = array(0 => "Sintética", 1 => "Analítica");
+                            db_select("iTipoConta", $aTipoConta, true, $db_opcao,"onchange='js_verificaEstrutural();'");
                         ?>
                     </td>
                 </tr>
@@ -219,9 +219,19 @@ $iOpcao = 1;
                         ?>
                     </td>
                 </tr>
-
-
-
+                <tr id = 'infCompMSC' style='display: none;'>
+                    <td><b>Inf. Comp. MSC</b></td>
+                    <td>
+                        <?php
+                        $aInfCompMSC = array(""=>"Selecione", 1 => "01 - Poder e Orgão", 2 => "02 - Atributos do Superávit Financeiro"
+                        , 3 => "03 - Dívida Consolidada", 4 => "04 - Financeiro por Fonte", 5 => "05 - Fonte de recursos"
+                        , 6 => "06 - Célula da Receita", 7 => "07 - Célula da Despesa", 8 => "08 - Financeiro por fonte mais DC"
+                        , 9 => "09 - Restos a Pagar"
+                        );
+                        db_select("c60_infcompmsc", $aInfCompMSC, true, $db_opcao,"");
+                        ?>
+                    </td>
+                </tr>
                 <tr id="trTipolancamento" style="display:none;">
                     <td colspan="2">
                         <fieldset><legend>Tipos TCE-MG</legend>
@@ -685,6 +695,7 @@ $iOpcao = 1;
         $('iTipoConta').value = oRetorno.dados.iTipoConta;
         if(oRetorno.dados.iTipoConta == 1) {
             $('conta-corrente').style.display = "";
+            $('infCompMSC').style.display = "";
         }
         $("c60_cgmpessoa").value = oRetorno.dados.iCgmPessoa;
         js_pesquisac60_cgmpessoa(false);
@@ -761,6 +772,7 @@ $iOpcao = 1;
         var iTipoConta           = $("iTipoConta").value;
         var iCgmPessoa           = document.form1.c60_cgmpessoa.value;
         var iNaturezaReceita     = document.form1.c60_naturezadareceita.value;
+        var infCompMSC           = $("c60_infcompmsc").value;
 
         if(iSistemaConta == 2  && iDetalhamentoSistema == 7) {
             var iTipoLancamento = $("iTipoLancamento").value;
@@ -875,9 +887,16 @@ $iOpcao = 1;
             return false;
         };
 
-        if(iTipoConta == 1 && iNaturezaReceita == '' && iEstrututalpermitido.contains(iEstrutValid)){
-            alert('Natureza da Receita não Informado !');
-            return false;
+        if(iTipoConta == 1){
+            if (iNaturezaReceita == '' && iEstrututalpermitido.contains(iEstrutValid)) {
+                alert('Natureza da Receita não Informado !');
+                return false;
+            }
+
+            if (infCompMSC == '') {
+                alert('Informação Complementar da MSC não Informado!');
+                return false;
+            }
         }
 
         /*
@@ -922,11 +941,12 @@ $iOpcao = 1;
         oParam.iContaBancaria       = $('iContaBancaria').value;
         oParam.iTipoConta           = iTipoConta;
         oParam.sFuncao              = sFuncao;
-        oParam.iTipoLancamento	  = iTipoLancamento;
-        oParam.iSubTipo=iSubTipo;
+        oParam.iTipoLancamento	    = iTipoLancamento;
+        oParam.iSubTipo             = iSubTipo;
+        oParam.infCompMSC           = infCompMSC;
 
         oParam.iDesdobramento       = iDesdobramento;
-        oParam.iCgmPessoa	          = iCgmPessoa;
+        oParam.iCgmPessoa	        = iCgmPessoa;
         oParam.iNaturezaReceita     = iNaturezaReceita;
 
         if (iTipoConta == 1 ) {
@@ -1167,8 +1187,10 @@ $iOpcao = 1;
     $('iTipoConta').observe('change', function() {
 
         $('conta-corrente').style.display = "none";
+        $('infCompMSC').style.display = "none";
         if ($F("iTipoConta") == 1) {
             $('conta-corrente').style.display = "";
+            $('infCompMSC').style.display = "";
         }
         js_habilitacgmpessoa(document.form1.c90_estrutcontabil.value,$F("iTipoConta"));
     });

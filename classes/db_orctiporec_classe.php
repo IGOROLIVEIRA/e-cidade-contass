@@ -1,75 +1,76 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
 //CLASSE DA ENTIDADE orctiporec
-class cl_orctiporec { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $o15_codigo = 0; 
-   var $o15_descr = null; 
-   var $o15_codtri = null; 
-   var $o15_finali = null; 
-   var $o15_tipo = 0; 
-   var $o15_datalimite_dia = null; 
-   var $o15_datalimite_mes = null; 
-   var $o15_datalimite_ano = null; 
-   var $o15_datalimite = null; 
-   var $o15_db_estruturavalor = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_orctiporec {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $o15_codigo = 0;
+   var $o15_codstn = 0;
+   var $o15_descr = null;
+   var $o15_codtri = null;
+   var $o15_finali = null;
+   var $o15_tipo = 0;
+   var $o15_datalimite_dia = null;
+   var $o15_datalimite_mes = null;
+   var $o15_datalimite_ano = null;
+   var $o15_datalimite = null;
+   var $o15_db_estruturavalor = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 o15_codigo = int4 = Recurso 
-                 o15_descr = varchar(60) = Descricao do Tipo de Recurso 
-                 o15_codtri = varchar(10) = Código Tribunal 
-                 o15_finali = text = Finalidade do Recurso 
-                 o15_tipo = int4 = Tipo do Recurso 
-                 o15_datalimite = date = Data Limite 
-                 o15_db_estruturavalor = int4 = Código da Estrutura 
+                 o15_codigo = int4 = Recurso
+                 o15_descr = varchar(60) = Descricao do Tipo de Recurso
+                 o15_codtri = varchar(10) = Código Tribunal
+                 o15_finali = text = Finalidade do Recurso
+                 o15_tipo = int4 = Tipo do Recurso
+                 o15_datalimite = date = Data Limite
+                 o15_db_estruturavalor = int4 = Código da Estrutura
                  ";
-   //funcao construtor da classe 
-   function cl_orctiporec() { 
+   //funcao construtor da classe
+   function cl_orctiporec() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("orctiporec"); 
+     $this->rotulo = new rotulo("orctiporec");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -99,9 +100,9 @@ class cl_orctiporec {
      }
    }
    // funcao para inclusao
-   function incluir ($o15_codigo){ 
+   function incluir ($o15_codigo){
       $this->atualizacampos();
-     if($this->o15_descr == null ){ 
+     if($this->o15_descr == null ){
        $this->erro_sql = " Campo Descricao do Tipo de Recurso nao Informado.";
        $this->erro_campo = "o15_descr";
        $this->erro_banco = "";
@@ -110,7 +111,16 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o15_codtri == null ){ 
+     if($this->o15_codstn == null ){
+       $this->erro_sql = " Campo Código STN nao Informado.";
+       $this->erro_campo = "o15_codstn";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->o15_codtri == null ){
        $this->erro_sql = " Campo Código Tribunal nao Informado.";
        $this->erro_campo = "o15_codtri";
        $this->erro_banco = "";
@@ -119,7 +129,7 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o15_finali == null ){ 
+     if($this->o15_finali == null ){
        $this->erro_sql = " Campo Finalidade do Recurso nao Informado.";
        $this->erro_campo = "o15_finali";
        $this->erro_banco = "";
@@ -128,7 +138,7 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o15_tipo == null ){ 
+     if($this->o15_tipo == null ){
        $this->erro_sql = " Campo Tipo do Recurso nao Informado.";
        $this->erro_campo = "o15_tipo";
        $this->erro_banco = "";
@@ -137,10 +147,10 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o15_datalimite == null ){ 
+     if($this->o15_datalimite == null ){
        $this->o15_datalimite = "null";
      }
-     if($this->o15_db_estruturavalor == null ){ 
+     if($this->o15_db_estruturavalor == null ){
        $this->erro_sql = " Campo Código da Estrutura nao Informado.";
        $this->erro_campo = "o15_db_estruturavalor";
        $this->erro_banco = "";
@@ -149,8 +159,8 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-       $this->o15_codigo = $o15_codigo; 
-     if(($this->o15_codigo == null) || ($this->o15_codigo == "") ){ 
+       $this->o15_codigo = $o15_codigo;
+     if(($this->o15_codigo == null) || ($this->o15_codigo == "") ){
        $this->erro_sql = " Campo o15_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -159,25 +169,27 @@ class cl_orctiporec {
        return false;
      }
      $sql = "insert into orctiporec(
-                                       o15_codigo 
-                                      ,o15_descr 
-                                      ,o15_codtri 
-                                      ,o15_finali 
-                                      ,o15_tipo 
-                                      ,o15_datalimite 
-                                      ,o15_db_estruturavalor 
+                                       o15_codigo
+                                      ,o15_descr
+                                      ,o15_codtri
+                                      ,o15_finali
+                                      ,o15_tipo
+                                      ,o15_datalimite
+                                      ,o15_db_estruturavalor
+                                      ,o15_codstn
                        )
                 values (
-                                $this->o15_codigo 
-                               ,'$this->o15_descr' 
-                               ,'$this->o15_codtri' 
-                               ,'$this->o15_finali' 
-                               ,$this->o15_tipo 
-                               ,".($this->o15_datalimite == "null" || $this->o15_datalimite == ""?"null":"'".$this->o15_datalimite."'")." 
-                               ,$this->o15_db_estruturavalor 
+                                $this->o15_codigo
+                               ,'$this->o15_descr'
+                               ,'$this->o15_codtri'
+                               ,'$this->o15_finali'
+                               ,$this->o15_tipo
+                               ,".($this->o15_datalimite == "null" || $this->o15_datalimite == ""?"null":"'".$this->o15_datalimite."'")."
+                               ,$this->o15_db_estruturavalor
+                               ,$this->o15_codstn
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Tipos de Recursos ($this->o15_codigo) nao Incluído. Inclusao Abortada.";
@@ -215,16 +227,16 @@ class cl_orctiporec {
        $resac = db_query("insert into db_acount values($acount,749,18132,'','".AddSlashes(pg_result($resaco,0,'o15_db_estruturavalor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($o15_codigo=null) { 
+   function alterar ($o15_codigo=null) {
       $this->atualizacampos();
      $sql = " update orctiporec set ";
      $virgula = "";
-     if(trim($this->o15_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codigo"])){ 
+     if(trim($this->o15_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codigo"])){
        $sql  .= $virgula." o15_codigo = $this->o15_codigo ";
        $virgula = ",";
-       if(trim($this->o15_codigo) == null ){ 
+       if(trim($this->o15_codigo) == null ){
          $this->erro_sql = " Campo Recurso nao Informado.";
          $this->erro_campo = "o15_codigo";
          $this->erro_banco = "";
@@ -234,10 +246,23 @@ class cl_orctiporec {
          return false;
        }
      }
-     if(trim($this->o15_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_descr"])){ 
+     if(trim($this->o15_codstn)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codstn"])){
+       $sql  .= $virgula." o15_codstn = $this->o15_codstn ";
+       $virgula = ",";
+       if(trim($this->o15_codstn) == null ){
+         $this->erro_sql = " Código STN não informado.";
+         $this->erro_campo = "o15_codstn";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->o15_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_descr"])){
        $sql  .= $virgula." o15_descr = '$this->o15_descr' ";
        $virgula = ",";
-       if(trim($this->o15_descr) == null ){ 
+       if(trim($this->o15_descr) == null ){
          $this->erro_sql = " Campo Descricao do Tipo de Recurso nao Informado.";
          $this->erro_campo = "o15_descr";
          $this->erro_banco = "";
@@ -247,10 +272,10 @@ class cl_orctiporec {
          return false;
        }
      }
-     if(trim($this->o15_codtri)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codtri"])){ 
+     if(trim($this->o15_codtri)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codtri"])){
        $sql  .= $virgula." o15_codtri = '$this->o15_codtri' ";
        $virgula = ",";
-       if(trim($this->o15_codtri) == null ){ 
+       if(trim($this->o15_codtri) == null ){
          $this->erro_sql = " Campo Código Tribunal nao Informado.";
          $this->erro_campo = "o15_codtri";
          $this->erro_banco = "";
@@ -260,10 +285,10 @@ class cl_orctiporec {
          return false;
        }
      }
-     if(trim($this->o15_finali)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_finali"])){ 
+     if(trim($this->o15_finali)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_finali"])){
        $sql  .= $virgula." o15_finali = '$this->o15_finali' ";
        $virgula = ",";
-       if(trim($this->o15_finali) == null ){ 
+       if(trim($this->o15_finali) == null ){
          $this->erro_sql = " Campo Finalidade do Recurso nao Informado.";
          $this->erro_campo = "o15_finali";
          $this->erro_banco = "";
@@ -273,10 +298,10 @@ class cl_orctiporec {
          return false;
        }
      }
-     if(trim($this->o15_tipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_tipo"])){ 
+     if(trim($this->o15_tipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_tipo"])){
        $sql  .= $virgula." o15_tipo = $this->o15_tipo ";
        $virgula = ",";
-       if(trim($this->o15_tipo) == null ){ 
+       if(trim($this->o15_tipo) == null ){
          $this->erro_sql = " Campo Tipo do Recurso nao Informado.";
          $this->erro_campo = "o15_tipo";
          $this->erro_banco = "";
@@ -286,19 +311,19 @@ class cl_orctiporec {
          return false;
        }
      }
-     if(trim($this->o15_datalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"] !="") ){ 
+     if(trim($this->o15_datalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"] !="") ){
        $sql  .= $virgula." o15_datalimite = '$this->o15_datalimite' ";
        $virgula = ",";
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"])){
          $sql  .= $virgula." o15_datalimite = null ";
          $virgula = ",";
        }
      }
-     if(trim($this->o15_db_estruturavalor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_db_estruturavalor"])){ 
+     if(trim($this->o15_db_estruturavalor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_db_estruturavalor"])){
        $sql  .= $virgula." o15_db_estruturavalor = $this->o15_db_estruturavalor ";
        $virgula = ",";
-       if(trim($this->o15_db_estruturavalor) == null ){ 
+       if(trim($this->o15_db_estruturavalor) == null ){
          $this->erro_sql = " Campo Código da Estrutura nao Informado.";
          $this->erro_campo = "o15_db_estruturavalor";
          $this->erro_banco = "";
@@ -336,7 +361,7 @@ class cl_orctiporec {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Tipos de Recursos nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->o15_codigo;
@@ -364,14 +389,14 @@ class cl_orctiporec {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($o15_codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($o15_codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($o15_codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -403,7 +428,7 @@ class cl_orctiporec {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Tipos de Recursos nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$o15_codigo;
@@ -431,11 +456,11 @@ class cl_orctiporec {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -457,8 +482,8 @@ class cl_orctiporec {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -474,8 +499,8 @@ class cl_orctiporec {
      $sql2 = "";
      if($dbwhere==""){
        if($o15_codigo!=null ){
-         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo "; 
-       } 
+         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -491,8 +516,8 @@ class cl_orctiporec {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -508,8 +533,8 @@ class cl_orctiporec {
      $sql2 = "";
      if($dbwhere==""){
        if($o15_codigo!=null ){
-         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo "; 
-       } 
+         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -525,7 +550,7 @@ class cl_orctiporec {
      }
      return $sql;
   }
-   function sql_query_convenios ($sDataini, $sDataFim = null, $campos="*",$ordem="o15_codigo",$dbwhere=""){ 
+   function sql_query_convenios ($sDataini, $sDataFim = null, $campos="*",$ordem="o15_codigo",$dbwhere=""){
 
    if (empty($sDataini)) {
      return false;
@@ -545,15 +570,15 @@ class cl_orctiporec {
      $sql .= "      inner join orctiporecconvenio   on o15_codigo = o16_orctiporec";
      $sql2 = " where ";
      if ($sDataFim == null) {
-        
+
         $sql2 .= "(('{$sDataini}' between o16_dtvigenciaini and o16_dtvigenciafim) or ";
         $sql2 .= "('{$sDataini}' between o16_dtprorrogacaoini and o16_dtprorrogacaofim))";
-        
+
      } else {
-       
+
        $sql2 .= "((o16_dtvigenciaini <= '{$sDataini}' and o16_dtvigenciafim >= '{$sDataFim}') or ";
        $sql2 .= "(o16_dtprorrogacaoini <= '{$sDataini}' and o16_dtprorrogacaofim >= '{$sDataFim}'))";
-       
+
      }
      $sql .= $sql2;
      if($ordem != null ){
@@ -567,7 +592,7 @@ class cl_orctiporec {
      }
      return $sql;
   }
-   function sql_query_emp( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_emp( $o15_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -585,8 +610,8 @@ class cl_orctiporec {
      $sql2 = "";
      if($dbwhere==""){
        if($o15_codigo!=null ){
-         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo "; 
-       } 
+         $sql2 .= " where orctiporec.o15_codigo = $o15_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

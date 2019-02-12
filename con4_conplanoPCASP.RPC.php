@@ -66,9 +66,10 @@ switch ($oParam->exec) {
             if ($oParam->iCodigoConta != "") {
                 $iAno = db_getsession("DB_anousu");
             }
-            $oPlanoPCASP = new ContaPlanoPCASP       ($oParam->iCodigoConta, $iAno);
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, $iAno);
             $oPlanoPCASP->setAno(db_getsession("DB_anousu"));
             $oPlanoPCASP->setNRegObrig($oParam->iNRegObrig);
+            $oPlanoPCASP->setInfCompMSC($oParam->infCompMSC);
             $oPlanoPCASP->setFuncao(db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncao));
             $oPlanoPCASP->setFinalidade(db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncionamento));
             $oPlanoPCASP->setContraPartida("0");
@@ -275,6 +276,7 @@ switch ($oParam->exec) {
         $oRetorno->dados->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
         $oRetorno->dados->isubtipo = $oPlanoPCASP->getSubTipo();
         $oRetorno->dados->idesdobramento = $oPlanoPCASP->getDesdobramento();
+        $oRetorno->dados->c60_infcompmsc = $oPlanoPCASP->getInfCompMSC();
         $oContaCorrente = $oPlanoPCASP->getContaCorrente();
         if (isset($oContaCorrente)) {
 

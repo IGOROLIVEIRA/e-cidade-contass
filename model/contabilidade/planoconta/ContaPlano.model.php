@@ -57,6 +57,7 @@ abstract class ContaPlano {
     protected $iCgmPessoa;
     protected $iNaturezadaReceita;
     protected $sTipoConta;
+    protected $iInfCompMSC;
     /**
      * @type ClassificacaoConta
      */
@@ -132,6 +133,7 @@ abstract class ContaPlano {
                 $oContaPlano = db_utils::fieldsMemory($rsContaPlano, $iLinhaResult);
                 $this->setCodigoConta($oContaPlano->c60_codcon);
                 $this->setNRegObrig($oContaPlano->c60_nregobrig);
+                $this->setInfCompMSC($oContaPlano->c60_infcompmsc);
                 $this->setAno($oContaPlano->c60_anousu);
                 $this->setEstrutural($oContaPlano->c60_estrut);
                 $this->setDescricao($oContaPlano->c60_descr);
@@ -358,13 +360,29 @@ abstract class ContaPlano {
     public function getNRegObrig() {
         return $this->iNRegObrig;
     }
-
+    
     /**
      * Recebe Numero Registro
      * @param $iCodigoConta
      */
     public function setNRegObrig($iNRegObrig) {
         $this->iNRegObrig = $iNRegObrig;
+        return $this;
+    }
+
+    /**
+     * Retorna Informação complementar MSC
+     * @return  integer
+     */
+    public function getInfCompMSC() {
+        return $this->iInfCompMSC;
+    }
+    /**
+     * Recebe Informação complementar MSC
+     * @param $iCodigoConta
+     */
+    public function setInfCompMSC($iInfCompMSC) {
+        $this->iInfCompMSC = $iInfCompMSC;
         return $this;
     }
 

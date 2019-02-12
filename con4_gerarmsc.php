@@ -22,6 +22,7 @@ $aMeses = array(
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/micoxUpload.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style>
@@ -31,19 +32,30 @@ $aMeses = array(
     padding-left: 5px;
   }
   .container {
-    width: 400px;
+    width: auto;
   }
   .formatselect {
     width: 200px;
     height: 18px;
   }
+  .fieldS1 {
+    position:relative;
+    float: left;
+  }
+  .fieldS2 {
+    position: relative;
+    float: left;
+    height: 115px;
+  }
+  #file {
+    width: 200px !important;
+  }
 </style>
 </head>
 <body bgcolor="#cccccc" style="margin-top: 25px;">
-  <form name="form1" method="post" action="">
+  <form id='form1' name="form1" method="post" action="" enctype="multipart/form-data">
     <div class="center container">
-      <fieldset>
-        <legend>Matriz de Saldos Contábeis</legend>
+      <fieldset class="fieldS1"> <legend>Matriz de Saldos Contábeis</legend>
         <div class="formatdiv" align="left">
           <strong>Mês Referência:&nbsp;</strong>
           <select name="mes" class="formatselect">
@@ -54,29 +66,39 @@ $aMeses = array(
                 </option>
               <?php endforeach; ?>
           </select>
-        </div> 
-        <div class="formatdiv" align="left"> 
+        </div>
+
+        <div class="formatdiv" align="left">
           <strong style="margin-right:55px">Matriz:&nbsp;</strong>
           <select name="matriz" class="formatselect">
             <option value="">Selecione...</option>
             <option value="a">Agregada</option>
-            <option value="b">Desagregada</option>
-          </select> 
-        </div> 
-        <div class="formatdiv" align="left"> 
+            <option value="d">Desagregada</option>
+          </select>
+        </div>
+
+        <div class="formatdiv" align="left">
           <strong style="margin-right:31px">Formato:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
           <select name="formato" class="formatselect">
             <option value="">Selecione...</option>
             <option value="xbrl">XBRL</option>
             <option value="csv">CSV</option>
-          </select> 
-        </div>    
+          </select>
+        </div>
+        <!--
+        <div class="formatdiv" align="left">
+          <strong style="margin-right:3px;">Import. Arquivo:&nbsp;</strong>
+          <input id="file" type="file" name="MSC">
+          <input type="button" value="Enviar" onclick="micoxUpload(this.form, 'con4_uploadarquivosmsc.php', 'MSC', 'Carregando...', 'Erro ao carregar')">
+        </div>
+        -->
+        <div id="MSC" class="recebe">&nbsp;</div>
       </fieldset>
-      <div class="formatdiv" align="center"> 
+      <fieldset id="arquivo" class="fieldS2" style="display: none">
+      </fieldset>
+      <div class="formatdiv" align="center">
         <input type="button" value="Processar" onclick="gerarMsc()">
       </div>
-      <div id="arquivo" style="display: none" class="formatdiv" align="center"> 
-      </div> 
     </div>
   </form>
   <script>
@@ -95,24 +117,28 @@ $aMeses = array(
       var sMatriz  = document.form1.matriz.value;
       var sFormato = document.form1.formato.value;
 
+      if (!iMes || !sMatriz || !sFormato) {
+        alert("Todos os campos são obrigatórios");
+        return false;
+      }
+
       js_divCarregando('Aguarde', 'div_aguarde');
       var params = {
         exec: 'gerarMsc',
         mes: iMes,
-        matriz: sMatriz,
+        matriz:sMatriz,
         formato: sFormato
       };
-      
+
       novoAjax(params, function(e) {
         var oRetorno = JSON.parse(e.responseText);
           if (oRetorno.status == 1) {
             js_removeObj('div_aguarde');
             alert("Processo concluído com sucesso!");
             var sArquivo = document.getElementById('arquivo');
-            var sLink = " <fieldset><legend>Arquivos Gerados</legend>"; 
+            var sLink = "<legend>Arquivos Gerados</legend>";
             sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
             sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
-            sLink += "</fieldset>"; 
             sArquivo.innerHTML = sLink;
             sArquivo.style.display = "inline-block";
           } else {

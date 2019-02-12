@@ -3,7 +3,9 @@
 $clvinculopcaspmsc->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<center>  
+  <input type="hidden" name="c210_pcaspestrutant" value="<?=@$c210_pcaspestrut?>">
+  <input type="hidden" name="c210_mscestrutant" value="<?=@$c210_mscestrut?>">
+<center>
 <fieldset style="margin-top:10px; margin-bottom:10px; ">
   <legend>Vínculo Pcasp MSC</legend>
   <table border="0" style="">
@@ -11,7 +13,7 @@ $clvinculopcaspmsc->rotulo->label();
     <td nowrap title="<?=@$Tc210_pcaspestrut?>">
        <?=@$Lc210_pcaspestrut?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('c210_pcaspestrut',9,$Ic210_pcaspestrut,true,'text',$db_opcao,"")
       ?>
@@ -21,7 +23,7 @@ $clvinculopcaspmsc->rotulo->label();
     <td nowrap title="<?=@$Tc210_mscestrut?>">
        <?=@$Lc210_mscestrut?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('c210_mscestrut',9,$Ic210_mscestrut,true,'text',$db_opcao,"")
       ?>
@@ -29,7 +31,7 @@ $clvinculopcaspmsc->rotulo->label();
   </tr>
   </table>
 </fieldset>
-<center> 
+<center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>

@@ -32,6 +32,7 @@ class cl_infocomplementaresinstit {
    var $si09_dataleicute_ano = null;
    var $si09_dataleicute = null;
    var $si09_contaunicatesoumunicipal = null;
+   var $si09_instsiconfi = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si09_sequencial = int8 = Código Sequencial
@@ -47,6 +48,7 @@ class cl_infocomplementaresinstit {
                  si09_nroleicute = int8 = Número da Lei CUTE
                  si09_dataleicute = date = Data da Lei CUTE
                  si09_contaunicatesoumunicipal = int8 = Conta Única do Tesouro Municipal
+                 si09_instsiconfi = varchar(25) = Código da instituição SICONFI
                  ";
    //funcao construtor da classe
    function cl_infocomplementaresinstit() {
@@ -75,6 +77,7 @@ class cl_infocomplementaresinstit {
        $this->si09_cnpjprefeitura = ($this->si09_cnpjprefeitura == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"]:$this->si09_cnpjprefeitura);
        $this->si09_instit = ($this->si09_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_instit"]:$this->si09_instit);
        $this->si09_assessoriacontabil = ($this->si09_assessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"]:$this->si09_assessoriacontabil);
+       $this->si09_instsiconfi = ($this->si09_instsiconfi == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_instsiconfi"]:$this->si09_instsiconfi);
        $this->si09_cgmassessoriacontabil = ($this->si09_cgmassessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"]:$this->si09_cgmassessoriacontabil);
 	   $this->si09_nroleicute = ($this->si09_nroleicute == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_nroleicute"]:$this->si09_nroleicute);
 	   $this->si09_contaunicatesoumunicipal = ($this->si09_contaunicatesoumunicipal == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_contaunicatesoumunicipal"]:$this->si09_contaunicatesoumunicipal);
@@ -224,6 +227,7 @@ class cl_infocomplementaresinstit {
                                       ,si09_nroleicute
                                       ,si09_dataleicute
                                       ,si09_contaunicatesoumunicipal
+                                      ,si09_instsiconfi
                        )
                 values (
                                 $this->si09_sequencial
@@ -239,6 +243,7 @@ class cl_infocomplementaresinstit {
                                ,$this->si09_nroleicute
                                ,". ($this->si09_dataleicute == "null" || $this->si09_dataleicute == "" ? "null" : "'" . $this->si09_dataleicute . "'") . "
                                ,$this->contaunicatesoumunicipal
+                               ,".($this->si09_instsiconfi == '' ? 'null' : $this->si09_instsiconfi)."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -427,6 +432,19 @@ class cl_infocomplementaresinstit {
 			return false;
 		}
 	}
+  if(trim($this->si09_instsiconfi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_instsiconfi"])){
+    $sql  .= $virgula." si09_instsiconfi = ".($this->si09_instsiconfi == '' ? 'null' : $this->si09_instsiconfi);
+    $virgula = ",";
+    if($this->si09_instsiconfi == 1 && empty($this->si09_instsiconfi)){
+      $this->erro_sql = " Campo instituição SICONFI não Informado.";
+      $this->erro_campo = "si09_instsiconfi";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+  }
 	if (trim($this->si09_dataleicute) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si09_dataleicute"]) && ($GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_dia"] != "")) {
 		$sql .= $virgula . " si09_dataleicute = '$this->si09_dataleicute' ";
 	}else {
@@ -528,6 +546,7 @@ class cl_infocomplementaresinstit {
          $resac = db_query("insert into db_acount values($acount,2010228,2009471,'','".AddSlashes(pg_result($resaco,$iresaco,'si09_gestor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010228,2009472,'','".AddSlashes(pg_result($resaco,$iresaco,'si09_cnpjprefeitura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010228,2009473,'','".AddSlashes(pg_result($resaco,$iresaco,'si09_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010228,2009473,'','".AddSlashes(pg_result($resaco,$iresaco,'si09_instsiconfi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from infocomplementaresinstit

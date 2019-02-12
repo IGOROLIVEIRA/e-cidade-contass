@@ -13,11 +13,11 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clvinculopcaspmsc->alterar($c210_pcaspestrut,$c210_mscestrut);
+  $clvinculopcaspmsc->alterar($c210_pcaspestrut,$c210_mscestrut,$c210_pcaspestrutant,$c210_mscestrutant);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $clvinculopcaspmsc->sql_record($clvinculopcaspmsc->sql_query($chavepesquisa,$chavepesquisa1)); 
+   $result = $clvinculopcaspmsc->sql_record($clvinculopcaspmsc->sql_query($chavepesquisa,$chavepesquisa1));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -32,7 +32,7 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -41,8 +41,8 @@ if(isset($alterar)){
 </table>
 <center>
 <table width="350" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <?
       include("forms/db_frmvinculopcaspmsc.php");
       ?>

@@ -36,6 +36,13 @@ class Recurso {
   protected $iCodigoRecurso;
 
   /**
+   * Código STN.
+   *
+   * @var integer_type
+   */
+  protected $iCodStn;
+
+  /**
    * Descrição da finalidade do recurso.
    *
    * @var string_type
@@ -95,7 +102,8 @@ class Recurso {
 	      $this->lNovo  = false;
 	      $oOrcTipoRec = db_utils::fieldsMemory($rsSqlOrcTipoRec, 0);
 	      $this->iCodigoRecurso         = $iCodigoRecurso;
-	      $this->sDescricao             = $oOrcTipoRec->o15_descr;
+        $this->sDescricao             = $oOrcTipoRec->o15_descr;
+	      $this->iCodStn                = $oOrcTipoRec->o15_codstn;
 	      $this->sEstrutural            = $oOrcTipoRec->o15_codtri;
 	      $this->sFinalidadeRecurso     = $oOrcTipoRec->o15_finali;
 	      $this->iTipoRecurso           = $oOrcTipoRec->o15_tipo;
@@ -124,6 +132,13 @@ class Recurso {
    */
   public function getCodigo() {
     return $this->iCodigoRecurso;
+  }
+
+  /**
+   * @return integer
+   */
+  public function getCodigoSTN() {
+    return $this->iCodStn;
   }
 
   /**
@@ -167,6 +182,18 @@ class Recurso {
     $this->iCodigoRecurso = $iCodigoRecurso;
     return $this;
   }
+
+   /**
+   *
+   * @param integer_type $iCodStn
+   * @return Recurso
+   */
+  public function setCodigoSTN($iCodStn) {
+
+    $this->iCodStn = $iCodStn;
+    return $this;
+  }
+
 
   /**
    * Seta um novo tipo para o recurso.
@@ -243,6 +270,7 @@ class Recurso {
     $oDaoOrcTipoRec->o15_codtri            = $this->getEstruturaValor()->getEstrutural();
     $oDaoOrcTipoRec->o15_finali            = $this->getFinalidadeRecurso();
     $oDaoOrcTipoRec->o15_tipo              = $this->getTipoRecurso();
+    $oDaoOrcTipoRec->o15_codstn            = $this->getCodigoSTN();
     $oDaoOrcTipoRec->o15_datalimite        = $this->getDataLimiteRecurso();
     $oDaoOrcTipoRec->o15_db_estruturavalor = $this->getEstruturaValor()->getCodigo();
 
