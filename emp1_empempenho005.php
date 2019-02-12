@@ -52,6 +52,7 @@ require_once("classes/db_orcelemento_classe.php");
 require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_empelemento_classe.php");
 require_once("classes/db_empempitem_classe.php");
+require_once("classes/db_convconvenios_classe.php");
 require_once("std/Modification.php");
 
 $clempempaut			= new cl_empempaut;
@@ -64,6 +65,7 @@ $clpctipocompra 	= new cl_pctipocompra;
 $clemptipo	    	= new cl_emptipo;
 $clemphist	    	= new cl_emphist;
 $clempparametro 	= new cl_empparametro;
+$clconvconvenios   = new cl_convconvenios;
 
 $clempemphist	  	= new cl_empemphist;
 $clconcarpeculiar = new cl_concarpeculiar;
@@ -89,11 +91,28 @@ if(isset($alterar)){
   if($sqlerro==false){
 
     $db_opcao = 2;
-    $clempempenho->alterar($e60_numemp);
-    if($clempempenho->erro_status==0){
-      $sqlerro=true;
+    $dados = (object) array(
+      'tabela' => 'empempenho',
+      'campo'  => 'e60_codemp',
+      'sigla'  => 'e60'
+    );
+    $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e60_codemp, db_getsession("DB_anousu"), $dados);
+    if ($veConvMSC > 0) {
+      $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
+      if (!$rsResult) {
+        $sqlerro  = true;
+        $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 129.\n";
+      }
+
     }
-    $erro_msg = $clempempenho->erro_msg;
+
+    if($sqlerro==false){
+      $clempempenho->alterar($e60_numemp);
+      if($clempempenho->erro_status == 0) {
+        $sqlerro=true;
+      }
+      $erro_msg = $clempempenho->erro_msg;
+    }
   }
 
   if (isset($e54_gestaut) && isset($e54_autori) && !empty($e54_gestaut)) {
@@ -277,14 +296,16 @@ if(isset($alterar)){
     }
   }
 
-  $result = $clempempenho->sql_record($clempempenho->sql_query($e60_numemp,"e60_anousu,e60_vlrliq"));
+  if (!$sqlerro) {
+    $result = $clempempenho->sql_record($clempempenho->sql_query($e60_numemp,"e60_anousu,e60_vlrliq"));
 
-  if ( $clempempenho->erro_status == '0' ) {
+    if ( $clempempenho->erro_status == '0' ) {
 
-    $sqlerro = true;
-    $erro_msg = $clempempenho->erro_msg;
-  } else {
-    db_fieldsmemory($result,0);
+      $sqlerro = true;
+      $erro_msg = $clempempenho->erro_msg;
+    } else {
+      db_fieldsmemory($result,0);
+    }
   }
   /**[Extensao Ordenador Despesa] inclusao_ordenador*/
 

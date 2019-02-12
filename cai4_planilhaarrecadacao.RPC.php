@@ -112,6 +112,7 @@ switch ($oParam->exec) {
         $iNumeroCgm = buscaCgmOrigem($oReceitas);
         $iInscricao = empty($oReceitas->iInscricao) ? '' : $oReceitas->iInscricao;
         $iMatricula = empty($oReceitas->iMatricula) ? '' : $oReceitas->iMatricula;
+        $iConvenio  = empty($oReceitas->iConvenio)  ? '' : $oReceitas->iConvenio;
 
         $oReceitaPlanilha = new ReceitaPlanilha();
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar($oReceitas->iCaracteriscaPeculiar));
@@ -126,6 +127,7 @@ switch ($oParam->exec) {
         $oReceitaPlanilha->setRecurso(new Recurso($oReceitas->iRecurso));
         $oReceitaPlanilha->setTipoReceita($oReceitas->iReceita);
         $oReceitaPlanilha->setValor($oReceitas->nValor);
+        $oReceitaPlanilha->setConvenio($iConvenio);
         $oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
       }
 
@@ -202,6 +204,7 @@ switch ($oParam->exec) {
         $oReceita->sOperacaoBancaria     = $oReceitaPlanilha->getOperacaoBancaria();
         $oReceita->iRecurso              = $oReceitaPlanilha->getRecurso()->getCodigoRecurso();
         $oReceita->nValor                = $oReceitaPlanilha->getValor();
+        $oReceita->iConvenio             = $oReceitaPlanilha->getConvenio();
 
         $oPlanilha->aReceitas[]          = $oReceita;
         unset($oReceita);
@@ -275,6 +278,7 @@ switch ($oParam->exec) {
         $iNumeroCgm       = buscaCgmOrigem($oReceitas);
         $iInscricao       = empty($oReceitas->iInscricao) ? '' : $oReceitas->iInscricao;
         $iMatricula       = empty($oReceitas->iMatricula) ? '' : $oReceitas->iMatricula;
+        $iConvenio        = empty($oReceitas->iConvenio)  ? '' : $oReceitas->iConvenio;
 
         $oReceitaPlanilha = new ReceitaPlanilha(null);
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar($oReceitas->iCaracteriscaPeculiar));
@@ -289,6 +293,7 @@ switch ($oParam->exec) {
         $oReceitaPlanilha->setRecurso(new Recurso($oReceitas->iRecurso));
         $oReceitaPlanilha->setTipoReceita($oReceitas->iReceita);
         $oReceitaPlanilha->setValor($oReceitas->nValor);
+        $oReceitaPlanilha->setConvenio($iConvenio);
 
         $oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
       }
@@ -312,23 +317,23 @@ switch ($oParam->exec) {
   case 'buscarDeducao':
 
     try{
-        $oRetorno->oDeducao = buscarDeducao($oParam->k81_receita); 
+        $oRetorno->oDeducao = buscarDeducao($oParam->k81_receita);
         $oRetorno->oDeducao->k02_descr = urlencode($oRetorno->oDeducao->k02_descr);
-        
+
     }catch (Exception $oExceptionErro) {
       $oRetorno->status  = 2;
       $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
     }
-    
+
    break;
 
    case 'excluirAutenticacaoPlanilha':
-     
+
     $iPlanilha       = $oParam->iPlanilha;
-    
-    
+
+
     try {
-      
+
       db_inicio_transacao();
 
       $oPlanilha = new PlanilhaArrecadacao($iPlanilha);
@@ -342,7 +347,7 @@ switch ($oParam->exec) {
       $oRetorno->status  = 2;
       $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
     }
-    
+
    break;
 
 }

@@ -207,6 +207,9 @@ $clempautret	  	= new cl_empautret;
 $clempempret	  	= new cl_empempret;
 $clempretencao	  = new cl_empretencao;
 
+require_once("classes/db_convconvenios_classe.php");
+$clconvconvenios = new cl_convconvenios;
+
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 //db_postmemory($HTTP_POST_VARS);
@@ -511,6 +514,22 @@ if(isset($incluir)) {
             }
         }
 
+        $dados = (object) array(
+          'tabela' => 'empautidot',
+          'campo'  => 'e56_autori',
+          'sigla'  => 'e56'
+        );
+
+        $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e54_autori, $anousu, $dados);
+        if ($veConvMSC > 0) {
+          $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
+          if (!$rsResult) {
+            $sqlerro  = true;
+            $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 129.\n";
+          }
+
+        }
+
         if ($sqlerro == false) {
 
             $result = $clempautidot->sql_record($clempautidot->sql_query_file($e54_autori, "e56_anousu,e56_coddot"));
@@ -523,6 +542,8 @@ if(isset($incluir)) {
             /*OC4401*/
             $clempempenho->e60_id_usuario = db_getsession("DB_id_usuario");
             /*FIM - OC4401*/
+
+            $clempempenho->e60_numconvenio = $e60_numconvenio;
 
             $result = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$e56_coddot", db_getsession("DB_anousu"));
             db_fieldsmemory($result, 0);
@@ -551,7 +572,7 @@ if(isset($incluir)) {
              * @author MarioJunior
              */
 
-            $sSql = "SELECT si09_tipoinstit AS tipoinstit 
+            $sSql = "SELECT si09_tipoinstit AS tipoinstit
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
 

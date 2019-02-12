@@ -176,7 +176,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_numconvenio == null && $this->db83_convenio == 1){ 
+     if($this->db83_numconvenio == null && $this->db83_convenio == 1){
        $this->erro_sql = " Campo Número Convênio nao Informado.";
        $this->erro_campo = "db83_numconvenio";
        $this->erro_banco = "";
@@ -185,7 +185,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_dataconvenio == null && $this->db83_convenio == 1){ 
+     if($this->db83_dataconvenio == null && $this->db83_convenio == 1){
        $this->erro_sql = " Campo Data Convênio nao Informado.";
        $this->erro_campo = "db83_dataconvenio_dia";
        $this->erro_banco = "";
@@ -278,7 +278,7 @@ class cl_contabancaria {
                                ,".($this->db83_dataconvenio == "null" || $this->db83_dataconvenio == ""?"null":"'".$this->db83_dataconvenio."'")."
                                 ,".($this->db83_nroseqaplicacao == ""? "null" : $this->db83_nroseqaplicacao)."
                       )";
-     
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -428,12 +428,12 @@ class cl_contabancaria {
          return false;
        }
      }
-    if(trim($this->db83_convenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_convenio"])){ 
+    if(trim($this->db83_convenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_convenio"])){
        $sql  .= $virgula." db83_convenio = '$this->db83_convenio' ";
        $virgula = ",";
      }
        $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") );
-     if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){ 
+     if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){
        $sql  .= $virgula." db83_tipoaplicacao = $this->db83_tipoaplicacao ";
        $virgula = ",";
          if (pg_result($result,0,0) == 5 && $this->db83_tipoconta == 3 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
@@ -460,10 +460,10 @@ class cl_contabancaria {
            }
        }
 
-     if(trim($this->db83_numconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_numconvenio"])){ 
+     if(trim($this->db83_numconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_numconvenio"])){
        $sql  .= $virgula." db83_numconvenio = ".($this->db83_numconvenio == null ? 'null' : $this->db83_numconvenio);
        $virgula = ",";
-       if(trim($this->db83_numconvenio) == null && $this->db83_convenio == 1){ 
+       if(trim($this->db83_numconvenio) == null && $this->db83_convenio == 1){
          $this->erro_sql = " Campo Número Convênio nao Informado.";
          $this->erro_campo = "db83_numconvenio";
          $this->erro_banco = "";
@@ -473,10 +473,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_dataconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"] !="") ){ 
+     if(trim($this->db83_dataconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"] !="") ){
        $sql  .= $virgula." db83_dataconvenio = '$this->db83_dataconvenio' ";
        $virgula = ",";
-       if(trim($this->db83_dataconvenio) == null && $this->db83_convenio == 1){ 
+       if(trim($this->db83_dataconvenio) == null && $this->db83_convenio == 1){
          $this->erro_sql = " Campo Data Convênio nao Informado.";
          $this->erro_campo = "db83_dataconvenio_dia";
          $this->erro_banco = "";
@@ -485,11 +485,11 @@ class cl_contabancaria {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["db83_dataconvenio_dia"])){
          $sql  .= $virgula." db83_dataconvenio = null ";
          $virgula = ",";
-         if(trim($this->db83_dataconvenio) == null && $this->db83_convenio == 1){ 
+         if(trim($this->db83_dataconvenio) == null && $this->db83_convenio == 1){
            $this->erro_sql = " Campo Data Convênio nao Informado.";
            $this->erro_campo = "db83_dataconvenio_dia";
            $this->erro_banco = "";
@@ -671,6 +671,7 @@ class cl_contabancaria {
      $sql .= " from contabancaria ";
      $sql .= "      inner join bancoagencia  on  bancoagencia.db89_sequencial = contabancaria.db83_bancoagencia";
      $sql .= "      inner join db_bancos  on  db_bancos.db90_codban = bancoagencia.db89_db_bancos";
+     $sql .= "      left  join convconvenios on convconvenios.c206_sequencial = contabancaria.db83_numconvenio";
      $sql2 = "";
      if($dbwhere==""){
        if($db83_sequencial!=null ){
@@ -744,7 +745,7 @@ class cl_contabancaria {
      $sql .= "      left  join conplanocontabancaria  on c56_contabancaria            = db83_sequencial";
      $sql .= "      left  join conplano               on c60_codcon                   = c56_codcon ";
      $sql .= "                                       and c60_anousu                   = c56_anousu ";
-     $sql .= "      left  join conplanoreduz          on c61_codcon                   = c60_codcon "; 
+     $sql .= "      left  join conplanoreduz          on c61_codcon                   = c60_codcon ";
      $sql2 = "";
      if($dbwhere==""){
        if($db83_sequencial!=null ){
@@ -778,6 +779,8 @@ class cl_contabancaria {
     $sql .= "                                       and c60_anousu = {$iAnoSessao}";
     $sql .= "      left  join conplanoreduz          on c61_codcon = c60_codcon ";
     $sql .= "                                       and c61_anousu = c60_anousu ";
+    $sql .= "      left join convconvenios on convconvenios.c206_sequencial = contabancaria.db83_numconvenio";
+
 
     $sql2 = "";
 

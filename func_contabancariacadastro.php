@@ -78,7 +78,7 @@ if ( isset($mostra_tipo_conta) && trim($mostra_tipo_conta) != '' )  {
     $sWhere .= "  )";
     $aWhere[]= $sWhere;
     break;
-  } 
+  }
 }
 
 $aWhere[] = " (c56_sequencial is null or c61_instit = {$iInstituicaoSessao}) ";
@@ -95,6 +95,10 @@ if(!isset($pesquisa_chave)){
       $campos = "contabancaria.*";
     }
   }
+  if (isset($convenio)) {
+    $campos .= ", RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio";
+  }
+
   if(isset($chave_db83_sequencial) && (trim($chave_db83_sequencial)!="") ){
     $sql = $clcontabancaria->sql_query_planocontas(null,$campos,"db83_sequencial",$sWhere." and db83_sequencial = ".$chave_db83_sequencial);
   }else if(isset($chave_db83_descricao) && (trim($chave_db83_descricao)!="") ){

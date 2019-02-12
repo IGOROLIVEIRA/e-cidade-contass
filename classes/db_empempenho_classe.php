@@ -1018,7 +1018,7 @@ class cl_empempenho {
         if($result==false){
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Erro ao selecionar os registros.";
+            $this->erro_sql   = "Erro ao selecionar os registros";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
@@ -1076,6 +1076,7 @@ class cl_empempenho {
         $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
         $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
         $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
+        $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
 
         $sql2 = "";
         if($dbwhere==""){
@@ -1780,11 +1781,11 @@ class cl_empempenho {
         $sqlperiodo = " SELECT (vlremp - vlrliq) AS valor_nao_processado,
                                 (vlrliq - vlrpag) AS valor_processado
                            FROM
-                            (SELECT sum(round(CASE WHEN c53_tipo = 10 THEN c70_valor ELSE 
+                            (SELECT sum(round(CASE WHEN c53_tipo = 10 THEN c70_valor ELSE
                                              (CASE WHEN c53_tipo = 11 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlremp,
-                                    sum(round(CASE WHEN c53_tipo = 20 THEN c70_valor ELSE 
+                                    sum(round(CASE WHEN c53_tipo = 20 THEN c70_valor ELSE
                                              (CASE WHEN c53_tipo = 21 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlrliq,
-                                    sum(round(CASE WHEN c53_tipo = 30 THEN c70_valor ELSE 
+                                    sum(round(CASE WHEN c53_tipo = 30 THEN c70_valor ELSE
                                              (CASE WHEN c53_tipo = 31 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlrpag
                              FROM empempenho
                              INNER JOIN conlancamemp ON c75_numemp=e60_numemp
@@ -2171,5 +2172,19 @@ class cl_empempenho {
             $sSql .= " where {$sWhere}";
         }
         return $sSql;
+    }
+
+    public function verificaConvenioSicomMSC($codigo, $ano, $dados) {
+
+     $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
+
+      $sSQL = "
+          select {$dados->campo}
+           from {$dados->tabela}
+            join orcdotacao on o58_coddot = {$dados->sigla}_coddot
+             where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
+              and o58_codigo in (122,123,124,129)";
+
+      return pg_num_rows(db_query($sSQL));
     }
 }

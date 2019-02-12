@@ -151,7 +151,9 @@ $rotulo->label("z01_cgccpf");
           e60_vlremp,
           e60_vlrliq,
           e60_vlrpag,
-          e60_vlranu";
+          e60_vlranu,
+          RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
+          ";
           $campos = " distinct " . $campos;
           $dbwhere=" e60_instit = " . db_getsession("DB_instit");
 

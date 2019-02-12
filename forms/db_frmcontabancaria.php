@@ -35,11 +35,11 @@ $clrotulo->label("db89_codagencia");
   function js_functionVerificaIdentificador(){
 
     var iIdentificador = document.getElementById('db83_identificador').value;
-    
+
     if (iIdentificador.length < 11 ) {
 
       alert("Campo identificador(CNPJ) inválido.");
-      return false; 
+      return false;
     }
 
     return true;
@@ -131,42 +131,47 @@ $clrotulo->label("db89_codagencia");
 				?>
 	    </td>
 	  </tr>
+    <!--
 	  <tr>
-	    <td nowrap title="<?=@$Tdb83_convenio?>">
-	      <?=@$Ldb83_convenio?>
+	    <td nowrap title="<?//=@$Tdb83_convenio?>">
+	      <?//=@$Ldb83_convenio?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
-				  $aConvenio = array('2' => 'Não','1' => 'Sim');
-				  db_select('db83_convenio', $aConvenio, true, $db_opcao,"");
+				  //$aConvenio = array('2' => 'Não','1' => 'Sim');
+				  //db_select('db83_convenio', $aConvenio, true, $db_opcao,"");
 				?>
 	    </td>
 	  </tr>
+    -->
+    <tr>
+      <td nowrap title="Código c206_sequencial">
+        <? db_ancora("Convênio","js_pesquisadb83_numconvenio(true);",$db_opcao); ?>
+      </td>
+      <td>
+          <?
+          db_input('db83_numconvenio',11,$Idb83_numconvenio,true,'text',$db_opcao,"onChange='js_pesquisadb83_numconvenio(false);'");
+          db_input("c206_objetoconvenio",50,0,true,"text",3);
+          ?>
+      </td>
+    </tr>
+    <!--
 	  <tr>
-	    <td nowrap title="<?=@$Tdb83_numconvenio?>">
-	      <?=@$Ldb83_numconvenio?>
-	    </td>
-	    <td> 
-				<?
-				  db_input('db83_numconvenio',11,$Idb83_numconvenio,true,'text',$db_opcao,"");
-				?>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td nowrap title="<?=@$Tdb83_dataconvenio?>">
+	    <td nowrap title="<?//=@$Tdb83_dataconvenio?>">
 	      <?=@$Ldb83_dataconvenio?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
-				  db_inputData('db83_dataconvenio',@$db83_dataconvenio_dia, @$db83_dataconvenio_mes,@$db83_dataconvenio_ano, true, 'text', $db_opcao);
+				  //db_inputData('db83_dataconvenio',@$db83_dataconvenio_dia, @$db83_dataconvenio_mes,@$db83_dataconvenio_ano, true, 'text', $db_opcao);
 				?>
 	    </td>
 	  </tr>
+    -->
 	  <tr>
 	    <td nowrap title="<?=@$Tdb83_tipoaplicacao?>">
 	      <?=@$Ldb83_tipoaplicacao?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
                 if(db_getsession("DB_anousu") < 2018) {
                     $aTipoAplicacao = array(
@@ -265,7 +270,7 @@ function js_mostrabancoagencia1(chave1,chave2,chave3){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_contabancaria','func_contabancariacadastro.php?funcao_js=parent.js_preenchepesquisa|db83_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo','db_iframe_contabancaria','func_contabancariacadastro.php?convenio=true&funcao_js=parent.js_preenchepesquisa|db83_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_contabancaria.hide();
@@ -274,5 +279,31 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function js_pesquisadb83_numconvenio(mostra) {
+  if(mostra==true){
+    js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostradb83_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
+  } else {
+      if(document.form1.db83_numconvenio.value != ''){
+          js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.db83_numconvenio.value+'&funcao_js=parent.js_mostradb83_numconvenio','Pesquisa',false);
+      }else{
+          document.form1.c206_objetoconvenio.value = '';
+      }
+  }
+}
+
+function js_mostradb83_numconvenio(chave,erro){
+    document.form1.c206_objetoconvenio.value = chave;
+    if(erro==true){
+        document.form1.db83_numconvenio.focus();
+        document.form1.db83_numconvenio.value = '';
+    }
+}
+
+function js_mostradb83_numconvenio1(chave1,chave2){
+    document.form1.db83_numconvenio.value     = chave1;
+    document.form1.c206_objetoconvenio.value = chave2;
+    db_iframe_convconvenios.hide();
 }
 </script>

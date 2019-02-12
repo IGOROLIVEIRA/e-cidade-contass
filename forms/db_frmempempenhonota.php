@@ -459,39 +459,41 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         ?>
                     </td>
                 </tr>
+                <!--
                 <tr>
-                    <td nowrap title="<?= @$Te60_convenio ?>">
-                        <?= @$Le60_convenio ?>
+                    <td nowrap title="<?//= @$Te60_convenio ?>">
+                        <?//= @$Le60_convenio ?>
                     </td>
                     <td>
                         <?
-                        $aConvenio = array('2' => 'Não', '1' => 'Sim');
-                        db_select('e60_convenio', $aConvenio, true, $db_opcao, "");
+                        /*$aConvenio = array('2' => 'Não', '1' => 'Sim');
+                        db_select('e60_convenio', $aConvenio, true, $db_opcao, "");*/
                         ?>
                     </td>
                 </tr>
-
+                -->
                 <tr>
-                    <td nowrap title="<?= @$Te60_numconvenio ?>">
-                        <?= @$Le60_numconvenio ?>
+                  <td nowrap title="Código c206_sequencial">
+                    <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
+                  </td>
+                  <td>
+                      <?
+                      db_input('e60_numconvenio',11,$Ie60_numconvenio,true,'text',$db_opcao,"onChange='js_pesquisae60_numconvenio(false);'");
+                      db_input("c206_objetoconvenio",50,0,true,"text",3);
+                      ?>
+                  </td>
+                </tr>
+                <!--
+                <tr>
+                    <td nowrap title="<?//= @$Te60_dataconvenio ?>">
+                        <?//= @$Le60_dataconvenio ?>
                     </td>
                     <td>
                         <?
-                        db_input('e60_numconvenio', 11, $Ie60_numconvenio, true, 'text', $db_opcao);
+                        //db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
                         ?>
                     </td>
-                </tr>
-
-                <tr>
-                    <td nowrap title="<?= @$Te60_dataconvenio ?>">
-                        <?= @$Le60_dataconvenio ?>
-                    </td>
-                    <td>
-                        <?
-                        db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
-                        ?>
-                    </td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td nowrap title="Data da Sentença Judical">
                         <strong>Data da Sentença Judical:</strong>
@@ -845,6 +847,32 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_numerl.focus();
             document.form1.e54_numerl.value = '';
         }
+    }
+
+    function js_pesquisae60_numconvenio(mostra) {
+      if(mostra==true){
+        js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
+      } else {
+          if(document.form1.e60_numconvenio.value != ''){
+              js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.e60_numconvenio.value+'&funcao_js=parent.js_mostrae60_numconvenio','Pesquisa',false);
+          }else{
+              document.form1.c206_objetoconvenio.value = '';
+          }
+      }
+    }
+
+    function js_mostrae60_numconvenio(chave,erro){
+        document.form1.c206_objetoconvenio.value = chave;
+        if(erro==true){
+            document.form1.e60_numconvenio.focus();
+            document.form1.e60_numconvenio.value = '';
+        }
+    }
+
+    function js_mostrae60_numconvenio1(chave1,chave2){
+        document.form1.e60_numconvenio.value     = chave1;
+        document.form1.c206_objetoconvenio.value = chave2;
+        db_iframe_convconvenios.hide();
     }
 
 </script>
