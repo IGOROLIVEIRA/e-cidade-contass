@@ -111,7 +111,7 @@ if ($oInstit->db21_usasisagua == "t") {
      width: 95px;
    }
    #k81_codigodescr {
-     width: 77%;
+     width: 74%;
    }
 
    #k81_obs {
@@ -167,7 +167,6 @@ if ($oInstit->db21_usasisagua == "t") {
 <fieldset style="width:95%; margin-top: 20px">
 <legend><b>Receita</b></legend>
   <table border="0" width="100%">
-
      <!-- Receita -->
     <tr>
       <td class='tamanho-primeira-col' nowrap><?db_ancora($Lk81_receita,"js_pesquisaReceita(true)",$db_opcao);?></td>
@@ -271,6 +270,19 @@ if ($oInstit->db21_usasisagua == "t") {
     </td>
   </tr>
 
+  <!--Convênio-->
+  <tr>
+    <td nowrap title="Código c206_sequencial">
+      <? db_ancora("Convênio","js_pesquisak81_convenio(true);",$db_opcao); ?>
+    </td>
+    <td colspan='3'>
+        <?
+        db_input('k81_convenio',11,$Ik81_convenio,true,'text',$db_opcao,"onChange='js_pesquisak81_convenio(false);'");
+        db_input("c206_objetoconvenio",62,0,true,"text",3);
+        ?>
+    </td>
+  </tr>
+
   <!-- Característica Peculiar -->
   <tr style=''>
     <td ><b><?db_ancora("C.Peculiar / C.Aplicação :","js_pesquisaPeculiar(true);",$db_opcao);?></b></td>
@@ -342,6 +354,32 @@ if ($oInstit->db21_usasisagua == "t") {
 const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
 sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
+function js_pesquisak81_convenio(mostra) {
+  if(mostra==true){
+    js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrak81_convenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
+  } else {
+      if(document.form1.k81_convenio.value != ''){
+          js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.k81_convenio.value+'&funcao_js=parent.js_mostrak81_convenio','Pesquisa',false);
+      }else{
+          document.form1.c206_objetoconvenio.value = '';
+      }
+  }
+}
+
+function js_mostrak81_convenio(chave,erro){
+    document.form1.c206_objetoconvenio.value = chave;
+    if(erro==true){
+        document.form1.k81_convenio.focus();
+        document.form1.k81_convenio.value = '';
+    }
+}
+
+function js_mostrak81_convenio1(chave1,chave2){
+    document.form1.k81_convenio.value     = chave1;
+    document.form1.c206_objetoconvenio.value = chave2;
+    db_iframe_convconvenios.hide();
+}
+
 /*
  * funcao para verificar o grupo das receitas.
  * Nesta rotina nao permitiremos mais receitas do Grupo 11
@@ -350,42 +388,42 @@ sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
   var sUrlRPC          = "cai4_devolucaoadiantamento004.RPC.php";
   var iReceita         = $F("k81_receita");
-	var oParametros      = new Object();
- 	var msgDiv           = "Verificando grupo receita selecionado \n Aguarde ...";
+  var oParametros      = new Object();
+  var msgDiv           = "Verificando grupo receita selecionado \n Aguarde ...";
 
- 	oParametros.exec     = 'verificaGrupoReceita';
- 	oParametros.iReceita = iReceita;
+  oParametros.exec     = 'verificaGrupoReceita';
+  oParametros.iReceita = iReceita;
 
   if (iReceita == '' || iReceita == null) {
     return false;
-	}
+  }
 
- 	js_divCarregando(msgDiv,'msgBox');
+  js_divCarregando(msgDiv,'msgBox');
 
- 	new Ajax.Request(sUrlRPC,
- 	                 {method: "post",
- 	                  parameters:'json='+Object.toJSON(oParametros),
- 	                  onComplete: js_retornoVerificacaoReceita
- 	                 });
+  new Ajax.Request(sUrlRPC,
+                   {method: "post",
+                    parameters:'json='+Object.toJSON(oParametros),
+                    onComplete: js_retornoVerificacaoReceita
+                   });
  }
 
  function js_retornoVerificacaoReceita(oAjax) {
 
- 	js_removeObj('msgBox');
- 	var oRetorno = eval("(" + oAjax.responseText + ")");
+  js_removeObj('msgBox');
+  var oRetorno = eval("(" + oAjax.responseText + ")");
 
- 	if (oRetorno.iStatus == '2') {
+  if (oRetorno.iStatus == '2') {
 
- 	  alert(oRetorno.sMessage.urlDecode());
- 	  $('codigo_receitaplanilha').value = '';
- 	  $('k81_receita').value            = '';
- 	  $('c61_codigo').value             = '';
+    alert(oRetorno.sMessage.urlDecode());
+    $('codigo_receitaplanilha').value = '';
+    $('k81_receita').value            = '';
+    $('c61_codigo').value             = '';
     $('k02_drecei').value             = '';
- 	  $('estrutural').value             = '';
+    $('estrutural').value             = '';
     $('recurso').value                = '';
 
- 	  return false;
- 	}
+    return false;
+  }
  }
 
 /**
@@ -644,7 +682,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 */
  function js_pesquisaReceita(lMostra){
 
-   var sPesquisa = 'func_tabrec_recurso.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|k02_estorc|k02_tipo';
+   var sPesquisa = 'func_tabrec_recurso.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_drecei|recurso|k02_estorc|k02_tipo|recurso';
 
    if(!lMostra) {
 
@@ -660,11 +698,11 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 
  }
 
- function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5){
+ function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5, chave6){
 
    $('k81_receita').value = iReceita;
    $('k02_drecei') .value = sReceita;
-   $('recurso')    .value = chave3;
+   $('recurso').value = chave3;
    $('estrutural') .value = chave4;
    $('k02_tipo')   .value = chave5;
 
@@ -685,7 +723,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    js_mostrarNotificacaoConta();
  }
 
- function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5){
+ function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6){
 
    $('k81_receita').value = iReceita;
    $('k02_drecei') .value = sReceita;
@@ -912,6 +950,44 @@ function js_addReceita () {
     return false;
   }
 
+  switch (Number($F('recurso'))) {
+
+    case 122:
+      if (!$('k81_convenio').value) {
+        alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+        console.log("sim");
+        $('k81_convenio').focus();
+        return false;
+      }
+    break;
+
+    case 123:
+      if (!$('k81_convenio').value) {
+        alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+        $('k81_convenio').focus();
+        return false;
+      }
+    break;
+
+    case 124:
+      if (!$('k81_convenio').value) {
+        alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+        $('k81_convenio').focus();
+        return false;
+      }
+    break;
+
+    case 142:
+      if (!$('k81_convenio').value) {
+        alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+        $('k81_convenio').focus();
+        return false;
+      }
+    break;
+
+  }
+
+
   var oReceita             = new Object();
   //Receita
   oReceita.iReceitaPlanilha = $F('codigo_receitaplanilha');
@@ -943,6 +1019,7 @@ function js_addReceita () {
   oReceita.k81_obs          = $F('k81_obs');
   oReceita.recurso          = $F('recurso');
   oReceita.k81_operbanco    = $F('k81_operbanco');
+  oReceita.k81_convenio     = $F('k81_convenio');
 
   if (iAlteracao == null) {
 
@@ -1014,6 +1091,7 @@ function js_criaDeducao(oAjax){
     oReceita.k81_obs          = $F('k81_obs');
     oReceita.recurso          = oRetorno.oDeducao.o70_codigo;
     oReceita.k81_operbanco    = $F('k81_operbanco');
+    oReceita.k81_convenio     = $F('k81_convenio');
 
     if (iAlteracao == null) {
 
@@ -1074,6 +1152,7 @@ function js_mostraReceita(iIndice) {
   $('k81_obs').value         = aReceitas[iIndice].k81_obs;
   $('recurso').value         = aReceitas[iIndice].recurso;
   $('k81_operbanco').value   = aReceitas[iIndice].k81_operbanco;
+  $('k81_convenio').value    = aReceitas[iIndice].k81_convenio;
 
   js_pesquisaReceita(false);
   js_pesquisaCgm(false);
@@ -1116,6 +1195,7 @@ function js_salvarPlanilha() {
         oReceita.iReceita              = oReceitaTela.k81_receita;
         oReceita.dtRecebimento         = oReceitaTela.k81_datareceb;
         oReceita.sOperacaoBancaria     = oReceitaTela.k81_operbanco;
+        oReceita.iConvenio             = oReceitaTela.k81_convenio;
 
     aReceitasPlanilha.push(oReceita);
   }
@@ -1257,7 +1337,7 @@ function js_completaImportar (oAjax) {
     $('k80_data').value   = oRetorno.oPlanilha.dtDataCriacao;
   }
 
-  console.log("aqui "+oRetorno.oPlanilha.k144_numeroprocesso);
+  //console.log("aqui "+oRetorno.oPlanilha.k144_numeroprocesso);
 
   var oInputProcesso = $('k144_numeroprocesso');
   oInputProcesso.value = "";
@@ -1266,6 +1346,8 @@ function js_completaImportar (oAjax) {
   }
 
   //Adiciona as novas receitas importadas ao array de receitas
+  var convenio;
+
   oRetorno.oPlanilha.aReceitas.each(
 
     function ( oReceita ) {
@@ -1291,6 +1373,7 @@ function js_completaImportar (oAjax) {
       oReceitaImportada.recurso           = oReceita.iRecurso;
       oReceitaImportada.k81_valor         = oReceita.nValor;
       oReceitaImportada.k81_operbanco     = oReceita.sOperacaoBancaria.urlDecode();
+      oReceitaImportada.k81_convenio      = convenio = oReceita.iConvenio;
 
       //Adiciona índice na receita e adiciona no array de receitas (cria propriedade no objeto)
       oReceitaImportada.iIndice        = "a"+iIndiceReceitas;
@@ -1299,6 +1382,8 @@ function js_completaImportar (oAjax) {
     }
   );
   js_renderizarGrid();
+
+  js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+convenio+'&funcao_js=parent.js_mostrak81_convenio','Pesquisa',false);
 
   if (lMenuAlteracao && !lImportacao) {
 

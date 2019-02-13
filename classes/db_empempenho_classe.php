@@ -2183,7 +2183,7 @@ class cl_empempenho {
            from {$dados->tabela}
             join orcdotacao on o58_coddot = {$dados->sigla}_coddot
              where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
-              and o58_codigo in (122,123,124,129)";
+              and o58_codigo in (122,123,124,142)";
 
       return pg_num_rows(db_query($sSQL));
     }

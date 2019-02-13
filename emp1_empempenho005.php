@@ -101,7 +101,7 @@ if(isset($alterar)){
       $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
       if (!$rsResult) {
         $sqlerro  = true;
-        $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 129.\n";
+        $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 142.\n";
       }
 
     }
@@ -309,7 +309,7 @@ if(isset($alterar)){
   }
   /**[Extensao Ordenador Despesa] inclusao_ordenador*/
 
-  db_fim_transacao($sqlerro);
+  db_fim_transacao(true);//$sqlerro
 
 } else if(isset($chavepesquisa)) {
 
