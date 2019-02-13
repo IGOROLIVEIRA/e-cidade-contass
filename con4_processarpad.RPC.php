@@ -382,8 +382,7 @@ switch($oParam->exec) {
      */
     $bEncerramento = false;
     if($oParam->mesReferencia == 13){
-      // $oParam->mesReferencia = 12;
-      // $novoMesReferencia = 12;
+      $oParam->mesReferencia = 12;
       $bEncerramento = true;
     }
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
