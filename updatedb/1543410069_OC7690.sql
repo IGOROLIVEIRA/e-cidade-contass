@@ -8,7 +8,7 @@ SELECT fc_startsession();
 ALTER TABLE infocomplementaresinstit ADD COLUMN si09_instsiconfi varchar(25);
 
 INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
-  VALUES ((select max(codcam)+1 from db_syscampo), 'si09_instsiconfi', 'varchar', 'Código da Instituição SICONFI', '', 'Código da Instituição SICONFI', 1, false, true, false, 0, 'text', 'Código da Instituição SICONFI');
+  VALUES ((select max(codcam)+1 from db_syscampo), 'si09_instsiconfi', 'varchar', 'Código da Instituição SICONFI', '', 'Código da Instituição SICONFI', 9, false, true, false, 0, 'text', 'Código da Instituição SICONFI');
 
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia)
   VALUES (
@@ -25,5 +25,4 @@ INSERT INTO db_menu values (32,(select max(id_item) from db_itensmenu),(select m
 -- Fim do script
 
 COMMIT;
-
 
