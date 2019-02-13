@@ -1,6 +1,6 @@
 
 -- Ocorrência 7690
-BEGIN;
+/*BEGIN;
 SELECT fc_startsession();
 
 -- Início do script
@@ -21,3 +21,4 @@ INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia)
 -- Fim do script
 
 COMMIT;
+*/
