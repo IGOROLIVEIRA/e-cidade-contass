@@ -63,7 +63,7 @@ INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Excl
 INSERT INTO db_menu values ((select id_item from db_itensmenu where descricao = 'De/Para Pcasp MSC'),(select id_item from db_itensmenu where help = 'Excluir De/Para Pcasp MSC.'),3,2000025);
 
 INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'De/Para Orcamento MSC','De/Para Orcamento MSC.','con4_sicominfocomplementarmsc.php',1,1,'De/Para Orcamento MSC','t');
-INSERT INTO db_menu values (3962,(select id_item from db_itensmenu where descricao = 'De/Para Orcamento MSC'),2,2000025);
+INSERT INTO db_menu values (3962,(select id_item from db_itensmenu where descricao = 'De/Para Orcamento MSC' limit 1),2,2000025);
 
 --RELATÓRIOS
 INSERT INTO db_menu values (2000025,30,3,2000025);
