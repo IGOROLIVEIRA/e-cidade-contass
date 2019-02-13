@@ -1,6 +1,6 @@
-
+/*
 -- Ocorrência 7687
-BEGIN;                   
+BEGIN;
 SELECT fc_startsession();
 
 -- Início do script
@@ -95,3 +95,4 @@ insert into db_usupermemp values ((select max(db20_codperm) from db_permemp),(se
 -- Fim do script
 
 COMMIT;
+*/
