@@ -2181,7 +2181,7 @@ class cl_empempenho {
       $sSQL = "
           select {$dados->campo}
            from {$dados->tabela}
-            join orcdotacao on o58_coddot = {$dados->sigla}_coddot
+            join orcdotacao on (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
              where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
               and o58_codigo in (122,123,124,142)";
 
