@@ -42,23 +42,23 @@
           <td align="center">
             <?
               $funcao_js = "parent.mostraDadosInscricao|0";
-              $sql = " select  issbase.q02_inscr,
+              $sql = " select DISTINCT issbase.q02_inscr,
 	                       CASE
 	                         WHEN trim(cgm.z01_nomefanta) = '' THEN 'Sem nome fantasia cadastrado'
 	                         ELSE cgm.z01_nomefanta
 	                          END as z01_nomefanta,
-		                                    z01_nome  , db98_descricao as dl_Tipo_Empresa,j14_nome, q02_numero     , q02_compl ,
+		                                    z01_nome  ,z01_cgccpf, db98_descricao as dl_Tipo_Empresa,j14_nome, q02_numero     , q02_compl ,
 		                                    q02_cxpost, j13_descr, issruas.z01_cep, q02_dtinic,
 		                                    q02_dtbaix, q140_datainicio as dl_Data_da_Paralizacao, q140_datafim as dl_Data_Fim_Paralizacao
 		                     from issbase
-                   inner join cgm on issbase.q02_numcgm = z01_numcgm
-                   left join cgmtipoempresa on z03_numcgm = z01_numcgm
-                   left join tipoempresa on z03_tipoempresa = db98_sequencial
-                   left join issbaseparalisacao on q02_inscr = q140_issbase
-                   left  join issruas on issruas.q02_inscr = issbase.q02_inscr
-                   left join ruas on issruas.j14_codigo = ruas.j14_codigo
-                   left join ruasbairro on ruas.j14_codigo = ruasbairro.j16_lograd
-                   left join bairro on bairro.j13_codi = ruasbairro.j16_bairro";
+                    INNER JOIN cgm ON issbase.q02_numcgm = z01_numcgm
+                    LEFT JOIN cgmtipoempresa ON z03_numcgm = z01_numcgm
+                    LEFT JOIN tipoempresa ON z03_tipoempresa = db98_sequencial
+                    LEFT JOIN issbaseparalisacao ON q02_inscr = q140_issbase
+                    LEFT JOIN issruas ON issruas.q02_inscr = issbase.q02_inscr
+                    LEFT JOIN ruas ON ruas.j14_codigo = issruas.j14_codigo
+                    LEFT JOIN issbairro ON issbairro.q13_inscr = issbase.q02_inscr
+                    LEFT JOIN bairro ON bairro.j13_codi = issbairro.q13_bairro ";
 
               if (isset($pesquisaPorNome)) {
               	// a variavel $pesquisaPorNome retorna com o numro do cgm do registro selecionado
@@ -85,23 +85,26 @@
 							 	</form> 			";
 						    db_lovrot($sql,15,"()",$pesquisaRua,$funcao_js);
 
-              }else if (isset($pesquisaAtividade)) {
-						  	$sql .= " inner join tabativ on q07_inscr = issbase.q02_inscr where q07_ativ = $pesquisaAtividade	";
-                db_lovrot($sql,15,"()",$pesquisaAtividade,$funcao_js);
+              } else if (isset($pesquisaAtividade)) {
+                $sql .= " inner join tabativ on q07_inscr = issbase.q02_inscr where q07_ativ = $pesquisaAtividade	";
+                db_lovrot($sql, 15, "()", $pesquisaAtividade, $funcao_js);
 
-						  }else if (isset($pesquisaSocios)) {
-						  	$sql .= " inner join socios on q95_cgmpri = q02_numcgm where q95_tipo = 1 and q95_numcgm = $pesquisaSocios ";
-						    db_lovrot($sql,15,"()",$pesquisaSocios,$funcao_js);
+              } else if (isset($pesquisaSocios)) {
+                $sql .= " inner join socios on q95_cgmpri = q02_numcgm where q95_tipo = 1 and q95_numcgm = $pesquisaSocios ";
+                db_lovrot($sql, 15, "()", $pesquisaSocios, $funcao_js);
 
-						  }else if (isset($pesquisaBairro)) {
-						  	$sql .= " inner join issbairro on q13_inscr = issbase.q02_inscr where q13_bairro = $pesquisaBairro";
-						    db_lovrot($sql,15,"()",$pesquisaBairro,$funcao_js);
+              } else if (isset($pesquisaBairro)) {
+                $sql .= " inner join issbairro on q13_inscr = issbase.q02_inscr where q13_bairro = $pesquisaBairro";
+                db_lovrot($sql, 15, "()", $pesquisaBairro, $funcao_js);
 
-						  }else if (isset($pesquisaMatriculaImovel)) {
-						  	$sql .= " inner join issmatric on q05_inscr = issbase.q02_inscr where q05_matric = $pesquisaMatriculaImovel";
-						  	db_lovrot($sql,15,"()",$pesquisaMatriculaImovel,$funcao_js);
+              } else if (isset($pesquisaMatriculaImovel)) {
+                $sql .= " inner join issmatric on q05_inscr = issbase.q02_inscr where q05_matric = $pesquisaMatriculaImovel";
+                db_lovrot($sql, 15, "()", $pesquisaMatriculaImovel, $funcao_js);
 
-						  }
+              } else if (isset($pesquisaCgcCpf)) {
+                $sql .= " where cgm.z01_cgccpf = '$pesquisaCgcCpf' ";
+                db_lovrot($sql,15,"()",$pesquisaCgcCpf,$funcao_js);
+              }
 
             ?>
           </td>

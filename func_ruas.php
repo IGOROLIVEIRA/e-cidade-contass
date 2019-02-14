@@ -44,8 +44,8 @@ if (isset($codrua) && !isset($pesquisar)){
   $chave_j14_codigo=$codrua;
 }
 
-if (isset($nomerua) && !isset($pesquisar)){
-  $chave_j14_nome=$nomerua;
+if (isset($nomeRua) && !isset($pesquisar)){
+  $chave_j14_nome=strtoupper($nomeRua);
 }
 
 if (isset($chave_j14_codigo) && !DBNumber::isInteger($chave_j14_codigo)) {

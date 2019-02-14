@@ -28,77 +28,82 @@
 <script>
   function mostraJanelaPesquisa() {
     F = document.form1;
-	  if(F.numInscricao.value.length > 0) {
-	    frameDadosInscricao.jan.location.href = 'iss3_consinscr003.php?numeroDaInscricao=' + F.numInscricao.value;
-	    frameDadosInscricao.mostraMsg();
-	    frameDadosInscricao.show();
+    if (F.numInscricao.value.length > 0) {
+      frameDadosInscricao.jan.location.href = 'iss3_consinscr003.php?numeroDaInscricao=' + F.numInscricao.value;
+      frameDadosInscricao.mostraMsg();
+      frameDadosInscricao.show();
       frameDadosInscricao.focus();
-    } else if(F.referenciaanterior.value.length > 0) {
+    } else if (F.cgccpf.value.length > 0) {
+      frameDadosInscricao.jan.location.href = 'iss3_consinscr002.php?pesquisaCgcCpf=' + F.cgccpf.value;
+      frameDadosInscricao.mostraMsg();
+      frameDadosInscricao.show();
+      frameDadosInscricao.focus();
+    } else if (F.referenciaanterior.value.length > 0) {
       frameDadosInscricao.jan.location.href = 'iss3_consinscr003.php?referenciaanterior=' + F.referenciaanterior.value;
       frameDadosInscricao.mostraMsg();
       frameDadosInscricao.show();
       frameDadosInscricao.focus();
-	  } else if(F.razaoSocial.value.length > 0) {
+    } else if (F.razaoSocial.value.length > 0) {
       frameListaRazaoSocial.jan.location.href = 'func_nome.php?funcao_js=parent.mostraTodasInscricoes_PesquisaPorNome|0&lCadTec=1&nomeDigitadoParaPesquisa=' + F.razaoSocial.value;
-	    frameListaRazaoSocial.mostraMsg();
-	    frameListaRazaoSocial.show();
-	    frameListaRazaoSocial.focus();
-	  } else if(F.escritorio.value.length > 0) {
+      frameListaRazaoSocial.mostraMsg();
+      frameListaRazaoSocial.show();
+      frameListaRazaoSocial.focus();
+    } else if (F.escritorio.value.length > 0) {
       frameEscritorio.jan.location.href = 'func_escritorio.php?funcao_js=parent.mostraTodasInscricoes_PesquisaEscritorio|0&lCadTec=1&nomeDigitadoParaPesquisa=' + F.escritorio.value;
-	    frameEscritorio.mostraMsg();
-	    frameEscritorio.show();
-	    frameEscritorio.focus();
-	  } else if(F.codRua.value.length > 0) {
+      frameEscritorio.mostraMsg();
+      frameEscritorio.show();
+      frameEscritorio.focus();
+    } else if (F.codRua.value.length > 0) {
       frameListaRuas.jan.location.href = 'func_ruas.php?funcao_js=parent.mostraTodasInscricoes_PesquisaRuas|0&codrua=' + F.codRua.value;
-	    frameListaRuas.mostraMsg();
-	    frameListaRuas.show();
-	    frameListaRuas.focus();
-	  } else if(F.nomeRua.value.length > 0) {
+      frameListaRuas.mostraMsg();
+      frameListaRuas.show();
+      frameListaRuas.focus();
+    } else if (F.nomeRua.value.length > 0) {
       frameListaRuas.jan.location.href = 'func_ruas.php?funcao_js=parent.mostraTodasInscricoes_PesquisaRuas|0&nomeRua=' + F.nomeRua.value;
-	    frameListaRuas.mostraMsg();
-	    frameListaRuas.show();
-	    frameListaRuas.focus();
-	  } else if(F.codBairro.value.length > 0) {
+      frameListaRuas.mostraMsg();
+      frameListaRuas.show();
+      frameListaRuas.focus();
+    } else if (F.codBairro.value.length > 0) {
       frameListaBairros.jan.location.href = 'func_bairros.php?funcao_js=parent.mostraTodasInscricoes_PesquisaBairro|0&codbairro=' + F.codBairro.value;
-	    frameListaBairros.mostraMsg();
-	    frameListaBairros.show();
-	    frameListaBairros.focus();
-	  } else if(F.nomeBairro.value.length > 0) {
+      frameListaBairros.mostraMsg();
+      frameListaBairros.show();
+      frameListaBairros.focus();
+    } else if (F.nomeBairro.value.length > 0) {
       frameListaBairros.jan.location.href = 'func_bairros.php?funcao_js=parent.mostraTodasInscricoes_PesquisaBairro|0&nomeBairro=' + F.nomeBairro.value;
-	    frameListaBairros.mostraMsg();
-	    frameListaBairros.show();
-	    frameListaBairros.focus();
-	  } else if(F.atividade.value.length > 0) {
+      frameListaBairros.mostraMsg();
+      frameListaBairros.show();
+      frameListaBairros.focus();
+    } else if (F.atividade.value.length > 0) {
       frameListaAtividades.jan.location.href = 'func_atividades.php?funcao_js=parent.mostraTodasInscricoes_PesquisaAtividades|0&nomeDigitadoParaPesquisa=' + F.atividade.value;
-	    frameListaAtividades.mostraMsg();
-	    frameListaAtividades.show();
-	    frameListaAtividades.focus();
-	  } else if(F.socios.value.length > 0) {
-      frameListaSocios.jan.location.href = 'func_socios.php?funcao_js=parent.mostraTodasInscricoes_PesquisaSocios|0&nomeDigitadoParaPesquisa='+F.socios.value;
-	    frameListaSocios.mostraMsg();
-	    frameListaSocios.show();
-	    frameListaSocios.focus();
-	  } else if(F.fantasia.value.length > 0) {
-      js_OpenJanelaIframe('top.corpo','frameListaFantasia','func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa='+F.fantasia.value,'Pesquisa',true,23);
+      frameListaAtividades.mostraMsg();
+      frameListaAtividades.show();
+      frameListaAtividades.focus();
+    } else if (F.socios.value.length > 0) {
+      frameListaSocios.jan.location.href = 'func_socios.php?funcao_js=parent.mostraTodasInscricoes_PesquisaSocios|0&nomeDigitadoParaPesquisa=' + F.socios.value;
+      frameListaSocios.mostraMsg();
+      frameListaSocios.show();
+      frameListaSocios.focus();
+    } else if (F.fantasia.value.length > 0) {
+      js_OpenJanelaIframe('top.corpo', 'frameListaFantasia', 'func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa=' + F.fantasia.value, 'Pesquisa', true, 23);
 
       /*  frameListaFantasia.jan.location.href = 'func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa='+F.fantasia.value;
-  		alert(F.fantasia.value);
-  	  frameListaFantasia.mostraMsg();
-  	  frameListaFantasia.show();
-  	  frameListaFantasia.focus();*/
-	  } else if(F.matriculaImovel.value.length > 0) {
-      js_OpenJanelaIframe('top.corpo','frameListaMatriculaImovel','iss3_consinscr002.php?pesquisaMatriculaImovel=' + F.matriculaImovel.value,'Lista Matricula',true,23);
+       alert(F.fantasia.value);
+       frameListaFantasia.mostraMsg();
+       frameListaFantasia.show();
+       frameListaFantasia.focus();*/
+    } else if (F.matriculaImovel.value.length > 0) {
+      js_OpenJanelaIframe('top.corpo', 'frameListaMatriculaImovel', 'iss3_consinscr002.php?pesquisaMatriculaImovel=' + F.matriculaImovel.value, 'Lista Matricula', true, 23);
 
-	  } else if ((F.setor.value.length > 0) || (F.quadra.value.length > 0) || (F.lote.value.length > 0)) {
+    } else if ((F.setor.value.length > 0) || (F.quadra.value.length > 0) || (F.lote.value.length > 0)) {
 
-	    js_OpenJanelaIframe('top.corpo','frameListaSetQuaLot','func_iptubase.php?'
-    	                     +'funcao_js=parent.mostraTodasInscricoes_PesquisaSetQuaLot'
-    	                     +'&j34_setor=' + F.setor.value
-    	                     +'&j34_quadra=' + F.quadra.value
-    	                     +'&j34_lote=' + F.lote.value
-    	                     +'&PesquisaSetQuaLot=1','Pesquisa',true,23);
-	  }
-	  F.reset();
+      js_OpenJanelaIframe('top.corpo', 'frameListaSetQuaLot', 'func_iptubase.php?'
+          + 'funcao_js=parent.mostraTodasInscricoes_PesquisaSetQuaLot'
+          + '&j34_setor=' + F.setor.value
+          + '&j34_quadra=' + F.quadra.value
+          + '&j34_lote=' + F.lote.value
+          + '&PesquisaSetQuaLot=1', 'Pesquisa', true, 23);
+    }
+    F.reset();
   }
 
   function mostraDadosInscricao(numeroissqn){
@@ -193,6 +198,14 @@
 						</td>
           </tr>
           <tr>
+            <td nowrap>&nbsp;</td>
+            <td width="25%" align="left" nowrap>
+						    <strong>CPF/CNPJ:</strong> </td>
+            <td nowrap>
+						    <input name="cgccpf" type="text" id="cgccpf" size="14" onkeyup='js_ValidaCampos(this,1,"CPF/CNPJ","","",event);' oninput="js_ValidaCampos(this,0,'CNPJ/CPF','t','t',event);" onkeydown="return js_controla_tecla_enter(this,event);" maxlength="14">
+						</td>
+          </tr>
+          <tr>
             <td width="15%" nowrap>&nbsp;</td>
             <td width="20%" align="left" nowrap>
 	            <strong>Raz&atilde;o social</strong>:
@@ -234,7 +247,7 @@
  					    <strong>Nome da rua :</strong>
   				  </td>
             <td nowrap>
-		 				  <input name="nomeRua" type="text" id="nomeRua" size="50" maxlength="40">
+		 				  <input name="nomeRua" onkeydown="return js_controla_tecla_enter(this,event);" oninput="js_ValidaCampos(this,0,'Logradouro','t','t',event);" type="text" style="text-transform:uppercase;" onblur="js_ValidaMaiusculo(this,'t',event);" id="nomeRua" size="50" maxlength="40">
 			  		 </td>
           </tr>
           <tr>
