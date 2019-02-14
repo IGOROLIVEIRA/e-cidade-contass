@@ -547,7 +547,10 @@ class RelatoriosLegaisMultiplosFiltrosBase {
    */
   protected static function calcularValorDaLinhaComValoresDerivados($Recordset, $RecordsetPosterior, stdClass $oLinha, $iTipoCalculo) {
 
-    $iTotalLinhas = pg_num_rows($Recordset);
+    $iTotalLinhasCorrente = pg_num_rows($Recordset);
+    $iTotalLinhasPosterior = pg_num_rows($RecordsetPosterior);
+    $iTotalLinhas = $iTotalLinhasCorrente > $iTotalLinhasPosterior ? $iTotalLinhasCorrente : $iTotalLinhasPosterior;
+
     $aContass = $oLinha->parametros->contas;
 
     // Percorre as linhas do balancete da receita
@@ -590,6 +593,7 @@ class RelatoriosLegaisMultiplosFiltrosBase {
         // Cria as contas derivadas da conta original - Coluna 1 e 2
         $aPrefixos = array('491','492','493','495','496','498','499');
         $aContasCols1e2e8 = array($oConta);
+
         foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
           $aContasCols1e2e8[] = $oContaa;
         }
@@ -640,7 +644,7 @@ class RelatoriosLegaisMultiplosFiltrosBase {
 
           if($oVerificacaoAnoPosterior->match && $RecordsetPosterior){
             RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCols1e2e8, $oLinha, $oDadosResource3, $iTipoCalculo, $oDados, $aColuna8);
-          }
+            }
 
         }
       }
