@@ -517,7 +517,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
         $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
         $clflpgo10->si195_indsalaaula 						= $oDados10->rh37_exerceatividade;
-        $clflpgo10->si195_vlrcargahorariasemanal 		    = $oDados10->si195_vlrcargahorariasemanal;
+        $clflpgo10->si195_vlrcargahorariasemanal 		    = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
         $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
