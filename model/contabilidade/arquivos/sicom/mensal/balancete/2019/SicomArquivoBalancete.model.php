@@ -385,7 +385,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $nCreditos = db_utils::fieldsMemory($rsSaldoAnt, 0)->creditos;
                 $nDebitos = db_utils::fieldsMemory($rsSaldoAnt, 0)->debitos;
                 $sNaturezaSaldoIni = db_utils::fieldsMemory($rsSaldoAnt, 0)->sinal_anterior;
-                var_dump($sNaturezaSaldoIni);die();
+
 
 
             }
@@ -560,7 +560,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     }
                 }
 
-                print_r($sqlDotacoes);
                 $rsDotacoes = db_query($sSqlDotacoes) or die(pg_last_error());
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsDotacoes); $iCont11++) {
