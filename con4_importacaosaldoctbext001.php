@@ -103,7 +103,7 @@ $iAnoSessao = db_getsession("DB_anousu");
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
       js_removeObj('div_aguarde');
-      alert(oRetorno.message);
+      alert(oRetorno.message.urlDecode());
     });
   }
 
