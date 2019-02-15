@@ -309,7 +309,7 @@ if(isset($alterar)){
   }
   /**[Extensao Ordenador Despesa] inclusao_ordenador*/
 
-  db_fim_transacao(true);//$sqlerro
+  db_fim_transacao($sqlerro);
 
 } else if(isset($chavepesquisa)) {
 
