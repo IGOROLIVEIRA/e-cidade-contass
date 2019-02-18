@@ -41,7 +41,7 @@ SET o15_codstn = (CASE
                       WHEN o15_codtri = '192' THEN 19300000
                   END);
 
-UPDATE \d orctiporec
+UPDATE orctiporec
 SET o15_codstn = (CASE
                       WHEN o15_codtri = '200' THEN 20010000
                       WHEN o15_codtri = '201' THEN 21110000
