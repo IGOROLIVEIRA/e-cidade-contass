@@ -722,8 +722,8 @@ class MSC {
             WHEN o15_codtri = '124'
               THEN
                 CASE
-                  WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN '15200000'
-                  ELSE '15100000' END
+                  WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
+                  ELSE 15100000 END
             ELSE o15_codstn
           END AS fr,
           natreceita AS nr,
@@ -792,7 +792,7 @@ class MSC {
         END AS po,
         funsub AS fs,
         CASE
-          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN '14300000'
+          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
         natdespesa AS nd,
@@ -866,7 +866,7 @@ class MSC {
         END AS po,
         funsub AS fs,
         CASE
-          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN '14300000'
+          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
         natdespesa AS nd,
@@ -998,7 +998,7 @@ class MSC {
         END AS po,
         funsub AS fs,
         CASE
-          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN '14300000'
+          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
         natdespesa AS nd,
@@ -1073,7 +1073,7 @@ class MSC {
         END AS po,
         funsub AS fs,
         CASE
-          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN '14300000'
+          WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
         natdespesa AS nd,
