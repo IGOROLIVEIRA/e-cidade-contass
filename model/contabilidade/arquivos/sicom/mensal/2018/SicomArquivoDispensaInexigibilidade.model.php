@@ -477,7 +477,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa12->si76_exercicioprocesso = $oDados12->exerciciolicitacao;
                 $dispensa12->si76_nroprocesso = $oDados12->nroprocessolicitatorio;
                 $dispensa12->si76_tipoprocesso = $oDados12->tipoprocesso;
-                $dispensa12->si76_nroitem = $oDados12->nroitem;
+                $dispensa12->si76_nroitem = $iCont12 + 1;
                 $dispensa12->si76_coditem = $oDados12->coditem;
                 $dispensa12->si76_instit = db_getsession("DB_instit");
                 $dispensa12->si76_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
