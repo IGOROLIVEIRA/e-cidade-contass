@@ -170,8 +170,9 @@ $rotulo->label("z01_cgccpf");
                   $dbwhere .= " and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
                   //removido por meio da solicitacao da oc 6848
                   //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
-                  $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '".$ve70_abast."')";
-                  $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '".$ve70_abast."')";
+                  //adicionado nova validadacao OC 6848
+                  $dbwhere .= "AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '".$ve70_abast."') AND date_part('month', empempenho.e60_emiss) <= 12)
+                               OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '".$ve70_abast."') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '".$ve70_abast."')))";
                   $filtroempelemento = 1;
                 }
                 /**
