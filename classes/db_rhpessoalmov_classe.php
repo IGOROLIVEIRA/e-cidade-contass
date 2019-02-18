@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -81,33 +81,33 @@ class cl_rhpessoalmov {
     var $rh02_tipoparentescoinst = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 rh02_instit = int4 = Cod. Instituição 
-                 rh02_seqpes = int4 = Sequência 
-                 rh02_anousu = int4 = Ano do Exercício 
-                 rh02_mesusu = int4 = Mês do Exercício 
-                 rh02_regist = int4 = Registro 
+                 rh02_instit = int4 = Cod. Instituição
+                 rh02_seqpes = int4 = Sequência
+                 rh02_anousu = int4 = Ano do Exercício
+                 rh02_mesusu = int4 = Mês do Exercício
+                 rh02_regist = int4 = Registro
                  rh02_codreg = int4 = Regime
-                 rh02_tipsal = varchar(1) = Tipo de Salário 
-                 rh02_folha = varchar(1) = Tipo de Folha 
-                 rh02_fpagto = int4 = Pagamento 
-                 rh02_tbprev = int4 = Tab.  Previdência 
-                 rh02_hrsmen = int4 = Horas Mensais 
-                 rh02_hrssem = int4 = Horas Semanais 
-                 rh02_ocorre = varchar(2) = Agentes Nocivos 
-                 rh02_equip = bool = Equiparação 
-                 rh02_tpcont = int4 = Tipo de Contrato 
-                 rh02_vincrais = int4 = Vínculo 
-                 rh02_salari = float8 = Salário 
-                 rh02_lota = int4 = Código da Lotação 
-                 rh02_funcao = int4 = Cargo 
-                 rh02_rhtipoapos = int4 = Tipo de Apos./Pensão 
-                 rh02_validadepensao = date = Validade Pensão 
-                 rh02_deficientefisico = bool = Deficiente Físico 
-                 rh02_portadormolestia = bool = Portador de Moléstia 
-                 rh02_datalaudomolestia = date = Data do Laudo 
-                 rh02_tipodeficiencia = int4 = Código do tipo de deficiência 
-                 rh02_abonopermanencia = bool = Abono Permanência 
-                 rh02_diasgozoferias = int4 = Dias padrão a Gozar 
+                 rh02_tipsal = varchar(1) = Tipo de Salário
+                 rh02_folha = varchar(1) = Tipo de Folha
+                 rh02_fpagto = int4 = Pagamento
+                 rh02_tbprev = int4 = Tab.  Previdência
+                 rh02_hrsmen = int4 = Horas Mensais
+                 rh02_hrssem = int4 = Horas Semanais
+                 rh02_ocorre = varchar(2) = Agentes Nocivos
+                 rh02_equip = bool = Equiparação
+                 rh02_tpcont = int4 = Tipo de Contrato
+                 rh02_vincrais = int4 = Vínculo
+                 rh02_salari = float8 = Salário
+                 rh02_lota = int4 = Código da Lotação
+                 rh02_funcao = int4 = Cargo
+                 rh02_rhtipoapos = int4 = Tipo de Apos./Pensão
+                 rh02_validadepensao = date = Validade Pensão
+                 rh02_deficientefisico = bool = Deficiente Físico
+                 rh02_portadormolestia = bool = Portador de Moléstia
+                 rh02_datalaudomolestia = date = Data do Laudo
+                 rh02_tipodeficiencia = int4 = Código do tipo de deficiência
+                 rh02_abonopermanencia = bool = Abono Permanência
+                 rh02_diasgozoferias = int4 = Dias padrão a Gozar
                  rh02_tipcatprof = int4 = Categoria Profissional SIOPE
                  rh02_cgminstituidor = int4 = CGM do Instituidor
                  rh02_dtobitoinstituidor = int4 = Data de Obito do Instituidor
@@ -405,70 +405,70 @@ class cl_rhpessoalmov {
             return false;
         }
         $sql = "insert into rhpessoalmov(
-                                       rh02_instit 
-                                      ,rh02_seqpes 
-                                      ,rh02_anousu 
-                                      ,rh02_mesusu 
-                                      ,rh02_regist 
-                                      ,rh02_codreg 
-                                      ,rh02_tipsal 
-                                      ,rh02_folha 
-                                      ,rh02_fpagto 
-                                      ,rh02_tbprev 
-                                      ,rh02_hrsmen 
-                                      ,rh02_hrssem 
-                                      ,rh02_ocorre 
-                                      ,rh02_equip 
-                                      ,rh02_tpcont 
-                                      ,rh02_vincrais 
-                                      ,rh02_salari 
-                                      ,rh02_lota 
-                                      ,rh02_funcao 
-                                      ,rh02_rhtipoapos 
-                                      ,rh02_validadepensao 
-                                      ,rh02_deficientefisico 
-                                      ,rh02_portadormolestia 
-                                      ,rh02_datalaudomolestia 
-                                      ,rh02_tipodeficiencia 
-                                      ,rh02_abonopermanencia 
-                                      ,rh02_diasgozoferias 
+                                       rh02_instit
+                                      ,rh02_seqpes
+                                      ,rh02_anousu
+                                      ,rh02_mesusu
+                                      ,rh02_regist
+                                      ,rh02_codreg
+                                      ,rh02_tipsal
+                                      ,rh02_folha
+                                      ,rh02_fpagto
+                                      ,rh02_tbprev
+                                      ,rh02_hrsmen
+                                      ,rh02_hrssem
+                                      ,rh02_ocorre
+                                      ,rh02_equip
+                                      ,rh02_tpcont
+                                      ,rh02_vincrais
+                                      ,rh02_salari
+                                      ,rh02_lota
+                                      ,rh02_funcao
+                                      ,rh02_rhtipoapos
+                                      ,rh02_validadepensao
+                                      ,rh02_deficientefisico
+                                      ,rh02_portadormolestia
+                                      ,rh02_datalaudomolestia
+                                      ,rh02_tipodeficiencia
+                                      ,rh02_abonopermanencia
+                                      ,rh02_diasgozoferias
                                       ,rh02_tipcatprof
                                       ,rh02_cgminstituidor
                                       ,rh02_dtobitoinstituidor
                                       ,rh02_tipoparentescoinst
                        )
                 values (
-                                $this->rh02_instit 
-                               ,$this->rh02_seqpes 
-                               ,$this->rh02_anousu 
-                               ,$this->rh02_mesusu 
-                               ,$this->rh02_regist 
-                               ,$this->rh02_codreg 
-                               ,'$this->rh02_tipsal' 
-                               ,'$this->rh02_folha' 
-                               ,$this->rh02_fpagto 
-                               ,$this->rh02_tbprev 
-                               ,$this->rh02_hrsmen 
-                               ,$this->rh02_hrssem 
-                               ,'$this->rh02_ocorre' 
-                               ,'$this->rh02_equip' 
-                               ,$this->rh02_tpcont 
-                               ,$this->rh02_vincrais 
-                               ,$this->rh02_salari 
-                               ,$this->rh02_lota 
-                               ,$this->rh02_funcao 
-                               ,$this->rh02_rhtipoapos 
-                               ,".($this->rh02_validadepensao == "null" || $this->rh02_validadepensao == ""?"null":"'".$this->rh02_validadepensao."'")." 
-                               ,'$this->rh02_deficientefisico' 
-                               ,'$this->rh02_portadormolestia' 
-                               ,".($this->rh02_datalaudomolestia == "null" || $this->rh02_datalaudomolestia == ""?"null":"'".$this->rh02_datalaudomolestia."'")." 
-                               ,$this->rh02_tipodeficiencia 
-                               ,'$this->rh02_abonopermanencia' 
+                                $this->rh02_instit
+                               ,$this->rh02_seqpes
+                               ,$this->rh02_anousu
+                               ,$this->rh02_mesusu
+                               ,$this->rh02_regist
+                               ,$this->rh02_codreg
+                               ,'$this->rh02_tipsal'
+                               ,'$this->rh02_folha'
+                               ,$this->rh02_fpagto
+                               ,$this->rh02_tbprev
+                               ,$this->rh02_hrsmen
+                               ,$this->rh02_hrssem
+                               ,'$this->rh02_ocorre'
+                               ,'$this->rh02_equip'
+                               ,$this->rh02_tpcont
+                               ,$this->rh02_vincrais
+                               ,$this->rh02_salari
+                               ,$this->rh02_lota
+                               ,$this->rh02_funcao
+                               ,$this->rh02_rhtipoapos
+                               ,".($this->rh02_validadepensao == "null" || $this->rh02_validadepensao == ""?"null":"'".$this->rh02_validadepensao."'")."
+                               ,'$this->rh02_deficientefisico'
+                               ,'$this->rh02_portadormolestia'
+                               ,".($this->rh02_datalaudomolestia == "null" || $this->rh02_datalaudomolestia == ""?"null":"'".$this->rh02_datalaudomolestia."'")."
+                               ,$this->rh02_tipodeficiencia
+                               ,'$this->rh02_abonopermanencia'
 			                   ,".($this->rh02_diasgozoferias == "null" || $this->rh02_diasgozoferias == ""?"30":"'".$this->rh02_diasgozoferias."'")."
                                ,'$this->rh02_tipcatprof'
-                               ,".($this->rh02_cgminstituidor == "null" || $this->rh02_cgminstituidor == ""?"null":"'".$this->rh02_cgminstituidor."'")." 
-                               ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")." 
-                               ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")." 
+                               ,".($this->rh02_cgminstituidor == "null" || $this->rh02_cgminstituidor == ""?"null":"'".$this->rh02_cgminstituidor."'")."
+                               ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")."
+                               ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -1273,6 +1273,43 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    function sql_query_instituidor($rh02_seqpes=null, $campos="*", $ordem=null, $dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from rhpessoalmov ";
+        $sql .= "      left  join rhpessoal on rhpessoal.rh01_regist = rhpessoalmov.rh02_regist";
+        $sql .= "      inner join cgm on cgm.z01_numcgm = rhpessoal.rh01_numcgm ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($rh02_seqpes!=null ){
+                $sql2 .= " where rhpessoalmov.rh02_seqpes = $rh02_seqpes ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        // print_r($sql);
+        return $sql;
+    }
+
     /**
      * Monta query buscando todas as matriculas pelo tipo de folha e agrupando por regime, lotacao ou cargo
      */
@@ -1757,7 +1794,7 @@ class cl_rhpessoalmov {
          *                        prefixo r35
          *
          */
-// Lógica antiga $sRubricaCalculo           = " 'R981', 'R975' "; 
+// Lógica antiga $sRubricaCalculo           = " 'R981', 'R975' ";
         $sRubricaCalculo          = " 'R985', 'R975' ";
         $sTabelaCalculo           = $sTabela;//'gerfsal';
         $sPrefixoTabelaCalculo    = $sSigla;//'r14';

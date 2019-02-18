@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_respinf102019_classe.php");
@@ -65,11 +63,12 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
      * excluir informacoes do mes selecionado registro 10
      */
     $result = $clrespinf10->sql_record($clrespinf10->sql_query(NULL,"*",NULL,"si197_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']));
-    if (pg_num_rows($result) > 0) {
-      $clrespinf10->excluir(NULL,"si197_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
-      if ($clrespinf10->erro_status == 0) {
-        throw new Exception($clrespinf10->erro_msg);
-      }
+    if($result)
+      if (pg_num_rows($result) > 0) {
+        $clrespinf10->excluir(NULL,"si197_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+        if ($clrespinf10->erro_status == 0) {
+          throw new Exception($clrespinf10->erro_msg);
+        }
     }
 
     /*
