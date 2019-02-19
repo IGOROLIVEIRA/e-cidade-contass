@@ -23,7 +23,12 @@ $iMes         = (!empty($oParam->mes))     ? $oParam->mes     : '';
 $iInstituicao = ($oParam->matriz == 'd')   ? " r.c61_instit = $iInstit and " : '';
 $sFormato     = (!empty($oParam->formato)) ? $oParam->formato : '';
 
-$sSQL = "select si09_instsiconfi from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit");
+$sSQL = "
+          select si09_instsiconfi
+            from infocomplementaresinstit
+              inner join db_config on codigo = si09_instit
+              inner join db_tipoinstit on db21_codtipo = db21_tipoinstit
+                and db21_codtipo = 1 ";
 
 $sIdentifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
 $sEntriesType = "trialbalance";
@@ -37,6 +42,10 @@ switch ($oParam->exec) {
   case 'gerarMsc':
 
     try {
+
+      if (empty($sIdentifier)) {
+        throw new Exception ("Não existe código SICONFI para a Prefeitura no cadastro de Instituições");
+      }
 
       $msc = new MSC;
 
@@ -64,7 +73,7 @@ switch ($oParam->exec) {
     } catch(Exception $eErro) {
 
       $oRetorno->status  = 2;
-      $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \\n \\n {$eErro->getMessage()}";
+      $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \n \n {$eErro->getMessage()}";
       $oRetorno->message = $sGetMessage;
 
     }
@@ -73,8 +82,7 @@ switch ($oParam->exec) {
 
 }
 
-if (isset($oRetorno->erro)) {
-  $oRetorno->erro = utf8_encode($oRetorno->erro);
+if ($oRetorno->status == 2) {
+  $oRetorno->message = utf8_encode($oRetorno->message);
 }
-
 echo $oJson->encode($oRetorno);
