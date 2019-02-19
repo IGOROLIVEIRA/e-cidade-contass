@@ -213,7 +213,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                               JOIN orcorgao o ON o.o40_orgao = u.o41_orgao
                               AND o.o40_anousu = u.o41_anousu
                               WHERE db01_coddepto = ac16_deptoresponsavel
-                                  AND db01_anousu = ac16_anousu
+                                  AND db01_anousu = e60_anousu
                               LIMIT 1)
                 END AS codunidadesubrespcontrato,
 				case when ac16_sequencial is null then null else ac16_numeroacordo end as nrocontrato,
@@ -440,6 +440,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                 trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho->especificaoempenho), 0, 200)));
             $aAnoContrato = explode('-', $oEmpenho->dtassinaturacontrato);
             if (date('m', strtotime($oEmpenho->dtempenho)) < date('m', strtotime($oEmpenho->dataassinaturacontrato)) || $oEmpenho->dataassinaturacontrato == null) {
+
                 $oDadosEmpenho->si106_despdeccontrato = 2;
                 if ($oEmpenho->despdeccontrato == 3) {
                     $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao->codorgao;
