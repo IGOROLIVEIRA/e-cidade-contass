@@ -261,8 +261,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalancete16 = new cl_balancete162019();
         $obalancete17 = new cl_balancete172019();
         $obalancete18 = new cl_balancete182019();
-        $obalancete18 = new cl_balancete192019();
-        $obalancete18 = new cl_balancete202019();
+        $obalancete19 = new cl_balancete192019();
+        $obalancete20 = new cl_balancete202019();
+        $obalancete21 = new cl_balancete212019();
+        $obalancete22 = new cl_balancete222019();
         $obalancete23 = new cl_balancete232019();
         $obalancete24 = new cl_balancete242019();
         $obalancete25 = new cl_balancete252019();
@@ -276,6 +278,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalancete25->excluir(null, "si195_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si195_instit = " . db_getsession("DB_instit"));
         $obalancete24->excluir(null, "si191_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si191_instit = " . db_getsession("DB_instit"));
         $obalancete23->excluir(null, "si190_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si190_instit = " . db_getsession("DB_instit"));
+        $obalancete22->excluir(null, "si189_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si189_instit = " . db_getsession("DB_instit"));
+        $obalancete21->excluir(null, "si188_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si188_instit = " . db_getsession("DB_instit"));
+        $obalancete20->excluir(null, "si187_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si187_instit = " . db_getsession("DB_instit"));
+        $obalancete19->excluir(null, "si186_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si186_instit = " . db_getsession("DB_instit"));
         $obalancete18->excluir(null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit = " . db_getsession("DB_instit"));
         $obalancete17->excluir(null, "si184_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si184_instit = " . db_getsession("DB_instit"));
         $obalancete16->excluir(null, "si183_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si183_instit = " . db_getsession("DB_instit"));
@@ -325,8 +331,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                              where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
-        $rsReg10 = db_query($sqlReg10) ;
-
+        $rsReg10 = db_query($sqlReg10);
 
         $aDadosAgrupados10 = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsReg10); $iCont++) {
