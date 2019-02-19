@@ -19,9 +19,9 @@ $oRetorno->status  = 1;
 $iInstit = db_getsession('DB_instit');
 $iAnoUsu = date("Y", db_getsession("DB_datausu"));
 
-$iMes     = (!empty($oParam->mes))     ? $oParam->mes     : '';
-$sMatriz  = (!empty($oParam->matriz))  ? $oParam->matriz  : '';
-$sFormato = (!empty($oParam->formato)) ? $oParam->formato : '';
+$iMes         = (!empty($oParam->mes))     ? $oParam->mes     : '';
+$iInstituicao = ($oParam->matriz == 'd')   ? " r.c61_instit = $iInstit and " : '';
+$sFormato     = (!empty($oParam->formato)) ? $oParam->formato : '';
 
 $sSQL = "select si09_instsiconfi from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit");
 
@@ -47,6 +47,7 @@ switch ($oParam->exec) {
       $msc->setPeriodStart($sPeriodStart);
       $msc->setPeriodEnd($sPeriodEnd);
       $msc->setInstant($sInstant);
+      $msc->setTipoMatriz($iInstituicao);
       $msc->setNomeArq($sNomeArq."$iAnoUsu$iMes");
       $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
 
