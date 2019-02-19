@@ -1,0 +1,3 @@
+<?
+$campos = "disponibilidadecaixa.c224_sequencial,disponibilidadecaixa.c224_fonte,disponibilidadecaixa.c224_vlrcaixabruta,disponibilidadecaixa.c224_rpexercicioanterior,disponibilidadecaixa.c224_vlrrestoarecolher,disponibilidadecaixa.c224_vlrrestoregativofinanceiro,disponibilidadecaixa.c224_vlrdisponibilidadecaixa,disponibilidadecaixa.c224_instit,disponibilidadecaixa.c224_anousu as db_c224_anousu";
+?>

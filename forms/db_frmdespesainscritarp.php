@@ -68,7 +68,7 @@
      GROUP BY 1, 2, 3,z01_numcgm, e60_anousu
      ORDER BY 1, 2, 3) AS total
      WHERE (vlr_n_lqd > 0 OR vlr_lqd > 0)";
-//            die($sql);exit;
+    //                die($sql);exit;
     $rsEmpenhos = db_query($sql);
 
     ?>
@@ -93,6 +93,17 @@
         $aEmpenhos = db_utils::getCollectionByRecord($rsEmpenhos);
         $iTotalFontes = 0;
         $arrayEmpenhos = 0;
+        $oTotalrpfonte = array();
+
+        foreach ($aEmpenhos as $chave => $emp){
+            $iFonte = $emp->fonte;
+
+            if(!$oTotalrpfonte[$iFonte]){
+                $oTotalrpfonte[$iFonte]->saldo += $emp->vlr_n_lqd + $emp->vlr_lqd;
+            }else{
+                $oTotalrpfonte[$iFonte]->saldo += $emp->vlr_n_lqd + $emp->vlr_lqd;
+            }
+        }
 
         foreach ($aEmpenhos as $key => $oEmp):
             $iFonte = $oEmp->fonte;
@@ -100,12 +111,15 @@
 
             if (!isset($arrayFontes[$iFonte])) {
                 ?>
-
+                <center>
+                    <input type="submit" value="Salvar">
+                </center>
+                <br>
                 <table>
                     <tr class="DBGrid">
                         <td class="table_header" style="width: 30px;"> Fonte </td>
-                        <td class="table_header" style="width: 50px;"> <?= $iFonte ?> </td>
-                        <th class="table_header" style="width: 120px;"> Disponibilidade Total </th>
+                        <td class="table_header" style="width: 75px;"> <?= $iFonte ?> </td>
+                        <th class="table_header" style="width: 156px;" rowspan="2"> Disponibilidade Total </th>
                         <td class="table_header" style="width: 100px;">
                             <input type="text" name="aFonte[<?= $iFonte ?>][disp_total]" value="0" style="width: 100px; background: #DEB887;" readonly="true">
                         </td>
@@ -114,20 +128,32 @@
                             <input type="text" name="aFonte[<?= $iFonte ?>][vlr_utilizado]" value="0" style="width: 100px; background: #DEB887;" readonly="true">
                         </td>
                         <th class="table_header" style="width: 100px;">Saldo Disponivel</th>
-                        <td class="table_header" style="width: 110px;" colspan="2">
+                        <td class="table_header" style="width: 110px;">
                             <input type="text" name="aFonte[<?= $iFonte ?>][vlr_disponivel]" value="0" style="width: 100px; background: #DEB887;" readonly="true">
                         </td>
+
+                        <th class="table_header" style="width: 70px;">Saldo Rp</th>
+                        <td class="table_header" style="width: 70px;">
+                            <input type="text" name="aFonte[<?= $iFonte ?>][vlr_totalrp]" value="<?= $oTotalrpfonte[$iFonte]->saldo?>" style="width: 95px; background: #DEB887;" readonly="true">
+                        </td>
+                        <th rowspan="2">
+                            <input type="button" nome="" value="Aplicar Disp. T" rowspan="2" onclick="js_aplicardisptotal(<?= $iFonte ?>)">
+                        </th>
+                        </td>
+                    </tr>
+                </table>
+                <table>
                     <tr>
-                    <tr>
-                        <th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th>
+                        <th class="table_header" style="width: 33px; cursor: pointer;" onclick="marcarTodos(<?= $iFonte ?>);">M</th>
                         <th class="table_header" style="width: 70px;">Nº Empenho</th>
                         <th class="table_header" style="width: 240px;">Credor</th>
                         <th class="table_header" style="width: 100px;">Saldo não Liquidado</th>
-                        <th class="table_header" style="width: 100px;">Saldo Liquidado</th>
+                        <th class="table_header" style="width: 110px;">Saldo Liquidado</th>
                         <th class="table_header" style="width: 100px;">Valor de Disp. RPNP</th>
                         <th class="table_header" style="width: 100px;">Valor de Disp. RPP</th>
                         <th class="table_header" style="width: 100px;">Valor Sem Disp. RPNP</th>
                         <th class="table_header" style="width: 100px;">Valor Sem Disp. RPP</th>
+                        <th class="table_header" style="width: 100px;">Dis. RPP e RPNP</th>
                     </tr>
                 </table>
                 <?
@@ -137,7 +163,7 @@
             <table class="DBGrid">
 
                 <th class="table_header" style="width: 33px">
-                    <input type="checkbox" class="marca_itens" name="aItonsMarcados[<?= $iEmpenho ?>]" value="<?= $iEmpenho ?>" id="<?= $iFonte?>">
+                    <input type="checkbox" class="marca_itens[<?= $iFonte ?>]" name="aItonsMarcados" value="<?= $iEmpenho ?>" id="<?= $iEmpenho?>">
                 </th>
 
                 <td class="linhagrid" style="width: 70px">
@@ -180,6 +206,10 @@
                     <?= $iEmpenho ?>
                     <input type="hidden" name="aEmpenho[<?= $iEmpenho ?>][fonte][<?= $iFonte ?>]" value="<?= $oEmp->fonte ?>" id="<?= $iFonte?>">
                 </td>
+
+                <td class="linhagrid" style="width: 100px;">
+                    <input type="button" name="aEmpenho[<?= $iEmpenho ?>][aplicar][<?= $iFonte ?>]" value="Aplicar" id="<?= $iFonte?>" onclick="js_aplicar(<?= $iFonte ?>,<?= $iEmpenho?>)">
+                </td>
             </table>
             <?
             $iTotalFontes++;
@@ -189,9 +219,6 @@
             ?>
 
         <?php endforeach; ?>
-        <center>
-            <input type="submit" value="Salvar">
-        </center>
     </form>
 </div>
 <script>
@@ -202,16 +229,24 @@
     js_buscarDisponibilidade(document.getElementById('o15_codtri').value);
 
     function aItens() {
-        var itensNum = document.querySelectorAll('.marca_itens');
+        var itensNum = document.getElementsByName("aItonsMarcados");
 
         return Array.prototype.map.call(itensNum, function (item) {
             return item;
         });
     }
 
-    function marcarTodos() {
+    function aItensFonte(fonte) {
+        var itensNum = document.getElementsByClassName("marca_itens["+ fonte +"]");
 
-        aItens().forEach(function (item) {
+        return Array.prototype.map.call(itensNum, function (item) {
+            return item;
+        });
+    }
+
+    function marcarTodos(fonte) {
+
+        aItensFonte(fonte).forEach(function (item) {
 
             var check = item.classList.contains('marcado');
 
@@ -255,29 +290,26 @@
         let vlr_dispCaixa      = document.form1['aFonte['+fonte+'][disp_total]'].value;
         let vlr_utilizado      = document.form1['aFonte['+fonte+'][vlr_utilizado]'].value;
 
-        if(vlr_dispCaixa <= 0){
-            alert("Não existe mais saldo disponivel a ser distribuido!");
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].style.background = '#DEB887';
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].value = 0;
-            document.form1['aItonsMarcados['+ codigo +']'].checked = false;
-        }else{
-            document.form1['aItonsMarcados['+ codigo +']'].checked = true;
-            document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = Number(vlr_disponivel) - Number(vlr_dispRPNP);
-        }
-
         if(vlr_n_lqd == 0){
             alert("Não existe saldo não liquidado para este empenho!");
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].style.background = '#DEB887';
+            // document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].style.background = '#DEB887';
             document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].value = 0;
-            document.form1['aItonsMarcados['+ codigo +']'].checked = false;
+            document.getElementById(codigo).checked = false;
         }else{
             if(Number(vlr_dispRPNP) > Number(vlr_n_lqd)){
                 alert("Erro! Valor de Disp. RPNP maior que valor não liquidado");
                 document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].value = 0;
-                document.form1['aItonsMarcados['+ codigo +']'].checked = false;
+                document.getElementById(codigo).checked = false;
             }else{
                 let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
-                document.form1['aEmpenho[' + codigo + '][vlr_semRPNP]['+fonte+']'].value = js_roundDecimal(resultvlrsemRPNP,2);
+                if(vlr_dispRPNP > vlr_disponivel){
+                    alert("Erro! Não existe saldo disponivel para essa operação.");
+                    document.getElementById(codigo).checked = false;
+                }else {
+                    document.form1['aEmpenho[' + codigo + '][vlr_semRPNP]['+fonte+']'].value = js_roundDecimal(resultvlrsemRPNP,2);
+                    document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = js_roundDecimal(Number(vlr_disponivel) - Number(vlr_dispRPNP),2);
+                    document.getElementById(codigo).checked = true;
+                }
             }
         }
     }
@@ -293,22 +325,9 @@
         let vlr_dispCaixa      = document.form1['aFonte['+fonte+'][disp_total]'].value;
         let vlr_utilizado      = document.form1['aFonte['+fonte+'][vlr_utilizado]'].value;
 
-        if(Number(vlr_dispCaixa) <= 0){
-            alert("Não existe mais saldo disponivel a ser distribuido!");
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].style.background = '#DEB887';
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].value = 0;
-            document.form1['aItonsMarcados['+ codigo +']'].checked = false;
-        }else{
-            document.form1['aItonsMarcados['+ codigo +']'].checked = true;
-            console.log("aqui");
-            console.log(vlr_disponivel);
-            console.log(vlr_dispRPP);
-            document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = Number(vlr_disponivel) - Number(vlr_dispRPP);
-        }
-
         if(Number(vlr_lqd) == 0){
             alert("Não existe saldo liquidado para este empenho!");
-            document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].style.background = '#DEB887';
+            // document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].style.background = '#DEB887';
             document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].value = 0;
             document.form1['aItonsMarcados['+ codigo +']'].checked = false;
         }else{
@@ -318,7 +337,14 @@
                 document.form1['aItonsMarcados['+ codigo +']'].checked = false;
             }else {
                 let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
-                document.form1['aEmpenho[' + codigo + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP,2);
+                if(vlr_dispRPP > vlr_disponivel) {
+                    alert("Erro! Não existe saldo disponivel para essa operação.");
+                    document.getElementById(codigo).checked = false;
+                }else {
+                    document.form1['aEmpenho[' + codigo + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP,2);
+                    document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = js_roundDecimal(Number(vlr_disponivel) - Number(vlr_dispRPP),2);
+                    document.getElementById(codigo).checked = true;
+                }
             }
         }
     }
@@ -329,6 +355,16 @@
 
     function getItensMarcados() {
         return aItens().filter(function (item) {
+            return item.checked;
+        });
+    }
+
+    /**
+     * retorna itens marcados por fonte
+     */
+    function getItensMarcadosFonte(fonte) {
+        let itensfonte = aItensFonte(fonte);
+        return itensfonte.filter(function (item) {
             return item.checked;
         });
     }
@@ -359,24 +395,28 @@
         var itensEnviar = [];
         try {
             itens.forEach(function (item) {
+
+                var fonte = item.className.substring(12);
+                fonte = fonte.replace(']','');
+                fonte = fonte.replace(' marcado','');
+
                 var elemento = 'aEmpenho[' + item.value + ']';
-                var elementofonte = 'aFonte[' + item.id + ']';
+                var elementofonte = 'aFonte[' + fonte + ']';
 
                 var novoItem = {
-                    c223_codemp:              fORM[elemento + '[empenho]['+item.id+']'].value,
-                    c223_credor:              fORM[elemento + '[credor]['+item.id+']'].value,
-                    c223_fonte:               fORM[elemento + '[fonte]['+item.id+']'].value,
-                    c223_vlrnaoliquidado:     fORM[elemento + '[vlr_n_lqd]['+item.id+']'].value,
-                    c223_vlrliquidado:        fORM[elemento + '[vlr_lqd]['+item.id+']'].value,
-                    c223_vlrdisRPNP:          fORM[elemento + '[vlr_dispRPNP]['+item.id+']'].value,
-                    c223_vlrdisRPP:           fORM[elemento + '[vlr_dispRPP]['+item.id+']'].value,
-                    c223_vlrsemdisRPNP:       fORM[elemento + '[vlr_semRPNP]['+item.id+']'].value,
-                    c223_vlrsemdisRPP:        fORM[elemento + '[vlr_semRPP]['+item.id+']'].value,
+                    c223_codemp:              fORM[elemento + '[empenho]['+fonte+']'].value,
+                    c223_credor:              fORM[elemento + '[credor]['+fonte+']'].value,
+                    c223_fonte:               fORM[elemento + '[fonte]['+fonte+']'].value,
+                    c223_vlrnaoliquidado:     fORM[elemento + '[vlr_n_lqd]['+fonte+']'].value,
+                    c223_vlrliquidado:        fORM[elemento + '[vlr_lqd]['+fonte+']'].value,
+                    c223_vlrdisRPNP:          fORM[elemento + '[vlr_dispRPNP]['+fonte+']'].value,
+                    c223_vlrdisRPP:           fORM[elemento + '[vlr_dispRPP]['+fonte+']'].value,
+                    c223_vlrsemdisRPNP:       fORM[elemento + '[vlr_semRPNP]['+fonte+']'].value,
+                    c223_vlrsemdisRPP:        fORM[elemento + '[vlr_semRPP]['+fonte+']'].value,
                     c223_vlrdisptotal:        fORM[elementofonte + '[disp_total]'].value,
                     c223_vlrutilizado:        fORM[elementofonte + '[vlr_utilizado]'].value,
                     c223_vlrdisponivel:       fORM[elementofonte + '[vlr_disponivel]'].value
                 };
-                // console.log(novoItem);
                 itensEnviar.push(novoItem);
             });
             novoAjax({
@@ -466,13 +506,12 @@
     function js_carregarVlorDisp(oRetorno) {
         var vlrDispFonte = JSON.parse(oRetorno.responseText.urlDecode());
 
-        // console.log(vlrDispFonte);
         if (vlrDispFonte != null) {
 
             vlrDispFonte.fontes.forEach(function (fonte, key) {
-                // console.log(fonte.totalVlrDisrpnp);
+                let VlrUtilizado = Number(fonte.saldoUtilizado);
                 if (document.form1['aFonte[' + fonte.fonte + '][vlr_utilizado]'] != undefined) {
-                    document.form1['aFonte[' + fonte.fonte + '][vlr_utilizado]'].value = fonte.saldoUtilizado;
+                    document.form1['aFonte[' + fonte.fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizado,2);
                 }
             });
         }
@@ -491,9 +530,8 @@
     }
 
     /**
-     * funcao para carregar o valor Disponibilidade total e calcular saldo disponivel
+     * funcao para carregar o valor Disponibilidade
      * */
-
 
     function js_buscarDisponibilidade(fonte) {
         buscaritens({
@@ -505,22 +543,16 @@
     function js_carregarDisponibilidade(oRetorno){
 
         var oDisponiblidade = JSON.parse(oRetorno.responseText.urlDecode());
+        oDisponiblidade.dispobilidade.forEach(function (dispfonte, key) {
 
-        oDisponiblidade.disponibilidadecaixa.forEach(function (dispfonte, key) {
-            Object.keys(dispfonte).forEach(function (fonte, key) {
-                if(document.form1['aFonte[' + fonte + '][disp_total]'] != undefined ){
-                    let vlr_utilizado     = document.form1['aFonte['+fonte+'][vlr_utilizado]'].value;
-                    let vlrdisponibilidade = dispfonte[fonte].VlrDisCaixa;
+            if(document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'] != undefined){
+                VlrUtilizado = document.form1['aFonte[' + dispfonte.c224_fonte + '][vlr_utilizado]'].value;
+            }
 
-                    if(vlrdisponibilidade < 0){
-                        document.form1['aFonte[' + fonte + '][disp_total]'].value = 0;
-                    }else {
-                        let Vlr_disponivel = vlrdisponibilidade - vlr_utilizado;
-                        document.form1['aFonte[' + fonte + '][disp_total]'].value = vlrdisponibilidade;
-                        document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = Vlr_disponivel;
-                    }
-                }
-            });
+            if(document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'] != undefined ){
+                document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'].value = dispfonte.c224_vlrdisponibilidadecaixa;
+                document.form1['aFonte[' + dispfonte.c224_fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(dispfonte.c224_vlrdisponibilidadecaixa) - Number(VlrUtilizado),2);
+            }
         });
     }
 
@@ -535,4 +567,114 @@
             }
         });
     }
+
+    function js_aplicardisptotal(fonte) {
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+
+        if(Number(VlrTotalRP) > Number(VlrDispTotal)){
+            alert("Erro! Valor Total RP maior que Valor Disp. Total");
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = false;
+            });
+        }else {
+            let VlrUtilizadoFonte = 0;
+            getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                itens.checked = true;
+                let vlr_lqd        = document.form1['aEmpenho[' + itens.value + '][vlr_lqd]['+ fonte +']'].value;
+                let vlr_n_lqd      = document.form1['aEmpenho[' + itens.value + '][vlr_n_lqd]['+ fonte +']'].value;
+                VlrUtilizadoFonte += Number(vlr_lqd) + Number(vlr_n_lqd);
+
+                document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = vlr_n_lqd;
+                document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = vlr_lqd;
+
+            });
+            if(VlrUtilizadoFonte > VlrDispTotal){
+                alert("Erro! Valor utilizado maior que valor Disponivel");
+                getItensMarcadosFonte(fonte).forEach(function (itens, key) {
+                    itens.checked = false;
+                    document.form1['aEmpenho['+ itens.value +'][vlr_dispRPNP]['+ fonte +']'].value = 0;
+                    document.form1['aEmpenho['+ itens.value +'][vlr_dispRPP]['+ fonte +']'].value = 0;
+                });
+            }
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
+
+        }
+    }
+
+    function js_aplicar(fonte,emp) {
+
+        let vlr_dispRPNP = document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value;
+        let vlr_dispRPP  = document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value;
+        let vlr_n_lqd    = document.form1['aEmpenho[' + emp + '][vlr_n_lqd][' + fonte + ']'].value;
+        let vlr_lqd      = document.form1['aEmpenho[' + emp + '][vlr_lqd][' + fonte + ']'].value;
+        let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
+        let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
+        let VlrDisponivel   = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
+        document.getElementById(emp).checked = true;
+
+        if(Number(VlrDisponivel) == 0 || Number(vlr_lqd) > Number(VlrDisponivel) || Number(vlr_n_lqd) > Number(VlrDisponivel)){
+            alert("Erro! Não existe saldo Disponivel para essa Operação");
+            document.getElementById(emp).checked = false;
+        }else {
+            if (Number(VlrTotalRP) > (VlrDispTotal) && Number(VlrDispTotal) == 0) {
+                alert("Erro! Valor Total RP maior que Valor Disp. Total");
+                document.getElementById(emp).checked = false;
+            } else {
+
+                if (Number(vlr_lqd) == 0) {
+                    // alert("Não existe saldo liquidado para este empenho!");
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].style.background = '#DEB887';
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = 0;
+                } else {
+                    if (Number(vlr_dispRPP) > Number(vlr_lqd)) {
+                        // alert("Erro! Valor de Disp. RPP maior que valor liquidado.");
+                        document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = 0;
+                    } else {
+                        let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
+                        document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP, 2);
+                        if (vlr_dispRPP == 0 || vlr_dispRPP == '') {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = vlr_lqd;
+                        } else {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = vlr_dispRPP;
+                        }
+                    }
+                }
+
+                if (vlr_n_lqd == 0) {
+                    // alert("Não existe saldo não liquidado para este empenho!");
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].style.background = '#DEB887';
+                    document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
+                } else {
+                    if (Number(vlr_dispRPNP) > Number(vlr_n_lqd)) {
+                        // alert("Erro! Valor de Disp. RPNP maior que valor não liquidado");
+                        document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
+                    } else {
+                        let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
+                        document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPNP, 2);
+                        if (vlr_dispRPNP == 0 || vlr_dispRPNP == '') {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_n_lqd, 2);
+                        } else {
+                            document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_dispRPNP, 2);
+                        }
+                    }
+                }
+            }
+            /**
+             *Calcular valor Disponivel
+             */
+            let VlrUtilizadoFonte = 0;
+            aItensFonte(fonte).forEach(function (itens, key) {
+                // itens.checked = true;
+                let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                VlrUtilizadoFonte += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+            });
+
+            document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte), 2);
+        }
+    }
+
 </script>
