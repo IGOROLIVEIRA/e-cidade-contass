@@ -50,7 +50,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $sql = "select z01_cgccpf from cgm where z01_numcgm = {$z01_numcgm}";
         $result = db_utils::fieldsMemory(db_query($sql), 0)->z01_cgccpf;
         if ( $result == 0) {
-            throw new Exception("Cgm do Constituinte nao informado para matricula {$matricula} / cod vinculoS");
+            $result = "";
         }
         return $result;
     }
@@ -497,7 +497,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
         if($oDados10->rh30_vinculo == 'P') {
-            $clflpgo10->si195_nrocpfinstituidor             = $this->getcpf($oDados10->rh02_cgminstituidor,$oDados10->rh02_regist);
+            if($oDados10->rh02_cgminstituidor == "" || $oDados10->rh02_cgminstituidor == null){
+                $clflpgo10->si195_nrocpfinstituidor         = "";
+            }else{
+                $clflpgo10->si195_nrocpfinstituidor         = $this->getcpf($oDados10->rh02_cgminstituidor,$oDados10->rh02_regist);
+            }
             $clflpgo10->si195_datobitoinstituidor           = implode("-",array_reverse(explode("-",$oDados10->rh02_dtobitoinstituidor)));
             $clflpgo10->si195_tipodependencia               = $oDados10->rh02_tipoparentescoinst;
         }else{
