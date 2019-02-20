@@ -107,7 +107,7 @@ class cl_vinculopcaspmsc {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+     /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->c210_pcaspestrut,$this->c210_mscestrut  ));
@@ -121,7 +121,7 @@ class cl_vinculopcaspmsc {
          $resac = db_query("insert into db_acount values($acount,1010192,1009244,'','".AddSlashes(pg_result($resaco,0,'c210_pcaspestrut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,1009245,'','".AddSlashes(pg_result($resaco,0,'c210_mscestrut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-    }
+       }*/
     return true;
   }
 
