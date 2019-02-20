@@ -433,7 +433,7 @@ class cl_infocomplementaresinstit {
 		}
 	}
   if(trim($this->si09_instsiconfi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_instsiconfi"])){
-    $sql  .= $virgula." si09_instsiconfi = ".($this->si09_instsiconfi == '' ? 'null' : $this->si09_instsiconfi);
+    $sql  .= $virgula." si09_instsiconfi = ".($this->si09_instsiconfi == '' ? 'null' : "'$this->si09_instsiconfi'");
     $virgula = ",";
     if($this->si09_instsiconfi == 1 && empty($this->si09_instsiconfi)){
       $this->erro_sql = " Campo instituição SICONFI não Informado.";
