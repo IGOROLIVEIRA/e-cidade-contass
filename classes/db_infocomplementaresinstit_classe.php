@@ -243,7 +243,7 @@ class cl_infocomplementaresinstit {
                                ,$this->si09_nroleicute
                                ,". ($this->si09_dataleicute == "null" || $this->si09_dataleicute == "" ? "null" : "'" . $this->si09_dataleicute . "'") . "
                                ,$this->contaunicatesoumunicipal
-                               ,".($this->si09_instsiconfi == '' ? 'null' : $this->si09_instsiconfi)."
+                               ,".($this->si09_instsiconfi == '' ? 'null' : "'" . $this->si09_instsiconfi . "'")."
                       )";
      $result = db_query($sql);
      if($result==false){
