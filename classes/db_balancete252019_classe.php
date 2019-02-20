@@ -22,12 +22,12 @@ class cl_balancete252019 {
   public $si195_codfundo = null;
   public $si195_atributosf = null;
   public $si195_naturezareceita = 0;
-  public $si195_saldoinicialsf = 0;
-  public $si195_naturezasaldoinicialsf = null;
-  public $si195_totaldebitossf = 0;
-  public $si195_totalcreditossf = 0;
-  public $si195_saldofinalsf = 0;
-  public $si195_naturezasaldofinalsf = null;
+  public $si195_saldoinicialnrsf = 0;
+  public $si195_naturezasaldoinicialnrsf = null;
+  public $si195_totaldebitosnrsf = 0;
+  public $si195_totalcreditosnrsf = 0;
+  public $si195_saldofinalnrsf = 0;
+  public $si195_naturezasaldofinalnrsf = null;
   public $si195_mes = 0;
   public $si195_instit = 0;
   public $si195_reg10 = 0;
@@ -39,12 +39,12 @@ class cl_balancete252019 {
                  si195_codfundo = varchar(8) = si195_codfundo
                  si195_atributosf = varchar(1) = si195_atributosf
                  si195_naturezareceita = int8 = si195_naturezareceita
-                 si195_saldoinicialsf = float8 = si195_saldoinicialsf
-                 si195_naturezasaldoinicialsf = varchar(1) = si195_naturezasaldoinicialsf
-                 si195_totaldebitossf = float8 = si195_totaldebitossf
-                 si195_totalcreditossf = float8 = si195_totalcreditossf
-                 si195_saldofinalsf = float8 = si195_saldofinalsf
-                 si195_naturezasaldofinalsf = varchar(1) = si195_naturezasaldofinalsf
+                 si195_saldoinicialnrsf = float8 = si195_saldoinicialnrsf
+                 si195_naturezasaldoinicialnrsf = varchar(1) = si195_naturezasaldoinicialnrsf
+                 si195_totaldebitosnrsf = float8 = si195_totaldebitosnrsf
+                 si195_totalcreditosnrsf = float8 = si195_totalcreditosnrsf
+                 si195_saldofinalnrsf = float8 = si195_saldofinalnrsf
+                 si195_naturezasaldofinalnrsf = varchar(1) = si195_naturezasaldofinalnrsf
                  si195_mes = int8 = si195_mes
                  si195_instit = int8 = si195_instit
                  si195_reg10 = int8 = si195_reg10
@@ -76,12 +76,12 @@ class cl_balancete252019 {
        $this->si195_codfundo = ($this->si195_codfundo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codfundo"]:$this->si195_codfundo);
        $this->si195_atributosf = ($this->si195_atributosf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_atributosf"]:$this->si195_atributosf);
        $this->si195_naturezareceita = ($this->si195_naturezareceita == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_naturezareceita"]:$this->si195_naturezareceita);
-       $this->si195_saldoinicialsf = ($this->si195_saldoinicialsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialsf"]:$this->si195_saldoinicialsf);
-       $this->si195_naturezasaldoinicialsf = ($this->si195_naturezasaldoinicialsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialsf"]:$this->si195_naturezasaldoinicialsf);
-       $this->si195_totaldebitossf = ($this->si195_totaldebitossf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_totaldebitossf"]:$this->si195_totaldebitossf);
-       $this->si195_totalcreditossf = ($this->si195_totalcreditossf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_totalcreditossf"]:$this->si195_totalcreditossf);
-       $this->si195_saldofinalsf = ($this->si195_saldofinalsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_saldofinalsf"]:$this->si195_saldofinalsf);
-       $this->si195_naturezasaldofinalsf = ($this->si195_naturezasaldofinalsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalsf"]:$this->si195_naturezasaldofinalsf);
+       $this->si195_saldoinicialnrsf = ($this->si195_saldoinicialnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialnrsf"]:$this->si195_saldoinicialnrsf);
+       $this->si195_naturezasaldoinicialnrsf = ($this->si195_naturezasaldoinicialnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialnrsf"]:$this->si195_naturezasaldoinicialnrsf);
+       $this->si195_totaldebitosnrsf = ($this->si195_totaldebitosnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_totaldebitosnrsf"]:$this->si195_totaldebitosnrsf);
+       $this->si195_totalcreditosnrsf = ($this->si195_totalcreditosnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_totalcreditosnrsf"]:$this->si195_totalcreditosnrsf);
+       $this->si195_saldofinalnrsf = ($this->si195_saldofinalnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_saldofinalnrsf"]:$this->si195_saldofinalnrsf);
+       $this->si195_naturezasaldofinalnrsf = ($this->si195_naturezasaldofinalnrsf == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalnrsf"]:$this->si195_naturezasaldofinalnrsf);
        $this->si195_mes = ($this->si195_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_mes"]:$this->si195_mes);
        $this->si195_instit = ($this->si195_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_instit"]:$this->si195_instit);
        $this->si195_reg10 = ($this->si195_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_reg10"]:$this->si195_reg10);
@@ -138,54 +138,54 @@ class cl_balancete252019 {
        $this->erro_status = "0";
        return false;
      }
-//     if ($this->si195_saldoinicialsf == null ) {
-//       $this->erro_sql = " Campo si195_saldoinicialsf não informado.";
-//       $this->erro_campo = "si195_saldoinicialsf";
+    if ($this->si195_saldoinicialnrsf == null ) {
+      $this->erro_sql = " Campo si195_saldoinicialnrsf não informado.";
+      $this->erro_campo = "si195_saldoinicialnrsf";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+     // if ($this->si195_naturezasaldoinicialnrsf == null ) {
+       // $this->erro_sql = " Campo si195_naturezasaldoinicialnrsf não informado.";
+       // $this->erro_campo = "si195_naturezasaldoinicialnrsf";
+       // $this->erro_banco = "";
+       // $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       // $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       // $this->erro_status = "0";
+       // return false;
+     // }
+//     if ($this->si195_totaldebitosnrsf == null ) {
+//       $this->erro_sql = " Campo si195_totaldebitosnrsf não informado.";
+//       $this->erro_campo = "si195_totaldebitosnrsf";
 //       $this->erro_banco = "";
 //       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
 //       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
 //       $this->erro_status = "0";
 //       return false;
 //     }
-     if ($this->si195_naturezasaldoinicialsf == null ) {
-       $this->erro_sql = " Campo si195_naturezasaldoinicialsf não informado.";
-       $this->erro_campo = "si195_naturezasaldoinicialsf";
+//     if ($this->si195_totalcreditosnrsf == null ) {
+//       $this->erro_sql = " Campo si195_totalcreditosnrsf não informado.";
+//       $this->erro_campo = "si195_totalcreditosnrsf";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
+     if ($this->si195_saldofinalnrsf == null ) {
+       $this->erro_sql = " Campo si195_saldofinalnrsf não informado.";
+       $this->erro_campo = "si195_saldofinalnrsf";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-//     if ($this->si195_totaldebitossf == null ) {
-//       $this->erro_sql = " Campo si195_totaldebitossf não informado.";
-//       $this->erro_campo = "si195_totaldebitossf";
-//       $this->erro_banco = "";
-//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//       $this->erro_status = "0";
-//       return false;
-//     }
-//     if ($this->si195_totalcreditossf == null ) {
-//       $this->erro_sql = " Campo si195_totalcreditossf não informado.";
-//       $this->erro_campo = "si195_totalcreditossf";
-//       $this->erro_banco = "";
-//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//       $this->erro_status = "0";
-//       return false;
-//     }
-     if ($this->si195_saldofinalsf == null ) {
-       $this->erro_sql = " Campo si195_saldofinalsf não informado.";
-       $this->erro_campo = "si195_saldofinalsf";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->si195_naturezasaldofinalsf == null ) {
-       $this->erro_sql = " Campo si195_naturezasaldofinalsf não informado.";
-       $this->erro_campo = "si195_naturezasaldofinalsf";
+     if ($this->si195_naturezasaldofinalnrsf == null ) {
+       $this->erro_sql = " Campo si195_naturezasaldofinalnrsf não informado.";
+       $this->erro_campo = "si195_naturezasaldofinalnrsf";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -265,12 +265,12 @@ class cl_balancete252019 {
                                       ,si195_codfundo
                                       ,si195_atributosf
                                       ,si195_naturezareceita
-                                      ,si195_saldoinicialsf
-                                      ,si195_naturezasaldoinicialsf
-                                      ,si195_totaldebitossf
-                                      ,si195_totalcreditossf
-                                      ,si195_saldofinalsf
-                                      ,si195_naturezasaldofinalsf
+                                      ,si195_saldoinicialnrsf
+                                      ,si195_naturezasaldoinicialnrsf
+                                      ,si195_totaldebitosnrsf
+                                      ,si195_totalcreditosnrsf
+                                      ,si195_saldofinalnrsf
+                                      ,si195_naturezasaldofinalnrsf
                                       ,si195_mes
                                       ,si195_instit
                                       ,si195_reg10
@@ -282,12 +282,12 @@ class cl_balancete252019 {
                                ,'$this->si195_codfundo'
                                ,'$this->si195_atributosf'
                                ,$this->si195_naturezareceita
-                               ,".($this->si195_saldoinicialsf == "null" || $this->si195_saldoinicialsf == "" ? 0 : $this->si195_saldoinicialsf)."
-                               ,'$this->si195_naturezasaldoinicialsf'
-                               ,$this->si195_totaldebitossf
-                               ,".($this->si195_totalcreditossf == "null" || $this->si195_totalcreditossf == "" ? 0 : $this->si195_totalcreditossf)."
-                               ,".($this->si195_saldofinalsf == "null" || $this->si195_saldofinalsf == "" ? 0 : $this->si195_saldofinalsf)."
-                               ,'$this->si195_naturezasaldofinalsf'
+                               ,".($this->si195_saldoinicialnrsf == "null" || $this->si195_saldoinicialnrsf == "" ? 0 : $this->si195_saldoinicialnrsf)."
+                               ,'$this->si195_naturezasaldoinicialnrsf'
+                               ,$this->si195_totaldebitosnrsf
+                               ,".($this->si195_totalcreditosnrsf == "null" || $this->si195_totalcreditosnrsf == "" ? 0 : $this->si195_totalcreditosnrsf)."
+                               ,".($this->si195_saldofinalnrsf == "null" || $this->si195_saldofinalnrsf == "" ? 0 : $this->si195_saldofinalnrsf)."
+                               ,'$this->si195_naturezasaldofinalnrsf'
                                ,$this->si195_mes
                                ,$this->si195_instit
                                ,$this->si195_reg10
@@ -333,12 +333,12 @@ class cl_balancete252019 {
          $resac = db_query("insert into db_acount values($acount,1010193,1009254,'','".AddSlashes(pg_result($resaco,0,'si195_codfundo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009255,'','".AddSlashes(pg_result($resaco,0,'si195_atributosf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009256,'','".AddSlashes(pg_result($resaco,0,'si195_naturezareceita'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,0,'si195_saldoinicialsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,0,'si195_naturezasaldoinicialsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,0,'si195_totaldebitossf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009260,'','".AddSlashes(pg_result($resaco,0,'si195_totalcreditossf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009261,'','".AddSlashes(pg_result($resaco,0,'si195_saldofinalsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010193,1009262,'','".AddSlashes(pg_result($resaco,0,'si195_naturezasaldofinalsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,0,'si195_saldoinicialnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,0,'si195_naturezasaldoinicialnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,0,'si195_totaldebitosnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009260,'','".AddSlashes(pg_result($resaco,0,'si195_totalcreditosnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009261,'','".AddSlashes(pg_result($resaco,0,'si195_saldofinalnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010193,1009262,'','".AddSlashes(pg_result($resaco,0,'si195_naturezasaldofinalnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009263,'','".AddSlashes(pg_result($resaco,0,'si195_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009264,'','".AddSlashes(pg_result($resaco,0,'si195_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009265,'','".AddSlashes(pg_result($resaco,0,'si195_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -430,12 +430,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_saldoinicialsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialsf"])) {
-       $sql  .= $virgula." si195_saldoinicialsf = $this->si195_saldoinicialsf ";
+     if (trim($this->si195_saldoinicialnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialnrsf"])) {
+       $sql  .= $virgula." si195_saldoinicialnrsf = $this->si195_saldoinicialnrsf ";
        $virgula = ",";
-       if (trim($this->si195_saldoinicialsf) == null ) {
-         $this->erro_sql = " Campo si195_saldoinicialsf não informado.";
-         $this->erro_campo = "si195_saldoinicialsf";
+       if (trim($this->si195_saldoinicialnrsf) == null ) {
+         $this->erro_sql = " Campo si195_saldoinicialnrsf não informado.";
+         $this->erro_campo = "si195_saldoinicialnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -443,12 +443,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_naturezasaldoinicialsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialsf"])) {
-       $sql  .= $virgula." si195_naturezasaldoinicialsf = '$this->si195_naturezasaldoinicialsf' ";
+     if (trim($this->si195_naturezasaldoinicialnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialnrsf"])) {
+       $sql  .= $virgula." si195_naturezasaldoinicialnrsf = '$this->si195_naturezasaldoinicialnrsf' ";
        $virgula = ",";
-       if (trim($this->si195_naturezasaldoinicialsf) == null ) {
-         $this->erro_sql = " Campo si195_naturezasaldoinicialsf não informado.";
-         $this->erro_campo = "si195_naturezasaldoinicialsf";
+       if (trim($this->si195_naturezasaldoinicialnrsf) == null ) {
+         $this->erro_sql = " Campo si195_naturezasaldoinicialnrsf não informado.";
+         $this->erro_campo = "si195_naturezasaldoinicialnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -456,12 +456,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_totaldebitossf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_totaldebitossf"])) {
-       $sql  .= $virgula." si195_totaldebitossf = $this->si195_totaldebitossf ";
+     if (trim($this->si195_totaldebitosnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_totaldebitosnrsf"])) {
+       $sql  .= $virgula." si195_totaldebitosnrsf = $this->si195_totaldebitosnrsf ";
        $virgula = ",";
-       if (trim($this->si195_totaldebitossf) == null ) {
-         $this->erro_sql = " Campo si195_totaldebitossf não informado.";
-         $this->erro_campo = "si195_totaldebitossf";
+       if (trim($this->si195_totaldebitosnrsf) == null ) {
+         $this->erro_sql = " Campo si195_totaldebitosnrsf não informado.";
+         $this->erro_campo = "si195_totaldebitosnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -469,12 +469,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_totalcreditossf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_totalcreditossf"])) {
-       $sql  .= $virgula." si195_totalcreditossf = $this->si195_totalcreditossf ";
+     if (trim($this->si195_totalcreditosnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_totalcreditosnrsf"])) {
+       $sql  .= $virgula." si195_totalcreditosnrsf = $this->si195_totalcreditosnrsf ";
        $virgula = ",";
-       if (trim($this->si195_totalcreditossf) == null ) {
-         $this->erro_sql = " Campo si195_totalcreditossf não informado.";
-         $this->erro_campo = "si195_totalcreditossf";
+       if (trim($this->si195_totalcreditosnrsf) == null ) {
+         $this->erro_sql = " Campo si195_totalcreditosnrsf não informado.";
+         $this->erro_campo = "si195_totalcreditosnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -482,12 +482,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_saldofinalsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_saldofinalsf"])) {
-       $sql  .= $virgula." si195_saldofinalsf = $this->si195_saldofinalsf ";
+     if (trim($this->si195_saldofinalnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_saldofinalnrsf"])) {
+       $sql  .= $virgula." si195_saldofinalnrsf = $this->si195_saldofinalnrsf ";
        $virgula = ",";
-       if (trim($this->si195_saldofinalsf) == null ) {
-         $this->erro_sql = " Campo si195_saldofinalsf não informado.";
-         $this->erro_campo = "si195_saldofinalsf";
+       if (trim($this->si195_saldofinalnrsf) == null ) {
+         $this->erro_sql = " Campo si195_saldofinalnrsf não informado.";
+         $this->erro_campo = "si195_saldofinalnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -495,12 +495,12 @@ class cl_balancete252019 {
          return false;
        }
      }
-     if (trim($this->si195_naturezasaldofinalsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalsf"])) {
-       $sql  .= $virgula." si195_naturezasaldofinalsf = '$this->si195_naturezasaldofinalsf' ";
+     if (trim($this->si195_naturezasaldofinalnrsf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalnrsf"])) {
+       $sql  .= $virgula." si195_naturezasaldofinalnrsf = '$this->si195_naturezasaldofinalnrsf' ";
        $virgula = ",";
-       if (trim($this->si195_naturezasaldofinalsf) == null ) {
-         $this->erro_sql = " Campo si195_naturezasaldofinalsf não informado.";
-         $this->erro_campo = "si195_naturezasaldofinalsf";
+       if (trim($this->si195_naturezasaldofinalnrsf) == null ) {
+         $this->erro_sql = " Campo si195_naturezasaldofinalnrsf não informado.";
+         $this->erro_campo = "si195_naturezasaldofinalnrsf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -576,18 +576,18 @@ class cl_balancete252019 {
              $resac = db_query("insert into db_acount values($acount,1010193,1009255,'".AddSlashes(pg_result($resaco,$conresaco,'si195_atributosf'))."','$this->si195_atributosf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezareceita"]) || $this->si195_naturezareceita != "")
              $resac = db_query("insert into db_acount values($acount,1010193,1009256,'".AddSlashes(pg_result($resaco,$conresaco,'si195_naturezareceita'))."','$this->si195_naturezareceita',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialsf"]) || $this->si195_saldoinicialsf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009257,'".AddSlashes(pg_result($resaco,$conresaco,'si195_saldoinicialsf'))."','$this->si195_saldoinicialsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialsf"]) || $this->si195_naturezasaldoinicialsf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009258,'".AddSlashes(pg_result($resaco,$conresaco,'si195_naturezasaldoinicialsf'))."','$this->si195_naturezasaldoinicialsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_totaldebitossf"]) || $this->si195_totaldebitossf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009259,'".AddSlashes(pg_result($resaco,$conresaco,'si195_totaldebitossf'))."','$this->si195_totaldebitossf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_totalcreditossf"]) || $this->si195_totalcreditossf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009260,'".AddSlashes(pg_result($resaco,$conresaco,'si195_totalcreditossf'))."','$this->si195_totalcreditossf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_saldofinalsf"]) || $this->si195_saldofinalsf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009261,'".AddSlashes(pg_result($resaco,$conresaco,'si195_saldofinalsf'))."','$this->si195_saldofinalsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalsf"]) || $this->si195_naturezasaldofinalsf != "")
-             $resac = db_query("insert into db_acount values($acount,1010193,1009262,'".AddSlashes(pg_result($resaco,$conresaco,'si195_naturezasaldofinalsf'))."','$this->si195_naturezasaldofinalsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_saldoinicialnrsf"]) || $this->si195_saldoinicialnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009257,'".AddSlashes(pg_result($resaco,$conresaco,'si195_saldoinicialnrsf'))."','$this->si195_saldoinicialnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldoinicialnrsf"]) || $this->si195_naturezasaldoinicialnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009258,'".AddSlashes(pg_result($resaco,$conresaco,'si195_naturezasaldoinicialnrsf'))."','$this->si195_naturezasaldoinicialnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_totaldebitosnrsf"]) || $this->si195_totaldebitosnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009259,'".AddSlashes(pg_result($resaco,$conresaco,'si195_totaldebitosnrsf'))."','$this->si195_totaldebitosnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_totalcreditosnrsf"]) || $this->si195_totalcreditosnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009260,'".AddSlashes(pg_result($resaco,$conresaco,'si195_totalcreditosnrsf'))."','$this->si195_totalcreditosnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_saldofinalnrsf"]) || $this->si195_saldofinalnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009261,'".AddSlashes(pg_result($resaco,$conresaco,'si195_saldofinalnrsf'))."','$this->si195_saldofinalnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["si195_naturezasaldofinalnrsf"]) || $this->si195_naturezasaldofinalnrsf != "")
+             $resac = db_query("insert into db_acount values($acount,1010193,1009262,'".AddSlashes(pg_result($resaco,$conresaco,'si195_naturezasaldofinalnrsf'))."','$this->si195_naturezasaldofinalnrsf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si195_mes"]) || $this->si195_mes != "")
              $resac = db_query("insert into db_acount values($acount,1010193,1009263,'".AddSlashes(pg_result($resaco,$conresaco,'si195_mes'))."','$this->si195_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["si195_instit"]) || $this->si195_instit != "")
@@ -657,12 +657,12 @@ class cl_balancete252019 {
            $resac  = db_query("insert into db_acount values($acount,1010193,1009254,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_codfundo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009255,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_atributosf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009256,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_naturezareceita'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_saldoinicialsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_naturezasaldoinicialsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_totaldebitossf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009260,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_totalcreditossf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009261,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_saldofinalsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010193,1009262,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_naturezasaldofinalsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009257,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_saldoinicialnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009258,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_naturezasaldoinicialnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009259,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_totaldebitosnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009260,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_totalcreditosnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009261,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_saldofinalnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010193,1009262,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_naturezasaldofinalnrsf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009263,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009264,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009265,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
