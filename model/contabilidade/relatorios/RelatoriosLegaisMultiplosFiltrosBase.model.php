@@ -579,72 +579,93 @@ class RelatoriosLegaisMultiplosFiltrosBase {
           continue;
         }
 
-        // Insere a conta original no array
+        $aContas = array();
         $aContas[] = $oConta;
+        $aContasCols1e2 = null;
+        $aContasCol4 = null;
+        $aContasCol6 = null;
+        $aContasCol8 = null;
 
-        // Organiza as colunas que serão usadas para o cálculo
-        $aColuna3= RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(3));
-        RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContas, $oLinha, $oDadosResource, $iTipoCalculo, $oDados, $aColuna3 );
+        $aColunas1e2 = null;
+        $aColuna4 = null;
+        $aColuna6 = null;
 
 
-        // DERIVAÇÃO - INÍCIO
+        if ($oVerificacaoAnoAtual->match){
 
-        // COLUNAS 1 E 2
-        // Cria as contas derivadas da conta original - Coluna 1 e 2
-        $aPrefixos = array('491','492','493','495','496','498','499');
-        $aContasCols1e2e8 = array($oConta);
+          // Organiza as colunas que serão usadas para o cálculo
+          $aColuna3 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(3));
+          RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContas, $oLinha, $oDadosResource, $iTipoCalculo, $oDados, $aColuna3);
 
-        foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
-          $aContasCols1e2e8[] = $oContaa;
-        }
+          // DERIVAÇÃO - INÍCIO
 
-        // Organiza as colunas 1 e 2 para serem utilizadas no cálculo
-        $aColunas1e2 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(1,2));
+          // COLUNAS 1 E 2
+          // Cria as contas derivadas da conta original - Coluna 1 e 2
+          $aPrefixos = array('491','492','493','495','496','498','499');
+          $aContasCols1e2 = array($oConta);
 
-        $aColuna8 = null;
-        if($RecordsetPosterior){
-          // Organiza a coluna 8 para ser utilizada no cálculo
-          $aColuna8 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(8));
-        }
-
-        // COLUNA 4
-        // Cria as contas derivadas da conta original - Coluna 4
-        $aPrefixos = array('491','492','493','496','498','499');
-        $aContasCol4 = array();
-        foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
-          $aContasCol4[] = $oContaa;
-        }
-
-        // Organiza a coluna 6 que será usada para o cálculo
-        $aColuna4 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(4));
-
-        // COLUNA 6
-        // Cria as contas derivadas da conta original - Coluna 6
-        $aPrefixos = array('495');
-        $aContasCol6 = array();
-        foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
-          $aContasCol6[] = $oContaa;
-        }
-
-        // Organiza a coluna 6 que será usada para o cálculo
-        $aColuna6 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(6));
-
-        // Percorre as linhas do balancete da receita - 2º nível
-        for ($iLinha2 = 0; $iLinha2 < $iTotalLinhas; $iLinha2++) {
-
-          $oDadosResource2 = db_utils::fieldsMemory($Recordset, $iLinha2);
-          $oDadosResource3 = db_utils::fieldsMemory($RecordsetPosterior, $iLinha2);
-
-          if($oVerificacaoAnoAtual->match){
-
-            RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCols1e2e8, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColunas1e2);
-            RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCol4, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColuna4);
-            RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCol6, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColuna6);
+          foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
+            $aContasCols1e2[] = $oContaa;
           }
 
-          if($oVerificacaoAnoPosterior->match && $RecordsetPosterior){
-            RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCols1e2e8, $oLinha, $oDadosResource3, $iTipoCalculo, $oDados, $aColuna8);
+          // Organiza as colunas 1 e 2 para serem utilizadas no cálculo
+          $aColunas1e2 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(1,2));
+
+          // COLUNA 4
+          // Cria as contas derivadas da conta original - Coluna 4
+          $aPrefixos = array('491','492','493','496','498','499');
+          $aContasCol4 = array();
+          foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
+            $aContasCol4[] = $oContaa;
+          }
+
+          // Organiza a coluna 4 que será usada para o cálculo
+          $aColuna4 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(4));
+
+          // COLUNA 6
+          // Cria as contas derivadas da conta original - Coluna 6
+          $aPrefixos = array('495');
+          $aContasCol6 = array();
+          foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
+            $aContasCol6[] = $oContaa;
+          }
+
+          // Organiza a coluna 6 que será usada para o cálculo
+          $aColuna6 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(6));
+
+          // Percorre as linhas do balancete da receita - 2º nível
+          for ($iLinha2 = 0; $iLinha2 < $iTotalLinhas; $iLinha2++) {
+
+            $oDadosResource2 = db_utils::fieldsMemory($Recordset, $iLinha2);
+
+            if($oVerificacaoAnoAtual->match){
+
+              RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCols1e2, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColunas1e2);
+              RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCol4, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColuna4);
+              RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCol6, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColuna6);
             }
+          }
+        }
+
+        if($oVerificacaoAnoPosterior->match && $RecordsetPosterior){
+
+          $aPrefixos = array('491','492','493','495','496','498','499');
+          $aContasCol8 = array($oConta);
+
+          foreach (RelatoriosLegaisMultiplosFiltrosBase::formataConta($aPrefixos, $oConta) as $oContaa){
+            $aContasCol8[] = $oContaa;
+          }
+
+          $aColuna8 = null;
+
+          // Organiza a coluna 8 para ser utilizada no cálculo
+          $aColuna8 = RelatoriosLegaisMultiplosFiltrosBase::processarColunasDaLinha($oLinha,array(8));
+
+          // Percorre as linhas do balancete da receita - 2º nível
+          for ($iLinha2 = 0; $iLinha2 < $iTotalLinhas; $iLinha2++) {
+            $oDadosResource3 = db_utils::fieldsMemory($RecordsetPosterior, $iLinha2);
+            RelatoriosLegaisMultiplosFiltrosBase::calcularValorDaLinha($aContasCol8, $oLinha, $oDadosResource3, $iTipoCalculo, $oDados, $aColuna8);
+          }
 
         }
       }
@@ -667,14 +688,15 @@ class RelatoriosLegaisMultiplosFiltrosBase {
 
   }
 
-  protected static function calcularValorDaLinha($aContas, $oLinha, $oDadosResource2, $iTipoCalculo, $oDados, $aColunasCalcular){
+  protected static function calcularValorDaLinha($aContas, $oLinha, $oDadosResource, $iTipoCalculo, $oDados, $aColunasCalcular){
 
     $aListaColunas        = RelatoriosLegaisMultiplosFiltrosBase::$aCamposReceita;
+
     foreach ($aContas as $iK => $oContaN2) {
 
       $oVerificacao = $oLinha->oLinhaRelatorio->match($oContaN2,
         $oLinha->parametros->orcamento,
-        $oDadosResource2,
+        $oDadosResource,
         $iTipoCalculo
       );
 
@@ -682,7 +704,7 @@ class RelatoriosLegaisMultiplosFiltrosBase {
         continue;
       }
 
-      $oValoresParaCalculo = clone $oDadosResource2;
+      $oValoresParaCalculo = clone $oDadosResource;
 
       if ($oContaN2->exclusao) {
 
