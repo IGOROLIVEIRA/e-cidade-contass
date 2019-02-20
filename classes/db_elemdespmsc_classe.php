@@ -1,38 +1,38 @@
 <?php
 //MODULO: contabilidade
 //CLASSE DA ENTIDADE elemdespmsc/
-class cl_elemdespmsc { 
-  // cria variaveis de erro 
-  public $rotulo     = null; 
-  public $query_sql  = null; 
-  public $numrows    = 0; 
-  public $numrows_incluir = 0; 
-  public $numrows_alterar = 0; 
-  public $numrows_excluir = 0; 
-  public $erro_status= null; 
-  public $erro_sql   = null; 
-  public $erro_banco = null;  
-  public $erro_msg   = null;  
-  public $erro_campo = null;  
-  public $pagina_retorno = null; 
-  // cria variaveis do arquivo 
-  public $c211_elemdespestrut = null; 
-  public $c211_mscestrut = null; 
-  // cria propriedade com as variaveis do arquivo 
+class cl_elemdespmsc {
+  // cria variaveis de erro
+  public $rotulo     = null;
+  public $query_sql  = null;
+  public $numrows    = 0;
+  public $numrows_incluir = 0;
+  public $numrows_alterar = 0;
+  public $numrows_excluir = 0;
+  public $erro_status= null;
+  public $erro_sql   = null;
+  public $erro_banco = null;
+  public $erro_msg   = null;
+  public $erro_campo = null;
+  public $pagina_retorno = null;
+  // cria variaveis do arquivo
+  public $c211_elemdespestrut = null;
+  public $c211_mscestrut = null;
+  // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 c211_elemdespestrut = varchar(9) = Estrutural E-Cidade 
-                 c211_mscestrut = varchar(9) = Estrutural MSC 
+                 c211_elemdespestrut = varchar(9) = Estrutural E-Cidade
+                 c211_mscestrut = varchar(9) = Estrutural MSC
                  ";
 
-  //funcao construtor da classe 
-  function __construct() { 
+  //funcao construtor da classe
+  function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("elemdespmsc"); 
+    $this->rotulo = new rotulo("elemdespmsc");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro 
-  function erro($mostra,$retorna) { 
+  //funcao erro
+  function erro($mostra,$retorna) {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )) {
       echo "<script>alert(\"".$this->erro_msg."\");</script>";
       if ($retorna==true) {
@@ -53,11 +53,11 @@ class cl_elemdespmsc {
    }
 
   // funcao para inclusao
-  function incluir ($c211_elemdespestrut,$c211_mscestrut) { 
+  function incluir ($c211_elemdespestrut,$c211_mscestrut) {
     $this->atualizacampos();
-    $this->c211_elemdespestrut = $c211_elemdespestrut; 
-    $this->c211_mscestrut = $c211_mscestrut; 
-     if (($this->c211_elemdespestrut == null) || ($this->c211_elemdespestrut == "") ) { 
+    $this->c211_elemdespestrut = $c211_elemdespestrut;
+    $this->c211_mscestrut = $c211_mscestrut;
+     if (($this->c211_elemdespestrut == null) || ($this->c211_elemdespestrut == "") ) {
        $this->erro_sql = " Campo c211_elemdespestrut nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -65,7 +65,7 @@ class cl_elemdespmsc {
        $this->erro_status = "0";
        return false;
      }
-     if (($this->c211_mscestrut == null) || ($this->c211_mscestrut == "") ) { 
+     if (($this->c211_mscestrut == null) || ($this->c211_mscestrut == "") ) {
        $this->erro_sql = " Campo c211_mscestrut nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -74,15 +74,15 @@ class cl_elemdespmsc {
        return false;
      }
      $sql = "insert into elemdespmsc(
-                                       c211_elemdespestrut 
-                                      ,c211_mscestrut 
+                                       c211_elemdespestrut
+                                      ,c211_mscestrut
                        )
                 values (
-                                '$this->c211_elemdespestrut' 
-                               ,'$this->c211_mscestrut' 
+                                '$this->c211_elemdespestrut'
+                               ,'$this->c211_mscestrut'
                       )";
-     $result = db_query($sql); 
-     if ($result==false) { 
+     $result = db_query($sql);
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
          $this->erro_sql   = "Elemento da despesa MSC ($this->c211_elemdespestrut."-".$this->c211_mscestrut) nao Incluído. Inclusao Abortada.";
@@ -106,7 +106,7 @@ class cl_elemdespmsc {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+     /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->c211_elemdespestrut,$this->c211_mscestrut  ));
@@ -120,19 +120,19 @@ class cl_elemdespmsc {
          $resac = db_query("insert into db_acount values($acount,1010192,1009244,'','".AddSlashes(pg_result($resaco,0,'c211_elemdespestrut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,1009245,'','".AddSlashes(pg_result($resaco,0,'c211_mscestrut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-    }
+    }*/
     return true;
   }
 
   // funcao para alteracao
-  function alterar ($c211_elemdespestrut=null,$c211_mscestrut=null) { 
+  function alterar ($c211_elemdespestrut=null,$c211_mscestrut=null) {
       $this->atualizacampos();
      $sql = " update elemdespmsc set ";
      $virgula = "";
-     if (trim($this->c211_elemdespestrut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c211_elemdespestrut"])) { 
+     if (trim($this->c211_elemdespestrut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c211_elemdespestrut"])) {
        $sql  .= $virgula." c211_elemdespestrut = '$this->c211_elemdespestrut' ";
        $virgula = ",";
-       if (trim($this->c211_elemdespestrut) == null ) { 
+       if (trim($this->c211_elemdespestrut) == null ) {
          $this->erro_sql = " Campo Estrutural elemdesp MSC não informado.";
          $this->erro_campo = "c211_elemdespestrut";
          $this->erro_banco = "";
@@ -142,10 +142,10 @@ class cl_elemdespmsc {
          return false;
        }
      }
-     if (trim($this->c211_mscestrut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c211_mscestrut"])) { 
+     if (trim($this->c211_mscestrut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c211_mscestrut"])) {
        $sql  .= $virgula." c211_mscestrut = '$this->c211_mscestrut' ";
        $virgula = ",";
-       if (trim($this->c211_mscestrut) == null ) { 
+       if (trim($this->c211_mscestrut) == null ) {
          $this->erro_sql = " Campo Estrutural MSC não informado.";
          $this->erro_campo = "c211_mscestrut";
          $this->erro_banco = "";
@@ -184,7 +184,7 @@ class cl_elemdespmsc {
        }
      }
      $result = db_query($sql);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Elemento da despesa MSC nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->c211_elemdespestrut."-".$this->c211_mscestrut;
@@ -216,8 +216,8 @@ class cl_elemdespmsc {
     }
   }
 
-  // funcao para exclusao 
-  function excluir ($c211_elemdespestrut=null,$c211_mscestrut=null,$dbwhere=null) { 
+  // funcao para exclusao
+  function excluir ($c211_elemdespestrut=null,$c211_mscestrut=null,$dbwhere=null) {
 
      $sql = " delete from elemdespmsc
                     where ";
@@ -239,7 +239,7 @@ class cl_elemdespmsc {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Elemento da despesa MSC nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$c211_elemdespestrut."-".$c211_mscestrut;
@@ -271,8 +271,8 @@ class cl_elemdespmsc {
     }
   }
 
-  // funcao do recordset 
-  function sql_record($sql) { 
+  // funcao do recordset
+  function sql_record($sql) {
      $result = db_query($sql);
      if ($result==false) {
        $this->numrows    = 0;
@@ -295,8 +295,8 @@ class cl_elemdespmsc {
     return $result;
   }
 
-  // funcao do sql 
-  function sql_query ( $c211_elemdespestrut=null,$c211_mscestrut=null,$campos="*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query ( $c211_elemdespestrut=null,$c211_mscestrut=null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -312,16 +312,16 @@ class cl_elemdespmsc {
      $sql2 = "";
      if ($dbwhere=="") {
        if ($c211_elemdespestrut!=null ) {
-         $sql2 .= " where elemdespmsc.c211_elemdespestrut = '$c211_elemdespestrut' "; 
-       } 
+         $sql2 .= " where elemdespmsc.c211_elemdespestrut = '$c211_elemdespestrut' ";
+       }
        if ($c211_mscestrut!=null ) {
          if ($sql2!="") {
             $sql2 .= " and ";
          } else {
             $sql2 .= " where ";
-         } 
-         $sql2 .= " elemdespmsc.c211_mscestrut = '$c211_mscestrut' "; 
-       } 
+         }
+         $sql2 .= " elemdespmsc.c211_mscestrut = '$c211_mscestrut' ";
+       }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
      }
@@ -338,8 +338,8 @@ class cl_elemdespmsc {
     return $sql;
   }
 
-  // funcao do sql 
-  function sql_query_file ( $c211_elemdespestrut=null,$c211_mscestrut=null,$campos="*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query_file ( $c211_elemdespestrut=null,$c211_mscestrut=null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -355,16 +355,16 @@ class cl_elemdespmsc {
      $sql2 = "";
      if ($dbwhere=="") {
        if ($c211_elemdespestrut!=null ) {
-         $sql2 .= " where elemdespmsc.c211_elemdespestrut = '$c211_elemdespestrut' "; 
-       } 
+         $sql2 .= " where elemdespmsc.c211_elemdespestrut = '$c211_elemdespestrut' ";
+       }
        if ($c211_mscestrut!=null ) {
          if ($sql2!="") {
             $sql2 .= " and ";
          } else {
             $sql2 .= " where ";
-         } 
-         $sql2 .= " elemdespmsc.c211_mscestrut = '$c211_mscestrut' "; 
-       } 
+         }
+         $sql2 .= " elemdespmsc.c211_mscestrut = '$c211_mscestrut' ";
+       }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
      }
