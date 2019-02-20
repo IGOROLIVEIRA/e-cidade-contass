@@ -532,7 +532,7 @@ class MSC {
       substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
       round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 AS debito,
       CASE
-          WHEN round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 = 0 THEN NULL
+          WHEN round(substr(fc_planosaldonovo,18,14)::float8,2)::float8 = 0 THEN NULL
           ELSE 'period_change_deb'
       END AS tipovalordeb,
       round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS credito,
