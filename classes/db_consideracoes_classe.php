@@ -1,40 +1,42 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE consideracoes
-class cl_consideracoes { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $si171_sequencial = 0; 
-   var $si171_codarquivo = null; 
-   var $si171_consideracoes = null; 
-   var $si171_mesreferencia = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_consideracoes {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $si171_sequencial = 0;
+   var $si171_codarquivo = null;
+   var $si171_consideracoes = null;
+   var $si171_mesreferencia = 0;
+   var $si171_anousu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si171_sequencial = int8 = sequencial 
-                 si171_codarquivo = varchar(2) = Código do arquivo 
-                 si171_consideracoes = text = Informações complementares 
-                 si171_mesreferencia = int8 = Mês de referência 
+                 si171_sequencial = int8 = sequencial
+                 si171_codarquivo = varchar(2) = Código do arquivo
+                 si171_consideracoes = text = Informações complementares
+                 si171_mesreferencia = int8 = Mês de referência
+                 si171_anousu = int4 = Ano de referência
                  ";
-   //funcao construtor da classe 
-   function cl_consideracoes() { 
+   //funcao construtor da classe
+   function cl_consideracoes() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("consideracoes"); 
+     $this->rotulo = new rotulo("consideracoes");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -49,14 +51,15 @@ class cl_consideracoes {
        $this->si171_codarquivo = ($this->si171_codarquivo == ""?@$GLOBALS["HTTP_POST_VARS"]["si171_codarquivo"]:$this->si171_codarquivo);
        $this->si171_consideracoes = ($this->si171_consideracoes == ""?@$GLOBALS["HTTP_POST_VARS"]["si171_consideracoes"]:$this->si171_consideracoes);
        $this->si171_mesreferencia = ($this->si171_mesreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si171_mesreferencia"]:$this->si171_mesreferencia);
+       $this->si171_anousu = ($this->si171_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["si171_anousu"]:$this->si171_anousu);
      }else{
        $this->si171_sequencial = ($this->si171_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si171_sequencial"]:$this->si171_sequencial);
      }
    }
    // funcao para inclusao
-   function incluir ($si171_sequencial){ 
+   function incluir ($si171_sequencial){
       $this->atualizacampos();
-     if($this->si171_codarquivo == null ){ 
+     if($this->si171_codarquivo == null ){
        $this->erro_sql = " Campo Código do arquivo nao Informado.";
        $this->erro_campo = "si171_codarquivo";
        $this->erro_banco = "";
@@ -65,7 +68,7 @@ class cl_consideracoes {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si171_consideracoes == null ){ 
+     if($this->si171_consideracoes == null ){
        $this->erro_sql = " Campo Informações complementares nao Informado.";
        $this->erro_campo = "si171_consideracoes";
        $this->erro_banco = "";
@@ -74,7 +77,7 @@ class cl_consideracoes {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si171_mesreferencia == null ){ 
+     if($this->si171_mesreferencia == null ){
        $this->erro_sql = " Campo Mês de referência nao Informado.";
        $this->erro_campo = "si171_mesreferencia";
        $this->erro_banco = "";
@@ -83,17 +86,26 @@ class cl_consideracoes {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si171_anousu == null ){
+       $this->erro_sql = " Campo Ano de referência nao Informado.";
+       $this->erro_campo = "si171_anousu";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($si171_sequencial == "" || $si171_sequencial == null ){
-       $result = db_query("select nextval('consideracoes_si171_sequencial_seq')"); 
+       $result = db_query("select nextval('consideracoes_si171_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: consideracoes_si171_sequencial_seq do campo: si171_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: consideracoes_si171_sequencial_seq do campo: si171_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->si171_sequencial = pg_result($result,0,0); 
+       $this->si171_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from consideracoes_si171_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si171_sequencial)){
@@ -104,10 +116,10 @@ class cl_consideracoes {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->si171_sequencial = $si171_sequencial; 
+         $this->si171_sequencial = $si171_sequencial;
        }
      }
-     if(($this->si171_sequencial == null) || ($this->si171_sequencial == "") ){ 
+     if(($this->si171_sequencial == null) || ($this->si171_sequencial == "") ){
        $this->erro_sql = " Campo si171_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -116,19 +128,21 @@ class cl_consideracoes {
        return false;
      }
      $sql = "insert into consideracoes(
-                                       si171_sequencial 
-                                      ,si171_codarquivo 
-                                      ,si171_consideracoes 
-                                      ,si171_mesreferencia 
+                                       si171_sequencial
+                                      ,si171_codarquivo
+                                      ,si171_consideracoes
+                                      ,si171_mesreferencia
+                                      ,si171_anousu
                        )
                 values (
-                                $this->si171_sequencial 
-                               ,'$this->si171_codarquivo' 
-                               ,'$this->si171_consideracoes' 
-                               ,$this->si171_mesreferencia 
+                                $this->si171_sequencial
+                               ,'$this->si171_codarquivo'
+                               ,'$this->si171_consideracoes'
+                               ,$this->si171_mesreferencia
+                               ,$this->si171_anousu
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "consideracoes ($this->si171_sequencial) nao Incluído. Inclusao Abortada.";
@@ -163,16 +177,16 @@ class cl_consideracoes {
        $resac = db_query("insert into db_acount values($acount,2010405,2011460,'','".AddSlashes(pg_result($resaco,0,'si171_mesreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($si171_sequencial=null) { 
-      $this->atualizacampos();
+   function alterar ($si171_sequencial=null) {
+    $this->atualizacampos();
      $sql = " update consideracoes set ";
      $virgula = "";
-     if(trim($this->si171_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_sequencial"])){ 
+     if(trim($this->si171_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_sequencial"])){
        $sql  .= $virgula." si171_sequencial = $this->si171_sequencial ";
        $virgula = ",";
-       if(trim($this->si171_sequencial) == null ){ 
+       if(trim($this->si171_sequencial) == null ){
          $this->erro_sql = " Campo sequencial nao Informado.";
          $this->erro_campo = "si171_sequencial";
          $this->erro_banco = "";
@@ -182,10 +196,10 @@ class cl_consideracoes {
          return false;
        }
      }
-     if(trim($this->si171_codarquivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_codarquivo"])){ 
+     if(trim($this->si171_codarquivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_codarquivo"])){
        $sql  .= $virgula." si171_codarquivo = '$this->si171_codarquivo' ";
        $virgula = ",";
-       if(trim($this->si171_codarquivo) == null ){ 
+       if(trim($this->si171_codarquivo) == null ){
          $this->erro_sql = " Campo Código do arquivo nao Informado.";
          $this->erro_campo = "si171_codarquivo";
          $this->erro_banco = "";
@@ -195,10 +209,10 @@ class cl_consideracoes {
          return false;
        }
      }
-     if(trim($this->si171_consideracoes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_consideracoes"])){ 
+     if(trim($this->si171_consideracoes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_consideracoes"])){
        $sql  .= $virgula." si171_consideracoes = '$this->si171_consideracoes' ";
        $virgula = ",";
-       if(trim($this->si171_consideracoes) == null ){ 
+       if(trim($this->si171_consideracoes) == null ){
          $this->erro_sql = " Campo Informações complementares nao Informado.";
          $this->erro_campo = "si171_consideracoes";
          $this->erro_banco = "";
@@ -208,10 +222,10 @@ class cl_consideracoes {
          return false;
        }
      }
-     if(trim($this->si171_mesreferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_mesreferencia"])){ 
+     if(trim($this->si171_mesreferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si171_mesreferencia"])){
        $sql  .= $virgula." si171_mesreferencia = $this->si171_mesreferencia ";
        $virgula = ",";
-       if(trim($this->si171_mesreferencia) == null ){ 
+       if(trim($this->si171_mesreferencia) == null ){
          $this->erro_sql = " Campo Mês de referência nao Informado.";
          $this->erro_campo = "si171_mesreferencia";
          $this->erro_banco = "";
@@ -243,7 +257,7 @@ class cl_consideracoes {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "consideracoes nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si171_sequencial;
@@ -271,14 +285,14 @@ class cl_consideracoes {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($si171_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($si171_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($si171_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -307,7 +321,7 @@ class cl_consideracoes {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "consideracoes nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si171_sequencial;
@@ -335,11 +349,11 @@ class cl_consideracoes {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -361,8 +375,8 @@ class cl_consideracoes {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si171_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si171_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -378,8 +392,8 @@ class cl_consideracoes {
      $sql2 = "";
      if($dbwhere==""){
        if($si171_sequencial!=null ){
-         $sql2 .= " where consideracoes.si171_sequencial = $si171_sequencial "; 
-       } 
+         $sql2 .= " where consideracoes.si171_sequencial = $si171_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -395,8 +409,8 @@ class cl_consideracoes {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si171_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si171_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -412,8 +426,8 @@ class cl_consideracoes {
      $sql2 = "";
      if($dbwhere==""){
        if($si171_sequencial!=null ){
-         $sql2 .= " where consideracoes.si171_sequencial = $si171_sequencial "; 
-       } 
+         $sql2 .= " where consideracoes.si171_sequencial = $si171_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

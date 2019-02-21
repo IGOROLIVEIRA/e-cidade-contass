@@ -5,14 +5,21 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_consideracoes_classe.php");
 include("dbforms/db_funcoes.php");
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clconsideracoes = new cl_consideracoes;
-$db_opcao = 1;
-$db_botao = true;
-if(isset($incluir)){
+$db_botao = false;
+$db_opcao = 22;
+if(isset($alterar)){
   db_inicio_transacao();
-  $clconsideracoes->incluir($si171_sequencial);
+  $db_opcao = 2;
+  $clconsideracoes->alterar($si171_sequencial);
   db_fim_transacao();
+}else if(isset($chavepesquisa)){
+   $db_opcao = 2;
+   $result = $clconsideracoes->sql_record($clconsideracoes->sql_query($chavepesquisa));
+   db_fieldsmemory($result,0);
+   $db_botao = true;
 }
 ?>
 <html>
@@ -36,11 +43,11 @@ if(isset($incluir)){
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
-	<?
-	include("forms/db_frmconsideracoes.php");
-	?>
+  <?
+  include("forms/db_frmconsideracoes.php");
+  ?>
     </center>
-	</td>
+  </td>
   </tr>
 </table>
 <?
@@ -52,7 +59,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 js_tabulacaoforms("form1","si171_codarquivo",true,1,"si171_codarquivo",true);
 </script>
 <?
-if(isset($incluir)){
+if(isset($alterar)){
   if($clconsideracoes->erro_status=="0"){
     $clconsideracoes->erro(true,false);
     $db_botao=true;
@@ -64,5 +71,8 @@ if(isset($incluir)){
   }else{
     $clconsideracoes->erro(true,true);
   }
+}
+if($db_opcao==22){
+  echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
