@@ -707,7 +707,7 @@ class MSC {
     }
   }
 
-  public function getDadosIC06($iAno, $dataInicio) {
+  public function getDadosIC06($iAno, $dataInicio) {//
 
     $iMes = date('m',strtotime($dataInicio));
 
@@ -755,7 +755,11 @@ class MSC {
         c61_codcon,
         c61_codigo,
         r.c61_instit,
-              c60_identificadorfinanceiro,o15_codstn,substr(c19_estrutural,2,8) as natreceita,
+              c60_identificadorfinanceiro,o15_codstn,
+              CASE
+                WHEN substr(c19_estrutural,2,1) = '9' THEN substr(c19_estrutural,4,8)
+                ELSE substr(c19_estrutural,2,8)
+              END AS natreceita,
               fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo)
            from conplanoexe e
        inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
