@@ -48,6 +48,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 	public function getcpf($z01_numcgm,$matricula){
         $sql = "select z01_cgccpf from cgm where z01_numcgm = {$z01_numcgm}";
+        echo $sql;
         $result = db_utils::fieldsMemory(db_query($sql), 0)->z01_cgccpf;
         if ( $result == 0) {
             $result = "";
