@@ -71,14 +71,14 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
          * inserir informacoes no banco de dados
          */
         db_inicio_transacao();
-        $result = $clviap->sql_record($clviap->sql_query(NULL,"*",NULL,"si198_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si198_inst = ".db_getsession("DB_instit")));
+        $result = $clviap->sql_record($clviap->sql_query(NULL,"*",NULL,"si198_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si198_instit = ".db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $clviap->excluir(NULL,"si198_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si198_inst = ".db_getsession("DB_instit"));
+            $clviap->excluir(NULL,"si198_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si198_instit = ".db_getsession("DB_instit"));
             if ($clviap->erro_status == 0) {
                 throw new Exception($clviap->erro_msg);
             }
         }
-
+        
         if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
 
             $sSql = "select z01_cgccpf,
@@ -102,11 +102,15 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     )
                     or
                     (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2018 
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
                      and date_part('YEAR',rh05_recis) = 2017 
                     )
                   )
-              AND   rh01_sicom = 1    
-			  ";
+              AND   rh01_sicom = 1
+              AND (rh01_admiss between '{$this->sDataInicial}' and '{$this->sDataFinal}' )";
         }else{
 
             $sSql = "select z01_cgccpf,
@@ -124,19 +128,24 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     or 
                     (date_part('MONTH',rh05_recis) = 01
                      and date_part('YEAR',rh05_recis) = 2019 
+                    )'
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2018 
                     )
                     or
                     (date_part('MONTH',rh05_recis) = 12
                      and date_part('YEAR',rh05_recis) = 2017 
                     )
                   )
-              AND   rh01_sicom = 1    
+              AND   rh01_sicom = 1
+              AND (rh01_admiss between '{$this->sDataInicial}' and '{$this->sDataFinal}' )
 			  ";
 
         }
 
-
-        $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
+        
+        $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit(pg_last_error());
 
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
@@ -149,7 +158,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
             $clviap->si198_codmatriculapessoa	= $oDadosViap->z01_numcgm;
             $clviap->si198_codvinculopessoa     = $oDadosViap->rh01_regist;
             $clviap->si198_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
-            $clviap->si198_inst               = db_getsession("DB_instit");
+            $clviap->si198_instit               = db_getsession("DB_instit");
 
 
             $clviap->incluir(null);

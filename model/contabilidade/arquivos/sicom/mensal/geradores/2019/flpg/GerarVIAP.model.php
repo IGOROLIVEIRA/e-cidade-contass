@@ -12,7 +12,7 @@ class GerarVIAP extends GerarAM {
 
     /**
      *
-     * Mes de referência
+     * Mes de referï¿½ncia
      * @var Integer
      */
     public $iMes;
@@ -22,7 +22,7 @@ class GerarVIAP extends GerarAM {
         $this->sArquivo = "VIAP";
         $this->abreArquivo();
 
-        $sSql          = "select * from viap102019 where si198_mes = ". $this->iMes." and si198_inst = ".db_getsession("DB_instit");
+        $sSql          = "select * from viap102019 where si198_mes = ". $this->iMes." and si198_instit = ".db_getsession("DB_instit");
         $rsVIAP10    = db_query($sSql);
 
         if (pg_num_rows($rsVIAP10) == 0) {
@@ -39,7 +39,7 @@ class GerarVIAP extends GerarAM {
 
                 unset($aVIAP10['si198_sequencial']);
                 unset($aVIAP10['si198_mes']);
-                unset($aVIAP10['si198_inst']);
+                unset($aVIAP10['si198_instit']);
 
                 $aCSVVIAP10['si198_tiporegistro']             =  str_pad($aVIAP10['si198_tiporegistro'], 2, "0", STR_PAD_LEFT);
                 $aCSVVIAP10['si198_nrocpfagentepublico']      =  substr($aVIAP10['si198_nrocpfagentepublico'], 0,11);
