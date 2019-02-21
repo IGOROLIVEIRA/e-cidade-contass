@@ -1,6 +1,6 @@
-
+/*
 -- Ocorrência 8580
-BEGIN;                   
+BEGIN;
 SELECT fc_startsession();
 
 -- Início do script
@@ -247,4 +247,4 @@ ALTER SEQUENCE consid102019_si158_sequencial_seq OWNER TO dbportal;
 -- Fim do script
 
 COMMIT;
-
+*/
