@@ -3,7 +3,7 @@
 $clelemdespmsc->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<fieldset style="width: 350px; height: 90px; margin-bottom:10px;"><legend><b>Natureza da Despesa</b></legend>
+<fieldset style="width: 350px; height: 90px; margin-bottom:10px;"><legend><b>Código da Despesa:</b></legend>
   <table style="margin-bottom: 10px;">
   <tr>
     <td>&nbsp;</td>
@@ -15,7 +15,7 @@ $clelemdespmsc->rotulo->label();
     </td>
   </tr>
   <tr>
-    <td><strong>Código da Despesa::</strong></td>
+    <td><strong>Código da Despesa:</strong></td>
     <td>
       <?
       db_input('c211_elemdespestrut',9,$Ic211_elemdespestrut,true,'text',1,"")
