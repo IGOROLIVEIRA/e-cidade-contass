@@ -7,7 +7,7 @@ $clvinculopcaspmsc->rotulo->label();
   <input type="hidden" name="c210_mscestrutant" value="<?=@$c210_mscestrut?>">
 <center>
 <fieldset style="margin-top:10px; margin-bottom:10px; ">
-  <legend>Vínculo Pcasp MSC</legend>
+  <legend>De/Para Pcasp MSC</legend>
   <table border="0" style="">
   <tr>
     <td nowrap title="<?=@$Tc210_pcaspestrut?>">

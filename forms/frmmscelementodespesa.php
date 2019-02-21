@@ -3,7 +3,7 @@
 $clelemdespmsc->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<fieldset style="width: 350px; height: 90px; margin-bottom:10px;"><legend><b>Elementos da Despesa</b></legend>
+<fieldset style="width: 350px; height: 90px; margin-bottom:10px;"><legend><b>Natureza da Despesa</b></legend>
   <table style="margin-bottom: 10px;">
   <tr>
     <td>&nbsp;</td>
@@ -12,16 +12,16 @@ $clelemdespmsc->rotulo->label();
     </td>
     <td nowrap title="<?=@$Tc211_mscestrut?>">
       <strong>MSC</strong>
-    </td>  
+    </td>
   </tr>
   <tr>
-    <td><strong>Elementos da Despesa:</strong></td>
-    <td> 
+    <td><strong>Código da Despesa::</strong></td>
+    <td>
       <?
       db_input('c211_elemdespestrut',9,$Ic211_elemdespestrut,true,'text',1,"")
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('c211_mscestrut',9,$Ic211_mscestrut,true,'text',1,"")
       ?>
