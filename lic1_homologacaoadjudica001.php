@@ -68,11 +68,11 @@ if(isset($incluir)){
     
     if ($parecer >= 1) {
 
-      $tipoparecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_tipoparecer = 3 ")));
+      $tipoparecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao")));
 
       if ($tipoparecer < 1) {
         echo
-        "<script>alert('Tipo do Parecer não é Juridico - Julgamento')</script>";
+        "<script>alert('Licitação sem Parecer Cadastrado.')</script>";
         db_redireciona('lic1_homologacaoadjudica001.php');
       }
 
