@@ -431,7 +431,17 @@ WHERE (z01_cgccpf != '00000000000'
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
           $oDadosTeste = db_utils::fieldsMemory($rsResult, $iCont);
+          /**
+           * pesquisa quem não tem cadastro de sexo
+           */
           $rsResultTeste = db_query("select z01_numcgm,z01_nome,z01_cgccpf,z01_sexo from cgm where z01_cgccpf = '$oDadosTeste->z01_cgccpf' and z01_sexo is null");
+          if(pg_num_rows($rsResultTeste) > 0)
+            db_criatabela($rsResultTeste);
+
+          /**
+           * pesquisa quem não tem cadastro de data de nascimento
+           */
+          $rsResultTeste = db_query("select z01_numcgm,z01_nome,z01_cgccpf,z01_nasc from cgm where z01_cgccpf = '$oDadosTeste->z01_cgccpf' and z01_nasc is null");
           if(pg_num_rows($rsResultTeste) > 0)
             db_criatabela($rsResultTeste);
 
