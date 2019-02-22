@@ -83,7 +83,7 @@ class GerarOPS extends GerarAM
         $aCSVOPS10['si132_nroop']           = substr($aOPS10['si132_nroop'], 0, 22);
         $aCSVOPS10['si132_dtpagamento']     = $this->sicomDate($aOPS10['si132_dtpagamento']);
         $aCSVOPS10['si132_vlop']            = $this->sicomNumberReal($aOPS10['si132_vlop'], 2);
-        $aCSVOPS10['si132_especificacaoop'] = substr($aOPS10['si132_especificacaoop'], 0, 200);
+        $aCSVOPS10['si132_especificacaoop'] = substr($aOPS10['si132_especificacaoop'], 0, 500);
         $aCSVOPS10['si132_cpfresppgto']     = $this->padLeftZero($aOPS10['si132_cpfresppgto'], 11);
 
         $this->sLinha = $aCSVOPS10;
@@ -103,7 +103,7 @@ class GerarOPS extends GerarAM
             $aCSVOPS11['si133_tipopagamento']       = $this->padLeftZero($aOPS11['si133_tipopagamento'], 1);
             $aCSVOPS11['si133_nroempenho']          = substr($aOPS11['si133_nroempenho'], 0, 22);
             $aCSVOPS11['si133_dtempenho']           = $this->sicomDate($aOPS11['si133_dtempenho']);
-            $aCSVOPS11['si133_nroliquidacao']       = substr($aOPS11['si133_nroliquidacao'], 0, 22);
+            $aCSVOPS11['si133_nroliquidacao']       = substr($aOPS11['si133_nroliquidacao'], 0, 22) == 0 ? "" : substr($aOPS11['si133_nroliquidacao'], 0, 22);
             $aCSVOPS11['si133_dtliquidacao']        = $this->sicomDate($aOPS11['si133_dtliquidacao']);
             $aCSVOPS11['si133_codfontrecursos']     = $this->padLeftZero($aOPS11['si133_codfontrecursos'], 3);
             $aCSVOPS11['si133_valorfonte']          = $this->sicomNumberReal($aOPS11['si133_valorfonte'], 2);

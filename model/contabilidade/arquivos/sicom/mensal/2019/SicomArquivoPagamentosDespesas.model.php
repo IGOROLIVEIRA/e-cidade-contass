@@ -228,7 +228,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           $clops10->si132_dtpagamento = $oEmpPago->dtpagamento;
           $clops10->si132_vlop = $oEmpPago->valor;
           $clops10->si132_especificacaoop = $oEmpPago->especificacaoop == '' ? 'SEM HISTORICO'
-            : trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpPago->especificacaoop), 0, 200)));
+            : trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpPago->especificacaoop), 0, 500)));
           $clops10->si132_cpfresppgto = substr($oEmpPago->cpfresppgto, 0, 11);
           $clops10->si132_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $clops10->si132_instit = db_getsession("DB_instit");
@@ -311,8 +311,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops11->si133_tipopagamento = $reg11->tipopagamento;
             $clops11->si133_nroempenho = $reg11->nroempenho;
             $clops11->si133_dtempenho = $reg11->dtempenho;
-            $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
-            $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
+            if($reg11->tipopagamento == 3){
+                $clops11->si133_nroliquidacao = "";
+                $clops11->si133_dtliquidacao = "";
+            }else{
+                $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
+                $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
+            }
             $clops11->si133_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
@@ -702,7 +707,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           $clops10->si132_dtpagamento = $oEmpPago->dtpagamento;
           $clops10->si132_vlop = $oEmpPago->valor;
           $clops10->si132_especificacaoop = $oEmpPago->especificacaoop == '' ? 'SEM HISTORICO'
-            : trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpPago->especificacaoop), 0, 200)));
+            : trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpPago->especificacaoop), 0, 500)));
           $clops10->si132_cpfresppgto = substr($oEmpPago->cpfresppgto, 0, 11);
           $clops10->si132_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $clops10->si132_instit = db_getsession("DB_instit");
@@ -780,8 +785,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops11->si133_tipopagamento = $reg11->tipopagamento;
             $clops11->si133_nroempenho = $reg11->nroempenho;
             $clops11->si133_dtempenho = $reg11->dtempenho;
-            $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
-            $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
+              if($reg11->tipopagamento == 3){
+                  $clops11->si133_nroliquidacao = "";
+                  $clops11->si133_dtliquidacao = "";
+              }else{
+                  $clops11->si133_nroliquidacao = $reg11->nroliquidacao;
+                  $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
+              }
             $clops11->si133_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
