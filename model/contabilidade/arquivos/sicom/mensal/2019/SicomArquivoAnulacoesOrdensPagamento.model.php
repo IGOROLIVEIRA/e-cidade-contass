@@ -51,7 +51,29 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
    */
   public function getCampos()
   {
-
+      $aElementos[10] = array(
+                        "tipoRegistro",
+                        "codReduzido",
+                        "codOrgao",
+                        "codUnidadeSub",
+                        "nroOP",
+                        "dtPagamento",
+                        "nroAnulacaoOP",
+                        "dtAnulacaoOP",
+                        "vlAnulacaoOP"
+                        );
+    $aElementos[11] = array(
+                        "tipoRegistro",
+                        "codReduzido",
+                        "tipoPagamento",
+                        "nroEmpenho",
+                        "dtEmpenho",
+                        "nroLiquidacao",
+                        "dtLiquidacao",
+                        "codFontRecursos",
+                        "valorAnulacaoFonte"
+                        );
+    return $aElementos;
 
   }
 
@@ -62,16 +84,15 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
   public function gerarDados()
   {
 
-
     $claop10 = new cl_aop102019();
     $claop11 = new cl_aop112019();
+
 
     $sSqlUnidade = "select * from infocomplementares where
   	si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
 
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTipoLiquidante = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tipoliquidante;
-
 
     $sSqlUnidade = "select * from infocomplementares where
   	 si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
@@ -86,12 +107,15 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     db_inicio_transacao();
     $result = $claop10->sql_record($claop10->sql_query(null, "*", null, "si137_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
       . " and si137_instit = " . db_getsession("DB_instit")));
+
     if (pg_num_rows($result) > 0) {
 
       $claop11->excluir(null, "si138_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si138_instit = " . db_getsession("DB_instit"));
+
       if ($claop11->erro_status == 0) {
         throw new Exception($claop11->erro_msg);
       }
+
       $claop10->excluir(null, "si137_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si137_instit = " . db_getsession("DB_instit"));
       if ($claop10->erro_status == 0) {
         throw new Exception($claop10->erro_msg);
@@ -166,9 +190,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 AND o41_instit = " . db_getsession("DB_instit") . "
                 AND e60_instit = " . db_getsession("DB_instit") . "
                 AND c71_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
-    //echo $sSql;
+
+
     $rsAnulacao = db_query($sSql);
-    //db_criatabela($rsAnulacao);
+    // print_r($sSql);die();
     /**
      * percorrer registros retornados do sql acima
      */

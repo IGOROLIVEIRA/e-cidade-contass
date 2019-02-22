@@ -19,7 +19,6 @@ class GerarAOP extends GerarAM
 
   public function gerarDados()
   {
-
     $this->sArquivo = "AOP";
     $this->abreArquivo();
 
@@ -36,8 +35,6 @@ class GerarAOP extends GerarAM
                      si138_dtliquidacao,
                      si138_codfontrecursos,
                      si138_valoranulacaofonte,
-                     si138_codorgaoempop,
-                     si138_codunidadeempop,
                      si138_mes,
                      si138_reg10,
                      si138_instit
@@ -46,7 +43,6 @@ class GerarAOP extends GerarAM
               WHERE si138_mes = " . $this->iMes . "
                 AND si138_instit = " . db_getsession("DB_instit");
     $rsAOP11 = db_query($sSql2);
-
 
     if (pg_num_rows($rsAOP10) == 0) {
 
