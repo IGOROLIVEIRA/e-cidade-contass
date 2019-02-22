@@ -91,7 +91,7 @@ $clrotulo->label("o15_codigo");
                                 <label for="Viap">Vínculo do Agente Público (Viap)</label><br>
 
                                 <input type="checkbox" value="Afast" id="Afast"/>
-                                <label for="Viap">Afastamento (Afast)</label><br>
+                                <label for="Afast">Afastamento (Afast)</label><br>
 
                                 <?
                             }

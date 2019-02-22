@@ -428,8 +428,6 @@ WHERE (z01_cgccpf != '00000000000'
 }
 
         $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit(pg_last_error());
-        ini_set('display_errors','On');
-        ini_set('error_log','log/php_error.log');
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
           $oDadosTeste = db_utils::fieldsMemory($rsResult, $iCont);

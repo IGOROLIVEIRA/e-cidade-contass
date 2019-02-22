@@ -55,7 +55,7 @@ class GerarFLPGO extends GerarAM {
                 $aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
                 $aCSVFLPGO10['si195_dsctipopagextra']                     =   substr($aFLPGO10['si195_dsctipopagextra'], 0, 150);
                 $aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);
-                $aCSVFLPGO10['si195_nrocpfinstituidor']                   =   str_pad($aFLPGO10['si195_nrocpfinstituidor'], 1, "", STR_PAD_LEFT);
+                $aCSVFLPGO10['si195_nrocpfinstituidor']                   =   (!empty($aFLPGO10['si195_nrocpfinstituidor']))? $aFLPGO10['si195_nrocpfinstituidor']   : '';
                 $aCSVFLPGO10['si195_datobitoinstituidor']                 =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datobitoinstituidor'])));
                 $aCSVFLPGO10['si195_tipodependencia']                     =   str_pad($aFLPGO10['si195_tipodependencia'], 1, "", STR_PAD_LEFT);
                 if($aCSVFLPGO10['si195_tipodependencia'] == 0){
