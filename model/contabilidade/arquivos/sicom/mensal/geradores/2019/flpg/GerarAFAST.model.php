@@ -28,7 +28,7 @@ class GerarAFAST extends GerarAM {
         $sSql2     = "select * from afast202019 where si200_mes = {$this->iMes} and si200_inst = ".db_getsession("DB_instit");
         $rsAFAST2    = db_query($sSql2);
 
-        $sSql3delete = "delete * from afast302019 where si201_mes = {$this->iMes}";
+        $sSql3delete = "delete from afast302019 where si201_mes = {$this->iMes}";
         db_query($sSql3delete);
 
         $sSql3 = "select * from afast302019 where si201_mes = {$this->iMes} and si201_inst = ".db_getsession("DB_instit");
