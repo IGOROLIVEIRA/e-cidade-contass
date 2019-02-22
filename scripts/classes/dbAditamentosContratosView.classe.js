@@ -172,7 +172,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "             </td> ";
     sContent += "           </tr> ";
 
-    sContent += "           <tr> ";
+    sContent += "           <tr style='display: none'> ";
     sContent += "             <td colspan='2'> ";
     sContent += "               <fieldset class=\"separator\"> ";
     sContent += "                 <legend>Valores</legend> ";
