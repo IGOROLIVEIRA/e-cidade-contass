@@ -315,35 +315,35 @@ class MSC {
         $oNovoResgistro->conta = $oRegistro[0];
 
         // so vai ter um registro no arquivo se o valor for diferente de ZERO
-        if ($oRegistro[$key-1] > 0) {
-            if (($aLinhas[$i] == 'beginning_balance' || $aLinhas[$i] == 'ending_balance')) {
-                $oNovoResgistro->nat_vlr   = $oRegistro[$key+1];
-                $oNovoResgistro->tipoValor = $aLinhas[$i];
-                $oNovoResgistro->valor     = $oRegistro[$key-1];
-            }
-            else if ($aLinhas[$i] == 'period_change_deb' || $aLinhas[$i] == 'period_change_cred') {
-                $nat_valor = explode("_", $aLinhas[$i]);
-                $oNovoResgistro->nat_vlr   = $nat_valor[2] == 'deb' ? 'D' : 'C';
-                $oNovoResgistro->tipoValor = 'period_change';
-                $oNovoResgistro->valor     = $oRegistro[$key-1];
-            }
+        if (number_format($oRegistro[$key-1], 2, '.', '') > 0) {
+          if (($aLinhas[$i] == 'beginning_balance' || $aLinhas[$i] == 'ending_balance')) {
+              $oNovoResgistro->nat_vlr   = $oRegistro[$key+1];
+              $oNovoResgistro->tipoValor = $aLinhas[$i];
+              $oNovoResgistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
+          }
+          else if ($aLinhas[$i] == 'period_change_deb' || $aLinhas[$i] == 'period_change_cred') {
+              $nat_valor = explode("_", $aLinhas[$i]);
+              $oNovoResgistro->nat_vlr   = $nat_valor[2] == 'deb' ? 'D' : 'C';
+              $oNovoResgistro->tipoValor = 'period_change';
+              $oNovoResgistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
+          }
 
-            $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es");
+          $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es");
 
-            for ($ii = 1; $ii <= 6; $ii++) {
-              $IC = "IC".$ii;
-              $TipoIC = "TipoIC".$ii;
+          for ($ii = 1; $ii <= 6; $ii++) {
+            $IC = "IC".$ii;
+            $TipoIC = "TipoIC".$ii;
 
-              if ($oRegistro[$ii] != "null") {
-                $cIC = explode("_", $oRegistro[$ii]);
-                if (in_array($cIC[1], $aTipoIC, true)) {
-                  $oNovoResgistro->{$IC}     = $cIC[0];
-                  $oNovoResgistro->{$TipoIC} = strtoupper($cIC[1]);
-                }
+            if ($oRegistro[$ii] != "null") {
+              $cIC = explode("_", $oRegistro[$ii]);
+              if (in_array($cIC[1], $aTipoIC, true)) {
+                $oNovoResgistro->{$IC}     = $cIC[0];
+                $oNovoResgistro->{$TipoIC} = strtoupper($cIC[1]);
               }
             }
-            $aRegistros[$indice] = $oContas;
-            $aRegistros[$indice]->registros[$i] = $oNovoResgistro;
+          }
+          $aRegistros[$indice] = $oContas;
+          $aRegistros[$indice]->registros[$i] = $oNovoResgistro;
         }
       }
     }
@@ -632,7 +632,7 @@ class MSC {
         left join orctiporec on c19_orctiporec = o15_codigo
         where {$this->getTipoMatriz()} c60_infcompmsc = 4 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
-
+      
     $rsResult = db_query($sSQL);
 
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
@@ -693,7 +693,7 @@ class MSC {
         left outer join consistema on c60_codsis = c52_codsis
         left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
         left join orctiporec on c19_orctiporec = o15_codigo
-        where {$this->getTipoMatriz()} c60_infcompmsc = 5 and c62_anousu = ".$iAno." and r.c61_reduz is not null and r.c61_reduz = 30934 order by p.c60_estrut
+        where {$this->getTipoMatriz()} c60_infcompmsc = 5 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
