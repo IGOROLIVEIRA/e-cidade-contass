@@ -119,7 +119,7 @@ if(isset($alterar)){
   /*OC4448*/
   if ($iLinhasLicProc > 0 && $lprocsis == 'n') {
 
-    try {
+    /*try {
       $resultado = db_query("
         BEGIN;
           delete from liclicitaproc where l34_liclicita = {$l20_codigo} and l34_protprocesso = {$l34_protprocesso};
@@ -131,8 +131,19 @@ if(isset($alterar)){
       }
     } catch (Exception $erro) {
       echo '<script>alert("Erro ao desvincular processo do sistema!");</script>';
+    }*/
+    $resultado = db_query("
+      BEGIN;
+        delete from liclicitaproc where l34_liclicita = {$l20_codigo} and l34_protprocesso = {$l34_protprocesso};
+      COMMIT;
+      ");
+
+    if ($resultado == false) {
+      $erro_msg = "Erro ao desvincular processo do sistema!";
+      $sqlerro  = true;
     }
   }
+
 
   $iNumero          = $l20_numero;
   $sSqlLicLicita    = $clliclicita->sql_query_file($l20_codigo, "l20_codtipocom");
@@ -197,13 +208,33 @@ if(isset($alterar)){
         }
     }
 
-  if ($sqlerro == false){
+
+    if ($l20_codtipocomdescr == 16 || $l20_codtipocomdescr == 28) {
+
+      $verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
+      if (!$verifica) {
+        $erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
+        $sqlerro = true;
+      }
+
+    }
+    else if ($l20_codtipocomdescr == 1 || $l20_codtipocomdescr == 2 || $l20_codtipocomdescr == 3) {
+
+      $verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
+      if (!$verifica) {
+        $erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
+        $sqlerro = true;
+      }
+
+    }
+
+  if ($sqlerro == false ){
     $clliclicita->l20_numero       = $iNumero;
     $clliclicita->l20_procadmin    = $sProcAdmin;
     $clliclicita->l20_equipepregao = $l20_equipepregao;
-  //$clliclicita->l20_horaaber     = $l20_horaaber;
-  $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
-  $clliclicita->alterar($l20_codigo,$descricao);
+    //$clliclicita->l20_horaaber     = $l20_horaaber;
+    $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+    $clliclicita->alterar($l20_codigo,$descricao);
 
     if ($clliclicita->erro_status == "0") {
       $erro_msg = $clliclicita->erro_msg;
@@ -573,7 +604,7 @@ function js_confirmar(){
 if(isset($alterar)){
   if($sqlerro == true){
 
-    //  db_msgbox($erro_sql);
+    db_msgbox($erro_msg);
     $clliclicita->erro_msg = $erro_msg;
     $clliclicita->erro_status = 0;
     $clliclicita->erro(true,false);

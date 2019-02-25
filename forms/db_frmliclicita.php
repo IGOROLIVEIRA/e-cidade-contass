@@ -1338,10 +1338,56 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
     }
 
-    function js_pregao(iCodigoProcesso, sNome, lErro){
+    function novoAjax(params, onComplete) {
 
-        document.form1.l20_equipepregao.value = iCodigoProcesso;
-        db_iframe_proc.hide();
+      var request = new Ajax.Request('lic4_licitacao.RPC.php', {
+        method:'post',
+        parameters:'json='+Object.toJSON(params),
+        onComplete: onComplete
+      });
+
+    }
+
+    function verificaMembrosModalidade(modalidade) {
+      var params = {
+        exec: 'VerificaMembrosModalidade',
+        equipepregao: $F('l20_equipepregao'),
+        modalidade: modalidade
+      };
+
+      novoAjax(params, function(e) {
+      var oRetorno = JSON.parse(e.responseText);
+        if (oRetorno.validaMod == 0) {
+          if (modalidade == 'pregao') {
+            alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio");
+            document.form1.l20_equipepregao.value = "";
+            document.form1.l20_equipepregao.focus();
+            return false;
+          }
+          else if (modalidade == 'outros') {
+            alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio");
+            document.form1.l20_equipepregao.value = "";
+            document.form1.l20_equipepregao.focus();
+            return false;
+          }
+        }
+      });
+    }
+
+    function js_pregao(iCodigoProcesso, sNome, lErro) {
+
+      document.form1.l20_equipepregao.value = iCodigoProcesso;
+      db_iframe_proc.hide();
+
+      var modalidade = document.form1.l20_codtipocomdescr.value;
+
+      if (modalidade == 16 || modalidade == 28) {
+        verificaMembrosModalidade("pregao");
+      }
+      else if (modalidade == 1 || modalidade == 2 || modalidade == 3) {
+        verificaMembrosModalidade("outros");
+      }
+
     }
 
     var sUrl = "lic4_licitacao.RPC.php";
@@ -1365,7 +1411,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         js_removeObj("msgBox");
         var oRetorno = eval("("+oAjax.responseText+")");
         if (oRetorno.status == 1) {
-            //$()
         }
     }
 

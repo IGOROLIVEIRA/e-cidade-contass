@@ -6,11 +6,13 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_liclicita_classe.php");
 
 require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
 
+$clliclicita = new cl_liclicita;
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
 $oRetorno          = new stdClass();
@@ -23,20 +25,20 @@ switch ($oParam->exec) {
 
 
   case 'verificaModalidade' :
-    
+
     $oDaoModalidade = new cl_cflicita();
     $sSqlModalidade = $oDaoModalidade->sql_query_file($oParam->iModalidade);
     $rsModalidade   = $oDaoModalidade->sql_record($sSqlModalidade);
     if ($oDaoModalidade->numrows > 0) {
-      
+
       $oDados = db_utils::fieldsMemory($rsModalidade, 0);
       $oRetorno->l03_usaregistropreco = $oDados->l03_usaregistropreco;
     }
-    
-    
-  break;  
-  
-  
+
+
+  break;
+
+
   case "salvarTrocaFornecedor" :
 
     require_once("classes/db_pcorcamtroca_classe.php");
@@ -554,6 +556,104 @@ switch ($oParam->exec) {
       }
     }
     $oRetorno->aItens = $aItensRetorno;
+
+    break;
+
+    case 'VerificaMembrosModalidade' :
+
+      $verifica = $clliclicita->verificaMembrosModalidade($oParam->modalidade, $oParam->equipepregao);
+
+      if ($verifica) {
+        $oRetorno->validaMod = 1;
+      } else {
+          $oRetorno->validaMod = 0;
+      }
+
+      /*switch ($oParam->modalidade) {
+
+        case 'pregao':
+
+          $sSQL = "
+
+          SELECT mapoio.l46_tipo, pregoeiro.l46_tipo FROM
+
+            (SELECT l46_licpregao, l46_tipo
+              FROM licpregaocgm
+                INNER JOIN cgm ON cgm.z01_numcgm = licpregaocgm.l46_numcgm
+                INNER JOIN licpregao ON licpregao.l45_sequencial = licpregaocgm.l46_licpregao
+                  WHERE l46_tipo = 2) AS mapoio
+
+            INNER JOIN
+
+            (SELECT l46_licpregao, l46_tipo
+              FROM licpregaocgm
+                INNER JOIN cgm ON cgm.z01_numcgm = licpregaocgm.l46_numcgm
+                INNER JOIN licpregao ON licpregao.l45_sequencial = licpregaocgm.l46_licpregao
+                  WHERE l46_tipo = 6) AS pregoeiro
+
+              ON pregoeiro.l46_licpregao = mapoio.l46_licpregao
+
+                WHERE pregoeiro.l46_licpregao = {$oParam->equipepregao} LIMIT 1
+
+          ";
+
+          $rsResult = db_query($sSQL);
+
+          if (pg_num_rows($rsResult) > 0) {
+            $oRetorno->validaMod = 1;
+          } else {
+              $oRetorno->validaMod = 0;
+          }
+
+        break;
+
+        case 'outros':
+
+          $sSQL = "
+
+          SELECT mapoio.l46_tipo, presidente.l46_tipo, secretario.l46_tipo FROM
+
+            (SELECT l46_licpregao, l46_tipo
+              FROM licpregaocgm
+                INNER JOIN cgm ON cgm.z01_numcgm = licpregaocgm.l46_numcgm
+                INNER JOIN licpregao ON licpregao.l45_sequencial = licpregaocgm.l46_licpregao
+                  WHERE l46_tipo = 2) AS mapoio
+
+            INNER JOIN
+
+            (SELECT l46_licpregao, l46_tipo
+              FROM licpregaocgm
+                INNER JOIN cgm ON cgm.z01_numcgm = licpregaocgm.l46_numcgm
+                INNER JOIN licpregao ON licpregao.l45_sequencial = licpregaocgm.l46_licpregao
+                  WHERE l46_tipo = 3) AS presidente ON presidente.l46_licpregao = mapoio.l46_licpregao
+
+            INNER JOIN
+
+            (SELECT l46_licpregao, l46_tipo
+              FROM licpregaocgm
+                INNER JOIN cgm ON cgm.z01_numcgm = licpregaocgm.l46_numcgm
+                INNER JOIN licpregao ON licpregao.l45_sequencial = licpregaocgm.l46_licpregao
+                  WHERE l46_tipo = 4) AS secretario
+
+              ON secretario.l46_licpregao = presidente.l46_licpregao
+
+                WHERE secretario.l46_licpregao = {$oParam->equipepregao} LIMIT 1
+
+          ";
+
+          $rsResult = db_query($sSQL);
+
+          if (pg_num_rows($rsResult) > 0) {
+            $oRetorno->validaMod = 1;
+          } else {
+              $oRetorno->validaMod = 0;
+          }
+
+        break;
+
+
+      }*/
+
 
     break;
 }
