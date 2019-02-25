@@ -377,7 +377,7 @@ class cl_entesconsorciados {
          $sql2 .= " where entesconsorciados.c215_sequencial = $c215_sequencial ";
        }
      } else if ($dbwhere != "") {
-       $sql2 = " where $dbwhere";
+       $sql2 = " where  $dbwhere";
      }
      $sql .= $sql2;
      if ($ordem != null ) {
@@ -391,28 +391,75 @@ class cl_entesconsorciados {
     }
     return $sql;
   }
-   
-  // funcao do sql para pegar valor percentual da arrecadação de um ente sobre todos os outros.
-  function sql_query_percentual ($dbwhere2="",$dbwhere3="") {
-     $sql = "select coalesce(round((vlrarrecadeente/vlrarrecadetotal)*100,2),0) as percent from (
-            select (select sum(case when c71_coddoc = 100 then c70_valor else c70_valor * -1 end)
-              from entesconsorciadosreceitas 
-            inner join orcreceita on c216_receita=o70_codfon and c216_anousu=o70_anousu
-            inner join conlancamrec on c74_anousu=o70_anousu and c74_codrec=o70_codrec
-            inner join conlancam on c74_codlan=c70_codlan
-            inner join conlancamdoc on c71_codlan=c70_codlan
-            inner join entesconsorciados on c216_enteconsorciado=c215_sequencial
-            ".$dbwhere2.") as vlrarrecadetotal,
-            (select sum(case when c71_coddoc = 100 then c70_valor else c70_valor * -1 end)
-              from entesconsorciadosreceitas 
-            inner join orcreceita on c216_receita=o70_codfon and c216_anousu=o70_anousu
-            inner join conlancamrec on c74_anousu=o70_anousu and c74_codrec=o70_codrec
-            inner join conlancam on c74_codlan=c70_codlan
-            inner join conlancamdoc on c71_codlan=c70_codlan
-            inner join entesconsorciados on c216_enteconsorciado=c215_sequencial
-            ".$dbwhere3.") as vlrarrecadeente) as percent ";
+  function gerarSQLDespesas($sMes, $sEnte) {
+    $nEnte  = intval($sEnte);
+    $nMes   = intval($sMes);
+    $nAno   = intval(db_getsession('DB_anousu'));
+
+    $sql = "SELECT sum(c217_valorpago) despesasatemes
+        FROM despesarateioconsorcio";
+    if($nMes == 1){
+        $sql = "SELECT sum(c217_valorpago) despesasatemes
+          FROM despesarateioconsorcio limit 0"; 
+    }else{ 
+      if($sEnte == null){ 
+        $sql .= " WHERE c217_mes<={$nMes}
+              AND c217_anousu={$nAno}";
+      }else{
+         $sql = " WHERE c217_enteconsorciado={$nEnte}
+              AND c217_mes<={$nMes}
+              AND c217_anousu={$nAno}";
+      }
+    }
     return $sql;
   }
+
+  function sql_rec_saldo_inicial($sEnte){
+    $nEnte  = intval($sEnte);
+    $nAno   = intval(db_getsession('DB_anousu'));
+    $sql = "select sum(c216_saldo3112) as c216_saldo3112 from entesconsorciadosreceitas ";
+    if($nEnte == null){
+        $sql .= " where c216_anousu=".$nAno;
+    }else
+        $sql .= " where c216_enteconsorciado=".$nEnte." and c216_anousu=".$nAno;
+    return $sql;
+  }
+  function gerarSQLReceitas($sMes, $sEnte) {
+
+    $nEnte  = intval($sEnte);
+    $nMes   = intval($sMes);
+    $nAno   = intval(db_getsession('DB_anousu'));
+    
+    $sql = "SELECT (sum(CASE
+                          WHEN c71_coddoc = 100 THEN (c70_valor*(c216_percentual/100))
+                          ELSE (c70_valor*(c216_percentual/100)) * -1
+                      END)) AS receitasatemes
+          FROM entesconsorciadosreceitas
+          INNER JOIN orcreceita ON c216_receita=o70_codfon
+          AND c216_anousu=o70_anousu
+          INNER JOIN conlancamrec ON c74_anousu=o70_anousu
+          AND c74_codrec=o70_codrec
+          INNER JOIN conlancam ON c74_codlan=c70_codlan
+          INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
+          INNER JOIN entesconsorciados ON c216_enteconsorciado=c215_sequencial
+          INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo ";
+
+    if($sEnte == null){
+       $sql .=" WHERE date_part('MONTH',c70_data) <={$nMes}
+              AND date_part('YEAR',c70_data)={$nAno}
+              AND c215_datainicioparticipacao <= '{$nAno}-{$nMes}-01'
+          ORDER BY c216_tiporeceita ";
+    }else{ 
+      $sql .=" WHERE date_part('MONTH',c70_data) <={$nMes}
+                AND date_part('YEAR',c70_data)={$nAno}
+                AND c216_enteconsorciado={$nEnte}
+                AND c215_datainicioparticipacao <= '{$nAno}-{$nMes}-01'
+            ORDER BY c216_tiporeceita ";
+      }
+    return $sql;
+  }
+
+  
   // funcao do sql
   function sql_query_file ( $c215_sequencial=null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";

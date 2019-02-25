@@ -193,7 +193,7 @@ ob_start();
     </table>
   </div>
   <div class="ritz grid-container" dir="ltr">
-    <table class="waffle" cellspacing="0" cellpadding="0" >
+    <!-- <table class="waffle" cellspacing="0" cellpadding="0" >
       <thead>
         <tr>
           <th class="borda1" style="width:70px">&nbsp;</th>
@@ -260,7 +260,7 @@ ob_start();
 
 
       </tbody>
-    </table>
+    </table> -->
   </div>
 </body>
 </html>

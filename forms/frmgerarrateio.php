@@ -30,7 +30,7 @@ $aMeses = array(
 .table {
   width: 100%;
   border: 1px solid #bbb;
-  margin-bottom: 25px;
+  
   border-collapse: collapse;
   background-color: #fff;
 }
@@ -43,7 +43,7 @@ $aMeses = array(
   background-color: #ddd;
 }
 .table .th_titulo {
-  width: 575px;
+  width: 600px;
 }
 </style>
 
@@ -62,13 +62,18 @@ $aMeses = array(
       </div>
 
       <br>
-
-      <div>
-        <table class="table">
+      <table class="table">
           <thead>
             <tr>
               <th class="th_titulo">Ente Consorciado</th>
-              <th>Percentual</th>
+              <th>Percentual (%)</th>
+            </tr>
+          </thead>
+      </table>
+      <div style="overflow: scroll; height: 200px;">
+        <table class="table">
+          <thead>
+            <tr>
             </tr>
           </thead>
 
@@ -86,14 +91,20 @@ $aMeses = array(
         </table>
         
       </div>
-
-      <div>
-        <table class="table">
+      <table class="table">
           <thead>
             <tr>
               <th>Código</th>
               <th class="th_titulo">Dotações para Rateio</th>
               <th>Selecionar</th>
+            </tr>
+          </thead>
+      </table>
+      <div style="overflow: scroll; height: 200px;">
+        <table class="table">
+          <thead>
+            <tr>
+              
             </tr>
           </thead>
 
@@ -229,11 +240,11 @@ function carregarEntesConsorciados(mes) {
     entes.forEach(function(ente, i) {
 
       var tr = ''
-      + '<tr class="bg_' + (i % 2 == 0) + '">'
+      + '<tr class="bg_' + (i % 2 == 0) + '" >'
         + '<td class="th_titulo">' + ente.cgm + ' - ' + ente.nome + '</td>'
         + '<td>'
         + '<input  value="' + ente.percentual + '" size="4" data-ente="' + ente.sequencial + '" name="entes[]" onchange="js_TotalPercent()" '
-        + ' oninput="js_ValidaCampos(this,4,\'Percentual\',\'t\',\'t\',event);" > % ' 
+        + ' oninput="js_ValidaCampos(this,4,\'Percentual\',\'t\',\'t\',event);" >' 
         + '</td>'
       + '</tr>';
       
