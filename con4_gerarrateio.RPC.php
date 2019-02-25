@@ -61,14 +61,7 @@ switch ($oParam->exec){
 
         $oNovoEnte = new stdClass();
         $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
-        $sWhere2   = " where date_part('MONTH',c70_data) ={$oParam->mes} and date_part('YEAR',c70_data)={$nAnoUsu} ";
-        $sWhere2  .= " and c215_datainicioparticipacao <= '{$nAnoUsu}-{$oParam->mes}-01' ";
-        $sWhere3   = " where date_part('MONTH',c70_data) ={$oParam->mes} ";
-        $sWhere3  .= " and date_part('YEAR',c70_data)={$nAnoUsu} and c216_enteconsorciado=".$oEnte->c215_sequencial;
-        $sWhere3  .= " and c215_datainicioparticipacao <= '{$nAnoUsu}-{$oParam->mes}-01' ";
-        $sSql2 = $oEntes->sql_query_percentual($sWhere2, $sWhere3);
-        $rsEntesPerc = $oEntes->sql_record($sSql2);
-        $percentualrateio = db_utils::fieldsMemory($rsEntesPerc, 0)->percent;
+        $percentualrateio = getPercentual( $oParam->mes, $oEnte->c215_sequencial );
 
         $oNovoEnte->percentual   = $percentualrateio;
         $oNovoEnte->cgm          = $oEnte->c215_cgm;
@@ -77,7 +70,7 @@ switch ($oParam->exec){
         $oRetorno->entes[] = $oNovoEnte;
 
       }
-
+     //echo "<pre>";print_r($oRetorno);exit;
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
     }
@@ -163,7 +156,6 @@ switch ($oParam->exec){
       $aEntes = array();
 
       $aRetornoFinal = array();
-
       foreach ($oParam->entes as $oEnte) {
         $aEntes[$oEnte->id] = $oEnte->percentual;
       }
@@ -260,6 +252,106 @@ switch ($oParam->exec){
 
   break;
 
+}
+function saldoAntTodos($mes){
+    
+    $oEntesConsorciados = new cl_entesconsorciados();
+    
+    $rsRecSaldoInicialTodos = $oEntesConsorciados->sql_record( $oEntesConsorciados->sql_rec_saldo_inicial(null) );
+    $nSaldoInicialRecTodos = db_utils::fieldsMemory($rsRecSaldoInicialTodos, 0)->c216_saldo3112;
+
+    $rsDesp = $oEntesConsorciados->sql_record($oEntesConsorciados->gerarSQLDespesas($mes, null));
+    $nDesp = db_utils::fieldsMemory($rsDesp, 0)->despesasatemes;
+
+    $rsRecAntesTodos = $oEntesConsorciados->sql_record($oEntesConsorciados->gerarSQLReceitas($mes,null));
+    $nRecAntesTodos = db_utils::getCollectionByRecord($rsRecAntesTodos, 0)->receitasatemes;
+    
+    $nSaldo = 0;
+    $nSaldo = $nSaldoInicialRecTodos + $nRecAntesTodos - $nDesp ;
+
+    // echo "<br> nSaldoInicialRecTodos => ".$nSaldoInicialRecTodos 
+    //   ."<br> nDesp => ".$nDesp
+    //   . "<br> nRecAntesTodos => ".$nRecAntesTodos;
+
+    return $nSaldo;
+}
+function saldoAntEnte($mes, $ente){
+    
+    $oEntesConsorciados = new cl_entesconsorciados();
+    
+    $rsRecSaldoInicialEnte = $oEntesConsorciados->sql_record($oEntesConsorciados->sql_rec_saldo_inicial($ente));
+    $nSaldoInicialRecEnte = db_utils::fieldsMemory($rsRecSaldoInicialEnte, 0)->c216_saldo3112;
+    
+    $rsDesp = $oEntesConsorciados->sql_record($oEntesConsorciados->gerarSQLDespesas($mes, $ente));
+    $nDesp = db_utils::fieldsMemory($rsDesp, 0)->despesasatemes;
+
+    $rsRelatorioFinanceiro = $oEntesConsorciados->sql_record($oEntesConsorciados->gerarSQLReceitas($mes, $ente));
+    $nRecAntesEnte = db_utils::getCollectionByRecord($rsRelatorioFinanceiro,0)->receitasatemes;
+    
+    $nSaldo = 0;
+    $nSaldo = $nSaldoInicialRecEnte + $nRecAntesEnte - $nDesp ;
+
+    return $nSaldo;
+}
+  // funcao do sql para pegar valor percentual da arrecadação de um ente sobre todos os outros.
+function getPercentual ( $mes, $ente) {
+    $oEntesConsorciados = new cl_entesconsorciados();
+    /*
+      1 - Pegar arrecadação total de receitas totalRecMes ok
+      2 - Pegar o saldo anterior do rateio para o ente saldoAntEnte. ok
+      3 - Pegar o total arrecadado do ente no mês totalRecEnteMes. ok
+      4 - Se o saldoAntEnte for menor que ZERO não utilizar. ok
+      5 - Pegar o total saldo anterior geral saldoAntTodos
+      5 - Percentual = ( (totalRecEnteMes + saldoAntEnte) / (totalRecMes + saldoAntTodos)) * 100
+    */
+      //retorna o total arrecadado de rateio no mes
+      $sqlTotalRecMes = "SELECT coalesce(sum(CASE
+                                              WHEN c71_coddoc = 100 THEN c70_valor
+                                              ELSE c70_valor * -1
+                                          END),0) AS totalrecmes
+                      from orcreceita 
+                      INNER JOIN conlancamrec ON c74_anousu=o70_anousu AND c74_codrec=o70_codrec
+                      INNER JOIN conlancam ON c74_codlan=c70_codlan
+                      INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
+                      WHERE date_part('MONTH',c70_data) = ".$mes."
+                          AND date_part('YEAR',c70_data)=".db_getsession('DB_anousu')."
+                          AND o70_codfon in 
+                      (select c216_receita from entesconsorciadosreceitas where c216_anousu=".db_getsession('DB_anousu').") limit 1";
+      
+      $rsTotalRecMes = $oEntesConsorciados->sql_record($sqlTotalRecMes);
+      $totalRecMes = db_utils::fieldsMemory($rsTotalRecMes,0)->totalrecmes;
+
+      $sqlTotalRecEnteMes = " SELECT coalesce(sum( CASE
+                                                      WHEN c71_coddoc = 100 THEN c70_valor
+                                                      ELSE c70_valor * -1
+                                                  END),0) AS totalrecentemes
+                            from orcreceita 
+                            INNER JOIN conlancamrec ON c74_anousu=o70_anousu AND c74_codrec=o70_codrec
+                            INNER JOIN conlancam ON c74_codlan=c70_codlan
+                            INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
+                            WHERE date_part('MONTH',c70_data) = ".$mes."
+                                AND date_part('YEAR',c70_data)=".db_getsession('DB_anousu')."
+                                AND o70_codfon = (select c216_receita 
+                            from entesconsorciadosreceitas where c216_enteconsorciado = ".$ente." 
+                             and c216_anousu=".db_getsession('DB_anousu')." limit 1 )  ";
+      
+      $rsTotalRecEnteMes = $oEntesConsorciados->sql_record($sqlTotalRecEnteMes);
+      $totalRecEnteMes = db_utils::fieldsMemory($rsTotalRecEnteMes,0)->totalrecentemes;
+      
+      $saldoAntEnte = saldoAntEnte($mes, $ente);
+      
+      // if($saldoAntEnte < 0)
+      //    $saldoAntEnte = 0;
+
+      $saldoAntTodos = saldoAntTodos($mes);
+
+
+      // echo "<br> totalRecEnteMes => ".$totalRecEnteMes 
+      // ."<br> saldoAntEnte => ".$saldoAntEnte
+      // . "<br> totalRecMes => ".$totalRecMes
+      // ."<br> saldoAntTodos => ". $saldoAntTodos;
+      $percent = ( ($totalRecEnteMes + $saldoAntEnte)/($totalRecMes + $saldoAntTodos) ) * 100;
+      return round($percent,2);
 }
 
 if (isset($oRetorno->erro)) {
