@@ -85,7 +85,7 @@ class GerarAOP extends GerarAM
             $aCSVAOP11['si138_tipopagamento']       = $this->padLeftZero($aAOP11['si138_tipopagamento'], 1);
             $aCSVAOP11['si138_nroempenho']          = substr($aAOP11['si138_nroempenho'], 0, 22);
             $aCSVAOP11['si138_dtempenho']           = $this->sicomDate($aAOP11['si138_dtempenho']);
-            $aCSVAOP11['si138_nroliquidacao']       = substr($aAOP11['si138_nroliquidacao'], 0, 22);
+            $aCSVAOP11['si138_nroliquidacao']       = substr($aAOP11['si138_nroliquidacao'], 0, 22) == 0 ? "" : substr($aAOP11['si138_nroliquidacao'], 0, 22);
             $aCSVAOP11['si138_dtliquidacao']        = $this->sicomDate($aAOP11['si138_dtliquidacao']);
             $aCSVAOP11['si138_codfontrecursos']     = $this->padLeftZero($aAOP11['si138_codfontrecursos'], 3);
             $aCSVAOP11['si138_valoranulacaofonte']  = $this->sicomNumberReal($aAOP11['si138_valoranulacaofonte'], 2);
