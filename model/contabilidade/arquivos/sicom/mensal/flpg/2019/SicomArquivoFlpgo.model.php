@@ -187,9 +187,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    end as si195_indcessao,
    r70_descr as si195_dsclotacao,
    case
-   when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'P' then 00
-   when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'I' then 00
-   when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'A' then rh02_hrssem
+   when rh30_vinculo = 'P' then 00
+   when rh30_vinculo = 'I' then 00
+   when rh30_vinculo = 'A' then rh02_hrssem
    end as si195_vlrcargahorariasemanal,
    rh01_admiss as si195_datefetexercicio,
    rh05_recis as si195_datexclusao,
@@ -392,9 +392,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
    ";
 
-   $rsResult10 = db_query($sSql);
-//		echo $sSql;
-//		db_criatabela($rsResult10);exit;
+   $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
 
    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
