@@ -80,9 +80,9 @@ try {
               $aHash  = $oRegistro10->si09_codorgaotce;
               $aHash .= intval($oRegistro10->c63_banco);
               $aHash .= intval($oRegistro10->c63_agencia);
-              $aHash .= intval($oRegistro10->c63_dvagencia);
+              $aHash .= ($oRegistro10->c63_dvagencia);
               $aHash .= intval($oRegistro10->c63_conta);
-              $aHash .= intval($oRegistro10->c63_dvconta);
+              $aHash .= ($oRegistro10->c63_dvconta);
               $aHash .= $oRegistro10->tipoconta;
               if ($oRegistro10->si09_codorgaotce == 5) {
                   $aHash .= $oRegistro10->tipoaplicacao;
