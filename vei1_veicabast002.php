@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -83,7 +83,7 @@ $databanco  = "'".$ve70_dtabast_ano."-".$ve70_dtabast_mes."-".$ve70_dtabast_dia.
 
 //último abastecimento
 $result_abast=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo","ve70_dtabast desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null "));
-    
+
  if ($clveicabast->numrows>0 ){
         $oAbast=db_utils::fieldsMemory($result_abast,0);
         $ve70_medida  = $oAbast->ve70_medida;
@@ -145,7 +145,11 @@ $ve70_dtabast3 = db_strtotime($ve70_dtabast3);
 
 }
 
-   
+if ($ve70_vlrun == '' || $ve70_vlrun == 0){
+  db_msgbox("Informar o valor do litro.");
+  $sqlerro=true;
+  $erro_msg="Não foi possível alterar.";
+}
 
 if (isset($sel_proprio) && ($sel_proprio==2)){
  if ($ve70_valor == ""){
@@ -220,8 +224,8 @@ if ($sqlerro==false){
   $erro_msg=$clveicabast->erro_msg;
   if ($clveicabast->erro_status=="0"){
   	$sqlerro=true;
-  }    
-  
+  }
+
   if ($sqlerro==false){
   	$clveicabastposto->ve71_veicabast=$ve70_codigo;
 
@@ -243,7 +247,7 @@ if ($sqlerro==false){
        if ($clveicabastposto->erro_status=="0"){
            $sqlerro=true;
            $erro_msg=$clveicabastposto->erro_msg;
-          }    
+          }
 
       if ($sel_proprio == 2){
         if ($e69_codnota==null and $ve71_nota!=null){
@@ -269,72 +273,72 @@ if ($sqlerro==false){
   	         if ($clveicabastpostoempnota->erro_status=="0"){
   		           $sqlerro=true;
   		           $erro_msg=$clveicabastpostoempnota->erro_msg;
-  	          } 
-        }       	  	  	
+  	          }
+        }
 }
-    } else{ 
-  	  $clveicabastposto->alterar(null,"ve71_veicabast=$ve70_codigo"); 
+    } else{
+  	  $clveicabastposto->alterar(null,"ve71_veicabast=$ve70_codigo");
     }
   	if ($clveicabastposto->erro_status=="0"){
   		$sqlerro=true;
   		$erro_msg=$clveicabastposto->erro_msg;
-  	}      	  	  	
+  	}
   }
 
   if ($sqlerro==false){
   	$result_retirada=$clveicabastretirada->sql_record($clveicabastretirada->sql_query(null,"ve73_codigo",null,"ve73_veicabast=$ve70_codigo"));
   	if (isset($ve73_veicretirada)&&$ve73_veicretirada!=""){
   		if ($clveicabastretirada->numrows>0){
-  			db_fieldsmemory($result_retirada,0);  	
+  			db_fieldsmemory($result_retirada,0);
   			$clveicabastretirada->ve73_codigo=$ve73_codigo;
-  			$clveicabastretirada->alterar($ve73_codigo);  	
+  			$clveicabastretirada->alterar($ve73_codigo);
   			if ($clveicabastretirada->erro_status=="0"){
   				$sqlerro=true;
   				$erro_msg=$clveicabastretirada->erro_msg;
   			}
       }else{
   			$clveicabastretirada->ve73_veicabast=$ve70_codigo;
-  			$clveicabastretirada->incluir(null);  	
-  			if ($clveicabastretirada->erro_status=="0"){
-  				$sqlerro=true;
-  				$erro_msg=$clveicabastretirada->erro_msg;
-  			}
-      }     
-  	}else{
-  		if ($clveicabastretirada->numrows>0){
-  			$clveicabastretirada->excluir(null,"ve73_veicabast=$ve70_codigo");  	
+  			$clveicabastretirada->incluir(null);
   			if ($clveicabastretirada->erro_status=="0"){
   				$sqlerro=true;
   				$erro_msg=$clveicabastretirada->erro_msg;
   			}
       }
-  	} 	  	  	
+  	}else{
+  		if ($clveicabastretirada->numrows>0){
+  			$clveicabastretirada->excluir(null,"ve73_veicabast=$ve70_codigo");
+  			if ($clveicabastretirada->erro_status=="0"){
+  				$sqlerro=true;
+  				$erro_msg=$clveicabastretirada->erro_msg;
+  			}
+      }
+  	}
   }
-  
+
   $clempveiculos->alterar(null,$ve70_codigo);
   $erro_msg=$clempveiculos->erro_msg;
   if ($clempveiculos->erro_status=="0"){
   	$sqlerro=true;
   }
-  
+
   db_fim_transacao($sqlerro);
 }
 
-}else 
+}else
 
  if(isset($chavepesquisa)){
    $db_botao = true;
    $db_opcao = 2;
    $result = $clveicabast->sql_record($clveicabast->sql_query($chavepesquisa));
-   if ($clveicabast->numrows>0){ 
+   if ($clveicabast->numrows>0){
    db_fieldsmemory($result,0);
-  }  
+  }
   $ve70_codigo=$chavepesquisa;
-   
+
    if (!isset($alterado)){
      $result_posto=$clveicabastposto->sql_record($clveicabastposto->sql_query_tip(null,"*",null,"ve71_veicabast=$ve70_codigo"));
      if ($clveicabastposto->numrows>0){
-       db_fieldsmemory($result_posto,0);  	
+       db_fieldsmemory($result_posto,0);
   	   if ($descrdepto!=""){
          $sel_proprio = 1;
        	 $posto=$descrdepto;
@@ -373,7 +377,7 @@ if ($sqlerro==false){
    $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query($ve01_veictipoabast,"ve07_sigla"));
    if ($clveictipoabast->numrows > 0){
      db_fieldsmemory($result_veictipoabast,0);
-   } 
+   }
 
    $result_retirada=$clveicabastretirada->sql_record($clveicabastretirada->sql_query(null,"*",null,"ve73_veicabast=$ve70_codigo"));
    if ($clveicabastretirada->numrows>0){
@@ -382,7 +386,7 @@ if ($sqlerro==false){
 
    $result_empnota=$clveicabastpostoempnota->sql_record($clveicabastpostoempnota->sql_query(null,"ve72_codigo",null,"ve71_veicabast=$ve70_codigo"));
    if ($clveicabastpostoempnota->numrows>0){
-   	 db_fieldsmemory($result_empnota,0);  	
+   	 db_fieldsmemory($result_empnota,0);
    }
 
    $result_empnota=$clveicabastpostoempnota->sql_record($clveicabastpostoempnota->sql_query_verificanota(null,"e69_numero as empnota,e69_codnota,ve71_nota",null,"ve71_veicabast=$ve70_codigo"));
@@ -395,15 +399,15 @@ if ($sqlerro==false){
    if ($clveicabast->numrows>0){
    db_fieldsmemory($result_comb,0);
    }
-   
+
    /*
-    * Alteração da tabela empveiculos para sicom 
+    * Alteração da tabela empveiculos para sicom
     */
    $result_comb=$clempveiculos->sql_record($clempveiculos->sql_query(null,"*",null,"si05_codabast=$ve70_codigo"));
    if ($clempveiculos->numrows>0){
    db_fieldsmemory($result_comb,0);
    }
-   
+
   }
 
 
@@ -425,7 +429,7 @@ if ($sqlerro==false){
 </html>
 <?
 
-if(isset($alterar)&& $self =! ""){ 
+if(isset($alterar)&& $self =! ""){
   if($clveicabast->erro_status=="0"||$sqlerro==true){
     db_msgbox($erro_msg);
     $db_botao=true;
