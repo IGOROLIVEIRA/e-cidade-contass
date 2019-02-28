@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -95,7 +95,24 @@ function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=n
     return $sql;
 }
 
-$result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+$anousu = db_getsession('DB_anousu');
+
+$sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+          from condataconf
+            where c99_instit = ".db_getsession('DB_instit')."
+              order by c99_anousu desc limit 1";
+
+$rsResult       = db_query($sSQL);
+$maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+
+$sNSQL = "";
+if ($anousu > $maxC99_datapat) {
+  $sNSQL = sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
+} else {
+    $sNSQL = sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+}
+
+$result = db_query($sNSQL);
 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
 ?>
@@ -104,7 +121,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
@@ -123,8 +140,8 @@ fieldset table td:first-child {
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_pesquisarAssinatura();">
 <?='<input id="c99_datapat_hidden" type="hidden" value="'.$c99_datapat.'">'?>
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr> 
-    <td valign="top" align="center"> 
+  <tr>
+    <td valign="top" align="center">
       <fieldset>
         <legend><b>Cancelar Assinatura do Acordo</b></legend>
         <table align="center" border="0">
@@ -161,8 +178,8 @@ fieldset table td:first-child {
             </td>
             <td align="left">
               <?
-                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia, 
-                                                  @$ac10_datamovimento_mes, 
+                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
+                                                  @$ac10_datamovimento_mes,
                                                   @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
               ?>
             </td>
@@ -179,7 +196,7 @@ fieldset table td:first-child {
                   ?>
               </fieldset>
             </td>
-          </tr> 
+          </tr>
         </table>
       </fieldset>
     </td>
@@ -189,7 +206,7 @@ fieldset table td:first-child {
   </tr>
   <tr>
     <td align="center">
-      <input id="cancelar" name="cancelar" type="button" value="Cancelar" 
+      <input id="cancelar" name="cancelar" type="button" value="Cancelar"
              onclick="return js_cancelarAssinatura();" disabled>
       <input id="pesquisar" name="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisarAssinatura();">
     </td>
@@ -215,9 +232,9 @@ function js_pesquisarAssinatura() {
   $('cancelar').disabled  = true;
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=2';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial';
-      
-  js_OpenJanelaIframe('top.corpo', 
-                      'db_iframe_assinatura', 
+
+  js_OpenJanelaIframe('top.corpo',
+                      'db_iframe_assinatura',
                       sUrl,
                       'Pesquisar Assinatura',
                       true);
@@ -239,14 +256,14 @@ function js_mostrarPesquisaAssinatura(chave) {
 function js_getDadosAssinatura(iCodigo) {
 
   js_divCarregando('Aguarde pesquisando assinatura...', 'msgBoxGetDadosAssinatura');
-   
+
   var oParam        = new Object();
   oParam.exec       = "getDadosAssinatura";
   oParam.codigo     = iCodigo;
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoGetDadosAssinatura
                                         }
                                 );
@@ -256,13 +273,13 @@ function js_getDadosAssinatura(iCodigo) {
  * Retorno dos dados da assinatura
  */
 function js_retornoGetDadosAssinatura(oAjax) {
-  
+
   js_removeObj("msgBoxGetDadosAssinatura");
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.status == 2) {
-    
+
     alert(oRetorno.erro.urlDecode());
     $('ac16_sequencial').value     = "";
     $('ac16_resumoobjeto').value   = "";
@@ -283,27 +300,27 @@ function js_retornoGetDadosAssinatura(oAjax) {
 
 /**
  * Cancelamento de assinatura
- */  
+ */
 function js_cancelarAssinatura() {
-   
+
   if ($('ac16_sequencial').value == '') {
-    
+
     alert('Acordo não informado!');
     return false;
   }
-  
+
   if ($('ac10_datamovimento').value == '') {
-    
+
     alert('Data não informada!');
     return false;
-  }  
-  
+  }
+
   if ($('ac10_sequencial').value == '') {
-    
+
     alert('Código da assinatura não informado! Verifique a pesquisa.');
     return false;
   }
-   
+
       /**
      * Verificar Encerramento Periodo Patrimonial
      */
@@ -330,24 +347,24 @@ function js_cancelarAssinatura() {
     oParam.codigo     = $F('ac10_sequencial');
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
 
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoCancelamentoAssinatura
                                         }
-                                );  
+                                );
 }
-  
+
 /**
  * Retorno dos dados do cancelamento da assinatura
  */
 function js_retornoCancelamentoAssinatura(oAjax) {
-  
+
   js_removeObj("msgBoxCancelarAssinatura");
-  
-  var oRetorno = eval("("+oAjax.responseText+")");   
-     
+
+  var oRetorno = eval("("+oAjax.responseText+")");
+
   $('ac10_sequencial').value    = "";
   $('ac16_sequencial').value    = "";
   $('ac16_resumoobjeto').value  = "";
@@ -360,9 +377,9 @@ function js_retornoCancelamentoAssinatura(oAjax) {
   } else {
     alert("Cancelamento efetuado com Sucesso.");
   }
-  
+
   js_pesquisarAssinatura();
-  
+
 }
 </script>
 </html>

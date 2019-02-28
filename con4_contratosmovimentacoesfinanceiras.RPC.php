@@ -380,7 +380,26 @@ switch($oParam->exec) {
             db_inicio_transacao();
             $clcondataconf = new cl_condataconf;
 
-            $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+            $anousu = db_getsession('DB_anousu');
+
+            $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+                      from condataconf
+                        where c99_instit = ".db_getsession('DB_instit')."
+                          order by c99_anousu desc limit 1";
+
+            $rsResult       = db_query($sSQL);
+            $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+
+            $sNSQL = "";
+            if ($anousu > $maxC99_datapat) {
+              $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
+
+            } else {
+                $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+            }
+
+            $result = db_query($sNSQL);
+
             $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
             arsort($oParam->aPosicoes);

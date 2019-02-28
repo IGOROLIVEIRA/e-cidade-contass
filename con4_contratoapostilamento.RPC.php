@@ -96,13 +96,33 @@ try {
             $clcondataconf = new cl_condataconf;
 
             if($sqlerro==false) {
-                $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit')));
-                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
-                $dateassinatura = implode("-",array_reverse(explode("/",$oParam->oApostila->dataapostila)));
+              $anousu = db_getsession('DB_anousu');
 
+              $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+                        from condataconf
+                          where c99_instit = ".db_getsession('DB_instit')."
+                            order by c99_anousu desc limit 1";
+
+              $rsResult       = db_query($sSQL);
+              $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+
+              $sNSQL = "";
+              if ($anousu > $maxC99_datapat) {
+                $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
+
+              } else {
+                  $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+              }
+
+              $result = db_query($sNSQL);
+              $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+              $dateassinatura = implode("-",array_reverse(explode("/",$oParam->oApostila->dataapostila)));
+
+              if($dateassinatura != "") {
                 if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                    throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                  throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
                 }
+              }
             }
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
             $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados);
