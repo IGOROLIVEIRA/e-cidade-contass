@@ -414,7 +414,7 @@ switch($oParam->exec) {
                     $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $oRetorno->status = 1;
                     throw new BusinessException($erro_msg);
-               }else {
+                }else {
                     if ($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
                         $oAcordoPosicao->remover();
                     } else {
@@ -534,8 +534,8 @@ switch($oParam->exec) {
         }
 
         /**
-        *Retorna dados da licitacao de outro orgao
-        */
+         *Retorna dados da licitacao de outro orgao
+         */
         $aLicOutrosorgaosVinculadas = $oAcordo->getiLicoutroorgao();
         if($aLicOutrosorgaosVinculadas[0] != ""){
             $oDaoAcordo = db_utils::getDao("liclicitaoutrosorgaos");
@@ -603,6 +603,24 @@ switch($oParam->exec) {
             $oRetorno->sTipoautorizacao = urlencode(4);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
+
+        break;
+
+    case 'getVigencia':
+
+        $oContrato = $_SESSION["oContrato"];
+        $dataFimVigencia = implode("-",array_reverse(explode("/",$oContrato->getUltimaPosicao(true)->getVigenciaFinal())));
+        $dataAutorizacao = date("Y-m-d",db_getsession("DB_datausu"));
+        $gerarAutorizacao = array();
+
+        if($dataAutorizacao > $dataFimVigencia){
+            $gerarAutorizacao[0] = false;
+            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+        }else{
+            $gerarAutorizacao[0] = true;
+            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+        }
+        $oRetorno = $gerarAutorizacao;
 
         break;
 }

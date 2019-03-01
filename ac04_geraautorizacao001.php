@@ -531,11 +531,42 @@ if($x->consultarDataDoSistema == true){
                 aLinha[4]  = oPosicao.emergencial.urlDecode();
                 oGridPosicoes.addRow(aLinha);
                 if (iLinha == oRetorno.posicoes.length-1) {
-                    oGridPosicoes.aRows[iLinha].sEvents='ondblclick="js_getItensPosicao('+oPosicao.codigo+','+iLinha+')"';
+                    oGridPosicoes.aRows[iLinha].sEvents='ondblclick="js_getItensPosicao('+oPosicao.codigo+','+iLinha+');js_verificavirgencia('+oPosicao.codigo+','+iLinha+')"';
                     oGridPosicoes.aRows[iLinha].setClassName('marcado');
                 }
             });
             oGridPosicoes.renderRows();
+        }
+    }
+
+    function js_verificavirgencia(iCodigo, iLinha) {
+        oGridPosicoes.aRows.each(function(oLinha, id) {
+            oLinha.select(false);
+        });
+        oGridPosicoes.aRows[iLinha].select(true);
+        js_divCarregando('Aguarde, pesquisando itens do acordo', 'msgbox');
+        var oParam      = new Object();
+        oParam.exec     = 'getVigencia';
+        oParam.iPosicao = iCodigo;
+        iPosicaoAtual   = iCodigo;
+        var oAjax       = new Ajax.Request(sUrlRpc,
+            {method:'post',
+                parameters:'json='+Object.toJSON(oParam),
+                onComplete: js_validavigencia
+            }
+        )
+    }
+
+    function js_validavigencia(oAjax){
+        var oRetorno = JSON.parse(oAjax.responseText);
+        let erro = oRetorno[0];
+console.log(oRetorno);
+        if (erro == false){
+            console.log("entrou");
+            alert("Contrato com vigência até "+ oRetorno[1] +", não será possível gerar autorização de empenho.");
+            location.reload();
+        }else{
+            js_removeObj("msgbox");
         }
     }
 
