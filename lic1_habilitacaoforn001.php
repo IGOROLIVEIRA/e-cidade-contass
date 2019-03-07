@@ -5,19 +5,63 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_habilitacaoforn_classe.php");
 include("dbforms/db_funcoes.php");
-require_once ("classes/db_pcorcamforne_classe.php");
+require_once("classes/db_pcorcamforne_classe.php");
+include("dbforms/db_liclicita_classe.php");
 db_postmemory($HTTP_POST_VARS);
 $clhabilitacaoforn = new cl_habilitacaoforn;
+$clhabilitacaoforn->rotulo->label();
 $clpcorcamforne    = new cl_pcorcamforne;
+$clliclicita = new cl_liclicita;
+$clcgm = new cl_cgm;
 
 $db_opcao = 22;
 $db_botao = false;
+$erro = '';
 if(isset($alterar) || isset($excluir) || isset($incluir)){
   $sqlerro = false;
 }
 
+if(isset($incluir) || isset($alterar)){
+  $sqlLicitacao = $clliclicita->sql_query($l206_licitacao,'distinct l20_codtipocom', null, null);
+  $rsLicitacao = $clliclicita->sql_record($sqlLicitacao);
+  $modalidade = db_utils::fieldsMemory($rsLicitacao, 0);
+  $modalid = $modalidade->l20_codtipocom;
+
+  $sqlCgm = $clcgm->sql_query($l206_fornecedor, 'distinct z01_cgccpf', null, null);
+  $rsCgm = $clcgm->sql_record($sqlCgm);
+  $cgm = db_utils::fieldsMemory($rsCgm, 0);
+
+  if(strlen($cgm->z01_cgccpf) == 14){
+    if($modalid == '9' || $modalid == '11' || $modalid == '8' || $modalid == '10'){
+        if($l206_datavalidadefgts == '')
+          $erro_msg = 'Campo Data de Validade FGTS não informado';
+        if($l206_dataemissaofgts == '')
+          $erro_msg = 'Campo Data de Emissão FGTS não informado';
+        if($l206_numcertidaofgts  == "")
+          $erro_msg = 'Campo Número de Certidão FGTS não informado';
+        if($l206_datavalidadeinss == '')
+          $erro_msg = 'Campo Data de Validade INSS não informado';
+        if($l206_dataemissaoinss == "")
+          $erro_msg = 'Campo Data de Emissão INSS não informado';
+        if($l206_numcertidaoinss == "")
+          $erro_msg = 'Campo Número de Certidão INSS não informado';
+    }
+
+    if($modalid == '6' || $modalid == '5' || $modalid == '1' || $modalid == '4'){
+        if($l206_datahab_dia == ""){
+          $erro_msg = 'Campo Data de Habilitação não informado';
+        }
+    }
+  }
+
+  if($erro_msg){
+    $sqlerro = true;
+  }
+
+}
+
 if(isset($incluir)){
-	if($sqlerro==false){
+  if($sqlerro==false){
     db_inicio_transacao();
     $clhabilitacaoforn->incluir($l206_sequencial);
     $erro_msg = $clhabilitacaoforn->erro_msg;
@@ -25,7 +69,7 @@ if(isset($incluir)){
       $sqlerro=true;
     }
     db_fim_transacao($sqlerro);
-  }
+ }
 }else if(isset($alterar)){
   if($sqlerro==false){
     db_inicio_transacao();
@@ -52,6 +96,7 @@ if(isset($incluir)){
      db_fieldsmemory($result,0);
    }
 }
+
 ?>
 <html>
 <head>
@@ -63,8 +108,8 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="100" marginheight="20" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmhabilitacaoforn.php");
@@ -94,9 +139,19 @@ js_tabulacaoforms("form1","l206_fornecedor",true,1,"l206_fornecedor",true);
 }*/
 if(isset($alterar) || isset($excluir) || isset($incluir)){
     db_msgbox($erro_msg);
+    // die();
+    // if($erro_msg)
+    //   print_r('1:'.$erro_msg);
+    // if($erro_campo){
+    //   print_r('2'.$erro_campo);
+    // }
+    // if($erro){
+    //   db_msgbox('3.'.$erro);
+    // }
+
     if($clhabilitacaoforn->erro_campo!=""){
-        echo "<script> document.form1.".$clhabilitacaoforn->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-        echo "<script> document.form1.".$clhabilitacaoforn->erro_campo.".focus();</script>";
+      echo "<script> document.form1.".$clhabilitacaoforn->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clhabilitacaoforn->erro_campo.".focus();</script>";
     }
 }
 ?>
