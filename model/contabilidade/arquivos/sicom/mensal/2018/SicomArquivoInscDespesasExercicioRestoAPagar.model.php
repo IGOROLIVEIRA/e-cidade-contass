@@ -453,9 +453,20 @@ AND e60_codemp = '$codemp'";
          *
          */
 
-        $sSql20 = "SELECT  * FROM disponibilidadecaixa where c224_anousu = ". db_getsession('DB_anousu')." and c224_instit = ". db_getsession('DB_instit')."";
+        $sSql20 = "SELECT *
+                   FROM disponibilidadecaixa
+                   WHERE c224_anousu = ". db_getsession('DB_anousu')."
+                        AND c224_instit = ". db_getsession('DB_instit')."
+                        AND c224_sequencial NOT IN
+                            (SELECT c224_sequencial
+                                 FROM disponibilidadecaixa
+                             WHERE c224_vlrcaixabruta = 0
+                             AND c224_rpexercicioanterior = 0
+                             AND c224_vlrrestoarecolher = 0
+                             AND c224_vlrrestoregativofinanceiro = 0
+                             AND c224_vlrdisponibilidadecaixa = 0)";
         $rsResult20 = db_query($sSql20);
-
+//        db_criatabela($rsResult20);
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
             $oDados20[] = db_utils::fieldsMemory($rsResult20, $iCont20);
@@ -474,13 +485,10 @@ AND e60_codemp = '$codemp'";
             $iderp202018->si181_vlsaldodispcaixa = $reg20->vlRdispCaixa < 0 ? 0 : $reg20->c224_vlrdisponibilidadecaixa;
             $iderp202018->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
             $iderp202018->si181_instit = $reg20->c224_instit;
-            if($reg20->c224_vlrcaixabruta == 0 && $reg20->c224_rpexercicioanterior == 0 &&  $reg20->c224_vlrrestoarecolher == 0 && $reg20->c224_vlrrestoregativofinanceiro == 0) {
-
-            }else{
-                $iderp202018->incluir(null);
-            }
+            $iderp202018->incluir(null);
 
             if ($iderp202018->erro_status == 0) {
+
                 throw new Exception($iderp202018->erro_msg);
             }
         }
