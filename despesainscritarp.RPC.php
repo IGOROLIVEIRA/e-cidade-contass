@@ -56,7 +56,7 @@ try{
                 $cldespesainscritarp->c223_anousu          = db_getsession("DB_anousu");
                 $cldespesainscritarp->c223_instit          = db_getsession("DB_instit");
 
-                $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query(null,"c223_sequencial",null,"c223_codemp = {$oItem->c223_codemp} and c223_anousu = " . db_getsession("DB_anousu") . "."));
+                $result = $cldespesainscritarp->sql_record($cldespesainscritarp->sql_query(null,"c223_sequencial",null,"c223_codemp = {$oItem->c223_codemp} and c223_instint = ".db_getsession("DB_instit")." and c223_anousu = " . db_getsession("DB_anousu") . "."));
                 db_fieldsmemory($result,0)->c223_sequencial;
                 db_inicio_transacao();
 
