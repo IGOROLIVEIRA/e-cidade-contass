@@ -127,6 +127,10 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412100422000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100431000000"){
             $fCSICRPPS+=$oDados->saldo_arrecadado;
         }
@@ -345,17 +349,18 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Própria</td>
+            <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Próprio</td>
             <td class="s5">
                 <?php
                 $fSaldoIntaivosPensionistasProprio = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
-                    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
+                    //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
                         $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                         $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
-                    }
+                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    //}
 
                 }
                 echo db_formatar($fSaldoIntaivosPensionistasProprio, "f");
@@ -389,8 +394,8 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s2 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
-            <td class="s6">
+            <td class="s3 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
+            <td class="s5">
                 <?php
                 $fSaldoAposentadoriaPensoesTesouro = 0;
                 foreach ($aInstits as $iInstit) {
@@ -398,8 +403,47 @@ ob_start();
                     if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
                         $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                         $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                     }
+                }
+                echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Indenização por demissão de servidores ou empregados</td>
+            <td class="s5">
+                <?php
+                $fSaldoAposentadoriaPensoesTesouro = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    //}
+                }
+                echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                ?>
+            </td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s2 bdleft" colspan="2">(-) Incentivos a demissão voluntária</td>
+            <td class="s6">
+                <?php
+                $fSaldoAposentadoriaPensoesTesouro = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+                    //$aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    //$aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    //$aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+
+                    //$fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    //}
                 }
                 echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
                 ?>
