@@ -44,9 +44,6 @@
 		var $si206_dtassinaturaconge_ano = null;
 		var $si206_nroconvenioconge = null;
 		var $si206_dtassinaturaconge = null;
-		var $si206_dtassinaturaconge_dia = null;
-		var $si206_dtassinaturaconge_mes = null;
-		var $si206_dtassinaturaconge_ano = null;
     var $si206_mes = 0;
 		var $si206_instit = 0;
 		// cria propriedade com as variaveis do arquivo
@@ -254,6 +251,7 @@
 
 				return false;
 			}
+
 			$sql = "insert into emp302019(
                                        si206_sequencial
                                       ,si206_tiporegistro
@@ -282,9 +280,9 @@
                                ," . ($this->si206_dtempenho == "null" || $this->si206_dtempenho == "" ? "null" : "'" . $this->si206_dtempenho . "'") . "
                                ,'$this->si206_codorgaorespcontrato'
                                ,'$this->si206_codunidadesubrespcontrato'
-                               ,$this->si206_nrocontrato
+                               ," . ($this->si206_nrocontrato == "null" || $this->si206_nrocontrato == "" ? "null" : "'" . $this->si206_nrocontrato . "'") . "
                                ," . ($this->si206_dtassinaturacontrato == "null" || $this->si206_dtassinaturacontrato == "" ? "null" : "'" . $this->si206_dtassinaturacontrato . "'") . "
-                               ,$this->si206_nrosequencialtermoaditivo
+                               ," . ($this->si206_nrosequencialtermoaditivo == "null" || $this->si206_nrosequencialtermoaditivo == "" ? "null" : "'" . $this->si206_nrosequencialtermoaditivo . "'") . "
                                ,'$this->si206_nroconvenio'
                                ," . ($this->si206_dtassinaturaconvenio == "null" || $this->si206_dtassinaturaconvenio == "" ? "null" : "'" . $this->si206_dtassinaturaconvenio . "'") . "
                                ,'$this->si206_nroconvenioconge'
@@ -292,6 +290,7 @@
                                ,$this->si206_mes
                                ,$this->si206_instit
                       )";
+
 			$result = db_query($sql);
 			if ($result == false) {
 				$this->erro_banco = str_replace("", "", @pg_last_error());

@@ -4,6 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_emp102019_classe.php");
 require_once("classes/db_emp112019_classe.php");
 require_once("classes/db_emp122019_classe.php");
+require_once("classes/db_emp302019_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarEMP.model.php");
 
 /**
@@ -225,16 +226,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				case when ac16_sequencial is null then null else ac26_numeroaditamento end as nrosequencialtermoaditivo,
 
                 CASE
-                    WHEN e60_convenio = 1 THEN 1
-                    ELSE 2
+                    WHEN e60_numconvenio is null THEN 2
+                    ELSE 1
                 END AS despdecconvenio,
                 CASE
-                    WHEN e60_convenio = 2 THEN NULL
-                    ELSE e60_numconvenio
+                    WHEN e60_numconvenio IS NULL THEN NULL
+                    ELSE (select c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
                 END AS nroconvenio,
                 CASE
-                    WHEN e60_convenio = 2 THEN NULL
-                    ELSE e60_dataconvenio
+                    WHEN e60_convenio IS NULL THEN NULL
+                    ELSE (select c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
                 END AS dataassinaturaconvenio,
                 CASE
                     WHEN l20_codigo IS NULL THEN 1
@@ -352,9 +353,8 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
               AND e60_instit = " . db_getsession("DB_instit") . "
               AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
 
-        $rsEmpenho = db_query($sSql);
-//        echo pg_last_error();
-//        echo $sSql;db_criatabela($rsEmpenho);exit;
+        $rsEmpenho10 = db_query($sSql);
+
         $aCaracteres = array("°", chr(13), chr(10), "'", ";");
         // matriz de entrada
         $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -369,14 +369,14 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
         $aTipoDespEmpRPPS = array('31900101', '31900102', '31900301', '31900302', '31900501', '31900502', '31900503', '31909102', '31909103', '31909201',
             '31909202', '31909203', '31909403', '31919102', '31919103', '31919201', '31919202', '31919203', '31969102', '31969103', '31969201', '31969202', '31969203');
 
-        for ($iCont = 0; $iCont < pg_num_rows($rsEmpenho); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rsEmpenho10); $iCont++) {
 
-            $oEmpenho = db_utils::fieldsMemory($rsEmpenho, $iCont);
+            $oEmpenho10 = db_utils::fieldsMemory($rsEmpenho10, $iCont);
 
             /**
              *pega os codigos de unidade e subunidade do departamento do contrato somente necessario quando despesa for de contrato.
              */
-            if($oEmpenho->despdeccontrato == 1) {
+            if($oEmpenho10->despdeccontrato == 1) {
                 $sSql = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
                      CASE WHEN o41_codtri = '0'
@@ -384,7 +384,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                      join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
                      and db01_anousu = o41_anousu
                      JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                     where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oEmpenho->ac16_deptoresponsavel;
+                     where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oEmpenho10->ac16_deptoresponsavel;
                 $rsDepart = db_query($sSql);
 
                 $sOrgDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_orgao;
@@ -398,13 +398,13 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             }
 
             if ($sTrataCodUnidade == 1) {
-                $sCodUnidade = str_pad($oEmpenho->o58_orgao, 2, "0", STR_PAD_LEFT);
-                $sCodUnidade .= str_pad($oEmpenho->o58_unidade, 3, "0", STR_PAD_LEFT);
+                $sCodUnidade = str_pad($oEmpenho10->o58_orgao, 2, "0", STR_PAD_LEFT);
+                $sCodUnidade .= str_pad($oEmpenho10->o58_unidade, 3, "0", STR_PAD_LEFT);
             } else {
-                $sCodUnidade = $oEmpenho->codunidadesub;
+                $sCodUnidade = $oEmpenho10->codunidadesub;
             }
 
-            $sElemento = substr($oEmpenho->naturezadadespesa, 0, 8);
+            $sElemento = substr($oEmpenho10->naturezadadespesa, 0, 8);
             /**
              * percorrer xml elemento despesa
              */
@@ -423,90 +423,90 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
             db_inicio_transacao();
 
-            $oDadosEmpenho = new cl_emp102019();
+            $oDadosEmpenho10 = new cl_emp102019();
 
-            $oDadosEmpenho->si106_tiporegistro = $oEmpenho->tiporegistro;
-            $oDadosEmpenho->si106_codorgao = $oEmpenho->codorgao;
-            $oDadosEmpenho->si106_codunidadesub = $sCodUnidade;
-            $oDadosEmpenho->si106_codfuncao = $oEmpenho->codfuncao;
-            $oDadosEmpenho->si106_codsubfuncao = $oEmpenho->codsubfuncao;
-            $oDadosEmpenho->si106_codprograma = $oEmpenho->codprograma;
-            $oDadosEmpenho->si106_idacao = $oEmpenho->idacao;
-            $oDadosEmpenho->si106_idsubacao = $oEmpenho->idsubacao;
-            $oDadosEmpenho->si106_naturezadespesa = substr($sElemento, 0, 6);
-            $oDadosEmpenho->si106_subelemento = substr($sElemento, 6, 2);
-            $oDadosEmpenho->si106_nroempenho = $oEmpenho->nroempenho;
-            $oDadosEmpenho->si106_dtempenho = $oEmpenho->dtempenho;
-            $oDadosEmpenho->si106_modalidadeempenho = $oEmpenho->modalidadempenho;
-            $oDadosEmpenho->si106_tpempenho = $oEmpenho->tpempenho;
-            $oDadosEmpenho->si106_vlbruto = $oEmpenho->vlbruto;
-            $oDadosEmpenho->si106_especificacaoempenho = $oEmpenho->especificaoempenho == '' ? 'SEM HISTORICO' :
-                trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho->especificaoempenho), 0, 200)));
-            $aAnoContrato = explode('-', $oEmpenho->dtassinaturacontrato);
-            if (date('m', strtotime($oEmpenho->dtempenho)) < date('m', strtotime($oEmpenho->dataassinaturacontrato)) || $oEmpenho->dataassinaturacontrato == null) {
-                $oDadosEmpenho->si106_despdeccontrato = 2;
-                if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao->codorgao;
+            $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
+            $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
+            $oDadosEmpenho10->si106_codunidadesub = $sCodUnidade; // campo 3
+            $oDadosEmpenho10->si106_codfuncao = $oEmpenho10->codfuncao; // campo 4
+            $oDadosEmpenho10->si106_codsubfuncao = $oEmpenho10->codsubfuncao; // campo 5
+            $oDadosEmpenho10->si106_codprograma = $oEmpenho10->codprograma; // campo 6
+            $oDadosEmpenho10->si106_idacao = $oEmpenho10->idacao; // campo 7
+            $oDadosEmpenho10->si106_idsubacao = $oEmpenho10->idsubacao; // campo 8
+            $oDadosEmpenho10->si106_naturezadespesa = substr($sElemento, 0, 6); // campo 9
+            $oDadosEmpenho10->si106_subelemento = substr($sElemento, 6, 2); // campo 10
+            $oDadosEmpenho10->si106_nroempenho = $oEmpenho10->nroempenho; // campo 11
+            $oDadosEmpenho10->si106_dtempenho = $oEmpenho10->dtempenho; // campo 12
+            $oDadosEmpenho10->si106_modalidadeempenho = $oEmpenho10->modalidadempenho; // campo 13
+            $oDadosEmpenho10->si106_tpempenho = $oEmpenho10->tpempenho; // campo 14
+            $oDadosEmpenho10->si106_vlbruto = $oEmpenho10->vlbruto; // campo 15
+            $oDadosEmpenho10->si106_especificacaoempenho = $oEmpenho10->especificaoempenho == '' ? 'SEM HISTORICO' :
+                trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho10->especificaoempenho), 0, 200))); // campo 16
+            $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
+            if (date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) || $oEmpenho10->dataassinaturacontrato == null) {
+                $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
+                if ($oEmpenho10->despdeccontrato == 3) {
+                    $oDadosEmpenho10->si106_codorgaorespcontrato = $sCodorgao->codorgao; // campo 18
                 } else {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
+                    $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
                 }
-                $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
-                $oDadosEmpenho->si106_nrocontrato = '';
-                $oDadosEmpenho->si106_dtassinaturacontrato = '';
-                $oDadosEmpenho->si106_nrosequencialtermoaditivo = '';
+                $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
+                $oDadosEmpenho10->si106_nrocontrato = ''; // campo 20
+                $oDadosEmpenho10->si106_dtassinaturacontrato = ''; // campo 21
+                $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
             }else {
-                $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
-                if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao->codorgao;
+                $oDadosEmpenho10->si106_despdeccontrato = $oEmpenho10->despdeccontrato; // campo 17
+                if ($oEmpenho10->despdeccontrato == 3) {
+                    $oDadosEmpenho10->si106_codorgaorespcontrato = $sCodorgao->codorgao; // campo 18
                 } else {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
+                    $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
                 }
 
-                if (in_array($oEmpenho->despdeccontrato, array(1, 3))) {
-                    $oDadosEmpenho->si106_codunidadesubrespcontrato = $oEmpenho->codunidadesubrespcontrato;
+                if (in_array($oEmpenho10->despdeccontrato, array(1, 3))) {
+                    $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->codunidadesubrespcontrato; // campo 19
                 } else {
-                    $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
+                    $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
                 }
-                $oDadosEmpenho->si106_nrocontrato = $oEmpenho->nrocontrato;
-                $oDadosEmpenho->si106_dtassinaturacontrato = $oEmpenho->dataassinaturacontrato;
-                $oDadosEmpenho->si106_nrosequencialtermoaditivo = $oEmpenho->nrosequencialtermoaditivo;
+                $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
+                $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
+                $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
             }
 
-            $oDadosEmpenho->si106_despdecconvenio = $oEmpenho->despdecconvenio;
-            $oDadosEmpenho->si106_nroconvenio = $oEmpenho->nroconvenio;
-            $oDadosEmpenho->si106_dataassinaturaconvenio = $oEmpenho->dataassinaturaconvenio;
-            $oDadosEmpenho->si106_despdecconvenioconge = $oEmpenho->si106_despdecconvenioconge;
-            $oDadosEmpenho->si106_nroconvenioconge = $oEmpenho->si106_nroconvenioconge;
-            $oDadosEmpenho->si106_dataassinaturaconvenioconge = $oEmpenho->si106_dataassinaturaconvenioconge;
-            $aHomologa = explode("-", $oEmpenho->datahomologacao);
-            if (($oEmpenho->datahomologacao == null && $oDadosEmpenho->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014) {
-                $oDadosEmpenho->si106_despdeclicitacao = 1;
-                $oDadosEmpenho->si106_codunidadesubresplicit = null;
-                $oDadosEmpenho->si106_nroprocessolicitatorio = null;
-                $oDadosEmpenho->si106_exercicioprocessolicitatorio = null;
-                $oDadosEmpenho->si106_tipoprocesso = null;
+            $oDadosEmpenho10->si106_despdecconvenio = $oEmpenho10->despdecconvenio; // campo 23
+            $oDadosEmpenho10->si106_nroconvenio = $oEmpenho10->nroconvenio; // campo 24
+            $oDadosEmpenho10->si106_dataassinaturaconvenio = $oEmpenho10->dataassinaturaconvenio; // campo 25
+            $oDadosEmpenho10->si106_despdecconvenioconge = $oEmpenho10->si106_despdecconvenioconge; // campo 26
+            $oDadosEmpenho10->si106_nroconvenioconge = $oEmpenho10->si106_nroconvenioconge; // campo 27
+            $oDadosEmpenho10->si106_dataassinaturaconvenioconge = $oEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
+            $aHomologa = explode("-", $oEmpenho10->datahomologacao);
+            if (($oEmpenho10->datahomologacao == null && $oDadosEmpenho10->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014) {
+                $oDadosEmpenho10->si106_despdeclicitacao = 1; // campo 29
+                $oDadosEmpenho10->si106_codunidadesubresplicit = null; // campo 30
+                $oDadosEmpenho10->si106_nroprocessolicitatorio = null; // campo 31
+                $oDadosEmpenho10->si106_exercicioprocessolicitatorio = null; // campo 32
+                $oDadosEmpenho10->si106_tipoprocesso = null; // campo 33
             } else {
-                $oDadosEmpenho->si106_despdeclicitacao = $oEmpenho->despdeclicitacao;
-                $oDadosEmpenho->si106_codunidadesubresplicit = $oEmpenho->codunidadesubresplicit;
-                $oDadosEmpenho->si106_nroprocessolicitatorio = $oEmpenho->nroprocessolicitatorio;
-                $oDadosEmpenho->si106_exercicioprocessolicitatorio = $oEmpenho->exercicioprocessolicitatorio;
-                $oDadosEmpenho->si106_tipoprocesso = $oEmpenho->tipoprocesso;
+                $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
+                $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->codunidadesubresplicit; // campo 30
+                $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->nroprocessolicitatorio; // campo 31
+                $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->exercicioprocessolicitatorio; // campo 32
+                $oDadosEmpenho10->si106_tipoprocesso = $oEmpenho10->tipoprocesso; // campo 33
             }
-            $oDadosEmpenho->si106_cpfordenador = substr($oEmpenho->ordenador, 0, 11);
+            $oDadosEmpenho10->si106_cpfordenador = substr($oEmpenho10->ordenador, 0, 11); // campo 34
             /*
              * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
              */
             if($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6){
-                $oDadosEmpenho->si106_tipodespesaemprpps = $oEmpenho->e60_tipodespesa;
+                $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
             }else{
-                $oDadosEmpenho->si106_tipodespesaemprpps = null;
+                $oDadosEmpenho10->si106_tipodespesaemprpps = null; // campo 35
             }
-            $oDadosEmpenho->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $oDadosEmpenho->si106_instit = db_getsession("DB_instit");
+            $oDadosEmpenho10->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
+            $oDadosEmpenho10->si106_instit = db_getsession("DB_instit"); // campo 37
 
-            $oDadosEmpenho->incluir();
-            if ($oDadosEmpenho->erro_status == 0) {
-                throw new Exception($oDadosEmpenho->erro_msg);
+            $oDadosEmpenho10->incluir();
+            if ($oDadosEmpenho10->erro_status == 0) {
+                throw new Exception($oDadosEmpenho10->erro_msg);
             }
 
             /**
@@ -516,11 +516,11 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
             $oDadosEmpenhoFonte->si107_tiporegistro = 11;
             $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
-            $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho->nroempenho;
-            $oDadosEmpenhoFonte->si107_codfontrecursos = $oEmpenho->o15_codtri;
-            $oDadosEmpenhoFonte->si107_valorfonte = $oEmpenho->vlbruto;
+            $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho10->nroempenho;
+            $oDadosEmpenhoFonte->si107_codfontrecursos = $oEmpenho10->o15_codtri;
+            $oDadosEmpenhoFonte->si107_valorfonte = $oEmpenho10->vlbruto;
             $oDadosEmpenhoFonte->si107_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $oDadosEmpenhoFonte->si107_reg10 = $oDadosEmpenho->si106_sequencial;
+            $oDadosEmpenhoFonte->si107_reg10 = $oDadosEmpenho10->si106_sequencial;
             $oDadosEmpenhoFonte->si107_instit = db_getsession("DB_instit");
 
             $oDadosEmpenhoFonte->incluir(null);
@@ -533,11 +533,11 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
             $oEmp12->si108_tiporegistro = '12';
             $oEmp12->si108_codunidadesub = $sCodUnidade;
-            $oEmp12->si108_nroempenho = $oEmpenho->nroempenho;;
-            $oEmp12->si108_tipodocumento = $oEmpenho->tipodocumento;;
-            $oEmp12->si108_nrodocumento = $oEmpenho->nrodocumento;;
+            $oEmp12->si108_nroempenho = $oEmpenho10->nroempenho;
+            $oEmp12->si108_tipodocumento = $oEmpenho10->tipodocumento;
+            $oEmp12->si108_nrodocumento = $oEmpenho10->nrodocumento;
             $oEmp12->si108_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $oEmp12->si108_reg10 = $oDadosEmpenho->si106_sequencial;
+            $oEmp12->si108_reg10 = $oDadosEmpenho10->si106_sequencial;
             $oEmp12->si108_instit = db_getsession("DB_instit");
 
 
@@ -546,13 +546,41 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                 throw new Exception($oEmp12->erro_msg);
             }
 
+          /**
+           * dados do registro 30
+           */
+          $oDadosEmpenho30 = new cl_emp302019();
 
-            db_fim_transacao();
+          $oDadosEmpenho30->si206_tiporegistro = '30'; // campo 1
+          $oDadosEmpenho30->si206_codorgao = $oEmpenho10->codorgao; //campo 2
+          $oDadosEmpenho30->si206_codunidadesub = $sCodUnidade; // campo 3
+          $oDadosEmpenho30->si206_nroempenho = $oEmpenho10->nroempenho; // campo 4
+          $oDadosEmpenho30->si206_dtempenho = $oEmpenho10->dtempenho; // campo 5
+
+          $oDadosEmpenho30->si206_codorgaorespcontrato = $oDadosEmpenho10->si106_codorgaorespcontrato; // campo 18
+          $oDadosEmpenho30->si206_codunidadesubrespcontrato = $oDadosEmpenho10->si106_codunidadesubrespcontrato; // campo 19
+          $oDadosEmpenho30->si206_nrocontrato = $oDadosEmpenho10->si106_nrocontrato; // campo 20
+          $oDadosEmpenho30->si206_dtassinaturacontrato = $oDadosEmpenho10->si106_dtassinaturacontrato; // campo 21
+          $oDadosEmpenho30->si206_nrosequencialtermoaditivo = $oDadosEmpenho10->si106_nrosequencialtermoaditivo; // campo 22
+
+          $oDadosEmpenho30->si206_nroconvenio = $oDadosEmpenho10->si106_nroconvenio; // campo 24
+          $oDadosEmpenho30->si206_dtassinaturaconvenio = $oDadosEmpenho10->si106_dataassinaturaconvenio; // campo 25
+          $oDadosEmpenho30->si206_nroconvenioconge = $oDadosEmpenho10->si106_nroconvenioconge; // campo 27
+          $oDadosEmpenho30->si206_dtassinaturaconge = $oDadosEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
+          $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
+          $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
+
+          $oDadosEmpenho30->incluir();
+          if ($oDadosEmpenho30->erro_status == 0) {
+            throw new Exception($oDadosEmpenho30->erro_msg);
+          }
+
+          db_fim_transacao();
         }
 
-        $oGerarEMP = new GerarEMP();
-        $oGerarEMP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $oGerarEMP->gerarDados();
+      $oGerarEMP = new GerarEMP();
+      $oGerarEMP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $oGerarEMP->gerarDados();
 
     }
 
