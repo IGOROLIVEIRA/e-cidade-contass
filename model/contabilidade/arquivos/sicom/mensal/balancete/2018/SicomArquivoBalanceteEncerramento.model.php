@@ -2042,10 +2042,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                                     $oReg17Saldo->saldoanterior = $oReg17Saldo->naturezasaldoinicialctb == 'C' ? $oReg17Saldo->saldoanterior * -1 : $oReg17Saldo->saldoanterior;
 
-                                    $iCodCtb = ($objContasctb->codctbtce == 0 ? $oCtb->si95_codctb : $objContasctb->codctbtce);
-
-                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb
-                                        . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
+                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $oCtb->si95_codctb
+                                        . ($this->getFontReduzAM($oCtb->si95_codctb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($oCtb->si95_codctb));
 
                                     if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
@@ -2053,8 +2051,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                         $obalancete17->si184_tiporegistro = 17;
                                         $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                         $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
-                                        $obalancete17->si184_codctb = $iCodCtb;
-                                        $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
+                                        $obalancete17->si184_codctb = $oCtb->si95_codctb;
+                                        $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($oCtb->si95_codctb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($oCtb->si95_codctb));
                                         $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
                                         $obalancete17->si184_naturezasaldoinicialctb = $oReg17Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                         $obalancete17->si184_totaldebitosctb = $oReg17Saldo->debitos;
