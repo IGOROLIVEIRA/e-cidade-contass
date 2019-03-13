@@ -619,7 +619,7 @@ function js_RetencaoINSS() {
   var select = document.getElementById('q62_tiporetinss');
 
   var info = {
-    limiteINSS: 621.04,
+    limiteINSS: 642.34,
     baseCalculo: parseFloat(document.getElementById('q62_vlrtotal').value),
     retencoesAntigas: document.getElementById('q62_deducaoinss')
   };
