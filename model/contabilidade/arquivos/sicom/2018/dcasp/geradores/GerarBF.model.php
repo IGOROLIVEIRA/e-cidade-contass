@@ -42,7 +42,6 @@ class GerarBF extends GerarAM
 
         $aCSVBF10 = array();
         $aCSVBF10['si206_tiporegistro']                       = $this->padLeftZero($aBF10['si206_tiporegistro'], 2);
-        $aCSVBF10['si206_exercicio']                          = $this->padLeftZero($aBF10['si206_exercicio'], 1);
         $aCSVBF10['si206_vlrecorcamenrecurord']               = $this->sicomNumberReal($aBF10['si206_vlrecorcamenrecurord'], 2);
         $aCSVBF10['si206_vlrecorcamenrecinceduc']             = $this->sicomNumberReal($aBF10['si206_vlrecorcamenrecinceduc'], 2);
         $aCSVBF10['si206_vlrecorcamenrecurvincusaude']        = $this->sicomNumberReal($aBF10['si206_vlrecorcamenrecurvincusaude'], 2);
@@ -73,7 +72,6 @@ class GerarBF extends GerarAM
 
         $aCSVBF20 = array();
         $aCSVBF20['si207_tiporegistro']                     = $this->padLeftZero($aBF20['si207_tiporegistro'], 2);
-        $aCSVBF20['si207_exercicio']                        = $this->padLeftZero($aBF20['si207_exercicio'], 1);
         $aCSVBF20['si207_vldesporcamenrecurordinarios']     = $this->sicomNumberReal($aBF20['si207_vldesporcamenrecurordinarios'], 2);
         $aCSVBF20['si207_vldesporcamenrecurvincueducacao']  = $this->sicomNumberReal($aBF20['si207_vldesporcamenrecurvincueducacao'], 2);
         $aCSVBF20['si207_vldesporcamenrecurvincusaude']     = $this->sicomNumberReal($aBF20['si207_vldesporcamenrecurvincusaude'], 2);

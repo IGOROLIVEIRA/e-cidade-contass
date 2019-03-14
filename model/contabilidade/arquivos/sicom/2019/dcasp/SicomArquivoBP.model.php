@@ -24,7 +24,7 @@ require_once("classes/db_bpdcasp602019_classe.php");
 require_once("classes/db_bpdcasp702019_classe.php");
 require_once("classes/db_bpdcasp712019_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2016/dcasp/geradores/GerarBP.model.php");
+require_once("model/contabilidade/arquivos/sicom/2019/dcasp/geradores/GerarBP.model.php");
 
 /**
  * gerar arquivo de Balanço Patrimonial
@@ -231,8 +231,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aExercicios = array(
-        1 => 'vlrexatual',
-        2 => 'vlrexanter'
+        1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {

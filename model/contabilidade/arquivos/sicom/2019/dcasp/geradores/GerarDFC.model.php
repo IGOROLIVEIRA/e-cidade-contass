@@ -78,7 +78,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC10 = array();
         $aCSVDFC10['si219_tiporegistro']                      = $this->padLeftZero($aDFC10['si219_tiporegistro'], 2);
-        $aCSVDFC10['si219_exercicio']                         = $this->padLeftZero($aDFC10['si219_exercicio'], 1);
         $aCSVDFC10['si219_vlreceitaderivadaoriginaria']       = $this->sicomNumberReal($aDFC10['si219_vlreceitaderivadaoriginaria'], 2);
         $aCSVDFC10['si219_vltranscorrenterecebida']           = $this->sicomNumberReal($aDFC10['si219_vltranscorrenterecebida'], 2);
         $aCSVDFC10['si219_vloutrosingressosoperacionais']     = $this->sicomNumberReal($aDFC10['si219_vloutrosingressosoperacionais'], 2);
@@ -97,7 +96,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC20 = array();
         $aCSVDFC20['si220_tiporegistro']                        = $this->padLeftZero($aDFC20['si220_tiporegistro'], 2);
-        $aCSVDFC20['si220_exercicio']                           = $this->padLeftZero($aDFC20['si220_exercicio'], 1);
         $aCSVDFC20['si220_vldesembolsopessoaldespesas']         = $this->sicomNumberReal($aDFC20['si220_vldesembolsopessoaldespesas'], 2);
         $aCSVDFC20['si220_vldesembolsojurosencargdivida']       = $this->sicomNumberReal($aDFC20['si220_vldesembolsojurosencargdivida'], 2);
         $aCSVDFC20['si220_vldesembolsotransfconcedidas']        = $this->sicomNumberReal($aDFC20['si220_vldesembolsotransfconcedidas'], 2);
@@ -117,7 +115,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC30 = array();
         $aCSVDFC30['si221_tiporegistro']                    = $this->padLeftZero($aDFC30['si221_tiporegistro'], 2);
-        $aCSVDFC30['si221_exercicio']                       = $this->padLeftZero($aDFC30['si221_exercicio'], 1);
         $aCSVDFC30['si221_vlfluxocaixaliquidooperacional']  = $this->sicomNumberReal($aDFC30['si221_vlfluxocaixaliquidooperacional'], 2);
 
         $this->sLinha = $aCSVDFC30;
@@ -134,7 +131,6 @@ class GerarDFC extends GerarAM
         $aCSVDFC40 = array();
 
         $aCSVDFC40['si222_tiporegistro']                        = $this->padLeftZero($aDFC40['si222_tiporegistro'], 2);
-        $aCSVDFC40['si222_exercicio']                           = $this->padLeftZero($aDFC40['si222_exercicio'], 1);
         $aCSVDFC40['si222_vlalienacaobens']                     = $this->sicomNumberReal($aDFC40['si222_vlalienacaobens'], 2);
         $aCSVDFC40['si222_vlamortizacaoemprestimoconcedido']    = $this->sicomNumberReal($aDFC40['si222_vlamortizacaoemprestimoconcedido'], 2);
         $aCSVDFC40['si222_vloutrosingressos']                   = $this->sicomNumberReal($aDFC40['si222_vloutrosingressos'], 2);
@@ -154,7 +150,6 @@ class GerarDFC extends GerarAM
         $aCSVDFC50 = array();
 
         $aCSVDFC50['si223_tiporegistro']                        = $this->padLeftZero($aDFC50['si223_tiporegistro'], 2);
-        $aCSVDFC50['si223_exercicio']                           = $this->padLeftZero($aDFC50['si223_exercicio'], 1);
         $aCSVDFC50['si223_vlaquisicaoativonaocirculante']       = $this->sicomNumberReal($aDFC50['si223_vlaquisicaoativonaocirculante'], 2);
         $aCSVDFC50['si223_vlconcessaoempresfinanciamento']      = $this->sicomNumberReal($aDFC50['si223_vlconcessaoempresfinanciamento'], 2);
         $aCSVDFC50['si223_vloutrosdesembolsos']                 = $this->sicomNumberReal($aDFC50['si223_vloutrosdesembolsos'], 2);
@@ -174,7 +169,6 @@ class GerarDFC extends GerarAM
         $aCSVDFC60 = array();
 
         $aCSVDFC60['si224_tiporegistro']                    = $this->padLeftZero($aDFC60['si224_tiporegistro'], 2);
-        $aCSVDFC60['si224_exercicio']                       = $this->padLeftZero($aDFC60['si224_exercicio'], 1);
         $aCSVDFC60['si224_vlfluxocaixaliquidoinvestimento'] = $this->sicomNumberReal($aDFC60['si224_vlfluxocaixaliquidoinvestimento'], 2);
 
         $this->sLinha = $aCSVDFC60;
@@ -190,7 +184,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC70 = array();
         $aCSVDFC70['si225_tiporegistro']                        = $this->padLeftZero($aDFC70['si225_tiporegistro'], 2);
-        $aCSVDFC70['si225_exercicio']                           = $this->padLeftZero($aDFC70['si225_exercicio'], 1);
         $aCSVDFC70['si225_vloperacoescredito']                  = $this->sicomNumberReal($aDFC70['si225_vloperacoescredito'], 2);
         $aCSVDFC70['si225_vlintegralizacaodependentes']         = $this->sicomNumberReal($aDFC70['si225_vlintegralizacaodependentes'], 2);
         $aCSVDFC70['si225_vltranscapitalrecebida']              = $this->sicomNumberReal($aDFC70['si225_vltranscapitalrecebida'], 2);
@@ -211,7 +204,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC80 = array();
         $aCSVDFC80['si226_tiporegistro']                        = $this->padLeftZero($aDFC80['si226_tiporegistro'], 2);
-        $aCSVDFC80['si226_exercicio']                           = $this->padLeftZero($aDFC80['si226_exercicio'], 1);
         $aCSVDFC80['si226_vlamortizacaorefinanciamento']        = $this->sicomNumberReal($aDFC80['si226_vlamortizacaorefinanciamento'], 2);
         $aCSVDFC80['si226_vloutrosdesembolsosfinanciamento']    = $this->sicomNumberReal($aDFC80['si226_vloutrosdesembolsosfinanciamento'], 2);
         $aCSVDFC80['si226_vltotaldesembolsoatividafinanciame']  = $this->sicomNumberReal($aDFC80['si226_vltotaldesembolsoatividafinanciame'], 2);
@@ -229,7 +221,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC90 = array();
         $aCSVDFC90['si227_tiporegistro']              = $this->padLeftZero($aDFC90['si227_tiporegistro'], 2);
-        $aCSVDFC90['si227_exercicio']                 = $this->padLeftZero($aDFC90['si227_exercicio'], 1);
         $aCSVDFC90['si227_vlfluxocaixafinanciamento'] = $this->sicomNumberReal($aDFC90['si227_vlfluxocaixafinanciamento'], 2);
 
         $this->sLinha = $aCSVDFC90;
@@ -245,7 +236,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC100 = array();
         $aCSVDFC100['si228_tiporegistro']                     = $this->padLeftZero($aDFC100['si228_tiporegistro'], 3);
-        $aCSVDFC100['si228_exercicio']                        = $this->padLeftZero($aDFC100['si228_exercicio'], 1);
         $aCSVDFC100['si228_vlgeracaoliquidaequivalentecaixa'] = $this->sicomNumberReal($aDFC100['si228_vlgeracaoliquidaequivalentecaixa'], 2);
 
         $this->sLinha = $aCSVDFC100;
@@ -261,7 +251,6 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC110 = array();
         $aCSVDFC110['si229_tiporegistro']                   = $this->padLeftZero($aDFC110['si229_tiporegistro'], 3);
-        $aCSVDFC110['si229_exercicio']                      = $this->padLeftZero($aDFC110['si229_exercicio'], 1);
         $aCSVDFC110['si229_vlcaixaequivalentecaixainicial'] = $this->sicomNumberReal($aDFC110['si229_vlcaixaequivalentecaixainicial'], 2);
         $aCSVDFC110['si229_vlcaixaequivalentecaixafinal']   = $this->sicomNumberReal($aDFC110['si229_vlcaixaequivalentecaixafinal'], 2);
 

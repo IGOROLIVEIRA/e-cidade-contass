@@ -45,7 +45,6 @@ class GerarDVP extends GerarAM
 
         $aCSVDVP10 = array();
         $aCSVDVP10['si216_tiporegistro']                        = $this->padLeftZero($aDVP10['si216_tiporegistro'], 2);
-        $aCSVDVP10['si216_exercicio']                           = $this->padLeftZero($aDVP10['si216_exercicio'], 1);
         $aCSVDVP10['si216_vlimpostos']                          = $this->sicomNumberReal($aDVP10['si216_vlimpostos'], 2);
         $aCSVDVP10['si216_vlcontribuicoes']                     = $this->sicomNumberReal($aDVP10['si216_vlcontribuicoes'], 2);
         $aCSVDVP10['si216_vlexploracovendasdireitos']           = $this->sicomNumberReal($aDVP10['si216_vlexploracovendasdireitos'], 2);
@@ -68,7 +67,6 @@ class GerarDVP extends GerarAM
 
         $aCSVDVP20 = array();
         $aCSVDVP20['si217_tiporegistro']                      = $this->padLeftZero($aDVP20['si217_tiporegistro'], 2);
-        $aCSVDVP20['si217_exercicio']                         = $this->padLeftZero($aDVP20['si217_exercicio'], 1);
         $aCSVDVP20['si217_vldiminutivapessoaencargos']        = $this->sicomNumberReal($aDVP20['si217_vldiminutivapessoaencargos'], 2);
         $aCSVDVP20['si217_vlprevassistenciais']               = $this->sicomNumberReal($aDVP20['si217_vlprevassistenciais'], 2);
         $aCSVDVP20['si217_vlservicoscapitalfixo']             = $this->sicomNumberReal($aDVP20['si217_vlservicoscapitalfixo'], 2);
@@ -93,7 +91,6 @@ class GerarDVP extends GerarAM
 
         $aCSVDVP30 = array();
         $aCSVDVP30['si218_tiporegistro']                  = $this->padLeftZero($aDVP30['si218_tiporegistro'], 2);
-        $aCSVDVP30['si218_exercicio']                     = $this->padLeftZero($aDVP30['si218_exercicio'], 1);
         $aCSVDVP30['si218_vlresultadopatrimonialperiodo'] = $this->sicomNumberReal($aDVP30['si218_vlresultadopatrimonialperiodo'], 2);
 
         $this->sLinha = $aCSVDVP30;

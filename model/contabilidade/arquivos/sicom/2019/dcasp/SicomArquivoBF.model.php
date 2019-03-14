@@ -151,8 +151,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     /** BFDCASP102019 */
     $aExercicios = array(
-        1 => 'vlrexatual',
-        2 => 'vlrexanter'
+        1 => 'vlrexatual'
     );
 
 
@@ -192,8 +191,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     /** BFDCASP202019 */
     $aExercicios = array(
-        1 => 'vlrexatual',
-        2 => 'vlrexanter'
+        1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {

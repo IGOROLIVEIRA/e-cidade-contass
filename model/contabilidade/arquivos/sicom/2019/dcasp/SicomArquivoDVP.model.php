@@ -153,8 +153,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oRetornoDVP = $oVariacoesPatrimoniais->getDados();
 
     $aExercicios = array(
-        1 => 'vlrexatual',
-        2 => 'vlrexanter'
+        1 => 'vlrexatual'
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {

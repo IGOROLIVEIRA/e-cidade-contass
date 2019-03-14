@@ -281,8 +281,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     /*------------------------------------------------------------------------*/
 
     $aExercicios = array(
-        1 => 'vlrexatual',
-        2 => 'vlrexanter'
+        1 => 'vlrexatual'
     );
 
 
