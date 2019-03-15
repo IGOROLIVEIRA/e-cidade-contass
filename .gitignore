@@ -1,0 +1,16 @@
+libs/db_conn.php
+vendor
+tmp/*
+!tmp/.tmp
+manuais
+.idea
+.vscode
+.history
+.editorconfig
+config/sicom
+imagens/files/
+login_externo.php
+config/preferencias.json
+cache/*
+updatedb/log/*
+modification/*
