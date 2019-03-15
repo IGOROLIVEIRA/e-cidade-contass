@@ -1434,6 +1434,18 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
+        if(iOrigem == 1){
+          document.getElementById('tradesaoregpreco').style.display = "none";
+          document.getElementById('trLicitacao').style.display = "none";
+          document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(iTipoOrigem == 4 && iOrigem == 1){
+            document.getElementById('tradesaoregpreco').style.display = "";
+            document.getElementById('trLicitacao').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
         if(iTipoOrigem != 4){
             document.form1.ac16_adesaoregpreco.value = "";
             document.form1.si06_objetoadesao.value = "";

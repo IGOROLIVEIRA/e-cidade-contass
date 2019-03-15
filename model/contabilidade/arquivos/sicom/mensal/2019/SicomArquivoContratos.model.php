@@ -360,6 +360,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 //        ini_set("display_errors","on");
 
         $sSql = "SELECT DISTINCT acordo.*,
+                    adesaoregprecos.si06_anoproc as anoproc,
+                    adesaoregprecos.si06_numeroprc as numeroproc,
                     liclicita.l20_codigo,
                     liclicita.l20_edital,
                     liclicita.l20_anousu,
@@ -418,10 +420,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN cflicita ON l20_codtipocom = l03_codigo
                 LEFT JOIN pctipocompra ON pc50_codcom = l03_codcom
                 LEFT JOIN liclicita l2 ON l2.l20_codigo = acordo.ac16_licitacao
+                LEFT JOIN adesaoregprecos ON si06_sequencial = ac16_adesaoregpreco
                 WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
                 AND ac16_dataassinatura >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
 
+        // print_r($sSql);die();
         $rsResult10 = db_query($sSql);
         db_inicio_transacao();
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -429,7 +433,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10 = new cl_contratos102019();
 
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
+            // var_dump($oDados10);
 
             $sSql = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
@@ -514,8 +518,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }else{
                 $clcontratos10->si83_codunidadesubresp = $oDados10->codunidadesubresp;
             }
-            $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
-            $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
+
+
+            if($oDados10->ac16_origem == self::ORIGEM_MANUAL || $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS){
+              if($oDados10->ac16_tipoorigem == self::TIPO_ORIGEM_ADESAO_REGISTRO_PRECO){
+                $clcontratos10->si83_nroprocesso = $oDados10->numeroproc;
+                $clcontratos10->si83_exercicioprocesso = $oDados10->anoproc;
+              }
+            }
             $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
             $clcontratos10->si83_naturezaobjeto = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_naturezaobjeto : $oDados10->ac16_acordogrupo;
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 500);
@@ -536,6 +546,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_veiculodivulgacao = $this->removeCaracteres($oDados10->ac16_veiculodivulgacao);
             $clcontratos10->si83_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos10->si83_instit = db_getsession('DB_instit');
+            // var_dump($clcontratos10);
 
             $clcontratos10->incluir(null);
 
