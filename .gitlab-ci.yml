@@ -206,7 +206,7 @@ cmbh:
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no cmbh@cmbhecid.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 cmbh@cmbhecid.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 cmbh@cmbhecid.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -216,7 +216,7 @@ cmbh:
 #    script:
 #        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
 #        - 'ssh -o StrictHostKeyChecking=no contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-#        - 'ssh -p22 contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+#        - 'ssh -p22 contass@cmarinos.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
 #    environment: production
 #    only:
 #        - master
@@ -226,7 +226,7 @@ cmbocaiuva:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@cmbocaiuva.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -236,7 +236,7 @@ cmcapitaoeneas:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@177.12.81.165 "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@177.12.81.165 "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@177.12.81.165 "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -246,7 +246,7 @@ cmmoc:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 ecidade@cmmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -256,7 +256,7 @@ cmnavarro:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@cmnavarro.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@cmnavarro.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@cmnavarro.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -266,7 +266,7 @@ cmuba:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@cmuba.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -276,7 +276,7 @@ cisaje:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@cisaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@cisaje.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@cisaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -286,7 +286,7 @@ ciiamaje:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -296,7 +296,7 @@ e-cidade:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@e-cidade.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -306,7 +306,7 @@ manutencao:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@manutencao.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -316,7 +316,7 @@ pmpirapora:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmpirapora.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -326,7 +326,7 @@ pmvarzelandia:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmvarzelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -336,7 +336,7 @@ pmverdelandia:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmverdelandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -346,7 +346,7 @@ pmluislandia:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmluislandia.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -356,7 +356,7 @@ pmcristalia:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmcristalia.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -366,7 +366,7 @@ pmibiracatu:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmibiracatu.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -376,7 +376,7 @@ pmitacambira:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmitacambira.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -386,7 +386,7 @@ pmsaojoaodaponte:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@pmsaojoaodaponte.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -396,7 +396,7 @@ prevmoc:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 ecidade@prevmoc.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
@@ -406,7 +406,7 @@ samuecid:
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@samuecid.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@samuecid.contassconsultoria.com.br "cd /var/www/e-cidade-git &&  php deploy_git.php "'
+        - 'ssh -p22 contass@samuecid.contassconsultoria.com.br "cd /var/www/e-cidade-git && ./updatedb/update.sh && php deploy_git.php "'
     environment: production
     only:
         - master
