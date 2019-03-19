@@ -97,6 +97,7 @@ do
 
       echo "  │  ├─ ${SCRIPT}: [ ERRO - consulte o log ]"
       abortou=1
+      exit 2
       break
 
     fi
