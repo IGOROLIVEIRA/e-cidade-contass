@@ -655,7 +655,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
     $('k81_codigo').onchange() ;
   }
   //OC5689
-  if($('estrutural').value.substr(0,7) != '4121004' && $('estrutural').value.substr(0,7) != '4721004'){
+  if($('estrutural').value.substr(0,7) != '4121004' && $('estrutural').value.substr(0,7) != '4721004' && $('estrutural').value.substr(0,5) != '41218' && $('estrutural').value.substr(0,5) != '47218'){
     js_getCgmConta(iCodigoConta);
   }
   db_iframe_saltes.hide();
@@ -711,10 +711,11 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
      $('k81_receita').value = '';
    }
 
-   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'){
+   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'|| $('estrutural').value.substr(0,5) == '41218' || $('estrutural').value.substr(0,5) == '47218'){
      $('k81_numcgm')   .value = '';
      $('z01_nome')   .value = '';
    }else{
+       console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
    }
 
@@ -731,10 +732,11 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    $('estrutural') .value = chave4;
    $('k02_tipo')   .value = chave5;
 
-   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'){
+   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004' || $('estrutural').value.substr(0,5) == '41218' || $('estrutural').value.substr(0,5) == '47218'){
      $('k81_numcgm')   .value = '';
      $('z01_nome')   .value = '';
    }else{
+       console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
    }
 
@@ -1439,7 +1441,7 @@ function js_mostrarNotificacaoEstruturais() {
 
   var iEstrutural = $('estrutural').value;
 
-    if(($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004') && $('k81_numcgm').value == ""){
+    if(($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004' || $('estrutural').value.substr(0,5) == '41218' || $('estrutural').value.substr(0,5) == '47218') && $('k81_numcgm').value == ""){
 
       var sMensagem = "Ao arrecadar receitas de contribuições para o Regime Próprio de Previdência Social é obrigatório informar o CGM do Contribuinte.";
 
