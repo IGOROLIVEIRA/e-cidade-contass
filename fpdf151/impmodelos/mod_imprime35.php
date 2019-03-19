@@ -315,8 +315,29 @@ $cldb_config = new cl_db_config;
 
 /***************************************************************************************************************************************************/
 
+/******************************************** ASSINATURAS ************************************************************************************/
+//select * from where tipodoc = 1010 and db02_descr = 'ASSINATURAS_CODIGOPHP';
+//se achou da eval no texto, senao faz como atualmente...
+$sqlass = "
+			select *
+			from db_documento
+			inner join db_docparag on db03_docum = db04_docum
+			inner join db_tipodoc on db08_codigo  = db03_tipodoc
+			inner join db_paragrafo on db04_idparag = db02_idparag
+			where db03_tipodoc = 1010 and db03_instit = ".db_getsession("DB_instit")."
+			and db02_descr = 'ASSINATURAS_CODIGOPHP'
+			";
+//die($sqlass);
+$resultass = db_query($sqlass);
+$linhasass = pg_num_rows($resultass);
+if ($linhasass>0){
+	//db_fieldsmemory($resultass,0);
+	$ass= pg_result($resultass,0,'db02_texto');
+	eval($ass);
+}else{
+// QUANDO NÃO TIVER "ASSINATURAS_CODIGOPHP" CADASTRADAS NA DB_DOCUMENTOS pegar o modo antigo.
 //  for pegando as assinaturas do alvara
-		$sqlparag = "select *
+	$sqlparag = "select *
 					from db_documento
 					inner join db_docparag on db03_docum = db04_docum
 					inner join db_tipodoc on db08_codigo  = db03_tipodoc
@@ -324,33 +345,34 @@ $cldb_config = new cl_db_config;
 					where db03_tipodoc = 1010 and db03_instit = ".db_getsession("DB_instit")."
 					  and db02_descr ilike 'assinatura_%'
 					order by db04_ordem ";
-		$resparag = pg_query($sqlparag);
+	$resparag = db_query($sqlparag);
 
 //		db_criatabela($resparag);exit;
 //		die($sqlparag);
 
-		if (pg_numrows($resparag) == 0) {
-			db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
-			exit;
-		}
-		$numrows = pg_numrows($resparag);
+	if (pg_numrows($resparag) == 0) {
+		db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
+		exit;
+	}
+	$numrows = pg_numrows($resparag);
 
-		$linha  = $this->objpdf->getY()+10;
-		$colpri = $coluna;
-		global $db02_texto;
-		for ($i = 0; $i < $numrows; $i ++){
-				db_fieldsmemory($resparag, $i);
-				//echo("texto -- ".$db02_texto);
-				$ass = $db02_texto;
-				if($i % 2 == 0){
-					 $this->objpdf->SetXY($coluna,$linha);
-					 $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".$ass,0,"C",0);
-				}else{
-					 $this->objpdf->SetXY($coluna+90,$linha);
-					 $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".$ass,0,"C",0);
-				   $linha += 10;
-				}
+	$linha  = $this->objpdf->getY()+7;
+	$colpri = $coluna;
+	global $db02_texto;
+	for ($i = 0; $i < $numrows; $i ++){
+		db_fieldsmemory($resparag, $i);
+		//echo("texto -- ".$db02_texto);
+		$ass = $db02_texto;
+		if($i % 2 == 0){
+			$this->objpdf->SetXY($coluna,$linha);
+			$this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".$ass,0,"C",0);
+		}else{
+			$this->objpdf->SetXY($coluna+90,$linha);
+			$this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".$ass,0,"C",0);
+			$linha += 10;
 		}
+	}
+}
 
 /*******************************************************************************************************************************************************************/
 
