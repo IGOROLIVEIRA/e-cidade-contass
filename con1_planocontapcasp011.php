@@ -242,7 +242,7 @@ $iOpcao = 1;
                                     </td>
                                     <td>
                                         <?php
-                                        $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2=> "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 9999 => "99-Outros");
+                                        $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2=> "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 5 => "05-Valores Disponibilizados em Conta Única do Tesouro Municipal", 9999 => "99-Outros");
                                         db_select("iTipoLancamento", $aTipoLancamento , true, $db_opcao,"onchange='js_getSubtipo();'");
                                         ?>
                                     </td>
