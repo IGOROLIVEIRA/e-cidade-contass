@@ -807,7 +807,7 @@ function db_insert($tabela,$mat_campos,$mat_valores,$execdie=true){
      }
   }
 
-  // echo "<BR><BR><BR>".($linha1.$linha2.$linha3.$linha4).";<BR><BR>";
+   echo "<BR><BR><BR>".($linha1.$linha2.$linha3.$linha4).";<BR><BR>";
   $db_sql = db_query($linha1.$linha2.$linha3.$linha4);
   if( $db_sql == false ){
   	if($execdie == true){
