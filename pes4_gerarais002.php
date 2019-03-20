@@ -298,10 +298,10 @@ global $pess;
                        left join rhregime on rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
 											                   and rhregime.rh30_instit = rhpessoalmov.rh02_instit
                        left join rhpesfgts on rhpesfgts.rh15_regist = rhpessoalmov.rh02_regist
-                       WHERE rh02_regist=1656 and rh02_anousu = '$ano_base' AND rh02_instit = " . db_getsession('DB_instit') . " $condicaoaux ";
+                       WHERE rh02_anousu = '$ano_base' AND rh02_instit = " . db_getsession('DB_instit') . " $condicaoaux ";
                        
     db_selectmax("pess", $sql);
-    //print_r($sql);exit;
+
 for($Ipes=0;$Ipes<count($pess);$Ipes++){
 
    if( $pess[$Ipes]["r01_numcgm"] == $numcgm){
@@ -351,7 +351,7 @@ for($Ipes=0;$Ipes<count($pess);$Ipes++){
                ".bb_condicaosubpesproc("rh02_",$ano_base.'/'.$mes_base ).$condicaoaux ;
 
       db_selectmax("pessoal_128", $sql2);
-    //echo $sql2;exit;
+
    if(!db_empty($pessoal_128[0]["r01_hrssem"])){
        $F008 = $pessoal_128[0]["r01_hrssem"] * 5;
    }else{
@@ -416,7 +416,7 @@ for($Ipes=0;$Ipes<count($pess);$Ipes++){
      $sSqlRescisao .= "    and rh05_recis between '$ano_base-01-01' and '$ano_base-12-31' ";
      $sSqlRescisao .= "    and rh02_instit = " . db_getsession('DB_instit') ;
      $sSqlRescisao .= "  limit 1                                                          ";
-    //echo $sSqlRescisao;exit;
+
      $rsSqlRescisao    = pg_query($sSqlRescisao);
 
      $aServidorRecisao = db_utils::getCollectionByRecord($rsSqlRescisao);
@@ -576,7 +576,6 @@ function ficha_128(){
 	 global $gerfsal;
          $condicaoaux = " and (r14_rubric < '4000' or r14_rubric > '6000') and r14_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
 	 global $gerfsal;
-	 //echo "select * from gerfsal ".bb_condicaosubpes( "r14_" ).$condicaoaux;exit;
          if( db_selectmax( "gerfsal", "select * from gerfsal ".bb_condicaosubpes( "r14_" ).$condicaoaux )){
             $soma        += soma_128($gerfsal,"r14_");
             $soma_sind   += soma_128_sind($gerfsal,"r14_",$w_sind);
@@ -604,9 +603,9 @@ function ficha_128(){
          }
          $condicaoaux = " and r20_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
 	 global $gerfres;
-         //echo "select * from gerfres ".bb_condicaosubpes( 'r20_' ).$condicaoaux;exit;
+   
          if( db_selectmax( "gerfres", "select * from gerfres ".bb_condicaosubpes( "r20_" ).$condicaoaux ) ){
-            //print_r($gerfres);exit;
+
             $soma        += soma_128($gerfres,"r20_");
             $soma_sind   += soma_128_sind($gerfres,"r20_",$w_sind);
             $soma_asso   += soma_128_asso($gerfres,"r20_",$w_asso);
@@ -666,7 +665,6 @@ function ficha_128(){
                               where r14_anousu = $ano_base
                                 and r14_regist = ".db_sqlformat($work[$Iwork]["w_matric"] )."
                                 and r14_rubric between '4000' and '6000'";
-            //echo $sSqlGerfsal13;exit;
             $rsGerfsal13   = db_query($sSqlGerfsal13);
             $nGerfSal13    = pg_result($rsGerfsal13,0,0);
 
@@ -720,10 +718,6 @@ function ficha_128(){
          $matriz6[4] = $soma_asso;
          $matriz6[5] = $soma_extras;
 
-         echo '<pre>';
-         echo 'criando matriz ';
-         print_r($matriz6);
-
         /**
          * Verificamos se o servidor ja possui registro na tabela temporaria e se o mesmo é zero 
          * para que ao processar a rais a rotina nao sobreescreva o valor das ferias pagas na rescisao
@@ -734,7 +728,7 @@ function ficha_128(){
          $lAtualizaValorFeriasNaRescisao = 0;
          $sSqlVerificaFeriasNaRescisao   = "select 1 from $arq_work where w_matric = " . $work[$Iwork]["w_matric"] . " and w_fer_res = 0";
          $rsVerificaFeriasNaRescisao     = db_query($sSqlVerificaFeriasNaRescisao);
-         //db_criatabela($rsVerificaFeriasNaRescisao);exit;
+
          if( $rsVerificaFeriasNaRescisao ){
 
           $iNumeroLinhasVerificaFeriasNaRescisao =  pg_num_rows($rsVerificaFeriasNaRescisao);
@@ -1125,8 +1119,6 @@ function imprime_rais_128($nomearq){
      }else{
         $lin .= db_str(db_day($work[$Iwork]["w_desliga"]),2,0,"0").db_str(db_month($work[$Iwork]["w_desliga"]),2,0,"0"); // 159 a 162 - data de rescisao - ddmm;
      }
-     echo 'add valores na linha p imprimir ';
-     print_r($work);exit;
      $lin .= valor_128($work[$Iwork]["w_jan"]);                          // 163 a 171 - janeiro;
      $lin .= valor_128($work[$Iwork]["w_fev"]);                          // 172 a 180 - fevereiro;
      $lin .= valor_128($work[$Iwork]["w_mar"]);                          // 181 a 189 - março;
@@ -1927,9 +1919,6 @@ function ajusresc(){
 
  for($Iwork=0;$Iwork<count($work);$Iwork++){
 
-   echo 'work ajuste ';
-   print_r($work);
-
    $matricula = $work[$Iwork]["w_matric"];
    $condicaoalt = " where w_matric = ".db_sqlformat($matricula);
    if( db_month($work[$Iwork]["w_desliga"]) != 0 && db_month($work[$Iwork]["w_desliga"]) != 12){
@@ -1940,8 +1929,6 @@ function ajusresc(){
       $valor = 0;
       for($ind=$nrmes;$ind<=12;$ind++){
         $mes = db_substr("janfevmarabrmaijunjulagosetoutnovdez",($ind*3)-2,3);
-        echo $Iwork.' ';
-        echo $work[$Iwork]["w_".$mes]. ' ';
         $valor += $work[$Iwork]["w_".$mes];
       }
       for($ind=$nrmes;$ind<=12;$ind++){
@@ -1951,7 +1938,6 @@ function ajusresc(){
           }else{
              $soma = 0;
           }
-          echo $soma.' modificada ';
           $matriz5[1] = "w_".$mes;
           $matriz6[1] = $soma;
           db_update( $arq_work, $matriz5,$matriz6, $condicaoalt );
