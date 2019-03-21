@@ -632,7 +632,7 @@ class MSC {
         left join orctiporec on c19_orctiporec = o15_codigo
         where {$this->getTipoMatriz()} c60_infcompmsc = 4 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
-      
+
     $rsResult = db_query($sSQL);
 
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
@@ -1029,7 +1029,7 @@ class MSC {
       c61_codigo,
       c61_instit
      from
-    (select case when c210_mscestrut is null then substr(p.c60_estrut,2,8) else c210_mscestrut end as estrut,
+    (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
     case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
             db21_tipoinstit,
       c61_reduz,
@@ -1104,7 +1104,7 @@ class MSC {
       c61_codigo,
       c61_instit
      from
-    (select case when c210_mscestrut is null then substr(p.c60_estrut,2,8) else c210_mscestrut end as estrut,
+    (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
             case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
             db21_tipoinstit,
       c61_reduz,
