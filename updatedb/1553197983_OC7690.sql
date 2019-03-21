@@ -160,7 +160,7 @@ AS $function$
        ||';'||sinal_ant
        ||';'||'-'||';'||sinal_final;
    end;
-  $function$
+  $function$;
 
 
 -- Fim do script
