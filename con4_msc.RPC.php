@@ -23,7 +23,7 @@ $iMes         = (!empty($oParam->mes))     ? $oParam->mes     : '';
 $iInstituicao = ($oParam->matriz == 'd')   ? " r.c61_instit = $iInstit and " : '';
 $sFormato     = (!empty($oParam->formato)) ? $oParam->formato : '';
 
-$sSQL = " select si09_instsiconfi from infocomplementaresinstit where si09_tipoinstit = 1 limit 1 ";
+$sSQL = " select si09_instsiconfi from infocomplementaresinstit where si09_tipoinstit = 2 limit 1 ";
 
 $sIdentifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
 $sEntriesType = "trialbalance";
