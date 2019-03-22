@@ -23,18 +23,18 @@ class GerarAFAST extends GerarAM {
 		$this->abreArquivo();
 
         $sSql     = "select * from afast102019 where si199_mes = {$this->iMes} and si199_inst = ".db_getsession("DB_instit");
-        $rsAFAST    = db_query($sSql);
+        $rsAFAST    = db_query($sSql); //db_criatabela($rsAFAST);
 
         $sSql2     = "select * from afast202019 where si200_mes = {$this->iMes} and si200_inst = ".db_getsession("DB_instit");
         $rsAFAST2    = db_query($sSql2);
 
-        $sSql3delete = "delete from afast302019 where si201_mes = {$this->iMes}";
-        db_query($sSql3delete);
+//        $sSql3delete = "delete from afast302019 where si201_mes = {$this->iMes}";
+//        db_query($sSql3delete);
 
         $sSql3 = "select * from afast302019 where si201_mes = {$this->iMes} and si201_inst = ".db_getsession("DB_instit");
         $rsAFAST3 = db_query($sSql3);
 
-		if (pg_num_rows($rsAFAST) == 0) {
+		if (pg_num_rows($rsAFAST) == 0 && pg_num_rows($rsAFAST2) == 0 && pg_num_rows($rsAFAST3) == 0 ) {
 
 			$aCSV['tiporegistro']       =   '99';
 			$this->sLinha = $aCSV;
@@ -54,11 +54,20 @@ class GerarAFAST extends GerarAM {
 				$aAFAST['si199_codvinculopessoa']          =  substr($aAFAST['si199_codvinculopessoa'], 0,15);
 				$aAFAST['si199_codafastamento']            =  substr($aAFAST['si199_codafastamento'], 0,15);
 				$aAFAST['si199_dtinicioafastamento']       =  implode("",array_reverse(explode("-", $aAFAST['si199_dtinicioafastamento'])));
-                $tipos = array(7,8,99);
-                if(in_array($aAFAST['si199_tipoafastamento'],$tipos)) {
-                    $aAFAST['si199_dtretornoafastamento'] = '';
+
+				$inicioAfastamento = date( 'm/Y', strtotime(substr($aAFAST['si199_dtinicioafastamento'],2)) );
+                $fimAfastamento = date( 'm/Y', strtotime($aAFAST['si199_dtretornoafastamento'] ));
+                $mesdegeracaosicom = $this->iMes."/".db_getsession("DB_anousu");
+
+                if($inicioAfastamento && $fimAfastamento == $mesdegeracaosicom){
+                        $aAFAST['si199_dtretornoafastamento'] = implode("", array_reverse(explode("-", $aAFAST['si199_dtretornoafastamento'])));
                 }else{
-                    $aAFAST['si199_dtretornoafastamento'] = implode("", array_reverse(explode("-", $aAFAST['si199_dtretornoafastamento'])));
+                    $tipos = array(7,8,99);
+                    if(in_array($aAFAST['si199_tipoafastamento'],$tipos)) {
+                        $aAFAST['si199_dtretornoafastamento'] = '';
+                    }else{
+                        $aAFAST['si199_dtretornoafastamento'] = implode("", array_reverse(explode("-", $aAFAST['si199_dtretornoafastamento'])));
+                    }
                 }
 				$aAFAST['si199_tipoafastamento']           =  substr($aAFAST['si199_tipoafastamento'], 0,2);
 				$aAFAST['si199_dscoutrosafastamentos']     =  substr($aAFAST['si199_dscoutrosafastamentos'], 0,500);
