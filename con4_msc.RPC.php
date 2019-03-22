@@ -23,12 +23,7 @@ $iMes         = (!empty($oParam->mes))     ? $oParam->mes     : '';
 $iInstituicao = ($oParam->matriz == 'd')   ? " r.c61_instit = $iInstit and " : '';
 $sFormato     = (!empty($oParam->formato)) ? $oParam->formato : '';
 
-$sSQL = "
-          select si09_instsiconfi
-            from infocomplementaresinstit
-              inner join db_config on codigo = si09_instit
-              inner join db_tipoinstit on db21_codtipo = db21_tipoinstit
-                and db21_codtipo = 1 ";
+$sSQL = " select si09_instsiconfi from infocomplementaresinstit where si09_tipoinstit = 1 limit 1 ";
 
 $sIdentifier = db_utils::fieldsMemory(db_query($sSQL),0)->si09_instsiconfi;
 $sEntriesType = "trialbalance";
