@@ -74,7 +74,7 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial ";
+                               todo.k106_sequencial, todo.e60_coddot ";
         $aOrderBy[] = "ORDER BY k12_data,
                                 e60_numcgm,
                                 tipo,
@@ -98,7 +98,7 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial ";
+                               todo.k106_sequencial,todo.e60_coddot ";
         $aOrderBy[] = "ORDER BY k12_data,
                          e60_numcgm,
                          o15_codtri,
@@ -217,7 +217,7 @@ $sSqlBuscaEmpenhos .= "            CASE                                         
 $sSqlBuscaEmpenhos .= "                WHEN e60_anousu < {$iAnoUsoSessao} THEN 'RP'                                                          												";
 $sSqlBuscaEmpenhos .= "                ELSE 'Emp'                                                          																					";
 $sSqlBuscaEmpenhos .= "            END AS tipo,                                                          																					";
-$sSqlBuscaEmpenhos .= "            k106_sequencial                                                          																				";
+$sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot                                                          																				";
 $sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
 $sSqlBuscaEmpenhos .= "     INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu                                                                       ";
@@ -248,7 +248,7 @@ $sSqlBuscaEmpenhos .= "                  credito AS k13_conta,                  
 $sSqlBuscaEmpenhos .= "                  o15_codtri,                                                          																				";
 $sSqlBuscaEmpenhos .= "                  descr_credito AS k13_descr,                                                          																";
 $sSqlBuscaEmpenhos .= "                  tipo,                                                           																					";
-$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial                                                          																		";
+$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial, 0 as e60_coddot                                                          																		";
 $sSqlBuscaEmpenhos .= "     FROM                                                          																									";
 $sSqlBuscaEmpenhos .= "         (SELECT k12_id,                                                          																					";
 $sSqlBuscaEmpenhos .= "                 k12_autent,                                                          																				";
@@ -451,13 +451,14 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $notas = "";
     $sepnotas = "";
     $oPdf->setfont('arial', '', 7);
-    $oPdf->cell(20, $iAltura, db_formatar($oDadoEmpenho->k12_data, 'd'), 0, 0, "C", 0);
-    $oPdf->cell(15, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
-    $oPdf->cell(15, $iAltura, $oDadoEmpenho->k13_conta, 0, 0, "C", 0);
-    $oPdf->cell(40, $iAltura, substr($oDadoEmpenho->k13_descr, 0, 25), 0, 0, "L", 0);
+    $oPdf->cell(19, $iAltura, db_formatar($oDadoEmpenho->k12_data, 'd'), 0, 0, "C", 0);
+    $oPdf->cell(14, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
+    $oPdf->cell(14, $iAltura, $oDadoEmpenho->k13_conta, 0, 0, "C", 0);
+    $oPdf->cell(39, $iAltura, substr($oDadoEmpenho->k13_descr, 0, 25), 0, 0, "L", 0);
 
 
-    $oPdf->cell(18, $iAltura, $oDadoEmpenho->o15_codtri, 0, 0, "C", 0);
+    $oPdf->cell(12, $iAltura, $oDadoEmpenho->o15_codtri, 0, 0, "C", 0);
+    $oPdf->cell(12, $iAltura, $oDadoEmpenho->e60_coddot, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, trim($oDadoEmpenho->e60_codemp) . '/' . $oDadoEmpenho->e60_anousu, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->e50_codord, 0, 0, "C", 0);
 
@@ -498,11 +499,12 @@ function imprimeCabecalho($oPdf, $iAltura) {
 
   $oPdf->addpage("L");
   $oPdf->SetFont('arial','b',8);
-  $oPdf->cell(20, $iAltura, "Data Autent",     1, 0, "C", 1);
-  $oPdf->cell(15, $iAltura, "Cod.Aut.",        1, 0, "C", 1);
-  $oPdf->cell(15, $iAltura, "Cod.Con.",        1, 0, "C", 1);
-  $oPdf->cell(40, $iAltura, "Descrição Conta", 1, 0, "C", 1);
-  $oPdf->cell(18, $iAltura, "Fonte",           1, 0, "C", 1);
+  $oPdf->cell(19, $iAltura, "Data Autent",     1, 0, "C", 1);
+  $oPdf->cell(14, $iAltura, "Cod.Aut.",        1, 0, "C", 1);
+  $oPdf->cell(14, $iAltura, "Cod.Con.",        1, 0, "C", 1);
+  $oPdf->cell(39, $iAltura, "Descrição Conta", 1, 0, "C", 1);
+  $oPdf->cell(12, $iAltura, "Fonte",           1, 0, "C", 1);
+  $oPdf->cell(12, $iAltura, "Dot.",           1, 0, "C", 1);
   $oPdf->cell(15, $iAltura, "Emp/Slip",        1, 0, "C", 1);
   $oPdf->cell(15, $iAltura, "Ordem",           1, 0, "C", 1);
   $oPdf->cell(28, $iAltura, "Notas Fiscais",   1, 0, "C", 1);

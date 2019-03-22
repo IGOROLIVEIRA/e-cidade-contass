@@ -110,7 +110,24 @@ var DBViewNovoDetalhamento = function(sInstance) {
 				c19_orctiporec              
 	    	 */
 			$('ctnTipoReceita')    . style.display = 'table-row';
-	    break;	
+	    break;
+        case '106':
+
+            /*
+             *	c19_contacorrente
+                c19_conplanoreduzanousu
+                c19_instit
+                c19_numcgm
+                c19_numemp
+                c19_orcunidadeanousu
+                c19_orcunidadeorgao
+                c19_orcunidadeunidade
+                c19_orcorgaoanousu
+                c19_orcorgaoorgao
+                c19_reduz
+             */
+            $('ctnEmpenho')        . style.display = 'table-row';
+            break;
 
     }  
 	  
