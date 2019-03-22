@@ -106,6 +106,7 @@ class GerarCAIXA extends GerarAM
                 $aCSVCAIXA13['si105_ededucaodereceita']     = $this->padLeftZero($aCAIXA13['si105_ededucaodereceita'], 1);
                 $aCSVCAIXA13['si105_identificadordeducao']  = $aCAIXA13['si105_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCAIXA13['si105_identificadordeducao'], 2);
                 $aCSVCAIXA13['si105_naturezareceita']       = $this->padLeftZero($aCAIXA13['si105_naturezareceita'], 8);
+                $aCSVCAIXA13['si105_codfontcaixa']          = ($aCAIXA13['si105_codfontcaixa'] == 0 ? ' ':$aCAIXA13['si105_codfontcaixa']);
                 $aCSVCAIXA13['si105_vlrreceitacont']        = $this->sicomNumberReal($aCAIXA13['si105_vlrreceitacont'], 2);
 
                 $this->sLinha = $aCSVCAIXA13;

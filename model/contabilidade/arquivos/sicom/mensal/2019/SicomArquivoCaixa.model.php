@@ -280,24 +280,27 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
           $aDadosAgrupados[$sHash]->si104_valorentrsaida += $nValor;
         }
 
-        $sSql = "select 13 as tiporegistro,
-					       c74_codlan as codreduzdio,
-					       case when substr(o57_fonte,1,2) = '49' then 1
-					            else 2
-					        end as ededucaodereceita,
-					       case when substr(o57_fonte,1,2) = '49' then substr(o57_fonte,2,2)
-					            else null
-					        end as ededucaodereceita,
-					       substr(o57_fonte,2,8) as naturezaReceita,
-					       c70_valor as vlrreceitacont       
-					     from conlancamrec
-					     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-					left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2019     
-					left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
-					left join orctiporec on o15_codigo = o70_codigo
-					    where c74_codlan = {$oMovi->codreduzido}";
+           $sSql = "SELECT 13 AS tiporegistro,
+                           c74_codlan AS codreduzdio,
+                           CASE
+                               WHEN substr(o57_fonte,1,2) = '49' THEN 1
+                               ELSE 2
+                           END AS ededucaodereceita,
+                           CASE
+                               WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,2,2)
+                               ELSE NULL
+                           END AS ededucaodereceita,
+                           substr(o57_fonte,2,8) AS naturezaReceita,
+                           c70_valor AS vlrreceitacont,
+                           o15_codtri::integer
+                    FROM conlancamrec
+                    JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
+                    LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = 2019
+                    LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+                    LEFT JOIN orctiporec ON o15_codigo = o70_codigo
+                    WHERE c74_codlan = {$oMovi->codreduzido}";
 
-        $rsReceita = db_query($sSql);//echo $sSql;db_criatabela($rsReceita);
+        $rsReceita = db_query($sSql);//echo $sSql; db_criatabela($rsReceita);
 
         if (pg_num_rows($rsReceita) != 0) {
           /*
@@ -307,6 +310,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
           $oRecita = db_utils::fieldsMemory($rsReceita, 0);
           $sHash13 = $aDadosAgrupados[$sHash]->si104_codreduzido . $oRecita->ededucaodereceita . $oRecita->identificadordeducao . $oRecita->naturezareceita;
+//          echo "<pre>"; print_r($sHash13);
           if (!isset($aDadosAgrupados[$sHash]->registro13[$sHash13])) {
 
             $oDadosReceita = new stdClass();
@@ -316,12 +320,14 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
             $oDadosReceita->si105_ededucaodereceita = $oRecita->ededucaodereceita;
             $oDadosReceita->si105_identificadordeducao = $oRecita->identificadordeducao;
             $oDadosReceita->si105_naturezareceita = $oRecita->naturezareceita;
-            $oDadosReceita->si105_vlrreceitacont = $oRecita->vlrreceitacont;
+            $oDadosReceita->si105_naturezareceita = $oRecita->vlrreceitacont;
+            $oDadosReceita->si105_codfontcaixa = $oRecita->o15_codtri;
             $oDadosReceita->si105_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $oDadosReceita->si105_reg10 = $oDadosCaixa->si103_sequencial;
 
 
             $aDadosAgrupados[$sHash]->registro13[$sHash13] = $oDadosReceita;
+//              echo "<pre>"; print_r($oDadosReceita);
 
           } else {
             $aDadosAgrupados[$sHash]->registro13[$sHash13]->si105_vlrreceitacont += $oRecita->vlrreceitacont;
@@ -369,6 +375,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
             $clcaixa13->si105_ededucaodereceita = $reg13->si105_ededucaodereceita;
             $clcaixa13->si105_identificadordeducao = $reg13->si105_identificadordeducao;
             $clcaixa13->si105_naturezareceita = $reg13->si105_naturezareceita;
+            $clcaixa13->si105_codfontcaixa = $reg13->si105_codfontcaixa;
             $clcaixa13->si105_vlrreceitacont = $reg13->si105_vlrreceitacont;
             $clcaixa13->si105_mes = $reg13->si105_mes;
             $clcaixa13->si105_reg10 = $oDadosCaixa->si103_sequencial;
