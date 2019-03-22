@@ -1050,7 +1050,7 @@ class MSC {
        left join elemdespmsc on substr(c19_estrutural,2,8) = c211_elemdespestrut
        left outer join consistema on c60_codsis = c52_codsis
        left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
-       left join orctiporec on c19_orctiporec = o15_codigo
+       left join orctiporec on o58_codigo = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=102 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
@@ -1125,7 +1125,7 @@ class MSC {
        left join elemdespmsc on substr(c19_estrutural,2,8) = c211_elemdespestrut
        left outer join consistema on c60_codsis = c52_codsis
        left join vinculopcaspmsc on substr(c19_estrutural,2,8) = c210_pcaspestrut
-       left join orctiporec on c19_orctiporec = o15_codigo
+       left join orctiporec on o58_codigo = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=106 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
