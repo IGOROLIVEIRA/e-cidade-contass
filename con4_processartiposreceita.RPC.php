@@ -64,7 +64,9 @@ switch ($oParam->exec){
         'o57_descr',
       ));
 
-      $sSql = $oEntesReceitas->sql_query(null, $sCampos, null, " c216_enteconsorciado = {$oParam->enteConsorciado}");
+      $sSql = $oEntesReceitas->sql_query(null, $sCampos, null,
+          " c216_enteconsorciado = {$oParam->enteConsorciado} and c216_anousu = ".db_getsession("DB_anousu"));
+
 
       $rsReceitas = $oEntesReceitas->sql_record($sSql);
 

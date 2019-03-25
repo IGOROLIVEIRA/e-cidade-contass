@@ -143,6 +143,20 @@ fieldset fieldset table tr td:first-child {
         </td>
       </tr>
 
+		<tr id="vencimento_incentivo">
+			<td>
+				<?
+				db_ancora(@$Lq60_codvenc_incentivo,"js_pesquisaq60_codvenc_incentivo(true);",$db_opcao);
+				?>
+			</td>
+			<td>
+				<?
+				db_input('q60_codvenc_incentivo',10,$Iq60_codvenc_incentivo,true,'text',$db_opcao," onchange='js_pesquisaq60_codvenc_incentivo(false);'");
+				db_input('q92_descr_incentivo',40,$Iq92_descr,true,'text',3,'');
+				?>
+			</td>
+		</tr>
+
       <tr id="historicocalculo">
         <td>
           <?php
@@ -354,7 +368,7 @@ fieldset fieldset table tr td:first-child {
   </fieldset><!-- Parâmetros Alvará -->
 
   <fieldset>
-    <legend><strong>Nota Fiscal Avulsa</strong></legend>
+    <legend><strong>Nota Fiscal Avulsa Eletrônica</strong></legend>
 
     <table>
 			<tr id="notaavulsa">
@@ -423,6 +437,16 @@ fieldset fieldset table tr td:first-child {
 				<td>
 				  <?
 				    db_input('q60_notaavulsadiasprazo',10,$Iq60_notaavulsadiasprazo,true,'text',$db_opcao,"");
+				  ?>
+				</td>
+			</tr>
+			<tr id="diasprazonotaavulsa">
+				<td nowrap>
+				  <?=@$Lq60_notaavulsalinkautenticacao?>
+				</td>
+				<td>
+				  <?
+				    db_input('q60_notaavulsalinkautenticacao',50,$Iq60_notaavulsalinkautenticacao,true,'text',$db_opcao,"");
 				  ?>
 				</td>
 			</tr>
@@ -746,6 +770,19 @@ function js_pesquisaq60_codvencvar(mostra){
   }
 }
 
+function js_pesquisaq60_codvenc_incentivo(mostra){
+
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_cadvencdesc','func_cadvencdesc.php?funcao_js=parent.js_mostracadvencdesc_incentivo1|q92_codigo|q92_descr','Pesquisa',true);
+  }else{
+     if(document.form1.q60_codvenc_incentivo.value != ''){
+        js_OpenJanelaIframe('top.corpo','db_iframe_cadvencdesc','func_cadvencdesc.php?pesquisa_chave='+document.form1.q60_codvenc_incentivo.value+'&funcao_js=parent.js_mostracadvencdesc_incentivo','Pesquisa',false);
+     }else{
+       document.form1.q92_descr_incentivo.value = '';
+     }
+  }
+}
+
 function js_mostracadvencdesc(chave,erro){
 
   document.form1.q92_descr.value = chave;
@@ -755,10 +792,26 @@ function js_mostracadvencdesc(chave,erro){
   }
 }
 
+function js_mostracadvencdesc_incentivo(chave,erro){
+
+  document.form1.q92_descr_incentivo.value = chave;
+  if(erro==true){
+    document.form1.q60_codvenc_incentivo.focus();
+    document.form1.q60_codvenc_incentivo.value = '';
+  }
+}
+
 function js_mostracadvencdesc1(chave1,chave2){
 
   document.form1.q60_codvencvar.value = chave1;
   document.form1.q92_descr.value      = chave2;
+  db_iframe_cadvencdesc.hide();
+}
+
+function js_mostracadvencdesc_incentivo1(chave1,chave2){
+
+  document.form1.q60_codvenc_incentivo.value = chave1;
+  document.form1.q92_descr_incentivo.value      = chave2;
   db_iframe_cadvencdesc.hide();
 }
 

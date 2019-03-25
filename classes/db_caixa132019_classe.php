@@ -23,6 +23,7 @@ class cl_caixa132019
   var $si105_ededucaodereceita = 0;
   var $si105_identificadordeducao = 0;
   var $si105_naturezareceita = 0;
+  var $si105_codfontcaixa = 0;
   var $si105_vlrreceitacont = 0;
   var $si105_mes = 0;
   var $si105_reg10 = 0;
@@ -35,6 +36,7 @@ class cl_caixa132019
                  si105_ededucaodereceita = int8 = dedução de receita 
                  si105_identificadordeducao = int8 = Identificador da dedução da receita 
                  si105_naturezareceita = int8 = Natureza da receita 
+                 si105_codfontcaixa = int4 = Fonte recurso do Caixa 
                  si105_vlrreceitacont = float8 = Valor  correspondente à  receita 
                  si105_mes = int8 = Mês 
                  si105_reg10 = int8 = reg10 
@@ -70,6 +72,7 @@ class cl_caixa132019
       $this->si105_ededucaodereceita = ($this->si105_ededucaodereceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_ededucaodereceita"] : $this->si105_ededucaodereceita);
       $this->si105_identificadordeducao = ($this->si105_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_identificadordeducao"] : $this->si105_identificadordeducao);
       $this->si105_naturezareceita = ($this->si105_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_naturezareceita"] : $this->si105_naturezareceita);
+      $this->si105_codfontcaixa = ($this->si105_codfontcaixa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_codfontcaixa"] : $this->si105_codfontcaixa);
       $this->si105_vlrreceitacont = ($this->si105_vlrreceitacont == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_vlrreceitacont"] : $this->si105_vlrreceitacont);
       $this->si105_mes = ($this->si105_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_mes"] : $this->si105_mes);
       $this->si105_reg10 = ($this->si105_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_reg10"] : $this->si105_reg10);
@@ -104,6 +107,9 @@ class cl_caixa132019
     }
     if ($this->si105_naturezareceita == null) {
       $this->si105_naturezareceita = "0";
+    }
+    if ($this->si105_codfontcaixa == null) {
+      $this->si105_codfontcaixa = "0";
     }
     if ($this->si105_vlrreceitacont == null) {
       $this->si105_vlrreceitacont = "0";
@@ -173,7 +179,8 @@ class cl_caixa132019
                                       ,si105_codreduzido 
                                       ,si105_ededucaodereceita 
                                       ,si105_identificadordeducao 
-                                      ,si105_naturezareceita 
+                                      ,si105_naturezareceita
+                                      ,si105_codfontcaixa 
                                       ,si105_vlrreceitacont 
                                       ,si105_mes 
                                       ,si105_reg10 
@@ -186,6 +193,7 @@ class cl_caixa132019
                                ,$this->si105_ededucaodereceita 
                                ,$this->si105_identificadordeducao 
                                ,$this->si105_naturezareceita 
+                               ,$this->si105_codfontcaixa 
                                ,$this->si105_vlrreceitacont 
                                ,$this->si105_mes 
                                ,$this->si105_reg10 
@@ -291,6 +299,13 @@ class cl_caixa132019
         $this->si105_naturezareceita = "0";
       }
       $sql .= $virgula . " si105_naturezareceita = $this->si105_naturezareceita ";
+      $virgula = ",";
+    }
+    if (trim($this->si105_codfontcaixa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si105_codfontcaixa"])) {
+      if (trim($this->si105_codfontcaixa) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si105_codfontcaixa"])) {
+        $this->si105_codfontcaixa = "0";
+      }
+      $sql .= $virgula . " si105_codfontcaixa = $this->si105_codfontcaixa ";
       $virgula = ",";
     }
     if (trim($this->si105_vlrreceitacont) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si105_vlrreceitacont"])) {
