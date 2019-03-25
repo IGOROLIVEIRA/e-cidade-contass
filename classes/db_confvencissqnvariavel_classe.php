@@ -40,8 +40,9 @@ class cl_confvencissqnvariavel {
    // cria variaveis do arquivo 
    var $q144_sequencial = 0; 
    var $q144_ano = 0; 
-   var $q144_codvenc = 0; 
-   var $q144_receita = 0; 
+   var $q144_codvenc = 0;
+   var $q144_codvenc_desconto = 0;
+   var $q144_receita = 0;
    var $q144_tipo = 0; 
    var $q144_hist = 0; 
    var $q144_diavenc = 1;
@@ -51,7 +52,8 @@ class cl_confvencissqnvariavel {
                  q144_sequencial = int4 = Código Sequencial 
                  q144_ano = int4 = Ano Competência 
                  q144_codvenc = int4 = Vencimento 
-                 q144_receita = int4 = Receita 
+                 q144_codvenc_desconto = int4 = Vencimento com Incentivo
+                 q144_receita = int4 = Receita
                  q144_tipo = int4 = Tipo de Débito 
                  q144_hist = int4 = Histórico 
                  q144_diavenc = int4 = Dia do Vencimento 
@@ -78,6 +80,7 @@ class cl_confvencissqnvariavel {
        $this->q144_sequencial = ($this->q144_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_sequencial"]:$this->q144_sequencial);
        $this->q144_ano = ($this->q144_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_ano"]:$this->q144_ano);
        $this->q144_codvenc = ($this->q144_codvenc == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_codvenc"]:$this->q144_codvenc);
+       $this->q144_codvenc_desconto = ($this->q144_codvenc_desconto == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_codvenc_desconto"]:$this->q144_codvenc_desconto);
        $this->q144_receita = ($this->q144_receita == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_receita"]:$this->q144_receita);
        $this->q144_tipo = ($this->q144_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_tipo"]:$this->q144_tipo);
        $this->q144_hist = ($this->q144_hist == ""?@$GLOBALS["HTTP_POST_VARS"]["q144_hist"]:$this->q144_hist);
@@ -102,6 +105,15 @@ class cl_confvencissqnvariavel {
      if($this->q144_codvenc == null ){ 
        $this->erro_sql = " Campo Vencimento nao Informado.";
        $this->erro_campo = "q144_codvenc";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+       if($this->q144_codvenc_desconto == null ){
+       $this->erro_sql = " Campo Vencimento com Incentivo nao Informado.";
+       $this->erro_campo = "q144_codvenc_desconto";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -192,7 +204,8 @@ class cl_confvencissqnvariavel {
                                        q144_sequencial 
                                       ,q144_ano 
                                       ,q144_codvenc 
-                                      ,q144_receita 
+                                      ,q144_codvenc_desconto
+                                      ,q144_receita
                                       ,q144_tipo 
                                       ,q144_hist 
                                       ,q144_diavenc 
@@ -202,7 +215,8 @@ class cl_confvencissqnvariavel {
                                 $this->q144_sequencial 
                                ,$this->q144_ano 
                                ,$this->q144_codvenc 
-                               ,$this->q144_receita 
+                               ,$this->q144_codvenc_desconto
+                               ,$this->q144_receita
                                ,$this->q144_tipo 
                                ,$this->q144_hist 
                                ,$this->q144_diavenc 
@@ -291,6 +305,23 @@ class cl_confvencissqnvariavel {
        if(trim($this->q144_codvenc) == null ){ 
          $this->erro_sql = " Campo Vencimento nao Informado.";
          $this->erro_campo = "q144_codvenc";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
+       if(trim($this->q144_codvenc_desconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q144_codvenc_desconto"])){
+        if(trim($this->q144_codvenc_desconto)=="" && isset($GLOBALS["HTTP_POST_VARS"]["q144_codvenc_desconto"])){
+           $this->q144_codvenc_desconto = "0" ;
+        }
+       $sql  .= $virgula." q144_codvenc_desconto = $this->q144_codvenc_desconto ";
+       $virgula = ",";
+       if(trim($this->q144_codvenc_desconto) == null ){
+         $this->erro_sql = " Campo Vencimento nao Informado.";
+         $this->erro_campo = "q144_codvenc_desconto";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

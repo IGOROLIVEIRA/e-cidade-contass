@@ -166,6 +166,7 @@ if (isset($alterar)) {
     $oDaoConfVencISSQNVariavel->q144_sequencial = $oConfVencISSQNVariavel->q144_sequencial;
     $oDaoConfVencISSQNVariavel->q144_ano        = $oConfVencISSQNVariavel->q144_ano;
     $oDaoConfVencISSQNVariavel->q144_codvenc    = $q60_codvencvar;
+    $oDaoConfVencISSQNVariavel->q144_codvenc_desconto    = $q60_codvenc_incentivo;
     $oDaoConfVencISSQNVariavel->q144_receita    = $q60_receit;
     $oDaoConfVencISSQNVariavel->q144_tipo       = $q60_tipo;
     $oDaoConfVencISSQNVariavel->q144_hist       = $q60_histsemmov;

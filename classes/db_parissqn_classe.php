@@ -29,59 +29,61 @@
 //CLASSE DA ENTIDADE parissqn
 class cl_parissqn {
    // cria variaveis de erro
-   var $rotulo     = null;
-   var $query_sql  = null;
-   var $numrows    = 0;
-   var $numrows_incluir = 0;
-   var $numrows_alterar = 0;
-   var $numrows_excluir = 0;
-   var $erro_status= null;
-   var $erro_sql   = null;
-   var $erro_banco = null;
-   var $erro_msg   = null;
-   var $erro_campo = null;
-   var $pagina_retorno = null;
-   // cria variaveis do arquivo
-   var $q60_receit = 0;
-   var $q60_tipo = 0;
-   var $q60_aliq = 0;
-   var $q60_aliq_reduzida = 0;
-   var $q60_codvencvar = 0;
-   var $q60_histsemmov = 0;
-   var $q60_impcodativ = 'f';
-   var $q60_impobsativ = 'f';
-   var $q60_impdatas = 'f';
-   var $q60_impobsissqn = 'f';
-   var $q60_modalvara = 0;
-   var $q60_integrasani = 0;
-   var $q60_campoutilcalc = 0;
-   var $q60_alvbaixadiv = 0;
-   var $q60_notaavulsapesjur = 'f';
-   var $q60_notaavulsavias = 0;
-   var $q60_notaavulsavlrmin = 0;
-   var $q60_notaavulsamax = 0;
-   var $q60_notaavulsaultimanota = 0;
-   var $q60_notaavulsadiasprazo = 0;
-   var $q60_tipopermalvara = 0;
-   var $q60_tiponumcertbaixa = 0;
-   var $q60_templatealvara = 0;
-   var $q60_dataimpmei_dia = null;
-   var $q60_dataimpmei_mes = null;
-   var $q60_dataimpmei_ano = null;
-   var $q60_dataimpmei = null;
-   var $q60_bloqemiscertbaixa = 0;
-   var $q60_isstipoalvaraper = 0;
-   var $q60_isstipoalvaraprov = 0;
-   var $q60_parcelasalvara = null;
-   var $q60_templatebaixaalvaranormal = 0;
-   var $q60_templatebaixaalvaraoficial = 0;
-   // cria propriedade com as variaveis do arquivo
-   var $campos = "
+   public $rotulo     = null;
+   public $query_sql  = null;
+   public $numrows    = 0;
+   public $numrows_incluir = 0;
+   public $numrows_alterar = 0;
+   public $numrows_excluir = 0;
+   public $erro_status= null;
+   public $erro_sql   = null;
+   public $erro_banco = null;
+   public $erro_msg   = null;
+   public $erro_campo = null;
+   public $pagina_retorno = null;
+   // cria publiciaveis do arquivo
+   public $q60_receit = 0;
+   public $q60_tipo = 0;
+   public $q60_aliq = 0;
+   public $q60_aliq_reduzida = 0;
+   public $q60_codvencpublic = 0;
+   public $q60_codvenc_incentivo = 0;
+   public $q60_histsemmov = 0;
+   public $q60_impcodativ = 'f';
+   public $q60_impobsativ = 'f';
+   public $q60_impdatas = 'f';
+   public $q60_impobsissqn = 'f';
+   public $q60_modalpublica = 0;
+   public $q60_integrasani = 0;
+   public $q60_campoutilcalc = 0;
+   public $q60_alvbaixadiv = 0;
+   public $q60_notaavulsapesjur = 'f';
+   public $q60_notaavulsavias = 0;
+   public $q60_notaavulsavlrmin = 0;
+   public $q60_notaavulsamax = 0;
+   public $q60_notaavulsaultimanota = 0;
+   public $q60_notaavulsadiasprazo = 0;
+   public $q60_tipopermalpublica = 0;
+   public $q60_tiponumcertbaixa = 0;
+   public $q60_templatealpublica = 0;
+   public $q60_dataimpmei_dia = null;
+   public $q60_dataimpmei_mes = null;
+   public $q60_dataimpmei_ano = null;
+   public $q60_dataimpmei = null;
+   public $q60_bloqemiscertbaixa = 0;
+   public $q60_isstipoalpublicaper = 0;
+   public $q60_isstipoalpublicaprov = 0;
+   public $q60_parcelasalpublica = null;
+   public $q60_templatebaixaalpublicanormal = 0;
+   public $q60_templatebaixaalpublicaoficial = 0;
+   public $q60_notaavulsalinkautenticacao = 0;
+   // cria propriedade com as publiciaveis do arquivo
+   public $campos = "
                  q60_receit = int4 = Receita
                  q60_tipo = int4 = tipo de débito
                  q60_aliq = float8 = Aliquota padrão
                  q60_aliq_reduzida = int8 = Alíquotas reduzidas
-                 q60_codvencvar = int4 = Código do vencimento
+                 q60_codvenc_incentivo = int4 = Código do vencimento com incentivo
                  q60_histsemmov = int4 = Hist.Calc.
                  q60_impcodativ = bool = Imprime Código Atividade
                  q60_impobsativ = bool = Imprime Observação Atividade
@@ -107,6 +109,7 @@ class cl_parissqn {
                  q60_parcelasalvara = varchar(3) = Limite Parcelas Alvará
                  q60_templatebaixaalvaranormal = int4 = Certidão de Baixa de Alvará Normal
                  q60_templatebaixaalvaraoficial = int4 = Certidão de Baixa de Alvará Oficial
+                 q60_notaavulsalinkautenticacao = varchar(200) = Link autenticação Nota Avulsa
                  ";
    //funcao construtor da classe
    function cl_parissqn() {
@@ -131,6 +134,7 @@ class cl_parissqn {
        $this->q60_aliq = ($this->q60_aliq == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq"]:$this->q60_aliq);
        $this->q60_aliq_reduzida = ($this->q60_aliq_reduzida == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq_reduzida"]:$this->q60_aliq_reduzida);
        $this->q60_codvencvar = ($this->q60_codvencvar == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_codvencvar"]:$this->q60_codvencvar);
+       $this->q60_codvenc_incentivo = ($this->q60_codvenc_incentivo == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_codvenc_incentivo"]:$this->q60_codvenc_incentivo);
        $this->q60_histsemmov = ($this->q60_histsemmov == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_histsemmov"]:$this->q60_histsemmov);
        $this->q60_impcodativ = ($this->q60_impcodativ == "f"?@$GLOBALS["HTTP_POST_VARS"]["q60_impcodativ"]:$this->q60_impcodativ);
        $this->q60_impobsativ = ($this->q60_impobsativ == "f"?@$GLOBALS["HTTP_POST_VARS"]["q60_impobsativ"]:$this->q60_impobsativ);
@@ -161,6 +165,7 @@ class cl_parissqn {
        $this->q60_isstipoalvaraper = ($this->q60_isstipoalvaraper == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_isstipoalvaraper"]:$this->q60_isstipoalvaraper);
        $this->q60_isstipoalvaraprov = ($this->q60_isstipoalvaraprov == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_isstipoalvaraprov"]:$this->q60_isstipoalvaraprov);
        $this->q60_parcelasalvara = ($this->q60_parcelasalvara == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_parcelasalvara"]:$this->q60_parcelasalvara);
+       $this->q60_notaavulsalinkautenticacao = ($this->q60_notaavulsalinkautenticacao == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_notaavulsalinkautenticacao"]:$this->q60_notaavulsalinkautenticacao);
        $this->q60_templatebaixaalvaranormal = ($this->q60_templatebaixaalvaranormal == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_templatebaixaalvaranormal"]:$this->q60_templatebaixaalvaranormal);
        $this->q60_templatebaixaalvaraoficial = ($this->q60_templatebaixaalvaraoficial == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_templatebaixaalvaraoficial"]:$this->q60_templatebaixaalvaraoficial);
      }else{
@@ -298,6 +303,10 @@ class cl_parissqn {
      if($this->q60_notaavulsapesjur == null ){
        $this->q60_notaavulsapesjur = "f";
      }
+
+     if($this->q60_codvenc_incentivo == null ){
+       $this->q60_codvenc_incentivo = "0";
+     }
      if($this->q60_notaavulsavias == null ){
        $this->erro_sql = " Campo Número de Vias da Nota não informado.";
        $this->erro_campo = "q60_notaavulsavias";
@@ -385,6 +394,9 @@ class cl_parissqn {
      if($this->q60_parcelasalvara == null ){
        $this->q60_parcelasalvara = "1";
      }
+     if($this->q60_notaavulsalinkautenticacao == null ){
+       $this->q60_notaavulsalinkautenticacao = "null";
+     }
      if($this->q60_templatebaixaalvaranormal == null ){
        $this->q60_templatebaixaalvaranormal = "null";
      }
@@ -397,6 +409,7 @@ class cl_parissqn {
                                       ,q60_aliq
                                       ,q60_aliq_reduzida
                                       ,q60_codvencvar
+                                      ,q60_codvenc_incentivo
                                       ,q60_histsemmov
                                       ,q60_impcodativ
                                       ,q60_impobsativ
@@ -422,6 +435,7 @@ class cl_parissqn {
                                       ,q60_parcelasalvara
                                       ,q60_templatebaixaalvaranormal
                                       ,q60_templatebaixaalvaraoficial
+                                      ,q60_notaavulsalinkautenticacao
                        )
                 values (
                                 $this->q60_receit
@@ -429,6 +443,7 @@ class cl_parissqn {
                                ,$this->q60_aliq
                                ,$this->q60_aliq_reduzida
                                ,$this->q60_codvencvar
+                               ,$this->q60_codvenc_incentivo
                                ,$this->q60_histsemmov
                                ,'$this->q60_impcodativ'
                                ,'$this->q60_impobsativ'
@@ -454,6 +469,7 @@ class cl_parissqn {
                                ,'$this->q60_parcelasalvara'
                                ,$this->q60_templatebaixaalvaranormal
                                ,$this->q60_templatebaixaalvaraoficial
+                               ,'$this->q60_notaavulsalinkautenticacao'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -724,6 +740,13 @@ class cl_parissqn {
        $sql  .= $virgula." q60_notaavulsadiasprazo = $this->q60_notaavulsadiasprazo ";
        $virgula = ",";
      }
+     if(trim($this->q60_codvenc_incentivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_codvenc_incentivo"])){
+        if(trim($this->q60_codvenc_incentivo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["q60_codvenc_incentivo"])){
+           $this->q60_codvenc_incentivo = "0" ;
+        }
+       $sql  .= $virgula." q60_codvenc_incentivo = $this->q60_codvenc_incentivo ";
+       $virgula = ",";
+     }
      if(trim($this->q60_tipopermalvara)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_tipopermalvara"])){
        $sql  .= $virgula." q60_tipopermalvara = $this->q60_tipopermalvara ";
        $virgula = ",";
@@ -807,6 +830,10 @@ class cl_parissqn {
      }
      if(trim($this->q60_parcelasalvara)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_parcelasalvara"])){
        $sql  .= $virgula." q60_parcelasalvara = '$this->q60_parcelasalvara' ";
+       $virgula = ",";
+     }
+     if(trim($this->q60_notaavulsalinkautenticacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_notaavulsalinkautenticacao"])){
+       $sql  .= $virgula." q60_notaavulsalinkautenticacao = '$this->q60_notaavulsalinkautenticacao' ";
        $virgula = ",";
      }
      if(trim($this->q60_templatebaixaalvaranormal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_templatebaixaalvaranormal"])){
@@ -1149,6 +1176,13 @@ class cl_parissqn {
      	$sql  .= $virgula." q60_templatealvara = $this->q60_templatealvara ";
       $virgula = ",";
      }
+        if(trim($this->q60_codvenc_incentivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_codvenc_incentivo"])){
+           if(trim($this->q60_codvenc_incentivo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["q60_codvenc_incentivo"])){
+               $this->q60_codvenc_incentivo = "0" ;
+           }
+           $sql  .= $virgula." q60_codvenc_incentivo = $this->q60_codvenc_incentivo ";
+           $virgula = ",";
+        }
      if(trim($this->q60_integrasani)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_integrasani"])){
        $sql  .= $virgula." q60_integrasani = $this->q60_integrasani ";
        $virgula = ",";
@@ -1323,6 +1357,11 @@ class cl_parissqn {
 
      if(trim($this->q60_parcelasalvara)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_parcelasalvara"])){
        $sql  .= $virgula." q60_parcelasalvara = '$this->q60_parcelasalvara' ";
+       $virgula = ",";
+     }
+
+     if(trim($this->q60_notaavulsalinkautenticacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_notaavulsalinkautenticacao"])){
+       $sql  .= $virgula." q60_notaavulsalinkautenticacao = '$this->q60_notaavulsalinkautenticacao' ";
        $virgula = ",";
      }
 
