@@ -28,6 +28,10 @@
     <campo campo="case when q136_tipotributacao = 1 then 't' else 'f' end"                     label="tributacao_fixada" />
     <campo campo="q136_exercicio"                                  label="exercicio" />
     <campo campo="case when q136_tipotributacao = 3 then 't' else 'f' end"                     label="tributacao_nao_incide" />
+    <campo campo= "q07_dataini_isen"                                           label="inicio_isencao"                     />
+    <campo campo= "q07_datafim_isen"                                           label="fim_isencao"                     />
+    <campo campo= "q07_aliquota_incentivo"                                           label="aliquota_isencao"                     />
+    <campo campo= "q07_justificaisencao"                                           label="justificativa_isencao"                     />
   </campos>
   <from tabela="issbase"                                                                                           />
   <juncoes>

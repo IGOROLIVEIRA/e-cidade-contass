@@ -372,7 +372,7 @@ class ParalisacaoEmpresa {
     /**
      * Tratamento de erro ao incluir ocorrencia
      */
-    if ( $oDaoHistOcorrencia->erro_status = "0" ) {
+    if ( $oDaoHistOcorrencia->erro_status == "0" ) {
 
       $oErroBanco = (object) array('sErroBanco' => $oDaoHistOcorrencia->erro_sql);
       throw new DBException(_M(ParalisacaoEmpresa::MENSAGEM . 'erro_incluir_ocorrencia',$oErroBanco));
@@ -391,7 +391,7 @@ class ParalisacaoEmpresa {
     /**
      * Tratamento de erro ao incluir ocorrencia
      */
-    if ( $oDaoHistOcorrenciaInscr->erro_status = "0" ) {
+    if ( $oDaoHistOcorrenciaInscr->erro_status == "0" ) {
 
       $oErroBanco = (object) array('sErroBanco' => $oDaoHistOcorrenciaInscr->erro_banco);
       throw new DBException(_M(ParalisacaoEmpresa::MENSAGEM . 'erro_incluir_ocorrencia',$oErroBanco));
