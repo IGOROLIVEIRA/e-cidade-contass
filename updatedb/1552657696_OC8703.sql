@@ -5,7 +5,7 @@ ALTER TABLE tabativ
 add q07_dataini_isen date,
 add q07_datafim_isen date,
 add q07_justificaisencao text,
-add q07_aliquota_incentivo DOUBLE PRECISION,
+add q07_aliquota_incentivo DOUBLE PRECISION;
 
 INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
 VALUES (
