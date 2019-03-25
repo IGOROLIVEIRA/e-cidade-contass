@@ -110,7 +110,7 @@ class cl_issnotaavulsa {
             $this->q51_data = $this->q51_data_ano."-".$this->q51_data_mes."-".$this->q51_data_dia;
          }
        }
-       $this->q51_codautent = ($this->q51_codautent == ""?@$GLOBALS["HTTP_POST_VARS"]["q51_codautent"]:$this->q51_codautent);
+       $this->q51_codautent = $this->gerarCodigoHash();
        $this->q51_pdfnota = ($this->q51_pdfnota == ""?@$GLOBALS["HTTP_POST_VARS"]["q51_pdfnota"]:$this->q51_pdfnota);
        $this->q51_obs = ($this->q51_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["q51_obs"]:$this->q51_obs);
      }else{
@@ -963,6 +963,22 @@ class cl_issnotaavulsa {
        }
      }
      return $sql;
+  }
+
+  /**
+   * Gera o código Hash
+   *
+   * @return string
+   */
+  private function gerarCodigoHash() {
+
+    // Pega o unixtime atual
+    $tTime = time();
+    $iContador = 0;
+    // Gera o hash md5 referente a: "id da nota . unix-time . numero de tentativas" e pega os 8 primeiros caracteres
+    $sCodigoHash = substr(md5("{$this->q51_sequencial}{$tTime}{$iContador}"), 0, 8);
+
+    return $sCodigoHash;
   }
 }
 ?>

@@ -73,6 +73,10 @@ $clissgruposervico->rotulo->label("q126_sequencial");
   <tr>
     <td align="center" valign="top">
       <?php
+      $sWhere = " 1 = 1 ";
+      if(isset($tipotributacao)){
+        $sWhere .= " and q136_tipotributacao = {$tipotributacao} ";
+      }
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_issgruposervico.php")==true){
@@ -90,9 +94,18 @@ $clissgruposervico->rotulo->label("q126_sequencial");
          */
         
         
-        $sWhere = " db121_tipoconta = 2 ";
+        $sWhere .= " and db121_tipoconta = 2 ";
 
-        $campos = "issgruposervico.q126_sequencial, db_estruturavalor.db121_estrutural, db_estruturavalor.db121_descricao, q136_exercicio";
+        $campos = "
+        issgruposervico.q126_sequencial,
+        db_estruturavalor.db121_estrutural,
+        db_estruturavalor.db121_descricao,
+        q136_valor,
+        case when q136_tipotributacao = 1 then 'Fixo'
+        when q136_tipotributacao = 2 then 'Variável'
+        when q136_tipotributacao = 3 then 'Não Incide'
+        else 'Não definido'
+        end as q136_tipotributacao, q136_exercicio";
         if(isset($chave_q126_sequencial) && (trim($chave_q126_sequencial)!="") ){
 
            $sWhere .= " and issgruposervico.q126_sequencial = {$chave_q126_sequencial} ";
@@ -111,12 +124,12 @@ $clissgruposervico->rotulo->label("q126_sequencial");
       } else {
 
         if ($pesquisa_chave!=null && $pesquisa_chave!="") {
-
-          $result = $clissgruposervico->sql_record($clissgruposervico->sql_query($pesquisa_chave));
+          $sWhere .= "issgruposervico.q126_sequencial = {$pesquisa_chave} ";
+          $result = $clissgruposervico->sql_record($clissgruposervico->sql_query(null,"*",null,$sWhere));
           if ($clissgruposervico->numrows!=0) {
 
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$db121_descricao',false);</script>";
+            echo "<script>".$funcao_js."('$db121_descricao','$q136_valor',false);</script>";
           } else {
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

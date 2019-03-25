@@ -41,14 +41,28 @@ $clissnotaavulsa              = new cl_issnotaavulsa();
 $clissnotaavulsatomador       = new cl_issnotaavulsatomador();
 $clparissqnviasnotaavulsavias = new cl_parissqnviasnotaavulsavias();
 $clissnotaavulsacanc = new cl_issnotaavulsacanc();
+$oDaoParIssqn                 = db_utils::getDao("parissqn");
+
+$pdf   = new scpdf();
+$pdf->open();
 
 $sqlpref = "select * from db_config where codigo = ".db_getsession("DB_instit");
 $resultpref = pg_exec($sqlpref);
 $oInst = db_utils::fieldsmemory($resultpref,0);
 $get   = db_utils::postmemory($_GET);
-$pdf   = new scpdf();
-$pdf->open();
-$pdf1  = new db_impcarne($pdf,'49');
+
+//dados do servico
+$rsServico = $clissnotaavulsaservico->sql_record($clissnotaavulsaservico->sql_query(null,"*","q62_sequencial",
+    "q62_issnotaavulsa = ".$get->q51_sequencial));
+$hasItemServico = empty(db_utils::fieldsMemory($rsServico,0)->q62_issgruposervico);
+
+if($hasItemServico) {
+    $pdf1 = new db_impcarne($pdf, '49');
+} else {
+    $pdf1 = new db_impcarne($pdf, '492');
+}
+$rsParIssqn = $oDaoParIssqn->sql_record($oDaoParIssqn->sql_query(null,"q60_notaavulsalinkautenticacao"));
+$pdf1->urlautenticacao = db_utils::fieldsMemory($rsParIssqn,0)->q60_notaavulsalinkautenticacao;
 $pdf1->rsConfig = $clparissqnviasnotaavulsavias->sql_record($clparissqnviasnotaavulsavias->sql_query());
 $pdf1->prefeitura     = $oInst->nomeinst;
 $pdf1->enderpref      = $oInst->ender.", ".$oInst->numero;
@@ -56,7 +70,7 @@ $pdf1->cgcpref        = $oInst->cgc;
 $pdf1->municpref      = $oInst->munic;
 $pdf1->telefpref      = $oInst->telef;
 $pdf1->emailpref      = $oInst->email;
-$pdf1->logo			      = $oInst->logo;
+$pdf1->logo			  = $oInst->logo;
 
 //dados do prestador
 $rsPrest = $clissnotaavulsa->sql_record($clissnotaavulsa->sql_query($get->q51_sequencial));
@@ -73,7 +87,9 @@ $pdf1->rsServico   = $rsServico;
 $pdf1->dadosTomador = db_utils::fieldsMemory($rsTom,0);
 $rsNotaCancelada = $clissnotaavulsacanc->sql_record($clissnotaavulsacanc->sql_query(null,"q63_sequencial",null,"q63_issnotaavulsa = ".$get->q51_sequencial));
 $pdf1->notaCancelada = empty(db_utils::fieldsMemory($rsNotaCancelada,0)->q63_sequencial) ? false : true;
-//dados de config
+
+$pdf1->texto_aviso = "Acesse {$pdf1->urlautenticacao} e utilize o código de verificação {$pdf1->dadosPrestador->q51_codautent} para confirmar a autenticidade. ";
+
 $pdf1->imprime();
 $pdf1->objpdf->Output();
 ?>

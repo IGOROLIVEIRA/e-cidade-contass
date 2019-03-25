@@ -44,7 +44,7 @@ class cl_issnotaavulsaservico {
    // cria variaveis do arquivo
    var $q62_sequencial = 0;
    var $q62_issnotaavulsa = 0;
-   var $q62_qtd = 0;
+   var $q62_qtd = 1;
    var $q62_discriminacao = null;
    var $q62_vlruni = 0;
    var $q62_aliquota = 0;
@@ -59,6 +59,7 @@ class cl_issnotaavulsaservico {
     var $q62_tiporetinss  = null;
     var $q62_deducaoinss  = null;
     var $q62_qtddepend    = 0;
+    var $q62_issgruposervico = null;
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -79,6 +80,7 @@ class cl_issnotaavulsaservico {
                   q62_tiporetinss = varchar = q62_tiporetinss;
                   q62_deducaoinss = float8 = q62_deducaoinss;
                   q62_qtddepend = int4 = q62_qtddepend;
+                  q62_issgruposervico = int4 = Item de Serviço
                  ";
    //funcao construtor da classe
    function cl_issnotaavulsaservico() {
@@ -100,7 +102,6 @@ class cl_issnotaavulsaservico {
      if($exclusao==false){
        $this->q62_sequencial = ($this->q62_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_sequencial"]:$this->q62_sequencial);
        $this->q62_issnotaavulsa = ($this->q62_issnotaavulsa == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_issnotaavulsa"]:$this->q62_issnotaavulsa);
-       $this->q62_qtd = ($this->q62_qtd == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_qtd"]:$this->q62_qtd);
        $this->q62_discriminacao = ($this->q62_discriminacao == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_discriminacao"]:$this->q62_discriminacao);
        $this->q62_vlruni = ($this->q62_vlruni == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_vlruni"]:$this->q62_vlruni);
        $this->q62_aliquota = ($this->q62_aliquota == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_aliquota"]:$this->q62_aliquota);
@@ -116,6 +117,7 @@ class cl_issnotaavulsaservico {
        $this->q62_tiporetinss = ($this->q62_tiporetinss == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_tiporetinss"] : $this->q62_tiporetinss);
        $this->q62_deducaoinss = ($this->q62_deducaoinss == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_deducaoinss"] : $this->q62_deducaoinss);
        $this->q62_qtddepend = ($this->q62_qtddepend == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_qtddepend"] : $this->q62_qtddepend);
+       $this->q62_issgruposervico = ($this->q62_issgruposervico == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_issgruposervico"] : $this->q62_issgruposervico);
      }else{
        $this->q62_sequencial = ($this->q62_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["q62_sequencial"]:$this->q62_sequencial);
      }
@@ -198,6 +200,10 @@ class cl_issnotaavulsaservico {
      if($this->q62_qtddepend == 0 ){
        $this->q62_qtddepend = "0";
      }
+
+       if($this->q62_issgruposervico == null ){
+       $this->q62_issgruposervico = "null";
+     }
      if($q62_sequencial == "" || $q62_sequencial == null ){
        $result = db_query("select nextval('issnotaavulsaservico_q62_sequencial_seq')");
        if($result==false){
@@ -248,6 +254,7 @@ class cl_issnotaavulsaservico {
                                         ,q62_tiporetinss
                                         ,q62_deducaoinss
                                         ,q62_qtddepend
+                                        ,q62_issgruposervico
                        )
                 values (
                                 $this->q62_sequencial
@@ -267,6 +274,7 @@ class cl_issnotaavulsaservico {
                                 ,'{$this->q62_tiporetinss}'
                                 ,{$this->q62_deducaoinss}
                                 ,{$this->q62_qtddepend}
+                                ,{$this->q62_issgruposervico}
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -404,6 +412,11 @@ class cl_issnotaavulsaservico {
      }
      if(trim($this->q62_qtddepend)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q62_qtddepend"])){
        $sql  .= $virgula." q62_qtddepend = $this->q62_qtddepend ";
+       $virgula = ",";
+     }
+
+     if(trim($this->q62_issgruposervico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q62_issgruposervico"])){
+       $sql  .= $virgula." q62_issgruposervico = $this->q62_issgruposervico ";
        $virgula = ",";
      }
      if(trim($this->q62_vlrtotal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q62_vlrtotal"])){
@@ -649,6 +662,8 @@ class cl_issnotaavulsaservico {
      $sql .= "      inner join issnotaavulsa  on  issnotaavulsa.q51_sequencial = issnotaavulsaservico.q62_issnotaavulsa";
      $sql .= "      inner join issbase  on  issbase.q02_inscr = issnotaavulsa.q51_inscr";
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = issnotaavulsa.q51_usuario";
+     $sql .= "      left join issgruposervico  on  issgruposervico.q126_sequencial = issnotaavulsaservico.q62_issgruposervico";
+     $sql .= "      left join db_estruturavalor  on  db_estruturavalor.db121_sequencial = issgruposervico.q126_db_estruturavalor";
      $sql2 = "";
      if($dbwhere==""){
        if($q62_sequencial!=null ){
@@ -682,6 +697,8 @@ class cl_issnotaavulsaservico {
        $sql .= $campos;
      }
      $sql .= " from issnotaavulsaservico ";
+     $sql .= "      left join issgruposervico  on  issgruposervico.q126_sequencial = issnotaavulsaservico.q62_issgruposervico";
+     $sql .= "      left join db_estruturavalor  on  db_estruturavalor.db121_sequencial = issgruposervico.q126_db_estruturavalor";
      $sql2 = "";
      if($dbwhere==""){
        if($q62_sequencial!=null ){
