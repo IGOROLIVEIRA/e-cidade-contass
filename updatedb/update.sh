@@ -8,7 +8,7 @@ CAMINHO="$(pwd)/updatedb"
 LOGS="${CAMINHO}/log"
 EXECUTADOS="${CAMINHO}/scripts_executados"
 DISPONIVEIS="${CAMINHO}/scripts_disponiveis"
-BASES_LOCAIS="$(cat ${CAMINHO}/conn | grep -e "$IFS$HOSTNAME$")"
+BASES_LOCAIS="$(cat ${CAMINHO}/conn | grep -e "$HOSTNAME$")"
 EXECUTADOS_TMP="/tmp/scripts_executados"
 NAO_EXECUTADOS="${CAMINHO}/scripts_nao_executados"
 
