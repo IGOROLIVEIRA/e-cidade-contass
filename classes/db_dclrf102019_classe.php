@@ -341,7 +341,7 @@ class cl_dclrf102019 {
          $this->si157_sequencial = $si157_sequencial;
        }
      }
-     $result = @pg_query("insert into dclrf102019(
+       $sql = "insert into dclrf102019(
                                        si157_sequencial
                                       ,si157_codorgao
                                       ,si157_passivosreconhecidos
@@ -363,7 +363,6 @@ class cl_dclrf102019 {
                                       ,si157_vlapropiacaodepositosjudiciais
                                       ,si157_vloutrosajustes
                                       ,si157_metarrecada
-                                      ,si157_dscmedidasadotadas
                                       ,si157_tiporegistro
                                       ,si157_mes
                                       ,si157_instit
@@ -390,11 +389,12 @@ class cl_dclrf102019 {
                                ,$this->si157_vlapropiacaodepositosjudiciais
                                ,$this->si157_vloutrosajustes
                                ,$this->si157_metarrecada
-                               ,'$this->si157_dscmedidasadotadas'
                                ,$this->si157_tiporegistro
                                ,$this->si157_mes
                                ,$this->si157_instit
-                      )");
+                      )";
+//     die($sql);
+       $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -701,19 +701,6 @@ class cl_dclrf102019 {
          return false;
        }
      }
-     if(trim($this->si157_dscmedidasadotadas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si157_dscmedidasadotadas"])){
-       $sql  .= $virgula." si157_dscmedidasadotadas = '$this->si157_dscmedidasadotadas' ";
-       $virgula = ",";
-       if(trim($this->si157_dscmedidasadotadas) == null ){
-         $this->erro_sql = " Campo Medidas adotadas e a adotar nao Informado.";
-         $this->erro_campo = "si157_dscmedidasadotadas";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->si157_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si157_tiporegistro"])){
         if(trim($this->si157_tiporegistro)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si157_tiporegistro"])){
            $this->si157_tiporegistro = "0" ;
@@ -795,7 +782,7 @@ class cl_dclrf102019 {
      $sql = " delete from dclrf102019
                     where ";
      $sql2 = "";
-     $sql2 = "si157_mes = $si157_mes AND si157_codorgao = '$si157_codorgao' ";
+     $sql2 = "si157_mes = $si157_mes AND si157_instit = '$si157_codorgao' ";
      $result = @pg_exec($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

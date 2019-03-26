@@ -95,15 +95,15 @@ class cl_dclrf202019 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_dsccontopcredito == null ){
-       $this->erro_sql = " Campo Descrição da ocorrência nao Informado.";
-       $this->erro_campo = "si191_dsccontopcredito";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+//     if($this->si191_dsccontopcredito == null ){
+//       $this->erro_sql = " Campo Descrição da ocorrência nao Informado.";
+//       $this->erro_campo = "si191_dsccontopcredito";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
      if($this->si191_realizopcredito == null ){
        $this->erro_sql = " Campo operações de crédito vedadas nao Informado.";
        $this->erro_campo = "si191_realizopcredito";
@@ -192,7 +192,7 @@ class cl_dclrf202019 {
 		   }
 	   }
 
-     $result = @pg_query("insert into dclrf202019(
+     $sql ="insert into dclrf202019(
                                        si191_sequencial
                                       ,si191_tiporegistro
                                       ,si191_contopcredito
@@ -207,7 +207,7 @@ class cl_dclrf202019 {
                                       ,si191_reg10
                        )
                 values (
-                				$this->sequencial
+                				$this->si191_sequencial
                                ,$this->si191_tiporegistro
                                ,$this->si191_contopcredito
                                ,'$this->si191_dsccontopcredito'
@@ -219,7 +219,8 @@ class cl_dclrf202019 {
                                ,$this->si191_mes
                                ,$this->si191_instit
                                ,$this->si191_reg10
-                      )");
+                      )";
+       $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

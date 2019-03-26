@@ -130,7 +130,7 @@ class cl_dclrf112019 {
 			 $this->si205_sequencial = $si205_sequencial;
 		   }
 		 }
-     	$result = @pg_query("insert into dclrf112019(
+     	$sql = "insert into dclrf112019(
                                        si205_sequencial
                                       ,si205_tiporegistro
                                       ,si205_medidasadotadas
@@ -147,7 +147,9 @@ class cl_dclrf112019 {
                                ,$this->si205_reg10
                                ,$this->si205_mes
                                ,$this->si205_instit
-                      )");
+                      )";
+//	     die($sql);
+       $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -287,12 +289,13 @@ class cl_dclrf112019 {
      }
    }
    // funcao para exclusao
-   function excluir ( $si205_mes=null, $si205_codorgao=null ) {
+   function excluir ( $si205_mes=null, $si205_instit=null ) {
      $this->atualizacampos(true);
      $sql = " delete from dclrf112019
                     where ";
      $sql2 = "";
-     $sql2 = "si205_mes = $si205_mes AND si205_codorgao = '$si205_codorgao' ";
+     $sql2 = "si205_mes = $si205_mes AND si205_instit = '$si205_instit' ";
+//     echo $sql.$sql2;exit;
      $result = @pg_exec($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
