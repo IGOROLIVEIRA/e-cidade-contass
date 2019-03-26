@@ -237,7 +237,7 @@ $aTiposRetencoesINSS = array(
                                     <b><?= @$Lq62_aliquota ?> <b>ISSQN %</b>
                                 </td>
                                 <td>
-                                    <?php db_input('q62_aliquota', 12, $Iq62_aliquota, true, 'text', 3) ?>
+                                    <?php db_input('q62_aliquota', 12, $Iq62_aliquota, true, 'text', $db_opcao) ?>
                                 </td>
                                 <td nowrap title="<?= @$Tq62_vlrissqn ?>">
                                     <?= @$Lq62_vlrissqn ?>
