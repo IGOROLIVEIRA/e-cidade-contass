@@ -149,7 +149,7 @@ class cl_dclrf402019 {
 		   $this->erro_status = "0";
 		   return false;
        }
-	 $result = @pg_query("insert into dclrf402019(
+	 $sql = "insert into dclrf402019(
                                 	   si193_sequencial
                                       ,si193_tiporegistro
                                       ,si193_publicrgf
@@ -166,14 +166,16 @@ class cl_dclrf402019 {
                                ,$this->si193_tiporegistro
                                ,$this->si193_publicrgf
                                ,".($this->si193_dtpublicacaorgf == "null" || $this->si193_dtpublicacaorgf == "" ? "null" : "'".$this->si193_dtpublicacaorgf."'")."
-                               ,$this->si193_localpublicacaorgf
+                               ,'$this->si193_localpublicacaorgf'
                                ,$this->si193_tpperiodo
-                               ,$this->si193_exerciciotpperiodo
+                               ,".($this->si193_exerciciotpperiodo == "null" || $this->si193_exerciciotpperiodo == "" ? 0 : $this->si193_exerciciotpperiodo)."
                                ,$this->si193_mes
                                ,$this->si193_instit
                                ,$this->si193_reg10
-                      )");
-     if($result==false){
+                      )";
+//	   die($sql);
+       $result = db_query($sql);
+	   if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Publicação e Periodicidade do RGF da LRF () nao Incluído. Inclusao Abortada.";

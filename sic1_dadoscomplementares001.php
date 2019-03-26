@@ -4,8 +4,10 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_dadoscomplementareslrf_classe.php");
+include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
+$aux         			  = new cl_arquivo_auxiliar;
 $cldadoscomplementareslrf = new cl_dadoscomplementareslrf;
 
 $db_botao = true;
