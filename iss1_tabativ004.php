@@ -480,11 +480,7 @@ if (isset($incluir)) {
     $cltabativ->q07_aliquota_incentivo = $q07_aliquota_incentivo;
     $cltabativ->q07_justificaisencao = $q07_justificaisencao;
 
-    if(!empty($cltabativ->q07_datafim_isen)
-        || !empty($cltabativ->q07_dataini_isen)
-        || $cltabativ->q07_aliquota_incentivo != ""
-        || !empty($cltabativ->q07_justificaisencao)){
-
+    if($isencao != "n"){
         if(empty($cltabativ->q07_datafim_isen)
             || empty($cltabativ->q07_dataini_isen)
             || $cltabativ->q07_aliquota_incentivo == ""
@@ -493,7 +489,6 @@ if (isset($incluir)) {
             $erromsg = "Para lançar uma isenção, preencha os campos corretamente.";
             $sqlerro = true;
         }
-
     }
 
     if(!empty($q07_datafi)){
