@@ -1377,7 +1377,86 @@ if (isset($tipo_debito)) {
   } else {
 
     $histparcela = "";
-    $sqlhist = " select *
+    /**OC 8843 - INCLUIR HISTORICO DE CALCULO DOS ALVARAS NAS GUIAS DE ALVARA*/
+    if (in_array($k03_tipo, array(9, 19))) {
+      if($k03_tipo == 19) {
+        $sqlhist = " select *
+                   from ( select distinct
+                                 arretipo.k00_tipo,
+                                 k00_descr,
+                                 k99_numpar,
+                                 case
+                                   when divida.v01_exerc is not null
+                                     then divida.v01_exerc
+                                     else
+                                       case
+                                         when termo.v07_parcel is not null
+                                           then termo.v07_parcel
+                                           else extract (year from arrecad.k00_dtoper)
+                                       end
+                                 end as k00_origem, q30_area
+                            from db_reciboweb
+                           inner join arrecad  on k99_numpre        = k00_numpre
+                                              and k99_numpar        = k00_numpar
+                           inner join arretipo on arretipo.k00_tipo = arrecad.k00_tipo
+                            left join divida   on divida.v01_numpre = arrecad.k00_numpre
+                                              and divida.v01_numpar = arrecad.k00_numpar
+                            left join termo    on termo.v07_numpre  = arrecad.k00_numpre
+                            LEFT JOIN vistorianumpre on y69_numpre = arrecad.k00_numpre
+                            LEFT JOIN vistorias on y69_codvist = y70_codvist
+                            LEFT JOIN vistinscr on y71_codvist = y70_codvist
+                            LEFT JOIN issquant on q30_inscr = y71_inscr and q30_anousu = EXTRACT('YEAR' FROM y70_data)
+                            where k99_numpre_n = $k03_numpre  ) as x
+                  order by k00_origem, k00_descr, k99_numpar";
+      } else {
+        $sqlhist = " select *
+                   from ( select distinct
+                                 arretipo.k00_tipo,
+                                 k00_descr,
+                                 k99_numpar,
+                                 case
+                                   when divida.v01_exerc is not null
+                                     then divida.v01_exerc
+                                     else
+                                       case
+                                         when termo.v07_parcel is not null
+                                           then termo.v07_parcel
+                                           else extract (year from arrecad.k00_dtoper)
+                                       end
+                                 end as k00_origem, q30_area
+                            from db_reciboweb
+                           inner join arrecad  on k99_numpre        = k00_numpre
+                                              and k99_numpar        = k00_numpar
+                           inner join arretipo on arretipo.k00_tipo = arrecad.k00_tipo
+                            left join divida   on divida.v01_numpre = arrecad.k00_numpre
+                                              and divida.v01_numpar = arrecad.k00_numpar
+                            left join termo    on termo.v07_numpre  = arrecad.k00_numpre
+                            LEFT JOIN isscalc on q01_numpre = arrecad.k00_numpre and q01_cadcal = 1
+                            LEFT JOIN issquant on q30_inscr = q01_inscr and q30_anousu = q01_anousu
+                            where k99_numpre_n = $k03_numpre  ) as x
+                  order by k00_origem, k00_descr, k99_numpar";
+      }
+      $result = db_query($sqlhist) or die($sqlhist);
+
+      $histant = pg_result($result,0,"k00_origem") . "-" . pg_result($result,0,"k00_descr");
+      $histparcela .=  pg_result($result,0,"k00_descr") . "=>" . pg_result($result,0,"k00_origem") . " / P: ";
+
+      for ($xy=0;$xy<pg_numrows($result);$xy++) {
+
+        if (pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr") <> $histant) {
+          $histparcela .= "-" . pg_result($result,$xy,"k00_descr") . "=>" . pg_result($result,$xy,"k00_origem") . " / P: ";
+          $histant = pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr");
+        }
+        $histparcela .= pg_result($result,$xy,"k99_numpar") . " ";
+
+      }
+      $nArea = pg_result($result,0,"q30_area");
+      if(!empty($nArea)) {
+        $histparcela .= " - Área: " . $nArea . "m2 ";
+      }
+
+    } else {
+      $sqlhist = " select *
                    from ( select distinct
                                  arretipo.k00_tipo,
                                  k00_descr,
@@ -1401,21 +1480,22 @@ if (isset($tipo_debito)) {
                             left join termo    on termo.v07_numpre  = arrecad.k00_numpre
                            where k99_numpre_n = $k03_numpre  ) as x
                   order by k00_origem, k00_descr, k99_numpar";
-    $result = db_query($sqlhist) or die($sqlhist);
 
-    $histant = pg_result($result,0,"k00_origem") . "-" . pg_result($result,0,"k00_descr");
-    $histparcela .=  pg_result($result,0,"k00_descr") . "=>" . pg_result($result,0,"k00_origem") . " / P: ";
+      $result = db_query($sqlhist) or die($sqlhist);
 
-    for ($xy=0;$xy<pg_numrows($result);$xy++) {
+      $histant = pg_result($result,0,"k00_origem") . "-" . pg_result($result,0,"k00_descr");
+      $histparcela .=  pg_result($result,0,"k00_descr") . "=>" . pg_result($result,0,"k00_origem") . " / P: ";
 
-      if (pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr") <> $histant) {
-        $histparcela .= "-" . pg_result($result,$xy,"k00_descr") . "=>" . pg_result($result,$xy,"k00_origem") . " / P: ";
-        $histant = pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr");
+      for ($xy=0;$xy<pg_numrows($result);$xy++) {
+
+        if (pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr") <> $histant) {
+          $histparcela .= "-" . pg_result($result,$xy,"k00_descr") . "=>" . pg_result($result,$xy,"k00_origem") . " / P: ";
+          $histant = pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr");
+        }
+        $histparcela .= pg_result($result,$xy,"k99_numpar") . " ";
+
       }
-      $histparcela .= pg_result($result,$xy,"k99_numpar") . " ";
-
     }
-
   }
 
   if ($lHistLimitado == true) {
