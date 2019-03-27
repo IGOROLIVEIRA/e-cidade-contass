@@ -416,17 +416,17 @@ ob_start();
             <td class="s3 bdleft" colspan="2">(-) Indenização por demissão de servidores ou empregados</td>
             <td class="s5">
                 <?php
-                $fSaldoAposentadoriaPensoesTesouro = 0;
+                $fSaldoIndenizacaoDemissaoServidores = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
                         $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                         $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                         $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                        $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                     //}
                 }
-                echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                echo db_formatar($fSaldoIndenizacaoDemissaoServidores, "f");
                 ?>
             </td>
         </tr>
@@ -434,7 +434,7 @@ ob_start();
             <td class="s2 bdleft" colspan="2">(-) Incentivos a demissão voluntária</td>
             <td class="s6">
                 <?php
-                $fSaldoAposentadoriaPensoesTesouro = 0;
+                $fSaldoIncentivosDemissaoVoluntaria = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
@@ -442,10 +442,10 @@ ob_start();
                     //$aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                     //$aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
 
-                    //$fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    //$fSaldoIncentivosDemissaoVoluntaria += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                     //}
                 }
-                echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                echo db_formatar($fSaldoIncentivosDemissaoVoluntaria, "f");
                 ?>
             </td>
         </tr>
@@ -453,7 +453,7 @@ ob_start();
             <td class="s7 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL = BASE DE CÁLCULO</td>
             <td class="s8">
                 <?php
-                $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro + $fSaldoDespesasAnteriores);
+                $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro + $fSaldoDespesasAnteriores + $fSaldoIndenizacaoDemissaoServidores + $fSaldoIncentivosDemissaoVoluntaria);
                 echo db_formatar($fTotalDespesaPessoal, "f");
                 ?>
             </td>
