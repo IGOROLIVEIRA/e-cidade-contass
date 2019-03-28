@@ -174,7 +174,7 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS20['si87_codorgao']                      =  str_pad($aCONTRATOS20['si87_codorgao'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS20['si87_codunidadesub']                 =  str_pad($aCONTRATOS20['si87_codunidadesub'], 5, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS20['si87_nrocontrato']                   =  substr($aCONTRATOS20['si87_nrocontrato'], 0, 14);
-        $aCSVCONTRATOS20['si87_dataassinaturacontoriginal']    =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dataassinaturacontoriginal'])));
+        $aCSVCONTRATOS20['si87_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dtassinaturacontoriginal'])));
         $aCSVCONTRATOS20['si87_nroseqtermoaditivo']            =  str_pad($aCONTRATOS20['si87_nroseqtermoaditivo'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS20['si87_dtassinaturatermoaditivo']      =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_dtassinaturatermoaditivo'])));
         $aCSVCONTRATOS20['si87_tipoalteracaovalor']            =  str_pad($aCONTRATOS20['si87_tipoalteracaovalor'], 1, "0", STR_PAD_LEFT);
