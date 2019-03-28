@@ -420,7 +420,7 @@ WHERE (z01_cgccpf != '00000000000'
            JOIN rhpessoal ON rh01_numcgm = cgminstituidor.z01_numcgm
            WHERE cgminstituidor.z01_ultalt <= '{$this->sDataInicial}')
       
-      AND cgminstituidor.z01_cadast <= '{$this->sDataFinal}'
+      
       AND rh01_sicom = 1
       AND rh02_cgminstituidor is not NULL
 
