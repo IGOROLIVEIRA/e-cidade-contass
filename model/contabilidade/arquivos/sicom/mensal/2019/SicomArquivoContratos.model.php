@@ -968,7 +968,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_codorgao = $sCodorgao;
             $clcontratos20->si87_codunidadesub = $sCodUnidade;
             $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
-            $clcontratos20->si87_dataassinaturacontoriginal = $oDados20->ac16_dataassinatura;
+            $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura;
             $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento;
             $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
 
@@ -1101,7 +1101,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_codorgao = $sCodorgao;
             $clcontratos20->si87_codunidadesub = $sCodUnidade;
             $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
-            $clcontratos20->si87_dataassinaturacontoriginal = $oDados20->ac16_dataassinatura;
+            $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura;
             $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento;
             $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
 

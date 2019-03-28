@@ -228,8 +228,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           FROM conlancamrec
           INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
           INNER JOIN orctiporec ON o70_codigo = o15_codigo
-          INNER JOIN conlancamcorrente on c86_conlancam = c74_codlan
-          INNER JOIN corplacaixa on (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
+          LEFT JOIN conlancamcorrente on c86_conlancam = c74_codlan
+          LEFT JOIN corplacaixa on (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
           LEFT JOIN placaixarec on k81_seqpla = k82_seqpla
           LEFT JOIN convconvenios on c206_sequencial = k81_convenio
           LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
