@@ -15,30 +15,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarCONS
  */
 class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 0;
-  
+
   /**
    *
    * NOme do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CONSOR';
-  
+
   /**
    *
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -48,7 +48,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -56,7 +56,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
   {
 
   }
-  
+
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -72,12 +72,12 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     $clconsor30 = new cl_consor302019();
     $clconsor40 = new cl_consor402019();
     $clconsor50 = new cl_consor502019();
-    
+
     /**
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao();
-    
+
     $result = db_query($clconsor50->sql_query(null, "*", null, "si20_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si20_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clconsor50->excluir(null, "si20_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si20_instit = " . db_getsession("DB_instit"));
@@ -85,7 +85,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         throw new Exception($clconsor50->erro_msg);
       }
     }
-    
+
     $result = db_query($clconsor40->sql_query(null, "*", null, "si19_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']));
     if (pg_num_rows($result) > 0) {
       $clconsor40->excluir(null, "si19_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']);
@@ -93,7 +93,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         throw new Exception($clconsor40->erro_msg);
       }
     }
-    
+
     $result = db_query($clconsor30->sql_query(null, "*", null, "si18_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si18_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clconsor30->excluir(null, "si18_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si18_instit = " . db_getsession("DB_instit"));
@@ -101,7 +101,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         throw new Exception($clconsor30->erro_msg);
       }
     }
-    
+
     $result = db_query($clconsor20->sql_query(null, "*", null, "si17_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si17_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clconsor20->excluir(null, "si17_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si17_instit = " . db_getsession("DB_instit"));
@@ -109,7 +109,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         throw new Exception($clconsor20->erro_msg);
       }
     }
-    
+
     $result = db_query($clconsor10->sql_query(null, "*", null, "si16_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']) . " and si16_instit = " . db_getsession("DB_instit"));
     if (pg_num_rows($result) > 0) {
       $clconsor10->excluir(null, "si16_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si16_instit = " . db_getsession("DB_instit"));
@@ -117,23 +117,23 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
         throw new Exception($clconsor10->erro_msg);
       }
     }
-    
+
     if ($this->sDataFinal['5'] . $this->sDataFinal['6'] == 01) {
-      $sSql = "select si09_codorgaotce,z01_cgccpf,c200_areaatuacao,c200_descrarea from consconsorcios join cgm on z01_numcgm = c200_numcgm 
-      join db_config on c200_instit = codigo join infocomplementaresinstit on codigo = si09_instit where c200_instit = " . db_getsession("DB_instit");
+      $sSql = "select si09_codorgaotce,z01_cgccpf,c200_areaatuacao,c200_descrarea,c200_dataadesao from consconsorcios join cgm on z01_numcgm = c200_numcgm
+      join db_config on c200_instit = codigo join infocomplementaresinstit on codigo = si09_instit where c200_instit = " . db_getsession("DB_instit")."
+      and extract(MONTH from c200_dataadesao) = '".$this->sDataFinal['5'] . $this->sDataFinal['6']."'
+      and extract(YEAR from c200_dataadesao)='".$this->sDataFinal['0'] . $this->sDataFinal['1']. $this->sDataFinal['2']. $this->sDataFinal['3']."'";
     } else {
       $sSql = "select si09_codorgaotce,z01_cgccpf,c200_areaatuacao,c200_descrarea from consconsorcios join cgm on z01_numcgm = c200_numcgm
-      join db_config on c200_instit = codigo join infocomplementaresinstit on codigo = si09_instit 
+      join db_config on c200_instit = codigo join infocomplementaresinstit on codigo = si09_instit
       where c200_dataadesao >= '{$this->sDataInicial}' and c200_dataadesao <= '{$this->sDataFinal}' and c200_instit = " . db_getsession("DB_instit");
     }
-    
+
     $rsResult10 = db_query($sSql);
-    
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $clconsor10 = new cl_consor102019();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
       $clconsor10->si16_tiporegistro = 10;
       $clconsor10->si16_codorgao = $oDados10->si09_codorgaotce;
       $clconsor10->si16_cnpjconsorcio = $oDados10->z01_cgccpf;
@@ -150,9 +150,9 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     }
 
     $sSql = "select si09_codorgaotce, z01_cgccpf,c201_valortransf,c201_enviourelatorios,c201_codfontrecursos from consvalorestransf
-		join consconsorcios on c201_consconsorcios = c200_sequencial 
-		join cgm on c200_numcgm = z01_numcgm 
-		join db_config on c200_instit = codigo 
+		join consconsorcios on c201_consconsorcios = c200_sequencial
+		join cgm on c200_numcgm = z01_numcgm
+		join db_config on c200_instit = codigo
 		join infocomplementaresinstit on codigo = si09_instit where c201_anousu = " . db_getsession("DB_anousu") . "
 		and c201_mescompetencia = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and c200_instit = " . db_getsession("DB_instit");
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);
@@ -181,9 +181,9 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     }
 
     $sSql = "select si09_codorgaotce, z01_cgccpf, consexecucaoorc.* from consexecucaoorc
-		join consconsorcios on c202_consconsorcios = c200_sequencial 
-		join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo 
-		join infocomplementaresinstit on codigo = si09_instit 
+		join consconsorcios on c202_consconsorcios = c200_sequencial
+		join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
+		join infocomplementaresinstit on codigo = si09_instit
 		where c202_anousu = " . db_getsession("DB_anousu") . " and c202_mescompetencia  = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 		and c200_instit = " . db_getsession("DB_instit");
     $rsResult30 = db_query($sSql);//db_criatabela($rsResult30);
@@ -224,7 +224,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     if ($this->sDataFinal['5'] . $this->sDataFinal['6'] == 12) {
 
       $sSql = "select si09_codorgaotce, z01_cgccpf,c203_valor,c203_codfontrecursos from consdispcaixaano join consconsorcios on c203_consconsorcios = c200_sequencial
-		  join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo 
+		  join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
 		  join infocomplementaresinstit on codigo = si09_instit where c203_anousu = " . db_getsession("DB_anousu") . " and c200_instit = " . db_getsession("DB_instit");
       $rsResult40 = db_query($sSql);
       /**
@@ -252,10 +252,10 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
     }
 
     $sSql = "select si09_codorgaotce, z01_cgccpf,c204_tipoencerramento,c204_dataencerramento from consretiradaexclusao
-		join consconsorcios on c204_consconsorcios = c200_sequencial 
-		join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo 
-		join infocomplementaresinstit on codigo = si09_instit 
-		where c204_dataencerramento is not null 
+		join consconsorcios on c204_consconsorcios = c200_sequencial
+		join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
+		join infocomplementaresinstit on codigo = si09_instit
+		where c204_dataencerramento is not null
 		and c204_dataencerramento >= '{$this->sDataInicial}' and c204_dataencerramento <= '{$this->sDataFinal}' and c200_instit = " . db_getsession("DB_instit");
     $rsResult50 = db_query($sSql);
 
@@ -278,13 +278,13 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       }
 
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarCONSOR = new GerarCONSOR();
     $oGerarCONSOR->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarCONSOR->gerarDados();
-    
+
   }
-  
+
 }
