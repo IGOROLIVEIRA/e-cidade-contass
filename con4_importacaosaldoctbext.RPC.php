@@ -68,7 +68,7 @@ try {
                 where c61_instit = ".db_getsession("DB_instit")."  order by k13_reduz ";
                
           $rsContas = db_query($sSqlGeral);
-
+          //db_criatabela($rsContas);
           $aBancosAgrupados = array();
 
           $rsContas = db_query($sSqlGeral);
@@ -94,6 +94,7 @@ try {
 
                   $cCtb10->icodigoreduzido = $oRegistro10->icodigoreduzido;
                   $cCtb10->codcon = $oRegistro10->codcon;
+                  $cCtb10->codtce = $oRegistro10->codtce;
                   $cCtb10->contas = array();
                   $aBancosAgrupados[$aHash] = $cCtb10;
 
@@ -106,8 +107,12 @@ try {
           $anousu = db_getsession("DB_anousu") - 1;
           $aSaldoCtbExt = array();
           foreach ($aBancosAgrupados as $aBancosAgrupado) {
-            $sSQL = "select si96_codfontrecursos, si96_vlsaldofinalfonte from ctb20{$anousu} where si96_codctb = {$aBancosAgrupado->icodigoreduzido} and si96_mes = 12 and si96_instit = ".db_getsession("DB_instit");
+            $ctb = $aBancosAgrupado->codtce != '' ? $aBancosAgrupado->codtce : $aBancosAgrupado->icodigoreduzido;
+            $sSQL = "select si96_codfontrecursos, si96_vlsaldofinalfonte from ctb20{$anousu} where si96_codctb = {$ctb} and si96_mes = 12 and si96_instit = ".db_getsession("DB_instit");
+
+           // echo $sSQL;
             $rsResult = db_query($sSQL);
+           // db_criatabela($rsResult);
             $oCtbFontes = db_utils::getCollectionByRecord($rsResult);
             
             foreach ($oCtbFontes as $oCtbFonte) {
@@ -151,7 +156,7 @@ try {
           join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
           left join infocomplementaresinstit on si09_instit = c61_instit
           where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 
-          and c61_instit = " . db_getsession("DB_instit") . " order by c61_reduz";
+          and c61_instit = " . db_getsession("DB_instit") . " order by c61_reduz ";
         
           $rsContasExtra = db_query($sSqlExt);  
           
@@ -183,8 +188,9 @@ try {
           }
           
           foreach ($aExt10Agrupado as $oExt10Agrupado) {
+            $ext = $oExt10Agrupado->codext != ''?$oExt10Agrupado->codext:$oExt10Agrupado->codtce;
             $sSQL = "select si165_codfontrecursos, si165_vlsaldoatualfonte, si165_natsaldoatualfonte from ext20{$anousu} 
-                      where si165_codext = {$oExt10Agrupado->codext} and si165_mes = 12 
+                      where si165_codext = {$ext} and si165_mes = 12 
                       and si165_instit = ".db_getsession("DB_instit"); 
             $rsResult = db_query($sSQL); 
             $oExtFontes = db_utils::getCollectionByRecord($rsResult);
@@ -405,6 +411,7 @@ function salvarSaldo($saldo, $valorSaldo){
           } else { // senao, incluimos
 
               $oDaoContaCorrenteSaldo->incluir(null);
+
           }
 
 
