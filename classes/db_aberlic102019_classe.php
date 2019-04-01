@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE aberlic102019
 class cl_aberlic102019
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo = null;
   var $query_sql = null;
   var $numrows = 0;
@@ -16,7 +16,7 @@ class cl_aberlic102019
   var $erro_msg = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si46_sequencial = 0;
   var $si46_tiporegistro = 0;
   var $si46_codorgaoresp = null;
@@ -62,7 +62,7 @@ class cl_aberlic102019
   var $si46_prazoexecucao = 0;
   var $si46_formapagamento = null;
   var $si46_criterioaceitabilidade = null;
-  var $si46_criterioadjudicacao = 0;
+  var $si46_criterioadjudicacao = null;
   var $si46_processoporlote = 0;
   var $si46_criteriodesempate = 0;
   var $si46_destinacaoexclusiva = 0;
@@ -70,54 +70,54 @@ class cl_aberlic102019
   var $si46_limitecontratacao = 0;
   var $si46_mes = 0;
   var $si46_instit = 0;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si46_sequencial = int8 = sequencial 
-                 si46_tiporegistro = int8 = Tipo do registro 
-                 si46_codorgaoresp = varchar(2) = Código do órgão 
-                 si46_codunidadesubresp = varchar(8) = Código da unidade 
-                 si46_exerciciolicitacao = int8 = Exercício 
-                 si46_nroprocessolicitatorio = varchar(12) = Número sequencial do processo 
-                 si46_codmodalidadelicitacao = int8 = Modalidade da Licitação 
-                 si46_nromodalidade = int8 = Número sequencial da Modalidade 
-                 si46_naturezaprocedimento = int8 = Natureza do Procedimento 
-                 si46_dtabertura = date = Data de abertura 
-                 si46_dteditalconvite = date = Data de emissão 
-                 si46_dtpublicacaoeditaldo = date = Data de publicação do edital 
-                 si46_dtpublicacaoeditalveiculo1 = date = Data de Publicação do edital no veículo 
-                 si46_veiculo1publicacao = varchar(50) = Nome do veículo   de divulgação 
-                 si46_dtpublicacaoeditalveiculo2 = date = Data de Publicação    do edital 
-                 si46_veiculo2publicacao = varchar(50) = Nome do veículo 
-                 si46_dtrecebimentodoc = date = Data prevista para  recebimento 
-                 si46_tipolicitacao = int8 = Tipo de licitação 
-                 si46_naturezaobjeto = int8 = Natureza do objeto 
-                 si46_objeto = varchar(500) = Objeto da licitação 
-                 si46_regimeexecucaoobras = int8 = Regime de  execução para    obras 
-                 si46_nroconvidado = int8 = Número de   convidados 
-                 si46_clausulaprorrogacao = varchar(250) = se  existente a  cláusula de   prorrogação 
-                 si46_unidademedidaprazoexecucao = int8 = Unidade de medida 
-                 si46_prazoexecucao = int8 = Prazo para entrega  do objeto 
-                 si46_formapagamento = varchar(80) = Descrição da forma    de pagamento 
-                 si46_criterioaceitabilidade = varchar(80) = Descrição do critério de aceitabilidade 
-                 si46_criterioadjudicacao = int8 = Informar critério de adjudicação 
-                 si46_processoporlote = int8 = Informar 
-                 si46_criteriodesempate = int8 = Licitação com    preferência 
-                 si46_destinacaoexclusiva = int8 = Destinação exclusiva 
-                 si46_subcontratacao = int8 = Subcontratação 
-                 si46_limitecontratacao = int8 = Limite para a  contratação 
-                 si46_mes = int8 = Mês 
-                 si46_instit = int8 = Instituição 
+                 si46_sequencial = int8 = sequencial
+                 si46_tiporegistro = int8 = Tipo do registro
+                 si46_codorgaoresp = varchar(2) = Código do órgão
+                 si46_codunidadesubresp = varchar(8) = Código da unidade
+                 si46_exerciciolicitacao = int8 = Exercício
+                 si46_nroprocessolicitatorio = varchar(12) = Número sequencial do processo
+                 si46_codmodalidadelicitacao = int8 = Modalidade da Licitação
+                 si46_nromodalidade = int8 = Número sequencial da Modalidade
+                 si46_naturezaprocedimento = int8 = Natureza do Procedimento
+                 si46_dtabertura = date = Data de abertura
+                 si46_dteditalconvite = date = Data de emissão
+                 si46_dtpublicacaoeditaldo = date = Data de publicação do edital
+                 si46_dtpublicacaoeditalveiculo1 = date = Data de Publicação do edital no veículo
+                 si46_veiculo1publicacao = varchar(50) = Nome do veículo   de divulgação
+                 si46_dtpublicacaoeditalveiculo2 = date = Data de Publicação    do edital
+                 si46_veiculo2publicacao = varchar(50) = Nome do veículo
+                 si46_dtrecebimentodoc = date = Data prevista para  recebimento
+                 si46_tipolicitacao = int8 = Tipo de licitação
+                 si46_naturezaobjeto = int8 = Natureza do objeto
+                 si46_objeto = varchar(500) = Objeto da licitação
+                 si46_regimeexecucaoobras = int8 = Regime de  execução para    obras
+                 si46_nroconvidado = int8 = Número de   convidados
+                 si46_clausulaprorrogacao = varchar(250) = se  existente a  cláusula de   prorrogação
+                 si46_unidademedidaprazoexecucao = int8 = Unidade de medida
+                 si46_prazoexecucao = int8 = Prazo para entrega  do objeto
+                 si46_formapagamento = varchar(80) = Descrição da forma    de pagamento
+                 si46_criterioaceitabilidade = varchar(80) = Descrição do critério de aceitabilidade
+                 si46_criterioadjudicacao = int8 = Informar critério de adjudicação
+                 si46_processoporlote = int8 = Informar
+                 si46_criteriodesempate = int8 = Licitação com    preferência
+                 si46_destinacaoexclusiva = int8 = Destinação exclusiva
+                 si46_subcontratacao = int8 = Subcontratação
+                 si46_limitecontratacao = int8 = Limite para a  contratação
+                 si46_mes = int8 = Mês
+                 si46_instit = int8 = Instituição
                  ";
-  
-  //funcao construtor da classe 
+
+  //funcao construtor da classe
   function cl_aberlic102019()
   {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("aberlic102019");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
-  //funcao erro 
+
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -127,7 +127,7 @@ class cl_aberlic102019
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -213,7 +213,7 @@ class cl_aberlic102019
       $this->si46_sequencial = ($this->si46_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si46_sequencial"] : $this->si46_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si46_sequencial)
   {
@@ -225,7 +225,7 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si46_exerciciolicitacao == null) {
@@ -277,7 +277,7 @@ class cl_aberlic102019
       $this->si46_prazoexecucao = "0";
     }
     if ($this->si46_criterioadjudicacao == null) {
-      $this->si46_criterioadjudicacao = "0";
+      $this->si46_criterioadjudicacao = "3";
     }
     if ($this->si46_processoporlote == null) {
       $this->si46_processoporlote = "0";
@@ -301,7 +301,7 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si46_instit == null) {
@@ -311,7 +311,7 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si46_sequencial == "" || $si46_sequencial == null) {
@@ -323,7 +323,7 @@ class cl_aberlic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si46_sequencial = pg_result($result, 0, 0);
@@ -335,7 +335,7 @@ class cl_aberlic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si46_sequencial = $si46_sequencial;
@@ -347,82 +347,82 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into aberlic102019(
-                                       si46_sequencial 
-                                      ,si46_tiporegistro 
-                                      ,si46_codorgaoresp 
-                                      ,si46_codunidadesubresp 
-                                      ,si46_exerciciolicitacao 
-                                      ,si46_nroprocessolicitatorio 
-                                      ,si46_codmodalidadelicitacao 
-                                      ,si46_nromodalidade 
-                                      ,si46_naturezaprocedimento 
-                                      ,si46_dtabertura 
-                                      ,si46_dteditalconvite 
-                                      ,si46_dtpublicacaoeditaldo 
-                                      ,si46_dtpublicacaoeditalveiculo1 
-                                      ,si46_veiculo1publicacao 
-                                      ,si46_dtpublicacaoeditalveiculo2 
-                                      ,si46_veiculo2publicacao 
-                                      ,si46_dtrecebimentodoc 
-                                      ,si46_tipolicitacao 
-                                      ,si46_naturezaobjeto 
-                                      ,si46_objeto 
-                                      ,si46_regimeexecucaoobras 
-                                      ,si46_nroconvidado 
-                                      ,si46_clausulaprorrogacao 
-                                      ,si46_unidademedidaprazoexecucao 
-                                      ,si46_prazoexecucao 
-                                      ,si46_formapagamento 
-                                      ,si46_criterioaceitabilidade 
-                                      ,si46_criterioadjudicacao 
-                                      ,si46_processoporlote 
-                                      ,si46_criteriodesempate 
-                                      ,si46_destinacaoexclusiva 
-                                      ,si46_subcontratacao 
-                                      ,si46_limitecontratacao 
-                                      ,si46_mes 
-                                      ,si46_instit 
+                                       si46_sequencial
+                                      ,si46_tiporegistro
+                                      ,si46_codorgaoresp
+                                      ,si46_codunidadesubresp
+                                      ,si46_exerciciolicitacao
+                                      ,si46_nroprocessolicitatorio
+                                      ,si46_codmodalidadelicitacao
+                                      ,si46_nromodalidade
+                                      ,si46_naturezaprocedimento
+                                      ,si46_dtabertura
+                                      ,si46_dteditalconvite
+                                      ,si46_dtpublicacaoeditaldo
+                                      ,si46_dtpublicacaoeditalveiculo1
+                                      ,si46_veiculo1publicacao
+                                      ,si46_dtpublicacaoeditalveiculo2
+                                      ,si46_veiculo2publicacao
+                                      ,si46_dtrecebimentodoc
+                                      ,si46_tipolicitacao
+                                      ,si46_naturezaobjeto
+                                      ,si46_objeto
+                                      ,si46_regimeexecucaoobras
+                                      ,si46_nroconvidado
+                                      ,si46_clausulaprorrogacao
+                                      ,si46_unidademedidaprazoexecucao
+                                      ,si46_prazoexecucao
+                                      ,si46_formapagamento
+                                      ,si46_criterioaceitabilidade
+                                      ,si46_criterioadjudicacao
+                                      ,si46_processoporlote
+                                      ,si46_criteriodesempate
+                                      ,si46_destinacaoexclusiva
+                                      ,si46_subcontratacao
+                                      ,si46_limitecontratacao
+                                      ,si46_mes
+                                      ,si46_instit
                        )
                 values (
-                                $this->si46_sequencial 
-                               ,$this->si46_tiporegistro 
-                               ,'$this->si46_codorgaoresp' 
-                               ,'$this->si46_codunidadesubresp' 
-                               ,$this->si46_exerciciolicitacao 
-                               ,'$this->si46_nroprocessolicitatorio' 
-                               ,$this->si46_codmodalidadelicitacao 
-                               ,$this->si46_nromodalidade 
-                               ,$this->si46_naturezaprocedimento 
-                               ," . ($this->si46_dtabertura == "null" || $this->si46_dtabertura == "" ? "null" : "'" . $this->si46_dtabertura . "'") . " 
-                               ," . ($this->si46_dteditalconvite == "null" || $this->si46_dteditalconvite == "" ? "null" : "'" . $this->si46_dteditalconvite . "'") . " 
-                               ," . ($this->si46_dtpublicacaoeditaldo == "null" || $this->si46_dtpublicacaoeditaldo == "" ? "null" : "'" . $this->si46_dtpublicacaoeditaldo . "'") . " 
-                               ," . ($this->si46_dtpublicacaoeditalveiculo1 == "null" || $this->si46_dtpublicacaoeditalveiculo1 == "" ? "null" : "'" . $this->si46_dtpublicacaoeditalveiculo1 . "'") . " 
-                               ,'$this->si46_veiculo1publicacao' 
-                               ," . ($this->si46_dtpublicacaoeditalveiculo2 == "null" || $this->si46_dtpublicacaoeditalveiculo2 == "" ? "null" : "'" . $this->si46_dtpublicacaoeditalveiculo2 . "'") . " 
-                               ,'$this->si46_veiculo2publicacao' 
-                               ," . ($this->si46_dtrecebimentodoc == "null" || $this->si46_dtrecebimentodoc == "" ? "null" : "'" . $this->si46_dtrecebimentodoc . "'") . " 
-                               ,$this->si46_tipolicitacao 
-                               ,$this->si46_naturezaobjeto 
-                               ,'$this->si46_objeto' 
-                               ,$this->si46_regimeexecucaoobras 
-                               ,$this->si46_nroconvidado 
-                               ,'$this->si46_clausulaprorrogacao' 
-                               ,$this->si46_unidademedidaprazoexecucao 
-                               ,$this->si46_prazoexecucao 
-                               ,'$this->si46_formapagamento' 
-                               ,'$this->si46_criterioaceitabilidade' 
-                               ,$this->si46_criterioadjudicacao 
-                               ,$this->si46_processoporlote 
-                               ,$this->si46_criteriodesempate 
-                               ,$this->si46_destinacaoexclusiva 
-                               ,$this->si46_subcontratacao 
-                               ,$this->si46_limitecontratacao 
-                               ,$this->si46_mes 
-                               ,$this->si46_instit 
+                                $this->si46_sequencial
+                               ,$this->si46_tiporegistro
+                               ,'$this->si46_codorgaoresp'
+                               ,'$this->si46_codunidadesubresp'
+                               ,$this->si46_exerciciolicitacao
+                               ,'$this->si46_nroprocessolicitatorio'
+                               ,$this->si46_codmodalidadelicitacao
+                               ,$this->si46_nromodalidade
+                               ,$this->si46_naturezaprocedimento
+                               ," . ($this->si46_dtabertura == "null" || $this->si46_dtabertura == "" ? "null" : "'" . $this->si46_dtabertura . "'") . "
+                               ," . ($this->si46_dteditalconvite == "null" || $this->si46_dteditalconvite == "" ? "null" : "'" . $this->si46_dteditalconvite . "'") . "
+                               ," . ($this->si46_dtpublicacaoeditaldo == "null" || $this->si46_dtpublicacaoeditaldo == "" ? "null" : "'" . $this->si46_dtpublicacaoeditaldo . "'") . "
+                               ," . ($this->si46_dtpublicacaoeditalveiculo1 == "null" || $this->si46_dtpublicacaoeditalveiculo1 == "" ? "null" : "'" . $this->si46_dtpublicacaoeditalveiculo1 . "'") . "
+                               ,'$this->si46_veiculo1publicacao'
+                               ," . ($this->si46_dtpublicacaoeditalveiculo2 == "null" || $this->si46_dtpublicacaoeditalveiculo2 == "" ? "null" : "'" . $this->si46_dtpublicacaoeditalveiculo2 . "'") . "
+                               ,'$this->si46_veiculo2publicacao'
+                               ," . ($this->si46_dtrecebimentodoc == "null" || $this->si46_dtrecebimentodoc == "" ? "null" : "'" . $this->si46_dtrecebimentodoc . "'") . "
+                               ,$this->si46_tipolicitacao
+                               ,$this->si46_naturezaobjeto
+                               ,'$this->si46_objeto'
+                               ,$this->si46_regimeexecucaoobras
+                               ,$this->si46_nroconvidado
+                               ,'$this->si46_clausulaprorrogacao'
+                               ,$this->si46_unidademedidaprazoexecucao
+                               ,$this->si46_prazoexecucao
+                               ,'$this->si46_formapagamento'
+                               ,'$this->si46_criterioaceitabilidade'
+                               ,$this->si46_criterioadjudicacao
+                               ,$this->si46_processoporlote
+                               ,$this->si46_criteriodesempate
+                               ,$this->si46_destinacaoexclusiva
+                               ,$this->si46_subcontratacao
+                               ,$this->si46_limitecontratacao
+                               ,$this->si46_mes
+                               ,$this->si46_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -440,7 +440,7 @@ class cl_aberlic102019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -492,10 +492,10 @@ class cl_aberlic102019
       $resac = db_query("insert into db_acount values($acount,2010275,2009898,'','" . AddSlashes(pg_result($resaco, 0, 'si46_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010275,2011560,'','" . AddSlashes(pg_result($resaco, 0, 'si46_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si46_sequencial = null)
   {
@@ -519,7 +519,7 @@ class cl_aberlic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -684,9 +684,6 @@ class cl_aberlic102019
       $virgula = ",";
     }
     if (trim($this->si46_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"])) {
-      if (trim($this->si46_criterioadjudicacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si46_criterioadjudicacao"])) {
-        $this->si46_criterioadjudicacao = "0";
-      }
       $sql .= $virgula . " si46_criterioadjudicacao = $this->si46_criterioadjudicacao ";
       $virgula = ",";
     }
@@ -735,7 +732,7 @@ class cl_aberlic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -749,7 +746,7 @@ class cl_aberlic102019
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -846,7 +843,7 @@ class cl_aberlic102019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -857,7 +854,7 @@ class cl_aberlic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -867,13 +864,13 @@ class cl_aberlic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao para exclusao 
+
+  // funcao para exclusao
   function excluir($si46_sequencial = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -947,7 +944,7 @@ class cl_aberlic102019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -958,7 +955,7 @@ class cl_aberlic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -968,13 +965,13 @@ class cl_aberlic102019
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
-  // funcao do recordset 
+
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -986,7 +983,7 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -996,14 +993,14 @@ class cl_aberlic102019
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query($si46_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -1036,11 +1033,11 @@ class cl_aberlic102019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
-  // funcao do sql 
+
+  // funcao do sql
   function sql_query_file($si46_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -1073,7 +1070,7 @@ class cl_aberlic102019
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

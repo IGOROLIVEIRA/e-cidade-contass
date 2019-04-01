@@ -179,10 +179,6 @@ class cl_orgao102019
       return false;
     }
 
-    if(($this->si14_tipodocumentoassessoria == null) || ($this->si14_tipodocumentoassessoria=='')){
-      $this->si14_tipodocumentoassessoria = '0';
-    }
-
     $sql = "insert into orgao102019(
                                        si14_sequencial
                                       ,si14_tiporegistro
@@ -210,9 +206,10 @@ class cl_orgao102019
                                ,$this->si14_mes
                                ,$this->si14_instit
                                ,$this->si14_assessoriacontabil
-                               ,$this->si14_tipodocumentoassessoria
+                               ,".($this->si14_tipodocumentoassessoria == '' ? "null": $this->si14_tipodocumentoassessoria)."
                                ,".($this->si14_nrodocumentoassessoria == '' ? "null" : $this->si14_nrodocumentoassessoria)."
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("

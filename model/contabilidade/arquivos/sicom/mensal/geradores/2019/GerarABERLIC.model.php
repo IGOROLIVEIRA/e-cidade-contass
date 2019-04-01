@@ -86,7 +86,7 @@ class GerarABERLIC extends GerarAM
         $aCSVABERLIC10['si46_prazoexecucao']              = substr($aABERLIC10['si46_prazoexecucao'], 0, 4);
         $aCSVABERLIC10['si46_formapagamento']             = substr($aABERLIC10['si46_formapagamento'], 0, 80);
         $aCSVABERLIC10['si46_criterioaceitabilidade']     = substr($aABERLIC10['si46_criterioaceitabilidade'], 0, 80);
-        $aCSVABERLIC10['si46_descontotabela']             = $this->padLeftZero($aABERLIC10['si46_descontotabela'], 1);
+        $aCSVABERLIC10['si46_criterioadjudicacao']        = $this->padLeftZero($aABERLIC10['si46_criterioadjudicacao'], 1);
         $aCSVABERLIC10['si46_processoporlote']            = $this->padLeftZero($aABERLIC10['si46_processoporlote'], 1);
         $aCSVABERLIC10['si46_criteriodesempate']          = $this->padLeftZero($aABERLIC10['si46_criteriodesempate'], 1);
         $aCSVABERLIC10['si46_destinacaoexclusiva']        = $this->padLeftZero($aABERLIC10['si46_destinacaoexclusiva'], 1);

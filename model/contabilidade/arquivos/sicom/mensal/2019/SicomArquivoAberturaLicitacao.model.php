@@ -282,8 +282,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_condicoespag AS formaPagamento,
        liclicita.l20_aceitabilidade AS criterioAceitabilidade,
        CASE
-           WHEN liclicita.l20_criterioadjudicacao is null
-            THEN 3
+           WHEN liclicita.l20_criterioadjudicacao is null THEN 3
+           WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
            ELSE liclicita.l20_criterioadjudicacao
        END AS criterioAdjudicacao,
        	(CASE liclicita.l20_tipojulg
@@ -310,7 +310,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
                                                       '52',
                                                       '53',
                                                       '54')";
+
     $rsResult10 = db_query($sSql);
+
     /**
      * registro 10
      */
@@ -350,9 +352,12 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       $claberlic10->si46_subcontratacao = $oDados10->subcontratacao;
       $claberlic10->si46_tipolicitacao = $oDados10->tipolicitacao;
       $claberlic10->si46_unidademedidaprazoexecucao = $oDados10->unidademedidaprazoexecucao;
+      $claberlic10->si46_criterioadjudicacao = $oDados10->criterioadjudicacao;
       $claberlic10->si46_veiculo1publicacao = $this->removeCaracteres($oDados10->veiculo1publicacao);
       $claberlic10->si46_veiculo2publicacao = $this->removeCaracteres($oDados10->veiculo2Publicacao);
       $claberlic10->si46_instit = db_getsession("DB_instit");
+
+
       $claberlic10->incluir(null);
       if ($claberlic10->erro_status == 0) {
         throw new Exception($claberlic10->erro_msg);
