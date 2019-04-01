@@ -24,21 +24,23 @@ class cl_conv112019
   var $si93_nrodocumento = null;
   var $si93_esferaconcedente = 0;
   var $si93_valorconcedido = 0;
+  var $si93_dscexterior = null;
   var $si93_mes = 0;
   var $si93_reg10 = 0;
   var $si93_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si93_sequencial = int8 = sequencial 
-                 si93_tiporegistro = int8 = Tipo do  registro 
-                 si93_codconvenio = int8 = Código do  Convênio 
-                 si93_tipodocumento = int8 = Tipo de documento 
-                 si93_nrodocumento = varchar(14) = Número do  documento 
-                 si93_esferaconcedente = int8 = Esfera do  Concedente 
-                 si93_valorconcedido = float8 = Valor a ser  concedido 
-                 si93_mes = int8 = Mês 
-                 si93_reg10 = int8 = reg10 
-                 si93_instit = int8 = Instituição 
+                 si93_sequencial = int8 = sequencial
+                 si93_tiporegistro = int8 = Tipo do  registro
+                 si93_codconvenio = int8 = Código do  Convênio
+                 si93_tipodocumento = int8 = Tipo de documento
+                 si93_nrodocumento = varchar(14) = Número do  documento
+                 si93_esferaconcedente = int8 = Esfera do  Concedente
+                 si93_valorconcedido = float8 = Valor a ser  concedido
+                 si93_dscexterior = varchar(120) = Descrição do Concedente
+                 si93_mes = int8 = Mês
+                 si93_reg10 = int8 = reg10
+                 si93_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -74,6 +76,7 @@ class cl_conv112019
       $this->si93_mes = ($this->si93_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_mes"] : $this->si93_mes);
       $this->si93_reg10 = ($this->si93_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_reg10"] : $this->si93_reg10);
       $this->si93_instit = ($this->si93_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_instit"] : $this->si93_instit);
+      $this->si93_dscexterior = ($this->si93_dscexterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_dscexterior"] : $this->si93_dscexterior);
     } else {
       $this->si93_sequencial = ($this->si93_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_sequencial"] : $this->si93_sequencial);
     }
@@ -128,6 +131,20 @@ class cl_conv112019
 
       return false;
     }
+
+    if ($this->si93_esferaconcedente == 4 && $this->si93_dscexterior == null) {//si93_dscexterior
+      $this->erro_sql = " Campo Esfera do concedente nao Informado.";
+      $this->erro_campo = "si93_instit";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si93_dscexterior == null) {
+      $this->si93_dscexterior = "null";
+    }
     if ($si93_sequencial == "" || $si93_sequencial == null) {
       $result = db_query("select nextval('conv112019_si93_sequencial_seq')");
       if ($result == false) {
@@ -165,28 +182,30 @@ class cl_conv112019
       return false;
     }
     $sql = "insert into conv112019(
-                                       si93_sequencial 
-                                      ,si93_tiporegistro 
-                                      ,si93_codconvenio 
-                                      ,si93_tipodocumento 
-                                      ,si93_nrodocumento 
-                                      ,si93_esferaconcedente 
-                                      ,si93_valorconcedido 
-                                      ,si93_mes 
-                                      ,si93_reg10 
-                                      ,si93_instit 
+                                       si93_sequencial
+                                      ,si93_tiporegistro
+                                      ,si93_codconvenio
+                                      ,si93_tipodocumento
+                                      ,si93_nrodocumento
+                                      ,si93_esferaconcedente
+                                      ,si93_valorconcedido
+                                      ,si93_mes
+                                      ,si93_reg10
+                                      ,si93_instit
+                                      ,si93_dscexterior
                        )
                 values (
-                                $this->si93_sequencial 
-                               ,$this->si93_tiporegistro 
-                               ,$this->si93_codconvenio 
-                               ,$this->si93_tipodocumento 
-                               ,'$this->si93_nrodocumento' 
-                               ,$this->si93_esferaconcedente 
-                               ,$this->si93_valorconcedido 
-                               ,$this->si93_mes 
-                               ,$this->si93_reg10 
-                               ,$this->si93_instit 
+                                $this->si93_sequencial
+                               ,$this->si93_tiporegistro
+                               ,$this->si93_codconvenio
+                               ,$this->si93_tipodocumento
+                               ,'$this->si93_nrodocumento'
+                               ,$this->si93_esferaconcedente
+                               ,$this->si93_valorconcedido
+                               ,$this->si93_mes
+                               ,$this->si93_reg10
+                               ,$this->si93_instit
+                               ,'$this->si93_dscexterior'
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -204,7 +223,6 @@ class cl_conv112019
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-
       return false;
     }
     $this->erro_banco = "";

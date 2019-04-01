@@ -37,23 +37,25 @@ class cl_conv102019
   var $si92_datafinalvigencia = null;
   var $si92_vlconvenio = 0;
   var $si92_vlcontrapartida = 0;
+  var $si92_codfontrecursos = 0;
   var $si92_mes = 0;
   var $si92_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si92_sequencial = int8 = sequencial 
-                 si92_tiporegistro = int8 = Tipo do  registro 
-                 si92_codconvenio = int8 = Código do  Convênio 
-                 si92_codorgao = varchar(2) = Código do órgão 
-                 si92_nroconvenio = varchar(30) = Número do  Convênio 
-                 si92_dataassinatura = date = Data da assinatura  do Convênio 
-                 si92_objetoconvenio = varchar(500) = Objeto do convênio 
-                 si92_datainiciovigencia = date = Data inicial da  vigência do  convênio 
-                 si92_datafinalvigencia = date = Data final da  vigência do  convênio 
-                 si92_vlconvenio = float8 = Valor do convênio 
-                 si92_vlcontrapartida = float8 = Valor da  contrapartida 
-                 si92_mes = int8 = Mês 
-                 si92_instit = int8 = Instituição 
+                 si92_sequencial = int8 = sequencial
+                 si92_tiporegistro = int8 = Tipo do  registro
+                 si92_codconvenio = int8 = Código do  Convênio
+                 si92_codorgao = varchar(2) = Código do órgão
+                 si92_nroconvenio = varchar(30) = Número do  Convênio
+                 si92_dataassinatura = date = Data da assinatura  do Convênio
+                 si92_objetoconvenio = varchar(500) = Objeto do convênio
+                 si92_datainiciovigencia = date = Data inicial da  vigência do  convênio
+                 si92_datafinalvigencia = date = Data final da  vigência do  convênio
+                 si92_vlconvenio = float8 = Valor do convênio
+                 si92_vlcontrapartida = float8 = Valor da  contrapartida
+                 si92_codfontrecursos = int8 = Tipo de Recurso
+                 si92_mes = int8 = Mês
+                 si92_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -109,6 +111,7 @@ class cl_conv102019
           $this->si92_datafinalvigencia = $this->si92_datafinalvigencia_ano . "-" . $this->si92_datafinalvigencia_mes . "-" . $this->si92_datafinalvigencia_dia;
         }
       }
+      $this->si92_codfontrecursos = ($this->si92_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si92_codfontrecursos"] : $this->si92_codfontrecursos);
       $this->si92_vlconvenio = ($this->si92_vlconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si92_vlconvenio"] : $this->si92_vlconvenio);
       $this->si92_vlcontrapartida = ($this->si92_vlcontrapartida == "" ? @$GLOBALS["HTTP_POST_VARS"]["si92_vlcontrapartida"] : $this->si92_vlcontrapartida);
       $this->si92_mes = ($this->si92_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si92_mes"] : $this->si92_mes);
@@ -153,6 +156,16 @@ class cl_conv102019
     if ($this->si92_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
       $this->erro_campo = "si92_mes";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si92_codfontrecursos == null) {
+      $this->erro_sql = " Código da fonte de Recurso não informado.";
+      $this->erro_campo = "si92_codfontrecursos";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -207,34 +220,36 @@ class cl_conv102019
       return false;
     }
     $sql = "insert into conv102019(
-                                       si92_sequencial 
-                                      ,si92_tiporegistro 
-                                      ,si92_codconvenio 
-                                      ,si92_codorgao 
-                                      ,si92_nroconvenio 
-                                      ,si92_dataassinatura 
-                                      ,si92_objetoconvenio 
-                                      ,si92_datainiciovigencia 
-                                      ,si92_datafinalvigencia 
-                                      ,si92_vlconvenio 
-                                      ,si92_vlcontrapartida 
-                                      ,si92_mes 
-                                      ,si92_instit 
+                                       si92_sequencial
+                                      ,si92_tiporegistro
+                                      ,si92_codconvenio
+                                      ,si92_codorgao
+                                      ,si92_nroconvenio
+                                      ,si92_dataassinatura
+                                      ,si92_objetoconvenio
+                                      ,si92_datainiciovigencia
+                                      ,si92_datafinalvigencia
+                                      ,si92_vlconvenio
+                                      ,si92_vlcontrapartida
+                                      ,si92_mes
+                                      ,si92_instit
+                                      ,si92_codfontrecursos
                        )
                 values (
-                                $this->si92_sequencial 
-                               ,$this->si92_tiporegistro 
-                               ,$this->si92_codconvenio 
-                               ,'$this->si92_codorgao' 
-                               ,'$this->si92_nroconvenio' 
+                                $this->si92_sequencial
+                               ,$this->si92_tiporegistro
+                               ,$this->si92_codconvenio
+                               ,'$this->si92_codorgao'
+                               ,'$this->si92_nroconvenio'
                                ," . ($this->si92_dataassinatura == "null" || $this->si92_dataassinatura == "" ? "null" : "'" . $this->si92_dataassinatura . "'") . "
-                               ,'$this->si92_objetoconvenio' 
+                               ,'$this->si92_objetoconvenio'
                                ," . ($this->si92_datainiciovigencia == "null" || $this->si92_datainiciovigencia == "" ? "null" : "'" . $this->si92_datainiciovigencia . "'") . "
                                ," . ($this->si92_datafinalvigencia == "null" || $this->si92_datafinalvigencia == "" ? "null" : "'" . $this->si92_datafinalvigencia . "'") . "
-                               ,$this->si92_vlconvenio 
-                               ,$this->si92_vlcontrapartida 
-                               ,$this->si92_mes 
-                               ,$this->si92_instit 
+                               ,$this->si92_vlconvenio
+                               ,$this->si92_vlcontrapartida
+                               ,$this->si92_mes
+                               ,$this->si92_instit
+                               ,$this->si92_codfontrecursos
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -318,6 +333,13 @@ class cl_conv102019
         $this->si92_codconvenio = "0";
       }
       $sql .= $virgula . " si92_codconvenio = $this->si92_codconvenio ";
+      $virgula = ",";
+    }
+    if (trim($this->si92_codfontrecursos) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si92_codfontrecursos"])) {
+      if (trim($this->si92_codfontrecursos) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si92_codfontrecursos"])) {
+        $this->si92_codfontrecursos = "0";
+      }
+      $sql .= $virgula . " si92_codfontrecursos = $this->si92_codfontrecursos ";
       $virgula = ",";
     }
     if (trim($this->si92_codorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si92_codorgao"])) {

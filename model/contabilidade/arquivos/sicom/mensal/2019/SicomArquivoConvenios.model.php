@@ -13,29 +13,29 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarCONV
  */
 class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout
    * @var Integer
    */
   protected $iCodigoLayout;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var unknown_type
    */
   protected $sNomeArquivo = 'CONV';
-  
-  /* 
+
+  /*
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * retornar o codigo do layout
    *
@@ -45,7 +45,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    * @return Array
@@ -53,7 +53,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
   public function getCampos()
   {
   }
-  
+
   /**
    * selecionar os dados de Leis de Alteração
    *
@@ -64,7 +64,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     $clconv10 = new cl_conv102019();
     $clconv11 = new cl_conv112019();
     $clconv20 = new cl_conv202019();
-    
+
     db_inicio_transacao();
 
 
@@ -73,13 +73,13 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
    */
     $result = $clconv11->sql_record($clconv11->sql_query(null, "*", null, "si93_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si93_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $clconv11->excluir(null, "si93_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si93_instit = " . db_getsession("DB_instit"));
       if ($clconv11->erro_status == 0) {
         throw new Exception($clconv11->erro_msg);
       }
     }
-    
+
 
     /*
      * excluir informacoes do mes selecionado registro 10
@@ -92,36 +92,36 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clconv10->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 20
      */
     $result = $clconv20->sql_record($clconv20->sql_query(null, "*", null, "si94_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si94_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clconv20->excluir(null, "si94_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si93_instit = " . db_getsession("DB_instit"));
+      $clconv20->excluir(null, "si94_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si94_instit = " . db_getsession("DB_instit"));
       if ($clconv20->erro_status == 0) {
         throw new Exception($clconv20->erro_msg);
       }
     }
-    
+
     $sSql = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
-    
+
     $rsResult = db_query($sSql);
     $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
 
     /*
      * selecionar informacoes registro 10
      */
-    $sSql = "select * from convconvenios where c206_dataassinatura >= '{$this->sDataInicial}' and c206_dataassinatura <= '{$this->sDataFinal}' and c206_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from convconvenios where c206_datacadastro >= '{$this->sDataInicial}' and c206_datacadastro <= '{$this->sDataFinal}' and c206_instit = " . db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $clconv10 = new cl_conv102019();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      
+
       $clconv10->si92_tiporegistro = 10;
       $clconv10->si92_codconvenio = $oDados10->c206_sequencial;
       $clconv10->si92_codorgao = $sCodorgao;
@@ -130,6 +130,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
       $clconv10->si92_objetoconvenio = $oDados10->c206_objetoconvenio;
       $clconv10->si92_datainiciovigencia = $oDados10->c206_datainiciovigencia;
       $clconv10->si92_datafinalvigencia = $oDados10->c206_datafinalvigencia;
+      $clconv10->si92_codfontrecursos = $oDados10->c206_tipocadastro;
       $clconv10->si92_vlconvenio = $oDados10->c206_vlconvenio;
       $clconv10->si92_vlcontrapartida = $oDados10->c206_vlcontrapartida;
       $clconv10->si92_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -145,22 +146,23 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
        */
       $sSql = "select * from convdetalhaconcedentes cd
                inner join convconvenios cc on cc.c206_sequencial = cd.c207_codconvenio
-               where c206_dataassinatura >= '{$this->sDataInicial}' and c206_dataassinatura <= '{$this->sDataFinal}' 
-               and c207_codconvenio = '{$oDados10->c206_sequencial}' 
+               where c206_datacadastro >= '{$this->sDataInicial}' and c206_datacadastro <= '{$this->sDataFinal}'
+               and c207_codconvenio = '{$oDados10->c206_sequencial}'
                and c206_instit = " . db_getsession("DB_instit");
-      
+
       $rsResult11 = db_query($sSql);
-      
+
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
         $clconv11 = new cl_conv112019();
         $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-        
+
         $clconv11->si93_tiporegistro = 11;
         $clconv11->si93_codconvenio = $oDados10->c206_sequencial;
-        $clconv11->si93_tipodocumento = 2;
+        $clconv11->si93_tipodocumento = ($oDados11->c207_esferaconcedente != 4) ? 2 : '';
         $clconv11->si93_nrodocumento = $oDados11->c207_nrodocumento;
         $clconv11->si93_esferaconcedente = $oDados11->c207_esferaconcedente;
+        $clconv11->si93_dscexterior = $oDados11->c207_descrconcedente;
         $clconv11->si93_valorconcedido = $oDados11->c207_valorconcedido;
         $clconv11->si93_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clconv11->si93_reg10 = $clconv10->si92_sequencial;
@@ -171,16 +173,17 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         if ($clconv11->erro_status == 0) {
           throw new Exception($clconv11->erro_msg);
         }
-        
+
       }
 
-      /*
-     * selecionar informacoes registro 20
-     */
+    }
+
+    /*
+        * selecionar informacoes registro 20
+      */
       $sSql = "select * from convdetalhatermos cdt
                inner join convconvenios cc on cc.c206_sequencial = cdt.c208_codconvenio
                where c208_dataassinaturatermoaditivo >= '{$this->sDataInicial}' and c208_dataassinaturatermoaditivo <= '{$this->sDataFinal}'
-               and c208_codconvenio = '{$oDados10->c206_sequencial}' 
                and c206_instit = " . db_getsession("DB_instit");
 
       $rsResult20 = db_query($sSql);
@@ -209,15 +212,13 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
       }
-      
-    }
-    
+
     db_fim_transacao();
-    
+
     $oGerarCONV = new GerarCONV();
     $oGerarCONV->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarCONV->gerarDados();
-    
+
   }
-  
+
 }

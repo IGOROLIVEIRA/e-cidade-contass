@@ -1438,7 +1438,7 @@ class cl_cgm {
      }
      return $sql;
   }
-   function sqlnome ($nome="",$campos="*",$filtro=0){
+   function sqlnome ($nome="",$campos="*",$filtro=0,$where=""){
     $nome = strtoupper($nome);
 
   $sql = "
@@ -1454,7 +1454,7 @@ class cl_cgm {
 
     if ($nome !=""){
       $sql .= "
-      where to_ascii(upper(z01_nome)) like to_ascii('$nome%')
+      where to_ascii(upper(z01_nome)) like to_ascii('$nome%') $where
                    ";
   }
    $sql .= " order by to_ascii(z01_nome)";

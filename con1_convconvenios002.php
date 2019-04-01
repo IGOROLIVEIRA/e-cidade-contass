@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -18,7 +18,7 @@ $db_opcao = 1;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -26,21 +26,26 @@ $db_opcao = 1;
   </tr>
 </table>
 <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-     <?
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+     <?php
 	     $clcriaabas->identifica = array("convconvenios"=>"Convênios","convdetalhaconcedentes"=>"Detalhamento dos concedentes","convdetalhatermos"=>"Termos Aditivos dos Convênios");
        $clcriaabas->src = array("convconvenios"=>"con1_convconvenios005.php","convdetalhaconcedentes"=>"con1_convdetalhaconcedentes001.php", "convdetalhatermos"=>"con1_convdetalhatermos001.php");
 	     $clcriaabas->disabled   =  array("convdetalhaconcedentes"=>"true","convdetalhatermos"=>"true");
-	     $clcriaabas->cria_abas(); 
-     ?> 
+	     $clcriaabas->cria_abas();
+     ?>
     </td>
   </tr>
 </table>
 <form name="form1">
 </form>
-<? 
+<?php
 	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
+<script>
+  document.formaba.convconvenios.size          = 10;
+  document.formaba.convdetalhaconcedentes.size = 25;
+  document.formaba.convdetalhatermos.size      = 25;
+</script>
