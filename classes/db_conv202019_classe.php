@@ -41,19 +41,19 @@ class cl_conv202019
   var $si94_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si94_sequencial = int8 = sequencial 
-                 si94_tiporegistro = int8 = Tipo do  registro 
-                 si94_codorgao = varchar(2) = Código do órgão 
-                 si94_nroconvenio = varchar(30) = Número do  Convênio Original 
-                 si94_dtassinaturaconvoriginal = date = Data da assinatura  do Convênio 
-                 si94_nroseqtermoaditivo = varchar(2) = Número sequencial do Termo Aditivo 
-                 si94_dscalteracao = varchar(500) = Descrição da  alteração 
-                 si94_dtassinaturatermoaditivo = date = Data da assinatura  do Termo Aditivo 
-                 si94_datafinalvigencia = date = Data final da  vigência do  convênio 
-                 si94_valoratualizadoconvenio = float8 = Valor atualizado do  Convênio 
-                 si94_valoratualizadocontrapartida = float8 = Valor atualizado da  Contrapartida 
-                 si94_mes = int8 = Mês 
-                 si94_instit = int8 = Instituição 
+                 si94_sequencial = int8 = sequencial
+                 si94_tiporegistro = int8 = Tipo do  registro
+                 si94_codorgao = varchar(2) = Código do órgão
+                 si94_nroconvenio = varchar(30) = Número do  Convênio Original
+                 si94_dtassinaturaconvoriginal = date = Data da assinatura  do Convênio
+                 si94_nroseqtermoaditivo = varchar(2) = Número sequencial do Termo Aditivo
+                 si94_dscalteracao = varchar(500) = Descrição da  alteração
+                 si94_dtassinaturatermoaditivo = date = Data da assinatura  do Termo Aditivo
+                 si94_datafinalvigencia = date = Data final da  vigência do  convênio
+                 si94_valoratualizadoconvenio = float8 = Valor atualizado do  Convênio
+                 si94_valoratualizadocontrapartida = float8 = Valor atualizado da  Contrapartida
+                 si94_mes = int8 = Mês
+                 si94_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -204,34 +204,34 @@ class cl_conv202019
       return false;
     }
     $sql = "insert into conv202019(
-                                       si94_sequencial 
-                                      ,si94_tiporegistro 
-                                      ,si94_codorgao 
-                                      ,si94_nroconvenio 
-                                      ,si94_dtassinaturaconvoriginal 
-                                      ,si94_nroseqtermoaditivo 
-                                      ,si94_dscalteracao 
-                                      ,si94_dtassinaturatermoaditivo 
-                                      ,si94_datafinalvigencia 
-                                      ,si94_valoratualizadoconvenio 
-                                      ,si94_valoratualizadocontrapartida 
-                                      ,si94_mes 
-                                      ,si94_instit 
+                                       si94_sequencial
+                                      ,si94_tiporegistro
+                                      ,si94_codorgao
+                                      ,si94_nroconvenio
+                                      ,si94_dtassinaturaconvoriginal
+                                      ,si94_nroseqtermoaditivo
+                                      ,si94_dscalteracao
+                                      ,si94_dtassinaturatermoaditivo
+                                      ,si94_datafinalvigencia
+                                      ,si94_valoratualizadoconvenio
+                                      ,si94_valoratualizadocontrapartida
+                                      ,si94_mes
+                                      ,si94_instit
                        )
                 values (
-                                $this->si94_sequencial 
-                               ,$this->si94_tiporegistro 
-                               ,'$this->si94_codorgao' 
-                               ,'$this->si94_nroconvenio' 
+                                $this->si94_sequencial
+                               ,$this->si94_tiporegistro
+                               ,'$this->si94_codorgao'
+                               ,'$this->si94_nroconvenio'
                                ," . ($this->si94_dtassinaturaconvoriginal == "null" || $this->si94_dtassinaturaconvoriginal == "" ? "null" : "'" . $this->si94_dtassinaturaconvoriginal . "'") . "
-                               ,'$this->si94_nroseqtermoaditivo' 
-                               ,'$this->si94_dscalteracao' 
+                               ,'$this->si94_nroseqtermoaditivo'
+                               ,'$this->si94_dscalteracao'
                                ," . ($this->si94_dtassinaturatermoaditivo == "null" || $this->si94_dtassinaturatermoaditivo == "" ? "null" : "'" . $this->si94_dtassinaturatermoaditivo . "'") . "
                                ," . ($this->si94_datafinalvigencia == "null" || $this->si94_datafinalvigencia == "" ? "null" : "'" . $this->si94_datafinalvigencia . "'") . "
-                               ,$this->si94_valoratualizadoconvenio 
-                               ,$this->si94_valoratualizadocontrapartida 
-                               ,$this->si94_mes 
-                               ,$this->si94_instit 
+                               ,$this->si94_valoratualizadoconvenio
+                               ,$this->si94_valoratualizadocontrapartida
+                               ,$this->si94_mes
+                               ,$this->si94_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

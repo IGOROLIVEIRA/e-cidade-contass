@@ -357,9 +357,11 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 					$lTelaCgmAlt = false;
 
 					if (isset($nomeDigitadoParaPesquisa) && ($nomeDigitadoParaPesquisa!="") ){
-
+              if (isset($z01_tipcre_cnpj)) {
+                $sSqlConv .= " and z01_tipcre = 2 ";
+              }
 							$nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
-							$sql = $clnome->sqlnome($nomeDigitadoParaPesquisa,$campos,$filtro);
+							$sql = $clnome->sqlnome($nomeDigitadoParaPesquisa,$campos,$filtro,$sSqlConv);
 					}else if(isset($numcgmDigitadoParaPesquisa) && $numcgmDigitadoParaPesquisa != ""){
 
             if( !is_int((int)$numcgmDigitadoParaPesquisa) ){
@@ -373,11 +375,15 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 							$sql = $clnome->$sMetodoExecutar("",$campos,""," z01_cgccpf = '$cnpj' ");
 					}else if(isset($pesquisa_cgmalt) && trim($pesquisa_cgmalt) != ""){
 							$campos 		 = "z05_numcgm as z01_numcgm, z05_nome as z01_nome,trim(z05_cgccpf) as z05_cgccpf, case when length(trim(z05_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z05_ender) as z05_ender, z05_munic, z05_uf, z05_cep, z05_email,z05_data_alt, z05_hora_alt,login";
-							$sql	  		 = $clcgmalt->sql_query("",$campos,"","z05_nome like '%{$pesquisa_cgmalt}%' and z05_tipo_alt = 'A'");
+							$sSqlConv = "";
+              if (isset($z01_tipcre_cnpj)) {
+                $sSqlConv .= " and z01_tipcre = 2 ";
+              }
+              $sql	  		 = $clcgmalt->sql_query("",$campos,"","z05_nome like '%{$pesquisa_cgmalt}%' and z05_tipo_alt = 'A' {$sSqlConv}");
 							$lTelaCgmAlt = true;
 				      $funcao_js 	 = "js_consultacgmoriginal|z01_numcgm";
 					}else{
-$sql = "";
+              $sql = "";
 							if(isset($z01_numcgm) && $z01_numcgm != ""){
 									$sql = $clnome->$sMetodoExecutar($z01_numcgm,$campos);
 							}

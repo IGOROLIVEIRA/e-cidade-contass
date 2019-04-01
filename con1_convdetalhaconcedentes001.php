@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -6,6 +6,9 @@ include("libs/db_usuariosonline.php");
 include("classes/db_convdetalhaconcedentes_classe.php");
 include("classes/db_convconvenios_classe.php");
 include("dbforms/db_funcoes.php");
+require_once("classes/db_cgm_classe.php");
+$clcgm = new cl_cgm;
+$clcgm->rotulo->label();
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clconvdetalhaconcedentes = new cl_convdetalhaconcedentes;
@@ -25,11 +28,22 @@ $clconvdetalhaconcedentes->c207_codconvenio = $c207_codconvenio;
 if(isset($incluir)){
   if($sqlerro==false){
     db_inicio_transacao();
-    $clconvdetalhaconcedentes->incluir($c207_sequencial);
-    $erro_msg = $clconvdetalhaconcedentes->erro_msg;
-    if($clconvdetalhaconcedentes->erro_status==0){
+    if ($c207_esferaconcedente != 4 && empty($c207_nrodocumento)) {
+      $erro_msg = "Campo Número do Documento é obrigatório!";
       $sqlerro=true;
     }
+    if ($c207_esferaconcedente == 4 && empty($c207_descrconcedente)) {
+      $erro_msg = "Campo Descrição do Concedente é obrigatório!";
+      $sqlerro=true;
+    }
+    if ($sqlerro==false) {
+      $clconvdetalhaconcedentes->incluir($c207_sequencial);
+      $erro_msg = $clconvdetalhaconcedentes->erro_msg;
+      if($clconvdetalhaconcedentes->erro_status==0){
+        $sqlerro=true;
+      }
+    }
+
     db_fim_transacao($sqlerro);
   }
 }else if(isset($alterar)){
@@ -66,15 +80,26 @@ if(isset($incluir)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+  #c207_esferaconcedente {
+    width: 111px;
+  }
+  #c207_descrconcedente {
+    background-color:#fff !important;
+  }
+  #descrconcedente {
+    display: none;
+  }
+</style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
-	<?
-	include("forms/db_frmconvdetalhaconcedentes.php");
-	?>
+    	<?php
+    	 include("forms/db_frmconvdetalhaconcedentes.php");
+    	?>
     </center>
 	</td>
   </tr>

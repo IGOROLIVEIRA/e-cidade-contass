@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -19,8 +19,8 @@ if(isset($incluir)){
   $clconvconvenios->incluir($c206_sequencial);
   if($clconvconvenios->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconvconvenios->erro_msg; 
+  }
+  $erro_msg = $clconvconvenios->erro_msg;
   db_fim_transacao($sqlerro);
    $c206_sequencial= $clconvconvenios->c206_sequencial;
    $db_opcao = 1;
@@ -37,12 +37,12 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
-	<?
-	include("forms/db_frmconvconvenios.php");
-	?>
+    	<?php
+    	 include("forms/db_frmconvconvenios.php");
+    	?>
     </center>
 	</td>
   </tr>

@@ -34,6 +34,11 @@ class cl_convconvenios {
    var $c206_datafinalvigencia = null;
    var $c206_vlconvenio = 0;
    var $c206_vlcontrapartida = 0;
+   var $c206_datacadastro_dia = null;
+   var $c206_datacadastro_mes = null;
+   var $c206_datacadastro_ano = null;
+   var $c206_datacadastro = null;
+   var $c206_tipocadastro = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c206_sequencial = int8 = sequencial
@@ -45,6 +50,8 @@ class cl_convconvenios {
                  c206_datafinalvigencia = date = Data final da  vigência
                  c206_vlconvenio = float8 = Valor do convênio
                  c206_vlcontrapartida = float8 = Valor da  contrapartida
+                 c206_datacadastro = date = Data de Cadastro
+                 c206_tipocadastro = int4 = Instituição
                  ";
    //funcao construtor da classe
    function cl_convconvenios() {
@@ -92,6 +99,15 @@ class cl_convconvenios {
             $this->c206_datafinalvigencia = $this->c206_datafinalvigencia_ano."-".$this->c206_datafinalvigencia_mes."-".$this->c206_datafinalvigencia_dia;
          }
        }
+       if($this->c206_datacadastro == ""){
+         $this->c206_datacadastro_dia = ($this->c206_datacadastro_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_datacadastro_dia"]:$this->c206_datacadastro_dia);
+         $this->c206_datacadastro_mes = ($this->c206_datacadastro_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_datacadastro_mes"]:$this->c206_datacadastro_mes);
+         $this->c206_datacadastro_ano = ($this->c206_datacadastro_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_datacadastro_ano"]:$this->c206_datacadastro_ano);
+         if($this->c206_datacadastro_dia != ""){
+            $this->c206_datacadastro = $this->c206_datacadastro_ano."-".$this->c206_datacadastro_mes."-".$this->c206_datacadastro_dia;
+         }
+       }
+       $this->c206_tipocadastro = ($this->c206_tipocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_tipocadastro"]:$this->c206_tipocadastro);
        $this->c206_vlconvenio = ($this->c206_vlconvenio == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_vlconvenio"]:$this->c206_vlconvenio);
        $this->c206_vlcontrapartida = ($this->c206_vlcontrapartida == ""?@$GLOBALS["HTTP_POST_VARS"]["c206_vlcontrapartida"]:$this->c206_vlcontrapartida);
      }else{
@@ -102,7 +118,7 @@ class cl_convconvenios {
    function incluir ($c206_sequencial){
       $this->atualizacampos();
      if($this->c206_instit == null ){
-       $this->erro_sql = " Campo Instituição nao Informado.";
+       $this->erro_sql = " Campo Instituição não Informado.";
        $this->erro_campo = "c206_instit";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -111,7 +127,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_nroconvenio == null ){
-       $this->erro_sql = " Campo Número do  Convênio nao Informado.";
+       $this->erro_sql = " Campo Número do  Convênio não Informado.";
        $this->erro_campo = "c206_nroconvenio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -120,7 +136,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_dataassinatura == null ){
-       $this->erro_sql = " Campo Data da assinatura nao Informado.";
+       $this->erro_sql = " Campo Data da assinatura não Informado.";
        $this->erro_campo = "c206_dataassinatura_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -129,7 +145,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_objetoconvenio == null ){
-       $this->erro_sql = " Campo Objeto do convênio nao Informado.";
+       $this->erro_sql = " Campo Objeto do convênio não Informado.";
        $this->erro_campo = "c206_objetoconvenio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -138,7 +154,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_datainiciovigencia == null ){
-       $this->erro_sql = " Campo Data inicial da  vigência nao Informado.";
+       $this->erro_sql = " Campo Data inicial da  vigência não Informado.";
        $this->erro_campo = "c206_datainiciovigencia_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -147,7 +163,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_datafinalvigencia == null ){
-       $this->erro_sql = " Campo Data final da  vigência nao Informado.";
+       $this->erro_sql = " Campo Data final da  vigência não Informado.";
        $this->erro_campo = "c206_datafinalvigencia_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -156,7 +172,7 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_vlconvenio == null ){
-       $this->erro_sql = " Campo Valor do convênio nao Informado.";
+       $this->erro_sql = " Campo Valor do convênio não Informado.";
        $this->erro_campo = "c206_vlconvenio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -165,8 +181,24 @@ class cl_convconvenios {
        return false;
      }
      if($this->c206_vlcontrapartida == null ){
-       $this->erro_sql = " Campo Valor da  contrapartida nao Informado.";
+       $this->erro_sql = " Campo Valor da  contrapartida não Informado.";
        $this->erro_campo = "c206_vlcontrapartida";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if(($this->c206_datacadastro == null) || ($this->c206_datacadastro == "") ){
+       $this->erro_sql = " Campo Data de cadastro não Informado.";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if(($this->c206_tipocadastro == null) || ($this->c206_tipocadastro == "") ){
+       $this->erro_sql = " Campo Tipo de Recurso não Informado.";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -197,6 +229,7 @@ class cl_convconvenios {
          $this->c206_sequencial = $c206_sequencial;
        }
      }
+
      if(($this->c206_sequencial == null) || ($this->c206_sequencial == "") ){
        $this->erro_sql = " Campo c206_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
@@ -215,6 +248,8 @@ class cl_convconvenios {
                                       ,c206_datafinalvigencia
                                       ,c206_vlconvenio
                                       ,c206_vlcontrapartida
+                                      ,c206_datacadastro
+                                      ,c206_tipocadastro
                        )
                 values (
                                 $this->c206_sequencial
@@ -226,6 +261,9 @@ class cl_convconvenios {
                                ,".($this->c206_datafinalvigencia == "null" || $this->c206_datafinalvigencia == ""?"null":"'".$this->c206_datafinalvigencia."'")."
                                ,$this->c206_vlconvenio
                                ,$this->c206_vlcontrapartida
+                               ,".($this->c206_datacadastro == "null" || $this->c206_datacadastro == ""?"null":"'".$this->c206_datacadastro."'")."
+                               ,".($this->c206_tipocadastro == "null" || $this->c206_tipocadastro == ""?"null":"$this->c206_tipocadastro")."
+
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -325,7 +363,7 @@ class cl_convconvenios {
          $this->erro_status = "0";
          return false;
        }
-     }     else{
+     }else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["c206_dataassinatura_dia"])){
          $sql  .= $virgula." c206_dataassinatura = null ";
          $virgula = ",";
@@ -365,7 +403,7 @@ class cl_convconvenios {
          $this->erro_status = "0";
          return false;
        }
-     }     else{
+     }else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["c206_datainiciovigencia_dia"])){
          $sql  .= $virgula." c206_datainiciovigencia = null ";
          $virgula = ",";
@@ -392,7 +430,7 @@ class cl_convconvenios {
          $this->erro_status = "0";
          return false;
        }
-     }     else{
+     }else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["c206_datafinalvigencia_dia"])){
          $sql  .= $virgula." c206_datafinalvigencia = null ";
          $virgula = ",";
@@ -405,6 +443,34 @@ class cl_convconvenios {
            $this->erro_status = "0";
            return false;
          }
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["c206_datacadastro"])){
+       $this->c206_datacadastro = $GLOBALS["HTTP_POST_VARS"]["c206_datacadastro"];
+       $sql  .= $virgula." c206_datacadastro = '$this->c206_datacadastro' ";
+       $virgula = ",";
+       if(trim($this->c206_datacadastro) == null || empty($this->c206_datacadastro)){
+         $this->erro_sql = " Campo Data de Cadastro do convênio não informado.";
+         $this->erro_campo = "c206_datacadastro";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(isset($GLOBALS["HTTP_POST_VARS"]["c206_tipocadastro"])){
+       $this->c206_tipocadastro = $GLOBALS["HTTP_POST_VARS"]["c206_tipocadastro"];
+       $sql  .= $virgula." c206_tipocadastro = '$this->c206_tipocadastro' ";
+       $virgula = ",";
+       if(trim($this->c206_tipocadastro) == null || empty($this->c206_tipocadastro)){
+         $this->erro_sql = " Campo Tipo de Recurso do convênio não informado.";
+         $this->erro_campo = "c206_tipocadastro";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
        }
      }
      if(trim($this->c206_vlconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c206_vlconvenio"])){
@@ -437,6 +503,7 @@ class cl_convconvenios {
      if($c206_sequencial!=null){
        $sql .= " c206_sequencial = $this->c206_sequencial";
      }
+
      $resaco = $this->sql_record($this->sql_query_file($this->c206_sequencial));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){

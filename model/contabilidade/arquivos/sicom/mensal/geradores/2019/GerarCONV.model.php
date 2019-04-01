@@ -16,13 +16,13 @@ class GerarCONV extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "CONV";
     $this->abreArquivo();
-    
+
     $sSql = "select * from conv102019 where si92_mes = " . $this->iMes . " and si92_instit = " . db_getsession("DB_instit");
     $rsCONV10 = db_query($sSql);
 
@@ -31,6 +31,8 @@ class GerarCONV extends GerarAM
 
     $sSql3 = "select * from conv202019 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
     $rsCONV20 = db_query($sSql3);
+
+    //echo $sSql."-".$sSql3; exit;
 
 
     if (pg_num_rows($rsCONV10) == 0 && pg_num_rows($rsCONV20) == 0) {
@@ -57,6 +59,7 @@ class GerarCONV extends GerarAM
         $aCSVCONV10['si92_objetoconvenio']      = substr($aCONV10['si92_objetoconvenio'], 0, 500);
         $aCSVCONV10['si92_datainiciovigencia']  = $this->sicomDate($aCONV10['si92_datainiciovigencia']);
         $aCSVCONV10['si92_datafinalvigencia']   = $this->sicomDate($aCONV10['si92_datafinalvigencia']);
+        $aCSVCONV10['si92_codfontrecursos']     = $aCONV10['si92_codfontrecursos'];
         $aCSVCONV10['si92_vlconvenio']          = $this->sicomNumberReal($aCONV10['si92_vlconvenio'], 2);
         $aCSVCONV10['si92_vlcontrapartida']     = $this->sicomNumberReal($aCONV10['si92_vlcontrapartida'], 2);
 
@@ -66,14 +69,15 @@ class GerarCONV extends GerarAM
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONV11); $iCont2++) {
 
           $aCONV11 = pg_fetch_array($rsCONV11, $iCont2);
-          
+
           if ($aCONV10['si92_sequencial'] == $aCONV11['si93_reg10']) {
 
             $aCSVCONV11['si93_tiporegistro']      = $this->padLeftZero($aCONV11['si93_tiporegistro'], 2);
             $aCSVCONV11['si93_codconvenio']       = substr($aCONV11['si93_codconvenio'], 0, 15);
-            $aCSVCONV11['si93_tipodocumento']     = $this->padLeftZero($aCONV11['si92_tiporegistro'], 1);
-            $aCSVCONV11['si93_nrodocumento']      = $this->padLeftZero($aCONV11['si93_nrodocumento'], 14);
+            $aCSVCONV11['si93_tipodocumento']     = $aCONV11['si93_esferaconcedente'] == 4 && empty($aCONV11['si92_tiporegistro']) ? "" : $this->padLeftZero($aCONV11['si93_tipodocumento'], 1);
+            $aCSVCONV11['si93_nrodocumento']      = $aCONV11['si93_esferaconcedente'] == 4 ? "" : $this->padLeftZero($aCONV11['si93_nrodocumento'], 14);
             $aCSVCONV11['si93_esferaconcedente']  = $this->padLeftZero($aCONV11['si93_esferaconcedente'], 1);
+            $aCSVCONV11['si93_dscexterior']       = $aCONV11['si93_dscexterior'] != "null" ? $aCONV11['si93_dscexterior'] : '';
             $aCSVCONV11['si93_valorconcedido']    = $this->sicomNumberReal($aCONV11['si93_valorconcedido'], 2);
 
             $this->sLinha = $aCSVCONV11;
@@ -112,7 +116,7 @@ class GerarCONV extends GerarAM
       $this->fechaArquivo();
 
     }
-    
+
   }
 
 }
