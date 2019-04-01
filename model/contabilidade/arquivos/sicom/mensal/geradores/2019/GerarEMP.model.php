@@ -35,21 +35,22 @@ class GerarEMP extends GerarAM
     $sSql4 = "select * from emp202019 where si109_mes = " . $this->iMes . " and si109_instit = " . db_getsession("DB_instit");
     $rsEMP20 = db_query($sSql4);
 
-    $sSql5 = "select * from ( select * from emp302019 where si206_mes = " . $this->iMes . " and si206_instit = " . db_getsession("DB_instit") . " order by si206_sequencial desc limit ".pg_num_rows($rsEMP10).") as consulta order by si206_sequencial;";
+    $sSql5 = "select * from emp302019 where si206_mes = " . $this->iMes . " and si206_instit = " . db_getsession("DB_instit");
     $rsEMP30 = db_query($sSql5);
 
-    if (pg_num_rows($rsEMP10) == 0 && pg_num_rows($rsEMP20) == 0) {
+    if (pg_num_rows($rsEMP10) == 0 && pg_num_rows($rsEMP20) == 0 && pg_num_rows($rsEMP30) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
 
-    } else {
+    }
 
-      /**
-       *
-       * Registros 10, 11, 12
-       */
+    /**
+     *
+     * Registros 10, 11, 12
+     */
+    if (pg_num_rows($rsEMP10) > 0){
       for ($iCont = 0; $iCont < pg_num_rows($rsEMP10); $iCont++) {
 
         $aEMP10 = pg_fetch_array($rsEMP10, $iCont);
@@ -132,11 +133,17 @@ class GerarEMP extends GerarAM
 
         }
 
-        /**
-         * Registro 30
-         */
-        $aEMP30 = pg_fetch_array($rsEMP30, $iCont);
+      }
+    }
 
+    /**
+     * Registro 30
+     */
+    if(pg_num_rows($rsEMP30) > 0) {
+
+      for ($iCont30 = 0; $iCont30 < pg_num_rows($rsEMP30); $iCont30++) {
+        $aEMP30 = pg_fetch_array($rsEMP30, $iCont30);
+  
         $aCSVEMP30['si206_tiporegistro']                  = $this->padLeftZero($aEMP30['si206_tiporegistro'], 2);
         $aCSVEMP30['si206_codorgao']                      = $this->padLeftZero($aEMP30['si206_codorgao'], 2);
         $aCSVEMP30['si206_codunidadesub']                 = $aEMP30['si206_codunidadesub'];
@@ -151,13 +158,13 @@ class GerarEMP extends GerarAM
         $aCSVEMP30['si206_dtassinaturaconvenio']          = $aEMP30['si206_dtassinaturaconvenio'] == '' ? ' ' : $this->sicomDate($aEMP30['si206_dtassinaturaconvenio']);  // campo 25
         $aCSVEMP30['si206_nroconvenioconge']              = $aEMP30['si206_nroconvenioconge'] == 0 ? ' ' : substr($aEMP30['si206_nroconvenioconge'], 0, 30); // campo 27
         $aCSVEMP30['si206_dtassinaturaconge']             = $aEMP30['si206_dtassinaturaconge'] == 0 ? ' ' : substr($aEMP30['si206_dtassinaturaconge'], 0, 30); // campo 28
-
+  
         $this->sLinha = $aCSVEMP30;
         $this->adicionaLinha();
-
       }
+    }
 
-
+    if(pg_num_rows($rsEMP20) > 0) {
       /**
        * Ao que parece, não tá gerando
        * Registros 20
@@ -182,9 +189,9 @@ class GerarEMP extends GerarAM
         $this->adicionaLinha();
 
       }
+    }
 
       $this->fechaArquivo();
 
-    }
   }
 }

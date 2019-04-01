@@ -63,10 +63,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     public function gerarDados()
     {
 
-
         $cEmp10 = new cl_emp102019();
         $cEmp11 = new cl_emp112019();
         $cEmp12 = new cl_emp122019();
+        $cEmp30 = new cl_emp302019();
 
         $sSqlInstit = "select cgc from db_config where codigo = " . db_getsession("DB_instit");
         $rsResultCnpj = db_query($sSqlInstit);
@@ -79,6 +79,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
 
         db_inicio_transacao();
+
         /**
          * excluir informacoes do mes caso ja tenha sido gerado anteriormente
          */
@@ -88,6 +89,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         if (pg_num_rows($result) > 0) {
 
+            $cEmp30->excluir(null, "si206_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
+                . " and si206_instit = " . db_getsession("DB_instit"));
             $cEmp12->excluir(null, "si108_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
                 . " and si108_instit = " . db_getsession("DB_instit"));
             $cEmp11->excluir(null, "si107_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
@@ -506,7 +509,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
             $oDadosEmpenho10->incluir();
             if ($oDadosEmpenho10->erro_status == 0) {
-                throw new Exception($oDadosEmpenho10->erro_msg);
+              throw new Exception($oDadosEmpenho10->erro_msg);
             }
 
             /**
@@ -540,48 +543,154 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             $oEmp12->si108_reg10 = $oDadosEmpenho10->si106_sequencial;
             $oEmp12->si108_instit = db_getsession("DB_instit");
 
-
             $oEmp12->incluir(null);
             if ($oEmp12->erro_status == 0) {
                 throw new Exception($oEmp12->erro_msg);
             }
 
-          /**
-           * dados do registro 30
-           */
-          $oDadosEmpenho30 = new cl_emp302019();
+        }
 
-          $oDadosEmpenho30->si206_tiporegistro = '30'; // campo 1
-          $oDadosEmpenho30->si206_codorgao = $oEmpenho10->codorgao; //campo 2
-          $oDadosEmpenho30->si206_codunidadesub = $sCodUnidade; // campo 3
-          $oDadosEmpenho30->si206_nroempenho = $oEmpenho10->nroempenho; // campo 4
-          $oDadosEmpenho30->si206_dtempenho = $oEmpenho10->dtempenho; // campo 5
+        /**
+         * Consulta do registro 30
+         */
 
-          $oDadosEmpenho30->si206_codorgaorespcontrato = $oDadosEmpenho10->si106_codorgaorespcontrato; // campo 18
-          $oDadosEmpenho30->si206_codunidadesubrespcontrato = $oDadosEmpenho10->si106_codunidadesubrespcontrato; // campo 19
-          $oDadosEmpenho30->si206_nrocontrato = $oDadosEmpenho10->si106_nrocontrato; // campo 20
-          $oDadosEmpenho30->si206_dtassinaturacontrato = $oDadosEmpenho10->si106_dtassinaturacontrato; // campo 21
-          $oDadosEmpenho30->si206_nrosequencialtermoaditivo = $oDadosEmpenho10->si106_nrosequencialtermoaditivo; // campo 22
+        $sSql = "SELECT  ac16_sequencial AS acordo, ac16_dataassinatura, e60_emiss, e60_codemp, e60_numemp
+                   FROM  empempenhocontrato
+             INNER JOIN  acordo ON ac16_sequencial = e100_acordo
+             INNER JOIN  empempenho ON e100_numemp = e60_numemp
+                  WHERE  (
+                          (date_part('year', empempenho.e60_emiss) < date_part('year',acordo.ac16_dataassinatura))
+                           OR  (date_part('year',empempenho.e60_emiss) = date_part('year', acordo.ac16_dataassinatura)
+                          AND  date_part('month', empempenho.e60_emiss) < date_part('month', acordo.ac16_dataassinatura))
+                         )
+                    AND  acordo.ac16_dataassinatura between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
+                    AND  e60_instit = " . db_getsession("DB_instit") .";";
 
-          $oDadosEmpenho30->si206_nroconvenio = $oDadosEmpenho10->si106_nroconvenio; // campo 24
-          $oDadosEmpenho30->si206_dtassinaturaconvenio = $oDadosEmpenho10->si106_dataassinaturaconvenio; // campo 25
-          $oDadosEmpenho30->si206_nroconvenioconge = $oDadosEmpenho10->si106_nroconvenioconge; // campo 27
-          $oDadosEmpenho30->si206_dtassinaturaconge = $oDadosEmpenho10->si106_dataassinaturaconvenioconge; // campo 28
-          $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
-          $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
+        $rsEmpenhoContrato30 = db_query($sSql);
 
-          $oDadosEmpenho30->incluir();
+        // debug ini
+        // for($jCont = 0; $jCont < pg_num_rows($rsEmpenhoContrato30); $jCont++){
+        //     var_dump(db_utils::fieldsMemory($rsEmpenhoContrato30, $jCont));
+        // }
+        // die('teste');
+        // debug fim
+
+        if(pg_num_rows($rsEmpenhoContrato30) > 0){
+
+          for($jCont = 0; $jCont < pg_num_rows($rsEmpenhoContrato30); $jCont++){
+
+            $sSql = "SELECT  DISTINCT 30 AS tiporegistro,
+                    si09_codorgaotce AS codorgao,
+                    lpad((CASE WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao::varchar ELSE orcorgao.o40_codtri END),2,0)||lpad(
+                      (CASE WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade::varchar ELSE orcunidade.o41_codtri END),3,0)||(
+                        CASE WHEN orcunidade.o41_subunidade = '0' OR NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) AS codunidadesub,
+                    e60_codemp AS nroempenho,
+                    e60_emiss AS dtempenho,
+                    ' '::char as codorgaorespcontrato,
+                    case when ac16_sequencial is null then null else (
+                      SELECT CASE WHEN o41_subunidade != 0 OR NOT NULL THEN lpad(
+                        (CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
+                        lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||
+                        lpad(o41_subunidade::integer,3,0) ELSE
+                        lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
+                        lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+                    END AS unidadesub
+                      FROM db_departorg
+                      JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
+                      JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
+                      JOIN orcorgao o ON o.o40_orgao = u.o41_orgao
+                      AND o.o40_anousu = u.o41_anousu
+                      WHERE db01_coddepto = ac16_deptoresponsavel AND db01_anousu = ac16_anousu LIMIT 1) END AS codunidadesubrespcontrato,
+                      case when ac16_sequencial is null then null else ac16_numeroacordo end as nrocontrato,
+                      case when ac16_sequencial is null then null else ac16_dataassinatura end as dataassinaturacontrato,
+                      case when ac16_sequencial is null then null else ac26_numeroaditamento end as nrosequencialtermoaditivo,
+                      CASE WHEN e60_numconvenio IS NULL THEN NULL ELSE
+                        (select c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS nroconvenio,
+                      CASE WHEN e60_convenio IS NULL THEN NULL ELSE
+                        (select c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS dataassinaturaconvenio,
+                      NULL as si106_nroconvenioconge,
+                      NULL as si106_dataassinaturaconvenioconge
+            
+            FROM empempenho
+            JOIN orcdotacao ON e60_coddot = o58_coddot
+            JOIN empelemento ON e60_numemp = e64_numemp
+            JOIN orcelemento ON e64_codele = o56_codele
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            JOIN emptipo ON e60_codtipo = e41_codtipo
+            JOIN cgm ON e60_numcgm = z01_numcgm
+            JOIN orcprojativ ON o58_anousu = o55_anousu
+            AND o58_projativ = o55_projativ
+            LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
+            LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal
+            AND l03_instit = 1
+            LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+            LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_edital::varchar
+            AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
+            AND l03_codigo = l20_codtipocom
+            LEFT JOIN orcunidade ON o58_anousu = orcunidade.o41_anousu
+            AND o58_orgao = orcunidade.o41_orgao
+            AND o58_unidade = orcunidade.o41_unidade
+            LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao
+            AND orcorgao.o40_anousu = orcunidade.o41_anousu
+            LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
+            LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
+            LEFT JOIN empempaut ON e61_numemp = e60_numemp
+            LEFT JOIN empautoriza ON e61_autori = e60_numemp
+  
+            LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
+            LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
+            LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
+            LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
+            LEFT JOIN acordo on ac26_acordo = ac16_sequencial
+                      and ac16_acordosituacao = 4          
+            WHERE  e60_numemp = ".db_utils::fieldsMemory($rsEmpenhoContrato30, $jCont)->e60_numemp.";";
+  
+            $rsRegistro30 = db_query($sSql);
+  
+            for ($kCont = 0; $kCont < pg_num_rows($rsRegistro30); $kCont++) {
+  
+              $oEmpenho30 = db_utils::fieldsMemory($rsRegistro30, $kCont);
+  
+              /**
+              * dados do registro 30
+              */
+              $oDadosEmpenho30 = new cl_emp302019();
+  
+              $oDadosEmpenho30->si206_tiporegistro = $oEmpenho30->tiporegistro; // campo 1
+              $oDadosEmpenho30->si206_codorgao = $oEmpenho30->codorgao; //campo 2
+              $oDadosEmpenho30->si206_codunidadesub = $oEmpenho30->codunidadesub; // campo 3
+              $oDadosEmpenho30->si206_nroempenho = $oEmpenho30->nroempenho; // campo 4
+              $oDadosEmpenho30->si206_dtempenho = $oEmpenho30->dtempenho; // campo 5
+  
+              $oDadosEmpenho30->si206_codorgaorespcontrato = $oEmpenho30->codorgaorespcontrato; // campo 18
+              $oDadosEmpenho30->si206_codunidadesubrespcontrato = $oEmpenho30->codunidadesubrespcontrato; // campo 19
+              $oDadosEmpenho30->si206_nrocontrato = $oEmpenho30->nrocontrato; // campo 20
+              $oDadosEmpenho30->si206_dtassinaturacontrato = $oEmpenho30->dataassinaturacontrato; // campo 21
+              $oDadosEmpenho30->si206_nrosequencialtermoaditivo = $oEmpenho30->nrosequencialtermoaditivo; // campo 22
+  
+              $oDadosEmpenho30->si206_nroconvenio = $oEmpenho30->nroconvenio; // campo 24
+              $oDadosEmpenho30->si206_dtassinaturaconvenio = $oEmpenho30->dataassinaturaconvenio; // campo 25
+              $oDadosEmpenho30->si206_nroconvenioconge = ''; // campo 27
+              $oDadosEmpenho30->si206_dtassinaturaconge = ''; // campo 28
+              $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
+              $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
+  
+              $oDadosEmpenho30->incluir();
+            }
+          }
+  
           if ($oDadosEmpenho30->erro_status == 0) {
             throw new Exception($oDadosEmpenho30->erro_msg);
           }
 
-          db_fim_transacao();
         }
+
+        
+      db_fim_transacao();
 
       $oGerarEMP = new GerarEMP();
       $oGerarEMP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $oGerarEMP->gerarDados();
 
     }
-
 }
