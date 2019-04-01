@@ -912,7 +912,7 @@ function getAliquotas()
     $start = 2;
     $end = 5;
     $arrAliq = array();
-
+    array_push($arrAliq,number_format(0,2,'.',''));
     while($start < $end){
         array_push($arrAliq,number_format($start,2,'.',''));
         $start += 0.01;
