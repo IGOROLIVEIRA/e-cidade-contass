@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 function init_130($opcao){
@@ -120,12 +120,12 @@ function init_130($opcao){
       try {
 
         $iAnoFolha    = db_anofolha();
-        $iMesFolha    = db_mesfolha();              
+        $iMesFolha    = db_mesfolha();
         $oCompetencia = new DBCompetencia($iAnoFolha, $iMesFolha);
 
         try {
           if(FolhaPagamento::fazerMigracao(InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')),
-            $oCompetencia) ) 
+            $oCompetencia) )
           {
 
             $oMigracao           = new stdClass();
@@ -177,7 +177,7 @@ function init_130($opcao){
               $sqlerro  = true;
               $erro_msg = $oMigracao->erro;
               return $erro_msg;
-            }                
+            }
 
           }
         } catch (Exception $oErro) {
@@ -188,8 +188,8 @@ function init_130($opcao){
         if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
 
           /**
-           * Verifica se ja possui uma folha de salario aberta, na competência atual, 
-           * se existir não pode ser criada uma nova. 
+           * Verifica se ja possui uma folha de salario aberta, na competência atual,
+           * se existir não pode ser criada uma nova.
            */
           if (FolhaPagamentoSalario::getCodigoFolha(FolhaPagamento::TIPO_FOLHA_SALARIO, false, $oCompetencia)) {
             throw new BusinessException("Não foi permitido o procedimento de inicialização do ponto para salário, o mesmo já encontra-se fechado.");
@@ -197,7 +197,7 @@ function init_130($opcao){
 
           if ( !FolhaPagamentoSalario::hasFolhaAberta($oCompetencia) ) {
 
-            $oInstituicao = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')); 
+            $oInstituicao = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
 
             $oFolhaPagamentoSalario = new FolhaPagamentoSalario();
             $oFolhaPagamentoSalario->setNumero(0);
@@ -223,7 +223,7 @@ function init_130($opcao){
         }else{
           $condicaoaux .= " and r10_regist in (".$campo_auxilio_regi.")" ;
         }
-      }else if( $glm == "l"){ 
+      }else if( $glm == "l"){
         global $buscalotac;
         if($tipofil == "i"){
           db_selectmax( "buscalotac","select max(trim(TO_CHAR(R70_CODIGO,'9999'))),min(trim(TO_CHAR(R70_CODIGO,'9999'))) from rhlota where r70_instit = ".db_getsession("DB_instit")." and r70_estrut between '$lotini' and '$lotfim'");
@@ -242,16 +242,16 @@ function init_130($opcao){
           $condicaoaux .= " and r10_lotac in (".$sellotac.")" ;
         }
       }
-      
+
       $tot_func = count($arquivo_rubricas);
 
       /**
        * Verificando quais são as rubricas de substituição
        */
       $oDaoRubricasEspeciais   = new cl_cfpess;
-      $sSqlRubricasEspeciais   = $oDaoRubricasEspeciais->sql_query(db_anofolha(), 
-                                                                   db_mesfolha(), 
-                                                                   db_getsession('DB_instit'), 
+      $sSqlRubricasEspeciais   = $oDaoRubricasEspeciais->sql_query(db_anofolha(),
+                                                                   db_mesfolha(),
+                                                                   db_getsession('DB_instit'),
                                                                    "r11_rubricasubstituicaoatual, r11_rubricasubstituicaoanterior");
       $rsRubricasEspeciais     = db_query($sSqlRubricasEspeciais);
 
@@ -282,12 +282,12 @@ function init_130($opcao){
       $aRubricasTiposAssentamentos      = db_utils::getColectionByRecord($rsRubricaTiposAssentamentos);
       $sRubricasTiposAssentamentos      = "";
 
-      for ($iIndRubricasTiposAssentamentos=0; 
-           $iIndRubricasTiposAssentamentos < count($aRubricasTiposAssentamentos); 
+      for ($iIndRubricasTiposAssentamentos=0;
+           $iIndRubricasTiposAssentamentos < count($aRubricasTiposAssentamentos);
            $iIndRubricasTiposAssentamentos++
           )
-      { 
-      
+      {
+
         $oRubricaTipoAssentamento     = $aRubricasTiposAssentamentos[$iIndRubricasTiposAssentamentos];
         $sRubricasTiposAssentamentos .= "'". $oRubricaTipoAssentamento->rh165_rubric ."'";
 
@@ -307,7 +307,7 @@ function init_130($opcao){
            */
           if( ( ($iIndArqRubricas+1) < $tot_func //Se não é o ultimo item pode testar próxima matrícula
                 && $arquivo_rubricas[$iIndArqRubricas]["r90_regist"] != $arquivo_rubricas[($iIndArqRubricas+1)]["r90_regist"]
-              ) 
+              )
               || ($iIndArqRubricas+1) == $tot_func //Necessário pois o último indice do array não necessita verificar se próxima matrícula é diferente
             )
           {
@@ -315,7 +315,7 @@ function init_130($opcao){
             $iMatricula = $arquivo_rubricas[$iIndArqRubricas]["r90_regist"];
 
             if($r11_rubricasubstituicaoatual != "" || $r11_rubricasubstituicaoanterior != "") {
-              
+
               /**
                * Verificando se as rubricas de subsituição estão lançadas no ponto de salário do servidor
                */
@@ -333,12 +333,12 @@ function init_130($opcao){
             if(is_resource($rsPontoFs) && pg_num_rows($rsPontoFs) > 0 ) {
 
               try{
-              
+
                 /**
                  * Busca os lotes de registros de substituição do servidor
                  */
                 $aLoteRegistros = LoteRegistrosPontoRepository::getLotesAssentamentosByMatricula($iMatricula, new DBCompetencia(db_anofolha(), db_mesfolha()));
-                
+
                 foreach ($aLoteRegistros as $oLoteRegistro) {
 
                   if($oLoteRegistro->getFolhaPagamento() && $oLoteRegistro->getFolhaPagamento()->getTipoFolha() == FolhaPagamento::TIPO_FOLHA_SALARIO) {
@@ -384,9 +384,9 @@ function init_130($opcao){
                     $erro_msg = "Não foi possível remover o(s) lote(s) de substituicao.";
 
                     if ( LoteRegistrosPontoRepository::remover($oLoteRegistro) === true ) {
-                      
+
                       $sqlerro  = false;
-                      $erro_msg = "Processamento concluído com sucesso."; 
+                      $erro_msg = "Processamento concluído com sucesso.";
                     }
                   }
                 }
@@ -400,10 +400,10 @@ function init_130($opcao){
       }
 
       /**
-       * Limpa o ponto de salário 
+       * Limpa o ponto de salário
        */
       db_delete( "pontofs", $condicaoaux );
-      
+
       $Iind = 0;
       while($Iind<$tot_func){
 
@@ -421,7 +421,7 @@ function init_130($opcao){
         $condicaoaux .= " and rh02_instit = r33_instit ";
         $condicaoaux .= "         inner join rhpessoal    on rhpessoal.rh01_regist       = rhpessoalmov.rh02_regist ";
         $condicaoaux .= "         inner join rhlota       on rhlota.r70_codigo           = rhpessoalmov.rh02_lota ";
-        $condicaoaux .= "         left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes "; 
+        $condicaoaux .= "         left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes ";
         $condicaoaux .= bb_condicaosubpes("rh02_");
         $condicaoaux .= " and rh02_regist = ".db_sqlformat($arquivo_rubricas[$Iind]["r90_regist"] );
         //  $condicaoaux .= " and rh02_recis is null ";
@@ -429,8 +429,8 @@ function init_130($opcao){
           for(;$Iind<$tot_func;$Iind++){
             if($arquivo_rubricas[$Iind]["r90_regist"] != $matricu){
               break;
-            } 
-          }   
+            }
+          }
           continue;
         }
 
@@ -472,7 +472,7 @@ function init_130($opcao){
         for(;$Iind<$tot_func;$Iind++){
           if($arquivo_rubricas[$Iind]["r90_regist"] != $matricu){
             break;
-          }  
+          }
 
           $quantidade      = $arquivo_rubricas[$Iind]["r90_quant"];
           $valor_descontar = $arquivo_rubricas[$Iind]["r90_valor"];
@@ -485,9 +485,9 @@ function init_130($opcao){
 
               // rubrica com calculo especial - plano de saude amparo;
               // esta rubrica deve permanecer integral;
-              if( trim( $d08_carnes ) != "amparo" || ( trim( $d08_carnes ) == "amparo" && $arquivo_rubricas[$Iind]["rh27_rubric"] != '0514' ) ){
+              /*if( trim( $d08_carnes ) != "amparo" || ( trim( $d08_carnes ) == "amparo" && $arquivo_rubricas[$Iind]["rh27_rubric"] != '0514' ) ){
                 continue;
-              }
+              }*/
 
             }
           }
@@ -518,7 +518,6 @@ function init_130($opcao){
                 db_update("pontofx",$matriz1,$matriz2,bb_condicaosubpes("r90_").$condicaoaux );
               }else{
                 db_delete("pontofx",bb_condicaosubpes("r90_").$condicaoaux );
-
                 continue;
               }
             }
@@ -551,19 +550,19 @@ function init_130($opcao){
                 continue;
               }
             }
-          }else if( 
+          }else if(
             (
               db_substr($arquivo_rubricas[$Iind]["rh27_rubric"],1,1) != "R"
-              && db_val($arquivo_rubricas[$Iind]["rh27_rubric"]) > 0  
-              && db_val($arquivo_rubricas[$Iind]["rh27_rubric"]) < 2000 
-              && $arquivo_rubricas[$Iind]["rh27_tipo"] == "2" // variavel 
+              && db_val($arquivo_rubricas[$Iind]["rh27_rubric"]) > 0
+              && db_val($arquivo_rubricas[$Iind]["rh27_rubric"]) < 2000
+              && $arquivo_rubricas[$Iind]["rh27_tipo"] == "2" // variavel
               && $arquivo_rubricas[$Iind]["rh27_limdat"] == 't' // usa data limite
               && !db_empty($arquivo_rubricas[$Iind]["r90_datlim"])
-              && ((db_substr( $arquivo_rubricas[$Iind]["r90_datlim"],1,4).db_substr( $arquivo_rubricas[$Iind]["r90_datlim"],-2)) 
+              && ((db_substr( $arquivo_rubricas[$Iind]["r90_datlim"],1,4).db_substr( $arquivo_rubricas[$Iind]["r90_datlim"],-2))
               < (db_substr($subpes,1,4).db_substr($subpes,-2)))
             )
-            || 
-            ( 
+            ||
+            (
               $arquivo_rubricas[$Iind]["rh27_tipo"] == 2 && $arquivo_rubricas[$Iind]["rh27_limdat"] == 'f'
             )
           ){
@@ -595,16 +594,20 @@ function init_130($opcao){
           // 2 - Afastado sem Remuneracao
           // 4 - Afastado Servico Militar
           // 3 - Afastado Acidente de Trabalho + 15 Dias
-          // 6 - Afastado Doenca + 15 Dias   
-          // 5 - licenca maternidade 
+          // 6 - Afastado Doenca + 15 Dias
+          // 5 - licenca maternidade
           // 7 - Licenca sem Vencimento, cessao sem onus
           $condicaoaux  = " and r90_regist = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_regist"] );
           $condicaoaux .= " and r90_rubric = ".db_sqlformat( $arquivo_rubricas[$Iind]["r90_rubric"] );
           global $ponto;
-          if( db_selectmax("ponto", "select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux)  && 
-            ( db_at(db_str($situacao_130,1),"1-3-4") > 0  || 
-            ( db_at(db_str($situacao_130,1),"2-6-7-8") > 0 && !db_empty($dias_pagamento) ) || 
-            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && !db_empty($rubrica_licenca_saude) ) || 
+          /*echo "<pre>";
+          print_r("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
+          db_criatabela("select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux);
+          die;*/
+          if( db_selectmax("ponto", "select * from pontofx".bb_condicaosubpes( "r90_").$condicaoaux)  &&
+            ( db_at(db_str($situacao_130,1),"1-3-4") > 0  ||
+            ( db_at(db_str($situacao_130,1),"2-6-7-8") > 0 && !db_empty($dias_pagamento) ) ||
+            ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && !db_empty($rubrica_licenca_saude) ) ||
             ( db_str($situacao_130,1) == "5" && !db_empty($rubrica_licenca_maternidade) ) ) )
           {
 
@@ -646,12 +649,12 @@ function init_130($opcao){
           // e feito na geracao do calculo;
           if( !db_empty($dias_pagamento)){
             if( (   db_str($situacao_130,1) == "5" && db_empty($rubrica_licenca_maternidade) )
-              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && db_empty( $rubrica_licenca_saude     )  )  
+              || ( (db_str($situacao_130,1) == "6" || db_str($situacao_130,1) == "8") && db_empty( $rubrica_licenca_saude     )  )
               || db_str($situacao_130,1) == "2"
               || db_str($situacao_130,1) == "3"
               || db_str($situacao_130,1) == "7"
-              || (    db_year($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes,1,4)) 
-              && db_month($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes,-2)) 
+              || (    db_year($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes,1,4))
+              && db_month($pessoal[0]["r01_admiss"]) == db_val(db_substr($subpes,-2))
               && $dias_pagamento < 30 )
             ){
 
@@ -696,7 +699,7 @@ function init_130($opcao){
 
 
 
-          /** 
+          /**
            * Validando se o servidor é de um contrato emergencial
            */
           $sSqlContrato = $oDaoContratoEmergencial->sql_query(null, "rh164_datafim" , 'rh164_datafim desc limit 1', "rh163_matricula = {$arquivo_rubricas[$Iind]["r90_regist"]}");
@@ -708,7 +711,7 @@ function init_130($opcao){
           if ( pg_num_rows($rsContrato) == 1 ) {
 
             $oDataFimContrato         = new DBDate( db_utils::fieldsMemory($rsContrato, 0)->rh164_datafim );
-            $oCompetenciaAtual        = DBPessoal::getCompetenciaFolha(); 
+            $oCompetenciaAtual        = DBPessoal::getCompetenciaFolha();
 
             $sCompetenciaFimContrato  = $oDataFimContrato->getAno()  . str_pad($oDataFimContrato->getMes(),  2, '0', STR_PAD_LEFT);
             $sCompetenciaAtual        = $oCompetenciaAtual->getAno() . str_pad($oCompetenciaAtual->getMes(), 2, '0', STR_PAD_LEFT);
@@ -721,12 +724,12 @@ function init_130($opcao){
              * Caso o contrato tenha vencido no mes anterior, nenhuma rubrica é inicializada.
              */
             if($sCompetenciaFimContrato < $sCompetenciaAtual) {
-              db_delete("pontofs", bb_condicaosubpes("r10_").$sWhereContrato);  
+              db_delete("pontofs", bb_condicaosubpes("r10_").$sWhereContrato);
             }
 
             /**
-             * Caso o término do contrato seja na competencia atual, proporcionaliza as rubrica que são 
-             * proporcionalizaveis :) 
+             * Caso o término do contrato seja na competencia atual, proporcionaliza as rubrica que são
+             * proporcionalizaveis :)
              *
              * rh27_calcp -> true
              */
@@ -749,8 +752,8 @@ function init_130($opcao){
 
                   $nValorProporcional = ( $valor_descontar / $iDiasNoMes ) * $iDiasTrabalhados;
 
-                  db_update( 
-                    "pontofs", 
+                  db_update(
+                    "pontofs",
                     array(1=>'r10_valor'),
                     array(1=>$nValorProporcional),
                     bb_condicaosubpes("r10_").$sWhereContrato
@@ -766,8 +769,8 @@ function init_130($opcao){
 
                   $nQuantidadeProporcional = ( $quantidade / $iDiasNoMes ) * $iDiasTrabalhados;
 
-                  db_update( 
-                    "pontofs", 
+                  db_update(
+                    "pontofs",
                     array(1=>'r10_quant'),
                     array(1=>$nQuantidadeProporcional),
                     bb_condicaosubpes("r10_").$sWhereContrato
@@ -866,7 +869,7 @@ function init_130($opcao){
           }
         }
       }//Fim while Funcionarios
-    } else if( $opcao == 2) {    
+    } else if( $opcao == 2) {
 
       // nao inicializar para quem esta de ferias....;
 
@@ -880,7 +883,7 @@ function init_130($opcao){
         $condicaoaux  = " select * from rhpessoalmov ";
         $condicaoaux .= "         inner join rhpessoal    on rhpessoal.rh01_regist       = rhpessoalmov.rh02_regist ";
         $condicaoaux .= "         inner join rhlota       on rhlota.r70_codigo           = rhpessoalmov.rh02_lota ";
-        $condicaoaux .= "         left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes "; 
+        $condicaoaux .= "         left join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes ";
         $condicaoaux .= " ".bb_condicaosubpes("rh02_")." and rh02_regist = ".db_sqlformat( $matricu );
         if(!db_selectmax( "pessoal",$condicaoaux )){
           break;
@@ -935,7 +938,7 @@ db_postmemory($HTTP_POST_VARS);
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="100%" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="25%">&nbsp;</td>
     <td width="25%">&nbsp;</td>
     <td width="25%">&nbsp;</td>
@@ -943,8 +946,8 @@ db_postmemory($HTTP_POST_VARS);
   </tr>
 </table>
 <table valign="top" marginwidth="0" width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="100%" align="left" valign="center" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="100%" align="left" valign="center" bgcolor="#CCCCCC">
 <center>
 <br/>
 <?
@@ -959,7 +962,7 @@ if(FolhaPagamento::fazerMigracao(InstituicaoRepository::getInstituicaoByCodigo(d
 </center>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?> 
+?>
     </td>
   </tr>
 </table>
@@ -972,7 +975,7 @@ global $glm,$lotini,$lotfim,$matini,$matfim,$rubini,$rubfim;
 
 $subpes = db_anofolha().'/'.db_mesfolha();
 
-db_selectmax("cfpess"," select * from cfpess ".bb_condicaosubpes("r11_")); 
+db_selectmax("cfpess"," select * from cfpess ".bb_condicaosubpes("r11_"));
 
 global $db_config;
 db_selectmax("db_config","select lower(trim(munic)) as d08_carnes , cgc from db_config where codigo = ".db_getsession("DB_instit"));

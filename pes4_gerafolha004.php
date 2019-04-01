@@ -1676,7 +1676,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
       continue;
    }
 
-   /*OC6893
+   /*OC6893*/
    $condicaoaux  = " and r30_regist = ".db_sqlformat( $pontofe[0]["r29_regist"] );
    $condicaoaux .= " order by r30_perai desc limit 1";
    $sSQL = "select r30_per1i from cadferia ".bb_condicaosubpes( "r30_" ).$condicaoaux;
@@ -1687,11 +1687,10 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
    $sSQL = "select r45_dtreto from afasta ".bb_condicaosubpes( "r45_" ).$condicaoaux;
    $rsResult = db_query($sSQL);
    $r45_dtreto = db_utils::fieldsMemory($rsResult, 0)->r45_dtreto;
+   /*FIM OC6893*/
    if( db_at(db_str($situacao_funcionario,1),"2-7") > 0 && strtotime($r30_per1i) < strtotime($r45_dtreto)){
-   FIM OC6893*/
-   if( db_at(db_str($situacao_funcionario,1),"2-7") > 0){
-      // Afastado sem Remuneracao
-      // Licensa sem Vencimento, cessao sem onus
+      //Afastado sem Remuneracao
+      //Licensa sem Vencimento, cessao sem onus
       continue;
    }
    carrega_fxxx(db_str($pessoal[$Ipessoal]["r01_regist"],6),true,"gerffer");
@@ -3191,7 +3190,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
 
       if( $r53_valor > 0){
          $matriz1 = array();
-   $matriz2 = array();
+         $matriz2 = array();
 
          $matriz1[1] = "r53_regist";
          $matriz1[2] = "r53_rubric";
@@ -3214,6 +3213,8 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
          $matriz2[8] = db_val( substr("#".$subpes,1,4 ));
          $matriz2[9] = db_val( substr("#".$subpes,6,2 ));
          $matriz2[10] = $DB_instit;
+
+         echo "<br><pre>"; print_r($matriz2); echo "<br>";
 
          db_insert( $chamada_geral_arquivo,$matriz1, $matriz2 );
 
@@ -4321,7 +4322,6 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
     //echo "<BR>  Verifica férias AKI";
 
     ferias($pessoal[$Ipessoal]["r01_regist"]," ");
-
     //echo "<BR>  saiu Verifica férias AKI";
     $base_prev  = 0;
     $prev_desc  = 0;
@@ -4341,17 +4341,17 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       $naoencontroupontosalario = false;
       $condicaoaux  = " and r10_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
       $condicaoaux .= " order by r10_regist,r10_rubric ";
-      //echo "<BR> Pesquisa ponto salario";
       global $pontofs;
-      if (!db_selectmax("pontofs", "select * from pontofs ".bb_condicaosubpes("r10_" ).$condicaoaux )) {
+
+      if (!db_selectmax("pontofs", "select * from pontofs ".bb_condicaosubpes("r10_" ).$condicaoaux)) {
 
         $naoencontroupontosalario = true;
-        if ($F019 < 30) {
+        if ($F019 != 30) {//OC6996
           // F019 - Numero de dias a pagar no mes
 
-          //echo "<BR><BR>entra Verifica férias 1";
+          echo "<BR><BR>entra Verifica férias 1  - {$F019} - {$F020} - {$F023}";
           verifica_ferias_100();
-          //echo "<BR><BR>sai Verifica férias 1";
+          echo "<BR><BR>sai Verifica férias 1";
 
           $condicaoaux = " and r10_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
           $condicaoaux .= " order by r10_regist,r10_rubric ";
@@ -4456,10 +4456,10 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
         } else if ($F019 == 30 ) {
           // F019 - Numero de dias a pagar no mes
-          //echo "<BR><BR>entra Verifica férias 2";
+          echo "<BR><BR>entra Verifica férias 2 - {$F019} - {$F020} - {$F023}";
 
           verifica_ferias_100();
-          //echo "<BR><BR>sai Verifica férias 2";
+          echo "<BR><BR>sai Verifica férias 2";
         } else {
 
           $tot_prov =0;
@@ -4474,9 +4474,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           // F019 - Numero de dias a pagar no mes
           // F020 - Numero de dias abono p/ pagar no mes
 
-          //echo "<BR><BR>entra Verifica férias 3";
+          echo "<BR><BR>entra Verifica férias 3 - {$F019} - {$F020} - {$F023}";
           verifica_ferias_100();
-          //echo "<BR><BR>sai   Verifica férias 3";
+          echo "<BR><BR>sai   Verifica férias 3";
         }
       }
     } else {
@@ -4485,18 +4485,17 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
       $condicaoaux .= " order by r47_regist,r47_rubric ";
       global $pontocom;
       if (!db_selectmax("pontocom", "select * from pontocom ".bb_condicaosubpes("r47_" ).$condicaoaux )) {
-        if ($F019 < 30) {
+        if ($F019 != 30) {//OC6996
           // F019 - Numero de dias a pagar no mes
-
           $tot_prov =0;
           $tot_desc =0;
           if ($db_debug == true) {
             echo "[gerfsal] 24 - tot_desc: $tot_desc<br>";
           }
 
-          //echo "<BR><BR>entra Verifica férias 4";
+          echo "<BR><BR>entra Verifica férias 4";
           verifica_ferias_100();
-          //echo "<BR><BR>sai Verifica férias 4";
+          echo "<BR><BR>sai Verifica férias 4";
 
           $condicaoaux = " and r47_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
           $condicaoaux .= " order by r47_regist,r47_rubric ";
@@ -4504,8 +4503,8 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
             continue;
           }
         } else if ($F019 == 30) {
-          // F019 - Numero de dias a pagar no mes
-          //echo "<BR><BR>entra Verifica férias 5";
+          //// F019 - Numero de dias a pagar no mes
+          echo "<BR><BR>entra Verifica férias 5";
           verifica_ferias_100();
           //echo "<BR><BR>sai Verifica férias 5";
         } else {
@@ -4514,9 +4513,11 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         }
       } else {
         if ($F019 > 0 || $F020 > 0 || $F023 > 0) {
-          // F019 - Numero de dias a pagar no mes
+          //F019 - Numero de dias a pagar no mes
           // F020 - Numero de dias abono p/ pagar no mes
+          //echo "<BR><BR>entra Verifica férias 6";
           verifica_ferias_100();
+          //echo "<BR><BR>entra Verifica férias 6";
         }
       }
 
@@ -4980,6 +4981,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
             $r14_valor = $pontofs[$Iponto]["r10_valor"];
             if ($db_debug == true) { echo "[gerfsal] 24 - r14_valor = $r14_valor  <br>"; }
+
           } else {
 
 
@@ -5037,11 +5039,11 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
           }
 
-          /*OC6893
-          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7))) {
+          /*OC6893*/
+          if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7), true)) {
             $r14_quant = $dias_pagamento;
             $r14_valor = ( $r14_valor / 30 ) * $r14_quant;
-          }*/
+          }
 
 // Fim --> Calcula conforme a formula da quantidade da rubrica
 
@@ -5064,8 +5066,24 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           $matriz2[1] = $r110_regist;
           $matriz2[2] = $pontofs[$Iponto]["r10_rubric"];
           $matriz2[3] = $r110_lotac;
-          $matriz2[4] = round($r14_valor,2);
-          $matriz2[5] = round($r14_quant,2);
+          /*OC6996*/
+          if ($matriz2[2] >= '2000' && $matriz2[2] <= '3999') {
+            $sSQL = "SELECT r31_valor, r31_quant
+                      FROM gerffer
+                      WHERE r31_regist = $r110_regist
+                          AND r31_anousu = $anousu
+                          AND r31_mesusu = $mesusu
+                          AND r31_rubric = '$matriz2[2]'
+                          AND r31_tpp = 'F'";
+            $rsResult = db_query($sSQL);
+            $aValores = db_utils::fieldsMemory($rsResult, 0);
+            $matriz2[4] = $r14_valor = round($aValores->r31_valor,2);
+            $matriz2[5] = $r14_quant = round($aValores->r31_quant,2);
+          } else {
+              $matriz2[4] = round($r14_valor,2);
+              $matriz2[5] = round($r14_quant,2);
+          }
+          /*FIM - OC6996*/
           $matriz2[6] = $r14_pd;
           $matriz2[7] = 0;
           $matriz2[8] = $anousu;
@@ -7104,13 +7122,13 @@ function carrega_fxxx($codigo, $carrega, $cfuncao=null ){
      $F004 = ver_idade($ultdat,db_dtoc($pessoal[$Ipessoal]["r01_nasc"]));
 
      if( db_mktime($F003) < db_mktime(db_ctod("01/01/".substr("#".$ultdat,7,4))) ){
-  $F009 = 12;
-     }else{
-  if( db_day($F003) > 15){
-     $F009 = (13 - db_month($F003)) - 1;
-  }else{
-     $F009 = (13 - db_month($F003));
-  }
+        $F009 = 12;
+     } else{
+        if( db_day($F003) > 15){
+           $F009 = (13 - db_month($F003)) - 1;
+        } else {
+           $F009 = (13 - db_month($F003));
+        }
      }
   }
   if( $carrega){
@@ -7768,7 +7786,6 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
 /// calc_rubrica ///
 
 function calc_rubrica($rubrica, $area0, $sigla, $sigla2, $nro_do_registro, $operacao,$formq=null,$valor_=0,$recursivo=0) {
-
   global $carregarubricas_geral,$rubricas,$r110_lotac,$$area0,$r110_regist;
   global $anousu, $mesusu, $DB_instit, $db_debug ;
 
@@ -8395,7 +8412,22 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
                     }
 
                     if ($campo_pd == "1") {
-                        $valor += round($transacao[0][$sigla2."_valor"],2);
+                        /*OC6996*/
+                        if ($rubrica == "R931") {//2000 3999
+                          if($tpgto == "f") {
+                             echo "<br>rubrica: $rubrica - campo_rubrica: $campo_rubrica<br>";
+                             $valor += round($transacao[0][$sigla2."_valor"],2);
+                          }
+                        }
+                        else if ($rubrica == "R940") {
+                          if ($tpgto == "d") {
+                            $valor += round($transacao[0][$sigla2."_valor"],2);
+                          }
+                        }
+                        else {
+                          $valor += round($transacao[0][$sigla2."_valor"],2);
+                        }
+                        /*FIM - OC6996*/
                       if($db_debug == true) { echo "[le_var_bxxx] 17 - $campo_rubrica + acumula --> $valor valor --> ".round($transacao[0][$sigla2."_valor"],2)."<br>"; }
                     } else {
                       if($db_debug == true) { echo "[le_var_bxxx] 18 - $campo_rubrica - subtraiu --> $valor valor --> ".round($transacao[0][$sigla2."_valor"],2)."<br>"; }
