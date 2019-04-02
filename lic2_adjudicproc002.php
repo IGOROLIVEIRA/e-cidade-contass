@@ -49,6 +49,7 @@ $dbinstit=db_getsession("DB_instit");
 
 $rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
 
+
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não Julgada, ou licitação revogada');
     exit;
@@ -100,7 +101,8 @@ WHERE l31_licitacao={$l20_codigo}
 $rsDadosEquipe = db_query($sSqlequipe);
 db_fieldsmemory($rsDadosEquipe,0);
 
-$l20_datacria=substr($l20_datacria,0,4);
+// $l20_datacria=substr($l20_anousu,0,4);
+$l20_datacria = $l20_anousu;
 
 $head3 = "ADJUDICAÇÃO DE PROCESSO ";
 $head4 = "SEQUENCIAL: $l20_codigo";
