@@ -126,8 +126,10 @@ $cldb_config = new cl_db_config;
       	$quebraobs   = 0;
       	$incremento  = 6;
       }
+      $iMaxCaracDescAtiv = 80;
 	  $this->objpdf->Cell(135,5,"ATIVIDADE PRINCIPAL: ",0,0,"L",0) ; // descrição da atividade principal
 	  if ($this->impdatas == 't'){
+		  $iMaxCaracDescAtiv = 55;
 		  	$this->objpdf->Cell(24,5,"INICIO",0,0,"C",0);
 		  	if($this->permanente == 'f'){
 		    	$this->objpdf->Cell(24,5,"FINAL",0,1,"C",0);
@@ -138,7 +140,7 @@ $cldb_config = new cl_db_config;
 	       	$this->objpdf->Cell(24,5,"",0,0,"C",0);
 	       	$this->objpdf->Cell(24,5,"",0,1,"C",0);
 	  }
-	  $this->objpdf->SetFont('Arial','',11);
+	  $this->objpdf->SetFont('Arial','',10);
 	  if ($this->impcodativ == 't'){
 	  	 $this->objpdf->setx(15);
 		 $this->objpdf->Cell(15,5,$this->ativ,0,0,"C",0);
@@ -146,8 +148,7 @@ $cldb_config = new cl_db_config;
 	  	 $this->objpdf->setx(15);
 	  	 $this->objpdf->Cell(15,5,"",0,0,"C",0);
 	  }
-//	  $this->objpdf->Cell(120,5,$this->descrativ,0,$quebradescr,"L",0);
-    $this->objpdf->MultiCell(120,5,$this->descrativ,0,1,"L",0);
+	  $this->objpdf->Cell(120,5,substr($this->descrativ,0,$iMaxCaracDescAtiv),0,$quebradescr,"L",0);
 	  if ($this->impdatas == 't'){
 		 $this->objpdf->Cell(24,5,db_formatar($this->dtiniativ,'d'),0,0,"C",0);
 		 if ($this->permanente == 'f'){
@@ -238,7 +239,7 @@ $cldb_config = new cl_db_config;
 		     }else{
 		     	 $this->objpdf->Cell(15,4,"",0,0,"C",0);
 		     }
-		     $descr=$this->outrasativs[$i]["descr"];
+		   $descr=substr($this->outrasativs[$i]["descr"],0,$iMaxCaracDescAtiv+5);
 		     $this->objpdf->Cell(120,4,$descr,0,$quebradescr,"L",0);
 		     if ($this->impdatas == 't'){
 			     $datain=$this->outrasativs[$i]["datain"];
