@@ -44,8 +44,6 @@ INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia)
 
 ALTER TABLE conv102019 RENAME COLUMN si92_dtassinatura TO si92_dataassinatura;
 
-ALTER TABLE conv102019 ADD COLUMN si92_codfontrecursos varchar(10);
-
 ALTER TABLE conv112019 ADD COLUMN si93_dscexterior varchar(120);
 
 ALTER TABLE conv202019 RENAME COLUMN si94_dtssinaturatermoaditivo TO si94_dtassinaturatermoaditivo
