@@ -135,9 +135,11 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
                                  UNION
                                  select si12_nomerazaosocial from pessoa102015 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
                                  UNION
+                                 select si12_nomerazaosocial from pessoa102016 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
+                                 UNION
                                  select si12_nomerazaosocial from pessoa102017 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
                                  UNION
-                                 select si12_nomerazaosocial from pessoa102016 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
+                                 select si12_nomerazaosocial from pessoa102018 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
                                  UNION
                                  select si12_nomerazaosocial from pessoa102019 where si12_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " AND si12_nrodocumento = '{$oDados->z01_cgccpf}'";
       $rsDadosVerifica = db_query($sSqlVerifica);

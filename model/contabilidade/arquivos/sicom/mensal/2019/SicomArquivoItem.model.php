@@ -84,7 +84,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
-FROM liclicita AS licitacao 
+FROM liclicita AS licitacao
 INNER JOIN liclicitem ON liclicitem.l21_codliclicita = licitacao.l20_codigo
 INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
 INNER JOIN compras . solicitem AS solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
@@ -119,7 +119,7 @@ WHERE empempenho.e60_instit = " . db_getsession("DB_instit") . " AND ((DATE_PART
   AND DATE_PART ('MONTH' , empnota . e69_dtinclusao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
   OR (date_part('year',empnota.e69_dtnota) = " . $this->sDataFinal['0'] . $this->sDataFinal['1'] . $this->sDataFinal['2'] . $this->sDataFinal['3'] . "
             and   date_part('month',empnota.e69_dtnota) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "))
-  UNION 
+  UNION
   SELECT distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
@@ -136,14 +136,14 @@ LEFT  JOIN matmater ON m60_codmater = m63_codmatmater
 LEFT  JOIN matunid ON m60_codmatunid = m61_codmatunid
 WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
   AND e60_anousu = " . db_getsession("DB_anousu") . "  and si172_instit = " . db_getsession("DB_instit") . "
-  
-  UNION 
+
+  UNION
   select distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
-       '' AS justificativaAlteracao	
+       '' AS justificativaAlteracao
 		FROM liclicitem
 		INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
@@ -160,8 +160,8 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
 		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND liclicitasituacao.l11_licsituacao = 1
 		AND pctipocompratribunal.l44_sequencial in (100,101,102) AND DATE_PART('YEAR',liclicitasituacao.l11_data)=" . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',liclicitasituacao.l11_data)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-	
-	UNION 
+
+	UNION
   SELECT distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
@@ -215,6 +215,8 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $sSqlitem = "select si43_coditem,si43_unidademedida from item102019  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $sSqlitem .= " union
+        select si43_coditem,si43_unidademedida from item102018  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
         select si43_coditem,si43_unidademedida from item102017  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
