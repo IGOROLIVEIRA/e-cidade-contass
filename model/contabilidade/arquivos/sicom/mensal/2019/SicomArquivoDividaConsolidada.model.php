@@ -163,6 +163,12 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
              and si167_anoreferencia = " . db_getsession("DB_anousu") . " and si167_instit = " . db_getsession("DB_instit") . " and not exists
              (select 1 from ddc202019  where si153_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "  and si153_instit = " . db_getsession("DB_instit") . "
              and si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              union select 1 from ddc202018  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              and si153_instit = " . db_getsession("DB_instit") . "
+              union select 1 from ddc202017  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              and si153_instit = " . db_getsession("DB_instit") . "
+              union select 1 from ddc202016  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
+              and si153_instit = " . db_getsession("DB_instit") . "
               union select 1 from ddc202015  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura
               and si153_instit = " . db_getsession("DB_instit") . "
               union select 1 from ddc202014  where si153_nrocontratodivida = si167_nrocontratodivida and si153_dtassinatura = si167_dtassinatura

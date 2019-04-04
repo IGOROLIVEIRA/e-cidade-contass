@@ -55,10 +55,10 @@ switch ($oParam->exec){
 
   case 'insereTransfVeiculo':
     try {
-
       $vVeiculos = null;
-      $vVeiculos = verificaTransferenciaVeicMes($oParam->veiculos);
+      $vVeiculos = verificaTransferenciaVeicMes($oParam->veiculos,$oParam->data);
       $oRetorno->e = $vVeiculos;
+
       if ($vVeiculos != null) {
           $oRetorno->status   = 3;
           throw new Exception("Erro ao realizar Transferência!\nMOTIVO: Não é permitido mais de uma transferência de um veículo na mesma competência,\nou com datas menores a última transferência do veículo!\nCódigo(s) do(s) Veículo(s): ".implode(", ",$vVeiculos));
@@ -87,9 +87,6 @@ switch ($oParam->exec){
 
       $rsTransferencia = buscaTransferencia();
       $oRetorno->transferencia = $transferencia = db_utils::fieldsMemory($rsTransferencia,0);
-
-
-
       $rsUnidadeAtual   = buscaUnidade($oParam->departamento_atual, $nAnoUsu ,$nInstit);
       $rsUnidadeDestino = buscaUnidade($oParam->departamento_destino, $nAnoUsu ,$nInstit);
 
@@ -242,11 +239,12 @@ function buscaTransferencia() {
   return $resultado;
 }
 
-function verificaTransferenciaVeicMes($veiculos) {
-
+function verificaTransferenciaVeicMes($veiculos, $data) {
   $vVeiculos = array();
   $resultado = db_query("
-      select veiculos.ve81_codigo, to_char(t.ve80_dt_transferencia,'MM') ve80_dt_transferencia
+      select veiculos.ve81_codigo, to_char(t.ve80_dt_transferencia,'MM') ve80_dt_transferencia,
+        to_char(t.ve80_dt_transferencia,'DD') dia_transferencia,
+        to_char(t.ve80_dt_transferencia,'YYYY') ano_transferencia
         from transferenciaveiculos t
           inner join
             ( select ve81_codigo, max(ve81_transferencia) ve81_transferencia
@@ -260,14 +258,21 @@ function verificaTransferenciaVeicMes($veiculos) {
     ");
 
   $uTransferencias = db_utils::getCollectionByRecord($resultado,0);
-  $mesAtual = date("m", db_getsession("DB_datausu"));
+
+  $anoAtual = substr(str_replace('/', '', $data),-4);
+  $mesAtual = substr(str_replace('/', '', $data),-6,2);
+  $diaAtual = substr(str_replace('/', '', $data),-9,2);
+
   foreach ($uTransferencias as $uTransferencia) {
-    if ($mesAtual > $uTransferencia->ve80_dt_transferencia) {
-      $vVeiculos = null;
-    } else {
-      $vVeiculos[] = $uTransferencia->ve81_codigo;
+    if($anoAtual >= $uTransferencia->ano_transferencia){
+      if($mesAtual > $uTransferencia->ve80_dt_transferencia)
+        $vVeiculos = null;
+      else $vVeiculos[] = $uTransferencia->ve81_codigo;
     }
+    else $vVeiculos[] = $uTransferencia->ve81_codigo;
   }
+
+
   return $vVeiculos;
 }
 
