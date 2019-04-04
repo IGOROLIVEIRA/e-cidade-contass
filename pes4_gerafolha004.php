@@ -4349,9 +4349,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
         if ($F019 != 30) {//OC6996
           // F019 - Numero de dias a pagar no mes
 
-          echo "<BR><BR>entra Verifica férias 1  - {$F019} - {$F020} - {$F023}";
+          //echo "<BR><BR>entra Verifica férias 1  - {$F019} - {$F020} - {$F023}";
           verifica_ferias_100();
-          echo "<BR><BR>sai Verifica férias 1";
+          //echo "<BR><BR>sai Verifica férias 1";
 
           $condicaoaux = " and r10_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
           $condicaoaux .= " order by r10_regist,r10_rubric ";
@@ -4456,10 +4456,10 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
         } else if ($F019 == 30 ) {
           // F019 - Numero de dias a pagar no mes
-          echo "<BR><BR>entra Verifica férias 2 - {$F019} - {$F020} - {$F023}";
+          //echo "<BR><BR>entra Verifica férias 2 - {$F019} - {$F020} - {$F023}";
 
           verifica_ferias_100();
-          echo "<BR><BR>sai Verifica férias 2";
+          //echo "<BR><BR>sai Verifica férias 2";
         } else {
 
           $tot_prov =0;
@@ -4474,9 +4474,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           // F019 - Numero de dias a pagar no mes
           // F020 - Numero de dias abono p/ pagar no mes
 
-          echo "<BR><BR>entra Verifica férias 3 - {$F019} - {$F020} - {$F023}";
+          //echo "<BR><BR>entra Verifica férias 3 - {$F019} - {$F020} - {$F023}";
           verifica_ferias_100();
-          echo "<BR><BR>sai   Verifica férias 3";
+          //echo "<BR><BR>sai   Verifica férias 3";
         }
       }
     } else {
@@ -4493,9 +4493,9 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
             echo "[gerfsal] 24 - tot_desc: $tot_desc<br>";
           }
 
-          echo "<BR><BR>entra Verifica férias 4";
+          //echo "<BR><BR>entra Verifica férias 4";
           verifica_ferias_100();
-          echo "<BR><BR>sai Verifica férias 4";
+          //echo "<BR><BR>sai Verifica férias 4";
 
           $condicaoaux = " and r47_regist = ".db_sqlformat($pessoal[$Ipessoal]["r01_regist"] );
           $condicaoaux .= " order by r47_regist,r47_rubric ";
@@ -4504,7 +4504,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
           }
         } else if ($F019 == 30) {
           //// F019 - Numero de dias a pagar no mes
-          echo "<BR><BR>entra Verifica férias 5";
+          //echo "<BR><BR>entra Verifica férias 5";
           verifica_ferias_100();
           //echo "<BR><BR>sai Verifica férias 5";
         } else {
