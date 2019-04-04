@@ -3214,7 +3214,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
          $matriz2[9] = db_val( substr("#".$subpes,6,2 ));
          $matriz2[10] = $DB_instit;
 
-         echo "<br><pre>"; print_r($matriz2); echo "<br>";
+         //echo "<br><pre>"; print_r($matriz2); echo "<br>";
 
          db_insert( $chamada_geral_arquivo,$matriz1, $matriz2 );
 
