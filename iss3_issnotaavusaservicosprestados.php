@@ -49,7 +49,7 @@ $get             = db_utils::postmemory($_GET);
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <?
-$campos  ="q62_qtd,q62_discriminacao,q62_vlruni,q62_aliquota,q62_vlrdeducao,q62_vlrtotal,q62_vlrbasecalc,q62_vlrissqn";
+$campos  ="q62_qtd,db121_estrutural dl_LC166,q62_discriminacao,q62_vlruni,q62_aliquota,q62_vlrdeducao,q62_vlrtotal,q62_vlrbasecalc,q62_vlrissqn";
 $sql     = $clissnotaavulsaservico->sql_query_file(null,"$campos","q62_sequencial","q62_issnotaavulsa=".$get->q51_sequencial);
 db_lovrot($sql,15,"","",null,"","NoMe");
 ?>
