@@ -38,7 +38,7 @@ include("classes/db_issnotaavulsaservico_classe.php");
 $clissnotaavulsa = new cl_issnotaavulsa();
 $get             = db_utils::postmemory($_GET);
 $db_opcao        = 1;
-$sSqlInfoTomador = null;
+$sSqlInfoTomador  = " cgm.z01_nome as dl_Prestador,";
 (string)$strWh   = null;
 (string)$strAnd  = null;
 
