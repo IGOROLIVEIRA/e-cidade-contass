@@ -109,13 +109,14 @@ try {
 
     $sCondicoes .= $sWhere."e69_numero='$e69_numero'";
   }
+  $sCondicoes .= " AND e139_codordem = m51_codordem ";
+
   $sSql .= $sCondicoes;
   $sSql .= " ORDER BY e139_datadispensa, pc01_codmater";
 
   $rsSql = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
-  // echo $sSql;
-  // die;
+
   if(pg_num_rows($rsSql)==0){
     //db_redireciona("db_erros.php?fechar=true&db_erro=Não forão encontrados registros.");
   }
