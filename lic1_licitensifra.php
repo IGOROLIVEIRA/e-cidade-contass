@@ -377,7 +377,8 @@ function js_submit_form(){
               		                                   pc01_descrmater,
               		                                   pc11_resum",
               		                                  "pc11_seq",
-              		                                  "pc81_codproc=$codproc",true);
+              		                                  "pc81_codproc=$codproc and pc23_valor <> 0",true);
+              // print_r($sql);die();
               $sql_disabled = $clpcprocitem->sql_query_pcmater(null,
                                                                "distinct pc81_codprocitem",
                                                                null,
