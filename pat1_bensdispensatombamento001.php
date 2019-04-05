@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ $oDataAtual   = new DBDate(date("d/m/Y", db_getsession("DB_datausu")));
 $oInstituicao = new Instituicao(db_getsession("DB_instit"));
 $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
 /**
- * Estorno true/false 
+ * Estorno true/false
  */
 if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 
@@ -91,8 +91,8 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
           <td nowrap title="<?php echo $Te139_empnotaitem; ?>" width="50">
              <?php db_ancora($Le139_empnotaitem, "js_buscarDadosItem();", 1); ?>
           </td>
-          <td> 
-            <?php 
+          <td>
+            <?php
               db_input('e139_empnotaitem', 10, 0, true, 'text', 3);
               db_input('pc01_descrmater', 50, 0, true, 'text', 3, '')
              ?>
@@ -117,7 +117,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
         <tr>
           <td nowrap title="<?php echo $Te139_justificativa; ?>" colspan="2">
             <fieldset style="margin-top:10px;">
-              <legend>Justificativa</legend>
+              <legend>Histórico do Lançamento Contábil</legend>
               <?php db_textarea('e139_justificativa', 0, 0, $Ie139_justificativa, true, 'text', 1); ?>
             </fieldset>
           </td>
@@ -138,31 +138,31 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 var sRPC = 'pat1_bensdispensatombamento.RPC.php';
 
 /**
- * Estorno true | false 
+ * Estorno true | false
  * @var boolean
  */
 var lEstorno = <?php echo $lEstorno ? 'true' : 'false'; ?>;
 
 /**
- * Caminho das mensagens do programa 
+ * Caminho das mensagens do programa
  */
 const MENSAGENS = 'patrimonial.patrimonio.pat1_bensdispensatombamento001.';
 
 /**
- * - Cria janelas para selecionar itens da nota para dispensa de tombamento 
- * - Abre tela de pesquisa dos itens para estornar dispensa de tombamento 
+ * - Cria janelas para selecionar itens da nota para dispensa de tombamento
+ * - Abre tela de pesquisa dos itens para estornar dispensa de tombamento
  */
 (function() {
 
   /**
-    * Abre tela de pesquisa dos itens para estornar dispensa de tombamento 
+    * Abre tela de pesquisa dos itens para estornar dispensa de tombamento
    */
   if ( lEstorno ) {
     return js_pesquisa();
   }
 
   /**
-   * Cria janelas para selecionar itens da nota para dispensa de tombamento 
+   * Cria janelas para selecionar itens da nota para dispensa de tombamento
    */
   return js_criarJanelaNotasPendentes();
 
@@ -184,7 +184,7 @@ function js_preencheDadosNotaPendente(oDadosLinha) {
   $('iCodigoNota').value      = oDadosLinha.iCodigoNota;
 
   /**
-   * Esconde janela do WindowAux 
+   * Esconde janela do WindowAux
    */
   oDBViewNotasPendentes.getWindowAux().hide();
 }
@@ -226,7 +226,7 @@ function js_criarJanelaNotasPendentes() {
 }
 
 /**
- * Processar 
+ * Processar
  * INCLUI ou ESTORNA item como dispensa de tombamento
  *
  * @access public
@@ -237,16 +237,16 @@ function js_processar() {
   /**
    * Item da nota
    */
-  if ( empty($('e139_empnotaitem').value) ) { 
+  if ( empty($('e139_empnotaitem').value) ) {
 
     alert(_M(MENSAGENS + 'item_nota_nao_informada'));
     return false;
   }
 
   /**
-   * Justifica tiva de tombamento 
+   * Justifica tiva de tombamento
    */
-  if ( empty($('e139_justificativa').value) ) { 
+  if ( empty($('e139_justificativa').value) ) {
 
     alert(_M(MENSAGENS + 'justificativa_nao_informada'));
     return false;
@@ -283,7 +283,7 @@ function js_processar() {
                                method     : "post",
                                parameters : 'json='+Object.toJSON(oParametros),
                                onComplete : js_retornoProcessar
-                              });  
+                              });
 
   return true;
 }
@@ -299,11 +299,11 @@ function js_retornoProcessar(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno  = eval("("+oAjax.responseText+")");
-  var sMensagem = oRetorno.sMensagem.urlDecode(); 
+  var sMensagem = oRetorno.sMensagem.urlDecode();
   var sEstorno  = "true";
 
   /**
-   * Erro no RPC 
+   * Erro no RPC
    */
   if ( oRetorno.iStatus > 1 ) {
     return alert(sMensagem);
@@ -314,7 +314,7 @@ function js_retornoProcessar(oAjax) {
   if (!lEstorno) {
     sEstorno = "false";
   }
-    
+
   js_divCarregando('Processando...', 'msgBox');
   document.location.href = 'pat1_bensdispensatombamento001.php?lEstorno='+lEstorno;
 }
@@ -327,7 +327,7 @@ function js_retornoProcessar(oAjax) {
  * @return void
  */
 function js_pesquisa() {
-  
+
   js_OpenJanelaIframe('top.corpo',
                       'db_iframe_bensdispensatombamento',
                       'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota|t64_codcla|t64_class|t64_descr',
@@ -338,10 +338,10 @@ function js_pesquisa() {
 /**
  * Redireciona tela para passar como parametro o codigo da dispensa de tombamento
  *
- * @param integer iCodigoEmpNotaItem 
- * @param string  sDescricaoItem 
- * @param integer iNumeroEmpenho 
- * @param Numeric nValorItemNota 
+ * @param integer iCodigoEmpNotaItem
+ * @param string  sDescricaoItem
+ * @param integer iNumeroEmpenho
+ * @param Numeric nValorItemNota
  * @param integer iCodCla
  * @param string sClassific
  * @param string sDescrClass
