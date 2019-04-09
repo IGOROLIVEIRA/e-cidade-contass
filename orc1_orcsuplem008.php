@@ -120,7 +120,8 @@ if (isset($o48_arrecadmaior) && $o48_arrecadmaior > 0){
 
 </td>
 <td valign=top>
- <input style="border:1px solid #999999;width:100px;height:25px" type=button onclick="parent.js_fechar();" value=Fechar>
+    <input style="border:1px solid #999999;width:100px;height:25px" type=button onclick="parent.js_fechar();" value=Fechar>
+    <input style="border:1px solid #999999;width:200px;height:25px" type=button onclick="parent.js_incluir(<?=$projeto?>,<?=$tiposup?>);" value="Lançar Nova Suplementação">
 </td>
 </tr>
 
