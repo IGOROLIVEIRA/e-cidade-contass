@@ -19,7 +19,9 @@ class cl_projecaoatuarial20 {
    var $si169_sequencial = 0; 
    var $si169_exercicio = 0; 
    var $si169_vlreceitaprevidenciaria = 0; 
-   var $si169_vldespesaprevidenciaria = 0; 
+   var $si169_vldespesaprevidenciaria = 0;
+   var $si169_projecaoatuarial10 = null;
+   var $si169_tipoplano = 0;
    var $si169_dtcadastro_dia = null; 
    var $si169_dtcadastro_mes = null; 
    var $si169_dtcadastro_ano = null; 
@@ -33,6 +35,8 @@ class cl_projecaoatuarial20 {
                  si169_vldespesaprevidenciaria = float8 = Valor projetado  das despesas 
                  si169_dtcadastro = date = Data de cadastro 
                  si169_instit = int8 = Instituição 
+                 si169_projecaoatuarial10 = vinculo com a tabela registro 10
+                 si169_tipoplano = plano previdenciario
                  ";
    //funcao construtor da classe 
    function cl_projecaoatuarial20() { 
@@ -65,15 +69,17 @@ class cl_projecaoatuarial20 {
          }
        }
        $this->si169_instit = ($this->si169_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si169_instit"]:$this->si169_instit);
+       $this->si169_projecaoatuarial10 = ($this->si169_projecaoatuarial10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si169_projecaoatuarial10"]:$this->si169_projecaoatuarial10);
+       $this->si169_tipoplano = ($this->si169_tipoplano == ""?@$GLOBALS["HTTP_POST_VARS"]["si169_tipoplano"]:$this->si169_tipoplano);
      }else{
        $this->si169_sequencial = ($this->si169_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si169_sequencial"]:$this->si169_sequencial);
      }
    }
    // funcao para inclusao
-   function incluir ($si169_sequencial){ 
+   function incluir ($si169_sequencial){
       $this->atualizacampos();
-     if($this->si169_exercicio == null ){ 
-       $this->erro_sql = " Campo Exercício nao Informado.";
+     if($this->si169_exercicio == null ){
+         $this->erro_sql = " Campo Exercício nao Informado.";
        $this->erro_campo = "si169_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -81,34 +87,35 @@ class cl_projecaoatuarial20 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si169_vlreceitaprevidenciaria == null ){ 
-       $this->erro_sql = " Campo Valor projetado das receitas previdênciarias nao Informado.";
-       $this->erro_campo = "si169_vlreceitaprevidenciaria";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si169_vldespesaprevidenciaria == null ){ 
-       $this->erro_sql = " Campo Valor projetado  das despesas nao Informado.";
-       $this->erro_campo = "si169_vldespesaprevidenciaria";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si169_dtcadastro == null ){ 
-       $this->erro_sql = " Campo Data de cadastro nao Informado.";
-       $this->erro_campo = "si169_dtcadastro_dia";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si169_instit == null ){ 
+//     if($this->si169_vlreceitaprevidenciaria == null ){
+//       $this->erro_sql = " Campo Valor projetado das receitas previdênciarias nao Informado.";
+//       $this->erro_campo = "si169_vlreceitaprevidenciaria";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
+//
+//       if($this->si169_vldespesaprevidenciaria == null ){
+//       $this->erro_sql = " Campo Valor projetado  das despesas nao Informado.";
+//       $this->erro_campo = "si169_vldespesaprevidenciaria";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
+//       if($this->si169_tipoplano == null ){
+//       $this->erro_sql = " Campo Tipo plano nao informado.";
+//       $this->erro_campo = "si169_tipoplano";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
+       if($this->si169_instit == null ){
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "si169_instit";
        $this->erro_banco = "";
@@ -117,6 +124,7 @@ class cl_projecaoatuarial20 {
        $this->erro_status = "0";
        return false;
      }
+
      if($si169_sequencial == "" || $si169_sequencial == null ){
        $result = db_query("select nextval('projecaoatuarial20_si169_sequencial_seq')"); 
        if($result==false){
@@ -141,7 +149,7 @@ class cl_projecaoatuarial20 {
          $this->si169_sequencial = $si169_sequencial; 
        }
      }
-     if(($this->si169_sequencial == null) || ($this->si169_sequencial == "") ){ 
+     if(($this->si169_sequencial == null) || ($this->si169_sequencial == "") ){
        $this->erro_sql = " Campo si169_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -155,17 +163,21 @@ class cl_projecaoatuarial20 {
                                       ,si169_vlreceitaprevidenciaria 
                                       ,si169_vldespesaprevidenciaria 
                                       ,si169_dtcadastro 
-                                      ,si169_instit 
+                                      ,si169_instit
+                                      ,si169_projecaoatuarial10
+                                      ,si169_tipoplano 
                        )
                 values (
                                 $this->si169_sequencial 
                                ,$this->si169_exercicio 
-                               ,$this->si169_vlreceitaprevidenciaria 
-                               ,$this->si169_vldespesaprevidenciaria 
+                               ,".($this->si169_vlreceitaprevidenciaria == "null" || $this->si169_vlreceitaprevidenciaria == ""? 0 : $this->si169_vlreceitaprevidenciaria)." 
+                               ,".($this->si169_vldespesaprevidenciaria == "null" || $this->si169_vldespesaprevidenciaria == ""? 0 :$this->si169_vldespesaprevidenciaria)." 
                                ,".($this->si169_dtcadastro == "null" || $this->si169_dtcadastro == ""?"null":"'".$this->si169_dtcadastro."'")." 
                                ,$this->si169_instit 
+                               ,$this->si169_projecaoatuarial10 
+                               ,$this->si169_tipoplano 
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -205,7 +217,7 @@ class cl_projecaoatuarial20 {
      return true;
    } 
    // funcao para alteracao
-   function alterar ($si169_sequencial=null) { 
+   function alterar ($si169_sequencial=null) {
       $this->atualizacampos();
      $sql = " update projecaoatuarial20 set ";
      $virgula = "";
@@ -261,7 +273,7 @@ class cl_projecaoatuarial20 {
          return false;
        }
      }
-     if(trim($this->si169_dtcadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro_dia"] !="") ){ 
+     if(trim($this->si169_dtcadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si169_dtcadastro_dia"] !="") ){
        $sql  .= $virgula." si169_dtcadastro = '$this->si169_dtcadastro' ";
        $virgula = ",";
        if(trim($this->si169_dtcadastro) == null ){ 
@@ -301,6 +313,7 @@ class cl_projecaoatuarial20 {
          return false;
        }
      }
+
      $sql .= " where ";
      if($si169_sequencial!=null){
        $sql .= " si169_sequencial = $this->si169_sequencial";
@@ -327,7 +340,7 @@ class cl_projecaoatuarial20 {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "projecaoatuarial20 nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si169_sequencial;
@@ -437,14 +450,14 @@ class cl_projecaoatuarial20 {
        return false;
      }
      $this->numrows = pg_numrows($result);
-      if($this->numrows==0){
-        $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:projecaoatuarial20";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+//      if($this->numrows==0){
+//        $this->erro_banco = "";
+//        $this->erro_sql   = "Record Vazio na Tabela:projecaoatuarial20";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
      return $result;
    }
    // funcao do sql 

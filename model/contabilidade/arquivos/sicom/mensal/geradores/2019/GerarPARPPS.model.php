@@ -10,71 +10,75 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
 class GerarPARPPS extends GerarAM
 {
 
-  /**
-   *
-   * Mes de referência
-   * @var Integer
-   */
-  public $iMes;
-  
-  public function gerarDados()
-  {
+    /**
+     *
+     * Mes de referência
+     * @var Integer
+     */
+    public $iMes;
 
-    $this->sArquivo = "PARPPS";
-    $this->abreArquivo();
-    
-    
-    $sSql = "select * from parpps102019 where si156_mes = " . $this->iMes . " and si156_instit = " . db_getsession("DB_instit");
-    $rsPARPPS10 = db_query($sSql);
+    public function gerarDados()
+    {
 
-    $sSql2 = "select * from parpps202019 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit");
-    $rsPARPPS20 = db_query($sSql2);
+        $this->sArquivo = "PARPPS";
+        $this->abreArquivo();
 
 
-    if (pg_num_rows($rsPARPPS10) == 0 && pg_num_rows($rsPARPPS20) == 0) {
+        $sSql = "select * from parpps102019 where si156_mes = " . $this->iMes . " and si156_instit = " . db_getsession("DB_instit");
+        $rsPARPPS10 = db_query($sSql);
 
-      $aCSV['tiporegistro'] = '99';
-      $this->sLinha = $aCSV;
-      $this->adicionaLinha();
+        $sSql20 = "select * from parpps202019 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit");
+        $rsPARPPS20 = db_query($sSql20);
 
-    } else {
 
-      /**
-       *
-       * Registros 10
-       */
-      for ($iCont = 0; $iCont < pg_num_rows($rsPARPPS10); $iCont++) {
+        if (pg_num_rows($rsPARPPS10) == 0 && pg_num_rows($rsPARPPS20) == 0) {
 
-        $aPARPPS10 = pg_fetch_array($rsPARPPS10, $iCont);
+            $aCSV['tiporegistro'] = '99';
+            $this->sLinha = $aCSV;
+            $this->adicionaLinha();
 
-        $aCSVPARPPS10['si156_tiporegistro']                       = $this->padZeroLeft($aPARPPS10['si156_tiporegistro'], 2);
-        $aCSVPARPPS10['si156_codorgao']                           = $this->padZeroLeft($aPARPPS10['si156_codorgao'], 2);
-        $aCSVPARPPS10['si156_vlsaldofinanceiroexercicioanterior'] = $this->sicomNumberReal($aPARPPS10['si156_vlsaldofinanceiroexercicioanterior'], 2);
-        
-        $this->sLinha = $aCSVPARPPS10;
-        $this->adicionaLinha();
+        } else {
 
-      }
+            /**
+             *
+             * Registros 10
+             */
+            for ($iCont = 0; $iCont < pg_num_rows($rsPARPPS10); $iCont++) {
 
-      for ($iCont2 = 0; $iCont2 < pg_num_rows($rsPARPPS20); $iCont2++) {
+                $aPARPPS10 = pg_fetch_array($rsPARPPS10, $iCont);
 
-        $aPARPPS20 = pg_fetch_array($rsPARPPS20, $iCont2);
+                ini_set("display_errors", "on");
+                $aCSVPARPPS10['si156_tiporegistro']                       = $this->padLeftZero($aPARPPS10['si156_tiporegistro'], 2);
+                $aCSVPARPPS10['si156_codorgao']                           = $this->padLeftZero($aPARPPS10['si156_codorgao'], 2);
+                $aCSVPARPPS10['si156_tipoplano']                          = $aPARPPS10['si156_tipoplano'];
+                $aCSVPARPPS10['si156_exercicio']                          = $aPARPPS10['si156_exercicio'];
+                $aCSVPARPPS10['si156_vlsaldofinanceiroexercicioanterior'] = $this->sicomNumberReal($aPARPPS10['si156_vlsaldofinanceiroexercicioanterior'], 2);
+                $aCSVPARPPS10['si156_vlreceitaprevidenciariaanterior']    = $this->sicomNumberReal($aPARPPS10['si156_vlreceitaprevidenciariaanterior'], 2);
+                $aCSVPARPPS10['si156_vldespesaprevidenciariaanterior']    = $this->sicomNumberReal($aPARPPS10['si156_vldespesaprevidenciariaanterior'], 2);
 
-        $aCSVPARPPS20['si155_tiporegistro']             = $this->padZeroLeft($aPARPPS20['si155_tiporegistro'], 2);
-        $aCSVPARPPS20['si155_codorgao']                 = $this->padZeroLeft($aPARPPS20['si155_codorgao'], 2);
-        $aCSVPARPPS20['si155_exercicio']                = $this->padZeroLeft($aPARPPS20['si155_exercicio'], 4);
-        $aCSVPARPPS20['si155_vlreceitaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vlreceitaprevidenciaria'], 2);
-        $aCSVPARPPS20['si155_vldespesaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vldespesaprevidenciaria'], 2);
-        
-        $this->sLinha = $aCSVPARPPS20;
-        $this->adicionaLinha();
+                $this->sLinha = $aCSVPARPPS10;
+                $this->adicionaLinha();
 
-      }
+            }
 
-      $this->fechaArquivo();
+            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsPARPPS20); $iCont2++) {
+
+                $aPARPPS20 = pg_fetch_array($rsPARPPS20, $iCont2);
+
+                $aCSVPARPPS20['si155_tiporegistro']             = $this->padLeftZero($aPARPPS20['si155_tiporegistro'], 2);
+                $aCSVPARPPS20['si155_codorgao']                 = $this->padLeftZero($aPARPPS20['si155_codorgao'], 2);
+                $aCSVPARPPS20['si155_exercicio']                = $this->padLeftZero($aPARPPS20['si155_exercicio'], 4);
+                $aCSVPARPPS20['si155_vlreceitaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vlreceitaprevidenciaria'], 2);
+                $aCSVPARPPS20['si155_vldespesaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vldespesaprevidenciaria'], 2);
+
+                $this->sLinha = $aCSVPARPPS20;
+                $this->adicionaLinha();
+            }
+
+            $this->fechaArquivo();
+
+        }
 
     }
-
-  }
 
 }

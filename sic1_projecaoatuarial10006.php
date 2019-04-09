@@ -7,20 +7,24 @@ include("dbforms/db_funcoes.php");
 include("classes/db_projecaoatuarial10_classe.php");
 include("classes/db_projecaoatuarial20_classe.php");
 $clprojecaoatuarial10 = new cl_projecaoatuarial10;
-  /*
 $clprojecaoatuarial20 = new cl_projecaoatuarial20;
-  */
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
 if(isset($excluir)){
   $sqlerro=false;
   db_inicio_transacao();
+
+  $clprojecaoatuarial20->excluir(null,"si169_projecaoatuarial10 = {$si168_sequencial} and si169_tipoplano = {$si168_tipoplano}");
+    if($clprojecaoatuarial20->erro_status==0){
+        $sqlerro=true;
+    }
   $clprojecaoatuarial10->excluir($si168_sequencial);
   if($clprojecaoatuarial10->erro_status==0){
     $sqlerro=true;
   } 
-  $erro_msg = $clprojecaoatuarial10->erro_msg; 
+  $erro_msg = $clprojecaoatuarial20->erro_msg;
+  $erro_msg = $clprojecaoatuarial10->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;

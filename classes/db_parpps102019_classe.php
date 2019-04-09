@@ -70,7 +70,7 @@ class cl_parpps102019
       $this->si156_tipoplano = ($this->si156_tipoplano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_tipoplano"] : $this->si156_tipoplano);
       $this->si156_exercicio = ($this->si156_exercicio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_exercicio"] : $this->si156_exercicio);
       $this->si156_vlsaldofinanceiroexercicioanterior = ($this->si156_vlsaldofinanceiroexercicioanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_vlsaldofinanceiroexercicioanterior"] : $this->si156_vlsaldofinanceiroexercicioanterior);
-      $this->si156_vlreceitaprevidenciariaanterior = ($this->si156_vlsldofinanceiroexercicioanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_vlsldofinanceiroexercicioanterior"] : $this->si156_vlsldofinanceiroexercicioanterior);
+      $this->si156_vlreceitaprevidenciariaanterior = ($this->si156_vlreceitaprevidenciariaanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_vlreceitaprevidenciariaanterior"] : $this->si156_vlreceitaprevidenciariaanterior);
       $this->si156_vldespesaprevidenciariaanterior = ($this->si156_vldespesaprevidenciariaanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_vldespesaprevidenciariaanterior"] : $this->si156_vldespesaprevidenciariaanterior);
       $this->si156_mes = ($this->si156_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_mes"] : $this->si156_mes);
       $this->si156_instit = ($this->si156_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si156_instit"] : $this->si156_instit);

@@ -29,10 +29,16 @@ $db_opcao = 1;
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
-	     $clcriaabas->identifica = array("projecaoatuarial10"=>"Saldo Financeiro","projecaoatuarial20"=>"Projecao"); 
-	     $clcriaabas->src = array("projecaoatuarial10"=>"sic1_projecaoatuarial10004.php","projecaoatuarial20"=>"sic1_projecaoatuarial20001.php");
-	     $clcriaabas->disabled   =  array("projecaoatuarial20"=>"false");
-       $clcriaabas->sizecampo = array("projecaoatuarial10"=>"14","projecaoatuarial20"=>"14");
+	     $clcriaabas->identifica = array("projecaoatuarial10"=>"Saldo Financeiro",
+                                         "projecaoatuarial20"=>"Projeção");
+
+	     $clcriaabas->src        = array("projecaoatuarial10"=>"sic1_projecaoatuarial10004.php",
+                                         "projecaoatuarial20"=>"sic1_projecaoatuarial20001.php");
+
+	     $clcriaabas->disabled   = array("projecaoatuarial20"=>"true");
+
+	     $clcriaabas->sizecampo  = array("projecaoatuarial10"=>"14",
+                                         "projecaoatuarial20"=>"14");
 	     $clcriaabas->cria_abas(); 
      ?> 
     </td>

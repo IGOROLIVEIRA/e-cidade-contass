@@ -114,10 +114,14 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
         $clparpps10->si156_tiporegistro = 10;
         $clparpps10->si156_codorgao = $sCodorgao;
+        $clparpps10->si156_tipoplano = $oDados10->si168_tipoplano;
+        $clparpps10->si156_exercicio = $oDados10->si168_exercicio;
         $clparpps10->si156_vlsaldofinanceiroexercicioanterior = $oDados10->si168_vlsaldofinanceiroexercicioanterior;
+        $clparpps10->si156_vlreceitaprevidenciariaanterior = $oDados10->si168_vlreceitaprevidenciaria;
+        $clparpps10->si156_vldespesaprevidenciariaanterior = $oDados10->si168_vldespesaprevidenciaria;
         $clparpps10->si156_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clparpps10->si156_instit = db_getsession("DB_instit");
-
+//echo "<pre>";print_r($clparpps10);die();
         $clparpps10->incluir(null);
         if ($clparpps10->erro_status == 0) {
           throw new Exception($clparpps10->erro_msg);
@@ -139,6 +143,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
         $clparpps20->si155_tiporegistro = 20;
         $clparpps20->si155_codorgao = $sCodorgao;
+        $clparpps20->si155_tipoplano = $oDados20->si169_tipoplano;
         $clparpps20->si155_exercicio = $oDados20->si169_exercicio;
         $clparpps20->si155_vlreceitaprevidenciaria = $oDados20->si169_vlreceitaprevidenciaria;
         $clparpps20->si155_vldespesaprevidenciaria = $oDados20->si169_vldespesaprevidenciaria;
