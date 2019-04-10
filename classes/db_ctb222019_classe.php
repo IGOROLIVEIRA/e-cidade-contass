@@ -36,7 +36,7 @@ class cl_ctb222019
                  si98_ededucaodereceita = int8 = dedução de  receita 
                  si98_identificadordeducao = int8 = Identificador da dedução da receita 
                  si98_naturezareceita = int8 = Natureza da receita 
-                 si98_codfontrecurso = int8 = Código da fonte de recursos 
+                 si98_codfontrecursos = int8 = Código da fonte de recursos 
                  si98_vlrreceitacont = float8 = Valor  correspondente à  receita 
                  si98_mes = int8 = Mês 
                  si98_reg21 = int8 = reg21 
