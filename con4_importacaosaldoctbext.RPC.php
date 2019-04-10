@@ -44,6 +44,7 @@ try {
           $sSqlGeral = "select  10 as tiporegistro,
                          k13_reduz as icodigoreduzido,
                          c61_codtce as codtce,
+                         si95_reduz,
                          si09_codorgaotce,
                          c63_banco,
                          c63_agencia,
@@ -64,6 +65,7 @@ try {
                    join orctiporec on c61_codigo = o15_codigo
               left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
               left join contabancaria on c56_contabancaria = db83_sequencial
+              left join acertactb on si95_codtceant = c61_codtce
               left join infocomplementaresinstit on si09_instit = c61_instit
                 where c61_instit = ".db_getsession("DB_instit")."  order by k13_reduz ";
                
@@ -95,6 +97,7 @@ try {
                   $cCtb10->icodigoreduzido = $oRegistro10->icodigoreduzido;
                   $cCtb10->codcon = $oRegistro10->codcon;
                   $cCtb10->codtce = $oRegistro10->codtce;
+                  $cCtb10->si95_reduz = $oRegistro10->si95_reduz;
                   $cCtb10->contas = array();
                   $aBancosAgrupados[$aHash] = $cCtb10;
 
@@ -108,6 +111,7 @@ try {
           $aSaldoCtbExt = array();
           foreach ($aBancosAgrupados as $aBancosAgrupado) {
             $ctb = $aBancosAgrupado->codtce != '' ? $aBancosAgrupado->codtce : $aBancosAgrupado->icodigoreduzido;
+            $ctb = $aBancosAgrupado->si95_reduz != '' ? $aBancosAgrupado->si95_reduz: $aBancosAgrupado->icodigoreduzido;
             $sSQL = "select si96_codfontrecursos, si96_vlsaldofinalfonte from ctb20{$anousu} where si96_codctb = {$ctb} and si96_mes = 12 and si96_instit = ".db_getsession("DB_instit");
 
            // echo $sSQL;
