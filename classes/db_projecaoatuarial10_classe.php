@@ -23,13 +23,19 @@ class cl_projecaoatuarial10 {
    var $si168_dtcadastro_ano = null; 
    var $si168_dtcadastro = null; 
    var $si168_instit = 0;
-   var $si168_exercicio = 0; 
+   var $si168_exercicio = 0;
+   var $si168_vlreceitaprevidenciaria = 0;
+   var $si168_vldespesaprevidenciaria = 0;
+   var $si168_tipoplano = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si168_sequencial = int8 = sequencial 
                  si168_vlsaldofinanceiroexercicioanterior = float8 = Valor do Saldo financeiro 
                  si168_dtcadastro = date = Data de cadastro 
                  si168_instit = int8 = Instituição 
+                 si168_vlreceitaprevidenciaria = float8 = valor de receita previdenciaria 
+                 si168_vldespesaprevidenciaria = float8 = valor de despesa previdenciaria
+                 si168_tipoplano = int4 = tipo de plano
                  ";
    //funcao construtor da classe 
    function cl_projecaoatuarial10() { 
@@ -61,6 +67,9 @@ class cl_projecaoatuarial10 {
        }
        $this->si168_instit = ($this->si168_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_instit"]:$this->si168_instit);
        $this->si168_exercicio = ($this->si168_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_exercicio"]:$this->si168_exercicio);
+       $this->si168_vlreceitaprevidenciaria = ($this->si168_vlreceitaprevidenciaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_vlreceitaprevidenciaria"]:$this->si168_vlreceitaprevidenciaria);
+       $this->si168_vldespesaprevidenciaria = ($this->si168_vldespesaprevidenciaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_vldespesaprevidenciaria"]:$this->si168_vldespesaprevidenciaria);
+       $this->si168_tipoplano = ($this->si168_tipoplano == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_tipoplano"]:$this->si168_tipoplano);
      }else{
        $this->si168_sequencial = ($this->si168_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_sequencial"]:$this->si168_sequencial);
      }
@@ -136,12 +145,45 @@ class cl_projecaoatuarial10 {
        $this->erro_status = "0";
        return false;
      }
+       if($this->si168_vlreceitaprevidenciaria == null ){
+           $this->erro_sql = " Campo valor de receita previdenciaria nao Informado.";
+           $this->erro_campo = "si168_exercicio";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
+       if($this->si168_vldespesaprevidenciaria == null ){
+           $this->erro_sql = " Campo valor de despesa previdenciaria nao Informado.";
+           $this->erro_campo = "si168_exercicio";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
+       if($this->si168_tipoplano == null ){
+           $this->erro_sql = " Campo tipo plano nao Informado.";
+           $this->erro_campo = "si168_exercicio";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
      $sql = "insert into projecaoatuarial10(
                                        si168_sequencial 
                                       ,si168_vlsaldofinanceiroexercicioanterior 
                                       ,si168_dtcadastro 
                                       ,si168_instit
-                                      ,si168_exercicio 
+                                      ,si168_exercicio
+                                      ,si168_vlreceitaprevidenciaria
+                                      ,si168_vldespesaprevidenciaria 
+                                      ,si168_tipoplano 
                        )
                 values (
                                 $this->si168_sequencial 
@@ -149,6 +191,9 @@ class cl_projecaoatuarial10 {
                                ,".($this->si168_dtcadastro == "null" || $this->si168_dtcadastro == ""?"null":"'".$this->si168_dtcadastro."'")." 
                                ,$this->si168_instit 
                                ,$this->si168_exercicio
+                               ,$this->si168_vlreceitaprevidenciaria
+                               ,$this->si168_vldespesaprevidenciaria
+                               ,$this->si168_tipoplano
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -271,6 +316,46 @@ class cl_projecaoatuarial10 {
          return false;
        }
      }
+
+       if(trim($this->si168_vlreceitaprevidenciaria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si168_vlreceitaprevidenciaria"])){
+           $sql  .= $virgula." si168_vlreceitaprevidenciaria = $this->si168_vlreceitaprevidenciaria ";
+           $virgula = ",";
+           if(trim($this->si168_vlreceitaprevidenciaria) == null ){
+               $this->erro_sql = " Campo Valor Receita Previdenciaria nao Informado.";
+               $this->erro_campo = "si168_vlreceitaprevidenciaria";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+       if(trim($this->si168_vldespesaprevidenciaria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si168_vldespesaprevidenciaria"])){
+           $sql  .= $virgula." si168_vldespesaprevidenciaria = $this->si168_vldespesaprevidenciaria ";
+           $virgula = ",";
+           if(trim($this->si168_vldespesaprevidenciaria) == null ){
+               $this->erro_sql = " Campo valor de Despesa Previdenciaria não Informado.";
+               $this->erro_campo = "si168_vldespesaprevidenciaria";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+       if(trim($this->si168_tipoplano)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si168_tipoplano"])){
+           $sql  .= $virgula." si168_tipoplano = $this->si168_tipoplano ";
+           $virgula = ",";
+           if(trim($this->si168_tipoplano) == null ){
+               $this->erro_sql = " Campo Tipo Plano.";
+               $this->erro_campo = "si168_tipoplano";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
      $sql .= " where ";
      if($si168_sequencial!=null){
        $sql .= " si168_sequencial = $this->si168_sequencial";

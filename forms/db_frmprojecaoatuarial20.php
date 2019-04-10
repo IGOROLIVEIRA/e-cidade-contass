@@ -1,119 +1,82 @@
 <?
 //MODULO: sicom
-include("dbforms/db_classesgenericas.php");
-$cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
-$clprojecaoatuarial20->rotulo->label();
-if(isset($db_opcaoal)){
-   $db_opcao=33;
-    $db_botao=false;
-}else if(isset($opcao) && $opcao=="alterar"){
-    $db_botao=true;
-    $db_opcao = 2;
-}else if(isset($opcao) && $opcao=="excluir"){
-    $db_opcao = 3;
-    $db_botao=true;
-}else{
-    $db_opcao = 1;
-    $db_botao=true;
-    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
-     $si169_sequencial = "";
-     $si169_exercicio = "";
-     $si169_vlreceitaprevidenciaria = "";
-     $si169_vldespesaprevidenciaria = "";
-     $si169_dtcadastro = "";
-     $si169_instit = "";
-   }
-}
-?>
-<form name="form1" method="post" action="">
-<center>
-<table border="0">
-  <tr>
-    <td nowrap title="<?=@$Tsi169_sequencial?>">
-       <?=@$Lsi169_sequencial?>
-    </td>
-    <td>
-<?
-db_input('si169_sequencial',10,$Isi169_sequencial,true,'text',3,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi169_exercicio?>">
-       <?=@$Lsi169_exercicio?>
-    </td>
-    <td>
-<?
-db_input('si169_exercicio',4,$Isi169_exercicio,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi169_vlreceitaprevidenciaria?>">
-       <?=@$Lsi169_vlreceitaprevidenciaria?>
-    </td>
-    <td>
-<?
-db_input('si169_vlreceitaprevidenciaria',14,$Isi169_vlreceitaprevidenciaria,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi169_vldespesaprevidenciaria?>">
-       <?=@$Lsi169_vldespesaprevidenciaria?>
-    </td>
-    <td>
-<?
-db_input('si169_vldespesaprevidenciaria',14,$Isi169_vldespesaprevidenciaria,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-
-<?
-$si169_dtcadastro_dia = date("d");
-$si169_dtcadastro_mes = date("m");
-$si169_dtcadastro_ano = date("Y");
-db_inputdata('si169_dtcadastro',@$si169_dtcadastro_dia,@$si169_dtcadastro_mes,@$si169_dtcadastro_ano,true,'hidden',$db_opcao,"")
+require_once "libs/db_stdlib.php";
+require_once "libs/db_conecta.php";
+require_once "libs/db_sessoes.php";
+require_once "libs/db_usuariosonline.php";
+require_once "dbforms/db_funcoes.php";
+require_once("libs/db_app.utils.php");
+require_once("dbforms/db_funcoes.php");
+$anousu = db_getsession("DB_anousu");
+$anousuanterior = $anousu - 1;
+$sql = "select * from projecaoatuarial10 where si168_sequencial = {$codigo} and si168_tipoplano = {$tipoplano}";
+$result = db_query($sql);
+$anousu10 = $oDados10 = db_utils::fieldsMemory($result, 0)->si168_exercicio;
+$anousuprojecao10 = $oDados10 = db_utils::fieldsMemory($result, 0)->si168_exercicio;
+$projecaoaturialano = $anousu10 + 74;
 ?>
 
+<form name="form1" method="post">
+    <table>
+        <tr>
+            <th class="table_header" style="width: 70px;">Exercicio</th>
+            <th class="table_header" style="width: 70px;">Receita</th>
+            <th class="table_header" style="width: 70px;">Despesa</th>
+        </tr>
+    </table>
 
-<?
-$si169_instit = db_getsession("DB_instit");
-db_input('si169_instit',10,$Isi169_instit,true,'hidden',$db_opcao,"")
-?>
+    <? for ($ano = $anousu10 + 1; $ano <= $projecaoaturialano; $ano++):?>
+        <table class="DBGrid">
+            <tr>
+                <td class="linhagrid" style="width: 70px;">
+                    <?= $ano ?>
+                    <input type="hidden" style="width: 70px;" name="exercicio[<?= $ano ?>]" value="" id="">
+                </td>
 
-  </tr>
-    <td colspan="2" align="center">
- <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
- <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
-    </td>
-  </tr>
-  </table>
- <table>
-  <tr>
-    <td valign="top"  align="center">
-    <?
-	 $chavepri= array("si169_sequencial"=>@$si169_sequencial);
-	 $cliframe_alterar_excluir->chavepri=$chavepri;
-	 $cliframe_alterar_excluir->sql     = $clprojecaoatuarial20->sql_query_file($si169_sequencial,"si169_sequencial,si169_exercicio,si169_dtcadastro, to_char(si169_vlreceitaprevidenciaria,'R$ 999G999G990D99') as si169_vlreceitaprevidenciaria,to_char(si169_vldespesaprevidenciaria,'R$ 999G999G990D99') as si169_vldespesaprevidenciaria","si169_exercicio","si169_instit = ".db_getsession("DB_instit"));
-	 $cliframe_alterar_excluir->campos  ="si169_sequencial,si169_exercicio,si169_vlreceitaprevidenciaria,si169_vldespesaprevidenciaria,si169_dtcadastro";
-	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
-	 $cliframe_alterar_excluir->iframe_height ="160";
-	 $cliframe_alterar_excluir->iframe_width ="700";
-	 $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
-    ?>
-    </td>
-   </tr>
- </table>
-  </center>
+                <td class="linhagrid" style="width: 70px;">
+                    <input type="text" style="width: 70px;" name="receita[<?=$ano?>]" value="0">
+                </td>
+
+                <td class="linhagrid" style="width: 70px;">
+                    <input type="text" style="width: 70px;" name="despesa[<?=$ano?>]" value="0">
+                </td>
+            </tr>
+
+        </table>
+    <?endfor;?>
+    <center>
+        <input type="submit" value="Salvar" name="salvar">
+    </center>
 </form>
 <script>
-function js_cancelar(){
-  var opcao = document.createElement("input");
-  opcao.setAttribute("type","hidden");
-  opcao.setAttribute("name","novo");
-  opcao.setAttribute("value","true");
-  document.form1.appendChild(opcao);
-  document.form1.submit();
-}
+    getdados();
+    function getdados() {
+        buscaritens({
+            exec: 'getItens',
+            codigo: <?= $codigo ?>,
+            tipoplano: <?= $tipoplano ?>,
+            exercicio: <?= $anousuprojecao10 ?>
+        }, js_carregaritens);
+    }
+
+    function js_carregaritens(oRetorno) {
+        let projecao = JSON.parse(oRetorno.responseText);
+        projecao.itens.forEach(function (item,key) {
+            document.form1['receita[' + item.si169_exercicio + ']'].value  = item.si169_vlreceitaprevidenciaria;
+            document.form1['despesa[' + item.si169_exercicio + ']'].value  = item.si169_vldespesaprevidenciaria;
+        })
+    }
+
+    function buscaritens(params,onComplete) {
+        js_divCarregando('Carregando Informações', 'div_aguarde');
+        var request = new Ajax.Request('projecaoatuarial.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
 </script>
