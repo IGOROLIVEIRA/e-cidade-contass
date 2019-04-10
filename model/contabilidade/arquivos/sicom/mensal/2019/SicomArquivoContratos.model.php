@@ -368,12 +368,19 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     liclicita.l20_codepartamento,
                     liclicita.l20_naturezaobjeto,
                 CASE
-                    WHEN pc50_pctipocompratribunal = 100 THEN 2
-                    WHEN pc50_pctipocompratribunal = 101 THEN 1
-                    WHEN pc50_pctipocompratribunal = 102 THEN 3
-                    WHEN pc50_pctipocompratribunal = 103 THEN 4
+                    WHEN p1.pc50_pctipocompratribunal = 100 THEN 2
+                    WHEN p1.pc50_pctipocompratribunal = 101 THEN 1
+                    WHEN p1.pc50_pctipocompratribunal = 102 THEN 3
+                    WHEN p1.pc50_pctipocompratribunal = 103 THEN 4
                     ELSE 0
                 END AS tipoprocesso,
+                CASE
+                    WHEN p2.pc50_pctipocompratribunal = 100 THEN 2
+                    WHEN p2.pc50_pctipocompratribunal = 101 THEN 1
+                    WHEN p2.pc50_pctipocompratribunal = 102 THEN 3
+                    WHEN p2.pc50_pctipocompratribunal = 103 THEN 4
+                    ELSE 0
+                END AS tipoprocessolicitacao,
                     ac16_tipoorigem AS contdeclicitacao,
                     ac16_origem,
                 (CASE
@@ -418,9 +425,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN orcorgao ON o40_orgao = o41_orgao
                 AND o40_anousu = o41_anousu
                 LEFT JOIN cflicita ON l20_codtipocom = l03_codigo
-                LEFT JOIN pctipocompra ON pc50_codcom = l03_codcom
+                LEFT JOIN pctipocompra p1 ON p1.pc50_codcom = l03_codcom
                 LEFT JOIN liclicita l2 ON l2.l20_codigo = acordo.ac16_licitacao
                 LEFT JOIN adesaoregprecos ON si06_sequencial = ac16_adesaoregpreco
+                LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
+                LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
                 AND ac16_dataassinatura >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
@@ -524,12 +533,18 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               if($oDados10->ac16_tipoorigem == self::TIPO_ORIGEM_ADESAO_REGISTRO_PRECO){
                 $clcontratos10->si83_nroprocesso = $oDados10->numeroproc;
                 $clcontratos10->si83_exercicioprocesso = $oDados10->anoproc;
+              }else{
+                $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
+                $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
               }
             }else{
               $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
               $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
             }
-            $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
+            if($oDados10->tipoprocesso == ''){
+              $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocessolicitacao;
+            }else $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
+            // $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
             $clcontratos10->si83_naturezaobjeto = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_naturezaobjeto : $oDados10->ac16_acordogrupo;
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 500);
             $clcontratos10->si83_tipoinstrumento = $oDados10->ac16_acordocategoria;
