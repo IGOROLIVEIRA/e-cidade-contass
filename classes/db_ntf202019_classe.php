@@ -258,7 +258,7 @@ class cl_ntf202019
                                ,'$this->si145_nfserie'
                                ,$this->si145_tipodocumento
                                ,'$this->si145_nrodocumento'
-                               ,'$this->si145_chaveacesso'
+                               ," . ($this->si145_chaveacesso == "null" || $this->si145_chaveacesso == "" ? "null" : "'" . $this->si145_chaveacesso . "'") . "
                                ," . ($this->si145_dtemissaonf == "null" || $this->si145_dtemissaonf == "" ? "null" : "'" . $this->si145_dtemissaonf . "'") . "
                                ,'$this->si145_codunidadesub'
                                ," . ($this->si145_dtempenho == "null" || $this->si145_dtempenho == "" ? "null" : "'" . $this->si145_dtempenho . "'") . "

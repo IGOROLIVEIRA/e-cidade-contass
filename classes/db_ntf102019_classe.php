@@ -285,7 +285,7 @@ class cl_ntf102019
                                ,$this->si143_cepmunicipio
                                ,'$this->si143_ufcredor'
                                ,$this->si143_notafiscaleletronica
-                               ,'$this->si143_chaveacesso'
+                               ," . ($this->si143_chaveacesso == "null" || $this->si143_chaveacesso == "" ? "null" : "'" . $this->si143_chaveacesso . "'") . "
                                ,'$this->si143_outraChaveAcesso'
                                ,'$this->si143_nfaidf'
                                ," . ($this->si143_dtemissaonf == "null" || $this->si143_dtemissaonf == "" ? "null" : "'" . $this->si143_dtemissaonf . "'") . "
