@@ -195,7 +195,7 @@ try {
           }
           
           foreach ($aExt10Agrupado as $oExt10Agrupado) {
-            $ext = $oExt10Agrupado->codext != ''?$oExt10Agrupado->codext:$oExt10Agrupado->codtce;
+            $ext = $oExt10Agrupado->codtce != '' ? $oExt10Agrupado->codtce : $oExt10Agrupado->codext;
             $sSQL = "select si165_codfontrecursos, si165_vlsaldoatualfonte, si165_natsaldoatualfonte from ext20{$anousu} 
                       where si165_codext = {$ext} and si165_mes = 12 
                       and si165_instit = ".db_getsession("DB_instit"); 
