@@ -67,7 +67,7 @@ try {
               left join contabancaria on c56_contabancaria = db83_sequencial
               left join acertactb on si95_codtceant = c61_codtce
               left join infocomplementaresinstit on si09_instit = c61_instit
-                where c61_instit = ".db_getsession("DB_instit")."  order by k13_reduz ";
+                where k13_limite is null and c61_instit = ".db_getsession("DB_instit")."  order by k13_reduz ";
                
           $rsContas = db_query($sSqlGeral);
           //db_criatabela($rsContas);
@@ -110,8 +110,11 @@ try {
           $anousu = db_getsession("DB_anousu") - 1;
           $aSaldoCtbExt = array();
           foreach ($aBancosAgrupados as $aBancosAgrupado) {
-            $ctb = $aBancosAgrupado->codtce != '' ? $aBancosAgrupado->codtce : $aBancosAgrupado->icodigoreduzido;
-            $ctb = $aBancosAgrupado->si95_reduz != '' ? $aBancosAgrupado->si95_reduz: $aBancosAgrupado->icodigoreduzido;
+            if ($ctb = $aBancosAgrupado->si95_reduz != '')
+                $ctb = $aBancosAgrupado->si95_reduz ;
+            else if($aBancosAgrupado->codtce != '' )
+                $ctb = $aBancosAgrupado->codtce ;
+            else $ctb = $aBancosAgrupado->icodigoreduzido;
             $sSQL = "select si96_codfontrecursos, si96_vlsaldofinalfonte from ctb20{$anousu} where si96_codctb = {$ctb} and si96_mes = 12 and si96_instit = ".db_getsession("DB_instit");
 
            // echo $sSQL;
