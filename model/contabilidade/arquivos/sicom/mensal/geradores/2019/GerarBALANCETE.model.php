@@ -496,20 +496,20 @@ class GerarBALANCETE extends GerarAM
 
                     $aBALACETE26 = pg_fetch_array($rsBALANCETE26, $iCont26);
 
-                    if ($aBALACETE26['si193_reg10'] == $aBALACETE10['si177_sequencial']) {
+                    if ($aBALACETE26['si196_reg10'] == $aBALACETE10['si177_sequencial']) {
 
-                        $aCSVBALANCETE26['si193_tiporegistro']            = $this->padLeftZero($aBALACETE26['si193_tiporegistro'], 2);
-                        $aCSVBALANCETE26['si193_contacontabil']           = $this->padLeftZero($aBALACETE26['si193_contacontabil'], 9);
-                        $aCSVBALANCETE26['si193_codfundo']                = "00000000";
-                        $aCSVBALANCETE26['si193_tipodocumentopessoaatributosf'] = $aBALACETE26['si193_tipodocumentopessoaatributosf'];
-                        $aCSVBALANCETE26['si193_nrodocumentopessoaatributosf'] = $aBALACETE26['si193_nrodocumentopessoaatributosf'];
-                        $aCSVBALANCETE26['si193_atributosf']              = trim($aBALACETE26['si193_atributosf']);
-                        $aCSVBALANCETE26['si193_saldoinicialpessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si193_saldoinicialpessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si193_naturezasaldoinicialpessoaatributosf']  = $this->padLeftZero($aBALACETE26['si193_naturezasaldoinicialpessoaatributosf'], 1);
-                        $aCSVBALANCETE26['si193_totaldebitospessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si193_totaldebitospessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si193_totalcreditospessoaatributosf']         = $this->sicomNumberReal($aBALACETE26['si193_totalcreditospessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si193_saldofinalpessoaatributosf']            = $this->sicomNumberReal($aBALACETE26['si193_saldofinalpessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si193_naturezasaldofinalpessoaatributosf']    = $this->padLeftZero($aBALACETE26['si193_naturezasaldofinalpessoaatributosf'], 1);
+                        $aCSVBALANCETE26['si196_tiporegistro']            = $this->padLeftZero($aBALACETE26['si196_tiporegistro'], 2);
+                        $aCSVBALANCETE26['si196_contacontabil']           = $this->padLeftZero($aBALACETE26['si196_contacontabil'], 9);
+                        $aCSVBALANCETE26['si196_codfundo']                = "00000000";
+                        $aCSVBALANCETE26['si196_tipodocumentopessoaatributosf'] = $aBALACETE26['si196_tipodocumentopessoaatributosf'];
+                        $aCSVBALANCETE26['si196_nrodocumentopessoaatributosf'] = $aBALACETE26['si196_nrodocumentopessoaatributosf'];
+                        $aCSVBALANCETE26['si196_atributosf']              = trim($aBALACETE26['si196_atributosf']);
+                        $aCSVBALANCETE26['si196_saldoinicialpessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si196_saldoinicialpessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si196_naturezasaldoinicialpessoaatributosf']  = $this->padLeftZero($aBALACETE26['si196_naturezasaldoinicialpessoaatributosf'], 1);
+                        $aCSVBALANCETE26['si196_totaldebitospessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si196_totaldebitospessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si196_totalcreditospessoaatributosf']         = $this->sicomNumberReal($aBALACETE26['si196_totalcreditospessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si196_saldofinalpessoaatributosf']            = $this->sicomNumberReal($aBALACETE26['si196_saldofinalpessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si196_naturezasaldofinalpessoaatributosf']    = $this->padLeftZero($aBALACETE26['si196_naturezasaldofinalpessoaatributosf'], 1);
 
                         $this->sLinha = $aCSVBALANCETE26;
                         $this->adicionaLinha();
