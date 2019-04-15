@@ -592,6 +592,34 @@ class cl_emppresta {
      }
      return $sql;
   }
+
+	public function sql_query_empenhos ($e45_sequencial = null,$campos = "*", $ordem = null, $dbwhere = "") {
+
+		$sql  = "select {$campos}";
+		$sql .= "  from emppresta ";
+		$sql .= "      inner join empempenho  on  empempenho.e60_numemp = emppresta.e45_numemp";
+		$sql .= "	   inner join empprestaitem ON empempenho.e60_numemp = empprestaitem.e46_numemp";
+		$sql .= "      inner join empprestatip  on  empprestatip.e44_tipo = emppresta.e45_tipo";
+		$sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
+		$sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
+		$sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
+		$sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
+		$sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
+		$sql2 = "";
+		if (empty($dbwhere)) {
+			if (!empty($e45_sequencial)) {
+				$sql2 .= " where emppresta.e45_sequencial = $e45_sequencial ";
+			}
+		} else if (!empty($dbwhere)) {
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if (!empty($ordem)) {
+			$sql .= " order by {$ordem} ";
+		}
+		return $sql;
+	}
+
    // funcao do sql
    public function sql_query_file ($e45_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "") {
 
@@ -637,11 +665,13 @@ class cl_emppresta {
          $sql2 .= " where emppresta.e45_numemp = $e45_numemp ";
        }
      }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
+       $sql2 .= " where $dbwhere";
+//       $sql2 .= " and extract(year from e60_emiss) = ".db_getsession("DB_anousu");
+//       $sql2 .= " and e60_vlremp <> e60_vlranu ";
      }
      $sql .= $sql2;
      if($ordem != null ){
-       $sql .= " order by ";
+       $sql .= " order by e60_emiss DESC, ";
        $campos_sql = split("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
@@ -649,6 +679,7 @@ class cl_emppresta {
          $virgula = ",";
        }
      }
+//     die($sql);
      return $sql;
   }
   function sql_query_depto_movimento ( $e45_numemp=null, $campos="*", $ordem=null, $group = null, $dbwhere=""){
