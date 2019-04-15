@@ -38,7 +38,7 @@ class cl_aoc152019
   var $si194_idsubacao = null;
   var $si194_naturezadespesa = 0;
   var $si194_codfontrecursos = 0;
-  var $si194_vlacrescimo = 0;
+  var $si194_vlreducao = 0;
   var $si194_mes = 0;
   var $si194_reg10 = 0;
   var $si194_instit = 0;
@@ -58,7 +58,7 @@ class cl_aoc152019
                  si194_idsubacao = varchar(4) = Identifica a Sub ação 
                  si194_naturezadespesa = int8 = Natureza de  Despesa 
                  si194_codfontrecursos = int8 = Código da fonte de recursos 
-                 si194_vlacrescimo = float8 = Valor do acréscimo   ou redução 
+                 si194_vlreducao = float8 = Valor do acréscimo   ou redução 
                  si194_mes = int8 = Mês 
                  si194_reg10 = int8 = reg10 
                  si194_instit = int8 = Instituição 
@@ -100,7 +100,7 @@ class cl_aoc152019
       $this->si194_idsubacao = ($this->si194_idsubacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_idsubacao"] : $this->si194_idsubacao);
       $this->si194_naturezadespesa = ($this->si194_naturezadespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_naturezadespesa"] : $this->si194_naturezadespesa);
       $this->si194_codfontrecursos = ($this->si194_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_codfontrecursos"] : $this->si194_codfontrecursos);
-      $this->si194_vlacrescimo = ($this->si194_vlacrescimo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_vlacrescimo"] : $this->si194_vlacrescimo);
+      $this->si194_vlreducao = ($this->si194_vlreducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_vlreducao"] : $this->si194_vlreducao);
       $this->si194_mes = ($this->si194_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_mes"] : $this->si194_mes);
       $this->si194_reg10 = ($this->si194_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_reg10"] : $this->si194_reg10);
       $this->si194_instit = ($this->si194_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si194_instit"] : $this->si194_instit);
@@ -138,8 +138,8 @@ class cl_aoc152019
     if ($this->si194_codfontrecursos == null) {
       $this->si194_codfontrecursos = "0";
     }
-    if ($this->si194_vlacrescimo == null) {
-      $this->si194_vlacrescimo = "0";
+    if ($this->si194_vlreducao == null) {
+      $this->si194_vlreducao = "0";
     }
     if ($this->si194_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -215,7 +215,7 @@ class cl_aoc152019
                                       ,si194_idsubacao 
                                       ,si194_naturezadespesa 
                                       ,si194_codfontrecursos 
-                                      ,si194_vlacrescimo 
+                                      ,si194_vlreducao 
                                       ,si194_mes 
                                       ,si194_reg10 
                                       ,si194_instit 
@@ -235,7 +235,7 @@ class cl_aoc152019
                                ,'$this->si194_idsubacao' 
                                ,$this->si194_naturezadespesa 
                                ,$this->si194_codfontrecursos 
-                               ,$this->si194_vlacrescimo 
+                               ,$this->si194_vlreducao 
                                ,$this->si194_mes 
                                ,$this->si194_reg10 
                                ,$this->si194_instit
@@ -285,7 +285,7 @@ class cl_aoc152019
       $resac = db_query("insert into db_acount values($acount,2010271,2009817,'','" . AddSlashes(pg_result($resaco, 0, 'si194_idsubacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009818,'','" . AddSlashes(pg_result($resaco, 0, 'si194_naturezadespesa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009819,'','" . AddSlashes(pg_result($resaco, 0, 'si194_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, 0, 'si194_vlacrescimo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, 0, 'si194_vlreducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009821,'','" . AddSlashes(pg_result($resaco, 0, 'si194_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2009831,'','" . AddSlashes(pg_result($resaco, 0, 'si194_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010271,2011556,'','" . AddSlashes(pg_result($resaco, 0, 'si194_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -377,11 +377,11 @@ class cl_aoc152019
       $sql .= $virgula . " si194_codfontrecursos = $this->si194_codfontrecursos ";
       $virgula = ",";
     }
-    if (trim($this->si194_vlacrescimo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si194_vlacrescimo"])) {
-      if (trim($this->si194_vlacrescimo) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si194_vlacrescimo"])) {
-        $this->si194_vlacrescimo = "0";
+    if (trim($this->si194_vlreducao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si194_vlreducao"])) {
+      if (trim($this->si194_vlreducao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si194_vlreducao"])) {
+        $this->si194_vlreducao = "0";
       }
-      $sql .= $virgula . " si194_vlacrescimo = $this->si194_vlacrescimo ";
+      $sql .= $virgula . " si194_vlreducao = $this->si194_vlreducao ";
       $virgula = ",";
     }
     if (trim($this->si194_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si194_mes"])) {
@@ -456,8 +456,8 @@ class cl_aoc152019
           $resac = db_query("insert into db_acount values($acount,2010271,2009818,'" . AddSlashes(pg_result($resaco, $conresaco, 'si194_naturezadespesa')) . "','$this->si194_naturezadespesa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si194_codfontrecursos"]) || $this->si194_codfontrecursos != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009819,'" . AddSlashes(pg_result($resaco, $conresaco, 'si194_codfontrecursos')) . "','$this->si194_codfontrecursos'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si194_vlacrescimo"]) || $this->si194_vlacrescimo != "")
-          $resac = db_query("insert into db_acount values($acount,2010271,2009820,'" . AddSlashes(pg_result($resaco, $conresaco, 'si194_vlacrescimo')) . "','$this->si194_vlacrescimo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si194_vlreducao"]) || $this->si194_vlreducao != "")
+          $resac = db_query("insert into db_acount values($acount,2010271,2009820,'" . AddSlashes(pg_result($resaco, $conresaco, 'si194_vlreducao')) . "','$this->si194_vlreducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si194_mes"]) || $this->si194_mes != "")
           $resac = db_query("insert into db_acount values($acount,2010271,2009821,'" . AddSlashes(pg_result($resaco, $conresaco, 'si194_mes')) . "','$this->si194_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si194_reg10"]) || $this->si194_reg10 != "")
@@ -530,7 +530,7 @@ class cl_aoc152019
         $resac = db_query("insert into db_acount values($acount,2010271,2009817,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_idsubacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009818,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_naturezadespesa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009819,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_codfontrecursos')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_vlacrescimo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010271,2009820,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_vlreducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009821,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2009831,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_reg10')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010271,2011556,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si194_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

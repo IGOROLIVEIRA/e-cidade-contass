@@ -21,7 +21,7 @@ class cl_aoc142019
   var $si42_tiporegistro = 0;
   var $si42_codreduzidodecreto = 0;
   var $si42_origemrecalteracao = "";
-  var $si42_codorigem = 0;
+  var $si42_codorigem = null;
   var $si42_codorgao = null;
   var $si42_codunidadesub = null;
   var $si42_codfuncao = null;
@@ -120,7 +120,7 @@ class cl_aoc142019
       $this->si42_codreduzidodecreto = "0";
     }
     if ($this->si42_origemrecalteracao == null) {
-      $this->si42_origemrecalteracao = "0";
+      $this->si42_origemrecalteracao = " ";
     }
     if ($this->si42_codorigem == null) {
       $this->si42_codorigem = "0";
