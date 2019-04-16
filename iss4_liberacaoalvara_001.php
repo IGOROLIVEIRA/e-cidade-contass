@@ -85,7 +85,7 @@ if (isset($liberar)) {
     $oDtMov = new DBDate(date("Y-m-d", db_getsession("DB_datausu")));
     $oDtValidade = new DBDate($oPost->q120_validadealvara);
     $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
-    $oLiberarAlvara->setValidadeAlvara($iValidade);
+    $oLiberarAlvara->setValidadeAlvara($iValidade+1);
     $oLiberarAlvara->setCodigoProcesso($oPost->p58_codproc);
     $oLiberarAlvara->setObservacao($oPost->q120_obs);
     $oLiberarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
