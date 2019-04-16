@@ -208,7 +208,7 @@ try {
               $extFonte = new stdClass();
               $extFonte->icodigoreduzido = $oExt10Agrupado->codext;
               $extFonte->si96_codfontrecursos = $oExtFonte->si165_codfontrecursos;
-              $extFonte->si96_vlsaldofinalfonte = $oExtFonte->si165_natsaldoatualfonte=='C' ? $oExtFonte->si165_vlsaldoatualfonte * (-1) : $oExtFonte->si165_vlsaldoatualfonte;
+              $extFonte->si96_vlsaldofinalfonte = $oExtFonte->si165_natsaldoatualfonte=='C' ? abs($oExtFonte->si165_vlsaldoatualfonte) * (-1) : abs($oExtFonte->si165_vlsaldoatualfonte);
               $extFonte->tipo = "ext";
               $extFonte->codcon = $oExt10Agrupado->codcon;
               $aSaldoCtbExt[$aHash] = $extFonte;
