@@ -483,10 +483,10 @@ function init_130($opcao){
           }else{
             if( strtolower($cfpess[0]["r11_fersal"]) == "f" && $F019 >= 30 && $arquivo_rubricas[$Iind]["rh27_tipo"] == "1"){  // reis
 
-              // rubrica com calculo especial - plano de saude amparo;
-              // esta rubrica deve permanecer integral;
+              // rubrica com calculo especial - plano de saude amparo/;
+              // esta rubrica deve permanecer integral;/
+              continue;
               /*if( trim( $d08_carnes ) != "amparo" || ( trim( $d08_carnes ) == "amparo" && $arquivo_rubricas[$Iind]["rh27_rubric"] != '0514' ) ){
-                continue;
               }*/
 
             }
