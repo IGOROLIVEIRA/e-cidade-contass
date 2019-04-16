@@ -179,11 +179,11 @@ class Alvara {
   /**
    * Define a situacao do alvará
    *
-   * @param integer $iSituaao
+   * @param integer $iSituacao
    * @access public
    * @return void
    */
-  public function setSituacao($iSituaao) {
+  public function setSituacao($iSituacao) {
     $this->iSituacao = $iSituacao;
   }
 

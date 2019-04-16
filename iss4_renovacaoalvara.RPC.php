@@ -56,7 +56,7 @@ switch ($oParam->exec) {
              $oDtMov = new DBDate($oParam->q120_dtmov);
              $oDtValidade = new DBDate($oParam->q120_validadealvara);
              $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
-			 $oRenovarAlvara->setValidadeAlvara($iValidade);
+			 $oRenovarAlvara->setValidadeAlvara($iValidade+1);
 			 $oRenovarAlvara->setDataMovimentacao($oParam->q120_dtmov);
              $oRenovarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
 

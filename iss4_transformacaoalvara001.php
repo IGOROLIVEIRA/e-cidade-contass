@@ -61,7 +61,7 @@ if (isset($oPost->transformar)) {
     $oDtValidade = new DBDate($oPost->q120_validadealvara);
     $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
     $oTransformaAlvara->setTipoTransformacao($oPost->q98_sequencial);
-    $oTransformaAlvara->setValidadeAlvara($iValidade);
+    $oTransformaAlvara->setValidadeAlvara($iValidade+1);
     $oTransformaAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
     $oTransformaAlvara->setObservacao($oPost->q120_obs);
 
