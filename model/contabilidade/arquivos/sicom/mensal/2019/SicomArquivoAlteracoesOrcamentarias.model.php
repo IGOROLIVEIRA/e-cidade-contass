@@ -423,7 +423,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                 $rsResult = db_query($sSql);
                 //echo $sSql;
-                db_criatabela($rsResult);
+                //db_criatabela($rsResult);
 
                 $aDadosAgrupados14 = array();
                 $aDadosAgrupados15 = array();
