@@ -130,7 +130,7 @@ class cl_cvc102019
       $this->si146_ano = "0";
     }
     if ($this->si146_numerorenavam == null) {
-      $this->si146_numerorenavam = " ";
+      $this->si146_numerorenavam = 'null';
     }
     if ($this->si146_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -225,7 +225,7 @@ class cl_cvc102019
                                ,$this->si146_ano 
                                ,'$this->si146_placa' 
                                ,'$this->si146_chassi' 
-                               ,'$this->si146_numerorenavam'
+                               ,$this->si146_numerorenavam
                                ,'$this->si146_nroserie' 
                                ,'$this->si146_situacao' 
                                ,".($this->si146_tipodocumento == NULL ? 'NULL' : $this->si146_tipodocumento)."
