@@ -45,6 +45,13 @@ $clselorcdotacao = new cl_selorcdotacao();
 
 $clselorcdotacao->setDados($oPost->filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 $sele_work = $clselorcdotacao->getDados(false);
+
+$sele_desdobramentos="";
+$desdobramentos = $clselorcdotacao->getDesdobramento(); // coloca os codele dos desdobramntos no formato (x,y,z)
+if ($desdobramentos != "") {
+    $sele_desdobramentos = " and o56_codele in ".$desdobramentos; // adiciona desdobramentos
+}
+
 $dtDataInicialBanco = implode("-", array_reverse(explode("/", $oPost->dtDataInicial)));
 $dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oPost->dtDataFinal)));
 $oPost->lQuebraConta == "t" ? $oPost->lQuebraConta = true : $oPost->lQuebraConta = false;
@@ -220,8 +227,9 @@ $sSqlBuscaEmpenhos .= "            END AS tipo,                                 
 $sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot                                                          																				";
 $sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
+$sSqlBuscaEmpenhos .= "     INNER JOIN empelemento ON e60_numemp = e64_numemp                                                      					";
 $sSqlBuscaEmpenhos .= "     INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu                                                                       ";
-$sSqlBuscaEmpenhos .= "     INNER JOIN orcelemento ON o58_codele = o56_codele                                                          							";
+$sSqlBuscaEmpenhos .= "     INNER JOIN orcelemento ON e64_codele = o56_codele                                                          							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN orctiporec ON o58_codigo = o15_codigo                                                          														";
 $sSqlBuscaEmpenhos .= "     INNER JOIN pagordem ON e50_codord = k12_codord                                                          														";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN pagordemconta ON e50_codord = e49_codord                                                          													";
@@ -231,7 +239,7 @@ $sSqlBuscaEmpenhos .= "     LEFT  JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49
 $sSqlBuscaEmpenhos .= "     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta                                                          											";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupocorrente ON k105_id = corrente.k12_id AND k105_data = corrente.k12_data AND k105_autent = corrente.k12_autent            					";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupotipo ON k106_sequencial = k105_corgrupotipo                                                                              ";
-$sSqlBuscaEmpenhos .= "     where {$sele_work}                                                          										";
+$sSqlBuscaEmpenhos .= "     where {$sele_work}{$sele_desdobramentos}                                                          										";
 $sSqlBuscaEmpenhos .= "     UNION                                                          																									";
 $sSqlBuscaEmpenhos .= "     SELECT k12_empen,                                                          																						";
 $sSqlBuscaEmpenhos .= "                  k12_empen AS e60_numemp,                                                          																	";
@@ -356,6 +364,7 @@ $sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                  
 $sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
 
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
+//db_criatabela($rsExecutaBuscaEmpenho);die($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
 if ($iLinhasRetornadasBuscaEmpenho == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem empenhos para o filtro selecionado.");
