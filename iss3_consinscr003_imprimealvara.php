@@ -72,7 +72,8 @@ if($q60_modalvara == 9) {
   $sSqlTipoAlvara  = " select q98_documento ";
   $sSqlTipoAlvara .= "  from isstipoalvara ";
   $sSqlTipoAlvara .= "       inner join issalvara on issalvara.q123_isstipoalvara = q98_sequencial ";
-  $sSqlTipoAlvara .= " where q123_inscr = {$oGet->inscricao} ";
+  $sSqlTipoAlvara .= "       inner join issmovalvara       on q123_sequencial   = q120_issalvara ";
+  $sSqlTipoAlvara .= " where q123_inscr = {$oGet->inscricao} order by q120_sequencial DESC limit 1";
   $rsTipoAlvara    = $clisstipoalvara->sql_record($sSqlTipoAlvara);
 
   $oTipoAlvara     = db_utils::fieldsMemory($rsTipoAlvara,0);

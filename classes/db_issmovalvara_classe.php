@@ -655,7 +655,7 @@ class cl_issmovalvara {
       $sSql .= " and {$sWhere} ";
     }
 
-    $sSql .= " order by q123_sequencial, q120_sequencial ";
+    $sSql .= " order by q123_sequencial, q120_sequencial DESC limit 1 ";
     
     return $sSql;
   }

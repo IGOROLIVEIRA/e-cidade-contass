@@ -52,10 +52,10 @@ $clMovAlvara    = new cl_issmovalvara();
  * 
  * 
  */
-$sCampoMov  = "q120_sequencial,                "; // 1
-$sCampoMov  = "q121_descr as dl_Movimentação,                "; // 1
+$sCampoMov  = "q123_sequencial,                "; // 1
+$sCampoMov .= "q121_descr as dl_Movimentação,                "; // 1
 $sCampoMov .= "q120_dtmov as dl_data,                        "; // 2
-//$sCampoMov .= "q98_descricao as dl_Tipo_Alvará,              "; // 3 removido pois nao temos o tipo guardado na movimentação
+$sCampoMov .= "q98_descricao as dl_Tipo_Alvará,              "; // 3
 $sCampoMov .= "case                                          "; // 4
 $sCampoMov .= "  when q120_dtmov + q120_validadealvara >= CURRENT_DATE                      "; // 4
 $sCampoMov .= "    then  'Válido'                            "; // 4
