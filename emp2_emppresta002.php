@@ -55,7 +55,7 @@ if (isset($e60_codemp)) {
 
   $sSql = $clemppresta->sql_query_empenhos(null, 'distinct(e45_numemp)',
 		"e45_numemp","e60_codemp = '$codemp' and
-   e60_instit = " . db_getsession("DB_instit"));
+   e60_instit = " . db_getsession("DB_instit")." and e60_anousu = ".$ano);
 }
 
 if(isset($codemp) && isset($e60_numemp)){
@@ -111,8 +111,9 @@ if(isset($codemp) && isset($e60_numemp)){
     }
 
 
+// print_r($sSql);die();
 $rsSql = db_query($sSql);
-
+// db_criatabela($rsSql);die();
 
 $mPDF  = new Relatorio('', 'A4-L'); //RELATORIO LANDSCAPE, PARA PORTRAIT, DEIXE SOMENTE A4
 
@@ -133,10 +134,11 @@ if(pg_num_rows($rsSql) == 0) {
 				"e45_numemp = $e45_numemp and e60_instit = " . db_getsession("DB_instit"));
 
 			$rsResult = db_query($sSqlItens);
+      // db_criatabela($rsResult);
 
-      for($contItens = 0; $contItens < pg_num_rows($rsResult);$contItens++){
+      // for($contItens = 0; $contItens < pg_num_rows($rsResult);$contItens++){
 
-        $rsResultado = db_utils::fieldsMemory($rsResult, $contItens);
+        $rsResultado = db_utils::fieldsMemory($rsResult, 0);
 
 
 		    $mPDF->addPage();
@@ -455,8 +457,9 @@ if(pg_num_rows($rsSql) == 0) {
             print_r($e->getMessage());
         }
        }
-      }
+      // }
 }
+// die();
 	$mPDF->Output();
 
 ?>
