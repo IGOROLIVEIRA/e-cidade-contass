@@ -173,6 +173,7 @@ if (isset($incluir)) {
         }
         /*FIM OC5813*/
         /*OC5815*/
+
         /*todo estrutural anterior à fonte de recurso deve ser idêntico para a dotação que suplementa e para a dotação que reduz*/
 
         if($tiposup=='1017'){
@@ -221,6 +222,13 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
                 }
             }
 
+            /*valida fonte (100,101,102,118,119) OC 9112 */
+            $dotacoes = array(100,101,102,118,119);
+            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
 
         }
         /*verifica se ja existe alguma dotacao cadastrada OC 9039*/
