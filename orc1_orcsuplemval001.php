@@ -68,92 +68,92 @@ $anousu = db_getsession("DB_anousu");
 
 //------------------------------------------
 if (isset($pesquisa_dot) && $o47_coddot!=""){
-   // foi clicado no botão "pesquisa" da tela
-   $res = $clorcdotacao->sql_record($clorcdotacao->sql_query(db_getsession("DB_anousu"),$o47_coddot));
-   if ($clorcdotacao->numrows > 0 ){
-      db_fieldsmemory($res,0); // deve existir 1 registro
+    // foi clicado no botão "pesquisa" da tela
+    $res = $clorcdotacao->sql_record($clorcdotacao->sql_query(db_getsession("DB_anousu"),$o47_coddot));
+    if ($clorcdotacao->numrows > 0 ){
+        db_fieldsmemory($res,0); // deve existir 1 registro
 
-      $resdot= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$anousu.'-01-01',$anousu.'-12-31');
-      db_fieldsmemory($resdot,0);
-       // $atual_menos_reservado
+        $resdot= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$anousu.'-01-01',$anousu.'-12-31');
+        db_fieldsmemory($resdot,0);
+        // $atual_menos_reservado
 
-   }
+    }
 }
 //------------------------------------------
 $limpa_dados = false;
 
 if(isset($incluir)){
-  // pressionado botao incluir na tela
-  $limpa_dados = true;
-  $sqlerro = false;
+    // pressionado botao incluir na tela
+    $limpa_dados = true;
+    $sqlerro = false;
 
-  db_inicio_transacao();
+    db_inicio_transacao();
 
-  // verifica se tem saldo para reservar  - saldo atual_menos_reservado = saldo disponivel liquido
-  $dtini  = $anousu.'-01-01'; // pega o saldo desdo inicio do ano, pra não permitir voltar a data e reduzir
-  $dtfin  = $anousu.'-12-31';
-  $result= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$dtini,$dtfin) ;
-  db_fieldsmemory($result,0);
-  if ($atual_menos_reservado < (abs($o47_valor))){
-     $sqlerro =true;
-     db_msgbox("Dotação $o47_coddot sem saldo ! (Saldo $atual_menos_reservado) ");
-  }
-
-  // lança reserva
-  $clorcreserva->o80_anousu = $anousu;
-  $clorcreserva->o80_coddot = $o47_coddot;
-  $clorcreserva->o80_dtlanc = date("Y-m-d", db_getsession('DB_datausu'));
-  $clorcreserva->o80_dtini  = date("Y-m-d", db_getsession('DB_datausu'));
-  $clorcreserva->o80_dtfim  = db_getsession('DB_anousu')."-12-31";
-  $clorcreserva->o80_valor  = $o47_valor;
-  $clorcreserva->o80_descr  = "suplementacao ";
-  $clorcreserva->o80_justificativa  = "suplementacao ";
-  if ($sqlerro==false){
-     $clorcreserva->incluir("");
-     if ($clorcreserva->erro_status == 0 ){
-        $sqlerro = true;
-	db_msgbox($clorcreserva->erro_msg);
-     }
-  }
-  //
-  $clorcreservasup->o81_codres = $clorcreserva->o80_codres;
-  $clorcreservasup->o81_codsup = $o46_codsup;
-  if ($sqlerro == false){
-    $clorcreservasup->incluir($clorcreservasup->o81_codres);
-    if ($clorcreservasup->erro_status == 0 ){
-        $sqlerro = true;
-        db_msgbox($clorcreservasup->erro_msg);
+    // verifica se tem saldo para reservar  - saldo atual_menos_reservado = saldo disponivel liquido
+    $dtini  = $anousu.'-01-01'; // pega o saldo desdo inicio do ano, pra não permitir voltar a data e reduzir
+    $dtfin  = $anousu.'-12-31';
+    $result= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$dtini,$dtfin) ;
+    db_fieldsmemory($result,0);
+    if ($atual_menos_reservado < (abs($o47_valor))){
+        $sqlerro =true;
+        db_msgbox("Dotação $o47_coddot sem saldo ! (Saldo $atual_menos_reservado) ");
     }
-  }
-  $clorcsuplemval->o47_valor          = (abs($o47_valor))*-1;
-  $clorcsuplemval->o47_anousu         = db_getsession("DB_anousu");
-  $clorcsuplemval->o47_concarpeculiar = "{$o58_concarpeculiar}";
+
+    // lança reserva
+    $clorcreserva->o80_anousu = $anousu;
+    $clorcreserva->o80_coddot = $o47_coddot;
+    $clorcreserva->o80_dtlanc = date("Y-m-d", db_getsession('DB_datausu'));
+    $clorcreserva->o80_dtini  = date("Y-m-d", db_getsession('DB_datausu'));
+    $clorcreserva->o80_dtfim  = db_getsession('DB_anousu')."-12-31";
+    $clorcreserva->o80_valor  = $o47_valor;
+    $clorcreserva->o80_descr  = "suplementacao ";
+    $clorcreserva->o80_justificativa  = "suplementacao ";
+    if ($sqlerro==false){
+        $clorcreserva->incluir("");
+        if ($clorcreserva->erro_status == 0 ){
+            $sqlerro = true;
+            db_msgbox($clorcreserva->erro_msg);
+        }
+    }
+    //
+    $clorcreservasup->o81_codres = $clorcreserva->o80_codres;
+    $clorcreservasup->o81_codsup = $o46_codsup;
+    if ($sqlerro == false){
+        $clorcreservasup->incluir($clorcreservasup->o81_codres);
+        if ($clorcreservasup->erro_status == 0 ){
+            $sqlerro = true;
+            db_msgbox($clorcreservasup->erro_msg);
+        }
+    }
+    $clorcsuplemval->o47_valor          = (abs($o47_valor))*-1;
+    $clorcsuplemval->o47_anousu         = db_getsession("DB_anousu");
+    $clorcsuplemval->o47_concarpeculiar = "{$o58_concarpeculiar}";
     /*OC5813*/
     //valida se a dotação já foi usada numa operacao contrária
 
-  $sSuplementacao = $clorcsuplemval->sql_record("select * from orcsuplemval join orcsuplem on o47_codsup=o46_codsup where o46_codlei = {$o39_codproj} and o47_coddot = {$o47_coddot} ");
-  if(pg_num_rows($sSuplementacao)>0){
-    $aSuple = db_utils::getCollectionByRecord($sSuplementacao);
-    foreach($aSuple as $oSupl){
-      //existe uma suplementacao que agora está sendo reduzida
-      if($oSupl->o47_valor > 0){
-       $sqlerro = true;
-       db_msgbox('Usuário, inclusão abortada. Esta dotação já foi inserida em outra suplementação neste mesmo projeto!');
-       $limpa_dados = false;
-       break;
-     }else{
-      $sqlerro = false;
-     }
-   }
- }else{
-    $sqlerro = false;
- }
- /*FIM OC5813*/
-  /*OC5815*/
- /*todo estrutural anterior à fonte de recurso deve ser idêntico para a dotação que suplementa e para a dotação que reduz*/
+    $sSuplementacao = $clorcsuplemval->sql_record("select * from orcsuplemval join orcsuplem on o47_codsup=o46_codsup where o46_codlei = {$o39_codproj} and o47_coddot = {$o47_coddot} ");
+    if(pg_num_rows($sSuplementacao)>0){
+        $aSuple = db_utils::getCollectionByRecord($sSuplementacao);
+        foreach($aSuple as $oSupl){
+            //existe uma suplementacao que agora está sendo reduzida
+            if($oSupl->o47_valor > 0){
+                $sqlerro = true;
+                db_msgbox('Usuário, inclusão abortada. Esta dotação já foi inserida em outra suplementação neste mesmo projeto!');
+                $limpa_dados = false;
+                break;
+            }else{
+                $sqlerro = false;
+            }
+        }
+    }else{
+        $sqlerro = false;
+    }
+    /*FIM OC5813*/
+    /*OC5815*/
+    /*todo estrutural anterior à fonte de recurso deve ser idêntico para a dotação que suplementa e para a dotação que reduz*/
 
- if($tiposup=='1017'){
-  $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
+    if($tiposup=='1017'){
+        $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
 FROM orcdotacao d
 INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
 AND p.o55_projativ = d.o58_projativ
@@ -162,9 +162,9 @@ AND o56_anousu = o58_anousu
 WHERE o58_anousu=".db_getsession('DB_anousu')."
   AND o58_coddot = {$o47_coddot}";
 
-  $oEstruturalDotacaoEnviada = db_utils::fieldsMemory(db_query($sSqlEstruturalDotacaoEnviada));
+        $oEstruturalDotacaoEnviada = db_utils::fieldsMemory(db_query($sSqlEstruturalDotacaoEnviada));
 
-  $sSqlestrututural = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural,
+        $sSqlestrututural = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural,
   o56_elemento,
   o55_descr::text,
   o56_descr,
@@ -187,68 +187,121 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
   AND o58_anousu = ".db_getsession('DB_anousu')."
   ";
 
-  if(pg_num_rows(db_query($sSqlestrututural))>0){
-    $oEstruturalSupl = db_query($sSqlestrututural);
-    $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
-    if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,4) !=  substr($oEstruturalSupl->dl_estrutural, 37,4))){
-      $sqlerro = true;
-      db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-      $limpa_dados = false;
+        if(pg_num_rows(db_query($sSqlestrututural))>0){
+            $oEstruturalSupl = db_query($sSqlestrututural);
+            $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
+            if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,4) !=  substr($oEstruturalSupl->dl_estrutural, 37,4))){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
 
+            }
+
+            /**
+             * OC 9112 - Inicio
+             */
+
+            /*valida fonte 101 e 102*/
+            $validacao = array(101,102);
+            if(substr($oEstruturalSupl->dl_estrutural, 38) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$validacao)){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /*valida fonte 101*/
+            if(substr($oEstruturalSupl->dl_estrutural, 38) == 101 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /*valida fonte 102*/
+            if(substr($oEstruturalSupl->dl_estrutural, 38) == 102 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /*valida fonte 118*/
+            if(substr($oEstruturalSupl->dl_estrutural, 38) == 118 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 119){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /*valida fonte 119*/
+            if(substr($oEstruturalSupl->dl_estrutural, 38) == 119 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 118){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /*valida fonte 100,101,102,118,119*/
+            $dotacoes = array(100,101,102,118,119);
+            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
+                $sqlerro = true;
+                die("aqui2");
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            /**
+             * OC 9112 - Fim
+             */
+        }
     }
-  }
-}
-  if ($sqlerro == false ) {
-     $clorcsuplemval->incluir($o46_codsup,db_getsession("DB_anousu"),$o47_coddot);
-     if ($clorcsuplemval->erro_status == 0){
-         $sqlerro = true;
-         db_msgbox($clorcsuplemval->erro_msg);
-         $limpa_dados = false;
-     }
-  }
-  db_fim_transacao($sqlerro);
+    if ($sqlerro == false ) {
+        $clorcsuplemval->incluir($o46_codsup,db_getsession("DB_anousu"),$o47_coddot);
+        if ($clorcsuplemval->erro_status == 0){
+            $sqlerro = true;
+            db_msgbox($clorcsuplemval->erro_msg);
+            $limpa_dados = false;
+        }
+    }
+    db_fim_transacao($sqlerro);
 
 }elseif(isset($opcao) && $opcao=="excluir" ){
-  $limpa_dados = true;
-  // clicou no exlcuir, já exlcui direto, nem confirma nada
-  db_inicio_transacao();
-  $sqlerro     = false;
-  // procura reserva
-  $res = $clorcreservasup->sql_record($clorcreservasup->sql_query(null,"o81_codres",null,"o81_codsup = $o46_codsup and o80_coddot=$o47_coddot "));
-  if ($clorcreservasup->numrows > 0){
-      db_fieldsmemory($res,0);
-  }
-  $clorcreservasup->excluir($o81_codres);
-  if ($clorcreservasup->erro_status == 0){
-     $sqlerro = true;
-     db_msgbox($clorcreservasup->erro_msg);
-  }
-  $clorcreserva->excluir($o81_codres);
-  if ($clorcreserva->erro_status == 0){
-      $sqlerro = true;
-      db_msgbox($clorcreserva->erro_msg);
-  }
-  $clorcsuplemval->excluir($o46_codsup,$anousu,$o47_coddot);
-  if ($clorcsuplemval->erro_status == 0){
-     $sqlerro = true;
-     $limpa_dados = false;
-     db_msgbox($clorcsuplemval->erro_msg);
-  }
-  // $sqlerro = true;
-  db_msgbox($clorcsuplemval->erro_msg);
-  db_fim_transacao($sqlerro);
+    $limpa_dados = true;
+    // clicou no exlcuir, já exlcui direto, nem confirma nada
+    db_inicio_transacao();
+    $sqlerro     = false;
+    // procura reserva
+    $res = $clorcreservasup->sql_record($clorcreservasup->sql_query(null,"o81_codres",null,"o81_codsup = $o46_codsup and o80_coddot=$o47_coddot "));
+    if ($clorcreservasup->numrows > 0){
+        db_fieldsmemory($res,0);
+    }
+    $clorcreservasup->excluir($o81_codres);
+    if ($clorcreservasup->erro_status == 0){
+        $sqlerro = true;
+        db_msgbox($clorcreservasup->erro_msg);
+    }
+    $clorcreserva->excluir($o81_codres);
+    if ($clorcreserva->erro_status == 0){
+        $sqlerro = true;
+        db_msgbox($clorcreserva->erro_msg);
+    }
+    $clorcsuplemval->excluir($o46_codsup,$anousu,$o47_coddot);
+    if ($clorcsuplemval->erro_status == 0){
+        $sqlerro = true;
+        $limpa_dados = false;
+        db_msgbox($clorcsuplemval->erro_msg);
+    }
+    // $sqlerro = true;
+    db_msgbox($clorcsuplemval->erro_msg);
+    db_fim_transacao($sqlerro);
 
 }
 if ($limpa_dados ==true){
-   $o47_coddot = "";
-   $o58_orgao  = "";
-   $o40_descr  = "";
-   $o56_elemento ="";
-   $o56_descr    ="";
-   $o58_codigo   ="";
-   $o15_descr    ="";
-   $o47_valor    ="";
-   $atual_menos_reservado = "";
+    $o47_coddot = "";
+    $o58_orgao  = "";
+    $o40_descr  = "";
+    $o56_elemento ="";
+    $o56_descr    ="";
+    $o58_codigo   ="";
+    $o15_descr    ="";
+    $o47_valor    ="";
+    $atual_menos_reservado = "";
 }
 // --------------------------------------
 // calcula total das reduções
@@ -263,40 +316,40 @@ if ($clorcsuplemval->numrows > 0 ){
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="480" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmorcsuplemval_reducao.php");
-	?>
-    </center>
-	</td>
-  </tr>
+    <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+            <center>
+                <?
+                include("forms/db_frmorcsuplemval_reducao.php");
+                ?>
+            </center>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
 <?
 
 if(isset($incluir) || isset($alterar) || isset($excluir)){
-  if($clorcsuplemval->erro_status=="0"){
-      $clorcsuplemval->erro(true,false);
-      $db_botao=true;
-      echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-      if($clorcsuplemval->erro_campo!=""){
-        echo "<script> document.form1.".$clorcsuplemval->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-        echo "<script> document.form1.".$clorcsuplemval->erro_campo.".focus();</script>";
-      };
-  }else{
-       $clorcsuplemval->erro(true,false);
-  };
+    if($clorcsuplemval->erro_status=="0"){
+        $clorcsuplemval->erro(true,false);
+        $db_botao=true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if($clorcsuplemval->erro_campo!=""){
+            echo "<script> document.form1.".$clorcsuplemval->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clorcsuplemval->erro_campo.".focus();</script>";
+        };
+    }else{
+        $clorcsuplemval->erro(true,false);
+    };
 };
 
 ?>

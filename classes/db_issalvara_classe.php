@@ -739,7 +739,7 @@ class cl_issalvara {
 
     $sql  = " select {$sCampos}                                                                   ";
     $sql .= "   from (select *,                                                                   ";
-    $sql .= "                (select q120_isstipomovalvara                                        ";
+    $sql .= "                (select q120_sequencial                                              ";
     $sql .= "                   from issmovalvara                                                 ";
     $sql .= "                  where q120_issalvara = q123_sequencial                             ";
     $sql .= "                    and q120_isstipomovalvara not in (3,5,6,7,8)                     ";

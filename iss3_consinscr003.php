@@ -96,7 +96,13 @@
   $sSqlDadosInscricao .= "        q02_numero,                                                                                      \n";
   $sSqlDadosInscricao .= "        q02_compl,                                                                                       \n";
   $sSqlDadosInscricao .= "        q05_matric,                                                                                      \n";
-  $sSqlDadosInscricao .= "        q98_descricao,                                                                                   \n";
+  $sSqlDadosInscricao .= "        (SELECT q98_descricao
+                                   FROM isstipoalvara
+                                   INNER JOIN issalvara ON issalvara.q123_isstipoalvara = q98_sequencial
+                                   INNER JOIN issmovalvara ON q123_sequencial = q120_issalvara
+                                   WHERE q123_inscr = issbase.q02_inscr
+                                   ORDER BY q120_sequencial DESC
+                                   LIMIT 1),                                                                                       \n";
   $sSqlDadosInscricao .= "        q14_proces,                                                                                      \n";
   $sSqlDadosInscricao .= "        p58_dtproc,                                                                                      \n";
   $sSqlDadosInscricao .= "        extract (year from p58_dtproc)::integer as p58_ano,                                              \n";

@@ -84,8 +84,8 @@ $clissalvara->rotulo->label("q123_sequencial");
     <td align="center" valign="top">
       <?
       $iDepto   = db_getsession('DB_coddepto');
-      $campos   = "q123_sequencial, q123_inscr, z01_nome";
-      $sOrder   = " order by q120_sequencial desc ";
+      $campos   = "q123_sequencial, q123_inscr, z01_nome, cod_ult_mov";
+      $sOrder   = " order by cod_ult_mov desc ";
       $sWhere   = " q99_depto = {$iDepto} ";
       if(!isset($pesquisa_chave)){
       	
@@ -100,13 +100,13 @@ $clissalvara->rotulo->label("q123_sequencial");
 
         
         if (isset($pesquisa_chave) && (trim($pesquisa_chave)!="") ){
-          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and q123_inscr = {$pesquisa_chave}");
+          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and q123_inscr = {$pesquisa_chave} {$sOrder} ");
         } else if (isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ){
         	
-          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and z01_nome ilike '$chave_z01_nome%' ");
+          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and z01_nome ilike '$chave_z01_nome%' {$sOrder} ");
         } else {
         	
-          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, $sWhere);
+          $sql = $clissalvara->sql_queryConsultaCancelamento($campos, $sWhere.$sOrder);
         }
         $repassa = array();
         if(isset($pesquisa_chave)){
@@ -117,7 +117,7 @@ $clissalvara->rotulo->label("q123_sequencial");
       	
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
         	
-          $result = $clissalvara->sql_record($clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and q123_inscr = {$pesquisa_chave} "));
+          $result = $clissalvara->sql_record($clissalvara->sql_queryConsultaCancelamento($campos, "{$sWhere} and q123_inscr = {$pesquisa_chave} {$sOrder}"));
           if($clissalvara->numrows!=0){
           	
             db_fieldsmemory($result,0);

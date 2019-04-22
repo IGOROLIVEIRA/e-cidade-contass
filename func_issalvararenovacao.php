@@ -111,7 +111,7 @@ $clissalvara->rotulo->label("q123_sequencial");
       	
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
         	
-          $result = $clissalvara->sql_record($clissalvara->sql_queryConsultaRenovacao(null, $campos, null, " q123_inscr = {$pesquisa_chave} "));
+          $result = $clissalvara->sql_record($clissalvara->sql_queryConsultaRenovacao(null, $campos, " q123_sequencial DESC limit 1 ", " q123_inscr = {$pesquisa_chave} "));
           if($clissalvara->numrows!=0){
           	
             db_fieldsmemory($result,0);
