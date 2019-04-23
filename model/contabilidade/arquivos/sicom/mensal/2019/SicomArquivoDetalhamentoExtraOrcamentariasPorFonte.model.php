@@ -123,7 +123,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   				order by c61_reduz  ";
 
   	    $rsContasExtra = db_query($sSqlExt) or die($sSqlExt);
-		// db_criatabela($rsContasExtra);
+		//db_criatabela($rsContasExtra);
+
 	    // matriz de entrada
     	$what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô',
     			'ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
@@ -152,7 +153,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 
 
-	       		if( !isset($aExt10Agrupodo[$aHash]) ){
+	       		if (!isset($aExt10Agrupodo[$aHash]) ){
 
 					$cExt10 = new cl_ext102019();
 
@@ -167,44 +168,50 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 		       		$cExt10->si124_instit			= db_getsession("DB_instit");
 		       		$cExt10->extras					= array();
 
-					/*
+                    /*
 					 * VERIFICA SE NO EM ALGUMA REMESSA ENVIADA O CODEXT FOI IMFORMADO, CASO NÃO TENHA ENCONTRATO CRIA UM NOVO
 					 */
-          $sSqlVerifica  = "SELECT 1 FROM ext102019
-                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                               AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento ."'
-                               AND si124_subtipo         = '".$cExt10->si124_subtipo."'
-                               AND si124_desdobrasubtipo = '". $cExt10->si124_desdobrasubtipo ."'
-                               AND si124_mes             <= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
-					$sSqlVerifica  .= " UNION ALL
-                            SELECT 1 FROM ext102017
-                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
-                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
-					$sSqlVerifica  .= " UNION ALL
-                            SELECT 1 FROM ext102016
-                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
-                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
-          $sSqlVerifica  .= " UNION ALL
-                            SELECT 1 FROM ext102015
-                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
-                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
-          $sSqlVerifica .= " UNION ALL
-                            SELECT 1 FROM ext102014
-                            WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                            AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-                            AND si124_subtipo         = '".$oContaExtra->subtipo."'
-                            AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."' ";
+                   $sSqlVerifica  = "SELECT 1 FROM ext102019
+                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                       AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
+                                       AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                       AND si124_desdobrasubtipo = '".$cExt10->si124_desdobrasubtipo."'
+                                       AND si124_mes             <= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
+                $sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102018
+                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                       AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
+                                       AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                       AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
+                $sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102017
+                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                       AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
+                                       AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                       AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
+                $sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102016
+                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                       AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
+                                       AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                       AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
+                $sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102015
+                                     WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                       AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento."'
+                                       AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                       AND si124_desdobrasubtipo =  '".$cExt10->si124_desdobrasubtipo."' ";
+                $sSqlVerifica  .= " UNION ALL
+                                    SELECT 1 FROM ext102014
+                                    WHERE si124_codorgao        = '".$cExt10->si124_codorgao."'
+                                      AND si124_tipolancamento    = '".$cExt10->si124_tipolancamento."'
+                                      AND si124_subtipo           = '".$cExt10->si124_subtipo."'
+                                      AND si124_desdobrasubtipo   = '".$cExt10->si124_desdobrasubtipo."' ";
 
 		       		$rsResulVerifica = db_query($sSqlVerifica) or die ($sSqlVerifica);
 					// echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
 
-		       		if ((pg_num_rows($rsResulVerifica) == 0) || (pg_num_rows($rsResulVerifica) != 0 && $this->sDataFinal['5'].$this->sDataFinal['6'] == 1)  ) {
+		       		if (pg_num_rows($rsResulVerifica) == 0) {
 
 		       			$cExt10->incluir(null);
 
@@ -229,7 +236,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 				/*
 				 * pegar todas as fontes de recursos movimentadas para cada codext
 				 */
-				$sSql20Fonte  = "   SELECT DISTINCT codext,fonte  from (
+				$sSql20Fonte  = "   SELECT DISTINCT codext, o15_codtri fonte  from (
    								    select c61_reduz  as codext,0 as contrapart,o15_codigo as fonte
 									  from conplano
 								inner join conplanoreduz on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
@@ -277,10 +284,13 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 									   and DATE_PART('YEAR',conlancamdoc.c71_data) = ".db_getsession("DB_anousu")."
 									   and DATE_PART('MONTH',conlancamdoc.c71_data) <= ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 									   and conlancaminstit.c02_instit = ".db_getsession("DB_instit")."
-								  ) as extfonte order by codext,fonte";
+								  ) as extfonte 
+								  join orctiporec on fonte::varchar = o15_codigo::varchar or fonte::varchar = o15_codtri::varchar
+								  order by codext,fonte";
 
 				$rsExt20FonteRecurso = db_query($sSql20Fonte);// or die($sSql20Fonte);
-				// echo "Movimento";db_criatabela($rsExt20FonteRecurso);
+				// echo "Movimento";
+                //db_criatabela($rsExt20FonteRecurso);
 				for ($iC = 0;$iC < pg_num_rows($rsExt20FonteRecurso); $iC++) {
 					$Hash20 = '';
 					$oContaExtraFonte = db_utils::fieldsMemory($rsExt20FonteRecurso, $iC);
@@ -334,6 +344,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						$cExt20->si165_instit                = db_getsession("DB_instit");
 						$cExt20->ext30                       = array();
 						$aExt20[$Hash20]                     = $cExt20;
+
 					}else{
 
 						$aExt20[$Hash20]->si165_vlsaldoanteriorfonte  += $saldoanterior;
