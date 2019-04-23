@@ -306,15 +306,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           /**
           * Adicionada consulta abaixo para verificação da data de cadastro da conta
           **/
-          $sSqlDtCad = "SELECT date_part('MONTH', k13_dtimplantacao),
+          $sSqlDtCad = "SELECT k13_dtimplantacao,
                                si09_codorgaotce,
                                CASE
-                                   WHEN c61_codtce IN (0, NULL) THEN c61_reduz
+                                   WHEN c61_codtce = 0 OR c61_codtce IS NULL THEN c61_reduz
                                    ELSE c61_codtce
                                END AS codctb
                         FROM conplanoconta 
                         JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu) 
-                        JOIN saltes ON (k13_reduz, date_part('YEAR', k13_dtimplantacao)::int4) = (c61_reduz, c61_anousu) 
+                        JOIN saltes ON (k13_reduz) = (c61_reduz)
                         LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit 
                         WHERE si09_codorgaotce = $oRegistro10->si09_codorgaotce 
                           AND c63_banco = '$oRegistro10->c63_banco'
@@ -322,14 +322,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                           AND c63_dvagencia = '$oRegistro10->c63_dvagencia' 
                           AND c63_conta = '$oRegistro10->c63_conta'
                           AND c63_dvconta = '$oRegistro10->c63_dvconta' 
-                          AND c63_tipoconta = CASE 
-                                                  WHEN c63_tipoconta IN (2,3) 
-                                                  THEN $oRegistro10->tipoconta 
-                                              ELSE 1 END
+                          AND (($oRegistro10->tipoconta IN (2,3) AND c63_tipoconta IN (2,3)) OR ($oRegistro10->tipoconta = 1 AND c63_tipoconta = 1))
                           AND c61_instit = " . db_getsession('DB_instit') ."
-                          AND date_part('MONTH',k13_dtimplantacao) = '" . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."'";
+                          AND c61_anousu = " . db_getsession('DB_anousu');
 
           $rsResultDtCad = db_query($sSqlDtCad);
+          $oDtCadastro = db_utils::fieldsMemory($rsResultDtCad, 0);
           //echo $sSqlDtCad."<br>";
           //db_criatabela($rsResultDtCad);
 
@@ -349,16 +347,19 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                   }
               }
 
-              /*
-               * Verificação se a data de cadastro da conta está dentro do período de geração do arquivo.
-               * */
+          /*
+           * Verificação se a data de cadastro da conta está dentro do período de geração do arquivo.
+           * */
 
-          } elseif (pg_num_rows($rsResultVerifica) == 0 && pg_num_rows($rsResultDtCad) != 0){
+          } elseif ((pg_num_rows($rsResultVerifica) == 0) && ($oDtCadastro->k13_dtimplantacao <= $this->sDataFinal)) {
+
                   $cCtb10->incluir(null);
+
                   if ($cCtb10->erro_status == 0) {
                       throw new Exception($cCtb10->erro_msg);
                   }
           }
+
           $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
           $sql = "select * from  acertactb where si95_reduz =".$oRegistro10->codctb ;
           $rsCtb = db_query($sql);
@@ -515,7 +516,21 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                          WHEN c71_coddoc IN (101, 116)
                                               AND substr(o57_fonte,0,3) = '49' THEN 2
                                          WHEN c71_coddoc = 101 THEN 3
-                                         WHEN c71_coddoc IN (5, 35, 37)
+                                         WHEN c71_coddoc IN (35, 37)
+                                              AND (SELECT sum(CASE
+                                                                  WHEN c53_tipo = 31 THEN -1 * c70_valor
+                                                                  ELSE c70_valor
+                                                              END) AS valor
+                                                   FROM conlancamdoc
+                                                   JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                                                   JOIN conlancamord ON c71_codlan = c80_codlan
+                                                   JOIN conlancam ON c70_codlan = c71_codlan
+                                                   WHERE c53_tipo IN (31, 30)
+                                                       AND c70_data <= '" . $this->sDataFinal . "'
+                                                       AND c80_codord = (SELECT c80_codord FROM conlancamord
+                                                                         WHERE c80_codlan=c69_codlan
+                                                                         LIMIT 1)) >= 0 
+                                         OR c71_coddoc = 5
                                               AND (SELECT sum(CASE
                                                                   WHEN c53_tipo = 31 THEN -1 * c70_valor
                                                                   ELSE c70_valor
