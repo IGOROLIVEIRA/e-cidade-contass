@@ -42,127 +42,150 @@ $db_opcao = 22;
 $db_botao = false;
 
 if(isset($alterar) || isset($excluir) || isset($incluir)){
-  $sqlerro = false;
-/*
-$clliccomissaocgm->l31_codigo = $l31_codigo;
-$clliccomissaocgm->l31_liccomissao = $l31_liccomissao;
-$clliccomissaocgm->l31_numcgm = $l31_numcgm;
-*/
+    $sqlerro = false;
+    /*
+    $clliccomissaocgm->l31_codigo = $l31_codigo;
+    $clliccomissaocgm->l31_liccomissao = $l31_liccomissao;
+    $clliccomissaocgm->l31_numcgm = $l31_numcgm;
+    */
 }
 
 if(isset($incluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clliccomissaocgm->l31_licitacao = $l31_licitacao;
-    $clliccomissaocgm->incluir(null);
-    $erro_msg = $clliccomissaocgm->erro_msg;
-    if($clliccomissaocgm->erro_status==0){
-      $sqlerro=true;
+
+    //VERIFICA CPF E CNPJ ZERADOS OC 7037
+    if ($sqlerro==false) {
+        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$l31_numcgm}");
+        db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+
+        if (strlen($z01_cgccpf) == 14) {
+            if ($z01_cgccpf == '00000000000000') {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }
+
+        if (strlen($z01_cgccpf) == 11) {
+            if ($z01_cgccpf == '00000000000') {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }
+
     }
-    db_fim_transacao($sqlerro);
+    //FIM OC 7037
+
+    if($sqlerro==false){
+        db_inicio_transacao();
+        $clliccomissaocgm->l31_licitacao = $l31_licitacao;
+        $clliccomissaocgm->incluir(null);
+        $erro_msg = $clliccomissaocgm->erro_msg;
+        if($clliccomissaocgm->erro_status==0){
+            $sqlerro=true;
+        }
+        db_fim_transacao($sqlerro);
+
+        $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+
+        if ($clliclicita->numrows > 0) {
+
+            $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    and l31_tipo::int in (1,2,3,4,5,6,7)"));
+            if ($clliccomissaocgm->numrows == 7) {
+                $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+      </script>";
+                echo $script;
+            }
+
+        }else {
+
+            if ($l20_naturezaobjeto == 6) {
+
+                $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
+                if ($clliccomissaocgm->numrows == 9) {
+                    $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+      </script>";
+                    echo $script;
+                }
+
+            } else {
+                $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    and l31_tipo::int in (1,2,3,4,5,6,7,8)"));
+                if ($clliccomissaocgm->numrows == 8) {
+                    $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+      </script>";
+                    echo $script;
+                }
+            }
+
+        }
+
+    }
+}else if(isset($alterar)){
+    if($sqlerro==false){
+        db_inicio_transacao();
+        $clliccomissaocgm->l31_licitacao = $l31_licitacao;
+        $clliccomissaocgm->alterar($l31_codigo);
+        $erro_msg = $clliccomissaocgm->erro_msg;
+        if($clliccomissaocgm->erro_status==0){
+            $sqlerro=true;
+        }
+        db_fim_transacao($sqlerro);
+    }
+}else if(isset($excluir)){
+    if($sqlerro==false){
+        db_inicio_transacao();
+        $clliccomissaocgm->excluir($l31_codigo);
+        $erro_msg = $clliccomissaocgm->erro_msg;
+        if($clliccomissaocgm->erro_status==0){
+            $sqlerro=true;
+        }
+        db_fim_transacao($sqlerro);
+
+    }
+}else if(isset($opcao)){
+
+    $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_codigo=$l31_codigo"));
+
+    if($result!=false && $clliccomissaocgm->numrows>0){
+        db_fieldsmemory($result,0);
+    }
 
     $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
 
     if ($clliclicita->numrows > 0) {
 
-      $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
-      if ($clliccomissaocgm->numrows == 7) {
-        $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+        if ($clliccomissaocgm->numrows == 7) {
+            $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-        echo $script;
-      }
+            echo $script;
+        }
 
     }else {
 
-      if ($l20_naturezaobjeto == 6) {
+        if ($l20_naturezaobjeto == 6) {
 
-        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+            $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-        if ($clliccomissaocgm->numrows == 9) {
-          $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+            if ($clliccomissaocgm->numrows == 9) {
+                $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-          echo $script;
+                echo $script;
+            }
+
+        } else {
+            $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
+            if ($clliccomissaocgm->numrows == 8) {
+                $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+      </script>";
+                echo $script;
+            }
         }
 
-      } else {
-        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
-    and l31_tipo::int in (1,2,3,4,5,6,7,8)"));
-        if ($clliccomissaocgm->numrows == 8) {
-          $script = "<script>parent.document.formaba.liclicitem.disabled=false;
-      </script>";
-          echo $script;
-        }
-      }
-
     }
-
-  }
-}else if(isset($alterar)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clliccomissaocgm->l31_licitacao = $l31_licitacao;
-    $clliccomissaocgm->alterar($l31_codigo);
-    $erro_msg = $clliccomissaocgm->erro_msg;
-    if($clliccomissaocgm->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($excluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clliccomissaocgm->excluir($l31_codigo);
-    $erro_msg = $clliccomissaocgm->erro_msg;
-    if($clliccomissaocgm->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-
-  }
-}else if(isset($opcao)){
-
-  $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_codigo=$l31_codigo"));
-
-  if($result!=false && $clliccomissaocgm->numrows>0){
-     db_fieldsmemory($result,0);
-   }
-
-  $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
-
-  if ($clliclicita->numrows > 0) {
-
-    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
-    and l31_tipo::int in (1,2,3,4,5,6,7)"));
-    if ($clliccomissaocgm->numrows == 7) {
-      $script = "<script>parent.document.formaba.liclicitem.disabled=false;
-      </script>";
-      echo $script;
-    }
-
-  }else {
-
-    if ($l20_naturezaobjeto == 6) {
-
-      $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
-    and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-      if ($clliccomissaocgm->numrows == 9) {
-        $script = "<script>parent.document.formaba.liclicitem.disabled=false;
-      </script>";
-        echo $script;
-      }
-
-    } else {
-      $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
-    and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-      if ($clliccomissaocgm->numrows == 8) {
-        $script = "<script>parent.document.formaba.liclicitem.disabled=false;
-      </script>";
-        echo $script;
-      }
-    }
-
-  }
 }
 
 
@@ -181,69 +204,69 @@ l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_n
 ",null,"l31_codigo=$l31_codigo"));
 
 if($result!=false && $clliccomissaocgm->numrows>0){
-  db_fieldsmemory($result,0);
+    db_fieldsmemory($result,0);
 }
 
 $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
 
 if ($clliclicita->numrows > 0) {
 
-  $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
 
-  if ($clliccomissaocgm->numrows == 7) {
-    $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+    if ($clliccomissaocgm->numrows == 7) {
+        $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-    echo $script;
-  }
+        echo $script;
+    }
 
 }else {
 
-  if ($l20_naturezaobjeto == 6) {
+    if ($l20_naturezaobjeto == 6) {
 
-    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-    if ($clliccomissaocgm->numrows == 9) {
-      $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+        if ($clliccomissaocgm->numrows == 9) {
+            $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-      echo $script;
-    }
+            echo $script;
+        }
 
-  } else {
-    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    } else {
+        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-    if ($clliccomissaocgm->numrows == 8) {
-      $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+        if ($clliccomissaocgm->numrows == 8) {
+            $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-      echo $script;
+            echo $script;
+        }
     }
-  }
 
 }
 
 ?>
-<html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-	<?
-	include("forms/db_frmresplicitacao.php");
-	?>
-    </center>
-	</td>
-  </tr>
-</table>
-</body>
-</html>
+    <html>
+    <head>
+        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Expires" CONTENT="0">
+        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+        <link href="estilos.css" rel="stylesheet" type="text/css">
+    </head>
+    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+    <table width="790" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmresplicitacao.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
+    </body>
+    </html>
 <?
 if(isset($alterar) || isset($excluir) || isset($incluir)){
     db_msgbox($erro_msg);
@@ -252,7 +275,7 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
         echo "<script> document.form1.".$clliccomissaocgm->erro_campo.".focus();</script>";
     }
     if ($sqlerro==false){
-    	echo "<script>location.href='lic1_resplicitacao001.php?l31_licitacao=$l31_licitacao&l20_codtipocom=$l20_codtipocom';</script>";
+        echo "<script>location.href='lic1_resplicitacao001.php?l31_licitacao=$l31_licitacao&l20_codtipocom=$l20_codtipocom';</script>";
     }
 }
 ?>

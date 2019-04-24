@@ -120,6 +120,7 @@ switch($oParam->exec) {
             $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
             $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
             $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+            $oPosicao->cgccpf         = $oContrato->getContratado()->getCgccpf();
             array_push($oRetorno->posicoes, $oPosicao);
 
         }

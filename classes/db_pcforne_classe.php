@@ -222,7 +222,7 @@ function incluir ($pc60_numcgm){
    return false;
  }
  if($this->pc60_obs == null && $this->fisica_juridica == 'j'){
-  $this->erro_sql = " Campo Objeto Social nao Informado.";
+  $this->erro_sql = " Campo Objeto Social nao Informadooooooooooooooooooo.";
   $this->erro_campo = "pc60_obs";
   $this->erro_banco = "";
   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -264,6 +264,16 @@ if($this->pc60_cnpjcpf == null && $this->fisica_juridica == 'j'){
   $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
   $this->erro_status = "0";
   return false;
+}
+
+if($this->pc60_cnpjcpf == '00000000000000' || $this->pc60_cnpjcpf == '00000000000'){
+    $this->erro_sql = "ERRO: Número do CPF/CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+    $this->erro_campo = "pc60_cnpjcpf";
+    $this->erro_banco = "";
+    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    $this->erro_status = "0";
+    return false;
 }
        /**
         * Validação da data de registro do CVM e o seu numero não são obrigatórias conforme solicitado pela ocorrencia 1236

@@ -106,14 +106,22 @@ $rotulo->label("e60_numemp");
       
       $dbwhere=" e60_instit = ".db_getsession("DB_instit");
       if (!isset($pesquisa_chave)) {
-	      
+	      $campos = "pagordem.e50_codord,
+       e60_numemp,
+       e60_codemp,
+       pagordem.e50_data,
+       pagordem.e50_obs,
+       e53_valor,
+       e53_vlranu,
+       e53_vlrpag,
+       cgm.z01_cgccpf";
 	      
         if (isset($campos)==false) {
         	
            if (file_exists("funcoes/db_func_pagordem.php")==true) {
              include("funcoes/db_func_pagordem.php");
            } else {
-             $campos = "pagordem.*";
+             $campos = "pagordem.*,cgm.z01_cgccpf";
            }
            
         }
@@ -123,7 +131,7 @@ $rotulo->label("e60_numemp");
 	              $sql = $clpagordem->sql_query_pagordemagenda("",$campos,"e50_codord","$dbwhere and e50_codord = '$chave_e50_codord' and $whereage ");
            } else {
 	              $sql = $clpagordem->sql_query_pagordemele("",$campos,"e50_codord","$dbwhere and e50_codord = '$chave_e50_codord' ");
-           }                
+           }
         } else if(isset($chave_e50_numemp) && (trim($chave_e50_numemp)!="") ) {
            if (strlen($whereage) > 0) {
 	              $sql = $clpagordem->sql_query_pagordemagenda("",$campos,"e50_numemp","$dbwhere and e50_numemp like '$chave_e50_numemp%' and $whereage ");
@@ -161,7 +169,7 @@ $rotulo->label("e60_numemp");
 	      if (isset($sql)) {
 		    //echo $sql;
           db_lovrot($sql,15,"()","",$funcao_js);
-	      }  
+	      }
 	      
       } else {
         

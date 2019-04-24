@@ -107,14 +107,14 @@ switch ($oParam->exec) {
       $oRetorno->message = urlencode("Encerramento do periodo contabil para ". implode('/',array_reverse(explode('-',$c99_data))) );
       break;
     }
-  
+
     try {
 
       /**
        * corrigimos as strings antes de salvarmos os dados
        */
       foreach ($oParam->aAutorizacoes as $oAutorizacao) {
-      	 
+
         $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
         $oAutorizacao->sContato          = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sContato))));
         $oAutorizacao->sOutrasCondicoes  = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sOutrasCondicoes))));
@@ -125,16 +125,38 @@ switch ($oParam->exec) {
         foreach ($oAutorizacao->itens as $oItem) {
           $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
         }
+
+          //VERIFICA CPF E CNPJ ZERADOS OC 7037
+          $sqlerro = false;
+          $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$oAutorizacao->cgm}");
+          db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+
+          if (strlen($z01_cgccpf) == 14) {
+              if ($z01_cgccpf == '00000000000000') {
+                  $sqlerro = true;
+                  $oRetorno->message = urlencode("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+              }
+          }
+
+          if (strlen($z01_cgccpf) == 11) {
+              if ($z01_cgccpf == '00000000000') {
+                  $sqlerro = true;
+                  $oRetorno->message = urlencode("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+              }
+          }
       }
                                                           
       db_inicio_transacao();
-      $oProcessoCompra        = new ProcessoCompras($oParam->iCodigo);
-      $oRetorno->autorizacoes = $oProcessoCompra->gerarAutorizacoes($oParam->aAutorizacoes);
-      db_fim_transacao(false);
-      
-      $oRetorno->status  = 1;
-      $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
-      
+      if($sqlerro = false) {
+
+
+          $oProcessoCompra = new ProcessoCompras($oParam->iCodigo);
+          $oRetorno->autorizacoes = $oProcessoCompra->gerarAutorizacoes($oParam->aAutorizacoes);
+          db_fim_transacao(false);
+
+          $oRetorno->status = 1;
+          $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
+      }
     } catch (Exception $eErro) {
 
       $oRetorno->status  = 2;

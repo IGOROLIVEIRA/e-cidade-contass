@@ -95,6 +95,28 @@ if (isset ($alterar) || isset ($excluir) || isset ($incluir) || isset ($verifica
         }
     }
 
+    //VERIFICA CPF E CNPJ ZERADOS OC 7037
+    if (isset ($incluir)) {
+        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm}");
+        db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+
+        if (strlen($z01_cgccpf) == 14) {
+            if ($z01_cgccpf == '00000000000000') {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }
+
+        if (strlen($z01_cgccpf) == 11) {
+            if ($z01_cgccpf == '00000000000') {
+                $sqlerro = true;
+                $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
+            }
+        }
+
+    }
+    //FIM OC 7037
+
 }
 
 $sSql="SELECT z01_cgccpf
