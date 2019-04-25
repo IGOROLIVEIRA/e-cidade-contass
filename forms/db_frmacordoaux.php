@@ -1164,7 +1164,7 @@ db_app::load("dbtextFieldData.widget.js");
             }else{
                 js_OpenJanelaIframe('top.corpo.iframe_acordo',
                     'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm',
+                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf',
                     'CGM Contratado',
                     true,
                     '0');
@@ -1182,7 +1182,7 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 'top.corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
                 'Pesquisa',
                 true,
                 '0',
@@ -1196,7 +1196,7 @@ db_app::load("dbtextFieldData.widget.js");
                 js_OpenJanelaIframe(
                     'top.corpo.iframe_acordo',
                     'db_iframe_contratado',
-                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
                     'Pesquisa',
                     false,
                     '0',
@@ -1209,7 +1209,21 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado(erro, chave) {
+    function js_mostracontratado(erro, chave, z01_cgccpf) {
+
+        if(z01_cgccpf.length = 11){
+            if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }
+
+        if(z01_cgccpf.length = 14){
+            if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }
 
         $('nomecontratado').value = chave;
         if (erro == true) {
@@ -1226,7 +1240,21 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2) {
+    function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
+
+        if(z01_cgccpf.length = 11){
+            if(z01_cgccpf == '00000000000'){
+                alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }
+
+        if(z01_cgccpf.length = 14){
+            if(z01_cgccpf == '00000000000000'){
+                alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                return false
+            }
+        }
 
         $('ac16_contratado').value = chave2;
         $('nomecontratado').value = chave1;

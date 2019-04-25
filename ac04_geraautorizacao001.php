@@ -522,6 +522,21 @@ if($x->consultarDataDoSistema == true){
         if (oRetorno.status == 1) {
 
             oRetorno.posicoes.each(function (oPosicao, iLinha) {
+                let z01_cgccpf = oPosicao.cgccpf;
+
+                if(z01_cgccpf.length = 11){
+                    if(z01_cgccpf == '00000000000'){
+                        alert("ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente");
+                        return false
+                    }
+                }
+
+                if(z01_cgccpf.length = 14){
+                    if(z01_cgccpf == '00000000000000'){
+                        alert("ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente");
+                        return false
+                    }
+                }
 
                 var aLinha = new Array();
                 aLinha[0]  = oPosicao.codigo;
