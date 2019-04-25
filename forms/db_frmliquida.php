@@ -363,7 +363,7 @@ function js_saida(oAjax){
         }
       }
 
-        if(obj.Zerado = true){
+        if(obj.Zerado == true){
             alert('"ERRO: Número do CPF/CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente"');
             location.href = 'emp1_empliquida001.php';
         }
