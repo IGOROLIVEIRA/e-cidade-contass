@@ -322,7 +322,7 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
   $('pesquisar').disabled = false;
   $('limpar').disabled    = false;
   var oMessageBoard = new messageBoard('msg1',
-                                       'Liberar Empenhos para Ordem de Compra',
+                                       'Liberar Empenhos para Ordem de Compra e Liquidação',
                                        'Somente os empenhos selecionados serão liberados para geração de Ordem de Compra. Os Empenhos que estiverem desmarcados continuarão ou serão bloqueados',
                                        $('windowwindowEmpenhosLiberados_content')
                                       );

@@ -117,6 +117,51 @@ $objEmpenho->setEncode(true);
 
 $dtDataSessao = db_getsession("DB_datausu");
 
+$clempparametro       = new cl_empparametro;
+$clempempenholiberado = new cl_empempenholiberado;
+$lBloquear = false;
+$result    = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu")));
+if($result != false && $clempparametro->numrows > 0){
+    $oParam = db_utils::fieldsMemory($result,0);
+}
+if ($oParam->e30_liberaempenho == 't') {
+
+    if (isset($objJson->iEmpenho) && !empty($objJson->iEmpenho)) {
+        $sCampos = "empempenholiberado.*";
+        $sWhere  = "e22_numemp = {$objJson->iEmpenho} ";
+        $sWhere .= " AND EXISTS(SELECT 1 FROM empempenholiberado WHERE e22_numemp= e60_numemp)";
+        $sWhere .= " AND NOT EXISTS(SELECT 1 FROM desdobramentosliberadosordemcompra WHERE pc33_codele = e64_codele ";
+        $sWhere .= " AND pc33_anousu = ".db_getsession("DB_anousu").")";
+
+        $sSqlEmpenhosLiberados  = $clempempenholiberado->sql_query(null,$sCampos,null,$sWhere);
+        $rsSqlEmpenhosLiberados = $clempempenholiberado->sql_record($sSqlEmpenhosLiberados);
+
+        if ($clempempenholiberado->numrows == 0) {
+            $lBloquear = true;
+        }
+    }
+}
+//var_dump($lBloquear);exit("saiu");
+
+//VERIFICA CPF E CNPJ ZERADOS OC 7037
+    $result_cgmzerado = db_query("select z01_cgccpf from empempenho inner join cgm on z01_numcgm = e60_numcgm where e60_numemp = {$objJson->iEmpenho}");
+    db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+    $zerado = false;
+
+    if (strlen($z01_cgccpf) == 14) {
+        if ($z01_cgccpf == '00000000000000') {
+            $zerado = true;
+        }
+    }
+
+    if (strlen($z01_cgccpf) == 11) {
+        if ($z01_cgccpf == '00000000000') {
+            $zerado = true;
+        }
+    }
+
+//FIM OC 7037
+
 
 switch ($objJson->method) {
 
@@ -179,7 +224,9 @@ switch ($objJson->method) {
     $oGrupoElemento->iGrupo = "";
     $oGrupoElemento->sGrupo = "";
     $oEmpenho->oGrupoElemento = $oGrupoElemento;
-    echo $json->encode($oEmpenho);
+      $oEmpenho->LiberadoLic = $lBloquear;
+      $oEmpenho->Zerado = $zerado;
+      echo $json->encode($oEmpenho);
 
   }
   else {
@@ -205,6 +252,8 @@ switch ($objJson->method) {
             $oGrupoElemento->iGrupo = $iGrupo;
             $oGrupoElemento->sGrupo = urlencode($sDescricao);
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
+            $oEmpenho->LiberadoLic = $lBloquear;
+            $oEmpenho->Zerado = $zerado;
             echo $json->encode($oEmpenho);
 
 
@@ -216,18 +265,21 @@ switch ($objJson->method) {
             $oGrupoElemento->iGrupo = "";
             $oGrupoElemento->sGrupo = "";
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
-            echo $json->encode($oEmpenho);
+              $oEmpenho->LiberadoLic = $lBloquear;
+              $oEmpenho->Zerado = $zerado;
+              echo $json->encode($oEmpenho);
           }
         }
       }
       else {
-
         // echo $objEmpenho->empenho2Json('',$item);
         $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
         $oGrupoElemento->iGrupo = "";
         $oGrupoElemento->sGrupo = "";
         $oEmpenho->oGrupoElemento = $oGrupoElemento;
-        echo $json->encode($oEmpenho);
+          $oEmpenho->LiberadoLic = $lBloquear;
+          $oEmpenho->Zerado = $zerado;
+          echo $json->encode($oEmpenho);
       }
 
     }
@@ -239,7 +291,7 @@ switch ($objJson->method) {
       $objEmpenho->setCredor($objJson->z01_credor);
     }
 
-    try {
+        try {
 
       $dtDataSessao = date("Y-m-d", $dtDataSessao);
       $oDaoConlancamEmp = new cl_conlancamemp();
