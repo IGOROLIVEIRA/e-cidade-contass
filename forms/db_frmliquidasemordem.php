@@ -651,6 +651,16 @@ function js_saida(oAjax) {
          saida += "</tr>";
       }
     }
+    if(obj.liberadolic == true){
+        alert('"Usuário: Empenho não liberado para liquidação"');
+        location.href = 'emp4_liquidarsemordem001.php';
+    }
+
+    if(obj.Zerado == true){
+        alert('"ERRO: Número do CPF/CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente"');
+        location.href = 'emp4_liquidarsemordem001.php';
+    }
+
     saida += "<tr style='height:auto'><td>&nbsp;</td></tr>";
     $('dados').innerHTML          = saida;
 
