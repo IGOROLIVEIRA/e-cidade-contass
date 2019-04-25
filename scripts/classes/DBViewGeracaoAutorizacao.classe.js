@@ -1308,10 +1308,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         });
 
         $('btnGerarAutorizacao').observe('click', function() {
-            // var [mensagem, retorno] = js_checaCpfCnpj(cgccpf);
-            // if(retorno)
                 me.processarAutorizacoes();
-            // else alert(mensagem);
         });
     }
 

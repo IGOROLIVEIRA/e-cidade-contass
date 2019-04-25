@@ -145,10 +145,9 @@ switch ($oParam->exec) {
               }
           }
       }
-                                                          
-      db_inicio_transacao();
-      if($sqlerro = false) {
 
+        db_inicio_transacao();
+      if($sqlerro == false) {
 
           $oProcessoCompra = new ProcessoCompras($oParam->iCodigo);
           $oRetorno->autorizacoes = $oProcessoCompra->gerarAutorizacoes($oParam->aAutorizacoes);
