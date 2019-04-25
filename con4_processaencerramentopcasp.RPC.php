@@ -146,6 +146,30 @@ try {
         $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS);
       }
 
+        /*Encerramento Patrimonial OC 8874*/
+        $c99_anousu = db_getsession("DB_anousu");
+        $c99_instit = db_getsession("DB_instit");
+        $c99_data = $oParam->sData;
+        $c99_usuario = db_getsession("DB_id_usuario");
+
+        $clcondataconf = new cl_condataconf();
+        $clcondataconf->c99_anousu  = $c99_anousu;
+        $clcondataconf->c99_instit  = $c99_instit;
+        $clcondataconf->c99_data    = $c99_data;
+        $clcondataconf->c99_datapat = $c99_data;
+        $clcondataconf->c99_usuario = $c99_usuario;
+        $clcondataconf->c99_anousu  = $c99_anousu;
+
+        $rsConDataConf = $clcondataconf->sql_record($clcondataconf->sql_query_file($c99_anousu,$c99_instit));
+
+        //  Se não houver um registro criado
+        if($rsConDataConf == false || $clcondataconf->numrows == 0) {
+            $clcondataconf->incluir($c99_anousu,$c99_instit);
+        }else{
+            $clcondataconf->alterar($c99_anousu,$c99_instit);
+        }
+        /*fim OC 8874*/
+
       break;
 
     case "desprocessarEncerramento":

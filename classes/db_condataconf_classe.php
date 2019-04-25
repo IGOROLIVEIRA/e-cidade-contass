@@ -49,12 +49,14 @@ class cl_condataconf {
    var $c99_data_ano = null;
    var $c99_data = null;
    var $c99_usuario = 0;
+   var $c99_datapat = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c99_anousu = int4 = Exercício
                  c99_instit = int4 = Instittuição
                  c99_data = date = Data Limite
                  c99_usuario = int4 = Usuário
+                 c99_datapat = date = data patrimonial
                  ";
    //funcao construtor da classe
    function cl_condataconf() {
@@ -85,6 +87,7 @@ class cl_condataconf {
          }
        }
        $this->c99_usuario = ($this->c99_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["c99_usuario"]:$this->c99_usuario);
+       $this->c99_datapat = ($this->c99_datapat == ""?@$GLOBALS["HTTP_POST_VARS"]["c99_datapat"]:$this->c99_datapat);
      }else{
        $this->c99_anousu = ($this->c99_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c99_anousu"]:$this->c99_anousu);
        $this->c99_instit = ($this->c99_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["c99_instit"]:$this->c99_instit);
@@ -128,12 +131,14 @@ class cl_condataconf {
                                       ,c99_instit
                                       ,c99_data
                                       ,c99_usuario
+                                      ,c99_datapat
                        )
                 values (
                                 $this->c99_anousu
                                ,$this->c99_instit
                                ,".($this->c99_data == "null" || $this->c99_data == ""?"null":"'".$this->c99_data."'")."
                                ,$this->c99_usuario
+                               ,".($this->c99_datapat == "null" || $this->c99_datapat == ""?"null":"'".$this->c99_datapat."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -299,6 +304,10 @@ class cl_condataconf {
          $virgula = ",";
        }
      }
+     if(trim($this->c99_datapat)!="" ){
+       $sql  .= $virgula." c99_datapat = '$this->c99_datapat' ";
+       $virgula = ",";
+     }
      if(trim($this->c99_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c99_usuario"])){
        $sql  .= $virgula." c99_usuario = $this->c99_usuario ";
        $virgula = ",";
@@ -411,7 +420,7 @@ class cl_condataconf {
                     $resac = db_query("insert into db_acount values($acount,1350,8874,'".AddSlashes(pg_result($resaco,$conresaco,'c99_usuario'))."','$this->c99_usuario',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             }
         }
-
+            die($sql);
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
