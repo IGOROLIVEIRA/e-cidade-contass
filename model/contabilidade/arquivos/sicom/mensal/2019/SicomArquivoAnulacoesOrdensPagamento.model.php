@@ -245,9 +245,9 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             $sSqlExtornos .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc ";
             $sSqlExtornos .= " JOIN conlancamord ON c71_codlan = c80_codlan ";
             $sSqlExtornos .= " JOIN conlancam ON c70_codlan = c71_codlan ";
-            $sSqlExtornos .= " WHERE c53_tipo IN (21, 20) ";
-            $sSqlExtornos .= "     AND c70_data <= '" . $this->sDataFinal . "' ";
+            $sSqlExtornos .= " WHERE c53_tipo IN (31, 30) ";
             $sSqlExtornos .= "     AND c80_codord = {$oAnulacoes->e50_codord} ";
+            $sSqlExtornos .= "     AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "' ";
 
             $rsQuantExtornos = db_query($sSqlExtornos);
 
