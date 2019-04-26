@@ -236,7 +236,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 				/*
 				 * pegar todas as fontes de recursos movimentadas para cada codext
 				 */
-				$sSql20Fonte  = "   SELECT DISTINCT codext, o15_codtri fonte  from (
+				$sSql20Fonte  = "   SELECT DISTINCT codext, fonte  from (
    								    select c61_reduz  as codext,0 as contrapart,o15_codigo as fonte
 									  from conplano
 								inner join conplanoreduz on conplanoreduz.c61_codcon = conplano.c60_codcon and conplanoreduz.c61_anousu = conplano.c60_anousu
@@ -284,9 +284,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 									   and DATE_PART('YEAR',conlancamdoc.c71_data) = ".db_getsession("DB_anousu")."
 									   and DATE_PART('MONTH',conlancamdoc.c71_data) <= ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 									   and conlancaminstit.c02_instit = ".db_getsession("DB_instit")."
-								  ) as extfonte 
-								  join orctiporec on fonte::varchar = o15_codigo::varchar or fonte::varchar = o15_codtri::varchar
-								  order by codext,fonte";
+								  ) as extfonte order by codext,fonte";
 
 				$rsExt20FonteRecurso = db_query($sSql20Fonte);// or die($sSql20Fonte);
 				// echo "Movimento";
