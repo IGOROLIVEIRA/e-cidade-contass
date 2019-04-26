@@ -420,7 +420,6 @@ class cl_condataconf {
                     $resac = db_query("insert into db_acount values($acount,1350,8874,'".AddSlashes(pg_result($resaco,$conresaco,'c99_usuario'))."','$this->c99_usuario',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             }
         }
-            die($sql);
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
