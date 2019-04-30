@@ -340,6 +340,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->agencia          = $pc63_agencia;
    $pdf1->agenciadv        = $pc63_agencia_dig;
    $pdf1->conta            = $pc63_conta;
+   $pdf1->tipoconta        = $pc63_tipoconta;
    $pdf1->contadv          = $pc63_conta_dig;
    $pdf1->numcgm           = $z01_numcgm;
    $pdf1->nome             = $z01_nome;
