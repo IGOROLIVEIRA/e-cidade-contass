@@ -91,7 +91,12 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     if (trim($this->contadv)!="") {
       $contadv = "-".$this->contadv;
     }
-    $this->objpdf->text($xcol+131,$xlin+23,': '.$this->banco.' / '.$this->agencia.$agenciadv.' / '.$this->conta.$contadv);
+    if($this->tipoconta == 1){
+        $abreviatura = "C/C";
+    }else{
+        $abreviatura = "C/I";
+    }
+    $this->objpdf->text($xcol+131,$xlin+23,': '.$this->banco.' / '.$this->agencia.$agenciadv.' / '.$this->conta.$contadv .' - '.$abreviatura);
   }
   $this->objpdf->text($xcol+122,$xlin+27,': '.$this->telef);
   $this->objpdf->text($xcol+157,$xlin+27,': '.$this->fax);
