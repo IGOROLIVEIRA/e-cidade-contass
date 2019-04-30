@@ -316,22 +316,24 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     c61_reduz,
                     c60_nregobrig,
                     c60_identificadorfinanceiro,
-                    case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo
+                    case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo,c18_contacorrente
                          from
                             (select 10 as tiporegistro,
                                     case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
                                     (select sum(c69_valor) as credito from conlancamval where c69_credito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as credito,
                                     (select sum(c69_valor) as debito from conlancamval where c69_debito = c61_reduz and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as debito,
                                     (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
-                                    c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo
+                                    c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo,c18_contacorrente 
                               from contabilidade.conplano
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
+                        left join conplanocontacorrente on c60_anousu=c18_anousu and c60_codcon=c18_codcon
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                              where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-
+//c60_estrut like '62213%' and
         $rsReg10 = db_query($sqlReg10);
+
 
         $aDadosAgrupados10 = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsReg10); $iCont++) {
@@ -418,6 +420,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalancete->si177_instit = db_getsession("DB_instit");
                 $obalancete->nregobrig = $oReg10->c60_nregobrig;
                 $obalancete->codcon = $oReg10->codcon;
+                $obalancete->c18_contacorrente = $oReg10->c18_contacorrente;
                 $obalancete->identificadorfinanceiro = $oReg10->c60_identificadorfinanceiro;
                 $obalancete->naturezasaldo = $oReg10->c60_naturezasaldo;
                 $obalancete->contas = array();
@@ -466,6 +469,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             if ($oContas10->nregobrig == 11) {
 
+
                 /*
                  * SQL PARA PEGA AS DOTACOES QUE DIVERAM MOVIMENTACAO NO MES
                  */
@@ -493,7 +497,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  inner join infocomplementaresinstit on  o58_instit = si09_instit
 					  inner join infocomplementares on si09_instit = si08_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
-                    $nContaCorrente = 101;
+                    $nContaCorrente = $oContas10->c18_contacorrente;
 
                 } else {
                     if (substr($oContas10->si177_contacontaabil, 0, 5) == '62213') {
@@ -515,20 +519,23 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  from conlancamval
 					  inner join contacorrentedetalheconlancamval on c69_sequen = c28_conlancamval
 					  inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
-					  inner join empempenho on c19_numemp = e60_numemp
-					  join empelemento on e64_numemp = e60_numemp
-					  join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
-					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
-					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-					  join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
-					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
-					  JOIN orctiporec ON o58_codigo = o15_codigo
+					  left join conlancamemp on c69_codlan = c75_codlan
+					  left join empempenho on e60_numemp = c75_numemp
+					  left join empelemento on e64_numemp = c75_numemp
+					  left join orcdotacao on c19_orcdotacao = o58_coddot and c19_orcdotacaoanousu = o58_anousu 
+					  left join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+					  left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+					  left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+					  left JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+					  left JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}
 					  and (c69_credito in (" . implode(',', $oContas10->contas) . ") or c69_debito in (" . implode(',', $oContas10->contas) . "))";
                         //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
-                        $nContaCorrente = 102;
+                        $nContaCorrente = $oContas10->c18_contacorrente;
+
+                       // echo $sSqlDotacoes; exit;
 
                     } else {
 
@@ -560,12 +567,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
                         //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
-                        $nContaCorrente = 102;
+                        $nContaCorrente = $oContas10->c18_contacorrente;
 
                     }
                 }
 
                 $rsDotacoes = db_query($sSqlDotacoes) or die(pg_last_error());
+//                echo $sSqlDotacoes;
+//                db_criatabela($rsDotacoes);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsDotacoes); $iCont11++) {
 
