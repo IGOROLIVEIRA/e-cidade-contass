@@ -149,8 +149,8 @@ foreach ($aDados as $oDadosLotacao) {
         $pdf->cell(115,$alt,'PROGRAMA'  ,1,1,"L",1);
 
         $pdf->setfont('arial','BI',7);
-        $pdf->cell(30,$alt,'ELEMENTO PRINCIPAL'              , 1,0,"L",1);
-        $pdf->cell(85,$alt,'ELEMENTO NOVO - DESCRIÇÃO'       , 1,0,"L",1);
+        $pdf->cell(15,$alt,'ELEMENTO PRINCIPAL'              , 1,0,"L",1);
+        $pdf->cell(100,$alt,'ELEMENTO NOVO - DESCRIÇÃO'       , 1,0,"L",1);
         $pdf->cell(70,$alt,'RECURSO - DESCRIÇÃO'             , 1,0,"L",1);
         $pdf->cell(75,$alt,'PROJETO / ATIVIDADE - DESCRIÇÃO' , 1,0,"L",1);
         $pdf->cell(15,$alt,'EXERCÍCIO'                       , 1,1,"L",1);
@@ -195,8 +195,8 @@ foreach ($aDados as $oDadosLotacao) {
      	
      	foreach ($oDadosLotacao->aElementosSecundarios as $oElementos) {
      		
-		     $pdf->cell(30,$alt,strtoupper($oElementos->rh28_codeledef)                                  ,0,0,"L",$pre);
-		     $pdf->cell(85,$alt,strtoupper($oElementos->o56_codele_novo . " - ". $oElementos->o56_descr) ,0,0,"L",$pre);
+		     $pdf->cell(15,$alt,strtoupper($oElementos->rh28_codeledef)                                  ,0,0,"L",$pre);
+		     $pdf->cell(100,$alt,strtoupper($oElementos->o56_codele_novo . " - ". $oElementos->o56_descr) ,0,0,"L",$pre);
 		     $pdf->cell(70,$alt,strtoupper($oElementos->o15_codigo . " - " . $oElementos->o15_descr)     ,0,0,"L",$pre);
 		     $pdf->cell(75,$alt,strtoupper($oElementos->o55_projativ . " - "  . $oElementos->o55_descr)  ,0,0,"L",$pre);
 		     $pdf->cell(15,$alt,strtoupper($oElementos->o55_anousu)                                      ,0,1,"L",$pre);
