@@ -494,7 +494,7 @@ if ($tipo=="s"){
   $xtipo = ' and c53_coddoc in (';
   $tem_outro = false;
   if (isset($emp)) {
-    $xtipo .= '1,2,32';
+    $xtipo .= '1,2,31,32';
     $tem_outro = true;
   }
   

@@ -792,7 +792,7 @@ class cl_rhlota {
 		$sSql .= "     orcprograma.o54_descr     ,                                                                          ";
 		$sSql .= "     concarpeculiar.c58_descr  ,                                                                          ";
 		$sSql .= "     rh28_codeledef,                                                                                      ";
-		$sSql .= "     elemento_novo.o56_codele   as o56_codele_novo,                                                       ";
+		$sSql .= "     elemento_novo.o56_elemento as o56_codele_novo,                                                       ";
 		$sSql .= "     elemento_novo.o56_descr    as o56_descr_novo,                                                        ";
 		$sSql .= "     recurso_novo.o15_codigo    as o15_codigo_novo,                                                       ";
 		$sSql .= "     recurso_novo.o15_descr     as o15_descr_novo,                                                        ";
