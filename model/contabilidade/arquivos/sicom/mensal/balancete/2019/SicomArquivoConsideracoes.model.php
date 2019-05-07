@@ -10,51 +10,51 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarCON
   * @package Contabilidade
   */
 class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CONSID';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
 	 * @return Integer
 	 */
   public function getCodigoLayout(){
-    
+
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
   }
-  
+
   /**
    * selecionar os dados de Dados Complementares à LRF do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-    
+
   	$clconsid10 = new cl_consid102019();
 
     db_inicio_transacao();
@@ -69,38 +69,44 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
         throw new Exception($clconsid10->erro_msg);
       }
     }
-    
+
     /*
      * selecionar informacoes registro 10
      */
 
-        $sSql       = "select * from consideracoes where si171_mesreferencia = '{$this->sDataFinal['6']}';";
+        // $sSql       = "select * from consideracoes where si171_mesreferencia = '{$this->sDataFinal['6']}';";
+        // Inserção de query vazia para criação de uma nova tabela para consulta do balancete e não dos arquivos mensais
+
+        $sSql = '';
 
         $rsResult10 = db_query($sSql);
 
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-          
+
           $clconsid10 = new cl_consid102019();
           $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-          $clconsid10->si158_tiporegistro          = 10;
-          $clconsid10->si158_codarquivo            = $oDados10->si171_codarquivo;
-          $clconsid10->si158_consideracoes         = $oDados10->si171_consideracoes;
-          $clconsid10->si158_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          
+          $clconsid10->si158_tiporegistro               = 10;
+          $clconsid10->si158_codarquivo                 = $oDados10->si171_codarquivo;
+          $clconsid10->si158_exercicioreferenciaconsid  = $oDados10->si171_anousu;
+          $clconsid10->si158_mesreferenciaconsid        = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          $clconsid10->si158_consideracoes              = $oDados10->si171_consideracoes;
+          $clconsid10->si158_mes                        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          $clconsid10->si158_instit                     = db_getsession("DB_instit");
+
           $clconsid10->incluir(null);
           if ($clconsid10->erro_status == 0) {
             throw new Exception($clconsid10->erro_msg);
           }
-          
+
         }
 
     db_fim_transacao();
-    
+
     $oGerarCONSID = new GerarCONSID();
     $oGerarCONSID->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarCONSID->gerarDados();
-    
+
   }
 
 }
