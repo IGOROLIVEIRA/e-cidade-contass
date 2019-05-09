@@ -25,7 +25,6 @@
  *                                licenca/licenca_pt.txt 
  */
 
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -44,7 +43,7 @@ require_once("classes/db_pontocom_classe.php");
 require_once("classes/db_rhrubricas_classe.php");
 require_once("classes/db_lotacao_classe.php");
 require_once("dbforms/db_funcoes.php");
-
+require_once('pes4_gerafolha.RPC.php');
 require_once("model/pessoal/Servidor.model.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -119,10 +118,18 @@ if(!isset($r90_mesusu)){
 	$r90_mesusu = db_mesfolha();
 }
 ////////////
+
+if($oGet->sChama === 'complementar2'){
+
+  $geraFolhaRPC = new RPCgerafolha();
+  $quantidadeDeComplementaresDoServidor = json_decode($geraFolhaRPC->quantidadeDeComplementaresDoServidor($r90_regist, $r90_anousu, $r90_mesusu));
+  
+  if((int) $quantidadeDeComplementaresDoServidor > 0){
+    db_msgbox('Já existe complementar para este servidor no mês atual.');
+  }
+}
+
 if(isset($incluir) || isset($confirmado) || isset($pontonovo)){
-
-
-
 
 	$pontoteste = 0;
     if((($ponto == "fx" || $ponto == "Rfx") && !isset($pontonovo)) || (isset($pontonovo) && trim($pontonovo)=="fx")){
@@ -136,7 +143,7 @@ if(isset($incluir) || isset($confirmado) || isset($pontonovo)){
       //////////
       
     }else if((($ponto == "fs" || $ponto == "Rfs") && !isset($pontonovo)) || (isset($pontonovo) && trim($pontonovo)=="fs")){
-      
+
       // Rotina que verifica se já existe, na tabela PONTOFS, algum registro com o mesmo anousu, mesusu e rubrica
 	  $result_pontosalario = $clpontofs->sql_record($clpontofs->sql_query_seleciona($r90_anousu,$r90_mesusu,$r90_regist,$r90_rubric,"r10_valor as valoranterior,r10_quant as quantidadeanterior"));
 	  if($clpontofs->numrows > 0){
@@ -186,7 +193,7 @@ if(isset($incluir) || isset($confirmado) || isset($pontonovo)){
       //////////
       
     }else if($ponto == "com" || $ponto == "Rcom"){
-      
+
       // Rotina que verifica se já existe, na tabela PONTOCOM, algum registro com o mesmo anousu, mesusu e rubrica
       $result_pontocomplementar = $clpontocom->sql_record($clpontocom->sql_query_seleciona($r90_anousu,$r90_mesusu,$r90_regist,$r90_rubric,"r47_valor as valoranterior,r47_quant as quantidadeanterior"));
 
@@ -561,6 +568,7 @@ else if (isset($alterar)) {
 
     // Se for ponto de salário
     }else if($sqlerro == false && ((($ponto == "fs" || $ponto == "Rfs") && !isset($pontonovo)) || (isset($pontonovo) && trim($pontonovo)=="fs"))){
+
       if(isset($pontonovo) && trim($pontonovo)=="fs" && $proporcionalizar == 't'){
       	$arr_ano_mes_usu = split("-",$data_de_admissao);
       	$ano_da_admissao = $arr_ano_mes_usu[0];
@@ -1082,18 +1090,18 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
   }
   if(!isset($alertconfirma) && !isset($alertrepassa) && isset($sqlerro) && $sqlerro == false && !isset($repassa_exclusao)){
 	echo "
-         <script>
-           document.form1.r90_rubric.value = '';
-           document.form1.r90_valor.value  = '0';
-           document.form1.r90_quant.value  = '0';
-           if ( document.form1.r90_datlim ) {
-             document.form1.r90_datlim.value = '';
-           }
-           document.form1.rh27_descr.value = '';
-           if ( document.form1.rh27_limdat ) {
-             document.form1.rh27_limdat.value= '';
-           }
-         </script>
+        <script>
+          document.form1.r90_rubric.value = '';
+          document.form1.r90_valor.value  = '0';
+          document.form1.r90_quant.value  = '0';
+          if ( document.form1.r90_datlim ) {
+            document.form1.r90_datlim.value = '';
+          }
+          document.form1.rh27_descr.value = '';
+          if ( document.form1.rh27_limdat ) {
+            document.form1.rh27_limdat.value= '';
+          }
+        </script>
     ";
   }
 };
@@ -1102,18 +1110,18 @@ if((isset($sqlerro) && $sqlerro == false) || !isset($sqlerro)){
 	// Pergunta se o usuário quer ou não somar o valor e quantidade informados
 	// com os já existentes para a matrícula
 	echo "
-         <script>
-           confirmado = 'false';
-           if(confirm('Rubrica $r90_rubric ($rh27_descr) já cadastrada para a matrícula $r90_regist ($z01_nome). Deseja somar a mesma ao valor e quantidade informados? \\n\\nClique em OK para somar ou Cancelar para substituir os dados.')){
-             confirmado = 'true';
-           }
-           obj = document.createElement('input');
-           obj.setAttribute('name','confirmado');
-           obj.setAttribute('type','hidden');
-           obj.setAttribute('value',confirmado);
-           document.form1.appendChild(obj);
-           document.form1.submit();
-         </script>
+        <script>
+          confirmado = 'false';
+          if(confirm('Rubrica $r90_rubric ($rh27_descr) já cadastrada para a matrícula $r90_regist ($z01_nome). Deseja somar a mesma ao valor e quantidade informados? \\n\\nClique em OK para somar ou Cancelar para substituir os dados.')){
+            confirmado = 'true';
+          }
+          obj = document.createElement('input');
+          obj.setAttribute('name','confirmado');
+          obj.setAttribute('type','hidden');
+          obj.setAttribute('value',confirmado);
+          document.form1.appendChild(obj);
+          document.form1.submit();
+        </script>
     ";
   }
 

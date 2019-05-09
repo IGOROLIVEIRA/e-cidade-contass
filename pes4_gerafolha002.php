@@ -67,9 +67,22 @@ $DB_instit = DB_getsession("DB_instit");
     
 require_once("std/db_stdClass.php");
 $aParamKeys = array(
-                   db_getsession("DB_anousu")
-                  );
-                  
+  db_getsession("DB_anousu")
+);
+
+//  Buscar complementares
+$oDaoGerfcom = db_utils::getDao("gerfcom");
+$sWhere = str_replace(' where', '', bb_condicaosubpes("r48_"));
+$sSqlBuscaComplementares = $oDaoGerfcom->sql_query_file(null, null, null, null, 'r48_anousu,r48_mesusu,r48_regist,r48_rubric,r48_semest', null, $sWhere);
+
+$rsBuscaContas = $oDaoGerfcom->sql_record($sSqlBuscaComplementares);
+
+$aComplementares = array();
+
+for($i=0; $i<$oDaoGerfcom->numrows; $i++){
+  $aComplementares[] = db_utils::fieldsMemory($rsBuscaContas, $i);
+}
+
 $aParametrosCustos   = db_stdClass::getParametro("parcustos",$aParamKeys);
 $iTipoControleCustos = 0;
 
@@ -78,23 +91,21 @@ if (count($aParametrosCustos) > 0) {
 }
 
 if ($iTipoControleCustos > 1) {
-    
+
   require_once('model/custoPlanilha.model.php');
   $oPlanilha = new custoPlanilha($mesusu, $anousu);
-  
+
   if ($oPlanilha->getSituacao() == 2) {
-        
     $sMsgErro  = "Erro (0) - Não é  possível gerar calculo da folha.\\nPlanilha de custos já processada "; 
     $sMsgErro .= "para competência {$mesusu}/{$anousu}";
     db_msgbox($sMsgErro);
     db_redireciona("pes4_gerafolha001.php"); 
   }
-}  
+}
 
 db_selectmax("cfpess"," select * from cfpess ".bb_condicaosubpes("r11_")); 
 
 db_inicio_transacao();
-
 
 
 db_postmemory($HTTP_POST_VARS);
@@ -110,35 +121,35 @@ if(!isset($r110_lotacf)){
 if ($opcao_gml == 'm') {
   $where = " ";
   if((isset($r110_regisi) && $r110_regisi != "" ) && (isset($r110_regisf) && $r110_regisf != "")){
-     $where .= " and rh01_regist between '$r110_regisi' and '$r110_regisf' ";
+    $where .= " and rh01_regist between '$r110_regisi' and '$r110_regisf' ";
   }else if(isset($r110_regisi) && $r110_regisi != ""){
-     $where .= " and rh01_regist >= '$r110_regisi' ";
+    $where .= " and rh01_regist >= '$r110_regisi' ";
   }else if(isset($r110_regisf) && $r110_regisf != ""){
-     $where .= " and rh01_regist <= '$r110_regisf' ";
+    $where .= " and rh01_regist <= '$r110_regisf' ";
   }else if(isset($faixa_regis) && $faixa_regis != "") {
-     $where .= " and rh01_regist in ($faixa_regis) ";
+    $where .= " and rh01_regist in ($faixa_regis) ";
   }
   
   if ($where != "") {
     
     if ($opcao_geral == 4) {
-       $where1 = " and rh05_recis is not null";
+      $where1 = " and rh05_recis is not null";
     } else {
-       $where1 = " and rh05_recis is null";
+      $where1 = " and rh05_recis is null";
     }
     
     global $pessoal;
 
     $sql = "select rh01_regist
               from rhpessoalmov
-                   left  join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes 
-                   inner join rhpessoal     on rh01_regist               = rh02_regist
-             where rh02_anousu = ".db_anofolha()."
-               and rh02_mesusu = ".db_mesfolha()."
-               and rh02_instit = ".db_getsession("DB_instit")."
-               $where1
-               and rh01_numcgm in (select distinct rh01_numcgm
-                                     from rhpessoalmov
+                  left  join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes 
+                  inner join rhpessoal     on rh01_regist               = rh02_regist
+            where rh02_anousu = ".db_anofolha()."
+              and rh02_mesusu = ".db_mesfolha()."
+              and rh02_instit = ".db_getsession("DB_instit")."
+              $where1
+              and rh01_numcgm in (select distinct rh01_numcgm
+                                    from rhpessoalmov
                                           left  join rhpesrescisao on rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes 
                                           inner join rhpessoal     on rh01_regist               = rh02_regist
                                     where rh02_anousu = ".db_anofolha()."
@@ -146,13 +157,13 @@ if ($opcao_gml == 'm') {
                                       and rh02_instit = ".db_getsession("DB_instit")."
                                       $where
                                       $where1)
-             order by rh01_numcgm,rh01_regist ";
+            order by rh01_numcgm,rh01_regist ";
     if (db_selectmax("pessoal",$sql)) {
       $faixa_regis = "";
       $separa = " "; 
       for($Ipessoal=0;$Ipessoal < count($pessoal);$Ipessoal++){
-          $faixa_regis .= $separa.$pessoal[$Ipessoal]["rh01_regist"];
-          $separa = ",";
+        $faixa_regis .= $separa.$pessoal[$Ipessoal]["rh01_regist"];
+        $separa = ",";
       }
     }
   }
@@ -234,7 +245,7 @@ $carregarubricas_geral = array();
 db_selectmax("carregarubricas","select * from rhrubricas where rh27_instit = $DB_instit order by rh27_rubric" );
       
 for($Icarregar=0;$Icarregar<count($carregarubricas);$Icarregar++){
-   
+
   $r10_pd = db_boolean( $carregarubricas[$Icarregar]["rh27_pd"] );
   $formula = $carregarubricas[$Icarregar]["rh27_form"];
   
@@ -405,6 +416,22 @@ if(!isset($oGet->lAutomatico)){
          setTimeout(parent.document.getElementById('pesquisar').click(), 2000);
         </script>";  
   
+}
+
+//  Atualiza complementares
+$oDaoGerfcom = db_utils::getDao("gerfcom");
+
+
+if(!empty($aComplementares)){
+  foreach ($aComplementares as $oComplementar){
+    $oDaoGerfcom->r48_semest = $oComplementar->r48_semest;
+    $oDaoGerfcom->r48_anousu = $oComplementar->r48_anousu;
+    $oDaoGerfcom->r48_mesusu = $oComplementar->r48_mesusu;
+    $oDaoGerfcom->r48_regist = $oComplementar->r48_regist;
+    $oDaoGerfcom->r48_rubric = $oComplementar->r48_rubric;
+
+    $oDaoGerfcom->alterar($oComplementar->r48_anousu,$oComplementar->r48_mesusu, $oComplementar->r48_regist, $oComplementar->r48_rubric);
+  }
 }
 
 if (is_string($sArquivoInconsistencias)) {
