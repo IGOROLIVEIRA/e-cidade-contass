@@ -62,6 +62,12 @@ if($ponto == 's'){
     $dcodcam1 = '4284';  /// r34_rubric
     $kcodcam1 = '4283';  /// r34_regist
     $dcodcamnot = '4281, 7462, 4287, 4282, 4283, 4284';
+}elseif($ponto == 'fr'){
+    $arquivo = '578';
+    $head7   = 'PONTO RESCISAO';
+    $dcodcam1 = '4310';  /// r19_rubric
+    $kcodcam1 = '4309';  /// r19_regist
+    $dcodcamnot = '4307, 7465, 4313, 4308, 4309, 4309';
 }
 
 $where_usuarios = '';

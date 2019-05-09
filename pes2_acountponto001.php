@@ -146,7 +146,7 @@ function js_relatorio() {
               </td>
               <td align="left"nowrap>&nbsp;&nbsp;
                 <?
-                  $arr_ponto = array("s"=>"Salario","f"=>"Fixo","c"=>"Complementar","fe"=>"Ferias","f13"=>"13º Salário");
+                  $arr_ponto = array("s"=>"Salario","f"=>"Fixo","c"=>"Complementar","fe"=>"Ferias","f13"=>"13º Salário","fr"=>"Rescisão");
                   db_select('ponto',$arr_ponto,true,4,"");
                       ?>
                     </td>
