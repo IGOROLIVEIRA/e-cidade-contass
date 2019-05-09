@@ -68,6 +68,15 @@ $clrotulo->label("o15_codigo");
           	 </select>
           	 </td>
           	</tr>
+                <tr>
+                    <td>De Para Natureza Despesa: </td>
+                    <td>
+                        <select id="DeParaNatureza" class="DeParaNatureza" onchange="isEncerramento();">
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                    </td>
+                </tr>
           	</table>
           	</fieldset>
           	</td>
@@ -126,6 +135,7 @@ function js_processar() {
   var aArquivosSelecionados = new Array();
   var aArquivos             = $$("input[type='checkbox']");
   var iMesReferencia        = $("MesReferencia");
+  var iDeParaNatureza        = $("DeParaNatureza");
 
   /*
    * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
@@ -146,6 +156,7 @@ function js_processar() {
   oParam.exec          = "processarBalancete";
   oParam.arquivos      = aArquivosSelecionados;
   oParam.mesReferencia = iMesReferencia.value;
+  oParam.deParaNatureza = iDeParaNatureza.value;
   var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
 		                            {
                                   method:'post',
