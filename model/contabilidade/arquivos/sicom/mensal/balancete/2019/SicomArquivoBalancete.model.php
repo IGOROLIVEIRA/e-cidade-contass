@@ -678,19 +678,21 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                              * percorrer xml elemento despesa
                              */
 
-                            foreach ($oElementos as $oElemento) {
+                            if($this->iDeParaNatureza == 1) {
+                                foreach ($oElementos as $oElemento) {
 
-                                $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                    $sElementoXml = $oElemento->getAttribute('elementoEcidade');
 
-                                if ($nContaCorrente == 101) {
-                                    if (substr($sElementoXml, 0, 6) == $sElemento) {
-                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                        $sSubElemento = '00';
-                                    }
-                                } else {
-                                    if ($sElementoXml == $sElemento . $sSubElemento) {
-                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+                                    if ($nContaCorrente == 101) {
+                                        if (substr($sElementoXml, 0, 6) == $sElemento) {
+                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                            $sSubElemento = '00';
+                                        }
+                                    } else {
+                                        if ($sElementoXml == $sElemento . $sSubElemento) {
+                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                            $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+                                        }
                                     }
                                 }
                             }
@@ -1446,18 +1448,19 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             /**
                              * percorrer xml elemento despesa
                              */
+                            if($this->iDeParaNatureza == 1) {
+                                foreach ($oElementos as $oElemento) {
 
-                            foreach ($oElementos as $oElemento) {
+                                    $sElementoXml = $oElemento->getAttribute('elementoEcidade');
 
-                                $sElementoXml = $oElemento->getAttribute('elementoEcidade');
+                                    if ($sElementoXml == $sElemento . $sSubElemento) {
 
-                                if ($sElementoXml == $sElemento . $sSubElemento) {
+                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
 
-                                    $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                    $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
+                                    }
 
                                 }
-
                             }
 
                             /**
@@ -1792,17 +1795,23 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                      */
                     $sSqlVerifica = " select distinct si95_codctb, ano from ( SELECT distinct si95_codctb, 2019 as ano FROM ctb102019 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta'
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2018 as ano FROM ctb102018 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta'";
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2017 as ano FROM ctb102017 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta'";
                     $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2016 as ano FROM ctb102016 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta'";
                     $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta'";
                     $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2014 as ano FROM ctb102014 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta') as x order by 2 DESC limit 1";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::int = '$objContasctb->tipoconta') as x order by 2 DESC limit 1";
 
                     $rsResultVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
 

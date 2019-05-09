@@ -381,6 +381,7 @@ switch($oParam->exec) {
      * Parametro de encerramento de exercicio.
      */
     $bEncerramento = false;
+
     if($oParam->mesReferencia == 13){
       $oParam->mesReferencia = 12;
       $bEncerramento = true;
@@ -388,6 +389,9 @@ switch($oParam->exec) {
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+
+
+    $deParaNatureza = $oParam->deParaNatureza;
 
     if (count($oParam->arquivos) > 0) {
 
@@ -432,6 +436,7 @@ switch($oParam->exec) {
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
           $oArquivo->setEncerramento($bEncerramento);
+          $oArquivo->setDeParaNatureza($deParaNatureza);
           $oArquivoCsv = new stdClass();
           try {
 

@@ -40,6 +40,12 @@ abstract class SicomArquivoBase {
    */
   protected $bEncerramento = FALSE;
 
+    /**
+     * Parametro de $iDeParaNatureza do exercício
+     * @var integer
+     */
+    protected $iDeParaNatureza = 0;
+
   /**
    * @return boolean
    */
@@ -49,12 +55,28 @@ abstract class SicomArquivoBase {
   }
 
   /**
-   * @param boolean $bEncerramento
+   * @param boolean $deParaNatureza
    */
-  public function setEncerramento($bEncerramento)
+  public function setDeParaNatureza($iDeParaNatureza)
   {
-    $this->bEncerramento = $bEncerramento;
+    $this->iDeParaNatureza = $iDeParaNatureza;
   }
+
+    /**
+     * @return boolean
+     */
+    public function getDeParaNatureza()
+    {
+        return $this->iDeParaNatureza;
+    }
+
+    /**
+     * @param integer $deParaNatureza
+     */
+    public function setEncerramento($bEncerramento)
+    {
+        $this->bEncerramento = $bEncerramento;
+    }
   
   /**
      *retorna array de dados
