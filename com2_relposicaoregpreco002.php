@@ -57,7 +57,7 @@ if ($oDaoEmpParametro->numrows > 0) {
 
 $sWhere                = "";
 $sAnd                  = "";
-$sOrder                = "order by solicita.pc10_numero, solicita.pc10_depto, solicitem.pc11_numero, solicitem.pc11_seq";
+$sOrder                = "order by estimativa.pc10_depto, solicita.pc10_numero, solicita.pc10_depto, solicitem.pc11_numero, solicitem.pc11_seq";
 $sHeaderDtCriacao      = "Criação do Registro: Todos";
 $sHeaderDtVal          = "Validade do Registro: Todos";
 $sHeaderNum            = "Compilação: Todos";
@@ -141,6 +141,11 @@ if(trim($oGet->itens) != "") {
   $sAnd         = " and ";
 }
 
+if(trim($oGet->departs) != ""){
+  $sWhere      .= "{$sAnd} estimativa.pc10_depto in ($oGet->departs) ";
+  $sAnd         = " and ";
+}
+
 $sWhere .= "{$sAnd} solicita.pc10_solicitacaotipo = 6 ";
 
 /**
@@ -181,7 +186,7 @@ $sSql .= "         inner join solicitem itemestimativa               on vinculoi
 $sSql .= "         inner join solicita estimativa                    on estimativa.pc10_numero                  = itemestimativa.pc11_numero";
 $sSql .= "         inner join solicitemregistropreco itemestimativavalores on itemestimativa.pc11_codigo        = itemestimativavalores.pc57_solicitem";
 $sSql .= "   where  {$sWhere}  {$sOrder}, estimativa.pc10_instit asc";
-
+// print_r($sSql);die();
 /**
  * Busca a quantidade liquidada do item da solicitação
  * @param  integer $iCodigoItemSolicitacao
@@ -260,6 +265,9 @@ $lUltimoControle = null;
  * Agrupa os registros do record set retornado pelo sql
  * Vincula item da estimativas a Solicitação, agrupando por instituição e departamento
  */
+
+$codEstimativa = '';
+
 for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
 
   $oSolicita                        = db_utils::fieldsMemory($rsSql, $iInd);
@@ -291,9 +299,12 @@ for ( $iInd = 0; $iInd  < $iRsSql; $iInd++ ) {
   $oStdItemEstimativa->nQuantMax    = (empty($oSolicita->pc57_quantmax)                   ? '0' : $oSolicita->pc57_quantmax);
   $oStdItemEstimativa->nVlrUnitario = (empty($oSolicita->oDadosFornecedor->valorunitario) ? '0' : $oSolicita->oDadosFornecedor->valorunitario);
 
-  $oEstimativa                      = new estimativaRegistroPreco($iCodigoEstimativa);
-  $iDepartamentoEstimativa          = $oEstimativa->getCodigoDepartamento();
-  $iInstituicaoEstimativa           = $oEstimativa->getCodigoInstituicao();
+  if($codEstimativa != $iCodigoEstimativa){
+    $oEstimativa                      = new estimativaRegistroPreco($iCodigoEstimativa);
+    $iDepartamentoEstimativa          = $oEstimativa->getCodigoDepartamento();
+    $iInstituicaoEstimativa           = $oEstimativa->getCodigoInstituicao();
+    $codEstimativa = $iCodigoEstimativa;
+  }
 
   $oItem                            = $oEstimativa->getItemByCodigo($iCodigoItemEstimativa);
   $oStdItemEstimativa->iSolicitada  = ($lControlaValor ? $oItem->getValorSolicitado() : $oItem->getQuantidadesSolicitadas());

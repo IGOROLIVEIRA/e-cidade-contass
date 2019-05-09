@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,7 +56,8 @@ function js_limpacampos() {
   $('dtfimvlrg').value       = '';
   $('pc10_numero_ini').value = '';
   $('pc10_numero_fim').value = '';
-  $('pc01_codmater').value   = '';
+  $('coddepto').value   = '';
+  $('')
 }
 
 function js_emite() {
@@ -68,10 +69,9 @@ function js_emite() {
   var pc10_numero_ini     = $('pc10_numero_ini').value;
   var pc10_numero_fim     = $('pc10_numero_fim').value;
   var iItens              = $('pcmater').options.length;
+  var iDepartamentos      = $('departamento').options.length;
   var lQuebraDepartamento = $("lQuebraDepartamento").value;
   var sQuery              = '';
-
-
 
   if (dtinicrg != "" && dtfimcrg != "") {
 
@@ -99,11 +99,24 @@ function js_emite() {
     }
   }
 
+  if(lQuebraDepartamento == 't' && iDepartamentos == 0){
+    alert('Nenhum departamento selecionado. Verifique!')
+    return false;
+  }
+
   var vrg    = '';
   var sItens = '';
   for (i = 0; i < iItens; i++) {
 
     sItens = sItens+vrg+$('pcmater').options[i].value;
+    vrg =',';
+  }
+
+  var vrg    = '';
+  var sDepartamentos = '';
+  for (i = 0; i < iDepartamentos; i++) {
+
+    sDepartamentos = sDepartamentos+vrg+$('departamento').options[i].value;
     vrg =',';
   }
 
@@ -116,12 +129,13 @@ function js_emite() {
   sQuery += '&numini='+pc10_numero_ini;
   sQuery += '&numfim='+pc10_numero_fim;
   sQuery += '&itens='+sItens;
+  sQuery += '&departs='+sDepartamentos;
 
   if (lQuebraDepartamento == "t") {
 	  sUrl = "com2_relposicaoregpreco002.php?";
   } else {
 	  sUrl = "com2_relposicaoregpreco_agrupado002.php?";
-  }    
+  }
   jan = window.open(sUrl+sQuery,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 
@@ -137,6 +151,11 @@ td {
 
   width: 90px;
   white-space: nowrap
+}
+
+#departamento{
+  width:400px;
+  size: 5;
 }
 </style>
 </head>
@@ -197,6 +216,38 @@ td {
                 </select>
               </td>
             </tr>
+            <tr id='area_departamento'>
+               <td colspan="2">
+                <fieldset>
+                  <legend>Departamentos</legend>
+                  <table align="center" border="0">
+                   <tr>
+                      <td>
+                        <?php db_ancora('Departamento',"js_pesquisa_departamento(true);",1); ?>
+                      </td>
+                      <td>
+                        <?php
+                          db_input('coddepto',6,'',true,'text',4," onchange='js_pesquisa_departamento(false);'","");
+                          db_input('descrdepto',25, '', true, 'text', 3,"","");
+                        ?>
+                        <input type="button" value="Lançar" id="btn-lancar"/>
+                      </td>
+                      <tr>
+                        <td colspan="2">
+                          <select name="departamento[]" id="departamento" size="5" multiple>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" colspan="2">
+                          <strong>Dois Cliques sobre o item o exclui.</strong>
+                        </td>
+                      </tr>
+                   </tr>
+                 </table>
+                </fieldset>
+               </td>
+            </tr>
 			      <tr>
 			         <td colspan="2">
 			           <table align="left" border="0">
@@ -228,7 +279,7 @@ td {
 			           </table>
 			         </td>
 			      </tr>
-			  </table>
+        </table>
 			</fieldset>
 			<table align="center">
 			  <tr>
@@ -250,8 +301,18 @@ td {
 </body>
 </html>
 <script>
-function js_pesquisa_pc10_numero_ini(mostra) {
 
+if(document.getElementById('lQuebraDepartamento').value = 'f'){
+  document.getElementById('area_departamento').style.display = 'none';
+}
+
+var quebraDepartamento = document.getElementById('lQuebraDepartamento');
+quebraDepartamento.addEventListener('change',function(){
+  var mostra = quebraDepartamento.value == 'f' ? 'none' : '';
+  document.getElementById('area_departamento').style.display = mostra;
+})
+
+function js_pesquisa_pc10_numero_ini(mostra) {
   var lMostra         = mostra;
   var pc10_numero_ini = $('pc10_numero_ini').value;
   var sFuncao         = '&funcao_js=parent.js_mostrapc10_numero_ini';
@@ -269,10 +330,10 @@ function js_pesquisa_pc10_numero_ini(mostra) {
        $('pc10_numero_ini').value = '';
      }
   }
+  limpar();
 }
 
 function js_mostrapc10_numero_ini(chave,erro) {
-
   $('pc10_numero_ini').value = chave;
   if (erro == true) {
 
@@ -306,6 +367,7 @@ function js_pesquisa_pc10_numero_fim(mostra) {
        $('pc10_numero_fim').value = '';
      }
   }
+  limpar();
 }
 
 function js_mostrapc10_numero_fim(chave,erro) {
@@ -323,4 +385,104 @@ function js_mostrapc10_numero_fim1(chave1) {
   $('pc10_numero_fim').value = chave1;
   db_iframe_solicitacompilacao.hide();
 }
+
+function js_pesquisa_departamento(mostra){
+  if (mostra==true) {
+    if(document.form1.pc10_numero_ini.value == '' && document.form1.pc10_numero_fim.value == ''){
+      alert('Informe o número da compilação!');
+      return;
+    }
+    var numero_ini = document.form1.pc10_numero_ini.value;
+    var numero_fim = document.form1.pc10_numero_fim.value;
+    js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?comp_ini='+numero_ini+
+      '&comp_fim='+numero_fim+'&funcao_js=parent.js_mostradepart|coddepto|descrdepto','Pesquisa',true);
+  } else {
+     if (document.form1.coddepto.value != '') {
+        js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart1','Pesquisa',false);
+     } else {
+       document.form1.coddepto.value = '';
+      }
+  }
+}
+
+function js_mostradepart1(chave1, chave2, erro) {
+  if (erro==true) {
+    document.form1.coddepto.focus();
+    document.form1.coddepto.value = '';
+    return;
+  }
+}
+
+function js_mostradepart(chave1,chave2) {
+  document.form1.coddepto.value = chave1;
+  document.form1.descrdepto.value = chave2;
+  db_iframe_departamento.hide();
+}
+
+element = document.getElementById('lQuebraDepartamento');
+
+element.addEventListener('click',function(){
+  if(element.value == 't'){
+    document.getElementById('area_departamento').style.display = '';
+  }else{
+    document.getElementById('area_departamento').style.display = 'none';
+    limparCampos();
+    limpar();
+  }
+});
+
+var optionsDepartamentos = document.getElementById("departamento");
+
+function addOption(codigo, descricao) {
+  if(document.getElementById('pc10_numero_ini').value == '' && document.getElementById('pc10_numero_ini').value == ''){
+    alert('Informe o número da compilação');
+    limparCampos();
+    return;
+  }
+
+  if (!codigo || !descricao) {
+    alert("Departamento inválido!");
+    limparCampos();
+    return;
+  }
+
+
+  var jaTem = Array.prototype.filter.call(optionsDepartamentos.children, function(o) {
+    return o.value == codigo;
+  });
+
+  if (jaTem.length > 0) {
+    alert("Departamento já inserido.");
+    limparCampos();
+    return;
+  }
+
+  var option = document.createElement('option');
+  option.value = codigo;
+  option.innerHTML = codigo + ' - ' + descricao;
+  optionsDepartamentos.appendChild(option);
+
+  limparCampos();
+}
+
+function limpar() {
+  optionsDepartamentos.innerHTML = "";
+}
+
+function limparCampos() {
+  document.form1.coddepto.value  = '';
+  document.form1.descrdepto.value  = '';
+}
+
+optionsDepartamentos.addEventListener('dblclick', function excluirEmpenho(e) {
+  optionsDepartamentos.removeChild(e.target);
+});
+
+document.getElementById('btn-lancar').addEventListener('click', function(e) {
+  addOption(
+    document.form1.coddepto.value,
+    document.form1.descrdepto.value
+  );
+});
+
 </script>
