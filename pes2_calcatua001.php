@@ -96,7 +96,7 @@ function js_fechaiframe(){
         </td>
         <td> 
           <?
-          $x = array("1"=>"Banco do Brasil","2"=>"Caixa Federal");
+          $x = array("1"=>"Banco do Brasil","2"=>"Caixa Federal","3"=>"Arquivo RTM");
           db_select('banco',$x,true,2,"");
           ?>
         </td>

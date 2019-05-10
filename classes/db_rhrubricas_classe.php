@@ -1089,5 +1089,19 @@ class cl_rhrubricas {
      return $sql;
   }
 
+  function rubricasAtivasNaBase($sBase, $iAnofolha, $iMesFolha, $iInstituicao){
+    $sSql = "SELECT distinct r09_base, r09_rubric, rh27_rubric, rh27_descr
+            FROM rhrubricas 
+					  LEFT OUTER JOIN basesr ON rh27_rubric = r09_rubric 
+            AND r09_base = '".$sBase."'
+					  AND r09_anousu = $iAnofolha
+            AND r09_mesusu = $iMesFolha
+            AND r09_instit = $iInstituicao
+            WHERE rh27_instit = $iInstituicao
+            AND r09_rubric = rh27_rubric 
+            order by rh27_rubric";
+    return $sSql;
+  }
+
 }
 ?>

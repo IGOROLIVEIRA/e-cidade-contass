@@ -67,8 +67,10 @@ $db_erro = false;
 
 if($banco == 1){
 $erro_msg = calcatua_bb($anofolha,$mesfolha,$where);
-}else{
+}else if ($banco == 2){
 $erro_msg = calcatua_cef($mesfolha,$anofolha,$where);
+}else{
+    $erro_msg = calcatua_rtm($anofolha,$mesfolha,$where);
 }
 
 if(empty($erro_msg)){
@@ -173,7 +175,7 @@ INNER JOIN
 where rh30_vinculo = 'A'
   and rh30_regime = 1
   $where ";
-  
+
 //  echo $sql;exit;
   $result = pg_query($sql);
   $num = pg_numrows($result);
@@ -636,6 +638,446 @@ where rh30_vinculo = 'P'
   fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
   fclose($arquivo);
+
+}
+
+function calcatua_rtm($anofolha,$mesfolha,$where){
+
+    $arq = '/tmp/calc_ativos.txt';
+    $arquivo = fopen($arq,'w');
+
+    /*pg_query("drop sequence layout_ati_seq");
+    pg_query("create sequence layout_ati_seq");*/
+
+    $sql = "SELECT DISTINCT rh01_regist ||'# '||
+                servidor.z01_nome ||'# '||
+                servidor.z01_cgccpf ||'# '||
+                coalesce(servidor.z01_pis,' ') ||'# '||
+                CASE
+                    WHEN rh01_sexo = 'M' THEN 2
+                    ELSE 1
+                END ||'# '||
+                to_char(rh01_nasc, 'DD/MM/YYYY') ||'# '||
+                '1' ||'# '||
+                instituicao.z01_nome ||'# '||
+                instituicao.z01_cgccpf ||'# '||
+                db21_tipopoder ||'# '||
+                '1' ||'# '||
+                CASE
+                    WHEN rhfuncao.rh37_funcaogrupo != '2' THEN 4
+                    ELSE 2
+                END ||'# '||
+                ' ' ||'# '||
+                CASE
+                    WHEN r45_situac = 2 OR r45_situac = 7 THEN '3'
+                    WHEN r45_situac = 3 OR r45_situac = 4 OR r45_situac = 9 THEN '13'
+                    WHEN r45_situac = 5 THEN '15'
+                    WHEN r45_situac = 6 OR r45_situac = 8 THEN '14'
+                    ELSE '1'
+                END ||'# '||
+                coalesce(CASE
+                    WHEN r45_mesusu = 04 AND r45_situac = 2 OR r45_situac = 7 THEN to_char(r45_dtreto, 'DD/MM/YYYY')
+                    ELSE NULL
+                END::varchar, '') 
+                ||'# '||
+                to_char(rh01_admiss, 'DD/MM/YYYY') ||'# '||
+                to_char(rh01_admiss, 'DD/MM/YYYY') ||'# '||
+                rh37_descr ||'# '||
+                to_char(rh01_admiss, 'DD/MM/YYYY') ||'# '||
+                rh37_descr ||'# '||
+                trim(translate(round(COALESCE(sal.salariobase, 0),2)::varchar,'.',','))||'# '||
+                trim(translate(round(COALESCE(sal.salariobase,0),2)::varchar,'.',',')) ||'# '||
+                trim(translate(round(COALESCE(sal.total,0),2)::varchar,'.',',')) ||'# '||
+                ' ' 
+                ||'# '||
+                trim(translate(round(COALESCE(sal.vlrcontribuicao,0),2)::varchar,'.',',')) 
+                ||'# '||
+                ' ' ||'# '||
+                ' ' ||'# '||
+                ' ' ||'# '||
+                ' ' ||'# '||
+                ' ' ||'# '||
+                case when rh02_abonopermanencia = 't' then 1 else 2 end ||'# '||
+                ' ' ||'# '||
+
+    (SELECT count(*)
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist) ||'# '||
+     
+     CASE
+     WHEN rh01_estciv = 4 THEN 9
+     ELSE rh01_estciv
+     END 
+    ||'# '||
+
+    COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+         AND rh31_gparen = 'C'),'')
+    ||'# '||
+
+    COALESCE((SELECT CASE
+                WHEN rh31_especi = 'S' THEN 2
+                ELSE 1
+            END AS condicao
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+         AND rh31_gparen = 'C')::varchar,'' )
+    ||'# '||
+
+    COALESCE(
+    (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc DESC
+     LIMIT 1
+     ), '')  
+    ||'# '||
+
+    COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc desc
+     LIMIT 1
+     OFFSET 1),'' )||'# '||
+
+    COALESCE((SELECT CASE
+                WHEN rh31_especi = 'C'
+                     OR rh31_especi = 'S' THEN 2
+                ELSE 1
+            END AS condicao
+     FROM rhdepend
+     WHERE rh31_codigo =
+             (SELECT rh31_codigo
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc desc
+     LIMIT 1
+     OFFSET 1))::varchar,'') ||'# '||
+                2 ||'# '||
+                '' ||'# '||
+                rh02_anousu ||'# '||
+                rh02_mesusu 
+
+                as todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession('DB_instit')."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+LEFT JOIN
+    (SELECT r14_regist,
+            sum(CASE
+                    WHEN r14_rubric = 'R992' THEN r14_valor
+                    ELSE 0
+                END) AS salariobase,
+            sum(CASE
+                    WHEN r14_rubric = 'R993' THEN r14_valor
+                    ELSE 0
+                END) AS vlrcontribuicao,
+            sum(CASE
+                    WHEN r14_pd = 1 THEN r14_valor
+                    ELSE 0
+                END) AS total
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+JOIN db_config ON codigo = rh01_instit
+JOIN cgm instituicao ON db_config.numcgm=instituicao.z01_numcgm
+JOIN cgm servidor ON servidor.z01_numcgm = rh01_numcgm
+LEFT JOIN afasta ON r45_regist = rh01_regist
+AND r45_anousu = $anofolha
+AND r45_mesusu = $mesfolha
+WHERE rh30_vinculo = 'A'
+    AND rh30_regime = 1
+    AND NOT EXISTS
+    (SELECT *
+     FROM rhpesrescisao
+     WHERE rh05_seqpes = rhpessoalmov.rh02_seqpes)
+    $where";
+
+    $result = pg_query($sql);
+//  echo $sql;db_criatabela($result);exit;
+    $num = pg_numrows($result);
+    for($x = 0;$x < pg_numrows($result);$x++){
+//    echo 'Total de : '.$num.' / '.$x."\r";
+        db_atutermometro($x,$num,'calculo_folha',1);
+        $todo = pg_result($result,$x,'todo');
+        if (empty($todo)) {
+            continue;
+        }
+        fputs($arquivo,$todo."\r\n");
+    }
+    fclose($arquivo);
+
+
+//echo "\n\n"."inativos "."\n\n";
+
+    $arq1 = '/tmp/calc_inativos.txt';
+
+//echo "arquivo : ".$arq."\n\n";
+
+    $arquivo = fopen($arq1,'w');
+
+    /*pg_query("drop sequence layout_ina_seq");
+    pg_query("create sequence layout_ina_seq");*/
+//echo "entrou no select"."\n\n";
+
+    $sql = "SELECT rh01_regist||'#'||
+      ' '||'#'||
+      servidor.z01_nome||'#' ||
+      servidor.z01_cgccpf||'#' ||
+      coalesce(servidor.z01_pis,' ')||'#' ||
+      CASE
+        WHEN rh01_sexo = 'M' THEN 2
+      ELSE 1
+      END ||'#' ||
+      to_char(rh01_nasc, 'DD/MM/YYYY')||'#' ||
+      instituicao.z01_nome||'#' ||
+      instituicao.z01_cgccpf||'#' ||
+      db21_tipopoder ||'# '||
+      '1'||'#' ||
+            case when rh37_funcaogrupo = 0 then 3 
+           when  rh37_funcaogrupo = 1 then 3
+           else rh37_funcaogrupo end ||'# '||
+      CASE
+        WHEN rh02_rhtipoapos = 2 THEN 2
+        WHEN rh02_rhtipoapos = 3 THEN 1
+        WHEN rh02_rhtipoapos = 4 THEN 4
+        WHEN rh02_rhtipoapos = 5 THEN 3
+        ELSE 5
+      END ||'#' ||
+      ' ' ||'#' ||
+      to_char(rh01_admiss, 'DD/MM/YYYY')||'#' ||
+      trim(translate(round(COALESCE(sal.prov, 0),2)::varchar,'.',','))||'# '||
+       ' '||'#' ||
+      coalesce(case when rh01_reajusteparidade = 2 then 1
+                    else 2 end::varchar,'')||'# '||
+       ' '||'#' ||
+      case when rh02_rhtipoapos = 4 then 2 else 1 end||'#' ||
+      ' '||'#' ||
+      ' '||'#' ||
+      ' '||'#' ||
+            (SELECT count(*) FROM rhdepend
+        WHERE rh31_regist = rh01_regist) ||'# '||
+
+      CASE
+        WHEN rh01_estciv = 4 THEN 9
+        ELSE rh01_estciv
+      END ||'# '||
+
+          COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+         AND rh31_gparen = 'C'),'')||'# '||
+
+      COALESCE((SELECT case when rh31_especi = 'S' then '2' else '1' end as rh31_especi
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+         AND rh31_gparen = 'C'),'')||'# '||
+
+      COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+              FROM rhdepend
+              WHERE rh31_regist = rh01_regist
+              ORDER BY rh31_dtnasc DESC
+              LIMIT 1), '')
+    ||'# '||
+
+    COALESCE(
+             (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+              FROM rhdepend
+              WHERE rh31_regist = rh01_regist
+              ORDER BY rh31_dtnasc DESC
+              LIMIT 1
+              OFFSET 1), '')    
+    ||'# '||
+    coalesce(
+  (SELECT CASE
+           WHEN rh31_especi = 'C'
+                OR rh31_especi = 'S' THEN '2'
+           ELSE '1'
+       END AS condicao
+
+FROM rhdepend
+WHERE rh31_codigo IN
+        (SELECT rh31_codigo
+         FROM rhdepend
+         WHERE rh31_regist = rh01_regist
+         ORDER BY rh31_dtnasc DESC
+         LIMIT 1
+         OFFSET 1)), '')
+    ||'# '||
+
+      ' '||'# '||
+      rh02_anousu ||'# '||
+      rh02_mesusu 
+
+       AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession('DB_instit')."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            sum(CASE
+                    WHEN r14_pd = 1 THEN r14_valor
+                    ELSE 0
+                END) AS prov,
+            sum(CASE
+                    WHEN r14_pd = 2 THEN r14_valor
+                    ELSE 0
+                END) AS desco,
+            sum(CASE
+                    WHEN r14_rubric = 'R992' THEN r14_valor
+                    ELSE 0
+                END) AS base
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+JOIN db_config ON codigo = rh01_instit
+JOIN cgm instituicao ON db_config.numcgm=instituicao.z01_numcgm
+JOIN cgm servidor ON servidor.z01_numcgm = rh01_numcgm
+WHERE rh30_vinculo = 'I'
+
+  $where ";
+
+//  echo $sql;exit;
+    $result = pg_query($sql);
+//  echo "gerou o result"."\n\n";
+//      echo $sql;db_criatabela($result);exit;
+
+    $num = pg_numrows($result);
+    for($x = 0;$x < pg_numrows($result);$x++){
+//    echo 'Total de : '.$num.' / '.$x."\r";
+
+        db_atutermometro($x,$num,'calculo_folha1',1);
+
+        $matric = pg_result($result,$x,'matricula');
+
+        $todo = pg_result($result,$x,'todo');
+        if (empty($todo)) {
+            continue;
+        }
+        fputs($arquivo,$todo."\r\n");
+    }
+    fclose($arquivo);
+
+
+
+
+//echo "pensionistas"."\n\n";
+
+    $arq2 = '/tmp/calc_pens.txt';
+
+//echo "arquivo : ".$arq."\n\n";
+
+    $arquivo = fopen($arq2,'w');
+
+    /*pg_query("drop sequence layout_pen_seq");
+    pg_query("create sequence layout_pen_seq");*/
+
+//echo "entrou no select"."\n\n";
+
+    $sql = "
+       SELECT rh01_regist||'# '||
+       servidor.z01_nome||'# '||
+       servidor.z01_cgccpf||'# '||
+       CASE
+        WHEN rh01_sexo = 'M' THEN 2
+        ELSE 1
+       END ||'#' ||  
+       to_char(rh01_nasc, 'DD/MM/YYYY')||'# '|| 
+       instituicao.z01_nome||'# '|| 
+       instituicao.z01_cgccpf||'# '||
+       db21_tipopoder ||'# '|| 
+       '1'||'# '||
+       coalesce(case when rh02_tipoparentescoinst = 3 then 1
+            when rh02_tipoparentescoinst = 1 then 2
+            when rh02_tipoparentescoinst = 4 then 3
+            when rh02_tipoparentescoinst = 5 or rh02_tipoparentescoinst = 6 then 4 end::varchar,'') ||'# '||
+       ' '||'# '||
+       case when coalesce(rhpessoalmov.rh02_validadepensao::varchar, '') = '' then 1 else 2 end ||'# '||
+       coalesce(to_char(rh02_validadepensao, 'DD/MM/YYYY'),' ')||'# '||
+       to_char(rh01_admiss, 'DD/MM/YYYY')||'# '||
+       trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+      coalesce(case when rh01_reajusteparidade = 2 then 1
+                    else 2 end::varchar,'')||'# '||
+      ' '||'# '||
+      coalesce(instintuidor.z01_numcgm::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_nome,' ')||'# '||
+      coalesce(instintuidor.z01_cgccpf::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_pis,' ')||'#' ||
+      coalesce(to_char(instintuidor.z01_nasc, 'DD/MM/YYYY'),' ')||'# '||
+      coalesce(to_char(instintuidor.z01_dtfalecimento, 'DD/MM/YYYY'),' ')||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '||
+      rh02_anousu ||'# '||
+      rh02_mesusu as todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession('DB_instit')."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            sum(case when r14_pd = 1 then r14_valor else 0 end) as prov,
+            sum(case when r14_pd = 2 then r14_valor else 0 end) as desco,
+            sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+
+     join db_config on codigo = rh01_instit
+     join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
+     join cgm servidor on servidor.z01_numcgm = rh01_numcgm
+     join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
+where rh30_vinculo = 'P'
+  $where ";
+
+//  echo $sql;exit;
+    $result = pg_query($sql);
+//    echo $sql;db_criatabela($result);exit;
+
+//  echo "gerou o result"."\n\n";
+    $num = pg_numrows($result);
+    for($x = 0;$x < pg_numrows($result);$x++){
+//    echo 'Total de : '.$num.' / '.$x."\r";
+
+        db_atutermometro($x,$num,'calculo_folha2',1);
+
+        fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
+    }
+    fclose($arquivo);
 
 }
 

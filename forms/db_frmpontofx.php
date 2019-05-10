@@ -319,7 +319,7 @@ function js_getDadosPadroes() {
   oParametros.sCodigoRubrica = $F('r90_rubric');
   
   js_divCarregando(msgDiv,'msgBox');
-   
+
   var oAjax = new Ajax.Request(
     sUrl, 
     {
@@ -676,69 +676,69 @@ function js_consultar(iMatricula){
       $cliframe_alterar_excluir->chavepri = $chavepri;
       if($ponto == "fx"){
       $cliframe_alterar_excluir->sql = $clpontofx->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "fs"){
       $cliframe_alterar_excluir->sql = $clpontofs->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "fa"){
       $cliframe_alterar_excluir->sql = $clpontofa->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "fe"){
       $cliframe_alterar_excluir->sql = $clpontofe->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "fr"){
       $cliframe_alterar_excluir->sql = $clpontofr->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "f13"){
       $cliframe_alterar_excluir->sql = $clpontof13->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }else if($ponto == "com"){
       $cliframe_alterar_excluir->sql = $clpontocom->sql_query_seleciona(
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   null,
-                                                   " distinct ".$campos,
-                                                   $orderby,
-                                                   $dbwhere);
+        null,
+        null,
+        null,
+        null,
+        " distinct ".$campos,
+        $orderby,
+        $dbwhere);
       }
       $cliframe_alterar_excluir->campos   = "r90_rubric,rh27_descr".$mostracamp.",r90_quant,r90_valor";
       $cliframe_alterar_excluir->opcoes   = 3;
@@ -750,9 +750,8 @@ function js_consultar(iMatricula){
 
 
       //Aqui colocar fieldset
-     
       echo "<fieldset>                           ";
-      echo "  <legend>Rubricas Lançadas</legend>";
+      echo "  <legend>Rubricas Lançadas</legend>";-
       $cliframe_alterar_excluir->iframe_alterar_excluir(1);
       echo "</fieldset>";
       ?>
@@ -826,7 +825,6 @@ function js_calculaQuant(sDataLimit){
     
   }  
 }
-
 
 function js_vercampos(){
   // Verificar se algum campo ficou em branco
@@ -973,13 +971,14 @@ function js_testarRegraPonto() {
       oParametros.sTipoPonto = sTabela;
       oParametros.iMatricula = iMatricula;   
 
-  var oAjax  = new Ajax.Request( sUrl, {
-                                         method: 'post', 
-                                         asynchronous: false,
-                                         parameters : 'json=' + Object.toJSON(oParametros),
-                                         onComplete: js_retornoTestarRegraPonto
-                                        }
-                                );
+  var oAjax  = new Ajax.Request(
+    sUrl,
+    {
+      method: 'post', 
+      asynchronous: false,
+      parameters : 'json=' + Object.toJSON(oParametros),
+      onComplete: js_retornoTestarRegraPonto
+    });
 
   return lTestarRegraPonto;
 }
@@ -1106,20 +1105,23 @@ function js_mascaradata(valor){
 
 }
 function js_pesquisar90_regist(mostra){
+
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matricula',true);
   }else{
-     if(document.form1.r90_regist.value != ''){
+    if(document.form1.r90_regist.value != ''){
       <?php if (!FolhaPagamentoSalario::hasFolhaAberta()) { ?>
         js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?rotina_suplementar=true&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } else { ?>
         js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } ?>
-     }else{
-       alert("Matrícula do servidor não informada.");
-       document.form1.z01_nome.value = '';
-       location.href = "pes1_pontofx001.php?ponto="+document.form1.ponto.value; 
-     }
+
+      
+    }else{
+      alert("Matrícula do servidor não informada.");
+      document.form1.z01_nome.value = '';
+      location.href = "pes1_pontofx001.php?ponto="+document.form1.ponto.value; 
+    }
   }
 }
 function js_mostrapessoal(chave,erro){
@@ -1145,23 +1147,72 @@ function js_pesquisar90_rubric(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_rhrubricas','func_rhrubricasponto.php?funcao_js=parent.js_mostrarubricas1|rh27_rubric|rh27_descr|rh27_limdat|formula|rh27_obs|rh27_presta&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Rubrica',true);
   }else{
-     if(document.form1.r90_rubric.value != ''){       
-       quantcaracteres = document.form1.r90_rubric.value.length;
-       for(i=quantcaracteres;i<4;i++){
-         document.form1.r90_rubric.value = "0"+document.form1.r90_rubric.value;        
-       }
-       js_OpenJanelaIframe('','db_iframe_rhrubricas','func_rhrubricasponto.php?pesquisa_chave='+document.form1.r90_rubric.value+'&funcao_js=parent.js_mostrarubricas&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Rubrica',false);
-     }else{
-       document.form1.rh27_descr.value = '';
-       document.form1.rh27_form.value  = '';
-       document.form1.r90_rubric.value  = '';
-       document.form1.r90_valor.value = '0';
-       document.form1.r90_quant.value = '0';
-       document.getElementById('caixa_de_texto').innerHTML = "";
-       js_desabilita(true); 
-     }
+    if(document.form1.r90_rubric.value != ''){
+      quantcaracteres = document.form1.r90_rubric.value.length;
+      for(i=quantcaracteres;i<4;i++){
+        document.form1.r90_rubric.value = "0"+document.form1.r90_rubric.value;        
+      }
+      js_OpenJanelaIframe('','db_iframe_rhrubricas','func_rhrubricasponto.php?pesquisa_chave='+document.form1.r90_rubric.value+'&funcao_js=parent.js_mostrarubricas&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Rubrica',false);
+    }else{
+      document.form1.rh27_descr.value = '';
+      document.form1.rh27_form.value  = '';
+      document.form1.r90_rubric.value  = '';
+      document.form1.r90_valor.value = '0';
+      document.form1.r90_quant.value = '0';
+      document.getElementById('caixa_de_texto').innerHTML = "";
+      js_desabilita(true); 
+    }
   }
 }
+
+const js_verificaBaseDasRubricas = () => {
+  const rubrica = document.querySelector('#r90_rubric')
+  const oParam = new Object()
+  oParam.exec = 'verificarPermissaoDaRubricaNoContexto'
+  oParam.rubrica = rubrica.value
+  oParam.regist = <?=$r90_regist?> 
+  oParam.anousu = <?=$r90_anousu?> 
+  oParam.mesusu = <?=$r90_mesusu?> 
+  var oAjax = new Ajax.Request(
+    'pes4_gerafolha.RPC.php',
+    { method:'post',
+      parameters:'json='+Object.toJSON(oParam),
+      onComplete: js_emiteAlertaParaRubricasNaoPermitidas
+    } 
+    ) 
+}
+
+const js_emiteAlertaParaRubricasNaoPermitidas = oResposta => {
+
+  const oRetorno = JSON.parse(oResposta.responseText)
+  const js_limpaRubricaNaoPermitida = () => {
+    document.querySelector('#r90_rubric').value = ''
+    document.querySelector('#rh27_descr').value = ''
+    document.querySelector('#r90_quant').value = 0
+    document.querySelector('#r90_valor').value = 0
+    document.querySelector('#r90_rubric').focus()
+  }
+
+  if(oRetorno.rubricasExistemNaBaseINSS && !oRetorno.rubricasExistemNaBaseIRRF){
+    alert('Essa rúbrica não pode ser utilizada pois altera a base INSS')
+    js_limpaRubricaNaoPermitida()
+    return
+  }
+
+  if(!oRetorno.rubricasExistemNaBaseINSS && oRetorno.rubricasExistemNaBaseIRRF){
+    alert('Essa rúbrica não pode ser utilizada pois altera a base e IRRF (salário)')
+    js_limpaRubricaNaoPermitida()
+    return
+  }
+
+  if(oRetorno.rubricasExistemNaBaseINSS && oRetorno.rubricasExistemNaBaseIRRF){
+    alert('Essa rúbrica não pode ser utilizada pois altera as bases INSS e IRRF (salário)')
+    js_limpaRubricaNaoPermitida()
+    return
+  }
+
+}
+
 function js_mostrarubricas(chave,chave2,chave3,chave4,chave5,erro){
   document.form1.rh27_descr.value  = chave;
   <?
@@ -1187,6 +1238,7 @@ function js_mostrarubricas(chave,chave2,chave3,chave4,chave5,erro){
   }else{
     js_desabilita(false);
   }
+  js_verificaBaseDasRubricas()
 }
 function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
   document.form1.r90_rubric.value  = chave1;
@@ -1208,17 +1260,18 @@ function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
   js_getDadosPadroes();
 
   db_iframe_rhrubricas.hide();
+  js_verificaBaseDasRubricas()
 }
 
 function js_pesquisar90_lotac(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?funcao_js=parent.js_mostralotacao1|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',true);
   }else{
-     if(document.form1.r90_lotac.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?pesquisa_chave='+document.form1.r90_lotac.value+'&funcao_js=parent.js_mostralotacao&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',false);
-     }else{
-       document.form1.r70_descr.value = ''; 
-     }
+    if(document.form1.r90_lotac.value != ''){ 
+      js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?pesquisa_chave='+document.form1.r90_lotac.value+'&funcao_js=parent.js_mostralotacao&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r90_mesusu.value+'&chave_r70_anousu'+document.form1.r90_anousu.value,'Pesquisa',false);
+    }else{
+      document.form1.r70_descr.value = ''; 
+    }
   }
 }
 function js_mostralotacao(chave,erro){
