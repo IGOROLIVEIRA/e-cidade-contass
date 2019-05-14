@@ -138,6 +138,9 @@ if(isset($incluir) && !isset($alertconfirma)){
     $r14_valor = "0";
     $valor_em_branco = true;
   }
+  if(empty($r48_semest) && $gerf == "com"){
+    $r48_semest = "0";
+  }
 
   $result_verifica_rubrica_com_formula = $clrhrubricas->sql_record($clrhrubricas->sql_query_file(null,db_getsession('DB_instit'),"rh27_form as formula_testa, rh27_propq as proporcionalizar,rh27_pd","","rh27_rubric = '".$r14_rubric."'"));
   if($clrhrubricas->numrows > 0){
@@ -223,7 +226,7 @@ if(isset($incluir) && !isset($alertconfirma)){
     $clgerfcom->r48_pd     = $r14_pd;
     $clgerfcom->r48_quant  = "$r14_quant";
     $clgerfcom->r48_lotac  = $r14_lotac;
-    $clgerfcom->r48_semest = "0";
+    $clgerfcom->r48_semest = $r48_semest;
     $clgerfcom->r48_instit = db_getsession("DB_instit");
     $clgerfcom->incluir($r14_anousu,$r14_mesusu,$r14_regist,$r14_rubric);
     $erro_msg = $clgerfcom->erro_msg;
@@ -233,7 +236,6 @@ if(isset($incluir) && !isset($alertconfirma)){
   //////////
 
   }
-
   db_fim_transacao($sqlerro);
 }else if(isset($alterar)){
   db_inicio_transacao();
@@ -249,6 +251,9 @@ if(isset($incluir) && !isset($alertconfirma)){
   if(trim($r14_valor) == ""){
     $r14_valor = "0";
     $valor_em_branco = true;
+  }
+  if(empty($r48_semest) && $gerf == "com"){
+    $r48_semest = "0";
   }
 
   $result_verifica_rubrica_com_formula = $clrhrubricas->sql_record($clrhrubricas->sql_query_file(null,db_getsession('DB_instit'),"rh27_form as formula_testa, rh27_propq as proporcionalizar,rh27_pd","","rh27_rubric = '".$r14_rubric."'"));
@@ -342,7 +347,7 @@ if(isset($incluir) && !isset($alertconfirma)){
     $clgerfcom->r48_pd     = $r14_pd;
     $clgerfcom->r48_quant  = "$r14_quant";
     $clgerfcom->r48_lotac  = $r14_lotac;
-    $clgerfcom->r48_semest = "0";
+    $clgerfcom->r48_semest = $gerf == "com" ? $r48_semest : "0";
     $clgerfcom->r48_instit = db_getsession("DB_instit");
     $clgerfcom->alterar($r14_anousu,$r14_mesusu,$r14_regist,$r14_rubric);
     $erro_msg = $clgerfcom->erro_msg;
@@ -433,6 +438,9 @@ if(isset($incluir) && !isset($alertconfirma)){
 
   $dbwhere = $sigla."regist = $r14_regist and ".$sigla."anousu = $r14_anousu and ".$sigla."mesusu = $r14_mesusu and ".$sigla."rubric = '$r14_rubric' $whereextra and ".$sigla."instit=".db_getsession("DB_instit");
   $campos  = "rh01_regist as r14_regist,z01_nome,rh27_rubric as r14_rubric,rh27_form,rh27_descr ".$campoextra.",r70_codigo as r14_lotac,r70_descr,".$sigla."quant as r14_quant,".$sigla."valor as r14_valor,".$sigla."pd as r14_pd";
+  if ($gerf == "com") {
+    $campos  .= ", r48_semest";
+  }
 
   // Se for folha de salário
   if($gerf == "fs" || $gerf == "Rfs"){
@@ -526,6 +534,9 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
             document.form1.r14_rubric.value = '';
             document.form1.r14_valor.value  = '0';
             document.form1.r14_quant.value  = '0';
+            if('$gerf' == 'com') {
+              document.form1.r48_semest.value = '0';
+            }
             document.form1.rh27_descr.value = '';
           </script>
          ";
