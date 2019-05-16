@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -63,7 +63,7 @@ if($gerf == "fs"){
   </tr>
   <tr>
     <td align="right" nowrap title="Digite o Ano / Mes de competência" >
-      <strong>Ano / Mês :&nbsp;&nbsp;</strong> 
+      <strong>Ano / Mês :&nbsp;&nbsp;</strong>
     </td>
     <td>
       <?
@@ -84,7 +84,7 @@ if($gerf == "fs"){
       db_ancora(@ $Lr14_regist, "js_pesquisar14_regist(true);", $db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r14_regist', 8, $Ir14_regist, true, 'text', $db_opcao, " onchange='js_pesquisar14_regist(false);'")
       ?>
@@ -99,7 +99,7 @@ if($gerf == "fs"){
       db_ancora(@ $Lr14_lotac, "js_pesquisar14_lotac(true);", 3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r14_lotac', 8, $Ir14_lotac, true, 'text', 3, " onchange='js_pesquisar14_lotac(false);'")
       ?>
@@ -107,7 +107,7 @@ if($gerf == "fs"){
       db_input('r70_descr', 60, $Ir70_descr, true, 'text', 3, '');
       ?>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td align="center" colspan="2" width="80%">
       <fieldset>
@@ -134,11 +134,16 @@ if($gerf == "fs"){
             <?=@$Lr14_quant?>
           </td>
           <td align="left" nowrap title="<?=@$Tr14_valor?>">
-            <?=@$Lr14_valor?>
+            <strong>Valor</strong>
           </td>
+          <?php if ($gerf == "com"){ ?>
+          <td style="padding-left: 20px;" align="left" nowrap title="Complementar">
+            <strong>Complementar</strong>
+          </td>
+          <?php } ?>
         </tr>
         <tr>
-          <td> 
+          <td>
             <?
             db_input('r14_rubric', 8, $Ir14_rubric, true, 'text', (($db_opcao==1)?"1":"3"), " onchange='js_pesquisar14_rubric(false);'")
             ?>
@@ -181,11 +186,24 @@ if($gerf == "fs"){
             db_input('r14_valor', 15, $Ir14_valor, true, 'text', $db_opcao, "");
             ?>
           </td>
+
+        <?php if ($gerf == "com"){ ?>
+          <td style="padding-left: 20px;">
+          <?
+          if (!isset($r48_semest) || (isset($r48_semest) && trim($r48_semest) == "")) {
+            $r48_semest = '0';
+          }
+          db_input('r48_semest', 13, $r48_semest, true, 'text', $db_opcao, "", "");
+          ?>
+          </td>
+
+        <?php } ?>
+
         </tr>
       </table>
       </fieldset>
     </td>
-  </tr>   
+  </tr>
   <tr>
     <td colspan="2" align="center" height="5%">
       <br>
@@ -195,7 +213,7 @@ if($gerf == "fs"){
     </td>
   </tr>
   <tr>
-    <td colspan="2" width="100%" height="60%" valign="top"  align="center">  
+    <td colspan="2" width="100%" height="60%" valign="top"  align="center">
       <?
       // $sigla - É a sigla a ser utilizada no select.
       // $campoextra - É para quando as tabelas tiverem campos TPP
@@ -210,12 +228,12 @@ if($gerf == "fs"){
       $mostracamp = "";
       if($gerf == "fs"){
         $sigla = "r14_";
-        $campoextra = ", case 
-                           when r14_pd = 1 then 'Provento' 
+        $campoextra = ", case
+                           when r14_pd = 1 then 'Provento'
                            when r14_pd = 2 then 'Desconto'
-                           else 'Base' 
+                           else 'Base'
                          end as r14_pd ";
-        
+
         $mostracamp = ",r14_pd";
       }else if($gerf == "fr"){
         $sigla = "r20_";
@@ -226,12 +244,12 @@ if($gerf == "fs"){
         $sigla = "r35_";
       }else if($gerf == "com"){
         $sigla = "r48_";
-        $campoextra = ", case 
-                            when r48_pd = 1 then 'Provento' 
+        $campoextra = ", r48_semest, case
+                            when r48_pd = 1 then 'Provento'
                             when r48_pd = 2 then 'Desconto'
-                            else 'Base' 
+                            else 'Base'
                          end as r14_pd ";
-        
+
         $mostracamp = ",r14_pd";
       }
       $dbwhere = "      ".$sigla."regist = ".@$r14_regist ;
@@ -247,14 +265,14 @@ if($gerf == "fs"){
       	  $dbwhere .= " and ".$sigla."tpp||".$sigla."rubric <> '".$r20_tpp.$r14_rubric."' ";
 	}
       }
-      
+
       $campos = $sigla."anousu as r14_anousu,".  $sigla."mesusu  as r14_mesusu,". $sigla."regist  as r14_regist,". $sigla."rubric as r14_rubric,
                 z01_numcgm, z01_nome".$campoextra.", rh27_descr ,".  $sigla."lotac as r14_lotac,
                 r70_descr,". $sigla."quant as r14_quant,".  $sigla."valor as r14_valor";
       $orderby= $sigla."regist,". $sigla."rubric";
 
       $chavepri = array ("r14_anousu" => @ $r14_anousu, "r14_mesusu" => @ $r14_mesusu, "r14_regist" => @ $r14_regist, "r14_rubric" => @ $r14_rubric);
-      
+
       // Seta TPP como chave primária.
       if($gerf == "fr"){
       	$chavepri["r20_tpp"] = @$r20_tpp;
@@ -299,7 +317,7 @@ if($gerf == "fs"){
                                                    $dbwhere);
       }
       // echo $cliframe_alterar_excluir->sql;
-      $cliframe_alterar_excluir->campos   = "r14_rubric,rh27_descr".$mostracamp.",r14_quant,r14_valor";
+      $cliframe_alterar_excluir->campos   = "r14_rubric,rh27_descr".$mostracamp.",r14_quant,r14_valor,r48_semest";
       $cliframe_alterar_excluir->opcoes   = 3;
       $cliframe_alterar_excluir->legenda  = "";
       $cliframe_alterar_excluir->iframe_height = "70%";
@@ -347,7 +365,7 @@ function js_vercampos(){
           }else if(document.form1.r14_rubric.value == ""){
             alert("Rubrica não informada");
             document.form1.r14_rubric.focus();
-            erro++;  
+            erro++;
           }else if((document.form1.r14_quant.value == "" || document.form1.r14_quant.value == "0") && (document.form1.rh27_form.value == "T" || document.form1.rh27_form.value == "t")){
             alert("Quantidade não informada");
             document.form1.r14_quant.select();
@@ -384,19 +402,19 @@ function js_pesquisar14_regist(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($gerf == "fs" ? "ar" : ($gerf == "fr" ? "af" : "r"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r14_mesusu.value+'&chave_r01_anousu'+document.form1.r14_anousu.value,'Pesquisa',true);
   }else{
-    if(document.form1.r14_regist.value != ''){ 
+    if(document.form1.r14_regist.value != ''){
        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($gerf == "fs" ? "ar" : ($gerf == "fr" ? "af" : "r"))?>&pesquisa_chave='+document.form1.r14_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
-      location.href = "pes1_gerffx001.php?gerf="+document.form1.gerf.value; 
+      location.href = "pes1_gerffx001.php?gerf="+document.form1.gerf.value;
     }
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.r14_regist.focus(); 
-    document.form1.r14_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.r14_regist.focus();
+    document.form1.r14_regist.value = '';
   }else{
     js_submita();
   }
@@ -412,10 +430,10 @@ function js_pesquisar14_rubric(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricasnovo.php?funcao_js=parent.js_mostrarubricas1|rh27_rubric|rh27_descr|rh27_limdat|formula|rh27_obs|rh27_pd&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
   }else{
-    if(document.form1.r14_rubric.value != ''){     	
+    if(document.form1.r14_rubric.value != ''){
       quantcaracteres = document.form1.r14_rubric.value.length;
       for(i=quantcaracteres;i<4;i++){
-        document.form1.r14_rubric.value = "0"+document.form1.r14_rubric.value;        
+        document.form1.r14_rubric.value = "0"+document.form1.r14_rubric.value;
       }
       js_OpenJanelaIframe('top.corpo','db_iframe_rhrubricas','func_rhrubricasnovo.php?ret=pd&pesquisa_chave='+document.form1.r14_rubric.value+'&funcao_js=parent.js_mostrarubricas&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
     }else{
@@ -465,18 +483,18 @@ function js_pesquisar14_lotac(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?funcao_js=parent.js_mostralotacao1|r70_codigo|r70_descr&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r14_mesusu.value+'&chave_r70_anousu'+document.form1.r14_anousu.value,'Pesquisa',true);
   }else{
-    if(document.form1.r14_lotac.value != ''){ 
+    if(document.form1.r14_lotac.value != ''){
       js_OpenJanelaIframe('top.corpo','db_iframelotacao','func_lotacao.php?pesquisa_chave='+document.form1.r14_lotac.value+'&funcao_js=parent.js_mostralotacao&instit=<?=(db_getsession("DB_instit"))?>&chave_r70_mesusu='+document.form1.r14_mesusu.value+'&chave_r70_anousu'+document.form1.r14_anousu.value,'Pesquisa',false);
     }else{
-      document.form1.r70_descr.value = ''; 
+      document.form1.r70_descr.value = '';
     }
   }
 }
 function js_mostralotacao(chave,erro){
-  document.form1.r70_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r14_lotac.focus(); 
-    document.form1.r14_lotac.value = ''; 
+  document.form1.r70_descr.value = chave;
+  if(erro==true){
+    document.form1.r14_lotac.focus();
+    document.form1.r14_lotac.value = '';
   }
 }
 function js_mostralotacao1(chave1,chave2){
