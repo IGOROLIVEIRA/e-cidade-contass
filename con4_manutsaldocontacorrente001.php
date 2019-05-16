@@ -168,7 +168,7 @@ db_app::load("widgets/DBAncora.widget.js");
             </fieldset>
 
             <div style="margin-top: 10px;">
-                <input name="processar" type="button" id="processar" value="Processar" disabled="disabled" onclick="js_processar();">
+                <input name="processar" type="button" id="processar" value="Processar"  onclick="js_processar();">
                 <input name="novo" type="button" id="novo" value="Novo Detalhamento" onclick="js_NovoDetalhamento();">
                 <input name="importar" type="button" id="importar" value="Importar do Sicom Balancete" disabled="disabled" onclick="js_importar();">
 
@@ -878,7 +878,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         }
 
         $('TotalForCol3').innerHTML = js_formatar(parseFloat(Math.abs(nTotal)).toFixed(2), 'f');
-        js_habilitaBotao();
+       // js_habilitaBotao();
 
     }
 
@@ -897,7 +897,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         }
 
         $('TotalForCol2').innerHTML = js_formatar(parseFloat(Math.abs(nTotal)).toFixed(2), 'f');
-        js_habilitaBotao();
+       // js_habilitaBotao();
 
     }
 
