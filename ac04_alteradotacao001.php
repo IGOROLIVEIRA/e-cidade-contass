@@ -354,8 +354,9 @@ function js_pesquisao47_coddot(mostra, campo, estrutural){
   input = campo;
   query='elemento='+estrutural;
 
-  if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'&funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,20,0);
+  if(mostra==true) {
+      js_OpenJanelaIframe('top.corpo', 'db_iframe_orcdotacao', 'func_permorcdotacao.php?' + query + '&funcao_js=parent.js_mostraorcdotacao1|o58_coddot', 'Pesquisa', true, 20, 0);
+  }
 
 function js_mostraorcdotacao1(chave1){
 
