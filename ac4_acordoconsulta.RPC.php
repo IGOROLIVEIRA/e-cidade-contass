@@ -220,30 +220,85 @@ switch($oParam->exec) {
 
     break;
 
-  case 'aditamentosConsulta' :
+  case 'apostilamentosConsulta' :
 
     $oRetorno->dados = array();
 
     $oAcordo = new Acordo($oParam->ac16_sequencial);
     $aDados = $oAcordo->getPosicoes();
 
-    
+
     foreach ($aDados as $oDado) {
       
-      $oItem = new stdClass();
-	    $oItem->codigo      = $oDado->getCodigo();
-	    $oItem->situacao    = urlencode($oDado->getDescricaoTipo());
-	    $oItem->data        = $oDado->getData();
-	    $oItem->emergencial = $oDado->isEmergencial();
-	    $oItem->vigencia    = urlencode($oDado->getVigenciaInicial()." até ".$oDado->getVigenciaFinal());
-	    $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
-      $oRetorno->dados[] = $oItem;
+        $oItem = new stdClass();
+        if(urlencode($oDado->getNumeroApostilamento()) != "") {
+            $oItem->codigo = $oDado->getCodigo();
+            $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+            $oItem->data = $oDado->getData();
+            $oItem->emergencial = $oDado->isEmergencial();
+            $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+            $oItem->numeroAditamento = urlencode($oDado->getNumeroApostilamento());
+            $oRetorno->dados[] = $oItem;
+        }
     }
 
     $oRetorno->detalhe          = $oParam->detalhe;
     $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
 
     break;
+
+    case 'posicoesConsulta' :
+
+        $oRetorno->dados = array();
+
+        $oAcordo = new Acordo($oParam->ac16_sequencial);
+        $aDados = $oAcordo->getPosicoes();
+
+        foreach ($aDados as $oDado) {
+
+            $oItem = new stdClass();
+            if(urlencode($oDado->getNumeroAditamento()) != "") {
+                $oItem->codigo = $oDado->getCodigo();
+                $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+                $oItem->data = $oDado->getData();
+                $oItem->emergencial = $oDado->isEmergencial();
+                $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+                $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
+                $oRetorno->dados[] = $oItem;
+            }
+        }
+
+        $oRetorno->detalhe          = $oParam->detalhe;
+        $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
+
+        break;
+
+    case 'aditamentosConsulta' :
+
+        $oRetorno->dados = array();
+
+        $oAcordo = new Acordo($oParam->ac16_sequencial);
+        $aDados = $oAcordo->getPosicoes();
+
+
+        foreach ($aDados as $oDado) {
+
+            $oItem = new stdClass();
+            if(urlencode($oDado->getNumeroAditamento()) != "") {
+                $oItem->codigo = $oDado->getCodigo();
+                $oItem->situacao = urlencode($oDado->getDescricaoTipo());
+                $oItem->data = $oDado->getData();
+                $oItem->emergencial = $oDado->isEmergencial();
+                $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
+                $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
+                $oRetorno->dados[] = $oItem;
+            }
+        }
+
+        $oRetorno->detalhe          = $oParam->detalhe;
+        $oRetorno->ac16_sequencial  = $oParam->ac16_sequencial;
+
+        break;
 
   case 'rescisoesConsulta' :
 
@@ -274,7 +329,6 @@ switch($oParam->exec) {
 
     $oAcordo = new Acordo($oParam->ac16_sequencial);
     $aDados = $oAcordo->getAnulacoes();
-    //print_r($aDados);
 
     foreach ($aDados as $oDado) {
 
@@ -319,7 +373,7 @@ switch($oParam->exec) {
 			      $oItem->vlrUnit     = $oDado->getValorunitario();
 			      $oItem->vlrTotal    = $oDado->getValorTotal();
 			      $oItem->dotacoes    = $oDado->getDotacoes();
-            $oItem->saldos      = $oDado->getSaldos();
+			      $oItem->saldos      = $oDado->getSaldos();
 			      $nSomaTotal        += $oDado->getValorTotal();
 
 			      $oRetorno->dados[]         = $oItem;

@@ -188,8 +188,6 @@ if(isset($codigo_acordo)){
   WHERE  ac20_acordoposicao = (SELECT max(ac26_sequencial) FROM acordoposicao where ac26_acordo = '".$codigo_acordo."') AND ac16_sequencial = '".$codigo_acordo."' ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
   $oResult = db_query($sSql);
   $oResult = db_utils::getColectionByRecord($oResult);
-//  echo $sSql;
-
 }
 ?>
 <html>
@@ -227,10 +225,7 @@ if(isset($codigo_acordo)){
             <tr>
               <td width="100%">
                 <table width="100%" id="dotacoes">
-                  <!-- primeiro exige posicao, data, material, quantidade valor total, qtd autorizar -->
-                <!--tr style="border:1px solid black; background:#bac6d8;">
-                  <th colspan="4">Posições de acordo</th>
-                </tr-->
+
                 <tr style="background: #ffffff;
                 height: 20px;">
                 <th style="height: 25px; font-size:14px; background: #ffffff;">Cód. Acordo</th>
@@ -361,24 +356,10 @@ function js_pesquisao47_coddot(mostra, campo, estrutural){
 
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'&funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,20,0);
-  }/*else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'pesquisa_chave='+document.getElementById(input).value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
-  }*/
-}
-/*function js_mostraorcdotacao(chave,erro){
-  /*if(erro==true){
-    document.form1.o47_coddot.focus();
-    document.form1.o47_coddot.value = '';
-  }*/
-  /*document.getElementById(input).setAttribute('value', chave);
-
-}*/
 
 function js_mostraorcdotacao1(chave1){
 
   document.getElementById(input).setAttribute('value', chave1);
-  /*document.form1.o47_coddot.value = chave1;
-  js_dot();*/
 
 
   db_iframe_orcdotacao.hide();
@@ -387,8 +368,7 @@ function js_mostraorcdotacao1(chave1){
   };
   var top = document.getElementById("ancora"+input).documentOffsetTop() - ( window.innerHeight / 2 );
   window.scrollTo( 0, top );
-  /*var elmnt = document.getElementById("ancora"+input);
-  elmnt.scrollIntoView();*/
+
 }
 
 function js_pesquisaac16_sequencial(lMostrar) {
