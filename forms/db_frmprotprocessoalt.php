@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: protocolo
@@ -50,23 +50,23 @@ function js_novo() {
 <table border="0">
   <tr>
     <td nowrap title="Usuário">
-      <b>Usuário:</b> 
+      <b>Usuário:</b>
     </td>
-    <td> 
+    <td>
      <?
        $sql = "select nome from db_usuarios where id_usuario = ".db_getsession("DB_id_usuario");
-       echo pg_result(db_query($sql),0,"nome");  
+       echo pg_result(db_query($sql),0,"nome");
      ?>
     </td>
   </tr>
   <tr>
     <td nowrap title="Usuário">
-      <b>Departamento:</b> 
+      <b>Departamento:</b>
     </td>
-    <td> 
+    <td>
      <?
        $sql = "select descrdepto from db_depart where coddepto = ".db_getsession("DB_coddepto");
-       echo pg_result(db_query($sql),0,"descrdepto");  
+       echo pg_result(db_query($sql),0,"descrdepto");
      ?>
     </td>
   </tr>
@@ -74,7 +74,7 @@ function js_novo() {
     <td nowrap title="<?=@$Tp58_codproc?>">
        <?=@$Lp58_codproc; ?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('p58_codproc',12,$Ip58_codproc,true,'text',3,"");
     ?>
@@ -93,7 +93,7 @@ function js_novo() {
     <td nowrap title="<?=@$Tp58_numero?>">
        <?=@$Lp58_numero; ?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('p58_numero',12,$Ip58_numero,true,'text',3,"");
     ?>
@@ -118,7 +118,7 @@ function js_novo() {
     <?=@$Lp58_hora;?>
     </td>
     <td>
-  <?     
+  <?
   if($db_opcao == 1){
     $p58_hora = db_hora();
     db_input('p58_hora',7,@$Ip58_hora,true,'text','3','');
@@ -129,23 +129,23 @@ function js_novo() {
   </tr>
 <?
   $op_tip = 1;
-  $pesq_p58_codigo1 = "js_pesquisap58_codigo(true)"; 
+  $pesq_p58_codigo1 = "js_pesquisap58_codigo(true)";
   $pesq_p58_codigo2 = "js_pesquisap58_codigo(false)";
   if($db_opcao==2){
     $op_tip = 2;
     if(isset($p58_codproc) && trim($p58_codproc)!=""){
-      $sql_tipo = " select p61_codproc as processo1, 
-                           p63_codproc as processo2, 
+      $sql_tipo = " select p61_codproc as processo1,
+                           p63_codproc as processo2,
                            p67_codproc as processo3
-                      from protprocesso 
-                           left join procandam        on procandam.p61_codproc        = protprocesso.p58_codproc 
-                           left join proctransferproc on proctransferproc.p63_codproc = protprocesso.p58_codproc 
-                           left join procarquiv       on procarquiv.p67_codproc       = protprocesso.p58_codproc 
-                     where protprocesso.p58_codproc = {$p58_codproc} 
+                      from protprocesso
+                           left join procandam        on procandam.p61_codproc        = protprocesso.p58_codproc
+                           left join proctransferproc on proctransferproc.p63_codproc = protprocesso.p58_codproc
+                           left join procarquiv       on procarquiv.p67_codproc       = protprocesso.p58_codproc
+                     where protprocesso.p58_codproc = {$p58_codproc}
                        and procandam.p61_codproc is null
                        and proctransferproc.p63_codproc is null
                        and procarquiv.p67_codproc is null ";
-                       
+
       $result_tipo = $clprotpro->sql_record($sql_tipo);
       if($clprotpro->numrows==0){
         $op_tip = 3;
@@ -160,7 +160,7 @@ function js_novo() {
        <?=db_ancora(@$Lp58_codigo,"$pesq_p58_codigo1",$op_tip);
 ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p58_codigo',5,$Ip58_codigo,true,'text',$op_tip," onchange='$pesq_p58_codigo2'")
 ?>
@@ -179,7 +179,7 @@ if($db_opcao == 1){
          db_ancora(@$Lp58_numcgm,"js_pesquisap58_numcgm(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
     <?
        db_input('p58_numcgm',5,$Ip58_numcgm,true,'text',3," onchange='js_pesquisap58_numcgm(false);'");
 
@@ -191,7 +191,7 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tp58_requer?>">
        <?=@$Lp58_requer?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('p58_requer',50,$Ip58_requer,true,'text',$db_opcao,"")
     ?>
@@ -201,9 +201,9 @@ if($db_opcao == 1){
     <td nowrap title="<?=@$Tp58_obs?>">
        <?=@$Lp58_obs?>
     </td>
-    <td> 
+    <td>
     <?
-      db_textarea('p58_obs',5,80,$Ip58_obs,true,'text',$db_opcao,"")
+      db_textarea('p58_obs',5,80,$Ip58_obs,true,'text',$db_opcao,"","","", 1100)
     ?>
     </td>
   </tr>
@@ -212,14 +212,14 @@ if($db_opcao == 1){
    <fieldset>
     <table>
      <tr>
-      <td> 
+      <td>
         <b>CAMPOS COMPLEMENTARES</b>
       </td>
      </tr>
      <tr>
       <td>
-<? 
-if ($db_opcao != 22 ){ 
+<?
+if ($db_opcao != 22 ){
 $funcaojava = null;
 $clprocvar = new cl_procvar;
 $cldb_syscampo = new cl_db_syscampo;
@@ -233,9 +233,9 @@ if($clandpadrao->numrows == 0) {
 }
 
 
-  
+
 $result = $clprocvar->sql_record($clprocvar->sql_query($p58_codigo));
-if ($clprocvar->numrows > 0) { 
+if ($clprocvar->numrows > 0) {
    for ($i = 0 ; $i < $clprocvar->numrows;$i++){
        db_fieldsmemory($result,$i);
        $rscampo = $cldb_syscampo->sql_record($cldb_syscampo->sql_query($p54_codcam));
@@ -244,16 +244,16 @@ if ($clprocvar->numrows > 0) {
        if ($db_opcao == 2){
           $sql1 = "select p55_conteudo from proctipovar where p55_codproc = $p58_codproc and p55_codcam = $p54_codcam";
           $rsq = db_query($sql1);
-          if (pg_num_rows($rsq) > 0){ 
+          if (pg_num_rows($rsq) > 0){
               $$nomecam = pg_result($rsq,0,"p55_conteudo");
           }
        }
        $jl = "L".$nomecam;
        echo "<tr>";
        echo "<td>".$$jl."</td>";
-       $xc = $conteudo; 
+       $xc = $conteudo;
        $ji = "I$nomecam";
-       if (substr($xc,0,4)!="date"){  
+       if (substr($xc,0,4)!="date"){
           if ( (substr($xc,0,3)=="cha") || ( substr($xc,0,3)=="var") || (substr($xc,0,3)=="flo") ){
             echo "<td>";
             db_input("$nomecam",$tamanho,$$ji,true,'text',$db_opcao,$funcaojava);
@@ -262,10 +262,10 @@ if ($clprocvar->numrows > 0) {
           $x = array("f"=>"NAO","t"=>"SIM");
               echo "<td>";
           db_select("$nomecam",$x,true,$db_opcao,$funcaojava);
-              echo "</td></tr>"; 
+              echo "</td></tr>";
           }else if (substr($xc,0,3)=="tex"){
              echo "<td>";
-             db_textarea("$nomecam",0,0,$$ji,true,'text',$db_opcao,$funcaojava); 
+             db_textarea("$nomecam",0,0,$$ji,true,'text',$db_opcao,$funcaojava);
              echo "</td></tr>";
           }else{
                echo "<td>";
@@ -288,15 +288,15 @@ if ($clprocvar->numrows > 0) {
 ?>
      </table>
    </td>
-  </tr> 
+  </tr>
   <tr>
     <td colspan="3" valign='top'>
     <?
 //    include("classes/db_procdoctipo_classe.php");
     $cldoc = new cl_procdoctipo;
     $res   = $cldoc->sql_record($cldoc->sql_query(@$p58_codigo,"","p56_coddoc,p56_descr"));
-    
-    if ($cldoc->numrows > 0) {      
+
+    if ($cldoc->numrows > 0) {
       echo "<fieldset>";
       if ($db_opcao == 1) {
         if (@$p58_codigo != "") {
@@ -314,7 +314,7 @@ if ($clprocvar->numrows > 0) {
           }
         }
       } else if ($db_opcao == 2) {
-        
+
         if (isset($btnalterar) && $btnalterar==2) {
           if (@$p58_codproc != "") {
             $sqldoc  = "select coalesce(p81_doc, false) as p81_doc, ";
@@ -327,14 +327,14 @@ if ($clprocvar->numrows > 0) {
             $sqldoc .= " where p57_codigo = $p58_codigo " ;
 
             $res = $cldoc->sql_record($sqldoc);
-            
+
             if ($cldoc->numrows > 0) {
               echo "<b>DOCUMENTOS</b><br>";
               $docs = "";
               $ndocs = "";
               for ($x=0; $x<$cldoc->numrows; $x++) {
                 db_fieldsmemory($res,$x);
-                echo "<input type='checkbox' name='doc$x' ".($p81_doc == 't'?'checked':'')." onClick='js_valor()' 
+                echo "<input type='checkbox' name='doc$x' ".($p81_doc == 't'?'checked':'')." onClick='js_valor()'
                              value='$p56_coddoc'><b>$p56_descr</b><br>";
                 if ($p81_doc == 't') {
                   $docs .= $p56_coddoc."#";
@@ -344,9 +344,9 @@ if ($clprocvar->numrows > 0) {
               }
             }
           }
-          
+
         } else {
-          
+
           if (@$p58_codigo != "") {
             $res = $cldoc->sql_record($cldoc->sql_query($p58_codigo,"","p56_coddoc,p56_descr"));
             if ($cldoc->numrows > 0) {
@@ -367,17 +367,17 @@ if ($clprocvar->numrows > 0) {
       db_input('btnalterar',10,"",true,'hidden',3);
     ?>
     </td>
-  </tr>  
+  </tr>
 </table>
 </center>
-<input name="db_opcao" type="submit" id="db_opcao" 
-       value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Alterar"))?>" 
+<input name="db_opcao" type="submit" id="db_opcao"
+       value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Alterar"))?>"
        onclick="js_testa()"  <?=($db_botao == false ? "disabled" : "")?>>
-       
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" 
+
+<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();"
        <?=($db_opcao == 1 ? "disabled" : "")?>>
 
-<input name="novo" type="button" id="novo" value="Novo" onclick="js_novo();" 
+<input name="novo" type="button" id="novo" value="Novo" onclick="js_novo();"
        <?=($db_opcao == 1 ? "disabled" : "")?>>
 
 <input type="button" id="btnAnexarDocumento" value="Anexar Documento" />
@@ -395,7 +395,7 @@ $("btnAnexarDocumento").observe("click", function () {
 function js_valor(){
  var cods  = '';
  var ncods = '';
-  
+
   for(i=0;i<document.form1.length;i++){
      if(document.form1.elements[i].type == "checkbox"){
        if(document.form1.elements[i].checked == true){
@@ -424,10 +424,10 @@ function js_pesquisap58_codigo(mostra){
   parent.document.formaba.processosapensados.disabled = true;
 }
 function js_mostratipoproc(chave,erro){
-  document.form1.p51_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.p58_codigo.focus(); 
-    document.form1.p58_codigo.value = ''; 
+  document.form1.p51_descr.value = chave;
+  if(erro==true){
+    document.form1.p58_codigo.focus();
+    document.form1.p58_codigo.value = '';
   }
   parent.document.formaba.dadosprocesso.disabled      = false;
   parent.document.formaba.processosapensados.disabled = false;
@@ -458,9 +458,9 @@ function js_pesquisap58_numcgm(mostra){
 function js_mostracgm(erro,chave){
   document.form1.z01_nome.value = chave;
   document.form1.p58_requer.value = chave2;
-  if(erro==true){ 
-    document.form1.p58_numcgm.focus(); 
-    document.form1.p58_numcgm.value = ''; 
+  if(erro==true){
+    document.form1.p58_numcgm.focus();
+    document.form1.p58_numcgm.value = '';
   }
   parent.document.formaba.dadosprocesso.disabled      = false;
   parent.document.formaba.processosapensados.disabled = false;
@@ -488,10 +488,10 @@ function js_pesquisap58_coddepto(mostra){
   parent.document.formaba.processosapensados.disabled = true;
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.p58_coddepto.focus(); 
-    document.form1.p58_coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.p58_coddepto.focus();
+    document.form1.p58_coddepto.value = '';
   }
   parent.document.formaba.dadosprocesso.disabled      = false;
   parent.document.formaba.processosapensados.disabled = false;
@@ -544,6 +544,6 @@ if($db_opcao == 22){
   echo "<script>
         onload = js_pesquisa();
         </script>";
-  $chamacgm = false;  
+  $chamacgm = false;
 }
 ?>

@@ -86,8 +86,8 @@ if (pg_numrows($result_impusu) > 0) {
   }
 }
 $sqlproc = "select coddepto,descrdepto,p51_descr
-	   		from andpadrao 
-				  inner join db_depart on coddepto = p53_coddepto 
+	   		from andpadrao
+				  inner join db_depart on coddepto = p53_coddepto
 				  inner join tipoproc on p51_codigo = p53_codigo where p53_codigo = ".$this->p58_codigo ."
         order by p53_ordem limit 1
         ";
@@ -112,10 +112,10 @@ $this->objpdf->roundedrect(10, 120, 190, 5, 2, 'DF', 12);
 $this->objpdf->sety(120);
 $this->objpdf->cell(180, 5, 'OUTROS DADOS', 0, 1, "C");
 
-$this->objpdf->Setfont("Times", "", 10);
+$this->objpdf->Setfont("Times", "", 9);
 
-$texto = db_formatatexto(10, 100, $this->p58_obs, "t");
-$this->objpdf->multicell(185, 5,$texto,0,1,"L");
+$texto = db_formatatexto(13, 100, $this->p58_obs, "t");
+$this->objpdf->multicell(186, 6,$texto,0,1,"J");
 
 // Variaveis
 if ($this->result_vars != ""){
