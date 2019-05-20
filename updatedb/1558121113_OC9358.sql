@@ -1,5 +1,5 @@
 -- Ocorrência 9358
-BEGIN;                   
+/*BEGIN;                   
 SELECT fc_startsession();
 
 -- Início do script
@@ -224,5 +224,5 @@ INSERT INTO db_menu (id_item,id_item_filho,menusequencia,modulo) VALUES
 
 -- Fim do script
 
-COMMIT;
+COMMIT;*/
 
