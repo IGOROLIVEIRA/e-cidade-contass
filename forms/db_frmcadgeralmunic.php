@@ -39,21 +39,43 @@ td {
 }
 
 fieldset table td:first-child {
-  width: 160px;
+  width: 180px;
   white-space: nowrap
+}
+
+#listMunicipios{
+ width: 180px;
+}
+
+#z01_incmunici, #z01_ultalt{
+  width: 118px;
+}
+
+#municipio, #z01_sexo{
+  width: 118px;
+}
+
+#z01_dtfalecimento{
+  width: 95px;
+}
+
+#z01_identdtexp{
+  width:88px;
 }
 </style>
 <?php
+
 $btnDisabled = "";
 if ($db_opcao == 33 || $db_opcao == 3) {
   $btnDisabled = "disabled";
 }
 
 $clrotulo = new rotulocampo ( );
+$cldb_uf  = new cl_db_uf;
 $clrotulo->label ('z03_tipoempresa');
 $clrotulo->label ('rh70_sequencial');
 $clrotulo->label ('rh70_descr');
-
+$clrotulo->label ('db12_uf');
 
 $ov02_sequencial = "";
 $ov02_seq = "";
@@ -68,7 +90,6 @@ if (isset ( $oGet->funcaoRetorno ) && trim ( $oGet->funcaoRetorno ) != "") {
   $funcaoRetorno = $oGet->funcaoRetorno;
 }
 
-
 if ($db_opcao == 22 || $db_opcao == 2) {
   $z01_incmunici =$oCgm->z01_incmunici;
 }
@@ -79,6 +100,7 @@ if ($db_opcao == 22 || $db_opcao == 2) {
 $sCampos         = "db98_sequencial as z03_tipoempresa, db98_descricao";
 $sSqlTipoEmpresa = $cltipoempresa->sql_query_file(null, $sCampos, null, "");
 $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
+
 ?>
 <form action="" method="post" name="form1" id="form1">
   <input type="hidden" name="ov02_sequencial" id="ov02_sequencial" value="<?=$ov02_sequencial?>" />
@@ -120,7 +142,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td align="right">
           <?=@$Lz01_ultalt?>
         </td>
-        <td align="left">
+        <td align="right">
           <?
             $z01_ultalt_ano = date ( 'Y', db_getsession ( "DB_datausu" ) );
             $z01_ultalt_mes = date ( 'm', db_getsession ( "DB_datausu" ) );
@@ -152,7 +174,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td align="right" title="<?=@$Tz01_ident?>">
           <?=@$Lz01_ident?>
         </td>
-        <td align="left">
+        <td align="right">
           <?
             db_input ( 'z01_ident', 15, $Iz01_ident, true, 'text', $db_opcao );
           ?>
@@ -174,7 +196,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td align="right">
           <?=@$Lz01_identdtexp?>
         </td>
-        <td align="left">
+        <td align="right">
           <?
             db_inputdata ('z01_identdtexp', @$z01_identdtexp_dia, @$z01_identdtexp_mes, @$z01_identdtexp_ano, true, 'text', $db_opcao );
           ?>
@@ -236,7 +258,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
           ?>
         </td>
       </tr>
-      <tr>
+      <tr style="display: none">
         <td nowrap title=<?=@$Tz01_naturalidade?> >
           <?=@$Lz01_naturalidade?>
         </td>
@@ -244,6 +266,38 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
           <?
             db_input ( 'z01_naturalidade', 50, $Iz01_naturalidade, true, 'text', $db_opcao);
           ?>
+        </td>
+      </tr>
+
+        <tr>
+          <td  title="naturalidade" >
+            <b>Naturalidade:</b>
+            <b style="margin-left: 45%">UF:</b>
+          </td>
+
+
+          <td colspan="3">
+          <div>
+          <?
+            $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file(null,"db12_uf as uf, db12_nome as ufdescr"));
+            db_selectrecord("uf",$result_uf,true,$db_opcao,"","","","Selecione - Selecione");
+            db_fieldsmemory($result_uf,0);
+          ?>
+          &nbsp&nbsp&nbsp
+          <b style="align: right">Cidade:</b>
+
+          <?
+            db_select('listMunicipios','', true, $db_opcao, "onchange='js_retornaCodigoIbge()'");
+          ?>
+          &nbsp&nbsp
+          <b>Código IBGE:</b>
+          &nbsp&nbsp
+
+          <?
+            db_input ('z01_ibge', 15, '', true, 'text', 3);
+          ?>
+
+          </div>
         </td>
       </tr>
       <tr>
@@ -518,11 +572,11 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td colspan="4">
           <fieldset>
             <legend><strong>Observações</strong></legend>
-              <? 
+              <?
               if($db_opcao == 1) {
-                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1"); 
+                db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao,'','',"#E6E4F1");
               }else{
-                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao); 
+                db_textarea('z01_obs', 5, 107, null, true, '',$db_opcao);
               }
               ?>
           </fieldset>
@@ -740,9 +794,9 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             <legend><strong>Observações</strong></legend>
               <?
                if($db_opcao == 1) {
-                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1"); 
+                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao,'','',"#E6E4F1");
               }else{
-                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao); 
+                db_textarea('z01_obs', 5, 80, null, true, '',$db_opcao);
               }
               ?>
           </fieldset>
@@ -778,7 +832,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
 </table>
 </form>
 <script type="text/javascript">
-
+  document.getElementById('uf').style.display = 'none';
 //========================================    ANCORA DA CBO =========================
 
 function js_pesquisaCbo(mostra){
@@ -1183,7 +1237,6 @@ function js_findCgm(chavePesquisa) {
 }
 
 function js_retornoFindCgm(oAjax) {
-
   js_removeObj('msgBox');
   var oRetorno = eval('('+oAjax.responseText+')');
 
@@ -1273,7 +1326,6 @@ function js_PreencheEndereco(aEndereco) {
 /*-----------------------Fim da função que preenche os endereços e secundário do form ----------------------*/
 
 function js_PreencheFormulario(oCgm) {
-
   if (oCgm.lfisico == true) {
 
     $('z01_numcgm').value         = oCgm.z01_numcgm;
@@ -1309,6 +1361,12 @@ function js_PreencheFormulario(oCgm) {
     $('z01_cxposcon').value       = oCgm.z01_cxposcon;
     $('z01_incest').value         = oCgm.z01_incest;
     $('z01_obs').value            = oCgm.z01_obs.urlDecode();
+    $('z01_ibge').value           = oCgm.z01_ibge.urlDecode();
+
+    js_preencheUf(oCgm.z01_ibge.urlDecode())
+    // js_pesquisaMunicipios();
+    // js_selCidade();
+
 
     if (oCgm.z01_foto != null) {
       $('fotocgm').src = 'func_mostrarimagem.php?oid='+oCgm.z01_foto;
@@ -1347,8 +1405,8 @@ function js_PreencheFormulario(oCgm) {
       $('fotocgm').src = 'imagens/none1.jpeg';
     }
   }
-
 }
+
 /*------------------ Funções de Validação do formulário ---------------------------------*/
 function js_tamnome(){
 
@@ -1481,8 +1539,8 @@ function js_sendForm(btnValue) {
       oPessoa.z01_dtfalecimento = js_formatar($F('z01_dtfalecimento'),'d');
       oPessoa.z01_identdtexp    = js_formatar($F('z01_identdtexp'),'d');
       oPessoa.z01_identorgao    = tagString($F('z01_identorgao'));
-      oPessoa.z01_naturalidade  = tagString($F('z01_naturalidade'));
-      oPessoa.z01_escolaridade  = tagString($F('z01_escolaridade'));
+      oPessoa.z01_naturalidade  = tagString($F('z01_naturalidade').trim());
+      oPessoa.z01_ibge          = $F('z01_ibge').trim();
       oPessoa.z01_localtrabalho = tagString($F('z01_localtrabalho'));
       oPessoa.z01_renda         = tagString($F('z01_renda'));
       oPessoa.z01_pis           = tagString($F('z01_pis'));
@@ -1494,7 +1552,6 @@ function js_sendForm(btnValue) {
       oPessoa.z01_obs           = $F('z01_obs');
       oPessoa.z04_rhcbo         = $F('rh70_sequencial');
       oPessoa.z01_incmunici     = $F('z01_incmunici');
-      
       var oEndereco = new Object();
       oEndereco.idEndPrimario   = $F('idEnderPrimario');
       oEndereco.idEndSecundario = $F('idEnderSecundario');
@@ -1551,7 +1608,8 @@ function js_sendForm(btnValue) {
       oPessoa.z01_nomefanta     = tagString($F('z01_nomefanta'));
       oPessoa.z01_obs           = $F('z01_obs');
       oPessoa.z01_incmunici     = $F('z01_incmunici');
-            
+      oPessoa.z01_ibge          = $F('z01_ibge');
+
       var oEndereco             = new Object();
       oEndereco.idEndPrimario   = $F('idEnderPrimario');
       oEndereco.idEndSecundario = $F('idEnderSecundario');
@@ -1595,6 +1653,37 @@ function js_sendForm(btnValue) {
   }
 }
 
+// Busca a descrição e a UF com base no código do IBGE
+
+function js_preencheUf(ibge){
+    var oParam = new Object();
+    oParam.exec = 'getDescrUf';
+    oParam.ibge = ibge;
+    var oAjax = new Ajax.Request(
+                    sUrlRpc,
+                    {
+                      asynchronous: false,
+                      parameters: 'json='+Object.toJSON(oParam),
+                      method: 'post',
+                      onComplete: js_retornoDescrUf
+                    }
+      );
+}
+
+function js_retornoDescrUf(oAjax){
+  let oRetorno = eval("("+oAjax.responseText+")");
+  let ufs = document.getElementById('uf');
+  let descricao = oRetorno.descricao;
+
+  for(let cont=0; cont < ufs.length; cont++){
+    if(ufs[cont].value == oRetorno.sigla){
+      document.getElementById('ufdescr').selectedIndex = cont;
+    }
+  }
+
+  js_pesquisaMunicipios(descricao);
+}
+
 function js_retornoExcluirCgm(oAjax) {
 
     js_removeObj("msgBox");
@@ -1616,7 +1705,6 @@ function js_retornoExcluirCgm(oAjax) {
 }
 
 function js_AjaxCgm(oSend,jsRetorno) {
-
   var msgDiv = "Aguarde ...";
   js_divCarregando(msgDiv,'msgBox');
 
@@ -1820,7 +1908,23 @@ function js_validaIncluir() {
             $('z01_obs').focus();
             return false;
           }
-    }   
+    }
+
+    if ($F('listMunicipios').trim() == '' || $F('listMunicipios') == null){
+      var strMessageUsuario = 'Cidade não informada!';
+      js_messageBox(strMessageUsuario, '');
+      $('listMunicipios').focus();
+      return false;
+    }else{
+      if ($F('z01_ibge').trim() == ''){
+        var strMessageUsuario = "Código IBGE não informado!";
+        js_messageBox(strMessageUsuario,'');
+        $('z01_ibge').focus();
+        return false;
+      }
+    }
+
+
 
     //Se não deu erro nenhum retorna true senão false
     return true;
@@ -1879,8 +1983,8 @@ function js_validaIncluir() {
             return false;
           }
       }
-      
-    return true;   
+
+    return true;
   } else {
 
     var strMessageUsuario = "Tipo de Pessoa indefinido para o cadastro!";
@@ -2050,5 +2154,113 @@ function js_validaPis(pis){
   }
 }
 
-//-->
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('ufdescr').onchange = () => {
+  var descrMunicipios = document.getElementById('ufdescr');
+    js_pesquisaMunicipios(null);
+    document.getElementById('z01_ibge').value = '';
+
+    if (descrMunicipios.text == 'DISTRITO FEDERAL')
+      document.getElementById('listMunicipios').selectedIndex = 1;
+
+    if(descrMunicipios.selectedIndex == 0){
+      document.getElementById('listMunicipios').selectedIndex = 0;
+    }
+  };
+
+  document.getElementById('listMunicipios').onchange = () => {
+    js_retornaCodigoIbge();
+  }
+
+},false);
+
+
+
+function js_pesquisaMunicipios(municipio=null){
+
+  let element = document.getElementById('ufdescr');
+  let option = element.options[element.selectedIndex].text;
+  let codigoIbge = document.form1.z01_ibge.value;
+
+  var sUrlRpc   = 'prot1_cadgeralmunic.RPC.php';
+  var oParam    = new Object();
+  oParam.estado = option;
+  oParam.exec   = 'buscaMunicipios';
+
+  if (municipio != '' && municipio != undefined)
+    oParam.cidade = municipio;
+  if (codigoIbge != '')
+    oParam.ibge   = codigoIbge;
+  var oAjax = new Ajax.Request(sUrlRpc, {
+                                        method: 'post',
+                                        asynchronous: false,
+                                        parameters:'json='+Object.toJSON(oParam),
+                                        onComplete: js_preencheCidade
+                                     }
+                                );
+}
+
+function js_preencheCidade(obj){
+  var retorno    = JSON.parse(obj.request.parameters.json);
+  var oRetorno   = JSON.parse(obj.responseText);
+  var municipios = document.getElementById('listMunicipios');
+
+  municipios.innerHTML = '';
+  listaMunicipios = oRetorno.municipios;
+  municipios.add(new Option('Selecione'));
+
+  if(listaMunicipios.length == 1){
+    var ob       = document.createElement('option');
+    ob.value     = listaMunicipios.sequencial;
+    ob.text      = 'BRASÍLIA';
+    municipios.appendChild(ob);
+    municipios.selectedIndex = 1;
+    js_retornaCodigoIbge();
+  }
+  else{
+    listamunictratado = listaMunicipios.filter(item => item.descricao !== undefined && item.descricao !==null);
+
+    listamunictratado.forEach((item, index) => {
+      var obj   = document.createElement('option');
+      obj.value = item.sequencial;
+      obj.text  = item.descricao;
+      municipios.appendChild(obj);
+
+    });
+  }
+
+  for (let cont = 0; cont < municipios.length; cont++) {
+     if (municipios.options[cont].text === retorno.cidade){
+        municipios.selectedIndex = cont;
+        js_retornaCodigoIbge();
+     }
+  }
+
+  if(retorno.ibge)
+    document.form1.z01_ibge.value = retorno.ibge;
+
+}
+
+function js_retornaCodigoIbge(){
+  var element   = document.getElementById('ufdescr');
+  var option    = element.options[element.selectedIndex].text;
+  var oParam    = new Object();
+  oParam.cidade = document.getElementById('listMunicipios').value;
+  oParam.estado = option;
+  oParam.exec   = 'getCodigoIbge';
+  var sUrlRpc   = 'prot1_cadgeralmunic.RPC.php';
+
+  var oAjax = new Ajax.Request(sUrlRpc, {
+                                        method: 'post',
+                                        parameters:'json='+Object.toJSON(oParam),
+                                        onComplete: js_preencheCodigoIbge
+                                     }
+                                );
+}
+
+function js_preencheCodigoIbge(obj){
+  let oRetorno = JSON.parse(obj.responseText);
+  document.getElementById('z01_ibge').value = oRetorno.codigo;
+}
+
 </script>

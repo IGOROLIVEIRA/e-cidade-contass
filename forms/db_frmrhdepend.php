@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("dbforms/db_classesgenericas.php");
@@ -31,6 +31,8 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clrhdepend->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
+$clrotulo->label("rh31_depend");
+$clrotulo->label("rh31_gparen");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -46,7 +48,7 @@ $clrotulo->label("z01_nome");
               db_ancora(@$Lrh31_regist,"",3);
               ?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh31_regist',6,$Irh31_regist,true,'text',3,"");
               db_input('rh31_codigo',6,$Irh31_codigo,true,'hidden',3);
@@ -60,9 +62,19 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_nome?>">
               <?=@$Lrh31_nome?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh31_nome',40,$Irh31_nome,true,'text',$db_opcao,"")
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td nowrap title="<?=@$Trh31_cpf?>">
+              <?=@$Lrh31_cpf?>
+            </td>
+            <td>
+              <?
+              db_input('rh31_cpf',40,$Irh31_cpf,true,'text',$db_opcao,'','', '', '', 11);
               ?>
             </td>
           </tr>
@@ -70,7 +82,7 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_dtnasc?>">
               <?=@$Lrh31_dtnasc?>
             </td>
-            <td> 
+            <td>
               <?
               db_inputdata('rh31_dtnasc',@$rh31_dtnasc_dia,@$rh31_dtnasc_mes,@$rh31_dtnasc_ano,true,'text',$db_opcao,"")
               ?>
@@ -80,9 +92,9 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_gparen?>">
               <?=@$Lrh31_gparen?>
             </td>
-            <td> 
+            <td>
               <?
-              $arr_gparen = array( 
+              $arr_gparen = array(
                                   'C'=>'Cônjuge',
                                   'F'=>'Filho',
                                   'P'=>'Pai',
@@ -98,12 +110,12 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_depend?>">
               <?=@$Lrh31_depend?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($rh31_depend)){
                 $rh31_depend = "N";
               }
-        
+
               $arr_depend = array(
                                   'C'=>'Cálculo',
                                   'S'=>'Sempre dependente',
@@ -117,10 +129,10 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_irf?>">
               <?=@$Lrh31_irf?>
             </td>
-            <td> 
+            <td>
               <?
-             
-              
+
+
               $arr_irf = array(
                                '0' => 'Não Dependente',
                                '1' => 'Cônjuge,Companheiro(a)',
@@ -140,12 +152,12 @@ $clrotulo->label("z01_nome");
             <td nowrap title="<?=@$Trh31_especi?>">
               <?=@$Lrh31_especi?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($rh31_especi)){
                 $rh31_especi = "N";
               }
-        
+
               $arr_especi = array(
                                   'N'=>'Não dependente',
                                   'C'=>'Cálculo',
@@ -169,7 +181,7 @@ if(isset($opcao)){
 ?>
 <table width="90%">
   <tr>
-    <td valign="top"  align="center" width="90%" heigth="100%">  
+    <td valign="top"  align="center" width="90%" heigth="100%">
       <?
       $dbwhere = " rh31_regist = $rh31_regist ";
       if(isset($rh31_codigo) && trim($rh31_codigo)!=""){
@@ -180,7 +192,8 @@ if(isset($opcao)){
                                           rh31_regist,
                                           rh31_nome,
                                           rh31_dtnasc,
-                                          case rh31_gparen 
+                                          rh31_cpf,
+                                          case rh31_gparen
                                                when 'C' then 'Conjuje'
                                                when 'F' then 'Filho'
                                                when 'P' then 'Pai'
@@ -194,13 +207,13 @@ if(isset($opcao)){
                                                'Cálculo'
                                                else case when rh31_depend='S' then
                                                     'Sempre dependente'
-                                                     else 
+                                                     else
                                                     'Não dependente'
                                                end
                                           end
                                           as rh31_depend,
-                                          
-                                          
+
+
                                           case rh31_irf
                                                when '0' then 'Não dependente'
                                                when '1' then 'Cônjuge,Companheiro(a)'
@@ -217,7 +230,7 @@ if(isset($opcao)){
                                                'Cálculo'
                                                else case when rh31_especi='S' then
                                                     'Sempre dependente'
-                                                     else 
+                                                     else
                                                     'Não dependente'
                                                end
                                           end
@@ -246,6 +259,17 @@ if(isset($opcao)){
  </table>
 </form>
 <script>
+// incluir = document.getElementById('db_opcao');
+// incluir.addEventListener("click", function(){
+//   let cpf = document.getElementById('rh31_cpf').value;
+//   let irf = document.getElementById('rh31_irf').value;
+//   if(cpf == '' && irf != 0){
+//     alert('Informe um número de CPF válido!!!');
+//     return false;
+//   }
+// })
+
+
 function js_pesquisa(){
   js_OpenJanelaIframe('','db_iframe_rhdepend','func_rhdepend.php?funcao_js=parent.js_preenchepesquisa|rh31_regist','Pesquisa',true);
 }
