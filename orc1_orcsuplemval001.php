@@ -241,7 +241,6 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
             $dotacoes = array(100,101,102,118,119);
             if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
                 $sqlerro = true;
-                die("aqui2");
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
