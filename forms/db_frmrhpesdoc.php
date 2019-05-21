@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -34,6 +34,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 $clrotulo->label("db12_uf");
 $clrotulo->label("db12_codigo");
+$clrotulo->label("rh16_reserv");
 if (isset($db_opcaoal)) {
 
   $db_opcao = 33;
@@ -66,28 +67,29 @@ if (isset($db_opcaoal)) {
     $r16_carth_cat  = "";
     $rh16_carth_val = "";
     $rh16_emissao   = "";
+    $rh16_cnh_uf   = "";
   }
 }
 
 if ($db_opcao == 1 || $db_opcao == 2 || $db_opcao == 11 || $db_opcao == 22) {
-  
+
   $oDaoRhPesDoc    = db_utils::getDao("rhpesdoc");
   $sSqlDocServidor = $oDaoRhPesDoc->sql_query_file($rh16_regist);
   $rsDocServidor   = $oDaoRhPesDoc->sql_record($sSqlDocServidor);
-  
+
   if ($oDaoRhPesDoc->numrows <= 0) {
-    
+
     $db_opcao = 1;
     $db_botao = true;
   }
-  
-  $sSqlNome = "select z01_nome 
-                 from cgm 
-           inner join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm 
+
+  $sSqlNome = "select z01_nome
+                 from cgm
+           inner join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm
                 where rh01_regist = {$rh16_regist}";
   $rsNome   = $oDaoRhPesDoc->sql_record($sSqlNome);
   $z01_nome = db_utils::fieldsMemory($rsNome, 0)->z01_nome;
-  
+
 }
 
 ?>
@@ -194,7 +196,7 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
 			$rh16_emissao_val_ano = '';
 			$rh16_emissao_val_mes = '';
 			$rh16_emissao_val_dia = '';
-			
+
 			if( isset($rh16_emissao) && $rh16_emissao != ""){
 				list( $rh16_emissao_val_ano, $rh16_emissao_val_mes, $rh16_emissao_val_dia ) = split( "[-]", $rh16_emissao );
 			}
@@ -240,7 +242,19 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
   </tr>
   <tr>
 
-	</fieldset></td></tr></table>
+    <tr>
+    <td nowrap title="<?=@$Trh16_cnh_uf?>">
+       <b>UF da CNH:</b>
+    </td>
+    <td colspan='3'>
+    <?
+      $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file(null,"db12_codigo as uf,db12_uf"));
+      db_selectrecord("rh16_cnh_uf",$result_uf,true,$db_opcao,"","","","","",1);
+    ?>
+  </td>
+</tr>
+
+</fieldset></td></tr></table>
 	</tr>
 	<tr>
     <td colspan="6" align="center">
@@ -250,6 +264,14 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
   </table>
 </form>
 <script>
+
+var select = document.getElementById('rh16_cnh_uf');
+select.insertBefore(new Option('Selecione', 0), select.firstChild);
+
+if (document.getElementById('rh16_carth_n').value == 0) {
+  document.getElementById('rh16_carth_n').value = '';
+}
+
 function js_pesquisarh16_regist(mostra) {
 
   if (mostra == true) {
@@ -295,7 +317,6 @@ function js_pesquisarh16_ctps_uf(mostra) {
 }
 
 function js_mostradb_uf(chave, erro) {
-
   document.form1.db12_uf.value = chave;
   if (erro == true) {
 
@@ -305,7 +326,6 @@ function js_mostradb_uf(chave, erro) {
 }
 
 function js_mostradb_uf1(chave1, chave2) {
-
   document.form1.rh16_ctps_uf.value = chave1;
   document.form1.db12_uf.value = chave2;
   db_iframe_db_uf.hide();
@@ -326,4 +346,15 @@ function js_validaPis(pis) {
     }
   }
 }
+
+if (document.getElementById('rh16_carth_n').value == '') {
+  document.form1.rh16_cnh_uf.selectedIndex = 0;
+}
+
+var elemento = document.getElementById('rh16_carth_n');
+elemento.onchange = (() => {
+  if(!elemento.value || elemento.value == 0)
+    document.getElementById('rh16_cnh_uf').selectedIndex = 0;
+});
+
 </script>

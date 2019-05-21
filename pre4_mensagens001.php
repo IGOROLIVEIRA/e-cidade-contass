@@ -55,12 +55,12 @@ function mens_help() {
   global $nome_help;
   global $texto_help;
   global $HTTP_ENV_VARS;
-    
+
   $uo = strrpos(@$HTTP_ENV_VARS['PATH_INFO'],"/") + 1;
   $ponto = strpos(@$HTTP_ENV_VARS['PATH_INFO'],".");
   $mens = substr(@$HTTP_ENV_VARS['PATH_INFO'],$uo,$ponto - $uo);
 
-  $result = @db_query("select * from db_confmensagem where cod = '".$mens."_help' and instit = $instit");
+  $result = @db_query("select * from db_confmensagem where cod = '".$mens."_help' and instit = ".db_getsession("DB_instit"));
   
   $nome_help = @pg_result($result,0,"cod");
   $texto_help = @pg_result($result,0,"mens");
