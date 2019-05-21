@@ -8836,19 +8836,38 @@ function le_tbprev($r20_rubr=null, $area=null, $sigla=null, $sigla2=null, $nro_d
     }
 
     if($db_debug == true) { echo "[le_tbprev]  Valor da  base de Previdencia da_folha complementar --> $base_folha_complementar <br>"; }
+    if($db_debug == true) { echo "[le_tbprev]  valor maluco --> $r07_valor <br>"; }
     if ($r07_valor + $base_folha_complementar > 0) {
+      if($db_debug == true) { echo "[le_tbprev]  N mizerável --> $n <br>"; }
       if ($n == 2 ) {
 
         if ($db_debug == true) { echo "[le_tbprev]  Valor da Base antes de ir na Tabela de Previdencia --> ".($r07_valor + $pessoal[$Ipessoal]["r01_b13fo"] + $base_folha_complementar)."<br>"; }
         $r07_valor  = calc_tabprev($r07_valor + $pessoal[$Ipessoal]["r01_b13fo"] + $base_folha_complementar,db_str($pessoal[$Ipessoal]["r01_tbprev"]+2,1),$pessoal[$Ipessoal]["r01_tpcont"]);
         if ($db_debug == true) { echo "[le_tbprev]  Valor do Desconto Previdenciario --> $r07_valor <br>"; }
-
+        if ($db_debug == true) { 
+          echo "[le_tbprev]  Valores do cálculo";
+          echo $r07_valor;  
+          echo $pessoal[$Ipessoal]["r01_b13fo"]; 
+          echo  $base_folha_complementar; 
+          echo db_str($pessoal[$Ipessoal]["r01_tbprev"]+2,1); 
+          echo $pessoal[$Ipessoal]["r01_tpcont"]; 
+          echo  "<br>"; 
+        }
       } else {
 
         if ($db_debug == true) { echo "[le_tbprev] Valor da Base antes de ir na Tabela de Previdencia --> ".($r07_valor + $pessoal[$Ipessoal]["r01_basefo"] + $base_folha_complementar)."<br>"; }
+        if ($db_debug == true) { echo "[le_tbprev] Valor maluco 2 --> $r07_valor <br>"; }
         $r07_valor  = calc_tabprev($r07_valor + $pessoal[$Ipessoal]["r01_basefo"] + $base_folha_complementar,db_str($pessoal[$Ipessoal]["r01_tbprev"]+2,1),$pessoal[$Ipessoal]["r01_tpcont"]);
         if ($db_debug == true) { echo "[le_tbprev] Valor do Desconto Previdenciario --> $r07_valor <br>"; }
-
+        if ($db_debug == true) { 
+          echo "[le_tbprev]  Valores do cálculo "."<br>";
+          echo $r07_valor."<br>";  
+          echo $pessoal[$Ipessoal]["r01_b13fo"]."<br>"; 
+          echo  $base_folha_complementar."<br>"; 
+          echo db_str($pessoal[$Ipessoal]["r01_tbprev"]+2,1)."<br>"; 
+          echo $pessoal[$Ipessoal]["r01_tpcont"]."<br>"; 
+          echo  "<br>"; 
+        }
         if($area == "pontofe"){
         //echo "<BR> Valor da Base Previdenciario D--> $vlr_base_prev_ferias_D";
         //echo "<BR> Valor da Base Previdenciario F--> $vlr_base_prev_ferias_F";
@@ -9906,21 +9925,25 @@ function grava_gerf($area_grava,$grava_tpp=" ") {
                             ".bb_condicaosubpes("rh02_" ).$condicaoaux )){
              if(count($pessoal__) == 1 ){
                 if ($db_debug == true) { echo "[grava_gerf] 1 passou aqui ! $r14_valor   -->   $tot_desc <br>"; }
-                $tot_desc += round($r14_valor,2);
+                //$tot_desc += round($r14_valor,3);
+                 $tot_desc += intval(($r14_valor*100))/100;
                 if ($db_debug == true) { echo "[grava_gerf] 29 - tot_desc: $tot_desc<br>"; }
                 //echo "<BR> 2 passou aqui ! $tot_desc";
              }
 
            }else{
-             $tot_desc += round($r14_valor,2);
+             //$tot_desc += round($r14_valor,3);
+               $tot_desc += intval(($r14_valor*100))/100;
              if ($db_debug == true) { echo "[grava_gerf] 30 - tot_desc: $tot_desc<br>"; }
           }
         }else{
-           $tot_desc += round($r14_valor,2);
+           //$tot_desc += round($r14_valor,3);
+            $tot_desc += intval(($r14_valor*100))/100;
            if ($db_debug == true) { echo "[grava_gerf] 31 - tot_desc: $tot_desc<br>"; }
         }
     } else if ($nro >= 17 && $nro <= 22) {
-      $salfamilia = round($r14_valor,2);
+      //$salfamilia = round($r14_valor,3);
+        $tot_desc += intval(($r14_valor*100))/100;
     }
     $condicaoaux = " where rh27_instit = $DB_instit and rh27_rubric = ".db_sqlformat($r20_rubr );
 
@@ -9975,7 +9998,8 @@ function grava_gerf($area_grava,$grava_tpp=" ") {
         $matriz2[1] = $r110_regist;
         $matriz2[2] = $r20_rubr;
         $matriz2[3] = $r110_lotac;
-        $matriz2[4] = round($r14_valor,2);
+        //$matriz2[4] = round($r14_valor,3);
+          $matriz2[4] = intval(($r14_valor*100))/100;
         $matriz2[5] = ($r14_quant==''?0:$r14_quant);
         $matriz2[6] = $r14_pd;
         $matriz2[7] = 0;
@@ -11433,6 +11457,10 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
   $condicaoaux = " and r33_codtab = ".db_sqlformat( $codigo )." order by r33_inic";
   global $inssirf;
   if( db_selectmax( "inssirf", "select * from inssirf ".bb_condicaosubpes( "r33_" ).$condicaoaux )){
+//     echo "select * from inssirf ".bb_condicaosubpes( "r33_" ).$condicaoaux;
+//     echo 'AAAAAAAA '.$base_inss;
+//     echo '<pre>';
+//     print_r($inssirf);
      for($Iinssirf=0;$Iinssirf<count($inssirf);$Iinssirf++){
        if( $base_inss >= $inssirf[$Iinssirf]["r33_inic"] && $base_inss <= $inssirf[$Iinssirf]["r33_fim"]){
     $r14_quant = $inssirf[$Iinssirf]["r33_perc"];
@@ -11440,9 +11468,16 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
     $r22_quant = $inssirf[$Iinssirf]["r33_perc"];
           $perc_inss = $inssirf[$Iinssirf]["r33_perc"];
           if ($tpcont == "13"){
-         $perc_inss = 11;
-      }
-    $calculo = round(($base_inss/100)*$perc_inss,2);
+            $perc_inss = 11;
+          }
+
+//           echo "<BR> r33_fim --> ".$inssirf[$Iinssirf]["r33_fim"];
+//           echo "<BR> perc_inss --> ".$perc_inss;
+//           echo "<BR> calculo --> $calculo";
+
+
+    $calculo = round(($base_inss/100)*$perc_inss,3);
+    $calculo = intval(($calculo*100))/100;
     return $calculo;
        }
 
@@ -11455,17 +11490,20 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
         $r20_quant = $inssirf[$Iinssirf]["r33_perc"];
         $r22_quant = $inssirf[$Iinssirf]["r33_perc"];
         $perc_inss = $inssirf[$Iinssirf]["r33_perc"];
-  if( $tpcont == "13"){
-     $perc_inss = 11;
-  }
-  $calculo = round(($inssirf[$Iinssirf]["r33_fim"]/100)*$perc_inss,2);
-//echo "<BR> r33_fim --> ".$inssirf[$Iinssirf]["r33_fim"];
-//echo "<BR> calculo --> $calculo";
+      if( $tpcont == "13"){
+         $perc_inss = 11;
+      }
+      //$calculo = round(($inssirf[$Iinssirf]["r33_fim"]/100)*$perc_inss,3);
+      $calculo = ($inssirf[$Iinssirf]["r33_fim"]/100)*$perc_inss;
+echo "<BR> r33_fim --> ".$inssirf[$Iinssirf]["r33_fim"];
+echo "<BR> perc_inss --> ".$perc_inss;
+echo "<BR> calculo --> $calculo";
+      $calculo = intval(($calculo*100))/100;
      }else{
-  $r14_quant = 0;
-  $r20_quant = 0;
-  $r22_quant = 0;
-  $calculo   = 0;
+          $r14_quant = 0;
+          $r20_quant = 0;
+          $r22_quant = 0;
+          $calculo   = 0;
      }
   }
   return $calculo;
