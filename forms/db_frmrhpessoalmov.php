@@ -58,8 +58,6 @@ $clrotulo->label("db83_sequencial");
 $clrotulo->label("rh01_reajusteparidade");
 $clrotulo->label("rh03_padraoprev");
 $clrotulo->label("r02_descrprev");
-$clrotulo->label("rh02_regist");
-$clrotulo->label("rh05_aviso");
 
 if(isset($db_opcaoal)){
 
