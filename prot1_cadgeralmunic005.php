@@ -35,16 +35,15 @@ require_once("libs/db_app.utils.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_cgmtipoempresa_classe.php");
 require_once("classes/db_tipoempresa_classe.php");
-// require_once("classes/db_cadendermunicipio_classe.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
 $db_opcao = 1;
 $db_botao = true;
+
 $clcgm            = new cl_cgm;
 $clcgmtipoempresa = new cl_cgmtipoempresa;
 $cltipoempresa    = new cl_tipoempresa;
-// $clmunicipio = new cl_cadendermunicipio;
 
 $clcgm->rotulo->label();
 $cltipoempresa->rotulo->label();
