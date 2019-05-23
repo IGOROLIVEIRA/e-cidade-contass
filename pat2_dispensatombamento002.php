@@ -82,7 +82,7 @@ try {
   INNER JOIN  pcmater ON pc01_codmater=e62_item
   ";
   $sWhere = "";
-  $sCondicoes = " WHERE m36_sequencial is null ";
+  $sCondicoes = " WHERE (m52_valor-coalesce(m36_vrlanu,0)) != 0 ";
 
   if($dInibd!="" && $dFimbd!=""){
     $sWhere = " AND ";
