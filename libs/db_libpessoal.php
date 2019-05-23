@@ -266,14 +266,13 @@ function db_verifica_dias_trabalhados($regist, $ano, $mes, $dias_trab = false)
   return $retorno;
 }
 
-function db_alerta_dados_func($opcao, $regist, $ano, $mes)
+function db_alerta_dados_func($opcao, $regist, $ano, $mes, $ponto = null)
 {
-
   require_once('pes4_gerafolha.RPC.php');
   $rpc = new RPCgerafolha();
   $quantidadeDeComplementaresDoServidor = json_decode($rpc->quantidadeDeComplementaresDoServidor($regist, $ano, $mes));
 
-  if ($quantidadeDeComplementaresDoServidor > 0) {
+  if ($quantidadeDeComplementaresDoServidor > 0 && $ponto == 'com') {
     db_msgbox('Já existe complementar para este servidor no mês atual.');
   }
 

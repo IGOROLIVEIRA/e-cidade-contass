@@ -193,7 +193,7 @@ if($gerf == "fs"){
           if (!isset($r48_semest) || (isset($r48_semest) && trim($r48_semest) == "")) {
             $r48_semest = '0';
           }
-          db_input('r48_semest', 13, $r48_semest, true, 'text', $db_opcao, "", "");
+          db_input('r48_semest', 13, $Ir48_semest, true, 'text', $db_opcao, "");
           ?>
           </td>
 

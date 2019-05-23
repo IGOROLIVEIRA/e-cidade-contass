@@ -64,7 +64,7 @@ $clrotulo->label("z01_nome");
 
 if (isset($valor_testa_rescisao)) {
   $chave_rh01_regist = $valor_testa_rescisao;
-  $retorno           = db_alerta_dados_func($testarescisao, $valor_testa_rescisao, db_anofolha(), db_mesfolha());
+  $retorno           = db_alerta_dados_func($testarescisao, $valor_testa_rescisao, db_anofolha(), db_mesfolha(), $ponto);
   if ($retorno != ""){
     db_msgbox($retorno);
   }
@@ -343,7 +343,7 @@ if(!isset($pesquisa_chave)){
       if ($clrhpessoal->numrows != 0) {
         db_fieldsmemory($result, 0);
         if (isset($testarescisao)) {
-          $retorno = db_alerta_dados_func($testarescisao,$pesquisa_chave,db_anofolha(), db_mesfolha());
+          $retorno = db_alerta_dados_func($testarescisao,$pesquisa_chave,db_anofolha(), db_mesfolha(), $ponto);
           if($retorno != ""){
 
             if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($rotina_suplementar)) {

@@ -124,7 +124,7 @@ if($oGet->sChama === 'complementar2'){
   $geraFolhaRPC = new RPCgerafolha();
   $quantidadeDeComplementaresDoServidor = json_decode($geraFolhaRPC->quantidadeDeComplementaresDoServidor($r90_regist, $r90_anousu, $r90_mesusu));
   
-  if((int) $quantidadeDeComplementaresDoServidor > 0){
+  if((int) $quantidadeDeComplementaresDoServidor > 0 && $oGet->sPonto == 'com'){
     db_msgbox('Já existe complementar para este servidor no mês atual.');
   }
 }

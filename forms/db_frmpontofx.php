@@ -1107,16 +1107,15 @@ function js_mascaradata(valor){
 function js_pesquisar90_regist(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matricula',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matricula',true);
   }else{
     if(document.form1.r90_regist.value != ''){
       <?php if (!FolhaPagamentoSalario::hasFolhaAberta()) { ?>
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?rotina_suplementar=true&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&rotina_suplementar=true&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } else { ?>
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?ponto=<?=$ponto?>&testarescisao=<?=($ponto == "fs" ? "raf" : ($ponto == "fr" ? "fa" : "ra"))?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matricula',false);
       <?php } ?>
 
-      
     }else{
       alert("Matrícula do servidor não informada.");
       document.form1.z01_nome.value = '';
@@ -1238,7 +1237,11 @@ function js_mostrarubricas(chave,chave2,chave3,chave4,chave5,erro){
   }else{
     js_desabilita(false);
   }
-  js_verificaBaseDasRubricas()
+  <?
+  if($ponto == "com"){
+    echo "js_verificaBaseDasRubricas()";
+  }
+  ?>
 }
 function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
   document.form1.r90_rubric.value  = chave1;
@@ -1260,7 +1263,12 @@ function js_mostrarubricas1(chave1,chave2,chave3,chave4,chave5,chave6){
   js_getDadosPadroes();
 
   db_iframe_rhrubricas.hide();
-  js_verificaBaseDasRubricas()
+  
+	<?
+  if($ponto == "com"){
+    echo "js_verificaBaseDasRubricas()";
+  }
+  ?>
 }
 
 function js_pesquisar90_lotac(mostra){
