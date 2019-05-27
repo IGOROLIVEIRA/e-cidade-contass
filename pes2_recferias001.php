@@ -162,6 +162,10 @@ function js_emite(){
   qry+= "&mes="+document.form1.mesfolha.value;
   qry+= "&tipofolha="+document.form1.tipofol.value;
 
+  if(document.form1.complementar){
+    qry+= "&semest="+document.form1.complementar.value;
+  }
+
   if(document.form1.selreg){
     if(document.form1.selreg.length > 0){
       faixareg = js_campo_recebe_valores();
