@@ -37,7 +37,6 @@ require_once("std/db_stdClass.php");
 
 $oPost = db_utils::postMemory($_GET);
 
-
 $sTipo = $oPost->tipo;
 $iAno  = $oPost->ano;
 if(strlen($oPost->mes)==1){
@@ -70,7 +69,10 @@ $sWhere = "		 cadferia.r30_anousu     = {$iAno}
 				   and (    cadferia.r30_proc1 = '{$iAno}/{$iMes}'   
 				         or cadferia.r30_proc2 = '{$iAno}/{$iMes}'           
 				        ) ";
-
+/* $sWhere .= " AND r48_semest = {$semest} AND r48_rubric < 'R950' "*/
+//(isset($semest) && $semest > 0 ) ? $complementar = " AND r48_semest = {$semest} AND r48_rubric < 'R950' " : $complementar = '';
+//$complementar = " AND r48_semest = $semest AND r48_rubric < 'R950' ";//str_replace('\'', "", $complementar);
+//$api->setParameter('$complementar', str_replace('\'', "", $complementar));
 
 if ( $sTipo == "m" ) {
 
@@ -100,7 +102,7 @@ if ( $sTipo == "m" ) {
 } else if ( $sTipo == "t" ) {
 
   if(isset($oPost->flc) && $oPost->flc != "" ) {
-	   $sWhere .= " and rh55_estrut in ('".str_replace(",","','",$oPost->flc)."') ";
+	   $sWhere .= " and rh55_estrut in ('".str_replace(",","'r14_pd",$oPost->flc)."') ";
   }elseif((isset($oPost->lci) && $oPost->lci != "" ) && (isset($oPost->lcf) && $oPost->lcf != "")){
 	   $sWhere .= " and rh55_estrut between '$oPost->lci' and '$oPost->lcf' ";
 	}else if(isset($oPost->lci) && $oPost->lci != ""){
@@ -111,13 +113,21 @@ if ( $sTipo == "m" ) {
 
 }
 
-
 $xml = $api->getReport();
 
-$xml["Report"]["DataSet"]["Query"]["Where"] 	= $sWhere;
+$xml["Report"]["DataSet"]["Query"]["Where"] = $sWhere; 
 
+if (isset($semest) && $semest > 0 ) {
+	$complementar = $xml["Report"]["OpenOffice"]["Details"]["Detail1"]["DataSet"]["Query"]["From"];
+	$xml["Report"]["OpenOffice"]["Details"]["Detail1"]["DataSet"]["Query"]["From"] = str_replace('$complementar', "AND r48_semest = $semest AND r48_rubric < 'R950'", $complementar);
+} else {
+	$complementar = $xml["Report"]["OpenOffice"]["Details"]["Detail1"]["DataSet"]["Query"]["From"];
+	$xml["Report"]["OpenOffice"]["Details"]["Detail1"]["DataSet"]["Query"]["From"] = str_replace('$complementar', "", $complementar);	
+}
+
+
+//echo '<pre>';var_dump($xml["Report"]["OpenOffice"]["Details"]["Detail1"]["DataSet"]["Query"]["From"]);die();//
 $api->setReport($xml);
-
 
 try {
 	$oRecModel = new documentoTemplate(1);

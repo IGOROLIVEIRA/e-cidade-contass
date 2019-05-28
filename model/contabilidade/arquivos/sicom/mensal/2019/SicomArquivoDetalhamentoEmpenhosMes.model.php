@@ -499,7 +499,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             /*
              * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
              */
-            if($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6){
+            if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array($sElemento, $aTipoDespEmpRPPS))) {
                 $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
             }else{
                 $oDadosEmpenho10->si106_tipodespesaemprpps = null; // campo 35
