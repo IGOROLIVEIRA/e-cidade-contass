@@ -138,24 +138,24 @@ class cl_balancete252019 {
        $this->erro_status = "0";
        return false;
      }
-    if ($this->si195_saldoinicialnrsf == null ) {
-      $this->erro_sql = " Campo si195_saldoinicialnrsf não informado.";
-      $this->erro_campo = "si195_saldoinicialnrsf";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-     // if ($this->si195_naturezasaldoinicialnrsf == null ) {
-       // $this->erro_sql = " Campo si195_naturezasaldoinicialnrsf não informado.";
-       // $this->erro_campo = "si195_naturezasaldoinicialnrsf";
-       // $this->erro_banco = "";
-       // $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       // $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       // $this->erro_status = "0";
-       // return false;
-     // }
+    // if ($this->si195_saldoinicialnrsf == null ) {
+    //   $this->erro_sql = " Campo si195_saldoinicialnrsf não informado.";
+    //   $this->erro_campo = "si195_saldoinicialnrsf";
+    //   $this->erro_banco = "";
+    //   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    //   $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    //   $this->erro_status = "0";
+    //   return false;
+    // }
+     if ($this->si195_naturezasaldoinicialnrsf == null ) {
+       $this->erro_sql = " Campo si195_naturezasaldoinicialnrsf não informado.";
+       $this->erro_campo = "si195_naturezasaldoinicialnrsf";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
 //     if ($this->si195_totaldebitosnrsf == null ) {
 //       $this->erro_sql = " Campo si195_totaldebitosnrsf não informado.";
 //       $this->erro_campo = "si195_totaldebitosnrsf";
@@ -292,7 +292,9 @@ class cl_balancete252019 {
                                ,$this->si195_instit
                                ,$this->si195_reg10
                       )";
+
      $result = db_query($sql);
+
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
