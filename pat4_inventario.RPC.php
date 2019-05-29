@@ -399,11 +399,12 @@ try {
 
       $nValorAtual       =  str_replace(",", ".", str_replace(".","", $oParam->nValorAtual));
       $nValorResidual    =  str_replace(",", ".",  str_replace(".","", $oParam->nValorResidual));
+      $nVidaUtil         =  str_replace(",", ".",  str_replace(".","", $oParam->iVidaUtil));
       $nValorDepreciavel =  $nValorAtual -  $nValorResidual;
 
       $oInventarioBem->setValorDepreciavel($nValorDepreciavel);
       $oInventarioBem->setValorResidual($nValorResidual);
-      $oInventarioBem->setVidaUtil($oParam->iVidaUtil);
+      $oInventarioBem->setVidaUtil($nVidaUtil);
       $oInventarioBem->setSituacao($oParam->iSituacao);
       $oInventarioBem->setDepartamento(new DBDepartamento($oParam->iCodigoDepartamento));
       $oInventarioBem->setDivisaoDepartamento(new DBDivisaoDepartamento($oParam->iCodigoDivisao == "0" ? null : $oParam->iCodigoDivisao));
@@ -437,10 +438,12 @@ try {
 
     case "alteraVidaUtil":
 
-    	$oInventarioBem = new InventarioBem($oParam->iInventarioBem == '0' ? null : $oParam->iInventarioBem);
+      $nVidaUtil      =  str_replace(",", ".",  str_replace(".","", $oParam->iVidaUtil));//
+
+      $oInventarioBem = new InventarioBem($oParam->iInventarioBem == '0' ? null : $oParam->iInventarioBem);
     	$oInventarioBem->setInventario(new Inventario($oParam->iCodigoInventario));
     	$oInventarioBem->setBem(new Bem($oParam->iCodigoBem));
-    	$oInventarioBem->setVidaUtil($oParam->iVidaUtil);
+    	$oInventarioBem->setVidaUtil($nVidaUtil);
     	$oInventarioBem->salvar();
     	$oRetorno->iCodigoBemInventario = $oInventarioBem->getCodigo();
     	break;

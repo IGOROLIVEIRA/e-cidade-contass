@@ -99,7 +99,7 @@ function calcatua_bb($anofolha,$mesfolha,$where){
 /*pg_query("drop sequence layout_ati_seq");
 pg_query("create sequence layout_ati_seq");*/
 
-$sql = " SELECT rh01_regist AS matricula,
+$sql = "SELECT rh01_regist AS matricula,
        '1'||'#' 
        ||'1'||'#' 
        ||instituicao.z01_cgccpf||'#' 
@@ -114,13 +114,13 @@ $sql = " SELECT rh01_regist AS matricula,
        ||servidor.z01_cgccpf||'#' 
        ||coalesce(servidor.z01_pis,' ')||'#' 
        ||CASE
-          WHEN rh01_sexo = 'M' THEN 2
-          ELSE 1
+          WHEN rh01_sexo = 'M' THEN 1
+          ELSE 2
           END ||'#'
        ||rh01_estciv||'#'
        ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
        ||'1'||'#' 
-       ||' '||'#' 
+       ||'1'||'#' 
        ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
        ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
        ||rhfuncao.rh37_descr||'#' 
@@ -129,28 +129,70 @@ $sql = " SELECT rh01_regist AS matricula,
        ||trim(translate(to_char(round(sal.salariobase,2),'999999999.99'),'.',','))||'#' 
        ||trim(translate(to_char(round(sal.total,2),'999999999.99'),'.',','))||'#' 
        ||' '||'#' 
-       ||' '||'#' 
-       ||coalesce( 
-  (select (count(*)||'#' ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1), 'DD/MM/YYYY'),' ')||'#' 
-  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1),' ')||'#' 
-  ||to_char(max(rh31_dtnasc),'DD/MM/YYYY')||'#' 
-  ||(select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and depend.rh31_dtnasc = 
-    (select max(rh31_dtnasc) from rhdepend as dependmax where dependmax.rh31_regist=depend.rh31_regist) limit 1)||'#' 
-  ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend where depend.rh31_regist=rhdependente.rh31_regist 
-    and rh31_gparen='O' limit 1), 'DD/MM/YYYY'),' ')||'#' 
-  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='O' limit 1),' ')) as dependentes FROM rhdepend rhdependente 
-  WHERE rhdependente.rh31_regist=rh01_regist group by rh31_regist limit 1),' # # # # # # ')||'#'
-       ||' '||'#' 
-       ||' ' AS todo
+       ||' '||'#'||
+    (SELECT count(*)
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist) ||'#' ||
+
+      coalesce(to_char(
+         (SELECT rh31_dtnasc
+                  FROM rhdepend
+                  WHERE rh31_regist=rh01_regist
+                        AND rh31_gparen='C'
+                  LIMIT 1), 'DD/MM/YYYY'),' ')||'#'||
+      coalesce(
+          (SELECT CASE
+                  WHEN rh31_especi = 'N' THEN '1'
+                      ELSE '2'
+                  END AS cond
+            FROM rhdepend
+            WHERE rh31_regist=rh01_regist
+                     AND rh31_gparen='C'
+              LIMIT 1),' ')||'#' ||
+        
+      COALESCE( (
+          SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+                  FROM rhdepend
+          WHERE rh31_regist = rh01_regist
+          ORDER BY rh31_dtnasc DESC
+          LIMIT 1), '')  ||'#' ||
+
+      COALESCE((SELECT CASE
+                WHEN rh31_especi = 'C'
+                     OR rh31_especi = 'S' THEN 2
+                ELSE 1
+            END AS condicao
+     FROM rhdepend
+     WHERE rh31_codigo =
+             (SELECT rh31_codigo
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc desc
+     LIMIT 1) LIMIT 1)::varchar,'')||'#'||
+     
+             COALESCE(
+    (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc DESC
+     LIMIT 1 OFFSET 1
+     ), '') ||'#'||
+
+            COALESCE((SELECT CASE
+                WHEN rh31_especi = 'S' OR rh31_especi = 'C' THEN 2
+                ELSE 1
+            END AS condicao
+     FROM rhdepend
+     WHERE rh31_codigo = (SELECT rh31_codigo
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc DESC
+     LIMIT 1 OFFSET 1) LIMIT 1)::varchar,'' )||'#'||
+
+       CASE WHEN rh02_abonopermanencia = 'f' THEN 2 ELSE 1 END ||'#'||
+       ' ' AS todo
 FROM rhpessoal
-INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
-AND rh02_anousu = $anofolha
-AND rh02_mesusu = $mesfolha
-AND rh01_instit = ".db_getsession("DB_instit")."
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist AND rh02_anousu = $anofolha AND rh02_mesusu = $mesfolha AND rh01_instit = ".db_getsession('DB_instit')."
 INNER JOIN rhlota ON r70_codigo = rh02_lota
 AND r70_instit = rh02_instit
 INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
@@ -172,13 +214,17 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm
+     LEFT JOIN afasta ON r45_regist = rh01_regist
+        AND r45_anousu = $anofolha
+        AND r45_mesusu = $mesfolha
 where rh30_vinculo = 'A'
   and rh30_regime = 1
+
   $where ";
 
-//  echo $sql;exit;
-  $result = pg_query($sql);
-  $num = pg_numrows($result);
+    $result = pg_query($sql);
+//  echo $sql;db_criatabela($result); exit;
+    $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
 //    echo 'Total de : '.$num.' / '.$x."\r";
    db_atutermometro($x,$num,'calculo_folha',1);
@@ -231,32 +277,93 @@ $sql = "SELECT rh01_regist AS matricula,
        ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
        ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
        ||'0'||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
+       ||CASE WHEN rh01_reajusteparidade = 2 THEN 1 ELSE 2 END||'#' 
+       ||CASE WHEN rh02_rhtipoapos = 4 THEN 2 ELSE 1 END||'#' 
        ||' '||'#' 
        ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
        ||' '||'#' 
        ||' '||'#' 
-       ||coalesce( 
-  (select (count(*)||'#' ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1), 'DD/MM/YYYY'),' ')||'#' 
-  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1),' ')||'#' 
-  ||to_char(max(rh31_dtnasc),'DD/MM/YYYY')||'#' 
-  ||(select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and depend.rh31_dtnasc = 
-    (select max(rh31_dtnasc) from rhdepend as dependmax where dependmax.rh31_regist=depend.rh31_regist) limit 1)||'#' 
-  ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend where depend.rh31_regist=rhdependente.rh31_regist 
-    and rh31_gparen='O' limit 1), 'DD/MM/YYYY'),' ')||'#' 
-  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
-    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='O' limit 1),' ')) as dependentes FROM rhdepend rhdependente 
-  WHERE rhdependente.rh31_regist=rh01_regist group by rh31_regist limit 1),' # # # # # # ')
+       ||
+
+        (SELECT count(*)
+         FROM rhdepend
+         WHERE rh31_regist = rh01_regist)
+        ||'#' ||
+
+        coalesce(to_char(
+                     (SELECT rh31_dtnasc
+                      FROM rhdepend
+                      WHERE rh31_regist=rh01_regist
+                          AND rh31_gparen='C'
+                      LIMIT 1), 'DD/MM/YYYY'),' ')
+        ||'#'||
+        
+        coalesce(
+             (SELECT CASE
+                         WHEN rh31_especi = 'N' THEN '1'
+                         ELSE '2'
+                     END AS cond
+              FROM rhdepend
+              WHERE rh31_regist=rh01_regist
+                  AND rh31_gparen='C'
+              LIMIT 1),' ')
+        
+        ||'#' ||
+        
+        COALESCE(
+             (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+              FROM rhdepend
+              WHERE rh31_regist = rh01_regist
+              ORDER BY rh31_dtnasc DESC
+              LIMIT 1 ), '')  
+        
+        ||'#' ||
+
+        COALESCE(
+             (SELECT CASE
+                         WHEN rh31_especi = 'C'
+                              OR rh31_especi = 'S' THEN 2
+                         ELSE 1
+                     END AS condicao
+              FROM rhdepend
+              WHERE rh31_codigo =
+                      (SELECT rh31_codigo
+                       FROM rhdepend
+                       WHERE rh31_regist = rh01_regist
+                       ORDER BY rh31_dtnasc DESC
+                       LIMIT 1
+                       OFFSET 1))::varchar,'')
+        ||'#'||
+        
+        COALESCE ((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+            FROM rhdepend
+            WHERE rh31_regist = rh01_regist
+            ORDER BY rh31_dtnasc DESC
+            LIMIT 1
+            OFFSET 1)::varchar,'')
+        
+        ||'#'||
+
+        COALESCE((SELECT CASE
+                WHEN rh31_especi = 'C'
+                     OR rh31_especi = 'S' THEN 2
+                ELSE 1
+            END AS condicao
+     FROM rhdepend
+     WHERE rh31_codigo =
+             (SELECT rh31_codigo
+     FROM rhdepend
+     WHERE rh31_regist = rh01_regist
+     ORDER BY rh31_dtnasc desc
+     LIMIT 1
+     OFFSET 1))::varchar,'')
+
         AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $anofolha
 AND rh02_mesusu = $mesfolha
-AND rh01_instit = ".db_getsession("DB_instit")."
+AND rh01_instit = ".db_getsession('DB_instit')."
 INNER JOIN rhlota ON r70_codigo = rh02_lota
 AND r70_instit = rh02_instit
 INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
@@ -276,11 +383,14 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm 
-where rh30_vinculo = 'I' 
+          LEFT JOIN afasta ON r45_regist = rh01_regist
+        AND r45_anousu = $anofolha
+        AND r45_mesusu = $mesfolha
+where rh30_vinculo = 'I'  
   $where ";
-  
-//  echo $sql;exit;
-  $result = pg_query($sql);
+
+    $result = pg_query($sql);
+//  echo $sql;db_criatabela($result);exit;
 //  echo "gerou o result"."\n\n";
   $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
@@ -322,11 +432,11 @@ $sql = " SELECT rh01_regist AS matricula,
        ||'1'||'#' 
        ||'1'||'#' 
        ||'7'||'#' 
-       ||'3'||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||rh01_regist||'#' 
+       ||'3'||'#'
+       ||coalesce(instintuidor.z01_numcgm::varchar,' ')||'# '||
+       coalesce(instintuidor.z01_cgccpf::varchar,' ')||'# '||
+       coalesce(instintuidor.z01_pis,' ')||'#' || 
+       rh01_regist||'#' 
        ||servidor.z01_cgccpf||'#' 
        ||CASE
           WHEN rh01_sexo = 'M' THEN 2
@@ -365,11 +475,13 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm
+     join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
+
 where rh30_vinculo = 'P'
   $where ";
-  
-//  echo $sql;exit;
-  $result = pg_query($sql);
+
+    $result = pg_query($sql);
+//  echo $sql; db_criatabela($result);exit;
 //  echo "gerou o result"."\n\n";
   $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
@@ -676,7 +788,7 @@ function calcatua_rtm($anofolha,$mesfolha,$where){
                     ELSE '1'
                 END ||'# '||
                 coalesce(CASE
-                    WHEN r45_mesusu = 04 AND r45_situac = 2 OR r45_situac = 7 THEN to_char(r45_dtreto, 'DD/MM/YYYY')
+                    WHEN r45_mesusu = $mesfolha AND r45_situac = 2 OR r45_situac = 7 THEN to_char(r45_dtreto, 'DD/MM/YYYY')
                     ELSE NULL
                 END::varchar, '') 
                 ||'# '||
@@ -993,49 +1105,37 @@ WHERE rh30_vinculo = 'I'
 
 //echo "entrou no select"."\n\n";
 
-    $sql = "
-       SELECT rh01_regist||'# '||
-       servidor.z01_nome||'# '||
-       servidor.z01_cgccpf||'# '||
-       CASE
-        WHEN rh01_sexo = 'M' THEN 2
-        ELSE 1
-       END ||'#' ||  
-       to_char(rh01_nasc, 'DD/MM/YYYY')||'# '|| 
-       instituicao.z01_nome||'# '|| 
-       instituicao.z01_cgccpf||'# '||
-       db21_tipopoder ||'# '|| 
-       '1'||'# '||
-       coalesce(case when rh02_tipoparentescoinst = 3 then 1
-            when rh02_tipoparentescoinst = 1 then 2
-            when rh02_tipoparentescoinst = 4 then 3
-            when rh02_tipoparentescoinst = 5 or rh02_tipoparentescoinst = 6 then 4 end::varchar,'') ||'# '||
-       ' '||'# '||
-       case when coalesce(rhpessoalmov.rh02_validadepensao::varchar, '') = '' then 1 else 2 end ||'# '||
-       coalesce(to_char(rh02_validadepensao, 'DD/MM/YYYY'),' ')||'# '||
-       to_char(rh01_admiss, 'DD/MM/YYYY')||'# '||
-       trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'# '||
-       ' '||'# '|| 
-       ' '||'# '||
-       ' '||'# '|| 
-       ' '||'# '||
-      coalesce(case when rh01_reajusteparidade = 2 then 1
-                    else 2 end::varchar,'')||'# '||
-      ' '||'# '||
-      coalesce(instintuidor.z01_numcgm::varchar,' ')||'# '||
-      coalesce(instintuidor.z01_nome,' ')||'# '||
-      coalesce(instintuidor.z01_cgccpf::varchar,' ')||'# '||
-      coalesce(instintuidor.z01_pis,' ')||'#' ||
-      coalesce(to_char(instintuidor.z01_nasc, 'DD/MM/YYYY'),' ')||'# '||
-      coalesce(to_char(instintuidor.z01_dtfalecimento, 'DD/MM/YYYY'),' ')||'# '|| 
-      ' '||'# '|| 
-      ' '||'# '|| 
-      ' '||'# '|| 
-      ' '||'# '|| 
-      ' '||'# '|| 
-      ' '||'# '||
-      rh02_anousu ||'# '||
-      rh02_mesusu as todo
+    $sql = "SELECT rh01_regist AS matricula,
+       '1'||'#' 
+       ||'3'||'#' 
+       ||instituicao.z01_cgccpf||'#' 
+       ||instituicao.z01_nome||'#' 
+       ||'1'||'#' 
+       ||'1'||'#' 
+       ||'7'||'#' 
+       ||'3'||'#'||
+       COALESCE(instintuidor.z01_numcgm::varchar,' ')||'# '||
+       COALESCE(instintuidor.z01_nome,' ')||'# '||
+       COALESCE(instintuidor.z01_cgccpf::varchar,' ')||'# '||
+       COALESCE(instintuidor.z01_pis,' ')||'#'|| 
+       ' '||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||rh01_regist||'#' 
+       ||servidor.z01_cgccpf||'#' 
+       ||CASE
+          WHEN rh01_sexo = 'M' THEN 2
+          ELSE 1
+          END ||'#'
+       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
+       ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
+       ||'0'||'#' 
+       ||'0'||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||case when rh02_rhtipoapos = 4 then 2 else 1 end||'#' 
+       ||' ' AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $anofolha

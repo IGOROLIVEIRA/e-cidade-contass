@@ -473,19 +473,19 @@ class GerarBALANCETE extends GerarAM
 
                     $aBALACETE25 = pg_fetch_array($rsBALANCETE25, $iCont25);
 
-                    if ($aBALACETE25['si194_reg10'] == $aBALACETE10['si177_sequencial']) {
+                    if ($aBALACETE25['si195_reg10'] == $aBALACETE10['si177_sequencial']) {
 
-                        $aCSVBALANCETE25['si194_tiporegistro']              = $this->padLeftZero($aBALACETE25['si194_tiporegistro'], 2);
-                        $aCSVBALANCETE25['si194_contacontabil']             = $this->padLeftZero($aBALACETE25['si194_contacontabil'], 9);
-                        $aCSVBALANCETE25['si194_codfundo']                  = "00000000";
-                        $aCSVBALANCETE25['si182_atributosf']                = $aBALACETE25['si194_atributosf'];
-                        $aCSVBALANCETE25['si194_naturezareceita']           = $this->padLeftZero($aBALACETE25['si194_naturezareceita'], 2);
-                        $aCSVBALANCETE25['si194_saldoinicialnrsf']            = $this->sicomNumberReal($aBALACETE25['si194_saldoinicialnrsf'], 2);
-                        $aCSVBALANCETE25['si194_naturezasaldoinicialnrsf']    = $aBALACETE25['si194_naturezasaldoinicialnrsf'];
-                        $aCSVBALANCETE25['si194_totaldebitosnrsf']            = $this->sicomNumberReal($aBALACETE25['si194_totaldebitosnrsf'], 2);
-                        $aCSVBALANCETE25['si194_totalcreditosnrsf']           = $this->sicomNumberReal($aBALACETE25['si194_totalcreditosnrsf'], 2);
-                        $aCSVBALANCETE25['si194_saldofinalnrsf']              = $this->sicomNumberReal($aBALACETE25['si194_saldofinalnrsf'], 2);
-                        $aCSVBALANCETE25['si194_naturezasaldofinalnrsf']      = $aBALACETE25['si194_naturezasaldofinalnrsf'];
+                        $aCSVBALANCETE25['si195_tiporegistro']              = $this->padLeftZero($aBALACETE25['si195_tiporegistro'], 2);
+                        $aCSVBALANCETE25['si195_contacontabil']             = $this->padLeftZero($aBALACETE25['si195_contacontabil'], 9);
+                        $aCSVBALANCETE25['si195_codfundo']                  = "00000000";
+                        $aCSVBALANCETE25['si182_atributosf']                = $aBALACETE25['si195_atributosf'];
+                        $aCSVBALANCETE25['si195_naturezareceita']           = $this->padLeftZero($aBALACETE25['si195_naturezareceita'], 2);
+                        $aCSVBALANCETE25['si195_saldoinicialnrsf']            = $this->sicomNumberReal($aBALACETE25['si195_saldoinicialnrsf'], 2);
+                        $aCSVBALANCETE25['si195_naturezasaldoinicialnrsf']    = $aBALACETE25['si195_naturezasaldoinicialnrsf'];
+                        $aCSVBALANCETE25['si195_totaldebitosnrsf']            = $this->sicomNumberReal($aBALACETE25['si195_totaldebitosnrsf'], 2);
+                        $aCSVBALANCETE25['si195_totalcreditosnrsf']           = $this->sicomNumberReal($aBALACETE25['si195_totalcreditosnrsf'], 2);
+                        $aCSVBALANCETE25['si195_saldofinalnrsf']              = $this->sicomNumberReal($aBALACETE25['si195_saldofinalnrsf'], 2);
+                        $aCSVBALANCETE25['si195_naturezasaldofinalnrsf']      = $aBALACETE25['si195_naturezasaldofinalnrsf'];
 
                         $this->sLinha = $aCSVBALANCETE25;
                         $this->adicionaLinha();

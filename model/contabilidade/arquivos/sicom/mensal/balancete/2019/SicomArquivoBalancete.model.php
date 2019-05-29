@@ -2580,8 +2580,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
-                                               substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
+                                               substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialnrsf,
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalnrsf,
                                                c60_estrut
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
@@ -2615,7 +2615,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $sHash25 = '25' . $oContas10->si177_contacontaabil . '00000000' . $oContas10->identificadorfinanceiro.substr($oReg25Saldo->c60_estrut,1,8);
 
-                        $oReg25Saldo->anterior = $oReg25Saldo->naturezasaldoinicialsf == 'C' ? $oReg25Saldo->anterior * -1 : $oReg25Saldo->anterior;
+                        $oReg25Saldo->anterior = $oReg25Saldo->naturezasaldoinicialnrsf == 'C' ? $oReg25Saldo->anterior * -1 : $oReg25Saldo->anterior;
 
                         if (!isset($aContasReg10[$reg10Hash]->reg25[$sHash25])) {
 
@@ -2625,22 +2625,22 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete25->si195_codfundo = "00000000";
                             $obalancete25->si195_atributosf = $oContas10->identificadorfinanceiro;
                             $obalancete25->si195_naturezareceita = substr($oReg25Saldo->c60_estrut,1,8);
-                            $obalancete25->si195_saldoinicialsf = $oReg25Saldo->anterior;
-                            $obalancete25->si195_naturezasaldoinicialsf = $obalancete25->si195_saldoinicialsf >= 0 ? 'D' : 'C';
-                            $obalancete25->si195_totaldebitossf = $oReg25Saldo->debitos;
-                            $obalancete25->si195_totalcreditossf = $oReg25Saldo->creditos;
-                            $obalancete25->si195_saldofinalsf = $oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos;
-                            $obalancete25->si195_naturezasaldofinalsf = $obalancete25->si195_saldofinalsf >= 0 ? 'D' : 'C';
+                            $obalancete25->si195_saldoinicialnrsf = $oReg25Saldo->anterior;
+                            $obalancete25->si195_naturezasaldoinicialnrsf = $obalancete25->si195_saldoinicialnrsf >= 0 ? 'D' : 'C';
+                            $obalancete25->si195_totaldebitosnrsf = $oReg25Saldo->debitos;
+                            $obalancete25->si195_totalcreditosnrsf = $oReg25Saldo->creditos;
+                            $obalancete25->si195_saldofinalnrsf = $oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos;
+                            $obalancete25->si195_naturezasaldofinalnrsf = $obalancete25->si195_saldofinalnrsf >= 0 ? 'D' : 'C';
                             $obalancete25->si195_instit = db_getsession("DB_instit");
                             $obalancete25->si195_mes = $nMes;
                             $aContasReg10[$reg10Hash]->reg25[$sHash25] = $obalancete25;
                         } else {
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldoinicialsf += $oReg25Saldo->anterior;
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_totaldebitossf += $oReg25Saldo->debitos;
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_totalcreditossf += $oReg25Saldo->creditos;
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldofinalsf += ($oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos) == '' ? 0 : ($oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos);
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_naturezasaldofinalsf = ($aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldofinalsf >= 0 ? 'D' : 'C');
-                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_naturezasaldoinicialsf = ($aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldoinicialsf >= 0 ? 'D' : 'C');
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldoinicialnrsf += $oReg25Saldo->anterior;
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_totaldebitosnrsf += $oReg25Saldo->debitos;
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_totalcreditosnrsf += $oReg25Saldo->creditos;
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldofinalnrsf += ($oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos) == '' ? 0 : ($oReg25Saldo->anterior + $oReg25Saldo->debitos - $oReg25Saldo->creditos);
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_naturezasaldofinalnrsf = ($aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldofinalnrsf >= 0 ? 'D' : 'C');
+                            $aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_naturezasaldoinicialnrsf = ($aContasReg10[$reg10Hash]->reg25[$sHash25]->si195_saldoinicialnrsf >= 0 ? 'D' : 'C');
                         }
                     }
                 }
@@ -3244,7 +3244,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg25->si195_totaldebitosnrsf = number_format(abs($reg25->si195_totaldebitosnrsf == '' ? 0 : $reg25->si195_totaldebitosnrsf),2,".","");
                 $obalreg25->si195_totalcreditosnrsf = number_format(abs($reg25->si195_totalcreditosnrsf == '' ? 0 : $reg25->si195_totalcreditosnrsf),2,".","");
                 $obalreg25->si195_saldofinalnrsf = number_format(abs($reg25->si195_saldofinalnrsf == '' ? 0 : $reg25->si195_saldofinalnrsf),2,".","");
-                $obalreg25->si195_naturezasaldofinalnrsf = $reg25->si195_naturezasaldofinalsf;
+                $obalreg25->si195_naturezasaldofinalnrsf = $reg25->si195_naturezasaldofinalnrsf;
                 $obalreg25->si195_mes = $reg25->si195_mes;
                 $obalreg25->si195_instit = $reg25->si195_instit;
                 $obalreg25->si195_reg10 = $obalancete10->si177_sequencial;
