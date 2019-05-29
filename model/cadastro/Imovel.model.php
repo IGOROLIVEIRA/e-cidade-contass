@@ -83,7 +83,13 @@ class Imovel {
 	 * @var array
 	 */
 	private $aPromitentes = array();
-	
+
+	/**
+	 * Numero do cgm do proprietário
+	 * @var integer
+	 */
+	private $iNumcgm;
+
 	/**
 	 * Construtor da Classe
 	 * @param integer $iMatricula - Matricula de registro do imóvel
@@ -110,7 +116,8 @@ class Imovel {
 		  $this->dtDataBaixa      = $oImovel->j01_baixa;
 		  $this->iCodigoAverbacao = $oImovel->j01_codave;
 		  $this->nFracao          = $oImovel->j01_fracao;
-		  
+		  $this->iNumcgm          = $oImovel->j01_numcgm;
+
 		}
 		
 	}
@@ -195,6 +202,24 @@ class Imovel {
 	 */
 	public function setFracao($nFracao) {
 		$this->nFracao = $nFracao;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNumcgm()
+	{
+		return $this->iNumcgm;
+	}
+
+	/**
+	 * @param int $iNumcgm
+	 * @return Imovel
+	 */
+	public function setNumcgm($iNumcgm)
+	{
+		$this->iNumcgm = $iNumcgm;
+		return $this;
 	}
 	
 	/**
@@ -454,6 +479,21 @@ class Imovel {
 	  }
 	  
 	  
+	}
+
+	public function alterarCgmProprietario()
+	{
+		$oDaoIptubase = db_utils::getDao("iptubase");
+
+		$oDaoIptubase->j01_matric = $this->getMatricula();
+		$oDaoIptubase->j01_numcgm = $this->getNumcgm();
+		$oDaoIptubase->j01_idbql = $this->getCodigoLote();
+		$oDaoIptubase->j01_baixa = $this->getDataBaixa();
+		$oDaoIptubase->j01_codave = $this->getCodigoAverbacao();
+		$oDaoIptubase->j01_fracao = $this->getFracao();
+		if(!$oDaoIptubase->alterar($this->getMatricula())){
+			throw new Exception('Erro ao alterar o proprietário.');
+		}
 	}
 	
 }

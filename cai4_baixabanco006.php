@@ -24,13 +24,13 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
+require_once("model/itbi/Itbi.model.php");
 $oGet = db_utils::postMemory($_GET);
 ?>
 <html>
@@ -109,13 +109,27 @@ $oGet = db_utils::postMemory($_GET);
       * Este trecho foi inserido para que as guias emitidas no JMS podessem ser reconhecidas no e-cidade no momento da baixa de banco
       * Rotina adaptada para a implantação do modulo tributário em Pirapora MG
       * Codcli do cadastro de clientes do SIGAT
-      * @author rodrigo@contass
+      * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
       */
      if($oInstit->getCodigoCliente() == 58) {
-       $sSqlIntegracaoJMS = "update disbanco set k00_numpre = debitos_jms.k00_numpre, k00_numpar = debitos_jms.k00_numpar from debitos_jms where disbanco.k00_numpre = debitos_jms.k00_numpre_old and disbanco.k00_numpar = debitos_jms.k00_numpar_old";
+       $sSqlIntegracaoJMS = "UPDATE disbanco
+                              SET k00_numpre = debitos_jms.k00_numpre,
+                                  k00_numpar = debitos_jms.k00_numpar
+                              FROM debitos_jms
+                              WHERE disbanco.k00_numpre = debitos_jms.k00_numpre_old
+                                  AND disbanco.k00_numpar = debitos_jms.k00_numpar_old
+                                  AND disbanco.codret = {$oGet->codret}";
        if (!db_query($sSqlIntegracaoJMS)) {
          throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
        }
+       /**
+        * Quando são importados as guias da JMS, as do ecidade ficam com numpre com tamanho < 6. Para não ficar lixo,
+        * setamos o classi = true.
+        */
+       $sSqlIgnoraGuiasEcidade = "UPDATE disbanco
+                                  SET classi = true
+                                  WHERE char_length(k00_numpre::varchar) < 6
+                                  AND disbanco.codret = {$oGet->codret}";
      }
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
@@ -127,7 +141,8 @@ $oGet = db_utils::postMemory($_GET);
    	if (substr($sRetornoBaixaBanco,0,1) != '1') {
    	  throw new Exception($sRetornoBaixaBanco);
    	}
-
+    $oItbi = new Itbi();
+    $oItbi->processarTransferenciaAutomatica($oGet->codret);
    	db_msgbox($sRetornoBaixaBanco);
 
    	db_fim_transacao(false);

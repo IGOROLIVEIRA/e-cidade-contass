@@ -56,6 +56,8 @@ if (isset($oPost->incluir)) {
   $clparitbi->it24_alteraguialib                   = $oPost->it24_alteraguialib;
   $clparitbi->it24_taxabancaria			               = $oPost->it24_taxabancaria;
   $clparitbi->it24_grupopadraoconstrutivobenurbana = $oPost->it24_grupopadraoconstrutivobenurbana;
+  $clparitbi->it24_cgmobrigatorio = $oPost->it24_cgmobrigatorio;
+  $clparitbi->it24_transfautomatica = $oPost->it24_transfautomatica;
   $clparitbi->incluir($oPost->it24_anousu);
 
   if ( $clparitbi->erro_status == 0 ) {
@@ -73,7 +75,7 @@ if (isset($oPost->incluir)) {
 
      $clparreciboitbi->it17_codigo = $oPost->k02_codigo;
      $clparreciboitbi->it17_numcgm = $oPost->z01_numcgm;
-     $clparreciboitbi->incluir  ();
+     $clparreciboitbi->incluir();
    }
 
   db_fim_transacao($lSqlErro);
@@ -94,6 +96,8 @@ if (isset($oPost->incluir)) {
   $clparitbi->it24_alteraguialib                   = $oPost->it24_alteraguialib;
   $clparitbi->it24_taxabancaria			               = $oPost->it24_taxabancaria;
   $clparitbi->it24_grupopadraoconstrutivobenurbana = $oPost->it24_grupopadraoconstrutivobenurbana;
+  $clparitbi->it24_cgmobrigatorio = $oPost->it24_cgmobrigatorio;
+  $clparitbi->it24_transfautomatica = $oPost->it24_transfautomatica;
   $clparitbi->alterar($oPost->it24_anousu);
 
   if ( $clparitbi->erro_status == 0 ) {

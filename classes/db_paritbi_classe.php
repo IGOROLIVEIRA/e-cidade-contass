@@ -55,7 +55,8 @@ class cl_paritbi {
    var $it24_impsituacaodeb = 'f'; 
    var $it24_taxabancaria = 0; 
    var $it24_cgmobrigatorio = 'f'; 
-   // cria propriedade com as variaveis do arquivo 
+   var $it24_transfautomatica = 'f';
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  it24_anousu = int4 = Ano 
                  it24_grupoespbenfurbana = int4 = Espécie de Benfeitoria 
@@ -70,6 +71,7 @@ class cl_paritbi {
                  it24_impsituacaodeb = bool = Imprime Situação de Débito na Guia 
                  it24_taxabancaria = float8 = Tarifa Bancária 
                  it24_cgmobrigatorio = bool = CGM Obrigatório Transmitente/Adquirente
+                 it24_transfautomatica = bool = Tranferencia automatica do imovel
                  ";
    //funcao construtor da classe 
    function cl_paritbi() { 
@@ -102,6 +104,7 @@ class cl_paritbi {
        $this->it24_impsituacaodeb = ($this->it24_impsituacaodeb == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_impsituacaodeb"]:$this->it24_impsituacaodeb);
        $this->it24_taxabancaria = ($this->it24_taxabancaria == ""?@$GLOBALS["HTTP_POST_VARS"]["it24_taxabancaria"]:$this->it24_taxabancaria);
        $this->it24_cgmobrigatorio = ($this->it24_cgmobrigatorio == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_cgmobrigatorio"]:$this->it24_cgmobrigatorio);
+       $this->it24_transfautomatica = ($this->it24_transfautomatica == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_transfautomatica"]:$this->it24_transfautomatica);
      }else{
        $this->it24_anousu = ($this->it24_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["it24_anousu"]:$this->it24_anousu);
      }
@@ -227,6 +230,15 @@ class cl_paritbi {
        $this->erro_status = "0";
        return false;
      }
+     if($this->it24_transfautomatica == null ){
+       $this->erro_sql = " Campo Tranferencia Automatica não informado.";
+       $this->erro_campo = "it24_transfautomatica";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
        $this->it24_anousu = $it24_anousu; 
      if(($this->it24_anousu == null) || ($this->it24_anousu == "") ){ 
        $this->erro_sql = " Campo it24_anousu nao declarado.";
@@ -250,6 +262,7 @@ class cl_paritbi {
                                       ,it24_impsituacaodeb 
                                       ,it24_taxabancaria 
                                       ,it24_cgmobrigatorio 
+                                      ,it24_transfautomatica
                        )
                 values (
                                 $this->it24_anousu 
@@ -265,6 +278,7 @@ class cl_paritbi {
                                ,'$this->it24_impsituacaodeb' 
                                ,$this->it24_taxabancaria 
                                ,'$this->it24_cgmobrigatorio' 
+                               ,'$this->it24_transfautomatica'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -495,6 +509,19 @@ class cl_paritbi {
        if(trim($this->it24_cgmobrigatorio) == null ){ 
          $this->erro_sql = " Campo CGM Obrigatório Transmitente/Adquirente não informado.";
          $this->erro_campo = "it24_cgmobrigatorio";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->it24_transfautomatica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["it24_transfautomatica"])){
+       $sql  .= $virgula." it24_transfautomatica = '$this->it24_transfautomatica' ";
+       $virgula = ",";
+       if(trim($this->it24_transfautomatica) == null ){
+         $this->erro_sql = " Campo Transferência Automática não informado.";
+         $this->erro_campo = "it24_transfautomatica";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
