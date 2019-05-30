@@ -108,6 +108,16 @@ $clrotulo->label('z01_nome');
               ?>
             </td>
           </tr>
+          <tr>
+            <td nowrap align="left" title="<?=@$Tit24_transfautomatica?>"><?=@$Lit24_transfautomatica?></td>
+            <td width="96%" align="left">
+              <?
+              $aTransfAutomatica = array("t"=>"Sim",
+                  "f"=>"Não");
+              db_select('it24_transfautomatica',$aTransfAutomatica,true,1," style='width: 210px;'");
+              ?>
+            </td>
+          </tr>
         </table>
       </td>
     </tr>
