@@ -42,7 +42,7 @@ $oGet = db_utils::postMemory($_GET);
  * Codigo do precesso informado por GET
  * - Pesquisa numero e ano do processo
  */
-if ( !empty($oGet->iCodigoProcesso) ) {
+if (!empty($oGet->iCodigoProcesso)) {
 
   $iOpcaoProcesso = 3;
   $lExibirMenus   = false;
@@ -51,12 +51,11 @@ if ( !empty($oGet->iCodigoProcesso) ) {
   $sSqlNumeroProcesso = $oDaoProtprocesso->sql_query_file($oGet->iCodigoProcesso, 'p58_numero, p58_ano');
   $rsNumeroProcesso = $oDaoProtprocesso->sql_record($sSqlNumeroProcesso);
 
-  if ( $oDaoProtprocesso->numrows > 0 ) {
+  if ($oDaoProtprocesso->numrows > 0) {
 
     $oDaoProcesso = db_utils::fieldsMemory($rsNumeroProcesso, 0);
     $p58_numero = $oDaoProcesso->p58_numero . '/' . $oDaoProcesso->p58_ano;
   }
-
 }
 
 $oRotulo  = new rotulocampo;
@@ -67,6 +66,7 @@ $oRotulo->label("p58_numero");
 $oRotulo->label("z01_nome");
 ?>
 <html>
+
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -75,6 +75,7 @@ $oRotulo->label("z01_nome");
   db_app::load("scripts.js, prototype.js, strings.js, datagrid.widget.js");
   ?>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
   <div class="container" style="width:650px;">
@@ -91,19 +92,19 @@ $oRotulo->label("z01_nome");
         <table class="form-container">
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_protprocesso; ?>" >
+            <td nowrap title="<?php echo $Tp01_protprocesso; ?>">
               <?php db_ancora($Lp58_numero, "js_pesquisarProcesso(true);", $iOpcaoProcesso); ?>
             </td>
             <td>
               <?php
-                db_input('p58_numero', 12, $Ip58_numero, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarProcesso(false);'");
-                db_input('z01_nome', 60, $Iz01_nome,true,'text',3,"");
+              db_input('p58_numero', 12, $Ip58_numero, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarProcesso(false);'");
+              db_input('z01_nome', 60, $Iz01_nome, true, 'text', 3, "");
               ?>
             </td>
           </tr>
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_documento; ?>" >
+            <td nowrap title="<?php echo $Tp01_documento; ?>">
               <?php echo $Lp01_documento; ?>
             </td>
             <td>
@@ -112,7 +113,7 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_descricao; ?>" >
+            <td nowrap title="<?php echo $Tp01_descricao; ?>">
               <?php echo $Lp01_descricao; ?>
             </td>
             <td>
@@ -132,463 +133,635 @@ $oRotulo->label("z01_nome");
     </fieldset>
 
     <input type="button" id="btnExcluir" value="Excluir Selecionados" onClick="js_excluirSelecionados();" />
+    <input type="button" id="btnDownloadAnexos" value="Download Anexos" onClick="js_downloadAnexos();" />
 
   </div>
 
-  <?php if ( $lExibirMenus ) : ?>
+  <?php if ($lExibirMenus) : ?>
     <?php db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
   <?php endif; ?>
 
   <div id="teste" style="display:none;"></div>
 </body>
+
 </html>
 <script type="text/javascript">
-
-/**
- * Pesquisa processo do protocolo e depois os documentos anexados
- */
-if ( !empty($('p58_numero').value) ) {
-  js_pesquisarProcesso(false);
-}
-
-/**
- * Mensagens do programa
- * @type constant
- */
-const MENSAGENS = 'patrimonial.protocolo.prot4_processodocumento001.';
-
-var sUrlRpc = 'prot4_processodocumento.RPC.php';
-
-var oGridDocumentos = new DBGrid('gridDocumentos');
-
-oGridDocumentos.nameInstance = "oGridDocumentos";
-oGridDocumentos.setCheckbox(0);
-oGridDocumentos.setCellAlign(new Array("center", "left", "left", "center"));
-oGridDocumentos.setCellWidth(["10%", "30%", "30%" , "30%"]);
-oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento","Ação"));
-oGridDocumentos.allowSelectColumns(true);
-oGridDocumentos.show($('ctnDbGridDocumentos'));
-
-/**
- * Buscar documentos do processo
- * @return boolean
- */
-function js_buscarDocumentos() {
-
-  var iCodigoProcesso = $('p58_codproc').value;
-
-  if ( empty(iCodigoProcesso) ) {
-    return false;
+  /**
+   * Pesquisa processo do protocolo e depois os documentos anexados
+   */
+  if (!empty($('p58_numero').value)) {
+    js_pesquisarProcesso(false);
   }
-
-  js_divCarregando( _M( MENSAGENS + 'mensagem_buscando_documentos' ), 'msgbox');
-
-  var oParametros = new Object();
-
-  oParametros.exec            = 'carregarDocumentos';
-  oParametros.iCodigoProcesso = iCodigoProcesso;
-
-  var oAjax = new Ajax.Request(
-    sUrlRpc, {
-      parameters   : 'json='+Object.toJSON(oParametros),
-      method       : 'post',
-      asynchronous : false,
-
-      /**
-       * Retorno do RPC
-       */
-      onComplete   : function(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno  = eval('('+oAjax.responseText+")");
-
-        var sMensagem = oRetorno.sMensagem.urlDecode();
-
-        if ( oRetorno.iStatus > 1 ) {
-
-          alert(sMensagem);
-          return false;
-        }
-
-        oGridDocumentos.clearAll(true);
-        var iDocumentos = oRetorno.aDocumentosVinculados.length;
-
-        console.log('retorno:');
-        console.log(oRetorno);
-
-        for ( var iIndice = 0; iIndice < iDocumentos; iIndice++ ) {
-
-          var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
-          var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-
-          if(oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0){
-
-                  var sHTMLBotoes  = '<input type="button" value="Alterar" onClick="js_alterarDocumento('+ oDocumento.iCodigoDocumento +', \'' + sDescricaoDocumento + '\');" />  ';
-                      sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
-
-                      $bBloquea = false;
-
-          }else if(oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0){
-
-              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
-
-              $bBloquea = true;
-
-          }else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0){
-
-              var sHTMLBotoes  = '<input type="button" value="Alterar" onClick="js_alterarDocumento('+ oDocumento.iCodigoDocumento +', \'' + sDescricaoDocumento + '\');" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
-
-              $bBloquea = false;
-          }
-
-
-
-          var aLinha       = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart +' - '+ oDocumento.sDepartamento ,sHTMLBotoes];
-          oGridDocumentos.addRow(aLinha, false, $bBloquea);
-        }
-
-        oGridDocumentos.renderRows();
-      }
-    }
-  );
-
-}
-
-/**
- * Exclui documentos selecionados
- * @return boolean
- */
-function js_excluirSelecionados() {
-
-  var aSelecionados   = oGridDocumentos.getSelection("object");
-  var iSelecionados   = aSelecionados.length;
-  var iCodigoProcesso = $('p58_codproc').value;
-  var aDocumentos     = [];
-
-  if ( iSelecionados == 0 ) {
-
-    alert(_M( MENSAGENS + 'erro_nenhum_documento_selecionado_exclusao' ));
-    return false;
-  }
-
-  if ( empty(iCodigoProcesso) ) {
-
-    alert(_M( MENSAGENS + 'erro_processo_nao_informado' ));
-    return false;
-  }
-
-  for( var iIndice = 0; iIndice < iSelecionados; iIndice++ ) {
-
-    var iDocumento = aSelecionados[iIndice].aCells[0].getValue();
-    aDocumentos.push(iDocumento);
-  }
-
-  js_divCarregando(_M( MENSAGENS + 'mensagem_excluindo_documentos' ), 'msgbox');
-
-  var oParametros = new Object();
-
-  oParametros.exec                = 'excluirDocumento';
-  oParametros.iCodigoProcesso     = iCodigoProcesso;
-  oParametros.aDocumentosExclusao = aDocumentos;
-
-  var oAjax = new Ajax.Request(
-    sUrlRpc, {
-      parameters   : 'json='+Object.toJSON(oParametros),
-      method       : 'post',
-      asynchronous : false,
-
-      /**
-       * Retorno do RPC
-       */
-      onComplete   : function(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno  = eval('('+oAjax.responseText+")");
-        var sMensagem = oRetorno.sMensagem.urlDecode();
-
-        if ( oRetorno.iStatus > 1 ) {
-
-          alert(sMensagem);
-          return false;
-        }
-
-        alert(sMensagem);
-        js_buscarDocumentos();
-     }
-  });
-
-}
-
-/**
- * Altera descricao de um documento
- * @param integer iCodigoDocumento
- * @param string sDescricaoDocumento
- * @return void
- */
-function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
-
-  $('namefile').value      = '';
-  $('uploadfile').value    = '';
-  $('uploadfile').disabled = true;
-  $('p01_descricao').value = sDescricaoDocumento.urlDecode();
 
   /**
-   * Altera acao do botao salvar
-   * @return void
+   * Mensagens do programa
+   * @type constant
    */
-  $('btnSalvar').onclick = function() {
+  const MENSAGENS = 'patrimonial.protocolo.prot4_processodocumento001.';
 
-    var iCodigoProcesso     = $('p58_codproc').value;
-    var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
-    var oParametros         = new Object();
+  var sUrlRpc = 'prot4_processodocumento.RPC.php';
 
-    if ( empty(iCodigoProcesso) ) {
+  var oGridDocumentos = new DBGrid('gridDocumentos');
 
-      alert(_M( MENSAGENS + 'erro_processo_nao_informado' ));
+  oGridDocumentos.nameInstance = "oGridDocumentos";
+  oGridDocumentos.setCheckbox(0);
+  oGridDocumentos.setCellAlign(new Array("center", "left", "left", "center"));
+  oGridDocumentos.setCellWidth(["10%", "30%", "30%", "30%"]);
+  oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento", "Ação"));
+  oGridDocumentos.allowSelectColumns(true);
+  oGridDocumentos.show($('ctnDbGridDocumentos'));
+
+  /**
+   * Buscar documentos do processo
+   * @return boolean
+   */
+  function js_buscarDocumentos() {
+
+    var iCodigoProcesso = $('p58_codproc').value;
+
+    if (empty(iCodigoProcesso)) {
       return false;
     }
 
-    if ( empty(sDescricaoDocumento) )  {
+    js_divCarregando(_M(MENSAGENS + 'mensagem_buscando_documentos'), 'msgbox');
 
-     alert(_M( MENSAGENS + 'erro_descricao_nao_informada' ));
-     return false;
-    }
+    var oParametros = new Object();
 
-    js_divCarregando(_M( MENSAGENS + 'mensagem_salvando_documento' ), 'msgbox');
-
-    oParametros.exec                = 'salvarDocumento';
-    oParametros.iCodigoDocumento    = iCodigoDocumento;
-    oParametros.iCodigoProcesso     = iCodigoProcesso;
-    oParametros.sDescricaoDocumento = sDescricaoDocumento;
+    oParametros.exec = 'carregarDocumentos';
+    oParametros.iCodigoProcesso = iCodigoProcesso;
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
-        parameters   : 'json='+Object.toJSON(oParametros),
-        method       : 'post',
-        asynchronous : false,
-        onComplete   : function(oAjax) {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
 
           js_removeObj("msgbox");
-          var oRetorno  = eval('('+oAjax.responseText+")");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
-          if ( oRetorno.iStatus > 1 ) {
+          if (oRetorno.iStatus > 1) {
 
             alert(sMensagem);
             return false;
           }
 
-          $('btnSalvar').onclick   = js_salvar;
-          $('namefile').value      = '';
-          $('uploadfile').value    = '';
+          oGridDocumentos.clearAll(true);
+          var iDocumentos = oRetorno.aDocumentosVinculados.length;
+
+          for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
+
+            var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
+            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+
+            if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
+
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+              $bBloquea = false;
+
+            } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
+
+              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+              $bBloquea = false;
+
+            } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
+
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+              $bBloquea = false;
+            }
+
+
+
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
+            oGridDocumentos.addRow(aLinha, false, $bBloquea);
+          }
+
+          oGridDocumentos.renderRows();
+        }
+      }
+    );
+
+  }
+
+  /**
+   * Exclui documentos selecionados
+   * @return boolean
+   */
+  function js_excluirSelecionados() {
+
+    var documentosSelecionados = oGridDocumentos.getSelection("object");
+    var iSelecionados = documentosSelecionados.length;
+    var iCodigoProcesso = $('p58_codproc').value;
+    var aDocumentos = [];
+
+    if (iSelecionados == 0) {
+
+      alert(_M(MENSAGENS + 'erro_nenhum_documento_selecionado_exclusao'));
+      return false;
+    }
+
+    if (empty(iCodigoProcesso)) {
+
+      alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+      return false;
+    }
+
+    for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+      var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+      aDocumentos.push(iDocumento);
+    }
+
+    js_divCarregando(_M(MENSAGENS + 'mensagem_excluindo_documentos'), 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'excluirDocumento';
+    oParametros.iCodigoProcesso = iCodigoProcesso;
+    oParametros.aDocumentosExclusao = aDocumentos;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          alert(sMensagem);
+          js_buscarDocumentos();
+        }
+      });
+
+  }
+
+  const js_arquivos = oCodigoDocumento => {
+    var oRetorno
+
+    var oAjax2 = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oCodigoDocumento),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: oAjax2 => {
+          oRetorno = eval('(' + oAjax2.responseText + ")")
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+        }
+      })
+
+    return oRetorno;
+
+  }
+  const js_documentosDeUmProcesso = iCodigoProcesso => {
+
+
+    if (empty(iCodigoProcesso)) {
+      return false
+    }
+
+    const oParametros = new Object()
+
+    oParametros.exec = 'carregarDocumentos'
+    oParametros.iCodigoProcesso = iCodigoProcesso
+
+    const codigosDeDocumentos = []
+
+    const oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+        onComplete: oAjax => {
+          const documentos = JSON.parse(oAjax.responseText).aDocumentosVinculados
+          documentos.map(documento => {
+            codigosDeDocumentos.push(documento.iCodigoDocumento)
+          })
+          const sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+            alert(sMensagem)
+            return false
+          }
+        }
+      }
+    )
+    return codigosDeDocumentos
+
+  }
+
+  const js_ziparAnexos = (arquivos, callback) => {
+
+    var oParametros = new Object()
+    oParametros.exec = 'ziparAnexos'
+
+    arquivos.map(documento => {
+      novoTituloDeArquivo = documento.sCaminhoDownloadArquivo.replace('tmp/', '')
+      documento.sTituloArquivo = novoTituloDeArquivo
+    })
+
+    oParametros.arquivos = arquivos
+
+    let oRetorno = null
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        method: 'post',
+        parameters: `json=${JSON.stringify(oParametros)}`,
+        onComplete: oAjax => {
+
+          oRetorno = eval('(' + oAjax.responseText + ')')
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+
+          return callback(oRetorno.nomeDoZip)
+
+        }
+      })
+
+  }
+
+  const js_apagarZip = nomeDoZip => {
+    const oParametros = new Object()
+    oParametros.exec = 'apagarZip'
+    oParametros.nomeDoZip = nomeDoZip
+    const oAjax = new Ajax.Request(
+      sUrlRpc, {
+        method: 'post',
+        parameters: `json=${JSON.stringify(oParametros)}`,
+        onComplete: oAjax => {
+
+          oRetorno = eval('(' + oAjax.responseText + ')')
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+        }
+      })
+  }
+  /**
+   * Realiza o download de todos os anexos ou apenas selecionados
+   * @return boolean
+   */
+  const js_downloadAnexos = () => {
+
+    js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
+    const iCodigoProcesso = $('p58_codproc').value
+
+    if (empty(iCodigoProcesso)) {
+      return false
+    }
+
+    const documentosSelecionados = oGridDocumentos.getSelection("object")
+    let codigosDosDocumentos = []
+
+    for (documento of documentosSelecionados) {
+      const codigoDoDocumento = documento.aCells[0].getValue()
+      codigosDosDocumentos.push(codigoDoDocumento)
+    }
+
+    if (codigosDosDocumentos.length == '1') {
+      js_downloadDocumento(codigosDosDocumentos[0])
+      js_removeObj("msgbox");
+      return false
+    }
+
+    let documentos = []
+    if (documentosSelecionados.length === 0) {
+      codigosDosDocumentos = js_documentosDeUmProcesso(iCodigoProcesso)
+    }
+
+    const urlDosArquivos = []
+
+    codigosDosDocumentos.map(codigoDoDocumento => {
+      const oCodigoDocumento = new Object()
+
+      oCodigoDocumento.exec = 'download'
+      oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
+
+      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
+    })
+
+    js_ziparAnexos(urlDosArquivos, nomeDoZip => {
+      js_removeObj("msgbox")
+      window.open(`db_download.php?arquivo=${nomeDoZip}`)
+
+      setTimeout(() => {
+        js_apagarZip(nomeDoZip)
+      }, 3000)
+    });
+
+  }
+
+  /**
+   * Altera descricao de um documento
+   * @param integer iCodigoDocumento
+   * @param string sDescricaoDocumento
+   * @return void
+   */
+  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
+
+    $('namefile').value = '';
+    $('uploadfile').value = '';
+    $('uploadfile').disabled = true;
+    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+
+    /**
+     * Altera acao do botao salvar
+     * @return void
+     */
+    $('btnSalvar').onclick = function() {
+
+      var iCodigoProcesso = $('p58_codproc').value;
+      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var oParametros = new Object();
+
+      if (empty(iCodigoProcesso)) {
+
+        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+        return false;
+      }
+
+      if (empty(sDescricaoDocumento)) {
+
+        alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
+        return false;
+      }
+
+      js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+
+      oParametros.exec = 'salvarDocumento';
+      oParametros.iCodigoDocumento = iCodigoDocumento;
+      oParametros.iCodigoProcesso = iCodigoProcesso;
+      oParametros.sDescricaoDocumento = sDescricaoDocumento;
+
+      var oAjax = new Ajax.Request(
+        sUrlRpc, {
+          parameters: 'json=' + Object.toJSON(oParametros),
+          method: 'post',
+          asynchronous: false,
+          onComplete: function(oAjax) {
+
+            js_removeObj("msgbox");
+            var oRetorno = eval('(' + oAjax.responseText + ")");
+            var sMensagem = oRetorno.sMensagem.urlDecode();
+
+            if (oRetorno.iStatus > 1) {
+
+              alert(sMensagem);
+              return false;
+            }
+
+            $('btnSalvar').onclick = js_salvar;
+            $('namefile').value = '';
+            $('uploadfile').value = '';
+            $('uploadfile').disabled = false;
+            $('p01_descricao').value = '';
+
+            alert(sMensagem);
+            js_buscarDocumentos();
+          }
+        });
+
+    }
+  }
+
+  /**
+   * Download de um documento
+   * - busca arquivo do banco e salva no tmp
+   * - exibe janela com link para download
+   * @param  integer iCodigoDocumento
+   * @return void
+   */
+  function js_downloadDocumento(iCodigoDocumento) {
+
+    js_divCarregando(_M(MENSAGENS + 'mensagem_carregando_documento'), 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'download';
+    oParametros.iCodigoDocumento = iCodigoDocumento;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          var sCaminhoDownloadArquivo = oRetorno.sCaminhoDownloadArquivo.urlDecode();
+          var sTituloArquivo = oRetorno.sTituloArquivo.urlDecode();
+
+          window.open("db_download.php?arquivo=" + sCaminhoDownloadArquivo);
+        }
+      });
+
+  }
+
+  /**
+   * Pesquisar processo
+   *
+   * @param boolean lMostra
+   * @return boolean
+   */
+  function js_pesquisarProcesso(lMostra) {
+
+    var sArquivo = 'func_protprocesso_protocolo.php?funcao_js=parent.';
+
+    if (lMostra) {
+      sArquivo += 'js_mostraProcesso|p58_codproc|p58_numero|dl_nome_ou_razão_social';
+    } else {
+
+      var iNumeroProcesso = $('p58_numero').value;
+
+      if (empty(iNumeroProcesso)) {
+        return false;
+      }
+
+      sArquivo += 'js_mostraProcessoHidden&pesquisa_chave=' + iNumeroProcesso + '&sCampoRetorno=p58_codproc';
+    }
+
+    js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Processos', lMostra);
+  }
+
+  /**
+   * Retorno da js_pesquisarProcesso apor clicar em um processo
+   * @param  integer iCodigoProcesso
+   * @param  integer iNumeroProcesso
+   * @param  string sNome
+   * @return void
+   */
+  function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
+
+    $('p58_codproc').value = iCodigoProcesso;
+    $('p58_numero').value = iNumeroProcesso;
+    $('z01_nome').value = sNome;
+    $('p01_descricao').value = '';
+    $('uploadfile').disabled = false;
+    db_iframe_proc.hide();
+    js_buscarDocumentos();
+  }
+
+  /**
+   * Retorno da pesquisa js_pesquisarProcesso apos mudar o campo p58_numero
+   * @param  integer iCodigoProcesso
+   * @param  string sNome
+   * @param  boolean lErro
+   * @return void
+   */
+  function js_mostraProcessoHidden(iCodigoProcesso, sNome, lErro) {
+
+    /**
+     * Nao encontrou processo
+     */
+    if (lErro) {
+
+      $('p58_numero').value = '';
+      $('p58_codproc').value = '';
+      $('p01_descricao').value = '';
+      $('uploadfile').disabled = false;
+      oGridDocumentos.clearAll(true);
+    }
+
+    $('p58_codproc').value = iCodigoProcesso;
+    $('z01_nome').value = sNome;
+    js_buscarDocumentos();
+  }
+
+  /**
+   * Cria um listener para subir a imagem, e criar um preview da mesma
+   */
+  $("uploadfile").onchange = function() {
+
+    startLoading();
+    var iFrame = document.createElement("iframe");
+    iFrame.src = 'func_uploadfiledocumento.php?clone=form';
+    iFrame.id = 'uploadIframe';
+    $('teste').appendChild(iFrame);
+  }
+
+  function startLoading() {
+    js_divCarregando(_M(MENSAGENS + 'mensagem_enviando_documento'), 'msgbox');
+  }
+
+  function endLoading() {
+    js_removeObj('msgbox');
+  }
+
+  function js_salvar() {
+
+    var iCodigoProcesso = $('p58_codproc').value;
+    var iCodigoDocumento = $('p01_sequencial').value;
+    var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+    var sCaminhoArquivo = $('namefile').value;
+
+    if (empty(iCodigoProcesso)) {
+
+      alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+      return false;
+    }
+
+    if (empty(sDescricaoDocumento)) {
+
+      alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
+      return false;
+    }
+
+    if (empty(sCaminhoArquivo)) {
+
+      alert(_M(MENSAGENS + 'erro_documento_nao_informado'));
+      return false;
+    }
+
+    js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'salvarDocumento';
+    oParametros.iCodigoDocumento = iCodigoDocumento;
+    oParametros.iCodigoProcesso = iCodigoProcesso;
+    oParametros.sDescricaoDocumento = sDescricaoDocumento;
+    oParametros.sCaminhoArquivo = sCaminhoArquivo;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          $('namefile').value = '';
+          $('uploadfile').value = '';
           $('uploadfile').disabled = false;
           $('p01_descricao').value = '';
 
           alert(sMensagem);
           js_buscarDocumentos();
         }
-    });
-
+      });
   }
-}
-
-/**
- * Dowload de um documento
- * - busca arquivo do banco e salva no tmp
- * - exibe janela com link para download
- * @param  integer iCodigoDocumento
- * @return void
- */
-function js_downloadDocumento(iCodigoDocumento) {
-
-  js_divCarregando(_M( MENSAGENS + 'mensagem_carregando_documento' ), 'msgbox');
-
-  var oParametros = new Object();
-
-  oParametros.exec             = 'download';
-  oParametros.iCodigoDocumento = iCodigoDocumento;
-
-  var oAjax = new Ajax.Request(
-    sUrlRpc, {
-      parameters   : 'json='+Object.toJSON(oParametros),
-      method       : 'post',
-      asynchronous : false,
-
-      /**
-       * Retorno do RPC
-       */
-      onComplete   : function(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno  = eval('('+oAjax.responseText+")");
-        var sMensagem = oRetorno.sMensagem.urlDecode();
-
-        if ( oRetorno.iStatus > 1 ) {
-
-          alert(sMensagem);
-          return false;
-        }
-
-        var sCaminhoDownloadArquivo = oRetorno.sCaminhoDownloadArquivo.urlDecode();
-        var sTituloArquivo          = oRetorno.sTituloArquivo.urlDecode();
-
-        window.open("db_download.php?arquivo="+sCaminhoDownloadArquivo);
-      }
-  });
-
-}
-
-/**
-* Pesquisar processo
- *
- * @param boolean lMostra
- * @return boolean
- */
-function js_pesquisarProcesso(lMostra) {
-
-  var sArquivo = 'func_protprocesso_protocolo.php?funcao_js=parent.';
-
-  if (lMostra) {
-    sArquivo += 'js_mostraProcesso|p58_codproc|p58_numero|dl_nome_ou_razão_social';
-  } else {
-
-    var iNumeroProcesso = $('p58_numero').value;
-
-    if ( empty(iNumeroProcesso) ) {
-      return false;
-    }
-
-    sArquivo += 'js_mostraProcessoHidden&pesquisa_chave=' + iNumeroProcesso + '&sCampoRetorno=p58_codproc';
-  }
-
-  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Processos', lMostra);
-}
-
-/**
- * Retorno da js_pesquisarProcesso apor clicar em um processo
- * @param  integer iCodigoProcesso
- * @param  integer iNumeroProcesso
- * @param  string sNome
- * @return void
- */
-function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
-
-  $('p58_codproc').value   = iCodigoProcesso;
-  $('p58_numero').value    = iNumeroProcesso;
-  $('z01_nome').value      = sNome;
-  $('p01_descricao').value = '';
-  $('uploadfile').disabled = false;
-  db_iframe_proc.hide();
-  js_buscarDocumentos();
-}
-
-/**
- * Retorno da pesquisa js_pesquisarProcesso apos mudar o campo p58_numero
- * @param  integer iCodigoProcesso
- * @param  string sNome
- * @param  boolean lErro
- * @return void
- */
-function js_mostraProcessoHidden(iCodigoProcesso, sNome, lErro) {
-
-  /**
-   * Nao encontrou processo
-   */
-  if ( lErro ) {
-
-    $('p58_numero').value    = '';
-    $('p58_codproc').value   = '';
-    $('p01_descricao').value = '';
-    $('uploadfile').disabled = false;
-    oGridDocumentos.clearAll(true);
-  }
-
-  $('p58_codproc').value = iCodigoProcesso;
-  $('z01_nome').value    = sNome;
-  js_buscarDocumentos();
-}
-
-/**
-* Cria um listener para subir a imagem, e criar um preview da mesma
-*/
-$("uploadfile").onchange = function() {
-
-  startLoading();
-  var iFrame = document.createElement("iframe");
-  iFrame.src = 'func_uploadfiledocumento.php?clone=form';
-  iFrame.id  = 'uploadIframe';
-  $('teste').appendChild(iFrame);
-}
-
-function startLoading() {
-  js_divCarregando(_M( MENSAGENS + 'mensagem_enviando_documento' ),'msgbox');
-}
-
-function endLoading() {
-  js_removeObj('msgbox');
-}
-
-function js_salvar() {
-
-  var iCodigoProcesso     = $('p58_codproc').value;
-  var iCodigoDocumento    = $('p01_sequencial').value;
-  var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
-  var sCaminhoArquivo     = $('namefile').value;
-
-  if ( empty(iCodigoProcesso) ) {
-
-    alert(_M( MENSAGENS + 'erro_processo_nao_informado' ));
-    return false;
-  }
-
-  if ( empty(sDescricaoDocumento) )  {
-
-   alert(_M( MENSAGENS + 'erro_descricao_nao_informada' ));
-   return false;
-  }
-
-  if ( empty(sCaminhoArquivo) ) {
-
-    alert(_M( MENSAGENS + 'erro_documento_nao_informado' ));
-    return false;
-  }
-
-  js_divCarregando(_M( MENSAGENS + 'mensagem_salvando_documento' ), 'msgbox');
-
-  var oParametros = new Object();
-
-  oParametros.exec                = 'salvarDocumento';
-  oParametros.iCodigoDocumento    = iCodigoDocumento;
-  oParametros.iCodigoProcesso     = iCodigoProcesso;
-  oParametros.sDescricaoDocumento = sDescricaoDocumento;
-  oParametros.sCaminhoArquivo     = sCaminhoArquivo;
-
-  var oAjax = new Ajax.Request(
-    sUrlRpc, {
-      parameters   : 'json='+Object.toJSON(oParametros),
-      method       : 'post',
-      asynchronous : false,
-      onComplete   : function(oAjax) {
-
-        js_removeObj("msgbox");
-        var oRetorno  = eval('('+oAjax.responseText+")");
-        var sMensagem = oRetorno.sMensagem.urlDecode();
-
-        if ( oRetorno.iStatus > 1 ) {
-
-          alert(sMensagem);
-          return false;
-        }
-
-        $('namefile').value      = '';
-        $('uploadfile').value    = '';
-        $('uploadfile').disabled = false;
-        $('p01_descricao').value = '';
-
-        alert(sMensagem);
-        js_buscarDocumentos();
-      }
-  });
-}
 </script>

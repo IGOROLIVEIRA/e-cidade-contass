@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -71,10 +71,9 @@ try {
       }
       $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
 
-      $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(),$oProcessoProtocolo->getAnoProcesso());
+      $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(), $oProcessoProtocolo->getAnoProcesso());
 
-    break;
-
+      break;
 
     case "salvarDocumento":
 
@@ -84,40 +83,56 @@ try {
       if ($oDepartamentoAtual->getCodigo() != db_getsession("DB_coddepto")) {
 
         $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
-        throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO."departamento_diferente_vinculo_documento", $oStdErro));
+        throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
       }
 
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
       $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);
 
-      if ( !empty($oParam->sCaminhoArquivo) ) {
+      if (!empty($oParam->sCaminhoArquivo)) {
         $oProcessoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
-      } 
+      }
 
       $oRetorno->sMensagem = urlencode($oProcessoDocumento->salvar());
 
-    break;
+      break;
 
     case "excluirDocumento":
 
-      $oProcessoProtocolo = new processoProtocolo($oParam->iCodigoProcesso);
-      $oDepartamentoAtual = $oProcessoProtocolo->getDepartamentoAtual();
-
-      if ($oDepartamentoAtual->getCodigo() != db_getsession("DB_coddepto")) {
-
-        $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
-        throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO."departamento_diferente_vinculo_documento", $oStdErro));
-      }
+			$aDocumentosNaoExcluidos = array();
 
       foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
 
-        $oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
-        $oProcessoDocumento->excluir();
-      }
-      $oRetorno->sMensagem = urlencode(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO."documento_excluido"));
+				$oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
 
-    break;
+				if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
+					$oProcessoDocumento->excluir();
+					continue;
+				}
+				$aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
+
+			}
+
+			$sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não".
+			" pertencem ao departamento atual.\n\nDocumentos não excluídos:";
+			$sDocumentosNaoExcluidos = '';
+			foreach($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
+				$sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
+			}		
+
+			if (count($aDocumentosNaoExcluidos) === 1) {
+				$sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
+				" pertence ao departamento atual.\n\nDocumento não excluído:";
+			}
+
+			if (!empty($aDocumentosNaoExcluidos)) {
+				$oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao.$sDocumentosNaoExcluidos);
+			} else {
+				$oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+			}
+
+      break;
 
     case "download":
 
@@ -125,14 +140,36 @@ try {
       $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
       $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
-    break;
+      break;
+
+    case "ziparAnexos":
+      $nomeDoZip = 'tmp/anexos-' . time() . '.zip';
+      $zip = new ZipArchive();
+      if ($zip->open($nomeDoZip, ZipArchive::CREATE) === true) {
+
+        foreach ($oParam->arquivos as $oArquivo) {
+          $zip->addFile($oArquivo->sCaminhoDownloadArquivo, $oArquivo->sTituloArquivo);
+        }
+
+        $zip->close();
+      }
+
+      $oRetorno->nomeDoZip = $nomeDoZip;
+      break;
+
+    case "apagarZip":
+      if (file_exists($oParam->nomeDoZip) && unlink($oParam->nomeDoZip)) {
+        $oRetorno->zipApagado = 1;
+      } else {
+        $oRetorno->zipApagado = 0;
+      }
+      break;
   }
 
   /**
    * Fim Transação
    */
   db_fim_transacao(false);
-
 } catch (Exception $eErro) {
 
   db_fim_transacao(true);
