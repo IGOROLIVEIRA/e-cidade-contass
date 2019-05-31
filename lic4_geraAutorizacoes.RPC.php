@@ -363,6 +363,38 @@ switch ($oParam->exec) {
   }
 
   break;
+
+  case "validaSolicitacaoRegP" : 
+
+    $sSQL = "SELECT l202_datahomologacao
+              FROM solicita
+                JOIN solicitem  ON pc11_numero = pc10_numero
+                JOIN pcprocitem ON pc81_solicitem = pc11_codigo
+                JOIN liclicitem ON l21_codpcprocitem = pc81_codprocitem
+                JOIN liclicita  ON l20_codigo = l21_codliclicita
+                JOIN homologacaoadjudica ON l202_licitacao = l20_codigo
+                  WHERE pc10_numero = (
+                                        SELECT pc53_solicitapai
+                                          FROM solicitavinculo
+                                            WHERE pc53_solicitafilho = (
+                                                                        SELECT pc10_numero
+                                                                          FROM solicita
+                                                                            JOIN solicitem  ON pc11_numero    = pc10_numero 
+                                                                            JOIN pcprocitem ON pc81_solicitem = pc11_codigo
+                                                                              WHERE pc81_codproc = {$oParam->iProcessoCompra}
+                                                                      )
+                                      ) limit 1";
+    
+    $rsConsulta = db_query($sSQL);
+    $dataH = db_utils::getCollectionByRecord($rsConsulta);
+    if (date("Y-m-d", db_getsession("DB_datausu")) < date('Y-m-d',strtotime($dataH[0]->l202_datahomologacao))) {
+      $oRetorno->validacao = 0;
+      $oRetorno->datahomologacao = date('d/m/Y',strtotime($dataH[0]->l202_datahomologacao));
+    } else {
+        $oRetorno->validacao = 1;
+    }
+
+  break;
 }
 
 function getFonercedoresLic($licitacao) {

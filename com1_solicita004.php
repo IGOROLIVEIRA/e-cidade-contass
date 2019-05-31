@@ -181,6 +181,7 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 			db_fieldsmemory($result_importacao, 0);
 			$ano_imp 							 = substr($data_imp, 0, 4);
 			$clsolicita->pc10_data = date("Y-m-d", db_getsession("DB_datausu"));
+
 			$clsolicita->pc10_log  = $pc10_log;
 			if ($pc10_correto == "f") {
 				$clsolicita->pc10_correto = "false";
@@ -198,6 +199,27 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 		}
 
 		//echo "<br><br>ERRO [1] => ". $sqlerro;
+	}
+
+	if ($pc10_solicitacaotipo == "5") {
+		if (!empty($pc54_solicita)) {
+			$sSQL = " SELECT l202_datahomologacao
+									FROM solicita
+										JOIN solicitem ON pc11_numero = pc10_numero
+										JOIN pcprocitem ON pc81_solicitem = pc11_codigo
+										JOIN liclicitem ON l21_codpcprocitem = pc81_codprocitem
+										JOIN liclicita ON l20_codigo = l21_codliclicita
+										JOIN homologacaoadjudica ON l202_licitacao = l20_codigo
+											WHERE pc10_numero = $pc54_solicita limit 1
+			";
+			$rsResultRP = db_query($sSQL);
+			$oSolicita = db_utils::fieldsMemory($rsResultRP, 0);
+			$datahomologacao = date("d/m/Y", strtotime($oSolicita->l202_datahomologacao));
+			if (date("Y-m-d", db_getsession("DB_datausu")) < date("Y-m-d", strtotime($oSolicita->l202_datahomologacao))) {
+				$sqlerro  = true;
+				$erro_msg = "\tOperação Cancelada!\nData da solicitação é menor que a data de homologação: {$datahomologacao}";
+			}
+		}
 	}
 
   if (!$sqlerro) {
