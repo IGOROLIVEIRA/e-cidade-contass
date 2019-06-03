@@ -50,9 +50,8 @@ require_once("dbforms/db_funcoes.php");
         </tr>
       </table>
     </fieldset>
-
     <br />
-    <input type="button" name="btnEnviarDados" id="btnEnviarDados" value="Enviar Dados" />
+    <input type="button" name="btnEnviarDados" id="btnEnviarDados" value="Enviar Dados" onclick="enviarDados()" />
   </form>
 
 </center>
@@ -64,8 +63,55 @@ require_once("dbforms/db_funcoes.php");
 
 <script>
 
+function novoAjax(params, onComplete) {
 
-$("btnEnviarDados").observe("click", function() {
+  let request = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
+    method:'post',
+    parameters:'json='+Object.toJSON(params),
+    onComplete: onComplete
+  });
+
+}
+
+function enviarDados() {
+
+  let oParams = {
+    exec: 'validaSolicitacaoRegP',
+    iProcessoCompra: $('iProcessoCompra').value
+  };
+
+  novoAjax(oParams, function(e) {
+    let oRetorno = JSON.parse(e.responseText);
+    if (oRetorno.validacao) {
+      var iProcessoCompra = $('iProcessoCompra').value;
+      var iSolicitacao    = $('iSolicitacao').value;
+
+      if (iProcessoCompra == "" && iSolicitacao == "") {
+
+        alert("Informe o código do processo de compras ou solicitação.");
+        return false;
+      }
+
+      var sStringUrl = "";
+      if (iProcessoCompra.trim() != "") {
+        sStringUrl  = "iCodigoCompra="+iProcessoCompra;
+        sStringUrl += "&iTipoCompra=1";
+      } else {
+        sStringUrl  = "iCodigoCompra="+iSolicitacao;
+        sStringUrl += "&iTipoCompra=2";
+      }
+      sStringUrl    += "&iInstituicao="+<?=db_getsession("DB_instit");?>;
+      sStringUrl    += "&iAno="+<?=db_getsession("DB_anousu");?>;
+      location.href  = "com1_geraautorizacao002.php?"+sStringUrl;
+    } else {
+        alert("Operação Cancelada!\nData do processo de compra é anterior a data de homologação: "+oRetorno.datahomologacao);
+    }
+  });
+
+}
+
+
+/*$("btnEnviarDados").observe("click", function() {
 
 
   var iProcessoCompra = $('iProcessoCompra').value;
@@ -88,7 +134,7 @@ $("btnEnviarDados").observe("click", function() {
   sStringUrl    += "&iInstituicao="+<?=db_getsession("DB_instit");?>;
   sStringUrl    += "&iAno="+<?=db_getsession("DB_anousu");?>;
   location.href  = "com1_geraautorizacao002.php?"+sStringUrl;
-});
+});*/
 
 /*
  * Abre Lookup para pesquisa de um processo de compra.
