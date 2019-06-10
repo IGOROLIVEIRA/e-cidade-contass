@@ -114,8 +114,8 @@ $sql = "SELECT rh01_regist AS matricula,
        ||servidor.z01_cgccpf||'#' 
        ||coalesce(servidor.z01_pis,' ')||'#' 
        ||CASE
-          WHEN rh01_sexo = 'M' THEN 1
-          ELSE 2
+          WHEN rh01_sexo = 'M' THEN 2
+          ELSE 1
           END ||'#'
        ||rh01_estciv||'#'
        ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
@@ -269,7 +269,7 @@ $sql = "SELECT rh01_regist AS matricula,
        ||servidor.z01_cgccpf||'#' 
        ||coalesce(servidor.z01_pis,' ')||'#' 
        ||CASE
-          WHEN rh01_sexo = 'M' THEN 2
+          WHEN rh01_sexo = 'M' THEN 1
           ELSE 2
           END ||'#'
        ||rh01_estciv||'#'
@@ -439,8 +439,8 @@ $sql = " SELECT rh01_regist AS matricula,
        rh01_regist||'#' 
        ||servidor.z01_cgccpf||'#' 
        ||CASE
-          WHEN rh01_sexo = 'M' THEN 2
-          ELSE 1
+          WHEN rh01_sexo = 'M' THEN 1
+          ELSE 2
           END ||'#'
        ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
        ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
@@ -475,7 +475,7 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm
-     join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
+     left join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
 
 where rh30_vinculo = 'P'
   $where ";

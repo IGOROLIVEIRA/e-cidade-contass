@@ -293,30 +293,28 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 					$Hash20 = '';
 					$oContaExtraFonte = db_utils::fieldsMemory($rsExt20FonteRecurso, $iC);
 
-					$sSqlSaldoFonte = " select round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),28,13)::float8,2)::float8 as saldo_anterior,
-											   round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),42,13)::float8,2)::float8 as debitomes,
-											   round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),56,13)::float8,2)::float8 as creditomes,
-											   round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),70,13)::float8,2)::float8 as saldo_final,
-											   substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),83,1)::varchar(1) as  sinalanterior,
-											   substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),85,1)::varchar(1) as  sinalfinal ";
+					$sSqlSaldoFonte =	"select round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),28,13)::float8,2)::float8 as saldo_anterior,
+												round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),42,13)::float8,2)::float8 as debitomes,
+												round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),56,13)::float8,2)::float8 as creditomes,
+												round(substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),70,13)::float8,2)::float8 as saldo_final,
+												substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),83,1)::varchar(1) as  sinalanterior,
+												substr(fc_saldoextfonte(".db_getsession("DB_anousu").",$oContaExtraFonte->codext,$oContaExtraFonte->fonte," . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "," . db_getsession("DB_instit") . "),85,1)::varchar(1) as  sinalfinal ";
 
 					$rsExtSaldoFonteRecurso   = db_query($sSqlSaldoFonte);
-					//echo "Saldo ".$oContaExtraFonte->codext."-".$oContaExtraFonte->fonte."<br>".$sSqlSaldoFonte."<br> [si165_codext] => ".$oExt10Agrupado->si124_codext." -".$oContaExtraFonte->fonte;
-					//db_criatabela($rsExtSaldoFonteRecurso);
+					// echo "Saldo ".$oContaExtraFonte->codext."-".$oContaExtraFonte->fonte."<br>".$sSqlSaldoFonte."<br> [si165_codext] => ".$oExt10Agrupado->si124_codext." - ".$oContaExtraFonte->fonte;
+					// db_criatabela($rsExtSaldoFonteRecurso);
 					$saldoanteriorabs         = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->saldo_anterior;
 					$oExtRecurso              = $oContaExtraFonte->fonte;
 					$natsaldoanteriorfonte    = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->sinalanterior;
 					$saldofinalabs            = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->saldo_final;
 					$natsaldoatualfonte       = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->sinalfinal;
 					$saldodebito              = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->debitomes;
-                    $saldocredito			  = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->creditomes;
+					$saldocredito			  			= db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->creditomes;
 					$saldoanterior            = $natsaldoanteriorfonte == 'C' ? ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs) * -1 : ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs);
 					$saldofinal               = $natsaldoatualfonte == 'C' ? ($saldofinalabs == '' ? 0 : $saldofinalabs) * -1 : ($saldofinalabs == '' ? 0 : $saldofinalabs);
 
 					/* SQL RETORNA O CODTRI DA FONTE */
-					$sSqlExtRecurso = "select o15_codtri
-                                         from orctiporec
-	        						    where o15_codigo = ". $oExtRecurso;
+					$sSqlExtRecurso = "SELECT o15_codtri FROM orctiporec WHERE o15_codigo = ". $oExtRecurso;
 					$rsExtRecurso = db_query($sSqlExtRecurso);
 					$oExtRecursoTCE = db_utils::fieldsMemory($rsExtRecurso, 0)->o15_codtri;
 
@@ -357,26 +355,26 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                      * CARREGA OS DADOS DO REGISTRO 30
                      */
 					$sSqlMov = "select conlancamdoc.c71_codlan as codreduzidomov,
-							   case when conplanoreduz.c61_codtce !=0 then conplanoreduz.c61_codtce else conplanoreduz.c61_reduz end as codext,
-							   orctiporec.o15_codtri as codfontrecursos,
-							   '2' as categoria,
-							   conlancamval.c69_data as dtLancamento,
-							   c69_valor as vllancamento,
-							   conlancamcorrente.c86_id as id,
-							   conlancamcorrente.c86_data as data,
-							   conlancamcorrente.c86_autent as autent,
-							   conlancamval.c69_credito as contapagadora
-						  from conlancamval
-					inner join conlancamdoc on conlancamdoc.c71_codlan = conlancamval.c69_codlan
-					inner join conlancamcorrente on  conlancamval.c69_codlan = conlancamcorrente.c86_conlancam
-					inner join conplanoreduz on conplanoreduz.c61_reduz = conlancamval.c69_credito
-					inner join orctiporec on  orctiporec.o15_codigo = conplanoreduz.c61_codigo
-						   and conplanoreduz.c61_anousu = conlancamval.c69_anousu
-						 where conlancamdoc.c71_coddoc in (120,151,161)
-						   and conlancamval.c69_debito = {$nExtras}
-						   and DATE_PART('YEAR',conlancamval.c69_data) = " . db_getsession("DB_anousu") . "
-						   and DATE_PART('MONTH',conlancamval.c69_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-						   and orctiporec.o15_codigo = {$oExtRecurso}";
+                                        case when conplanoreduz.c61_codtce !=0 then conplanoreduz.c61_codtce else conplanoreduz.c61_reduz end as codext,
+                                        orctiporec.o15_codtri as codfontrecursos,
+                                        '2' as categoria,
+                                        conlancamval.c69_data as dtLancamento,
+                                        c69_valor as vllancamento,
+                                        conlancamcorrente.c86_id as id,
+                                        conlancamcorrente.c86_data as data,
+                                        conlancamcorrente.c86_autent as autent,
+                                        conlancamval.c69_credito as contapagadora
+                                from conlancamval
+                                inner join conlancamdoc on conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                inner join conlancamcorrente on  conlancamval.c69_codlan = conlancamcorrente.c86_conlancam
+                                inner join conplanoreduz on conplanoreduz.c61_reduz = conlancamval.c69_credito
+                                inner join orctiporec on  orctiporec.o15_codigo = conplanoreduz.c61_codigo
+                                        and conplanoreduz.c61_anousu = conlancamval.c69_anousu
+                                where conlancamdoc.c71_coddoc in (120,151,161)
+                                  and conlancamval.c69_debito = {$nExtras}
+                                  and DATE_PART('YEAR',conlancamval.c69_data) = " . db_getsession("DB_anousu") . "
+                                  and DATE_PART('MONTH',conlancamval.c69_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                                  and orctiporec.o15_codigo = {$oExtRecurso}";
 
 					$rsExtMov = db_query($sSqlMov);
 					// echo "Reg30";db_criatabela($rsExtMov);
@@ -385,56 +383,61 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 						$oExtMov = db_utils::fieldsMemory($rsExtMov, $linha);
 
-						     $sSql30 = "SELECT '30' as tiporegistro,
-												e91_codcheque,
-											   c86_data as dtpagamento,
-											   (SELECT coalesce(c86_conlancam, 0)
-												  FROM conlancamcorrente
-												 WHERE c86_id = corrente.k12_id
-												   AND c86_data = corrente.k12_data
-												   AND c86_autent = corrente.k12_autent) as codreduzidomov,
-											   (slip.k17_codigo||slip.k17_debito)::int8 as codreduzidoop,
-											   (slip.k17_codigo||slip.K17_debito)::int8 as nroop,
-										   case when length(cc.z01_cgccpf::varchar) = 11 then 1 else 2 end as tipodocumentocredor,
-										   cc.z01_cgccpf as nrodocumentocredor,
-										   k17_valor as vlop,
-										   k17_texto as especificacaoop,
-										   case when c61_codtce <> 0 then c61_codtce else slip.k17_credito end as contapagadora,
-										   orctiporec.o15_codtri as fontepagadora,
-										   (select CASE WHEN o41_subunidade != 0
-										                  OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-														  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-															              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-															    ELSE lpad((CASE WHEN o40_codtri = '0'
-															         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-															           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-													 end as unidade
-												   from orcunidade
-												   join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao
-												   where o41_instit = " . db_getsession("DB_instit") . " and o40_anousu = " . db_getsession("DB_anousu") . " order by o40_orgao limit 1) as codunidadesub
-										  FROM corlanc
-									INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
-										   AND corlanc.k12_data = corrente.k12_data
-										   AND corlanc.k12_autent = corrente.k12_autent
-									inner join slip on slip.k17_codigo = corlanc.k12_codigo
-									inner join conplanoreduz on slip.k17_credito = conplanoreduz.c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
-									inner join orctiporec on orctiporec.o15_codigo = conplanoreduz.c61_codigo
-									inner join slipnum on slipnum.k17_codigo = slip.k17_codigo
-									inner join cgm cc on cc.z01_numcgm = slipnum.k17_numcgm
-									 LEFT JOIN corconf ON corlanc.k12_id = corconf.k12_id
-										   AND corlanc.k12_data = corconf.k12_data
-										   AND corlanc.k12_autent = corconf.k12_autent
-									 LEFT JOIN empageconfche ON k12_codmov = e91_codcheque
-									 LEFT JOIN empagemovforma ON e91_codmov = e97_codmov
-									 LEFT JOIN empageforma ON e97_codforma = e96_codigo
-									 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
-										   AND conlancamcorrente.c86_data = corrente.k12_data
-										   AND conlancamcorrente.c86_autent = corrente.k12_autent
-										 WHERE c86_id     = {$oExtMov->id}
-										   AND c86_data   = '{$oExtMov->data}'
-										   AND c86_autent = {$oExtMov->autent} ";
+                                $sSql30 = " SELECT '30' as tiporegistro,
+                                                    /*e91_codcheque,*/
+                                                    CASE 
+                                                        WHEN conplano.c60_codsis = 5 
+                                                        THEN 5
+                                                        ELSE e91_codcheque
+                                                    END AS e91_codcheque,
+                                                    c86_data as dtpagamento,
+                                                    (SELECT coalesce(c86_conlancam, 0) FROM conlancamcorrente
+                                                        WHERE c86_id = corrente.k12_id
+                                                            AND c86_data = corrente.k12_data
+                                                            AND c86_autent = corrente.k12_autent) AS codreduzidomov,
+                                                    (slip.k17_codigo||slip.k17_debito)::int8 AS codreduzidoop,
+                                                    (slip.k17_codigo||slip.K17_debito)::int8 AS nroop,
+                                                    CASE WHEN LENGTH(cc.z01_cgccpf::varchar) = 11 THEN 1 ELSE 2 END AS tipodocumentocredor,
+                                                    cc.z01_cgccpf AS nrodocumentocredor,
+                                                    k17_valor AS vlop,
+                                                    k17_texto AS especificacaoop,
+                                                    CASE WHEN c61_codtce <> 0 THEN c61_codtce ELSE slip.k17_credito END AS contapagadora,
+                                                    orctiporec.o15_codtri AS fontepagadora,
+                                                    (SELECT CASE WHEN o41_subunidade != 0
+                                                                                OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+                                                                OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                                                                                            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                                                        ELSE lpad((CASE WHEN o40_codtri = '0'
+                                                                                OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                                                                                    OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+                                                        END AS unidade
+                                                        FROM orcunidade
+                                                        JOIN orcorgao ON o41_anousu = o40_anousu and o41_orgao = o40_orgao
+                                                        WHERE o41_instit = " . db_getsession("DB_instit") . " AND o40_anousu = " . db_getsession("DB_anousu") . " ORDER BY o40_orgao LIMIT 1) AS codunidadesub
+                                            FROM corlanc
+                                            INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
+                                                        AND corlanc.k12_data = corrente.k12_data
+                                                        AND corlanc.k12_autent = corrente.k12_autent
+                                            INNER JOIN slip on slip.k17_codigo = corlanc.k12_codigo
+                                            INNER JOIN conplanoreduz on slip.k17_credito = conplanoreduz.c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
+                                            INNER JOIN conplano ON (conplano.c60_codcon, conplano.c60_anousu) = (conplanoreduz.c61_codcon, conplanoreduz.c61_anousu)
+                                            INNER JOIN orctiporec on orctiporec.o15_codigo = conplanoreduz.c61_codigo
+                                            INNER JOIN slipnum on slipnum.k17_codigo = slip.k17_codigo
+                                            INNER JOIN cgm cc on cc.z01_numcgm = slipnum.k17_numcgm
+                                            LEFT JOIN corconf ON corlanc.k12_id = corconf.k12_id
+                                                        AND corlanc.k12_data = corconf.k12_data
+                                                        AND corlanc.k12_autent = corconf.k12_autent
+                                            LEFT JOIN empageconfche ON k12_codmov = e91_codcheque
+                                            LEFT JOIN empagemovforma ON e91_codmov = e97_codmov
+                                            LEFT JOIN empageforma ON e97_codforma = e96_codigo
+                                            LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
+                                                        AND conlancamcorrente.c86_data = corrente.k12_data
+                                                        AND conlancamcorrente.c86_autent = corrente.k12_autent
+                                            WHERE c86_id     = {$oExtMov->id}
+                                                AND c86_data   = '{$oExtMov->data}'
+                                                AND c86_autent = {$oExtMov->autent} ";
 
-							    $rsExt30 = db_query($sSql30) or die($sSql30);
+								$rsExt30 = db_query($sSql30) or die($sSql30);
 								// db_criatabela($rsExt30);
 								for ($linha30 = 0; $linha30 < pg_num_rows($rsExt30); $linha30++) {
 
@@ -471,9 +474,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                                     $cExt31->si127_tiporegistro        = '31';
                                     $cExt31->si127_codreduzidoop       = $oExt30->codreduzidoop;
-                                    $cExt31->si127_tipodocumentoop     = $oExt30->e91_codcheque != '' ? 1 : 99;
-                                    $cExt31->si127_nrodocumento        = $oExt30->e91_codcheque != '' ? $oExt30->e91_codcheque : $aExt20[$Hash20]->ext30[$Hash30]->si126_codreduzidoop;
-                                    $cExt31->si127_codctb              = $oExt30->contapagadora;
+                                    $cExt31->si127_tipodocumentoop     = empty($oExt30->e91_codcheque) ? 99 : (($oExt30->e91_codcheque == 5) ? 5 : 1);
+                                    $cExt31->si127_nrodocumento        = $oExt30->e91_codcheque == 5 ? '' : (!empty($oExt30->e91_codcheque) ? $oExt30->e91_codcheque : $aExt20[$Hash20]->ext30[$Hash30]->si126_codreduzidoop);
+                                    $cExt31->si127_codctb              = $oExt30->e91_codcheque == 5 ? '' : $oExt30->contapagadora;
                                     $cExt31->si127_codfontectb         = $oExt30->fontepagadora;
                                     $cExt31->si127_desctipodocumentoop = $cExt31->si127_tipodocumentoop == 99 ? 'TED' : ' ';
                                     $cExt31->si127_dtemissao           = $cExt30->si126_dtpagamento;
@@ -488,23 +491,38 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						//$aExt20[$Hash20] = $cExt20;
 					}
 				}
-	    }
-	 }
-      //echo "<pre>";print_r($aExt20);
-	  foreach($aExt20 as $oExt20) {
+		}
+	}
+      // echo "<pre>";print_r($aExt20);
+	foreach($aExt20 as $oExt20) {
+
 
 			$cExt   = new cl_ext202019();
 
 			$cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
-			$cExt->si165_codorgao 			   = $oExt20->si165_codorgao;
+			$cExt->si165_codorgao 			  		 = $oExt20->si165_codorgao;
 			$cExt->si165_codext                = $oExt20->si165_codext;
 			$cExt->si165_codfontrecursos       = $oExt20->si165_codfontrecursos;
 			$cExt->si165_vlsaldoanteriorfonte  = abs($oExt20->si165_vlsaldoanteriorfonte);
-			$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_natsaldoanteriorfonte;
-		    $cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
-		    $cExt->si165_totalcreditos         = $oExt20->si165_totalcreditos;
+			
+			if (($oExt20->si165_vlsaldoanteriorfonte) < 0) {				
+					$cExt->si165_natsaldoanteriorfonte = 'C';
+			} elseif ((($oExt20->si165_vlsaldoanteriorfonte) > 0)) {				
+					$cExt->si165_natsaldoanteriorfonte = 'D';
+			} else {				
+					$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_natsaldoanteriorfonte;
+			}
+
+			$cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
+			$cExt->si165_totalcreditos         = $oExt20->si165_totalcreditos;
 			$cExt->si165_vlsaldoatualfonte     = abs($oExt20->si165_vlsaldoatualfonte);
-			$cExt->si165_natsaldoatualfonte    = $oExt20->si165_natsaldoatualfonte;
+
+			if (($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos) < 0) {
+						$cExt->si165_natsaldoatualfonte    = 'C';
+				} else {				
+						$cExt->si165_natsaldoatualfonte    = $oExt20->si165_natsaldoatualfonte;
+			}
+
 			$cExt->si165_mes                   = $oExt20->si165_mes;
 			$cExt->si165_instit                = $oExt20->si165_instit;
 			$cExt->incluir(null);
@@ -566,7 +584,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 	db_fim_transacao();
 	$oGerarEXT = new GerarEXT();
-    $oGerarEXT->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
+	$oGerarEXT->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	$oGerarEXT->gerarDados();
   }
 
