@@ -449,11 +449,15 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 
     //tipo licitacao
     if($e54_tipoautorizacao == 3){
-        $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null, null, "distinct e54_numerl,e54_nummodalidade,e54_anousu", null, "e55_autori = $e54_autori "));
-        if ($clempautitem->numrows > 0) {
+        $sqlLic = "select l20_codigo,l20_numero,l20_anousu,l20_edital from empautoriza
+				inner join liclicita on l20_codigo = e54_codlicitacao
+				where e54_autori = {$e54_autori}";
+				$result_empaut = db_query($sqlLic);
+
+        if ($result_empaut != 0) {
             db_fieldsmemory($result_empaut, 0);
-            $pdf1->edital_licitacao = $e54_numerl;
-            $pdf1->modalidade = $e54_nummodalidade.'/'.$e54_anousu;
+            $pdf1->edital_licitacao = $l20_edital.'/'.$l20_anousu;
+            $pdf1->modalidade = $l20_numero.'/'.$l20_anousu;
         }
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';

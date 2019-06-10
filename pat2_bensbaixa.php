@@ -4,6 +4,7 @@ include("libs/db_sql.php");
 require_once("libs/db_utils.php");
 include ("classes/db_clabens_classe.php");
 include("classes/db_conciliapendcorrente_classe.php");
+include("classes/db_db_docparag_classe.php");
 
 $clc_bens= new cl_bens;
 
@@ -48,7 +49,7 @@ $rsBens= $clc_bens->sql_record($sql);//echo $sql;db_criatabela($rsBens);exit;
 $intNumRows = $clc_bens->numrows;
 if($intNumRows==0)
 {
- db_redireciona('db_erros.php?fechar=true&db_erro=Não existe bens BAIXADOS para esta DATA '.$databaixa);
+ db_redireciona('db_erros.php?fechar=true&db_erro=N?o existe bens BAIXADOS para esta DATA '.$databaixa);
 }
 
 $oResult = db_utils::fieldsMemory($rsBens,0);
@@ -57,11 +58,11 @@ $oResult = db_utils::fieldsMemory($rsBens,0);
 $head2 = "RELATÓRIO BAIXA DE BENS";
 
 
-//$head5 = "Exercício: ". date("Y",db_getsession("DB_datausu"));
+//$head5 = "Exerc?cio: ". date("Y",db_getsession("DB_datausu"));
 if ($databaixaini==$databaixafim) {
   $head5 = "Data : "  .$databaixaini;
 } else {
-	$head5 = "Pedríodo : $databaixaini à $databaixafim ";
+	$head5 = "Período : $databaixaini à $databaixafim ";
 }
 
 
@@ -183,10 +184,32 @@ $iPosX = $pdf->getx();
 $pdf->SetXY($iPosX+110,$iPosY);
 $pdf->multicell(60,2,$sAssSecr,0,"C",0,0);
 
+$sWhere  = " db02_descr like 'ASSINATURA DO RESPONS%VEL' ";
+$sWhere .= " AND db03_descr like 'ASSINATURA PADR%O DO RESPONS%VEL' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
+
+$cl_docparag = new cl_db_docparag;
+$sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+
+$rs = $cl_docparag->sql_record($sAssinatura);
+$oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+if($oLinha){
+  
+  if($pdf->gety() > 270){
+    $pdf->AddPage();
+    $pdf->Ln(10);
+  }else{
+    $pdf->Ln(20);
+  }
+
+  $pdf->SetLeftMargin(58);
+  $pdf->setfont($fonte, 'b', 8);
+  $pdf->multiCell(100, 6, $oLinha, 'T', "C", 0, 0);
+  
+}
 
 $pdf->output();
 
-
-
 ?>
-
