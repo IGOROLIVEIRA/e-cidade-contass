@@ -61,8 +61,12 @@ $imp=0;
 $sql1 = "
 SELECT descrdepto as departament,nomeresponsavel as responsaveldiv, coddepto
 FROM db_depart
-WHERE {$txt_where_atend} {$txt_where}";
-//echo $sql1;exit;
+WHERE {$txt_where_atend} {$txt_where}
+AND limite is null 
+ORDER BY descrdepto ASC
+";
+// LEFT JOIN cgm on numcgm = z01_numcgm
+// echo $sql1;exit;
 $res1 = @pg_query($sql1);
 $numrows_1   = @pg_numrows($res1);
 
@@ -92,7 +96,8 @@ for ($x1 = 0; $x1 < $numrows_1; $x1++) {
     LEFT JOIN cgm on cgm.z01_numcgm = departdiv.t30_numcgm
     WHERE departdiv.t30_depto = {$coddepto}
     ";
-
+    
+    // print_r( $sql2);die();
     $res2 = @pg_query($sql2);
     $numrows_2   = @pg_numrows($res2);
 
@@ -126,5 +131,6 @@ if ($numrows_1 == 0) {
      }	  
 }
 
+// die('Stoping');
 $pdf->Output();
 ?>

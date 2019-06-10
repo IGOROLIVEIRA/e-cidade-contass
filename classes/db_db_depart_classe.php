@@ -246,6 +246,7 @@ class cl_db_depart {
    } 
    // funcao para alteracao
    public function alterar ($coddepto=null) { 
+    //  var_dump( $GLOBALS["HTTP_POST_VARS"]["nomeresponsavel"]);die();
       $this->atualizacampos();
      $sql = " update db_depart set ";
      $virgula = "";
@@ -275,8 +276,11 @@ class cl_db_depart {
          return false;
        }
      }
-     if(trim($this->nomeresponsavel)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeresponsavel"])){ 
-       $sql  .= $virgula." nomeresponsavel = '$this->nomeresponsavel' ";
+    
+     if(trim($this->nomeresponsavel)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeresponsavel"]) || isset($GLOBALS["HTTP_POST_VARS"]["z01_nome"])){ 
+       if( isset($GLOBALS["HTTP_POST_VARS"]["z01_nome"]))
+        $sql  .= $virgula . " nomeresponsavel = '".$GLOBALS["HTTP_POST_VARS"]["z01_nome"]."'";
+       else $sql  .= $virgula." nomeresponsavel = '$this->nomeresponsavel' ";
        $virgula = ",";
      }
      if(trim($this->emailresponsavel)!="" || isset($GLOBALS["HTTP_POST_VARS"]["emailresponsavel"])){ 
@@ -366,6 +370,7 @@ class cl_db_depart {
          }
        }
      }
+     
      $result = db_query($sql);
      if (!$result) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
