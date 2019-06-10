@@ -170,7 +170,8 @@ class cl_empautoriza {
             $this->e54_concarpeculiar = ($this->e54_concarpeculiar == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_concarpeculiar"]:$this->e54_concarpeculiar);
             $this->e54_gestaut = ($this->e54_gestaut == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_gestaut"]:$this->e54_gestaut);
             $this->e54_nummodalidade = ($this->e54_nummodalidade == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_nummodalidade"]:$this->e54_nummodalidade);
-            $this->e54_licoutrosorgaos = ($this->e54_licoutrosorgaos == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_licoutrosorgaos"]:$this->e54_licoutrosorgaos);
+						$this->e54_codlicitacao = ($this->e54_codlicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_codlicitacao"]:$this->e54_codlicitacao);
+						$this->e54_licoutrosorgaos = ($this->e54_licoutrosorgaos == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_licoutrosorgaos"]:$this->e54_licoutrosorgaos);
             $this->e54_adesaoregpreco = ($this->e54_adesaoregpreco == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_adesaoregpreco"]:$this->e54_adesaoregpreco);
             $this->e54_tipoorigem = ($this->e54_tipoorigem == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_tipoorigem"]:$this->e54_tipoorigem);
             $this->e54_tipoautorizacao = ($this->e54_tipoautorizacao == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_tipoautorizacao"]:$this->e54_tipoautorizacao);
@@ -318,7 +319,7 @@ class cl_empautoriza {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
-        }
+				}
         $sql = "insert into empautoriza(
                                            e54_autori
                                           ,e54_numcgm

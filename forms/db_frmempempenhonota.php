@@ -220,7 +220,11 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         ?>
                         <?= @$Le54_numerl ?>
                         <?
-                        db_input('e54_numerl', 8, $Ie54_numerl, true, 'text', $dop, "onchange='js_validaNumLicitacao();'");
+                        db_input('e54_numerl', 8, $Ie54_numerl, true, 'text', 3, "onchange='js_validaNumLicitacao();'");
+                        ?>
+                        <strong>Modalidade:</strong>
+                        <?
+                        db_input('e54_nummodalidade', 8, $e54_nummodalidade, true, 'text', 3, "");
                         ?>
                     </td>
                 </tr>
