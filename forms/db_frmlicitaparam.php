@@ -61,8 +61,8 @@ $cllicitaparam->rotulo->label();
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tl12_tipoliberacaoweb?>">
-       <?=@$Ll12_tipoliberacaoweb?>
+    <td>
+       <strong>Disp. licitação na web até o julgamento:</strong>
     </td>
     <td> 
       <?
@@ -72,6 +72,17 @@ $cllicitaparam->rotulo->label();
       ?>
     </td>
   </tr>
+    <tr>
+        <td>
+            <strong>Emitir usuário no relatório de adjudicação:</strong>
+        </td>
+        <td>
+            <?
+            $x = array("f"=>"NAO","t"=>"SIM");
+            db_select('l12_usuarioadjundica',$x,true,$db_opcao,"");
+            ?>
+        </td>
+    </tr>
   
   <? $sDisplay = $l12_tipoliberacaoweb <> 1 ? '' : 'none'; ?>
   <tr id="trLiberacaoWebDias" style="display: <?=$sDisplay; ?>;">

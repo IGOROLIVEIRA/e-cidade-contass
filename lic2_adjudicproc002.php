@@ -32,6 +32,7 @@ include("classes/db_liclicitem_classe.php");
 include("classes/db_pcorcamforne_classe.php");
 include("classes/db_pcorcamitem_classe.php");
 include("classes/db_pcorcamval_classe.php");
+include("classes/db_licitaparam_classe.php");
 require_once("libs/db_libdocumento.php");
 require_once("libs/db_utils.php");
 $clliclicita = new cl_liclicita;
@@ -40,6 +41,7 @@ $clpcorcamforne = new cl_pcorcamforne;
 $clpcorcamitem = new cl_pcorcamitem;
 $clpcorcamval = new cl_pcorcamval;
 $clrotulo = new rotulocampo;
+$cllicitaparam = new cl_licitaparam();
 $clrotulo->label('');
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -97,11 +99,34 @@ FROM liccomissaocgm
 WHERE l31_licitacao={$l20_codigo}
     AND l31_tipo = '7'
 ";
-
 $rsDadosEquipe = db_query($sSqlequipe);
 db_fieldsmemory($rsDadosEquipe,0);
 
-// $l20_datacria=substr($l20_anousu,0,4);
+$sSqlusuario = "SELECT DISTINCT db_usuarios.nome as nomeusuario
+        FROM pcorcamitem
+        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        INNER JOIN pcorcamjulgamentologitem ON pc93_pcorcamitem = pc22_orcamitem
+        INNER JOIN pcorcamjulgamentolog ON pc92_sequencial = pc93_pcorcamjulgamentolog
+        INNER JOIN db_usuarios on id_usuario = pc92_usuario
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        WHERE l20_codigo = {$l20_codigo}
+            AND pc93_pontuacao = 1";
+
+$rsDadosusuario = db_query($sSqlusuario);
+db_fieldsmemory($rsDadosusuario,0);
+
+$sSqlparam = "select l12_usuarioadjundica from licitaparam where l12_instit = {$dbinstit}";
+$rsDadosParam = db_query($sSqlparam);
+db_fieldsmemory($rsDadosParam,0);
+
 $l20_datacria = $l20_anousu;
 
 $head3 = "ADJUDICAÇÃO DE PROCESSO ";
@@ -115,7 +140,7 @@ $oPDF->cell(0,8,"PROCESSO LICITATORIO : $l20_edital/$l20_datacria",0,1,"C",0);
 $oPDF->cell(0,8,"$l03_descr Nº $l20_numero/$l20_datacria",0,1,"C",0);
 $oPDF->setfont('arial','',8);
 $oPDF->ln();
-$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais Adjudica o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." modalidade ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Fica adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
+$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." modalidade ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
 $result_munic=pg_exec("select * from db_config where codigo=$dbinstit");
 db_fieldsmemory($result_munic,0);
 
@@ -181,7 +206,9 @@ for($x = 0; $x < $numrows_forne;$x++){
 
 $oPDF->cell(80,$alt,"VALOR TOTAL ADJUDICADO:",'T',0,"R",0);
 $oPDF->cell(30,$alt,"R$".db_formatar($val_tot, 'f'),'T',1,"R",0);
-
+if($l12_usuarioadjundica == 't') {
+    $oPDF->cell(86, 35, "Lançamento realizado conforme de relatório de folhas __________.", 'T', 1, "R", 0);
+}
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
 $hoje = date("Y-m-d",db_getsession("DB_datausu"));
@@ -193,7 +220,12 @@ $oPDF->cell(135,$alt,$munic.", ".$dataformatada.".",0,1,"C",0);
 $oPDF->ln();
 $oPDF->ln();
 $oPDF->cell(185,$alt,"__________________________________",0,1,"R",0);
-$oPDF->cell(180,$alt,$pregoeiro,0,0,"R",0);
+
+if($l12_usuarioadjundica == 't'){
+    $oPDF->cell(175,$alt,$nomeusuario,0,0,"R",0);
+}else{
+    $oPDF->cell(185,$alt,$pregoeiro,0,0,"R",0);
+}
 
 /**
  *comentado por mario junior pois as linhas seram criadas de forma manual no relatorio.
