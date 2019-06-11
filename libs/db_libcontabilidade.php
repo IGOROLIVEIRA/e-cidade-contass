@@ -5467,6 +5467,116 @@ class cl_estrutura_sistema {
       }
 
     }
+
+    /**
+     * Busca saldo conta contarrente
+     *
+     */
+    function getSaldoTotalContaCorrente($iAnousu, $iReduz, $iCC, $iMes, $iInstit ){
+        $sSaldoInicialAno = "select coalesce((SELECT sum(CASE WHEN c29_debito > 0 THEN c29_debito
+                               WHEN c29_credito > 0 THEN -1 * c29_credito
+                               ELSE 0 END) AS saldoinicialano
+                   FROM contacorrente
+                          INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                          INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                     AND contacorrentesaldo.c29_mesusu = 0
+                     AND contacorrentesaldo.c29_anousu = $iAnousu
+                   WHERE contacorrentedetalhe.c19_reduz = $iReduz
+                     AND contacorrentedetalhe.c19_instit = $iInstit
+                     AND contacorrentedetalhe.c19_conplanoreduzanousu = $iAnousu),0) as saldoinicialano";
+
+        $rsInicAno = db_query($sSaldoInicialAno);
+
+
+
+        $nSaldoInicialAno = db_utils::fieldsMemory($rsInicAno, 0)->saldoinicialano;
+
+        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor) AS creditoano
+                   FROM conlancamval
+                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                     AND conlancam.c70_anousu = conlancamval.c69_anousu
+                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                   WHERE c28_tipo = 'C'
+                     AND DATE_PART('MONTH',c69_data) < $iMes
+                     AND DATE_PART('YEAR',c69_data) = $iAnousu
+                     AND contacorrentedetalhe.c19_reduz = $iReduz
+                     AND c19_instit = $iInstit
+                   GROUP BY c28_tipo),0) ";
+
+        $nTotalCreditoAno = db_utils::fieldsMemory(db_query($sTotalCreditoAno), 0)->creditoano;
+
+        $sTotalDebitoAno = "select coalesce((SELECT sum(c69_valor) AS debito
+                   FROM conlancamval
+                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                     AND conlancam.c70_anousu = conlancamval.c69_anousu
+                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                   WHERE c28_tipo = 'D'
+                     AND DATE_PART('MONTH',c69_data) < $iMes
+                     AND DATE_PART('YEAR',c69_data) = $iAnousu
+                     AND contacorrentedetalhe.c19_reduz = $iReduz
+                     AND c19_instit = $iInstit
+                   GROUP BY c28_tipo),0) as debito ";
+
+        $nTotalDebitoAno = db_utils::fieldsMemory(db_query($sTotalDebitoAno), 0)->debito;
+
+        $nSaldoInicialMes = $nSaldoInicialAno + $nTotalDebitoAno - $nTotalCreditoAno;
+
+        $sTotalCreditoMes = "select coalesce((SELECT sum(c69_valor) as creditomes
+                   FROM conlancamval
+                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                     AND conlancam.c70_anousu = conlancamval.c69_anousu
+                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                   WHERE c28_tipo = 'C'
+                     AND DATE_PART('MONTH',c69_data) = $iMes
+                     AND DATE_PART('YEAR',c69_data) = $iAnousu
+                     AND contacorrentedetalhe.c19_reduz = $iReduz
+                     AND c19_instit = $iInstit
+                   GROUP BY c28_tipo),0) as creditomes";
+
+        $nTotalCreditoMes = db_utils::fieldsMemory(db_query($sTotalCreditoMes), 0)->creditomes;
+
+        $sTotalDebitosMes = "select coalesce((SELECT sum(c69_valor)
+                   FROM conlancamval
+                          INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                     AND conlancam.c70_anousu = conlancamval.c69_anousu
+                          INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                          INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                          INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                          INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                   WHERE c28_tipo = 'D'
+                     AND DATE_PART('MONTH',c69_data) = $iMes
+                     AND DATE_PART('YEAR',c69_data) = $iAnousu
+                     AND contacorrentedetalhe.c19_reduz = $iReduz
+                     AND c19_instit = $iInstit
+                   GROUP BY c28_tipo),0) as debitomes";
+
+        $nTotalDebitoMes = db_utils::fieldsMemory(db_query($sTotalDebitosMes), 0)->debitomes;
+
+        $nSaldoFinalMes = $nSaldoInicialMes + $nTotalDebitoMes - $nTotalCreditoMes;
+
+        $sinal_ant = $nSaldoInicialMes < 0 ? 'C' : 'D';
+        $sinal_final = $nSaldoFinalMes < 0 ? 'C' : 'D';
+
+        $oSaldo                   = new stdClass;
+        $oSaldo->cc               = $iCC;
+        $oSaldo->sinal_ant        = $sinal_ant;
+        $oSaldo->nSaldoInicialMes = abs($nSaldoInicialMes);
+        $oSaldo->debito           = $nTotalDebitoMes;
+        $oSaldo->credito          = $nTotalCreditoMes;
+        $oSaldo->saldo_final      = abs($nSaldoFinalMes);
+        $oSaldo->sinal_final      = $sinal_final;
+
+        return $oSaldo;
+    }
     /**
      * Busca o saldo da despesa
      * @param null $o58_elemento
