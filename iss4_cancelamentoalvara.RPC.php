@@ -109,7 +109,7 @@ switch ($oParam->exec) {
       $oCancelamentoAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
       $oCancelamentoAlvara->setValidadeAlvara(0);
 	    $oCancelamentoAlvara->setDataMovimentacao(date('Y-m-d', db_getsession('DB_datausu')));
-      $oCancelamentoAlvara->setObservacao($oParam->q120_obs);
+      $oCancelamentoAlvara->setObservacao(utf8_decode($oParam->q120_obs));
 
 	    foreach ($oParam->aDocumentos as $iDoc) {
 	   	  $oAlvara->addDocumento($iDoc);

@@ -67,7 +67,7 @@ switch ($oParam->exec) {
 			   $oRenovarAlvara->setCodigoProcesso($oParam->p58_codproc);
 			 }
 
-			 $oRenovarAlvara->setObservacao($oParam->q120_obs);
+			 $oRenovarAlvara->setObservacao(utf8_decode($oParam->q120_obs));
 
 			 foreach ($oParam->aDocumentos as $iDoc) {
          $oRenovarAlvara->getAlvara()->addDocumento($iDoc); 

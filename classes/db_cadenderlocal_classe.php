@@ -424,6 +424,7 @@ class cl_cadenderlocal {
      }else{
        $sql .= $campos;
      }
+
      $sql .= " from cadenderlocal                                                                            ";
      $sql .= "      inner join cadenderbairrocadenderrua on db87_sequencial = db75_cadenderbairrocadenderrua ";
      $sql .= "      inner join cadenderbairro     on  db73_sequencial  = db87_cadenderbairro                 ";

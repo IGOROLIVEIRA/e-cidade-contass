@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -43,6 +43,9 @@ $cldb_uf      = new cl_db_uf;
 $db_opcao     = 22;
 $db_botao     = false;
 $rhregistorig = $rh16_regist;
+$oPost = db_utils::postmemory($_POST);
+// var_dump($oPost);die();
+
 
 if (isset($alterar) || isset($excluir) || isset($incluir)) {
   $sqlerro = false;
@@ -58,13 +61,21 @@ if (isset($incluir)) {
     if ($rh16_ctps_uf != 0) {
 
       $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file($rh16_ctps_uf,"db12_uf"));
-
       if ($cldb_uf->numrows > 0) {
         db_fieldsmemory($result_uf, 0);
       }
     }
-
     $clrhpesdoc->rh16_ctps_uf = $db12_uf;
+
+    if ($rh16_cnh_uf != 0) {
+
+      $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file($rh16_cnh_uf,"db12_uf"));
+      if ($cldb_uf->numrows > 0) {
+        db_fieldsmemory($result_uf, 0);
+      }
+    }
+    $clrhpesdoc->rh16_cnh_uf = $db12_uf;
+
     $clrhpesdoc->incluir($rh16_regist);
     $erro_msg = $clrhpesdoc->erro_msg;
     if ($clrhpesdoc->erro_status == 0) {
@@ -89,6 +100,24 @@ if (isset($incluir)) {
     }
 
     $clrhpesdoc->rh16_ctps_uf = $db12_uf;
+
+    if ($rh16_cnh_uf != 0) {
+
+      $result_ufcnh = $cldb_uf->sql_record($cldb_uf->sql_query_file($rh16_cnh_uf,"db12_uf"));
+      if ($cldb_uf->numrows > 0) {
+        db_fieldsmemory($result_ufcnh, 0);
+      }
+    }
+
+    if (trim($rh16_carth_n) != ''){
+      if (!$r16_carth_cat || !$rh16_carth_val || !$rh16_cnh_uf || !$rh16_cnh_exp) {
+        $sqlerro = true;
+        $clrhpesdoc->erro_msg = 'Campos obrigatórios não preenchidos';
+      }
+
+    }
+
+    $clrhpesdoc->rh16_cnh_uf = $db12_uf;
     $clrhpesdoc->rh16_regist  = $rh16_regist;
 
     /**
@@ -108,8 +137,8 @@ if (isset($incluir)) {
     if (isset($rh16_pis)) {
       unset($rh16_pis);
     }
-
-    $clrhpesdoc->alterar($rh16_regist);
+    if (!$sqlerro)
+      $clrhpesdoc->alterar($rh16_regist);
     $erro_msg = $clrhpesdoc->erro_msg;
     if ($clrhpesdoc->erro_status == 0) {
       $sqlerro=true;
@@ -142,12 +171,18 @@ if (isset($opcao) || isset($rh16_regist)) {
     $opcao = "alterar";
     db_fieldsmemory($result, 0);
     if (trim($rh16_ctps_uf) != "") {
-
       $result_uf = $cldb_uf->sql_record($cldb_uf->sql_query_file(null,"*","","db12_uf = '".$rh16_ctps_uf."'"));
       if ($cldb_uf->numrows > 0) {
-
         db_fieldsmemory($result_uf, 0);
         $rh16_ctps_uf = $db12_codigo;
+      }
+    }
+
+    if (trim($rh16_cnh_uf) != "") {
+      $result_ufcnh = $cldb_uf->sql_record($cldb_uf->sql_query_file(null,"*","","db12_uf = '".$rh16_cnh_uf."'"));
+      if ($cldb_uf->numrows > 0) {
+        db_fieldsmemory($result_ufcnh, 0);
+        $rh16_cnh_uf = $db12_codigo;
       }
     }
   } else if ($clrhpesdoc->numrows <= 0) {

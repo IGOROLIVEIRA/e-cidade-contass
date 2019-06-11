@@ -34,6 +34,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("model/CgmFactory.model.php");
 require_once("model/endereco.model.php");
+require_once("model/configuracao/endereco/Estado.model.php");
+require_once("model/configuracao/endereco/Municipio.model.php");
 
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
@@ -247,10 +249,11 @@ switch ($oParam->exec) {
       $oCgmFisico->z01_incest        = $oCgm->getInscricaoEstadual();
 
       $oCgmFisico->z01_incmunici     = $oCgm->getInscricaoMunicipal();
-      
+
       $oCgmFisico->z01_obs           = urlencode($oCgm->getObs());
 
       $oCgmFisico->z04_rhcbo         = $oCgm->getCBO();
+      $oCgmFisico->z01_ibge          = $oCgm->getIbge();
 
       $oRetorno->cgm = $oCgmFisico;
 
@@ -264,9 +267,9 @@ switch ($oParam->exec) {
       $oCgmJuridico->z01_numcgm      = $oCgm->getCodigo();
       $oCgmJuridico->z01_cgc         = $oCgm->getCnpj();
       $oCgmJuridico->z01_incest      = $oCgm->getInscricaoEstadual();
-      
+
       $oCgmJuridico->z01_incmunici   = $oCgm->getInscricaoMunicipal();
-      
+
       $oCgmJuridico->municipio       = urlencode($oCgm->getMunicipio());
       $oCgmJuridico->z01_telef       = $oCgm->getTelefone();
       $oCgmJuridico->z01_telcel      = $oCgm->getCelular();
@@ -351,6 +354,7 @@ switch ($oParam->exec) {
       $oCgm->setEmail(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_email)));
       $oCgm->setEmailComercial(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_emailc)));
       $oCgm->setNaturalidade(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_naturalidade)));
+      $oCgm->setIbge(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_ibge)));
       $oCgm->setEscolaridade(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_escolaridade)));
       $oCgm->setIdentOrgao(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_identorgao)));
       $oCgm->setLocalTrabalho(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_localtrabalho)));
@@ -522,11 +526,11 @@ switch ($oParam->exec) {
       $oCgm->setContato($oParam->pessoa->z01_contato);
       $oCgm->setInscricaoEstadual($oParam->pessoa->z01_incest);
       $oCgm->setInscricaoMunicipal($oParam->pessoa->z01_incmunici);
-      $oCgm->setTelefone($oParam->pessoa->z01_telef);      
-      $oCgm->setCelular($oParam->pessoa->z01_telcel);      
-      $oCgm->setEmail(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_email)));      
-      $oCgm->setTelefoneComercial($oParam->pessoa->z01_telcon);      
-      $oCgm->setCelularComercial($oParam->pessoa->z01_celcon);      
+      $oCgm->setTelefone($oParam->pessoa->z01_telef);
+      $oCgm->setCelular($oParam->pessoa->z01_telcel);
+      $oCgm->setEmail(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_email)));
+      $oCgm->setTelefoneComercial($oParam->pessoa->z01_telcon);
+      $oCgm->setCelularComercial($oParam->pessoa->z01_celcon);
       $oCgm->setEmailComercial(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_emailc)));
       $oCgm->setNire($oParam->nire->z08_nire);
       //Campos novos criados
@@ -579,9 +583,9 @@ switch ($oParam->exec) {
           $oCgm->setMunicipio($oEnderecoSecundario[0]->smunicipio);
           $oCgm->setLogradouroComercial($oEnderecoSecundario[0]->srua);
           $oCgm->setComplementoComercial($oEnderecoSecundario[0]->scomplemento);
-          
+
       } else {
-            
+
         $oCgm->setUfComercial('');
         $oCgm->setCepComercial('');
         $oCgm->setBairroComercial('');
@@ -590,7 +594,7 @@ switch ($oParam->exec) {
         $oCgm->setLogradouroComercial('');
         $oCgm->setComplementoComercial('');
      }
-          
+
       try {
 
         $oCgm->save();
@@ -708,6 +712,22 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
     break;
 
+  case 'buscaMunicipios' :
+    $oRetorno->municipios = estado::getMunicipiosByEstado($oParam->estado);
+    echo $oJson->encode($oRetorno);
+    break;
+
+  case 'getCodigoIbge' :
+    $oRetorno->codigo = municipio::getCodigoIbge($oParam->estado, $oParam->cidade);
+    echo $oJson->encode($oRetorno);
+    break;
+
+  case 'getDescrUf':
+    list($oRetorno->descricao, $oRetorno->sigla) = municipio::getDescrUf($oParam->ibge);
+    echo $oJson->encode($oRetorno);
+    break;
+
+
   case 'atualizarCgmCidadao' :
 
     db_inicio_transacao();
@@ -793,6 +813,9 @@ switch ($oParam->exec) {
     }
     if (isset($oParam->pessoa->z01_uf)) {
       $oCgm->setUf($oParam->pessoa->z01_uf);
+    }
+    if (isset($oParam->pessoa->z01_ibge)) {
+      $oCgm->setIbge($oParam->pessoa->z01_ibge);
     }
 
     try {

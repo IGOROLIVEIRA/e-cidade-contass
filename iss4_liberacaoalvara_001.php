@@ -87,7 +87,7 @@ if (isset($liberar)) {
     $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
     $oLiberarAlvara->setValidadeAlvara($iValidade+1);
     $oLiberarAlvara->setCodigoProcesso($oPost->p58_codproc);
-    $oLiberarAlvara->setObservacao($oPost->q120_obs);
+    $oLiberarAlvara->setObservacao(utf8_decode($oPost->q120_obs));
     $oLiberarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
 
     if ($oPost->documentos != "" && !isset($oGet->aba)) {
