@@ -125,6 +125,8 @@ class cl_cgm {
    var $z01_pis = null;
    var $z01_obs = null;
    var $z01_incmunici = 0;
+   var $z01_ibge = null;
+
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  z01_numcgm = int4 = Numcgm
@@ -186,6 +188,7 @@ class cl_cgm {
                  z01_pis = varchar(11) = Pis/Pasep/CI
                  z01_obs = text = Observações
                  z01_incmunici = int8 = Inscrição Municipal
+                 z01_ibge = char(7) = Código do IBGE
                  ";
    //funcao construtor da classe
    function cl_cgm() {
@@ -320,6 +323,7 @@ class cl_cgm {
        $this->z01_pis = ($this->z01_pis == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_pis"]:$this->z01_pis);
        $this->z01_obs = ($this->z01_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_obs"]:$this->z01_obs);
        $this->z01_incmunici = ($this->z01_incmunici == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_incmunici"]:$this->z01_incmunici);
+       $this->z01_ibge = ($this->z01_ibge == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_ibge"]:$this->z01_ibge);
      }else{
        $this->z01_numcgm = ($this->z01_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numcgm"]:$this->z01_numcgm);
      }
@@ -396,6 +400,10 @@ class cl_cgm {
      if($this->z01_incmunici == null ){
        $this->z01_incmunici = "0";
      }
+     if($this->z01_ibge == null ){
+       $this->z01_ibge = "null";
+     }
+
      if($z01_numcgm == "" || $z01_numcgm == null ){
        $result = db_query("select nextval('cgm_z01_numcgm_seq')");
        if($result==false){
@@ -488,6 +496,7 @@ class cl_cgm {
                                       ,z01_pis
                                       ,z01_obs
                                       ,z01_incmunici
+                                      ,z01_ibge
                        )
                 values (
                                 $this->z01_numcgm
@@ -549,6 +558,7 @@ class cl_cgm {
                                ,'$this->z01_pis'
                                ,'$this->z01_obs'
                                ,$this->z01_incmunici
+                               ,'$this->z01_ibge'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -971,6 +981,10 @@ class cl_cgm {
      }
      if(trim($this->z01_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_obs"])){
        $sql  .= $virgula." z01_obs = '$this->z01_obs' ";
+       $virgula = ",";
+     }
+     if(trim($this->z01_ibge)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_ibge"])){
+       $sql  .= $virgula." z01_ibge = '$this->z01_ibge' ";
        $virgula = ",";
      }
      if(trim($this->z01_incmunici)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){

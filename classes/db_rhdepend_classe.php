@@ -1,77 +1,79 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
 //CLASSE DA ENTIDADE rhdepend
-class cl_rhdepend { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $rh31_codigo = 0; 
-   var $rh31_regist = 0; 
-   var $rh31_nome = null; 
-   var $rh31_dtnasc_dia = null; 
-   var $rh31_dtnasc_mes = null; 
-   var $rh31_dtnasc_ano = null; 
-   var $rh31_dtnasc = null; 
-   var $rh31_gparen = null; 
-   var $rh31_depend = null; 
-   var $rh31_irf = null; 
-   var $rh31_especi = null; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_rhdepend {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $rh31_codigo = 0;
+   var $rh31_regist = 0;
+   var $rh31_nome = null;
+   var $rh31_dtnasc_dia = null;
+   var $rh31_dtnasc_mes = null;
+   var $rh31_dtnasc_ano = null;
+   var $rh31_dtnasc = null;
+   var $rh31_gparen = null;
+   var $rh31_depend = null;
+   var $rh31_irf = null;
+   var $rh31_especi = null;
+   var $rh31_cpf = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 rh31_codigo = int8 = Código 
-                 rh31_regist = int4 = Matrícula do Servidor 
-                 rh31_nome = varchar(40) = Nome do Dependente 
-                 rh31_dtnasc = date = Data de Nascimento 
-                 rh31_gparen = varchar(1) = Parentesco 
-                 rh31_depend = varchar(1) = Salário Família 
-                 rh31_irf = varchar(1) = IRF 
-                 rh31_especi = varchar(1) = Especial 
+                 rh31_codigo = int8 = CÃ³digo
+                 rh31_regist = int4 = MatrÃ­cula do Servidor
+                 rh31_nome = varchar(40) = Nome do Dependente
+                 rh31_dtnasc = date = Data de Nascimento
+                 rh31_gparen = varchar(1) = Parentesco
+                 rh31_depend = varchar(1) = SalÃ¡rio FamÃ­lia
+                 rh31_irf = varchar(1) = IRF
+                 rh31_especi = varchar(1) = Especial
+                 rh31_cpf = varchar(11) = CPF do Dependente
                  ";
-   //funcao construtor da classe 
-   function cl_rhdepend() { 
+   //funcao construtor da classe
+   function cl_rhdepend() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("rhdepend"); 
+     $this->rotulo = new rotulo("rhdepend");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -97,139 +99,151 @@ class cl_rhdepend {
        $this->rh31_depend = ($this->rh31_depend == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_depend"]:$this->rh31_depend);
        $this->rh31_irf = ($this->rh31_irf == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_irf"]:$this->rh31_irf);
        $this->rh31_especi = ($this->rh31_especi == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_especi"]:$this->rh31_especi);
+       $this->rh31_cpf = ($this->rh31_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_cpf"]:$this->rh31_cpf);
      }else{
        $this->rh31_codigo = ($this->rh31_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_codigo"]:$this->rh31_codigo);
      }
    }
    // funcao para inclusao
-   function incluir ($rh31_codigo){ 
+   function incluir ($rh31_codigo){
       $this->atualizacampos();
-     if($this->rh31_regist == null ){ 
-       $this->erro_sql = " Campo Matrícula do Servidor nao Informado.";
+     if($this->rh31_regist == null ){
+       $this->erro_sql = " Campo MatrÃ­cula do Servidor nao Informado.";
        $this->erro_campo = "rh31_regist";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_nome == null ){ 
+     if($this->rh31_nome == null ){
        $this->erro_sql = " Campo Nome do Dependente nao Informado.";
        $this->erro_campo = "rh31_nome";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_dtnasc == null ){ 
+     if($this->rh31_dtnasc == null ){
        $this->erro_sql = " Campo Data de Nascimento nao Informado.";
        $this->erro_campo = "rh31_dtnasc_dia";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_gparen == null ){ 
+     if($this->rh31_gparen == null ){
        $this->erro_sql = " Campo Parentesco nao Informado.";
        $this->erro_campo = "rh31_gparen";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_depend == null ){ 
-       $this->erro_sql = " Campo Salário Família nao Informado.";
+     if($this->rh31_depend == null ){
+       $this->erro_sql = " Campo SalÃ¡rio FamÃ­lia nao Informado.";
        $this->erro_campo = "rh31_depend";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_irf == null ){ 
+     if($this->rh31_irf == null ){
        $this->erro_sql = " Campo IRF nao Informado.";
        $this->erro_campo = "rh31_irf";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh31_especi == null ){ 
+     if($this->rh31_especi == null ){
        $this->erro_sql = " Campo Especial nao Informado.";
        $this->erro_campo = "rh31_especi";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->rh31_cpf == null && $this->rh31_irf != 0){
+       $this->erro_sql = " Campo CPF do Dependente nao Informado.";
+       $this->erro_campo = "rh31_cpf";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if($rh31_codigo == "" || $rh31_codigo == null ){
-       $result = db_query("select nextval('rhdepend_rh31_codigo_seq')"); 
+       $result = db_query("select nextval('rhdepend_rh31_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: rhdepend_rh31_codigo_seq do campo: rh31_codigo"; 
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: rhdepend_rh31_codigo_seq do campo: rh31_codigo";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->rh31_codigo = pg_result($result,0,0); 
+       $this->rh31_codigo = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from rhdepend_rh31_codigo_seq");
        if(($result != false) && (pg_result($result,0,0) < $rh31_codigo)){
-         $this->erro_sql = " Campo rh31_codigo maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = " Campo rh31_codigo maior que Ãºltimo nÃºmero da sequencia.";
+         $this->erro_banco = "Sequencia menor que este nÃºmero.";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }else{
-         $this->rh31_codigo = $rh31_codigo; 
+         $this->rh31_codigo = $rh31_codigo;
        }
      }
-     if(($this->rh31_codigo == null) || ($this->rh31_codigo == "") ){ 
+     if(($this->rh31_codigo == null) || ($this->rh31_codigo == "") ){
        $this->erro_sql = " Campo rh31_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      $sql = "insert into rhdepend(
-                                       rh31_codigo 
-                                      ,rh31_regist 
-                                      ,rh31_nome 
-                                      ,rh31_dtnasc 
-                                      ,rh31_gparen 
-                                      ,rh31_depend 
-                                      ,rh31_irf 
-                                      ,rh31_especi 
+                                       rh31_codigo
+                                      ,rh31_regist
+                                      ,rh31_nome
+                                      ,rh31_dtnasc
+                                      ,rh31_gparen
+                                      ,rh31_depend
+                                      ,rh31_irf
+                                      ,rh31_especi
+                                      ,rh31_cpf
                        )
                 values (
-                                $this->rh31_codigo 
-                               ,$this->rh31_regist 
-                               ,'$this->rh31_nome' 
-                               ,".($this->rh31_dtnasc == "null" || $this->rh31_dtnasc == ""?"null":"'".$this->rh31_dtnasc."'")." 
-                               ,'$this->rh31_gparen' 
-                               ,'$this->rh31_depend' 
-                               ,'$this->rh31_irf' 
-                               ,'$this->rh31_especi' 
+                                $this->rh31_codigo
+                               ,$this->rh31_regist
+                               ,'$this->rh31_nome'
+                               ,".($this->rh31_dtnasc == "null" || $this->rh31_dtnasc == ""?"null":"'".$this->rh31_dtnasc."'")."
+                               ,'$this->rh31_gparen'
+                               ,'$this->rh31_depend'
+                               ,'$this->rh31_irf'
+                               ,'$this->rh31_especi'
+                               ,'$this->rh31_cpf'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Dependentes já Cadastrado";
+         $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao IncluÃ­do. Inclusao Abortada.";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "Dependentes jÃ¡ Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "Dependentes ($this->rh31_codigo) nao IncluÃ­do. Inclusao Abortada.";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -239,7 +253,7 @@ class cl_rhdepend {
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->rh31_codigo;
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -259,125 +273,138 @@ class cl_rhdepend {
        $resac = db_query("insert into db_acount values($acount,1186,7156,'','".AddSlashes(pg_result($resaco,0,'rh31_especi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($rh31_codigo=null) { 
+   function alterar ($rh31_codigo=null) {
       $this->atualizacampos();
      $sql = " update rhdepend set ";
      $virgula = "";
-     if(trim($this->rh31_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_codigo"])){ 
+     if(trim($this->rh31_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_codigo"])){
        $sql  .= $virgula." rh31_codigo = $this->rh31_codigo ";
        $virgula = ",";
-       if(trim($this->rh31_codigo) == null ){ 
-         $this->erro_sql = " Campo Código nao Informado.";
+       if(trim($this->rh31_codigo) == null ){
+         $this->erro_sql = " Campo CÃ³digo nao Informado.";
          $this->erro_campo = "rh31_codigo";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_regist)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_regist"])){ 
+     if(trim($this->rh31_regist)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_regist"])){
        $sql  .= $virgula." rh31_regist = $this->rh31_regist ";
        $virgula = ",";
-       if(trim($this->rh31_regist) == null ){ 
-         $this->erro_sql = " Campo Matrícula do Servidor nao Informado.";
+       if(trim($this->rh31_regist) == null ){
+         $this->erro_sql = " Campo MatrÃ­cula do Servidor nao Informado.";
          $this->erro_campo = "rh31_regist";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_nome)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_nome"])){ 
+     if(trim($this->rh31_nome)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_nome"])){
        $sql  .= $virgula." rh31_nome = '$this->rh31_nome' ";
        $virgula = ",";
-       if(trim($this->rh31_nome) == null ){ 
+       if(trim($this->rh31_nome) == null ){
          $this->erro_sql = " Campo Nome do Dependente nao Informado.";
          $this->erro_campo = "rh31_nome";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_dtnasc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"] !="") ){ 
+     if(trim($this->rh31_dtnasc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"] !="") ){
        $sql  .= $virgula." rh31_dtnasc = '$this->rh31_dtnasc' ";
        $virgula = ",";
-       if(trim($this->rh31_dtnasc) == null ){ 
+       if(trim($this->rh31_dtnasc) == null ){
          $this->erro_sql = " Campo Data de Nascimento nao Informado.";
          $this->erro_campo = "rh31_dtnasc_dia";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["rh31_dtnasc_dia"])){
          $sql  .= $virgula." rh31_dtnasc = null ";
          $virgula = ",";
-         if(trim($this->rh31_dtnasc) == null ){ 
+         if(trim($this->rh31_dtnasc) == null ){
            $this->erro_sql = " Campo Data de Nascimento nao Informado.";
            $this->erro_campo = "rh31_dtnasc_dia";
            $this->erro_banco = "";
-           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
            $this->erro_status = "0";
            return false;
          }
        }
      }
-     if(trim($this->rh31_gparen)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_gparen"])){ 
+     if(trim($this->rh31_gparen)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_gparen"])){
        $sql  .= $virgula." rh31_gparen = '$this->rh31_gparen' ";
        $virgula = ",";
-       if(trim($this->rh31_gparen) == null ){ 
+       if(trim($this->rh31_gparen) == null ){
          $this->erro_sql = " Campo Parentesco nao Informado.";
          $this->erro_campo = "rh31_gparen";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_depend)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_depend"])){ 
+     if(trim($this->rh31_depend)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_depend"])){
        $sql  .= $virgula." rh31_depend = '$this->rh31_depend' ";
        $virgula = ",";
-       if(trim($this->rh31_depend) == null ){ 
-         $this->erro_sql = " Campo Salário Família nao Informado.";
+       if(trim($this->rh31_depend) == null ){
+         $this->erro_sql = " Campo SalÃ¡rio FamÃ­lia nao Informado.";
          $this->erro_campo = "rh31_depend";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_irf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_irf"])){ 
+     if(trim($this->rh31_irf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_irf"])){
        $sql  .= $virgula." rh31_irf = '$this->rh31_irf' ";
        $virgula = ",";
-       if(trim($this->rh31_irf) == null ){ 
+       if(trim($this->rh31_irf) == null ){
          $this->erro_sql = " Campo IRF nao Informado.";
          $this->erro_campo = "rh31_irf";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
        }
      }
-     if(trim($this->rh31_especi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_especi"])){ 
+     if(trim($this->rh31_especi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_especi"])){
        $sql  .= $virgula." rh31_especi = '$this->rh31_especi' ";
        $virgula = ",";
-       if(trim($this->rh31_especi) == null ){ 
+       if(trim($this->rh31_especi) == null ){
          $this->erro_sql = " Campo Especial nao Informado.";
          $this->erro_campo = "rh31_especi";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if((trim($this->rh31_cpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_cpf"])) && $this->rh31_irf != 0){
+       $sql  .= $virgula." rh31_cpf = $this->rh31_cpf ";
+       $virgula = ",";
+       if(trim($this->rh31_cpf) == null ){
+         $this->erro_sql = " Campo CPF do Dependente nao Informado.";
+         $this->erro_campo = "rh31_cpf";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -413,11 +440,11 @@ class cl_rhdepend {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Dependentes nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->rh31_codigo;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -427,28 +454,28 @@ class cl_rhdepend {
          $this->erro_banco = "";
          $this->erro_sql = "Dependentes nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->rh31_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql = "AlteraÃ§Ã£o efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->rh31_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($rh31_codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($rh31_codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($rh31_codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -481,11 +508,11 @@ class cl_rhdepend {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Dependentes nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Dependentes nao ExcluÃ­do. ExclusÃ£o Abortada.\\n";
        $this->erro_sql .= "Valores : ".$rh31_codigo;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -493,33 +520,33 @@ class cl_rhdepend {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Dependentes nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Dependentes nao Encontrado. ExclusÃ£o nÃ£o Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$rh31_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql = "ExclusÃ£o efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$rh31_codigo;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -528,14 +555,14 @@ class cl_rhdepend {
       if($this->numrows==0){
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:rhdepend";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
       }
      return $result;
    }
-   function sql_query ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -566,8 +593,8 @@ class cl_rhdepend {
      $sql2 = "";
      if($dbwhere==""){
        if($rh31_codigo!=null ){
-         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo "; 
-       } 
+         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -583,7 +610,7 @@ class cl_rhdepend {
      }
      return $sql;
   }
-   function sql_query_file ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_file ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -599,8 +626,8 @@ class cl_rhdepend {
      $sql2 = "";
      if($dbwhere==""){
        if($rh31_codigo!=null ){
-         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo "; 
-       } 
+         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -616,7 +643,7 @@ class cl_rhdepend {
      }
      return $sql;
   }
-   function sql_query_cgm ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_cgm ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -638,8 +665,8 @@ class cl_rhdepend {
      $sql2 = "";
      if($dbwhere==""){
        if($rh31_codigo!=null ){
-         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo "; 
-       } 
+         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -655,7 +682,7 @@ class cl_rhdepend {
      }
      return $sql;
   }
-   function sql_query_relPREVID ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_relPREVID ( $rh31_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -670,7 +697,7 @@ class cl_rhdepend {
      $sql .= " from rhdepend ";
      $sql .= "      inner join rhpessoal     on rhpessoal.rh01_regist     = rhdepend.rh31_regist";
      $sql .= "      inner join rhpessoalmov  on rhpessoalmov.rh02_regist  = rhpessoal.rh01_regist
-		                                        and rhpessoalmov.rh02_anousu  = ".db_anofolha()." 
+		                                        and rhpessoalmov.rh02_anousu  = ".db_anofolha()."
 																						and rhpessoalmov.rh02_mesusu  = ".db_mesfolha()."
 																						and rhpessoalmov.rh02_instit  = ".db_getsession("DB_instit")." ";
      $sql .= "      inner join cgm           on cgm.z01_numcgm            = rhpessoal.rh01_numcgm";
@@ -678,8 +705,8 @@ class cl_rhdepend {
      $sql2 = "";
      if($dbwhere==""){
        if($rh31_codigo!=null ){
-         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo "; 
-       } 
+         $sql2 .= " where rhdepend.rh31_codigo = $rh31_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
