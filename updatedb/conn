@@ -14,7 +14,6 @@ e-cidade			5433	pmpatis
 e-cidade			5432	pmsaofrancisco
 e-cidade			5432	pmsaojoaodaponte
 e-cidade			5432	pmubai
-e-cidade			5432	samuecid
 e-cidade			5432	cmuba
 e-cidade			5432	pmmontezuma
 e-cidade			5432	pmpirapora
@@ -64,6 +63,7 @@ inframinas			5432	e-cidade
 prevcap				5432	e-cidade
 prevponte39			5432	e-cidade
 cmburitizeiro       5432    e-cidade
+samu                5432    e-cidade
 
 cisgraomogol			5432	manutencao
 pmbotumirim_23_05_2017		5432	manutencao
