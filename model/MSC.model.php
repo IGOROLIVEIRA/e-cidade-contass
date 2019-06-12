@@ -526,7 +526,7 @@ class MSC {
         WHEN db21_tipoinstit IN (2) THEN 20231
         ELSE 10131
         END AS po,
-        case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
+        case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
       round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
@@ -591,7 +591,7 @@ class MSC {
         WHEN db21_tipoinstit IN (2) THEN 20231
         ELSE 10131
         END AS po,
-        case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
+        case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         o15_codstn as fr,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
@@ -941,7 +941,7 @@ class MSC {
             WHEN db21_tipoinstit IN (2) THEN 20231
             ELSE 10131
         END AS po,
-        case when c60_identificadorfinanceiro = 'f' then 1 else 2 end as fp,
+        case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         null as dc,
         o15_codstn AS fr,
       round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
