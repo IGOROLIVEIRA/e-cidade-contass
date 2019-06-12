@@ -18,21 +18,6 @@ $clrubricasesocial = new cl_rubricasesocial;
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
   <tr>
-    <td height="63" align="center" valign="top">
-        <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
-          <tr>
-            <td colspan="2" align="center">
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe.hide();">
-             </td>
-          </tr>
-        </form>
-        </table>
-      </td>
-  </tr>
-  <tr>
     <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
@@ -41,7 +26,7 @@ $clrubricasesocial = new cl_rubricasesocial;
            $campos = "e990_sequencial,e990_descricao";
 
         }
-	      $sql = $clrubricasesocial->sql_query();
+	      $sql = $clrubricasesocial->sql_query(null,"*","e990_sequencial");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){

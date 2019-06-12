@@ -54,8 +54,7 @@ if(isset($excluir)){
     db_fim_transacao(true);
     db_msgbox($clrubricasesocial->erro_msg);
   }
-  if($clbaserubricasesocial->erro_status != '0' && $clrubricasesocial->erro_status != '0'){
-    db_msgbox($clbaserubricasesocial->erro_msg);
+  if($clrubricasesocial->erro_status != '0'){
     db_msgbox($clrubricasesocial->erro_msg);
     db_fim_transacao(false);
   }

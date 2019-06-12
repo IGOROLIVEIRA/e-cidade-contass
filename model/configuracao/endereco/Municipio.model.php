@@ -265,7 +265,7 @@ class Municipio {
     $sqlBusca         = $oDaoCadEnderMunicipio->sql_queryCodIbge(null, 'db72_descricao, db71_sigla', null, $sWhere);
     $resultSql        = $oDaoCadEnderMunicipio->sql_record($sqlBusca);
 
-    $descricao  = db_utils::fieldsMemory($resultSql, 0)->db72_descricao;
+    $descricao  = utf8_encode(db_utils::fieldsMemory($resultSql, 0)->db72_descricao);
     $sigla      = db_utils::fieldsMemory($resultSql, 0)->db71_sigla;
 
     return array($descricao, $sigla);
