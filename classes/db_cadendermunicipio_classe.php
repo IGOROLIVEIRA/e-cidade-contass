@@ -486,7 +486,6 @@ class cl_cadendermunicipio {
      $sql .= "      INNER JOIN cadenderestado ON cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial";
      $sql .= "      INNER JOIN cadenderpais ON cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial";
      $sql .= "      INNER JOIN cadenderpaissistema ON cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais";
-     $sql .= "      AND cadenderpaissistema.db135_db_sistemaexterno = 3 ";
 
      $sql2 = "";
      if($dbwhere==""){

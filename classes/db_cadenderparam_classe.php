@@ -483,6 +483,7 @@ class cl_cadenderparam {
      $sql .= "      inner join cadendermunicipio on  cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial";
      $sql .= "      inner join cadenderpais as p on  p.db70_sequencial = cadenderestado.db71_cadenderpais";
      $sql .= "      inner join cadenderestado  as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado";
+     $sql .= "      INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial";
      $sql2 = "";
      if($dbwhere==""){
        if($db99_sequencial!=null ){
