@@ -248,7 +248,7 @@ if(isset($opcao)){
       $chavepri= array("rh31_codigo"=>@$rh31_codigo);
       $cliframe_alterar_excluir->chavepri=$chavepri;
       $cliframe_alterar_excluir->sql = $sql;
-      $cliframe_alterar_excluir->campos  ="rh31_nome,rh31_dtnasc,rh31_gparen,rh31_depend,rh31_irf,rh31_especi";
+      $cliframe_alterar_excluir->campos  ="rh31_nome,rh31_dtnasc,rh31_cpf,rh31_gparen,rh31_depend,rh31_irf,rh31_especi";
       $cliframe_alterar_excluir->legenda="DEPENDENTES LANÇADOS";
       $cliframe_alterar_excluir->iframe_height ="100%";
       $cliframe_alterar_excluir->iframe_width ="100%";

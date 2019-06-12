@@ -397,10 +397,10 @@ class cl_rhdepend {
          return false;
        }
      }
-     if((trim($this->rh31_cpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_cpf"])) && $this->rh31_irf != 0){
-       $sql  .= $virgula." rh31_cpf = $this->rh31_cpf ";
+     if(isset($GLOBALS["HTTP_POST_VARS"]["rh31_cpf"]) || trim($thi->rh31_cpf)!= ''){
+       $sql  .= $virgula." rh31_cpf = '$this->rh31_cpf' ";
        $virgula = ",";
-       if(trim($this->rh31_cpf) == null ){
+       if(trim($this->rh31_cpf) == null && trim($this->rh31_irf) != 0){
          $this->erro_sql = " Campo CPF do Dependente nao Informado.";
          $this->erro_campo = "rh31_cpf";
          $this->erro_banco = "";
