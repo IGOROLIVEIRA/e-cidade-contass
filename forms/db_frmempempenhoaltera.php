@@ -100,6 +100,11 @@ $clrotulo->label("e60_datasentenca");
                         <?=@$Le60_numerol?>
                         <?
                         db_input('e60_numerol',10,$Ie60_numerol,true,'text',$dop);
+                        ?>
+                        <strong>Modalidade:</strong>
+                        <?
+                        db_input('e54_nummodalidade', 8, $e54_nummodalidade, true, 'text', 3, "");
+
                     }
                     ?>
                 </td>
