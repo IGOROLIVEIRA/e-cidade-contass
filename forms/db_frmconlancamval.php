@@ -40,10 +40,12 @@ $clrotulo->label("c74_codrec");
 $clrotulo->label("c78_chave");
 $clrotulo->label("c80_codord");
 $clrotulo->label("c82_reduz");
+$clrotulo->label("o15_descr");
 
 
 ?>
 <script>
+
   function critica_form(){
       obj = document.form1;
       if ( obj.c69_debito.value =="" ) {
@@ -88,6 +90,7 @@ $clrotulo->label("c82_reduz");
     $("debito_descr") .value = "";
     $("debito_saldo") .value = "";
     $("debito_sinal") .value = "";
+    $("o15_descr") .value = "";
 
     $("c69_codhist")  .value = "";
     $("c50_descr")    .value = "";
@@ -336,7 +339,22 @@ db_input('credito_sinal', 3, $Ic69_debito, true, 'text', 3, "");
 	?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="<?=@$To15_codigo?>">
+            <a class='dbancora' onclick='js_pesquisao15_codigo(true);' style='text-decoration: underline;' href='#'>
+                Fonte Recurso:
+            </a>
 
+        </td>
+        <td>
+            <?
+            db_input('o15_codigo',10,$Io15_codigo,true,'text',$db_opcao," onchange='js_pesquisao15_codigo(false);'")
+            ?>
+            <?
+            db_input('o15_descr',50,$Io15_descr,true,'text',3,'')
+            ?>
+        </td>
+    </tr>
   <tr>
     <td nowrap title="<?=@$Tc69_codhist ?>">
 
@@ -908,6 +926,27 @@ $('c72_complem').observe("keydown", function(event) {
 
    }
 
+
+ }
+ function js_pesquisao15_codigo(mostra){
+     if(mostra==true){
+         js_OpenJanelaIframe('','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr','Pesquisa',true);
+     }else{
+         js_OpenJanelaIframe('','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
+     }
+ }
+
+ function js_mostraorctiporec(chave,erro){
+     document.form1.o15_descr.value = chave;
+     if(erro==true){
+         document.form1.o15_codigo.focus();
+         document.form1.o15_codigo.value = '';
+     }
+ }
+ function js_mostraorctiporec1(chave1,chave2){
+     document.form1.o15_codigo.value = chave1;
+     document.form1.o15_descr.value = chave2;
+     db_iframe_orctiporec.hide();
  }
 
 

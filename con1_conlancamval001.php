@@ -37,6 +37,8 @@ require_once("classes/db_conlancamcompl_classe.php");
 require_once("classes/db_conlancamdig_classe.php");
 require_once("classes/db_conlancamdoc_classe.php");
 require_once("classes/db_conplano_classe.php");
+require_once("classes/db_contacorrentedetalhe_classe.php");
+require_once("classes/db_contacorrentedetalheconlancamval_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -46,6 +48,7 @@ $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamdig = new cl_conlancamdig;
 $clconlancamdoc = new cl_conlancamdoc;
 $clconlancam = new cl_conlancam;
+$contacorrentedetalheconlancamval = new cl_contacorrentedetalheconlancamval;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -125,17 +128,121 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])
     $clconlancamval->incluir("");
 
     if (USE_PCASP) {
-      
-      $oDaoConLancamDoc = db_utils::getDao('conlancamdoc');
-      $oDaoConLancamDoc->c71_codlan = $codlan;
-      $oDaoConLancamDoc->c71_coddoc = $iDocumento;
-      $oDaoConLancamDoc->c71_data   = "{$c70_data_ano}-{$c70_data_mes}-{$c70_data_dia}";
-      $oDaoConLancamDoc->incluir($codlan);
-      if ($oDaoConLancamDoc->erro_status == "0") {
-  
-        db_msgbox("Não foi possível vincular o documento ao lançamento. Procedimento abortado.");
-        $erro = true;
-      }
+
+          $oDaoConLancamDoc = db_utils::getDao('conlancamdoc');
+          $oDaoConLancamDoc->c71_codlan = $codlan;
+          $oDaoConLancamDoc->c71_coddoc = $iDocumento;
+          $oDaoConLancamDoc->c71_data   = "{$c70_data_ano}-{$c70_data_mes}-{$c70_data_dia}";
+          $oDaoConLancamDoc->incluir($codlan);
+          if ($oDaoConLancamDoc->erro_status == "0") {
+
+              db_msgbox("Não foi possível vincular o documento ao lançamento. Procedimento abortado.");
+              $erro = true;
+          }
+    }
+
+    if($o15_codigo != ""){
+
+        //Ver se contacorrentedelhe existe para conta debito
+        $oDaoContaCorrenteDetalhe = db_utils::getDao('contacorrentedetalhe');
+        $oDaoVerificaDetalhe = db_utils::getDao('contacorrentedetalhe');
+
+        $iReduzido = $clconlancamval->c69_debito;
+        $iContaCorrente = 103;
+        $iInstituicao = db_getsession("DB_instit");
+        $iAnoUsu = db_getsession("DB_anousu");
+
+        $iTipoRec = $o15_codigo;
+
+        $rsDebito = $clconplano->sql_record($clconplano->sql_query_tudo(null,$campos="c18_contacorrente",$ordem=null,$dbwhere=" c61_reduz={$iReduzido} and c61_anousu=".db_getsession("DB_anousu")));
+        db_fieldsmemory($rsDebito, 0);
+
+        $sWhereVerificacao = "     c19_contacorrente       = {$iContaCorrente}    ";
+        $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoRec}      ";
+        $sWhereVerificacao .= " and c19_instit              = {$iInstituicao}      ";
+        $sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
+        $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
+
+        $sSqlVerificaDetalhe = $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
+
+        $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
+
+        $oDaoContaCorrenteDetalhe->c19_contacorrente = $iContaCorrente;
+        $oDaoContaCorrenteDetalhe->c19_orctiporec = $iTipoRec;
+        $oDaoContaCorrenteDetalhe->c19_instit = $iInstituicao;
+        $oDaoContaCorrenteDetalhe->c19_reduz = $iReduzido;
+        $oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu = $iAnoUsu;
+
+        if ($oDaoVerificaDetalhe->numrows == 0) {
+            $oDaoContaCorrenteDetalhe->incluir(null);
+            if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
+                db_msgbox("Não foi possível vincular o documento ao lançamento. Procedimento abortado.".$oDaoContaCorrenteDetalhe->erro_msg);
+                $erro = true;
+            }
+        }else{
+            $seqContaCorrenteDetalhe = db_utils::fieldsMemory($rsVerificacao,0)->c19_sequencial;
+        }
+
+        $contacorrentedetalheconlancamval->c28_conlancamval = $clconlancamval->c69_sequen;
+        $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
+        $contacorrentedetalheconlancamval->c28_tipo = 'D';
+        if($c18_contacorrente == 103)
+            $contacorrentedetalheconlancamval->incluir();
+        if ($contacorrentedetalheconlancamval->erro_status == "0") {
+            db_msgbox("Não foi possível incluir detalhe da conta débito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
+            $erro = true;
+        }
+
+        //Ver se contacorrentedelhe existe para conta CREDITO
+        $oDaoContaCorrenteDetalhe = db_utils::getDao('contacorrentedetalhe');
+        $oDaoVerificaDetalhe = db_utils::getDao('contacorrentedetalhe');
+
+        $iReduzido = $clconlancamval->c69_credito;
+        $iContaCorrente = 103;
+        $iInstituicao = db_getsession("DB_instit");
+        $iAnoUsu = db_getsession("DB_anousu");
+
+        $iTipoRec = $o15_codigo;
+
+        $rsCredito = $clconplano->sql_record($clconplano->sql_query_tudo(null,$campos="c18_contacorrente",$ordem=null,$dbwhere=" c61_reduz={$iReduzido} and c61_anousu=".db_getsession("DB_anousu")));
+        db_fieldsmemory($rsCredito, 0);
+
+        $sWhereVerificacao = "     c19_contacorrente       = {$iContaCorrente}    ";
+        $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoRec}      ";
+        $sWhereVerificacao .= " and c19_instit              = {$iInstituicao}      ";
+        $sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
+        $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
+
+        $sSqlVerificaDetalhe = $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
+        $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
+
+        $oDaoContaCorrenteDetalhe->c19_contacorrente = $iContaCorrente;
+        $oDaoContaCorrenteDetalhe->c19_orctiporec = $iTipoRec;
+        $oDaoContaCorrenteDetalhe->c19_instit = $iInstituicao;
+        $oDaoContaCorrenteDetalhe->c19_reduz = $iReduzido;
+        $oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu = $iAnoUsu;
+
+        if ($oDaoVerificaDetalhe->numrows == 0) {
+            $oDaoContaCorrenteDetalhe->incluir(null);
+            if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
+                db_msgbox("Não foi possível vincular o documento ao lançamento. Procedimento abortado.".$oDaoContaCorrenteDetalhe->erro_msg);
+                $erro = true;
+
+            }
+        }else{
+            $seqContaCorrenteDetalhe = db_utils::fieldsMemory($rsVerificacao,0)->c19_sequencial;
+        }
+        $contacorrentedetalheconlancamval->c28_conlancamval = $clconlancamval->c69_sequen;
+        $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
+        $contacorrentedetalheconlancamval->c28_tipo = 'C';
+        if($c18_contacorrente == 103)
+            $contacorrentedetalheconlancamval->incluir();
+        if ($contacorrentedetalheconlancamval->erro_status == "0") {
+            db_msgbox("Não foi possível incluir detalhe da conta crédito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
+            $erro = true;
+        }
+
+
     }
 
     db_fim_transacao($erro);

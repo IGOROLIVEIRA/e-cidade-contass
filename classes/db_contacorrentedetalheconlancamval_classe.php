@@ -414,8 +414,7 @@ class cl_contacorrentedetalheconlancamval {
      $sql .= "      left  join conplanoreduz  on  conplanoreduz.c61_reduz = contacorrentedetalhe.c19_conplanoreduzanousu and  conplanoreduz.c61_anousu = contacorrentedetalhe.c19_reduz";
      $sql .= "      left  join empempenho  on  empempenho.e60_numemp = contacorrentedetalhe.c19_numemp";
      $sql .= "      left  join contabancaria  on  contabancaria.db83_sequencial = contacorrentedetalhe.c19_contabancaria";
-     $sql .= "      left  join conlancamconcarpeculiar  on  conlancamconcarpeculiar.c08_sequencial = contacorrentedetalhe.c19_conlancamconcarpeculiar";
-     $sql .= "      left  join contacorrente  as a on   a. = contacorrentedetalhe.c19_contacorrente";
+     $sql .= "      left  join contacorrente  as a on a.c17_sequencial = contacorrentedetalhe.c19_contacorrente";
      $sql2 = "";
      if($dbwhere==""){
        if($c28_sequencial!=null ){

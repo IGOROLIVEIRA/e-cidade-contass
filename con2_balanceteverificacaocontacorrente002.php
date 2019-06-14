@@ -72,6 +72,16 @@ try {
             $nCC = db_utils::fieldsMemory($rsCC, 0)->c18_contacorrente;
             $oNovoResgistro->contacorrente         = getSaldoTotalContaCorrente($iAnoUsu,$oBalancete->c61_reduz,$nCC > 0 ? $nCC : null, $iMes, $oBalancete->c61_instit);
         }
+        if($oBalancete->saldo_anterior == 0
+            && $oBalancete->saldo_anterior_debito == 0
+            && $oBalancete->saldo_anterior_credito == 0
+            && $oBalancete->saldo_final == 0
+            && $aRegistro->contacorrente->nSaldoInicialMes == 0
+            && $aRegistro->contacorrente->debito == 0
+            && $aRegistro->contacorrente->credito == 0
+            && $aRegistro->contacorrente->saldo_final == 0) {
+            continue;
+        }
         $aRegistros[] = $oNovoResgistro;
     }
 
