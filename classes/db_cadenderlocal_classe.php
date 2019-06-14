@@ -1,64 +1,64 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Configuracoes
 //CLASSE DA ENTIDADE cadenderlocal
-class cl_cadenderlocal { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $db75_sequencial = 0; 
-   var $db75_cadenderbairrocadenderrua = 0; 
-   var $db75_numero = null; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_cadenderlocal {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $db75_sequencial = 0;
+   var $db75_cadenderbairrocadenderrua = 0;
+   var $db75_numero = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 db75_sequencial = int4 = Código do Local 
-                 db75_cadenderbairrocadenderrua = int4 = Codigo bairro rua 
-                 db75_numero = varchar(10) = Número 
+                 db75_sequencial = int4 = Código do Local
+                 db75_cadenderbairrocadenderrua = int4 = Codigo bairro rua
+                 db75_numero = varchar(10) = Número
                  ";
-   //funcao construtor da classe 
-   function cl_cadenderlocal() { 
+   //funcao construtor da classe
+   function cl_cadenderlocal() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("cadenderlocal"); 
+     $this->rotulo = new rotulo("cadenderlocal");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -77,9 +77,9 @@ class cl_cadenderlocal {
      }
    }
    // funcao para inclusao
-   function incluir ($db75_sequencial){ 
+   function incluir ($db75_sequencial){
       $this->atualizacampos();
-     if($this->db75_cadenderbairrocadenderrua == null ){ 
+     if($this->db75_cadenderbairrocadenderrua == null ){
        $this->erro_sql = " Campo Codigo bairro rua nao Informado.";
        $this->erro_campo = "db75_cadenderbairrocadenderrua";
        $this->erro_banco = "";
@@ -88,20 +88,20 @@ class cl_cadenderlocal {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db75_numero == null ){ 
+     if($this->db75_numero == null ){
        $this->db75_numero = "0";
      }
      if($db75_sequencial == "" || $db75_sequencial == null ){
-       $result = db_query("select nextval('cadenderlocal_db75_sequencial_seq')"); 
+       $result = db_query("select nextval('cadenderlocal_db75_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: cadenderlocal_db75_sequencial_seq do campo: db75_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: cadenderlocal_db75_sequencial_seq do campo: db75_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->db75_sequencial = pg_result($result,0,0); 
+       $this->db75_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from cadenderlocal_db75_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $db75_sequencial)){
@@ -112,10 +112,10 @@ class cl_cadenderlocal {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->db75_sequencial = $db75_sequencial; 
+         $this->db75_sequencial = $db75_sequencial;
        }
      }
-     if(($this->db75_sequencial == null) || ($this->db75_sequencial == "") ){ 
+     if(($this->db75_sequencial == null) || ($this->db75_sequencial == "") ){
        $this->erro_sql = " Campo db75_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -124,17 +124,17 @@ class cl_cadenderlocal {
        return false;
      }
      $sql = "insert into cadenderlocal(
-                                       db75_sequencial 
-                                      ,db75_cadenderbairrocadenderrua 
-                                      ,db75_numero 
+                                       db75_sequencial
+                                      ,db75_cadenderbairrocadenderrua
+                                      ,db75_numero
                        )
                 values (
-                                $this->db75_sequencial 
-                               ,$this->db75_cadenderbairrocadenderrua 
-                               ,'$this->db75_numero' 
+                                $this->db75_sequencial
+                               ,$this->db75_cadenderbairrocadenderrua
+                               ,'$this->db75_numero'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Cadastro de Locais ($this->db75_sequencial) nao Incluído. Inclusao Abortada.";
@@ -168,16 +168,16 @@ class cl_cadenderlocal {
        $resac = db_query("insert into db_acount values($acount,2784,15868,'','".AddSlashes(pg_result($resaco,0,'db75_numero'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($db75_sequencial=null) { 
+   function alterar ($db75_sequencial=null) {
       $this->atualizacampos();
      $sql = " update cadenderlocal set ";
      $virgula = "";
-     if(trim($this->db75_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_sequencial"])){ 
+     if(trim($this->db75_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_sequencial"])){
        $sql  .= $virgula." db75_sequencial = $this->db75_sequencial ";
        $virgula = ",";
-       if(trim($this->db75_sequencial) == null ){ 
+       if(trim($this->db75_sequencial) == null ){
          $this->erro_sql = " Campo Código do Local nao Informado.";
          $this->erro_campo = "db75_sequencial";
          $this->erro_banco = "";
@@ -187,10 +187,10 @@ class cl_cadenderlocal {
          return false;
        }
      }
-     if(trim($this->db75_cadenderbairrocadenderrua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_cadenderbairrocadenderrua"])){ 
+     if(trim($this->db75_cadenderbairrocadenderrua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_cadenderbairrocadenderrua"])){
        $sql  .= $virgula." db75_cadenderbairrocadenderrua = $this->db75_cadenderbairrocadenderrua ";
        $virgula = ",";
-       if(trim($this->db75_cadenderbairrocadenderrua) == null ){ 
+       if(trim($this->db75_cadenderbairrocadenderrua) == null ){
          $this->erro_sql = " Campo Codigo bairro rua nao Informado.";
          $this->erro_campo = "db75_cadenderbairrocadenderrua";
          $this->erro_banco = "";
@@ -200,7 +200,7 @@ class cl_cadenderlocal {
          return false;
        }
      }
-     if(trim($this->db75_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_numero"])){ 
+     if(trim($this->db75_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db75_numero"])){
        $sql  .= $virgula." db75_numero = '$this->db75_numero' ";
        $virgula = ",";
      }
@@ -224,7 +224,7 @@ class cl_cadenderlocal {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de Locais nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->db75_sequencial;
@@ -252,14 +252,14 @@ class cl_cadenderlocal {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($db75_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($db75_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($db75_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -287,7 +287,7 @@ class cl_cadenderlocal {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de Locais nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$db75_sequencial;
@@ -315,11 +315,11 @@ class cl_cadenderlocal {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -341,8 +341,8 @@ class cl_cadenderlocal {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -361,8 +361,8 @@ class cl_cadenderlocal {
      $sql2 = "";
      if($dbwhere==""){
        if($db75_sequencial!=null ){
-         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial "; 
-       } 
+         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -378,8 +378,8 @@ class cl_cadenderlocal {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -395,8 +395,8 @@ class cl_cadenderlocal {
      $sql2 = "";
      if($dbwhere==""){
        if($db75_sequencial!=null ){
-         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial "; 
-       } 
+         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -412,7 +412,7 @@ class cl_cadenderlocal {
      }
      return $sql;
   }
-   function sql_query_completo ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_completo ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -440,8 +440,8 @@ class cl_cadenderlocal {
      $sql2 = "";
      if($dbwhere==""){
        if($db75_sequencial!=null ){
-         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial                                   "; 
-       } 
+         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial                                   ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -457,7 +457,7 @@ class cl_cadenderlocal {
      }
      return $sql;
   }
-   function sql_query_local ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_local ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -478,8 +478,8 @@ class cl_cadenderlocal {
      $sql2 = "";
      if($dbwhere==""){
        if($db75_sequencial!=null ){
-         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial "; 
-       } 
+         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -495,8 +495,8 @@ class cl_cadenderlocal {
      }
      return $sql;
   }
-  
-  function sql_query_cgmendereco ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+
+  function sql_query_cgmendereco ( $db75_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -509,7 +509,7 @@ class cl_cadenderlocal {
        $sql .= $campos;
      }
      $sql .= " from cadenderlocal ";
-     $sql .= "      inner join cadenderbairrocadenderrua  on  
+     $sql .= "      inner join cadenderbairrocadenderrua  on
                               cadenderbairrocadenderrua.db87_sequencial = cadenderlocal.db75_cadenderbairrocadenderrua";
      $sql .= "      inner join cadenderbairro  on  cadenderbairro.db73_sequencial = cadenderbairrocadenderrua.db87_cadenderbairro";
      $sql .= "      inner join cadenderrua     on  cadenderrua.db74_sequencial = cadenderbairrocadenderrua.db87_cadenderrua";
@@ -521,8 +521,8 @@ class cl_cadenderlocal {
      $sql2 = "";
      if($dbwhere==""){
        if($db75_sequencial!=null ){
-         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial "; 
-       } 
+         $sql2 .= " where cadenderlocal.db75_sequencial = $db75_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

@@ -63,20 +63,23 @@
 
       if ($iCodigoEndereco != null) {
         $sWhere       = " db76_sequencial = ".$iCodigoEndereco;
-        $sWhere      .= " and db125_db_sistemaexterno = 4 ";
+        // $sWhere      .= " and db125_db_sistemaexterno = 4 ";
 
         $oDaoLocal    = db_utils::getDao('cadenderlocal');
         $sQueryLocal  = $oDaoLocal->sql_query_completo(null, "*", null, $sWhere);
+        // print_r($sQueryLocal);die('as');
         $rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
 
-        $codigoSistema = db_utils::fieldsMemory($rsQueryLocal, 0)->db125_codigosistema;
+        // $codigoSistema = db_utils::fieldsMemory($rsQueryLocal, 0)->db125_codigosistema;
 
-        if(strlen($codigoSistema) < 7 ){
-          $sWhere       = " db76_sequencial = ".$iCodigoEndereco;
-          $sWhere      .= " and municipios.db125_db_sistemaexterno = 4 ";
-          $sQueryLocal  = $oDaoLocal->sql_query_completo(null, "*", null, $sWhere, true);
-          $rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
-        }
+        // if(strlen($codigoSistema) < 7 ){
+        //   $sWhere       = " db76_sequencial = ".$iCodigoEndereco;
+        //   $sWhere      .= " and municipios.db125_db_sistemaexterno = 4 ";
+        //   $sQueryLocal  = $oDaoLocal->sql_query_completo(null, "*", null, $sWhere, true);
+        //   $rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
+        // }
+
+        // print_r($sQueryLocal);die('as');
 
         if ($rsQueryLocal === false ){
 
@@ -115,6 +118,7 @@
         $this->setCep($oDadosEndereco->db86_cep);
         $this->setCodigoCep($oDadosEndereco->db86_sequencial);
         $this->setTipoRua($oDadosEndereco->j88_descricao);
+
 
       }
 
@@ -1600,7 +1604,7 @@ db72_sequencial =
 
 
     $sQueryParametros = $oDaoParametros->sql_query_params(null, $sCampos, "db72_descricao ASC", $sWhere);
-    // print_r($sQueryParametros);
+    // print_r($sQueryParametros);die('Mrte');
 
     $rsQueryParametros = $oDaoParametros->sql_record($sQueryParametros);
 
@@ -1628,6 +1632,7 @@ db72_sequencial =
     $sWhere   = " z07_numcgm = ".$iNumCgm;
 
     $sQueryCgmEndereco  = $oDaoCgmEndereco->sql_query_cgmendereco(null,$sCampos,'z07_tipo',$sWhere);
+    // print_r($sQueryCgmEndereco);die();
     $rsQueryCgmEndereco = $oDaoCgmEndereco->sql_record($sQueryCgmEndereco);
     if( $rsQueryCgmEndereco !== false) {
       $aRetorno = db_utils::getCollectionByRecord($rsQueryCgmEndereco, false, false, true);
