@@ -387,7 +387,6 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                     null,
                     "e55_autori = ". @$e61_autori));
                 if ($clempautitem->numrows > 0) {
-											db_criatabela(result_licita);die();
                 db_fieldsmemory($result_licita,0);
                 $arr_data  = split("-",$l20_anousu);
                 $ano_lic   = $arr_data[0];
@@ -398,19 +397,27 @@ if (isset($e60_numemp) and $e60_numemp != "") {
                         <?=@$Le60_codcom?></b>
                 </td>
                 <td  align="left" class='valores' colspan="3">
-                    <?echo $l03_descr; ?>resumo
+                    <?echo $l03_descr; ?>
                 </td>
                 <td  align="left" nowrap>
-                    <b>
-                        <?
-                        db_ancora($Le60_numerol,"pesquisa_lic();",1);
-                        ?>
-                    </b>
+                    <b><?=$Le60_numerol?>
                 </td>
-                <td colspan='3' class='valores'>
+                <td colspan='1' class='valores'>
                     <?
-                    echo $numerolic;
+                    echo $e60_numerol;
                     ?>
+                </td>
+                <td colspan="2">
+                    <div class="tdmodalidade">
+                        <div class="modalidade">
+                            <strong>Modalidade: </strong>
+                        </div>
+                        <div class='valores'>
+                            <?
+                            echo $e54_nummodalidade;
+                            ?>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <?
