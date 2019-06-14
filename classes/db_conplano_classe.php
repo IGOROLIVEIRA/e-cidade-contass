@@ -1154,6 +1154,49 @@ class cl_conplano {
     }
     return $sql;
   }
+  function sql_query_tudo ( $c60_codcon=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from conplano ";
+    $sql .= "      inner join conplanoreduz  on  conplanoreduz.c61_codcon = conplano.c60_codcon and c60_anousu=c61_anousu";
+    $sql .= "      inner join conplanoexe     on  conplanoexe.c62_reduz   = conplanoreduz.c61_reduz and c61_anousu=c62_anousu";
+    $sql .= "      inner join conclass  on  conclass.c51_codcla           = conplano.c60_codcla";
+    $sql .= "      inner join consistema  on  consistema.c52_codsis       = conplano.c60_codsis";
+    $sql .= "      left join conplanocontacorrente on c60_codcon = c18_codcon and c60_anousu=c18_anousu";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($c60_codcon!=null ){
+        $dbwhere = "  conplano.c60_codcon = $c60_codcon";
+
+      }
+    }
+    if($dbwhere!=""){
+      $dbwhere .=" and ";
+    }
+    $sql2 .= " where $dbwhere  c62_anousu= ".db_getsession("DB_anousu");
+    $sql2 .= " and c61_instit = " . db_getsession("DB_instit");
+
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
   function sql_query2 ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){

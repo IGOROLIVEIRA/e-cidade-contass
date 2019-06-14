@@ -36,6 +36,8 @@ require_once("classes/db_conlancamcompl_classe.php");
 require_once("classes/db_conlancamdig_classe.php");
 require_once("classes/db_conlancamdoc_classe.php");
 require_once("classes/db_conplano_classe.php");
+
+require_once("classes/db_contacorrentedetalheconlancamval_classe.php");
 require_once("libs/db_utils.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -46,6 +48,8 @@ $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamdig   = new cl_conlancamdig;
 $clconlancamdoc   = new cl_conlancamdoc;
 $clconlancam      = new cl_conlancam;
+$contacorrentedetalheconlancamval = new cl_contacorrentedetalheconlancamval;
+
 
 $db_botao = false;
 $db_opcao = 33;
@@ -118,6 +122,13 @@ if ($alt==true){
           }
         }
         if($erro==false){
+            $contacorrentedetalheconlancamval->excluir(null, " c28_conlancamval = {$c69_sequen}");
+            if($contacorrentedetalheconlancamval->erro_status == '0'){
+                $erro = true;
+                $msg_erro = $contacorrentedetalheconlancamval->msg_erro;
+            }
+        }
+        if($erro==false){
           $clconlancamval->excluir($c69_sequen);
           if($clconlancamval->erro_status == '0'){
             $erro = true;
@@ -159,6 +170,11 @@ if ($alt==true){
        $db_opcao = 3;
        $result = $clconlancamval->sql_record($clconlancamval->sql_query($chavepesquisa)); 
        db_fieldsmemory($result,0);
+       $result = $contacorrentedetalheconlancamval->sql_record($contacorrentedetalheconlancamval->sql_query(null,'o15_codigo, o15_descr', null, " c28_conlancamval= {$c69_sequen} limit 1"));
+
+       if($contacorrentedetalheconlancamval->numrows!=0){
+            db_fieldsmemory($result,0);
+       }
        $db_botao = true;
 }
 ?>
