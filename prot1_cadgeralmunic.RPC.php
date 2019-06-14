@@ -718,7 +718,7 @@ switch ($oParam->exec) {
     break;
 
   case 'getCodigoIbge' :
-    $oRetorno->codigo = municipio::getCodigoIbge($oParam->estado, $oParam->cidade);
+    $oRetorno->codigo = municipio::getCodigoIbge($oParam->estado, utf8_decode($oParam->cidade));
     echo $oJson->encode($oRetorno);
     break;
 

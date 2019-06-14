@@ -231,7 +231,6 @@ function dbViewCadastroDocumento() {
 
 
       me.createFormDocument(campos);
-      console.log('All campos...',campos);
     }
 
 }
@@ -270,20 +269,14 @@ function dbViewCadastroDocumento() {
 
     var documento = Number(listaAtributos[0].db45_caddocumento);
 
-
     descricao = aAtributos[0].db45_descricao;
+
     if(descricao != 'CNH'){
-
-
       if (documento != Number(listaAtributos[0].db45_sequencial)){
         listaAtributos = listaAtributos.reverse();
-        console.log('Inversão: ', listaAtributos);
       }
 
     }
-
-    me.carregaCampos(listaAtributos[0].db45_sequencial);
-
 
     if (aAtributos.length == 0) {
       alert('Nenhum atributo informado!');
@@ -293,17 +286,13 @@ function dbViewCadastroDocumento() {
     me.aInputsValidos = new Array();
     var iInd          = 0;
 
-    listaAtributos.each(function(oAtributo) {
+    listaAtributos.each( (oAtributo) => {
       var input         = "";
       var codigo        = oAtributo.db45_sequencial;
       var descricao     = oAtributo.db45_descricao;
 
-
-      var encodeDescr = encodeURIComponent(descricao);
-      var decodeDescr = decodeURIComponent(encodeDescr);
-      descricao = decodeURIComponent(decodeDescr);
-      descricao = descricao.replace(/\+/gi,' ');
-
+      descricao = unescape(descricao);
+      descricao = descricao.replace(/\+/g,' ');
 
       var valor_default = oAtributo.db45_valordefault;
       var referencia    = oAtributo.referencia;
@@ -367,7 +356,6 @@ function dbViewCadastroDocumento() {
         oScript.innerHTML  += me.geraLookUp(referencia.tabela, referencia.campo, codigo);
         document.getElementsByTagName("head")[0].appendChild(oScript);
       }
-      console.log('Description: ', descricao);
 
       var shtml  = "<tr>";
           shtml += " <td align=left>";
@@ -383,27 +371,6 @@ function dbViewCadastroDocumento() {
 
     });
   }
-
-  this.carregaCampos = function(codigo){
-    var oJson              = new Object();
-    oJson.sMethod          = "loadCampos";
-    oJson.codigo           = codigo;
-
-    var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post',
-                                            parameters: 'json='+Object.toJSON(oJson),
-                                            onComplete : me.retorno_getCampos
-                                          }
-                                   );
-    sleep(1000);
-  }
-
-  this.retorno_getCampos = function(oAjax){
-    var oRetorno    = eval("("+oAjax.responseText+")");
-    aCampos = oRetorno;
-    me.setCampos(oRetorno.aCampos);
-  }
-
 
   /**
    *  Cria uma nova janela com os atributos apartir do código do cadastro de documento informado
@@ -449,7 +416,6 @@ function dbViewCadastroDocumento() {
 
     var oRetorno  = eval("("+oAjax.responseText+")");
     var aValores  = oRetorno.aValores;
-    console.log('Values: ', aValores);
 
     me.showForm();
 
@@ -499,23 +465,6 @@ function dbViewCadastroDocumento() {
    */
   this.getSaveCallBackFunction = function(iCodDocumento){
     me.sSaveCallBackFunction(iCodDocumento);
-  }
-
-  this.setCampos = function(campos){
-    me.aCampos = campos;
-  }
-
-  this.getCampos = function(){
-    return me.aCampos;
-  }
-
-  function sleep(time){
-  var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > time){
-        break;
-      }
-    }
   }
 
 

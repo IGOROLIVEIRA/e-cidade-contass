@@ -2255,7 +2255,10 @@ function js_retornaCodigoIbge(){
   var element   = document.getElementById('ufdescr');
   var option    = element.options[element.selectedIndex].text;
   var oParam    = new Object();
-  oParam.cidade = document.getElementById('listMunicipios').value;
+
+  let cidade = document.getElementById('listMunicipios');
+
+  oParam.cidade = cidade.options[cidade.selectedIndex].text;
   oParam.estado = option;
   oParam.exec   = 'getCodigoIbge';
   var sUrlRpc   = 'prot1_cadgeralmunic.RPC.php';

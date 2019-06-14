@@ -2937,7 +2937,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         }
       }
 
-      oParam.cidade = aMunicipios.value;
+      oParam.cidade = aMunicipios.options[aMunicipios.selectedIndex].text;
       oParam.exec = 'findCodigoIbge';
 
       var oAjax = new Ajax.Request(
