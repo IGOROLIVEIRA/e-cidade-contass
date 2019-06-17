@@ -5487,11 +5487,9 @@ class cl_estrutura_sistema {
 
         $rsInicAno = db_query($sSaldoInicialAno);
 
-
-
         $nSaldoInicialAno = db_utils::fieldsMemory($rsInicAno, 0)->saldoinicialano;
 
-        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor) AS creditoano
+        $sTotalCreditoAno = "select coalesce((SELECT sum(c69_valor) 
                    FROM conlancamval
                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
                      AND conlancam.c70_anousu = conlancamval.c69_anousu
@@ -5504,7 +5502,7 @@ class cl_estrutura_sistema {
                      AND DATE_PART('YEAR',c69_data) = $iAnousu
                      AND contacorrentedetalhe.c19_reduz = $iReduz
                      AND c19_instit = $iInstit
-                   GROUP BY c28_tipo),0) ";
+                   GROUP BY c28_tipo),0) as creditoano ";
 
         $nTotalCreditoAno = db_utils::fieldsMemory(db_query($sTotalCreditoAno), 0)->creditoano;
 
@@ -5569,10 +5567,10 @@ class cl_estrutura_sistema {
         $oSaldo                   = new stdClass;
         $oSaldo->cc               = $iCC;
         $oSaldo->sinal_ant        = $sinal_ant;
-        $oSaldo->nSaldoInicialMes = abs($nSaldoInicialMes);
-        $oSaldo->debito           = $nTotalDebitoMes;
-        $oSaldo->credito          = $nTotalCreditoMes;
-        $oSaldo->saldo_final      = abs($nSaldoFinalMes);
+        $oSaldo->nSaldoInicialMes = db_formatar(abs($nSaldoInicialMes),"f");
+        $oSaldo->debito           = db_formatar($nTotalDebitoMes,"f");
+        $oSaldo->credito          = db_formatar($nTotalCreditoMes,"f");
+        $oSaldo->saldo_final      = db_formatar(abs($nSaldoFinalMes),"f");
         $oSaldo->sinal_final      = $sinal_final;
 
         return $oSaldo;
