@@ -8,6 +8,13 @@ foreach ($oInfoRelatorio->aHeader as $key => $value) {
     $mPDF->addInfo($value, $key);
 }
 
+$sSql  = "SELECT db21_codigomunicipoestado,cgc FROM db_config where codigo = ".db_getsession("DB_instit");
+$rsInst = db_query($sSql);
+$sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
+//cisaje
+$aCgcExtFonte = $arrayName = array('00699767000150');
+
+//db_criatabela($rsInst);exit;
 
 $aTotal = array(
     'empenhado' => array(
@@ -192,76 +199,79 @@ ob_start();
         </tbody>
     </table>
 </div>
+<?php if(in_array($sInstCgc, $aCgcExtFonte)) {?>
 <div class="ritz grid-container" dir="ltr">
-<!--    <table class="waffle" cellspacing="0" cellpadding="0" >-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th class="borda1" style="width:70px">&nbsp;</th>-->
-<!--            <th class="borda1" style="width:78px">&nbsp;</th>-->
-<!--            <th class="borda1" style="width:66px">&nbsp;</th>-->
-<!--            <th class="borda1" style="width:91px">&nbsp;</th>-->
-<!--            <th class="borda1" style="width:42px">&nbsp;</th>-->
-<!--            <th class="borda1" style="width:100px">&nbsp;</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!---->
-<!--        <tbody>-->
-<!--        <tr style='height:20px;'>-->
-<!--            <td class="s0 fstb borda2 borda3" colspan="6">Resumo Financeiro</td>-->
-<!--        </tr>-->
-<!--        <tr style='height:20px;'>-->
-<!--            <td class="s0 fstb borda2 borda3" colspan="3">Entradas</td>-->
-<!--            <td class="s0 fstb" colspan="3">Saídas</td>-->
-<!--        </tr>-->
-<!---->
-<!--        <tr style='height:20px;'>-->
-<!--            <td class="s1 fstb borda2 borda3">Classifica&ccedil;&atilde;o</td>-->
-<!--            <td class="s2 fstb borda2">Saldo Incial</td>-->
-<!--            <td class="s2 fstb borda2">Receitas At&eacute; o M&ecirc;s</td>-->
-<!--            <td class="s3 fstb borda2">Despesas At&eacute; o M&ecirc;s</td>-->
-<!--            <td class="s0 fstb">RPs At&eacute; o M&ecirc;s</td>-->
-<!--            <td class="s0 fstb">Saldo</td>-->
-<!--        </tr>-->
-<!---->
-<!---->
-<!--        --><?php //foreach ($oInfoRelatorio->aDadosFinanceiros as $key => $oRegistro):
-//
-//            $aTotal['saldoinicial']['saldoinicial']     += $oRegistro->saldoinicial;
-//            $aTotal['receitasatemes']['receitasatemes'] += $oRegistro->receitasatemes;
-//            $aTotal['despesasatemes']['despesasatemes'] += $oRegistro->despesasatemes;
-//            $aTotal['rps']['rps']                       += $oRegistro->rps;
-//            $aTotal['saldo']['salo_no_mes']             += $oRegistro->saldo;
-//
-//
-//            ?>
-<!---->
-<!--            <tr style='height:20px;' class="bg_--><?//= ($key % 2) == 0 ?><!--">-->
-<!---->
-<!--                <td class="s4 fstb borda2 borda3" style='text-align: left'>--><?//= $oRegistro->classificacao ?><!--</td>-->
-<!--                <td class="s4 fstb ">--><?//= db_formatar($oRegistro->saldoinicial, 'f') ?><!--</td>-->
-<!--                <td class="s4 fstb">--><?//= db_formatar($oRegistro->receitasatemes, 'f') ?><!--</td>-->
-<!--                <td class="s4 fstb">--><?//= db_formatar($oRegistro->despesasatemes, 'f') ?><!--</td>-->
-<!--                <td class="s4 fstb">--><?//= db_formatar($oRegistro->rps, 'f') ?><!--</td>-->
-<!--                <td class="s4 fstb">--><?//= db_formatar($oRegistro->saldo, 'f') ?><!--</td>-->
-<!---->
-<!--            </tr>-->
-<!---->
-<!--        --><?php //endforeach ?>
-<!---->
-<!---->
-<!--        <tr style='height:20px;'>-->
-<!--            <td class="s5 fstb borda2 borda3" >Saldo Total</td>-->
-<!--            <td class="s5 fstb">--><?//= db_formatar($aTotal['saldoinicial']['saldoinicial'], 'f') ?><!--</td>-->
-<!--            <td class="s5 fstb">--><?//= db_formatar($aTotal['receitasatemes']['receitasatemes'], 'f') ?><!--</td>-->
-<!--            <td class="s5 fstb">--><?//= db_formatar($aTotal['despesasatemes']['despesasatemes'], 'f') ?><!--</td>-->
-<!--            <td class="s5 fstb">--><?//= db_formatar($aTotal['rps']['rps'], 'f') ?><!--</td>-->
-<!--            <td class="s5 fstb">--><?//= db_formatar($aTotal['saldo']['salo_no_mes'], 'f') ?><!--</td>-->
-<!--        </tr>-->
-<!---->
-<!---->
-<!--        </tbody>-->
-<!--    </table>-->
+
+    <table class="waffle" cellspacing="0" cellpadding="0" >
+        <thead>
+        <tr>
+            <th class="borda1" style="width:70px">&nbsp;</th>
+            <th class="borda1" style="width:78px">&nbsp;</th>
+            <th class="borda1" style="width:66px">&nbsp;</th>
+            <th class="borda1" style="width:91px">&nbsp;</th>
+            <th class="borda1" style="width:42px">&nbsp;</th>
+            <th class="borda1" style="width:100px">&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr style='height:20px;'>
+            <td class="s0 fstb borda2 borda3" colspan="6">Resumo Financeiro</td>
+        </tr>
+        <tr style='height:20px;'>
+            <td class="s0 fstb borda2 borda3" colspan="3">Entradas</td>
+            <td class="s0 fstb" colspan="3">Saídas</td>
+        </tr>
+
+        <tr style='height:20px;'>
+            <td class="s1 fstb borda2 borda3">Classifica&ccedil;&atilde;o</td>
+            <td class="s2 fstb borda2">Saldo Incial</td>
+            <td class="s2 fstb borda2">Receitas At&eacute; o M&ecirc;s</td>
+            <td class="s3 fstb borda2">Despesas At&eacute; o M&ecirc;s</td>
+            <td class="s0 fstb">RPs At&eacute; o M&ecirc;s</td>
+            <td class="s0 fstb">Saldo</td>
+        </tr>
+
+
+        <?php foreach ($oInfoRelatorio->aDadosFinanceiros as $key => $oRegistro):
+
+            $aTotal['saldoinicial']['saldoinicial']     += $oRegistro->saldoinicial;
+            $aTotal['receitasatemes']['receitasatemes'] += $oRegistro->receitasatemes;
+            $aTotal['despesasatemes']['despesasatemes'] += $oRegistro->despesasatemes;
+            $aTotal['rps']['rps']                       += $oRegistro->rps;
+            $aTotal['saldo']['salo_no_mes']             += $oRegistro->saldo;
+
+
+            ?>
+
+            <tr style='height:20px;' class="bg_<?= ($key % 2) == 0 ?>">
+
+                <td class="s4 fstb borda2 borda3" style='text-align: left'><?= $oRegistro->classificacao ?></td>
+                <td class="s4 fstb "><?= db_formatar($oRegistro->saldoinicial, 'f') ?></td>
+                <td class="s4 fstb"><?= db_formatar($oRegistro->receitasatemes, 'f') ?></td>
+                <td class="s4 fstb"><?= db_formatar($oRegistro->despesasatemes, 'f') ?></td>
+                <td class="s4 fstb"><?= db_formatar($oRegistro->rps, 'f') ?></td>
+                <td class="s4 fstb"><?= db_formatar($oRegistro->saldo, 'f') ?></td>
+
+            </tr>
+
+        <?php endforeach ?>
+
+
+        <tr style='height:20px;'>
+            <td class="s5 fstb borda2 borda3" >Saldo Total</td>
+            <td class="s5 fstb"><?= db_formatar($aTotal['saldoinicial']['saldoinicial'], 'f') ?></td>
+            <td class="s5 fstb"><?= db_formatar($aTotal['receitasatemes']['receitasatemes'], 'f') ?></td>
+            <td class="s5 fstb"><?= db_formatar($aTotal['despesasatemes']['despesasatemes'], 'f') ?></td>
+            <td class="s5 fstb"><?= db_formatar($aTotal['rps']['rps'], 'f') ?></td>
+            <td class="s5 fstb"><?= db_formatar($aTotal['saldo']['salo_no_mes'], 'f') ?></td>
+        </tr>
+
+
+        </tbody>
+    </table>
 </div>
+<?php } ?>
 </body>
 </html>
 
