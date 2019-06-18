@@ -1690,6 +1690,19 @@ class cl_liclicita
                 return false;
             }
         }
+        if (trim($this->l20_formacontroleregistropreco != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_formacontroleregistropreco"]))) {
+            $sql .= $virgula . " l20_formacontroleregistropreco = '$this->l20_formacontroleregistropreco' ";
+            $virgula = ",";
+            if (trim($this->l20_formacontroleregistropreco) == null) {
+                $this->erro_sql = " Campo Registro Preço nao Informado.";
+                $this->erro_campo = "l20_formacontroleregistropreco";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         //if($tribunal==52){
         if (trim($this->l20_equipepregao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_equipepregao"])) {
             $sql .= $virgula . " l20_equipepregao = $this->l20_equipepregao";
