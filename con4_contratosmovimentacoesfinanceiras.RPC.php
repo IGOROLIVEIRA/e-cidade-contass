@@ -347,10 +347,12 @@ switch($oParam->exec) {
 
             $tipoLicitacao = array(52,48,49,50,51,53,54);
             $tipoDispensaInex = array(100,101,102);
-
             $oAcordo = new Acordo($oParam->iCodigoAcordo);
             $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
-            $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+
+            if(!empty($aLicitacoesVinculadas))
+                $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+
             if(in_array($oStdDados->l44_sequencial, $tipoLicitacao)){
                 $oParam->dados->sTipoorigem = 2;
             }else if(in_array($oStdDados->l44_sequencial, $tipoDispensaInex)){
