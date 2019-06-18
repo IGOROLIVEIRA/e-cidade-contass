@@ -59,10 +59,10 @@ try {
         $oNovoResgistro->estrutural             = $oBalancete->estrutural;
         $oNovoResgistro->c61_reduz              = $oBalancete->c61_reduz != '0' ?  $oBalancete->c61_reduz : '';
         $oNovoResgistro->c60_descr              = substr($oBalancete->c60_descr,0,70);
-        $oNovoResgistro->saldo_anterior         = $oBalancete->saldo_anterior;
-        $oNovoResgistro->saldo_anterior_debito  = $oBalancete->saldo_anterior_debito;
-        $oNovoResgistro->saldo_anterior_credito = $oBalancete->saldo_anterior_credito;
-        $oNovoResgistro->saldo_final            = $oBalancete->saldo_final;
+        $oNovoResgistro->saldo_anterior         = db_formatar($oBalancete->saldo_anterior,'f');
+        $oNovoResgistro->saldo_anterior_debito  = db_formatar($oBalancete->saldo_anterior_debito,'f');
+        $oNovoResgistro->saldo_anterior_credito = db_formatar($oBalancete->saldo_anterior_credito,'f');
+        $oNovoResgistro->saldo_final            = db_formatar($oBalancete->saldo_final,'f');
         $oNovoResgistro->sinal_anterior         = $oBalancete->sinal_anterior;
         $oNovoResgistro->sinal_final            = $oBalancete->sinal_final;
         $oNovoResgistro->contacorrente          = new stdClass;;
@@ -72,6 +72,7 @@ try {
             $rsCC = db_query($sSqlCC);
             $nCC = db_utils::fieldsMemory($rsCC, 0)->c18_contacorrente;
             $oNovoResgistro->contacorrente         = getSaldoTotalContaCorrente($iAnoUsu,$oBalancete->c61_reduz,$nCC > 0 ? $nCC : null, $iMes, $oBalancete->c61_instit);
+            $oNovoResgistro->cc                    = $nCC;
         }
         if($oBalancete->saldo_anterior == 0
             && $oBalancete->saldo_anterior_debito == 0
@@ -120,18 +121,21 @@ foreach ($aRegistros as $aRegistro) {
     $pdf->cell(19,$alt,$aRegistro->estrutural,"0",0,"C",0);
     $pdf->cell(70,$alt,$aRegistro->c60_descr,"0",0,"L",0);
     $pdf->cell(10,$alt,$aRegistro->c61_reduz,"0",0,"C",0);
-    $pdf->cell(24,$alt,db_formatar($aRegistro->saldo_anterior,'f')."$aRegistro->sinal_anterior","0",0,"R",0);
-    $pdf->cell(22,$alt,db_formatar($aRegistro->saldo_anterior_debito,'f'),"0",0,"R",0);
-    $pdf->cell(22,$alt,db_formatar($aRegistro->saldo_anterior_credito,'f'),"0",0,"R",0);
-    $pdf->cell(24,$alt,db_formatar($aRegistro->saldo_final,'f')."$aRegistro->sinal_final","0",0,"R",0);
+    $pdf->cell(24,$alt,$aRegistro->saldo_anterior."$aRegistro->sinal_anterior","0",0,"R",0);
+    $pdf->cell(22,$alt,$aRegistro->saldo_anterior_debito,"0",0,"R",0);
+    $pdf->cell(22,$alt,$aRegistro->saldo_anterior_credito,"0",0,"R",0);
+    $pdf->cell(24,$alt,$aRegistro->saldo_final."$aRegistro->sinal_final","0",0,"R",0);
 
     $pdf->ln();
     $diferente = false;
-    if(db_formatar($aRegistro->saldo_anterior,'f') != $aRegistro->contacorrente->nSaldoInicialMes
-        && db_formatar($aRegistro->saldo_anterior_debito,'f') != $aRegistro->contacorrente->debito
-        && db_formatar($aRegistro->saldo_anterior_credito,'f') != $aRegistro->contacorrente->credito
-        && db_formatar($aRegistro->saldo_final,'f') != $aRegistro->contacorrente->saldo_final)
+    if($aRegistro->cc > 0
+        && ($aRegistro->saldo_anterior != $aRegistro->contacorrente->nSaldoInicialMes
+        || $aRegistro->saldo_anterior_debito != $aRegistro->contacorrente->debito
+        || $aRegistro->saldo_anterior_credito != $aRegistro->contacorrente->credito
+        || $aRegistro->saldo_final != $aRegistro->contacorrente->saldo_final)) {
         $diferente = true;
+        //echo "<pre>"; print_r($aRegistro);die();
+    }
     if($aRegistro->contacorrente->cc > 0) {
         $pdf->cell(19,$alt,"","0",0,"C",1);
         $pdf->cell(70,$alt,($diferente==true)?"S A L D O   CC ":"SALDO CC ",($diferente==true)?"B":"0",0,"R",1);
