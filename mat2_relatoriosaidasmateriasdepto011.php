@@ -178,6 +178,7 @@ if($clparcustos->numrows > 0){
       <tr>
         <td colspan="2" align = "center"><br>
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_mandadados();" >
+          <input  name="imprimircsv" id="imprimircsv" type="button" value="Exportar CSV" onclick="js_imprimircsv();" >
         </td>
       </tr>
   </form>
@@ -440,6 +441,131 @@ function js_mandadados(){
                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
  jan.moveTo(0,0);
 
+}
+
+function js_imprimircsv() {
+
+    var urls = {
+        padrao: 'mat2_relatoriosaidasmateriasdeptocsv002.php',
+        separaDepartamentos: 'mat2_relatoriosaidasmateriasdeptocsv002_deptos.php'
+    };
+
+
+
+
+    query       = "";
+    vir         = "";
+    listadepart = "";
+
+    vir                = "";
+    listadepartDestino = "";
+    oLancadorDestino.getRegistros().each( function( oDados, iIndice){
+
+        listadepartDestino += vir + oDados.sCodigo;
+        vir=",";
+    });
+
+    vir                = "";
+    listadepartOrigem = "";
+    oLancadorOrigem.getRegistros().each( function( oDados, iIndice){
+
+        listadepartOrigem += vir + oDados.sCodigo;
+        vir=",";
+    });
+
+    vir      = "";
+    listamat = "";
+
+    for ( x = 0; x < parent.iframe_g2.document.form1.material.length;x++){
+        listamat+=vir+parent.iframe_g2.document.form1.material.options[x].value;
+        vir=",";
+    }
+
+    vir="";
+    listausu="";
+    for(x=0;x<parent.iframe_g3.document.form1.usuario.length;x++){
+        listausu+=vir+parent.iframe_g3.document.form1.usuario.options[x].value;
+        vir=",";
+    }
+
+    vir        = "";
+    listamatestoquetipo = "";
+    obj        = parent.iframe_g4.db_iframe_matestoquetipo.document.getElementsByTagName("input");
+    nObj       = obj.length;
+
+    for (x=0 ; x < nObj;x++){
+
+        if (obj[x].type == "checkbox" && obj[x].checked==true){
+            listamatestoquetipo += vir+obj[x].value;
+            vir = ",";
+        }
+
+    }
+
+    vir        = "";
+    listaorgao = "";
+    obj        = parent.iframe_g4.db_iframe_orgao.document.getElementsByTagName("input");
+    console.log(obj);
+    nObj       = obj.length;
+
+    for (x=0 ; x < nObj;x++){
+
+        if (obj[x].type == "checkbox" && obj[x].checked==true){
+            listaorgao += vir+obj[x].value;
+            vir = ",";
+        }
+
+    }
+
+    var sDataIni = new String(document.form1.data1.value).trim();
+    var sDataFim = new String(document.form1.data2.value).trim();
+
+
+    if ( sDataIni == '' && sDataFim == '' ) {
+        alert('Favor informe algum período!');
+        return false;
+    } else if ( sDataIni == '' ) {
+        alert('Favor informe período inicial!');
+        return false;
+    } else if ( sDataFim == '' ) {
+        alert('Favor informe período final!');
+        return false;
+    }
+
+
+    var aLinhas = oTreeViewGrupos.getNodesChecked();
+    var aContas = new Array();
+
+    aLinhas.each (
+        function(oRetornoCheck) {
+
+            aContas.push(oRetornoCheck.value);
+        }
+    );
+
+
+    query+='&listadepart=' + listadepartOrigem;
+    query+='&verdepart='   + document.form1.ver.value;
+    query+='&listamat='    + listamat;
+    query+='&vermat='      + parent.iframe_g2.document.form1.ver.value;
+    query+='&listausu='    + listausu;
+    query+='&verusu='      + parent.iframe_g3.document.form1.ver.value;
+    query+='&dataini='     + sDataIni;
+    query+='&datafin='     + sDataFim;
+    query+='&listadepartDestino='  + listadepartDestino;
+    query+='&ordem='               + document.form1.ordem.value;
+    query+='&listaorgao='          + listaorgao;
+    query+='&listamatestoquetipo=' +listamatestoquetipo;
+    query+='&separaDepartamentos=' + document.form1.agrupar_dpto.value;
+
+    query+= '&grupos=' + aContas.implode(',');
+
+
+    var URL = document.form1.agrupar_dpto.value == 'sim' ? 'separaDepartamentos' : 'padrao';
+
+    jan = window.open( urls[URL] + '?' + query,'',
+        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
 }
 
 function js_verifica_orgao(){

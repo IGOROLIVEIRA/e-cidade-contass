@@ -168,6 +168,8 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
       </fieldset>
 
       <input type="button" onClick="js_imprimir();" value="Imprimir" />
+      <input  name="imprimircsv" id="imprimircsv" type="button" value="Exportar CSV" onclick="js_imprimircsv();" >
+
 
     </div>
 
@@ -271,6 +273,49 @@ function js_imprimir() {
 
   var janela = window.open('mat2_controleestoque002.php?' + sParametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   janela.moveTo(0,0);
+}
+
+function js_imprimircsv() {
+
+    if (!js_validarFormulario()) {
+        return false;
+    }
+
+    var sParametros    = '';
+    var sAlmoxarifados = '';
+    var sMateriais     = '';
+
+    oLancadorAlmoxarifado.getRegistros().each(function(oDadosAlmoxarifado, iIndice) {
+
+        if (iIndice > 0) {
+            sAlmoxarifados += ',';
+        }
+        sAlmoxarifados += oDadosAlmoxarifado.sCodigo;
+    });
+
+    oLancadorMaterial.getRegistros().each(function(oDadosMaterial, iIndice) {
+
+        if (iIndice > 0) {
+            sMateriais += ',';
+        }
+        sMateriais += oDadosMaterial.sCodigo;
+    });
+
+    sParametros += 'periodoInicial=' + $('periodoInicial').value;
+    sParametros += '&periodoFinal=' + $('periodoFinal').value;
+    sParametros += '&quebraPorAlmoxarifado=' + $('quebraPorAlmoxarifado').value;
+    sParametros += '&ordem=' + $('ordem').value;
+    sParametros += '&somenteItensComMovimento=' + $('somenteItensComMovimento').value;
+    sParametros += '&tipoImpressao=' + $('tipoImpressao').value;
+    sParametros += '&sAlmoxarifados=' + sAlmoxarifados;
+    sParametros += '&sMateriais=' + sMateriais;
+    sParametros += '&sdeMaterial=' + $("iMaterial2").value;
+    sParametros += '&sateMaterial=' + $("iMaterial3").value;
+    sParametros += '&ativos=' + $('ativos').value;
+    sParametros += '&totalizador=' + $('totalizador').value;
+
+    var janela = window.open('mat2_controleestoquecsv002.php?' + sParametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    janela.moveTo(0,0);
 }
 
 

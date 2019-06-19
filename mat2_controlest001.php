@@ -113,7 +113,8 @@ $rotulo->label("m81_codtipo");
 		<tr>
 		<td colspan="2" align = "center"> 
 		<input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_mandadados();" >
-		</td>
+        <input  name="imprimircsv" id="imprimircsv" type="button" value="Exportar CSV" onclick="js_imprimircsv();" >
+        </td>
 		</tr>
 		</table>
 </form>
@@ -137,6 +138,20 @@ function js_mandadados(){
   qry='codmater='+document.form1.m60_codmater.value+'&listatipo='+listatipo+'&listadepto='+listadepto+'&data='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+'&vertipo=&verdepto='+parent.iframe_g2.document.form1.ver.value;
   jan = window.open('mat2_controlest002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
+}
+
+function js_imprimircsv(){
+
+    if (document.form1.m60_codmater.value==""){
+        alert('Informe um Material!!Campo vazio!!');
+        document.form1.m60_codmater.focus();
+        //return false;
+    }
+    listatipo = "";
+    listadepto = parent.iframe_g2.js_retorna_chaves().replace(/#/g,",");
+    qry='codmater='+document.form1.m60_codmater.value+'&listatipo='+listatipo+'&listadepto='+listadepto+'&data='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&data1='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+'&vertipo=&verdepto='+parent.iframe_g2.document.form1.ver.value;
+    jan = window.open('mat2_controlestcsv002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
 }
 function js_pesquisam60_codmater(mostra){
   if(mostra==true){
