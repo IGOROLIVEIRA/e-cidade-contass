@@ -144,14 +144,17 @@ try {
       /**
 	   * Receita - Lancamento contabil para abertura de exercicio
 	   */
+
+      /* Documento 2003 - ABERTURA DO ORÇAMENTO RECEITA */
+
       $iTipoDocumento = 2003;
   	  //$nValorReceita  = ReceitaContabil::getValorPrevistoAno( $iAnoSessao, $iInstituicao );
 
 	  $sSqlOrcreceita  = "SELECT DISTINCT o70_codigo, o70_anousu, o70_valor, o57_fonte FROM orcreceita
-	   						inner join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
-	   						inner join orctiporec on o70_codigo = o15_codigo
-	  						 where o70_instit = {$iInstituicao} and o70_anousu= {$iAnoSessao}";
-	  $rsSqlOrcreceita = db_query($sSqlOrcreceita) or die($sSqlOrcreceita);
+	   					  INNER JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+	   					  INNER JOIN orctiporec ON o70_codigo = o15_codigo
+	  					  WHERE o70_instit = {$iInstituicao} AND o70_anousu= {$iAnoSessao}";
+	  $rsSqlOrcreceita = db_query($sSqlOrcreceita) or die ($sSqlOrcreceita);
 
 	  for ($iContRec = 0; $iContRec < pg_num_rows($rsSqlOrcreceita); $iContRec++) {
 
@@ -162,6 +165,71 @@ try {
 		  }
 
 	  }
+
+	  /**
+       * Receita - Lançamento contábil das Deduções das Receitas para abertura do exercício
+	  */
+
+	  /* Documento 2015 - ABERTURA DEDUCOES RECEITA FUNDEB */
+
+	  $iTipoDocumento = 2015;
+
+	  $sSqlRecDeduFundeb  = $sSqlOrcreceita." AND substr(o57_fonte,1,3) = '495'";
+	  $sSqlRecDeduFundeb .= " AND substr(o57_fonte,1,3) = '495'";
+
+	  $rsSqlRecDeduFundeb = db_query($sSqlRecDeduFundeb);
+
+	  for ($iContDedu = 0; $iContDedu < pg_num_rows($rsSqlRecDeduFundeb); $iContDedu++){
+
+	      $oDeduFundeb = db_utils::fieldsMemory($rsSqlRecDeduFundeb, $iContDedu);
+
+	      $vlrDeduFundeb = $oDeduFundeb->o70_valor * -1;
+
+          if($vlrDeduFundeb > 0){
+              executaLancamento($iTipoDocumento, $vlrDeduFundeb, $iSequencialAberturaExercicio, $sObservacao, null, null, $oDeduFundeb->o70_codigo, $oDeduFundeb->o57_fonte);
+          }
+      }
+
+      /* Documento 2017 - ABERTURA DEDUCOES RECEITA RENUNCIA */
+
+	  $iTipoDocumento = 2017;
+
+	  $sSqlRecDeduRenuncia  = $sSqlOrcreceita;
+	  $sSqlRecDeduRenuncia .= " AND substr(o57_fonte,1,3) = '491'";
+
+	  $rsSqlRecDeduRenuncia = db_query($sSqlRecDeduRenuncia);
+
+	  for ($iContRenuncia = 0; $iContRenuncia < pg_num_rows($rsSqlRecDeduRenuncia); $iContRenuncia++){
+
+	      $oDeduRenuncia = db_utils::fieldsMemory($rsSqlRecDeduRenuncia, $iContDedu);
+
+	      $vlrDeduRenuncia = $oDeduRenuncia->o70_valor * -1;
+
+          if($vlrDeduRenuncia > 0){
+              executaLancamento($iTipoDocumento, $vlrDeduRenuncia, $iSequencialAberturaExercicio, $sObservacao, null, null, $oDeduRenuncia->o70_codigo, $oDeduRenuncia->o57_fonte);
+          }
+      }
+
+      /* Documento 2019 - ABERTURA DEMAIS DEDUCOES RECEITA */
+
+	  $iTipoDocumento = 2019;
+
+	  $sSqlDemaisDeduRec  = $sSqlOrcreceita;
+	  $sSqlDemaisDeduRec .= " AND substr(o57_fonte,1,2) = '49' AND substr(o57_fonte,1,3) NOT IN ('491', '495')";
+
+	  $rsSqlDemaisDeduRec = db_query($sSqlDemaisDeduRec);
+
+	  for ($iContOutrasDedu = 0; $iContOutrasDedu < pg_num_rows($rsSqlDemaisDeduRec); $iContOutrasDedu++){
+
+	      $oDeduDemaisRec = db_utils::fieldsMemory($rsSqlDemaisDeduRec, $iContDedu);
+
+	      $vlrDeduDemaisRec = $oDeduDemaisRec->o70_valor * -1;
+
+          if($vlrDeduDemaisRec > 0){
+              executaLancamento($iTipoDocumento, $vlrDeduDemaisRec, $iSequencialAberturaExercicio, $sObservacao, null, null, $oDeduDemaisRec->o70_codigo, $oDeduDemaisRec->o57_fonte);
+          }
+      }
+
 
 	  /**
 	   * Despesa - Lancamento contabil para abertura de exercicio
