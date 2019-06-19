@@ -551,7 +551,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="formacontraleregistropreco" style="'display:none">
+                                <tr id="formacontraleregistropreco" >
                                     <td nowrap title="<?=@$Tl20_formacontroleregistropreco?>">
                                         <?=@$Ll20_formacontroleregistropreco?>
                                     </td>
@@ -789,6 +789,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
+
+
+    let elemento = document.getElementById('l20_tipnaturezaproced');
+    elemento.addEventListener('change', (event)=> {
+    if(elemento.selectedIndex == 2){
+        document.getElementById('formacontraleregistropreco').style.display = '';
+      }else{
+        document.getElementById('formacontraleregistropreco').style.display = 'none';
+       }
+    });
 
     js_busca();
 
@@ -1568,13 +1578,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         if ($F('l20_usaregistropreco') == 't') {
             $('formacontraleregistropreco').style.display = '';
         } else {
-
             $('l20_formacontroleregistropreco').value     ='1'
             $('formacontraleregistropreco').style.display = 'none';
-
         }
+
+
+
         verificaTipoJulgamento();
     }
+
+
+
+
 </script>
 <?
 if ( empty($l34_liclicita)) {
