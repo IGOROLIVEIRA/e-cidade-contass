@@ -76,7 +76,6 @@ if (isset($script) && $script != "" && !is_bool($script)) {
   $vals = "";
   $vir  = "";
   $camp = split(",",$valores);
-
   for($f=0;$f<count($camp);$f++){
   	$vals .= $vir."'".$camp[$f]."'";
   	$vir   = ",";
@@ -90,6 +89,7 @@ if (isset($script) && $script != "" && !is_bool($script)) {
   echo "</script>";
   exit;
 }
+
 
 if (isset($testanome) && !isset($pesquisa_chave)) {
 
@@ -109,11 +109,11 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
     $valores .= "|".$funmat[$i];
     $camp		 .= $vir.$funmat[$i];
     $vir			= ",";
+  }
 
-	}
 
 	$funmat[0] = "js_testanome";
-  $funcao_js = $funmat[0]."|z01_numcgm|z01_ender|z01_cgccpf|z01_incest|z01_uf".$valores;
+  $funcao_js = $funmat[0]."|z01_numcgm|z01_nome|z01_ender|z01_cgccpf|z01_incest|z01_uf|".$valores;
 
 }
 
@@ -136,12 +136,12 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
   }
 
 	<?
-		if(isset($testanome) and $testanome==true and !isset($pesquisa_chave)){
+    if(isset($testanome) and $testanome==true and !isset($pesquisa_chave)){
 	?>
 
-	function js_testanome(z01_numcgm,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
+	function js_testanome(z01_numcgm,z01_nome,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
 
-   	  alerta = "";
+      alerta = "";
 
       if(ender == ""){
         alerta += "Endereço\n";
@@ -177,8 +177,8 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
  	  echo "location.href = 'prot1_cadcgm002.php?chavepesquisa='+z01_numcgm+'&testanome=$func_antes&valores=$valores&funcao_js=".$func_antes.$valores."';";
      ?>
 	}else{
-	 <?=$func_antes."(".$camp.")"?>;
-	}
+   <?=$func_antes."(".$camp.")"?>;
+  }
   }
 <?
 }
@@ -315,6 +315,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 	<tr>
     <td align="center" valign="top">
       <?
+
         if ($filtro==1){
           $sMetodoExecutar="sql_query_cpf";
         }elseif($filtro==2){
@@ -326,8 +327,8 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 	           $filtro="";
            }
         }
-				if(!isset($pesquisa_chave)){
-					echo "<script>
+        if(!isset($pesquisa_chave)){
+          echo "<script>
 								//js_limpa();
 									document.form2.nomeDigitadoParaPesquisa.focus();
 								</script>";
@@ -362,6 +363,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
               }
 							$nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
 							$sql = $clnome->sqlnome($nomeDigitadoParaPesquisa,$campos,$filtro,$sSqlConv);
+              //print_r($sql);die('Muerte!');
 					}else if(isset($numcgmDigitadoParaPesquisa) && $numcgmDigitadoParaPesquisa != ""){
 
             if( !is_int((int)$numcgmDigitadoParaPesquisa) ){
@@ -369,6 +371,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
             }
 
 						$sql = $clnome->$sMetodoExecutar($numcgmDigitadoParaPesquisa,$campos);
+            // print_r($sql);die('Campos!!!');
 					}else if(isset($cpf) && $cpf != ""){
 							$sql = $clnome->$sMetodoExecutar("",$campos,""," z01_cgccpf = '$cpf' ");
 					}else if(isset($cnpj) && $cnpj != ""){
@@ -391,7 +394,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 
 					if(isset($sql) && trim($sql) != ""){
 						 $rsNome = db_query($sql) or die($sql);
-						 if( pg_num_rows($rsNome) == 0){
+             if( pg_num_rows($rsNome) == 0){
 								if(isset($nomeDigitadoParaPesquisa) && trim($nomeDigitadoParaPesquisa!="")){
 									?>
 									  <table>
@@ -464,20 +467,18 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 							 }else{
 
                  $aVarRepassa = array(
-                   "nomeDigitadoParaPesquisa" => "$nomeDigitadoParaPesquisa",
+                   "z01_nome" => "$nomeDigitadoParaPesquisa",
                    "cpf" => "$cpf",
                    "cnpj" => "$cnpj"
                  );
-
-								 db_lovrot($sql, 14, "()", "", $funcao_js, "", "NoMe", $aVarRepassa);
+                 db_lovrot($sql, 14, "()", "", $funcao_js, "", "NoMe", $aVarRepassa);
 							 }
 						 }
 					}
 			}else{
 				if($pesquisa_chave!=""){
 					$result = $clcgm->sql_record($clcgm->$sMetodoExecutar($pesquisa_chave));
-
-					if(!isset($testanome)){
+          if(!isset($testanome)){
 						if(($result!=false) && (pg_numrows($result) != 0)){
 							db_fieldsmemory($result,0);
 							if ($filtro==1){

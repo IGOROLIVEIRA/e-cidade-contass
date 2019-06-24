@@ -197,6 +197,17 @@ if ($modelo == 1) {
     $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor > 0 " : "";
     $troca = 1;
     db_fieldsmemory($result_itens, $x);
+
+	  $sSql = $clpcorcamval->sql_query_julg(null, null, "min(pc23_vlrun) as menor_valor", null,
+		"pc23_orcamitem=$pc22_orcamitem and pc23_vlrun > 0");
+    $result = $clpcorcamval->sql_record($sSql);
+    db_fieldsmemory($result, 0);
+
+    if(is_null($menor_valor) || $menor_valor == ''){
+      continue;
+    }
+
+
     if ($pdf->gety() > $pdf->h - 60 || $troca != 0) {
       if ($pdf->gety() > $pdf->h - 60) {
         $pdf->addpage('L');
@@ -210,9 +221,9 @@ if ($modelo == 1) {
       $p = 0;
       $troca = 0;
     }
-	$sSql = $clpcorcamval->sql_query_julg(null, null, "min(pc23_vlrun) as menor_valor", null,
-		  "pc23_orcamitem=$pc22_orcamitem and pc23_vlrun > 0");
-	$sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "($sSql) as vlrunit, pc23_quant as quant, pc24_pontuacao, pc23_obs", null,
+
+
+	  $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "($sSql) as vlrunit, pc23_quant as quant, pc24_pontuacao, pc23_obs", null,
         "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
     $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor_item);
@@ -245,6 +256,7 @@ if ($modelo == 1) {
 
       $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc23_perctaxadesctabela,pc23_percentualdesconto,pc24_pontuacao", null,
           "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem {$condCriterioadj} and pc23_vlrun <> 0");
+
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
         continue;
@@ -303,6 +315,7 @@ if ($modelo == 1) {
   }
 
   $troca = 1;
+
   for($y = 0; $y < $numrows_forne; $y ++) {
     db_fieldsmemory($result_forne, $y);
     if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
@@ -320,8 +333,10 @@ if ($modelo == 1) {
 
     $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "sum(pc23_valor) as vltotal", null,
         "pc23_orcamforne=$pc21_orcamforne");
+
     $result_valor = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor);
+
     if($vltotal > 0) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
@@ -751,7 +766,6 @@ if ($oConfiguracaoGed->utilizaGED()) {
     $oStdDadosGED->nome  = $sTipoDocumento;
     $oStdDadosGED->tipo  = "NUMERO";
     $oStdDadosGED->valor = $orcamento;
-
     $pdf->Output("tmp/{$sTipoDocumento}_{$orcamento}.pdf");
 
     $oGerenciador->moverArquivo(array($oStdDadosGED));
