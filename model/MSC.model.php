@@ -1116,20 +1116,24 @@ class MSC {
             p.c60_identificadorfinanceiro,o15_codstn, lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
             fc_saldocontacorrente($iAno,c19_sequencial,106,$iMes,codigo)
          from conplanoexe e
-     inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
-     inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
-         inner join db_config ON codigo = r.c61_instit
+       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
+       inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
+       inner join db_config ON codigo = r.c61_instit
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
-       inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
        inner join empempenho on c19_numemp=e60_numemp
-       left join elemdespmsc on substr(c19_estrutural,2,8) = c211_elemdespestrut
-       left outer join consistema on c60_codsis = c52_codsis
+       inner join orcdotacao on e60_coddot= o58_coddot and o58_anousu=e60_anousu
+       inner join empelemento on e64_numemp=e60_numemp
+       left join conplanoorcamento on conplanoorcamento.c60_codcon=e64_codele and conplanoorcamento.c60_anousu=e60_anousu
+       left join elemdespmsc on substr(conplanoorcamento.c60_estrut,2,8) = c211_elemdespestrut
+       left outer join consistema on p.c60_codsis = c52_codsis
        left join vinculopcaspmsc on substr(c19_estrutural,2,8) = c210_pcaspestrut
        left join orctiporec on o58_codigo = o15_codigo
-       where {$this->getTipoMatriz()} c19_contacorrente=106 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
+       where {$this->getTipoMatriz()} c19_contacorrente=106 and p.c60_infcompmsc = 9 and c62_anousu = ".$iAno." 
+       and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
+
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
