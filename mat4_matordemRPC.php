@@ -625,7 +625,11 @@ if ($method == "getDados") {
 
       $clmatrequi->m40_auto  = 'false';
       $clmatrequi->m40_almox = $objJson->m51_depto;
-      $clmatrequi->m40_depto = $objJson->codDeptoConsumo;
+      if (empty($objJson->codDeptoConsumo)) {
+        $clmatrequi->m40_depto = $objJson->m51_depto;
+      } else {
+        $clmatrequi->m40_depto = $objJson->codDeptoConsumo;
+      }
       $clmatrequi->m40_hora  = db_hora();
       $clmatrequi->m40_data  = date('Y-m-d', db_getsession("DB_datausu"));
       $clmatrequi->m40_login = db_getsession("DB_id_usuario");
