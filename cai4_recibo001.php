@@ -806,7 +806,11 @@ function js_removelinha(linha) {
   }
 ?>
 
-
+var elemento = document.getElementById('z01_numcgm');
+elemento.addEventListener('change', () => {
+  if(elemento.value == '')
+    document.form1.z01_nome.value = '';
+})
 
 /*
  * funcao para verificar o grupo das receitas.
@@ -856,13 +860,6 @@ function js_removelinha(linha) {
  $('k02_codigo').observe("change", function() {
 	 js_verificaReceita();
  });
-
-
-
-
-
-
-
 
 
 var sUrlRpc = 'cai4_recibo.RPC.php';
@@ -985,7 +982,7 @@ function js_mostraproc1(chave1,n,z,f){
 
 function js_mostranomes(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe("<?=$sIframeLocation?>",'db_iframe_nome','func_nome.php?testanome=true&funcao_js=parent.js_preenche|0|1','Pesquisa',true);
+    js_OpenJanelaIframe("<?=$sIframeLocation?>",'db_iframe_nome','func_nome.php?testanome=true&funcao_js=parent.js_preenche|z01_nome|z01_numcgm','Pesquisa',true);
     /*
     func_iframe.jan.location.href = 'func_nome.php?testanome=true&funcao_js=parent.js_preenche|0|1';
     func_iframe.setLargura(770);
@@ -1005,6 +1002,7 @@ function js_preenche1(chave,chave1){
   document.form1.z01_nome.value = chave1;
   if(chave==true){
     document.form1.z01_numcgm.value = '';
+    document.form1.z01_nome.value ='';
     document.form1.z01_numcgm.focus();
   }
 }
@@ -1012,8 +1010,8 @@ function js_preenche1(chave,chave1){
 function js_preenche(chave,chave1){
   document.form1.q02_inscr.value = "";
   document.form1.j01_matric.value = "";
-  document.form1.z01_numcgm.value = chave;
-  document.form1.z01_nome.value = chave1;
+  document.form1.z01_nome.value = chave;
+  document.form1.z01_numcgm.value = chave1;
 
   db_iframe_nome.hide();
 }
