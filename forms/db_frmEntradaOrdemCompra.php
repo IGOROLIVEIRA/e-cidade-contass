@@ -1024,12 +1024,18 @@ if (count($aParametrosEmpenho) > 0) {
       return false;
     }
 
-    /*if ($F('consumoImediato') != '') {
+    /*if ($F('coddeptoconsumo').trim() == '') {
+      alert('Para realizar o consumo imediato é necessário informar o Depto. Consumo!');
+      $('coddeptoconsumo').focus();
+      return false;
+    }*/
+
+    if ($F('consumoImediato') != '') {
       if ($F('coddeptoconsumo') == '') {
         alert('Campo Depto. Consumo é obrigatório se o Consumo Imediato estiver preenchido.');
         return false;
       }
-    }*/
+    }
 
     //testamos se o material possui controle de lote/validade
     switch ($('matmater').options[$('matmater').selectedIndex].controlaEstoque) {
@@ -1526,13 +1532,7 @@ if (count($aParametrosEmpenho) > 0) {
 
             return false;
 
-         }*/
-
-      if ($F('coddeptoconsumo').trim() == '') {
-        alert('Para realizar o consumo imediato é necessário informar o Depto. Consumo!');
-        $('coddeptoconsumo').focus();
-        return false;
-      }
+         }*/     
 
       if ($F('e69_notafiscaleletronica') == 2) {
         if ($F('e69_nfserie') == '') {
