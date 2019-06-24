@@ -1030,11 +1030,22 @@ class ordemCompra {
       }
     }
 
-    $oMaterial->pc01_descrmater = urlencode(urldecode($oMaterial->pc01_descrmater));
-    $oMaterial->e62_descr       = urlencode(urldecode($oMaterial->e62_descr));
-    $oMaterial->m76_nome        = urlencode(urldecode($oMaterial->m76_nome));
-    $oMaterial->m60_descr       = urlencode(urldecode($oMaterial->m60_descr));
-    $oMaterial->consumoImediato = urlencode(urldecode($oMaterial->consumoImediato));
+    $oMaterial->pc01_descrmater   = urlencode(urldecode($oMaterial->pc01_descrmater));
+    $oMaterial->e62_descr         = urlencode(urldecode($oMaterial->e62_descr));
+    $oMaterial->m76_nome          = urlencode(urldecode($oMaterial->m76_nome));
+    $oMaterial->m60_descr         = urlencode(urldecode($oMaterial->m60_descr));
+    $oMaterial->consumoImediato   = urlencode(urldecode($oMaterial->consumoImediato));
+    $oMaterial->m78_matfabricante = urlencode(urldecode($oMaterial->m78_matfabricante));
+    $oMaterial->m76_nome          = urlencode(urldecode($oMaterial->m76_nome));
+    if (!empty($oMaterial->coddeptoconsumo) && empty($oMaterial->descrdeptoconsumo)) {
+      $rsResult = db_query("select descrdepto from db_depart where instit = ".db_getsession("DB_instit")." and coddepto = {$oMaterial->coddeptoconsumo}");
+      $oMaterial->coddeptoconsumo   = urlencode(urldecode($oMaterial->coddeptoconsumo));
+      $oMaterial->descrdeptoconsumo = urlencode(urldecode(db_utils::fieldsMemory($rsResult,0)->descrdepto));
+    } else {
+      $oMaterial->coddeptoconsumo   = urlencode(urldecode($oMaterial->coddeptoconsumo));
+      $oMaterial->descrdeptoconsumo = urlencode(urldecode($oMaterial->descrdeptoconsumo));
+    }
+    
     if ($oMaterial->iIndiceEntrada != "") {
 
 
@@ -1063,7 +1074,7 @@ class ordemCompra {
 
       $oMaterial->pc01_descrmater = urlencode(urldecode($oMaterial->pc01_descrmater));
       $oOrdemSession[$iCodLanc][] = $oMaterial;
-    }
+    }//die;//
     $_SESSION["matordem{$this->iCodOrdem}"] = $oOrdemSession;
     return true;
   }
@@ -1139,10 +1150,8 @@ class ordemCompra {
    * @return object
    */
   function getInfoItem($iCodLanc,  $iIndice) {
-
+    
     $oItemAtivo = $_SESSION["matordem{$this->iCodOrdem}"][$iCodLanc][$iIndice];
-
-
 
     $_SESSION["matordem{$this->iCodOrdem}"][$iCodLanc][$iIndice]->checked = " checked ";
     $oDaoTransMater = db_utils::getDao("transmater");
@@ -1198,7 +1207,7 @@ class ordemCompra {
     return $iIndiceNovo+1;
   }
 
-  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null) {
+  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null,$confEntrada=TRUE) {
 
     //Devemos estar dentro de uma transação.
     if (!db_utils::inTransaction()) {
@@ -1626,7 +1635,7 @@ class ordemCompra {
         $oDaoMatestoqueIniMei->incluir(null);
         if ($oDaoMatestoqueIniMei->erro_status == 0) {
 
-          $sErroMsg  = "Erro [11] - Não foi possível finalizar a aaainclusao da Ordem.\n";
+          $sErroMsg  = "Erro [11] - Não foi possível finalizar a inclusao da Ordem.\n";
           $sErroMsg .= "[Erro Técnico] - ".str_replace("\\n", "\n", $oDaoMatestoqueIniMei->erro_msg);
           throw new Exception($sErroMsg);
         }
@@ -1860,8 +1869,9 @@ class ordemCompra {
         }
       }
     }
-
-    $this->destroySession();
+    if ($confEntrada) {
+      $this->destroySession();
+    }
     return true;
   }
 

@@ -161,6 +161,7 @@ $aux = new cl_arquivo_auxiliar;
     </table>
   </fieldset>
   <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_mandadados();" >
+  <input  name="imprimircsv" id="imprimircsv" type="button" value="Exportar CSV" onclick="js_imprimircsv();" >
 </form>
 </center>
 
@@ -255,4 +256,69 @@ $('ordem').style.width       = '123px';
 
 $('').style.width = '';
 */
+
+function js_imprimircsv(){
+
+    query="";
+    vir="";
+    listadepart="";
+
+    //pega o valor das instituições selecionadas no campo db_selinstit do 'g3'
+    var selInstit = (parent.iframe_g3.document.form1.db_selinstit.value);
+
+    //valida se alguma instituição foi informada
+    if (selInstit != 0) {
+
+        //roda a variavel e faz um replace de '-' por ','
+        for (x=0; x<selInstit.length; x++ ){
+            selInstit = (selInstit.replace('-',','));
+
+        }
+
+    } else {
+        //se não foi selecionada nehuma isntituição retorna para seleção
+        alert('Você não escolheu nenhuma instituição. Verifique!');
+        return false;
+
+    }
+
+    for(x = 0; x < document.form1.departamentos.length; x++) {
+
+        listadepart += vir+document.form1.departamentos.options[x].value;
+        vir          = ",";
+    }
+
+    vir      = "";
+    listamat = "";
+
+    for(x = 0; x < parent.iframe_g2.document.form1.material.length; x++) {
+
+        listamat += vir+parent.iframe_g2.document.form1.material.options[x].value;
+        vir=",";
+    }
+
+    query += '&almoxarifados='+listadepart;
+    query += '&veralmoxarifados='+document.form1.ver.value;
+    query += '&listamaterial='+listamat;
+    query += '&vermaterial='+parent.iframe_g2.document.form1.ver.value;
+    query += '&data_inicial='+document.form1.data1.value;
+    query += '&data_final='+document.form1.data2.value;
+    query += '&ordem='+document.form1.ordem.value;
+    query += '&tipoimpressao='+document.form1.tipo.value;
+    query += '&verestoquezerado='+document.form1.list_zera.value;
+    //query += '&listarservico='+document.form1.listar_serv.value;
+    query += '&quebrapordepartamento='+document.form1.quebra.value;
+    query += '&opcao_material='+parent.iframe_g2.document.form1.opcao_material.value;
+    query += '&instituicoes='+selInstit;
+    query += '&totalizador='+document.form1.totalizador.value;
+
+    //jan = window.open('mat2_relestoque002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan = window.open(
+        'mat2_estoqueporitemnovo003.php?' + query,
+        '',
+        'width=' + (screen.availWidth-5) + ',height=' + (screen.availHeight-40) + ',scrollbars=1,location=0 '
+    );
+
+    jan.moveTo(0,0);
+}
 </script>
