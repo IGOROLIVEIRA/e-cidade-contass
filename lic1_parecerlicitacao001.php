@@ -27,16 +27,51 @@ if($_POST['json']){
 }
 
 
-if(isset($incluir)){
+if (isset($incluir)) {
+  $rsResult = db_query("select l20_codtipocom from liclicita where l20_codigo = $l200_licitacao");
+  $codtipocom = db_utils::fieldsMemory($rsResult, 0)->l20_codtipocom;
+  $count = 1;
+  if ($codtipocom == 4 || $codtipocom == 6) {
+    $sSQL = "SELECT l206_fornecedor
+              FROM habilitacaoforn
+                INNER JOIN pcforne ON pcforne.pc60_numcgm = habilitacaoforn.l206_fornecedor
+                INNER JOIN liclicita ON liclicita.l20_codigo = habilitacaoforn.l206_licitacao
+                INNER JOIN cgm ON cgm.z01_numcgm = pcforne.pc60_numcgm
+                INNER JOIN db_usuarios ON db_usuarios.id_usuario = pcforne.pc60_usuario
+                INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
+                INNER JOIN db_usuarios AS a ON a.id_usuario = liclicita.l20_id_usucria
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal
+                INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
+                INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao
+                  WHERE l206_licitacao = $l200_licitacao";
+    
+    $rsResult = db_query($sSQL);
+    $count = pg_num_rows($rsResult);
+  }
   $sql = db_query("select z01_cgccpf as cpf from cgm where z01_numcgm = $l200_numcgm");
   $cgm = db_utils::fieldsMemory($sql, 0)->cpf;
-  if(strlen($cgm) <= 11){
-	  db_inicio_transacao();
-	  $clparecerlicitacao->incluir($l200_sequencial);
+  if (strlen($cgm) > 11) {
+    echo "<script>alert('O CGM selecionado deverá ser de Pessoa Física.');</script>";
+  }
+  else if (empty($count)) {
+    echo "<script>alert('Inclusão abortada. Verifique os fornecedores habilitados!');</script>";
+  } else {
+      db_inicio_transacao();
+      $clparecerlicitacao->incluir($l200_sequencial);  
+      db_fim_transacao();
+  }
+  
+  /*
+  $sql = db_query("select z01_cgccpf as cpf from cgm where z01_numcgm = $l200_numcgm");
+  $cgm = db_utils::fieldsMemory($sql, 0)->cpf;
+  if (strlen($cgm) <= 11) {
+    db_inicio_transacao();
+    $clparecerlicitacao->incluir($l200_sequencial);  
 	  db_fim_transacao();
   }else {
       echo "<script>alert('O CGM selecionado deverá ser de Pessoa Física.');</script>";
-  }
+  }*/
 }
 ?>
 <html>
