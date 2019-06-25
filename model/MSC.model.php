@@ -1105,7 +1105,13 @@ class MSC {
       c61_instit
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-            case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
+           CASE WHEN c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8)
+                WHEN c211_mscestrut IS NULL and c19_estrutural IS NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
+                WHEN c211_mscestrut IS NULL and c19_estrutural IS NOT NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
+                WHEN c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NOT NULL THEN substr(c19_estrutural, 2, 8)
+      ELSE
+        c211_mscestrut
+      END AS natdespesa,
             db21_tipoinstit,
       c61_reduz,
       c61_codcon,
