@@ -23,11 +23,11 @@ $clrotulo->label("rh02_salari");
 	  }
 	  if(isset($matini) || isset($matfim)){
             if(trim($matini) != "" && trim($matfim) != ""){
-              $dbwhere.= " and rh01_regist between ".$matini." and ".$matfim; 
+              $dbwhere.= " and rh01_regist between ".$matini." and ".$matfim;
             }else if(trim($matini) != ""){
-	      $dbwhere.= " and rh01_regist >= ".$matini; 
+	      $dbwhere.= " and rh01_regist >= ".$matini;
             }else if(trim($matfim) != ""){
-              $dbwhere.= " and rh01_regist <= ".$matfim; 
+              $dbwhere.= " and rh01_regist <= ".$matfim;
             }
 	  }
           if(isset($selmatri) && count($selmatri) > 0){
@@ -41,7 +41,7 @@ $clrotulo->label("rh02_salari");
 	  }
 	  if(isset($lotini) || isset($lotfim)){
 	    if(trim($lotini) != "" && trim($lotfim) != ""){
-	      $dbwhere.= " and r70_estrut between '".$lotini."' and '".$lotfim."' "; 
+	      $dbwhere.= " and r70_estrut between '".$lotini."' and '".$lotfim."' ";
 	    }else if(trim($lotini) != ""){
 	      $dbwhere.= " and r70_estrut >= '".$lotini."' ";
 	    }else if(trim($lotfim) != ""){
@@ -69,14 +69,25 @@ $clrotulo->label("rh02_salari");
           db_input('campo_auxilio_regi',2, 0, true, 'hidden', 3);
           db_input('campo_auxilio_lota',2, 0, true, 'hidden', 3);
           $campofocar = "valor";
-	  // die($clrhpessoal->sql_query_cgmmov(null,"rh01_regist,rh02_seqpes,rh01_numcgm,z01_nome,rh02_salari,r70_codigo,r70_estrut,r70_descr","",$dbwhere));
- 	  
+
 	  if( !empty($selecao) ) {
             $oDaoSelecao   = new cl_selecao();
             $dbwhere .= " and ".$oDaoSelecao->getCondicaoSelecao($selecao);
           }
 
-	  $result_rhpessoal = $clrhpessoal->sql_record($clrhpessoal->sql_query_cgmmov(null,"rh01_regist,rh02_seqpes,rh01_numcgm,z01_nome,rh02_salari,r70_codigo,r70_estrut,r70_descr","",$dbwhere));
+    if(!empty($aRegistros) && $aRegistros != undefined){
+      if(!empty($dbwhere)){
+        $dbwhere .= ' and ';
+        $dbwhere .= ' rhpessoalmov.rh02_funcao in ('.$aRegistros.')';
+      }
+    }
+
+    if(!empty($dbwhere)){
+      $dbwhere .= " and ";
+    }
+    $dbwhere .= ' rh05_recis IS NULL ';
+
+    $result_rhpessoal = $clrhpessoal->sql_record($clrhpessoal->sql_query_cgmmov(null,"rh01_regist,rh02_seqpes,rh01_numcgm,z01_nome,rh02_salari,r70_codigo,r70_estrut,r70_descr","",$dbwhere));
 
 	  for($i=0;$i<$clrhpessoal->numrows;$i++){
 	    db_fieldsmemory($result_rhpessoal, $i);
@@ -234,7 +245,7 @@ function js_desabcampos(campo,opcao,receb){
     if(valorcampoop == 0 && valorcamporc == 0){
       eval("document.form1."+opcao+campo+".readOnly = false;");
       eval("document.form1."+opcao+campo+".style.backgroundColor = '';");
- 
+
       eval("document.form1."+receb+campo+".readOnly = false;");
       eval("document.form1."+receb+campo+".style.backgroundColor = '';");
     }else if(valorcampoop > 0){

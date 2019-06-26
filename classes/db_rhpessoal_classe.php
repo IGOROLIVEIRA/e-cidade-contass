@@ -1,29 +1,29 @@
 <?php
 
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -330,7 +330,7 @@ class cl_rhpessoal {
      if($this->rh01_rhsindicato == null ){
        $this->rh01_rhsindicato = "0";
      }
-     if($this->rh01_reajusteparidade == null ){ 
+     if($this->rh01_reajusteparidade == null ){
        $this->erro_sql = " Campo Reajuste de Paridade não informado.";
        $this->erro_campo = "rh01_reajusteparidade";
        $this->erro_banco = "";
@@ -338,7 +338,7 @@ class cl_rhpessoal {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }  
+     }
        $this->rh01_regist = $rh01_regist;
      if(($this->rh01_regist == null) || ($this->rh01_regist == "") ){
        $this->erro_sql = " Campo rh01_regist nao declarado.";
@@ -742,18 +742,18 @@ class cl_rhpessoal {
        $sql  .= $virgula." rh01_rhsindicato = $this->rh01_rhsindicato ";
        $virgula = ",";
      }
-     if(trim($this->rh01_reajusteparidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_reajusteparidade"])){     
+     if(trim($this->rh01_reajusteparidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_reajusteparidade"])){
        $sql  .= $virgula." rh01_reajusteparidade = '$this->rh01_reajusteparidade' ";
-       $virgula = ",";            
+       $virgula = ",";
        if(trim($this->rh01_reajusteparidade) == null ){
          $this->erro_sql = " Campo Reajuste de Paridade não informado.";
          $this->erro_campo = "rh01_reajusteparidade";
-         $this->erro_banco = "";  
+         $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false;            
-       }                          
+         return false;
+       }
      }
        if(trim($this->rh01_sicom)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_sicom"])){
            $sql  .= $virgula." rh01_sicom = '$this->rh01_sicom' ";
@@ -1080,7 +1080,7 @@ class cl_rhpessoal {
                                            and  rh02_instit = ".db_getsession("DB_instit")." ";
      $sql .= "      inner join rhlota  on  rhlota.r70_codigo = rhpessoalmov.rh02_lota
                                            and  rhlota.r70_instit = rhpessoalmov.rh02_instit ";
-     $sql .= "      inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm 
+     $sql .= "      inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm
 		    inner join rhlotavinc on rh25_codigo = r70_codigo";
      $sql2 = "";
      if($dbwhere==""){
@@ -1411,13 +1411,14 @@ class cl_rhpessoal {
                                             and  rhpessoalmov.rh02_anousu = ".db_anofolha()."
                                             and  rhpessoalmov.rh02_mesusu = ".db_mesfolha()."
                                             and  rhpessoalmov.rh02_instit = ".db_getsession("DB_instit")." ";
-                                            
+
      $sql .= "      inner join rhlota  on  rhlota.r70_codigo = rhpessoalmov.rh02_lota
                                       and  rhlota.r70_instit = rhpessoalmov.rh02_instit  ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm ";
-     $sql .= "      inner join rhregime on rh30_codreg = rh02_codreg 
+     $sql .= "      inner join rhregime on rh30_codreg = rh02_codreg
 		    inner join rhlotavinc on rh25_codigo = r70_codigo";
-     
+     $sql .= " LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes ";
+
      $sql2 = "";
 
      if($dbwhere==""){
@@ -2091,7 +2092,7 @@ class cl_rhpessoal {
      $sSql .= "                and extract( month from rh05_recis  )  = rh02_mesusu                             ";
      $sSql .= "              )                                                                                  ";
      $sSql .= "         )                                                                                       ";
-     
+
      if ( $lEstagiario === false ) {
        $sSql .= "     and rh30_descr not ilike '%estagiario%'                                                   ";
      }
