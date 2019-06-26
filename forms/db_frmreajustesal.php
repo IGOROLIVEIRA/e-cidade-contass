@@ -1,29 +1,29 @@
 <?php
 
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -81,7 +81,7 @@ $clrotulo->label("rh30_vinculo");
           </td>
           <td id="containerCompetencia"></td>
         </tr>
-	<tr> 
+	<tr>
         <td align="right" nowrap title="Seleção:" >
         <?
 	db_ancora("<b>Seleção:</b>","js_pesquisasel(true)",1);
@@ -168,7 +168,7 @@ var oTiposFiltrosFolha = null;
   oTipoReajuste.show($('containerVinculo'));
 
   oTiposFiltrosFolha = new DBViewFormularioFolha.DBViewTipoFiltrosFolha(<?=db_getsession("DB_instit")?>);
-  oTiposFiltrosFolha.aTipos = [0,2,3,5];
+  oTiposFiltrosFolha.aTipos = [0, 5];
   oTiposFiltrosFolha.sInstancia = 'oTiposFiltrosFolha';
   oTiposFiltrosFolha.show($('containnerTipoFiltrosFolha'));
 
@@ -186,7 +186,7 @@ var oTiposFiltrosFolha = null;
   $('percentual').onkeyup =  function(event){
 
     var lValidou = js_ValidaCampos(this, 4, 'Percentual', false, false, event);
-     
+
     if (!lValidou) {
       event.preventDefault();
       return false;
@@ -203,7 +203,7 @@ function js_comportamentoCampos(){
   $('tipoLancamento').observe('change', function(){
 
     /**
-     * Quando for automatico(a) desabilita o campo 'para' 
+     * Quando for automatico(a) desabilita o campo 'para'
      * e habilita o campo 'percentual'
      */
     if (this.value == 'a') {
@@ -216,7 +216,7 @@ function js_comportamentoCampos(){
     }
 
     /**
-     * Quando for manual(m) habilita o campo 'para' 
+     * Quando for manual(m) habilita o campo 'para'
      * e desabilita o campo 'percentual'
      */
     if (this.value == 'm') {
@@ -276,12 +276,12 @@ function js_processar(){
   var oTipoFiltro    = $F('oCboTipoFiltro');
 
   if (oTipoRelatorio != 0 && oTipoFiltro == 2) {
-      
+
     var oLancadorSelecionado = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
     if (oLancadorSelecionado.length == 0) {
 
       alert('Por favor, realize ao menos o lançamento de um registro.');
-      return false 
+      return false
     }
   }
 
@@ -297,7 +297,7 @@ function js_processar(){
     };
 
     if ($F('InputIntervaloInicial') == '' || $F('InputIntervaloFinal') == '') {
- 
+
       alert('Por favor, informe um intervalo para o tipo de resumo selecionado.');
       return false;
     }
@@ -333,10 +333,10 @@ function enviaDados(){
   oQuery.iSelec          = $F('r44_selec');
 
   /**
-   * Verifica se o tipo escolhido foi intervalo 
+   * Verifica se o tipo escolhido foi intervalo
    */
   if ($F('oCboTipoFiltro') == 1) {
-   
+
     oQuery.iIntervaloInicial = $F('InputIntervaloInicial');
     oQuery.iIntervaloFinal   = $F('InputIntervaloFinal');
   }
@@ -345,7 +345,7 @@ function enviaDados(){
    * Verifica se o tipo escolhido foi seleção
    */
   if ($F('oCboTipoFiltro') == 2 ) {
-   
+
     var aSelecionados = [];
     var oTipoFiltros = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
 
@@ -355,21 +355,23 @@ function enviaDados(){
     oTipoFiltros.each (function(oFiltro, iIndice) {
       aSelecionados[iIndice] = oFiltro.sCodigo;
     });
-   
+
     oQuery.aRegistros = aSelecionados;
+
   }
 
   var sUrl = 'pes1_reajustesalarial.RPC.php';
 
   var oAjax = new Ajax.Request( sUrl, {
-                                        method: 'post', 
-                                        parameters: "json=" + Object.toJSON(oQuery), 
+                                        method: 'post',
+                                        parameters: "json=" + Object.toJSON(oQuery),
                                         onComplete: js_retornoReajuste
                                       }
                                     );
 }
 
 function js_retornoReajuste(sRetorno) {
+  let params = JSON.parse(sRetorno.request.parameters.json);
 
   js_removeObj("msgBox");
 
@@ -380,7 +382,7 @@ function js_retornoReajuste(sRetorno) {
     js_OpenJanelaIframe(
       '',
       'janelaReajuste',
-      'pes1_reajustesal002.php?selecao='+$F('r44_selec'),
+      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&registros='+params.aRegistros,
       'Processar reajuste salarial dos servidores.',
       true
     );
@@ -410,7 +412,7 @@ function js_pesquisasel(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_mostrasel1|r44_selec|r44_descr','Pesquisa',true);
   }else{
-     if($('r44_selec').value != ''){ 
+     if($('r44_selec').value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+$('r44_selec').value+'&funcao_js=parent.js_mostrasel','Pesquisa',false);
      }else{
        document.form1.r44_descr.value = '';
@@ -418,10 +420,10 @@ function js_pesquisasel(mostra){
   }
 }
 function js_mostrasel(chave,erro){
-  $('r44_descr').value = chave; 
-  if(erro==true){ 
-    $('r44_selec').focus(); 
-    $('r44_selec').value = ''; 
+  $('r44_descr').value = chave;
+  if(erro==true){
+    $('r44_selec').focus();
+    $('r44_selec').value = '';
   }
 }
 function js_mostrasel1(chave1,chave2){
