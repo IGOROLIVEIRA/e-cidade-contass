@@ -342,8 +342,8 @@ db_app::load("estilos.css, grid.style.css");
     db_iframe_acordo.hide();
   }
   function js_pesquisaac20_pcmater(mostra) {
-    if (mostra) {
 
+    if (mostra) {
       js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
         'db_iframe_pcmater',
         'func_pcmatercontratos.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc01_servico',
@@ -355,7 +355,7 @@ db_app::load("estilos.css, grid.style.css");
         js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
           'db_iframe_pcmater',
           'func_pcmatercontratos.php?pesquisa_chave=' + document.form1.ac20_pcmater.value +
-          '&funcao_js=parent.js_mostrapcmater',
+          '&funcao_js=parent.js_mostrapcmater2',
           'Pesquisar materiais',
           false, 0);
       } else {
@@ -363,24 +363,87 @@ db_app::load("estilos.css, grid.style.css");
       }
     }
   }
-  function js_mostrapcmater(chave, erro) {
-    document.form1.pc01_descrmater.value = chave;
-    if (erro == true) {
-      document.form1.ac20_pcmater.focus();
-      document.form1.ac20_pcmater.value = '';
-    } else {
-      js_getElementosMateriais();
-    }
-  }
-  function js_mostrapcmater1(chave1, chave2, chave3) {
-    document.form1.ac20_pcmater.value = chave1;
-    document.form1.pc01_descrmater.value = chave2;
-    db_iframe_pcmater.hide();
-    isServico = chave3;
-    js_verificaServico();
-    js_getElementosMateriais();
+
+  function novoAjax(params, onComplete) {
+
+    let request = new Ajax.Request('con4_contratos.RPC.php', {
+      method:'post',
+      parameters:'json='+Object.toJSON(params),
+      onComplete: onComplete
+    });
 
   }
+
+  function js_mostrapcmater2(chave, erro) {
+    let params = {
+      exec: 'verificaItemContratoAcordo',
+      ac20_pcmater: document.form1.ac20_pcmater.value
+    };
+
+    novoAjax(params, function(e) {
+      let oRetorno = JSON.parse(e.responseText);
+      if (oRetorno.status == 1) {
+        document.form1.pc01_descrmater.value = chave;
+        if (erro == true) {
+          document.form1.ac20_pcmater.focus();
+          document.form1.ac20_pcmater.value = '';
+        } else {
+          js_getElementosMateriais();
+        }
+      } 
+      else {
+          alert(oRetorno.message.urlDecode());
+        return false;
+      }
+    });
+
+  }
+
+  function js_mostrapcmater1(chave1, chave2, chave3) {
+
+    let params = {
+      exec: 'verificaItemContratoAcordo',
+      ac20_pcmater: chave1
+    };
+
+    novoAjax(params, function(e) {
+      let oRetorno = JSON.parse(e.responseText);
+      if (oRetorno.status == 1) {
+        document.form1.ac20_pcmater.value = chave1;
+        document.form1.pc01_descrmater.value = chave2;
+        db_iframe_pcmater.hide();
+        isServico = chave3;
+        js_verificaServico();
+        js_getElementosMateriais();
+      } 
+      else {
+        db_iframe_pcmater.hide();
+        alert(oRetorno.message.urlDecode());
+        return false;
+      }
+    });
+
+  }
+
+  /*function checkItemContratoAcordo() {
+
+    let params = {
+      exec: 'verificaItemContratoAcordo',
+      ac20_pcmater: document.form1.ac20_pcmater.value,
+      ac20_acordo: document.form1.ac20_acordo.value
+    };
+
+    novoAjax(params, function(e) {
+      let oRetorno = JSON.parse(e.responseText);
+      if (oRetorno.status == 2) {
+        } else {
+          alert(oRetorno.erro);
+        return;
+      }
+    });
+
+  }*/
+
   function js_pesquisaMaterial(mostra) {
     if (mostra) {
 
