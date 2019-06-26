@@ -24,7 +24,6 @@ e-cidade			5432	pmluislandia
 e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
 e-cidade			5432	cii-amaje
-e-cidade			5432	cmjanauba
 
 e-cidade            5432    cmbhecid
 
@@ -65,6 +64,7 @@ prevponte39			5432	e-cidade
 cmburitizeiro       5432    e-cidade
 samu                5432    e-cidade
 cmarinos			5432    e-cidade
+cmjanauba           5432    e-cidade
 
 cisgraomogol			5432	manutencao
 pmbotumirim_23_05_2017		5432	manutencao
