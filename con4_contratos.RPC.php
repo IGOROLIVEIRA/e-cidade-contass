@@ -1412,6 +1412,27 @@ switch($oParam->exec) {
     }
 
     break;
+
+    case "verificaItemContratoAcordo" :
+
+      try {
+
+        $oContrato     = $_SESSION["oContrato"];
+        $oPosicao      = $oContrato->getUltimaPosicao();
+        
+        $dbwhere = " ac20_acordoposicao = {$oPosicao->getCodigo()} and ac20_pcmater = {$oParam->ac20_pcmater} ";
+        $oDaoAcordoItem = db_utils::getDao("acordoitem");
+        $sSQL = $oDaoAcordoItem->sql_query_file(null, "ac20_sequencial", null, $dbwhere);
+        $oDaoAcordoItem->sql_record($sSQL);
+        if ($oDaoAcordoItem->numrows > 0) {
+          throw new Exception("Item {$oParam->ac20_pcmater} já incluído!"); 
+        }
+      } catch (Exception $eErro) {
+
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+      }
+      break;
   }
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
@@ -1432,4 +1453,3 @@ function validaDataAssinatura($iLicitacao, $sDataAssinatura, $bDispensa=false){
 }
 //echo $oJson->encode($oRetorno);
 echo json_encode($oRetorno);
-?>
