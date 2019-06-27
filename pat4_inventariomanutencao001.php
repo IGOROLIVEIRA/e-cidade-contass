@@ -818,7 +818,7 @@ function js_preencheGrid(aBens) {
     }
 
     /* INPUT VIDA UTIL */
-    var oVidaUtil = window["oTxtVidaUtil"+oItem.codigo_bem] = new DBTextField("oTxtVidaUtil"+oItem.codigo_bem, "oTxtVidaUtil"+oItem.codigo_bem, oItem.vida_util, 5);
+    var oVidaUtil = window["oTxtVidaUtil"+oItem.codigo_bem] = new DBTextField("oTxtVidaUtil"+oItem.codigo_bem, "oTxtVidaUtil"+oItem.codigo_bem, js_formatar(oItem.vida_util, 'f'), 5);
     oVidaUtil.addEvent("onKeyPress", "return js_mask(event,\"0-9|,|-\")");
     oVidaUtil.addStyle('width', '100%');
     oVidaUtil.addStyle('height', '100%');
@@ -826,9 +826,22 @@ function js_preencheGrid(aBens) {
     oVidaUtil.addStyle('border', '1px solid transparent');
     oVidaUtil.addEvent("onFocus", "js_liberaDigitacao(this);");
     oVidaUtil.addEvent("onBlur", "js_bloqueiaDigitacao(this);js_atualizaValor(this,event)");
-    oVidaUtil.addEvent("onChange","js_vidaUtil(this,"+oItem.codigo_bem+","+iIndice+");js_atualizaValor(this,event)");
+    oVidaUtil.addEvent("onChange","js_vidaUtil(this,"+oItem.codigo_bem+","+iIndice+");js_atualizaValor(this,event);");
     oVidaUtil.addEvent("onKeyUp",'js_ValidaValor(this, event);');
     oVidaUtil.setReadOnly(true);//
+
+    /*
+    oValorResidual.addEvent("onKeyPress", "return js_mask(event,\"0-9|,|-\")");
+    oValorResidual.addStyle('width', '100%');
+    oValorResidual.addStyle('height', '100%');
+    oValorResidual.addStyle('text-align', 'right');
+    oValorResidual.addStyle('border', '1px solid transparent');
+    oValorResidual.addEvent("onFocus", "js_liberaDigitacao(this);");
+    oValorResidual.addEvent("onBlur", "js_bloqueiaDigitacao(this);js_atualizaValor(this, event);");
+    oValorResidual.addEvent("onChange","js_valorResidual(this,"+oItem.codigo_bem+","+iIndice+");js_atualizaValor(this,event);");
+    oValorResidual.addEvent("onKeyUp",'js_ValidaValor(this, event);');
+    oValorResidual.setReadOnly(true);
+    */
 
     /* INPUT   BEM-INVETARIO */
     var oBemInvetario = window["oTxtBemInventario"+oItem.codigo_bem] = new DBTextField("oTxtBemInventario"+oItem.codigo_bem, "oTxtBemInventario"+oItem.codigo_bem, +oItem.codigo_bem_inventario, 5);
@@ -1064,7 +1077,7 @@ function js_valorResidual(oInputValorResidual, iCodigoBem, iCodigoLinha) {
   //                         });
 }
 
-function js_vidaUtil (oInputVidaUtil, iCodigoBem, iCodigoLinha) {
+function js_vidaUtil(oInputVidaUtil, iCodigoBem, iCodigoLinha) {
 
   js_divCarregando(_M('patrimonial.patrimonio.pat4_inventariomanutencao001.salvando_informacoes'), "msgBox");
   var oParam               = new Object();
@@ -1091,7 +1104,6 @@ function js_vidaUtil (oInputVidaUtil, iCodigoBem, iCodigoLinha) {
                                }
                           });
 }
-
 
 
 
