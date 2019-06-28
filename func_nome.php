@@ -114,6 +114,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 
 	$funmat[0] = "js_testanome";
   $funcao_js = $funmat[0]."|z01_numcgm|z01_nome|z01_ender|z01_cgccpf|z01_incest|z01_uf|".$valores;
+  // $funcao_js = $funmat[0]."|z01_numcgm|z01_ender|z01_cgccpf|z01_incest|z01_uf|".$valores;
 
 }
 
@@ -139,7 +140,8 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
     if(isset($testanome) and $testanome==true and !isset($pesquisa_chave)){
 	?>
 
-	function js_testanome(z01_numcgm,z01_nome,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
+	// function js_testanome(z01_numcgm,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
+  function js_testanome(z01_numcgm,z01_nome,ender,cgccpf,z01_incest,z01_uf<?=$camp?>){
 
       alerta = "";
 
@@ -467,7 +469,7 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 							 }else{
 
                  $aVarRepassa = array(
-                   "z01_nome" => "$nomeDigitadoParaPesquisa",
+                   "nomeDigitadoParaPesquisa" => "$nomeDigitadoParaPesquisa",
                    "cpf" => "$cpf",
                    "cnpj" => "$cnpj"
                  );
