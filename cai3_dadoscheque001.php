@@ -65,7 +65,7 @@ function js_emiteCheque(){
   params += "&empenho="+$('empenho').textContent;
   params += "&valor="+$('valor').textContent;
 
-  jan = window.open('cai3_emitecheque.php?'+params,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan = window.open('cai3_cheque.php?'+params,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 
 }
