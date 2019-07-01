@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ db_postmemory($HTTP_GET_VARS);
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<? 
+<?
 	db_app::load('strings.js,scripts.js,datagrid.widget.js,prototype.js');
 	db_app::load('estilos.css,grid.style.css');
 ?>
@@ -54,9 +54,20 @@ function js_emite(){
   query +="&c63_banco="+$F('c63_banco');
   query +="&c63_agencia="+$F('c63_agencia');
   query +="&c63_conta="+$F('c63_conta');
-  
+
   jan = window.open('cai3_dadoscheque002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
+}
+
+function js_emiteCheque(){
+  let params = "";
+  params += "&credor="+$('credor').textContent;
+  params += "&empenho="+$('empenho').textContent;
+  params += "&valor="+$('valor').textContent;
+
+  jan = window.open('cai3_cheque.php?'+params,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan.moveTo(0,0);
+
 }
 
 function js_frmHistCheques(){
@@ -80,7 +91,7 @@ function js_limpa(){
 }
 
 function js_pesquisa(){
-	
+
 	var oPesquisa = new Object();
 
 	oPesquisa.exec			 	= 'getHistCheque';
@@ -88,42 +99,42 @@ function js_pesquisa(){
 	oPesquisa.c63_agencia	=	$('c63_agencia').value;
 	oPesquisa.c63_banco		=	$('c63_banco').value;
 	oPesquisa.c63_conta		=	$('c63_conta').value;
-	
+
 	var sDados = Object.toJSON(oPesquisa);
 //	alert(sDados);
 	var msgDiv = "Aguarde pesquisando ...";
 	js_divCarregando(msgDiv,'msgBox');
-	
+
 	sUrl = 'emp4_consultacheques.RPC.php';
 	var sQuery = 'dados='+sDados;
 	var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
+                                            method: 'post',
+                                            parameters: sQuery,
                                             onComplete: js_retornoPesquisaHistCheque
                                           }
                                   );
-	
+
 }
 
 function js_retornoPesquisaHistCheque(oAjax){
 	js_removeObj("msgBox");
 	//alert(oAjax.responseText);
-	
+
 	var aRetorno = eval("("+oAjax.responseText+")");
-	
+
 	var sExpReg  = new RegExp('\\\\n','g');
   if(aRetorno.status == 2 ){
   	alert(aRetorno.message.urlDecode().replace(sExpReg,'\n'));
   	return false;
   }
-  
+
   js_preenche_dados_cheque(aRetorno.dados)
   js_RenderGridHistCheques(aRetorno.historico);
-  
+
 }
 
 function js_preenche_dados_cheque(aDados){
-	
+
 	var iNumRows = aDados.length;
 	if(iNumRows > 0){
 		aDados.each(
@@ -139,42 +150,42 @@ function js_preenche_dados_cheque(aDados){
 				$('e83_descr').innerHTML	= oDado.e83_descr.urlDecode();
 				$('banco').innerHTML			= oDado.c63_banco;
 				$('recurso').innerHTML	  = oDado.recurso.urlDecode();
-				$('ordem').innerHTML	    = oDado.ordem.urlDecode();	
-				//$('slip').innerHTML	    	= oDado.slip.urlDecode();	
-				$('db90_descr').innerHTML	= oDado.db90_descr.urlDecode();	
-				$('anulado').innerHTML		= oDado.anulado.urlDecode();	
+				$('ordem').innerHTML	    = oDado.ordem.urlDecode();
+				//$('slip').innerHTML	    	= oDado.slip.urlDecode();
+				$('db90_descr').innerHTML	= oDado.db90_descr.urlDecode();
+				$('anulado').innerHTML		= oDado.anulado.urlDecode();
 				if(oDado.anulado.urlDecode() == 'Sim'){
 					$('e86_data').innerHTML		= js_formatar(oDado.e86_data,'d');
-				}	
+				}
 			}
 		);
-	}	
+	}
 }
 
 function js_RenderGridHistCheques(aHist){
-	
+
 	oDBGridHistCheques.clearAll(true);
-	
+
 	var iNumRows = aHist.length;
-	
+
 		if(iNumRows > 0){
 			aHist.each(
 				function (oHist,iInd){
-											
+
 						var aRow	= new Array();
-						
+
 						aRow[0] 	= oHist.k12_codord.urlDecode();
 						aRow[1] 	= js_formatar(oHist.k12_data,'d','');
 						aRow[2] 	= oHist.situacao.urlDecode();
 						aRow[3] 	= oHist.k11_tesoureiro.urlDecode();
-												
+
 	 					oDBGridHistCheques.addRow(aRow);
-	 						 										
+
 				}
 			);
 		}
-		
-	
+
+
 	oDBGridHistCheques.renderRows();
 
 }
@@ -187,10 +198,10 @@ function js_RenderGridHistCheques(aHist){
 	.td_left {
 		background-color: #FFFFFF;
 		text-align: left;
-	}		
+	}
 </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" 
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc"
   onLoad="js_frmHistCheques();">
 <table width="100%" align="center" style="margin-top: 20px;"><tr align="center"><td>
 <?
@@ -208,57 +219,57 @@ function js_RenderGridHistCheques(aHist){
  						<tr>
  							<td width="30%"><b>Número do cheque:</b></td>
  							<td class="td_right" id="cheque">
- 							  
+
  							</td>
  							<td>&nbsp;</td>
  							</tr>
  						<tr>
  							<td><b>Empenho(s)</b></td>
  							<td class="td_left" id="empenho" colspan="2">
- 									
+
  							</td>
  							<td>&nbsp;</td>
  						</tr>
  						<tr>
  							<td><b>Ordem(s)/SLIP(S)</b></td>
  							<td class="td_left" id="ordem" colspan="2">
- 									
+
  							</td>
  							<td>&nbsp;</td>
  						</tr>
  						<tr>
  							<td><b>Conta Pagadora</b></td>
- 							<td class="td_right" id="c61_reduz"> 
- 									
+ 							<td class="td_right" id="c61_reduz">
+
       				</td>
-      				<td class="td_left" id="e83_descr"> 
- 									
+      				<td class="td_left" id="e83_descr">
+
       				</td>
  						</tr>
  						<tr>
  							<td><b>Banco</b></td>
  							<td class="td_right" id="banco">
       				</td>
-      				<td class="td_left" id="db90_descr"> 
- 									
+      				<td class="td_left" id="db90_descr">
+
       				</td>
  						</tr>
  						<tr>
  							<td><b>Recurso</b></td>
- 							<td class="td_right" id="recurso"> 
- 									
+ 							<td class="td_right" id="recurso">
+
       				</td>
-      				<td class="td_left" id="o15_descr"> 
- 									
+      				<td class="td_left" id="o15_descr">
+
       				</td>
  						</tr>
  						<tr>
  							<td><b>Credor</b></td>
- 							<td class="td_right" id="numcgm"> 
- 									
+ 							<td class="td_right" id="numcgm">
+
       				</td>
-      				<td class="td_left" id="credor"> 
- 									
+      				<td class="td_left" id="credor">
+
       				</td>
  						</tr>
  						<tr>
@@ -272,7 +283,7 @@ function js_RenderGridHistCheques(aHist){
  							<td class="td_left" id="anulado">
       				</td>
       				<td class="td_left" id="e86_data">
-      					
+
       				</td>
  						</tr>
  					</table>
@@ -290,6 +301,7 @@ function js_RenderGridHistCheques(aHist){
 <tr>
 	<td colspan='2' align="center">
     <input  name="imprimir" id="imprimir" type="button" value="Imprimir" onclick="js_emite();" >
+    <input  name="imprimir_cheque" id="imprimir_cheque" type="button" value="Emitir Cheque" onclick="js_emiteCheque();" >
     <input  name="fechar" id="fechar" type="button" value="Fechar" onclick="parent.db_iframe_dados_cheque.hide();" >
   </td>
  </tr>
