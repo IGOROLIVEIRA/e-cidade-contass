@@ -90,6 +90,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
+   $responsavel = "(case when pessoa.z01_nome is null and nomeresponsavel is not null then nomeresponsavel
+                                 else pessoa.z01_nome end) as responsavel";
 
    $result = $cldb_depart->sql_record($cldb_depart->sql_query($chavepesquisa, "*,(select z01_nome from cgm where z01_numcgm=db_depart.numcgm) as nomeresp"));
    db_fieldsmemory($result,0);

@@ -104,7 +104,6 @@ $cldb_depart->rotulo->label("descrdepto");
             $sql = $cldb_depart->sql_query_nome("",$campos,"coddepto",'',true);
 	  }
         }
-        // print_r($sql);die('Die');
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
