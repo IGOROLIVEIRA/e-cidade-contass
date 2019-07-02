@@ -118,7 +118,7 @@ $nTotalItens = 0;
     $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$quant_casas, ",", ".");
     $oDadosDaLinha->quantidade = $oResult->pc11_quant;
     $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-    $oDadosDaLinha->total = number_format($lTotal, 1, ",", ".");
+    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
 
     echo "$oDadosDaLinha->item;";
