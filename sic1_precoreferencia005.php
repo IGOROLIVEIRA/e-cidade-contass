@@ -77,8 +77,8 @@ JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit}
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
+WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
 
 $rsResult = db_query($sSql) or die(pg_last_error());//db_criatabela($rsResult);exit;
@@ -106,10 +106,9 @@ $nTotalItens = 0;
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    if($quant_casas == 2){
-      $lTotal = round($oResult->si02_vlprecoreferencia,2) * $oResult->pc11_quant;
-    }
-    else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
+    //if($quant_casas == 2){
+      $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
+    //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
     $nTotalItens += $lTotal;
 
@@ -119,7 +118,7 @@ $nTotalItens = 0;
     $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$quant_casas, ",", ".");
     $oDadosDaLinha->quantidade = $oResult->pc11_quant;
     $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-    $oDadosDaLinha->total = number_format($lTotal, 1, ",", ".");
+    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
 
     echo "$oDadosDaLinha->item;";
