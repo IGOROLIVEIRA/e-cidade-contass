@@ -106,10 +106,9 @@ $nTotalItens = 0;
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    if($quant_casas == 2){
-      $lTotal = round($oResult->si02_vlprecoreferencia,2) * $oResult->pc11_quant;
-    }
-    else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
+    //if($quant_casas == 2){
+      $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
+    //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
     $nTotalItens += $lTotal;
 
