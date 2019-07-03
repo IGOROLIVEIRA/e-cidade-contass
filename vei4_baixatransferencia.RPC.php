@@ -275,6 +275,7 @@ function verificaTransferenciaVeicMes($veiculos, $data) {
     } else if($anoAtual > $uTransferencia->ano_transferencia){
       $vVeiculos = null;
     } else $vVeiculos[] = $uTransferencia->ve81_codigo;
+
   }
 
 
