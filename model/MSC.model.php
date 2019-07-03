@@ -988,7 +988,11 @@ class MSC {
         $this->setErroSQL(8);
     }
   }
-
+    /**
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
+     * por isso temos duas funções para IC09
+     *
+     */
   public function getDadosIC09EMP($iAno, $dataInicio) {
 
     $iMes = date('m',strtotime($dataInicio));
@@ -1064,6 +1068,11 @@ class MSC {
     }
   }
 
+    /**
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
+     * por isso temos duas funções para IC09
+     *
+     */
   public function getDadosIC09RSP($iAno, $dataInicio) {
 
     $iMes = date('m',strtotime($dataInicio));
@@ -1105,10 +1114,12 @@ class MSC {
       c61_instit
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-           CASE WHEN c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8)
+           CASE WHEN c211_mscestrut IS NULL and si177_naturezadespesa is not null then si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) 
+                when c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8)
                 WHEN c211_mscestrut IS NULL and c19_estrutural IS NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
                 WHEN c211_mscestrut IS NULL and c19_estrutural IS NOT NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
                 WHEN c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NOT NULL THEN substr(c19_estrutural, 2, 8)
+                
       ELSE
         c211_mscestrut
       END AS natdespesa,
@@ -1129,8 +1140,9 @@ class MSC {
        inner join empempenho on c19_numemp=e60_numemp
        inner join orcdotacao on e60_coddot= o58_coddot and o58_anousu=e60_anousu
        inner join empelemento on e64_numemp=e60_numemp
+       left join dotacaorpsicom on e60_numemp = si177_numemp
        left join conplanoorcamento on conplanoorcamento.c60_codcon=e64_codele and conplanoorcamento.c60_anousu=e60_anousu
-       left join elemdespmsc on substr(conplanoorcamento.c60_estrut,2,8) = c211_elemdespestrut
+       left join elemdespmsc on (substr(conplanoorcamento.c60_estrut,2,8) = c211_elemdespestrut) or (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = c211_elemdespestrut)
        left outer join consistema on p.c60_codsis = c52_codsis
        left join vinculopcaspmsc on substr(c19_estrutural,2,8) = c210_pcaspestrut
        left join orctiporec on o58_codigo = o15_codigo
