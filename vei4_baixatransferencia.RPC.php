@@ -264,14 +264,18 @@ function verificaTransferenciaVeicMes($veiculos, $data) {
   $diaAtual = substr(str_replace('/', '', $data),-9,2);
 
   foreach ($uTransferencias as $uTransferencia) {
-    if($anoAtual >= $uTransferencia->ano_transferencia){
-      if($mesAtual >= $uTransferencia->ve80_dt_transferencia)
-        if($diaAtual > $uTransferencia->ve80_dt_transferencia)
+    if($anoAtual == $uTransferencia->ano_transferencia){
+      if($mesAtual == $uTransferencia->ve80_dt_transferencia)
+        if($diaAtual > $uTransferencia->dia_transferencia)
           $vVeiculos = null;
         else $vVeiculos[] = $uTransferencia->ve81_codigo;
-      else $vVeiculos[] = $uTransferencia->ve81_codigo;
-    }
-    else $vVeiculos[] = $uTransferencia->ve81_codigo;
+      else if($mesAtual > $uTransferencia->ve80_dt_transferencia){
+          $vVeiculos = null;
+      }else $vVeiculos[] = $uTransferencia->ve81_codigo;
+    } else if($anoAtual > $uTransferencia->ano_transferencia){
+      $vVeiculos = null;
+    } else $vVeiculos[] = $uTransferencia->ve81_codigo;
+
   }
 
 
