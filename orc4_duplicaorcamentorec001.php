@@ -31,9 +31,9 @@ require ("libs/db_conecta.php");
 include ("libs/db_sessoes.php");
 include ("libs/db_usuariosonline.php");
 include ("libs/db_libcontabilidade.php");
-include ("libs/db_liborcamento.php");
+require_once ("libs/db_liborcamento.php");
 
-include ("dbforms/db_funcoes.php");
+require_once ("dbforms/db_funcoes.php");
 include ("dbforms/db_classesgenericas.php");
 
 include ("classes/db_orcfontes_classe.php");
@@ -125,19 +125,24 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 		for ($i = 0; $i < count($chaves); $i ++) {
 			if ($chaves[$i] == "")
 				continue;
-			$res = $clorcreceita->sql_record($clorcreceita->sql_query_file($anousu_ant, $chaves[$i]));
+			$res = $clorcreceita->sql_record($clorcreceita->sql_query_file($anousu_ant, $chaves[$i], "*",null,""));
+
 			if (($clorcreceita->numrows) > 0) {
+
 				db_fieldsmemory($res, 0);
-				$clorcreceita->o70_anousu = $anousu;
-				$clorcreceita->o70_codrec  = $o70_codrec;
-				$clorcreceita->o70_codfon  = $o70_codfon;
-				$clorcreceita->o70_codigo  = $o70_codigo;
-				$clorcreceita->o70_valor     = $o70_valor;						
-				$clorcreceita->o70_reclan   = $o70_reclan;				
-				$clorcreceita->o70_instit     = $o70_instit;
+				$clorcreceita->o70_anousu         = $anousu;
+				$clorcreceita->o70_codrec         = $o70_codrec;
+				$clorcreceita->o70_codfon         = $o70_codfon;
+				$clorcreceita->o70_codigo         = $o70_codigo;
+				$clorcreceita->o70_valor          = $o70_valor;
+				$clorcreceita->o70_reclan         = "$o70_reclan";
+
+				$clorcreceita->o70_instit         = $o70_instit;
+                $clorcreceita->o70_concarpeculiar = $o70_concarpeculiar;
+
 				$clorcreceita->incluir($anousu, $o70_codrec);
 				if ($clorcreceita->erro_status == '0') {
-					db_msgbox($clorcreceita->erro_msg);
+					db_msgbox("Reduzido: ".$clorcreceita->o70_codrec." -> ".$clorcreceita->erro_msg);
 					$erro = true;
 					break;
 				}
@@ -145,7 +150,14 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 		} // 
 		db_fim_transacao($erro);
 	} //
+    if ($clorcreceita->erro_status != '0' && $erro != true) {
+        db_msgbox("Importação concluída com sucesso!");
+        $erro = false;
+    }
 } //
+if (isset ($processa_receitas) && ($processa_receitas == 'Excluir')) {
+
+}
 ?>
 <html>
 <head>
@@ -177,19 +189,19 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
      <tr>
        <td colspan=3><h3>Duplicação de Receitas ( do exerício <?=(db_getsession("DB_anousu")-1)?> para <?=db_getsession("DB_anousu")?> ) </h3></td>
      </tr>    
-     <tr>
-       <td colspan=3><b>Cadastros </b> </td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Fontes  </td>
-       <td><input type='submit' name='processa_fontes' value='Selecionar'   ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Desdobramentos </td>
-       <td><input type='submit' name='processa_fontesdes' value='Selecionar'   ></td>
-     </tr>
+<!--     <tr>-->
+<!--       <td colspan=3><b>Cadastros </b> </td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Fontes  </td>-->
+<!--       <td><input type='submit' name='processa_fontes' value='Selecionar'   ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Desdobramentos </td>-->
+<!--       <td><input type='submit' name='processa_fontesdes' value='Selecionar'   ></td>-->
+<!--     </tr>-->
     
      <tr>
        <td colspan=3><b>Receitas</b> </td>
@@ -288,7 +300,8 @@ if (isset ($processa_receitas) && $processa_receitas == "Selecionar") {
 	$cliframe_seleciona->chaves = "o70_codrec";
 	$cliframe_seleciona->iframe_seleciona(1);
 ?><table border=0 width=100%>
-          <tr><td width=100% align=center><input type=button value=Processar onClick="js_processa('receitas');"></td></tr>
+          <tr><td width=100% align=center><input type=button value=Processar onClick="js_processa('receitas');"></td>
+              <td width=100% align=center><input type=button value=Excluir onClick="js_processa('receitas');"></td></tr>
           </table>               
        <? 
 
