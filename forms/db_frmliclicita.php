@@ -97,6 +97,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
+<input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
     <center>
 
         <table align=center style="margin-top:25px;">
@@ -831,7 +832,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var oRetorno = eval("("+oAjax.responseText+")");
         var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
-
+        document.form1.modalidade_tribunal.value = oRetorno.tribunal;
         // verifica se e do tipo convite
         if(oRetorno.tribunal==48){
             document.form1.l20_numeroconvidado.style.backgroundColor='#FFFFFF';
@@ -956,6 +957,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("aceitabilidade").style.display='inline';
 
         }
+
+      if ($F('l20_equipepregao') != '') {
+        let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
+
+        if (modalidade == 52 || modalidade == 53) {
+            verificaMembrosModalidade("pregao");
+        }
+        else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
+            verificaMembrosModalidade("outros");
+        }
+      }
 
     }
     /*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
@@ -1389,12 +1401,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
       document.form1.l20_equipepregao.value = iCodigoProcesso;
       db_iframe_proc.hide();
 
-      var modalidade = document.form1.l20_codtipocomdescr.value;
+      let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
 
-      if (modalidade == 16 || modalidade == 28) {
+      if (modalidade == 52 || modalidade == 53) {
         verificaMembrosModalidade("pregao");
       }
-      else if (modalidade == 1 || modalidade == 2 || modalidade == 3) {
+      else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
         verificaMembrosModalidade("outros");
       }
 
