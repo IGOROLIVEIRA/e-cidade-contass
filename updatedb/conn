@@ -18,14 +18,13 @@ e-cidade			5432	pmluislandia
 e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
 e-cidade			5432	cii-amaje
+
 pmcapitaoeneas      5432    ecidadepref
 
 e-cidade            5432    cmbhecid
 
 cmnavarro			5432    cmnavarro
 cmfranciscodumont		5432    cmnavarro
-
-e-cidade            5432    ecidade
 
 ammesf				5432	e-cidade
 cii-amaje			5432	e-cidade
@@ -44,7 +43,6 @@ cmmatiascardoso			5432	e-cidade
 cmmirabela			5432	e-cidade
 cmmonteazul			5432	e-cidade
 cmpatis				5432	e-cidade
-cmpirapora			5432	e-cidade
 cmsantafe			5432	e-cidade
 cmsjponte			5432	e-cidade
 cmubai				5432	e-cidade
@@ -63,17 +61,8 @@ cmjanauba           5432    e-cidade
 
 cisgraomogol			5432	manutencao
 pmbotumirim_23_05_2017		5432	manutencao
-pmcapitaoeneas			5432	manutencao
 pmlagoadospatos			5432	manutencao
 pmmontezuma			5432	manutencao
 pmsaoromao			5432	manutencao
 pmubai				5432	manutencao
 treinamento_2019		5432	manutencao
-
-CIMAMS_Jeferson			5432	teste
-cmmonteazul_max			5432	teste
-cmpirapora_lukas		5432	teste
-cmsantafe			5432	teste
-converdegran_marcelo		5432	teste
-pmsaojoaodaponte_marcelo	5432	teste
-pmsaojoaodaponte_msc		5432	teste
