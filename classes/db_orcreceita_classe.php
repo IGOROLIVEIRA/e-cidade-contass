@@ -136,13 +136,7 @@ class cl_orcreceita {
        return false;
      }
      if($this->o70_reclan == null ){
-       $this->erro_sql = " Campo Receita Lançada nao Informado.";
-       $this->erro_campo = "o70_reclan";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+         $this->o70_reclan = 'f';
      }
      if($this->o70_instit == null ){
        $this->erro_sql = " Campo Código da Instituição nao Informado.";
@@ -341,17 +335,12 @@ class cl_orcreceita {
        }
      }
      if(trim($this->o70_reclan)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o70_reclan"])){
+         if(trim($this->o70_reclan) == null ){
+             $this->o70_reclan = 'f';
+         }
        $sql  .= $virgula." o70_reclan = '$this->o70_reclan' ";
        $virgula = ",";
-       if(trim($this->o70_reclan) == null ){
-         $this->erro_sql = " Campo Receita Lançada nao Informado.";
-         $this->erro_campo = "o70_reclan";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
+
      }
      if(trim($this->o70_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o70_instit"])){
        $sql  .= $virgula." o70_instit = $this->o70_instit ";

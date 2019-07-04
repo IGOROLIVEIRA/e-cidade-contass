@@ -26,14 +26,19 @@
  */
 
 
+
 require ("libs/db_stdlib.php");
 require ("libs/db_conecta.php");
 include ("libs/db_sessoes.php");
 include ("libs/db_usuariosonline.php");
 include ("libs/db_libcontabilidade.php");
-include ("libs/db_liborcamento.php");
 
-include ("dbforms/db_funcoes.php");
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+require_once ("libs/db_liborcamento.php");
+
+require_once ("dbforms/db_funcoes.php");
+
 include ("dbforms/db_classesgenericas.php");
 
 include ("classes/db_orcorgao_classe.php");
@@ -57,6 +62,8 @@ db_postmemory($HTTP_POST_VARS);
 $debug = false;
 
 $anousu = db_getsession("DB_anousu");
+
+
 $dt_ini = $anousu.'-01-01';
 $dt_fin = $anousu.'-12-31';
 
@@ -213,6 +220,7 @@ if (isset ($processa_elemento) && ($processa_elemento == 'Processar')) {
 }//
 // dotações, migra dotações
 if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
+    $instit = db_getsession("DB_instit");
     // echo "aqui";
     // vars
     // $dotacao='inicial'
@@ -223,55 +231,102 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
     // $percentual = '3';
     $datafinal = $dataf_ano.'-'.$dataf_mes.'-'.$dataf_dia;
     // echo $datafinal;
-    // seleciona todas as dotações do exercicio anterior 
-    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query($anousu_ant));
+    // seleciona todas as dotações do exercicio atual caso exista
+    $resAtual= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu and o58_instit =  $instit "));
+    $rowsAtual = $clorcdotacao->numrows;
+    // seleciona todas as dotações do exercicio anterior
+    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu_ant and o58_instit =  $instit "));
     //db_criatabela($res);
     $rows = $clorcdotacao->numrows;
-    
-    for ($x=0;$x<$rows;$x++){         
-         db_fieldsmemory($res,$x);
-         $dot= db_dotacaosaldo(8,2,3,true,"o58_coddot=$o58_coddot",$anousu_ant,$anousu_ant.'-01-01',$datafinal);  
-         
-         if (pg_numrows($dot) > 0 ){
-	         db_fieldsmemory($dot,0);
 
-                 $valor ='0.00'; 
-                 if ($dotacao=='inicial'){
-		     $valor = $dot_ini;
-		 }
-		 if ($dotacao=='atualizada'){
-                     $valor = $dot_ini + $suplementado - $reduzido;
-		 }  
-		 if (isset($percent) && $percent=='on' && ($percentual > 0) && $dotacao!='zerada'){
-		     // quando não for dotação zerada, e tiver percentual
-		     if ($valor > 0 ){
-                        $adicional = round(($valor * $percentual) / 100,2);
-		        $valor     = $valor + $adicional;
-		     }
-		 }  
-		 // insere no database 
-	         $clorcdotacao->o58_anousu  = $anousu;
-        	 $clorcdotacao->o58_coddot  = $o58_coddot;
-	         $clorcdotacao->o58_orgao   = $o58_orgao;
-	         $clorcdotacao->o58_unidade = $o58_unidade;
-		 $clorcdotacao->o58_funcao    = $o58_funcao;
-		 $clorcdotacao->o58_subfuncao = $o58_subfuncao;
-		 $clorcdotacao->o58_programa  = $o58_programa;
-		 $clorcdotacao->o58_projativ  = $o58_projativ;
-		 $clorcdotacao->o58_codele  = $o58_codele;
-		 $clorcdotacao->o58_codigo  = $o58_codigo;
-		 $clorcdotacao->o58_valor   = $valor;
-		 $clorcdotacao->o58_instit  = $o58_instit;
-	 	 $clorcdotacao->incluir($anousu,$o58_coddot);
-		 if ($clorcdotacao->erro_status == '0') {
-			db_msgbox($clorcdotacao->erro_msg);
-			$erro = true;
-			break;
-		 }
-	 }  // 
+    db_inicio_transacao();
 
-    }  // endfor
+    if($rowsAtual > 0 ){
+        db_msgbox("Importação já realizada para a instiuição!");
+        $erro = true;
+    }else {
+        for ($x = 0; $x < $rows; $x++) {
+            db_fieldsmemory($res, $x);
+            $dot = db_dotacaosaldo(8, 2, 3, true, "o58_instit = " . $instit . " and o58_coddot=$o58_coddot", $anousu_ant, $anousu_ant . '-01-01', $datafinal);
+
+            if (pg_numrows($dot) > 0) {
+                db_fieldsmemory($dot, 0);
+
+                $valor = '0.00';
+                if ($dotacao == 'inicial') {
+                    $valor = $dot_ini;
+                }
+                if ($dotacao == 'atualizada') {
+                    $valor = $dot_ini + $suplementado - $reduzido;
+                }
+                if (isset($percent) && $percent == 'on' && ($percentual > 0) && $dotacao != 'zerada') {
+                    // quando não for dotação zerada, e tiver percentual
+                    if ($valor > 0) {
+                        $adicional = round(($valor * $percentual) / 100, 2);
+                        $valor = $valor + $adicional;
+                    }
+                }
+                // insere nas tabelas
+                $clorcdotacao->o58_anousu = $anousu;
+                $clorcdotacao->o58_coddot = $o58_coddot;
+                $clorcdotacao->o58_orgao = $o58_orgao;
+                $clorcdotacao->o58_unidade = $o58_unidade;
+                $clorcdotacao->o58_funcao = $o58_funcao;
+                $clorcdotacao->o58_subfuncao = $o58_subfuncao;
+                $clorcdotacao->o58_programa = $o58_programa;
+                $clorcdotacao->o58_projativ = $o58_projativ;
+                $clorcdotacao->o58_codele = $o58_codele;
+                $clorcdotacao->o58_codigo = $o58_codigo;
+                $clorcdotacao->o58_valor = $valor;
+                $clorcdotacao->o58_instit = $o58_instit;
+                $clorcdotacao->o58_localizadorgastos = $o58_localizadorgastos;
+                $clorcdotacao->o58_datacriacao = $o58_datacriacao;
+                $clorcdotacao->o58_concarpeculiar = $o58_concarpeculiar;
+                $clorcdotacao->incluir($anousu, $o58_coddot);
+                if ($clorcdotacao->erro_status == '0') {
+                    db_msgbox($clorcdotacao->erro_msg);
+                    $erro = true;
+                    break;
+                }
+            }  //
+
+        }  // endfor
+
+    }
+    db_fim_transacao($erro);
+    if ($clorcdotacao->erro_status != '0' && $erro != true) {
+        db_msgbox("Importação concluída com sucesso!");
+        $erro = false;
+    }
     
+}
+
+if (isset ($processa_dotacao) && ($processa_dotacao == 'Excluir')) {
+    $instit = db_getsession("DB_instit");
+    $datafinal = $dataf_ano.'-'.$dataf_mes.'-'.$dataf_dia;
+    // echo $datafinal;
+    // seleciona todas as dotações do exercicio atual caso exista
+    $resAtual= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu and o58_instit =  $instit "));
+    $rowsAtual = $clorcdotacao->numrows;
+    $erro = false;
+
+    db_inicio_transacao();
+    if($rowsAtual == 0 ){
+        db_msgbox("Sem orçamento para excluir da instiuição!");
+        $erro = true;
+    }else {
+
+        $res= $clorcdotacao->excluir(null,null," o58_anousu = $anousu and o58_instit =  $instit ");
+        if ($clorcdotacao->erro_status == '0') {
+            db_msgbox($clorcdotacao->erro_msg);
+            $erro = true;
+        }
+        if($res){
+            db_msgbox("Exclusão Realizada com Sucesso!!");
+        }
+    }
+    db_fim_transacao($erro);
+
 }
 
 ?>
@@ -304,51 +359,56 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
      <table border=0 align=center>
      <tr>
        <td colspan=3><h3>Duplicação de Orçamento ( do exerício <?=(db_getsession("DB_anousu")-1)?> para <?=db_getsession("DB_anousu")?> ) </h3></td>
-     </tr>    
-     <tr>
-       <td colspan=3><b>Cadastros </b> </td>
+         <td colspan=3> </h3></td>
      </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Orgão </td>
-       <td><input type=submit name='processa_orgao' value=Selecionar   ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Unidade </td>
-       <td><input type=submit name='processa_unidade' value=Selecionar   ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Função (independe de exercício) </td>
-       <td><input type=submit name='processa_funcao' value=Selecionar disabled  ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>SubFunção (independe de exercício) </td>
-       <td><input type=submit name='processa_subfuncao' value=Selecionar disabled  ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Programa </td>
-       <td><input type=submit name='processa_programa' value=Selecionar   ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Proj/Atividades </td>
-       <td><input type=submit name='processa_projativ' value=Selecionar   ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Elementos de despesa </td>
-       <td><input type=submit name='processa_elemento' value=Selecionar  ></td>
-     </tr>
-     <tr>
-       <td width=40px> &nbsp; </td>
-       <td>Recursos (independe de exercício) </td>
-       <td><input type=submit name='processa_recurso' value=Selecionar  disabled ></td>
-     </tr>
+         <tr>
 
+             <td colspan=3><h4>1 - Importação só poderá ser realizada uma vez por instituição. </h4></td>
+         </tr>
+         <!--     <tr>-->
+<!--       <td colspan=3><b>Cadastros </b> </td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Orgão </td>-->
+<!--       <td><input type=submit name='processa_orgao' value=Selecionar   ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Unidade </td>-->
+<!--       <td><input type=submit name='processa_unidade' value=Selecionar   ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Função (independe de exercício) </td>-->
+<!--       <td><input type=submit name='processa_funcao' value=Selecionar disabled  ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>SubFunção (independe de exercício) </td>-->
+<!--       <td><input type=submit name='processa_subfuncao' value=Selecionar disabled  ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Programa </td>-->
+<!--       <td><input type=submit name='processa_programa' value=Selecionar   ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Proj/Atividades </td>-->
+<!--       <td><input type=submit name='processa_projativ' value=Selecionar   ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Elementos de despesa </td>-->
+<!--       <td><input type=submit name='processa_elemento' value=Selecionar  ></td>-->
+<!--     </tr>-->
+<!--     <tr>-->
+<!--       <td width=40px> &nbsp; </td>-->
+<!--       <td>Recursos (independe de exercício) </td>-->
+<!--       <td><input type=submit name='processa_recurso' value=Selecionar  disabled ></td>-->
+<!--     </tr>-->
+<!---->
      <tr>
        <td colspan=3><b>Dotações</b> </td>
      </tr>
@@ -510,7 +570,9 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
 	 </table>
        <?
        ?><table border=0 width=100%>
-          <tr><td width=100% align=center><input type=submit name=processa_dotacao value=Processar ></td></tr>
+          <tr><td width=50% align=right><input type=submit name=processa_dotacao value=Processar ></td>
+              <td width=50% align=left><input type=submit name=processa_dotacao value=Excluir ></td>
+          </tr>
          </table>               
        <?        
   }
