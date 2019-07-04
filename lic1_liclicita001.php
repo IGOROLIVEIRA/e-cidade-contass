@@ -197,7 +197,26 @@ if(isset($incluir)){
                 $erro_msg = $clcondataconf->erro_msg;
                 $sqlerro  = true;
             }
-        }
+				}
+		
+				if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
+
+					$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
+					if (!$verifica) { die("if");
+						$erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
+						$sqlerro = true;
+					}
+		
+				}
+				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) { 
+		
+					$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
+					if (!$verifica) {die("else");
+						$erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
+						$sqlerro = true;
+					}
+		
+				}
 
 		if ($sqlerro == false){
 
@@ -255,8 +274,9 @@ if(isset($incluir)){
 	  }
 
 	  $codigo   = $clliclicita->l20_codigo;
-	  $tipojulg = $clliclicita->l20_tipojulg;
-	  db_fim_transacao($sqlerro);
+		$tipojulg = $clliclicita->l20_tipojulg;
+		db_fim_transacao(false);
+	  //db_fim_transacao($sqlerro);
 	}
 }
 $l20_liclocal = 0;

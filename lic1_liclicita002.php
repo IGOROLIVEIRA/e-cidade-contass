@@ -209,7 +209,7 @@ if(isset($alterar)){
     }
 
 
-    if ($l20_codtipocomdescr == 16 || $l20_codtipocomdescr == 28) {
+    if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
 
       $verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
       if (!$verifica) {
@@ -218,7 +218,7 @@ if(isset($alterar)){
       }
 
     }
-    else if ($l20_codtipocomdescr == 1 || $l20_codtipocomdescr == 2 || $l20_codtipocomdescr == 3) {
+    else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
 
       $verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
       if (!$verifica) {
