@@ -29,7 +29,7 @@ include("fpdf151/scpdf.php");
 db_postmemory($HTTP_SERVER_VARS);
 $oLicitacao = new licitacao($l20_codigo);
 
-$sql = "select uf, db12_extenso, logo, munic, cgc, ender, bairro, numero
+$sql = "select uf, db12_extenso, logo, munic, cgc, ender, bairro, numero, codigo, nomeinst
 			from db_config  
 				inner join db_uf on db12_uf = uf
 			where codigo = ".db_getsession("DB_instit");
@@ -47,7 +47,7 @@ $pdf->Ln(30);
 $pdf->SetFont('Arial','',8);
 $pdf->MultiCell(0,4,$db12_extenso,0,"C",0);
 $pdf->SetFont('Arial','B',11);
-$pdf->MultiCell(0,6,'PREFEITURA MUNICIPAL DE '.strtoupper($munic),0,"C",0);
+$pdf->MultiCell(0,6,strtoupper($nomeinst),0,"C",0);
 $pdf->SetFont('Arial','',8);
 $pdf->MultiCell(0,4,'CNPJ: '.db_formatar($cgc,'cnpj'),0,"C",0);
 $pdf->SetFont('Arial','',8);
