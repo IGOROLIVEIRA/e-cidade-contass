@@ -30,11 +30,11 @@ function js_acesso() {
 	    sQuery += "&servidor=localhost";
 	    sQuery += "&base="+$F('baseDados');
 	    sQuery += "&user=dbportal";
-	    sQuery += "&port=5433";
+	    sQuery += "&port=5432";
 	    sQuery += "&senha=";
 
           window.location = '../'+$F('baseDados');
-	  var sUrl  = '../e-cidade_2_3_19/abrir.php?estenaoserveparanada=1&DB_login='+sLogin+'&DB_senha='+sSenha+sQuery;
+	  var sUrl  = '../e-cidade/abrir.php?estenaoserveparanada=1&DB_login='+sLogin+'&DB_senha='+sSenha+sQuery;
 	  var jan   = window.open(sUrl,wname,'width=1,height=1');
 	  
 	}
@@ -51,7 +51,7 @@ $senha   = '';
 		$oStatement = $oPdo->query("SELECT login,md5(senha) FROM configuracoes.db_usuarios WHERE login = '{$_POST['login_externo']}' AND usuarioativo = 1");
 		$rsResult   = $oStatement->fetchAll();*/
 
-$conexao_postgre = pg_connect("host=localhost port=5433 dbname={$banco} user=dbportal password=") or die("Não foi possí­vel conectar ao Banco de dados.");
+$conexao_postgre = pg_connect("host=localhost port=5432 dbname={$banco} user=dbportal password=") or die("Não foi possí­vel conectar ao Banco de dados.");
 
 $rsResult = pg_query("SELECT login,md5(senha),senha FROM configuracoes.db_usuarios WHERE login = '{$_POST['login_externo']}' AND usuarioativo = 1");
 $dados = pg_fetch_array($rsResult);
