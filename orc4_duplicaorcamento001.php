@@ -571,7 +571,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Excluir')) {
        <?
        ?><table border=0 width=100%>
           <tr><td width=50% align=right><input type=submit name=processa_dotacao value=Processar ></td>
-              <td width=50% align=left><input type=submit name=processa_dotacao value=Excluir ></td>
+              <td width=50% align=left><input type=button value=Excluir onClick="js_processaExcluir('Excluir');"></td>
           </tr>
          </table>               
        <?        
@@ -600,6 +600,19 @@ function js_processa(tipo){
   obj.setAttribute('value','Processar');
   document.form1.appendChild(obj);
   document.form1.submit();
+}
+
+
+function js_processaExcluir(tipo){
+    if (confirm("Tem certeza que deseja excluir toda meta da despesa?") ) {
+        // cria um objeto que indica o tipo de processamento
+        obj = document.createElement('input');
+        obj.setAttribute('name', 'processa_dotacao');
+        obj.setAttribute('type', 'hidden');
+        obj.setAttribute('value', tipo);
+        document.form1.appendChild(obj);
+        document.form1.submit();
+    }
 }
 </script>
 

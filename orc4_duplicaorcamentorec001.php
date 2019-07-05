@@ -157,6 +157,28 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 } //
 if (isset ($processa_receitas) && ($processa_receitas == 'Excluir')) {
 
+    $instit = db_getsession("DB_instit");
+    $resAtual= $clorcreceita->sql_record($clorcreceita->sql_query(null,null,"*",null," o70_anousu = $anousu and o70_instit =  $instit "));
+
+    $rowsAtual = $clorcreceita->numrows;
+    $erro = false;
+
+    db_inicio_transacao();
+    if($rowsAtual == 0 ){
+        db_msgbox("Sem orçamento para excluir da instiuição!");
+        $erro = true;
+    }else {
+
+        $res= $clorcreceita->excluir(null, null, " o70_anousu = $anousu and o70_instit =  $instit ");
+        if ($clorcreceita->erro_status == '0') {
+            db_msgbox($clorcreceita->erro_msg);
+            $erro = true;
+        }
+        if($res){
+            db_msgbox("Exclusão Realizada com Sucesso!!");
+        }
+    }
+    db_fim_transacao($erro);
 }
 ?>
 <html>
@@ -300,8 +322,10 @@ if (isset ($processa_receitas) && $processa_receitas == "Selecionar") {
 	$cliframe_seleciona->chaves = "o70_codrec";
 	$cliframe_seleciona->iframe_seleciona(1);
 ?><table border=0 width=100%>
-          <tr><td width=100% align=center><input type=button value=Processar onClick="js_processa('receitas');"></td>
-              <td width=100% align=center><input type=button value=Excluir onClick="js_processa('receitas');"></td></tr>
+          <tr>
+              <td width=50% align=right><input type=button value=Processar onClick="js_processa('Processar');"></td>
+              <td width=50% align=left><input type=button value=Excluir onClick="js_processa('Excluir');">
+              </td></tr>
           </table>               
        <? 
 
@@ -322,13 +346,23 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
 function js_processa(tipo){
   js_gera_chaves();
-  // cria um objeto que indica o tipo de processamento
-  obj=document.createElement('input');
-  obj.setAttribute('name','processa_'+tipo);  
-  obj.setAttribute('type','hidden');
-  obj.setAttribute('value','Processar');
-  document.form1.appendChild(obj);
-  document.form1.submit();
+
+
+        // cria um objeto que indica o tipo de processamento
+        obj=document.createElement('input');
+        obj.setAttribute('name','processa_receitas');
+        obj.setAttribute('type','hidden');
+        obj.setAttribute('value',tipo);
+        document.form1.appendChild(obj);
+        if(tipo == 'Excluir'){
+            if (confirm("Tem certeza que deseja excluir toda previsão da receita?") ) {
+                document.form1.submit();
+            }
+        }else{
+            document.form1.submit();
+        }
+
+
 }
 </script>
 
