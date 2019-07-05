@@ -151,8 +151,8 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                INNER JOIN cgm          ON r52_numcgm              = z01_numcgm
                INNER JOIN rhpessoal    ON rh01_regist             = r52_regist
                INNER JOIN rhpessoalmov ON rh01_regist             = rh02_regist
-                                      AND rh02_anousu             = {$iAnoFolha}
-                                      AND rh02_mesusu             = {$iMesFolha}
+                                      AND rh02_anousu             = {$oPost->ano}
+                                      AND rh02_mesusu             = {$oPost->mes}
                                       AND rh02_instit             = {$iInstituicao}
                INNER JOIN rhlota       ON r70_codigo              = rh02_lota
                                       AND r70_instit              = rh02_instit
@@ -206,8 +206,8 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
             INNER JOIN cgm          ON   r52_numcgm              =  z01_numcgm
             INNER JOIN rhpessoal    ON  rh01_regist              =  r52_regist
             INNER JOIN rhpessoalmov ON  rh01_regist              = rh02_regist
-                                   AND  rh02_anousu              = {$iAnoFolha}
-                                   AND  rh02_mesusu              = {$iMesFolha}
+                                   AND  rh02_anousu              = {$oPost->ano}
+                                   AND  rh02_mesusu              = {$oPost->mes}
                                    AND  rh02_instit              = {$iInstituicao}
             INNER JOIN rhlota       ON   r70_codigo              = rh02_lota
                                    AND   r70_instit              = rh02_instit
