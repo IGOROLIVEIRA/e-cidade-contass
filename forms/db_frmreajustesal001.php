@@ -13,7 +13,7 @@ $clrotulo->label("rh02_salari");
     <td colspan="2" align='center'>
       <fieldset>
         <Legend align="left">
-          <b>Reajuste de Salários</b>
+          <b>Reajuste de Salrios</b>
         </Legend>
         <center>
         <table cellspacing="8" cellpadding="0">
@@ -153,18 +153,18 @@ $clrotulo->label("rh02_salari");
     <td colspan="2" align='center'>
       <fieldset>
         <Legend align="left">
-          <b>Lançar valores</b>
+          <b>Lanar valores</b>
         </Legend>
         <center>
         <table cellspacing="8" cellpadding="0">
       	  <tr>
-            <td align='right'>Valor padrão:</td>
+            <td align='right'>Valor padro:</td>
             <td align='left'>
               <?
               db_input('rh02_salari',10, $Irh02_salari, true, 'text', 1, "onchange='js_lancarvalor(\"v\",this.value);'", 'valor');
               ?>
             </td>
-            <td align='right'>Percentual padrão:</td>
+            <td align='right'>Percentual padro:</td>
             <td align='left'>
               <?
               db_input('rh02_salari',10, $Irh02_salari, true, 'text', 1, "onchange='js_lancarvalor(\"p\",this.value, \"".$rh02_salari."\");'", 'perce');
@@ -207,7 +207,7 @@ function js_testecampos(){
     document.form1.vallancar.value = vallancar;
     return true;
   }
-  alert("Informe os valores a serem lançados.");
+  alert("Informe os valores a serem lanados.");
   return false;
 }
 function js_lancarvalor(PorV,valor,salario=null){
@@ -249,7 +249,6 @@ function js_lancarvalor(PorV,valor,salario=null){
             if(valor > 0){
               salario_retorno = (salario + (salario * (valor/100)));
               novo_salario = js_formatar(salario_retorno, 'f', 2);
-              console.log('Salarim...', novo_salario);
               document.form1.elements[i].value = String(novo_salario).replace('.', ',');
             }
             contadorElementos++;
