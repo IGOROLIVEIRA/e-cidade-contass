@@ -247,8 +247,6 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
      $pdf->cell(20, $alt, $pc01_codmater, 0, 0, "C", 0);
      $pdf->setXY($pdf->getX(), $valor_y+0.5);
      $valor_x = $pdf->getX();
-     // if($pdf->gety() > $maiorTamanho)
-     //    $maiorTamanho = $pdf->gety();
      $pdf->setXY(150, $valor_y);
      $pdf->cell(20, $alt, $m52_sequen, 0, 0, "C", 0);
      $valor_x2 = $pdf->getx();
