@@ -14,3 +14,8 @@ config/preferencias.json
 cache/*
 updatedb/log/*
 modification/*
+*.zip
+*.csv
+updatedb/scripts*
+libs/..cache/
+*.yml
