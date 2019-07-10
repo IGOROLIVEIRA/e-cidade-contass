@@ -3079,6 +3079,7 @@ if ( $lErro ) {
 
   db_query($connDestino,"ROLLBACK;");
   db_logTitulo(" FIM PROCESSAMENTO COM ERRO",$sArquivoLog,$iParamLog);
+  throw new Exception("FIM PROCESSAMENTO COM ERRO");
 } else {
 
   db_query($connDestino,"COMMIT;");
