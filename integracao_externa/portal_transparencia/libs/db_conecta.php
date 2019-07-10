@@ -66,7 +66,8 @@
 
  if (! ($connDestino = pg_connect($sDataSourceDestino))) {
    db_log("Erro ao conectar no Destino... ($sDataSourceDestino)", $sArquivoLog,$iParamLog);
-   die();
+   throw new Exception("Erro ao conectar no destino");
+   //die();
  }
 
 /**
@@ -82,7 +83,8 @@
  
  if (! ($connOrigem = @pg_connect($sDataSourcePrefeitura))) {
    db_log("Erro ao conectar no DBPortal ($sDataSourcePrefeitura)...", $sArquivoLog,$iParamLog);
-   die();
+   throw new Exception("Erro ao conectar no destino");
+   //die();
  }
 
  db_log("", $sArquivoLog,$iParamLog);
