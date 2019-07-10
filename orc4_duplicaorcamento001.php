@@ -266,6 +266,9 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
                         $valor = $valor + $adicional;
                     }
                 }
+                if($valor == 0){
+                    $valor = '0.00';
+                }
                 // insere nas tabelas
                 $clorcdotacao->o58_anousu = $anousu;
                 $clorcdotacao->o58_coddot = $o58_coddot;
