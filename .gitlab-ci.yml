@@ -82,14 +82,14 @@ teste-cisaje:
     only:
         - teste
 
-teste-ciiamaje:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git checkout composer.lock && git pull origin teste "'
-    environment: staging
-    only:
-        - teste
+# teste-ciiamaje:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-teste && git checkout development && git checkout composer.lock && git pull origin teste "'
+#     environment: staging
+#     only:
+#         - teste
 
 teste-e-cidade:
     stage: deploy
@@ -290,15 +290,15 @@ cisaje:
     only:
         - master
 
-ciiamaje:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
-        - 'ssh -p22 contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
-    environment: production
-    only:
-        - master
+# ciiamaje:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
+#         - 'ssh -p22 contass@ciiamaje.contassconsultoria.com.br "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+#     environment: production
+#     only:
+#         - master
 
 e-cidade:
     stage: deploy
