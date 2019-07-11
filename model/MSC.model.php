@@ -1114,14 +1114,14 @@ class MSC {
       c61_instit
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-           CASE WHEN c211_mscestrut IS NULL and si177_naturezadespesa is not null then si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) 
-                when c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8)
-                WHEN c211_mscestrut IS NULL and c19_estrutural IS NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
-                WHEN c211_mscestrut IS NULL and c19_estrutural IS NOT NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
-                WHEN c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NOT NULL THEN substr(c19_estrutural, 2, 8)
+           CASE WHEN elemdespmsc.c211_mscestrut IS NULL and si177_naturezadespesa is not null then si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) 
+                when elemdespmsc.c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8)
+                WHEN elemdespmsc.c211_mscestrut IS NULL and c19_estrutural IS NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
+                WHEN elemdespmsc.c211_mscestrut IS NULL and c19_estrutural IS NOT NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8)
+                WHEN elemdespmsc.c211_mscestrut IS NULL and conplanoorcamento.c60_estrut IS NOT NULL THEN substr(c19_estrutural, 2, 8)
                 
       ELSE
-        c211_mscestrut
+        elemdespmsc.c211_mscestrut
       END AS natdespesa,
             db21_tipoinstit,
       c61_reduz,
@@ -1142,7 +1142,8 @@ class MSC {
        inner join empelemento on e64_numemp=e60_numemp
        left join dotacaorpsicom on e60_numemp = si177_numemp
        left join conplanoorcamento on conplanoorcamento.c60_codcon=e64_codele and conplanoorcamento.c60_anousu=e60_anousu
-       left join elemdespmsc on (substr(conplanoorcamento.c60_estrut,2,8) = c211_elemdespestrut) or (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = c211_elemdespestrut)
+       LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8) = elemdespmsc.c211_elemdespestrut)
+       LEFT JOIN elemdespmsc tb ON si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = tb.c211_elemdespestrut
        left outer join consistema on p.c60_codsis = c52_codsis
        left join vinculopcaspmsc on substr(c19_estrutural,2,8) = c210_pcaspestrut
        left join orctiporec on o58_codigo = o15_codigo
