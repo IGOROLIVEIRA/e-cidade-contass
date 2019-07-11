@@ -11,7 +11,7 @@
     <join tipo="left"  tabela="issconfiguracaogruposervico" condicao="q126_sequencial  = q136_issgruposervico"  />
   </juncoes>
   <filtros>
-    <filtro label="itemservico" condicao="db121_estrutural = '$itemservico'" obrigatorio="true"/>
+    <filtro label="itemservico" condicao="REPLACE(db121_estrutural,'.','') = REPLACE('$itemservico','.','')" obrigatorio="true"/>
     <filtro label="exercicio" condicao="q136_exercicio = '$exercicio'" obrigatorio="true"/>
   </filtros>
   <agrupamento campos=""         />
