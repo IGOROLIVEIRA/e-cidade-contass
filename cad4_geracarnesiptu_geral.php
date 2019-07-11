@@ -193,6 +193,22 @@ if(!empty($j34_setor)){
   $sWhereSetor = " and lote.j34_setor = '{$j34_setor}' ";
 }
 
+/**
+ * Excessões na geração dos carnes
+ */
+$sSqlNaoGeraCgm  = ' select 1                                                                   ';
+$sSqlNaoGeraCgm .= '   from iptunaogeracarne                                                    ';
+$sSqlNaoGeraCgm .= '        inner join iptunaogeracarnecgm on j66_sequencial = j68_naogeracarne ';
+$sSqlNaoGeraCgm .= '  where j68_numcgm = j01_numcgm                                             ';
+$sWhereIptuNaoGeraCarneCgm = " AND NOT EXISTS ($sSqlNaoGeraCgm) ";
+
+$sSqlNaoGeraSQ  = ' select 1                                                                      ';
+$sSqlNaoGeraSQ .= '   from iptunaogeracarne                                                       ';
+$sSqlNaoGeraSQ .= '        inner join iptunaogeracarnesetqua on j66_sequencial = j67_naogeracarne ';
+$sSqlNaoGeraSQ .= '  where j67_setor  = j34_setor                                                 ';
+$sSqlNaoGeraSQ .= '    and j67_quadra = j34_quadra                                                ';
+$sWhereIptuNaoGeraCarneSQ = " AND NOT EXISTS ($sSqlNaoGeraSQ) ";
+
 $sOrder = null;
 switch ($ordem) {
   case "endereco":
@@ -277,13 +293,13 @@ $sqlprinc .= "              left  join imobil 	          on imobil.j44_matric = 
 $sqlprinc .= "              left  join loteloteam 	      on loteloteam.j34_idbql = lote.j34_idbql                                    ";
 $sqlprinc .= "              left  join iptuant     	      on iptuant.j40_matric   = iptubase.j01_matric                               ";
 $sqlprinc .= "        where iptucalc.j23_anousu = $anousu                                                                             ";
-$sqlprinc .= "        $whereimobil {$whereloteam} {$sWhereMatriculas} {$sWhereSetor} {$sWhereCgm}) as x                                           ";
+$sqlprinc .= "        $whereimobil {$whereloteam} {$sWhereMatriculas} {$sWhereSetor} {$sWhereCgm} {$sWhereIptuNaoGeraCarneCgm} {$sWhereIptuNaoGeraCarneSQ}) as x                                           ";
 $sqlprinc .= " $wherecidbranco";
 $sqlprinc .= " order by {$sOrder}";
 $sqlprinc .= "    $quantidade ";
 $sqlIptunump = $sqlprinc;
 
-$rsIptunump  = db_query($sqlIptunump) or die($sql);
+$rsIptunump  = db_query($sqlIptunump) or die($sqlIptunump);
 
 if($debugar ==true){
   echo "<br>SQL1 - Principal:<br> $sqlIptunump <br>";
