@@ -795,69 +795,71 @@ try {
     // REPASSES *******************************************************************************************************//
     $instit   = db_utils::fieldsMemory(db_query("SELECT codigo FROM db_config LEFT JOIN infocomplementaresinstit ON si09_instit = codigo WHERE si09_tipoinstit = 1"),0)->codigo;
     $matrixResultados = array();
-    $ianoMin = db_utils::fieldsMemory(db_query("select MIN(c60_anousu) as ano from conplano where c60_anousu = 2015;"),0)->ano;
-    $ianoMax = db_utils::fieldsMemory(db_query("select MAX(c60_anousu) as ano from conplano;"),0)->ano;
+    $sInstit  = pg_result($instit,0,0);
+    if ($sInstit) {
+        $ianoMin = db_utils::fieldsMemory(db_query("select MIN(c60_anousu) as ano from conplano where c60_anousu = 2015;"), 0)->ano;
+        $ianoMax = db_utils::fieldsMemory(db_query("select MAX(c60_anousu) as ano from conplano;"), 0)->ano;
 
-    for($i = $ianoMin; $i <= $ianoMax; $i++){
-        for($j = 1; $j <= 12; $j++){
-            $dataInicial = date_create("$i-$j-01");
-            $dataInicial = date_format($dataInicial, 'Y-m-d');
-            if($j == 12){
-                $dataFinal = date_create(($i+1).'-01-01');
-                date_sub($dataFinal, date_interval_create_from_date_string('1 days'));
-                $dataFinal = date_format($dataFinal, 'Y-m-d');
-            }else{
-                $dataFinal = date_create($i.'-'.($j+1).'-01');
-                date_sub($dataFinal, date_interval_create_from_date_string('1 days'));
-                $dataFinal = date_format($dataFinal, 'Y-m-d');
-            }
+        for ($i = $ianoMin; $i <= $ianoMax; $i++) {
+            for ($j = 1; $j <= 12; $j++) {
+                $dataInicial = date_create("$i-$j-01");
+                $dataInicial = date_format($dataInicial, 'Y-m-d');
+                if ($j == 12) {
+                    $dataFinal = date_create(($i + 1) . '-01-01');
+                    date_sub($dataFinal, date_interval_create_from_date_string('1 days'));
+                    $dataFinal = date_format($dataFinal, 'Y-m-d');
+                } else {
+                    $dataFinal = date_create($i . '-' . ($j + 1) . '-01');
+                    date_sub($dataFinal, date_interval_create_from_date_string('1 days'));
+                    $dataFinal = date_format($dataFinal, 'Y-m-d');
+                }
 
-            $data1=$dataInicial;
-            $data2=$dataFinal;
-            $variavel='1';
-            $sDocumentos='';
-            $relatorio='s';
-            $contrapartida='off';
-            $saldopordia='n';
-            $contasemmov='s';
-            $quebrapaginaporconta='s';
-            $estrut_inicial='';
+                $data1 = $dataInicial;
+                $data2 = $dataFinal;
+                $variavel = '1';
+                $sDocumentos = '';
+                $relatorio = 's';
+                $contrapartida = 'off';
+                $saldopordia = 'n';
+                $contasemmov = 's';
+                $quebrapaginaporconta = 's';
+                $estrut_inicial = '';
 ///////////////////////////////////////////////////////////////////////
 
-            $contaold = null;
-            $anousu   = $i;
+                $contaold = null;
+                $anousu = $i;
 
 
-            $txt_where  = " 1 = 1 ";
-            $txt_where .= " and conplanoreduz.c61_instit =" . $instit;
+                $txt_where = " 1 = 1 ";
+                $txt_where .= " and conplanoreduz.c61_instit =" . $instit;
 
-            $txt_where = $txt_where . " and (conplano.c60_estrut like '3511209%' OR conplano.c60_estrut like '4511202%')";
+                $txt_where = $txt_where . " and (conplano.c60_estrut like '3511209%' OR conplano.c60_estrut like '4511202%')";
 
 
 //-----------------------------------------------------------------------------
 
-            $sql_analitico = "select conplanoreduz.c61_codcon, conplanoreduz.c61_reduz, conplano.c60_estrut, conplano.c60_descr from conplanoreduz inner join conplano     on c60_codcon = conplanoreduz.c61_codcon and c60_anousu=conplanoreduz.c61_anousu where conplanoreduz.c61_anousu = " . $anousu . " and " . $txt_where . " order by conplano.c60_estrut";
+                $sql_analitico = "select conplanoreduz.c61_codcon, conplanoreduz.c61_reduz, conplano.c60_estrut, conplano.c60_descr from conplanoreduz inner join conplano     on c60_codcon = conplanoreduz.c61_codcon and c60_anousu=conplanoreduz.c61_anousu where conplanoreduz.c61_anousu = " . $anousu . " and " . $txt_where . " order by conplano.c60_estrut";
 //----------------------------------------------------------------------------
 
-            $res = db_query($sql_analitico);
+                $res = db_query($sql_analitico);
 
-            $contador = 0;
-            $total_final_debito_devolucao = 0;
-            $total_final_credito_estorno = 0;
-            $total_final_debito = 0;
-            $total_final_credito = 0;
-            $total_final_saldo_final = 0;
+                $contador = 0;
+                $total_final_debito_devolucao = 0;
+                $total_final_credito_estorno = 0;
+                $total_final_debito = 0;
+                $total_final_credito = 0;
+                $total_final_saldo_final = 0;
 
-            $txt_where .= " and c53_coddoc not in (1009)";
-            for($contas = 0; $contas < pg_numrows($res); $contas ++) {
+                $txt_where .= " and c53_coddoc not in (1009)";
+                for ($contas = 0; $contas < pg_numrows($res); $contas++) {
 
-                db_fieldsmemory($res, $contas);
+                    db_fieldsmemory($res, $contas);
 
-                $conta_atual = $c61_reduz;
-                $txt_where2  = $txt_where . " and conplanoreduz.c61_reduz = $c61_reduz  and conplanoreduz.c61_instit = " . $instit;
-                $txt_where2 .= " and c69_data between '$data1' and '$data2'  and conplanoreduz.c61_instit = " . $instit;
+                    $conta_atual = $c61_reduz;
+                    $txt_where2 = $txt_where . " and conplanoreduz.c61_reduz = $c61_reduz  and conplanoreduz.c61_instit = " . $instit;
+                    $txt_where2 .= " and c69_data between '$data1' and '$data2'  and conplanoreduz.c61_instit = " . $instit;
 
-                $sql_analitico = "
+                    $sql_analitico = "
         select conplanoreduz.c61_codcon,
         conplanoreduz.c61_reduz,
         conplano.c60_estrut,
@@ -936,209 +938,209 @@ try {
        where conplanoreduz.c61_anousu = {$anousu} and {$txt_where2}
        order by conplano.c60_estrut, c69_data,c69_codlan,c69_sequen ";
 
-                $reslista = db_query($sql_analitico);
+                    $reslista = db_query($sql_analitico);
 
-                if (!$reslista) {
-                    echo "ERRO<br><br><br><br><br>";
-                    die($sql_analitico);
-                }
+                    if (!$reslista) {
+                        echo "ERRO<br><br><br><br><br>";
+                        die($sql_analitico);
+                    }
 
-                if (pg_numrows($reslista) > 0) {
-                    db_fieldsmemory($reslista, 0);
-                    $datasaldo = $c69_data;
-                } else {
-                    $datasaldo = $data1;
-                }
-
-                $sinal_dia         = '';
-                $saldo_dia         = 0;
-                $total_dia_debito  = 0;
-                $total_dia_credito = 0;
-                $tot_mov_debito    = 0;
-                $tot_mov_credito   = 0;
-                $saldo_anterior    = "";
-                $repete            = "";
-                $repete_colunas    = false;
-
-
-                $iTotalRegistros = pg_num_rows($reslista);
-                //------------------------------------------------------
-                if ($iTotalRegistros > 0) {
-
-                    for($x = 0; $x < $iTotalRegistros; $x ++) {
-                        db_fieldsmemory($reslista, $x);
+                    if (pg_numrows($reslista) > 0) {
+                        db_fieldsmemory($reslista, 0);
                         $datasaldo = $c69_data;
-                        if ($repete != $c61_codcon) {
-                            // --- imprime movimentao da conta anterior, se houver conta anterior
-                            if ($repete != "") {
+                    } else {
+                        $datasaldo = $data1;
+                    }
 
-                                // --- calcula saldo final ---
-                                if ($tot_mov_debito > $tot_mov_credito)
-                                    $sinal_final = "D";
-                                else
-                                    $sinal_final = "C";
-                                if ($saldo_anterior != "") {
-                                    if ($sinal_anterior == "D")
-                                        $tot_mov_debito += $saldo_anterior;
-                                    else
-                                        $tot_mov_credito += $saldo_anterior;
-                                }
+                    $sinal_dia = '';
+                    $saldo_dia = 0;
+                    $total_dia_debito = 0;
+                    $total_dia_credito = 0;
+                    $tot_mov_debito = 0;
+                    $tot_mov_credito = 0;
+                    $saldo_anterior = "";
+                    $repete = "";
+                    $repete_colunas = false;
 
-                                // --- fim calculo saldo  final -- // --
-                            }
-                            //------------------ //  ------------------
-                            $repete = $c61_codcon;
-                            //--- saldo anterior
-                            $saldo_anterior     = 0;
-                            $sinal_anterior     = 'D';
-                            $saldo_final_funcao = 0;
-                            $c61_reduz_old      = $c61_reduz; // na funo abaixoa tem um GLobal c61_reduz...
 
-                            db_inicio_transacao();
-                            $r_anterior = db_planocontassaldo_matriz($anousu, $data1, $data2, false, "c61_reduz = $c61_reduz and c61_instit=$instit");
-                            db_fim_transacao(true);
-
-                            @ $saldo_anterior     = pg_result($r_anterior, 0, "saldo_anterior");
-                            @ $sinal_anterior     = pg_result($r_anterior, 0, "sinal_anterior");
-                            @ $saldo_final_funcao = pg_result($r_anterior, 0, "saldo_final");
-                            $c61_reduz            = $c61_reduz_old; // devolvemos o valor a globals;
-
-                            //-----------------------------
-                            //---- totalizadores do movimento
-                            $tot_mov_debito  = 0;
-                            $tot_mov_credito = 0;
-
-                            $sinal_dia = $sinal_anterior;
-                            $saldo_dia = $saldo_anterior;
-                        }
-                        $sNumeroEmpenho = "{$e60_codemp} / {$e60_anousu}";
-                        if (empty($e60_codemp)) {
-                            $sNumeroEmpenho = "";
-                        }
-
-                        // -- totalizadores do movimento -------------
-                        if ($tipo == "D") {
-                            $tot_mov_debito   += $c69_valor;
-                            $total_dia_debito += $c69_valor;
-                        } else {
-                            $tot_mov_credito   += $c69_valor;
-                            $total_dia_credito += $c69_valor;
-                        }
-                        //--------------   //   ----------------------
-
-                    } // end for
-                    // imprime totalizador da movimentao
+                    $iTotalRegistros = pg_num_rows($reslista);
+                    //------------------------------------------------------
                     if ($iTotalRegistros > 0) {
-                        // --- calcula saldo final ---
-                        if ($sinal_dia == "D")
-                            $total_dia_debito += $saldo_dia;
-                        else
-                            $total_dia_credito += $saldo_dia;
 
-                        if ($total_dia_debito > $total_dia_credito)
-                            $sinal_dia = "D";
-                        else
-                            $sinal_dia = "C";
-                        $saldo_dia = abs($total_dia_debito - $total_dia_credito);
-                        $total_dia_debito = 0;
-                        $total_dia_debito = 0;
-                        // --- calcula saldo final ---
-                        if ($saldo_anterior != "") {
-                            if ($sinal_anterior == "D")
-                                $tot_mov_debito += $saldo_anterior;
+                        for ($x = 0; $x < $iTotalRegistros; $x++) {
+                            db_fieldsmemory($reslista, $x);
+                            $datasaldo = $c69_data;
+                            if ($repete != $c61_codcon) {
+                                // --- imprime movimentao da conta anterior, se houver conta anterior
+                                if ($repete != "") {
+
+                                    // --- calcula saldo final ---
+                                    if ($tot_mov_debito > $tot_mov_credito)
+                                        $sinal_final = "D";
+                                    else
+                                        $sinal_final = "C";
+                                    if ($saldo_anterior != "") {
+                                        if ($sinal_anterior == "D")
+                                            $tot_mov_debito += $saldo_anterior;
+                                        else
+                                            $tot_mov_credito += $saldo_anterior;
+                                    }
+
+                                    // --- fim calculo saldo  final -- // --
+                                }
+                                //------------------ //  ------------------
+                                $repete = $c61_codcon;
+                                //--- saldo anterior
+                                $saldo_anterior = 0;
+                                $sinal_anterior = 'D';
+                                $saldo_final_funcao = 0;
+                                $c61_reduz_old = $c61_reduz; // na funo abaixoa tem um GLobal c61_reduz...
+
+                                db_inicio_transacao();
+                                $r_anterior = db_planocontassaldo_matriz($anousu, $data1, $data2, false, "c61_reduz = $c61_reduz and c61_instit=$instit");
+                                db_fim_transacao(true);
+
+                                @ $saldo_anterior = pg_result($r_anterior, 0, "saldo_anterior");
+                                @ $sinal_anterior = pg_result($r_anterior, 0, "sinal_anterior");
+                                @ $saldo_final_funcao = pg_result($r_anterior, 0, "saldo_final");
+                                $c61_reduz = $c61_reduz_old; // devolvemos o valor a globals;
+
+                                //-----------------------------
+                                //---- totalizadores do movimento
+                                $tot_mov_debito = 0;
+                                $tot_mov_credito = 0;
+
+                                $sinal_dia = $sinal_anterior;
+                                $saldo_dia = $saldo_anterior;
+                            }
+                            $sNumeroEmpenho = "{$e60_codemp} / {$e60_anousu}";
+                            if (empty($e60_codemp)) {
+                                $sNumeroEmpenho = "";
+                            }
+
+                            // -- totalizadores do movimento -------------
+                            if ($tipo == "D") {
+                                $tot_mov_debito += $c69_valor;
+                                $total_dia_debito += $c69_valor;
+                            } else {
+                                $tot_mov_credito += $c69_valor;
+                                $total_dia_credito += $c69_valor;
+                            }
+                            //--------------   //   ----------------------
+
+                        } // end for
+                        // imprime totalizador da movimentao
+                        if ($iTotalRegistros > 0) {
+                            // --- calcula saldo final ---
+                            if ($sinal_dia == "D")
+                                $total_dia_debito += $saldo_dia;
                             else
-                                $tot_mov_credito += $saldo_anterior;
+                                $total_dia_credito += $saldo_dia;
+
+                            if ($total_dia_debito > $total_dia_credito)
+                                $sinal_dia = "D";
+                            else
+                                $sinal_dia = "C";
+                            $saldo_dia = abs($total_dia_debito - $total_dia_credito);
+                            $total_dia_debito = 0;
+                            $total_dia_debito = 0;
+                            // --- calcula saldo final ---
+                            if ($saldo_anterior != "") {
+                                if ($sinal_anterior == "D")
+                                    $tot_mov_debito += $saldo_anterior;
+                                else
+                                    $tot_mov_credito += $saldo_anterior;
+                            }
+                            if ($tot_mov_debito > $tot_mov_credito)
+                                $sinal_final = "D";
+                            else
+                                $sinal_final = "C";
+                            $total_saldo_final = $tot_mov_debito - $tot_mov_credito;
+
+                            //--- fim calculo saldo final
                         }
-                        if ($tot_mov_debito > $tot_mov_credito)
-                            $sinal_final = "D";
-                        else
-                            $sinal_final = "C";
-                        $total_saldo_final = $tot_mov_debito - $tot_mov_credito;
+                    } else {
 
-                        //--- fim calculo saldo final
+                        $reduz = $c61_reduz;
+                        $descr = $c60_descr;
+                        $estrut = $c60_estrut;
+
+                        db_inicio_transacao();
+                        $r_anterior = db_planocontassaldo_matriz($anousu, $data1, $data2, false, "c61_reduz = $reduz and c61_instit=$instit");
+                        db_fim_transacao(true);
+                        if ($contasemmov == 's') {
+
+                            $saldo_anterior = @ pg_result($r_anterior, 0, "saldo_anterior");
+                            $sinal_anterior = @ pg_result($r_anterior, 0, "sinal_anterior");
+                            $saldo_final_funcao = @pg_result($r_anterior, 0, "saldo_final");
+
+                        }
                     }
-                } else {
 
-                    $reduz = $c61_reduz;
-                    $descr = $c60_descr;
-                    $estrut = $c60_estrut;
-
-                    db_inicio_transacao();
-                    $r_anterior = db_planocontassaldo_matriz($anousu, $data1, $data2, false, "c61_reduz = $reduz and c61_instit=$instit");
-                    db_fim_transacao(true);
-                    if ($contasemmov == 's') {
-
-                        $saldo_anterior = @ pg_result($r_anterior, 0, "saldo_anterior");
-                        $sinal_anterior = @ pg_result($r_anterior, 0, "sinal_anterior");
-                        $saldo_final_funcao = @pg_result($r_anterior, 0, "saldo_final");
-
+                    $contaold = null;
+                    if ($iTotalRegistros > 0 || $contasemmov == 's') {
+                        $contaold = $conta_atual;
+                    }
+                    if (substr($c60_estrut, 0, 7) == '3511209') {
+                        $total_final_debito_devolucao += $tot_mov_debito;
+                        $total_final_credito_estorno += $tot_mov_credito;
+                    } else {
+                        $total_final_debito += $tot_mov_debito;
+                        $total_final_credito += $tot_mov_credito;
                     }
                 }
 
-                $contaold = null;
-                if ($iTotalRegistros > 0 || $contasemmov == 's') {
-                    $contaold = $conta_atual;
-                }
-                if(substr($c60_estrut,0,7) == '3511209'){
-                    $total_final_debito_devolucao  += $tot_mov_debito;
-                    $total_final_credito_estorno   += $tot_mov_credito;
-                }else{
-                    $total_final_debito +=$tot_mov_debito;
-                    $total_final_credito +=$tot_mov_credito;
-                }
-            }
+                $total_final_credito = $total_final_credito > 0 ? ($total_final_credito - @$saldo_anterior) : 0;
 
-            $total_final_credito = $total_final_credito>0?($total_final_credito-@$saldo_anterior):0;
+                $matrixResultados[$i][$j]['credito_repasse_recebido'] = $total_final_credito;
+                $matrixResultados[$i][$j]['debito_devolucao_repasse_recebido'] = $total_final_debito;
 
-            $matrixResultados[$i][$j]['credito_repasse_recebido'] = $total_final_credito;
-            $matrixResultados[$i][$j]['debito_devolucao_repasse_recebido'] = $total_final_debito;
+                $matrixResultados[$i][$j]['credito_devolucao_estorno_repasse_recebido'] = $total_final_credito_estorno;
+                $matrixResultados[$i][$j]['debito_estorno_repasse_recebido'] = $total_final_debito_devolucao;
 
-            $matrixResultados[$i][$j]['credito_devolucao_estorno_repasse_recebido'] = $total_final_credito_estorno;
-            $matrixResultados[$i][$j]['debito_estorno_repasse_recebido'] = $total_final_debito_devolucao;
-
-            $matrixResultados[$i][$j]['saldo_anterior'] = @$saldo_anterior;
-            $matrixResultados[$i][$j]['saldo_total'] = @$saldo_anterior + (abs($total_final_credito) + abs($total_final_credito_estorno)) - (abs($total_final_debito)+abs($total_final_debito_devolucao));
-        }
-    }
-
-    db_logTitulo(" IMPORTA REPASSES",$sArquivoLog,$iParamLog);
-    db_logNumReg((count($matrixResultados)*12),$sArquivoLog,$iParamLog);
-
-    if(!empty($matrixResultados)){
-        $iInd=0;
-        foreach ($matrixResultados as $iAno => $aAno) {
-            foreach($aAno as $iMes => $aMes){
-                $iInd++;
-                logProcessamento($iInd,(count($matrixResultados)*12),$iParamLog);
-                $oRepasses = new stdClass();
-
-                $dataMovimentacao = date_create("$iAno-$iMes-01");
-                $dataMovimentacao = date_format($dataMovimentacao, 'Y-m-d');
-                $oRepasses->data = $dataMovimentacao;
-                $oRepasses->credito_repasse_recebido = $aMes['credito_repasse_recebido'];
-                $oRepasses->debito_devolucao_repasse_recebido  = $aMes['debito_devolucao_repasse_recebido'];
-                $oRepasses->credito_devolucao_estorno_repasse_recebido = $aMes['credito_devolucao_estorno_repasse_recebido'];
-                $oRepasses->debito_estorno_repasse_recebido  = $aMes['debito_estorno_repasse_recebido'];
-                $oRepasses->saldo = $aMes['saldo_total'];
-                $oRepasses->instituicao_id  = $instit;
-                $oTBRepasses->setByLineOfDBUtils($oRepasses);
-                try {
-                    $oTBRepasses->insertValue();
-                } catch ( Exception $eException ) {
-                    throw new Exception("ERRO-0: {$eException->getMessage()}");
-                }
+                $matrixResultados[$i][$j]['saldo_anterior'] = @$saldo_anterior;
+                $matrixResultados[$i][$j]['saldo_total'] = @$saldo_anterior + (abs($total_final_credito) + abs($total_final_credito_estorno)) - (abs($total_final_debito) + abs($total_final_debito_devolucao));
             }
         }
-        try {
-            $oTBRepasses->persist();
-        } catch ( Exception $eException ) {
-            throw new Exception("ERRO-0: {$eException->getMessage()}");
+
+        db_logTitulo(" IMPORTA REPASSES", $sArquivoLog, $iParamLog);
+        db_logNumReg((count($matrixResultados) * 12), $sArquivoLog, $iParamLog);
+
+        if (!empty($matrixResultados)) {
+            $iInd = 0;
+            foreach ($matrixResultados as $iAno => $aAno) {
+                foreach ($aAno as $iMes => $aMes) {
+                    $iInd++;
+                    logProcessamento($iInd, (count($matrixResultados) * 12), $iParamLog);
+                    $oRepasses = new stdClass();
+
+                    $dataMovimentacao = date_create("$iAno-$iMes-01");
+                    $dataMovimentacao = date_format($dataMovimentacao, 'Y-m-d');
+                    $oRepasses->data = $dataMovimentacao;
+                    $oRepasses->credito_repasse_recebido = $aMes['credito_repasse_recebido'];
+                    $oRepasses->debito_devolucao_repasse_recebido = $aMes['debito_devolucao_repasse_recebido'];
+                    $oRepasses->credito_devolucao_estorno_repasse_recebido = $aMes['credito_devolucao_estorno_repasse_recebido'];
+                    $oRepasses->debito_estorno_repasse_recebido = $aMes['debito_estorno_repasse_recebido'];
+                    $oRepasses->saldo = $aMes['saldo_total'];
+                    $oRepasses->instituicao_id = $instit;
+                    $oTBRepasses->setByLineOfDBUtils($oRepasses);
+                    try {
+                        $oTBRepasses->insertValue();
+                    } catch (Exception $eException) {
+                        throw new Exception("ERRO-0: {$eException->getMessage()}");
+                    }
+                }
+            }
+            try {
+                $oTBRepasses->persist();
+            } catch (Exception $eException) {
+                throw new Exception("ERRO-0: {$eException->getMessage()}");
+            }
         }
+
+        // FIM REPASSES ***************************************************************************************************//
+
     }
-
-    // FIM REPASSES ***************************************************************************************************//
-
-
 
     // PROJETOS *******************************************************************************************************//
 
