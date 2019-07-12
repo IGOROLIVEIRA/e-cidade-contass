@@ -795,8 +795,8 @@ try {
     // REPASSES *******************************************************************************************************//
     $instit   = db_utils::fieldsMemory(db_query("SELECT codigo FROM db_config LEFT JOIN infocomplementaresinstit ON si09_instit = codigo WHERE si09_tipoinstit = 1"),0)->codigo;
     $matrixResultados = array();
-    $sInstit  = pg_result($instit,0,0);
-    if ($sInstit) {
+
+    if ($instit) {
         $ianoMin = db_utils::fieldsMemory(db_query("select MIN(c60_anousu) as ano from conplano where c60_anousu = 2015;"), 0)->ano;
         $ianoMax = db_utils::fieldsMemory(db_query("select MAX(c60_anousu) as ano from conplano;"), 0)->ano;
 
