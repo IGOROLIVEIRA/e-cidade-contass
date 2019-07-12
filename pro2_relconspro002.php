@@ -103,14 +103,16 @@ while(count($aNovo) > 0){
 		$aNovo[] = $oProc->p30_procapensado;
 	}
 }
-
-$oDaoProcessosApensados = db_utils::getDao('processosapensados');
-$sCampos                = 'p58_dtproc as data_processo, p30_procapensado as codigo_processo, z01_nome as titular,';
-$sCampos               .= "p51_descr as tipo_processo,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero";
-$sWhere                 = "p58_codproc in (".implode(",",$aAgrupados).")";
-$sSqlProcessosApensados = $oDaoProcessosApensados->sql_query_processo_apensado(null, $sCampos, "p58_codproc", $sWhere);
-$rsProcessosApensados   = $oDaoProcessosApensados->sql_record($sSqlProcessosApensados);
-$aProcessosApensados    = db_utils::getCollectionByRecord($rsProcessosApensados, true);
+$aProcessosApensados = array();
+if(count($aAgrupados) > 0){
+	$oDaoProcessosApensados = db_utils::getDao('processosapensados');
+	$sCampos                = 'p58_dtproc as data_processo, p30_procapensado as codigo_processo, z01_nome as titular,';
+	$sCampos               .= "p51_descr as tipo_processo,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero";
+	$sWhere                 = "p58_codproc in (".implode(",",$aAgrupados).")";
+	$sSqlProcessosApensados = $oDaoProcessosApensados->sql_query_processo_apensado(null, $sCampos, "p58_codproc", $sWhere);
+	$rsProcessosApensados   = $oDaoProcessosApensados->sql_record($sSqlProcessosApensados);
+	$aProcessosApensados    = db_utils::getCollectionByRecord($rsProcessosApensados, true);
+}
 
 
 if (isset ($codproc) && $codproc != "") {
@@ -225,13 +227,11 @@ if (isset ($codproc) && $codproc != "") {
 		$pdf->cell(25, $alt, 'Observação :', 0, 0, "R", 0);
 		$pdf->multicell(175, $alt, $p58_obs, 0, "L", 0);	
 		if ($lMostrarMovimento) {
-			$aDadposApensado = apensado($codproc);
-			$aCodigosProcessos = array($codproc, $aDadposApensado[0]['p30_procprincipal']);
-			if(count($aCodigosProcessos) > 1) {
-				$result_proctransferproc = $clproctransferproc->sql_record($clproctransferproc->sql_query_file(null, null, "distinct *", "p63_codtran", "p63_codproc in (".implode(",",$aCodigosProcessos).")"));
-			}else {
-				$result_proctransferproc = $clproctransferproc->sql_record($clproctransferproc->sql_query_file(null, null, "distinct *", "p63_codtran", "p63_codproc = $codproc"));
+			$p30_procprincipal = getPrincipal($codproc);
+			if(!empty($p30_procprincipal)){
+				$codproc = $codproc.",". $p30_procprincipal;
 			}
+			$result_proctransferproc = $clproctransferproc->sql_record($clproctransferproc->sql_query_file(null, null, "distinct *", "p63_codtran", "p63_codproc in ({$codproc})"));
   		if ($clproctransferproc->numrows != 0) {
   			$tramite = 0;
   			$exe = $clproctransferproc->numrows - 1;
@@ -679,7 +679,12 @@ if (isset ($codproc) && $codproc != "") {
 
 }
 
-function apensado($processo)
+/**
+ * Busca o processo principal de um processo apensado
+ * @param int $processo
+ * @return Array
+ */
+function getPrincipal($processo)
 {
 	$oDaoProcessosApensados = db_utils::getDao('processosapensados');
 	$sCampos = "p30_procprincipal,p58_dtproc as data_processo, cast(p58_numero||'/'||p58_ano as varchar) as codigo_processo, z01_nome as titular,";
@@ -687,7 +692,7 @@ function apensado($processo)
 	$sWhere = "p30_procapensado = {$processo}";
 	$sSqlProcessosApensados = $oDaoProcessosApensados->sql_query_processo_apensado(null, $sCampos, "p58_codproc", $sWhere);
 	$rsProcessosApensados = $oDaoProcessosApensados->sql_record($sSqlProcessosApensados);
-	return pg_fetch_all($rsProcessosApensados);
+	return db_utils::fieldsMemory($rsProcessosApensados,0)->p30_procprincipal;
 }
 
 $pdf->Output();
