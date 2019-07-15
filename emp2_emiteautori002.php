@@ -279,13 +279,15 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 		                   o56_descr,
 		                   pc81_codproc,
 		                   pc11_numero,
-		                   e56_orctiporec,
+                           e56_orctiporec,
+                           m61_descr,
 		                   (CASE WHEN pc23_obs IS NOT NULL and pc23_obs <> '' THEN 'Marca: ' ELSE '' END)||coalesce(trim(pc23_obs),'') as pc23_obs
 	   									 from empautitem
                       		  inner join pcmater        			on pc01_codmater = e55_item
                             inner join orcelemento          on e55_codele    = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
                             left join empautitempcprocitem  on empautitempcprocitem.e73_autori = empautitem.e55_autori
                                                            and empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+                            inner join matunid on matunid.m61_codmatunid = empautitem.e55_unid
                             left join pcprocitem            on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem
                       		  left  join solicitem            on solicitem.pc11_codigo          = pcprocitem.pc81_solicitem
                       		  left  join liclicitem           on liclicitem.l21_codpcprocitem   = pcprocitem.pc81_codprocitem
@@ -388,6 +390,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
     $pdf1->valoritem = 'e55_vltot';
     $pdf1->valor = 'e55_vlrun';
     $pdf1->descricaoitem = 'pc01_descrmater';
+    $pdf1->unidadeitem = 'm61_descr';
     $pdf1->marca = 'e55_marca';
     $pdf1->processoadministrativo = $sProcessoAdministrativo;
     $pdf1->numero = $z01_numero;

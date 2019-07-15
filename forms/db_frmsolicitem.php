@@ -668,10 +668,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 case when pc16_codmater is null then substr(pc11_resum,1,40)
                                      else substr(pc01_descrmater,1,40)
                                 end as pc01_descrmater,
+                                m61_descr,
                                 pc13_quant,
                                 pc13_valor";
                     $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq, pc11_codigo", "$codigos pc11_numero= ".@$pc11_numero);
-                    $cliframe_alterar_excluir->campos = "pc11_seq,pc11_codigo,pc11_numero,pc13_coddot,pc19_orctiporec,pc01_codmater,pc01_descrmater,pc13_quant,pc13_valor";
+                    $cliframe_alterar_excluir->campos = "pc11_seq,pc11_codigo,pc11_numero,pc13_coddot,pc19_orctiporec,pc01_codmater,pc01_descrmater,m61_descr,pc13_quant,pc13_valor";
                     $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
                     $cliframe_alterar_excluir->iframe_height = "150";
                     $cliframe_alterar_excluir->iframe_width = "100%";

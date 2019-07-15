@@ -630,26 +630,38 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 175, $xlin + 51, ':  ' . $this->fax);
 
     $this->objpdf->Setfont('Arial', 'B', 8);
-    //	  $this->objpdf->Roundedrect($xcol,$xlin+54,202,80,2,'DF','1234')
+    //$this->objpdf->Roundedrect($xcol,$xlin+54,202,80,2,'DF','1234')
+
+    $this->objpdf->rect($xcol, $xlin + 58, 8, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 8, $xlin + 58, 12, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 20, $xlin + 58, 15, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 35, $xlin + 58, 103, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 138, $xlin + 58, 22, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 160, $xlin + 58, 20, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 180, $xlin + 58, 22, 6, 2, 'DF', '12');
+
+    /*
     $this->objpdf->rect($xcol, $xlin + 58, 8, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 8, $xlin + 58, 12, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 20, $xlin + 58, 15, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 35, $xlin + 58, 107, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 142, $xlin + 58, 30, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 172, $xlin + 58, 30, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 172, $xlin + 58, 30, 6, 2, 'DF', '12');*/
 
     $this->objpdf->rect($xcol, $xlin + 64, 8, 118, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 118, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 118, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 118, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 142, $xlin + 64, 30, 151, 2, 'DF', '');
-    $this->objpdf->rect($xcol + 172, $xlin + 64, 30, 151, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 35, $xlin + 64, 103, 118, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 138, $xlin + 64, 22, 141, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 160, $xlin + 64, 20, 141, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 180, $xlin + 64, 22, 141, 2, 'DF', '34');
 
-    $this->objpdf->rect($xcol, $xlin + 205, 142, 10, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 142, $xlin + 205, 30, 10, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 172, $xlin + 205, 30, 10, 2, 'DF', '34');
+    $this->objpdf->rect($xcol, $xlin + 205, 138, 10, 2, 'DF', '34');
 
-    $this->objpdf->rect($xcol, $xlin + 182, 142, 23, 2, 'DF', '');
+    $this->objpdf->rect($xcol + 138, $xlin + 205, 0, 10, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 138, $xlin + 205, 64, 10, 2, 'DF', '34');
+
+    $this->objpdf->rect($xcol, $xlin + 182, 138, 23, 2, 'DF', '');
 
     $this->objpdf->sety($xlin + 28);
     $alt = 4;
@@ -658,13 +670,27 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
     $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
     $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
+    $this->objpdf->text($xcol + 143, $xlin + 62, 'UNIDADE');
+    $this->objpdf->text($xcol + 163, $xlin + 62, 'UNITÁRIO');
+    $this->objpdf->text($xcol + 186, $xlin + 62, 'TOTAL');
+
+    /*
+    $this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
+    $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
+    $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
+    $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
     $this->objpdf->text($xcol + 145, $xlin + 62, 'VALOR UNITÁRIO');
     $this->objpdf->text($xcol + 176, $xlin + 62, 'VALOR TOTAL');
+    */
     $maiscol = 0;
 
-    $this->objpdf->SetWidths(array(8, 12, 15, 105, 30, 30));
+    $this->objpdf->SetWidths(array(8, 12, 15, 104, 20, 20, 20));
 
-    $this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'R', 'R'));
+    $this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'C', 'R', 'R'));
+
+    /*$this->objpdf->SetWidths(array(8, 12, 15, 105, 30, 30));
+
+    $this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'R', 'R'));*/
 
     $this->objpdf->setleftmargin(4);
     $this->objpdf->sety($xlin + 65);
@@ -673,7 +699,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $xtotal = 0;
 
     $retorna_obs = 0;
-
+    
     for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
         db_fieldsmemory($this->recorddositens, $ii);
@@ -718,7 +744,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             if(pg_result($this->recorddositens, $ii, $this->marca) != ''){
 				$descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
 			}
-
+           
             $this->objpdf->Setfont('Arial', '', 7);
             $this->objpdf->Row(array(
 
@@ -726,6 +752,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 pg_result($this->recorddositens, $ii, $this->item),
                 pg_result($this->recorddositens, $ii, $this->quantitem),
                 $descricaoitem,
+                pg_result($this->recorddositens, $ii, $this->unidadeitem),
                 db_formatar(pg_result($this->recorddositens, $ii, $this->valor), 'v', " ", $this->casadec),
                 db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
             ), 3, false, 3);
@@ -937,8 +964,16 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
                 $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
                 $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
+                $this->objpdf->text($xcol + 145, $xlin + 62, 'UNIDADE');
+                $this->objpdf->text($xcol + 168, $xlin + 62, 'UNITÁRIO');
+                $this->objpdf->text($xcol + 176, $xlin + 62, 'TOTAL');
+
+                /*$this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
+                $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
+                $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
+                $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
                 $this->objpdf->text($xcol + 145, $xlin + 62, 'VALOR UNITÁRIO');
-                $this->objpdf->text($xcol + 176, $xlin + 62, 'VALOR TOTAL');
+                $this->objpdf->text($xcol + 176, $xlin + 62, 'VALOR TOTAL');*/
                 //$this->objpdf->text($xcol + 85, $xlin + 320, 'Continuação da Página ' . ($this->objpdf->PageNo() + 1));
 
                 $alt = 4;

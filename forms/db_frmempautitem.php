@@ -398,12 +398,12 @@ function js_troca(codele) {
     <tr>
       <td valign="top"  align='center' width="90%"  height="100%">  
        <?
-        $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
-        //  echo $sql_item;
+        $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,m61_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
+        //echo $sql_item;
         $chavepri= array("e55_autori"=>$e55_autori,"e55_sequen"=>@$e55_sequen);
         $cliframe_alterar_excluir->chavepri=$chavepri;
         $cliframe_alterar_excluir->sql     = $sql_item;
-        $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,e55_marca,e55_quant,e55_vlrun,e55_vltot";
+        $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,m61_descr,e55_marca,e55_quant,e55_vlrun,e55_vltot";
         $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
         $cliframe_alterar_excluir->strFormatar   ="";	
         $cliframe_alterar_excluir->iframe_height ="160";

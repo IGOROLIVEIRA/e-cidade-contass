@@ -477,6 +477,7 @@ class db_impcarne extends cl_assinatura {
   var $recorddositens 	= null;		// record set dos itens
   var $linhasdositens 	= null;		// numero de itens da autorizacao
   var $item	    	= null;		// codigo do item
+  var $unidadeitem = null;
   var $quantitem    	= null;		// quantidade do item
   var $valoritem    	= null;		// valor unit�rio do item
   var $empempenho       = null;         // cod empenho para emiss�o de ordem de compra
