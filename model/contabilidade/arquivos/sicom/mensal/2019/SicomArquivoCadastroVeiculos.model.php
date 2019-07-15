@@ -761,6 +761,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                           AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                     ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                 END AS codunidadesub,
+                ve01_codunidadesub,
                 CASE
                     WHEN veiculostransferencia.ve81_codigoant IS NULL THEN veiculostransferencia.ve81_codigo
                     WHEN veiculostransferencia.ve81_codigoant = 0 THEN veiculostransferencia.ve81_codigo
@@ -799,6 +800,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       SELECT DISTINCT '40' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
                       veiculostransferencia.ve81_codunidadesubant AS codunidadesub,
+                      ve01_codunidadesub,
                         CASE
                             WHEN veiculostransferencia.ve81_codigoant IS NULL THEN veiculostransferencia.ve81_codigo
                             WHEN veiculostransferencia.ve81_codigoant = 0 THEN veiculostransferencia.ve81_codigo
@@ -835,7 +837,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
         $rsResult40 = db_query($sSql);
-//        db_criatabela($rsResult40);die ($sSql);
         /**
          * registro 40
          */
