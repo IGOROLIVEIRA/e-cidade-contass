@@ -162,9 +162,9 @@ class cl_veiculos {
      }
    }
    // funcao para inclusao
-   function incluir ($ve01_codigo,$si04_tipoveiculo = 0){ 
+   function incluir ($ve01_codigo,$si04_tipoveiculo = 0){
       $this->atualizacampos();
-     if($this->ve01_placa == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_placa == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Placa nao Informado.";
        $this->erro_campo = "ve01_placa";
        $this->erro_banco = "";
@@ -173,7 +173,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     /*if($this->ve01_veiccadtipo == null ){ 
+     /*if($this->ve01_veiccadtipo == null ){
        $this->erro_sql = " Campo Tipo nao Informado.";
        $this->erro_campo = "ve01_veiccadtipo";
        $this->erro_banco = "";
@@ -182,7 +182,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     if($this->ve01_veiccadmarca == null || $this->ve01_veiccadmarca == 0){ 
+     if($this->ve01_veiccadmarca == null || $this->ve01_veiccadmarca == 0){
        $this->erro_sql = " Campo Marca nao Informado.";
        $this->erro_campo = "ve01_veiccadmarca";
        $this->erro_banco = "";
@@ -191,7 +191,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->ve01_veiccadmodelo == null || $this->ve01_veiccadmodelo == 0) && $si04_tipoveiculo == 3){ 
+     if(($this->ve01_veiccadmodelo == null || $this->ve01_veiccadmodelo == 0) && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Modelo nao Informado.";
        $this->erro_campo = "ve01_veiccadmodelo";
        $this->erro_banco = "";
@@ -200,7 +200,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && $si04_tipoveiculo == 3){ 
+     if(($this->ve01_veiccadcor == null || $this->ve01_veiccadcor == 0) && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Cor nao Informado.";
        $this->erro_campo = "ve01_veiccadcor";
        $this->erro_banco = "";
@@ -209,7 +209,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadproced == null ){ 
+     if($this->ve01_veiccadproced == null ){
        $this->erro_sql = " Campo Procedência nao Informado.";
        $this->erro_campo = "ve01_veiccadproced";
        $this->erro_banco = "";
@@ -218,7 +218,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadcateg == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_veiccadcateg == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Categoria nao Informado.";
        $this->erro_campo = "ve01_veiccadcateg";
        $this->erro_banco = "";
@@ -227,7 +227,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_chassi == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_chassi == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Nº do Chassi nao Informado.";
        $this->erro_campo = "ve01_chassi";
        $this->erro_banco = "";
@@ -236,7 +236,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_ranavam == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_ranavam == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Renavam nao Informado.";
        $this->erro_campo = "ve01_ranavam";
        $this->erro_banco = "";
@@ -245,7 +245,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_placanum == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_placanum == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Placa em Número nao Informado.";
        $this->erro_campo = "ve01_placanum";
        $this->erro_banco = "";
@@ -254,7 +254,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_nroserie == null && $this->ve01_chassi == null){ 
+     if($this->ve01_nroserie == null && $this->ve01_chassi == null){
        $this->erro_sql = " Campo N° de Série nao Informado.";
        $this->erro_campo = "ve01_nroserie";
        $this->erro_banco = "";
@@ -263,7 +263,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     /*if($this->ve01_certif == null ){ 
+     /*if($this->ve01_certif == null ){
        $this->erro_sql = " Campo Nº do Certificado nao Informado.";
        $this->erro_campo = "ve01_certif";
        $this->erro_banco = "";
@@ -272,7 +272,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     /*if($this->ve01_quantpotencia == null ){ 
+     /*if($this->ve01_quantpotencia == null ){
        $this->erro_sql = " Campo Quant. Potência nao Informado.";
        $this->erro_campo = "ve01_quantpotencia";
        $this->erro_banco = "";
@@ -281,7 +281,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     /*if($this->ve01_veiccadpotencia == null && $si04_tipoveiculo == 3){ 
+     /*if($this->ve01_veiccadpotencia == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Potência nao Informado.";
        $this->erro_campo = "ve01_veiccadpotencia";
        $this->erro_banco = "";
@@ -290,7 +290,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     /*if($this->ve01_quantcapacidad == null ){ 
+     /*if($this->ve01_quantcapacidad == null ){
        $this->erro_sql = " Campo Quant. Capacidade nao Informado.";
        $this->erro_campo = "ve01_quantcapacidad";
        $this->erro_banco = "";
@@ -299,7 +299,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     /*if($this->ve01_veiccadtipocapacidade == null ){ 
+     /*if($this->ve01_veiccadtipocapacidade == null ){
        $this->erro_sql = " Campo Tipo de Capacidade nao Informado.";
        $this->erro_campo = "ve01_veiccadtipocapacidade";
        $this->erro_banco = "";
@@ -308,7 +308,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }*/
-     if($this->ve01_dtaquis == null ){ 
+     if($this->ve01_dtaquis == null ){
        $this->erro_sql = " Campo Data de Aquisição nao Informado.";
        $this->erro_campo = "ve01_dtaquis";
        $this->erro_banco = "";
@@ -317,7 +317,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_veiccadcategcnh == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_veiccadcategcnh == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
        $this->erro_campo = "ve01_veiccadcategcnh";
        $this->erro_banco = "";
@@ -326,7 +326,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_anofab == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_anofab == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
        $this->erro_campo = "ve01_anofab";
        $this->erro_banco = "";
@@ -335,7 +335,7 @@ class cl_veiculos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve01_anomod == null && $si04_tipoveiculo == 3){ 
+     if($this->ve01_anomod == null && $si04_tipoveiculo == 3){
        $this->erro_sql = " Campo Ano do Modelo nao Informado.";
        $this->erro_campo = "ve01_anomod";
        $this->erro_banco = "";
@@ -443,29 +443,29 @@ class cl_veiculos {
                                       ,ve01_instit
                        )
                 values (
-                                $this->ve01_codigo 
-                               ,'$this->ve01_placa' 
-                               ,".($this->ve01_veiccadtipo == 0 ? 'null' : $this->ve01_veiccadtipo)." 
-                               ,$this->ve01_veiccadmarca 
-                               ,".($this->ve01_veiccadmodelo == 0 ? 'null' : $this->ve01_veiccadmodelo)." 
-                               ,".($this->ve01_veiccadcor == 0 ? 'null' : $this->ve01_veiccadcor)." 
-                               ,".($this->ve01_veiccadproced == 0 ? 'null' : $this->ve01_veiccadproced)." 
-                               ,".($this->ve01_veiccadcateg == 0 ? 'null' : $this->ve01_veiccadcateg)." 
-                               ,'$this->ve01_chassi' 
-                               ,".($this->ve01_ranavam == null ? "null" : $this->ve01_ranavam)." 
-                               ,".($this->ve01_placanum == null ? "null" : $this->ve01_placanum)." 
-                               ,'$this->ve01_certif' 
-                               ,".($this->ve01_quantpotencia == null ? 0 : $this->ve01_quantpotencia)." 
-                               ,".($this->ve01_veiccadpotencia == 0 ? 'null' : $this->ve01_veiccadpotencia)." 
-                               ,".($this->ve01_quantcapacidad == null? 0 : $this->ve01_quantcapacidad)." 
-                               ,".($this->ve01_veiccadtipocapacidade == 0? 'null' : $this->ve01_veiccadtipocapacidade)." 
-                               ,".($this->ve01_dtaquis == "null" || $this->ve01_dtaquis == ""?"null":"'".$this->ve01_dtaquis."'")." 
-                               ,".($this->ve01_veiccadcategcnh == 0 ? 'null' : $this->ve01_veiccadcategcnh)." 
-                               ,".($this->ve01_anofab == null? 0 : $this->ve01_anofab)." 
-                               ,".($this->ve01_anomod == null? 0 : $this->ve01_anomod)." 
-                               ,$this->ve01_ceplocalidades 
-                               ,$this->ve01_ativo 
-                               ,$this->ve01_veictipoabast 
+                                $this->ve01_codigo
+                               ,'$this->ve01_placa'
+                               ,".($this->ve01_veiccadtipo == 0 ? 'null' : $this->ve01_veiccadtipo)."
+                               ,$this->ve01_veiccadmarca
+                               ,".($this->ve01_veiccadmodelo == 0 ? 'null' : $this->ve01_veiccadmodelo)."
+                               ,".($this->ve01_veiccadcor == 0 ? 'null' : $this->ve01_veiccadcor)."
+                               ,".($this->ve01_veiccadproced == 0 ? 'null' : $this->ve01_veiccadproced)."
+                               ,".($this->ve01_veiccadcateg == 0 ? 'null' : $this->ve01_veiccadcateg)."
+                               ,'$this->ve01_chassi'
+                               ,".($this->ve01_ranavam == null ? "null" : $this->ve01_ranavam)."
+                               ,".($this->ve01_placanum == null ? "null" : $this->ve01_placanum)."
+                               ,'$this->ve01_certif'
+                               ,".($this->ve01_quantpotencia == null ? 0 : $this->ve01_quantpotencia)."
+                               ,".($this->ve01_veiccadpotencia == 0 ? 'null' : $this->ve01_veiccadpotencia)."
+                               ,".($this->ve01_quantcapacidad == null? 0 : $this->ve01_quantcapacidad)."
+                               ,".($this->ve01_veiccadtipocapacidade == 0? 'null' : $this->ve01_veiccadtipocapacidade)."
+                               ,".($this->ve01_dtaquis == "null" || $this->ve01_dtaquis == ""?"null":"'".$this->ve01_dtaquis."'")."
+                               ,".($this->ve01_veiccadcategcnh == 0 ? 'null' : $this->ve01_veiccadcategcnh)."
+                               ,".($this->ve01_anofab == null? 0 : $this->ve01_anofab)."
+                               ,".($this->ve01_anomod == null? 0 : $this->ve01_anomod)."
+                               ,$this->ve01_ceplocalidades
+                               ,$this->ve01_ativo
+                               ,$this->ve01_veictipoabast
                                ,$this->ve01_medidaini
                                ,'$this->ve01_nroserie'
                                ,".($this->ve01_codigoant == null? 'null' : $this->ve01_codigoant)."
@@ -530,7 +530,7 @@ class cl_veiculos {
      return true;
    }
    // funcao para alteracao
-   function alterar ($ve01_codigo=null, $si04_tipoveiculo) { 
+   function alterar ($ve01_codigo=null, $si04_tipoveiculo) {
       $this->atualizacampos();
      $sql = " update veiculos set ";
      $virgula = "";
@@ -550,7 +550,7 @@ class cl_veiculos {
      if(trim($this->ve01_placa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placa"])){
        $sql  .= $virgula." ve01_placa = '$this->ve01_placa' ";
        $virgula = ",";
-       if(trim($this->ve01_placa) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_placa) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Placa nao Informado.";
          $this->erro_campo = "ve01_placa";
          $this->erro_banco = "";
@@ -560,10 +560,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_veiccadtipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipo"])){ 
+     if(trim($this->ve01_veiccadtipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipo"])){
        $sql  .= $virgula." ve01_veiccadtipo = ".($this->ve01_veiccadtipo == 0 ? 'null' : $this->ve01_veiccadtipo)."  ";
        $virgula = ",";
-       /*if(trim($this->ve01_veiccadtipo) == null ){ 
+       /*if(trim($this->ve01_veiccadtipo) == null ){
          $this->erro_sql = " Campo Tipo nao Informado.";
          $this->erro_campo = "ve01_veiccadtipo";
          $this->erro_banco = "";
@@ -576,7 +576,7 @@ class cl_veiculos {
      if(trim($this->ve01_veiccadmarca)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmarca"])){
        $sql  .= $virgula." ve01_veiccadmarca = $this->ve01_veiccadmarca ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadmarca) == null || $this->ve01_veiccadmarca == 0){ 
+       if(trim($this->ve01_veiccadmarca) == null || $this->ve01_veiccadmarca == 0){
          $this->erro_sql = " Campo Marca nao Informado.";
          $this->erro_campo = "ve01_veiccadmarca";
          $this->erro_banco = "";
@@ -586,10 +586,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_veiccadmodelo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"])){ 
+     if(trim($this->ve01_veiccadmodelo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadmodelo"])){
        $sql  .= $virgula." ve01_veiccadmodelo = ".($this->ve01_veiccadmodelo == 0 ? 'null' : $this->ve01_veiccadmodelo)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadmodelo) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_veiccadmodelo) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Modelo nao Informado.";
          $this->erro_campo = "ve01_veiccadmodelo";
          $this->erro_banco = "";
@@ -599,10 +599,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_veiccadcor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcor"])){ 
+     if(trim($this->ve01_veiccadcor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcor"])){
        $sql  .= $virgula." ve01_veiccadcor = ".($this->ve01_veiccadcor == 0 ? 'null' : $this->ve01_veiccadcor)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcor) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_veiccadcor) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Cor nao Informado.";
          $this->erro_campo = "ve01_veiccadcor";
          $this->erro_banco = "";
@@ -612,10 +612,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_veiccadproced)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"])){ 
+     if(trim($this->ve01_veiccadproced)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadproced"])){
        $sql  .= $virgula." ve01_veiccadproced = ".($this->ve01_veiccadproced == 0 ? 'null' : $this->ve01_veiccadproced)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadproced) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_veiccadproced) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Procedência nao Informado.";
          $this->erro_campo = "ve01_veiccadproced";
          $this->erro_banco = "";
@@ -625,10 +625,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_veiccadcateg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"])){ 
+     if(trim($this->ve01_veiccadcateg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcateg"])){
        $sql  .= $virgula." ve01_veiccadcateg = ".($this->ve01_veiccadcateg == 0 ? 'null' : $this->ve01_veiccadcateg)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcateg) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_veiccadcateg) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Categoria nao Informado.";
          $this->erro_campo = "ve01_veiccadcateg";
          $this->erro_banco = "";
@@ -641,7 +641,7 @@ class cl_veiculos {
      if(trim($this->ve01_chassi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_chassi"])){
        $sql  .= $virgula." ve01_chassi = '$this->ve01_chassi' ";
        $virgula = ",";
-       if(trim($this->ve01_chassi) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_chassi) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Nº do Chassi nao Informado.";
          $this->erro_campo = "ve01_chassi";
          $this->erro_banco = "";
@@ -651,10 +651,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_ranavam)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ranavam"])){ 
+     if(trim($this->ve01_ranavam)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_ranavam"])){
        $sql  .= $virgula." ve01_ranavam = ".($this->ve01_ranavam == null ? "null" : $this->ve01_ranavam)." ";
        $virgula = ",";
-       if(trim($this->ve01_ranavam) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_ranavam) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Renavam nao Informado.";
          $this->erro_campo = "ve01_ranavam";
          $this->erro_banco = "";
@@ -664,10 +664,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_placanum)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"])){ 
+     if(trim($this->ve01_placanum)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_placanum"])){
        $sql  .= $virgula." ve01_placanum = ".($this->ve01_placanum == null ? "null" : $this->ve01_placanum)."  ";
        $virgula = ",";
-       if(trim($this->ve01_placanum) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_placanum) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Placa em Número nao Informado.";
          $this->erro_campo = "ve01_placanum";
          $this->erro_banco = "";
@@ -677,10 +677,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_nroserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_nroserie"])){ 
+     if(trim($this->ve01_nroserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_nroserie"])){
        $sql  .= $virgula." ve01_nroserie = '$this->ve01_nroserie' ";
        $virgula = ",";
-       if(trim($this->ve01_nroserie) == null && $this->ve01_chassi == null){ 
+       if(trim($this->ve01_nroserie) == null && $this->ve01_chassi == null){
          $this->erro_sql = " Campo Nº de Série nao Informado.";
          $this->erro_campo = "ve01_nroserie";
          $this->erro_banco = "";
@@ -690,10 +690,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_certif)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_certif"])){ 
+     if(trim($this->ve01_certif)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_certif"])){
        $sql  .= $virgula." ve01_certif = '$this->ve01_certif' ";
        $virgula = ",";
-       /*if(trim($this->ve01_certif) == null ){ 
+       /*if(trim($this->ve01_certif) == null ){
          $this->erro_sql = " Campo Nº do Certificado nao Informado.";
          $this->erro_campo = "ve01_certif";
          $this->erro_banco = "";
@@ -703,10 +703,10 @@ class cl_veiculos {
          return false;
        }*/
      }
-     if(trim($this->ve01_quantpotencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantpotencia"])){ 
+     if(trim($this->ve01_quantpotencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantpotencia"])){
        $sql  .= $virgula." ve01_quantpotencia = ".($this->ve01_quantpotencia == null ? 0 : $this->ve01_quantpotencia)." ";
        $virgula = ",";
-       /*if(trim($this->ve01_quantpotencia) == null ){ 
+       /*if(trim($this->ve01_quantpotencia) == null ){
          $this->erro_sql = " Campo Quant. Potência nao Informado.";
          $this->erro_campo = "ve01_quantpotencia";
          $this->erro_banco = "";
@@ -716,10 +716,10 @@ class cl_veiculos {
          return false;
        }*/
      }
-     if(trim($this->ve01_veiccadpotencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadpotencia"])){ 
+     if(trim($this->ve01_veiccadpotencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadpotencia"])){
        $sql  .= $virgula." ve01_veiccadpotencia = ".($this->ve01_veiccadpotencia == 0 ? 'null' : $this->ve01_veiccadpotencia)." ";
        $virgula = ",";
-       /*if(trim($this->ve01_veiccadpotencia) == null ){ 
+       /*if(trim($this->ve01_veiccadpotencia) == null ){
          $this->erro_sql = " Campo Potência nao Informado.";
          $this->erro_campo = "ve01_veiccadpotencia";
          $this->erro_banco = "";
@@ -729,10 +729,10 @@ class cl_veiculos {
          return false;
        }*/
      }
-     if(trim($this->ve01_quantcapacidad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantcapacidad"])){ 
+     if(trim($this->ve01_quantcapacidad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_quantcapacidad"])){
        $sql  .= $virgula." ve01_quantcapacidad = ".($this->ve01_quantcapacidad == null? 0 : $this->ve01_quantcapacidad)." ";
        $virgula = ",";
-       /*if(trim($this->ve01_quantcapacidad) == null ){ 
+       /*if(trim($this->ve01_quantcapacidad) == null ){
          $this->erro_sql = " Campo Quant. Capacidade nao Informado.";
          $this->erro_campo = "ve01_quantcapacidad";
          $this->erro_banco = "";
@@ -742,10 +742,10 @@ class cl_veiculos {
          return false;
        }*/
      }
-     if(trim($this->ve01_veiccadtipocapacidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipocapacidade"])){ 
+     if(trim($this->ve01_veiccadtipocapacidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadtipocapacidade"])){
        $sql  .= $virgula." ve01_veiccadtipocapacidade = ".($this->ve01_veiccadtipocapacidade == 0 ? 'null' : $this->ve01_veiccadtipocapacidade)." ";
        $virgula = ",";
-       /*if(trim($this->ve01_veiccadtipocapacidade) == null ){ 
+       /*if(trim($this->ve01_veiccadtipocapacidade) == null ){
          $this->erro_sql = " Campo Tipo de Capacidade nao Informado.";
          $this->erro_campo = "ve01_veiccadtipocapacidade";
          $this->erro_banco = "";
@@ -782,10 +782,10 @@ class cl_veiculos {
          }
        }
      }
-     if(trim($this->ve01_veiccadcategcnh)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"])){ 
+     if(trim($this->ve01_veiccadcategcnh)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_veiccadcategcnh"])){
        $sql  .= $virgula." ve01_veiccadcategcnh = ".($this->ve01_veiccadcategcnh == 0? 'null' : $this->ve01_veiccadcategcnh)." ";
        $virgula = ",";
-       if(trim($this->ve01_veiccadcategcnh) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_veiccadcategcnh) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Categoria CNH Exigida nao Informado.";
          $this->erro_campo = "ve01_veiccadcategcnh";
          $this->erro_banco = "";
@@ -795,10 +795,10 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_anofab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])){ 
+     if(trim($this->ve01_anofab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anofab"])){
        $sql  .= $virgula." ve01_anofab = $this->ve01_anofab ";
        $virgula = ",";
-       if(trim($this->ve01_anofab) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_anofab) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Ano de Fabricação nao Informado.";
          $this->erro_campo = "ve01_anofab";
          $this->erro_banco = "";
@@ -811,7 +811,7 @@ class cl_veiculos {
      if(trim($this->ve01_anomod)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_anomod"])){
        $sql  .= $virgula." ve01_anomod = $this->ve01_anomod ";
        $virgula = ",";
-       if(trim($this->ve01_anomod) == null && $si04_tipoveiculo == 3){ 
+       if(trim($this->ve01_anomod) == null && $si04_tipoveiculo == 3){
          $this->erro_sql = " Campo Ano do Modelo nao Informado.";
          $this->erro_campo = "ve01_anomod";
          $this->erro_banco = "";
@@ -873,11 +873,11 @@ class cl_veiculos {
          return false;
        }
      }
-     if(trim($this->ve01_codigoant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])){ 
+     if(trim($this->ve01_codigoant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])){
        $sql  .= $virgula." ve01_codigoant = ".($this->ve01_codigoant == 0 || $this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant)." ";
        $virgula = ",";
      }
-     if(trim($this->ve01_codunidadesub)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])){ 
+     if(trim($this->ve01_codunidadesub)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])){
        $sql  .= $virgula." ve01_codunidadesub = '".($this->ve01_codunidadesub == 0 || $this->ve01_codunidadesub == null ? '' : $this->ve01_codunidadesub)."' ";
        $virgula = ",";
      }
@@ -1214,6 +1214,41 @@ class cl_veiculos {
      }
      return $sql;
   }
+  function sql_query_placa ($ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from veiculos ";
+     $sql .= " join veicbaixa on ve04_veiculo = ve01_codigo ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve01_codigo!=null ){
+         $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+
   function sql_query_veiculo ( $ve01_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
