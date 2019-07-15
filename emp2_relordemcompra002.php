@@ -194,20 +194,23 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
    if ($clmatordemitem->numrows==0){
      $erro++;
    }else{
-   $pdf->setfont('arial','b',8);
-   $pdf->cell(20,$alt,$m51_codordem,0,0,"C",0);
-   $pdf->cell(20,$alt,db_formatar($m51_data,'d'),0,0,"C",0);
+    $tamanho_cabecalho = 0;
+    $pdf->setfont('arial','b',8);
+    if ($pdf->gety()+4 > $pdf->h - 30 || $troca != 0 ){
+       $pdf->addpage('L');
+    }
+    $pdf->Cell(20,$alt,$m51_codordem,0,0,"C",0);
+
+   $pdf->Cell(20,$alt,db_formatar($m51_data,'d'),0,0,"C",0);
    $y_value = $pdf->gety();
-   $pdf->MultiCell(20,$alt,$m51_depto,0,"C",0);
-   $pdf->SetXY($pdf->getx()+60, $y_value);
+   $pdf->Cell(20,$alt,$m51_depto,0, 0,"C",0);
    $pdf->MultiCell(70,$alt,$descrdepto,0,"L",0);
-   $pdf->setXY($pdf->getx()+131, $y_value);
-   $pdf->MultiCell(20,$alt,$m51_numcgm,0,"C",0);
-   $pdf->setXY($pdf->getx()+150, $y_value);
+   $pdf->setXY(140, $y_value);
+   $pdf->Cell(20,$alt,$m51_numcgm,0, 0, "C", 0);
    $pdf->MultiCell(70,$alt,$z01_nome,0,"L",0);
    $pdf->setXY($pdf->getx()+220, $y_value);
    $pdf->cell(25,$alt,$m53_data,0,0,"C",0);
-   $pdf->cell(20,$alt,db_formatar($m51_valortotal,'f'),0,1,"C",0);
+   $pdf->cell(30,$alt,db_formatar($m51_valortotal,'f'),0,1,"C",0);
    $total++;
 
    for($i = 0; $i < $clmatordemitem->numrows;$i++){
@@ -224,9 +227,10 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
        $pdf->cell(25,$alt,'Data Anulaзгo',1,0,"C",1);
        $pdf->cell(30,$alt,$RLm51_valortotal,1,1,"C",1);
        $pdf->cell(20,$alt,'Cod. Lanc.',1,0,"C",1);
-       $pdf->cell(20,$alt,'Nє do Empenho',1,0,"C",1);
+       $pdf->cell(20,$alt,'Nє Empenho',1,0,"C",1);
        $pdf->cell(20,$alt,$RLm52_numemp,1,0,"C",1);
        $pdf->cell(20,$alt,$RLpc01_codmater,1,0,"C",1);
+       // $valor_x = $pdf->getx();
        $pdf->cell(60,$alt,$RLpc01_descrmater,1,0,"C",1);
        $pdf->cell(20,$alt,$RLm52_sequen,1,0,"C",1);
        $pdf->cell(55,$alt,$RLe62_descr,1,0,"C",1);
@@ -236,50 +240,68 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
 
        $troca = 0;
      }
-     $maiorTamanho = 0;
+
      $pdf->sety($pdf->gety()+3);
+     $maiorTamanho = 0;
      $valoruni=$m52_valor/$m52_quant;
      $pdf->setfont('arial', '', 7);
+
      $pdf->cell(20, $alt, $m52_codlanc, 0, 0, "C", 0);
+
      $valor_y = $pdf->gety();
      $pdf->cell(20, $alt, $e60_codemp, 0, 0, "C", 0);
      $pdf->cell(20, $alt, $m52_numemp, 0, 0, "C", 0);
      $pdf->cell(20, $alt, $pc01_codmater, 0, 0, "C", 0);
-     $pdf->setXY($pdf->getX(), $valor_y+0.5);
-     $valor_x = $pdf->getX();
-     $pdf->setXY(150, $valor_y);
+     $valor_x = $pdf->getx();
+
+     $pdf->setx(150);
      $pdf->cell(20, $alt, $m52_sequen, 0, 0, "C", 0);
-     $valor_x2 = $pdf->getx();
-     $nova_descr = $e62_descr;
-
-     if($pdf->gety() > $maiorTamanho)
-        $maiorTamanho = $pdf->gety();
-
-     $pdf->setXY($valor_x2 + 48, $valor_y);
-     $pdf->cell(29, $alt, db_formatar($valoruni,'f'), 0, 0, "C", 0);
-     $pdf->cell(17, $alt, $m52_quant, 0, 0, "C", 0);
-     $pdf->cell(18, $alt, db_formatar($m52_valor, 'f'), 0, 1, "C", 0);
-     $line_y = $pdf->gety() + 2;
-
+     $nova_descr = converte_minusculas(strtoupper($e62_descr));
 
      if(strpos($nova_descr, '%') !== false){
-      if(preg_match("/\%\d/", $nova_descr) != 0){
-          while(preg_match("/\%\d/", $nova_descr) != 0){
-            $nova_descr = urldecode($nova_descr);
+      if(preg_match("/\%\w/", $nova_descr) != 0){
+        while(preg_match("/\%\w/", $nova_descr) != 0){
+          $nova_descr = urldecode($nova_descr);
+          $nova_descr = str_replace("+", " ", $nova_descr);
+        }
+      }
+     }
+
+     $descr_param = preg_replace("/[^A-Za-z]/", "", $nova_descr);
+     $tratado = replace_palavras($descr_param);
+
+     if(ctype_upper($tratado)){
+        if(strlen($nova_descr) > 30){
+          $nova_descr = trim(substr($nova_descr, 0, 30));
+          $nova_descr .= "...";
+        }
+     }else {
+      if(strlen($nova_descr) > 35){
+        $nova_descr = trim(substr($nova_descr, 0, 35));
+        $nova_descr .= '...';
+      }
+     }
+
+     // print_r('Tratado: '.$tratado);
+
+     $pdf->cell(55, $alt-1, $nova_descr, 0, 0, "L", 0);
+     $pdf->cell(20, $alt, db_formatar($valoruni,'f'), 0, 0, "C", 0);
+     $pdf->cell(20, $alt, $m52_quant, 0, 0, "C", 0);
+     $pdf->cell(20, $alt, db_formatar($m52_valor, 'f'), 0, 1, "C", 0);
+     $line_y = $pdf->gety() + 2;
+
+     $descr_mater = trim($pc01_descrmater);
+     if(strpos($descr_mater, '%') !== false){
+      if(preg_match("/\%\w/", $descr_mater) != 0){
+          while(preg_match("/\%\w/", $descr_mater) != 0){
+            $descr_mater = urldecode($descr_mater);
           }
         }
      }
 
-     if($nova_descr){
-       $nova_descr = str_replace('+'," ", $nova_descr);
-       $nova_descr = substr($nova_descr, 0, 80);
-       $nova_descr .= ' ...';
-     }
+     $pdf->setXY($valor_x + 1, $valor_y+0.5);
+     $pdf->MultiCell(55,$alt-1,$descr_mater,0,"L",0);
 
-     $pdf->setXY($valor_x, $valor_y+0.5);
-     $pdf->MultiCell(60, $alt-1, $pc01_descrmater, 0, "L", 0);
-     $pdf->setXY($valor_x2 + 1, $valor_y+0.5);
-     $pdf->MultiCell(55,$alt-1,$nova_descr,0,"L",0);
      if($pdf->gety() > $maiorTamanho)
         $maiorTamanho = $pdf->gety();
    }
@@ -427,5 +449,32 @@ if ($itens=="true"){
 
 }
 $pdf->Output();
+
+
+function replace_palavras($texto){
+  $novo_texto = str_replace(" ", '', trim($texto));
+  $substituintes = array(
+                         "Г" => "A",
+                         "Й" => "E","И" => "E",
+                         "Н" => "I","М" => "I",
+                         "У" => "O", "Т" => "O", "Х" => "O",
+                         "Ъ" => "U", "Щ" => "U",
+                         "З" => "C");
+  $texto_retorno = strtr($novo_texto, $substituintes);
+  return urlencode($texto_retorno);
+}
+
+function converte_minusculas($texto){
+  $novo_texto = trim($texto);
+  $substituintes = array(
+                         "в" => "A",
+                         "й" => "E","и" => "E",
+                         "н" => "I","м" => "I",
+                         "у" => "O", "т" => "O", "ф" => "O",
+                         "ъ" => "U", "щ" => "U",
+                         "з" => "З");
+  $texto_retorno = strtr($novo_texto, $substituintes);
+  return urlencode($texto_retorno);
+}
 
 ?>
