@@ -708,7 +708,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
             if ($this->usa_sub == 'f') {
 
-                $this->objpdf->Setfont('Arial', 'B', 8);
+                $this->objpdf->Setfont('Arial', 'B', 7);
 
                 if ($ele != pg_result($this->recorddositens, $ii, $this->analitico)) {
                     $this->objpdf->cell(36, 4, '', 0, 0, "C", 0);
