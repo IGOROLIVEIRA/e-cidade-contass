@@ -268,7 +268,7 @@ if(isset($confirmar)){
       if($clorcreservaaut->numrows > 0){
      echo "
         <script>
-          top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php.php?db_opcaoal=3&e55_autori=$e56_autori';\n
+          top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
           parent.document.formaba.empautret.disabled=false;
         </script>
           ";
