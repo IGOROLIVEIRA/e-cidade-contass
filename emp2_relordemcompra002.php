@@ -256,21 +256,21 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
 
      $pdf->setx(150);
      $pdf->cell(20, $alt, $m52_sequen, 0, 0, "C", 0);
-     $nova_descr = converte_minusculas(strtoupper($e62_descr));
+     $texto_a_tratar = $e62_descr;
 
-     if(strpos($nova_descr, '%') !== false){
-      if(preg_match("/\%\w/", $nova_descr) != 0){
-        while(preg_match("/\%\w/", $nova_descr) != 0){
-          $nova_descr = urldecode($nova_descr);
-          $nova_descr = str_replace("+", " ", $nova_descr);
+     if(strpos($texto_a_tratar, '%') !== false){
+      if(preg_match("/\%\w/", $texto_a_tratar) != 0){
+        while(preg_match("/\%\w/", $texto_a_tratar) != 0){
+          $texto_a_tratar = urldecode($texto_a_tratar);
         }
       }
      }
 
+     $nova_descr = str_replace("+", " ", $texto_a_tratar);
+     $nova_descr = converte_minusculas($nova_descr);
      $descr_param = preg_replace("/[^A-Za-z]/", "", $nova_descr);
-     $tratado = replace_palavras($descr_param);
 
-     if(ctype_upper($tratado)){
+     if(ctype_upper($descr_param)){
         if(strlen($nova_descr) > 30){
           $nova_descr = trim(substr($nova_descr, 0, 30));
           $nova_descr .= "...";
@@ -281,8 +281,6 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
         $nova_descr .= '...';
       }
      }
-
-     // print_r('Tratado: '.$tratado);
 
      $pdf->cell(55, $alt-1, $nova_descr, 0, 0, "L", 0);
      $pdf->cell(20, $alt, db_formatar($valoruni,'f'), 0, 0, "C", 0);
@@ -452,7 +450,6 @@ $pdf->Output();
 
 
 function replace_palavras($texto){
-  $novo_texto = str_replace(" ", '', trim($texto));
   $substituintes = array(
                          "Ã" => "A",
                          "É" => "E","È" => "E",
@@ -465,16 +462,20 @@ function replace_palavras($texto){
 }
 
 function converte_minusculas($texto){
-  $novo_texto = trim($texto);
-  $substituintes = array(
-                         "â" => "A",
-                         "é" => "E","è" => "E",
-                         "í" => "I","ì" => "I",
-                         "ó" => "O", "ò" => "O", "ô" => "O",
-                         "ú" => "U", "ù" => "U",
-                         "ç" => "Ç");
-  $texto_retorno = strtr($novo_texto, $substituintes);
-  return urlencode($texto_retorno);
+  for($cont = 0; $cont < strlen($texto); $cont++){
+    if(!is_numeric($texto[$cont])){
+      $substituintes = array(
+                             "â" => "A", "ã" => "Ã", "á" => "Á",
+                             "é" => "E","è" => "E",
+                             "í" => "I","ì" => "I",
+                             "ó" => "O", "ò" => "O", "ô" => "O",
+                             "ú" => "U", "ù" => "U",
+                             "ç" => "Ç");
+      $texto[$cont] = strtr($texto[$cont], $substituintes);
+    }
+  }
+  $novo_texto = trim(strtoupper($texto));
+  return $novo_texto;
 }
 
 ?>
