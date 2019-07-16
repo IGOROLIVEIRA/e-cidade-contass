@@ -234,6 +234,13 @@ abstract class CgmBase {
    */
   private $lJuridico;
 
+   /**
+   * Flag que define se CGM recebe e-mail
+   *
+   * @var boolean
+   */
+  private $lNotificalEmail;
+
   /**
    * Objeto contendo tipo empresa
    *
@@ -325,6 +332,7 @@ abstract class CgmBase {
         $this->setEmailComercial      ($oDadosCgm->z01_emailc);
         $this->setFax                 ($oDadosCgm->z01_fax);
         $this->setObs                 ($oDadosCgm->z01_obs);
+        $this->setNotificalEmail      ($oDadosCgm->z01_notificaemail); 
 
         if ( strlen(trim($oDadosCgm->z01_cgccpf)) == 14 ) {
           $this->lJuridico = true;
@@ -810,6 +818,22 @@ abstract class CgmBase {
   }
 
   /**
+   * Método verifica se CGM recebe email
+   *
+   * @return boolean
+   */
+  public function getNotificalEmail(){
+    return $this->lNotificalEmail;
+  }
+ 
+  /**
+   * @param boolean 
+   */
+  public function setNotificalEmail ($lNotificalEmail) {
+    $this->lNotificalEmail = $lNotificalEmail;
+  }
+
+  /**
    * Método verifica se CGM é jurídico
    *
    * @return boolean
@@ -1012,8 +1036,9 @@ abstract class CgmBase {
     $oDaoCgm->z01_cadast     = $this->getCadastro();
     $oDaoCgm->z01_obs        = $this->getObs();
     $oDaoCgm->z01_hora       = db_hora();
+    $oDaoCgm->z01_notificaemail = $this->getNotificalEmail();
 
-    //var_dump($oDaoCgm);
+    //echo "<pre>"; var_dump($oDaoCgm->z01_notificaemail); die;
 
     if ( trim($this->getCodigo()) == '' ) {
       $oDaoCgm->incluir(null);

@@ -125,6 +125,7 @@ class cl_cgm {
    var $z01_pis = null;
    var $z01_obs = null;
    var $z01_incmunici = 0;
+   var $z01_notificaemail = null;
    var $z01_ibge = null;
 
    // cria propriedade com as variaveis do arquivo
@@ -188,6 +189,7 @@ class cl_cgm {
                  z01_pis = varchar(11) = Pis/Pasep/CI
                  z01_obs = text = Observações
                  z01_incmunici = int8 = Inscrição Municipal
+                 z01_notificaemail = bool = Notifica
                  z01_ibge = char(7) = Código do IBGE
                  ";
    //funcao construtor da classe
@@ -218,6 +220,7 @@ class cl_cgm {
        $this->z01_uf = ($this->z01_uf == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_uf"]:$this->z01_uf);
        $this->z01_cep = ($this->z01_cep == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cep"]:$this->z01_cep);
        $this->z01_cxpostal = ($this->z01_cxpostal == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cxpostal"]:$this->z01_cxpostal);
+       $this->z01_notificaemail = ($this->z01_notificaemail == "" ? @$GLOBALS["HTTP_POST_VARS"]["z01_notificaemail"] : $this->z01_notificaemail);
        if($this->z01_cadast == ""){
          $this->z01_cadast_dia = ($this->z01_cadast_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cadast_dia"]:$this->z01_cadast_dia);
          $this->z01_cadast_mes = ($this->z01_cadast_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_cadast_mes"]:$this->z01_cadast_mes);
@@ -496,6 +499,7 @@ class cl_cgm {
                                       ,z01_pis
                                       ,z01_obs
                                       ,z01_incmunici
+                                      ,z01_notificaemail
                                       ,z01_ibge
                        )
                 values (
@@ -558,6 +562,7 @@ class cl_cgm {
                                ,'$this->z01_pis'
                                ,'$this->z01_obs'
                                ,$this->z01_incmunici
+                               ,'$this->z01_notificaemail'
                                ,'$this->z01_ibge'
                       )";
      $result = db_query($sql);
@@ -994,6 +999,10 @@ class cl_cgm {
        $sql  .= $virgula." z01_incmunici = $this->z01_incmunici ";
        $virgula = ",";
      }
+     if(trim($this->z01_notificaemail) != "" || isset($GLOBALS["HTTP_POST_VARS"]["z01_notificaemail"])){
+      $sql  .= $virgula." z01_notificaemail = '$this->z01_notificaemail' ";
+      $virgula = ",";
+     }
      $sql .= " where ";
      if($z01_numcgm!=null){
        $sql .= " z01_numcgm = $this->z01_numcgm";
@@ -1264,7 +1273,7 @@ class cl_cgm {
      $result = db_query($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Cadastro Geral de Contribuinte nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Cadastro Geral de Contribuinte nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
        $this->erro_sql .= "Valores : ".$z01_numcgm;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1274,7 +1283,7 @@ class cl_cgm {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Cadastro Geral de Contribuinte nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Cadastro Geral de Contribuinte nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$z01_numcgm;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1283,7 +1292,7 @@ class cl_cgm {
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$z01_numcgm;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1964,6 +1973,10 @@ class cl_cgm {
      if(trim($this->z01_incmunici)!="" ){
        $sql  .= $virgula." z01_incmunici = '$this->z01_incmunici' ";
        $virgula = ",";
+     }
+     if(trim($this->z01_notificaemail) != ""){
+      $sql  .= $virgula." z01_notificaemail = '$this->z01_notificaemail' ";
+      $virgula = ",";
      }
      $sql .= " where ";
      if($z01_numcgm!=null){

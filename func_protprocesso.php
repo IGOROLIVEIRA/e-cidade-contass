@@ -70,6 +70,16 @@ if (isset($chave_p58_requer)) {
             <table width="35%" border="0" align="center" cellspacing="0">
                 <form name="form2" method="post" action="">
                     <tr>
+                        <td width="4%" align="right" nowrap>
+                            <strong>Número do Processo:</strong>
+                        </td>
+                        <td width="96%" align="left" nowrap>
+                            <?
+                            db_input("numeroprocesso", 10, '', true, "text", 4, "", "chave_numeroprocesso");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td width="4%" align="right" nowrap title="<?= $Tp58_codproc ?>">
                             <?= $Lp58_codproc ?>
                         </td>
@@ -183,7 +193,7 @@ if (isset($chave_p58_requer)) {
                         $where .= " p58_codproc = " . $chave_p58_codproc;
                     }
                     $sql = $clprotprocesso->sql_query($chave_p58_codproc, $campos, "p58_codproc desc", $where);
-                    //die($sql);
+
                 } else if (isset($chave_p58_requer) && (trim($chave_p58_requer) != "")) {
                     $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", " p58_requer like '$chave_p58_requer%'  and $where");
                 } else if (isset($chave_p58_numero) && (trim($chave_p58_numero) != "")) {
@@ -200,13 +210,32 @@ if (isset($chave_p58_requer)) {
                 } else if (isset($chave_unica) and ($chave_unica != '')) {
 
                     $sql = $clprotprocesso->sql_query($chave_unica, $campos);
-                } else {
+                }
+                else if (isset($ntfornec)) {
+                  if (!empty($p58_codigo)) {
+                    $nrProcesso = explode("/", $p58_codigo);
+                    !empty($where) ? $where .= " and p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} " : $where .= " p58_codigo = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} ";
+                  }
+                  if (!empty($p58_numero)){
+                    !empty($where) ? $where .= " and p58_codigo = {$p58_numero} " : $where .= " p58_codigo = {$p58_numero} ";
+                  }
+                  if (!empty($p58_requer)) {
+                    !empty($where) ? $where .= " and p58_requer like '%{$p58_requer}%' " : $where .= " p58_requer like '%{$p58_requer}%' ";
+                  }
+                  if (!empty($p51_codigo)) {
+                    !empty($where) ? $where .= " and p51_codigo = {$p51_codigo} " : $where .= " p51_codigo = {$p51_codigo} ";
+                  }
+                  $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", $where);
+
+                }
+                else {
                     $sql = $clprotprocesso->sql_query("", $campos, "p58_dtproc desc", $where);
                 }
                 $repassa = array();
                 if (isset($chave_p58_codproc)) {
                     $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
                 }
+
                 db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
             } else {
 
