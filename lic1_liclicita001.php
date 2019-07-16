@@ -202,7 +202,7 @@ if(isset($incluir)){
 				if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
 
 					$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
-					if (!$verifica) { die("if");
+					if (!$verifica) {
 						$erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
@@ -211,7 +211,7 @@ if(isset($incluir)){
 				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) { 
 		
 					$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
-					if (!$verifica) {die("else");
+					if (!$verifica) {
 						$erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
