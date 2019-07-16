@@ -45,6 +45,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 $rsParametros = $clparametroscontratos->sql_record($clparametroscontratos->sql_query_file('','*'));
 
 $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaautorizacao;
+$pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontratodepart;
 
 
 ?>
@@ -124,12 +125,16 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
           $sWhere  = " 1 = 1 ";
 
           $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
+
           if (!isset($lNovoDetalhe)) {
 
             if (!isset($lDepartamento)) {
 
-              $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
-              $sWhere .= " and {$sDepartamentos} ";
+              if ($pc01_libcontratodepart == 't') {
+                $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
+                $sWhere .= " and {$sDepartamentos} ";
+              }
+              
             }
             if($pc01_liberaautorizacao <> 't') {
               if (isset($iTipoFiltro)) {
@@ -272,7 +277,7 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
           if (isset($chave_ac16_sequencial)) {
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
-
+          
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {

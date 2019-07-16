@@ -41,14 +41,19 @@ db_select('pc01_liberarsemassinaturaaditivo',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
- </table>
- <table style="width: 100px" >
-     <tr align="center">
-         <td>
-             <strong>Atenção ao liberar esse Parâmetro o sistema irar permitir a execução de contratos que não
-                 estejam assinados. Contratos Não assinados não são gerados no SICOM - CONTRATOS</strong>
-         </td>
-     </tr>
+
+  <tr>
+    <td nowrap title="<?=@$pc01_libcontratodepart?>">
+    <input name="oid" type="hidden" value="<?=@$oid?>">
+       Controlar a alteração de dados do contrato por departamento?:
+    </td>
+    <td>
+<?
+$x = array("f"=>"NAO","t"=>"SIM");
+db_select('pc01_libcontratodepart',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
  </table>
 <table>
     <tr>
