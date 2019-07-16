@@ -630,7 +630,7 @@ function js_retornoSaltesConvenio(oAjax) {
     js_mostrarNotificacaoConvenio(oSatesConvenio);
 }
 
-function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,teste,lErro) {
+function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
 
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
