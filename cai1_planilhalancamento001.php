@@ -272,16 +272,20 @@ if ($oInstit->db21_usasisagua == "t") {
 
   <!--Convênio-->
   <tr>
-    <td nowrap title="Código c206_sequencial">
-      <? db_ancora("Convênio","js_pesquisak81_convenio(true);",$db_opcao); ?>
-    </td>
+    <td nowrap title="<?= @$Tk81_convenio ?>"><?echo $Lk81_convenio?></td>
     <td colspan='3'>
         <?
-        db_input('k81_convenio',11,$Ik81_convenio,true,'text',$db_opcao,"onChange='js_pesquisak81_convenio(false);'");
+        db_input('k81_convenio',11,$Ik81_convenio,true,'text',3,"onChange='js_pesquisak81_convenio(false);'");
         db_input("c206_objetoconvenio",62,0,true,"text",3);
         ?>
     </td>
   </tr>
+
+  <tr id="notificacao-conv" style="display:none;">
+      <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
+        <!-- Mensagem de notificação -->
+      </td>
+    </tr>
 
   <!-- Característica Peculiar -->
   <tr style=''>
@@ -605,7 +609,28 @@ function js_pesquisaConta(lMostra) {
 }
 
 
-function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
+function js_getSaltesConvenio(iCodigoSaltes) {
+     sJson    = '{"exec":"getSaltesConvenio","iCodigoSaltes":'+iCodigoSaltes+'}';
+     url      = 'cai4_planilhalancamento.RPC.php';
+     oAjax    = new Ajax.Request(
+                            url,
+                              {
+                               method: 'post',
+                               parameters: 'sJson='+sJson,
+                               onComplete: js_retornoSaltesConvenio
+                              }
+                             );
+}
+
+function js_retornoSaltesConvenio(oAjax) {
+    oSatesConvenio = eval("("+oAjax.responseText+")");
+
+    $('k81_convenio').value           = oSatesConvenio.c206_sequencial;
+    $('c206_objetoconvenio').value    = oSatesConvenio.c206_objetoconvenio;
+    js_mostrarNotificacaoConvenio(oSatesConvenio);
+}
+
+function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,teste,lErro) {
 
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
@@ -635,6 +660,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
     js_getCgmConta(iCodigoConta);
   }
 
+  js_getSaltesConvenio(iCodigoConta);
   js_mostrarNotificacaoConta();
 }
 
@@ -1456,6 +1482,33 @@ function js_mostrarNotificacaoEstruturais() {
     }
 
   $('notificacao2').setStyle({
+    display : 'none'
+  });
+
+  return false;
+}
+
+/**
+ * Verifica se a conta possui convênio cadastrado
+ *
+ * @returns {Boolean}
+ */
+function js_mostrarNotificacaoConvenio(oSatesConvenio) {
+
+  if(!oSatesConvenio.lValidacao){
+
+    $('notificacao-conv').childElements()[0].update("");
+    $('notificacao-conv').childElements()[0].insert("<b>" + oSatesConvenio.sMensagem + "</b>");
+    
+    $('notificacao-conv').setStyle({
+      display : 'table-row'
+    });
+
+    return true;
+
+  }
+
+  $('notificacao-conv').setStyle({
     display : 'none'
   });
 

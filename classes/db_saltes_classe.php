@@ -705,4 +705,45 @@ class cl_saltes {
 
     return $sql;
   }
+
+  function sql_query_convenio_conta( $k13_conta=null,$campos="*",$ordem=null,$dbwhere="" ){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+
+     $sql .= " from saltes                                                                                               "; 
+     $sql .= "     inner join conplanoreduz on conplanoreduz.c61_reduz = saltes.k13_reduz                                ";
+     $sql .= "     inner join conplanocontabancaria on conplanocontabancaria.c56_codcon = conplanoreduz.c61_codcon       ";
+     $sql .= "     inner join contabancaria on contabancaria.db83_sequencial = conplanocontabancaria.c56_contabancaria   ";
+     $sql .= "     inner join convconvenios on contabancaria.db83_numconvenio = convconvenios.c206_sequencial            ";
+
+     $sql2 = "";
+     if($dbwhere==""){
+       if($k13_conta!=null ){
+         $sql2 .= " where saltes.k13_conta = $k13_conta ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql2 .= ($sql2!=""?" and ":" where ") . " c61_instit = " . db_getsession("DB_instit");
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
 }
