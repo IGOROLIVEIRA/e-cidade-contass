@@ -361,10 +361,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                                 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
-                      CASE
-                          WHEN veiculostransf.ve81_codigonovo IS NULL THEN veiculos.ve01_codigo
-                          ELSE veiculostransf.ve81_codigonovo
-                      END AS codVeiculo,
+                     veiculostransf.ve81_codigonovo AS codVeiculo,
+                     veiculos.ve01_codigo,
+                     veiculos.ve01_codigoant,
+                     transferenciaveiculos.ve80_dt_transferencia,
+                     veicabast.ve70_dtabast,
                      veiculostransf.ve81_codunidadesubatual,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
@@ -427,6 +428,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                    ve81_codunidadesubatual
           ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
                   LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
+                  INNER JOIN veicabast ON ve70_veiculos = veiculos.ve01_codigo
                   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
                   AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
@@ -455,6 +457,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                            pc01_descrmater,
                            veiculostransf.ve81_codigonovo,
                            veiculostransf.ve81_codigo,
+                           transferenciaveiculos.ve80_dt_transferencia,
+                           veicabast.ve70_dtabast,
                            veiculostransf.ve81_codunidadesubatual
                     UNION
                     SELECT '20' AS tipoRegistro,
@@ -463,10 +467,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    CASE
-                          WHEN veiculostransf.ve81_codigonovo IS NULL THEN veiculos.ve01_codigo
-                          ELSE veiculostransf.ve81_codigonovo
-                    END AS codVeiculo,
+                    veiculostransf.ve81_codigonovo AS codVeiculo,
+                    veiculos.ve01_codigo,
+                    veiculos.ve01_codigoant,
+                    transferenciaveiculos.ve80_dt_transferencia,
+                    veicabast.ve70_dtabast,
                     veiculostransf.ve81_codunidadesubatual,
                     veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
@@ -546,6 +551,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		                     codmater,
                              veiculostransf.ve81_codigonovo,
                              veiculostransf.ve81_codigo,
+                             transferenciaveiculos.ve80_dt_transferencia,
+                             veicabast.ve70_dtabast,
                              veiculostransf.ve81_codunidadesubatual) as teste";
 
         $rsResult20 = db_query($sSql);
@@ -587,7 +594,23 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 }else{
                     $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
                 }
-                $oDados20->si147_codveiculo = $oResult20->codveiculo;
+                if(isset($oResult20->ve80_dt_transferencia)){
+                    if($oResult20->ve70_dtabast < $oResult20->ve80_dt_transferencia){
+                        if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
+                            $oDados20->si147_codveiculo = $oResult20->ve01_codigo;
+                        }else{
+                            $oDados20->si147_codveiculo = $oResult20->ve01_codigoant;
+                        }
+                    }else{
+                        $oDados20->si147_codveiculo = $oResult20->codveiculo;
+                    }
+                }else{
+                    if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
+                        $oDados20->si147_codveiculo = $oResult20->ve01_codigo;
+                    }else{
+                        $oDados20->si147_codveiculo = $oResult20->ve01_codigoant;
+                    }
+                }
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
                 $oDados20->si147_nroempenho = $oResult20->nroempenho;
@@ -662,7 +685,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /*
          * Registro 30
          */
-        $sSql = " SELECT '30' AS tipoRegistro,
+       $sSql = " SELECT '30' AS tipoRegistro,
        si09_codorgaotce AS codOrgao,
        CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
 	    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
