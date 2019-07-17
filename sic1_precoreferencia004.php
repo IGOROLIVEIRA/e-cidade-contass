@@ -99,6 +99,7 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao, si01_justificativa ORDER BY p
 ;
 
 $rsResult = db_query($sSql) or die(pg_last_error());
+$oLinha = null;
 
 $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
 $sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
@@ -284,9 +285,18 @@ HTML;
     <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
 </div>
 
-<div class="linha-vertical">
-  <strong><?= $oLinha ?></strong>
-</div>
+<?php 
+  if($oLinha!=null || trim($oLinha)!=""){
+    
+    echo <<<HTML
+      <div class="linha-vertical">
+        <strong>{$oLinha}</strong>
+      </div>     
+HTML;
+
+  }
+
+?>
 
 </body>
 </html>
