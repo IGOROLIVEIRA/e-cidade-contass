@@ -130,7 +130,7 @@ if($x->consultarDataDoSistema == true){
     <meta http-equiv="Expires" CONTENT="0">
     <?
     db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
-    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
+    db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
     db_app::load("estilos.css, grid.style.css");
     ?>
 </head>
@@ -699,6 +699,9 @@ console.log(oRetorno);
 
         aItensPosicao = oRetorno.itens;
         oGridItens.clearAll(true);
+        var aEventsIn  = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
 
         aItensPosicao.each(function (oItem, iSeq) {
 
@@ -801,10 +804,32 @@ console.log(oRetorno);
                 lDesativaLinha = true;
             }
 
+            var sTextEvent  = " ";
+
+            if (aLinha[1] !== '') {
+                sTextEvent += "<b>Material: </b>"+aLinha[1];
+            } else {
+                sTextEvent += "<b>Nenhum dado à mostrar</b>";
+            }
+
+            var oDadosHint           = new Object();
+            oDadosHint.idLinha   = `oGridItensrowoGridItens${iSeq}`;
+            oDadosHint.sText     = sTextEvent;
+            aDadosHintGrid.push(oDadosHint);
             oGridItens.addRow(aLinha, null, lDesativaLinha);
 
         });
+
         oGridItens.renderRows();
+        aDadosHintGrid.each(function(oHint, id) {
+          var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+          oDBHint.setText(oHint.sText);
+          oDBHint.setShowEvents(aEventsIn);
+          oDBHint.setHideEvents(aEventsOut);
+          oDBHint.setPosition('B', 'L');
+          oDBHint.make($(oHint.idLinha));
+        });
+
         aItensPosicao.each(function (oItem, iLinha){
             js_salvarInfoDotacoes(iLinha, false);
         });

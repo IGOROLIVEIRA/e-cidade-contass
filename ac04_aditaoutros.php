@@ -50,6 +50,7 @@ if($result!=false && $clparametroscontratos->numrows>0){
   <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>

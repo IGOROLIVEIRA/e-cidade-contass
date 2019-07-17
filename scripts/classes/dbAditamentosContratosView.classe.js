@@ -1421,6 +1421,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.oGridItens.clearAll(true);
 
+        var aEventsIn  = ["onmouseover"];
+        var aEventsOut = ["onmouseout"];
+        aDadosHintGrid = new Array();
+
         aItens.each(function (oItem, iSeq) {
             var aLinha = new Array();
 
@@ -1623,6 +1627,20 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             me.oGridItens.addRow(aLinha, false, me.lBloqueiaItem, (me.lBloqueiaItem || iTipoAditamento == 5 || oItem.novo));
 
+            var sTextEvent  = " ";
+
+            if (aLinha[1] !== '') {
+                sTextEvent += "<b>Item: </b>"+aLinha[1];
+            } else {
+                sTextEvent += "<b>Nenhum dado à mostrar</b>";
+            }
+
+            var oDadosHint           = new Object();
+            oDadosHint.idLinha   = `oGridItensrowoGridItens${iSeq}`;
+            oDadosHint.sText     = sTextEvent;
+            aDadosHintGrid.push(oDadosHint);
+
+
             if (oItem.dotacoesoriginal == undefined) {
 
                 oItem.dotacoesoriginal = new Array();
@@ -1650,6 +1668,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         });
 
         me.oGridItens.renderRows();
+
+        aDadosHintGrid.each(function(oHint, id) {
+          var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+          oDBHint.setText(oHint.sText);
+          oDBHint.setShowEvents(aEventsIn);
+          oDBHint.setHideEvents(aEventsOut);
+          oDBHint.setPosition('B', 'L');
+          oDBHint.make($(oHint.idLinha));
+        });
     }
 
     /**
