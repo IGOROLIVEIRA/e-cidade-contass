@@ -31,7 +31,7 @@ include("classes/db_matordem_classe.php");
 include("classes/db_matordemitem_classe.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-// print_r($HTTP_SERVER_VARS);die('let\'id die');die('ads')
+
 $clmatordem = new cl_matordem;
 $clmatordemitem = new cl_matordemitem;
 
@@ -71,13 +71,13 @@ $where1='and 1=1 ';
 $info="Periodo Total";
 if ($opcao=='a'){
   $where='1=1';
-  $info2='Opção de impressão: Todas';
+  $info2='Opo de impresso: Todas';
 }else if ($opcao=='b'){
   $where='m53_data is null';
-  $info2='Opção de impressão: Não Anuladas';
+  $info2='Opo de impresso: No Anuladas';
 }else if ($opcao=='c'){
   $where='m53_data is not null';
-  $info2='Opção de impressão: Anuladas';
+  $info2='Opo de impresso: Anuladas';
 }
 $txt_where="and 1=1";
 if ($listadepart!=""){
@@ -106,7 +106,7 @@ if (($data!="--")&&($data1!="--")) {
   $txt_where = $txt_where." and m51_data  between '$data' and '$data1'  ";
   $data=db_formatar($data,"d");
   $data1=db_formatar($data1,"d");
-  $info="De $data até $data1.";
+  $info="De $data at $data1.";
 } else if ($data!="--"){
   $txt_where = $txt_where." and m51_data >= '$data'  ";
   $data=db_formatar($data,"d");
@@ -114,7 +114,7 @@ if (($data!="--")&&($data1!="--")) {
 } else if ($data1!="--"){
   $txt_where = $txt_where."and m51_data <= '$data1'   ";
   $data1=db_formatar($data1,"d");
-  $info="Até $data1.";
+  $info="At $data1.";
 }
 
 $inicial="";
@@ -153,7 +153,7 @@ $result=$clmatordem->sql_record($clmatordem->sql_query_anu(null,'distinct m51_co
 
 if ($clmatordem->numrows == 0){
 
-   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros  cadastrados.');
+   db_redireciona('db_erros.php?fechar=true&db_erro=No existem registros  cadastrados.');
 }
 
 $pdf = new PDF();
@@ -177,10 +177,10 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
       $pdf->cell(70,$alt,$RLdescrdepto,1,0,"C",1);
       $pdf->cell(20,$alt,$RLm51_numcgm,1,0,"C",1);
       $pdf->cell(70,$alt,$RLz01_nome,1,0,"C",1);
-      $pdf->cell(25,$alt,'Data Anulação',1,0,"C",1);
+      $pdf->cell(25,$alt,'Data Anulao',1,0,"C",1);
       $pdf->cell(30,$alt,$RLm51_valortotal,1,1,"C",1);
       $pdf->cell(20,$alt,'Cod. Lanc.',1,0,"C",1);
-      $pdf->cell(20,$alt,'Nº Empenho',1,0,"C",1);
+      $pdf->cell(20,$alt,'N Empenho',1,0,"C",1);
       $pdf->cell(20,$alt,$RLm52_numemp,1,0,"C",1);
       $pdf->cell(20,$alt,$RLpc01_codmater,1,0,"C",1);
       $pdf->cell(60,$alt,$RLpc01_descrmater,1,0,"C",1);
@@ -224,10 +224,10 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
        $pdf->cell(70,$alt,$RLdescrdepto,1,0,"C",1);
        $pdf->cell(20,$alt,$RLm51_numcgm,1,0,"C",1);
        $pdf->cell(70,$alt,$RLz01_nome,1,0,"C",1);
-       $pdf->cell(25,$alt,'Data Anulação',1,0,"C",1);
+       $pdf->cell(25,$alt,'Data Anulao',1,0,"C",1);
        $pdf->cell(30,$alt,$RLm51_valortotal,1,1,"C",1);
        $pdf->cell(20,$alt,'Cod. Lanc.',1,0,"C",1);
-       $pdf->cell(20,$alt,'Nº Empenho',1,0,"C",1);
+       $pdf->cell(20,$alt,'N Empenho',1,0,"C",1);
        $pdf->cell(20,$alt,$RLm52_numemp,1,0,"C",1);
        $pdf->cell(20,$alt,$RLpc01_codmater,1,0,"C",1);
        // $valor_x = $pdf->getx();
@@ -314,14 +314,14 @@ for($x = 0; $x < $clmatordem->numrows;$x++){
    }
 }
 if ($erro==$clmatordem->numrows){
-  db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros  cadastrados.');
+  db_redireciona('db_erros.php?fechar=true&db_erro=No existem registros  cadastrados.');
 }
 
 $pdf->setfont('arial','b',8);
 $pdf->cell(275,$alt,'TOTAL DE REGISTROS  :  '.$total,"T",0,"L",0);
 
 //---------------------------------------------------------------------------------------
-//  TOTALIZAÇÕES
+//  TOTALIZAES
 
 if ($depart=="true"){
   $result_totdep=$clmatordem->sql_record($clmatordem->sql_query_tot(null,'m51_depto,descrdepto,sum(m51_valortotal) as valortotal ',null,"$where $txt_where group by m51_depto,descrdepto "));
@@ -334,7 +334,7 @@ if ($depart=="true"){
     if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage('L');
       $pdf->setfont('arial','b',8);
-      $pdf->cell(210,$alt,'Totalização por Departamentos',1,1,"C",1);
+      $pdf->cell(210,$alt,'Totalizao por Departamentos',1,1,"C",1);
       $pdf->cell(70,$alt,'Depart.',1,0,"C",1);
       $pdf->cell(70,$alt,$RLdescrdepto,1,0,"C",1);
       $pdf->cell(70,$alt,'Valor',1,1,"C",1);
@@ -369,7 +369,7 @@ if ($forn=="true"){
     if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage('L');
       $pdf->setfont('arial','b',8);
-      $pdf->cell(210,$alt,'Totalização por Fornecedor',1,1,"C",1);
+      $pdf->cell(210,$alt,'Totalizao por Fornecedor',1,1,"C",1);
       $pdf->cell(70,$alt,'Fornecedor',1,0,"C",1);
       $pdf->cell(70,$alt,$RLz01_nome,1,0,"C",1);
       $pdf->cell(70,$alt,'Valor',1,1,"C",1);
@@ -422,7 +422,7 @@ if ($itens=="true"){
       if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
 	$pdf->addpage('L');
 	$pdf->setfont('arial','b',8);
-	$pdf->cell(210,$alt,'Totalização por Itens',1,1,"C",1);
+	$pdf->cell(210,$alt,'Totalizao por Itens',1,1,"C",1);
 	$pdf->cell(70,$alt,$RLpc01_codmater,1,0,"C",1);
 	$pdf->cell(70,$alt,$RLpc01_descrmater,1,0,"C",1);
 	$pdf->cell(70,$alt,'Valor',1,1,"C",1);
@@ -451,12 +451,12 @@ $pdf->Output();
 
 function replace_palavras($texto){
   $substituintes = array(
-                         "Ã" => "A",
-                         "É" => "E","È" => "E",
-                         "Í" => "I","Ì" => "I",
-                         "Ó" => "O", "Ò" => "O", "Õ" => "O",
-                         "Ú" => "U", "Ù" => "U",
-                         "Ç" => "C");
+                         "" => "A",
+                         "" => "E","" => "E",
+                         "" => "I","" => "I",
+                         "" => "O", "" => "O", "" => "O",
+                         "" => "U", "" => "U",
+                         "" => "C");
   $texto_retorno = strtr($novo_texto, $substituintes);
   return urlencode($texto_retorno);
 }
@@ -465,12 +465,12 @@ function converte_minusculas($texto){
   for($cont = 0; $cont < strlen($texto); $cont++){
     if(!is_numeric($texto[$cont])){
       $substituintes = array(
-                             "â" => "A", "ã" => "Ã", "á" => "Á",
-                             "é" => "E","è" => "E",
-                             "í" => "I","ì" => "I",
-                             "ó" => "O", "ò" => "O", "ô" => "O",
-                             "ú" => "U", "ù" => "U",
-                             "ç" => "Ç");
+                             "" => "A", "" => "", "" => "",
+                             "" => "E","" => "E",
+                             "" => "I","" => "I",
+                             "" => "O", "" => "O", "" => "O",
+                             "" => "U", "" => "U",
+                             "" => "");
       $texto[$cont] = strtr($texto[$cont], $substituintes);
     }
   }
