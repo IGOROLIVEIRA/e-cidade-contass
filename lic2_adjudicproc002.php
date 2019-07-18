@@ -43,14 +43,13 @@ $clpcorcamval = new cl_pcorcamval;
 $clrotulo = new rotulocampo;
 $cllicitaparam = new cl_licitaparam();
 $clrotulo->label('');
-
+$oPost = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_SERVER_VARS);
 
 $dbinstit=db_getsession("DB_instit");
 
 $rsLicitacao=$clliclicita->sql_record($clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit and l20_licsituacao in (1,10)"));
-
 
 if ($clliclicita->numrows == 0){
     db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não Julgada, ou licitação revogada');
@@ -140,7 +139,7 @@ $oPDF->cell(0,8,"PROCESSO LICITATORIO : $l20_edital/$l20_datacria",0,1,"C",0);
 $oPDF->cell(0,8,"$l03_descr Nº $l20_numero/$l20_datacria",0,1,"C",0);
 $oPDF->setfont('arial','',8);
 $oPDF->ln();
-$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." modalidade ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
+$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais adjudicou o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." ".converte_charespeciais($l03_descr)." Nº ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Foi adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
 $result_munic=pg_exec("select * from db_config where codigo=$dbinstit");
 db_fieldsmemory($result_munic,0);
 
@@ -251,5 +250,22 @@ if($l12_usuarioadjundica == 't'){
 
 $oPDF->Output();
 
+
+function converte_charespeciais($texto){
+  $texto_transf = ucwords(strtolower($texto));
+  for($cont = 0; $cont < strlen($texto_transf); $cont++){
+    if(!is_numeric($texto_transf[$cont])){
+      $substituintes = array(
+                             "Â" => "â", "Ã" => "ã", "Á" => "á",
+                             "É" => "é","È" => "è",
+                             "Í" => "í","Ì" => "ì",
+                             "Ó" => "ó", "Ò" => "ò", "Ô" => "ô",
+                             "Ú" => "ú", "Ù" => "ù",
+                             "Ç" => "ç");
+      $texto_transf[$cont] = strtr($texto_transf[$cont], $substituintes);
+    }
+  }
+  return $texto_transf;
+}
 
 ?>
