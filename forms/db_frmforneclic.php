@@ -192,10 +192,16 @@ db_select("pc31_renunrecurso",$x,true,$db_opcao);
         if(!empty($pc20_codorc)) {
 
           $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null,"pc21_codorc","","pc21_codorc=".@$pc20_codorc));
-        
+
+          $resultTipocom = $clliclicita->sql_record($clliclicita->getTipocomTribunal($l20_codigo));
+          db_fieldsmemory($resultitem,0)->l03_pctipocompratribunal;
           if($clpcorcamforne->numrows>0){
-            echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel();' ".($db_botao==false?"disabled":"").">&nbsp;";        	
-            echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";   
+          $tiposcompra = array(102,103);
+              echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel();' ".($db_botao==false?"disabled":"").">&nbsp;";
+            if(!in_array($l03_pctipocompratribunal, $tiposcompra)){
+                echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";
+            }
+
           }
         }	
      // $result_sugersol = $clpcsugforn->sql_record($clpcsugforn->sql_query_solsugforne(null," z01_numcgm "));
