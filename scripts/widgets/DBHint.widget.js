@@ -191,8 +191,7 @@
             break;
 
           case 'B':
-
-            var iTop = oCoordinates.y;
+            var iTop = oCoordinates.y+(me.oDivContainer.offsetHeight + oElemento.offsetHeight) - 27;
             break;
         }
         if (oScrollElement != null) {

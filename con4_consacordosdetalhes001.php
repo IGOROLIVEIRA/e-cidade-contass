@@ -310,6 +310,7 @@ $oGet = db_utils::postMemory($_GET);
                             oDBHint.setShowEvents(aEventsIn);
                             oDBHint.setHideEvents(aEventsOut);
                             oDBHint.setPosition('B', 'L');
+                            oDBHint.setUseMouse(true);
                             oDBHint.make($(oHint.idLinha));
                         });
                     }

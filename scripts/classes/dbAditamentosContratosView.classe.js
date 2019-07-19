@@ -1675,6 +1675,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           oDBHint.setShowEvents(aEventsIn);
           oDBHint.setHideEvents(aEventsOut);
           oDBHint.setPosition('B', 'L');
+          oDBHint.setUseMouse(true);
           oDBHint.make($(oHint.idLinha));
         });
     }
