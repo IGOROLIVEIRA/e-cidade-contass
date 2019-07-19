@@ -1120,6 +1120,7 @@ class MSC {
                                END AS estrut, 
                                CASE 
                                    WHEN si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = tb.c211_elemdespestrut THEN tb.c211_mscestrut 
+                                   WHEN substr(contacorrentedetalhe.c19_estrutural,2,8) = a1.c211_elemdespestrut THEN a1.c211_mscestrut
                                    WHEN elemdespmsc.c211_mscestrut IS NULL AND si177_naturezadespesa IS NOT NULL THEN si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) 
                                    WHEN elemdespmsc.c211_mscestrut IS NULL AND conplanoorcamento.c60_estrut IS NULL THEN substr(c19_estrutural, 2, 8) 
                                    WHEN elemdespmsc.c211_mscestrut IS NULL AND c19_estrutural IS NULL THEN substr(conplanoorcamento.c60_estrut, 2, 8) 
@@ -1151,6 +1152,7 @@ class MSC {
                         LEFT JOIN conplanoorcamento ON conplanoorcamento.c60_codcon=e64_codele AND conplanoorcamento.c60_anousu=e60_anousu 
                         LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8) = elemdespmsc.c211_elemdespestrut) 
                         LEFT JOIN elemdespmsc tb ON si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = tb.c211_elemdespestrut 
+                        LEFT JOIN elemdespmsc a1 ON substr(contacorrentedetalhe.c19_estrutural,2,8) = a1.c211_elemdespestrut
                         LEFT OUTER JOIN consistema ON p.c60_codsis = c52_codsis 
                         LEFT JOIN vinculopcaspmsc ON substr(c19_estrutural,2,8) = c210_pcaspestrut 
                         LEFT JOIN orctiporec ON o58_codigo = o15_codigo 
@@ -1162,8 +1164,6 @@ class MSC {
               WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
 
     $rsResult = db_query($sSQL);
-
-    die($sSQL);
 
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
