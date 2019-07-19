@@ -1163,6 +1163,8 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
+    die($sSQL);
+
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
