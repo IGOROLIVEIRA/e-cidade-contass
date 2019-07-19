@@ -186,7 +186,11 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
             }
 
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
+            if($listacred == "false"){
+                $sWhereCredenciamento = " and l03_pctipocompratribunal not in (103,102)";
+            }
+
+            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}";
             if (isset($lContratos) && $lContratos == 1 ) {
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
