@@ -234,6 +234,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 where si06_instit= " . db_getsession("DB_instit") . " and date_part('month',si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
 
+    // print_r($sSql);die();
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -243,7 +244,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_codorgao = $oDados10->codorgao;
       $regadesao10->si67_codunidadesub = $oDados10->codunidadesub;
       $regadesao10->si67_nroprocadesao = $oDados10->si06_numeroadm;
-      $regadesao10->si63_exercicioadesao = $oDados10->exercicioadesao;
+      $regadesao10->si63_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
       $regadesao10->si67_dtabertura = $oDados10->si06_dataabertura;
       $regadesao10->si67_nomeorgaogerenciador = $oDados10->nomeorgaogerenciador;
       $regadesao10->si67_exerciciolicitacao = $oDados10->exerciciolicitacao;
@@ -278,7 +279,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao11->si68_codorgao = $oDados10->codorgao;
         $regadesao11->si68_codunidadesub = $oDados10->codunidadesub;
         $regadesao11->si68_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao11->si68_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao11->si68_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao11->si68_nrolote = $oDados11->si07_numerolote;
         $regadesao11->si68_dsclote = $oDados11->desclote;
         $regadesao11->si68_instit = db_getsession("DB_instit");
@@ -305,7 +306,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao12->si69_codorgao = $oDados10->codorgao;
         $regadesao12->si69_codunidadesub = $oDados10->codunidadesub;
         $regadesao12->si69_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao12->si69_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao12->si69_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao12->si69_coditem = $oDados12->coditem;
         $regadesao12->si69_nroitem = $oDados12->si07_numeroitem;
         $regadesao12->si69_instit = db_getsession("DB_instit");
@@ -332,7 +333,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao13->si70_codorgao = $oDados10->codorgao;
         $regadesao13->si70_codunidadesub = $oDados10->codunidadesub;
         $regadesao13->si70_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao13->si70_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao13->si70_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao13->si70_nrolote = $oDados13->si07_numerolote;
         $regadesao13->si70_coditem = $oDados13->coditem;
         $regadesao13->si70_instit = db_getsession("DB_instit");
@@ -414,7 +415,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         $regadesao14->si71_codorgao = $oDados10->codorgao;
         $regadesao14->si71_codunidadesub = $oDados10->codunidadesub;
         $regadesao14->si71_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao14->si71_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao14->si71_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao14->si71_nrolote = $oDados14->si07_numerolote;
         $regadesao14->si71_coditem = $oDados14->coditem;
         $regadesao14->si71_dtcotacao = $oDados14->si01_datacotacao;
@@ -448,7 +449,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         $regadesao15->si72_codorgao = $oDados10->codorgao;
         $regadesao15->si72_codunidadesub = $oDados10->codunidadesub;
         $regadesao15->si72_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao15->si72_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao15->si72_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao15->si72_nrolote = $oDados15->si07_numerolote;
         $regadesao15->si72_coditem = $oDados15->coditem;
         $regadesao15->si72_precounitario = $oDados15->si07_precounitario;
@@ -483,7 +484,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         $regadesao20->si73_codorgao = $oDados10->codorgao;
         $regadesao20->si73_codunidadesub = $oDados10->codunidadesub;
         $regadesao20->si73_nroprocadesao = $oDados10->si06_numeroadm;
-        $regadesao20->si73_exercicioadesao = $oDados10->exercicioadesao;
+        $regadesao20->si73_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao20->si73_nrolote = $oDados20->si07_numerolote;
         $regadesao20->si73_coditem = $oDados20->coditem;
         $regadesao20->si73_percdesconto = $oDados20->si07_precounitario;
