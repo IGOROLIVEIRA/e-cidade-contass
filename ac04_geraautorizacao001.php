@@ -828,7 +828,7 @@ console.log(oRetorno);
           oDBHint.setHideEvents(aEventsOut);
           oDBHint.setPosition('B', 'L');
           oDBHint.setUseMouse(true);
-          oDBHint.make($(oHint.idLinha));
+          oDBHint.make($(oHint.idLinha), 2);
         });
 
         aItensPosicao.each(function (oItem, iLinha){

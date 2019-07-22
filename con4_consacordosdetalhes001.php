@@ -311,7 +311,7 @@ $oGet = db_utils::postMemory($_GET);
                             oDBHint.setHideEvents(aEventsOut);
                             oDBHint.setPosition('B', 'L');
                             oDBHint.setUseMouse(true);
-                            oDBHint.make($(oHint.idLinha));
+                            oDBHint.make($(oHint.idLinha), 3);
                         });
                     }
                 } else {
