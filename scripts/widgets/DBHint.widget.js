@@ -42,18 +42,25 @@
       /**
        * Escreve as funções no elemento
        */
-      var setEvents      = function(oElemento) {
+      var setEvents      = function(oElemento, indiceCelula) {
         /**
          * Percorre eventos de Exibição
          */
+        let elemento = '';
+
+        if(indiceCelula){
+          elemento = oElemento.cells[indiceCelula];
+        }else elemento = oElemento;
+
+
         for (var i = 0; i < aShowEvents.length; i++) {
 
-          var sAttr = oElemento.getAttribute(aShowEvents[i])
+          var sAttr = elemento.getAttribute(aShowEvents[i])
             if (sAttr == null){
               sAttr = "";
             }
 
-          oElemento.setAttribute(aShowEvents[i], sNameInstance + ".show(this, event);" + sAttr);
+          elemento.setAttribute(aShowEvents[i], sNameInstance + ".show(this, event);" + sAttr);
         }
         /**
          * Percorre eventos de Ocultação
@@ -97,12 +104,12 @@
       /**
        * Constrói o componente
        */
-      this.make          = function(oElemento) {
+      this.make          = function(oElemento, indiceCelula=null) {
 
         /**
          * Define os Eventos para o elemnto mostrar/ocultar o hint
          */
-        var lEventos = setEvents(oElemento);
+        var lEventos = setEvents(oElemento, indiceCelula);
 
         if ($(sNameInstance + "divDBhintExterno")) {
           $(sNameInstance + "divDBhintExterno").parentNode.removeChild($(sNameInstance + "divDBhintExterno"));
@@ -191,8 +198,8 @@
             break;
 
           case 'B':
+            var iTop = oCoordinates.y+(me.oDivContainer.offsetHeight + oElemento.offsetHeight) - 27;
 
-            var iTop = oCoordinates.y;
             break;
         }
         if (oScrollElement != null) {
@@ -205,16 +212,14 @@
 
 
       this.getCoordinatesLeft = function(oCoordinates, oElemento) {
-
         var iLeft = 0;
         var iJanelaCliente = document.body.clientWidth;
-
         switch (me.sPositionLeft.toUpperCase()) {
 
           case 'L':
 
             var iLeft = oCoordinates.x;
-            break;
+             break;
 
           case 'R':
 
