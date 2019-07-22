@@ -25,7 +25,7 @@ class Oc10197 extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function charge()
+    public function change()
     {
         $this->table('orcparametro')
             ->addColumn('o50_controlafote1017','bool')
