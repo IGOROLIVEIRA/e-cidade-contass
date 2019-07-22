@@ -11,7 +11,7 @@ require_once("classes/db_regadesao202019_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarREGADESAO.model.php");
 
 /**
- * Adesão a Registro de Preços Sicom Acompanhamento Mensal
+ * Adeso a Registro de Preos Sicom Acompanhamento Mensal
  * @author robson
  * @package Contabilidade
  */
@@ -132,7 +132,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
   }
 
   /**
-   * selecionar os dados da adesão a registro de preço do mes para gerar o arquivo
+   * selecionar os dados da adeso a registro de preo do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -234,7 +234,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 where si06_instit= " . db_getsession("DB_instit") . " and date_part('month',si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
 
-    // print_r($sSql);die();
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
