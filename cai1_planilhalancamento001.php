@@ -610,16 +610,16 @@ function js_pesquisaConta(lMostra) {
 
 
 function js_getSaltesConvenio(iCodigoSaltes) {
-     sJson    = '{"exec":"getSaltesConvenio","iCodigoSaltes":'+iCodigoSaltes+'}';
-     url      = 'cai4_planilhalancamento.RPC.php';
-     oAjax    = new Ajax.Request(
-                            url,
-                              {
-                               method: 'post',
-                               parameters: 'sJson='+sJson,
-                               onComplete: js_retornoSaltesConvenio
-                              }
-                             );
+  sJson    = '{"exec":"getSaltesConvenio","iCodigoSaltes":'+iCodigoSaltes+'}';
+  url      = 'cai4_planilhalancamento.RPC.php';
+  oAjax    = new Ajax.Request(
+    url,
+    {
+      method: 'post',
+      parameters: 'sJson='+sJson,
+      onComplete: js_retornoSaltesConvenio
+    }
+  );
 }
 
 function js_retornoSaltesConvenio(oAjax) {
@@ -636,18 +636,17 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
   $('k13_descr') .value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
 
-  if (iAlteracao != null) {
-    return;
-  }
-
   if( $('estrutural').value.substr(0,3) == '211' ) {
 
     $('k81_codigo').value = $('c61_codigo').value;
     $('k81_codigo').onchange() ;
   } else {
 
-    $('k81_codigo').value = iCodigoRecurso;
-    $('k81_codigo').onchange() ;
+    if(iCodigoRecurso != ''){
+      $('k81_codigo').value = iCodigoRecurso;
+      $('k81_codigo').onchange() ;
+    }
+  
   }
 
   if(lErro) {
@@ -686,6 +685,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
   }
   db_iframe_saltes.hide();
 
+  js_getSaltesConvenio(iCodigoConta);
   js_mostrarNotificacaoConta();
 }
 
@@ -1013,6 +1013,13 @@ function js_addReceita () {
       }
     break;
 
+  }
+
+  if (!$('k81_convenio').value) {
+    alert("É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.");
+    console.log("sim");
+    $('k81_convenio').focus();
+    return false;
   }
 
 

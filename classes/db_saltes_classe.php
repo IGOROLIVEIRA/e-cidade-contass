@@ -724,6 +724,7 @@ class cl_saltes {
      $sql .= "     inner join conplanocontabancaria on conplanocontabancaria.c56_codcon = conplanoreduz.c61_codcon       ";
      $sql .= "     inner join contabancaria on contabancaria.db83_sequencial = conplanocontabancaria.c56_contabancaria   ";
      $sql .= "     inner join convconvenios on contabancaria.db83_numconvenio = convconvenios.c206_sequencial            ";
+     $sql .= "     inner join placaixarec on placaixarec.k81_conta = saltes.k13_conta                                    ";
 
      $sql2 = "";
      if($dbwhere==""){
