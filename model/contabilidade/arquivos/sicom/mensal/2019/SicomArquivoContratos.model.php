@@ -360,8 +360,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 //        ini_set("display_errors","on");
 
         $sSql = "SELECT DISTINCT acordo.*,
-                    adesaoregprecos.si06_anoproc as anoproc,
-                    adesaoregprecos.si06_numeroprc as numeroproc,
+                    adesaoregprecos.si06_dataadesao as anoproc,
+                    adesaoregprecos.si06_numeroadm as numeroproc,
                     liclicita.l20_codigo,
                     liclicita.l20_edital,
                     liclicita.l20_anousu,
@@ -564,7 +564,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_veiculodivulgacao = $this->removeCaracteres($oDados10->ac16_veiculodivulgacao);
             $clcontratos10->si83_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos10->si83_instit = db_getsession('DB_instit');
-            // var_dump($clcontratos10);
+            // var_dump($clcontratos10);die();
 
             $clcontratos10->incluir(null);
 
