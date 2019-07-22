@@ -28,8 +28,8 @@ class Oc10197 extends AbstractMigration
     public function change()
     {
         $this->table('orcparametro')
-            ->addColumn('o50_controlafote1017','bool')
-            ->addColumn('o50_controlafote10011006','bool')
+            ->addColumn('o50_controlafote1017','boolean')
+            ->addColumn('o50_controlafote10011006','boolean')
             ->update();
     }
 }
