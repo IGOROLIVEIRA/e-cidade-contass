@@ -105,43 +105,54 @@ js_tabulacaoforms("form1","l200_licitacao",true,1,"l200_licitacao",true);
 if(isset($incluir)){
 
 
+  /**
+   * Verifica data de julgamento da licitação
+   */
   if($l200_tipoparecer == "3") {
 
-    $clliclicitasituacao = new cl_liclicitasituacao;
-
-    $sSql           = $clliclicitasituacao->sql_query(null, 'l11_data', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao.' and l08_sequencial = 1');
+    $clliclicitasituacao  = new cl_liclicitasituacao;
+    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao.' and l08_sequencial = 1');
+    $rsResult             = db_query($sSql);
     
-    $rsResult       = db_query($sSql);
-    $dtDataJulg     = db_utils::fieldsMemory($rsResult, 0)->l11_data;
-    $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
-    $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
+    if(pg_numrows($rsResult) > 0){
+    
+      $dtDataJulg     = db_utils::fieldsMemory($rsResult, 0)->l11_data;   
+      $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+      $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
 
-    if($dtDataParecer < $dtDataJulg){
+      if($dtDataParecer < $dtDataJulg){
       
-      $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.', data do parecer do tipo (3- Jurídico/Julgamento) deve ser igual ou posterior a esta.';
-      echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-      db_redireciona('lic1_parecerlicitacao001.php');
-    } 
+        $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.', data do parecer do tipo (3- Jurídico/Julgamento) deve ser igual ou posterior.';
+        echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+        db_redireciona('lic1_parecerlicitacao001.php');
 
+      } 
+    }
   }
      
+  /**
+   * Verifica data de publicação do edital da licitação
+   */
   if($l200_tipoparecer == "2") {
-
-    $clliclicita = new cl_liclicita;
-
+    
+    $clliclicita        = new cl_liclicita;
     $sSql               = $clliclicita->sql_query_file('', 'l20_recdocumentacao','','l20_codigo = '.$l200_licitacao);
     $rsResult           = db_query($sSql);
-    $dtDataEmissao      = db_utils::fieldsMemory($rsResult, 0)->l20_recdocumentacao;
-    $dtDataEmissaoShow  = tr_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
-    $dtDataParecer      = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
     
-    if($dtDataParecer > $dtDataEmissao){
-      
-      $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.', data do parecer do tipo (2- Jurídico-Edital) deve ser igual ou posterior a esta.';
-      echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-      db_redireciona('lic1_parecerlicitacao001.php');
-    } 
-    
+    if(pg_numrows($rsResult) > 0){
+
+      $dtDataEmissao      = db_utils::fieldsMemory($rsResult, 0)->l20_recdocumentacao;
+      $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
+      $dtDataParecer      = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
+
+      if($dtDataParecer > $dtDataEmissao){
+        
+        $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.', data do parecer do tipo (2- Jurídico-Edital) não pode ser posterior.';
+        echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+        db_redireciona('lic1_parecerlicitacao001.php');
+
+      } 
+    }
   }
 
   if($clparecerlicitacao->erro_status=="0"){
