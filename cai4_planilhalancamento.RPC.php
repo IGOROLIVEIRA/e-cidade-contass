@@ -41,26 +41,16 @@ if ($oParam->exec == 'getSaltesConvenio') {
    
    $oDaoSaltes = db_utils::getDao("saltes");
 
-   $sqlSaltesConvenio = $oDaoSaltes->sql_query_convenio_conta(null,"c206_sequencial, c206_objetoconvenio, k81_codigo","","$where k13_conta={$oParam->iCodigoSaltes} and c61_instit = ".db_getsession("DB_instit"));
+   $sqlSaltesConvenio = $oDaoSaltes->sql_query_convenio_conta(null,"c206_sequencial, c206_objetoconvenio","","$where k13_conta={$oParam->iCodigoSaltes} and c61_instit = ".db_getsession("DB_instit"));
    
    $rsSaltes = $oDaoSaltes->sql_record($sqlSaltesConvenio);
    
    if ($oDaoSaltes->numrows > 0) {
 
       $oSaltesConv = db_utils::fieldsMemory($rsSaltes, 0);
-      
-      if($oSaltesConv->k81_codigo == 122 
-         || $oSaltesConv->k81_codigo == 123
-         || $oSaltesConv->k81_codigo == 124
-         || $oSaltesConv->k81_codigo == 142) {
 
-         $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);   
-      } else {
-         
-         $sMensagem = "É obrigatório informar o convênio para as receitas de fontes 122, 123, 124 e 142.";
-         $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //         
-      }
-
+      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);   
+    
    } else {
 
       $sMensagem = "Usuário, para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
