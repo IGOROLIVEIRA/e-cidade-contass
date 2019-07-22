@@ -221,15 +221,15 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
 
                 }
             }
-
-            /*valida fonte (100,101,102,118,119) OC 9112 */
-            $dotacoes = array(100,101,102,118,119);
-            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
-                $sqlerro = true;
-                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                $limpa_dados = false;
+            if($o50_controlafote1017 == 't') {
+                /*valida fonte (100,101,102,118,119) OC 9112 */
+                $dotacoes = array(100,101,102,118,119);
+                if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
             }
-
         }
         /*verifica se ja existe alguma dotacao cadastrada OC 9039*/
         $tipossupvalida = array(1001,1006,1011,1012,1013,1014,1015,1016,1017);
@@ -337,30 +337,30 @@ $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 
 
 ?>
-<html>
-<head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-    <link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="480" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-            <center>
-                <?
-                include("forms/db_frmorcsuplemval.php");
-                ?>
-            </center>
-        </td>
-    </tr>
-</table>
-</body>
-</html>
+    <html>
+    <head>
+        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Expires" CONTENT="0">
+        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+        <link href="estilos.css" rel="stylesheet" type="text/css">
+    </head>
+    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+    <table width="480" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmorcsuplemval.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
+    </body>
+    </html>
 <?
 
 if(isset($incluir) || isset($alterar) || isset($excluir)){

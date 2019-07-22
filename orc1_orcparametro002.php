@@ -34,9 +34,6 @@ require_once("dbforms/db_funcoes.php");
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
 
-//echo ("<pre>" . print_r($HTTP_POST_VARS, 1) . "</pre>");
-//die();
-
 $clorcparametro  = new cl_orcparametro;
 $db_opcao        = 22;
 $db_botao        = false;
@@ -44,8 +41,10 @@ $lSqlErro        = false;
 $lMostraMensagem = false;
 
 $iAnoUso = db_getsession("DB_anousu");
-
 if ( isset($HTTP_POST_VARS['db_opcao']) && $HTTP_POST_VARS['db_opcao'] == "Alterar") {
+
+  $clorcparametro->o50_controlafote1017 = $o50_controlafonte1017;
+  $clorcparametro->o50_controlafote10011006 = $o50_controlafote10011006;
 
   db_inicio_transacao();
    
