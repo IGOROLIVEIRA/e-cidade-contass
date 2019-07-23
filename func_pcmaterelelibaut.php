@@ -106,21 +106,6 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
              <td width="96%" align="left" nowrap><? db_input("pc01_descrmater",80,$Ipc01_descrmater,true,"text",4,"","chave_pc01_descrmater"); ?></td>
 
           </tr>
-          <tr>
-            <td width="4%" align="right" nowrap title="Selecionar todos, ativos ou inativos"><b>Seleção por:</b></td>
-            <td width="96%" align="left" nowrap>
-              <?
-              if(!isset($opcao)){
-	            $opcao = "f";
-              }
-              if(!isset($opcao_bloq)){
-      	        $opcao_bloq = 1;
-              }
-              $arr_opcao = array("i"=>"Todos","f"=>"Ativos","t"=>"Inativos");
-              db_select('opcao',$arr_opcao,true,$opcao_bloq,"onchange='js_reload();'");
-              ?>
-            </td>
-           </tr>
            <tr>
              <td colspan="2" align="center">
                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
