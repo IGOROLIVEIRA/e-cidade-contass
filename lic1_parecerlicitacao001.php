@@ -56,7 +56,7 @@ if (isset($incluir)) {
   if (strlen($cgm) > 11) {
     echo "<script>alert('O CGM selecionado deverá ser de Pessoa Física.');</script>";
   }
-  else if (empty($count)) {
+  else if (empty($count) && $l200_tipoparecer != "2") {
     echo "<script>alert('Inclusão abortada. Verifique os fornecedores habilitados!');</script>";
   } else {
       db_inicio_transacao();
@@ -111,22 +111,28 @@ if(isset($incluir)){
   if($l200_tipoparecer == "3") {
 
     $clliclicitasituacao  = new cl_liclicitasituacao;
-    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao.' and l08_sequencial = 1');
+    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data, l08_sequencial', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao);
     $rsResult             = db_query($sSql);
-    
+
     if(pg_numrows($rsResult) > 0){
-    
-      $dtDataJulg     = db_utils::fieldsMemory($rsResult, 0)->l11_data;   
-      $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
-      $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
-
-      if($dtDataParecer < $dtDataJulg){
       
-        $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.', data do parecer do tipo (3- Jurídico/Julgamento) deve ser igual ou posterior.';
-        echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-        db_redireciona('lic1_parecerlicitacao001.php');
+      $oLicSituacao     = db_utils::fieldsMemory($rsResult, 0);
 
-      } 
+      if($oLicSituacao->l08_sequencial == 1) {
+        
+        $dtDataJulg     = $oLicSituacao->l11_data;   
+        $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+        $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
+
+        if($dtDataParecer < $dtDataJulg){
+        
+          $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data do parecer deverá ser igual ou superior a data de julgamento.';
+          echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+          db_redireciona('lic1_parecerlicitacao001.php');
+
+        
+        }
+      }
     }
   }
      
