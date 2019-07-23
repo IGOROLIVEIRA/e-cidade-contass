@@ -361,7 +361,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                                 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
-                     veiculostransf.ve81_codigonovo AS codVeiculo,
+                     veiculostransf.ve81_codigonovo,
                      veiculos.ve01_codigo,
                      veiculos.ve01_codigoant,
                      transferenciaveiculos.ve80_dt_transferencia,
@@ -467,7 +467,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculostransf.ve81_codigonovo AS codVeiculo,
+                    veiculostransf.ve81_codigonovo,
                     veiculos.ve01_codigo,
                     veiculos.ve01_codigoant,
                     transferenciaveiculos.ve80_dt_transferencia,
@@ -564,8 +564,28 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
             $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
+            /**
+             * Aqui verifico a existencia de manutençao para gerar o novo codigo do veiculo no SICOM OC9284
+             */
+            if($oResult20->ve80_dt_transferencia != ""){
+                if($oResult20->ve70_dtabast < $oResult20->ve80_dt_transferencia){
+                    if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
+                        $codveiculo = $oResult20->ve01_codigo;
+                    }else{
+                        $codveiculo = $oResult20->ve01_codigoant;
+                    }
+                }else{
+                    $codveiculo = $oResult20->ve81_codigonovo;
+                }
+            }else{
+                if ($oResult20->ve01_codigoant == null || $oResult20->ve01_codigoant == 0){
+                    $codveiculo = $oResult20->ve01_codigo;
+                }else{
+                    $codveiculo = $oResult20->ve01_codigoant;
+                }
+            }
 
-            $sHash20 = $oResult20->codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
+            $sHash20 = $codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
 
             if (!isset($aDadosAgrupados20[$sHash20])) {
 
@@ -594,23 +614,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 }else{
                     $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
                 }
-                if(isset($oResult20->ve80_dt_transferencia)){
-                    if($oResult20->ve70_dtabast < $oResult20->ve80_dt_transferencia){
-                        if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
-                            $oDados20->si147_codveiculo = $oResult20->ve01_codigo;
-                        }else{
-                            $oDados20->si147_codveiculo = $oResult20->ve01_codigoant;
-                        }
-                    }else{
-                        $oDados20->si147_codveiculo = $oResult20->codveiculo;
-                    }
-                }else{
-                    if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
-                        $oDados20->si147_codveiculo = $oResult20->ve01_codigo;
-                    }else{
-                        $oDados20->si147_codveiculo = $oResult20->ve01_codigoant;
-                    }
-                }
+                $oDados20->si147_codveiculo = $codveiculo;
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
                 $oDados20->si147_nroempenho = $oResult20->nroempenho;
@@ -636,7 +640,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 								  inner join veicmanutretirada on ve65_veicmanut = ve62_codigo
 								  inner join veicretirada on ve65_veicretirada = ve60_codigo
 								  inner join veicdevolucao on ve61_veicretirada = ve60_codigo
-							  WHERE veicmanut.ve62_veiculos =  $oResult20->codveiculo
+							  WHERE veicmanut.ve62_veiculos =  $codveiculo
 							  AND  DATE_PART('YEAR',veicmanut.ve62_dtmanut)= " . db_getsession("DB_anousu") . "
 							  AND DATE_PART('MONTH',veicmanut.ve62_dtmanut)=  " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -685,7 +689,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /*
          * Registro 30
          */
-       $sSql = " SELECT '30' AS tipoRegistro,
+        $sSql = " SELECT '30' AS tipoRegistro,
        si09_codorgaotce AS codOrgao,
        CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
 	    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
