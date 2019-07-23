@@ -30,15 +30,15 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     CONST ORIGEM_EMPENHO = 6;
 
     /*
-        1 - Não ou dispensa por valor
-        2 - Licitação
+        1 - No ou dispensa por valor
+        2 - Licitao
         3 - Dispensa ou Inexigibilidade
-        4 - Adesão à ata de registro de preços
-        5 - Licitação realizada por outro órgão ou entidade
-        6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade
-        7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC
-        8 - Licitação realizada por consorcio público
-        9 - Licitação realizada por outro ente da federação
+        4 - Adeso  ata de registro de preos
+        5 - Licitao realizada por outro rgo ou entidade
+        6 - Dispensa ou Inexigibilidade realizada por outro rgo ou entidade
+        7 - Licitao - Regime Diferenciado de Contrataes Pblicas - RDC
+        8 - Licitao realizada por consorcio pblico
+        9 - Licitao realizada por outro ente da federao
      */
 
     CONST TIPO_ORIGEM_NAO_OU_DISPENSA = 1;
@@ -123,16 +123,16 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     /**
      * Tipo de Termo de Aditivo:
      *   04 ? Reajuste;
-     *   05 ? Recomposição (Equilíbrio Financeiro);
+     *   05 ? Recomposio (Equilbrio Financeiro);
      *   06 ? Outros.
-     *   07 ? Alteração de Prazo de Vigência;
-     *   08 ? Alteração de Prazo de Execução;
-     *   09 ? Acréscimo de Item(ns);
-     *   10 ? Decréscimo de Item(ns);
-     *   11 ? Acréscimo e Decréscimo de Item(ns);
-     *   12 ? Alteração de Projeto/Especificação
-     *   13 ? Alteração de Prazo de vigência e Prazo de Execução;
-     *   14 ? Acréscimo/Decréscimo de item(ns) conjugado com
+     *   07 ? Alterao de Prazo de Vigncia;
+     *   08 ? Alterao de Prazo de Execuo;
+     *   09 ? Acrscimo de Item(ns);
+     *   10 ? Decrscimo de Item(ns);
+     *   11 ? Acrscimo e Decrscimo de Item(ns);
+     *   12 ? Alterao de Projeto/Especificao
+     *   13 ? Alterao de Prazo de vigncia e Prazo de Execuo;
+     *   14 ? Acrscimo/Decrscimo de item(ns) conjugado com
      *        outros tipos de termos aditivos;
      * @param AcordoPosicao $oAcordoPosicao
      * @return int
@@ -225,8 +225,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
     }
 
     /**
-     * Quando um contrato é de origem manual mas o tipo origem é adesão à ata de registro de preço,
-     * busca-se os dados do processo licitatório em: compras>>procedimentos>adesão de registro de preço
+     * Quando um contrato  de origem manual mas o tipo origem  adeso  ata de registro de preo,
+     * busca-se os dados do processo licitatrio em: compras>>procedimentos>adeso de registro de preo
      * @param $param
      */
     public function getDadosLicitacaoAdesao($param){
@@ -234,7 +234,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
     }
 
     /**
-     * selecionar os dados de Leis de Alteração
+     * selecionar os dados de Leis de Alterao
      *
      */
     public function gerarDados()
@@ -251,9 +251,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         db_inicio_transacao();
         // matriz de entrada
-        $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+        $what = array("", chr(13), chr(10), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', '', '');
 
-        // matriz de saída
+        // matriz de sada
         $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
         /*
@@ -434,7 +434,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 AND ac16_dataassinatura >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
 
-        // print_r($sSql);die();
         $rsResult10 = db_query($sSql);
         db_inicio_transacao();
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -554,7 +553,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_vlcontrato = $oDados10->ac16_valor;
             $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
             $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-            $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Mês(s)' : ' Dia(s)';
+            $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Ms(s)' : ' Dia(s)';
             $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo . $sTipoUnidade;
             $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
             $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
@@ -564,8 +563,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_veiculodivulgacao = $this->removeCaracteres($oDados10->ac16_veiculodivulgacao);
             $clcontratos10->si83_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos10->si83_instit = db_getsession('DB_instit');
-            // var_dump($clcontratos10);die();
-
+            
             $clcontratos10->incluir(null);
 
             if ($clcontratos10->erro_status == 0) {
@@ -630,13 +628,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if ($clcontratos10->si83_naturezaobjeto != 4 || $clcontratos10->si83_naturezaobjeto != 5) {
 
                 /**
-                 * Caso o contrato seja de origem manual (3) e quando for processo de compras e NÃO HOUVER empenho, deve ser buscado as dotações para cada item do contrato.
+                 * Caso o contrato seja de origem manual (3) e quando for processo de compras e NO HOUVER empenho, deve ser buscado as dotaes para cada item do contrato.
                  */
 
                 if($oDados10->ac16_origem == self::ORIGEM_MANUAL or ($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS && count($oAcordo->getEmpenhosAcordo()) == 0)) {
 
                     /**
-                     * Acordos de origem manual e processo de compras e NÃO HOUVER empenho
+                     * Acordos de origem manual e processo de compras e NO HOUVER empenho
                      */
                     foreach($oAcordo->getItensPosicaoInicial() as $oItens) {
                         foreach ($oItens->getDotacoes() as $oDotacao) {
@@ -718,14 +716,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }else{
 
                     /**
-                     * Aqui é tratado apenas os contratos de origem Licitação, Empenho e Processo de Compras quando HOUVER empenho. Quando não houver é tratado no if anterior.
+                     * Aqui  tratado apenas os contratos de origem Licitao, Empenho e Processo de Compras quando HOUVER empenho. Quando no houver  tratado no if anterior.
                      */
 
                     $oDadosBusca = $oDados10->ac16_origem == self::ORIGEM_LICITACAO ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
 
                     foreach ($oDadosBusca as $oDados12) {
 
-                        //Se a origem for licitação
+                        //Se a origem for licitao
                         if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_codigo != '') {
                             $sSql = "SELECT distinct on (o58_coddot)
                                 o58_coddot,
