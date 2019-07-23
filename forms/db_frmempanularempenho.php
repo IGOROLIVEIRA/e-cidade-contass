@@ -596,7 +596,7 @@ if (empty ($e60_numemp)) {
 
         empAnulaTipo = document.getElementById('e94_empanuladotipo').value
         if(parseInt(empAnulaTipo) === 0) {
-            alert("Nenhum tipo foi selecionado.\nPor favor, escolha um tipo.")
+            alert("Para anular o empenho é obrigatório selecionar o tipo.")
             document.getElementById('e94_empanuladotipodescr').focus()
             return
         }
