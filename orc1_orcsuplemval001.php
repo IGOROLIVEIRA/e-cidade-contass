@@ -351,11 +351,11 @@ if(isset($incluir)){
 
             /*valida diferente*/
             $validacao = array(100,101,102,118,119);
-            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)){
+            if(!in_array(substr($oEstruturalSupl->dl_estrutural, 38), $validacao)){
 
                 if(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != substr($oEstruturalSupl->dl_estrutural, 38)){
                     $sqlerro = true;
-                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada   ");
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                     $limpa_dados = false;
                 }
 
