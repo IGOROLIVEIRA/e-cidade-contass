@@ -25,11 +25,19 @@ class Oc10197 extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
+    public function up()
     {
-        $this->table('orcparametro')
-            ->addColumn('o50_controlafote1017','boolean')
-            ->addColumn('o50_controlafote10011006','boolean')
-            ->update();
+        $sql = "alter table orcparametro add column o50_controlafote1017 boolean;
+                alter table orcparametro add column o50_controlafote10011006 boolean;";
+
+     $this->execute($sql);
+
+    }
+
+    public function down()
+    {
+     $sql = "alter table orcparametro drop column o50_controlafote1017;
+             alter table orcparametro drop column o50_controlafote10011006;";
+     $this->execute($sql);
     }
 }
