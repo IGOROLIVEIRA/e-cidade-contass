@@ -108,8 +108,8 @@ $clorcparametro->rotulo->label();
                             </td>
                             <td>
                                 <?
-                                $x = array("f"=>"Não","t"=>"Sim");
-                                db_select('o50_controlafonte1017',$x,true,$db_opcao,"style='width:200px'");
+                                $x = array("t"=>"Sim","f"=>"Não");
+                                db_select('o50_controlafote1017',$x,true,$db_opcao,"style='width:200px'");
                                 ?>
                             </td>
                         </tr>
@@ -119,8 +119,8 @@ $clorcparametro->rotulo->label();
                             </td>
                             <td>
                                 <?
-                                $y = array("f"=>"Não","t"=>"Sim");
-                                db_select('o50_controlafote10011006',$y,true,$db_opcao,"style='width:200px'");
+                                $x = array("t"=>"Sim","f"=>"Não");
+                                db_select('o50_controlafote10011006',$x,true,$db_opcao,"style='width:200px'");
                                 ?>
                             </td>
                         </tr>

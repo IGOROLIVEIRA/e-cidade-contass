@@ -311,9 +311,6 @@ if(isset($incluir)){
         if($o50_controlafote10011006 == 't'){
             /*valida fonte 100*/
             $validacao = array(100, 101, 102);
-            echo substr($oEstruturalSupl->dl_estrutural, 38);echo "<br>";
-            echo substr($oEstruturalDotacaoEnviada->dl_estrutural, 38);
-//            exit;
             if (substr($oEstruturalSupl->dl_estrutural, 38) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
