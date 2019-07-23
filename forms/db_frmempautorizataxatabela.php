@@ -120,9 +120,17 @@ db_app::load("DBFormCache.js");
                 <td nowrap title="<?=@$Te54_codcom?>">
                     <strong>Nome/Razão Social:</strong>
                 </td>
-                <td>
-                    <select name="e54_numcgm" id="e54_numcgm" style="width:370;">
-                    </select>
+                <td>  
+                  <?php
+                    if (isset($e54_numcgm) && !empty($e54_numcgm)) {
+                      $cgm = array($aCgm->z01_numcgm => $aCgm->z01_nome);
+                      db_select('e54_numcgm', $cgm, true, $db_opcao, " style='width:370;' "); 
+                    }
+                    else {
+                      db_select('e54_numcgm', '', true, $db_opcao, " style='width:370;' "); 
+                    }
+                    
+                  ?>
                 </td>
             </tr>
             <tr>
@@ -142,7 +150,7 @@ db_app::load("DBFormCache.js");
                 <td>
                     <? db_input('e54_codcom',8,1,true,'hidden'); ?>
                     <select name="e54_codcomS" id="e54_codcomS" style="width:370;" disabled="true">
-                        <option value="">...</option>
+                        <option value="">Selecione</option>
                         <?php foreach ($aPctipocompras as $aPctipocompra) : ?>
                             <option <?= ($aPctipocompra->pc50_codcom == $e54_codcom ? 'selected' : '')  ?> value="<?= $aPctipocompra->pc50_codcom ?>">
                                 <?= $aPctipocompra->pc50_codcom." - ".$aPctipocompra->pc50_descr ?>
@@ -156,8 +164,8 @@ db_app::load("DBFormCache.js");
                     <strong>Tipo de Empenho:</strong>
                 </td>
                 <td>
-                    <select name="e54_codtipo" id="e54_codtipo" style="width:370;" <?php //($db_opcao != 1 ? 'disabled="true"' : '')  ?>>
-                        <option value="">...</option>
+                    <select name="e54_codtipo" id="e54_codtipo" style="width:370;">
+                        <option value="">Selecione</option>
                         <?php foreach ($aEmptipos as $aEmptipo) : ?>
                             <option <?= ($aEmptipo->e41_codtipo == $e54_codtipo ? 'selected' : '')  ?> value="<?= $aEmptipo->e41_codtipo ?>">
                                 <?= $aEmptipo->e41_codtipo." - ".$aEmptipo->e41_descr ?>
@@ -173,7 +181,7 @@ db_app::load("DBFormCache.js");
                 <td>
                     <? db_input('e54_tipol',8,1,true,'hidden'); ?>
                     <select name="e54_tipolS" id="e54_tipolS" style="width:370;" disabled="true">
-                        <option value="">...</option>
+                        <option value="">Selecione</option>
                         <?php foreach ($aCflicitas as $aCflicita) : ?>
                             <option <?= ($aCflicita->l03_tipo == $e54_tipol ? 'selected' : '')  ?> value="<?= $aCflicita->l03_tipo ?>">
                                 <?= $aCflicita->l03_tipo." - ".$aCflicita->l03_descr ?>
@@ -320,7 +328,7 @@ db_app::load("DBFormCache.js");
     window.onload = function () {
         var codlicitacao = document.form1.e54_codlicitacao.value;
         if (codlicitacao != "") {
-            js_pesquisa_fornecedor(codlicitacao);
+            //js_pesquisa_fornecedor(codlicitacao);
             document.form1.e54_numerll.value = document.form1.e54_numerl.value+"/"+document.form1.e54_anousu.value;
         }
     }
@@ -427,8 +435,6 @@ db_app::load("DBFormCache.js");
     }
 
     function completaElemento(iElemento) {
-
-        //alert(iElemento);
         $("o58_codele").value = iElemento;
     }
 
@@ -444,7 +450,7 @@ db_app::load("DBFormCache.js");
 
     function js_pesquisa_liclicita(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?criterioadjudicacao=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu|pc50_codcom|l03_tipo|l20_numero','Pesquisa',true);
+            js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?criterioadjudicacao=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu|pc50_codcom|l03_tipo|l20_numero|l20_objeto','Pesquisa',true);
         }else{
             if(document.form1.e54_codlicitacao.value != ''){
                 js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?criterioadjudicacao=true&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
@@ -492,7 +498,7 @@ db_app::load("DBFormCache.js");
         }
     }
 
-    function js_mostraliclicita1(chave1, chave2, chave3, chave4, chave5, chave6) {
+    function js_mostraliclicita1(chave1, chave2, chave3, chave4, chave5, chave6, chave7) {
         document.form1.e54_codlicitacao.value = chave1;
         js_pesquisa_fornecedor(chave1);
         document.form1.e54_codcom.value       = chave4;
@@ -500,6 +506,7 @@ db_app::load("DBFormCache.js");
         document.form1.e54_nummodalidade.value = chave6;
         document.form1.e54_concarpeculiar.value = '000';
         document.form1.c58_descr.value = 'NÃO SE APLICA';
+        document.form1.e54_resumo.value = chave7;
 
         document.form1.e54_numerl.value  = chave2;
         document.form1.e54_numerll.value = chave2+"/"+chave3;
@@ -524,25 +531,32 @@ db_app::load("DBFormCache.js");
     }
 
     function js_pesquisa_fornecedor(codlicitacao) {
-        var razaoSocial = document.getElementById("e54_numcgm");
-        for (var i = 0; i <= razaoSocial.options.length; i++) {
+        let razaoSocial = document.getElementById("e54_numcgm");
+        for (let i = 0; i <= razaoSocial.options.length; i++) {
             razaoSocial.remove(razaoSocial.selectedIndex[i]);
         }
-        var params = {
+        let params = {
             exec: 'getFonercedoresLic',
             licitacao: codlicitacao
         };
 
         novoAjax(params, function(e) {
 
-            var cgms = JSON.parse(e.responseText).cgms;
-            cgms.forEach(function(cgm, i) {
-                var opt   = document.createElement("option");
-                opt.value = cgm.z01_numcgm;
-                opt.text  = cgm.z01_nome;
-                razaoSocial.add(opt, razaoSocial.options[i]);
+          let cgms = JSON.parse(e.responseText).cgms;
+          if (cgms.length > 1) {
+            let opt   = document.createElement("option");
+            opt.value = '';
+            opt.text  = 'Selecione';
+            razaoSocial.add(opt, 0);
+          }
 
-            });
+          cgms.forEach(function(cgm, i) {
+            let opt   = document.createElement("option");
+            opt.value = cgm.z01_numcgm;
+            opt.text  = cgm.z01_nome;
+            razaoSocial.add(opt, razaoSocial.options[++i]);
+
+          });
 
         });
     }

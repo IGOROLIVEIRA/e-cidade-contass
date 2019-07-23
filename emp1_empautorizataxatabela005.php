@@ -321,6 +321,18 @@ $cflicitas  = db_query("
                     select l03_codigo, l03_descr, l03_tipo from cflicita order by l03_codigo
                   ");
 $aCflicitas = db_utils::getCollectionByRecord($cflicitas);
+
+if (isset($e54_numcgm) && !empty($e54_numcgm)) {
+  $cgm  = db_query("
+          select z01_numcgm, z01_nome 
+          from empautoriza
+          inner join cgm on z01_numcgm = e54_numcgm
+              where e54_autori = {$e54_autori}
+                  ");
+  //$aCgm = db_utils::getCollectionByRecord($cgm);
+  $aCgm = db_utils::fieldsMemory($cgm, 0);
+}
+
 ?>
 <html>
 <head>
