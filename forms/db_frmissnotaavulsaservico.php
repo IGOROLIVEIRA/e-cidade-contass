@@ -79,6 +79,15 @@ if (pg_num_rows($rsTotLInhas) > 0) {
 
 }
 
+$sSqlHasRecibo = "select q52_numnov from issnotaavulsanumpre ";
+$sSqlHasRecibo .= "where q52_issnotaavulsa = {$get->q51_sequencial}";
+
+$rsHasRecibo = pg_query($sSqlHasRecibo);
+$hasRecibo = false;
+
+if (pg_num_rows($rsHasRecibo) > 0) {
+    $hasRecibo = true;
+}
 
 $iCodInstit = intval(db_getsession('DB_instit'));
 $iCodAnousu = intval(db_getsession('DB_anousu'));
@@ -353,9 +362,9 @@ $aTiposRetencoesINSS = array(
 
                 <input name="novo" type="button" id="cancelar" value="Novo"
                        onclick="js_cancelar();" <?= ($db_opcao == 1 || isset($db_opcaoal) || $hasServico ? "style='visibility:hidden;'" : "") ?> >
-                <input name="recibo" type="submit" onclick='return js_emiteRecibo(<?= $oPar->q60_notaavulsavlrmin; ?>)'
+                <input name="recibo" type="submit" <?= ($hasRecibo || !$hasServico ? "disabled" : "") ?> onclick='return js_emiteRecibo(<?= $oPar->q60_notaavulsavlrmin; ?>)'
                        id="recibo" value="Emitir Recibo">
-                <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota'
+                <input name='notaavulsa' <?= (!$hasRecibo ? 'style="display:none;"' : '') ?> onclick='return js_verificaNota();' type='submit' id='nota'
                        value='Emitir nota'>
                 <?
                 $fTotal = 0;
@@ -390,7 +399,7 @@ $aTiposRetencoesINSS = array(
                     $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
                     $cliframe_alterar_excluir->iframe_height = "160";
                     $cliframe_alterar_excluir->iframe_width = "700";
-                    if (isset($post->recibo) || isset($post->notaavulsa)) {
+                    if ($hasRecibo) {
 
                         $cliframe_alterar_excluir->opcoes = 4;
 
@@ -523,7 +532,8 @@ $aTiposRetencoesINSS = array(
         }
         if (valNota >= valMin) {
             parent.iframe_issnotaavulsa.document.getElementById('db_opcao').disabled = true;
-            parent.iframe_issnotaavulsa.document.getElementById('novaNota').style.display = "";
+            parent.iframe_issnotaavulsa.document.getElementById('nota').style.display = "";
+            parent.iframe_issnotaavulsa.document.getElementById('recibo').disabled = true;
 
             parent.iframe_issnotaavulsatomador.document.getElementById('db_opcao').disabled = true;
             parent.iframe_issnotaavulsatomador.js_controlaAncora(false);

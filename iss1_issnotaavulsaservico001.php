@@ -56,6 +56,7 @@ function db_calculaLinhasTexto22($texto){
 $clissnotaavulsaservico = new cl_issnotaavulsaservico;
 $clissnotaavulsa        = new cl_issnotaavulsa;
 $clissnotaavulsatomador = new cl_issnotaavulsatomador;
+$clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
 $clparissqn             = new cl_parissqn;
 $get                    = db_utils::postmemory($_GET);
 $post                   = db_utils::postmemory($_POST);
@@ -150,138 +151,146 @@ if(isset($post->incluir)){
      db_fieldsmemory($result,0);
    }
 }
-if (isset($post->recibo)){
+if (isset($post->recibo)) {
 
-  $lSqlErro = false;
-  $rsNot    = $clissnotaavulsa->sql_record($clissnotaavulsa->sql_query($post->q62_issnotaavulsa,"*"));
-  $oNot     = db_utils::fieldsMemory($rsNot,0);
-  if ($post->totlinhas > 40 ){
+    $lSqlErro = false;
+    $rsNumpre = $clissnotaavulsanumpre->sql_record($clissnotaavulsanumpre->sql_query(null, "*",null," q52_issnotaavulsa = {$post->q62_issnotaavulsa} "));
+    $oNumpre = db_utils::fieldsMemory($rsNumpre, 0);
 
-    db_msgbox('Total das linhas da descrição da nota maior que o permitido (40 linha)');
-    $emitenota = true;
-    $lGeraNota = true;
-    $db_botao  = true;
-  }else if (str_replace(",",".",$post->vlrrectotal) >= $oPar->q60_notaavulsavlrmin){
+    if (!empty($oNumpre->q52_sequencial)) {
+        db_msgbox('Já existe uma guia gerada para essa nota.');
+    } else {
 
-			db_inicio_transacao();
-		  $clarrecad  = new cl_arrecad();
-		  $clarrehist = new cl_arrehist();
-			$rsNum      = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numpre");
-			$oNum       = db_utils::fieldsMemory($rsNum,0);
-      //Codigo numpre do Recibo
-			$rsNumnov   = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numnov");
-      $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa));
-      $oTom  = db_utils::fieldsMemory($rsTom,0);
-      /**
-      * A data do vencimento do ISSQN é sempre no mês subsequente ao do fato gerador
-      * $oPar->q60_notaavulsadiasprazo -> dia do vencimento
-      */
-      $oDataPgto  = new DateTime(date($oTom->q53_dtservico));
-      $oDataPgto->modify('+ 1 month');
-      $oNumnov    = db_utils::fieldsMemory($rsNumnov,0);
-      $aDataPgto  = explode("-",$oDataPgto->format('Y-m-d'));
-      $dataPagto  = date("Y-m-d",mktime(0,0,0,$aDataPgto[1],$oPar->q60_notaavulsadiasprazo,$aDataPgto[0]));
+        $lSqlErro = false;
+        $rsNot = $clissnotaavulsa->sql_record($clissnotaavulsa->sql_query($post->q62_issnotaavulsa, "*"));
+        $oNot = db_utils::fieldsMemory($rsNot, 0);
+        if ($post->totlinhas > 40) {
 
-      $clarrecad->k00_numpre = $oNum->k03_numpre;
-			$clarrecad->k00_numpar = 1;
-			$clarrecad->k00_numcgm = $oNot->q02_numcgm;
-			$clarrecad->k00_valor  = str_replace(",",".",str_replace(".","",$post->vlrrectotal));
-			$clarrecad->k00_receit = $oPar->q60_receit;
-			$clarrecad->k00_tipo   = $oPar->q60_tipo;
-			$clarrecad->k00_dtoper = $oNot->q51_dtemiss;
-			$clarrecad->k00_dtvenc = $dataPagto;
-			$clarrecad->k00_numtot = 1;
-			$clarrecad->k00_numdig = 1;
-			$clarrecad->k00_tipojm = 1;
-			$clarrecad->k00_hist   = $oPar->q60_histsemmov;
-			$clarrecad->incluir();
-			if ($clarrecad->erro_status == 0){
+            db_msgbox('Total das linhas da descrição da nota maior que o permitido (40 linha)');
+            $emitenota = true;
+            $lGeraNota = true;
+            $db_botao = true;
+        } else if (str_replace(",", ".", $post->vlrrectotal) >= $oPar->q60_notaavulsavlrmin) {
 
-          $lSqlErro = true;
-					$erro_msg = $clarrecad->erro_msg;
-			}
-      if (!$lSqlErro){
+            db_inicio_transacao();
+            $clarrecad = new cl_arrecad();
+            $clarrehist = new cl_arrehist();
+            $rsNum = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numpre");
+            $oNum = db_utils::fieldsMemory($rsNum, 0);
+            //Codigo numpre do Recibo
+            $rsNumnov = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numnov");
+            $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa));
+            $oTom = db_utils::fieldsMemory($rsTom, 0);
+            /**
+             * A data do vencimento do ISSQN é sempre no mês subsequente ao do fato gerador
+             * $oPar->q60_notaavulsadiasprazo -> dia do vencimento
+             */
+            $oDataPgto = new DateTime(date($oTom->q53_dtservico));
+            $oDataPgto->modify('+ 1 month');
+            $oNumnov = db_utils::fieldsMemory($rsNumnov, 0);
+            $aDataPgto = explode("-", $oDataPgto->format('Y-m-d'));
+            $dataPagto = date("Y-m-d", mktime(0, 0, 0, $aDataPgto[1], $oPar->q60_notaavulsadiasprazo, $aDataPgto[0]));
 
-           $clarrehist->k00_numpre     = $oNum->k03_numpre;
-           $clarrehist->k00_numpar     = 1;
-           $clarrehist->k00_hist       = $oPar->q60_histsemmov;
-           $clarrehist->k00_dtoper     = $oNot->q51_dtemiss;
-           $clarrehist->k00_id_usuario = db_getsession("DB_id_usuario");
-           $clarrehist->k00_hora       = date("h:i");
-           $clarrehist->k00_histtxt    = "Valor referente a nota fiscal avulsa nº ".$oNot->q51_numnota." de (".db_formatar($oNot->q51_dtemiss,"d").")";
-           $clarrehist->k00_limithist  = null;
-           $clarrehist->incluir(null);
-           if ($clarrehist->erro_status == 0){
-
-              $lSqlErro = true;
-					    $erro_msg = $clarrehist->erro_msg;
-
-           }
-
-      }
-			if (!$lSqlErro){
-
-        $clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
-				$clissnotaavulsanumpre->q52_issnotaavulsa = $q62_issnotaavulsa;
-				$clissnotaavulsanumpre->q52_numpre        = $oNum->k03_numpre;
-				$clissnotaavulsanumpre->q52_numnov        = $oNumnov->k03_numnov;
-				$clissnotaavulsanumpre->incluir(null);
-       	if ($clissnotaavulsanumpre->erro_status == 0){
-
-						 $lSqlErro = true;
-						 $erro_msg = $clissnotaavulsanumpre->erro_msg;
-
-				}
-        if (!$lSqlErro){
-
-           $clarreinscr             = new cl_arreinscr();
-           $clarreinscr->k00_perc   = 100;
-           $clarreinscr->k00_inscr  = $oNot->q02_inscr;
-           $clarreinscr->k00_numpre = $oNum->k03_numpre;
-           $clarreinscr->incluir($oNum->k03_numpre,$oNot->q02_inscr);
-           if ($clarreinscr->erro_status == 0){
+            $clarrecad->k00_numpre = $oNum->k03_numpre;
+            $clarrecad->k00_numpar = 1;
+            $clarrecad->k00_numcgm = $oNot->q02_numcgm;
+            $clarrecad->k00_valor = str_replace(",", ".", str_replace(".", "", $post->vlrrectotal));
+            $clarrecad->k00_receit = $oPar->q60_receit;
+            $clarrecad->k00_tipo = $oPar->q60_tipo;
+            $clarrecad->k00_dtoper = $oNot->q51_dtemiss;
+            $clarrecad->k00_dtvenc = $dataPagto;
+            $clarrecad->k00_numtot = 1;
+            $clarrecad->k00_numdig = 1;
+            $clarrecad->k00_tipojm = 1;
+            $clarrecad->k00_hist = $oPar->q60_histsemmov;
+            $clarrecad->incluir();
+            if ($clarrecad->erro_status == 0) {
 
                 $lSqlErro = true;
-                $erro_msg = $clarreinscr->erro_msg;
-           }
-        }
+                $erro_msg = $clarrecad->erro_msg;
+            }
+            if (!$lSqlErro) {
 
-			}
+                $clarrehist->k00_numpre = $oNum->k03_numpre;
+                $clarrehist->k00_numpar = 1;
+                $clarrehist->k00_hist = $oPar->q60_histsemmov;
+                $clarrehist->k00_dtoper = $oNot->q51_dtemiss;
+                $clarrehist->k00_id_usuario = db_getsession("DB_id_usuario");
+                $clarrehist->k00_hora = date("h:i");
+                $clarrehist->k00_histtxt = "Valor referente a nota fiscal avulsa nº " . $oNot->q51_numnota . " de (" . db_formatar($oNot->q51_dtemiss, "d") . ")";
+                $clarrehist->k00_limithist = null;
+                $clarrehist->incluir(null);
+                if ($clarrehist->erro_status == 0) {
 
-      db_fim_transacao($lSqlErro);
-			if ($lSqlErro){
+                    $lSqlErro = true;
+                    $erro_msg = $clarrehist->erro_msg;
 
-        db_msgbox($erro_msg);
-			}else{
+                }
 
-       $db_botao = false;
-       $rsObs    = $clissnotaavulsaservico->sql_record(
-			                      $clissnotaavulsaservico->sql_query(null,"sum(q62_vlrissqn) as tvlrissqn,
+            }
+            if (!$lSqlErro) {
+
+                $clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
+                $clissnotaavulsanumpre->q52_issnotaavulsa = $q62_issnotaavulsa;
+                $clissnotaavulsanumpre->q52_numpre = $oNum->k03_numpre;
+                $clissnotaavulsanumpre->q52_numnov = $oNumnov->k03_numnov;
+                $clissnotaavulsanumpre->incluir(null);
+                if ($clissnotaavulsanumpre->erro_status == 0) {
+
+                    $lSqlErro = true;
+                    $erro_msg = $clissnotaavulsanumpre->erro_msg;
+
+                }
+                if (!$lSqlErro) {
+
+                    $clarreinscr = new cl_arreinscr();
+                    $clarreinscr->k00_perc = 100;
+                    $clarreinscr->k00_inscr = $oNot->q02_inscr;
+                    $clarreinscr->k00_numpre = $oNum->k03_numpre;
+                    $clarreinscr->incluir($oNum->k03_numpre, $oNot->q02_inscr);
+                    if ($clarreinscr->erro_status == 0) {
+
+                        $lSqlErro = true;
+                        $erro_msg = $clarreinscr->erro_msg;
+                    }
+                }
+
+            }
+
+            db_fim_transacao($lSqlErro);
+            if ($lSqlErro) {
+
+                db_msgbox($erro_msg);
+            } else {
+
+                $db_botao = false;
+                $rsObs = $clissnotaavulsaservico->sql_record(
+                    $clissnotaavulsaservico->sql_query(null, "sum(q62_vlrissqn) as tvlrissqn,
 														                                         sum(q62_vlrdeducao) as tvlrdeducoes,
 																																		 sum(q62_vlrtotal) as tvlrtotal",
-																															null,"q62_issnotaavulsa=".$post->q62_issnotaavulsa));
-		   $oObs  = db_utils::fieldsmemory($rsObs,0);
-       $obs   = "Referente a nota fiscal avulsa nº ".$oNot->q51_numnota."\n";
-			 $obs  .= "Tomador : ".$oTom->z01_cgccpf." - ".$oTom->z01_nome."\n";
-			 $obs  .= "Imposto : R$ ".trim(db_formatar($oObs->tvlrissqn,"f"))."\n";
-			 $obs  .= "Deduções: R$ ".trim(db_formatar($oObs->tvlrdeducoes,"f"))."\n";
-			 $obs  .= "Valor serviço: R$ ".trim(db_formatar($oObs->tvlrtotal,"f"))."\n";
-       session_register("DB_obsrecibo",$obs);
-			 db_putsession("DB_obsrecibo",$obs);
-       $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNum->k03_numpre."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNot->q02_inscr;
-			 $url  .= "&numcgm=".$oNot->q02_numcgm."&emrec=t&CHECK10=".$oNum->k03_numpre."P1&tipo_debito=".$oPar->q60_tipo;
-       $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNot->q02_numcgm;
-       $url  .= "&totregistros=1&k03_numnov=".$oNumnov->k03_numnov."&loteador=";
-       echo "<script>\n";
+                        null, "q62_issnotaavulsa=" . $post->q62_issnotaavulsa));
+                $oObs = db_utils::fieldsmemory($rsObs, 0);
+                $obs = "Referente a nota fiscal avulsa nº " . $oNot->q51_numnota . "\n";
+                $obs .= "Tomador : " . $oTom->z01_cgccpf . " - " . $oTom->z01_nome . "\n";
+                $obs .= "Imposto : R$ " . trim(db_formatar($oObs->tvlrissqn, "f")) . "\n";
+                $obs .= "Deduções: R$ " . trim(db_formatar($oObs->tvlrdeducoes, "f")) . "\n";
+                $obs .= "Valor serviço: R$ " . trim(db_formatar($oObs->tvlrtotal, "f")) . "\n";
+                session_register("DB_obsrecibo", $obs);
+                db_putsession("DB_obsrecibo", $obs);
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNum->k03_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNot->q02_inscr;
+                $url .= "&numcgm=" . $oNot->q02_numcgm . "&emrec=t&CHECK10=" . $oNum->k03_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNot->q02_numcgm;
+                $url .= "&totregistros=1&k03_numnov=" . $oNumnov->k03_numnov . "&loteador=";
+                echo "<script>\n";
 
-			 echo " window.open('$url','','location=0');\n";
-       echo "</script>\n";
+                echo " window.open('$url','','location=0');\n";
+                echo "</script>\n";
 
-			}
+            }
 
-	}
-  $lGeraNota = true;
-
+        }
+        $lGeraNota = true;
+    }
 }
 if (isset($post->notaavulsa)){
 
