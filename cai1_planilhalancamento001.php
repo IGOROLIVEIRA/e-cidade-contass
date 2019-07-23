@@ -623,11 +623,11 @@ function js_getSaltesConvenio(iCodigoSaltes) {
 }
 
 function js_retornoSaltesConvenio(oAjax) {
-    oSatesConvenio = eval("("+oAjax.responseText+")");
+    oSaltesConvenio = eval("("+oAjax.responseText+")");
 
-    $('k81_convenio').value           = oSatesConvenio.c206_sequencial;
-    $('c206_objetoconvenio').value    = oSatesConvenio.c206_objetoconvenio;
-    js_mostrarNotificacaoConvenio(oSatesConvenio);
+    $('k81_convenio').value           = oSaltesConvenio.c206_sequencial;
+    $('c206_objetoconvenio').value    = oSaltesConvenio.c206_objetoconvenio;
+    js_mostrarNotificacaoConvenio(oSaltesConvenio);
 }
 
 function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
@@ -770,6 +770,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    js_verificaReceita();
    js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
+   js_mostrarNotificacaoConvenio();
  }
 
  function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6){
@@ -792,6 +793,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    js_verificaReceita();
    js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
+   js_mostrarNotificacaoConvenio();
 
  }
 
@@ -1514,20 +1516,23 @@ function js_mostrarNotificacaoEstruturais() {
  *
  * @returns {Boolean}
  */
-function js_mostrarNotificacaoConvenio(oSatesConvenio) {
-
-  if(!oSatesConvenio.lValidacao){
-
-    $('notificacao-conv').childElements()[0].update("");
-    $('notificacao-conv').childElements()[0].insert("<b>" + oSatesConvenio.sMensagem + "</b>");
+function js_mostrarNotificacaoConvenio(oSaltesConvenio) {
+  
+  if(oSaltesConvenio){
     
-    $('notificacao-conv').setStyle({
-      display : 'table-row'
-    });
+    if(!oSaltesConvenio.lValidacao){
 
-    return true;
+      $('notificacao-conv').childElements()[0].update("");
+      $('notificacao-conv').childElements()[0].insert("<b>" + oSaltesConvenio.sMensagem + "</b>");
+      
+      $('notificacao-conv').setStyle({
+        display : 'table-row'
+      });
 
-  }
+      return true;
+
+    }
+  } 
 
   $('notificacao-conv').setStyle({
     display : 'none'
