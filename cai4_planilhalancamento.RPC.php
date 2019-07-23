@@ -53,7 +53,7 @@ if ($oParam->exec == 'getSaltesConvenio') {
     
    } else {
 
-      $sMensagem = "Usuário, para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
+      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
 
    }
