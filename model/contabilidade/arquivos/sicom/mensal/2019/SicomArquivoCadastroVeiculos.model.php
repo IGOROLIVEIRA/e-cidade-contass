@@ -366,6 +366,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                      veiculos.ve01_codigoant,
                      transferenciaveiculos.ve80_dt_transferencia,
                      veicabast.ve70_dtabast,
+                     veicmanut.ve62_dtmanut,
                      veiculostransf.ve81_codunidadesubatual,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
@@ -453,6 +454,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                            ve62_origemgasto,
                            veicmanut.ve62_tipogasto,
                            veicmanut.ve62_descr,
+                           veicmanut.ve62_dtmanut,
                            pc01_codmater,
                            pc01_descrmater,
                            veiculostransf.ve81_codigonovo,
@@ -472,6 +474,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     veiculos.ve01_codigoant,
                     transferenciaveiculos.ve80_dt_transferencia,
                     veicabast.ve70_dtabast,
+                    veicmanut.ve62_dtmanut,
                     veiculostransf.ve81_codunidadesubatual,
                     veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
@@ -529,6 +532,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                    ve81_codunidadesubatual
           ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
                     LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
+                    LEFT JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
@@ -553,10 +557,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              veiculostransf.ve81_codigo,
                              transferenciaveiculos.ve80_dt_transferencia,
                              veicabast.ve70_dtabast,
+                             veicmanut.ve62_dtmanut,
                              veiculostransf.ve81_codunidadesubatual) as teste";
 
         $rsResult20 = db_query($sSql);
-//        echo $sSql; db_criatabela($rsResult20); die();
+        echo $sSql; db_criatabela($rsResult20); die();
         /**
          * registro 20
          */
