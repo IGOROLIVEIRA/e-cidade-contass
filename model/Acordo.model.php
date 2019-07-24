@@ -2650,7 +2650,8 @@ class Acordo
       $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
       $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
       $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
-      $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
+      $sSqlAutorizacoes .= "        e60_numemp as codigoempenho,";
+      $sSqlAutorizacoes .= "        e60_vlranu as valoranulado";
       $sSqlAutorizacoes .= "   from acordoposicao ";
       $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
       $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";
@@ -2680,7 +2681,8 @@ class Acordo
       $sSqlAutorizacoes .= "        e54_emiss as dataemissao,";
       $sSqlAutorizacoes .= "        e54_anulad as dataanulacao,";
       $sSqlAutorizacoes .= "        e60_codemp||'/'||e60_anousu as empenho, ";
-      $sSqlAutorizacoes .= "        e60_numemp as codigoempenho";
+      $sSqlAutorizacoes .= "        e60_numemp as codigoempenho,";
+      $sSqlAutorizacoes .= "        e60_vlranu as valoranulado";
       $sSqlAutorizacoes .= "   from acordoposicao ";
       $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
       $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";

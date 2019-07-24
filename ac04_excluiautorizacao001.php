@@ -208,16 +208,20 @@ function js_retornoGetAutorizacoesAcordo(oAjax) {
 
     oRetorno.autorizacoes.each(function (oAutorizacao, iLinha) {
 
-      if (oAutorizacao.dataanulacao != '') {
-        var aLinha = new Array();
-        aLinha[0]  = oAutorizacao.codigo;
-        aLinha[1]  = "<a href='#' onclick='js_visualizarAutorizacao("+oAutorizacao.codigo+");return false'>";
-        aLinha[1]  += oAutorizacao.codigo+"</a>";
-        aLinha[2]  = js_formatar(oAutorizacao.dataemissao, 'd');
-        aLinha[3]  = js_formatar(oAutorizacao.e54_valor, 'f');
-        oGridAutorizacoes.addRow(aLinha);
+      if ((oAutorizacao.dataanulacao != '' && oAutorizacao.empenho == '') || (oAutorizacao.dataanulacao != '' && (parseFloat(oAutorizacao.e54_valor) == parseFloat(oAutorizacao.valoranulado)))) {
+          
+          var aLinha = new Array();
+          aLinha[0]  = oAutorizacao.codigo;
+          aLinha[1]  = "<a href='#' onclick='js_visualizarAutorizacao("+oAutorizacao.codigo+");return false'>";
+          aLinha[1]  += oAutorizacao.codigo+"</a>";
+          aLinha[2]  = js_formatar(oAutorizacao.dataemissao, 'd');
+          aLinha[3]  = js_formatar(oAutorizacao.e54_valor, 'f');
+          oGridAutorizacoes.addRow(aLinha);
+
       }
+
     });
+
     oGridAutorizacoes.renderRows();
   }
 }
