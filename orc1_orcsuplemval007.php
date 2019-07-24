@@ -42,6 +42,7 @@ require_once("classes/db_orcsuplemval_classe.php");
 require_once("classes/db_orcdotacao_classe.php");   // instancia da classe dotação
 require_once("classes/db_orcreceita_classe.php"); // receita
 require_once("classes/db_orcorgao_classe.php"); // receita
+require_once("classes/db_orcparametro_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -53,8 +54,7 @@ $clorcdotacao   = new cl_orcdotacao;  // instancia da classe dotação
 $clorcsuplem    = new cl_orcsuplem;
 $clorcorgao     = new cl_orcorgao;
 $clorcprojeto   = new cl_orcprojeto;
-
-
+$clorcparametro           = new cl_orcparametro();
 
 $clorcsuplem->rotulo->label();
 $clorcsuplemval->rotulo->label();
@@ -66,6 +66,12 @@ $db_opcao = 1;
 $db_botao = true;
 $anousu = db_getsession("DB_anousu");
 $o39_codproj = (isset($o39_codproj)&&!empty($o39_codproj))?$o39_codproj:'null';
+
+/*OC10197*/
+$result=$clorcparametro->sql_record($clorcparametro->sql_query_file($anousu,"o50_controlafote1017,o50_controlafote10011006"));
+if ($clorcparametro->numrows > 0 ){
+    db_fieldsmemory($result,0);
+}
 
 /**
  * verifica o tipo da Suplementacao

@@ -246,14 +246,6 @@ if(isset($incluir)){
                     $limpa_dados = false;
                 }
 
-                /*valida fonte 100,101,102,118,119*/
-                $dotacoes = array(100, 101, 102, 118, 119);
-                if (!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $dotacoes)) {
-                    $sqlerro = true;
-                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                    $limpa_dados = false;
-                }
-
                 /**
                  * OC 9112 - Fim
                  */
