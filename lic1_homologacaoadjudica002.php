@@ -35,7 +35,7 @@ if(isset($alterar)){
 
 
     /**
-     * Verificar Encerramento Periodo Patrimonial
+     * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
      */
 
   if (!empty($l202_datahomologacao)) {
@@ -43,6 +43,27 @@ if(isset($alterar)){
     if (!$clcondataconf->verificaPeriodoPatrimonial($l202_datahomologacao)) {
       echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
       db_redireciona('lic1_homologacaoadjudica002.php');
+    }
+
+    $clliclicitasituacao  = new cl_liclicitasituacao;
+    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l202_licitacao);
+    $rsResult             = db_query($sSql);
+    
+    if(pg_numrows($rsResult) > 0){
+      
+      $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
+
+      $dtDataJulg         = $oLicSituacao->l11_data;   
+      $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+      $dtDataHomologacao  = date('Y-m-d', strtotime(str_replace('/', '-', $l202_datahomologacao)));
+
+      if($dtDataHomologacao < $dtDataJulg){
+
+        $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data da homologação deverá ser igual ou superior a data de julgamento.';
+        echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+        db_redireciona('lic1_homologacaoadjudica002.php');
+
+      }
     }
   }
 
