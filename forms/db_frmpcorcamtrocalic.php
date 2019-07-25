@@ -114,7 +114,7 @@ db_select("l20_interporrecurso",$x,true,$db_opcao,"onchange='js_interporrecurso(
   
   <fieldset style="width: 60%">
   <legend align="left">
-  <b>Descrição do Revurso</b>
+  <b>Descrição do Recurso</b>
   </legend>
   <table>
   <tr>

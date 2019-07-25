@@ -659,7 +659,7 @@ function js_retornoGeraOrdem(oAjax) {
      
   } else {
   
-    alert("Operação afetuada com sucesso");
+    alert("Operação efetuada com sucesso");
    // js_emitir(oRetorno.dtAutoriza,oRetorno.iCodAgenda);
     js_pesquisarOrdens();
     
