@@ -377,6 +377,7 @@ if (isset($incluir)) {
         $clempautitem->e55_item              = $e55_item ;
         $clempautitem->e55_quant             = $e55_quant;
         $clempautitem->e55_servicoquantidade = $e55_servicoquantidade;
+        $clempautitem->e55_unid              = $e55_unid;
 
         if ($valor_tot != $e55_vltot) {
           $clempautitem->e55_vltot = $valor_tot;
