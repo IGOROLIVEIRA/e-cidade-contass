@@ -110,7 +110,7 @@ $iCodigoDepartamento = db_getsession('DB_coddepto');
 
 
 $sCamposParam = "p90_modelcapaproc, p90_db_documentotemplate, db82_templatetipo";
-$sSqlParam    = $clprotparam->sql_query_documentos(null,$sCamposParam);
+$sSqlParam    = $clprotparam->sql_query_documentos(null,$sCamposParam,null," p90_instit =  {$iCodigoInstituicao} ");
 $rsParm       = $clprotparam->sql_record($sSqlParam);
 $oProtParam   = db_utils::fieldsMemory($rsParm, 0);
 
@@ -245,7 +245,6 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   
   $aParam['$codigo_instituicao']  = $iCodigoInstituicao;
   $aParam['$codigo_departamento'] = $iCodigoDepartamento;
-  
   
   db_stdClass::oo2pdf($oProtParam->db82_templatetipo,
                       $oProtParam->p90_db_documentotemplate, 
