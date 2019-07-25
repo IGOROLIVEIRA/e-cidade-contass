@@ -42,6 +42,7 @@ require_once("classes/db_orcsuplemval_classe.php");
 require_once("classes/db_orcdotacao_classe.php");   // instancia da classe dotação
 require_once("classes/db_orcreceita_classe.php"); // receita
 require_once("classes/db_orcorgao_classe.php"); // receita
+require_once("classes/db_orcparametro_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -53,8 +54,7 @@ $clorcdotacao   = new cl_orcdotacao;  // instancia da classe dotação
 $clorcsuplem    = new cl_orcsuplem;
 $clorcorgao     = new cl_orcorgao;
 $clorcprojeto   = new cl_orcprojeto;
-
-
+$clorcparametro           = new cl_orcparametro();
 
 $clorcsuplem->rotulo->label();
 $clorcsuplemval->rotulo->label();
@@ -66,6 +66,12 @@ $db_opcao = 1;
 $db_botao = true;
 $anousu = db_getsession("DB_anousu");
 $o39_codproj = (isset($o39_codproj)&&!empty($o39_codproj))?$o39_codproj:'null';
+
+/*OC10197*/
+$result=$clorcparametro->sql_record($clorcparametro->sql_query_file($anousu,"o50_controlafote1017,o50_controlafote10011006"));
+if ($clorcparametro->numrows > 0 ){
+    db_fieldsmemory($result,0);
+}
 
 /**
  * verifica o tipo da Suplementacao
@@ -221,15 +227,15 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
 
                 }
             }
-
-            /*valida fonte (100,101,102,118,119) OC 9112 */
-            $dotacoes = array(100,101,102,118,119);
-            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
-                $sqlerro = true;
-                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                $limpa_dados = false;
+            if($o50_controlafote1017 == 't') {
+                /*valida fonte (100,101,102,118,119) OC 9112 */
+                $dotacoes = array(100,101,102,118,119);
+                if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
             }
-
         }
         /*verifica se ja existe alguma dotacao cadastrada OC 9039*/
         $tipossupvalida = array(1001,1006,1011,1012,1013,1014,1015,1016,1017);
@@ -337,30 +343,30 @@ $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 
 
 ?>
-<html>
-<head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-    <link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="480" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-            <center>
-                <?
-                include("forms/db_frmorcsuplemval.php");
-                ?>
-            </center>
-        </td>
-    </tr>
-</table>
-</body>
-</html>
+    <html>
+    <head>
+        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Expires" CONTENT="0">
+        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+        <link href="estilos.css" rel="stylesheet" type="text/css">
+    </head>
+    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+    <table width="480" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmorcsuplemval.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
+    </body>
+    </html>
 <?
 
 if(isset($incluir) || isset($alterar) || isset($excluir)){

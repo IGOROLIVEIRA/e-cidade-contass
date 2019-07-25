@@ -40,6 +40,7 @@ require_once("classes/db_orcsuplemval_classe.php");
 require_once("classes/db_orcdotacao_classe.php");   // instancia da classe dotação
 require_once("classes/db_orcreceita_classe.php"); // receita
 require_once("classes/db_orcorgao_classe.php"); // receita
+require_once("classes/db_orcparametro_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -52,6 +53,7 @@ $clorcorgao               = new cl_orcorgao;
 $clorcreserva             = new cl_orcreserva;
 $clorcreservasup          = new cl_orcreservasup;
 $clrotulo                 = new rotulocampo;
+$clorcparametro           = new cl_orcparametro();
 
 $clrotulo->label("o58_concarpeculiar");
 $clrotulo->label("c58_descr");
@@ -65,6 +67,12 @@ $op =1 ;
 $db_opcao = 1;
 $db_botao = true;
 $anousu = db_getsession("DB_anousu");
+
+/*OC10197*/
+$result=$clorcparametro->sql_record($clorcparametro->sql_query_file($anousu,"o50_controlafote1017,o50_controlafote10011006"));
+if ($clorcparametro->numrows > 0 ){
+    db_fieldsmemory($result,0);
+}
 
 //------------------------------------------
 if (isset($pesquisa_dot) && $o47_coddot!=""){
@@ -154,38 +162,38 @@ if(isset($incluir)){
 
     if($tiposup=='1017'){
         $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
-FROM orcdotacao d
-INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
-AND p.o55_projativ = d.o58_projativ
-INNER JOIN orcelemento e ON e.o56_codele = d.o58_codele
-AND o56_anousu = o58_anousu
-WHERE o58_anousu=".db_getsession('DB_anousu')."
-  AND o58_coddot = {$o47_coddot}";
+            FROM orcdotacao d
+            INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
+            AND p.o55_projativ = d.o58_projativ
+            INNER JOIN orcelemento e ON e.o56_codele = d.o58_codele
+            AND o56_anousu = o58_anousu
+            WHERE o58_anousu=".db_getsession('DB_anousu')."
+              AND o58_coddot = {$o47_coddot}";
 
         $oEstruturalDotacaoEnviada = db_utils::fieldsMemory(db_query($sSqlEstruturalDotacaoEnviada));
 
         $sSqlestrututural = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural,
-  o56_elemento,
-  o55_descr::text,
-  o56_descr,
-  o58_coddot,
-  o58_instit,
-  o46_codlei,
-  o46_codsup,
-  o46_tiposup
-  FROM orcsuplemval
-  JOIN orcdotacao ON o47_anousu=o58_anousu
-  AND o47_coddot=o58_coddot
-  JOIN orcsuplem ON o47_codsup=o46_codsup
-  INNER JOIN orcprojativ ON o55_anousu = ".db_getsession('DB_anousu')."
-  AND o55_projativ = o58_projativ
-  INNER JOIN orcelemento e ON o56_codele = o58_codele
-  AND o56_anousu = o58_anousu
-  WHERE o46_codlei = {$o39_codproj}
-  AND o46_codsup = {$o46_codsup}
-  AND o46_tiposup = {$tiposup}
-  AND o58_anousu = ".db_getsession('DB_anousu')."
-  ";
+              o56_elemento,
+              o55_descr::text,
+              o56_descr,
+              o58_coddot,
+              o58_instit,
+              o46_codlei,
+              o46_codsup,
+              o46_tiposup
+              FROM orcsuplemval
+              JOIN orcdotacao ON o47_anousu=o58_anousu
+              AND o47_coddot=o58_coddot
+              JOIN orcsuplem ON o47_codsup=o46_codsup
+              INNER JOIN orcprojativ ON o55_anousu = ".db_getsession('DB_anousu')."
+              AND o55_projativ = o58_projativ
+              INNER JOIN orcelemento e ON o56_codele = o58_codele
+              AND o56_anousu = o58_anousu
+              WHERE o46_codlei = {$o39_codproj}
+              AND o46_codsup = {$o46_codsup}
+              AND o46_tiposup = {$tiposup}
+              AND o58_anousu = ".db_getsession('DB_anousu')."
+              ";
 
         if(pg_num_rows(db_query($sSqlestrututural))>0){
             $oEstruturalSupl = db_query($sSqlestrututural);
@@ -197,57 +205,153 @@ WHERE o58_anousu=".db_getsession('DB_anousu')."
 
             }
 
-            /**
-             * OC 9112 - Inicio
-             */
+            if($o50_controlafote1017 == 't') {
+                /**
+                 * OC 9112 - Inicio
+                 */
 
-            /*valida fonte 101 e 102*/
-            $validacao = array(101,102);
-            if(substr($oEstruturalSupl->dl_estrutural, 38) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$validacao)){
+                /*valida fonte 101 e 102*/
+                $validacao = array(101, 102);
+                if (substr($oEstruturalSupl->dl_estrutural, 38) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 101*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38) == 101 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 102*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38) == 102 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 118*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38) == 118 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 119) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 119*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38) == 119 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 118) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /**
+                 * OC 9112 - Fim
+                 */
+            }
+        }
+    }
+
+    if($tiposup == '1001' || $tiposup == '1006'){
+        $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
+            FROM orcdotacao d
+            INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
+            AND p.o55_projativ = d.o58_projativ
+            INNER JOIN orcelemento e ON e.o56_codele = d.o58_codele
+            AND o56_anousu = o58_anousu
+            WHERE o58_anousu=".db_getsession('DB_anousu')."
+              AND o58_coddot = {$o47_coddot}";
+
+        $oEstruturalDotacaoEnviada = db_utils::fieldsMemory(db_query($sSqlEstruturalDotacaoEnviada));
+
+        $sSqlestrututural = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural,
+              o56_elemento,
+              o55_descr::text,
+              o56_descr,
+              o58_coddot,
+              o58_instit,
+              o46_codlei,
+              o46_codsup,
+              o46_tiposup
+              FROM orcsuplemval
+              JOIN orcdotacao ON o47_anousu=o58_anousu
+              AND o47_coddot=o58_coddot
+              JOIN orcsuplem ON o47_codsup=o46_codsup
+              INNER JOIN orcprojativ ON o55_anousu = ".db_getsession('DB_anousu')."
+              AND o55_projativ = o58_projativ
+              INNER JOIN orcelemento e ON o56_codele = o58_codele
+              AND o56_anousu = o58_anousu
+              WHERE o46_codlei = {$o39_codproj}
+              AND o46_codsup = {$o46_codsup}
+              AND o46_tiposup = {$tiposup}
+              AND o58_anousu = ".db_getsession('DB_anousu')."
+              ";
+
+        if(pg_num_rows(db_query($sSqlestrututural))>0) {
+            $oEstruturalSupl = db_query($sSqlestrututural);
+
+            $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
+//            if (!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0, 36) == substr($oEstruturalSupl->dl_estrutural, 0, 36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37, 4) != substr($oEstruturalSupl->dl_estrutural, 37, 4))) {
+//                $sqlerro = true;
+//                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+//                $limpa_dados = false;
+//
+//            }
+        }
+
+        if($o50_controlafote10011006 == 't'){
+            /*valida fonte 100*/
+            $validacao = array(100, 101, 102);
+            if (substr($oEstruturalSupl->dl_estrutural, 38) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
 
             /*valida fonte 101*/
-            if(substr($oEstruturalSupl->dl_estrutural, 38) == 101 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100){
+            $validacao = array(100,101);
+            if (substr($oEstruturalSupl->dl_estrutural, 38) == 101 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
 
             /*valida fonte 102*/
-            if(substr($oEstruturalSupl->dl_estrutural, 38) == 102 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 100){
+            $validacao = array(100,102);
+            if (substr($oEstruturalSupl->dl_estrutural, 38) == 102 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
 
             /*valida fonte 118*/
-            if(substr($oEstruturalSupl->dl_estrutural, 38) == 118 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 119){
+            $validacao = array(118,119);
+            if (substr($oEstruturalSupl->dl_estrutural, 38) == 118 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
 
             /*valida fonte 119*/
-            if(substr($oEstruturalSupl->dl_estrutural, 38) == 119 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != 118){
+            $validacao = array(118,119);
+            if (substr($oEstruturalSupl->dl_estrutural, 38) == 119 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
 
-            /*valida fonte 100,101,102,118,119*/
-            $dotacoes = array(100,101,102,118,119);
-            if(!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38),$dotacoes) ){
-                $sqlerro = true;
-                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                $limpa_dados = false;
-            }
+            /*valida diferente*/
+            $validacao = array(100,101,102,118,119);
+            if(!in_array(substr($oEstruturalSupl->dl_estrutural, 38), $validacao)){
 
-            /**
-             * OC 9112 - Fim
-             */
+                if(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38) != substr($oEstruturalSupl->dl_estrutural, 38)){
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+            }
         }
     }
     if ($sqlerro == false ) {
@@ -313,28 +417,28 @@ if ($clorcsuplemval->numrows > 0 ){
 // --------------------------------------
 
 ?>
-<html>
-<head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    <link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="480" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-            <center>
-                <?
-                include("forms/db_frmorcsuplemval_reducao.php");
-                ?>
-            </center>
-        </td>
-    </tr>
-</table>
-</body>
-</html>
+    <html>
+    <head>
+        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Expires" CONTENT="0">
+        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+        <link href="estilos.css" rel="stylesheet" type="text/css">
+    </head>
+    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+    <table width="480" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+                <center>
+                    <?
+                    include("forms/db_frmorcsuplemval_reducao.php");
+                    ?>
+                </center>
+            </td>
+        </tr>
+    </table>
+    </body>
+    </html>
 <?
 
 if(isset($incluir) || isset($alterar) || isset($excluir)){
