@@ -111,14 +111,20 @@ if(isset($incluir)){
   if($l200_tipoparecer == "3") {
 
     $clliclicitasituacao  = new cl_liclicitasituacao;
-    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data, l08_sequencial', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao);
+    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data, l11_licsituacao', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao);
     $rsResult             = db_query($sSql);
 
     if(pg_numrows($rsResult) > 0){
-      
+
       $oLicSituacao     = db_utils::fieldsMemory($rsResult, 0);
 
-      if($oLicSituacao->l08_sequencial == 1) {
+      if($oLicSituacao->l11_licsituacao == 0){
+          $clliclicitasituacao->erro_msg = 'Usuário, é necessário efetuar o julgamento da licitação.';
+          echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+          db_redireciona('lic1_parecerlicitacao001.php');
+      }
+
+      if($oLicSituacao->l11_licsituacao == 1) {
         
         $dtDataJulg     = $oLicSituacao->l11_data;   
         $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
@@ -129,7 +135,6 @@ if(isset($incluir)){
           $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data do parecer deverá ser igual ou superior a data de julgamento.';
           echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
           db_redireciona('lic1_parecerlicitacao001.php');
-
         
         }
       }
@@ -151,9 +156,9 @@ if(isset($incluir)){
       $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
       $dtDataParecer      = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
 
-      if($dtDataParecer > $dtDataEmissao){
+      if($dtDataParecer < $dtDataEmissao){
         
-        $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.', data do parecer do tipo (2- Jurídico-Edital) não pode ser posterior.';
+        $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.'. A data do parecer do tipo (2- Jurdico-Edital) não pode ser anterior a data de emissão do edital.';
         echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
         db_redireciona('lic1_parecerlicitacao001.php');
 
