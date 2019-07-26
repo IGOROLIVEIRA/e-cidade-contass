@@ -217,7 +217,7 @@ db_app::load("prototype.js");
               </td>
               <td> 
               <?
-                db_textarea('ve60_destino',0,50,$Ive60_destino,true,'text',$db_opcao,"")
+                db_textarea('ve60_destino',5,50,$Ive60_destino,true,'text',$db_opcao,"","","",200);
               ?>
               </td>
             </tr>
