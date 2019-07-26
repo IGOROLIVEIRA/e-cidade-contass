@@ -47,12 +47,13 @@ if ($oParam->exec == 'getSaltesConvenio') {
    
    if ($oDaoSaltes->numrows > 0) {
 
-      $oSaltesConv      = db_utils::fieldsMemory($rsSaltes, 0);
-      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);
+      $oSaltesConv = db_utils::fieldsMemory($rsSaltes, 0);
 
+      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);   
+    
    } else {
 
-      $sMensagem = "Usuário, para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária";
+      $sMensagem = "Usuário: para realizar a arrecadação da receita, vincule o convênio a respectiva conta bancária.";
       $aSaltesConv = array("c206_sequencial" => "", "c206_objetoconvenio" => "", "lValidacao" => false, "sMensagem" => $sMensagem); //Garantimos que ira ter uma string valida para retorno
 
    }

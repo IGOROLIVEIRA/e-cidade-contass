@@ -610,24 +610,24 @@ function js_pesquisaConta(lMostra) {
 
 
 function js_getSaltesConvenio(iCodigoSaltes) {
-     sJson    = '{"exec":"getSaltesConvenio","iCodigoSaltes":'+iCodigoSaltes+'}';
-     url      = 'cai4_planilhalancamento.RPC.php';
-     oAjax    = new Ajax.Request(
-                            url,
-                              {
-                               method: 'post',
-                               parameters: 'sJson='+sJson,
-                               onComplete: js_retornoSaltesConvenio
-                              }
-                             );
+  sJson    = '{"exec":"getSaltesConvenio","iCodigoSaltes":'+iCodigoSaltes+'}';
+  url      = 'cai4_planilhalancamento.RPC.php';
+  oAjax    = new Ajax.Request(
+    url,
+    {
+      method: 'post',
+      parameters: 'sJson='+sJson,
+      onComplete: js_retornoSaltesConvenio
+    }
+  );
 }
 
 function js_retornoSaltesConvenio(oAjax) {
-    oSatesConvenio = eval("("+oAjax.responseText+")");
+    oSaltesConvenio = eval("("+oAjax.responseText+")");
 
-    $('k81_convenio').value           = oSatesConvenio.c206_sequencial;
-    $('c206_objetoconvenio').value    = oSatesConvenio.c206_objetoconvenio;
-    js_mostrarNotificacaoConvenio(oSatesConvenio);
+    $('k81_convenio').value           = oSaltesConvenio.c206_sequencial;
+    $('c206_objetoconvenio').value    = oSaltesConvenio.c206_objetoconvenio;
+    js_mostrarNotificacaoConvenio(oSaltesConvenio);
 }
 
 function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
@@ -635,10 +635,7 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
   $('k81_conta') .value = iCodigoConta;
   $('k13_descr') .value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
-
-  if (iAlteracao != null) {
-    return;
-  }
+  iCodRecursoConta = $F('recurso');
 
   if( $('estrutural').value.substr(0,3) == '211' ) {
 
@@ -646,8 +643,11 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
     $('k81_codigo').onchange() ;
   } else {
 
-    $('k81_codigo').value = iCodigoRecurso;
-    $('k81_codigo').onchange() ;
+    if(iCodigoRecurso != ''){
+      $('k81_codigo').value = iCodigoRecurso;
+      $('k81_codigo').onchange() ;
+    }
+  
   }
 
   if(lErro) {
@@ -660,7 +660,17 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
     js_getCgmConta(iCodigoConta);
   }
 
-  js_getSaltesConvenio(iCodigoConta);
+  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142){
+    
+    js_getSaltesConvenio(iCodigoConta);  
+
+  } else {
+
+    $('k81_convenio').value           = '';
+    $('c206_objetoconvenio').value    = '';
+
+  }
+  
   js_mostrarNotificacaoConta();
 }
 
@@ -669,6 +679,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
   $('k81_conta').value = iCodigoConta;
   $('k13_descr').value = sDescricao;
   $('c61_codigo').value = iCodigoRecurso;
+  iCodRecursoConta = $F('recurso');
 
   if ( $F('estrutural').substr(0,3) == '211' ) {
 
@@ -685,6 +696,17 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
     js_getCgmConta(iCodigoConta);
   }
   db_iframe_saltes.hide();
+
+  if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142){
+    
+    js_getSaltesConvenio(iCodigoConta);  
+
+  } else {
+    
+    $('k81_convenio').value           = '';
+    $('c206_objetoconvenio').value    = '';
+
+  }
 
   js_mostrarNotificacaoConta();
 }
@@ -748,6 +770,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    js_verificaReceita();
    js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
+   js_mostrarNotificacaoConvenio();
  }
 
  function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6){
@@ -770,6 +793,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    js_verificaReceita();
    js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
+   js_mostrarNotificacaoConvenio();
 
  }
 
@@ -1014,7 +1038,6 @@ function js_addReceita () {
     break;
 
   }
-
 
   var oReceita             = new Object();
   //Receita
@@ -1493,20 +1516,23 @@ function js_mostrarNotificacaoEstruturais() {
  *
  * @returns {Boolean}
  */
-function js_mostrarNotificacaoConvenio(oSatesConvenio) {
-
-  if(!oSatesConvenio.lValidacao){
-
-    $('notificacao-conv').childElements()[0].update("");
-    $('notificacao-conv').childElements()[0].insert("<b>" + oSatesConvenio.sMensagem + "</b>");
+function js_mostrarNotificacaoConvenio(oSaltesConvenio) {
+  
+  if(oSaltesConvenio){
     
-    $('notificacao-conv').setStyle({
-      display : 'table-row'
-    });
+    if(!oSaltesConvenio.lValidacao){
 
-    return true;
+      $('notificacao-conv').childElements()[0].update("");
+      $('notificacao-conv').childElements()[0].insert("<b>" + oSaltesConvenio.sMensagem + "</b>");
+      
+      $('notificacao-conv').setStyle({
+        display : 'table-row'
+      });
 
-  }
+      return true;
+
+    }
+  } 
 
   $('notificacao-conv').setStyle({
     display : 'none'
