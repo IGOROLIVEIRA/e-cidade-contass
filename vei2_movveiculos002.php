@@ -239,15 +239,28 @@ function quebrar_texto($texto, $tamanho)
     $aTexto = explode(" ", $texto);
     $string_atual = "";
     foreach ($aTexto as $word) {
-        $string_ant = $string_atual;
-        $string_atual .= " " . $word;
-        if (strlen($string_atual) > $tamanho) {
-            $aTextoNovo[] = $string_ant;
-            $string_ant = "";
-            $string_atual = $word;
+
+        if(strlen($word) > $tamanho) {
+
+            $aTextoNovo = str_split($word, $tamanho);
+
+        } else {
+
+            $string_ant = $string_atual;
+            $string_atual .= " " . $word;
+            if (strlen($string_atual) > $tamanho) {
+                $aTextoNovo[] = $string_ant;
+                $string_ant = "";
+                $string_atual = $word;
+            }
         }
     }
-    $aTextoNovo[] = $string_atual;
+
+    if($string_atual != '') {
+
+        $aTextoNovo[] = $string_atual;
+
+    }
     return $aTextoNovo;
 
 }
