@@ -3294,6 +3294,43 @@ class cl_liclicita
 
             }
 
+    function excluirpublicacaocredenciamento ($l20_codigo){
+        $sql = "begin; update liclicita set l20_dtpubratificacao = null,l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= '' 
+        where l20_codigo = $l20_codigo";
+        $result = db_query($sql);
+
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql = "Publicação nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql .= "Valores : " . $this->l20_codigo;
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            $this->numrows_alterar = 0;
+            return false;
+        } else {
+            if (pg_affected_rows($result) == 0) {
+                $this->erro_banco = "";
+                $this->erro_sql = "Publicação nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql .= "Valores : " . $this->l20_codigo;
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = 0;
+                return true;
+            } else {
+                $this->erro_banco = "";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                //$this->erro_sql .= "Valores : ".$this->l20_codigo;
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
+
 
         }
 
