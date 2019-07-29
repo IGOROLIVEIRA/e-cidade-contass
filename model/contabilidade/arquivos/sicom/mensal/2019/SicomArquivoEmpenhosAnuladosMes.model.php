@@ -227,7 +227,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
             $oDadosEmpenhoAnulado->si110_dtempenho = $oEmpenhoAnulado->e60_emiss;
             $oDadosEmpenhoAnulado->si110_dtanulacao = $oEmpenhoAnulado->c70_data;
             $oDadosEmpenhoAnulado->si110_nroanulacao = $oEmpenhoAnulado->c70_codlan;
-            $arraytipos = array(3,4,5);
+            $arraytipos = array(2,3,4,5);
             if(in_array($oEmpenhoAnulado->tipoanulacao,$arraytipos)){
                 $oDadosEmpenhoAnulado->si110_tipoanulacao = 1;
             }else{
