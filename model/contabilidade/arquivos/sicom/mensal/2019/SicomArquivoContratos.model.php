@@ -540,7 +540,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
               $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
             }
-            if($oDados10->tipoprocesso == ''){
+            if($oDados10->tipoprocesso == '' || $oDados10->tipoprocesso == 0){
               $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocessolicitacao;
             }else $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
             // $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
