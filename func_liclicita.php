@@ -190,7 +190,13 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereCredenciamento = " and l03_pctipocompratribunal not in (103,102)";
             }
 
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}";
+            if($credenciamento == 'true'){
+                $sWherePublicCredenciamento = "AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao = 1";
+            }else{
+                $sWherePublicCredenciamento = "AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao = 1 AND l20_dtpubratificacao IS NOT NULL";
+            }
+
+            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}"."$sWherePublicCredenciamento";
             if (isset($lContratos) && $lContratos == 1 ) {
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
