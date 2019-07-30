@@ -29,16 +29,16 @@ class cl_arc202019
   var $si31_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si31_sequencial = int8 = sequencial 
-                 si31_tiporegistro = int8 = Tipo do  registro 
-                 si31_codorgao = varchar(2) = Código do órgão 
-                 si31_codestorno = int8 = Código estorno 
-                 si31_ededucaodereceita = int8 = Identifica 
-                 si31_identificadordeducao = int8 = Identificador 
-                 si31_naturezareceitaestornada = int8 = Natureza da receita 
-                 si31_vlestornado = float8 = Valor estornado 
-                 si31_mes = int8 = Mês 
-                 si31_instit = int8 = Instituição 
+                 si31_sequencial = int8 = sequencial
+                 si31_tiporegistro = int8 = Tipo do  registro
+                 si31_codorgao = varchar(2) = Código do órgão
+                 si31_codestorno = int8 = Código estorno
+                 si31_ededucaodereceita = int8 = Identifica
+                 si31_identificadordeducao = int8 = Identificador
+                 si31_naturezareceitaestornada = int8 = Natureza da receita
+                 si31_vlestornado = float8 = Valor estornado
+                 si31_mes = int8 = Mês
+                 si31_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -83,6 +83,7 @@ class cl_arc202019
   function incluir($si31_sequencial)
   {
     $this->atualizacampos();
+
     if ($this->si31_tiporegistro == null) {
       $this->erro_sql = " Campo Tipo do  registro nao Informado.";
       $this->erro_campo = "si31_tiporegistro";
@@ -93,21 +94,58 @@ class cl_arc202019
 
       return false;
     }
+
+    if ($this->si31_codorgao == null) {
+      $this->erro_sql = " Campo Código do Órgão não Informado.";
+      $this->erro_campo = "si31_codorgao";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
     if ($this->si31_codestorno == null) {
-      $this->si31_codestorno = "0";
+      $this->erro_sql = " Campo Código do Estorno não Informado.";
+      $this->erro_campo = "si31_codestorno";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si31_ededucaodereceita == null) {
-      $this->si31_ededucaodereceita = "0";
+      $this->erro_sql = " Campo Dedução de Receita não Informado.";
+      $this->erro_campo = "si31_ededucaodereceita";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
     }
-    if ($this->si31_identificadordeducao == null) {
-      $this->si31_identificadordeducao = "0";
-    }
-    if ($this->si31_naturezareceitaestornada == null) {
-      $this->si31_naturezareceitaestornada = "0";
-    }
+    // if ($this->si31_identificadordeducao == null) {
+    //   $this->si31_identificadordeducao = "0";
+    // }
+    // if ($this->si31_naturezareceitaestornada == null) {
+    //   $this->erro_sql = " Campo Natureza da Receita Estornada não Informado.";
+    //   $this->erro_campo = "si31_naturezareceitaestornada";
+    //   $this->erro_banco = "";
+    //   $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+    //   $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+    //   $this->erro_status = "0";
+
+    // }
     if ($this->si31_vlestornado == null) {
-      $this->si31_vlestornado = "0";
+      $this->erro_sql = " Campo Valor Estornado na Natureza de Receita não Informado.";
+      $this->erro_campo = "si31_vlestornado";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
+
     if ($this->si31_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
       $this->erro_campo = "si31_mes";
@@ -128,8 +166,12 @@ class cl_arc202019
 
       return false;
     }
+
     if ($si31_sequencial == "" || $si31_sequencial == null) {
+
       $result = db_query("select nextval('arc202019_si31_sequencial_seq')");
+
+
       if ($result == false) {
         $this->erro_banco = str_replace("
 ", "", @pg_last_error());
@@ -165,30 +207,33 @@ class cl_arc202019
       return false;
     }
     $sql = "insert into arc202019(
-                                       si31_sequencial 
-                                      ,si31_tiporegistro 
-                                      ,si31_codorgao 
-                                      ,si31_codestorno 
-                                      ,si31_ededucaodereceita 
-                                      ,si31_identificadordeducao 
-                                      ,si31_naturezareceitaestornada 
-                                      ,si31_vlestornado 
-                                      ,si31_mes 
-                                      ,si31_instit 
+                                       si31_sequencial
+                                      ,si31_tiporegistro
+                                      ,si31_codorgao
+                                      ,si31_codestorno
+                                      ,si31_ededucaodereceita
+                                      ,si31_identificadordeducao
+                                      ,si31_naturezareceitaestornada
+                                      ,si31_vlestornado
+                                      ,si31_mes
+                                      ,si31_instit
                        )
                 values (
-                                $this->si31_sequencial 
-                               ,$this->si31_tiporegistro 
-                               ,'$this->si31_codorgao' 
-                               ,$this->si31_codestorno 
-                               ,$this->si31_ededucaodereceita 
-                               ,$this->si31_identificadordeducao 
-                               ,$this->si31_naturezareceitaestornada 
-                               ,$this->si31_vlestornado 
-                               ,$this->si31_mes 
-                               ,$this->si31_instit 
+                                $this->si31_sequencial
+                               ,$this->si31_tiporegistro
+                               ,'$this->si31_codorgao'
+                               ,$this->si31_codestorno
+                               ,$this->si31_ededucaodereceita
+                               ,$this->si31_identificadordeducao
+                               ,$this->si31_naturezareceitaestornada
+                               ,$this->si31_vlestornado
+                               ,$this->si31_mes
+                               ,$this->si31_instit
                       )";
+
+
     $result = db_query($sql);
+
     if ($result == false) {
       $this->erro_banco = str_replace("
 ", "", @pg_last_error());
