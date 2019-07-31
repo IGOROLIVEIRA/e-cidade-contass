@@ -1,7 +1,7 @@
-<?php
+<?
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -24,18 +24,39 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-//echo '<pre>';ini_set("display_errors", "On");
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_pagordem_classe.php");
+include("classes/db_empempenho_classe.php");
+
+$clmatordem = new cl_matordem;
+$clpagordem   = new cl_pagordem;
+$clempempenho = new cl_empempenho;
+$clrotulo = new rotulocampo;
+
+$clempempenho->rotulo->label();
+$clmatordem->rotulo->label();
+$clrotulo->label("e60_codemp");
+$clrotulo->label("e60_numemp");
+$clrotulo->label("e50_codord");
+
+$clpagordem->rotulo->label("e60_codemp");
+$clpagordem->rotulo->label("e60_numemp");
+$clpagordem->rotulo->label("e50_codord");
+
 
 db_postmemory($HTTP_POST_VARS);
+parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
-$clcriaabas = new cl_criaabas;
+if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
+    $empenho = $aFiltros['empenho'];
+}
+
 ?>
+
 <html>
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -44,49 +65,19 @@ $clcriaabas = new cl_criaabas;
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr>
-        <td width="360" height="18">&nbsp;</td>
-        <td width="263">&nbsp;</td>
-        <td width="25">&nbsp;</td>
-        <td width="140">&nbsp;</td>
-    </tr>
-</table>
-<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td>
-            <?
-            $clcriaabas->identifica = array("alteracaoempenho"=>"Alteração de Empenho",
-                "alteracaoop"=>"Alteração de OP"
-            );
-
-            $clcriaabas->title      = array("alteracaoempenho"=>"Alteração de Empenho",
-                "alteracaoop"=>"Alteração de OP"
-            );
-
-
-            $clcriaabas->src        = array("alteracaoempenho"=>"emp1_aba1empempenho002.php",
-                "alteracaoop"=>"emp1_aba2ordempagamento002.php"
-            );
-
-            $clcriaabas->disabled   = array("alteracaoempenho"=>"false",
-                "alteracaoop"=>"true"
-            );
-
-            $clcriaabas->cria_abas();
-            ?>
-        </td>
-    </tr>
-    <tr>
-    </tr>
-</table>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)">
+<br><br>
 <?php
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+    require_once("forms/db_frmordempagamento.php");
 ?>
-</body>
+
+<script type="text/javascript" src="scripts/prototype.js"></script>
+<script type="text/javascript" src="scripts/strings.js"></script>
 <script>
-    document.formaba.alteracaoempenho.size        = 25;
-    document.formaba.alteracaoop.size             = 25;
+    function pesquisaOrdemPagamento(empenho) {
+        $('e60_codemp').value = empenho;
+    }
+
 </script>
+</body>
 </html>
