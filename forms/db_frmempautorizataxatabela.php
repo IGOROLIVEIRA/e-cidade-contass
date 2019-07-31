@@ -555,7 +555,6 @@ db_app::load("DBFormCache.js");
             opt.value = cgm.z01_numcgm;
             opt.text  = cgm.z01_nome;
             razaoSocial.add(opt, razaoSocial.options[++i]);
-
           });
 
         });
