@@ -329,7 +329,13 @@ db_app::load("DBFormCache.js");
         var codlicitacao = document.form1.e54_codlicitacao.value;
         if (codlicitacao != "") {
             //js_pesquisa_fornecedor(codlicitacao);
-            document.form1.e54_numerll.value = document.form1.e54_numerl.value+"/"+document.form1.e54_anousu.value;
+            let e54_numerl = document.form1.e54_numerl.value;
+            if (e54_numerl.indexOf("/") == -1) {
+              document.form1.e54_numerll.value = document.form1.e54_numerl.value+"/"+document.form1.e54_anousu.value;
+            } else {
+                document.form1.e54_numerll.value = document.form1.e54_numerl.value;
+            }
+            
         }
     }
 
