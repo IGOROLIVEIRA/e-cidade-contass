@@ -135,8 +135,9 @@ if (pg_num_rows($resproc)) {
 
 $this->objpdf->Setfont("times", "", 10);
 $this->objpdf->setx(13);
-$texto = db_formatatexto(6, 90, $this->p58_obs, "t");
-$this->objpdf->multicell(185, 5,$texto,0,1,"L");
+
+$texto = db_formatatexto(strlen($this->p58_obs)*0.03, 0, $this->p58_obs, "t");
+$this->objpdf->multicell(0, 5,$texto,0,1,"L");
 
 // Variaveis
 if ($this->result_vars != ""){
@@ -153,7 +154,8 @@ if ($this->result_vars != ""){
            $imprime_str .= ucfirst($rotulo).": ".$conteudo."\n";
      }
      $this->objpdf->setx(13);
-     $this->objpdf->multicell(185, 5, $imprime_str,0,1,"L");
+
+     $this->objpdf->multicell(0, 5, $imprime_str,0,1,"L");
 }
 $this->objpdf->Setfont("Times", "", 12);
 
