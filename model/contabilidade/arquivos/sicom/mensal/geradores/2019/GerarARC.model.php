@@ -38,8 +38,7 @@ class GerarARC extends GerarAM
     $sSql5 = "select * from arc212019 where si32_mes = " . $this->iMes . " and si32_instit = " . db_getsession("DB_instit");
     $rsARC21 = db_query($sSql5);
 
-    if (pg_num_rows($rsARC10) == 0 && pg_num_rows($rsARC20) == 0 ) {
-    // if (pg_num_rows($rsARC10) == 0) {
+    if ($rsARC20) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
