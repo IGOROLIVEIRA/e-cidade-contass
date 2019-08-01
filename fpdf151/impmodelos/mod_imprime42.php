@@ -69,7 +69,7 @@ if ($this->z01_cgccpf  != "") {
   $this->objpdf->Setfont("times", "B", 12);
   $this->objpdf->cell(35, 6, (strlen($this->z01_cgccpf ) == 11 ? "CPF: " : "CNPJ: "), 0, 0, 'R');
   $this->objpdf->Setfont("times", "", 11);
-  $this->objpdf->cell(40, 6, $this->z01_cgccpf , 0, ($this->z01_telef  != "" ? 0 : 1), 'L');
+  $this->objpdf->cell(40, 6, $this->z01_cgccpf , 0, 1, 'L');
 }
 
 if (trim($this->p58_requer ) != trim($this->z01_nome )) {
@@ -151,7 +151,6 @@ if ($this->result_vars != ""){
           $separador = "";
      }
            $imprime_str .= ucfirst($rotulo).": ".$conteudo."\n";
-           // print_r($imprime_str);die('Ends');
      }
      $this->objpdf->setx(13);
      $this->objpdf->multicell(185, 5, $imprime_str,0,1,"L");
