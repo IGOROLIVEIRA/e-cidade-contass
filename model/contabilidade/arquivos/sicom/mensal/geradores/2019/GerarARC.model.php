@@ -121,7 +121,7 @@ class GerarARC extends GerarAM
         $aCSVARC20['si31_ededucaodereceita']        = $this->padLeftZero($aARC20['si31_ededucaodereceita'], 1);
         $aCSVARC20['si31_identificadordeducao']     = $aARC20['si31_identificadordeducao'] == '' || $aARC20['si31_identificadordeducao'] == '0' ? "" : $aARC20['si31_identificadordeducao'];
         $aCSVARC20['si31_naturezareceitaestornada'] = $this->padLeftZero($aARC20['si31_naturezareceitaestornada'], 8);
-        $aCSVARC20['si31_vlestornado']              = $this->sicomNumberReal($aARC20['si31_vlestornado'], 14);
+        $aCSVARC20['si31_vlestornado']              = $this->sicomNumberReal($aARC20['si31_vlestornado'], 2);
 
         $this->sLinha = $aCSVARC20;
         $this->adicionaLinha();
@@ -139,7 +139,7 @@ class GerarARC extends GerarAM
             $aCSVARC21['si32_nrodocumento']       = $aARC21['si32_nrodocumento'] == "" || $aARC21['si32_nrodocumento'] == '0' ? "" : $aARC21['si32_nrodocumento'];
             $aCSVARC21['si32_nroconvenio']        = $aARC21['si32_nroconvenio'];
             $aCSVARC21['si32_dataassinatura']     = $this->sicomDate($aARC21['si32_dataassinatura']);
-            $aCSVARC21['si32_vlrestornadofonte']  = $this->sicomNumberReal($aARC21['si32_vlestornadofonte'], 8);
+            $aCSVARC21['si32_vlrestornadofonte']  = $this->sicomNumberReal($aARC21['si32_vlestornadofonte'], 2);
 
             $this->sLinha = $aCSVARC21;
             $this->adicionaLinha();
