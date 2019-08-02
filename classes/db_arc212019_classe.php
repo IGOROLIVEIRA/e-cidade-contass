@@ -31,19 +31,21 @@ class cl_arc212019
   var $si32_vlestornadofonte = 0;
   var $si32_reg20 = 0;
   var $si32_instit = 0;
+  var $si32_mes = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si32_sequencial = int8 = sequencial 
-                 si32_tiporegistro = int8 = Tipo do  registro 
-                 si32_codestorno = int8 = Código identificador 
+                 si32_sequencial = int8 = sequencial
+                 si32_tiporegistro = int8 = Tipo do  registro
+                 si32_codestorno = int8 = Código identificador
                  si32_codfonteestornada = int8 = Código da fonte
                  si32_tipodocumento = int8 = Tipo do documento
                  si32_nrodocumento = varchar(14) = Número do documento
                  si32_nroconvenio = varchar(30) = Número do convênio
-                 si32_dataassinatura = date = Data da assinatura 
-                 si32_vlestornadofonte = float8 = Valor estornado 
-                 si32_reg20 = int8 = reg20 
-                 si32_instit = int8 = Instituição 
+                 si32_dataassinatura = date = Data da assinatura
+                 si32_vlestornadofonte = float8 = Valor estornado
+                 si32_reg20 = int8 = reg20
+                 si32_instit = int8 = Instituição
+                 si31_mes = int8 = Mês
                  ";
 
   //funcao construtor da classe
@@ -73,30 +75,33 @@ class cl_arc212019
       $this->si32_tiporegistro = ($this->si32_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tiporegistro"] : $this->si32_tiporegistro);
       $this->si32_codestorno = ($this->si32_codestorno == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codestorno"] : $this->si32_codestorno);
       $this->si32_codfonteestornada = ($this->si32_codfonteestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codfonteestornada"] : $this->si32_codfonteestornada);
-	  $this->si32_tipodocumento = ($this->si32_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"] : $this->si32_tipodocumento);
-	  $this->si32_nrodocumento = ($this->si32_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"] : $this->si32_nrodocumento);
-	  $this->si32_nroconvenio = ($this->si32_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"] : $this->si32_nroconvenio);
+  	  $this->si32_tipodocumento = ($this->si32_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"] : $this->si32_tipodocumento);
+  	  $this->si32_nrodocumento = ($this->si32_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"] : $this->si32_nrodocumento);
+  	  $this->si32_nroconvenio = ($this->si32_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"] : $this->si32_nroconvenio);
    	  if($this->si32_dataassinatura == ""){
-	  	$this->si32_dataassinatura_dia = ($this->si32_dataassinatura_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_dia"] : $this->si32_dataassinatura_dia);
-		$this->si32_dataassinatura_mes = ($this->si32_dataassinatura_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_mes"] : $this->si32_dataassinatura_mes);
-		$this->si32_dataassinatura_ano = ($this->si32_dataassinatura_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_ano"] : $this->si32_dataassinatura_ano);
-		if ($this->si32_dataassinatura_dia != "") {
-			$this->si32_dataassinatura = $this->si32_dataassinatura_ano . "-" . $this->si32_dataassinatura_mes . "-" . $this->si32_dataassinatura_dia;
-		}
-	  }
+  	  	$this->si32_dataassinatura_dia = ($this->si32_dataassinatura_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_dia"] : $this->si32_dataassinatura_dia);
+    		$this->si32_dataassinatura_mes = ($this->si32_dataassinatura_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_mes"] : $this->si32_dataassinatura_mes);
+    		$this->si32_dataassinatura_ano = ($this->si32_dataassinatura_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_dataassinatura_ano"] : $this->si32_dataassinatura_ano);
+    		if ($this->si32_dataassinatura_dia != "") {
+    			$this->si32_dataassinatura = $this->si32_dataassinatura_ano . "-" . $this->si32_dataassinatura_mes . "-" . $this->si32_dataassinatura_dia;
+  		  }
+  	  }
 
-      $this->si32_vlestornadofonte = ($this->si32_vlestornadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"] : $this->si32_vlestornadofonte);
-      $this->si32_reg20 = ($this->si32_reg20 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_reg20"] : $this->si32_reg20);
-      $this->si32_instit = ($this->si32_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_instit"] : $this->si32_instit);
-    } else {
-      $this->si32_sequencial = ($this->si32_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_sequencial"] : $this->si32_sequencial);
-    }
+        $this->si32_vlestornadofonte = ($this->si32_vlestornadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_vlestornadofonte"] : $this->si32_vlestornadofonte);
+        $this->si32_reg20 = ($this->si32_reg20 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_reg20"] : $this->si32_reg20);
+        $this->si32_mes = ($this->si32_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_mes"] : $this->si32_mes);
+        $this->si32_instit = ($this->si32_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_instit"] : $this->si32_instit);
+      } else {
+        $this->si32_sequencial = ($this->si32_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_sequencial"] : $this->si32_sequencial);
+      }
+
   }
 
   // funcao para inclusao
   function incluir($si32_sequencial)
   {
     $this->atualizacampos();
+
     if ($this->si32_tiporegistro == null) {
       $this->erro_sql = " Campo Tipo do  registro nao Informado.";
       $this->erro_campo = "si32_tiporegistro";
@@ -108,29 +113,41 @@ class cl_arc212019
       return false;
     }
     if ($this->si32_codestorno == null) {
-    	$this->si32_codestorno = "0";
+    	$this->erro_sql = " Campo Código Identificador do Estorno da Receita não Informado.";
+      $this->erro_campo = "si32_codestorno";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
     if ($this->si32_codfonteestornada == null) {
-    	$this->si32_codfonteestornada = "0";
+    	$this->erro_sql = " Campo Código da Fonte de Recursos Estornada não Informado.";
+      $this->erro_campo = "si32_codfonteestornada";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
     }
-	if ($this->si32_tipodocumento == null) {
-		$this->si32_tipodocumento = "0";
-	}
-	if ($this->si32_nrodocumento == null) {
-		$this->si32_nrodocumento = "0";
-	}
-	if ($this->si32_nroconvenio == null){
-		$this->si32_nroconvenio = "0";
-	}
-	if ($this->si32_dataassinatura == null){
-		$this->si32_dataassinatura = "0";
-	}
+  	if (!$this->si32_tipodocumento) {
+  		$this->si32_tipodocumento = 0;
+  	}
+
+
     if ($this->si32_vlestornadofonte == null) {
-      $this->si32_vlestornadofonte = "0";
+      $this->erro_sql = " Campo Valor Estornado para a Fonte de Recursos não Informado.";
+      $this->erro_campo = "si32_vlestornadofonte";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
     }
-    if ($this->si32_reg20 == null) {
-      $this->si32_reg20 = "0";
-    }
+    // if ($this->si32_reg20 == null) {
+    //   $this->si32_reg20 = "0";
+    // }
     if ($this->si32_instit == null) {
       $this->erro_sql = " Campo Instituição nao Informado.";
       $this->erro_campo = "si32_instit";
@@ -177,31 +194,36 @@ class cl_arc212019
       return false;
     }
     $sql = "insert into arc212019(
-                                       si32_sequencial 
-                                      ,si32_tiporegistro 
-                                      ,si32_codestorno 
+                                       si32_sequencial
+                                      ,si32_tiporegistro
+                                      ,si32_codestorno
                                       ,si32_codfonteestornada
                                       ,si32_tipodocumento
                                       ,si32_nrodocumento
                                       ,si32_nroconvenio
-                                      ,si32_dataassinatura 
-                                      ,si32_vlestornadofonte 
-                                      ,si32_reg20 
-                                      ,si32_instit 
+                                      ,si32_dataassinatura
+                                      ,si32_vlestornadofonte
+                                      ,si32_reg20
+                                      ,si32_mes
+                                      ,si32_instit
                        )
                 values (
-                                $this->si32_sequencial 
-                               ,$this->si32_tiporegistro 
-                               ,$this->si32_codestorno 
+                                $this->si32_sequencial
+                               ,$this->si32_tiporegistro
+                               ,$this->si32_codestorno
                                ,$this->si32_codfonteestornada
                                ,$this->si32_tipodocumento
-                               ,$this->si32_nrodocumento
-                               ,$this->si32_nroconvenio
-                               ," . ($this->si32_dataassinatura == "null" || $this->si32_dataassinatura == "" ? "null" : "'" . $this->si32_dataassinatura . "'") . " 
-                               ,$this->si32_vlestornadofonte 
-                               ,$this->si32_reg20 
-                               ,$this->si32_instit 
+                               ,'$this->si32_nrodocumento'
+                               ,'$this->si32_nroconvenio'
+                               ," . ($this->si32_dataassinatura == "null" || $this->si32_dataassinatura == "" ? "null" : "'" . $this->si32_dataassinatura . "'") . "
+                               ,$this->si32_vlestornadofonte
+                               ,$this->si32_reg20
+                               ,$this->si32_mes
+                               ,$this->si32_instit
                       )";
+
+
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("", "", @pg_last_error());
@@ -288,7 +310,7 @@ class cl_arc212019
     }
 	  if (trim($this->si32_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"])) {
 		  if (trim($this->si32_tipodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"])) {
-			  $this->si32_tipodocumento = "0";
+			  $this->si32_tipodocumento = "";
 		  }
 		  $sql .= $virgula . " si32_tipodocumento = $this->si32_tipodocumento ";
 		  $virgula = ",";
@@ -334,6 +356,13 @@ class cl_arc212019
       $sql .= $virgula . " si32_reg20 = $this->si32_reg20 ";
       $virgula = ",";
     }
+    // if (trim($this->si32_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_mes"])) {
+    //   if (trim($this->si32_mes) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_mes"])) {
+    //     $this->si32_mes = "0";
+    //   }
+    //   $sql .= $virgula . " si32_mes = $this->si32_mes ";
+    //   $virgula = ",";
+    // },
     if (trim($this->si32_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_instit"])) {
       $sql .= $virgula . " si32_instit = $this->si32_instit ";
       $virgula = ",";
