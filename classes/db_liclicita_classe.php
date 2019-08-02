@@ -1541,8 +1541,8 @@ class cl_liclicita
 
         if(($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaber != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
             if($this->l20_datacria > $this->l20_dataaber){
-                $this->erro_sql = "A data inserida no campo 'Data Abertura Proc. Adm.' deverá ser menor ou igual a data inserida no campo 'Data Emis/Alt Edital/Convite'.";
-                $this->erro_campo = "l20_datacria";
+                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_campo = "l20_dataaber";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
