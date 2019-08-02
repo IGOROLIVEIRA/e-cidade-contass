@@ -1,72 +1,73 @@
-<div style="width: 70%; margin-left: 15%;">
-    <form name="form1" method="post">
-        <input type="hidden" name="empenho" value="<?= $empenho ?>">
-        <table border="0">
-            <tr>
-                <td nowrap title="<?=@$Te60_codemp?>">
-                    <?=@$Le60_codemp?>
-                </td>
-                <td>
-                    <?
-                    db_input('e60_codemp',10,$empenho,true,'text',3);
-                    db_input('e60_numemp',10,'',true,'hidden',3);
-                    ?>
-                </td>
+<form name="form1" method="post">
+    <input type="hidden" name="empenho" value="<?= $empenho ?>">
+    <table border="0">
+        <tr>
+            <td align="left" nowrap title="<?=@$Te60_codemp?>">
+                <?=@$Le60_codemp?>
+                <?
+                db_input('e60_codemp',10,'',true,'text',3);
+                ?>
+            </td>
+            <td align="right" nowrap title="<?=@$Te50_codord?>">
+                <?
+                db_ancora(@$Le50_codord,"js_pesquisae50_getordem(".$empenho.");",$db_opcao);
+                ?>
+            </td>
+            <td>
+                <?
+                db_input('e50_codord',10,'',true,'text',3);
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Te50_obs?>" colspan="3">
+                <fieldset>
+                    <legend>
+                        <strong>Histórico</strong>
+                    </legend>
+                    <? db_textarea('e50_obs',4,84,$Ie50_obs,true,'text',$db_opcao) ?>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
 
-                <td nowrap title="<?=@$Te50_codord?>">
-                    <?=@$Le50_codord?>
-                </td>
-                <td>
-                    <?
-                    db_input('e60_numemp',10,'',true,'hidden',3);
-                    db_input('e50_codord',10,$empenho,true,'text',3);
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" valign="top">
-                    <?
+    <div style="margin-top: 10px;">
 
-                    $whereage = "";
-                    $dbwhere  =" e60_instit = ".db_getsession("DB_instit")." and e60_codemp = '".$empenho."'";
-                    $campos   = "pagordem.e50_codord,
-                                   e60_numemp,
-                                   e60_codemp,
-                                   pagordem.e50_data,
-                                   pagordem.e50_obs,
-                                   e53_valor,
-                                   e53_vlranu,
-                                   e53_vlrpag,
-                                   cgm.z01_cgccpf";
+        <!--        <input name="alterar" type="button" id="alterar" value="Alterar" onclick="js_altera();" >-->
+        <input name="alterar" type="submit" id="db_opcao" value="Alterar">
 
-                    if (isset($campos)==false) {
+    </div>
+</form>
+<script type="text/javascript" src="scripts/prototype.js"></script>
+<script type="text/javascript" src="scripts/strings.js"></script>
+<script>
+    function pesquisaOrdemPagamento(empenho) {
+        $('e60_codemp').value = empenho;
 
-                        if (file_exists("funcoes/db_func_pagordem.php")==true) {
-                            include("funcoes/db_func_pagordem.php");
-                        } else {
-                            $campos = "pagordem.*,cgm.z01_cgccpf";
-                        }
+        js_pesquisae50_getordem(empenho);
+    }
 
-                    }
+    function js_pesquisae50_getordem(e60_codemp) {
+        
+        js_OpenJanelaIframe(
+            '',
+            'iframe_alteracaoop',
+            'func_pagordem.php?$pesquisa_chave='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs',
+            'Pesquisa',
+            true,
+            '0',
+            '1'
+        );
 
-                    if (isset($filtroquery)) {
-//                        die('0');
-//                        if (strlen($whereage) > 0){
-//                            die('1');
-                            $sql = $clpagordem->sql_query_pagordemagenda("",$campos,"e50_codord","$dbwhere and $whereage");
-//                        }
-                    } else {
-//                        die('2');
-                        $sql = $clpagordem->sql_query_pagordemele("",$campos,"e50_codord","$dbwhere");
-                    }
-//                    die('asdf');
-//                    echo $sql;
-                    if (isset($sql)) {
-                        db_lovrot($sql,8,"()","",$funcao_js);
-                    }
-                    ?>
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
+    }
+
+    function js_mostraordem(e50_codord, e50_obs) {
+
+        $('e50_codord').value = e50_codord;
+        $('e50_obs').value = e50_obs;
+        console.log(e50_obs);
+        iframe_alteracaoop.hide();
+
+    }
+
+</script>

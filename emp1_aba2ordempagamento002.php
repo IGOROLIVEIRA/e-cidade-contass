@@ -31,6 +31,7 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_pagordem_classe.php");
 include("classes/db_empempenho_classe.php");
+require_once("std/Modification.php");
 
 $clmatordem = new cl_matordem;
 $clpagordem   = new cl_pagordem;
@@ -42,21 +43,32 @@ $clmatordem->rotulo->label();
 $clrotulo->label("e60_codemp");
 $clrotulo->label("e60_numemp");
 $clrotulo->label("e50_codord");
+$clrotulo->label("e50_obs");
 
 $clpagordem->rotulo->label("e60_codemp");
 $clpagordem->rotulo->label("e60_numemp");
 $clpagordem->rotulo->label("e50_codord");
+$clpagordem->rotulo->label("e50_obs");
 
-
+//$db_opcao =  22;
+$db_botao = false;
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
 if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
     $empenho = $aFiltros['empenho'];
 }
+print_r($empenho);
+db_inicio_transacao();
+if(isset($alterar)){
+
+    $clpagordem->e50_obs = $e50_obs;
+    $clpagordem->alterar($e50_codord);
+
+}
+db_fim_transacao();
 
 ?>
-
 <html>
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -67,17 +79,8 @@ if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)">
 <br><br>
-<?php
-    require_once("forms/db_frmordempagamento.php");
-?>
-
-<script type="text/javascript" src="scripts/prototype.js"></script>
-<script type="text/javascript" src="scripts/strings.js"></script>
-<script>
-    function pesquisaOrdemPagamento(empenho) {
-        $('e60_codemp').value = empenho;
-    }
-
-</script>
+<center>
+    <?php require_once (modification::getFile("forms/db_frmordempagamento.php")); ?>
+</center>
 </body>
 </html>

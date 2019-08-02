@@ -352,15 +352,15 @@ $clrotulo->label("e60_datasentenca");
                 </td>
                 <td>
                     <?
-                    //$aConvenio = array('2' => 'Não','1' => 'Sim');
-                    //db_select('e60_convenio', $aConvenio, true, $db_opcao,"");
-                    ?>
+            //$aConvenio = array('2' => 'Não','1' => 'Sim');
+            //db_select('e60_convenio', $aConvenio, true, $db_opcao,"");
+            ?>
                 </td>
             </tr>
             -->
             <tr>
                 <td nowrap title="Código c206_sequencial">
-                  <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
+                    <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
                 </td>
                 <td>
                     <?
@@ -376,8 +376,8 @@ $clrotulo->label("e60_datasentenca");
                 </td>
                 <td>
                     <?
-                    //db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
-                    ?>
+            //db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
+            ?>
                 </td>
             </tr>-->
             <tr>
@@ -413,7 +413,7 @@ $clrotulo->label("e60_datasentenca");
 
     function js_pesquisae54_gestaut() {
         js_OpenJanelaIframe(
-            'top.corpo',
+            '',
             'db_iframe_db_depart',
             'func_db_depart.php?funcao_js=parent.js_preenchepesquisae54_gestaut|coddepto|descrdepto',
             'Pesquisa',
@@ -455,10 +455,10 @@ $clrotulo->label("e60_datasentenca");
 
     function js_pesquisae60_concarpeculiar(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiar','func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr','Pesquisa',true);
+            js_OpenJanelaIframe('','db_iframe_concarpeculiar','func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr','Pesquisa',true,'0');
         }else{
             if(document.form1.e60_concarpeculiar.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_concarpeculiar','func_concarpeculiar.php?pesquisa_chave='+document.form1.e60_concarpeculiar.value+'&funcao_js=parent.js_mostraconcarpeculiar','Pesquisa',false);
+                js_OpenJanelaIframe('','db_iframe_concarpeculiar','func_concarpeculiar.php?pesquisa_chave='+document.form1.e60_concarpeculiar.value+'&funcao_js=parent.js_mostraconcarpeculiar','Pesquisa',false,'0');
             }else{
                 document.form1.c58_descr.value = '';
             }
@@ -544,15 +544,15 @@ $clrotulo->label("e60_datasentenca");
     js_verificaFinalidadeEmpenho();
 
     function js_pesquisae60_numconvenio(mostra) {
-      if(mostra==true){
-        js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
-      } else {
-          if(document.form1.e60_numconvenio.value != ''){
-              js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.e60_numconvenio.value+'&funcao_js=parent.js_mostrae60_numconvenio','Pesquisa',false);
-          }else{
-              document.form1.c206_objetoconvenio.value = '';
-          }
-      }
+        if(mostra==true){
+            js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true,'0');
+        } else {
+            if(document.form1.e60_numconvenio.value != ''){
+                js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.e60_numconvenio.value+'&funcao_js=parent.js_mostrae60_numconvenio','Pesquisa',false,'0');
+            }else{
+                document.form1.c206_objetoconvenio.value = '';
+            }
+        }
     }
 
     function js_mostrae60_numconvenio(chave,erro){
