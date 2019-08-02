@@ -515,7 +515,7 @@ function js_cancelar(){
 function js_pesquisae55_item(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem",'Pesquisa',true,"0","1");
+    js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
         js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
@@ -538,7 +538,7 @@ function js_mostrapcmater(chave,erro,codele){
   }
 }
 
-function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chave7,chave8){
+function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chave7,chave8,chave9) {
 
   document.form1.e55_item.value = chave1;
   document.form1.pc01_descrmater.value = chave2;
@@ -553,7 +553,8 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
     exec: 'verificaSaldoCriterio',
     e55_item: chave1,
     e55_autori: document.form1.e55_autori.value,
-    tipoitem:chave8
+    tipoitem: chave8,
+    pc94_sequencial: chave9
   };
   novoAjax(params, function(e) {
     var totitens = JSON.parse(e.responseText).itens;

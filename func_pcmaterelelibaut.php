@@ -92,7 +92,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
     <tr>
       <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
-          <form name="form2" method="post" action="">
+          <form id="form2" name="form2" method="post" action="">
             <tr>
               <td width="4%" align="right" nowrap title="<?= $Tpc07_codmater ?>">
                 <?= $Lpc07_codmater ?>
@@ -145,6 +145,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                 } else {
                   document.form2.chave_pc94_sequencial.value = document.form2.chave_tabela.value;
                 }
+                document.getElementById('form2').submit();
               }
             </script>
             <?php endif; ?>
@@ -247,7 +248,8 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                               pc23_valor,
                               pc80_criterioadjudicacao,
                               pcmater.pc01_servico,
-                              'itemtabela' as tipoitem
+                              'itemtabela' as tipoitem,
+                              pctabela.pc94_sequencial
               FROM liclicitem
               LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
               LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
@@ -296,7 +298,8 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                               pc23_valor,
                               pc80_criterioadjudicacao,
                               pcmater.pc01_servico,
-                              'item' as tipoitem
+                              'item' as tipoitem,
+                              pctabela.pc94_sequencial
               FROM liclicitem
               LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
               LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
@@ -347,7 +350,8 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                       pc23_valor,
                       pc80_criterioadjudicacao,
                       pcmater.pc01_servico,
-                      'naoitem' as tipoitem
+                      'naoitem' as tipoitem,
+                      0 as pc94_sequencial
             FROM liclicitem
             LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
             LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc

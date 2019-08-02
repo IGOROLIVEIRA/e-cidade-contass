@@ -355,7 +355,7 @@ switch ($oParam->exec) {
 
   try {
 
-    $oRetorno->itens = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem);
+    $oRetorno->itens = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem,$oParam->pc94_sequencial);
 
   } catch (Exception $e) {
     $oRetorno->erro = $e->getMessage();
@@ -439,7 +439,7 @@ function getFonercedoresLic($licitacao) {
   return $oCgm;
 }
 
-function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem) {
+function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequencial) {
   $sSQL = "";
   if (strcasecmp($tipoitem, 'item') === 0) {
     $sSQL = "
@@ -454,11 +454,14 @@ function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem) {
       select sum(e55_vltot) as totalitens
       from empautitem
        inner join empautoriza on e54_autori = e55_autori
+       inner join pctabelaitem on pctabelaitem.pc95_codmater = empautitem.e55_item
+       inner join pctabela on pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
         where e54_codlicitacao = (
                                   select e54_codlicitacao
                                    from empautoriza
                                     where e54_autori = {$e55_autori}
                                   )
+                                  and pc94_sequencial = {$pc94_sequencial}
     ";
   }
 
