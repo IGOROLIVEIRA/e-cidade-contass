@@ -25,7 +25,9 @@ class Oc10215 extends PostgresMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(){
+
+    public function up(){
+
       $arc21 = $this->table('arc212019');
       $arcMes = $arc21->hasColumn('si32_mes');
 
@@ -33,14 +35,19 @@ class Oc10215 extends PostgresMigration
         $arc21->addColumn('si32_mes', 'biginteger', ['null' => false])->save();
       }
       $this->execute('ALTER TABLE arc212019 ALTER COLUMN si32_tipodocumento SET DEFAULT NULL;');
-      $this->execute('ALTER TABLE arc202019 ALTER COLUMN si31_identificadordeducao SET DEFAULT null;');
-    }
-
-    public function up(){
+      $this->execute('ALTER TABLE arc202019 ALTER COLUMN si31_identificadordeducao SET DEFAULT NULL;');
 
     }
 
     public function down(){
+
+      $arc21 = $this->table('arc212019');
+      $arcMes = $arc21->hasColumn('si32_mes');
+      if($arcMes){
+        $arc21->removeColumn('si32_mes')->save();
+      }
+      $this->execute('ALTER TABLE arc212019 ALTER COLUMN si32_tipodocumento SET DEFAULT NOT NULL;');
+      $this->execute('ALTER TABLE arc202019 ALTER COLUMN si31_identificadordeducao SET DEFAULT NOT NULL;');
 
     }
 }
