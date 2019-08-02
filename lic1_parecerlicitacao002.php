@@ -45,8 +45,10 @@ if($_POST['json']){
 if (isset($alterar)) {
 
   /**
-   * Verifica data de julgamento da licitação
+   * Verifica data de julgamento e homologação da licitação do tipo julgamento
    */
+  $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
+
   if($l200_tipoparecer == "3") {
 
     $clliclicitasituacao  = new cl_liclicitasituacao;
@@ -63,11 +65,11 @@ if (isset($alterar)) {
           db_redireciona('lic1_parecerlicitacao002.php');
       }
 
+      //licitação julgada
       if($oLicSituacao->l11_licsituacao == 1) {
         
         $dtDataJulg     = $oLicSituacao->l11_data;   
         $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
-        $dtDataParecer  = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
 
         if($dtDataParecer < $dtDataJulg){
         
@@ -75,6 +77,21 @@ if (isset($alterar)) {
           echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
           db_redireciona('lic1_parecerlicitacao002.php');
         
+        }
+      }
+
+      //licitação homologada
+      if($oLicSituacao->l11_licsituacao == 10) {
+
+        $dtDataJulg         = $oLicSituacao->l11_data;
+        $dtDataJulgHomolog  = db_utils::fieldsMemory(db_query($clliclicitasituacao->sql_query(null, '*', 'l11_data desc, l11_hora desc', 'l11_liclicita = ' . $l200_licitacao . 'and l11_licsituacao = 1')), 0)->l11_data;
+        $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+        $dtDataJulgHomShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulgHomolog)));
+
+        if ($dtDataParecer > $dtDataJulgHomolog || $dtDataParecer < $dtDataJulg) {
+            $clliclicitasituacao->erro_msg = 'Licitação julgada ('.$dtDataJulgShow.') e homologada ('.$dtDataJulgHomShow.'). A data do parecer deverá ser igual ou superior a data de julgamento.';
+            echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+            db_redireciona('lic1_parecerlicitacao001.php');
         }
       }
     }
@@ -93,7 +110,6 @@ if (isset($alterar)) {
 
       $dtDataEmissao      = db_utils::fieldsMemory($rsResult, 0)->l20_recdocumentacao;
       $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
-      $dtDataParecer      = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
 
       if($dtDataParecer < $dtDataEmissao){
         
