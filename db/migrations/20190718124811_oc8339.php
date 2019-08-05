@@ -27,7 +27,8 @@ class Oc8339 extends AbstractMigration
      */
     public function up()
     {
-        $sSql = "ALTER TABLE credenciamento ADD COLUMN l205_datacreditem date";
+        $sSql = "ALTER TABLE credenciamento ADD COLUMN l205_datacreditem date;
+                 ALTER TABLE liclicita ADD COLUMN l20_dtlimitecredenciamento date;";
 
         $this->execute($sSql);
     }

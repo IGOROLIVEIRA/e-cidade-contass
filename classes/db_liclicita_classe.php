@@ -110,6 +110,7 @@ class cl_liclicita
     var $l20_dtpubratificacao_mes = null;
     var $l20_dtpubratificacao_ano = null;
     var $l20_dtpubratificacao = null;
+    var $l20_dtlimitecredenciamento = null;
     var $l20_critdesempate = null;
     var $l20_destexclusiva = null;
     var $l20_subcontratacao = null;
@@ -171,6 +172,7 @@ class cl_liclicita
                  l20_tipliticacao = int8 = Tipo da Licitação
                  l20_tipnaturezaproced = int8 = Natureza do Procedimento
                  l20_dtpubratificacao = date= Data Publicação Termo Ratificação
+                 l20_dtlimitecredenciamento = date = Data limite para credenciamento
                  l20_critdesempate = int8= Critério de Desempate
                  l20_destexclusiva = int8= Destinação Exclusiva
                  l20_subcontratacao = int8= Sub. Contratação
@@ -181,10 +183,10 @@ class cl_liclicita
                  l20_descrinterporrecurso = Descrição
                  l20_veicdivulgacao= Veiculo de Divulgaçao
                  l20_clausulapro= text = Prorrogacao
-         l20_codepartamento=int8= Codigo departamento
-         l20_diames=int8= Dia mes
-         l20_execucaoentrega=int8= Execucao da entrega
-         l20_criterioadjudicacao = int4 = Criterio de adjudicacao
+                 l20_codepartamento=int8= Codigo departamento
+                 l20_diames=int8= Dia mes
+                 l20_execucaoentrega=int8= Execucao da entrega
+                 l20_criterioadjudicacao = int4 = Criterio de adjudicacao
 
 
                  ";
@@ -325,6 +327,7 @@ class cl_liclicita
             $this->l20_interporrecurso = ($this->l20_interporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_interporrecurso"] : $this->l20_interporrecurso);
             $this->l20_descrinterporrecurso = ($this->l20_descrinterporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descrinterporrecurso"] : $this->l20_descrinterporrecurso);
             $this->l20_veicdivulgacao = ($this->l20_veicdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"] : $this->l20_veicdivulgacao);
+            $this->l20_dtlimitecredenciamento = ($this->l20_dtlimitecredenciamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"] : $this->l20_dtlimitecredenciamento);
 
             $this->l20_clausulapro = ($this->l20_clausulapro == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_clausulapro"] : $this->l20_clausulapro);
             $this->l20_codepartamento = ($this->l20_codepartamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"] : $this->l20_codepartamento);
@@ -966,6 +969,7 @@ class cl_liclicita
                 ,l20_dtpubratificacao
                 ,l20_formacontroleregistropreco
                 ,l20_criterioadjudicacao
+                ,l20_dtlimitecredenciamento
                        )
                 values (
 
@@ -1020,6 +1024,7 @@ class cl_liclicita
                 ," . ($this->l20_dtpubratificacao == "null" || $this->l20_dtpubratificacao == "" ? "null" : "'" . $this->l20_dtpubratificacao . "'") . "
                 ,$this->l20_formacontroleregistropreco
                 ,$this->l20_criterioadjudicacao
+                ," . ($this->l20_dtlimitecredenciamento == "null" || $this->l20_dtlimitecredenciamento == "" ? "null" : "'" . $this->l20_dtlimitecredenciamento . "'") . "
                       )";
 
         $result = db_query($sql);
@@ -1230,11 +1235,19 @@ class cl_liclicita
                     $virgula = ",";
                 }
 
+        if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
+            $sql .= $virgula . " l20_dtlimitecredenciamento = '$this->l20_dtlimitecredenciamento '";
+            $virgula = ",";
+        } else {
+            $sql .= $virgula . " l20_dtlimitecredenciamento = null";
+            $virgula = ",";
+        }
+
         if (trim($this->l20_tipoprocesso == 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
             $virgula = ",";
             if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
-                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processo";
+                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
                 $this->erro_campo = "l20_tipoprocesso";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -3295,7 +3308,7 @@ class cl_liclicita
             }
 
     function excluirpublicacaocredenciamento ($l20_codigo){
-        $sql = "begin; update liclicita set l20_dtpubratificacao = null,l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= '' 
+        $sql = "begin; update liclicita set l20_dtpubratificacao = null,l20_dtlimitecredenciamento = null, l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= '' 
         where l20_codigo = $l20_codigo";
         $result = db_query($sql);
 

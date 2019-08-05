@@ -8,9 +8,16 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitasituacao_classe.php");
+include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_credenciamento_classe.php");
 
 $clcredenciamento       = new cl_credenciamento;
+$clitenshomologacao    = new cl_itenshomologacao;
+$clhomologacaoadjudica = new cl_homologacaoadjudica;
+$clliclicitasituacao   = new cl_liclicitasituacao;
+$clliclicita           = new cl_liclicita;
+$clliclicitasituacao   = new cl_liclicitasituacao;
+
 $oJson    = new services_json();
 $oRetorno = new stdClass();
 $oParam   = json_decode(str_replace('\\', '',$_POST["json"]));
@@ -84,9 +91,6 @@ try{
 
         case 'julgarLic':
 
-            $clliclicita           = new cl_liclicita;
-            $clliclicitasituacao   = new cl_liclicitasituacao;
-
             /*altero a situação da licitacao para julgada*/
             $clliclicita->alterarSituacaoCredenciamento($oParam->licitacao,1);
 
@@ -105,12 +109,91 @@ try{
             }
 
             break;
+
+        case 'SalvarHomologacao':
+
+            /**
+             * realiza as alterações na licitaçao
+             */
+
+            db_inicio_transacao();
+            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
+
+            $l20_codtipocom = pg_result($result,0,0);
+
+            $clliclicita->alterarSituacaoCredenciamento($oParam->licitacao,10);
+
+            $clliclicita->l20_codtipocom = $l20_codtipocom;
+            $clliclicita-> l20_codigo = $oParam->licitacao;
+            $clliclicita->l20_tipoprocesso = $oParam->l20_tipoprocesso;
+            $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
+            $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
+            $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;
+            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
+            $clliclicita->l20_razao = $oParam->l20_razao;
+            $clliclicita->alterar($oParam->licitacao,null,null);
+
+            if ($clliclicita->erro_status == "0") {
+                $erro_msg = $clliclicita->erro_msg;
+                $sqlerro = true;
+                $oRetorno = $erro_msg;
+            }
+
+            /**
+             * incluir a situaçao homologada
+             */
+
+            $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+            $clliclicitasituacao->l11_hora        = db_hora();
+            $clliclicitasituacao->l11_licsituacao = 10;
+            $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+            $clliclicitasituacao->l11_liclicita   = $oParam->licitacao;
+            $clliclicitasituacao->l11_obs         = "Homologação";
+            $clliclicitasituacao->incluir(null);
+
+            /**
+             * incluir a homologação
+             */
+            $clhomologacaoadjudica->l202_licitacao = $oParam->licitacao;
+            $clhomologacaoadjudica->l202_datahomologacao = $oParam->l20_dtpubratificacao;
+            $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->l20_dtpubratificacao;
+            $clhomologacaoadjudica->incluir(null);
+
+            /**
+             * incluir itens na homologação
+             */
+            foreach ($oParam->itens as $iten) {
+                $clitenshomologacao->l203_item = $iten->l205_item;
+                $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+                $clitenshomologacao->incluir(null);
+            }
+            db_fim_transacao();
+            break;
+
+        case 'getItensHomo':
+            $aItens = array();
+
+            $sql = "SELECT l203_item,l202_datahomologacao
+                            FROM itenshomologacao
+                    INNER JOIN homologacaoadjudica ON l202_sequencial = l203_homologaadjudicacao
+                    WHERE l202_licitacao = {$oParam->licitacao}";
+
+            $result = db_query($sql);
+
+            for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
+                $oItens = db_utils::fieldsMemory($result, $iContItens);
+                $aItens[] = $oItens;
+            }
+//            echo "<pre>"; print_r($oItens);exit;
+            $oRetorno->itens = $aItens;
+            $oRetorno->dtpublicacao = $oItens->l202_datahomologacao;
+
+            break;
     }
 
     db_fim_transacao (true);
 
 } catch (Exception $eErro) {
-
     $oRetorno->erro  = true;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
