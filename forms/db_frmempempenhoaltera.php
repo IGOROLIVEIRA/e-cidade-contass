@@ -477,16 +477,17 @@ $clrotulo->label("e60_datasentenca");
         db_iframe_concarpeculiar.hide();
     }
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|e60_codemp','Pesquisa',true,'0');
+        js_OpenJanelaIframe('','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|e60_codemp|e60_anousu','Pesquisa',true,'0');
     }
-    function js_preenchepesquisa(chave, chave2){
+    function js_preenchepesquisa(chave, chave2, ano){
         db_iframe_empempenho.hide();
         <?
         echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
         ?>
 
         parent.document.formaba.alteracaoop.disabled=false;
-        top.corpo.iframe_alteracaoop.location.href='emp1_aba2ordempagamento002.php?pesquisa=1&empenho='+chave2;
+        empenho = chave2+'/'+ano;
+        top.corpo.iframe_alteracaoop.location.href='emp1_aba2ordempagamento002.php?pesquisa=1&empenho='+empenho;
     }
 
     /**

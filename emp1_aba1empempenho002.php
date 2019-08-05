@@ -355,7 +355,7 @@ if(isset($alterar)){
 <center>
     <fieldset style="width: 800px;">
         <legend><b>Alteração de Empenho</b></legend>
-        <?php require_once (modification::getFile("forms/emp1_empempenho005.php.php")); ?>
+        <?php require_once (modification::getFile("forms/db_frmempempenhoaltera.php")); ?>
     </fieldset>
 </center>
 </body>

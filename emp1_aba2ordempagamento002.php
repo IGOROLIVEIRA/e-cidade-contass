@@ -50,21 +50,22 @@ $clpagordem->rotulo->label("e60_numemp");
 $clpagordem->rotulo->label("e50_codord");
 $clpagordem->rotulo->label("e50_obs");
 
-//$db_opcao =  22;
-$db_botao = false;
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
 if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
     $empenho = $aFiltros['empenho'];
 }
-print_r($empenho);
+
 db_inicio_transacao();
 if(isset($alterar)){
 
-    $clpagordem->e50_obs = $e50_obs;
+    $sqlerro=false;
     $clpagordem->alterar($e50_codord);
-
+    if($clpagordem->erro_status == 0) {
+        $sqlerro=true;
+    }
+    $erro_msg = $clpagordem->erro_msg;
 }
 db_fim_transacao();
 
@@ -84,3 +85,16 @@ db_fim_transacao();
 </center>
 </body>
 </html>
+<?php
+if(isset($alterar)){
+    if($sqlerro == true){
+        db_msgbox($erro_msg);
+        if($clpagordem->erro_campo!=""){
+            echo "<script> document.form1.".$clpagordem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clpagordem->erro_campo.".focus();</script>";
+        }
+    }else{
+        db_msgbox($erro_msg);
+    }
+}
+?>

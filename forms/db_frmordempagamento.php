@@ -1,5 +1,5 @@
 <form name="form1" method="post">
-    <input type="hidden" name="empenho" value="<?= $empenho ?>">
+    <input type="hidden" name="empenho" id="empenho" value="<?= $empenho ?>">
     <table border="0">
         <tr>
             <td align="left" nowrap title="<?=@$Te60_codemp?>">
@@ -10,7 +10,7 @@
             </td>
             <td align="right" nowrap title="<?=@$Te50_codord?>">
                 <?
-                db_ancora(@$Le50_codord,"js_pesquisae50_getordem(".$empenho.");",$db_opcao);
+                db_ancora(@$Le50_codord,"pesquisaOrdemPagamento();",$db_opcao);
                 ?>
             </td>
             <td>
@@ -25,7 +25,7 @@
                     <legend>
                         <strong>Histórico</strong>
                     </legend>
-                    <? db_textarea('e50_obs',4,84,$Ie50_obs,true,'text',$db_opcao) ?>
+                    <? db_textarea('e50_obs',4,84,$Ie50_obs,true,'text',2) ?>
                 </fieldset>
             </td>
         </tr>
@@ -33,7 +33,6 @@
 
     <div style="margin-top: 10px;">
 
-        <!--        <input name="alterar" type="button" id="alterar" value="Alterar" onclick="js_altera();" >-->
         <input name="alterar" type="submit" id="db_opcao" value="Alterar">
 
     </div>
@@ -41,18 +40,19 @@
 <script type="text/javascript" src="scripts/prototype.js"></script>
 <script type="text/javascript" src="scripts/strings.js"></script>
 <script>
-    function pesquisaOrdemPagamento(empenho) {
+    function pesquisaOrdemPagamento() {
+        empenho = $('empenho').value;
         $('e60_codemp').value = empenho;
-
+        
         js_pesquisae50_getordem(empenho);
     }
 
     function js_pesquisae50_getordem(e60_codemp) {
-        
+
         js_OpenJanelaIframe(
             '',
-            'iframe_alteracaoop',
-            'func_pagordem.php?$pesquisa_chave='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs',
+            'db_iframe_alteracaoop',
+            'func_pagordem.php?chave_e60_codemp='+e60_codemp+'&funcao_js=parent.js_mostraordem|e50_codord|e50_obs',
             'Pesquisa',
             true,
             '0',
@@ -65,8 +65,8 @@
 
         $('e50_codord').value = e50_codord;
         $('e50_obs').value = e50_obs;
-        console.log(e50_obs);
-        iframe_alteracaoop.hide();
+
+        db_iframe_alteracaoop.hide();
 
     }
 
