@@ -995,7 +995,6 @@ if ($tipo == "a" or 1 == 1) {
                 }
             }
 
-            //*/
             if ($tipo == "a" and $sememp == "n") {
                 if ($agrupar == "oo" || $agrupar == 'gest') {
                     $pdf->Cell(165, $tam, '', 1, 0, "C", 1);
@@ -1015,15 +1014,6 @@ if ($tipo == "a" or 1 == 1) {
                             $pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
                         }
                 }
-
-//				if ($agrupar == "ta") {
-//					if ($mostrar == "r") {
-//						$pdf->Cell(46, $tam, strtoupper($RLo15_codigo), 1, 0, "C", 1); // recurso
-//					} else
-//						if ($mostrar == "t") {
-//							$pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
-//						}
-//				}
 
                 if ($agrupar == "d") {
                     if ($mostrar == "r") {
@@ -1052,6 +1042,10 @@ if ($tipo == "a" or 1 == 1) {
                 }
 
                 if ($agrupar == "oo" || $agrupar == 'gest') {
+                    $pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1);
+                }
+
+                if($agrupar == 'ta'){
                     $pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1);
                 }
 
@@ -1466,7 +1460,7 @@ if ($tipo == "a" or 1 == 1) {
                         $preenche = 0;
                         $iTamanhoCelula = 25;
                     }
-                    $pdf->Cell(79, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
                     $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
@@ -1596,8 +1590,11 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(46, $tam, substr($z01_nome,0,28),$iBorda, 0, "L", 0);
             }
 
+            if($agrupar == 'ta'){
+                $pdf->Cell(46, $tam, substr($z01_nome,0,28),$iBorda, 0, "L", 0);
+            }
+
             $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
-            //$pdf->Cell(15, $tam, $e60_concarpeculiar, 0, 0, "C", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlremp, 'f'), 'B', 0, "R", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlranu, 'f'), 'B', 0, "R", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlrliq, 'f'), 'B', 0, "R", $preenche);
@@ -1613,7 +1610,6 @@ if ($tipo == "a" or 1 == 1) {
 
 
             if (1 == 1) {
-//die($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
                 $reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
                 $rows_lancamemp = $clconlancamemp->numrows;
 
@@ -1665,7 +1661,7 @@ if ($tipo == "a" or 1 == 1) {
                 }
 
                 if($agrupar == "ta"){
-                    $tamanho = 59;
+                    $tamanho = 105;
                 }else{
                     $tamanho = 105;
                 }
@@ -1714,11 +1710,6 @@ if ($tipo == "a" or 1 == 1) {
 
         }
 
-
-
-
-
-
         if ($sememp == "n") {
             $pdf->Ln(1);
         }
@@ -1751,11 +1742,7 @@ if ($tipo == "a" or 1 == 1) {
                 $iTamanhoCelula = 25;
                 $iCelulaFornec  = 65;
             }
-            if($agrupar == 'ta'){
-                $iTamanho = 79;
-            }else{
-                $iTamanho = 125;
-            }
+            $iTamanho = 125;
 
             $pdf->Cell($iTamanho, $tam, '', $base, 0, "R", $preenche);
             $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
@@ -1773,12 +1760,7 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->Ln();
             $pdf->Ln();
             if($agrupar == "ta"){
-                $pdf->Cell(92, $tam, "TOTAL DE EMPENHOS: ".db_formatar($rows, "s"), "T", 0, "L", 1);
-//				if ($totalforne > 0) {
-//					$pdf->Cell($iCelulaFornec, $tam, "TOTAL DE FORNECEDORES: ".db_formatar($totalforne, "s"), "T", 0, "L", 1);
-//				} else {
-//					$pdf->Cell($iCelulaFornec, $tam, "", "T", 0, "L", 1);
-//				}
+                $pdf->Cell(138, $tam, "TOTAL DE EMPENHOS: ".db_formatar($rows, "s"), "T", 0, "L", 1);
                 $pdf->Cell(27, $tam, "TOTAL GERAL", "T", 0, "L", 1);
                 $pdf->Cell(18, $tam, db_formatar($g_emp, 'f'), "T", 0, "R", 1); //totais globais
                 $pdf->Cell(18, $tam, db_formatar($g_anu, 'f'), "T", 0, "R", 1);
@@ -1793,8 +1775,7 @@ if ($tipo == "a" or 1 == 1) {
                 }
 
                 $pdf->Ln();
-                $iTam = $sememp == "n"?119:104;
-                $pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
+                $pdf->Cell(165, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
                 $pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
