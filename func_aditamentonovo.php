@@ -16,8 +16,8 @@ if($aditamento = true){
        ac20_quantidade,
        ac20_valoraditado,
        ac26_acordoposicaotipo||'-'||ac27_descricao as tipoaditivo,
-       ac16_datainicio,
-       ac16_datafim,
+       ac18_datainicio,
+       ac18_datafim,
        ac35_descricaoalteracao,
        ac35_datapublicacao,
        ac35_veiculodivulgacao,
@@ -30,6 +30,7 @@ if($aditamento = true){
        ac20_ordem
 FROM acordo
 INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+INNER JOIN acordovigencia ON ac18_acordoposicao = ac26_sequencial
 INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
 INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
 INNER JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
@@ -87,7 +88,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
                                 <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_datapublicacao)); ?></td>
                                 <td style=""><?php echo $oResult[0]->ac35_veiculodivulgacao; ?></td>
                                 <td style=""><?php echo $oResult[0]->ac35_descricaoalteracao; ?></td>
-                                <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac16_datainicio))." á ".date("d/m/Y", strtotime($oResult[0]->ac16_datafim)); ?></td>
+                                <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac18_datainicio))." á ".date("d/m/Y", strtotime($oResult[0]->ac18_datafim)); ?></td>
                             </tr>
                         </table>
                     </td>
