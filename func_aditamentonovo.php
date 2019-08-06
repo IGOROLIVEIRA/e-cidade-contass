@@ -16,8 +16,8 @@ if($aditamento = true){
        ac20_quantidade,
        ac20_valoraditado,
        ac26_acordoposicaotipo||'-'||ac27_descricao as tipoaditivo,
-       ac16_datainicio,
-       ac16_datafim,
+       ac18_datainicio,
+       ac18_datafim,
        ac35_descricaoalteracao,
        ac35_datapublicacao,
        ac35_veiculodivulgacao,
@@ -34,6 +34,7 @@ INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
 INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
 INNER JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
 INNER JOIN acordoposicaotipo ON ac27_sequencial = ac26_acordoposicaotipo
+INNER JOIN acordovigencia ON ac18_acordoposicao = ac26_sequencial
 WHERE ac26_sequencial = {$ac26_sequencial} order by ac20_ordem";
 }
 $oResult = db_query($sql);
