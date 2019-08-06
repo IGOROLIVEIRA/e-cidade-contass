@@ -3308,7 +3308,7 @@ class cl_liclicita
             }
 
     function excluirpublicacaocredenciamento ($l20_codigo){
-        $sql = "begin; update liclicita set l20_dtpubratificacao = null,l20_dtlimitecredenciamento = null, l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= '' 
+        $sql = "Update liclicita set l20_dtpubratificacao = null,l20_dtlimitecredenciamento = null, l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= '' 
         where l20_codigo = $l20_codigo";
         $result = db_query($sql);
 
