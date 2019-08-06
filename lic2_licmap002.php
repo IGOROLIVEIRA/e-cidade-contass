@@ -470,7 +470,7 @@ if ($modelo == 1) {
 
             }
             $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem"));
-            echo $clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");db_criatabela($result_valor);
+//            echo $clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");db_criatabela($result_valor);
             if ($clpcorcamval->numrows > 0) {
                 db_fieldsmemory($result_valor, 0);
                 if ($pc24_pontuacao == 1) {
