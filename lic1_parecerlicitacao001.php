@@ -37,51 +37,48 @@ if (isset($incluir)) {
 
     $dtDataParecer = date('Y-m-d', strtotime(str_replace('/', '-', $l200_data)));
 
+    $clliclicita        = new cl_liclicita;
+    $sSql               = $clliclicita->sql_query_file('', 'l20_dataaber, l20_licsituacao','','l20_codigo = '.$l200_licitacao);
+    $oLicitacao         = db_utils::fieldsMemory(db_query($sSql), 0);
+
+    //Jurídico Julgamento
     if($l200_tipoparecer == "3") {
 
-        $clliclicitasituacao  = new cl_liclicitasituacao;
-        $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data, l11_licsituacao', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l200_licitacao);
-        $rsResult             = db_query($sSql);
+        $clliclicitasituacao    = new cl_liclicitasituacao;
+        $sOrder                 = 'l11_data desc, l11_hora desc';
+        $sWhereJulg             = 'l11_liclicita = '.$l200_licitacao.'and l11_licsituacao = 1';
+        $sSqlJulg               = $clliclicitasituacao->sql_query(null, 'l11_data', $sOrder, $sWhereJulg);
+        $dtDataJulg             = db_utils::fieldsMemory(db_query($sSqlJulg), 0)->l11_data;
+        $dtDataJulgShow         = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
 
-        if(pg_numrows($rsResult) > 0){
+        //Licitação não julgada
+        if($oLicitacao->l20_licsituacao == 0){
 
-            $oLicSituacao     = db_utils::fieldsMemory($rsResult, 0);
+            $clliclicitasituacao->erro_msg = 'Usuário, é necessário efetuar o julgamento da licitação.';
+            echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+            db_redireciona('lic1_parecerlicitacao001.php');
 
-            if($oLicSituacao->l11_licsituacao == 0){
-                $clliclicitasituacao->erro_msg = 'Usuário, é necessário efetuar o julgamento da licitação.';
+        }
+
+        //licitacao julgada
+        if($oLicitacao->l20_licsituacao == 1){
+
+            if ($dtDataParecer < $dtDataJulg) {
+
+                $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data do parecer deverá ser igual ou superior a data de julgamento.';
                 echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
                 db_redireciona('lic1_parecerlicitacao001.php');
+
             }
+        }
 
-            //licitação julgada
-            if($oLicSituacao->l11_licsituacao == 1) {
+        //licitação homologada
+        if($oLicitacao->l20_licsituacao == 10){
 
-                $dtDataJulg     = $oLicSituacao->l11_data;
-                $dtDataJulgShow = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+            $clliclicitasituacao->erro_msg = 'Licitação já homologada.';
+            echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+            db_redireciona('lic1_parecerlicitacao001.php');
 
-                if($dtDataParecer < $dtDataJulg){
-
-                    $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data do parecer deverá ser igual ou superior a data de julgamento.';
-                    echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-                    db_redireciona('lic1_parecerlicitacao001.php');
-
-                }
-            }
-
-            //licitação homologada
-            if($oLicSituacao->l11_licsituacao == 10) {
-
-                $dtDataJulg         = $oLicSituacao->l11_data;
-                $dtDataJulgHomolog  = db_utils::fieldsMemory(db_query($clliclicitasituacao->sql_query(null, '*', 'l11_data desc, l11_hora desc', 'l11_liclicita = ' . $l200_licitacao . 'and l11_licsituacao = 1')), 0)->l11_data;
-                $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
-                $dtDataJulgHomShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulgHomolog)));
-
-                if ($dtDataParecer > $dtDataJulgHomolog || $dtDataParecer < $dtDataJulg) {
-                    $clliclicitasituacao->erro_msg = 'Licitação julgada ('.$dtDataJulgShow.') e homologada ('.$dtDataJulgHomShow.'). A data do parecer deverá ser igual ou superior a data de julgamento.';
-                    echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-                    db_redireciona('lic1_parecerlicitacao001.php');
-                }
-            }
         }
     }
 
@@ -90,13 +87,7 @@ if (isset($incluir)) {
      */
     if($l200_tipoparecer == "2") {
 
-        $clliclicita        = new cl_liclicita;
-        $sSql               = $clliclicita->sql_query_file('', 'l20_recdocumentacao','','l20_codigo = '.$l200_licitacao);
-        $rsResult           = db_query($sSql);
-
-        if(pg_numrows($rsResult) > 0){
-
-            $dtDataEmissao      = db_utils::fieldsMemory($rsResult, 0)->l20_recdocumentacao;
+            $dtDataEmissao      = $oLicitacao->l20_dataaber;
             $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
 
             if($dtDataParecer < $dtDataEmissao){
@@ -106,7 +97,7 @@ if (isset($incluir)) {
                 db_redireciona('lic1_parecerlicitacao001.php');
 
             }
-        }
+
     }
 
   $rsResult = db_query("select l20_codtipocom from liclicita where l20_codigo = $l200_licitacao");
