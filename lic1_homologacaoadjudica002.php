@@ -46,10 +46,15 @@ if(isset($alterar)){
     }
 
     $clliclicitasituacao  = new cl_liclicitasituacao;
-    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', 'l11_data desc, l11_hora desc', 'l11_liclicita = '.$l202_licitacao);
+    $sOrder               = 'l11_data desc, l11_hora desc';
+    $sWhere               = 'l11_liclicita = '.$l200_licitacao.'and l11_licsituacao = 1';
+    $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', $sOrder, $sWhere);
     $rsResult             = db_query($sSql);
-    
-    if(pg_numrows($rsResult) > 0){
+
+    $sSql                 = $clliclicita->sql_query_file('', 'l20_dataaber, l20_licsituacao','','l20_codigo = '.$l200_licitacao);
+    $oLicitacao           = db_utils::fieldsMemory(db_query($sSql), 0);
+
+    if(pg_numrows($rsResult) > 0 && $oLicSituacao->l20_licsituacao == 1){
       
       $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
 
