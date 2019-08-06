@@ -43,8 +43,6 @@ $clrotulo = new rotulocampo();
 $clrotulo->label('');
 
 parse_str($HTTP_SERVER_VARS ['QUERY_STRING']);
-//echo $HTTP_SERVER_VARS['QUERY_STRING'];
-
 
 $iAnoUsu = db_getsession('DB_anousu');
 $sSqlEmpParam = $clempparametro->sql_query($iAnoUsu, "e30_numdec");
@@ -108,7 +106,6 @@ if (isset($imp_troca) && $imp_troca == "S") {
                          order by pc25_orcamitem desc, pc25_codtroca desc) as x
                    order by l21_ordem,pc01_descrmater";
 
-    //   echo $sql_troca; exit;
     $res_troca = $clpcorcamtroca->sql_record($sql_troca);
 }
 
@@ -311,7 +308,6 @@ if ($modelo == 1) {
 
     /*PEGA ITENS*/
     $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "distinct pc22_orcamitem,pc01_descrmater,pc11_resum,pc11_quant,m61_abrev,l21_ordem, pc11_numero, l20_criterioadjudicacao", "l21_ordem", "pc22_codorc=$orcamento"));
-//    db_criatabela($result_itens);echo $clpcorcamitem->sql_query_pcmaterlic(null, "distinct pc22_orcamitem,pc01_descrmater,pc11_resum,pc11_quant,m61_abrev,l21_ordem, pc11_numero,l20_criterioadjudicacao", "l21_ordem", "pc22_codorc=$orcamento");db_criatabela($result_itens);exit;
     $numrows_itens = $clpcorcamitem->numrows;
     if ($numrows_itens == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem itens cadastrados.');
@@ -343,7 +339,6 @@ if ($modelo == 1) {
 
     /*PEGA FORNECEDOR*/
     $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
-//    db_criatabela($result_forne); die($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
     $numrows_forne = $clpcorcamforne->numrows;
 
     for($i = 0; $i < $numrows_forne; $i ++) {
@@ -394,7 +389,6 @@ if ($modelo == 1) {
             $pdf->cell(10, $alt, "Und", 1, 0, "C", 1);
             $pdf->cell(15, $alt, "Quant.", 1, 0, "C", 1);
             $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
-//          db_criatabela($result_forne); die($clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento"));
             $numrows_forne = $clpcorcamforne->numrows;
 
             if ($troca != 0) {
@@ -470,7 +464,6 @@ if ($modelo == 1) {
 
             }
             $result_valor = $clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem"));
-            echo $clpcorcamval->sql_query_julg(null, null, "pc23_valor,pc23_vlrun,pc24_pontuacao,pc23_percentualdesconto,pc23_perctaxadesctabela", null, "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");db_criatabela($result_valor);
             if ($clpcorcamval->numrows > 0) {
                 db_fieldsmemory($result_valor, 0);
                 if ($pc24_pontuacao == 1) {
