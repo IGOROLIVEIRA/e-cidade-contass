@@ -195,7 +195,7 @@ $sWhereContratos = " and 1 = 1 ";
             }
 
             if($credenciamento == 'false'){
-                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao IN (1,10) AND l20_dtpubratificacao IS NOT NULL";
+                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao IN (10) AND l20_dtpubratificacao IS NOT NULL";
             }
 
             $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}"."$sWherePublicCredenciamento";

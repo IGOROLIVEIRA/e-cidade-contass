@@ -13,18 +13,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica();
 
 $db_botao = false;
 $db_opcao = 33;
-if(isset($excluir)){
-    db_inicio_transacao();
-    $db_opcao = 3;
-
-    $clliclicita->excluirpublicacaocredenciamento($l20_codigo);
-
-    if ($clliclicita->erro_status == "0") {
-        $erro_msg = $clliclicita->erro_msg;
-        $sqlerro = true;
-    }
-    db_fim_transacao();
-}else if(isset($chavepesquisa)){
+if(isset($chavepesquisa)){
     $db_opcao = 3;
     $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
@@ -68,4 +57,5 @@ if($db_opcao==33){
 ?>
 <script>
     js_tabulacaoforms("form1","excluir",true,1,"excluir",true);
+    BuscarItens();
 </script>

@@ -172,7 +172,13 @@ $clliclicita->rotulo->label();
         ?>
     </div>
     <div style="margin-left: 25%;">
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+        <?php if($db_opcao == 11 || $db_opcao == 1):?>
+            <input name="Incluir" type="submit" id="incluir" value="Incluir">
+        <?php elseif ($db_opcao == 22 || $db_opcao == 2):?>
+            <input name="Alterar" type="button" id="excluir" value="Alterar" onclick="js_AHomologacao()">
+        <?php else :?>
+            <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_EHomologacao()" >
+        <?php endif;?>
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
     </div>
 </form>
@@ -185,8 +191,12 @@ $clliclicita->rotulo->label();
 
     function js_preenchepesquisa(chave){
         db_iframe_publicratificacao.hide();
-
-        window.location.href = 'lic1_publicratificacao002.php?chavepesquisa='+chave;
+        let db_opcao = <?= $db_opcao?>;
+        if(db_opcao === 33 || db_opcao === 3){
+            window.location.href = 'lic1_publicratificacao003.php?chavepesquisa='+chave;
+        }else if(db_opcao === 22 || db_opcao === 2){
+            window.location.href = 'lic1_publicratificacao002.php?chavepesquisa='+chave;
+        }
     }
 
     /**
@@ -260,6 +270,18 @@ $clliclicita->rotulo->label();
         });
     }
 
+    function FormataStringData(data) {
+        //js_FormatarStringData
+        //Funcao para retornar data no formato dd/mm/yyyy
+        //para deve ser do tipo yyyy-mm-dd
+
+        var ano  = data.split("-")[0];
+        var mes  = data.split("-")[1];
+        var dia  = data.split("-")[2];
+
+        return ("0"+dia).slice(-2) + '/' + ("0"+mes).slice(-2) + '/' + ano;
+        // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
+    }
     /**
      * Marca todos os itens
      *
@@ -314,7 +336,7 @@ $clliclicita->rotulo->label();
                 itensEnviar.push(novoItem);
             });
             salvarCredAjax({
-                exec :'SalvarHomologacao',
+                exec :'salvarHomo',
                 licitacao                  : document.getElementById('l20_codigo').value,
                 l20_tipoprocesso           : document.getElementById('l20_tipoprocesso').value,
                 l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
@@ -343,6 +365,67 @@ $clliclicita->rotulo->label();
     }
 
     function retornoAjax(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status != 1) {
+            alert(response.erro);
+        } else if (response.erro == false) {
+            alert('Salvo Com Sucesso!');
+            window.location.href = "lic1_publicratificacao001.php";
+        }
+    }
+
+    /**
+     * Alterar Homologação
+     *
+     */
+    function js_AHomologacao() {
+        let itens = getItensMarcados();
+
+        if (itens.length < 1) {
+            alert('Selecione pelo menos um item da lista.');
+            return false;
+        }
+
+        var itensEnviar = [];
+
+        try {
+            itens.forEach(function (item) {
+                let coditem = item.id;
+                var novoItem = {
+                    l205_item            :coditem,
+                };
+                itensEnviar.push(novoItem);
+            });
+            aHomoAjax({
+                exec :'alterarHomo',
+                licitacao                  : document.getElementById('l20_codigo').value,
+                l20_tipoprocesso           : document.getElementById('l20_tipoprocesso').value,
+                l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
+                l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
+                l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
+                l20_justificativa          : document.getElementById('l20_justificativa').value,
+                l20_razao                  : document.getElementById('l20_razao').value,
+                itens                      : itensEnviar,
+            }, oRetornoAjax);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function aHomoAjax(params, onComplete) {
+        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
+    function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
             alert(response.erro);
@@ -382,11 +465,47 @@ $clliclicita->rotulo->label();
 
     function oretornoitens(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        console.log(oRetornoitens);
         oRetornoitens.itens.forEach(function (item, x) {
             document.getElementById(item.l203_item).checked = true;
         });
-        document.getElementById('l20_dtpubratificacao').value = oRetornoitens.dtpublicacao;
+        document.getElementById('l20_dtpubratificacao').value = FormataStringData(oRetornoitens.dtpublicacao);
     }
 
+    /**
+     * Excluir Homologação
+     *
+     */
+    function js_EHomologacao() {
+        try {
+            excluirhomologacao({
+                exec: 'excluirHomo',
+                licitacao: document.getElementById('l20_codigo').value,
+            }, oretornoexclusao);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function excluirhomologacao(params, onComplete) {
+        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
+    function oretornoexclusao(res) {
+        var oRetornoitens = JSON.parse(res.responseText);
+        if (oRetornoitens.status != 1) {
+            alert(oRetornoitens.erro);
+        } else if (oRetornoitens.erro == false) {
+            alert('Homologação excluida com Sucesso !');
+            window.location.href = "lic1_publicratificacao003.php";
+        }
+    }
 </script>
