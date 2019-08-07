@@ -561,7 +561,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              veiculostransf.ve81_codunidadesubatual) as teste";
 
         $rsResult20 = db_query($sSql);
-//        echo $sSql; db_criatabela($rsResult20);
+
         /**
          * registro 20
          */
@@ -570,31 +570,57 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
             $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
             /**
-             * Aqui verifico a existencia de manutençao para gerar o novo codigo do veiculo no SICOM OC9284
+             * Aqui verifico a existencia de transferencia para gerar o novo codigo do veiculo e codunidadesub no SICOM
+             * OC9284
              */
             if($oResult20->ve80_dt_transferencia != ""){
 
+                //ABASTECIMENTO
                 $tipogastoabast = array(01,02,03,04,05);
                 if(in_array($oResult20->tipogasto,$tipogastoabast)){
 
                     if($oResult20->ve70_dtabast < $oResult20->ve80_dt_transferencia){
+
+                        /**
+                         * verifica se o veiculo tem codigoant no cadastro tabela veiculos campo ve01_codigoant
+                         */
                         if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
                             $codveiculo = $oResult20->ve01_codigo;
                         }else{
                             $codveiculo = $oResult20->ve01_codigoant;
                         }
+
+                        /**
+                         * verifica se o veiculo tem codunidadesubant no cadastro tabela veiculos campo ve01_codunidadesub
+                         */
+                        if($oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0){
+                            $codUnidadeSub = $oResult20->ve01_codunidadesub;
+                        }else{
+                            $codUnidadeSub = $oResult20->codunidadesub;
+                        }
+
                     }else{
-                        $codveiculo = $oResult20->ve81_codigonovo;
+                        $codveiculo    = $oResult20->ve81_codigonovo;
+                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
                     }
-                }else{
+                }
+                //MANUTENÇÃO
+                else{
                     if($oResult20->ve62_dtmanut < $oResult20->ve80_dt_transferencia){
                         if ($oResult20->ve01_codigoant != null || $oResult20->ve01_codigoant == 0){
                             $codveiculo = $oResult20->ve01_codigo;
                         }else{
                             $codveiculo = $oResult20->ve01_codigoant;
                         }
+
+                        if($oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0){
+                            $codUnidadeSub = $oResult20->ve01_codunidadesub;
+                        }else{
+                            $codUnidadeSub = $oResult20->codunidadesub;
+                        }
                     }else{
                         $codveiculo = $oResult20->ve81_codigonovo;
+                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
                     }
                 }
 
@@ -604,7 +630,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 }else{
                     $codveiculo = $oResult20->ve01_codigoant;
                 }
+
+                if($oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0){
+                    $codUnidadeSub = $oResult20->ve01_codunidadesub;
+                }else{
+                    $codUnidadeSub = $oResult20->codunidadesub;
+                }
             }
+            //FIM OC9284
 
             $sHash20 = $codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
 
@@ -630,11 +663,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $oDados20->si147_tiporegistro = 20;
                 $oDados20->si147_codorgao = $oResult20->codorgao;
-                if($oResult20->ve81_codunidadesubatual != null){
-                    $oDados20->si147_codunidadesub = $oResult20->ve81_codunidadesubatual;
-                }else{
-                    $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
-                }
+                $oDados20->si147_codunidadesub = $codUnidadeSub;
                 $oDados20->si147_codveiculo = $codveiculo;
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
@@ -759,6 +788,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         AND db_config.codigo =" . db_getsession("DB_instit");
 
         $rsResult30 = db_query($sSql);
+
+//        echo $sSql; db_criatabela($rsResult30); die();
+
         /**
          * registro 30
          */
