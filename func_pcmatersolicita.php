@@ -144,10 +144,13 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
       $dDataAtual = date('Y-m-d', db_getsession("DB_datausu"));
       //echo($clpcmaterele->sql_query_file(null,null,"pc07_codmater as pc01_codmater","pc07_codmater"," pc07_codele=$o56_codele "));exit;
       $where_ativo = " pc07_codele is not null ";
+
       /*
-        Trecho descontinuado devido a OC3770
-        $where_ativo .= " and pc01_data <= '$dDataAtual' ";
-      */
+       * Trecho descontinuado devido a OC3770
+       * Comentário removido do trecho devido a OC10276
+       */
+      $where_ativo .= " and pc01_data <= '$dDataAtual' ";
+
       if(isset($opcao) && trim($opcao)!="i"){
         $where_ativo .= " and pc01_ativo='$opcao' ";
       }
