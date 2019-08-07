@@ -119,35 +119,34 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
         <td ></td>
       </tr>
       <tr>
-        <td align="right" nowrap title="<?=$Te60_numemp?>">
-          <? db_ancora(@$Le60_numemp,"js_pesquisa_empenho(true);",1); ?>
-        </td>
         <td align="left" nowrap>
+          <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true, e60_codemp_ini);",1);  ?>
+        </td>
+        <td>
+         <?
+           db_input("e60_codemp_ini",15,$Ie60_codemp,true,"text",4,"onchange='js_pesquisae60_codemp(false, e60_codemp_ini);'");
+           db_input('e60_anousu_ini','','',true, 'hidden', '');
+         ?>
+        </td>
+        <td>
+          <? db_ancora('à',"js_pesquisae60_codemp(true, e60_codemp_fim);",1);  ?>
+        </td>
+        <td>
           <?
-            db_input("e60_numemp",6,$Ie60_numemp,true,"text",4,"onchange='js_pesquisa_empenho(false);'");
-            db_input("z01_nome",40,"",true,"text",3);
+            db_input("e60_codemp_fim",15,$Ie60_codemp,true,"text",4,"onchange='js_pesquisae60_codemp(false, e60_codemp_fim);'");
+            db_input('e60_anousu_fim','','',true, 'hidden', '');
           ?>
         </td>
       </tr>
       <tr>
-        <td  align="left" nowrap title="<?=$Te60_codemp?>">
-          <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1);  ?>
-        </td>
-        <td  nowrap="nowrap" title='<?=$Te60_codemp?>' >
-          <?
-            db_input("e60_codemp",6,$Ie60_codemp,true,"text",4,"onchange='js_pesquisae60_codemp(false);'");
-            db_input("z01_nome1",40,"",true,"text",3);
-          ?>
-        </td>
       </tr>
       <tr height="14px">
       <td ></td>
       <td ></td>
       </tr>
       <tr>
-      <td></td>
-      <td align="left">
-        <input style="margin-left: 83px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
+      <td align="center" colspan="4">
+        <input type="button" id="inserir" value="Incluir" onclick="incluir();">
       </td>
       </tr>
     </table>
@@ -179,32 +178,70 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
 <script type="text/javascript" src="scripts/strings.js"></script>
 <script>
 
+limpaCampos();
+
+function limpaCampos(){
+  let doc = document.form1;
+  doc.e60_codemp_ini.value = '';
+  doc.e60_codemp_fim.value = '';
+  doc.e60_anousu_ini.value = '';
+  doc.e60_anousu_fim.value = '';
+}
+
 //--------------------------------
-function js_pesquisae60_codemp(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_empempenho2','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_emiss|e60_vlremp|e60_codemp','Pesquisa',true);
-  }else{
-    js_OpenJanelaIframe('','db_iframe_empempenho02','func_empempenho.php?protocolo=2&pesquisa_chave='+document.form1.e60_codemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+function js_pesquisae60_codemp(mostra, campo){
+
+  if(campo.name == 'e60_codemp_ini'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_empempenho1','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome|e60_emiss|e60_vlremp|e60_codemp','Pesquisa',true);
+    }else{
+      js_OpenJanelaIframe('','db_iframe_empempenho01','func_empempenho.php?protocolo=2&pesquisa_chave='+document.form1.e60_codemp_ini.value+'&funcao_js=parent.js_mostraempempenho_ini','Pesquisa',false);
+    }
+  }
+
+  if(campo.name == 'e60_codemp_fim'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_empempenho2','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_emiss|e60_vlremp|e60_codemp','Pesquisa',true);
+    }else{
+      js_OpenJanelaIframe('','db_iframe_empempenho02','func_empempenho.php?protocolo=2&pesquisa_chave='+document.form1.e60_codemp_fim.value+'&funcao_js=parent.js_mostraempempenho_fim','Pesquisa',false);
+    }
+  }
+
+}
+
+function js_mostraempempenho_ini(chave1, chave2, chave3, chave4, chave5){
+  document.form1.valtab.value         = chave4;
+  if(chave5){
+    document.form1.e60_anousu_ini.value = chave3;
+    document.form1.e60_codemp_ini.value = chave5;
   }
 }
 
-function js_mostraempempenho(chave1, chave2, chave3, chave4, chave5){
-  document.form1.e60_numemp.value = chave2;
-  document.form1.z01_nome.value   = chave1;
-  document.form1.z01_nome1.value  = chave1;
-  document.form1.dattab.value     = chave3;
-  document.form1.valtab.value     = chave4;
-  document.form1.e60_codemp.value = chave5;
+function js_mostraempempenho1(chave1, chave2, chave3, chave4, chave5){
+  document.form1.valtab.value         = chave4;
+  if(chave5){
+    document.form1.e60_anousu_ini.value = chave3;
+    document.form1.e60_codemp_ini.value = chave5;
+  }
+
+  db_iframe_empempenho1.hide();
+}
+
+function js_mostraempempenho_fim(chave1, chave2, chave3, chave4, chave5){
+  document.form1.valtab.value         = chave4;
+  if(chave5){
+    document.form1.e60_anousu_fim.value = chave3;
+    document.form1.e60_codemp_fim.value = chave5;
+  }
 
 }
 
 function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5){
-  document.form1.e60_numemp.value = chave1;
-  document.form1.z01_nome.value   = chave2;
-  document.form1.z01_nome1.value  = chave2;
-  document.form1.dattab.value     = chave3;
-  document.form1.valtab.value     = chave4;
-  document.form1.e60_codemp.value = chave5;
+  document.form1.valtab.value         = chave4;
+  if(chave5){
+    document.form1.e60_anousu_fim.value = chave3;
+    document.form1.e60_codemp_fim.value = chave5;
+  }
   db_iframe_empempenho2.hide();
 }
 
@@ -243,33 +280,77 @@ function js_mostraempenho1(chave1, chave2, chave3, chave4, chave5){
 
 //--------------------------------
 
-function novoAjax(params, onComplete) {
-
+function novoAjax(params, onComplete, async=true) {
   var request = new Ajax.Request('pro4_protocolos.RPC.php', {
     method:'post',
     parameters:'json='+Object.toJSON(params),
-    onComplete: onComplete
+    onComplete: onComplete,
+    asynchronous: async
   });
 
 }
 var table_empenhos = document.getElementById('table_empenhos');
 
+function pesquisaEmpenhos(){
+  let oParam = new Object();
+  let doc = document.form1;
+
+  if(doc.e60_codemp_ini.value){
+    oParam.inicio = doc.e60_codemp_ini.value;
+    oParam.dtInicio = doc.e60_anousu_ini.value;
+  }
+  if(doc.e60_codemp_fim.value){
+    oParam.fim = doc.e60_codemp_fim.value;
+    oParam.dtFim = doc.e60_anousu_fim.value;
+  }
+
+  let ini = new Date(`${oParam.dtInicio}`);
+  let fim = new Date(`${oParam.dtFim}`);
+
+
+  if(ini && fim && ini.getFullYear() > fim.getFullYear()){
+    alert('Informe uma data maior ou igual ao empenho inicial');
+    return false;
+  }
+
+  if(ini && fim && ini.getFullYear() == fim.getFullYear()){
+    if(parseInt(oParam.fim) < parseInt(oParam.inicio)){
+      alert('Valor do último empenho é menor que o empenho inicial');
+      return false;
+    }
+  }
+
+  let listaEmpenhos = [];
+    oParam.exec = 'pesquisaEmpenhos';
+    novoAjax(oParam, function(e){
+      let response = JSON.parse(e.responseText);
+      listaEmpenhos = [...response.empenhos];
+    }, false);
+
+    return listaEmpenhos;
+}
+
 function incluir() {
-  var protocolo      = document.form1.protocolo.value;
-  var empenho        = document.form1.e60_numemp.value;
+  var protocolo   = document.form1.protocolo.value;
+  var empenho_ini = document.form1.e60_codemp_ini.value;
+  var empenho_fim = document.form1.e60_codemp_fim.value;
   var protocoloVazio = protocolo == '';
-  var empenhoVazio   = empenho   == '';
+
   if (protocoloVazio) {
     alert('Ocorreu um erro na geração do protocolo!');
     return;
   }
 
-  if (empenhoVazio) {
-    alert('Informe um empenho!');
+  if (!empenho_ini && !empenho_fim) {
+    alert('Informe um intervalo de empenho');
     return;
   }
 
-  incluirEmpenho(protocolo,empenho);
+  let aEmpenhos = pesquisaEmpenhos();
+  aEmpenhos.forEach((empenho) => {
+    incluirEmpenho(protocolo, empenho.e60_numemp);
+  })
+
 }
 
 function incluirEmpenho(iProtocolo, iEmpenho) {

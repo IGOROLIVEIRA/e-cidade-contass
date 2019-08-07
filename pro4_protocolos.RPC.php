@@ -1,5 +1,6 @@
 <?php
 //ini_set("display_errors", true);
+require_once('classes/db_empempenho_classe.php');
 require_once('classes/db_protocolos_classe.php');
 require_once('classes/db_protempautoriza_classe.php');
 require_once('classes/db_protempenhos_classe.php');
@@ -727,6 +728,29 @@ switch ($oParam->exec) {
     }
   break;
 
+  case 'pesquisaEmpenhos';
+    try{
+      $oRetorno->empenhos = pesquisaIntervaloEmpenhos($oParam->inicio, $oParam->dtInicio, $oParam->fim, $oParam->dtFim);
+    }catch(Exception $e){
+      $oRetorno->erro = $e;
+    }
+
+  break;
+
+  case 'pesquisaOrdens';
+  try{
+    $oRetorno->ordens = pesquisaOrdens($oParam->ordem_ini, $oParam->ordem_fim);
+  }catch(Exception $e){
+    $oRetorno->erro = $e;
+  }
+  break;
+
+  case 'pesquisaSlips';
+  try{
+    $oRetorno->slips = pesquisaSlips($oParam->slip_ini, $oParam->slip_fim);
+  }catch(Exception $e){
+    $oRetorno->erro = $e;
+  }
 }
 
 // Funções
@@ -1096,6 +1120,39 @@ function salvaCopiaEmpenho($protocolo, $protocoloCopia) {
   }
 }
 
+function pesquisaIntervaloEmpenhos($param_ini, $dtinicio, $param_fim, $dtfim){
+
+  $oEmpenhos = new cl_empempenho;
+  $where = '';
+
+  if($param_ini && $param_fim){
+    $where = " e60_codemp::integer >= $param_ini and e60_codemp::integer <= $param_fim ";
+    $where .= " and e60_instit = ".db_getsession('DB_instit');
+    $where .= " and e60_anousu >= substr('$dtinicio', 1, 4)::integer ";
+    $where .= " and e60_anousu <= substr('$dtfim', 1, 4)::integer ";
+  }
+
+  if($param_ini && !$param_fim){
+    $where = " e60_codemp::integer = $param_ini ";
+    $where .= " and e60_instit = ".db_getsession('DB_instit');
+    $where .= " and e60_anousu = substr('$dtinicio', 1, 4)::integer ";
+  }
+
+  if($param_fim && !$param_ini){
+    $where = " e60_codemp::integer = $param_fim ";
+    $where .= " and e60_instit = ".db_getsession('DB_instit');
+    $where .= " and e60_anousu = substr('$dtfim', 1, 4)::integer ";
+  }
+
+  $campos = "empempenho.e60_codemp, empempenho.e60_numemp";
+
+  $sSql = $oEmpenhos->sql_query(null, $campos, '', $where,'');
+  $rsSql = $oEmpenhos->sql_record($sSql);
+
+  $empenhos = db_utils::getCollectionByRecord($rsSql);
+  return $empenhos;
+}
+
 function salvaCopiaAutCompra($protocolo, $protocoloCopia) {
   try {
 
@@ -1252,6 +1309,80 @@ function salvaCopiaSlip($protocolo, $protocoloCopia, $instituicao) {
     $oRetorno->erro = $e->getMessage();
     $oRetorno->status = 2;
   }
+}
+
+function pesquisaOrdens($ordem_ini, $ordem_fim){
+  $where = '';
+
+  if($ordem_ini && $ordem_fim){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord >= $ordem_ini and pagordemele.e53_codord <= $ordem_fim ";
+  }
+
+  if($ordem_ini && !$ordem_fim){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord = $ordem_ini";
+  }
+
+  if($ordem_fim && !$ordem_ini){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord = $ordem_fim";
+  }
+
+  $sSql = "SELECT pagordemele.e53_codord
+           FROM pagordemele
+           INNER JOIN pagordem ON pagordem.e50_codord = pagordemele.e53_codord
+           INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+           INNER JOIN orcelemento ON orcelemento.o56_codele = pagordemele.e53_codele
+           INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+           AND orcelemento.o56_anousu = empempenho.e60_anousu
+           WHERE e60_instit = ".db_getsession('DB_instit')." ".$where."
+           ORDER BY e53_codord, e53_codele";
+
+  $rsSql = db_query($sSql);
+  $ordens = db_utils::getCollectionByRecord($rsSql);
+  return $ordens;
+}
+
+function pesquisaSlips($slip_ini, $slip_fim){
+  $where = '';
+
+  if($slip_ini && $slip_fim){
+    $where = " and ";
+    $where .= " slip.k17_codigo >= $slip_ini and slip.k17_codigo <= $slip_fim ";
+  }
+
+  if($slip_ini && !$slip_fim){
+    $where = " and ";
+    $where .= " slip.k17_codigo = $slip_ini";
+  }
+
+  if($slip_fim && !$slip_ini){
+    $where = " and ";
+    $where .= " slip.k17_codigo = $slip_fim";
+  }
+
+  $ano_usu = db_getsession('DB_datausu');
+  $sSql = "SELECT slip.k17_codigo
+              FROM slip
+              LEFT JOIN conplanoreduz r1 ON r1.c61_reduz = k17_debito
+              AND r1.c61_instit = k17_instit AND r1.c61_anousu = $ano_usu
+              LEFT JOIN conplano c1 ON c1.c60_codcon = r1.c61_codcon
+              AND c1.c60_anousu = r1.c61_anousu
+              LEFT JOIN conplanoreduz r2 ON r2.c61_reduz = k17_credito
+              AND r2.c61_instit = k17_instit AND r2.c61_anousu= $ano_usu
+              LEFT JOIN conplano c2 ON c2.c60_codcon = r2.c61_codcon
+              AND c2.c60_anousu = r2.c61_anousu
+              LEFT JOIN slipnum ON slipnum.k17_codigo = slip.k17_codigo
+              LEFT JOIN cgm ON cgm.z01_numcgm = slipnum.k17_numcgm
+              LEFT JOIN slipprocesso ON slip.k17_codigo = slipprocesso.k145_slip
+              WHERE k17_instit = ".db_getsession('DB_instit')." ".$where."
+              ORDER BY slip.k17_codigo";
+
+
+  $rsSql = db_query($sSql);
+  $slips = db_utils::getCollectionByRecord($rsSql);
+  return $slips;
 }
 
 // Fim Funções

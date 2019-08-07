@@ -89,12 +89,19 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
     <table border='0'>
       <tr>
         <td align="left" nowrap title="<?=$Tk17_codigo?>">
-           <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);");  ?>
+           <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true, k17_codigo_ini);");  ?>
         </td>
         <td align="left" nowrap>
           <?
-            db_input('k17_codigo',10,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'") ;
-            db_input("z01_nome",40,"$Iz01_nome",true,"text",3);
+            db_input('k17_codigo_ini',12,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false, k17_codigo_ini);'") ;
+          ?>
+        </td>
+        <td>
+          <? db_ancora("à","js_pesquisak17_codigo(true, k17_codigo_fim);");  ?>
+        </td>
+        <td>
+          <?
+            db_input('k17_codigo_fim',12,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false, k17_codigo_fim);'") ;
           ?>
         </td>
       </tr>
@@ -104,10 +111,11 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
         <td></td>
       </tr>
       <tr>
-        <td></td>
-        <td align="left">
-          <input style="margin-left: 125px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
+        <!-- <td></td> -->
+        <td align="center" colspan="4">
+          <input type="button" id="inserir" value="Incluir" onclick="incluir();">
         </td>
+        <!-- <td></td> -->
       </tr>
     </table>
     <br>
@@ -133,6 +141,7 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
         <input id="bt_autorizar" style="margin-left: 3px; display: none" type="button" value="Liberar" onclick="autorizar(<?php echo $protocolo; ?>);">
       <?php endif ; ?>
     </td>
+  </table>
 </form>
 </fieldset>
 </div>
@@ -141,68 +150,141 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
 <script type="text/javascript" src="scripts/strings.js"></script>
 <script>
 
+limpaCampos();
+
+function limpaCampos(){
+  let doc = document.form1;
+  doc.k17_codigo_ini.value = ''
+  doc.k17_codigo_fim.value = ''
+}
+
 //---slip 01
-function js_pesquisak17_codigo(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_slip','func_slip.php?protocolo=1&funcao_js=parent.js_mostraslip1|k17_codigo|z01_nome|k17_data|k17_valor','Pesquisa',true);
-  }else{
-    slip01 = new Number(document.form1.k17_codigo.value);
-    if(slip01 != ""){
-       js_OpenJanelaIframe('','db_iframe_slip','func_slip.php?protocolo=1&pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
+function js_pesquisak17_codigo(mostra, campo){
+
+  if(campo.name == 'k17_codigo_ini'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_slip_ini','func_slip.php?protocolo=1&funcao_js=parent.js_mostraslip1|k17_codigo|k17_data|k17_valor','Pesquisa',true);
     }else{
-        document.form1.k17_codigo.value='';
+      slip01 = new Number(document.form1.k17_codigo_ini.value);
+      if(slip01 != ""){
+         js_OpenJanelaIframe('','db_iframe_slip_ini','func_slip.php?protocolo=1&pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip_ini','Pesquisa',false);
+      }else{
+          document.form1.k17_codigo_ini.value='';
+      }
     }
   }
+
+  if(campo.name == 'k17_codigo_fim'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_slip_fim','func_slip.php?protocolo=1&funcao_js=parent.js_mostraslip2|k17_codigo|k17_data|k17_valor','Pesquisa',true);
+    }else{
+      slip02 = new Number(document.form1.k17_codigo_fim.value);
+      if(slip02 != ""){
+         js_OpenJanelaIframe('','db_iframe_slip_fim','func_slip.php?protocolo=1&pesquisa_chave='+slip02+'&funcao_js=parent.js_mostraslip_fim','Pesquisa',false);
+      }else{
+          document.form1.k17_codigo_fim.value='';
+      }
+    }
+  }
+
 }
-function js_mostraslip(chave1, chave2, chave3, chave4, erro){
-  document.form1.z01_nome.value = chave2;
+function js_mostraslip_ini(chave1, chave2, chave3, chave4, erro){
   document.form1.dattab.value   = chave3;
   document.form1.valtab.value   = chave4;
   if(erro==true){
-    document.form1.k17_codigo.focus();
-    document.form1.k17_codigo.value = '';
+    document.form1.k17_codigo_ini.focus();
+    document.form1.k17_codigo_ini.value = '';
   }
 
 }
 
-function js_mostraslip1(chave1, chave2, chave3, chave4){
-  document.form1.k17_codigo.value = chave1;
-  document.form1.z01_nome.value   = chave2;
-  document.form1.dattab.value     = chave3;
-  document.form1.valtab.value     = chave4;
+function js_mostraslip1(chave1, chave2, chave3){
+  document.form1.k17_codigo_ini.value = chave1;
+  document.form1.dattab.value     = chave2;
+  document.form1.valtab.value     = chave3;
 
-  db_iframe_slip.hide();
+  db_iframe_slip_ini.hide();
+}
+
+function js_mostraslip_fim(chave1, chave2, chave3, chave4, erro){
+  document.form1.dattab.value   = chave3;
+  document.form1.valtab.value   = chave4;
+  if(erro==true){
+    document.form1.k17_codigo_fim.focus();
+    document.form1.k17_codigo_fim.value = '';
+  }
+
+}
+
+function js_mostraslip2(chave1, chave2, chave3){
+  document.form1.k17_codigo_fim.value = chave1;
+  document.form1.dattab.value     = chave2;
+  document.form1.valtab.value     = chave3;
+
+  db_iframe_slip_fim.hide();
 }
 
 
 var table_slips = document.getElementById('table_slips');
-function novoAjax(params, onComplete) {
+function novoAjax(params, onComplete, async=true) {
 
   var request = new Ajax.Request('pro4_protocolos.RPC.php', {
     method:'post',
     parameters:'json='+Object.toJSON(params),
-    onComplete: onComplete
+    onComplete: onComplete,
+    asynchronous: async
   });
 
 }
 
-function incluir() {
+function pesquisaSlips(){
+  let oParam = new Object();
+  let doc = document.form1;
 
+  if(doc.k17_codigo_ini.value){
+    oParam.slip_ini = doc.k17_codigo_ini.value;
+  }
+  if(doc.k17_codigo_fim.value){
+    oParam.slip_fim = doc.k17_codigo_fim.value;
+  }
+
+  if(parseInt(oParam.slip_ini) > parseInt(oParam.slip_fim)){
+      alert('Valor do último slip é menor que o slip inicial');
+      return false;
+    }
+
+  let listaSlips = [];
+
+  oParam.exec = 'pesquisaSlips';
+  novoAjax(oParam, function(e){
+    let response = JSON.parse(e.responseText);
+    listaSlips = [...response.slips];
+  }, false);
+
+  return listaSlips;
+}
+
+function incluir() {
+  var doc = document.form1;
   var protocolo = document.form1.protocolo.value;
-  var slip      = document.form1.k17_codigo.value;
   var protocoloVazio    = protocolo == '';
-  var autpagamentoVazio = slip == '';
+  // var autpagamentoVazio = slip == '';
   if (protocoloVazio) {
     alert('Ocorreu um erro na geração do protocolo!');
     return;
   }
 
-  if (autpagamentoVazio) {
+  if (!doc.k17_codigo_ini.value && !doc.k17_codigo_fim.value) {
     alert('Informe um Slip!');
     return;
   }
 
-  incluirSlip(protocolo,slip);
+  let aSlips = pesquisaSlips();
+
+  aSlips.forEach(slip => {
+    incluirSlip(protocolo, slip.k17_codigo);
+  })
+
 }
 
 function incluirSlip(iProtocolo, iSlip) {
@@ -217,8 +299,9 @@ function incluirSlip(iProtocolo, iSlip) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
         pesquisaProtocolo(iProtocolo);
-        document.form1.k17_codigo.value = "";
-        document.form1.z01_nome.value   = "";
+        document.form1.k17_codigo_ini.value = "";
+        document.form1.k17_codigo_fim.value = "";
+        // document.form1.z01_nome.value   = "";
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
