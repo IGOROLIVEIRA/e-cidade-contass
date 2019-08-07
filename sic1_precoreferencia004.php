@@ -1,5 +1,6 @@
 <?php
 require_once 'model/relatorios/Relatorio.php';
+include("classes/db_db_docparag_classe.php");
 
 // include("fpdf151/pdf.php");
 require("libs/db_utils.php");
@@ -103,6 +104,18 @@ GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,pc80_criterioadjudicacao ORDER
 ;
 
 $rsResult = db_query($sSql) or die(pg_last_error());
+$oLinha = null;
+
+$sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
+$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
+
+$cl_docparag = new cl_db_docparag;
+$sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rs = $cl_docparag->sql_record($sAssinatura);
+$oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
 //echo $sSql; db_criatabela($rsResult);exit;
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
 $head3 = "Preço de Referência";
@@ -314,6 +327,18 @@ HTML;
 <div class="linha-vertical">
     <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
 </div>
+
+<?php
+    if($oLinha!=null || trim($oLinha)!=""){
+
+        echo <<<HTML
+            <div class="linha-vertical">
+                <strong>{$oLinha}</strong>
+            </div>     
+HTML;
+
+}
+?>
 
 </body>
 </html>
