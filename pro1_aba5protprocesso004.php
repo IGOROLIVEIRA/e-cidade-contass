@@ -302,10 +302,8 @@ function incluir() {
   }
 
   let aOrdens = pesquisaOrdens();
+  incluirAutPagamento(protocolo, aOrdens);
 
-  aOrdens.forEach(ordem => {
-    incluirAutPagamento(protocolo, ordem.e53_codord);
-  });
 }
 
 function incluirAutPagamento(iProtocolo, iAutPagamento) {
@@ -322,7 +320,6 @@ function incluirAutPagamento(iProtocolo, iAutPagamento) {
         pesquisaProtocolo(iProtocolo);
         document.form1.e53_codord_ini.value = "";
         document.form1.e53_codord_fim.value = "";
-        // document.form1.z01_nome.value   = "";
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";

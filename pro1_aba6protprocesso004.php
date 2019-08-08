@@ -280,10 +280,7 @@ function incluir() {
   }
 
   let aSlips = pesquisaSlips();
-
-  aSlips.forEach(slip => {
-    incluirSlip(protocolo, slip.k17_codigo);
-  })
+  incluirSlip(protocolo, aSlips);
 
 }
 
@@ -301,7 +298,6 @@ function incluirSlip(iProtocolo, iSlip) {
         pesquisaProtocolo(iProtocolo);
         document.form1.k17_codigo_ini.value = "";
         document.form1.k17_codigo_fim.value = "";
-        // document.form1.z01_nome.value   = "";
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";

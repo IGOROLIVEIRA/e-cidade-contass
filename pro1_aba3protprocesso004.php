@@ -347,9 +347,7 @@ function incluir() {
   }
 
   let aEmpenhos = pesquisaEmpenhos();
-  aEmpenhos.forEach((empenho) => {
-    incluirEmpenho(protocolo, empenho.e60_numemp);
-  })
+  incluirEmpenho(protocolo, aEmpenhos);
 
 }
 
@@ -359,15 +357,14 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
     protocolo: iProtocolo,
     empenho: iEmpenho
   };
-
+  js_divCarregando('Aguarde', 'div_aguarde');
   novoAjax(params, function(e) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
         pesquisaProtocolo(iProtocolo);
         document.form1.e60_numemp.value = "";
-        document.form1.e60_codemp.value = "";
-        document.form1.z01_nome.value   = "";
-        document.form1.z01_nome1.value  = "";
+        document.form1.e60_codemp_ini.value = "";
+        document.form1.e60_codemp_fim.value = "";
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
@@ -375,7 +372,8 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
           alert(oRetorno.erro);
         return;
       }
-    });
+    }, false);
+  js_removeObj('div_aguarde');
 }
 
 function pesquisaProtocolo(protocolo) {

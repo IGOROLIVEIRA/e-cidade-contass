@@ -198,21 +198,22 @@ switch ($oParam->exec) {
   case "insereEmpenho":
 
     try {
+        foreach($oParam->empenho as $empenho){
 
-      $verifica = false;
-      $verifica = verificaEmpenho($oParam->empenho, $oParam->protocolo);
-      if ($verifica == true) {
-        throw new Exception("O empenho ".$oParam->empenho." já existe para este protocolo!");
+        $verifica = false;
+        $verifica = verificaEmpenho($empenho->e60_numemp, $oParam->protocolo);
+        if ($verifica == true) {
+          throw new Exception("O empenho ".$empenho->e60_numemp." já existe para este protocolo!");
+        }
+        $oEmpenho = new cl_protempenhos;
+        $oEmpenho->p103_numemp    = $empenho->e60_numemp;
+        $oEmpenho->p103_protocolo = $oParam->protocolo;
+        $oEmpenho->incluir(null);
+
+        if ($oEmpenho->erro_status != 1) {
+          throw new Exception($oEmpenho->erro_msg);
+        }
       }
-      $oEmpenho = new cl_protempenhos;
-      $oEmpenho->p103_numemp    = $oParam->empenho;
-      $oEmpenho->p103_protocolo = $oParam->protocolo;
-      $oEmpenho->incluir(null);
-
-      if ($oEmpenho->erro_status != 1) {
-        throw new Exception($oEmpenho->erro_msg);
-      }
-
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
       $oRetorno->status   = 2;
@@ -249,13 +250,15 @@ switch ($oParam->exec) {
 
   try {
 
-      $verifica = false;
-      $verifica = verificaAutPagamento($oParam->autpagamento, $oParam->protocolo);
+      foreach ($oParam->autpagamento as $autorizacao) {
+
+        $verifica = false;
+        $verifica = verificaAutPagamento($autorizacao->e53_codord, $oParam->protocolo);
         if ($verifica == true) {
-          throw new Exception("A autorização de pagamento ".$oParam->autpagamento." já existe para este protocolo!");
+          throw new Exception("A autorização de pagamento ".$autorizacao->e53_codord." já existe para este protocolo!");
         }
         $oAutPagamento = new cl_protpagordem;
-        $oAutPagamento->p105_codord    = $oParam->autpagamento;
+        $oAutPagamento->p105_codord    = $autorizacao->e53_codord;
         $oAutPagamento->p105_protocolo = $oParam->protocolo;
         $oAutPagamento->incluir(null);
 
@@ -285,25 +288,25 @@ switch ($oParam->exec) {
 
         if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
           $sSQL = "
-            select p107_protocolo from autprotpagordem where p107_codord = {$oParam->autpagamento}
+            select p107_protocolo from autprotpagordem where p107_codord = {$autorizacao->e53_codord}
           ";
           $ordemAutorizada = db_query($sSQL);
 
           if (pg_num_rows($ordemAutorizada) > 0) {
             break;
           } else {
-            $resultado = autorizarOrdemPagamento($oParam->autpagamento, $oParam->protocolo, $data);
+            $resultado = autorizarOrdemPagamento($autorizacao->e53_codord, $oParam->protocolo, $data);
             if ($resultado == false) {
               throw new Exception ("Erro ao liberar ordem de pagamento!");
             }
           }
 
         }
-
-    } catch (Exception $e) {
-      $oRetorno->erro = $e->getMessage();
-      $oRetorno->status   = 2;
     }
+  } catch (Exception $e) {
+    $oRetorno->erro = $e->getMessage();
+    $oRetorno->status   = 2;
+  }
 
   break;
 
@@ -312,54 +315,59 @@ switch ($oParam->exec) {
   try {
 
     $verifica = false;
-    $verifica = verificaSlip($oParam->slip, $oParam->protocolo);
-      if ($verifica == true) {
-        throw new Exception("O Slip ".$oParam->slip." já existe para este protocolo!");
-      }
-      $oSlip = new cl_protslip;
-      $oSlip->p106_slip    = $oParam->slip;
-      $oSlip->p106_protocolo = $oParam->protocolo;
-      $oSlip->incluir(null);
 
-      if ($oSlip->erro_status != 1) {
-        throw new Exception($oSlip->erro_msg);
-      }
 
-      $rsProtocolo = buscaProtocolo($oParam->protocolo);
-      $protocolo   = db_utils::fieldsMemory($rsProtocolo,0);
-      $departorig  = $protocolo->p101_coddeptoorigem;
-      $departdest  = $protocolo->p101_coddeptodestino;
+    foreach ($oParam->slip as $slip) {
 
-      $rsConfig  = db_query("
-                      select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
-        $configDepart = db_utils::fieldsMemory($rsConfig,0);
+        $verifica = verificaSlip($slip->k17_codigo, $oParam->protocolo);
+        if ($verifica == true) {
+          throw new Exception("O Slip ".$slip->k17_codigo." já existe para este protocolo!");
+        }
 
-        $sSQL = " SELECT p109_sequencial
-                    FROM protconfigdepartaut
-                      INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
-                      INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
-                      INNER JOIN db_config ON codigo = p109_instit
-                        WHERE p109_instit =  {$oParam->instit}
-                         AND p109_coddeptoorigem = {$departorig}
-                         AND p109_coddeptodestino = {$departdest}
-                ";
-        $rsResult = db_query($sSQL);
+        $oSlip = new cl_protslip;
+        $oSlip->p106_slip    = $slip->k17_codigo;
+        $oSlip->p106_protocolo = $oParam->protocolo;
+        $oSlip->incluir(null);
 
-        if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
+        if ($oSlip->erro_status != 1) {
+          throw new Exception($oSlip->erro_msg);
+        }
 
-        $sSQL = "
-          select p108_protocolo from autprotslip where p108_slip = {$oParam->slip}
-        ";
-        $slipAutorizada = db_query($sSQL);
-        if (pg_num_rows($slipAutorizada) > 0) {
-          break;
-        } else {
-          $resultado = autorizarSlip($oParam->slip, $oParam->protocolo, $data);
-          if ($resultado == false) {
-            throw new Exception ("Erro ao liberar slip!");
+        $rsProtocolo = buscaProtocolo($oParam->protocolo);
+        $protocolo   = db_utils::fieldsMemory($rsProtocolo,0);
+        $departorig  = $protocolo->p101_coddeptoorigem;
+        $departdest  = $protocolo->p101_coddeptodestino;
+
+        $rsConfig  = db_query("
+                        select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
+          $configDepart = db_utils::fieldsMemory($rsConfig,0);
+
+          $sSQL = " SELECT p109_sequencial
+                      FROM protconfigdepartaut
+                        INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                        INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                        INNER JOIN db_config ON codigo = p109_instit
+                          WHERE p109_instit =  {$oParam->instit}
+                           AND p109_coddeptoorigem = {$departorig}
+                           AND p109_coddeptodestino = {$departdest}
+                  ";
+          $rsResult = db_query($sSQL);
+          if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
+
+          $sSQL = "
+            select p108_protocolo from autprotslip where p108_slip = {$slip->k17_codigo}
+          ";
+          $slipAutorizada = db_query($sSQL);
+          if (pg_num_rows($slipAutorizada) > 0) {
+            break;
+          } else {
+            $resultado = autorizarSlip($slip->k17_codigo, $oParam->protocolo, $data);
+            if ($resultado == false) {
+              throw new Exception ("Erro ao liberar slip!");
+            }
           }
         }
-      }
+    }
 
   } catch (Exception $e) {
     $oRetorno->erro = $e->getMessage();
@@ -1144,7 +1152,8 @@ function pesquisaIntervaloEmpenhos($param_ini, $dtinicio, $param_fim, $dtfim){
     $where .= " and e60_anousu = substr('$dtfim', 1, 4)::integer ";
   }
 
-  $campos = "empempenho.e60_codemp, empempenho.e60_numemp";
+  $where .= ' limit 100 ';
+  $campos = "empempenho.e60_numemp";
 
   $sSql = $oEmpenhos->sql_query(null, $campos, '', $where,'');
   $rsSql = $oEmpenhos->sql_record($sSql);
@@ -1337,7 +1346,7 @@ function pesquisaOrdens($ordem_ini, $ordem_fim){
            INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
            AND orcelemento.o56_anousu = empempenho.e60_anousu
            WHERE e60_instit = ".db_getsession('DB_instit')." ".$where."
-           ORDER BY e53_codord, e53_codele";
+           ORDER BY e53_codord, e53_codele limit 100";
 
   $rsSql = db_query($sSql);
   $ordens = db_utils::getCollectionByRecord($rsSql);
@@ -1377,7 +1386,7 @@ function pesquisaSlips($slip_ini, $slip_fim){
               LEFT JOIN cgm ON cgm.z01_numcgm = slipnum.k17_numcgm
               LEFT JOIN slipprocesso ON slip.k17_codigo = slipprocesso.k145_slip
               WHERE k17_instit = ".db_getsession('DB_instit')." ".$where."
-              ORDER BY slip.k17_codigo";
+              ORDER BY slip.k17_codigo limit 100";
 
 
   $rsSql = db_query($sSql);
