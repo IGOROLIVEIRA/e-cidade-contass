@@ -305,7 +305,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->setxy($xcol + 1, $xlin + 187);
                 $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
                 $this->objpdf->Setfont('Arial', '', 7);
-                $this->objpdf->multicell(140, 3, $this->resumo);
+                $this->objpdf->multicell(135, 3, $this->resumo);
                 $this->objpdf->Setfont('Arial', 'B', 8);
             }
 
@@ -383,7 +383,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $this->objpdf->setxy($xcol + 1, $xlin + 187);
                     $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
                     $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->multicell(140, 3, $this->resumo);
+                    $this->objpdf->multicell(135, 3, $this->resumo);
                     $this->objpdf->Setfont('Arial', 'B', 8);
                 }
 
@@ -459,7 +459,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         $this->objpdf->setxy($xcol + 1, $xlin + 187);
         $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
         $this->objpdf->Setfont('Arial', '', 7);
-        $this->objpdf->multicell(140, 3, $this->resumo);
+        $this->objpdf->multicell(135, 3, $this->resumo);
         $this->objpdf->Setfont('Arial', 'B', 8);
     }
 
@@ -699,7 +699,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $xtotal = 0;
 
     $retorna_obs = 0;
-    
+
     for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
         db_fieldsmemory($this->recorddositens, $ii);
@@ -744,7 +744,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             if(pg_result($this->recorddositens, $ii, $this->marca) != ''){
 				$descricaoitem .= ' - Marca: '. pg_result($this->recorddositens, $ii, $this->marca);
 			}
-           
+
             $this->objpdf->Setfont('Arial', '', 7);
             $this->objpdf->Row(array(
 
@@ -804,9 +804,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             if (($proximo + 1) < $this->linhasdositens) { // Alterado para controle de itens nao imprimir paginas sem itens(branco)
                 if ($pagina == 1) {
                     $this->objpdf->setxy($xcol + 1, $xlin + 187);
-                    $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO: ', 0, 1, 'L', 0);
+                    $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
                     $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->multicell(140, 3, $this->resumo);
+                    $this->objpdf->multicell(135, 3, $this->resumo);
                     $this->objpdf->Setfont('Arial', 'B', 8);
                 }
 
@@ -893,9 +893,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
                     if ($pagina == 1) {
                         $this->objpdf->setxy($xcol + 1, $xlin + 187);
-                        $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO: ', 0, 1, 'L', 0);
+                        $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
                         $this->objpdf->Setfont('Arial', '', 7);
-                        $this->objpdf->multicell(140, 3, $this->resumo);
+                        $this->objpdf->multicell(135, 3, $this->resumo);
                         $this->objpdf->Setfont('Arial', 'B', 8);
                     }
 
@@ -988,7 +988,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
         $sResumo = $this->resumo;
 
-        $this->objpdf->multicell(140, 3, $sResumo); //stripslashes($this->resumo));
+        $this->objpdf->multicell(135, 3, $sResumo); //stripslashes($this->resumo));
 
         $this->objpdf->Setfont('Arial', 'B', 8);
     }
