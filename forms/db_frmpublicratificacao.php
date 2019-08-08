@@ -1,7 +1,7 @@
 <?
 //MODULO: licitacao
 $clliclicita->rotulo->label();
-        var_dump($l20_tipoprocesso);
+
 ?>
 <form name="form1" method="post" action="" style="margin-left: 20%;margin-top: 2%;" onsubmit="return js_IHomologacao(this);">
     <fieldset style="width: 62.5%">
