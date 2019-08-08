@@ -318,7 +318,7 @@ try{
         case 'getItensHomo':
             $aItens = array();
 
-            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"l203_item,l202_datahomologacao",null,"l202_licitacao = {$oParam->licitacao}"));
+            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"l203_item,l202_datahomologacao,l20_dtlimitecredenciamento",null,"l202_licitacao = {$oParam->licitacao}"));
 
             for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
                 $oItens = db_utils::fieldsMemory($result, $iContItens);
@@ -326,6 +326,7 @@ try{
             }
             $oRetorno->itens = $aItens;
             $oRetorno->dtpublicacao = $oItens->l202_datahomologacao;
+            $oRetorno->dtlimitecredenciamento = $oItens->l20_dtlimitecredenciamento;
 
             break;
     }
