@@ -120,16 +120,16 @@ db_app::load("DBFormCache.js");
                 <td nowrap title="<?=@$Te54_codcom?>">
                     <strong>Nome/Razão Social:</strong>
                 </td>
-                <td>  
+                <td>
                   <?php
                     if (isset($e54_numcgm) && !empty($e54_numcgm)) {
                       $cgm = array($aCgm->z01_numcgm => $aCgm->z01_nome);
-                      db_select('e54_numcgm', $cgm, true, $db_opcao, " style='width:370;' "); 
+                      db_select('e54_numcgm', $cgm, true, $db_opcao, " style='width:370;' ");
                     }
                     else {
-                      db_select('e54_numcgm', '', true, $db_opcao, " style='width:370;' "); 
+                      db_select('e54_numcgm', '', true, $db_opcao, " style='width:370;' ");
                     }
-                    
+
                   ?>
                 </td>
             </tr>
@@ -297,7 +297,7 @@ db_app::load("DBFormCache.js");
 
     <div style="margin-top: 10px;">
 
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+        <input <?= ($db_opcao == 1 ? "onclick='return js_validacampos();'" : "") ?> name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
                type="submit" id="db_opcao"
                value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
             <?=($db_botao==false?"disabled":"")?> onclick="return js_validaLicitacao();<?php ($db_opcao == 1) ? 'return js_salvaCache();' : ' '; ?>" >
@@ -335,7 +335,7 @@ db_app::load("DBFormCache.js");
             } else {
                 document.form1.e54_numerll.value = document.form1.e54_numerl.value;
             }
-            
+
         }
     }
 
@@ -346,6 +346,15 @@ db_app::load("DBFormCache.js");
         } else {
             return true;
         }
+    }
+
+    function js_validacampos(){
+      if($('e54_numcgm').value == '') {
+          alert("Campo Nome/Razão Social não informado.");
+          return false;
+      } else {
+          return true;
+      }
     }
 
     function js_pesquisa(){
