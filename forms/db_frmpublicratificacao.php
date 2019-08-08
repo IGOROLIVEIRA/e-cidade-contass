@@ -1,6 +1,7 @@
 <?
 //MODULO: licitacao
 $clliclicita->rotulo->label();
+        var_dump($l20_tipoprocesso);
 ?>
 <form name="form1" method="post" action="" style="margin-left: 20%;margin-top: 2%;" onsubmit="return js_IHomologacao(this);">
     <fieldset style="width: 62.5%">
@@ -98,8 +99,13 @@ $clliclicita->rotulo->label();
 
         $sCampos  = "DISTINCT pc81_codprocitem,pc11_seq,pc11_codigo,pc11_quant,pc11_vlrun,m61_descr,pc01_codmater,pc01_descrmater,pc11_resum";
         $sOrdem   = "pc11_seq";
-        $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} and pc24_pontuacao = 1";
+        $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
+//        var_dump($l20_tipoprocesso);
+        if($l20_tipoprocesso != "103" && $l20_tipoprocesso != "102"){
+            $sWhere  .= "and pc24_pontuacao = 1";
+        }
         $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere);
+//        die($sSqlItemLicitacao);
         $sResultitens = $clhomologacaoadjudica->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clhomologacaoadjudica->numrows;
@@ -109,13 +115,13 @@ $clliclicita->rotulo->label();
     ?>
     <table style="width: 65%;">
         <tr class="DBgrid">
-            <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
-            <td class="table_header" style="width: 44px">Ordem</td>
-            <td class="table_header" style="width: 52px">Item</td>
-            <td class="table_header" style="width: 260px">Descrição Item</td>
-            <td class="table_header" style="width: 55px">Unidade</td>
-            <td class="table_header" style="width: 80px">Valor Unitário</td>
-            <td class="table_header" style="width: 120px">Quantidade Licitada</td>
+            <td class="table_header" style="width: 33px; height:30px;" onclick="marcarTodos();">M</td>
+            <td class="table_header" style="width: 40px">Ordem</td>
+            <td class="table_header" style="width: 50px">Item</td>
+            <td class="table_header" style="width: 235px">Descrição Item</td>
+            <td class="table_header" style="width: 50px">Unidade</td>
+            <td class="table_header" style="width: 72px">Valor Unitário</td>
+            <td class="table_header" style="width: 125px">Quantidade Licitada</td>
         </tr>
     </table>
 
@@ -184,18 +190,19 @@ $clliclicita->rotulo->label();
 </form>
 
 <script>
+    js_verificatipoproc();
 
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=false&funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+        js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=false&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
     }
 
-    function js_preenchepesquisa(chave){
+    function js_preenchepesquisa(chave,tipocompratribunal){
         db_iframe_publicratificacao.hide();
         let db_opcao = <?= $db_opcao?>;
         if(db_opcao === 33 || db_opcao === 3){
-            window.location.href = 'lic1_publicratificacao003.php?chavepesquisa='+chave;
+            window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
         }else if(db_opcao === 22 || db_opcao === 2){
-            window.location.href = 'lic1_publicratificacao002.php?chavepesquisa='+chave;
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
         }
     }
 
@@ -207,7 +214,7 @@ $clliclicita->rotulo->label();
     function js_verificatipoproc() {
         let tipoproc = document.getElementById('l20_tipoprocesso').value;
 
-        if(tipoproc === 102 || tipoproc === 103){
+        if(tipoproc === '102' || tipoproc === '103'){
             document.getElementById('trdtlimitecredenciamento').style.display = "";
         }
     }
@@ -468,7 +475,18 @@ $clliclicita->rotulo->label();
         oRetornoitens.itens.forEach(function (item, x) {
             document.getElementById(item.l203_item).checked = true;
         });
-        document.getElementById('l20_dtpubratificacao').value = FormataStringData(oRetornoitens.dtpublicacao);
+
+        if(oRetornoitens.dtpublicacao === ""){
+            document.getElementById('l20_dtpubratificacao').value = "";
+        }else{
+            document.getElementById('l20_dtpubratificacao').value = FormataStringData(oRetornoitens.dtpublicacao);
+        }
+
+        if(oRetornoitens.dtlimitecredenciamento === ""){
+            document.getElementById('l20_dtlimitecredenciamento').value = "";
+        }else{
+            document.getElementById('l20_dtlimitecredenciamento').value = FormataStringData(oRetornoitens.dtlimitecredenciamento);
+        }
     }
 
     /**
