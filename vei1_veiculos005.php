@@ -126,47 +126,60 @@ if(isset($alterar)){
     $veiculoPesquisado = db_utils::fieldsMemory($result, 0);
   }else $veiculoPesquisado = '';
 
-if($veiculoPesquisado){
-  if ($ve01_placa != '') {
-    $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_placa, ve01_codigo",null,"ve01_placa = '$ve01_placa' and ve01_instit = ".db_getsession('DB_instit')));
-    $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
-    if($codigo)
-      if ($codigo != $veiculoPesquisado->ve01_codigo){
-        $sqlerro  = true;
-        $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_placa";
-      }
+  if($veiculoPesquisado){
+    if ($ve01_placa != '') {
+      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_placa, ve01_codigo",null,"ve01_placa = '$ve01_placa' and ve01_instit = ".db_getsession('DB_instit')));
+      $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
+      if($codigo)
+        if ($codigo != $veiculoPesquisado->ve01_codigo){
+          $sqlerro  = true;
+          $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
+          $clveiculos->erro_campo = "ve01_placa";
+        }
+    }
+
+    if ($ve01_ranavam != '') {
+      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_ranavam = $ve01_ranavam and ve01_instit = ".db_getsession('DB_instit')));
+      $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
+      if($codigo)
+        if ($codigo != $veiculoPesquisado->ve01_codigo){
+          $sqlerro  = true;
+          $erro_msg = "Renavam já cadastrado para outro veículo. Verifique.";
+          $clveiculos->erro_campo = "ve01_ranavam";
+        }
+    }
+
+    if ($ve01_chassi != '') {
+      $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_chassi = '$ve01_chassi' and ve01_instit = ".db_getsession('DB_instit')));
+      $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
+      if($codigo)
+        if ($codigo != $veiculoPesquisado->ve01_codigo){
+          $sqlerro  = true;
+          $erro_msg = "Chassi já cadastrado para outro veículo. Verifique.";
+          $clveiculos->erro_campo = "ve01_chassi";
+        }
+    }
   }
 
-  if ($ve01_ranavam != '') {
-    $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_ranavam = $ve01_ranavam and ve01_instit = ".db_getsession('DB_instit')));
-    $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
-    if($codigo)
-      if ($codigo != $veiculoPesquisado->ve01_codigo){
-        $sqlerro  = true;
-        $erro_msg = "Renavam já cadastrado para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_ranavam";
-      }
+  if($si04_especificacao == 0 || $si04_especificacao == ''){
+    $sqlerro  = true;
+    $erro_msg = "Especificação do veículo não informado. Verifique.";
+    $clveiculos->erro_campo = "si04_especificacao";
   }
 
-  if ($ve01_chassi != '') {
-    $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_chassi = '$ve01_chassi' and ve01_instit = ".db_getsession('DB_instit')));
-    $codigo = db_utils::fieldsMemory($result, 0)->ve01_codigo;
-    if($codigo)
-      if ($codigo != $veiculoPesquisado->ve01_codigo){
-        $sqlerro  = true;
-        $erro_msg = "Chassi já cadastrado para outro veículo. Verifique.";
-        $clveiculos->erro_campo = "ve01_chassi";
-      }
+  if($si04_tipoveiculo == 0 && $si04_tipoveiculo == 0){
+    $sqlerro  = true;
+    $erro_msg = "Tipo de veículo não informado. Verifique.";
+    $clveiculos->erro_campo = "si04_tipoveiculo";
   }
-}
-if ($sqlerro==false){
-  $clveiculos->alterar($ve01_codigo,$si04_tipoveiculo);
-  $erro_msg=$clveiculos->erro_msg;
-  if($clveiculos->erro_status=="0"){
-   $sqlerro=true;
- }
-}
+
+  if ($sqlerro==false){
+    $clveiculos->alterar($ve01_codigo,$si04_tipoveiculo);
+    $erro_msg=$clveiculos->erro_msg;
+    if($clveiculos->erro_status=="0"){
+     $sqlerro=true;
+   }
+  }
 
   /*
    * Altera tipo veiculo para sicom
