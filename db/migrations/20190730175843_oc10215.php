@@ -32,7 +32,7 @@ class Oc10215 extends PostgresMigration
       $arcMes = $arc21->hasColumn('si32_mes');
 
       if(!$arcMes){
-        $arc21->addColumn('si32_mes', 'biginteger', ['null' => false])->save();
+        $arc21->addColumn('si32_mes', 'biginteger', array('null' => false))->save();
       }
       $this->execute('ALTER TABLE arc212019 ALTER COLUMN si32_tipodocumento SET DEFAULT NULL;');
       $this->execute('ALTER TABLE arc202019 ALTER COLUMN si31_identificadordeducao SET DEFAULT NULL;');
