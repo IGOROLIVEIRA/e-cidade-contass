@@ -3,7 +3,7 @@
 header('Content-Type:text/plain');
 
 $hostname = gethostname();
-$cmd = shell_exec("cat updatedb/conn | grep -e $hostname"); 
+$cmd = shell_exec("cat updatedb/conn | grep -e {$hostname}$"); 
 $rows        = preg_split('/\s+/', $cmd);
 $rows = array_filter($rows);
 $array_global = array();
