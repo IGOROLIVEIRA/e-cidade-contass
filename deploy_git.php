@@ -54,19 +54,15 @@ fclose($file);
 
 foreach($array_global as $row){
 
-  try {
-
     echo "php vendor/robmorgan/phinx/bin/phinx migrate ENV='$row[0]'";
 
     passthru("php vendor/robmorgan/phinx/bin/phinx migrate -e $row[0] ",$status);
 
     echo 'Status: '.$status;PHP_EOL;
-    
-  } catch (Exception $e) {
-    
-    echo 'Exceção capturada: ',  $e->getMessage(), "\n";
 
-  }
+    if ($status != 0) {
+        throw new Exception('Exceção capturada.');
+    }
 
 }
 
