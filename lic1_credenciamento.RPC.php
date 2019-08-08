@@ -39,7 +39,7 @@ try{
                 $clcredenciamento->l205_datacred = $item->l205_datacred;
                 $clcredenciamento->l205_item = $item->l205_item;
                 $clcredenciamento->l205_licitacao = $item->l205_licitacao;
-                $clcredenciamento->l205_datacreditem = $item->l205_datacreditem;
+                $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
 
                 $resultitem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
 
