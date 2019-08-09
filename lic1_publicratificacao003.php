@@ -15,7 +15,9 @@ $db_botao = false;
 $db_opcao = 33;
 if(isset($chavepesquisa)){
     $db_opcao = 3;
-    $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa));
+    $campos = "DISTINCT l20_dtpubratificacao,l20_dtlimitecredenciamento,l20_justificativa,l20_razao,
+               l20_veicdivulgacao,l03_pctipocompratribunal,l20_codigo,l20_objeto";
+    $result = $clliclicita->sql_record($clliclicita->sql_query(null,$campos,null,"l20_codigo = {$chavepesquisa}"));
     db_fieldsmemory($result,0);
     $db_botao = true;
 }
