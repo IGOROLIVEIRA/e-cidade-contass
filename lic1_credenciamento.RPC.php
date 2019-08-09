@@ -117,11 +117,29 @@ try{
              */
 
             db_inicio_transacao();
-            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
+            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom,l20_datacria",null,"l20_codigo = $oParam->licitacao"));
 
-            $l20_codtipocom = pg_result($result,0,0);
+            $rsCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"max(l205_datacred) as l205_datacred",null,"l205_licitacao = $oParam->licitacao"));
 
-            $clliclicita->l20_codtipocom = $l20_codtipocom;
+            $l20_codtipocom = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_codtipocom))));
+            $l20_datacria = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria))));
+            $l205_datacred  = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($rsCredenciamento,0)->l205_datacred))));
+
+            if($oParam->l20_dtpubratificacao != null){
+                if($oParam->l20_dtpubratificacao < $l20_datacria){
+                    throw new Exception ("A Data da Publicação Termo Ratificação deve ser posterior a Data de Recebimento da Documentacao.");
+                }
+            }
+
+            if($oParam->l20_dtlimitecredenciamento != null){
+                if ($oParam->l20_dtlimitecredenciamento < $l205_datacred){
+                    throw new Exception ("A Data final do Credenciamento deve ser maior ou igual a data do ultimo Credenciamento.");
+                }
+            }
+
+            $clliclicita->l20_codtipocom = implode("/",(array_reverse(explode("-",$l20_codtipocom))));
+            $clliclicita->l20_datacria = implode("/",(array_reverse(explode("-",$l20_datacria))));
+            $clliclicita->l205_datacred = implode("/",(array_reverse(explode("-",$l205_datacred))));
             $clliclicita->l20_codigo = $oParam->licitacao;
             $clliclicita->l20_tipoprocesso = $oParam->l20_tipoprocesso;
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
@@ -335,6 +353,7 @@ try{
 
 } catch (Exception $eErro) {
     $oRetorno->erro  = true;
+    $oRetorno->status = 2;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
 echo $oJson->encode($oRetorno);

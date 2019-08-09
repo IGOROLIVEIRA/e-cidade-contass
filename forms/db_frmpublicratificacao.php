@@ -374,7 +374,7 @@ $clliclicita->rotulo->label();
     function retornoAjax(res) {
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
-            alert(response.erro);
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Salvo Com Sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
@@ -435,7 +435,7 @@ $clliclicita->rotulo->label();
     function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
-            alert(response.erro);
+            alert(urlDecode(response.message));
         } else if (response.erro == false) {
             alert('Salvo Com Sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
@@ -520,7 +520,7 @@ $clliclicita->rotulo->label();
     function oretornoexclusao(res) {
         var oRetornoitens = JSON.parse(res.responseText);
         if (oRetornoitens.status != 1) {
-            alert(oRetornoitens.erro);
+            alert(oRetornoitens);
         } else if (oRetornoitens.erro == false) {
             alert('Homologação excluida com Sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
