@@ -355,7 +355,8 @@ switch ($oParam->exec) {
 
   try {
 
-    $oRetorno->itens = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem,$oParam->pc94_sequencial);
+    $oRetorno->itens   = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem,$oParam->pc94_sequencial);
+    $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($oParam->e55_autori,$oParam->e55_item);
 
   } catch (Exception $e) {
     $oRetorno->erro = $e->getMessage();
@@ -364,7 +365,7 @@ switch ($oParam->exec) {
 
   break;
 
-  case "validaSolicitacaoRegP" : 
+  case "validaSolicitacaoRegP" :
 
     $sSQL = "SELECT l202_datahomologacao
               FROM solicita
@@ -379,12 +380,12 @@ switch ($oParam->exec) {
                                             WHERE pc53_solicitafilho = (
                                                                         SELECT pc10_numero
                                                                           FROM solicita
-                                                                            JOIN solicitem  ON pc11_numero    = pc10_numero 
+                                                                            JOIN solicitem  ON pc11_numero    = pc10_numero
                                                                             JOIN pcprocitem ON pc81_solicitem = pc11_codigo
                                                                               WHERE pc81_codproc = {$oParam->iProcessoCompra}
                                                                       )
                                       ) limit 1";
-    
+
     $rsConsulta = db_query($sSQL);
     $dataH = db_utils::getCollectionByRecord($rsConsulta);
     if (date("Y-m-d", db_getsession("DB_datausu")) < date('Y-m-d',strtotime($dataH[0]->l202_datahomologacao))) {
@@ -464,6 +465,22 @@ function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequenci
                                   and pc94_sequencial = {$pc94_sequencial}
     ";
   }
+
+  $rsConsulta = db_query($sSQL);
+  $oItens = db_utils::getCollectionByRecord($rsConsulta);
+  return $oItens;
+
+}
+
+function verificaSaldoCriterioItemQuantidade($e55_autori, $e55_item) {
+
+  $sSQL = "
+   select sum(e55_quant) as totalitensqt
+    from empautitem
+     inner join empautoriza on e54_autori = e55_autori
+      where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
+       and e55_item = {$e55_item}
+  ";
 
   $rsConsulta = db_query($sSQL);
   $oItens = db_utils::getCollectionByRecord($rsConsulta);
