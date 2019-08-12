@@ -85,46 +85,54 @@ if(isset($opcao) && $opcao=="alterar"){
 
 <script>
 
-function js_calcula(origem){
-  obj=document.form1;
-  quant=new Number(obj.e55_quant.value);
-  uni=new Number(obj.e55_vluni.value);
-  tot=new Number(obj.e55_vltot.value).toFixed(2);
-  if(origem=='quant' && quant != ''){
-    if(isNaN(quant)){
-      //alert("Quantidade inváida!");
+function js_calcula(origem) {
+  obj   = document.form1;
+  quant = new Number(obj.e55_quant.value);
+  uni   = new Number(obj.e55_vluni.value);
+  tot   = new Number(obj.e55_vltot.value).toFixed(2);
+
+  conQt = obj.lControlaQuantidade.value;
+
+  if (conQt == 'true') {
+    t = new Number(uni * quant);
+    obj.e55_vltot.value = t.toFixed(2);
+  }
+
+  if (origem == 'quant' && quant != '' && conQt == 'false' ) {
+    if (isNaN(quant)) {
       obj.e55_quant.focus();
       return false;
     }
-    if(tot!=0){
-     t=new Number(tot/quant);
-   obj.e55_vltot.value=tot;
-     obj.e55_vluni.value=t.toFixed('<?=$e30_numdec?>');
-    }else{
-     t=new Number(uni*quant);
-   obj.e55_vltot.value=t.toFixed(2);
-
+    if (tot != 0) {
+     t = new Number(tot / quant);
+     obj.e55_vltot.value = tot;
+     obj.e55_vluni.value = t.toFixed('<?=$e30_numdec?>');
+    } else {
+        t = new Number(uni * quant);
+        obj.e55_vltot.value = t.toFixed(2);
     }
   }
-  if(origem=="uni"){
-    if(isNaN(uni)){
+
+  if (origem == "uni") {
+    if (isNaN(uni)) {
       //alert("Valor unico inváido!");
       obj.e55_vluni.focus();
       return false;
     }
-    t=new Number(uni*quant);
-    obj.e55_vltot.value=t.toFixed(2);
+    t = new Number(uni * quant);
+    obj.e55_vltot.value = t.toFixed(2);
   }
-  if(origem=="tot"){
-    if(isNaN(tot)){
+
+  if (origem == "tot" && conQt == 'false' ) {
+    if (isNaN(tot)) {
       //alert("Valor total inváido!");
       obj.e55_vltot.focus();
       return false;
     }
-    if(quant!=0){
-      t=new Number(tot/quant);
-      obj.e55_vltot.value=tot;
-    obj.e55_vluni.value=t.toFixed('<?=$e30_numdec?>');
+    if (quant != 0) {
+      t = new Number(tot/quant);
+      obj.e55_vltot.value = tot;
+      obj.e55_vluni.value = t.toFixed('<?=$e30_numdec?>');
     }
   }
 
@@ -144,7 +152,7 @@ function js_verificaControlaQuantidade(lControla) {
   } else {
     $("e55_quant").style.backgroundColor = "#DEB887";
     $("e55_quant").setAttribute("readonly", true);
-    $("e55_quant").value = 1;
+    //$("e55_quant").value = 1;
     $("e55_vluni").style.backgroundColor = "#FFFFFF";
     $("e55_vluni").removeAttribute("readonly");
     js_calcula('uni');
@@ -159,11 +167,12 @@ function js_troca(codele) {
   elemento  = arr[0];
   descricao = arr[1];
   document.form1.elemento01.value = elemento;
-  document.form1.o56_descr.value = descricao;
+  document.form1.o56_descr.value  = descricao;
 }
 </script>
 <form name="form1" method="post" action="">
 <input type="hidden" id="pc80_criterioadjudicacao" name="pc80_criterioadjudicacao">
+<input type="hidden" id="e55_quant_ant" name="e55_quant_ant" value="<?= $e55_quant ?>">
 <center>
 <fieldset style="margin-top:5px; width:45%;">
   <legend><b>Ítens</b></legend>
@@ -205,30 +214,30 @@ function js_troca(codele) {
               db_fieldsmemory($result_sql_unid, $i);
               $result_unidade[$m61_codmatunid] = $m61_descr;
            }
-           
+
          db_select("e55_unid", $result_unidade, true, $db_opcao) ;
-         
+
       ?>
       <label style="margin-left: 20px"><b>Marca:</b></label>
       <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
       </td>
     </tr>
 
-<?if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>
-    <tr style="height: 20px;">
-      <td nowrap title="">
-      <b>Ele. item</b>
-      </td>
-      <td>
-       <?  db_selectrecord("pc07_codele",$result_elemento,true,$db_opcao,'','','','',"js_troca(this.value);");  ?>
-      </td>
-    </tr>
-<?
-   } else{
-      db_input('pc07_codele',50,0,true,'hidden',1);
-   }
+    <? if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>
+        <tr style="height: 20px;">
+          <td nowrap title="">
+          <b>Ele. item: </b>
+          </td>
+          <td>
+           <?  db_selectrecord("pc07_codele",$result_elemento,true,$db_opcao,'','','','',"js_troca(this.value);");  ?>
+          </td>
+        </tr>
+    <?
+       } else{
+          db_input('pc07_codele',50,0,true,'hidden',1);
+       }
 
-?>
+    ?>
 
     <tr style="height: 20px;">
       <td><?=$Lo56_elemento?></td>
@@ -282,7 +291,7 @@ function js_troca(codele) {
       </td>
       <td>
       <?php
-          if(isset($pc01_servico) and $pc01_servico=='t') {
+          /*if(isset($pc01_servico) and $pc01_servico=='t') {
 
             if (!isset($e55_servicoquantidade) || $e55_servicoquantidade == "f") {
               $e55_quant = 1;
@@ -290,8 +299,8 @@ function js_troca(codele) {
             $db_opcao_e55_quant = 3;
           } else {
             $db_opcao_e55_quant = $db_opcao;
-          }
-          db_input('e55_quant',11,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
+          }*/
+          db_input('e55_quant',11,$e55_quant,true,'text','',"onchange=\"js_calcula('quant');\"");
           ?>
 
           <script>
@@ -336,11 +345,10 @@ function js_troca(codele) {
    <tr style="height: 20px;">
       <td>&nbsp;</td>
       <td>
-        <?php if (isset($pc01_servico) and $pc01_servico=='t') :
-            echo "<font color='red'><b>** SERVIÇO **</b></font>";
+        <?php if (isset($pc01_servico) && $pc01_servico=='t') :
 
             if (!isset($e55_servicoquantidade)) {
-              $e55_servicoquantidade = "false";
+              $e55_servicoquantidade = "f";
             }
           ?>
 
@@ -415,9 +423,9 @@ function js_troca(codele) {
   <table width="90%" border="0" height="50%">
     <tr>
       <td valign="top"  align='center' width="90%"  height="100%">
-       <?
+       <?php
         $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,m61_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
-        //echo $sql_item;
+
         $chavepri= array("e55_autori"=>$e55_autori,"e55_sequen"=>@$e55_sequen);
         $cliframe_alterar_excluir->chavepri=$chavepri;
         $cliframe_alterar_excluir->sql     = $sql_item;
@@ -466,9 +474,17 @@ function js_troca(codele) {
 
 
   function js_verificar() {
-    var vltot =  new Number(document.form1.e55_vltot.value);
-    var total =  new Number(document.form1.totalad.value);
-    var utili =  new Number(document.form1.utilizado.value);
+
+    let qt    =  new Number(document.form1.e55_quant.value);
+    let qtant =  new Number(document.form1.e55_quant_ant.value);
+    let vltot =  new Number(document.form1.e55_vltot.value);
+    let total =  new Number(document.form1.totalad.value);
+    let utili =  new Number(document.form1.utilizado.value);
+
+    if (qt > qtant) {
+      alert('Quantidade do item não pode ser maior que saldo total!');
+      return false;
+    }
 
     if (isNaN(vltot) || vltot==0 || vltot ==' '  ) {
 
@@ -540,13 +556,13 @@ function js_mostrapcmater(chave,erro,codele){
 
 function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chave7,chave8,chave9) {
 
-  document.form1.e55_item.value = chave1;
+  document.form1.e55_item.value        = chave1;
   document.form1.pc01_descrmater.value = chave2;
-  document.form1.pc07_codele.value = codele;
+  document.form1.pc07_codele.value     = codele;
   chave7 == 't' ? document.form1.e55_quant.value = chave3 : "";
   chave7 == 't' ? document.form1.e55_vluni.value = chave4 : "";
   chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
-  document.form1.pc80_criterioadjudicacao.value = chave6;
+  document.form1.pc80_criterioadjudicacao.value  = chave6;
   document.form1.totalad.value = chave5;
   db_iframe_pcmaterele.hide();
   var params = {
@@ -556,10 +572,15 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
     tipoitem: chave8,
     pc94_sequencial: chave9
   };
+
   novoAjax(params, function(e) {
-    var totitens = JSON.parse(e.responseText).itens;
+    let totitens = JSON.parse(e.responseText).itens;
     document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
     document.form1.disponivel.value = new Number(chave5 - totitens[0].totalitens) > 0 ? new Number(chave5 - totitens[0].totalitens) : "0";
+
+    let totitensqt = JSON.parse(e.responseText).itensqt;
+    document.form1.e55_quant.value = new Number(chave3 - totitensqt[0].totalitensqt);
+
     js_consulta();
     document.form1.e55_quant.focus();
   });
