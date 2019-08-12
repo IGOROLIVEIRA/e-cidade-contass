@@ -120,7 +120,17 @@ db_app::load("DBFormCache.js");
                 <td nowrap title="<?=@$Te54_codcom?>">
                     <strong>Nome/Razão Social:</strong>
                 </td>
+                <td>
+                  <?php
+                    if (isset($e54_numcgm) && !empty($e54_numcgm)) {
+                      $cgm = array($aCgm->z01_numcgm => $aCgm->z01_nome);
+                      db_select('e54_numcgm', $cgm, true, $db_opcao, " style='width:370;' ");
+                    }
+                    else {
+                      db_select('e54_numcgm', '', true, $db_opcao, " style='width:370;' ");
+                    }
 
+                  ?>
                 </td>
             </tr>
             <tr>
@@ -318,7 +328,13 @@ db_app::load("DBFormCache.js");
     window.onload = function () {
         var codlicitacao = document.form1.e54_codlicitacao.value;
         if (codlicitacao != "") {
-
+            //js_pesquisa_fornecedor(codlicitacao);
+            let e54_numerl = document.form1.e54_numerl.value;
+            if (e54_numerl.indexOf("/") == -1) {
+              document.form1.e54_numerll.value = document.form1.e54_numerl.value+"/"+document.form1.e54_anousu.value;
+            } else {
+                document.form1.e54_numerll.value = document.form1.e54_numerl.value;
+            }
         }
     }
 
