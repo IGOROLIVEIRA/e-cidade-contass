@@ -480,17 +480,17 @@ function init_130($opcao){
             if( $F019 >= 30 && $arquivo_rubricas[$Iind]["rh27_tipo"] == "1"){  // reis
               continue;
             }
-          }else{
+          }/*else{
             if( strtolower($cfpess[0]["r11_fersal"]) == "f" && $F019 >= 30 && $arquivo_rubricas[$Iind]["rh27_tipo"] == "1"){  // reis
 
               // rubrica com calculo especial - plano de saude amparo/;
               // esta rubrica deve permanecer integral;/
               continue;
-              /*if( trim( $d08_carnes ) != "amparo" || ( trim( $d08_carnes ) == "amparo" && $arquivo_rubricas[$Iind]["rh27_rubric"] != '0514' ) ){
-              }*/
+              if( trim( $d08_carnes ) != "amparo" || ( trim( $d08_carnes ) == "amparo" && $arquivo_rubricas[$Iind]["rh27_rubric"] != '0514' ) ){
+              }
 
             }
-          }
+          }*/
 
           if( $arquivo_rubricas[$Iind]["rh27_rubric"] == '0604' && trim($d08_carnes) == "riogrande"){
 
@@ -813,7 +813,7 @@ function init_130($opcao){
               $matriz2[1] = $quantidade;
               db_update( "pontofs", $matriz1,$matriz2,bb_condicaosubpes("r10_").$condicaoaux );
             }
-            if( $valor_descontar == 0 && $quantidade == 0){
+            if( $valor_descontar <= 0 && $quantidade <= 0){
               db_delete( "pontofs", bb_condicaosubpes("r10_").$condicaoaux );
             }
           }
