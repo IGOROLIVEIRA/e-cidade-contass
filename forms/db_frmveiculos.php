@@ -127,14 +127,14 @@ db_input('ve01_codunidadesub',10,1,true,'text',$db_opcao,"","","","",8);
 	<td nowrap title="<?=@$Tsi04_tipoveiculo?>">
 	<?
     $x = array(
-         0 => 'Selecione',
+         0 =>'Selecione',
          3 =>'Veiculos',
          1 =>'Aeronaves',
          2 =>'Embarcações',
          4 =>'Maquinário',
          5 =>'Equipamentos',
          99=>'Outros');
-	db_select('si04_tipoveiculo',$x,true,$db_opcao,
+	  db_select('si04_tipoveiculo',$x,true,$db_opcao,
         " onchange='js_verifica_select(this.value);js_tipodeveiculo(this.value)'");
     ?>
     </td>
@@ -144,9 +144,8 @@ db_input('ve01_codunidadesub',10,1,true,'text',$db_opcao,"","","","",8);
 	<td nowrap title="<?=@$Tsi04_especificacao?>">
 	<?
     //$x = array('1'=>'Aeronaves');
-    // $x = array('3' => 'Veículo de Passeio','4'=>'Utilitário (Camionete)','5' => 'Ônibus','6'=>'Caminhão','7'=>'Motocicleta','8'=>'Van');
-    $x = array(0 => 'Selecione');
-	  db_select('si04_especificacao',$x,true,$db_opcao,"");
+    $x = array('0'=> 'Selecione', '3' => 'Veículo de Passeio','4'=>'Utilitário (Camionete)','5' => 'Ônibus','6'=>'Caminhão','7'=>'Motocicleta','8'=>'Van');
+  db_select('si04_especificacao', $x,true,$db_opcao,"");
     ?>
     </td>
     </tr>
@@ -154,7 +153,7 @@ db_input('ve01_codunidadesub',10,1,true,'text',$db_opcao,"","","","",8);
     <td> <?=@$Lsi04_situacao?> </td>
 	<td nowrap title="<?=@$Tsi04_situacao?>">
 	<?
-    $x = array('1'=>'Compõe o património do municipio (veiculo próprio)','2'=>'Terceirizado ou contratado','3'=>'Cedido, empréstimo de outro ente, convênio, acordo ou ajuste');
+    $x = array('1'=>'Compõe o patrimônio do municipio (veiculo próprio)','2'=>'Terceirizado ou contratado','3'=>'Cedido, empréstimo de outro ente, convênio, acordo ou ajuste');
 	db_select('si04_situacao',$x,true,$db_opcao,"onchange='js_situacao();'");
     ?>
     </td>
@@ -422,18 +421,18 @@ db_inputdata('ve01_dtaquis',@$ve01_dtaquis_dia,@$ve01_dtaquis_mes,@$ve01_dtaquis
           }
 
 ?>
-<input title=" Combústivel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+<input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
 <?
         } else {
-         $valor = "Nenhum combústivel cadastrado.";
+         $valor = "Nenhum combustível cadastrado.";
 ?>
-<input title=" Combústivel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+<input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
 <?
         }
       } else {
-       $valor = "Nenhum combústivel cadastrado.";
+       $valor = "Nenhum combustível cadastrado.";
 ?>
-<input title=" Combústivel Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
+<input title=" Combustível Campo:ve06_veiccadcomb " name="ve06_veiccadcomb" type="text" id="ve06_veiccadcomb" value="<?=$valor?>" size="60" readonly style="background-color:#DEB887;" autocomplete="off">
 <?
       }
     ?>
@@ -538,6 +537,9 @@ db_input('t52_descr',40,$It52_descr,true,'text',3,'')
 </form>
 <script>
 
+// js_verifica_select(document.form1.si04_tipoveiculo.value);
+// var especificacaoSelect;
+
 function js_submit() {
   if(document.form1.si04_situacao.value == 2 || document.form1.si04_situacao.value == 3){
     if(document.form1.si04_numcgm.value == null || document.form1.si04_numcgm.value == "" ){
@@ -547,6 +549,10 @@ function js_submit() {
     }
   }
   document.form1.submit();
+  // var especificacaoSelect = document.form1.si04_especificacao.value;
+  // js_verifica_select(document.form1.si04_tipoveiculo.value);
+  // document.form1.si04_especificacao.selectedIndex = 2;
+  // console.log('Depois do submit: ', especificacaoSelect);
 }
 function js_situacao(){
   if(document.getElementById("si04_situacao").value == 1){
@@ -597,64 +603,71 @@ function js_mostracgm1(chave1,chave2){
   db_iframe_nomes.hide();
 }
 function js_verifica_select(valor){
-    if(valor == '0'){
-      var combo = document.getElementById('si04_especificacao');
+  if(valor == '0'){
+    var combo = document.getElementById('si04_especificacao');
       removeAllOptions(combo);
       combo.options[0] = new Option ("Selecione", "0");
-    }
-    if(valor == '1'){
+  }
+  if(valor == '1'){
 	    var combo = document.getElementById('si04_especificacao');
 	    removeAllOptions(combo);
 	    combo.options[0] = new Option ("Aeronaves", "1");
-  	}
-    if(valor == '2'){
-    	var combo = document.getElementById('si04_especificacao');
-    	removeAllOptions(combo);
-    	combo.options[0] = new Option ("Embarcações", "2");
-    }
-    if(valor == '3'){
-    	var combo = document.getElementById('si04_especificacao');
-    	removeAllOptions(combo);
-      combo.options[0] = new Option ("Selecione", "0");
-      combo.options[1] = new Option ("Veículo de passeio", "3");
-    	combo.options[2] = new Option ("Utilitário (Camionete)", "4");
-    	combo.options[3] = new Option ("Ônibus", "5");
-    	combo.options[4] = new Option ("Caminhão", "6");
-    	combo.options[5] = new Option ("Motocicleta", "7");
-    	combo.options[6] = new Option ("Van", "8");
-    }
-    if(valor == '4'){
-    	var combo = document.getElementById('si04_especificacao');
-    	removeAllOptions(combo);
-      combo.options[0] = new Option ("Selecione", "0");
-    	combo.options[1] = new Option ("Trator de Esteira", "9");
-    	combo.options[2] = new Option ("Trator de Pneu", "10");
-    	combo.options[3] = new Option ("Moto niveladora", "11");
-    	combo.options[4] = new Option ("Pá-Carregadeira", "12");
-    	combo.options[5] = new Option ("Retro Escavadeira", "13");
-    	combo.options[6] = new Option ("Mini Carregadeira", "14");
-    	combo.options[7] = new Option ("Escavadeira", "15");
-    	combo.options[8] = new Option ("Empilhadeira", "16");
-    	combo.options[9] = new Option ("Compactador", "17");
-    }
-    if(valor == '5'){
-    	var combo = document.getElementById('si04_especificacao');
-    	removeAllOptions(combo);
-      combo.options[0] = new Option ("Selecione", "0");
-    	combo.options[1] = new Option ("Gerador", "18");
-    	combo.options[2] = new Option ("Moto bomba", "19");
-    	combo.options[3] = new Option ("Roçadeira", "20");
-    	combo.options[4] = new Option ("Motoserra", "21");
-    	combo.options[5] = new Option ("Pulverizador", "22");
-    	combo.options[6] = new Option ("Compactador de Mão", "23");
-    	combo.options[7] = new Option ("Oficina", "24");
-    	combo.options[8] = new Option ("Motor de Popa", "25");
-    }
-    if(valor == '99'){
-    	var combo = document.getElementById('si04_especificacao');
-    	removeAllOptions(combo);
-    	combo.options[0] = new Option ("Outros", "99");
-    }
+	}
+  if(valor == '2'){
+  	var combo = document.getElementById('si04_especificacao');
+  	removeAllOptions(combo);
+  	combo.options[0] = new Option ("Embarcações", "2");
+  }
+  if(valor == '3'){
+    var combo = document.getElementById('si04_especificacao');
+  	removeAllOptions(combo);
+  	combo.options[0] = new Option ("Selecione", "0");
+    combo.options[1] = new Option ("Veículo de passeio", "3");
+  	combo.options[2] = new Option ("Utilitário (Camionete)", "4");
+  	combo.options[3] = new Option ("Ônibus", "5");
+  	combo.options[4] = new Option ("Caminhão", "6");
+  	combo.options[5] = new Option ("Motocicleta", "7");
+  	combo.options[6] = new Option ("Van", "8");
+  }
+  if(valor == '4'){
+  	var combo = document.getElementById('si04_especificacao');
+  	removeAllOptions(combo);
+  	combo.options[0] = new Option ("Selecione", "0");
+    combo.options[1] = new Option ("Trator de Esteira", "9");
+  	combo.options[2] = new Option ("Trator de Pneu", "10");
+  	combo.options[3] = new Option ("Moto niveladora", "11");
+  	combo.options[4] = new Option ("Pá-Carregadeira", "12");
+  	combo.options[5] = new Option ("Retro Escavadeira", "13");
+  	combo.options[6] = new Option ("Mini Carregadeira", "14");
+  	combo.options[7] = new Option ("Escavadeira", "15");
+  	combo.options[8] = new Option ("Empilhadeira", "16");
+  	combo.options[9] = new Option ("Compactador", "17");
+  }
+  if(valor == '5'){
+  	var combo = document.getElementById('si04_especificacao');
+  	removeAllOptions(combo);
+  	combo.options[0] = new Option ("Selecione", "0");
+    combo.options[1] = new Option ("Gerador", "18");
+  	combo.options[2] = new Option ("Moto bomba", "19");
+  	combo.options[3] = new Option ("Roçadeira", "20");
+  	combo.options[4] = new Option ("Motoserra", "21");
+  	combo.options[5] = new Option ("Pulverizador", "22");
+  	combo.options[6] = new Option ("Compactador de Mão", "23");
+  	combo.options[7] = new Option ("Oficina", "24");
+  	combo.options[8] = new Option ("Motor de Popa", "25");
+  }
+  if(valor == '99'){
+  	var combo = document.getElementById('si04_especificacao');
+  	removeAllOptions(combo);
+  	combo.options[0] = new Option ("Outros", "99");
+  }
+
+  // console.log('Especificação: ', document.form1.si04_especificacao.options);
+  // console.log('Especificação index: ', especificacaoSelect);
+  // if(especificacaoSelect){
+  //   document.form1.si04_especificacao.selectedIndex = especificacaoSelect;
+  //   // console.log('Especificação: ', especificacaoSelect);
+  // }
 }
 
 function removeAllOptions(selectbox)
@@ -804,6 +817,7 @@ function js_preenchepesquisa(chave){
 
 function js_tipodeveiculo(value)
 {
+    console.log(value);
     if (value == 3) {
         document.getElementById("trchassi").style.display = "";
         document.getElementById("trrenavam").style.display = "";
@@ -849,9 +863,6 @@ if ($db_opcao==2 || $db_opcao==22) {
 	echo "<script>
 	var input = document.getElementById('si04_especificacao_select_descr');
 
-  if ($si04_especificacao == 0){
-    input.value = 'Selecione';
-  }
 	if ($si04_especificacao == 1) {
 		input.value = 'Aeronaves';
 	}
