@@ -46,28 +46,31 @@ if(isset($alterar)){
     }
 
     $clliclicitasituacao  = new cl_liclicitasituacao;
-    $sOrder               = 'l11_data desc, l11_hora desc';
-    $sWhere               = 'l11_liclicita = '.$l200_licitacao.'and l11_licsituacao = 1';
+    $sOrder               = 'l11_sequencial desc';
+    $sWhere               = 'l11_liclicita = '.$l202_licitacao.'and l11_licsituacao = 1';
     $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', $sOrder, $sWhere);
     $rsResult             = db_query($sSql);
 
-    $sSql                 = $clliclicita->sql_query_file('', 'l20_dataaber, l20_licsituacao','','l20_codigo = '.$l200_licitacao);
+    $sSql                 = $clliclicita->sql_query_file('', 'l20_dataaber, l20_licsituacao','','l20_codigo = '.$l202_licitacao);
     $oLicitacao           = db_utils::fieldsMemory(db_query($sSql), 0);
 
-    if(pg_numrows($rsResult) > 0 && $oLicSituacao->l20_licsituacao == 1){
-      
-      $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
+    if(pg_numrows($rsResult) > 0){
 
-      $dtDataJulg         = $oLicSituacao->l11_data;   
-      $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
-      $dtDataHomologacao  = date('Y-m-d', strtotime(str_replace('/', '-', $l202_datahomologacao)));
+        if($oLicitacao->l20_licsituacao == 1 || $oLicitacao->l20_licsituacao == 10) {
 
-      if($dtDataHomologacao < $dtDataJulg){
+          $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
 
-        $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data da homologação deverá ser igual ou superior a data de julgamento.';
-        echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-        db_redireciona('lic1_homologacaoadjudica002.php');
+          $dtDataJulg         = $oLicSituacao->l11_data;
+          $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
+          $dtDataHomologacao  = date('Y-m-d', strtotime(str_replace('/', '-', $l202_datahomologacao)));
 
+          if($dtDataHomologacao < $dtDataJulg){
+
+            $clliclicitasituacao->erro_msg = 'Licitação julgada em '.$dtDataJulgShow.'. A data da homologação deverá ser igual ou superior a data de julgamento.';
+            echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+            db_redireciona('lic1_homologacaoadjudica002.php');
+
+          }
       }
     }
   }

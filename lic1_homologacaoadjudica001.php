@@ -62,7 +62,7 @@ if(isset($incluir)){
         }
 
         $clliclicitasituacao  = new cl_liclicitasituacao;
-        $sOrder               = 'l11_data desc, l11_hora desc';
+        $sOrder               = 'l11_sequencial desc';
         $sWhere               = 'l11_liclicita = '.$l202_licitacao.'and l11_licsituacao = 1';
         $sSql                 = $clliclicitasituacao->sql_query(null, 'l11_data', $sOrder, $sWhere);
         $rsResult             = db_query($sSql);
@@ -70,7 +70,7 @@ if(isset($incluir)){
         $sSql                 = $clliclicita->sql_query_file('', 'l20_dataaber, l20_licsituacao','','l20_codigo = '.$l202_licitacao);
         $oLicitacao           = db_utils::fieldsMemory(db_query($sSql), 0);
 
-        if(pg_numrows($rsResult) > 0 && $oLicSituacao->l20_licsituacao == 1){
+        if(pg_numrows($rsResult) > 0 && $oLicitacao->l20_licsituacao == 1){
           
           $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
 

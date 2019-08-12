@@ -57,7 +57,7 @@ if (isset($alterar)) {
     if($l200_tipoparecer == "3") {
 
         $clliclicitasituacao    = new cl_liclicitasituacao;
-        $sOrder                 = 'l11_data desc, l11_hora desc';
+        $sOrder                 = 'l11_sequencial desc';
         $sWhereJulg             = 'l11_liclicita = '.$l200_licitacao.'and l11_licsituacao = 1';
         $sSqlJulg               = $clliclicitasituacao->sql_query(null, 'l11_data', $sOrder, $sWhereJulg);
         $dtDataJulg             = db_utils::fieldsMemory(db_query($sSqlJulg), 0)->l11_data;
