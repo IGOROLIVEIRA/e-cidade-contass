@@ -126,7 +126,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                     and o58_anousu = ".db_getsession("DB_anousu")."
                     and o58_instit = ".db_getsession("DB_instit");*/
 
-        $sSql = "SELECT DISTINCT ON (tipoanulacao) c70_codlan,
+        $sSql = "SELECT DISTINCT ON (c70_codlan)
                    c70_data,
                    c72_complem,
                    e94_empanuladotipo AS tipoanulacao,
@@ -172,8 +172,6 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                 AND o58_anousu = " . db_getsession("DB_anousu") . "
                 AND o58_instit = " . db_getsession("DB_instit");
         $rsEmpenhoAnulados = db_query($sSql);
-
-//    echo $sSql; db_criatabela($rsEmpenhoAnulados);
 
         /**
          * inicio informacoes no banco de dados
