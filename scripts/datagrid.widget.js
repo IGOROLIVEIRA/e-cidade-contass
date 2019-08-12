@@ -756,34 +756,6 @@ function DBGrid(sName) {
     this.renderRows();
   };
 
-  this.renderizar2 = function() {
-    var aLinhasImprimir = [];
-
-    for (var iRow = 0; iRow < this.aRows.length; iRow++) {
-
-      var iTotalCelulas = this.aRows[iRow].aCells.length;
-      var aLinha = [];
-      var iIndice = 0;
-      for (var iCell = 0; iCell < iTotalCelulas; iCell++) {
-        if (iCell === 0 && this.hasCheckbox) {
-          continue;
-        }
-        aLinha[iIndice] = this.aRows[iRow].aCells[iCell].content;
-        iIndice++;
-      }
-      aLinhasImprimir.push(aLinha);
-    }
-
-    this.clearAll(true);
-    aLinhasImprimir.each(
-      function (aCelula, iIndice) {
-        me.addRow(aCelula);
-      }
-    );
-    
-    this.renderRows(false,false);
-  };
-
   /**
    * Seleciona uma linha da grid
    *

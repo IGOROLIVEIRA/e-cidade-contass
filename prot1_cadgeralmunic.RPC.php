@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBseller Servicos de Informatica
@@ -253,7 +253,6 @@ switch ($oParam->exec) {
       $oCgmFisico->z01_obs           = urlencode($oCgm->getObs());
 
       $oCgmFisico->z04_rhcbo         = $oCgm->getCBO();
-      $oCgmFisico->z01_notificaemail = $oCgm->getNotificalEmail();
       $oCgmFisico->z01_ibge          = $oCgm->getIbge();
 
       $oRetorno->cgm = $oCgmFisico;
@@ -289,7 +288,6 @@ switch ($oParam->exec) {
       $oCgmJuridico->z01_cxpostal    = $oCgm->getCaixaPostal();
       $oCgmJuridico->z01_cxposcon    = $oCgm->getCaixaPostalComercial();
       $oCgmJuridico->z01_obs         = urlencode($oCgm->getObs());
-      $oCgmJuridico->z01_notificaemail = $oCgm->getNotificalEmail();
 
       $oRetorno->cgm = $oCgmJuridico;
     }
@@ -327,14 +325,14 @@ switch ($oParam->exec) {
     break;
 
   case 'incluirAlterar' :
-  
+
     $sqlErro = false;
 
     $oRetorno->action     = $oParam->action;
 
     db_inicio_transacao();
     db_query("select fc_putsession('DB_habilita_trigger_endereco','false')");
-    
+
     if ($oParam->lPessoaFisica == true) {
 
       if ($oParam->action == "incluir") {
@@ -345,7 +343,6 @@ switch ($oParam->exec) {
 
         $oCgm = CgmFactory::getInstanceByCgm($oParam->pessoa->z01_numcgm);
       }
-      
       $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
       $oCgm->setCpf($oParam->pessoa->z01_cgccpf);
       $oCgm->setIdentidade($oParam->pessoa->z01_ident);
@@ -381,7 +378,6 @@ switch ($oParam->exec) {
       $oCgm->setCaixaPostalComercial($oParam->pessoa->z01_cxposcon);
       $oCgm->setInscricaoEstadual($oParam->pessoa->z01_incest);
       $oCgm->setInscricaoMunicipal($oParam->pessoa->z01_incmunici);
-      $oCgm->setNotificalEmail($oParam->pessoa->z01_notificaemail);
       $oCgm->setObs(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs)));
 
       if ($oParam->pessoa->z01_trabalha == 't') {
@@ -536,7 +532,6 @@ switch ($oParam->exec) {
       $oCgm->setTelefoneComercial($oParam->pessoa->z01_telcon);
       $oCgm->setCelularComercial($oParam->pessoa->z01_celcon);
       $oCgm->setEmailComercial(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_emailc)));
-      $oCgm->setNotificalEmail($oParam->pessoa->z01_notificaemail);
       $oCgm->setNire($oParam->nire->z08_nire);
       //Campos novos criados
       $oCgm->setCadastro($oParam->pessoa->z01_cadast);
