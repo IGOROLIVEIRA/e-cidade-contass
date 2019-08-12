@@ -126,9 +126,20 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td title='<?=$Tz01_numcgm?>' nowrap>
           <?=$Lz01_numcgm?>
         </td>
-        <td colspan="3">
+        <td>
           <?
             db_input ( 'z01_numcgm', 10, $Iz01_numcgm, true, 'text', 3 );
+          ?>
+        </td>
+        <td align="right">
+          <?=@$Lz01_ultalt?>
+        </td>
+        <td align="left">
+          <?
+            $z01_ultalt_ano = date ( 'Y', db_getsession ( "DB_datausu" ) );
+            $z01_ultalt_mes = date ( 'm', db_getsession ( "DB_datausu" ) );
+            $z01_ultalt_dia = date ( 'd', db_getsession ( "DB_datausu" ) );
+            db_inputdata ( 'z01_ultalt', @$z01_ultalt_dia, @$z01_ultalt_mes, @$z01_ultalt_ano, true, 'text', 3 );
           ?>
         </td>
       </tr>
@@ -148,15 +159,14 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             db_input ( 'z01_cadast', 10, @$Iz01_cadast, true, 'text', 3, "", '', '', '', 11 );
           ?>
         </td>
-        <td align="right">
-          <?=@$Lz01_ultalt?>
+        <td nowrap title="CGM do Município" align="right">
+          <strong>CGM do Município:</strong>
         </td>
+        <td nowrap title="<?=$Tz01_dtfalecimento?>" align="left">
         <td align="right">
           <?
-            $z01_ultalt_ano = date ( 'Y', db_getsession ( "DB_datausu" ) );
-            $z01_ultalt_mes = date ( 'm', db_getsession ( "DB_datausu" ) );
-            $z01_ultalt_dia = date ( 'd', db_getsession ( "DB_datausu" ) );
-            db_inputdata ( 'z01_ultalt', @$z01_ultalt_dia, @$z01_ultalt_mes, @$z01_ultalt_ano, true, 'text', 3 );
+            $x = array ("t" => "Sim", "f" => "Não" );
+            db_select ( 'municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();"  " style="width:95%;text-align:left;"' );
           ?>
         </td>
       </tr>
@@ -188,6 +198,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             db_input ( 'z01_ident', 15, $Iz01_ident, true, 'text', $db_opcao );
           ?>
         </td>
+        
       </tr>
       <tr>
         <td>
@@ -247,6 +258,8 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
           ?>
         </td>
       </tr>
+      <tr>
+      
       <tr>
         <td nowrap title=<?=@$Tz01_pai?>>
           <?=@$Lz01_pai?>
@@ -435,6 +448,17 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         </td>
       </tr>
       <tr>
+        <td nowrap title="">
+          <strong><?=@$Lz01_notificaemail?></strong>
+        </td>
+        <td nowrap title="<?=$Tz01_notificaemail?>">
+          <?
+            $x = array ("t" => "Sim", "f" => "Não" );
+            db_select ('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"' );
+          ?>
+        </td>
+      </tr>
+      <tr>
         <td colspan="4">
           <fieldset class="rfieldsetinterno"><legend> <strong>Endereço Primário</strong></legend>
             <div align="center">
@@ -612,15 +636,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
             db_input ( 'z01_cgc', 15, @$Iz01_cgc, true, 'text', $db_opcao, "onBlur='js_verificaCGCCPF(this);js_testanome(\"\",\"\",this.value)'", '', '', 'text-align:left;' );
           ?>
         </td>
-        <td nowrap title="CGM do Município" align="right">
-          <strong>CGM do Município:</strong>
-        </td>
-        <td nowrap title="<?=$Tz01_dtfalecimento?>" align="right">
-          <?
-            $x = array ("t" => "Sim", "f" => "Não" );
-            db_select ( 'municipio', $x, true, $db_opcao, 'onChange="js_alteraMunicipio();"  " style="width:95%;text-align:left;"' );
-          ?>
-        </td>
+        
       </tr>
       <tr>
         <td nowrap title=<?=@$Tz01_nome?>>
@@ -729,6 +745,17 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         <td colspan="3">
           <?
             db_input ( 'z01_email', 50, $Iz01_email, true, 'text', $db_opcao );
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap title="">
+          <strong><?=@$Lz01_notificaemail?></strong>
+        </td>
+        <td nowrap title="<?=$Tz01_notificaemail?>">
+          <?
+            $x = array ("t" => "Sim", "f" => "Não" );
+            db_select ('z01_notificaemail', $x, true, $db_opcao, 'style="width:35%;"' );
           ?>
         </td>
       </tr>
@@ -1374,6 +1401,7 @@ function js_PreencheFormulario(oCgm) {
     $('z01_cxposcon').value       = oCgm.z01_cxposcon;
     $('z01_incest').value         = oCgm.z01_incest;
     $('z01_obs').value            = oCgm.z01_obs.urlDecode();
+    $('z01_notificaemail').value  = oCgm.z01_notificaemail;
 
     if (oCgm.z01_ibge.urlDecode() != null){
       $('z01_ibge').value         = oCgm.z01_ibge.urlDecode();
@@ -1409,6 +1437,7 @@ function js_PreencheFormulario(oCgm) {
     $('z01_cxpostal').value   = oCgm.z01_cxpostal;
     $('z01_cxposcon').value   = oCgm.z01_cxposcon;
     $('z01_obs').value        = oCgm.z01_obs.urlDecode();
+    $('z01_notificaemail').value = oCgm.z01_notificaemail;
 
     if (oCgm.z01_foto != null) {
       $('fotocgm').src = 'func_mostrarimagem.php?oid='+oCgm.z01_foto;
@@ -1541,6 +1570,7 @@ function js_sendForm(btnValue) {
       oPessoa.z01_telef         = $F('z01_telef');
       oPessoa.z01_telcel        = $F('z01_telcel');
       oPessoa.z01_email         = tagString($F('z01_email'));
+      oPessoa.z01_notificaemail = $F('z01_notificaemail');
       oPessoa.z01_telcon        = $F('z01_telcon');
       oPessoa.z01_celcon        = $F('z01_celcon');
       oPessoa.z01_emailc        = tagString($F('z01_emailc'));
@@ -1607,6 +1637,7 @@ function js_sendForm(btnValue) {
       oPessoa.z01_telef         = $F('z01_telef');
       oPessoa.z01_telcel        = $F('z01_telcel');
       oPessoa.z01_email         = tagString($F('z01_email'));
+      oPessoa.z01_notificaemail = $F('z01_notificaemail');
       oPessoa.z01_telcon        = $F('z01_telcon');
       oPessoa.z01_celcon        = $F('z01_celcon');
       oPessoa.z01_fax           = $F('z01_fax');
