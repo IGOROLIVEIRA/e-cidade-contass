@@ -522,6 +522,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return false;
         }
 
+        oItem = aItensPosicao[iLinha];
+
+        if(oItem.novo) {
+            sDisabled = '';
+        } else {
+            sDisabled = "disabled=\'disabled\'";
+        }
+
+
         oDadosItem = me.oGridItens.aRows[iLinha];
         windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotações Item', 430, 380);
 
@@ -548,7 +557,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         sContent += "    </tr>";
         sContent += "  </table>";
         sContent += "</fieldset>";
-        sContent += "  <input type='button' disabled='disabled' value='Adicionar' id='btnSalvarDotacao'>";
+        sContent += "  <input type='button' "+sDisabled+" value='Adicionar' id='btnSalvarDotacao'>";
         sContent += "  <fieldset style=\"margin-top: 5px;\">";
         sContent += "    <div id='cntgridDotacoes'></div>";
         sContent += "  </fieldset>";
@@ -619,7 +628,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oBotaoRemover.id = "btnexcluidotacao" + iDot;
             oBotaoRemover.value = "E";
             oBotaoRemover.setAttribute("onclick", me.sInstance + ".removerDotacao(" + iLinha + ", " + iDot + ")");
-            oBotaoRemover.setAttribute("disabled","disabled");
+            if(!oItem.novo) {
+                oBotaoRemover.setAttribute("disabled", "disabled");
+            }
 
             aLinha = new Array();
             aLinha[0] = "<a href='javascript:;' onclick='" + me.sInstance + ".mostraSaldo(" + oDotacao.dotacao + ");'>" + oDotacao.dotacao + "</a>";
@@ -1382,6 +1393,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         var nValorUnitario = oTxtVlrUnitario.getValue();
         var iUnidade = oCboUnidade.getValue();
         var iElemento = oCboDesdobramento.getValue();
+        var dtDataInicialItem = oTxtDataInicialItem.getValue();
+        var dtDataFinalItem = oTxtDataFinalItem.getValue();
 
         if (iElemento == '0') {
 
@@ -1409,12 +1422,17 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oNovoMaterial.aPeriodos = me.aPeriodoItensNovos;
         oNovoMaterial.dotacoes = new Array();
         oNovoMaterial.novo = true;
+        oNovoMaterial.qtdeanterior = '';
+        oNovoMaterial.vlunitanterior = '';
+        oNovoMaterial.periodoini = dtDataInicialItem;
+        oNovoMaterial.periodofim = dtDataFinalItem;
 
         aItensPosicao.push(oNovoMaterial);
         me.preencheItens(aItensPosicao);
 
         $('btnItens').disabled = false;
         windowNovoItem.destroy();
+        me.ajusteDotacao(aItensPosicao.length - 1, oNovoMaterial.elemento);
     }
 
     this.preencheItens = function (aItens) {
@@ -1599,8 +1617,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     aLinha[13].setValue(0);
                     aLinha[13].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 12) {
-                    aLinha[11] = js_formatar(oItem.periodoini, 'd');
-                    aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    if(oItem.novo){
+                        aLinha[11] = oItem.periodoini;
+                        aLinha[12] = oItem.periodofim;
+                    } else {
+                        aLinha[11] = js_formatar(oItem.periodoini, 'd');
+                        aLinha[12] = js_formatar(oItem.periodofim, 'd');
+                    }
                     aLinha[13].setValue(0);
                     aLinha[13].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 14) {
@@ -1772,6 +1795,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         $('oTxtDataInicial').style.backgroundColor= 'rgb(222, 184, 135)';
         $('oTxtDataFinal').readOnly = true;
         $('oTxtDataFinal').style.backgroundColor= 'rgb(222, 184, 135)';
+        $('btnItens').style.display = 'none';
 
         if ($('oCboTipoAditivo').value == 7) {
 
@@ -1794,6 +1818,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('oTxtDataInicial').style.backgroundColor= 'white';
             $('oTxtDataFinal').readOnly = false;
             $('oTxtDataFinal').style.backgroundColor= 'white';
+        } else if($('oCboTipoAditivo').value == 12) {
+            $('btnItens').style.display = '';
+            $('btnItens').observe('click', me.novoItem);
         }
 
     }
