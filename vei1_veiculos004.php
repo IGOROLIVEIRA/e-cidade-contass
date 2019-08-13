@@ -98,15 +98,15 @@ if(isset($incluir)){
 
     if ($sqlerro == false){
         $clveiculos->ve01_ativo = 1;
-        $result2 = $clveiculos->sql_record($clveiculos->sql_query_placa(null,"*",null,"ve01_placa = '$ve01_placa' AND ve01_instit <> ".db_getsession('DB_instit')));
-        if($result2){
+
+        $rsResultado = $clveiculos->sql_record($clveiculos->sql_query_placa(null,"*",null,"ve01_placa = '$ve01_placa' AND ve01_instit <> ".db_getsession('DB_instit')));
+        if($rsResultado){
           $resultado = db_utils::fieldsMemory($rsResultado, 0);
         }else $resultado = '';
 
         if(!$resultado){
           if ($si04_tipoveiculo == 3 && $ve01_placa != '') {
               $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_placa = '$ve01_placa'"));
-
               if ($clveiculos->numrows > 0){
                   $sqlerro  = true;
                   $erro_msg = "Placa já cadastrada para outro veículo. Verifique.";
@@ -133,7 +133,20 @@ if(isset($incluir)){
           }
         }
 
+        if($si04_especificacao == 0 || $si04_especificacao == ''){
+          $sqlerro  = true;
+          $erro_msg = "Especificação do veículo não informado. Verifique.";
+          $clveiculos->erro_campo = "si04_especificacao";
+        }
+
+        if($si04_tipoveiculo == 0 || $si04_tipoveiculo == ''){
+          $sqlerro  = true;
+          $erro_msg = "Tipo do veículo não informado. Verifique.";
+          $clveiculos->erro_campo = "si04_tipoveiculo";
+        }
+
         if ($sqlerro==false){
+
             $clveiculos->incluir(null,$si04_tipoveiculo);
             $erro_msg=$clveiculos->erro_msg;
             if ($clveiculos->erro_status=="0"){
