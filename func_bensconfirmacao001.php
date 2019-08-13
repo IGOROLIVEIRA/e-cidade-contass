@@ -210,7 +210,7 @@ db_fieldsmemory($result,0);
             $sql = $clbens->sql_query_benstransf("",
                                                  $campos,
                                                  "t52_bem",
-                                                 "t52_bem = {$chave_t52_bem} {$where2_instit} {$where_baixado}",
+                                                 "t52_bem = {$chave_t52_bem} {$where2_instit} {$where_baixado} and {$where} ",
                                                  "tudo");
 
             /**
@@ -222,7 +222,7 @@ db_fieldsmemory($result,0);
             $sql    = $clbens->sql_query_benstransf("",
                                                     $campos,
                                                     "t52_bem",
-                                                    " {$sWhere} {$where_depart} {$where_g} {$where2_instit} {$where_baixado}"
+                                                    " {$sWhere} {$where_depart} {$where_g} {$where2_instit} {$where_baixado} and {$where}"
             );
 
             /**
@@ -231,9 +231,9 @@ db_fieldsmemory($result,0);
           } else if(isset($chave_t64_codcla) && (trim($chave_t64_codcla)!="") ) {
 
             if ($chave_t64_codcla == 'NDA') {
-              $sql = $clbens->sql_query_benstransf("",$campos,"","t52_codcla = -1 $where2_instit $where_baixado","tudo");
+              $sql = $clbens->sql_query_benstransf("",$campos,"","t52_codcla = -1 $where2_instit $where_baixado $where","tudo");
             } else {
-              $sql = $clbens->sql_query_benstransf("",$campos,"","t52_codcla = $chave_t64_codcla $where2_instit $where_baixado","tudo");
+              $sql = $clbens->sql_query_benstransf("",$campos,"","t52_codcla = $chave_t64_codcla $where2_instit $where_baixado and $where","tudo");
             }
 
             /**
@@ -243,7 +243,7 @@ db_fieldsmemory($result,0);
             $sql = $clbens->sql_query_benstransf("",
                                                  $campos,
                                                  "t52_descr",
-                                                 "t52_descr like '$chave_t52_descr%' $where2_instit $where_baixado",
+                                                 "t52_descr like '$chave_t52_descr%' $where2_instit $where_baixado and $where",
                                                  "tudo");
 
             /**
@@ -273,7 +273,7 @@ db_fieldsmemory($result,0);
              * Sem filtro. Busca todos bens.
              */
           } else {
-            $sql = $clbens->sql_query_benstransf("",$campos,"t52_bem","$where3_instit $where_baixado","tudo");
+            $sql = $clbens->sql_query_benstransf("",$campos,"t52_bem","$where3_instit $where_baixado and $where","tudo");
 
           }
 
@@ -296,26 +296,30 @@ db_fieldsmemory($result,0);
             }
 
             if (isset($chave_id_usuario) && (trim($chave_id_usuario)!="") ) {
+              
               $sql = $clbens->sql_query_benstransf("",
                                                    $campos,
                                                    "",
-                                                   " {$sWhere} {$where2_instit} {$where_baixado} ",
+                                                   " {$sWhere} {$where2_instit} {$where_baixado} and {$where}",
                                                    "tudo");
+              
               $result = $clbens->sql_record($sql);
 
             } else if(isset($chave_coddepto) && (trim($chave_descrdepto)!="")) {
+              
               $sql = $clbens->sql_query_benstransf("",
                                                    $campos,
                                                    "",
-                                                   " t52_depart = {$pesquisa_chave} {$where2_instit} {$where_baixado} ",
+                                                   " t52_depart = {$pesquisa_chave} {$where2_instit} {$where_baixado} and {$where}",
                                                    "tudo");
               $result = $clbens->sql_record($sql);
 
             } else {
+              
               $result = $clbens->sql_record($clbens->sql_query(null,
                                                                "*",
                                                                null,
-                                                               " {$sWhere} {$where2_instit} {$where_baixado}",
+                                                               " {$sWhere} {$where2_instit} {$where_baixado} and {$where}",
                                                                "tudo"));
             }
 
