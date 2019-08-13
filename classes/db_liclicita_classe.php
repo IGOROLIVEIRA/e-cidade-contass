@@ -578,14 +578,6 @@ class cl_liclicita
                         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                         $this->erro_status = "0";
                         return false;
-                    } else if(($this->l20_datacria == $this->l20_dataaber) && ($this->l20_horacria > $this->l20_horaaber)){
-                        $this->erro_sql = "A hora inserida no campo 'Hora Abertura' deverá ser maior ou igual a hora inserida no campo 'Hora Criação'.";
-                        $this->erro_campo = "l20_horaaber";
-                        $this->erro_banco = "";
-                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                        $this->erro_status = "0";
-                        return false;
                     }
                 }
 
@@ -1543,14 +1535,6 @@ class cl_liclicita
             if($this->l20_datacria > $this->l20_dataaber and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103){
                 $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
                 $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            } else if(($this->l20_datacria == $this->l20_dataaber) && ($this->l20_horacria > $this->l20_horaaber)){
-                $this->erro_sql = "A hora inserida no campo 'Hora Abertura' deverá ser maior ou igual a hora inserida no campo 'Hora Criação'.";
-                $this->erro_campo = "l20_horaaber";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
