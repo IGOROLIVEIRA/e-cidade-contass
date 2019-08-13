@@ -448,6 +448,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             WHERE DATE_PART('YEAR',r45_dtreto) = 2019
             AND ( (DATE_PART('YEAR',r45_dtafas) = 2019) )
             AND r45_situac <> 5
+            AND r45_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
             GROUP BY r45_regist,
             si199_tipoafastamento,
             r45_dtlanc,
@@ -465,9 +466,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $inicioAfastamento = date( 'm/Y', strtotime($oDados->dtinicioafastamento) );
                 $fimAfastamento = date( 'm/Y', strtotime($oDados->dtretornoafastamento) );
                 $mesdegeracaosicom = $this->sDataFinal['5'] . $this->sDataFinal['6']."/".db_getsession("DB_anousu");
-//                echo "inicio afastamento: ";var_dump($inicioAfastamento);echo"<br>";
-//                echo "fim afastamento: ";var_dump($fimAfastamento);echo"<br>";
-//                echo "messicom afastamento: ";var_dump($mesdegeracaosicom);echo"<br>";
 
                 if($mesdegeracaosicom > $inicioAfastamento && $mesdegeracaosicom <= $fimAfastamento) {
                     $clafast = new cl_afast302019();
@@ -478,7 +476,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     $clafast->si201_dtretornoafastamento = $oDados->dtretornoafastamento;
                     $clafast->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clafast->si201_inst = db_getsession("DB_instit");
-//                    echo "<pre>";print_r($clafast);die();
                     $clafast->incluir(null);
                     if ($clafast->erro_status == 0) {
                         throw new Exception($clafast->erro_msg);
