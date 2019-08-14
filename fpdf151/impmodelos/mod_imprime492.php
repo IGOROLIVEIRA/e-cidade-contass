@@ -256,7 +256,8 @@ $this->objpdf->Setfont('Arial', 'B', 7);
 $this->objpdf->cell(190, 5, "CÓDIGO DO SERVIÇO - ATIVIDADE", 1, 1, "C", true);
 $this->objpdf->Setfont('Arial', '', 7);
 $this->objpdf->sety(183);
-$this->objpdf->multiCell(190, 12, $sDescitemservico, "LRB", "L");
+$this->objpdf->rect(10, $iYinicio+80, 190, 32);
+$this->objpdf->multiCell(190, 5, $sDescitemservico, "", "J");
 $this->objpdf->sety(220);
 
 //box com o total devido de imposto
