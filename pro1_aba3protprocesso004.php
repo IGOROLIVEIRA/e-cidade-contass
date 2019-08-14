@@ -99,12 +99,12 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     border: 0 none;
     outline: 0;
     max-width: 30px;
-    text-align: center;;
+    text-align: center;
 }
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaProtocolo(document.form1.protocolo.value)">
-<br><br>
+<br/><br/>
 <center>
 <div style="width: 48%;">
 <fieldset>
@@ -321,13 +321,13 @@ function pesquisaEmpenhos(){
   }
 
   let listaEmpenhos = [];
-    oParam.exec = 'pesquisaEmpenhos';
-    novoAjax(oParam, function(e){
-      let response = JSON.parse(e.responseText);
-      listaEmpenhos = [...response.empenhos];
-    }, false);
+  oParam.exec = 'pesquisaEmpenhos';
+  novoAjax(oParam, function(e){
+    let response = JSON.parse(e.responseText);
+    listaEmpenhos = [...response.empenhos];
+  }, false);
 
-    return listaEmpenhos;
+  return listaEmpenhos;
 }
 
 function incluir() {
@@ -347,8 +347,17 @@ function incluir() {
   }
 
   let aEmpenhos = pesquisaEmpenhos();
-  incluirEmpenho(protocolo, aEmpenhos);
+  let aNumEmpenhos = [];
 
+  aEmpenhos.forEach((empenho) => {
+    aNumEmpenhos.push(empenho.e60_numemp);
+  });
+  incluirEmpenho(protocolo, aNumEmpenhos);
+  if(aNumEmpenhos.length == 100){
+    let priEmp = aEmpenhos[0];
+    let ultEmp = aEmpenhos[aEmpenhos.length - 1];
+    alert(`Inseridos 100 registros do intervalo ${priEmp.e60_codemp}/${priEmp.e60_anousu} à ${ultEmp.e60_codemp}/${ultEmp.e60_anousu}`);
+  }
 }
 
 function incluirEmpenho(iProtocolo, iEmpenho) {

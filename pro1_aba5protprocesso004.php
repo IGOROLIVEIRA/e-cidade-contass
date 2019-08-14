@@ -302,8 +302,17 @@ function incluir() {
   }
 
   let aOrdens = pesquisaOrdens();
+  let aCodOrdens = [];
+
+  aOrdens.forEach(ordem => {
+    aCodOrdens.push(ordem.e53_codord);
+  });
+
   incluirAutPagamento(protocolo, aOrdens);
 
+  if(aCodOrdens.length == 100){
+    alert(`Intervalo de 100 registros inseridos ${aCodOrdens[0]} à ${aCodOrdens[aCodOrdens.length - 1]}`);
+  }
 }
 
 function incluirAutPagamento(iProtocolo, iAutPagamento) {

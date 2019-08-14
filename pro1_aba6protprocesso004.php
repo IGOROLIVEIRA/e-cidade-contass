@@ -268,7 +268,7 @@ function incluir() {
   var doc = document.form1;
   var protocolo = document.form1.protocolo.value;
   var protocoloVazio    = protocolo == '';
-  // var autpagamentoVazio = slip == '';
+
   if (protocoloVazio) {
     alert('Ocorreu um erro na geração do protocolo!');
     return;
@@ -280,7 +280,17 @@ function incluir() {
   }
 
   let aSlips = pesquisaSlips();
+  let aCodSlips = [];
+
+  aSlips.forEach(slip => {
+    aCodSlips.push(slip.k17_codigo);
+  });
+
   incluirSlip(protocolo, aSlips);
+
+  if(aCodSlips.length == 100){
+    alert(`Inseridos 100 registros do intervalo ${aCodSlips[0]} à ${aCodSlips[aCodSlips.length - 1]}`);
+  }
 
 }
 

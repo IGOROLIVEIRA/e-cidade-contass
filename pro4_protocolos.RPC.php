@@ -201,12 +201,12 @@ switch ($oParam->exec) {
         foreach($oParam->empenho as $empenho){
 
         $verifica = false;
-        $verifica = verificaEmpenho($empenho->e60_numemp, $oParam->protocolo);
+        $verifica = verificaEmpenho($empenho, $oParam->protocolo);
         if ($verifica == true) {
-          throw new Exception("O empenho ".$empenho->e60_numemp." já existe para este protocolo!");
+          throw new Exception("O empenho ".$empenho." já existe para este protocolo!");
         }
         $oEmpenho = new cl_protempenhos;
-        $oEmpenho->p103_numemp    = $empenho->e60_numemp;
+        $oEmpenho->p103_numemp    = $empenho;
         $oEmpenho->p103_protocolo = $oParam->protocolo;
         $oEmpenho->incluir(null);
 
@@ -1152,10 +1152,9 @@ function pesquisaIntervaloEmpenhos($param_ini, $dtinicio, $param_fim, $dtfim){
     $where .= " and e60_anousu = substr('$dtfim', 1, 4)::integer ";
   }
 
-  $where .= ' limit 100 ';
-  $campos = "empempenho.e60_numemp";
+  $campos = "empempenho.e60_numemp, empempenho.e60_codemp, empempenho.e60_anousu";
 
-  $sSql = $oEmpenhos->sql_query(null, $campos, '', $where,'');
+  $sSql = $oEmpenhos->sql_query(null, $campos, 'e60_codemp::integer, e60_numemp', $where,'', '100');
   $rsSql = $oEmpenhos->sql_record($sSql);
 
   $empenhos = db_utils::getCollectionByRecord($rsSql);
