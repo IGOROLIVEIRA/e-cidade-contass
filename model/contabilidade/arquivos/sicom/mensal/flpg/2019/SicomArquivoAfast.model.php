@@ -122,11 +122,12 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             FROM afasta
             join rhpessoal on r45_regist = rh01_regist
             join rhpessoalmov on rh02_regist = rh01_regist and rh02_anousu = ".db_getsession("DB_anousu")."
-            WHERE DATE_PART('YEAR',r45_dtreto) = ".db_getsession("DB_anousu")."
-            AND DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu")."
-            AND DATE_PART('MONTH',r45_dtreto) >= {$iMes}
-                AND r45_situac <> 5
-                AND r45_mesusu = {$iMes} OR (r45_mesusu > {$iMes} AND DATE_PART('MONTH',r45_dtafas) = {$iMes})
+            WHERE DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu")."
+            AND ((DATE_PART('YEAR',r45_dtreto) = ".db_getsession("DB_anousu")." AND DATE_PART('MONTH',r45_dtreto) >= {$iMes})
+            OR (DATE_PART('YEAR',r45_dtreto) > ".db_getsession("DB_anousu")."))
+            AND r45_situac <> 5
+            AND (r45_mesusu = {$iMes} OR (r45_mesusu > {$iMes} AND DATE_PART('MONTH',r45_dtafas) = {$iMes}))
+            AND rh02_instit = ".db_getsession("DB_instit")."
             GROUP BY r45_regist,si199_tipoafastamento
             ";
 
@@ -436,6 +437,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             AND ( (DATE_PART('YEAR',r45_dtafas) = ".db_getsession("DB_anousu").") )
             AND r45_situac <> 5
             AND r45_mesusu = {$iMes}
+            AND rh02_instit = ".db_getsession("DB_instit")."
             GROUP BY r45_regist,
             si199_tipoafastamento,
             r45_dtlanc,
