@@ -101,6 +101,18 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     max-width: 30px;
     text-align: center;
 }
+td{
+  padding-top: 7px;
+}
+input{
+  width:78px;
+}
+#ancora_a{
+  width: 17px;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 25px;
+}
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaProtocolo(document.form1.protocolo.value)">
@@ -113,14 +125,11 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
   <input type="hidden" name="protocolo" value="<?= $protocolo ?>">
   <input type="hidden" name="dattab">
   <input type="hidden" name="valtab">
-    <table border='0'>
-      <tr height="20px">
-        <td ></td>
-        <td ></td>
-      </tr>
+    <table border='0' width="100%">
       <tr>
-        <td align="left" nowrap>
-          <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true, e60_codemp_ini);",1);  ?>
+        <td width="24%"></td>
+        <td align="left">
+          <? db_ancora('Empenho:',"js_pesquisae60_codemp(true, e60_codemp_ini);",1);  ?>
         </td>
         <td>
          <?
@@ -128,8 +137,9 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
            db_input('e60_anousu_ini','','',true, 'hidden', '');
          ?>
         </td>
-        <td>
+        <td id="ancora_a">
           <? db_ancora('à',"js_pesquisae60_codemp(true, e60_codemp_fim);",1);  ?>
+          &nbsp;&nbsp;
         </td>
         <td>
           <?
@@ -137,17 +147,12 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
             db_input('e60_anousu_fim','','',true, 'hidden', '');
           ?>
         </td>
+        <td width="35%"></td>
       </tr>
       <tr>
-      </tr>
-      <tr height="14px">
-      <td ></td>
-      <td ></td>
-      </tr>
-      <tr>
-      <td align="center" colspan="4">
-        <input type="button" id="inserir" value="Incluir" onclick="incluir();">
-      </td>
+        <td align="center" colspan="6">
+          <input type="button" id="inserir" value="Incluir" onclick="incluir();">
+        </td>
       </tr>
     </table>
     <br>
@@ -190,7 +195,7 @@ function limpaCampos(){
 
 //--------------------------------
 function js_pesquisae60_codemp(mostra, campo){
-
+  console.log('Campo valor: ', campo.value);
   if(campo.name == 'e60_codemp_ini'){
     if(mostra==true){
       js_OpenJanelaIframe('','db_iframe_empempenho1','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome|e60_emiss|e60_vlremp|e60_codemp','Pesquisa',true);
@@ -295,31 +300,47 @@ function pesquisaEmpenhos(){
   let oParam = new Object();
   let doc = document.form1;
 
+  let empIni = doc.e60_codemp_ini.value.split('/');
+  let empFim = doc.e60_codemp_fim.value.split('/');
+
   if(doc.e60_codemp_ini.value){
-    oParam.inicio = doc.e60_codemp_ini.value;
+    oParam.inicio = empIni;
     oParam.dtInicio = doc.e60_anousu_ini.value;
   }
   if(doc.e60_codemp_fim.value){
-    oParam.fim = doc.e60_codemp_fim.value;
+    oParam.fim = empFim;
     oParam.dtFim = doc.e60_anousu_fim.value;
   }
 
   let ini = new Date(`${oParam.dtInicio}`);
   let fim = new Date(`${oParam.dtFim}`);
 
-
-  if(ini && fim && ini.getFullYear() > fim.getFullYear()){
-    alert('Informe uma data maior ou igual ao empenho inicial');
+  if(ini && fim && ini.getFullYear() > fim.getFullYear() || ini.getFullYear() == parseInt(empFim[1]) && empIni[0] > empFim[0]){
+    alert('Data do empenho final menor que o empenho inicial');
     return false;
   }
 
-  if(ini && fim && ini.getFullYear() == fim.getFullYear()){
-    if(parseInt(oParam.fim) < parseInt(oParam.inicio)){
-      alert('Valor do último empenho é menor que o empenho inicial');
-      return false;
+  if(!empIni[1] && !empFim[1]){
+    if(ini && fim && ini.getFullYear() == fim.getFullYear()){
+      if(parseInt(oParam.fim) < parseInt(oParam.inicio)){
+        alert('Valor do último empenho é menor que o empenho inicial');
+        return false;
+      }
     }
   }
 
+  if(ini.getFullYear() > parseInt(empFim[1])){
+    alert('Data do empenho inicial é maior que o empenho final');
+    return false;
+  }
+
+  // else{
+  //   if(parseInt(empIni[1]) > parseInt(empFim[1])){
+  //     alert('Data do empenho inicial é maior que o empenho final');
+  //     return false;
+  //   }
+  // }
+  console.log('Parametros: ', oParam);
   let listaEmpenhos = [];
   oParam.exec = 'pesquisaEmpenhos';
   novoAjax(oParam, function(e){
@@ -346,12 +367,18 @@ function incluir() {
     return;
   }
 
-  let aEmpenhos = pesquisaEmpenhos();
+  let aEmpenhos = [];
+  aEmpenhos = pesquisaEmpenhos();
+
+  if(aEmpenhos.length == 0)
+    aEmpenhos = pesquisaEmpenhos();
+
   let aNumEmpenhos = [];
 
   aEmpenhos.forEach((empenho) => {
     aNumEmpenhos.push(empenho.e60_numemp);
   });
+
   incluirEmpenho(protocolo, aNumEmpenhos);
   if(aNumEmpenhos.length == 100){
     let priEmp = aEmpenhos[0];
@@ -382,7 +409,7 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
         return;
       }
     }, false);
-  js_removeObj('div_aguarde');
+    js_removeObj('div_aguarde');
 }
 
 function pesquisaProtocolo(protocolo) {
@@ -483,6 +510,7 @@ function excluir(protocolo) {
       return;
     }
   });
+  limpaCampos();
 }
 
 function verificaEmpenhos() {

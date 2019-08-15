@@ -1128,34 +1128,84 @@ function salvaCopiaEmpenho($protocolo, $protocoloCopia) {
   }
 }
 
-function pesquisaIntervaloEmpenhos($param_ini, $dtinicio, $param_fim, $dtfim){
+function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
 
+  $param_ini = $emp_inicial[0];
+  $param_fim = $emp_final[0];
+
+  if($emp_inicial[0] == $emp_final[0]){
+    if($emp_inicial[1] && !$emp_final[1]){
+      $emp_final[1] = $emp_inicial[1];
+    }else if(!$emp_inicial[1] && !$emp_final[1] && $dtinicio){
+      $dtfim = $dtinicio;
+    }
+  }else if($emp_inicial[0] != $emp_final[0]){
+    if(!$emp_final[1]){
+      $emp_final[1] = db_getsession('DB_anousu');
+    }
+  }
+
+  if($emp_inicial[1] && $emp_final[1]){
+    $dtinicio = '';
+    $dtfim = '';
+  }
+
+  if($dtinicio)
+    $dataInicial = split('-', $dtinicio);
   $oEmpenhos = new cl_empempenho;
   $where = '';
 
   if($param_ini && $param_fim){
-    $where = " e60_codemp::integer >= $param_ini and e60_codemp::integer <= $param_fim ";
-    $where .= " and e60_instit = ".db_getsession('DB_instit');
-    $where .= " and e60_anousu >= substr('$dtinicio', 1, 4)::integer ";
-    $where .= " and e60_anousu <= substr('$dtfim', 1, 4)::integer ";
+    if($param_fim == $param_ini){
+      if($dtinicio != $dtfim){ // 2 -> 2/2017 : 2/2018
+        // if($dataInicial[0] == $param_fim[1])
+          $dtfim = $dtinicio;
+      }
+    }
+    if($dtinicio != '' && $dtfim != ''){
+      $where  = " e60_codemp::integer >= $param_ini ";
+      $where .= " and e60_emiss BETWEEN '$dtinicio' AND '$dtfim' ";
+      // $where .= " and e60_codemp::integer <= $param_fim AND e60_emiss <= '$dtfim' ";
+
+      $where .= " and (CASE WHEN(e60_codemp::integer > $param_fim) ";
+      $where .= " THEN (e60_emiss) < '$dtfim' ";
+      $where .= " ELSE e60_codemp::integer <= $param_fim AND e60_emiss <= '$dtfim' END)";
+      $where .= " and e60_instit = ".db_getsession('DB_instit');
+    }
+    else{
+      if(!$emp_inicial[1]){
+        $data = $dataInicial[0];
+      }else $data = $emp_inicial[1];
+      $where  = " e60_codemp::integer >= ".$emp_inicial[0]." ";
+      $where .= " AND e60_anousu >= ".$data." AND e60_anousu <= ".$emp_final[1]."";
+      $where .= " AND (CASE WHEN(e60_codemp::integer > $param_fim) ";
+      $where .= " THEN (e60_anousu) < ".$emp_final[1]." ";
+      $where .= " ELSE e60_codemp::integer <= $param_fim AND e60_anousu <= ".$emp_final[1]." END)";
+      $where .= " AND e60_instit = ".db_getsession('DB_instit');
+    }
   }
 
   if($param_ini && !$param_fim){
     $where = " e60_codemp::integer = $param_ini ";
     $where .= " and e60_instit = ".db_getsession('DB_instit');
-    $where .= " and e60_anousu = substr('$dtinicio', 1, 4)::integer ";
+    if(isset($dtinicio) && !$emp_inicial[1]){
+      $where .= " and e60_emiss = '$dtinicio' ";
+    }else $where .= " and e60_anousu = ".$emp_inicial[1]."::integer ";
   }
 
   if($param_fim && !$param_ini){
     $where = " e60_codemp::integer = $param_fim ";
     $where .= " and e60_instit = ".db_getsession('DB_instit');
-    $where .= " and e60_anousu = substr('$dtfim', 1, 4)::integer ";
+    if(isset($dtfim) && !$param_fim){
+      $where .= " and e60_emiss = '$dtfim' ";
+    }else $where .= " and e60_anousu = ".$emp_final[1]."::integer ";
   }
 
   $campos = "empempenho.e60_numemp, empempenho.e60_codemp, empempenho.e60_anousu";
 
-  $sSql = $oEmpenhos->sql_query(null, $campos, 'e60_codemp::integer, e60_numemp', $where,'', '100');
+  $sSql = $oEmpenhos->sql_query(null, $campos, ' e60_numemp, e60_anousu', $where,'', '100');
   $rsSql = $oEmpenhos->sql_record($sSql);
+
 
   $empenhos = db_utils::getCollectionByRecord($rsSql);
   return $empenhos;

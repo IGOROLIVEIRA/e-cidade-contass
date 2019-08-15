@@ -100,6 +100,24 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     max-width: 30px;
     text-align: center;
 }
+#inserir{
+  padding-left: 17px;
+  padding-right: 17px;
+  margin-top: 4px;
+}
+input{
+  width:78px;
+}
+.formulario{
+  width: 100%;
+}
+.ancora{
+  width: 16px;
+  padding-left:7px;
+}
+td{
+  padding-top: 6px;
+}
 </style>
 
 </head>
@@ -114,12 +132,10 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     <input type="hidden" name="dattab">
     <input type="hidden" name="valtab">
 <table border='0'>
-  <tr height="18px">
-    <td></td>
-    <td></td>
-  </tr>
-    <table border='0'>
+    <table border='0' class="formulario">
       <tr>
+        <br/>
+        <td width="26%"></td>
         <td align="right" nowrap title="<?=$Te53_codord?>">
           <? db_ancora(@$Le53_codord,"js_buscae53_codord(true, e53_codord_ini)",1); ?>
         </td>
@@ -128,7 +144,7 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
             db_input("e53_codord_ini",12,$Ie53_codord,true,"text", 12,"onchange='js_buscae53_codord(false, e53_codord_ini);'");
           ?>
         </td>
-        <td>
+        <td class="ancora">
           <? db_ancora("à","js_buscae53_codord(true, e53_codord_fim)",1); ?>
         </td>
 
@@ -137,14 +153,12 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
             db_input("e53_codord_fim",12,$Ie53_codord,true,"text", 12,"onchange='js_buscae53_codord(false, e53_codord_fim);'");
           ?>
         </td>
+        <td width="34%"></td>
       </tr>
 
-      <tr height="16px">
-        <td></td>
-        <td></td>
-      </tr>
       <tr>
-        <td align="center" colspan="4">
+        <td align="center" colspan="6">
+          <br/>
           <input type="button" id="inserir" value="Incluir" onclick="incluir();">
         </td>
       </tr>
@@ -442,6 +456,7 @@ function excluir(protocolo) {
       return;
     }
   });
+  limpaCampos();
 }
 
 function verificaAutPagamentos() {

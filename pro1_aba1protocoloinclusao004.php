@@ -60,7 +60,7 @@ $departamento =  db_fieldsmemory($rsD,0);
 
 <style type="text/css">
 strong {
-  width: 100px;
+  width: 106px;
   display: inline-block;
   text-align: right;
 }
@@ -71,6 +71,7 @@ strong {
   margin-left: 10px;
   padding-bottom: 8px;
   float: left;
+  display: inline-flex;
 }
 
 #motivo {
@@ -83,6 +84,7 @@ strong {
   text-align: center;
   background-color: #DEB887;
 }
+
 </style>
 
 </head>
@@ -91,7 +93,7 @@ strong {
   <form name="form1" method="post" action="">
   <center>
     <fieldset>
-      <legend><strong>Dados Processo</strong></legend>
+      <legend id="titulo"><strong>Dados Processo</strong></legend>
       <div class="formulario" style="margin-top: 15px;">
         <strong>Protocolo:&nbsp;</strong>
         <?= db_input("p101_sequencial",10,"",true,"text",3,"","","","text-align: center"); ?>
@@ -102,27 +104,35 @@ strong {
       </div>
       <div class="formulario">
         <strong>Usuário:&nbsp;</strong>
-        <?= db_input("id_usuario",10,"",true,"text",3,"","","","text-align: center"); ?>
-        <?= db_input("nome",37,"",true,"text",3); ?>
+        <div>
+          <?= db_input("id_usuario",10,"",true,"text",3,"","","","text-align: center"); ?>
+          <?= db_input("nome",37,"",true,"text",3); ?>
+        </div>
       </div>
       <div class="formulario">
       <strong>Depto. Origem:&nbsp;</strong>
-        <?=
-          db_input('p101_coddeptoorigem',10,"",true,'text',3,"","","","text-align: center;");
-          db_input('descrdeptoo',37,"",true,'text',3,'');
-        ?>
+        <div>
+          <?=
+            db_input('p101_coddeptoorigem',10,"",true,'text',3,"","","","text-align: center;");
+            db_input('descrdeptoo',37,"",true,'text',3,'');
+          ?>
+      </div>
       </div>
       <div class="formulario">
-        <?=
-          db_ancora("<strong><u>Depto. Destino:&nbsp;</u></strong>","js_pesquisap101_coddeptodestino(true);","");
-          db_input('p101_coddeptodestino',10,"",true,'text',""," onchange='js_pesquisap101_coddeptodestino(false);'","","","text-align: center;");
-          db_input('descrdeptod',37,"",true,'text',3,'');
-        ?>
+        <div>
+          <?= db_ancora("<strong><u>Depto. Destino:&nbsp;</u></strong>","js_pesquisap101_coddeptodestino(true);","");?>
+        </div>
+        <div>
+          <?=
+            db_input('p101_coddeptodestino',10,"",true,'text',""," onchange='js_pesquisap101_coddeptodestino(false);'","","","text-align: center;");
+            db_input('descrdeptod',37,"",true,'text',3,'');
+          ?>
+        </div>
       </div>
 
       <div class="formulario">
         <strong id="motivo">Observação:&nbsp;</strong>
-        <textarea style="width: 360px;" maxlength="200" name="p101_observacao"></textarea>
+        <textarea style="width: 358px;" maxlength="200" name="p101_observacao"></textarea>
       </div>
       <div class="formulario" id="anulado" style="display: none">
         <strong>Anulação:&nbsp;</strong>

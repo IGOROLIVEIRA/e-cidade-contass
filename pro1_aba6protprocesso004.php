@@ -68,6 +68,23 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
     max-width: 30px;
     text-align: center;;
 }
+td{
+  padding-top:20px;
+}
+#inserir{
+  padding-left: 17px;
+  padding-right: 17px;
+  margin-top:4px;
+  margin-left:12px;
+}
+input{
+  width:78px;
+}
+.ancora{
+  width: 11px;
+  padding-left: 11px;
+  padding-right: 7px;
+}
 </style>
 
 </head>
@@ -81,13 +98,9 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
     <input type="hidden" name="protocolo" value="<?= $protocolo ?>">
     <input type="hidden" name="dattab">
     <input type="hidden" name="valtab">
-<table border='0'>
-  <tr height="18px">
-    <td></td>
-    <td></td>
-  </tr>
     <table border='0'>
       <tr>
+        <td width="20%"></td>
         <td align="left" nowrap title="<?=$Tk17_codigo?>">
            <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true, k17_codigo_ini);");  ?>
         </td>
@@ -96,7 +109,7 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
             db_input('k17_codigo_ini',12,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false, k17_codigo_ini);'") ;
           ?>
         </td>
-        <td>
+        <td class="ancora">
           <? db_ancora("à","js_pesquisak17_codigo(true, k17_codigo_fim);");  ?>
         </td>
         <td>
@@ -104,18 +117,12 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
             db_input('k17_codigo_fim',12,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false, k17_codigo_fim);'") ;
           ?>
         </td>
-      </tr>
-
-      <tr height="16px">
-        <td></td>
-        <td></td>
+        <td width="33%"></td>
       </tr>
       <tr>
-        <!-- <td></td> -->
-        <td align="center" colspan="4">
+        <td align="center" colspan="6">
           <input type="button" id="inserir" value="Incluir" onclick="incluir();">
         </td>
-        <!-- <td></td> -->
       </tr>
     </table>
     <br>
