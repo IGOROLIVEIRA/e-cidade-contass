@@ -1991,6 +1991,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->precomplpri   = @$j43_compl;
     $pdf1->precgccpf     = $z01_cgccpf;
     $pdf1->cgccpf        = $z01_cgccpf;
+    $pdf1->cgmpessoa     = $z01_cgmpri;
+    $pdf1->nomepessoa    = $z01_nome;
 
   }else if(!empty($aDados["ver_inscr"])) {
 
@@ -2051,6 +2053,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->precomplpri   = $j39_compl;
     $pdf1->precgccpf     = $z01_cgccpf;
     $pdf1->cgccpf        = $z01_cgccpf;
+    $pdf1->cgmpessoa     = $z01_numcgm;
+    $pdf1->nomepessoa    = $z01_nome;
 
 
   } else if(!empty($aDados["ver_numcgm"])) {
@@ -2105,6 +2109,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->precomplpri   = $z01_compl;
     $pdf1->precgccpf     = $z01_cgccpf;
     $pdf1->cgccpf        = $z01_cgccpf;
+    $pdf1->cgmpessoa     = $z01_numcgm;
+    $pdf1->nomepessoa    = $z01_nome;
 
   } else {
 
