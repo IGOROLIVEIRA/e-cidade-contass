@@ -452,30 +452,33 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'tipo'=>'4',
      );
   }
-  //Descri��o do tipo de pagamento extra
-  if($aTiposPagamento[$iQuantTipoPagamento]['si195_indtipopagamento'] == 'E'){
-    //Consulta se o servidor possui ferias cadastradas no mes
-    $sSqlFerias = "SELECT *
-    FROM cadferia
-    WHERE r30_proc1 = '".db_getsession("DB_anousu")."/".$this->sDataFinal['5'].$this->sDataFinal['6']."'
-    AND r30_regist = ".$oDados10->rh02_regist."
-    ORDER BY r30_perai";
-    $rsResultFerias = db_query($sSqlFerias);
-    if(pg_num_rows($rsResultFerias)>0){
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = 'FERIAS';
-    }else{
+  //Descrição do tipo de pagamento extra
+  for ($iContTiposPagamento=0; $iContTiposPagamento < count($aTiposPagamento); $iContTiposPagamento++) { 
+    if($aTiposPagamento[$iContTiposPagamento]['si195_indtipopagamento'] == 'E'){
+      //Consulta se o servidor possui ferias cadastradas no mes
+      $sSqlFerias = "SELECT *
+      FROM cadferia
+      WHERE r30_proc1 = '".db_getsession("DB_anousu")."/".$this->sDataFinal['5'].$this->sDataFinal['6']."'
+      AND r30_regist = ".$oDados10->rh02_regist."
+      ORDER BY r30_perai";
+      $rsResultFerias = db_query($sSqlFerias);
+      if(pg_num_rows($rsResultFerias)>0){
+        $aTiposPagamento[$iContTiposPagamento]['si195_dsctipopagextra'] = 'FERIAS';
+      }else{
 
-      $sSqlRubricaCom = "SELECT rh27_descr
-      FROM gerfcom
-      INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
-      AND r48_instit = rh27_instit
-      WHERE r48_anousu = ".db_getsession("DB_anousu")."
-      AND r48_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
-      AND r48_regist = ".$oDados10->rh02_regist."
-      ";
-      $rsResultRubricaCom = db_query($sSqlRubricaCom);
-      $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = $rsResultRubricaCom->rh27_descr;
+        $sSqlRubricaCom = "SELECT rh27_descr
+        FROM gerfcom
+        INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
+        AND r48_instit = rh27_instit
+        WHERE r48_anousu = ".db_getsession("DB_anousu")."
+        AND r48_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+        AND r48_regist = ".$oDados10->rh02_regist."
+        ORDER BY r48_rubric LIMIT 1";
+        $rsResultRubricaCom = db_query($sSqlRubricaCom);
+        $oResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
+        $aTiposPagamento[$iContTiposPagamento]['si195_dsctipopagextra'] = $oResultRubricaCom->rh27_descr;
+      }
+
     }
 
   }
