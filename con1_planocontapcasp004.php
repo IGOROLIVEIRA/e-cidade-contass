@@ -336,6 +336,7 @@ function js_retornoAssociaConPlanoConta(oAjax) {
  js_removeObj("msgBox");
  var oRetorno = eval("("+oAjax.responseText+")");
  alert(oRetorno.message.urlDecode());
+ parent.iframe_conta.document.form1.c90_estrutcontabil.disabled = true;
 
 }
 

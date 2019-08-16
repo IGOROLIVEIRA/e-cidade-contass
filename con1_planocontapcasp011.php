@@ -701,7 +701,7 @@ $iOpcao = 1;
         js_pesquisac60_cgmpessoa(false);
 
         var lAbaReduzidos     = oRetorno.dados.iTipoConta == 0?false:true;
-        js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos);
+        js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos, oRetorno.dados.c90_estrutcontabil.split('.').join(''), oRetorno.dados.iCodigoContaCorrente);
 
         if($("iSistemaConta").value == '2'  && $("iDetalhamentoSistema").value == '7') {
             $("isubtipo_hidden").value = oRetorno.dados["isubtipo"];
@@ -954,8 +954,6 @@ $iOpcao = 1;
                 oParam.iContaCorrente = $F('iCodigoContaCorrente');
             } else {
                 oParam.iContaCorrente = js_verificaContaEstrutural(sEstrutural);
-                $('iCodigoContaCorrente').value = oParam.iContaCorrente;
-                js_pesquisaContaCorrente(false);
             }
         }
 
@@ -1150,14 +1148,11 @@ $iOpcao = 1;
     function js_liberaAbasPlano(iCodigoConta, lAbaReduzidos, sEstrutural = null, iContaCorrente = null) {
 
         parent.document.formaba.reduzido.disabled  = true;
-        if (lAbaReduzidos) {
+        if (lAbaReduzidos && sEstrutural != null && iContaCorrente != null) {
 
             parent.document.formaba.reduzido.disabled  = false;
-            if(sEstrutural != null && iContaCorrente != null) {
-                parent.iframe_reduzido.location.href = "con1_planocontapcasp004.php?iCodigoConta=" + iCodigoConta + "&sEstrutural=" + sEstrutural + "&iContaCorrente=" + iContaCorrente;
-            } else {
-                parent.iframe_reduzido.location.href = "con1_planocontapcasp004.php?iCodigoConta=" + iCodigoConta;
-            }
+            parent.iframe_reduzido.location.href = "con1_planocontapcasp004.php?iCodigoConta=" + iCodigoConta + "&sEstrutural=" + sEstrutural + "&iContaCorrente=" + iContaCorrente;
+
         }
 
         parent.document.formaba.vinculo.disabled = false;
