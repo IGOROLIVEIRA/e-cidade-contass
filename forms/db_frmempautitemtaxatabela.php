@@ -314,7 +314,7 @@ function js_troca(codele) {
         <?
           if(isset($opcao)){
             if(!isset($e55_vlrun)){
-              $e55_vlrun = number_format($e55_vltot/$e55_quant,2,".","");
+              $e55_vlrun = number_format($e55_vltot / $e55_quant,2,".","");
             }
             $e55_vluni=$e55_vlrun;
           }
@@ -322,7 +322,7 @@ function js_troca(codele) {
         ?>
         <?=@$Le55_vltot?>
         <?
-          if(isset($pc01_servico) and $pc01_servico=='t') {
+          if(isset($pc01_servico) and $pc01_servico == 't') {
             $db_opcao_e55_vltot = 3;
           } else {
             $db_opcao_e55_vltot = $db_opcao;
@@ -415,7 +415,7 @@ function js_troca(codele) {
   <table>
     <tr>
     <td colspan='2' align='center'>
-    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onclick=" return js_verificar();" >
+    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=($db_opcao == 22) ? "onclick='return js_verificar();'" : ''?>  >
     <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
       </td>
     </tr>
