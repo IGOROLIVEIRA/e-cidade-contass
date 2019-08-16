@@ -295,6 +295,10 @@ function js_retornoSalvarReduzidos(oAjax) {
   $('iCodigoTce').value            = '';
   js_carregaReduzidos();
 
+  if(oGridReduzido.getNumRows() < 1) {
+    js_associaConplanoConta();
+  }
+
   var sLinkInstituicao = "<a class=\"dbancora\" onclick=\"js_pesquisaInstituicao(true)\" style=\"text-decoration:underline;\" href=\"#\"><b>Instituição:</b></a>";
   
   $("iCodigoInstituicao").readOnly              = false;
@@ -302,6 +306,37 @@ function js_retornoSalvarReduzidos(oAjax) {
   $("iCodigoInstituicao").style.color           = "#000";
   $("tdInstituicao").innerHTML                  = sLinkInstituicao;
   
+}
+
+/**
+* Função para associação automática da respectiva conta com o conta corrente
+*/
+function js_associaConplanoConta() {
+
+  var sEstrutural       = <?=$oGet->sEstrutural;?>;
+  var iContaCorrente    = <?=$oGet->iContaCorrente;?>;
+
+  var oParam                  = new Object();
+  oParam.exec                 = "salvarVinculo";
+  oParam.iCodigoContaCorrente = iContaCorrente;
+  oParam.sEstrutural          = sEstrutural.toString();
+
+  js_divCarregando("Aguarde, vinculando contas contábeis...", "msgBox");
+
+  var oAjax = new Ajax.Request("con4_contacorrente.RPC.php",
+      {method: 'post',
+          parameters: 'json='+Object.toJSON(oParam),
+          onComplete: js_retornoAssociaConPlanoConta
+      });
+
+}
+
+function js_retornoAssociaConPlanoConta(oAjax) {
+
+ js_removeObj("msgBox");
+ var oRetorno = eval("("+oAjax.responseText+")");
+ alert(oRetorno.message.urlDecode());
+
 }
 
 /**
