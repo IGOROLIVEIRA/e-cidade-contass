@@ -91,7 +91,11 @@ function js_calcula(origem) {
   uni   = new Number(obj.e55_vluni.value);
   tot   = new Number(obj.e55_vltot.value).toFixed(2);
 
-  conQt = obj.lControlaQuantidade.value;
+  conQt = 'false';
+
+  if (document.querySelector('#lControlaQuantidade')){
+    conQt = obj.lControlaQuantidade.value;
+  } 
 
   if (conQt == 'true') {
     t = new Number(uni * quant);
@@ -555,7 +559,6 @@ function js_mostrapcmater(chave,erro,codele){
 }
 
 function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chave7,chave8,chave9) {
-
   document.form1.e55_item.value        = chave1;
   document.form1.pc01_descrmater.value = chave2;
   document.form1.pc07_codele.value     = codele;
