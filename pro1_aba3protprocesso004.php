@@ -223,10 +223,11 @@ function js_mostraempempenho_ini(chave1, chave2, chave3, chave4, chave5){
 }
 
 function js_mostraempempenho1(chave1, chave2, chave3, chave4, chave5){
+  let emiss = new Date(chave3);
   document.form1.valtab.value         = chave4;
   if(chave5){
     document.form1.e60_anousu_ini.value = chave3;
-    document.form1.e60_codemp_ini.value = chave5;
+    document.form1.e60_codemp_ini.value = chave5+'/'+emiss.getFullYear();
   }
 
   db_iframe_empempenho1.hide();
@@ -242,10 +243,11 @@ function js_mostraempempenho_fim(chave1, chave2, chave3, chave4, chave5){
 }
 
 function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5){
+  let emiss = new Date(chave3);
   document.form1.valtab.value         = chave4;
   if(chave5){
     document.form1.e60_anousu_fim.value = chave3;
-    document.form1.e60_codemp_fim.value = chave5;
+    document.form1.e60_codemp_fim.value = chave5+'/'+emiss.getFullYear();
   }
   db_iframe_empempenho2.hide();
 }
