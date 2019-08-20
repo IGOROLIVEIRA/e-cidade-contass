@@ -195,7 +195,7 @@ function limpaCampos(){
 
 //--------------------------------
 function js_pesquisae60_codemp(mostra, campo){
-  console.log('Campo valor: ', campo.value);
+
   if(campo.name == 'e60_codemp_ini'){
     if(mostra==true){
       js_OpenJanelaIframe('','db_iframe_empempenho1','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome|e60_emiss|e60_vlremp|e60_codemp','Pesquisa',true);
@@ -342,7 +342,6 @@ function pesquisaEmpenhos(){
   //     return false;
   //   }
   // }
-  console.log('Parametros: ', oParam);
   let listaEmpenhos = [];
   oParam.exec = 'pesquisaEmpenhos';
   novoAjax(oParam, function(e){
@@ -375,18 +374,20 @@ function incluir() {
   if(aEmpenhos.length == 0)
     aEmpenhos = pesquisaEmpenhos();
 
-  let aNumEmpenhos = [];
-
-  aEmpenhos.forEach((empenho) => {
-    aNumEmpenhos.push(empenho.e60_numemp);
-  });
-
-  incluirEmpenho(protocolo, aNumEmpenhos);
-  if(aNumEmpenhos.length == 100){
-    let priEmp = aEmpenhos[0];
-    let ultEmp = aEmpenhos[aEmpenhos.length - 1];
-    alert(`Inseridos 100 registros do intervalo ${priEmp.e60_codemp}/${priEmp.e60_anousu} à ${ultEmp.e60_codemp}/${ultEmp.e60_anousu}`);
-  }
+  incluirEmpenho(protocolo, aEmpenhos);
+  // if(retornoCadastro.erro){
+  //   alert(retornoCadastro.erro);
+  // }
+  // if(empenhoCadastrado){
+  //   aEmpenhos.map(empenho => {
+  //     if(empenho)
+  //   })
+  // }
+  // if(aNumEmpenhos.length == 100){
+  //   let priEmp = aEmpenhos[0];
+  //   let ultEmp = aEmpenhos[aEmpenhos.length - 1];
+  //   alert(`Inseridos 100 registros do intervalo ${priEmp.e60_codemp}/${priEmp.e60_anousu} à ${ultEmp.e60_codemp}/${ultEmp.e60_anousu}`);
+  // }
 }
 
 function incluirEmpenho(iProtocolo, iEmpenho) {
@@ -399,6 +400,16 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
   novoAjax(params, function(e) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
+        console.log('Retorno da bagaça: ', oRetorno);
+        if(oRetorno.erro){
+          alert(oRetorno.erro);
+        }
+
+        if(iEmpenho.length == 100){
+          let priEmp = iEmpenho[0];
+          let ultEmp = iEmpenho[iEmpenho.length - 1];
+          alert(`Inseridos 100 registros do intervalo ${priEmp.e60_numemp}/${priEmp.e60_anousu} à ${ultEmp.e60_numemp}/${ultEmp.e60_anousu}`);
+        }
         pesquisaProtocolo(iProtocolo);
         document.form1.e60_numemp.value = "";
         document.form1.e60_codemp_ini.value = "";
@@ -406,9 +417,10 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
+
       } else {
           alert(oRetorno.erro);
-        return;
+          return oRetorno.empenho;
       }
     }, false);
     js_removeObj('div_aguarde');
@@ -480,7 +492,6 @@ function excluir(protocolo) {
   recEmpenhos.forEach(function (item) {
     if (item.checked) {
       var empenhoAno = item.value.split("/");
-      console.log(empenhoAno);
       var empenho    = empenhoAno[0];
       var ano        = empenhoAno[1];
       empenhos.push("'"+empenho+"'");

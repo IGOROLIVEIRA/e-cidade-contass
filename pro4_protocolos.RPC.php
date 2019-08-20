@@ -198,25 +198,47 @@ switch ($oParam->exec) {
   case "insereEmpenho":
 
     try {
-        foreach($oParam->empenho as $empenho){
-
+      $tamanho = count($oParam->empenho);
+      $empenhosCadastrados = array();
+      foreach($oParam->empenho as $empenho){
         $verifica = false;
-        $verifica = verificaEmpenho($empenho, $oParam->protocolo);
-        if ($verifica == true) {
-          throw new Exception("O empenho ".$empenho." já existe para este protocolo!");
-        }
-        $oEmpenho = new cl_protempenhos;
-        $oEmpenho->p103_numemp    = $empenho;
-        $oEmpenho->p103_protocolo = $oParam->protocolo;
-        $oEmpenho->incluir(null);
+        $verifica = verificaEmpenho($empenho->e60_numemp, $oParam->protocolo);
 
-        if ($oEmpenho->erro_status != 1) {
-          throw new Exception($oEmpenho->erro_msg);
+        if ($verifica == true) {
+          if($tamanho > 1){
+            $empenhosCadastrados[] = $empenho->e60_numemp;
+          }else{
+            throw new Exception("O empenho ".$empenho->e60_numemp." já existe para este protocolo!");
+          }
         }
+
       }
+      $listaCadastrados = array();
+      foreach ($oParam->empenho as $empenho) {
+        if(!in_array($empenho->e60_numemp, $empenhosCadastrados)){
+          $oEmpenho = new cl_protempenhos;
+          $oEmpenho->p103_numemp = $empenho->e60_numemp;
+          $oEmpenho->p103_protocolo = $oParam->protocolo;
+          $oEmpenho->incluir(null);
+        }else{
+          $listaCadastrados[] = $empenho->e60_numemp;
+        }
+    }
+    $stringErro = implode(',', $listaCadastrados);
+    $qtdCadastrados = count($listaCadastrados);
+    if($qtdCadastrados > 1){
+      if($qtdCadastrados > 5){
+        $primeiroEmpenho = $listaCadastrados[0];
+        $ultimoEmpenho = $listaCadastrados[$qtdCadastrados - 1];
+        $oRetorno->erro = "Os empenhos do intervalo ".$primeiroEmpenho.' à '.$ultimoEmpenho." já estão cadastrados!";
+      }else $oRetorno->erro = "Os empenhos ".$stringErro." já estão cadastrados!";
+    }else if($qtdCadastrados == 1){
+      $oRetorno->erro = "O empenho ".$stringErro." já está cadastrado!";
+    }
+
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
-      $oRetorno->status   = 2;
+      $oRetorno->status = 2;
     }
 
   break;
