@@ -232,6 +232,9 @@ function js_excluirReduzido(iReduzido, iCodigoInstituicao) {
                                    alert(oRetorno.message.urlDecode());
                                    if (oRetorno.status == 1) {
                                      js_carregaReduzidos();
+                                     parent.iframe_conta.document.form1.iTipoConta.value = 0;
+                                     parent.iframe_conta.document.form1.iCodigoContaCorrente.value = '';
+                                     parent.iframe_conta.document.form1.sDescricaoContaCorrente.value = '';
                                    }
                                  }
                                 }
@@ -337,6 +340,8 @@ function js_retornoAssociaConPlanoConta(oAjax) {
  var oRetorno = eval("("+oAjax.responseText+")");
  alert(oRetorno.message.urlDecode());
  parent.iframe_conta.document.form1.c90_estrutcontabil.disabled = true;
+ parent.iframe_conta.document.form1.iCodigoContaCorrente.value = <?=$oGet->iContaCorrente;?>;
+ parent.iframe_conta.js_pesquisaContaCorrente(false);
 
 }
 
