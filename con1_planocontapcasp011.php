@@ -701,7 +701,7 @@ $iOpcao = 1;
         js_pesquisac60_cgmpessoa(false);
 
         var lAbaReduzidos     = oRetorno.dados.iTipoConta == 0?false:true;
-        js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos);
+        js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos, oRetorno.dados.c90_estrutcontabil.split('.').join(''), oRetorno.dados.iCodigoContaCorrente);
 
         if($("iSistemaConta").value == '2'  && $("iDetalhamentoSistema").value == '7') {
             $("isubtipo_hidden").value = oRetorno.dados["isubtipo"];
@@ -950,7 +950,11 @@ $iOpcao = 1;
         oParam.iNaturezaReceita     = iNaturezaReceita;
 
         if (iTipoConta == 1 ) {
-            oParam.iContaCorrente = $F('iCodigoContaCorrente');
+            if($F('iCodigoContaCorrente') != '') {
+                oParam.iContaCorrente = $F('iCodigoContaCorrente');
+            } else {
+                oParam.iContaCorrente = js_verificaContaEstrutural(sEstrutural);
+            }
         }
 
         var oAjax                   = new Ajax.Request(sUrlRPC,
@@ -976,7 +980,7 @@ $iOpcao = 1;
 
                 alert("Aba 'Reduzidos' liberada.");
                 parent.mo_camada('reduzido');
-                js_liberaAbasPlano(oRetorno.iCodigoConta, true);
+                js_liberaAbasPlano(oRetorno.iCodigoConta, true, oRetorno.sEstrutural.split('.').join(''), oRetorno.iContaCorrente);
             }
         }
     }
@@ -1141,13 +1145,14 @@ $iOpcao = 1;
         }
     }
 
-    function js_liberaAbasPlano(iCodigoConta, lAbaReduzidos) {
+    function js_liberaAbasPlano(iCodigoConta, lAbaReduzidos, sEstrutural = null, iContaCorrente = null) {
 
         parent.document.formaba.reduzido.disabled  = true;
-        if (lAbaReduzidos) {
+        if (lAbaReduzidos && sEstrutural != null && iContaCorrente != null) {
 
             parent.document.formaba.reduzido.disabled  = false;
-            parent.iframe_reduzido.location.href       = "con1_planocontapcasp004.php?iCodigoConta="+iCodigoConta;
+            parent.iframe_reduzido.location.href = "con1_planocontapcasp004.php?iCodigoConta=" + iCodigoConta + "&sEstrutural=" + sEstrutural + "&iContaCorrente=" + iContaCorrente;
+
         }
 
         parent.document.formaba.vinculo.disabled = false;
@@ -1339,6 +1344,66 @@ $iOpcao = 1;
     $('c90_estrutcontabil').observe('change', function() {
         js_habilitacgmpessoa(document.form1.c90_estrutcontabil.value,$F("iTipoConta"));
     });
+
+    /**
+     * Função que retorna conta corrente de acordo com o inicial do estrutural
+     */
+
+    function js_verificaContaEstrutural(sEstrutural) {
+
+        let aEstC100 = [
+            '52111', '521120101', '5211202', '5211203', '5211204', '5211205', '5211206', '5211299', '5212101', '5212102',
+            '52129', '6211', '6212', '6213101', '62132', '62133', '62134', '62135', '62136', '62139'
+        ];
+
+        let aEstC101 = [
+            '5111', '5112', '5221101', '522110201', '522110209', '5221201', '522120201', '522120202', '522120203',
+            '522120301', '522120302', '522120303', '5221301', '5221302', '5221303', '5221304', '5221305', '5221306',
+            '5221307', '5221309', '5221399', '522190101', '522190109', '522190201', '522190209', '5221904', '5222101',
+            '5222102', '522210901', '522210909', '522220101', '522220109', '522220201', '522220209', '522220901',
+            '522220909', '5222901', '5222902', '5229101', '5229102', '5229103', '522920101', '522920102', '522920103',
+            '522920104', '6111', '6112', '6113', '62211', '6221201', '6221202', '6221299', '6221399', '6222101', '6222102',
+            '622210901', '622210909', '622220101', '622220201', '622220901', '622220909', '62229', '62231', '6229101',
+            '6229102', '622920101', '622920102', '622920103', '622920104', '7531', '7532', '7533', '7534', '8531', '85321',
+            '85322', '85323', '85324', '85331', '85332', '85333', '85334', '85335', '85336', '85337', '85338', '85341',
+            '85342', '85343', '85344', '85345'
+        ];
+
+        let aEstC102 = [
+            '6221301', '6221302', '6221303', '6221304', '6221305', '6221306', '6221307'
+        ];
+
+        let aEstC106 = [
+            '5311', '5312', '5313', '5316', '5317', '5321', '5322', '5326', '5327', '6311', '6312', '6313', '6314',
+            '6315', '6316', '63171', '63172', '63191', '63199', '6321', '6322', '6326', '6327', '63291', '63299'
+        ];
+
+        for (var i = 0; i < aEstC100.length; i++) {
+            if(sEstrutural.split('.').join('').substr(0, aEstC100[i].length).includes(aEstC100[i])){
+                return 100;
+            }
+        }
+
+        for (var i = 0; i < aEstC101.length; i++) {
+            if(sEstrutural.split('.').join('').substr(0, aEstC101[i].length).includes(aEstC101[i])){
+                return 101;
+            }
+        }
+
+        for (var i = 0; i < aEstC102.length; i++) {
+            if(sEstrutural.split('.').join('').substr(0, aEstC102[i].length).includes(aEstC102[i])){
+                return 102;
+            }
+        }
+
+        for (var i = 0; i < aEstC106.length; i++) {
+            if(sEstrutural.split('.').join('').substr(0, aEstC106[i].length).includes(aEstC106[i])){
+                return 106;
+            }
+        }
+
+        return 103;
+    }
 
     js_main();
 </script>

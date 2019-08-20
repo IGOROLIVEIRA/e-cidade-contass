@@ -148,6 +148,7 @@ switch ($oParam->exec) {
             $oRetorno->iDesdobramento = $oPlanoPCASP->getDesdobramento();
             $oRetorno->iCgmPessoa = $oPlanoPCASP->getCgmPessoa();
             $oRetorno->iNaturezaReceita = $oPlanoPCASP->getNaturezadaReceita();
+            $oRetorno->iContaCorrente = $oParam->iContaCorrente;
 
             db_fim_transacao(false);
         } catch (Exception $eErro) {

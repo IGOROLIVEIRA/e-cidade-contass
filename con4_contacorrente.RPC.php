@@ -1457,7 +1457,7 @@ try {
             db_inicio_transacao();
             $oContaCorrente = new ContaCorrente($oParam->iCodigoContaCorrente);
             $oContaCorrente->vincularContasContabeisPorEstrutural($oParam->sEstrutural);
-            $oRetorno->message = urlencode("Contas vínculadas com sucesso.");
+            $oRetorno->message = urlencode("Contas vinculadas com sucesso.");
             db_fim_transacao(false);
             break;
 
