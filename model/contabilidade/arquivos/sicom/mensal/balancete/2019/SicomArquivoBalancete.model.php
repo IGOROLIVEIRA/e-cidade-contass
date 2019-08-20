@@ -1576,8 +1576,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf
-                                        FROM
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
+                                               identificadorfinanceiro
+                                          FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
                                                   c61_reduz,
@@ -1587,7 +1588,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1605,17 +1606,16 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $oReg15Saldo = db_utils::fieldsMemory($rsReg15saldos, $iContSaldo15);
 
-                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro;
+                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oReg15Saldo->identificadorfinanceiro;
 
                         $oReg15Saldo->anterior = $oReg15Saldo->naturezasaldoinicialsf == 'C' ? $oReg15Saldo->anterior * -1 : $oReg15Saldo->anterior;
 
-                        if (!isset($aContasReg10[$reg10Hash]->reg15[$sHash15])) {
-
+                        if (!isset($aContasReg10[$reg10Hash]->reg15[$sHash15])){
                             $obalancete15 = new stdClass();
                             $obalancete15->si182_tiporegistro = 15;
                             $obalancete15->si182_contacontabil = $oContas10->si177_contacontaabil;
                             $obalancete15->si182_codfundo = "00000000";
-                            $obalancete15->si182_atributosf = $oContas10->identificadorfinanceiro;
+                            $obalancete15->si182_atributosf = $oReg15Saldo->identificadorfinanceiro;
                             $obalancete15->si182_saldoinicialsf = $oReg15Saldo->anterior;
                             $obalancete15->si182_naturezasaldoinicialsf = $obalancete15->anterior >= 0 ? 'D' : 'C';
                             $obalancete15->si182_totaldebitossf = $oReg15Saldo->debitos;
@@ -1627,13 +1627,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $aContasReg10[$reg10Hash]->reg15[$sHash15] = $obalancete15;
 
-                        } else {
+                        } else{
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldoinicialsf += $oReg15Saldo->anterior;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_totaldebitossf += $oReg15Saldo->debitos;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_totalcreditossf += $oReg15Saldo->creditos;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldofinalsf += ($oReg15Saldo->anterior + $oReg15Saldo->debitos - $oReg15Saldo->creditos) == '' ? 0 : ($oReg15Saldo->anterior + $oReg15Saldo->debitos - $oReg15Saldo->creditos);
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_naturezasaldofinalsf = ($aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldofinalsf >= 0 ? 'D' : 'C');
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_naturezasaldoinicialsf = ($aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldoinicialsf >= 0 ? 'D' : 'C');
+
                         }
                     }
                 }
@@ -2928,7 +2929,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     throw new Exception($obalreg14->erro_msg);
                 }
             }
-
             foreach ($oDado10->reg15 as $reg15) {
 
                 $obalreg15 = new cl_balancete152019();
