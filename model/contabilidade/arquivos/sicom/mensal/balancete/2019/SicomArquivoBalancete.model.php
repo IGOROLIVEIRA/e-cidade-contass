@@ -1676,7 +1676,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1687,7 +1688,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1824,7 +1825,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1835,7 +1837,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1904,7 +1906,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1915,7 +1918,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -2583,7 +2586,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialnrsf,
                                                substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalnrsf,
-                                               c60_estrut
+                                               c60_estrut,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -2594,7 +2598,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   p.c60_consistemaconta,
                                                   o.c60_estrut
                                            FROM conplanoexe e
@@ -2668,7 +2672,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
                                                substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
-                                               nrodocumentopessoaatributosf,z01_numcgm
+                                               nrodocumentopessoaatributosf,z01_numcgm,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -2679,7 +2684,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta,
                                                   cgm.z01_cgccpf as nrodocumentopessoaatributosf,z01_numcgm
                                            FROM conplanoexe e
