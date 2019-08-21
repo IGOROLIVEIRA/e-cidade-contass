@@ -209,6 +209,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 		                                                  '54') order by liclicita.l20_edital";
 
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    print_r($sSql);
     $aLicitacoes = array();
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -325,6 +326,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);
+
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
       $clhomolic20 = new cl_homolic202019();

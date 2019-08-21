@@ -1155,15 +1155,13 @@ function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
   $param_ini = $emp_inicial[0];
   $param_fim = $emp_final[0];
 
-  if($emp_inicial[0] == $emp_final[0]){
+  if($emp_inicial[0] && $emp_final[0]){
     if($emp_inicial[1] && !$emp_final[1]){
       $emp_final[1] = $emp_inicial[1];
+    }else if(!$emp_inicial[1] && $emp_final[1]){
+      $emp_inicial[1] = $emp_final[1];
     }else if(!$emp_inicial[1] && !$emp_final[1] && $dtinicio){
       $dtfim = $dtinicio;
-    }
-  }else if($emp_inicial[0] != $emp_final[0]){
-    if(!$emp_final[1]){
-      $emp_final[1] = db_getsession('DB_anousu');
     }
   }
 
@@ -1179,8 +1177,7 @@ function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
 
   if($param_ini && $param_fim){
     if($param_fim == $param_ini){
-      if($dtinicio != $dtfim){ // 2 -> 2/2017 : 2/2018
-        // if($dataInicial[0] == $param_fim[1])
+      if($dtinicio != $dtfim){
           $dtfim = $dtinicio;
       }
     }

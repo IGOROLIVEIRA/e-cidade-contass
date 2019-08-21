@@ -304,44 +304,47 @@ function pesquisaEmpenhos(){
 
   let empIni = doc.e60_codemp_ini.value.split('/');
   let empFim = doc.e60_codemp_fim.value.split('/');
+  console.log('Ini: ', empIni);
+  console.log('Fim: ', empFim);
+  if(!empIni[1] && empFim[1]){
+    empIni[1] = empFim[1];
+  }
+
+  if(empFim[1] && !empIni[1]){
+    empFim[1] = empIni[1]
+  }
 
   if(doc.e60_codemp_ini.value){
     oParam.inicio = empIni;
     oParam.dtInicio = doc.e60_anousu_ini.value;
   }
+
   if(doc.e60_codemp_fim.value){
     oParam.fim = empFim;
     oParam.dtFim = doc.e60_anousu_fim.value;
   }
 
-  let ini = new Date(`${oParam.dtInicio}`);
-  let fim = new Date(`${oParam.dtFim}`);
-
-  if(ini && fim && ini.getFullYear() > fim.getFullYear() || ini.getFullYear() == parseInt(empFim[1]) && empIni[0] > empFim[0]){
-    alert('Data do empenho final menor que o empenho inicial');
-    return false;
-  }
-
-  if(!empIni[1] && !empFim[1]){
-    if(ini && fim && ini.getFullYear() == fim.getFullYear()){
-      if(parseInt(oParam.fim) < parseInt(oParam.inicio)){
-        alert('Valor do último empenho é menor que o empenho inicial');
-        return false;
-      }
+  if(empIni[1] && empFim[1]){
+    if(parseInt(empIni[1]) > parseInt(empFim[1])){
+      alert('Data do empenho final é menor que o empenho inicial. Verifique!');
+      return false;
+    }
+    if(parseInt(empIni[0]) > parseInt(empFim[0])){
+      alert('Empenho inicial é maior que o empenho Final. Verifique!');
+      return false;
     }
   }
 
-  if(ini.getFullYear() > parseInt(empFim[1])){
+  if(parseInt(empIni[0]) > parseInt(empFim[0])){
+    alert('Valor do último empenho é menor que o empenho inicial');
+    return false;
+  }
+
+  if(parseInt(empIni[1]) > parseInt(empFim[1])){
     alert('Data do empenho inicial é maior que o empenho final');
     return false;
   }
 
-  // else{
-  //   if(parseInt(empIni[1]) > parseInt(empFim[1])){
-  //     alert('Data do empenho inicial é maior que o empenho final');
-  //     return false;
-  //   }
-  // }
   let listaEmpenhos = [];
   oParam.exec = 'pesquisaEmpenhos';
   novoAjax(oParam, function(e){
@@ -400,7 +403,6 @@ function incluirEmpenho(iProtocolo, iEmpenho) {
   novoAjax(params, function(e) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
-        console.log('Retorno da bagaça: ', oRetorno);
         if(oRetorno.erro){
           alert(oRetorno.erro);
         }
