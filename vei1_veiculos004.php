@@ -56,6 +56,7 @@ $clpcforne       = new cl_pcforne;
 
 $db_opcao = 1;
 $db_botao = true;
+
 if(isset($incluir)){
     $clcondataconf = new cl_condataconf;
 
