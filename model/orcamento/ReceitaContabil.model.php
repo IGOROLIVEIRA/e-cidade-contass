@@ -483,6 +483,10 @@ class ReceitaContabil {
 
         }
 
+        if (substr($this->getContaOrcamento()->getEstrutural(), 0, 3) == 493) {
+          $iCodigoTipoDocumento = 101;
+        }
+        
         $oDocumentoContabil = SingletonRegraDocumentoContabil::getDocumento($iCodigoTipoDocumento);
         $oDocumentoContabil->setValorVariavel("[codigoreceita]", $codrec);
         $oDocumentoContabil->setValorVariavel("[anousureceita]", $iAnoAutenticacao);
