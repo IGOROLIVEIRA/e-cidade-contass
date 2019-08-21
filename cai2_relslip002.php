@@ -71,6 +71,17 @@ if (($data != "--") && ($data1 != "--")) {
    $sAnd   = " and ";
 }
 
+if (($data_autenticacao != "--") && ($data_autenticacao1 != "--")) {
+    $sWhere .= "{$sAnd} k17_dtaut  between '$data_autenticacao' and '$data_autenticacao1'  ";
+    $sAnd   = " and ";
+} else if ($data_autenticacao != "--"){
+    $sWhere .= "{$sAnd} k17_dtaut >= '$data_autenticacao'  ";
+    $sAnd   = " and ";
+} else if ($data_autenticacao1!="--"){
+    $sWhere .= "{$sAnd} k17_dtaut <= '$data_autenticacao1'   ";
+    $sAnd   = " and ";
+}
+
 // Filtro em conta espe
 $codconta = isset($codconta) ? intval($codconta) : '';
 

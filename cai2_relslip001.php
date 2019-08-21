@@ -56,6 +56,10 @@ $db_opcao = 1;
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 <script>
 function js_emite(){
   var var_obj     = document.getElementById('cgm').length;
@@ -79,7 +83,8 @@ function js_emite(){
   qry+= '&situac='+document.form1.situacao.value;
   qry+= '&data='+document.form1.data_ano.value+'-'+document.form1.data_mes.value+'-'+document.form1.data_dia.value;
   qry+= '&data1='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
-  qry+= '&parametro='+document.form1.parametro.value;
+  qry+= '&data_autenticacao='+document.form1.data_autenticacao_ano.value+'-'+document.form1.data_autenticacao_mes.value+'-'+document.form1.data_autenticacao_dia.value;
+  qry+= '&data_autenticacao1='+document.form1.data_autenticacao1_ano.value+'-'+document.form1.data_autenticacao1_mes.value+'-'+document.form1.data_autenticacao1_dia.value;
   qry+= '&slip1='+document.form1.k17_codigo.value;
   qry+= '&recurso='+document.form1.o15_codigo.value;
   qry+= '&slip2='+document.form1.k17_codigo02.value;
@@ -95,186 +100,185 @@ function js_emite(){
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+    <style>
+        #fieldset_cgm {
+            width: 500px;
+        }
+    </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
     <tr>
-      <td width="360" height="18">&nbsp;</td>
-      <td width="263">&nbsp;</td>
-      <td width="25">&nbsp;</td>
-      <td width="140">&nbsp;</td>
+        <td width="360" height="18">&nbsp;</td>
+        <td width="263">&nbsp;</td>
+        <td width="25">&nbsp;</td>
+        <td width="140">&nbsp;</td>
     </tr>
-  </table>
+</table>
 <br>
-  <table  align="center" cellspacing='0' border="0">
-    <tr><td><fieldset><table>
-    <form name="form1">
-      <tr>
-	<td nowrap title="<?=@$Tk17_codigo?>" align='left'>
-	   <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",$db_opcao);  ?>
-	 </td><td>
-	   <? db_input('k17_codigo',16,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'")  ?>
-		 </td><td>
-           <? db_ancora("<b>até</b>","js_pesquisak17_codigo02(true);",$db_opcao);  ?>
-			</td><td>
-	   <? db_input('k17_codigo',16,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02")?>
-	</td>
-      </tr>
-      <tr>
-        <td align=left>
-	  <b>De:</b></td><td><?db_inputdata("data","","","","true","text",2);?>
-		  </td><td>
-          <b>Até:</b>
-					</td>
-					<td>
-					<?db_inputdata("data1","","","","true","text",2);?>
-	      </td>
-      </tr>
-      <tr>
-    <td align="left"><? db_ancora(@$Lk17_hist,"js_pesquisac50_codhist(true);",$db_opcao);  ?></td>
-    <td colspan="4"><?
-                  db_input('k17_hist',10,$Ik17_hist,true,'text',$db_opcao," onchange='js_pesquisac50_codhist(false);'");
-                  db_input('c50_descr',30,$Ic50_descr,true,'text',3);
-            ?>
-    </td>
-    </tr>
-
+<table align="center" cellspacing='0' border="0">
     <tr>
-      <td align="left">
-        <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
-      </td>
-      <td colspan="4">
-        <?php
-          db_input('c61_reduz',10,$Ic61_reduz,true,'text',$db_opcao,"onchange='js_pesquisac61_reduz(false);'");
-          db_input('c60_descr',60,$Ic60_descr,true,'text',3,'');
-        ?>
-      </td>
         <td>
-          <? 
-          $movimento = array(
-           "0"=>"Todos",
-           "1"=>"Debito",
-           "2"=>"Credito");
-          db_select("movimento",$movimento,true,2); ?>
-          </td>
+            <fieldset>
+                <table>
+                    <form name="form1">
+                        <tr>
+                            <td nowrap title="<?=@$Tk17_codigo?>" align='left'>
+                                <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",$db_opcao);  ?>
+                            </td>
+                            <td>
+                                <? db_input('k17_codigo',14,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'")  ?>
+                            </td>
+                            <td align="right">
+                                <? db_ancora("<b>até:</b>","js_pesquisak17_codigo02(true);",$db_opcao);  ?>
+                                <? db_input('k17_codigo',14,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02")?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align=left>
+                                <b>Data Emissão:</b>
+                            </td>
+                            <td>
+                                <?db_inputdata("data","","","","true","text",2);?>
+                            </td>
+                            <td align="right">
+                                <b>à:</b><?db_inputdata("data1","","","","true","text",2);?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align=left>
+                                <b>Data Autenticação:</b>
+                            </td>
+                            <td>
+                                <?db_inputdata("data_autenticacao","","","","true","text",2);?>
+                            </td>
+                            <td align="right">
+                                <b>à:</b><?db_inputdata("data_autenticacao1","","","","true","text",2);?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <? db_ancora(@$Lk17_hist,"js_pesquisac50_codhist(true);",$db_opcao);  ?>
+                            </td>
+                            <td colspan="2">
+                                <? db_input('k17_hist',10,$Ik17_hist,true,'text',$db_opcao," onchange='js_pesquisac50_codhist(false);'");
+                                   db_input('c50_descr',48,$Ic50_descr,true,'text',3); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
+                            </td>
+                            <td colspan="2">
+                                <?php db_input('c61_reduz',10,$Ic61_reduz,true,'text',$db_opcao,"onchange='js_pesquisac61_reduz(false);'");
+                                      db_input('c60_descr',48,$Ic60_descr,true,'text',3,''); ?>
+                            </td>
+                            <td>
+                                <? $movimento = array(
+                                        "0"=>"Todos",
+                                        "1"=>"Debito",
+                                        "2"=>"Credito");
+                                db_select("movimento",$movimento,true,2); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Recurso:</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $dbwhere = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
+                                   $rs      = $clorctiporec->sql_record($clorctiporec->sql_query(null,"o15_codigo,o15_descr","o15_codigo",$dbwhere));
+                                   db_selectrecord("o15_codigo",$rs,false,1,"","","","0"); ?>
+                                <script>
+                                    document.getElementById('o15_codigo').style.width='16%';
+                                    document.getElementById('o15_codigodescr').style.width='83%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align=left><strong>Situacao :&nbsp;&nbsp;</strong></td><td colspan=2>
+                                <? $tipo_ordem = array("A"=>"Todas","1"=>"Não Autenticado","2"=>"Autenticado","3"=>"Estornado","4"=>"Cancelado");
+                                   db_select("situacao",$tipo_ordem,true,2); ?>
+                                <script>
+                                    document.getElementById('situacao').style.width='99.7%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" nowrap title="Tipo Slip" >
+                                <strong>Tipo Slip:&nbsp;&nbsp;</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $tiposlip = array(
+                                        "0"=>"Todos",
+                                        "1"=>"Transferência Financeira - Pagamento",
+                                        "2"=>"Transferência Financeira - Estorno Pagamento",
+                                        "3"=>"Transferência Financeira - Recebimento",
+                                        "4"=>"Transferência Financeira - Estorno Recebimento",
+                                        "5"=>"Transferência Bancária - Inclusão",
+                                        "6"=>"Transferência Bancária - Estorno",
+                                        "7"=>"Caução - Recebimento",
+                                        "8"=>"Caução - Estorno Recebimento",
+                                        "9"=>"Caução - Devolução",
+                                        "10"=>"Caução - Estorno Devolução",
+                                        "11"=>"Depósito de Diversos - Recebimento",
+                                        "12"=>"Depósito de Diversos - Estorno Recebimento",
+                                        "13"=>"Depósito de Diversos - Pagamento",
+                                        "14"=>"Depósito de Diversos - Estorno Pagamento");
+                                db_select("tiposlip",$tiposlip,true,2); ?>
+                                <script>
+                                    document.getElementById('tiposlip').style.width='99.7%';
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap">
+                                <strong>Processo Administrativo:</strong>
+                            </td>
+                            <td colspan="2">
+                                <?php db_input('k145_numeroprocesso',60, null,true,'text',1, null,null,null,null,15);?>
+                            </td>
+                            <script>
+                                document.getElementById('k145_numeroprocesso').style.width='99.7%';
+                            </script>
+                        </tr>
+                        <? $aux = new cl_arquivo_auxiliar;
+                           $aux->cabecalho = "<strong>Credor</strong>";
+                           $aux->codigo = "z01_numcgm";
+                           $aux->descr = "z01_nome";
+                           $aux->isfuncnome = true;
+                           $aux->nomeobjeto = 'cgm';
+                           $aux->funcao_js = 'js_mostra';
+                           $aux->funcao_js_hide = 'js_mostra1';
+                           $aux->sql_exec = "";
+                           $aux->func_arquivo = "func_nome.php";
+                           $aux->nomeiframe = "func_nome";
+                           $aux->localjan = "";
+                           $aux->db_opcao = 2;
+                           $aux->tipo = 2;
+                           $aux->top = 0;
+                           $aux->linhas = 5;
+                           $aux->vwhidth = 200;
+                           $aux->funcao_gera_formulario(); ?>
+                        <script>
+                            document.getElementById('tr_inicio_cgm').firstChild.nextElementSibling.colSpan="4";
+                        </script>
+                        <tr>
+                            <td colspan="4" align="center">
+                                <? db_selinstit('',300,100); ?>
+                            </td>
+                        </tr>
+                        </tr>
+                    </form>
+                </table>
+            </fieldset>
+        </td>
     </tr>
-
-      <tr>
-        <td><strong>Recurso:</strong></td>
-				<td colspan='5'>
-	     <?
-	        $dbwhere = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."'";
-	        $rs      = $clorctiporec->sql_record($clorctiporec->sql_query(null,"o15_codigo,o15_descr","o15_codigo",$dbwhere));
-          db_selectrecord("o15_codigo",$rs,false,1,"","","","0");
-	     ?>
-	</td>
-      </tr>
-
-      <tr>
-	<td align=left><strong>Situacao :&nbsp;&nbsp;</strong></td><td colspan=3>
-	  <?
-	  $tipo_ordem = array("A"=>"Todas","1"=>"Não Autenticado","2"=>"Autenticado","3"=>"Estornado","4"=>"Cancelado");
-	  db_select("situacao",$tipo_ordem,true,2); ?>
-		<script>
-		   document.getElementById('situacao').style.width='100%';
-		</script>
-        </td>
-      </tr>
-  <tr>   
-         <td align="left" nowrap title="Tipo Slip" >
-          <strong>Tipo Slip:&nbsp;&nbsp;</strong>
-         </td>
-        <td>
-          <? 
-          $tiposlip = array(
-           "0"=>"Todos",
-           "1"=>"Transferência Financeira - Pagamento",
-           "2"=>"Transferência Financeira - Estorno Pagamento",
-           "3"=>"Transferência Financeira - Recebimento",
-           "4"=>"Transferência Financeira - Estorno Recebimento",
-           "5"=>"Transferência Bancária - Inclusão",
-           "6"=>"Transferência Bancária - Estorno",
-           "7"=>"Caução - Recebimento",
-           "8"=>"Caução - Estorno Recebimento",
-           "9"=>"Caução - Devolução",
-           "10"=>"Caução - Estorno Devolução",
-           "11"=>"Depósito de Diversos - Recebimento",
-           "12"=>"Depósito de Diversos - Estorno Recebimento",
-           "13"=>"Depósito de Diversos - Pagamento",
-           "14"=>"Depósito de Diversos - Estorno Pagamento");
-          db_select("tiposlip",$tiposlip,true,2); ?>
-          </td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap">
-          <strong>Processo Administrativo:</strong>
-        </td>
-
-        <td colspan="3">
-          <?php db_input('k145_numeroprocesso',10, null,true,'text',1, null,null,null,null,15);?>
-        </td>
-
-      </tr>
-
-
-      <tr>
-        <td></td>
-        <td colspan=3>
-         <?
-           db_selinstit('',300,100);
-         ?>
-        </td>
-      </tr>
-
-			</table></fieldset></tr></td>
-      <tr>
-        <td colspan="6">
-	  <table>
-	  <?
-	  $aux = new cl_arquivo_auxiliar;
-	  $aux->cabecalho = "<strong>CGM</strong>";
-	  $aux->codigo = "z01_numcgm";
-	  $aux->descr  = "z01_nome";
-	  $aux->isfuncnome = true;
-	  $aux->nomeobjeto = 'cgm';
-	  $aux->funcao_js = 'js_mostra';
-	  $aux->funcao_js_hide = 'js_mostra1';
-	  $aux->sql_exec  = "";
-	  $aux->func_arquivo = "func_nome.php";
-	  $aux->nomeiframe = "func_nome";
-	  $aux->localjan = "";
-	  $aux->db_opcao = 2;
-	  $aux->tipo = 2;
-	  $aux->top = 0;
-	  $aux->linhas = 5;
-	  $aux->vwhidth = 200;
-	  $aux->funcao_gera_formulario();
-	  ?>
-	  </table>
-        </td>
-      </tr>
-			<tr><td><fieldset><table>
-		   <tr>
-        <td align="right"> <strong>Opção de Seleção :<strong></td>
-        <td align="left" colspan='4'>
-          <?
-          $xxx = array("S"=>"Somente Selecionados&nbsp;&nbsp;","N"=>"Menos os Selecionados&nbsp;&nbsp;");
-          db_select('parametro',$xxx,true,2);
-          ?>
-		     <script>
-       	   document.getElementById('parametro').style.width='100%';
-        </script>
-        </td>
-				</tr>
-		   </table>
-   		</fieldset></td></tr>
-				<tr>
-        <td align="center" colspan='5'>
-          <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
-       </td>
-      </tr>
-    </form>
-  </table>
+</table>
+<br><br>
+<center>
+    <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();">
+</center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -283,6 +287,7 @@ function js_emite(){
 <script>
 //-----------------------------------------------------------
 //---slip 01
+oDBToogleCredores = new DBToogle('fieldset_cgm', false);
 function js_pesquisak17_codigo(mostra){
 
 	sFuncao = 'func_slip.php?';
