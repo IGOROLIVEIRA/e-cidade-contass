@@ -119,7 +119,6 @@ if(isset($alterar)){
    }
  }
 
-
  $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_codigo = '$codigoVeiculo'"));
 
  if($result){
