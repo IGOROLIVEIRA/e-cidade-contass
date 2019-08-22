@@ -118,7 +118,7 @@ class Oc10263 extends AbstractMigration
         -- Vinculando os estruturais das receitas específicos para as novas regras dos novos documentos.
 
         INSERT INTO conplanoorcamentogrupo 
-        SELECT
+        SELECT DISTINCT ON (c60_codcon)
          nextval('conplanoorcamentogrupo_c21_sequencial_seq'),
          c60_anousu,
          c60_codcon,
@@ -131,7 +131,7 @@ class Oc10263 extends AbstractMigration
           AND c60_anousu = 2019;
 
         INSERT INTO conplanoorcamentogrupo 
-        SELECT
+        SELECT DISTINCT ON (c60_codcon) 
          nextval('conplanoorcamentogrupo_c21_sequencial_seq'),
          c60_anousu,
          c60_codcon,
@@ -144,7 +144,7 @@ class Oc10263 extends AbstractMigration
           AND c60_anousu = 2019;
 
         INSERT INTO conplanoorcamentogrupo 
-        SELECT
+        SELECT DISTINCT ON (c60_codcon)
          nextval('conplanoorcamentogrupo_c21_sequencial_seq'),
          c60_anousu,
          c60_codcon,
