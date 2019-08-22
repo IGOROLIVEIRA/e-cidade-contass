@@ -33,6 +33,7 @@ class cl_infocomplementaresinstit {
    var $si09_dataleicute = null;
    var $si09_contaunicatesoumunicipal = null;
    var $si09_instsiconfi = null;
+   var $si09_codfundotcemg = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si09_sequencial = int8 = Código Sequencial
@@ -49,6 +50,7 @@ class cl_infocomplementaresinstit {
                  si09_dataleicute = date = Data da Lei CUTE
                  si09_contaunicatesoumunicipal = int8 = Conta Única do Tesouro Municipal
                  si09_instsiconfi = varchar(25) = Código da instituição SICONFI
+                 si09_codfundotcemg = int8 = Código do Fundo TCE/MG
                  ";
    //funcao construtor da classe
    function cl_infocomplementaresinstit() {
@@ -81,6 +83,7 @@ class cl_infocomplementaresinstit {
        $this->si09_cgmassessoriacontabil = ($this->si09_cgmassessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"]:$this->si09_cgmassessoriacontabil);
 	   $this->si09_nroleicute = ($this->si09_nroleicute == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_nroleicute"]:$this->si09_nroleicute);
 	   $this->si09_contaunicatesoumunicipal = ($this->si09_contaunicatesoumunicipal == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_contaunicatesoumunicipal"]:$this->si09_contaunicatesoumunicipal);
+	   $this->si09_codfundotcemg = ($this->si09_codfundotcemg == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_codfundotcemg"]:$this->si09_codfundotcemg);
 	   if($this->si09_dataleicute == ""){
 		 $this->si09_dataleicute_dia = ($this->si09_dataleicute_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_dia"] : $this->si09_dataleicute_dia);
 		 $this->si09_dataleicute_mes = ($this->si09_dataleicute_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si09_dataleicute_mes"] : $this->si09_dataleicute_mes);
@@ -228,6 +231,7 @@ class cl_infocomplementaresinstit {
                                       ,si09_dataleicute
                                       ,si09_contaunicatesoumunicipal
                                       ,si09_instsiconfi
+                                      ,si09_codfundotcemg
                        )
                 values (
                                 $this->si09_sequencial
@@ -244,6 +248,7 @@ class cl_infocomplementaresinstit {
                                ,". ($this->si09_dataleicute == "null" || $this->si09_dataleicute == "" ? "null" : "'" . $this->si09_dataleicute . "'") . "
                                ,$this->contaunicatesoumunicipal
                                ,".($this->si09_instsiconfi == '' ? 'null' : "'" . $this->si09_instsiconfi . "'")."
+                               ,".($this->si09_codfundotcemg == '' ? 0 : $this->si09_codfundotcemg)."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -466,6 +471,11 @@ class cl_infocomplementaresinstit {
 		   return false;
 	   }
    }
+
+     if(trim($this->si09_codfundotcemg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_codfundotcemg"])){
+       $sql  .= $virgula." si09_codfundotcemg = '$this->si09_codfundotcemg' ";
+       $virgula = ",";
+     }
 
 	  $sql .= " where ";
      if($si09_sequencial!=null){
