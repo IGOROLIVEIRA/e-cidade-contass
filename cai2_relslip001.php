@@ -102,7 +102,7 @@ function js_emite(){
 <link href="estilos.css" rel="stylesheet" type="text/css">
     <style>
         #fieldset_cgm {
-            width: 500px;
+            width: 560px;
         }
     </style>
 </head>
@@ -167,18 +167,16 @@ function js_emite(){
                         </tr>
                         <tr>
                             <td align="left">
-                                <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
+                                <?php db_ancora('Conta:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
                             </td>
                             <td colspan="2">
                                 <?php db_input('c61_reduz',10,$Ic61_reduz,true,'text',$db_opcao,"onchange='js_pesquisac61_reduz(false);'");
-                                      db_input('c60_descr',48,$Ic60_descr,true,'text',3,''); ?>
-                            </td>
-                            <td>
-                                <? $movimento = array(
-                                        "0"=>"Todos",
-                                        "1"=>"Debito",
-                                        "2"=>"Credito");
-                                db_select("movimento",$movimento,true,2); ?>
+                                      db_input('c60_descr',39,$Ic60_descr,true,'text',3,'');
+                                      $movimento = array(
+                                              "0"=>"Todos",
+                                              "1"=>"Debito",
+                                              "2"=>"Credito");
+                                      db_select("movimento",$movimento,true,2); ?>
                             </td>
                         </tr>
                         <tr>
@@ -196,7 +194,7 @@ function js_emite(){
                             </td>
                         </tr>
                         <tr>
-                            <td align=left><strong>Situacao :&nbsp;&nbsp;</strong></td><td colspan=2>
+                            <td align=left><strong>Situação:&nbsp;&nbsp;</strong></td><td colspan=2>
                                 <? $tipo_ordem = array("A"=>"Todas","1"=>"Não Autenticado","2"=>"Autenticado","3"=>"Estornado","4"=>"Cancelado");
                                    db_select("situacao",$tipo_ordem,true,2); ?>
                                 <script>
@@ -262,10 +260,12 @@ function js_emite(){
                            $aux->funcao_gera_formulario(); ?>
                         <script>
                             document.getElementById('tr_inicio_cgm').firstChild.nextElementSibling.colSpan="4";
+                            document.getElementById('tr_inicio_cgm').firstChild.nextElementSibling.firstChild.nextElementSibling.align="left";
+                            document.getElementById('fieldset_cgm').children[1].align="center"; //.firstChild.nextElementSibling.firstChild.nextElementSibling.align="left";
                         </script>
                         <tr>
                             <td colspan="4" align="center">
-                                <? db_selinstit('',300,100); ?>
+                                <? db_selinstit('',300,120); ?>
                             </td>
                         </tr>
                         </tr>
@@ -275,7 +275,7 @@ function js_emite(){
         </td>
     </tr>
 </table>
-<br><br>
+<br>
 <center>
     <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();">
 </center>
