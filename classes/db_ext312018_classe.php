@@ -584,8 +584,9 @@ class cl_ext312018
       $sql .= $campos;
     }
     $sql .= " from ext312018 ";
-    $sql .= "      left  join ext222018  on  ext222018.si126_sequencial = ext312018.si127_reg30";
-    $sql .= "      left  join ext212018  on  ext212018.si125_sequencial = ext222018.si126_reg21";
+    //comentado para conseguir importar o sicom
+    // $sql .= "      left  join ext222018  on  ext222018.si126_sequencial = ext312018.si127_reg30";
+    // $sql .= "      left  join ext212018  on  ext212018.si125_sequencial = ext222018.si126_reg21";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si127_sequencial != null) {
