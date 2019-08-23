@@ -299,7 +299,7 @@ class MSC {
     $aRegistros = array();
     $indice = "";
 
-    for ($ind = 0; $ind <= 6; $ind++) {
+    for ($ind = 0; $ind <= 4; $ind++) {
       $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
@@ -311,21 +311,21 @@ class MSC {
       if (in_array($aLinhas[$i], $oRegistro, true)) {
 
         $key = array_search($aLinhas[$i], $oRegistro, true);
-        $oNovoResgistro = new stdClass;
-        $oNovoResgistro->conta = $oRegistro[0];
+        $oNovoRegistro = new stdClass;
+        $oNovoRegistro->conta = $oRegistro[0];
 
         // so vai ter um registro no arquivo se o valor for diferente de ZERO
         if (number_format($oRegistro[$key-1], 2, '.', '') > 0) {
           if (($aLinhas[$i] == 'beginning_balance' || $aLinhas[$i] == 'ending_balance')) {
-              $oNovoResgistro->nat_vlr   = $oRegistro[$key+1];
-              $oNovoResgistro->tipoValor = $aLinhas[$i];
-              $oNovoResgistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
+              $oNovoRegistro->nat_vlr   = $oRegistro[$key+1];
+              $oNovoRegistro->tipoValor = $aLinhas[$i];
+              $oNovoRegistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
           }
           else if ($aLinhas[$i] == 'period_change_deb' || $aLinhas[$i] == 'period_change_cred') {
               $nat_valor = explode("_", $aLinhas[$i]);
-              $oNovoResgistro->nat_vlr   = $nat_valor[2] == 'deb' ? 'D' : 'C';
-              $oNovoResgistro->tipoValor = 'period_change';
-              $oNovoResgistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
+              $oNovoRegistro->nat_vlr   = $nat_valor[2] == 'deb' ? 'D' : 'C';
+              $oNovoRegistro->tipoValor = 'period_change';
+              $oNovoRegistro->valor     = number_format($oRegistro[$key-1], 2, '.', '');
           }
 
           $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es");
@@ -337,13 +337,13 @@ class MSC {
             if ($oRegistro[$ii] != "null") {
               $cIC = explode("_", $oRegistro[$ii]);
               if (in_array($cIC[1], $aTipoIC, true)) {
-                $oNovoResgistro->{$IC}     = $cIC[0];
-                $oNovoResgistro->{$TipoIC} = strtoupper($cIC[1]);
+                $oNovoRegistro->{$IC}     = $cIC[0];
+                $oNovoRegistro->{$TipoIC} = strtoupper($cIC[1]);
               }
             }
           }
           $aRegistros[$indice] = $oContas;
-          $aRegistros[$indice]->registros[$i] = $oNovoResgistro;
+          $aRegistros[$indice]->registros[$i] = $oNovoRegistro;
         }
       }
     }
@@ -357,24 +357,22 @@ class MSC {
       */
     $this->setErroSQL(0);
     $iUltimoDiaMes = date("d", mktime(0,0,0,$mes+1,0,db_getsession("DB_anousu")));
-    $data_incio = db_getsession("DB_anousu")."-{$mes}-01";
+    $data_inicio = db_getsession("DB_anousu")."-{$mes}-01";
     $data_fim   = db_getsession("DB_anousu")."-{$mes}-{$iUltimoDiaMes}";
-    // $somaGeral = 0;
     $aDadosAgrupados = array();
     $aDadosAgrupados = array_merge(
-      (array)$this->getDadosIC01($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC02($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC03($ano, $data_incio),
-      (array)$this->getDadosIC04($ano, $data_incio),
-      (array)$this->getDadosIC05($ano, $data_incio),
-      (array)$this->getDadosIC06($ano, $data_incio),
-      (array)$this->getDadosIC07EMP($ano, $data_incio),
-      (array)$this->getDadosIC07RSP($ano, $data_incio),
-      (array)$this->getDadosIC08($ano, $data_incio, $data_fim),
-      (array)$this->getDadosIC09EMP($ano, $data_incio),
-      (array)$this->getDadosIC09RSP($ano, $data_incio)
+      (array)$this->getDadosIC01($ano, $data_inicio, $data_fim),
+      (array)$this->getDadosIC02($ano, $data_inicio, $data_fim),
+      (array)$this->getDadosIC03($ano, $data_inicio),
+      (array)$this->getDadosIC04($ano, $data_inicio),
+      (array)$this->getDadosIC05($ano, $data_inicio),
+      (array)$this->getDadosIC06($ano, $data_inicio),
+      (array)$this->getDadosIC07EMP($ano, $data_inicio),
+      (array)$this->getDadosIC07RSP($ano, $data_inicio),
+      (array)$this->getDadosIC08($ano, $data_inicio, $data_fim),
+      (array)$this->getDadosIC09EMP($ano, $data_inicio),
+      (array)$this->getDadosIC09RSP($ano, $data_inicio)
     );
-    // $somaGeral = 0;
     return $aDadosAgrupados;
   }
 
@@ -389,7 +387,6 @@ class MSC {
       for ($ind = 0; $ind <= 6; $ind++) {
         $sHash .= (isset($oReg->{$aCampos[$ind]}) && !empty($oReg->{$aCampos[$ind]})) ? $oReg->{$aCampos[$ind]} : '';
       }
-
       if (!isset(${$aDadosIC}[$sHash])) {
         $$aIC = array();
         for ($i = 0; $i < 17; $i++) {
@@ -633,7 +630,7 @@ class MSC {
         left outer join consistema on c60_codsis = c52_codsis
         left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
         left join orctiporec on c19_orctiporec = o15_codigo
-        where {$this->getTipoMatriz()} c60_infcompmsc = 4 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
+        where {$this->getTipoMatriz()} c60_infcompmsc = 4 or c60_infcompmsc is null and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
