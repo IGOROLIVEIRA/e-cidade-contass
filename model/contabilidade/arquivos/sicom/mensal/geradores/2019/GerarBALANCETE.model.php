@@ -112,7 +112,7 @@ class GerarBALANCETE extends GerarAM
 
                 $aCSVBALANCETE10['si177_tiporegistro']          = $this->padLeftZero($aBALACETE10['si177_tiporegistro'], 2);
                 $aCSVBALANCETE10['si177_contacontaabil']        = $this->padLeftZero($aBALACETE10['si177_contacontaabil'], 9);
-                $aCSVBALANCETE10['si177_codfundo']              = "00000000";
+                $aCSVBALANCETE10['si177_codfundo']              = $aBALACETE10['si177_codfundo'];
                 $aCSVBALANCETE10['si177_saldoinicial']          = $this->sicomNumberReal($aBALACETE10['si177_saldoinicial'], 2);
                 $aCSVBALANCETE10['si177_naturezasaldoinicial']  = $this->padLeftZero($aBALACETE10['si177_naturezasaldoinicial'], 1);
                 $aCSVBALANCETE10['si177_totaldebitos']          = $this->sicomNumberReal($aBALACETE10['si177_totaldebitos'], 2);
@@ -132,7 +132,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE11['si178_tiporegistro']            = $this->padLeftZero($aBALACETE11['si178_tiporegistro'], 2);
                         $aCSVBALANCETE11['si178_contacontaabil']          = $this->padLeftZero($aBALACETE11['si178_contacontaabil'], 9);
-                        $aCSVBALANCETE11['si178_codfundo']                = "00000000";
+                        $aCSVBALANCETE11['si178_codfundo']                = $aBALACETE11['si178_codfundo'];
                         $aCSVBALANCETE11['si178_codorgao']                = $this->padLeftZero($aBALACETE11['si178_codorgao'], 2);
                         $aCSVBALANCETE11['si178_codunidadesub']           = $this->padLeftZero($aBALACETE11['si178_codunidadesub'], 5);
                         $aCSVBALANCETE11['si178_codfuncao']               = $this->padLeftZero($aBALACETE11['si178_codfuncao'], 2);
@@ -163,7 +163,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE12['si179_tiporegistro']            = $this->padLeftZero($aBALACETE12['si179_tiporegistro'], 2);
                         $aCSVBALANCETE12['si179_contacontabil']           = $this->padLeftZero($aBALACETE12['si179_contacontabil'], 9);
-                        $aCSVBALANCETE12['si179_codfundo']                = "00000000";
+                        $aCSVBALANCETE12['si179_codfundo']                = $aBALACETE12['si179_codfundo'];
                         $aCSVBALANCETE12['si179_naturezareceita']         = $this->padLeftZero($aBALACETE12['si179_naturezareceita'], 6);
                         $aCSVBALANCETE12['si179_codfontrecursos']         = $this->padLeftZero($aBALACETE12['si179_codfontrecursos'], 3);
                         $aCSVBALANCETE12['si179_saldoinicialcr']          = $this->sicomNumberReal($aBALACETE12['si179_saldoinicialcr'], 2);
@@ -186,7 +186,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE13['si180_tiporegistro']            = $this->padLeftZero($aBALACETE13['si180_tiporegistro'], 2);
                         $aCSVBALANCETE13['si180_contacontabil']           = $this->padLeftZero($aBALACETE13['si180_contacontabil'], 9);
-                        $aCSVBALANCETE13['si180_codfundo']                = "00000000";
+                        $aCSVBALANCETE13['si180_codfundo']                = $aBALACETE13['si180_codfundo'];
                         $aCSVBALANCETE13['si180_codprograma']             = $this->padLeftZero($aBALACETE13['si180_codprograma'], 4);
                         $aCSVBALANCETE13['si180_idacao']                  = $this->padLeftZero($aBALACETE13['si180_idacao'], 3);
                         $aCSVBALANCETE13['si180_idsubacao']               = $aBALACETE13['si180_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE13['si180_idacao'], 4);
@@ -210,7 +210,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE14['si181_tiporegistro']            = $this->padLeftZero($aBALACETE14['si181_tiporegistro'], 2);
                         $aCSVBALANCETE14['si181_contacontabil']           = $this->padLeftZero($aBALACETE14['si181_contacontabil'], 9);
-                        $aCSVBALANCETE14['si181_codfundo']                = "00000000";
+                        $aCSVBALANCETE14['si181_codfundo']                = $aBALACETE14['si181_codfundo'];
                         $aCSVBALANCETE14['si181_codorgao']                = $this->padLeftZero($aBALACETE14['si181_codorgao'], 2);
                         $aCSVBALANCETE14['si181_codunidadesub']           = $this->padLeftZero($aBALACETE14['si181_codunidadesub'], (strlen($aBALACETE14['si181_codunidadesub']) <= 5 ? 5 : 8) );
                         $aCSVBALANCETE14['si181_codunidadesuborig']       = $this->padLeftZero($aBALACETE14['si181_codunidadesuborig'], (strlen($aBALACETE14['si181_codunidadesuborig']) <= 5 ? 5 : 8));
@@ -244,7 +244,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE15['si182_tiporegistro']            = $this->padLeftZero($aBALACETE15['si182_tiporegistro'], 2);
                         $aCSVBALANCETE15['si182_contacontabil']           = $this->padLeftZero($aBALACETE15['si182_contacontabil'], 9);
-                        $aCSVBALANCETE15['si182_codfundo']                = "00000000";
+                        $aCSVBALANCETE15['si182_codfundo']                = $aBALACETE15['si182_codfundo'];
                         $aCSVBALANCETE15['si182_atributosf']              = trim($aBALACETE15['si182_atributosf']);
                         $aCSVBALANCETE15['si182_saldoinicialsf']          = $this->sicomNumberReal($aBALACETE15['si182_saldoinicialsf'], 2);
                         $aCSVBALANCETE15['si182_naturezasaldoinicialsf']  = $this->padLeftZero($aBALACETE15['si182_naturezasaldoinicialsf'], 1);
@@ -266,7 +266,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE16['si183_tiporegistro']                = $this->padLeftZero($aBALACETE16['si183_tiporegistro'], 2);
                         $aCSVBALANCETE16['si183_contacontabil']               = $this->padLeftZero($aBALACETE16['si183_contacontabil'], 9);
-                        $aCSVBALANCETE16['si183_codfundo']                    = "00000000";
+                        $aCSVBALANCETE16['si183_codfundo']                    = $aBALACETE16['si183_codfundo'];
                         $aCSVBALANCETE16['si183_atributosf']                  = trim($aBALACETE16['si183_atributosf']);
                         $aCSVBALANCETE16['si183_codfontrecursos']             = $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
                         $aCSVBALANCETE16['si183_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_saldoinicialfontsf'], 2);
@@ -289,7 +289,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE17['si184_tiporegistro']            = $this->padLeftZero($aBALACETE17['si184_tiporegistro'], 2);
                         $aCSVBALANCETE17['si184_contacontabil']           = $this->padLeftZero($aBALACETE17['si184_contacontabil'], 9);
-                        $aCSVBALANCETE17['si184_codfundo']                = "00000000";
+                        $aCSVBALANCETE17['si184_codfundo']                = $aBALACETE17['si184_codfundo'];
                         $aCSVBALANCETE17['si184_atributosf']              = trim($aBALACETE17['si184_atributosf']);
                         $aCSVBALANCETE17['si184_codctb']                  = trim($aBALACETE17['si184_codctb']);
                         $aCSVBALANCETE17['si184_codfontrecursos']         = $this->padLeftZero($aBALACETE17['si184_codfontrecursos'], 3);
@@ -313,7 +313,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE18['si185_tiporegistro']            = $this->padLeftZero($aBALACETE18['si185_tiporegistro'], 2);
                         $aCSVBALANCETE18['si185_contacontabil']           = $this->padLeftZero($aBALACETE18['si185_contacontabil'], 9);
-                        $aCSVBALANCETE18['si185_codfundo']                = "00000000";
+                        $aCSVBALANCETE18['si185_codfundo']                = $aBALACETE18['si185_codfundo'];
                         $aCSVBALANCETE18['si185_codfontrecursos']         = $this->padLeftZero($aBALACETE18['si185_codfontrecursos'], 3);
                         $aCSVBALANCETE18['si185_saldoinicialfr']          = $this->sicomNumberReal($aBALACETE18['si185_saldoinicialfr'], 2);
                         $aCSVBALANCETE18['si185_naturezasaldoinicialfr']  = $this->padLeftZero($aBALACETE18['si185_naturezasaldoinicialfr'], 1);
@@ -335,7 +335,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE19['si186_tiporegistro']                = $this->padLeftZero($aBALACETE19['si186_tiporegistro'], 2);
                         $aCSVBALANCETE19['si186_contacontabil']               = $this->padLeftZero($aBALACETE19['si186_contacontabil'], 9);
-                        $aCSVBALANCETE19['si186_codfundo']                    = "00000000";
+                        $aCSVBALANCETE19['si186_codfundo']                    = $aBALACETE19['si186_codfundo'];
                         $aCSVBALANCETE19['si186_cnpjconsorcio']               = $this->padLeftZero($aBALACETE19['si186_cnpjconsorcio'], 3);
                         $aCSVBALANCETE19['si186_saldoinicialconsor']          = $this->sicomNumberReal($aBALACETE19['si186_saldoinicialconsor'], 2);
                         $aCSVBALANCETE19['si186_naturezasaldoinicialconsor']  = $this->padLeftZero($aBALACETE19['si186_naturezasaldoinicialconsor'], 1);
@@ -357,7 +357,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE20['si187_tiporegistro']                = $this->padLeftZero($aBALACETE20['si187_tiporegistro'], 2);
                         $aCSVBALANCETE20['si187_contacontabil']               = $this->padLeftZero($aBALACETE20['si187_contacontabil'], 9);
-                        $aCSVBALANCETE20['si187_codfundo']                    = "00000000";
+                        $aCSVBALANCETE20['si187_codfundo']                    = $aBALACETE20['si187_codfundo'];
                         $aCSVBALANCETE20['si187_cnpjconsorcio']               = $this->padLeftZero($aBALACETE20['si187_cnpjconsorcio'], 3);
                         $aCSVBALANCETE20['si187_tiporecurso']                 = $this->padLeftZero($aBALACETE20['si187_tiporecurso'], 3);
                         $aCSVBALANCETE20['si187_codfuncao']                   = $this->padLeftZero($aBALACETE20['si187_codfuncao'], 3);
@@ -385,7 +385,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE21['si188_tiporegistro']                = $this->padLeftZero($aBALACETE21['si188_tiporegistro'], 2);
                         $aCSVBALANCETE21['si188_contacontabil']               = $this->padLeftZero($aBALACETE21['si188_contacontabil'], 9);
-                        $aCSVBALANCETE21['si188_codfundo']                    = "00000000";
+                        $aCSVBALANCETE21['si188_codfundo']                    = $aBALACETE21['si188_codfundo'];
                         $aCSVBALANCETE21['si188_cnpjconsorcio']               = $this->padLeftZero($aBALACETE21['si188_cnpjconsorcio'], 3);
                         $aCSVBALANCETE21['si188_codfontrecursos']               = $this->padLeftZero($aBALACETE21['si188_codfontrecursos'], 3);
                         $aCSVBALANCETE21['si188_saldoinicialconsorfr']          = $this->sicomNumberReal($aBALACETE21['si188_saldoinicialconsorfr'], 2);
@@ -408,7 +408,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE22['si189_tiporegistro']                  = $this->padLeftZero($aBALACETE22['si189_tiporegistro'], 2);
                         $aCSVBALANCETE22['si189_contacontabil']                 = $this->padLeftZero($aBALACETE22['si189_contacontabil'], 9);
-                        $aCSVBALANCETE22['si189_codfundo']                      = "00000000";
+                        $aCSVBALANCETE22['si189_codfundo']                      = $aBALACETE22['si189_codfundo'];
                         $aCSVBALANCETE22['si189_cnpjconsorcio']                 = $this->padLeftZero($aBALACETE22['si189_cnpjconsorcio'], 3);
                         $aCSVBALANCETE22['si189_atributosf']                    = $this->padLeftZero($aBALACETE22['si189_atributosf'], 3);
                         $aCSVBALANCETE22['si189_codctb']                        = $this->padLeftZero($aBALACETE22['si189_codctb'], 3);
@@ -433,7 +433,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE23['si190_tiporegistro']                    = $this->padLeftZero($aBALACETE23['si190_tiporegistro'], 2);
                         $aCSVBALANCETE23['si190_contacontabil']                   = $this->padLeftZero($aBALACETE23['si190_contacontabil'], 9);
-                        $aCSVBALANCETE23['si190_codfundo']                        = "00000000";
+                        $aCSVBALANCETE23['si190_codfundo']                        = $aBALACETE23['si190_codfundo'];
                         $aCSVBALANCETE23['si190_naturezareceita']                 = $this->padLeftZero($aBALACETE23['si190_naturezareceita'], 6);
                         $aCSVBALANCETE23['si190_saldoinicialnatreceita']          = $this->sicomNumberReal($aBALACETE23['si190_saldoinicialnatreceita'], 2);
                         $aCSVBALANCETE23['si190_naturezasaldoinicialnatreceita']  = $this->padLeftZero($aBALACETE23['si190_naturezasaldoinicialnatreceita'], 1);
@@ -455,7 +455,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE24['si191_tiporegistro']              = $this->padLeftZero($aBALACETE24['si191_tiporegistro'], 2);
                         $aCSVBALANCETE24['si191_contacontabil']             = $this->padLeftZero($aBALACETE24['si191_contacontabil'], 9);
-                        $aCSVBALANCETE24['si191_codfundo']                  = "00000000";
+                        $aCSVBALANCETE24['si191_codfundo']                  = $aBALACETE24['si191_codfundo'];
                         $aCSVBALANCETE24['si191_codorgao']                  = $this->padLeftZero($aBALACETE24['si191_codorgao'], 2);
                         $aCSVBALANCETE24['si191_codunidadesub']             = $this->padLeftZero($aBALACETE24['si191_codunidadesub'], (strlen($aBALACETE24['si191_codorgao']) <= 5 ? 5 : 8));
                         $aCSVBALANCETE24['si191_saldoinicialorgao']         = $this->sicomNumberReal($aBALACETE24['si191_saldoinicialorgao'], 2);
@@ -477,7 +477,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE25['si195_tiporegistro']              = $this->padLeftZero($aBALACETE25['si195_tiporegistro'], 2);
                         $aCSVBALANCETE25['si195_contacontabil']             = $this->padLeftZero($aBALACETE25['si195_contacontabil'], 9);
-                        $aCSVBALANCETE25['si195_codfundo']                  = "00000000";
+                        $aCSVBALANCETE25['si195_codfundo']                  = $aBALACETE25['si195_codfundo'];
                         $aCSVBALANCETE25['si182_atributosf']                = $aBALACETE25['si195_atributosf'];
                         $aCSVBALANCETE25['si195_naturezareceita']           = $this->padLeftZero($aBALACETE25['si195_naturezareceita'], 2);
                         $aCSVBALANCETE25['si195_saldoinicialnrsf']            = $this->sicomNumberReal($aBALACETE25['si195_saldoinicialnrsf'], 2);
@@ -500,7 +500,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE26['si196_tiporegistro']            = $this->padLeftZero($aBALACETE26['si196_tiporegistro'], 2);
                         $aCSVBALANCETE26['si196_contacontabil']           = $this->padLeftZero($aBALACETE26['si196_contacontabil'], 9);
-                        $aCSVBALANCETE26['si196_codfundo']                = "00000000";
+                        $aCSVBALANCETE26['si196_codfundo']                = $aBALACETE26['si196_codfundo'];
                         $aCSVBALANCETE26['si196_tipodocumentopessoaatributosf'] = $aBALACETE26['si196_tipodocumentopessoaatributosf'];
                         $aCSVBALANCETE26['si196_nrodocumentopessoaatributosf'] = $aBALACETE26['si196_nrodocumentopessoaatributosf'];
                         $aCSVBALANCETE26['si196_atributosf']              = trim($aBALACETE26['si196_atributosf']);
@@ -524,7 +524,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE27['si197_tiporegistro']                    = $this->padLeftZero($aBALACETE27['si197_tiporegistro'], 2);
                         $aCSVBALANCETE27['si197_contacontabil']                   = $this->padLeftZero($aBALACETE27['si197_contacontabil'], 9);
-                        $aCSVBALANCETE27['si197_codfundo']                        = "00000000";
+                        $aCSVBALANCETE27['si197_codfundo']                        = $aBALACETE27['si197_codfundo'];
                         $aCSVBALANCETE27['si197_codorgao']                        = $aBALACETE27['si197_codorgao'];
                         $aCSVBALANCETE27['si197_codunidadesub']                   = $aBALACETE27['si197_codunidadesub'];
                         $aCSVBALANCETE27['si197_codfontrecursos']                 = $aBALACETE27['si197_codfontrecursos'];
@@ -549,7 +549,7 @@ class GerarBALANCETE extends GerarAM
 
                         $aCSVBALANCETE28['si198_tiporegistro']                  = $this->padLeftZero($aBALACETE28['si198_tiporegistro'], 2);
                         $aCSVBALANCETE28['si198_contacontabil']                 = $this->padLeftZero($aBALACETE28['si198_contacontabil'], 9);
-                        $aCSVBALANCETE28['si198_codfundo']                      = "00000000";
+                        $aCSVBALANCETE28['si198_codfundo']                      = $aBALACETE28['si198_codfundo'];
                         $aCSVBALANCETE28['si198_codctb']                        = $aBALACETE28['si198_codctb'];
                         $aCSVBALANCETE28['si198_codfontrecursos']               = trim($aBALACETE28['si198_codfontrecursos']);
                         $aCSVBALANCETE28['si198_saldoinicialctbfonte']          = $this->sicomNumberReal($aBALACETE28['si198_saldoinicialctbfonte'], 2);
