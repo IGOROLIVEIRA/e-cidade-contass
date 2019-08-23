@@ -54,7 +54,7 @@ class cl_ctb102019
                  si95_nroseqaplicacao = int8 = Número sequencial  da aplicação 
                  si95_desccontabancaria = varchar(50) = Nome da Conta  Bancária 
                  si95_contaconvenio = int8 = Conta vinculada a  convênio 
-                 si95_nroconvenio = varchar(30) = Número do  Convênio 
+                 si95_nroconvenio = int8 = Número do  Convênio 
                  si95_dataassinaturaconvenio = date = Data da assinatura  do Convênio 
                  si95_mes = int8 = Mês 
                  si95_instit = int8 = Instituição 
@@ -235,7 +235,7 @@ class cl_ctb102019
                                ,'$this->si95_tipoaplicacao' 
                                ,$this->si95_nroseqaplicacao 
                                ,'$this->si95_desccontabancaria' 
-                               ,'$this->si95_contaconvenio' 
+                               ,$this->si95_contaconvenio 
                                ,$this->si95_nroconvenio 
                                ," . ($this->si95_dataassinaturaconvenio == "null" || $this->si95_dataassinaturaconvenio == "" ? "null" : "'" . $this->si95_dataassinaturaconvenio . "'") . " 
                                ,$this->si95_mes 
