@@ -36,6 +36,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_conplano_classe.php");
 require_once("classes/db_orcfontes_classe.php");
 require_once("classes/db_orcelemento_classe.php");
+require_once("classes/db_conplanocontacorrente_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -81,18 +82,36 @@ if (isset($alterar) && trim(@$alterar) != ""){
          $rsSqlConPlan = $clconplano->sql_record($sSqlConPlan);
 
          //Busca conta corrente para verificar se o novo estrutural informado está de acordo com a conta corrente existente
-         $sSqlConCorr  = $clconplano->sql_query_tudo($codcon,"c18_contacorrente");
-         $rsSqlConCorr = $clconplano->sql_record($sSqlConCorr);
+         $clconplanocontacorrente = new cl_conplanocontacorrente;
+         $sSqlConCorr  = $clconplanocontacorrente->sql_query_file(null, "c18_contacorrente", null, "c18_codcon = {$codcon}");
+         $rsSqlConCorr = $clconplanocontacorrente->sql_record($sSqlConCorr);
+
+         if($clconplanocontacorrente->numrows > 0) {
+             if($sConCorr != $c18_contacorrente) {
+                 $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
+                 $sqlerro = true;
+                 break;
+             }
+         }
+
+//
+//         $sConCorr = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
+//
+//         if($sConCorr != '' && $sConCorr != $c18_contacorrente){
+//             $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
+//             $sqlerro  = true;
+//             break;
+//         }
 
          if ($clconplano->numrows > 0) {
-
-           $sConCorr = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
-
-           if($sConCorr != $c18_contacorrente){
-               $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
-               $sqlerro  = true;
-               break;
-           }
+//
+//           $sConCorr = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
+//
+//           if($sConCorr != $c18_contacorrente){
+//               $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
+//               $sqlerro  = true;
+//               break;
+//           }
 
            $oConPlan = db_utils::fieldsMemory($rsSqlConPlan, 0);
 
@@ -144,6 +163,8 @@ if (isset($alterar) && trim(@$alterar) != ""){
 		           }
 		         }
            }
+         } else {
+             die('else');
          }
 
        }
