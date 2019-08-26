@@ -414,6 +414,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         );
      }
      if($oDados10->si195_vlrremuneracaobruta_res != 0){
+      $iQuantTipoPagamento++;
        $aTiposPagamento[$iQuantTipoPagamento] = array(
         'Matricula'=>$oDados10->rh02_regist,
         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
@@ -453,7 +454,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      );
   }
   //Descrição do tipo de pagamento extra
-  for ($iContTiposPagamento=0; $iContTiposPagamento < count($aTiposPagamento); $iContTiposPagamento++) { 
+  for ($iContTiposPagamento=1; $iContTiposPagamento <= count($aTiposPagamento); $iContTiposPagamento++) { 
     if($aTiposPagamento[$iContTiposPagamento]['si195_indtipopagamento'] == 'E'){
       //Consulta se o servidor possui ferias cadastradas no mes
       $sSqlFerias = "SELECT *
@@ -521,7 +522,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_dscnatcargo 						= ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
         $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
         $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
-        $clflpgo10->si195_indsalaaula 						= $oDados10->rh37_exerceatividade;
+        $clflpgo10->si195_indsalaaula 						= ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
         $clflpgo10->si195_vlrcargahorariasemanal 		    = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
         $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
