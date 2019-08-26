@@ -1184,7 +1184,6 @@ function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
     if($dtinicio != '' && $dtfim != ''){
       $where  = " e60_codemp::integer >= $param_ini ";
       $where .= " and e60_emiss BETWEEN '$dtinicio' AND '$dtfim' ";
-      // $where .= " and e60_codemp::integer <= $param_fim AND e60_emiss <= '$dtfim' ";
 
       $where .= " and (CASE WHEN(e60_codemp::integer > $param_fim) ";
       $where .= " THEN (e60_emiss) < '$dtfim' ";

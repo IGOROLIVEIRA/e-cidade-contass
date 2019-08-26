@@ -304,8 +304,7 @@ function pesquisaEmpenhos(){
 
   let empIni = doc.e60_codemp_ini.value.split('/');
   let empFim = doc.e60_codemp_fim.value.split('/');
-  console.log('Ini: ', empIni);
-  console.log('Fim: ', empFim);
+
   if(!empIni[1] && empFim[1]){
     empIni[1] = empFim[1];
   }
@@ -378,19 +377,7 @@ function incluir() {
     aEmpenhos = pesquisaEmpenhos();
 
   incluirEmpenho(protocolo, aEmpenhos);
-  // if(retornoCadastro.erro){
-  //   alert(retornoCadastro.erro);
-  // }
-  // if(empenhoCadastrado){
-  //   aEmpenhos.map(empenho => {
-  //     if(empenho)
-  //   })
-  // }
-  // if(aNumEmpenhos.length == 100){
-  //   let priEmp = aEmpenhos[0];
-  //   let ultEmp = aEmpenhos[aEmpenhos.length - 1];
-  //   alert(`Inseridos 100 registros do intervalo ${priEmp.e60_codemp}/${priEmp.e60_anousu} à ${ultEmp.e60_codemp}/${ultEmp.e60_anousu}`);
-  // }
+
 }
 
 function incluirEmpenho(iProtocolo, iEmpenho) {
