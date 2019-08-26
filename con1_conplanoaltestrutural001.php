@@ -85,33 +85,23 @@ if (isset($alterar) && trim(@$alterar) != ""){
          $clconplanocontacorrente = new cl_conplanocontacorrente;
          $sSqlConCorr  = $clconplanocontacorrente->sql_query_file(null, "c18_contacorrente", null, "c18_codcon = {$codcon}");
          $rsSqlConCorr = $clconplanocontacorrente->sql_record($sSqlConCorr);
-
+         $sConCorr     = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
+//         print_r($sSqlConCorr);die();
+//         echo $sConCorr.'<br>';
+//         echo $c18_contacorrente.'<br>';die();
          if($clconplanocontacorrente->numrows > 0) {
+
              if($sConCorr != $c18_contacorrente) {
+
                  $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
                  $sqlerro = true;
                  break;
+
              }
+
          }
 
-//
-//         $sConCorr = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
-//
-//         if($sConCorr != '' && $sConCorr != $c18_contacorrente){
-//             $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
-//             $sqlerro  = true;
-//             break;
-//         }
-
          if ($clconplano->numrows > 0) {
-//
-//           $sConCorr = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
-//
-//           if($sConCorr != $c18_contacorrente){
-//               $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
-//               $sqlerro  = true;
-//               break;
-//           }
 
            $oConPlan = db_utils::fieldsMemory($rsSqlConPlan, 0);
 
@@ -163,10 +153,7 @@ if (isset($alterar) && trim(@$alterar) != ""){
 		           }
 		         }
            }
-         } else {
-             die('else');
          }
-
        }
      }
 
