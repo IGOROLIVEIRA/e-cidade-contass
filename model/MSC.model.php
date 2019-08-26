@@ -17,7 +17,7 @@ class MSC {
   //@var string
   public $sTipoIC2;
   //@var integer
-  public $iIC3;7
+  public $iIC3;
   //@var string
   public $sTipoIC3;
   //@var integer
@@ -989,8 +989,8 @@ class MSC {
     }
   }
     /**
-     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
-     * por isso temos duas funções para IC09
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informaes complementares e necessrio pegar separadamente
+     * por isso temos duas funes para IC09
      *
      */
   public function getDadosIC09EMP($iAno, $dataInicio) {
@@ -1069,8 +1069,8 @@ class MSC {
   }
 
     /**
-     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
-     * por isso temos duas funções para IC09
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informaes complementares e necessrio pegar separadamente
+     * por isso temos duas funes para IC09
      *
      */
   public function getDadosIC09RSP($iAno, $dataInicio) {
