@@ -17,7 +17,7 @@ class MSC {
   //@var string
   public $sTipoIC2;
   //@var integer
-  public $iIC3;
+  public $iIC3;7
   //@var string
   public $sTipoIC3;
   //@var integer
@@ -360,6 +360,7 @@ class MSC {
     $data_inicio = db_getsession("DB_anousu")."-{$mes}-01";
     $data_fim   = db_getsession("DB_anousu")."-{$mes}-{$iUltimoDiaMes}";
     $aDadosAgrupados = array();
+
     $aDadosAgrupados = array_merge(
       (array)$this->getDadosIC01($ano, $data_inicio, $data_fim),
       (array)$this->getDadosIC02($ano, $data_inicio, $data_fim),

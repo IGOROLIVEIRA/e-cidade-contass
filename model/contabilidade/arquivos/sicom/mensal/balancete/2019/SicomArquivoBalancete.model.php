@@ -29,6 +29,7 @@ require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
  * @package Contabilidade
  * @revision Rodrigo e Igor
  */
+
 class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
     /**
@@ -1024,6 +1025,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     }
 
                 } else {
+
                     /*
                      * Busca as dotacoes
                      */
