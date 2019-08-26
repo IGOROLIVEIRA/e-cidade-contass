@@ -81,15 +81,14 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
         
         if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
 
-            $sSql = "select z01_cgccpf,
+            $sSql = "select distinct z01_cgccpf,
 		       rh01_regist,
 			   z01_numcgm
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
-		      inner join rhpessoalmov on rh01_regist = rh02_regist
+		      left join rhpessoalmov on rh01_regist = rh02_regist
 		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes 
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 		      AND rh01_regist NOT IN
                         (SELECT si198_codvinculopessoa
                          FROM viap102019 where si198_mes < " . ($this->sDataFinal['5'] . $this->sDataFinal['6']) . " )
@@ -113,15 +112,14 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
               AND (rh01_admiss between '{$this->sDataInicial}' and '{$this->sDataFinal}' )";
         }else{
 
-            $sSql = "select z01_cgccpf,
+            $sSql = "select distinct z01_cgccpf,
 		       rh01_regist,
 			   z01_numcgm
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
-		      inner join rhpessoalmov on rh01_regist = rh02_regist
+		      left join rhpessoalmov on rh01_regist = rh02_regist
 		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 		      AND rh01_instit =  " . db_getsession("DB_instit") . "
 		      AND (
                     rh05_seqpes is null 
