@@ -414,6 +414,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         );
      }
      if($oDados10->si195_vlrremuneracaobruta_res != 0){
+      $iQuantTipoPagamento++;
        $aTiposPagamento[$iQuantTipoPagamento] = array(
         'Matricula'=>$oDados10->rh02_regist,
         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
@@ -453,7 +454,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      );
   }
   //Descrição do tipo de pagamento extra
-  for ($iContTiposPagamento=0; $iContTiposPagamento < count($aTiposPagamento); $iContTiposPagamento++) { 
+  for ($iContTiposPagamento=1; $iContTiposPagamento <= count($aTiposPagamento); $iContTiposPagamento++) { 
     if($aTiposPagamento[$iContTiposPagamento]['si195_indtipopagamento'] == 'E'){
       //Consulta se o servidor possui ferias cadastradas no mes
       $sSqlFerias = "SELECT *
