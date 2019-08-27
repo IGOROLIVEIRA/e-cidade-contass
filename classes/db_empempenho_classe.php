@@ -1036,7 +1036,7 @@ class cl_empempenho {
         return $result;
     }
     // funcao do sql
-    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento =""){
+    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento ="", $limit = ''){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1095,6 +1095,9 @@ class cl_empempenho {
                 $sql .= $virgula.$campos_sql[$i];
                 $virgula = ",";
             }
+        }
+        if($limit){
+          $sql.=" limit $limit ";
         }
         return $sql;
     }

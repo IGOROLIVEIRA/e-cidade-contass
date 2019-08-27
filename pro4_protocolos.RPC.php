@@ -1,5 +1,6 @@
 <?php
 //ini_set("display_errors", true);
+require_once('classes/db_empempenho_classe.php');
 require_once('classes/db_protocolos_classe.php');
 require_once('classes/db_protempautoriza_classe.php');
 require_once('classes/db_protempenhos_classe.php');
@@ -197,24 +198,47 @@ switch ($oParam->exec) {
   case "insereEmpenho":
 
     try {
+      $tamanho = count($oParam->empenho);
+      $empenhosCadastrados = array();
+      foreach($oParam->empenho as $empenho){
+        $verifica = false;
+        $verifica = verificaEmpenho($empenho->e60_numemp, $oParam->protocolo);
 
-      $verifica = false;
-      $verifica = verificaEmpenho($oParam->empenho, $oParam->protocolo);
-      if ($verifica == true) {
-        throw new Exception("O empenho ".$oParam->empenho." já existe para este protocolo!");
-      }
-      $oEmpenho = new cl_protempenhos;
-      $oEmpenho->p103_numemp    = $oParam->empenho;
-      $oEmpenho->p103_protocolo = $oParam->protocolo;
-      $oEmpenho->incluir(null);
+        if ($verifica == true) {
+          if($tamanho > 1){
+            $empenhosCadastrados[] = $empenho->e60_numemp;
+          }else{
+            throw new Exception("O empenho ".$empenho->e60_numemp." já existe para este protocolo!");
+          }
+        }
 
-      if ($oEmpenho->erro_status != 1) {
-        throw new Exception($oEmpenho->erro_msg);
       }
+      $listaCadastrados = array();
+      foreach ($oParam->empenho as $empenho) {
+        if(!in_array($empenho->e60_numemp, $empenhosCadastrados)){
+          $oEmpenho = new cl_protempenhos;
+          $oEmpenho->p103_numemp = $empenho->e60_numemp;
+          $oEmpenho->p103_protocolo = $oParam->protocolo;
+          $oEmpenho->incluir(null);
+        }else{
+          $listaCadastrados[] = $empenho->e60_numemp;
+        }
+    }
+    $stringErro = implode(',', $listaCadastrados);
+    $qtdCadastrados = count($listaCadastrados);
+    if($qtdCadastrados > 1){
+      if($qtdCadastrados > 5){
+        $primeiroEmpenho = $listaCadastrados[0];
+        $ultimoEmpenho = $listaCadastrados[$qtdCadastrados - 1];
+        $oRetorno->erro = "Os empenhos do intervalo ".$primeiroEmpenho.' à '.$ultimoEmpenho." já estão cadastrados!";
+      }else $oRetorno->erro = "Os empenhos ".$stringErro." já estão cadastrados!";
+    }else if($qtdCadastrados == 1){
+      $oRetorno->erro = "O empenho ".$stringErro." já está cadastrado!";
+    }
 
     } catch (Exception $e) {
       $oRetorno->erro = $e->getMessage();
-      $oRetorno->status   = 2;
+      $oRetorno->status = 2;
     }
 
   break;
@@ -248,13 +272,15 @@ switch ($oParam->exec) {
 
   try {
 
-      $verifica = false;
-      $verifica = verificaAutPagamento($oParam->autpagamento, $oParam->protocolo);
+      foreach ($oParam->autpagamento as $autorizacao) {
+
+        $verifica = false;
+        $verifica = verificaAutPagamento($autorizacao->e53_codord, $oParam->protocolo);
         if ($verifica == true) {
-          throw new Exception("A autorização de pagamento ".$oParam->autpagamento." já existe para este protocolo!");
+          throw new Exception("A autorização de pagamento ".$autorizacao->e53_codord." já existe para este protocolo!");
         }
         $oAutPagamento = new cl_protpagordem;
-        $oAutPagamento->p105_codord    = $oParam->autpagamento;
+        $oAutPagamento->p105_codord    = $autorizacao->e53_codord;
         $oAutPagamento->p105_protocolo = $oParam->protocolo;
         $oAutPagamento->incluir(null);
 
@@ -284,25 +310,25 @@ switch ($oParam->exec) {
 
         if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
           $sSQL = "
-            select p107_protocolo from autprotpagordem where p107_codord = {$oParam->autpagamento}
+            select p107_protocolo from autprotpagordem where p107_codord = {$autorizacao->e53_codord}
           ";
           $ordemAutorizada = db_query($sSQL);
 
           if (pg_num_rows($ordemAutorizada) > 0) {
             break;
           } else {
-            $resultado = autorizarOrdemPagamento($oParam->autpagamento, $oParam->protocolo, $data);
+            $resultado = autorizarOrdemPagamento($autorizacao->e53_codord, $oParam->protocolo, $data);
             if ($resultado == false) {
               throw new Exception ("Erro ao liberar ordem de pagamento!");
             }
           }
 
         }
-
-    } catch (Exception $e) {
-      $oRetorno->erro = $e->getMessage();
-      $oRetorno->status   = 2;
     }
+  } catch (Exception $e) {
+    $oRetorno->erro = $e->getMessage();
+    $oRetorno->status   = 2;
+  }
 
   break;
 
@@ -311,54 +337,59 @@ switch ($oParam->exec) {
   try {
 
     $verifica = false;
-    $verifica = verificaSlip($oParam->slip, $oParam->protocolo);
-      if ($verifica == true) {
-        throw new Exception("O Slip ".$oParam->slip." já existe para este protocolo!");
-      }
-      $oSlip = new cl_protslip;
-      $oSlip->p106_slip    = $oParam->slip;
-      $oSlip->p106_protocolo = $oParam->protocolo;
-      $oSlip->incluir(null);
 
-      if ($oSlip->erro_status != 1) {
-        throw new Exception($oSlip->erro_msg);
-      }
 
-      $rsProtocolo = buscaProtocolo($oParam->protocolo);
-      $protocolo   = db_utils::fieldsMemory($rsProtocolo,0);
-      $departorig  = $protocolo->p101_coddeptoorigem;
-      $departdest  = $protocolo->p101_coddeptodestino;
+    foreach ($oParam->slip as $slip) {
 
-      $rsConfig  = db_query("
-                      select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
-        $configDepart = db_utils::fieldsMemory($rsConfig,0);
+        $verifica = verificaSlip($slip->k17_codigo, $oParam->protocolo);
+        if ($verifica == true) {
+          throw new Exception("O Slip ".$slip->k17_codigo." já existe para este protocolo!");
+        }
 
-        $sSQL = " SELECT p109_sequencial
-                    FROM protconfigdepartaut
-                      INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
-                      INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
-                      INNER JOIN db_config ON codigo = p109_instit
-                        WHERE p109_instit =  {$oParam->instit}
-                         AND p109_coddeptoorigem = {$departorig}
-                         AND p109_coddeptodestino = {$departdest}
-                ";
-        $rsResult = db_query($sSQL);
+        $oSlip = new cl_protslip;
+        $oSlip->p106_slip    = $slip->k17_codigo;
+        $oSlip->p106_protocolo = $oParam->protocolo;
+        $oSlip->incluir(null);
 
-        if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
+        if ($oSlip->erro_status != 1) {
+          throw new Exception($oSlip->erro_msg);
+        }
 
-        $sSQL = "
-          select p108_protocolo from autprotslip where p108_slip = {$oParam->slip}
-        ";
-        $slipAutorizada = db_query($sSQL);
-        if (pg_num_rows($slipAutorizada) > 0) {
-          break;
-        } else {
-          $resultado = autorizarSlip($oParam->slip, $oParam->protocolo, $data);
-          if ($resultado == false) {
-            throw new Exception ("Erro ao liberar slip!");
+        $rsProtocolo = buscaProtocolo($oParam->protocolo);
+        $protocolo   = db_utils::fieldsMemory($rsProtocolo,0);
+        $departorig  = $protocolo->p101_coddeptoorigem;
+        $departdest  = $protocolo->p101_coddeptodestino;
+
+        $rsConfig  = db_query("
+                        select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
+          $configDepart = db_utils::fieldsMemory($rsConfig,0);
+
+          $sSQL = " SELECT p109_sequencial
+                      FROM protconfigdepartaut
+                        INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                        INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                        INNER JOIN db_config ON codigo = p109_instit
+                          WHERE p109_instit =  {$oParam->instit}
+                           AND p109_coddeptoorigem = {$departorig}
+                           AND p109_coddeptodestino = {$departdest}
+                  ";
+          $rsResult = db_query($sSQL);
+          if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
+
+          $sSQL = "
+            select p108_protocolo from autprotslip where p108_slip = {$slip->k17_codigo}
+          ";
+          $slipAutorizada = db_query($sSQL);
+          if (pg_num_rows($slipAutorizada) > 0) {
+            break;
+          } else {
+            $resultado = autorizarSlip($slip->k17_codigo, $oParam->protocolo, $data);
+            if ($resultado == false) {
+              throw new Exception ("Erro ao liberar slip!");
+            }
           }
         }
-      }
+    }
 
   } catch (Exception $e) {
     $oRetorno->erro = $e->getMessage();
@@ -727,6 +758,29 @@ switch ($oParam->exec) {
     }
   break;
 
+  case 'pesquisaEmpenhos';
+    try{
+      $oRetorno->empenhos = pesquisaIntervaloEmpenhos($oParam->inicio, $oParam->dtInicio, $oParam->fim, $oParam->dtFim);
+    }catch(Exception $e){
+      $oRetorno->erro = $e;
+    }
+
+  break;
+
+  case 'pesquisaOrdens';
+  try{
+    $oRetorno->ordens = pesquisaOrdens($oParam->ordem_ini, $oParam->ordem_fim);
+  }catch(Exception $e){
+    $oRetorno->erro = $e;
+  }
+  break;
+
+  case 'pesquisaSlips';
+  try{
+    $oRetorno->slips = pesquisaSlips($oParam->slip_ini, $oParam->slip_fim);
+  }catch(Exception $e){
+    $oRetorno->erro = $e;
+  }
 }
 
 // Funções
@@ -1096,6 +1150,85 @@ function salvaCopiaEmpenho($protocolo, $protocoloCopia) {
   }
 }
 
+function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
+
+  $param_ini = $emp_inicial[0];
+  $param_fim = $emp_final[0];
+
+  if($emp_inicial[0] && $emp_final[0]){
+    if($emp_inicial[1] && !$emp_final[1]){
+      $emp_final[1] = $emp_inicial[1];
+    }else if(!$emp_inicial[1] && $emp_final[1]){
+      $emp_inicial[1] = $emp_final[1];
+    }else if(!$emp_inicial[1] && !$emp_final[1] && $dtinicio){
+      $dtfim = $dtinicio;
+    }
+  }
+
+  if($emp_inicial[1] && $emp_final[1]){
+    $dtinicio = '';
+    $dtfim = '';
+  }
+
+  if($dtinicio)
+    $dataInicial = split('-', $dtinicio);
+  $oEmpenhos = new cl_empempenho;
+  $where = '';
+
+  if($param_ini && $param_fim){
+    if($param_fim == $param_ini){
+      if($dtinicio != $dtfim){
+          $dtfim = $dtinicio;
+      }
+    }
+    if($dtinicio != '' && $dtfim != ''){
+      $where  = " e60_codemp::integer >= $param_ini ";
+      $where .= " and e60_emiss BETWEEN '$dtinicio' AND '$dtfim' ";
+
+      $where .= " and (CASE WHEN(e60_codemp::integer > $param_fim) ";
+      $where .= " THEN (e60_emiss) < '$dtfim' ";
+      $where .= " ELSE e60_codemp::integer <= $param_fim AND e60_emiss <= '$dtfim' END)";
+      $where .= " and e60_instit = ".db_getsession('DB_instit');
+    }
+    else{
+      if(!$emp_inicial[1]){
+        $data = $dataInicial[0];
+      }else $data = $emp_inicial[1];
+      $where  = " e60_codemp::integer >= ".$emp_inicial[0]." ";
+      $where .= " AND e60_anousu >= ".$data." AND e60_anousu <= ".$emp_final[1]."";
+      $where .= " AND (CASE WHEN(e60_codemp::integer > $param_fim) ";
+      $where .= " THEN (e60_anousu) < ".$emp_final[1]." ";
+      $where .= " ELSE e60_codemp::integer <= $param_fim AND e60_anousu <= ".$emp_final[1]." END)";
+      $where .= " AND e60_instit = ".db_getsession('DB_instit');
+    }
+  }
+
+  if($param_ini && !$param_fim){
+    $where = " e60_codemp::integer = $param_ini ";
+    $where .= " and e60_instit = ".db_getsession('DB_instit');
+    if(isset($dtinicio) && !$emp_inicial[1]){
+      $where .= " and e60_emiss = '$dtinicio' ";
+    }else $where .= " and e60_anousu = ".$emp_inicial[1]."::integer ";
+  }
+
+  if($param_fim && !$param_ini){
+    $where = " e60_codemp::integer = $param_fim ";
+    $where .= " and e60_instit = ".db_getsession('DB_instit');
+    if(isset($dtfim) && !$param_fim){
+      $where .= " and e60_emiss = '$dtfim' ";
+    }else $where .= " and e60_anousu = ".$emp_final[1]."::integer ";
+  }
+
+  $campos = "empempenho.e60_numemp, empempenho.e60_codemp, empempenho.e60_anousu";
+
+  $sSql = $oEmpenhos->sql_query(null, $campos, ' e60_numemp, e60_anousu', $where,'', '100');
+  $rsSql = $oEmpenhos->sql_record($sSql);
+
+
+  $empenhos = db_utils::getCollectionByRecord($rsSql);
+  return $empenhos;
+}
+
 function salvaCopiaAutCompra($protocolo, $protocoloCopia) {
   try {
 
@@ -1252,6 +1385,80 @@ function salvaCopiaSlip($protocolo, $protocoloCopia, $instituicao) {
     $oRetorno->erro = $e->getMessage();
     $oRetorno->status = 2;
   }
+}
+
+function pesquisaOrdens($ordem_ini, $ordem_fim){
+  $where = '';
+
+  if($ordem_ini && $ordem_fim){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord >= $ordem_ini and pagordemele.e53_codord <= $ordem_fim ";
+  }
+
+  if($ordem_ini && !$ordem_fim){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord = $ordem_ini";
+  }
+
+  if($ordem_fim && !$ordem_ini){
+    $where = " and ";
+    $where .= " pagordemele.e53_codord = $ordem_fim";
+  }
+
+  $sSql = "SELECT pagordemele.e53_codord
+           FROM pagordemele
+           INNER JOIN pagordem ON pagordem.e50_codord = pagordemele.e53_codord
+           INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+           INNER JOIN orcelemento ON orcelemento.o56_codele = pagordemele.e53_codele
+           INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+           AND orcelemento.o56_anousu = empempenho.e60_anousu
+           WHERE e60_instit = ".db_getsession('DB_instit')." ".$where."
+           ORDER BY e53_codord, e53_codele limit 100";
+
+  $rsSql = db_query($sSql);
+  $ordens = db_utils::getCollectionByRecord($rsSql);
+  return $ordens;
+}
+
+function pesquisaSlips($slip_ini, $slip_fim){
+  $where = '';
+
+  if($slip_ini && $slip_fim){
+    $where = " and ";
+    $where .= " slip.k17_codigo >= $slip_ini and slip.k17_codigo <= $slip_fim ";
+  }
+
+  if($slip_ini && !$slip_fim){
+    $where = " and ";
+    $where .= " slip.k17_codigo = $slip_ini";
+  }
+
+  if($slip_fim && !$slip_ini){
+    $where = " and ";
+    $where .= " slip.k17_codigo = $slip_fim";
+  }
+
+  $ano_usu = db_getsession('DB_datausu');
+  $sSql = "SELECT slip.k17_codigo
+              FROM slip
+              LEFT JOIN conplanoreduz r1 ON r1.c61_reduz = k17_debito
+              AND r1.c61_instit = k17_instit AND r1.c61_anousu = $ano_usu
+              LEFT JOIN conplano c1 ON c1.c60_codcon = r1.c61_codcon
+              AND c1.c60_anousu = r1.c61_anousu
+              LEFT JOIN conplanoreduz r2 ON r2.c61_reduz = k17_credito
+              AND r2.c61_instit = k17_instit AND r2.c61_anousu= $ano_usu
+              LEFT JOIN conplano c2 ON c2.c60_codcon = r2.c61_codcon
+              AND c2.c60_anousu = r2.c61_anousu
+              LEFT JOIN slipnum ON slipnum.k17_codigo = slip.k17_codigo
+              LEFT JOIN cgm ON cgm.z01_numcgm = slipnum.k17_numcgm
+              LEFT JOIN slipprocesso ON slip.k17_codigo = slipprocesso.k145_slip
+              WHERE k17_instit = ".db_getsession('DB_instit')." ".$where."
+              ORDER BY slip.k17_codigo limit 100";
+
+
+  $rsSql = db_query($sSql);
+  $slips = db_utils::getCollectionByRecord($rsSql);
+  return $slips;
 }
 
 // Fim Funções
