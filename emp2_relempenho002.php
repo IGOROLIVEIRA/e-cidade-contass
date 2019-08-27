@@ -365,6 +365,8 @@ if ($agrupar == "a") { // fornecedor
     // desdobramento
 } elseif ($agrupar == "ta"){
     $sOrderSQL = "e94_empanuladotipo,e60_emiss";
+} elseif ($agrupar == "do") {
+    $sOrderSQL = "o58_coddot, e60_emiss";
 } else {
 
 }
@@ -995,6 +997,30 @@ if ($tipo == "a" or 1 == 1) {
                 }
             }
 
+            if ($agrupar == "do") {
+                if ($sememp == "n") {
+                    $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
+                    $pdf->Cell(120, $tam, 'DOTAÇÃO ORÇAMENTÁRIA', 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
+                    $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
+                } else {
+                    $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
+                    $pdf->Cell(80, $tam, 'DOTAÇÃO ORÇAMENTÁRIA', 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
+                    $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
+
+                    $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
+                    $pdf->Cell(25, $tam, "QUANTIDADE", 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, strtoupper($RLe60_vlranu), 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, strtoupper($RLe60_vlrliq), 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, strtoupper($RLe60_vlrpag), 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, "LIQUIDADO", 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, "NAO LIQUID", 1, 0, "C", 1);
+                    $pdf->Cell(18, $tam, "GERAL", 1, 1, "C", 1); //quebra linha
+                }
+            }
+
             if ($tipo == "a" and $sememp == "n") {
                 if ($agrupar == "oo" || $agrupar == 'gest') {
                     $pdf->Cell(165, $tam, '', 1, 0, "C", 1);
@@ -1048,8 +1074,16 @@ if ($tipo == "a" or 1 == 1) {
                 if($agrupar == 'ta'){
                     $pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1);
                 }
-
-                $pdf->Cell(62, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                if($agrupar == "do") {
+                    if ($mostrar == "r") {
+                        $pdf->Cell(46, $tam, 'NOME', 1, 0, "C", 1); //108
+                        $pdf->Cell(62, $tam, 'DOTAÇÃO', 1, 0, "C", 1);
+                    } elseif ($mostrar == "t") {
+                        $pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
+                    }
+                } else {
+                    $pdf->Cell(62, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                }
                 //$pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlranu), 1, 0, "C", 1);
@@ -1390,6 +1424,59 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', '', 7);
         }
 
+        /* ----------- AGRUPAR POR DOTAÇÃO ORÇAMENTÁRIA ----------- */
+        if ($repete_r != $o58_orgao and $agrupar == "do") {
+            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+                    //$pdf->setX(125);
+                    $pdf->SetFont('Arial', 'B', 7);
+                    if ($sememp == "n") {
+                        $base = "B";
+                        $preenche = 1;
+                        $iTamanhoCelula = 40;
+                    } else {
+                        $base = "";
+                        $preenche = 0;
+                        $iTamanhoCelula = 25;
+                    }
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
+                }
+            }
+            $t_emp = 0;
+            $t_liq = 0;
+            $t_anu = 0;
+            $t_pag = 0;
+            $t_total = 0;
+            $repete = $e60_numcgm;
+            $repete_r = $o58_orgao; // trocado
+            $quantimp = 0;
+            if ($sememp == "n") {
+                $pdf->Ln();
+            }
+            $pdf->SetFont('Arial', 'B', 8);
+            $totalforne ++;
+
+            if ($agrupar == "do") {
+                $pdf->Cell(45, $tam, "$o58_coddot", $iBorda, 0, "C", 0);
+                $pdf->Cell(63, $tam, "$dl_estrutural", $iBorda, 1, "L", 0);
+            }
+
+            $pdf->SetFont('Arial', '', 7);
+        }
+
         /* ----------- AGRUPAR POR GEST ----------- */
         if ($sGestorAtual != "{$e54_gestaut} :: {$descrdepto}" and $agrupar == 'gest') {
 
@@ -1594,7 +1681,13 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(46, $tam, substr($z01_nome,0,28),$iBorda, 0, "L", 0);
             }
 
-            $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+            if($agrupar == "do") {
+                $pdf->Cell(46, $tam, substr($z01_nome, 0, 27), $iBorda, 0, "L", $preenche); //quebra linha 108
+                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+            } else {
+                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+            }
+
             $pdf->Cell(18, $tam, db_formatar($e60_vlremp, 'f'), 'B', 0, "R", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlranu, 'f'), 'B', 0, "R", $preenche);
             $pdf->Cell(18, $tam, db_formatar($e60_vlrliq, 'f'), 'B', 0, "R", $preenche);
