@@ -115,8 +115,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 4 OR TRIM(r45_codafa) = 'R' THEN 2
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev <> 1 THEN 7
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev = 1 THEN 8
+                           WHEN r45_situac in (6,3,8) THEN 
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
                            ELSE 99
                        END AS si199_tipoafastamento
             FROM afasta
@@ -151,8 +151,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 4 OR TRIM(r45_codafa) = 'R' THEN 2
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev <> 1 THEN 7
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev = 1 THEN 8
+                           WHEN r45_situac in (6,3,8) THEN 
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
                            ELSE 99
                        END AS si199_tipoafastamento,
 
@@ -211,9 +211,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                                         (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
                                     )
 
-                                AND DATE_PART('DAY',r45_dtreto) >= 1
-                                AND DATE_PART('MONTH',r45_dtreto) = 1
-                                AND DATE_PART('YEAR',r45_dtreto) >= ".db_getsession("DB_anousu")."
                                 AND r45_situac <> 5
                                 AND rh01_instit =  " . db_getsession("DB_instit") . "
                                 AND   rh01_sicom = 1
@@ -228,8 +225,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 4 OR TRIM(r45_codafa) = 'R' THEN 2
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev <> 1 THEN 7
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev = 1 THEN 8
+                           WHEN r45_situac in (6,3,8) THEN 
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
                            ELSE 99
                        END AS si199_tipoafastamento,
 
@@ -269,9 +266,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
                                     )
 
-                                AND DATE_PART('DAY',r45_dtreto) >= 1
-                                AND DATE_PART('MONTH',r45_dtreto) > 1
-                                AND DATE_PART('YEAR',r45_dtreto) >= ".db_getsession("DB_anousu")."
                                 AND r45_situac <> 5
                                 AND rh01_instit =  " . db_getsession("DB_instit") . "
                                 AND   rh01_sicom = 1
@@ -324,7 +318,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace(";", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\n", " ", $oDadosAfast->si199_dscoutrosafastamentos); //usei essas 3 formas que achei
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\r", " ", $oDadosAfast->si199_dscoutrosafastamentos); //na net pra tentar eliminar a quebra
-                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas até o momento sem sucesso :/
+                $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas atÃ© o momento sem sucesso :/
 
                 $clafast->si199_dscoutrosafastamentos = '';
 
@@ -423,8 +417,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 4 OR TRIM(r45_codafa) = 'R' THEN 2
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev <> 1 THEN 7
-                           WHEN r45_situac in (6,3,8) AND rh02_tbprev = 1 THEN 8
+                           WHEN r45_situac in (6,3,8) THEN 
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
                            ELSE 99
                        END AS si199_tipoafastamento,
                        r45_dtlanc as datalancamento,
