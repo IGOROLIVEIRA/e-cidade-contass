@@ -299,7 +299,7 @@ class MSC {
     $aRegistros = array();
     $indice = "";
 
-    for ($ind = 0; $ind <= 4; $ind++) {
+    for ($ind = 0; $ind <= 6; $ind++) {
       $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
@@ -467,8 +467,6 @@ class MSC {
               WHEN db21_tipoinstit IN (2) THEN 20231
               ELSE 10131
           END AS po,
-          case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
-          o15_codstn AS fr,
         round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
         'beginning_balance' AS tipovalor_si,
         substr(fc_planosaldonovo,59,1)::varchar(1) AS nat_vlr_si,
@@ -492,24 +490,19 @@ class MSC {
         c61_codcon,
         c61_codigo,
         r.c61_instit,
-        c60_identificadorfinanceiro,
-        o15_codstn,
         fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false)
            from conplanoexe e
        inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
        inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
        inner join db_config ON codigo = r.c61_instit
-       INNER JOIN contacorrentedetalhe ON c19_conplanoreduzanousu = c61_anousu
-         AND c19_reduz = c61_reduz
          left outer join consistema on c60_codsis = c52_codsis
          left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
-         LEFT JOIN orctiporec ON c19_orctiporec = o15_codigo
          where {$this->getTipoMatriz()} (c60_infcompmsc is null or c60_infcompmsc = 0 or c60_infcompmsc = 1) and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(1, $aCampos, $rsResult);
@@ -707,7 +700,7 @@ class MSC {
     }
   }
 
-  public function getDadosIC06($iAno, $dataInicio) {//
+  public function getDadosIC06($iAno, $dataInicio) {
 
     $iMes = date('m',strtotime($dataInicio));
 
@@ -989,8 +982,8 @@ class MSC {
     }
   }
     /**
-     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informaes complementares e necessrio pegar separadamente
-     * por isso temos duas funes para IC09
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
+     * por isso temos duas funções para IC09
      *
      */
   public function getDadosIC09EMP($iAno, $dataInicio) {
@@ -1069,8 +1062,8 @@ class MSC {
   }
 
     /**
-     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informaes complementares e necessrio pegar separadamente
-     * por isso temos duas funes para IC09
+     * A IC09 atinge tanto empenhos como restos a pagar mas na hora de pegar as informações complementares e necessário pegar separadamente
+     * por isso temos duas funções para IC09
      *
      */
   public function getDadosIC09RSP($iAno, $dataInicio) {
