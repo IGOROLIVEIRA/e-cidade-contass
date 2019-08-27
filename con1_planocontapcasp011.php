@@ -1148,7 +1148,7 @@ $iOpcao = 1;
     function js_liberaAbasPlano(iCodigoConta, lAbaReduzidos, sEstrutural = null, iContaCorrente = null) {
 
         parent.document.formaba.reduzido.disabled  = true;
-        if (lAbaReduzidos && sEstrutural != null && iContaCorrente != null) {
+        if (lAbaReduzidos || (sEstrutural != null && iContaCorrente != null)) {
 
             parent.document.formaba.reduzido.disabled  = false;
             parent.iframe_reduzido.location.href = "con1_planocontapcasp004.php?iCodigoConta=" + iCodigoConta + "&sEstrutural=" + sEstrutural + "&iContaCorrente=" + iContaCorrente;
