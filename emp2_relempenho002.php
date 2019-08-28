@@ -366,7 +366,7 @@ if ($agrupar == "a") { // fornecedor
 } elseif ($agrupar == "ta"){
     $sOrderSQL = "e94_empanuladotipo,e60_emiss";
 } elseif ($agrupar == "do") {
-    $sOrderSQL = "o58_coddot, e60_emiss";
+    $sOrderSQL = "e60_coddot, e60_emiss";
 } else {
 
 }
@@ -1425,7 +1425,7 @@ if ($tipo == "a" or 1 == 1) {
         }
 
         /* ----------- AGRUPAR POR DOTAÇÃO ORÇAMENTÁRIA ----------- */
-        if ($repete_r != $o58_orgao and $agrupar == "do") {
+        if ($repete_r != $e60_coddot and $agrupar == "do") {
             if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
                 if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
@@ -1461,7 +1461,7 @@ if ($tipo == "a" or 1 == 1) {
             $t_pag = 0;
             $t_total = 0;
             $repete = $e60_numcgm;
-            $repete_r = $o58_orgao; // trocado
+            $repete_r = $e60_coddot;
             $quantimp = 0;
             if ($sememp == "n") {
                 $pdf->Ln();
@@ -1470,7 +1470,7 @@ if ($tipo == "a" or 1 == 1) {
             $totalforne ++;
 
             if ($agrupar == "do") {
-                $pdf->Cell(45, $tam, "$o58_coddot", $iBorda, 0, "C", 0);
+                $pdf->Cell(45, $tam, "$e60_coddot", $iBorda, 0, "C", 0);
                 $pdf->Cell(63, $tam, "$dl_estrutural", $iBorda, 1, "L", 0);
             }
 

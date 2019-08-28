@@ -313,7 +313,7 @@ if ($agrupar == "a") { // fornecedor
 } elseif ($agrupar == "ta"){
     $sOrderSQL = "e94_empanuladotipo,e60_emiss";
 } elseif ($agrupar == "do") {
-    $sOrderSQL = "o58_coddot, e60_emiss";
+    $sOrderSQL = "e60_coddot, e60_emiss";
 } else {
 
 }
@@ -1933,8 +1933,8 @@ if($agrupar == 'do'){
         $objeto = db_utils::fieldsMemory($res, $x, true);
 
         if(empty($dotOrcAnt)) {
-            $dotOrcAnt = "{$objeto->o58_coddot}";
-            echo ";;$dotOrcAnt;;$objeto->dl_estrutural\n";
+            $dotOrcAnt = "{$objeto->e60_coddot}";
+            echo "$dotOrcAnt;;;;$objeto->dl_estrutural\n";
         }
 
         $dotacao = str_pad($objeto->e60_coddot, 4, '0', STR_PAD_LEFT);
@@ -1947,10 +1947,10 @@ if($agrupar == 'do'){
         $GERAL = db_formatar($objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag, 'f');
 
 
-        if ($dotOrcAnt != "{$objeto->o58_coddot}") {
+        if ($dotOrcAnt != "{$objeto->e60_coddot}") {
 
             echo ";;;;;TOTAL DE $contEmpenhos EMPENHOS;$TotalEmpenhado;$TotalAnulado;$TotalLiquidado;$TotalPago;$TotalLiquidado2;$TotalNaoLiquidado;$TotalGeral;\n";
-            echo ";;;OrgAo: ;$objeto->o40_descr;\n";
+            echo "$objeto->e60_coddot;;;;$objeto->dl_estrutural;\n";
             $TotalEmpenhado    = 0;
             $TotalAnulado      = 0;
             $TotalLiquidado    = 0;
@@ -1959,7 +1959,7 @@ if($agrupar == 'do'){
             $TotalNaoLiquidado = 0;
             $TotalGeral        = 0;
 
-            $dotOrcAnt = "{$objeto->o40_orgao}";
+            $dotOrcAnt = "{$objeto->e60_coddot}";
             $contEmpenhos = 0;
 
         }
