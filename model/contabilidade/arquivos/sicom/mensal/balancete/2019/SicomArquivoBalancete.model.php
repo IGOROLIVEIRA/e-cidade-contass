@@ -124,7 +124,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         if ($sCodFundo == "") {
             return "00000000";
         } else {
-            return $sCodFundo;
+            return str_pad($sCodFundo, 8, '0', STR_PAD_LEFT);
         }
     }
 
