@@ -710,7 +710,7 @@ class licitacao {
             "pc21_numcgm= {$iFornecedor}
       and ac24_sequencial is null
       and l21_codliclicita in({$sLista})");
-//        echo $sSqlLicitacoes; die();
+        //echo $sSqlLicitacoes; die();
 
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);

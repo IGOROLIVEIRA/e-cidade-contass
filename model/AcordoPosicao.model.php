@@ -1627,10 +1627,8 @@ class AcordoPosicao {
       throw new BusinessException( _M( self::CAMINHO_MENSAGENS."sequencial_nao_existente" ) );
     }
 
-      foreach ( $this->getItens() as $oAcordoItem ) {
-        $oAcordoItem->remover();
-        //excluir credenciamentosaldo
-        $oAcordoItem->removercredsaldo($oAcordoItem->getCodigoItemLicitacao());
+    foreach ( $this->getItens() as $oAcordoItem ) {
+      $oAcordoItem->remover();
     }
     $oDAoAcordoPosicaoAditamento = new cl_acordoposicaoaditamento();
     $oDAoAcordoPosicaoAditamento->excluir(null, "ac35_acordoposicao = {$this->getCodigo()}");
