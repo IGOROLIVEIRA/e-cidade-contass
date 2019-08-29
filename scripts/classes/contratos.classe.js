@@ -16,7 +16,7 @@ contrato = function () {
         oParam.exec        = sFuncao;
         oParam.iContratado = $F('ac16_contratado');
         oParam.iContrato   = $F('ac16_sequencial');
-
+        oParam.iTipoOrigem = $F('ac16_tipoorigem');
         js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,

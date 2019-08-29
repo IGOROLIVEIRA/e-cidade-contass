@@ -33,6 +33,7 @@ require_once("classes/db_acordogarantia_classe.php");
 require_once("classes/db_acordoprogramacaofinanceira_classe.php");
 require_once("classes/db_acordoposicaoperiodo_classe.php");
 require_once("classes/db_acordoitemprevisao_classe.php");
+require_once("classes/db_credenciamentosaldo_classe.php");
 require_once('model/AcordoComissao.model.php');
 require_once('model/Acordo.model.php');
 require_once('model/AcordoItem.model.php');
