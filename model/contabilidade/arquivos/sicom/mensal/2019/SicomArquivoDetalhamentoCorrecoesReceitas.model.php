@@ -127,12 +127,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
     $db_filtro = "o70_instit = " . db_getsession("DB_instit");
     $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
-//    db_criatabela($rsResult10);
-    /*$sSql   = "SELECT * FROM infocomplementaresinstit WHERE si09_tipoinstit != 2";
-    $rsPref = db_query($sSql);
-    if (pg_num_rows($rsPref) > 0) {
-      $rsResult10 = 0;
-    }*/
+    // db_criatabela($rsResult10);
 
     $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
     $rsResult = db_query($sSql);
@@ -182,14 +177,39 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
       '193113', '172401', '247199', '247299', '176299', '172199', '172134',
       '160099', '112299', '176202', '242201', '242202', '222900', '193199',
       '191199', '176101', '160004', '132810', '132820', '132830', '192210',
-      '242102', /*'199099',*/ '247101', '172402', '172233');
+      '242102', '247101', '172402', '172233');
 
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
-      if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
+      $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte FROM conlancamrec
+               JOIN conlancamdoc ON c71_codlan = c74_codlan
+               JOIN conhistdoc ON c71_coddoc = c53_coddoc
+               JOIN conlancam ON c70_codlan = c74_codlan
+               JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+               JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
+               WHERE c74_anousu = ". db_getsession("DB_anousu") ."
+                 AND o57_fonte = '{$oDadosRec->o57_fonte}'
+                 AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49') 
+                        OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))
+                 AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+               ORDER BY 4, 3 DESC";
+
+      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x 
+                    WHERE ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49') 
+                        OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))";
+
+      $rsDocRec = db_query($sSql);
+      $rsDocRecVlr = db_query($sSqlValor);
+      
+      $oCodDoc = db_utils::fieldsMemory($rsDocRec);
+      $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr);
+      
+      if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
+       
+      if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
         $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
         foreach ($oNaturezaReceita as $oNatureza) {
@@ -198,36 +218,35 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             && $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita
           ) {
             $sNaturezaReceita = $oNatureza->getAttribute('receitaSicom');
-          break;
+            break;
+
+          }
 
         }
 
-      }
+        if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
 
-      if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
+          if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
+            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 6) . "00";
+          } else if (substr($oDadosRec->o57_fonte, 0, 2) == '49') {
+            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 3, 8);
+          } else {
+            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
+          }
 
-        if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
-          $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 6) . "00";
-        } else if (substr($oDadosRec->o57_fonte, 0, 2) == '49') {
-          $sNaturezaReceita = substr($oDadosRec->o57_fonte, 3, 8);
-        } else {
-          $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
         }
-
-      }
-      $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
-      $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2);
+        $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
+        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2);
 
 
-      if (!isset($aDadosAgrupados[$sHash10])) {
+        if (!isset($aDadosAgrupados[$sHash10])) {
 
-
-        $oDados10 = new stdClass();
-        $oDados10->si25_tiporegistro = 10;
-        $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
-        $oDados10->si25_codorgao = $sCodOrgaoTce;
-        $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
-          $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
+          $oDados10 = new stdClass();
+          $oDados10->si25_tiporegistro = 10;
+          $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
+          $oDados10->si25_codorgao = $sCodOrgaoTce;
+          $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
+          $oDados10->si25_identificadordeducao = $iIdentDeducao;
           $oDados10->si25_naturezareceita = $sNaturezaReceita;
           $oDados10->si25_vlarrecadado = 0;
           $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -236,91 +255,94 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
           $aDadosAgrupados[$sHash10] = $oDados10;
 
         }
-        $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oDadosRec->saldo_arrecadado;
-
+          $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDocVlr->c70_valor;
+          
         /**
          * agrupar registro 11
          */
         $sHash11 = $oDadosRec->o70_codigo;
         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+            
+          $sSql = "SELECT taborc.k02_estorc,
+                          CASE
+                              WHEN substr(taborc.k02_estorc,2,4) IN ('1218','7218') THEN cgm.z01_cgccpf
+                              ELSE ''
+                          END AS z01_cgccpf,
+                          o70_codrec,
+                          o15_codtri,
+                          SUM(CASE
+                                  WHEN c53_tipo = 100 THEN ROUND(c70_valor,2)::FLOAT8
+                                  WHEN c53_tipo = 101 THEN ROUND(c70_valor*-1,2)::FLOAT8
+                                  ELSE 0::FLOAT8
+                              END) AS c70_valor,
+                          c206_nroconvenio,
+                          c206_dataassinatura,
+                          c53_tipo
+                   FROM conlancamrec
+                   INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+                   INNER JOIN orctiporec ON o70_codigo = o15_codigo
+                   LEFT JOIN conlancamcorrente on c86_conlancam = c74_codlan
+                   LEFT JOIN corplacaixa on (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
+                   LEFT JOIN placaixarec on k81_seqpla = k82_seqpla
+                   LEFT JOIN convconvenios on c206_sequencial = k81_convenio
+                   LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
+                         AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
+                                           WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
+                   LEFT JOIN conlancam ON c74_codlan = c70_codlan
+                   LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
+                   INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                   INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                   LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
+                   WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
+                     AND o70_instit = " . db_getsession('DB_instit') . "
+                     AND ((c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) != '49') OR (c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) = '49'))
+                     AND (CASE
+                             WHEN substr(taborc.k02_estorc,1,2) = '49'
+                                 THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
+                             ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
+                          END)
+                     AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+                   GROUP BY 1,2,3,4,c53_tipo,c70_valor,c206_nroconvenio,c206_dataassinatura
+                   ORDER BY 1,4,3";
 
-          $sSql = "
-          SELECT taborc.k02_estorc,
-          CASE
-          WHEN substr(taborc.k02_estorc,2,4) IN ('1218','7218') THEN cgm.z01_cgccpf
-          ELSE ''
-          END AS z01_cgccpf,
-          o70_codrec,
-          o15_codtri,
-          SUM(CASE
-          WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
-          WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
-          ELSE 0::FLOAT8
-          END) AS c70_valor,
-          c206_nroconvenio,
-          c206_dataassinatura
-          FROM conlancamrec
-          INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
-          INNER JOIN orctiporec ON o70_codigo = o15_codigo
-          LEFT JOIN conlancamcorrente on c86_conlancam = c74_codlan
-          LEFT JOIN corplacaixa on (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
-          LEFT JOIN placaixarec on k81_seqpla = k82_seqpla
-          LEFT JOIN convconvenios on c206_sequencial = k81_convenio
-          LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
-          AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
-          WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
-          LEFT JOIN conlancam ON c74_codlan = c70_codlan
-          LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
-          INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
-          INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
-          LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
-          WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
-          AND o70_instit = " . db_getsession('DB_instit') . "
-          AND (CASE
-          WHEN substr(taborc.k02_estorc,1,2) = '49'
-          THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
-          ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
-          END)
-          AND conlancamrec.c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-          GROUP BY 1,2,3,4,c53_tipo,c70_valor,c206_nroconvenio,c206_dataassinatura
-          ORDER BY 1,4,3";
           $result = db_query($sSql);
-
-         //          echo $sSql;
-         // db_criatabela($result);die();
 
           $aDadosCgm11 = array();
 
           for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++){
 
-            $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
-            $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+          $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
+          $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
-            if (!isset($aDadosCgm11[$sHashCgm])){
+          if (!isset($aDadosCgm11[$sHashCgm])){
 
-              $oDados11 = new stdClass();
-              $oDados11->si26_tiporegistro = 11;
-              $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
-              $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
-              if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
-                $oDados11->si26_tipodocumento = 1;
-              } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
-                $oDados11->si26_tipodocumento = 2;
-              }else{
-                $oDados11->si26_tipodocumento = "";
-              }
-              $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
-              $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
-              $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
-              $oDados11->si26_vlarrecadadofonte = 0;
-              $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          $oDados11 = new stdClass();
+          $oDados11->si26_tiporegistro = 11;
+          $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+          $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+          if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
+              $oDados11->si26_tipodocumento = 1;
+          } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
+              $oDados11->si26_tipodocumento = 2;
+          }else{
+              $oDados11->si26_tipodocumento = "";
+          }
+          $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+          $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+          $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+          $oDados11->si26_vlarrecadadofonte = 0;
+          $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-              $aDadosCgm11[$sHashCgm] = $oDados11;
-            }
-            $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
+          $aDadosCgm11[$sHashCgm] = $oDados11;
+          }
+           if ($oCodFontRecursos->c53_tipo == 101 || substr($oCodFontRecursos->k02_estorc, 0, 2) == '49') {
+             $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
+           }
+              
           }
           $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
         }
+       }
       }
 
     }
