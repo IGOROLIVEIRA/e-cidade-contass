@@ -207,7 +207,8 @@ $anousu = db_getsession("DB_anousu");
                             "r"     => "Recurso",
                             "gest"  => "Gestor",
                             "d"     => "Desdobramento",
-                            "ta"    => "Tipo de Anulação");
+                            "ta"    => "Tipo de Anulação",
+                            "do"    => "Dotação Orçamentária");
                         db_select("agrupar", $aAgruparPor, true, 1);
                         ?>
                     </td>
