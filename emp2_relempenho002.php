@@ -243,7 +243,7 @@ if ($listacom != "" ) {
 
 if ($listalicita != "" ) {
     if (isset ($vercom) and $vercom == "com") {
-        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
+        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_edital::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
 
         $sWhereSQL = $sWhereSQL." AND empempenho.e60_codcom IN
     (SELECT l03_codcom
@@ -501,7 +501,6 @@ if ($processar == "a") {
             ? " order by e64_codele, e60_emiss "
             : " order by $sOrderSQL "
         );
-
     $res = $clempempenho->sql_record($sqlrelemp);
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -710,7 +709,6 @@ if ($processar == "a") {
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
-//		echo $sqlperiodo;db_criatabela($res);die();
 
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -1553,7 +1551,7 @@ if ($tipo == "a" or 1 == 1) {
         // o tipo sempre é == "A"
         if ($tipo == "a" and $sememp == "n") {
             $pdf->Cell(20, $tam, substr($pc50_descr,0,10), $iBorda, 0, "L", $preenche);
-            $pdf->Cell(11, $tam, "$l20_edital/$l20_anousu", $iBorda, 0, "R", $preenche);
+            $pdf->Cell(11, $tam, "$e60_numerol", $iBorda, 0, "R", $preenche);
             $pdf->Cell(11, $tam, "$e60_codemp", $iBorda, 0, "R", $preenche);
             $pdf->Cell(15, $tam, $e60_emiss, $iBorda, 0, "C", $preenche);
 
@@ -2032,7 +2030,7 @@ if ($hist == "h") {
 												                       left join orctiporec    on orctiporec.o58_codigo = orcdotacao.o58_codigo
 														       group by x.o58_codigo,x.o15_descr order by x.o58_codigo";
     }
-    //     die($sqlperiodo)
+
     $result = $clempempenho->sql_record($sql);
     if ($clempempenho->numrows > 0) {
         $pdf->addpage("L");
