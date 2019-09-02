@@ -161,7 +161,7 @@ $sCamposPosicaoAtual  = "distinct e60_numemp, to_number(e60_codemp::text,'999999
 $sCamposPosicaoAtual .= ", e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr";
 $sCamposPosicaoAtual .= ", e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr";
 $sCamposPosicaoAtual .= ", o15_codigo, o15_descr, fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural, e60_codcom";
-$sCamposPosicaoAtual .= ", pc50_descr,e60_concarpeculiar,e60_numerol,e54_gestaut,descrdepto,e94_empanuladotipo,e38_descr";
+$sCamposPosicaoAtual .= ", pc50_descr,e60_concarpeculiar,e60_numerol,e54_gestaut,descrdepto,e94_empanuladotipo,e38_descr,l20_edital,l20_anousu";
 
 //---------
 // monta sql
@@ -243,7 +243,7 @@ if ($listacom != "" ) {
 
 if ($listalicita != "" ) {
     if (isset ($vercom) and $vercom == "com") {
-        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
+        $sWhereSQL = $sWhereSQL." and empempenho.e60_numerol IN (select l20_edital::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
 
         $sWhereSQL = $sWhereSQL." AND empempenho.e60_codcom IN
     (SELECT l03_codcom
@@ -434,10 +434,10 @@ if ($processar == "a") {
 					  x.pc50_descr,
 					  empelemento.e64_codele,
 					  orcelemento.o56_descr,
-                                          x.e60_vlremp,
+            x.e60_vlremp,
 					  x.e60_vlranu,
 					  x.e60_vlrliq,
-                                          x.e60_vlrpag,
+            x.e60_vlrpag,
 					  empelemento.e64_vlremp,
 					  empelemento.e64_vlrliq,
 					  empelemento.e64_vlranu,
@@ -447,7 +447,9 @@ if ($processar == "a") {
             x.e54_gestaut,
             x.descrdepto,
             e94_empanuladotipo,
-            e38_descr
+            e38_descr,
+            x.l20_edital,
+            x.l20_anousu
 				  from ($sqlrelemp) as x
 			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos."
 				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
@@ -478,10 +480,10 @@ if ($processar == "a") {
 					      x.pc50_descr,
 					      empelemento.e64_codele,
 					      orcelemento.o56_descr,
-                                              x.e60_vlremp,
+                x.e60_vlremp,
 					      x.e60_vlranu,
 					      x.e60_vlrliq,
-                                              x.e60_vlrpag,
+                x.e60_vlrpag,
 					      empelemento.e64_vlremp,
 					      empelemento.e64_vlrliq,
 					      empelemento.e64_vlranu,
@@ -491,7 +493,9 @@ if ($processar == "a") {
                 x.e54_gestaut,
                 x.descrdepto,
                 e94_empanuladotipo,
-            	e38_descr";
+            	  e38_descr,
+                x.l20_edital,
+                x.l20_anousu";
     }
 
     $sqlrelemp = "select * from ($sqlrelemp) as x " . (
@@ -499,10 +503,7 @@ if ($processar == "a") {
             ? " order by e64_codele, e60_emiss "
             : " order by $sOrderSQL "
         );
-
     $res = $clempempenho->sql_record($sqlrelemp);
-//	echo $sqlrelemp;db_criatabela($res);die();
-
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
     } else {
@@ -570,7 +571,7 @@ if ($processar == "a") {
 					  inner join orcelemento 		on  orcelemento.o56_codele = orcdotacao.o58_codele
 									       and  orcelemento.o56_anousu = orcdotacao.o58_anousu
 					      inner join conlancamemp 	on c75_numemp = xxx.e60_numemp
-					      inner join conlancam	    on c70_codlan = c75_codlan 
+					      inner join conlancam	    on c70_codlan = c75_codlan
 					      inner join conlancamdoc 	on c71_codlan = c70_codlan
 					      inner join conhistdoc 	on c53_coddoc = c71_coddoc and c53_tipo in (10,11,20,21,30,31)
 					      inner join conlancamdot   on c73_codlan = c75_codlan
@@ -710,7 +711,6 @@ if ($processar == "a") {
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
-//		echo $sqlperiodo;db_criatabela($res);die();
 
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -2123,7 +2123,7 @@ if ($hist == "h") {
 												                       left join orctiporec    on orctiporec.o58_codigo = orcdotacao.o58_codigo
 														       group by x.o58_codigo,x.o15_descr order by x.o58_codigo";
     }
-    //     die($sqlperiodo)
+
     $result = $clempempenho->sql_record($sql);
     if ($clempempenho->numrows > 0) {
         $pdf->addpage("L");
