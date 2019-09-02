@@ -34,6 +34,8 @@ include("classes/db_pcmaterele_classe.php");
 include("classes/db_pcgrupo_classe.php");
 include("classes/db_pcsubgrupo_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
+
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 
@@ -41,6 +43,8 @@ $clpcmater = new cl_pcmater;
 $clpcmaterele = new cl_pcmaterele;
 $clpcgrupo = new cl_pcgrupo;
 $clpcsubgrupo = new cl_pcsubgrupo;
+$clcondataconf = new cl_condataconf;
+
 $db_opcao = 1;
 $db_botao = true;
 if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir")) {
@@ -54,7 +58,22 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
   $clpcmater->pc01_tabela = $pc01_tabela;
   $clpcmater->pc01_taxa   = $pc01_taxa;
   /*FIM - OC3770*/
+    if(!empty($pc01_data)){
+        $anousu = db_getsession('DB_anousu');
+        $instituicao = db_getsession('DB_instit');
+        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+        if ($pc01_data < $c99_datapat) {
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+            $sqlerro  = true;
+            db_msgbox($erro_msg);
+        }
+    }
+
+    if($sqlerro == false){
   $clpcmater->incluir(null);
+    }
 
   if ($clpcmater->erro_status == 0) {
     $sqlerro = true;
