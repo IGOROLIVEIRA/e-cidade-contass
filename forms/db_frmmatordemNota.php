@@ -1,34 +1,34 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
 /**
  * Cadastro de ordem de compras por empenho
- * 
+ *
  * @package compras
  * @author dbluizmarcelo Revisão $Author: dbiuri $Author: dbiuri $
  * @version $Revision: 1.28 $
@@ -77,11 +77,11 @@ if (isset($e60codemp) && $e60_codemp){
 if((isset($e60_numcgm) && $e60_numcgm!='')||(isset($e60_numemp) && $e60_numemp!='' )||(isset($e60_codemp) && $e60_codemp)){
 
   //rotina que traz os dados do empenho
-  $result = $clempempenho->sql_record($clempempenho->sql_query_empnome(null,"*","","$where $where1 $where2")); 
+  $result = $clempempenho->sql_record($clempempenho->sql_query_empnome(null,"*","","$where $where1 $where2"));
   db_fieldsmemory($result,0,true);
-  //fim  
+  //fim
 
-}    
+}
 
 if ($lBloquear) {
 	$pesqemp = false;
@@ -125,25 +125,25 @@ border: 1px solid #cccccc;
 <td><?db_input('z01_cgccpf',20,$Iz01_cgccpf,true,'text',3)?></td>
 <td nowrap align="right" title="<?=@$z01_email?>"><?=@$Lz01_email?></td>
 <td nowrap><?db_input('z01_email',45,$Iz01_email,true,'text',3)?>
-<input name="Alterar CGM" type="button" id="alterarcgm" value="Alterar CGM" 
+<input name="Alterar CGM" type="button" id="alterarcgm" value="Alterar CGM"
        onclick="js_AlteraCGM(document.form1.e60_numcgm.value);" <?=$sDisable?>>
-</td>                    
+</td>
 </tr>
 <?
 $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit")));
 if ($clpcparam->numrows > 0) {
   db_fieldsmemory($result_pcparam, 0);
-  
+
   if(($pc30_importaresumoemp == 't') and ($clempempenho->numrows == 1)) {
     $m51_obs = $e60_resumo;
   }
-  
+
   if ($pc30_emiteemail == 't'){
-    $sSql = "select usuext 
+    $sSql = "select usuext
       from db_usuarios u
       inner join db_usuacgm c on u.id_usuario = c.id_usuario
       where cgmlogin = $z01_numcgm";
-    $rs = db_query($sSql);						
+    $rs = db_query($sSql);
     if (pg_num_rows($rs) > 0){
       db_fieldsmemory($rs,0);
       if ($usuext == 1){
@@ -154,14 +154,14 @@ if ($clpcparam->numrows > 0) {
           <td nowrap></td>
           <td nowrap></td>
           <td align="right"><input id='manda_email' name="manda_mail" type="checkbox" value="X"></td>
-          <td nowrap><label for='manda_email'><b>Mandar e-mail para o fornecedor.</b></label></td>         
+          <td nowrap><label for='manda_email'><b>Mandar e-mail para o fornecedor.</b></label></td>
           </tr>
           <?//end if parametro
       }
     }
   }
 }
-?>		 
+?>
 <tr>
 <td nowrap align="right" title="<?=@$z01_ender?>"><?=@$Lz01_ender?></td>
 <td><?db_input('z01_ender',30,"$Iz01_ender",true,'text',3);if (@$z01_numero!=0){db_input('z01_numero',4,@$Iz01_numero,true,'text',3);}?></td>
@@ -196,37 +196,37 @@ if ($clmatparam->numrows>0){
   if($m90_tipocontrol=='F'){
 
     echo "<td nowrap align='right' title='Almox'><b>Almoxarifado :</b></td>";
-    
+
 		if ($m90_almoxordemcompra == "2") {
-			
+
 			$sSqlOrigemEmpenho = "select * from fc_origem_empenho($e60_numemp)";
 			$rsOrigemEmpenho   = db_query($sSqlOrigemEmpenho) or die($sSqlOrigemEmpenho);
-			
+
 			for ($i = 0; $i < pg_num_rows($rsOrigemEmpenho); $i++) {
 				$oOrigemEmpenho = db_utils::fieldsMemory($rsOrigemEmpenho,$i);
-			  $aDeptoEmp[]	  = $oOrigemEmpenho->ridepto; 		
+			  $aDeptoEmp[]	  = $oOrigemEmpenho->ridepto;
 			}
-			
-			$rsAlmox = $cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query(null,null,"distinct m91_depto,a.descrdepto",null," m92_depto in (".implode(",",array_unique($aDeptoEmp)).") and a.instit = $instit")); 
 
-			if ($cldb_almoxdepto->numrows > 1){			
-				$rsAlmox    = $cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query(null,null,"'0' as m91_depto, 'Nenhum' as descrdepto union all select distinct m91_depto,a.descrdepto",null," m92_depto in (".implode(",",array_unique($aDeptoEmp)).") and a.instit = $instit")); 
+			$rsAlmox = $cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query(null,null,"distinct m91_depto,a.descrdepto",null," m92_depto in (".implode(",",array_unique($aDeptoEmp)).") and a.instit = $instit"));
+
+			if ($cldb_almoxdepto->numrows > 1){
+				$rsAlmox    = $cldb_almoxdepto->sql_record($cldb_almoxdepto->sql_query(null,null,"'0' as m91_depto, 'Nenhum' as descrdepto union all select distinct m91_depto,a.descrdepto",null," m92_depto in (".implode(",",array_unique($aDeptoEmp)).") and a.instit = $instit"));
 			}
-			
+
 			$iLinhasAlmox = $cldb_almoxdepto->numrows;
-		
+
 		}else{
-			
+
 			$rsAlmox			= $cldb_almox->sql_record($cldb_almox->sql_query(null,"m91_depto,descrdepto",null,"db_depart.instit = $instit"));
 			$iLinhasAlmox = $cldb_almox->numrows;
-		
+
 		}
-		
+
     if ($iLinhasAlmox == 0){
       db_msgbox("Sem Almoxarifados cadastrados!!");
       echo "<script>location.href='emp4_ordemCompra001.php';</script>";
     }
-    
+
 		echo "<td>";
 			db_selectrecord("coddepto",$rsAlmox,true,$dbopcao);
     echo "</td>";
@@ -247,19 +247,19 @@ if ($clmatparam->numrows>0){
     </td>
     <?}?>
     </tr>
-    <tr> 
+    <tr>
     <td align='right'><b>Obs:</b></td>
     <td colspan='3' align='left'>
-    <? 
+    <?
     db_textarea("m51_obs","","110",$Im51_obs,true,'text',$dbopcao);
 
     ?>
     </td>
 
-    </tr>  
-    <tr> 
+    </tr>
+    <tr>
     <td colspan='4' align='center'></td>
-    </tr> 
+    </tr>
     </table>
     </fieldset>
     </td>
@@ -279,15 +279,15 @@ if ($clmatparam->numrows>0){
       <input name="incluir" type="submit" disabled  value="Incluir" onclick=" return js_valida()" <?=$sDisable?>>
         <input name="voltar" type="button" value="Voltar" onclick="location.href='emp4_ordemCompra001.php';" <?=$sDisable?>><?}?>
         </td>
-      
+
     </tr>
 <tr>
 <td align='center' valign='top' colspan='2'>
 <fieldset><legend><b>Dados da Ordem</b></legend>
 <?
 if($pesqemp == true){
-  ?>  
-    <table border='0' cellspacing="0" cellpadding="0" 
+  ?>
+    <table border='0' cellspacing="0" cellpadding="0"
     style='border:2px inset white; padding-bottom:15px;' width='100%' bgcolor="white" id="dadosDaOrdem">
     <tr class=''>
         <td class='table_header' title='Marca/desmarca todos' align='center'>
@@ -313,14 +313,14 @@ if($pesqemp == true){
     if ((isset($e60_numcgm) && $e60_numcgm!= "")){
 
       $where="";
-      $where1=""; 
+      $where1="";
       if (isset($e60_numemp)){
         $where = "and e60_numemp = $e60_numemp";
       }
 
       if (isset($e60_codemp)){
         $where1 = "and e60_codemp = '$e60_codemp'";
-      }    
+      }
       $sSQLemp  = "select e60_numemp, ";
       $sSQLemp .= "       e60_codemp, ";
       $sSQLemp .= "       e62_item, ";
@@ -353,9 +353,9 @@ if($pesqemp == true){
       $sSQLemp .= " where e60_numcgm = {$e60_numcgm} {$where} {$where1}";
       $sSQLemp .="  order by e60_numemp";
       $result   = db_query($sSQLemp);
-      // db_criatabela($result);die;
+
       $numrows  = pg_num_rows($result);
-      // print_r($numrows);die();
+
       $sClassName = 'normal';
       $sChecked   = '';
 //      if ($numrows == 1) {
@@ -363,7 +363,7 @@ if($pesqemp == true){
 //        $sChecked   = " checked ";
 //        $sClassName = " marcado ";
 //      }
-      
+
       for ($i = 0; $i < $numrows; $i++) {
 
         $disabled    = null;
@@ -371,7 +371,7 @@ if($pesqemp == true){
         $sClassName  = "normal";
         db_fieldsmemory($result,$i);
         if ($e62_vltot <= 0 || $e62_quant <= 0){
-          
+
           $disabled   = " disabled ";
           $sChecked   =  '';
           $iOpcao     = 3;
@@ -390,7 +390,7 @@ if($pesqemp == true){
 
         // Número do empenho
         echo "  <td class='linhagrid' align='center'>";
-					 				db_ancora($e60_codemp,"js_pesquisaEmpenho({$e60_numemp});","1"); 
+					 				db_ancora($e60_codemp,"js_pesquisaEmpenho({$e60_numemp});","1");
 				echo "	</td>";
 
         // Sequência do empenho
@@ -458,7 +458,7 @@ if($pesqemp == true){
               $iControlaValor = $iOpcao;
             }
           }
-          
+
           if ($e62_vltot <= 0  || $e62_quant <= 0){
           	$iControlaQuantidade = 3;
           	$iControlaValor      = 3;
@@ -488,7 +488,7 @@ if($pesqemp == true){
 <!--            <td colspan="9"><b>Total de itens: </b><span id="total_de_itens">0</span></td>-->
 <!--            <td colspan="2"><b>Valor total: </b><span id="valor_total">0.00</span></td>-->
 <!--        </tr>-->
-     </tbody>   
+     </tbody>
      </table>
 
     <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
@@ -499,10 +499,10 @@ if($pesqemp == true){
             <b>Valor total: </b><span id="valor_total">0.00</span>
         </div>
     </div>
-     
+
      <?
     }
-  ?>  
+  ?>
     </td>
     </tr>
     </table>
@@ -514,7 +514,7 @@ if($pesqemp == true){
     </form>
 </center>
     <script>
-  
+
 	function js_pesquisaEmpenho(iNumEmp){
     js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
   }
@@ -522,7 +522,7 @@ if($pesqemp == true){
 	function js_AlteraCGM(cgm) {
       js_OpenJanelaIframe('','db_iframe_altcgm','prot1_cadcgm002.php?chavepesquisa='+cgm+'&testanome=true&autoc=true','Altera Cgm',true);
   }
-  
+
 	function js_coddepto(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
@@ -530,9 +530,9 @@ if($pesqemp == true){
       coddepto = document.form1.coddepto.value;
       if(coddepto!=""){
         js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
-      }else{ 	
+      }else{
         document.form1.descrdepto.value='';
-      } 	
+      }
     }
   }
   function js_mostracoddepto1(chave1,chave2){
@@ -541,31 +541,31 @@ if($pesqemp == true){
     db_iframe_db_depart.hide();
   }
   function js_mostracoddepto(chave,erro){
-    
-    document.form1.descrdepto.value = chave; 
-    if (erro){ 
-    
-      document.form1.coddepto.focus(); 
-      document.form1.coddepto.value = ''; 
-      
+
+    document.form1.descrdepto.value = chave;
+    if (erro){
+
+      document.form1.coddepto.focus();
+      document.form1.coddepto.value = '';
+
     }
   }
   function js_valida(){
-      
-    
+
+
 		if (document.form1.coddepto.value == 0){
 			alert("Favor escolha algum almoxarifado!");
 			return false;
 		}
-		
+
     //buscamos todos os itens marcados pelo usuário, e validos ele.
 	var itensOrdem = js_getElementbyClass(form1,"itensEmpenho");
-    
+
     itensMarcados  = new Number(0);
     for (i = 0; i < itensOrdem.length; i++) {
-      
+
       if (itensOrdem[i].checked) {
-      
+
         //codigo do item
         iItem = itensOrdem[i].value;
         //valor do item (identificamos pela string "valor" seguido do sequencial do empenho.
@@ -574,7 +574,7 @@ if($pesqemp == true){
        var nValorEmpenho = new Number($('e62_vltot' + iItem).innerHTML);
        var nQteEmpenho   = new Number($('e62_quant' + iItem).innerHTML);
        if ( nValor > nValorEmpenho || nQuantidade > nQteEmpenho || (nValor == 0 || nQuantidade == 0) ) {
-        
+
           var iSequen  = js_stripTags($('e62_descr' + iItem).innerHTML);
           var iEmpenho = $('empenho' + iItem).innerHTML
            alert("Item (" + iSequen + ") do Empenho " + iEmpenho + " possui valores/quantidade inválidas.\nVerifique");
@@ -582,7 +582,7 @@ if($pesqemp == true){
         } else {
           itensMarcados++;
         }
-      }  
+      }
     }
     if (itensMarcados == 0) {
       alert("Não há itens Selecionados.\nVerifique.");
@@ -594,19 +594,15 @@ if($pesqemp == true){
 
 function js_marca(val){
 
-   // if(val){
-   //   $('valor_total').innerText = definePontoFlutuante(0);
-   // }
-
    obj = document.getElementById('mtodos');
-   
-	 if (obj.checked){
+
+	if (obj.checked){
 		 obj.checked = false;
 	}else{
 		 obj.checked = true;
 	}
    itens = js_getElementbyClass(form1,'itensEmpenho');
-   
+
 	 for (i = 0;i < itens.length;i++){
       if (itens[i].disabled == false){
         if (obj.checked == true){
@@ -622,59 +618,52 @@ function js_marca(val){
 
 
 
-
 function js_marcaLinha(obj, sequencia){
-
     var vlr_anterior = $('valor'+sequencia).value;
     var qtd_anterior = $('quantidade'+sequencia).value;
 
-    if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value)){
-      var vlr_unitario = $("valor"+sequencia).value;
-    }
-    else var vlr_unitario = $("vlrunitario"+sequencia).value;
-    
+    var vlr_unitario = $("vlrunitario"+sequencia).value;
+
     if (obj.checked){
-        
         if($('tr'+obj.id).className === 'marcado'){
             $('quantidade'+sequencia).on('change', function (event,ui){
                 var temp = parseFloat($('valor_total').innerText) + parseFloat($('valor'+sequencia).value);
-                // console.log('1 temp',temp);
                 // temp += $('valor'+sequencia).value;
-                // console.log('2',temp);
                 $("valor_total").innerText = definePontoFlutuante(temp);
             });
           return;
-        }   
+        }
 
         $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) + 1;
         $('tr'+obj.id).className='marcado';
 
 
         var temp = (parseFloat($('valor_total').innerText) + parseFloat(vlr_unitario) * parseFloat($('quantidade'+sequencia).value)).toFixed(2);
-        // console.log('2 temp',temp);
-        
-        $("valor_total").innerText = definePontoFlutuante(temp);
-    
+        let resultado = formataValor(temp);
+
+        $("valor_total").innerText = resultado;
+
     }else{
-          
+
         if($('tr'+obj.id).className === 'marcado'){
           $('tr'+obj.id).className='normal';
 
           $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) >= 1 ?
                                           parseInt($("total_de_itens").innerText, 10) - 1 : 0;
 
-          if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value)){
+          if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value).toFixed(2)){
             var vlr_unitario = $("valor"+sequencia).value;
           }
           else var vlr_unitario = $("vlrunitario"+sequencia).value;
 
           var temp = (parseFloat($("valor_total").innerText) - parseFloat(vlr_unitario) * parseFloat($("quantidade"+sequencia).value)).toFixed(2);
-            $("valor_total").innerText = definePontoFlutuante(temp);
-          // console.log('3 temp',temp);
+          let resultado = formataValor(temp);
+
+          $("valor_total").innerText = resultado;
         }
       }
 
-    
+
 }
 
 function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
@@ -690,16 +679,34 @@ function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
     }
 
     var valorAntigo = $("valor"+sequencia).value;
-
     //  Insere novo valor na coluna
     $("valor"+sequencia).value = definePontoFlutuante(round(new Number(quan * valoruni), 2));
-
+    let recebeTotal = 0;
     //  Atualiza valor total
     if($("chk"+sequencia).checked){
-        $("valor_total").innerText = definePontoFlutuante(parseFloat($("valor_total").innerText)
-                                                            - parseFloat(valorAntigo)
-                                                            + parseFloat($("valor"+sequencia).value));
+      recebeTotal = definePontoFlutuante(parseFloat($("valor_total").innerText) - parseFloat(valorAntigo) + parseFloat($("valor"+sequencia).value));
+
+      if(!recebeTotal)
+        return;
+
+      if(recebeTotal > 0 && recebeTotal % 2 != 0){
+        let aValor = parseFloat(recebeTotal).toFixed(2).toString().split('.');
+
+        if(aValor[1] && aValor[1].length == 1){
+           aValor[1] += '0';
+        }
+
+        if(aValor.length == 1){
+          recebeTotal = aValor.join('.')+".00";
+        }else{
+          recebeTotal = aValor.join('.');
+        }
+      }
+
+      $("valor_total").innerText = recebeTotal;
     }
+
+
 }
 
 function alteraValor(max,quan,nome,valoruni,numemp,sequencia,valorAntigo){
@@ -723,6 +730,23 @@ function definePontoFlutuante(temp){
         return(temp + ".00");
     }
     return(temp);
+}
+
+function formataValor(valor){
+  let numFormat = valor.toString().split('.');
+  let valorFinal = '';
+  if(valor){
+    if(numFormat.length > 1){
+      if(numFormat[1].length == 1)
+        numFormat[1] += '0';
+    }else{
+      numFormat[0] += '.00';
+    }
+    valorFinal = numFormat.join('.');
+  }else{
+    valorFinal = definePontoFlutuante(valor);
+  }
+  return valorFinal;
 }
 
 </script>
