@@ -450,7 +450,7 @@ switch ($oParam->exec) {
             $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
             $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-            if ($oParam->pessoa->z01_cadast < $c99_datapat) {
+            if ($oParam->pessoa->z01_cadast <= $c99_datapat) {
                 $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                 $sqlErro  = true;
             }

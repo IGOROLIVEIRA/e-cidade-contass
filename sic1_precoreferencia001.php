@@ -41,7 +41,7 @@ if (isset($incluir)) {
             $datacotacao = strtotime(implode("-",(array_reverse(explode("/",$si01_datacotacao)))));
             $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
             $c99_datapat = strtotime(db_utils::fieldsMemory($result, 0)->c99_datapat);
-            if ($datacotacao < $c99_datapat) {
+            if ($datacotacao <= $c99_datapat) {
                 echo "<script>alert('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');</script>";
                 $processoValidado  = false;
             }
