@@ -416,6 +416,7 @@ function js_validaCaracteres(texto, campo){
   /* Remove os caracteres contidos no array charBuscados */
   novoTexto = novoTexto.match(/[^;\*\\\.:\"\']/gm);
 
+
   if(erro){
     alert('Caractere não permitido para inclusão!');
   }
