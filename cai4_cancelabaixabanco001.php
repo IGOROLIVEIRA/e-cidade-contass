@@ -53,7 +53,7 @@ $cldb_usuarios = new cl_db_usuarios;
 $rsUsuarios = $cldb_usuarios->sql_record($cldb_usuarios->sql_query_file(db_getsession('DB_id_usuario'),"administrador"));
 $oUsuarios  = db_utils::fieldsMemory($rsUsuarios,0);
 
-if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == 19985 && $oUsuarios->administrador == 1 ) ) {
+if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == Instituicao::COD_CLI_PMPIRAPORA && db_getsession("DB_id_usuario") == 2050 ) ) {
 
 ?>
   <form name="form1" method="POST">
