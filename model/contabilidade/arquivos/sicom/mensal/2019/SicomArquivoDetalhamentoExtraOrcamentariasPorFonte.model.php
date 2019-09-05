@@ -108,19 +108,22 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   	     * SQL RETORNA TODAS AS CONTAS EXTRAS EXISTENTES NO SISTEMA
   	     *
   	     */
-  	    $sSqlExt = "select 10 as tiporegistro,c61_codcon,
-				       c61_reduz as codext,
-				       c61_codtce as codtce,
-				       si09_codorgaotce as codorgao,
-				       COALESCE(c60_tipolancamento,0) as tipolancamento,
-				       COALESCE(c60_subtipolancamento,0) as subtipo,
-				       COALESCE(c60_desdobramneto,0) as desdobrasubtipo,
-				       substr(c60_descr,1,50) as descextraorc
-				  from conplano
-				  inner join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
-				   left join infocomplementaresinstit on si09_instit = c61_instit
-				  where c60_anousu = ".db_getsession("DB_anousu")." and c60_codsis = 7 and c61_instit = ".db_getsession("DB_instit")."
-  				order by c61_reduz  ";
+  	    $sSqlExt = "SELECT 10 AS tiporegistro,
+					       c61_codcon,
+					       c61_reduz AS codext,
+					       c61_codtce AS codtce,
+					       si09_codorgaotce AS codorgao,
+					       COALESCE(c60_tipolancamento,0) AS tipolancamento,
+					       COALESCE(c60_subtipolancamento,0) AS subtipo,
+					       COALESCE(c60_desdobramneto,0) AS desdobrasubtipo,
+					       substr(c60_descr,1,50) AS descextraorc
+					FROM conplano
+					INNER JOIN conplanoreduz ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
+					LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+					WHERE c60_anousu = ".db_getsession("DB_anousu")."
+					  AND c60_codsis = 7
+					  AND c61_instit = ".db_getsession("DB_instit")."
+					ORDER BY c61_reduz";
 
   	    $rsContasExtra = db_query($sSqlExt) or die($sSqlExt);
 		//db_criatabela($rsContasExtra);
@@ -243,14 +246,14 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 								inner join orctiporec on o15_codigo = c61_codigo
 									 where conplanoreduz.c61_reduz  in ({$nExtras})
 									   and conplanoreduz.c61_anousu = " . db_getsession("DB_anousu") . "
-								 union all
+								 UNION ALL
 							        select ces01_reduz as codext, ces01_reduz as contrapart,ces01_fonte as fonte
 									  from conextsaldo
 								inner join conplanoreduz on conextsaldo.ces01_reduz = conplanoreduz.c61_reduz
 								       and conplanoreduz.c61_anousu = conextsaldo.ces01_anousu
 									 where conextsaldo.ces01_reduz  in ({$nExtras})
 									   and conextsaldo.ces01_anousu = ".db_getsession("DB_anousu")."
-								 union all
+								 UNION ALL
 									SELECT  conlancamval.c69_credito AS codext,
 									        conlancamval.c69_debito as contrapart,
 											  orctiporec.o15_codigo AS fonte
@@ -267,7 +270,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 									   and DATE_PART('YEAR',conlancamdoc.c71_data) = ".db_getsession("DB_anousu")."
 									   and DATE_PART('MONTH',conlancamdoc.c71_data) <= ".$this->sDataFinal['5'].$this->sDataFinal['6']."
 									   and conlancaminstit.c02_instit = ".db_getsession("DB_instit")."
-								 union all
+								 UNION ALL
 									SELECT conlancamval.c69_debito AS codext,
 									       conlancamval.c69_credito as contrapart,
 												orctiporec.o15_codigo AS fonte
@@ -309,7 +312,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 					$saldofinalabs            = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->saldo_final;
 					$natsaldoatualfonte       = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->sinalfinal;
 					$saldodebito              = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->debitomes;
-					$saldocredito			  			= db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->creditomes;
+					$saldocredito			  = db_utils::fieldsMemory($rsExtSaldoFonteRecurso)->creditomes;
 					$saldoanterior            = $natsaldoanteriorfonte == 'C' ? ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs) * -1 : ($saldoanteriorabs == '' ? 0 : $saldoanteriorabs);
 					$saldofinal               = $natsaldoatualfonte == 'C' ? ($saldofinalabs == '' ? 0 : $saldofinalabs) * -1 : ($saldofinalabs == '' ? 0 : $saldofinalabs);
 
@@ -347,8 +350,6 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						$aExt20[$Hash20]->si165_vlsaldoatualfonte     += $saldofinal;
 						$aExt20[$Hash20]->si165_totaldebitos          += $saldodebito;
 						$aExt20[$Hash20]->si165_totalcreditos         += $saldocredito;
-						//$cExt20                                        = $aExt20[$Hash20];
-
 					}
 
 					/**
@@ -500,17 +501,17 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			$cExt   = new cl_ext202019();
 
 			$cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
-			$cExt->si165_codorgao 			  		 = $oExt20->si165_codorgao;
+			$cExt->si165_codorgao 			   = $oExt20->si165_codorgao;
 			$cExt->si165_codext                = $oExt20->si165_codext;
 			$cExt->si165_codfontrecursos       = $oExt20->si165_codfontrecursos;
 			$cExt->si165_vlsaldoanteriorfonte  = abs($oExt20->si165_vlsaldoanteriorfonte);
 			
-			if (($oExt20->si165_vlsaldoanteriorfonte) < 0) {				
-					$cExt->si165_natsaldoanteriorfonte = 'C';
-			} elseif ((($oExt20->si165_vlsaldoanteriorfonte) > 0)) {				
-					$cExt->si165_natsaldoanteriorfonte = 'D';
-			} else {				
-					$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_natsaldoanteriorfonte;
+			if (($oExt20->si165_vlsaldoanteriorfonte) < 0) {
+				$cExt->si165_natsaldoanteriorfonte = 'C';
+			} elseif ((($oExt20->si165_vlsaldoanteriorfonte) > 0)) {
+				$cExt->si165_natsaldoanteriorfonte = 'D';
+			} else {
+				$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_natsaldoanteriorfonte;
 			}
 
 			$cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
@@ -518,9 +519,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			$cExt->si165_vlsaldoatualfonte     = abs($oExt20->si165_vlsaldoatualfonte);
 
 			if (($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos) < 0) {
-						$cExt->si165_natsaldoatualfonte    = 'C';
-				} else {				
-						$cExt->si165_natsaldoatualfonte    = $oExt20->si165_natsaldoatualfonte;
+				$cExt->si165_natsaldoatualfonte = 'C';
+			} elseif (($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos) > 0) {
+				$cExt->si165_natsaldoatualfonte = 'D';
+			} else {
+				$cExt->si165_natsaldoatualfonte = $oExt20->si165_natsaldoatualfonte;
 			}
 
 			$cExt->si165_mes                   = $oExt20->si165_mes;
