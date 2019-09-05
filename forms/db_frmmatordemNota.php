@@ -567,7 +567,7 @@ if($pesqemp == true){
       if (itensOrdem[i].checked) {
 
         //codigo do item
-        iItem = itensOrdem[i].value;
+       iItem = itensOrdem[i].value;
         //valor do item (identificamos pela string "valor" seguido do sequencial do empenho.
        var nValor        = new Number($('valor' + iItem).value);
        var nQuantidade   = new Number($('quantidade' + iItem).value);
@@ -620,7 +620,10 @@ function js_marca(val){
 
 function js_marcaLinha(obj, sequencia){
     var vlr_anterior = $('valor'+sequencia).value;
-    var qtd_anterior = $('quantidade'+sequencia).value;
+    var qtd_anterior = 0;
+    if($('quantidade'+sequencia).value){
+      qtd_anterior = formataValor($('quantidade'+sequencia).value);
+    }
 
     var vlr_unitario = $("vlrunitario"+sequencia).value;
 
@@ -628,8 +631,8 @@ function js_marcaLinha(obj, sequencia){
         if($('tr'+obj.id).className === 'marcado'){
             $('quantidade'+sequencia).on('change', function (event,ui){
                 var temp = parseFloat($('valor_total').innerText) + parseFloat($('valor'+sequencia).value);
-                // temp += $('valor'+sequencia).value;
-                $("valor_total").innerText = definePontoFlutuante(temp);
+
+                $("valor_total").innerText = formataValor+--(temp);
             });
           return;
         }
@@ -637,9 +640,8 @@ function js_marcaLinha(obj, sequencia){
         $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) + 1;
         $('tr'+obj.id).className='marcado';
 
-
-        var temp = (parseFloat($('valor_total').innerText) + parseFloat(vlr_unitario) * parseFloat($('quantidade'+sequencia).value)).toFixed(2);
-        let resultado = formataValor(temp);
+        var temp = parseFloat($('valor_total').innerText) + parseFloat(vlr_unitario) * parseFloat(qtd_anterior);
+        let resultado = formataValor(temp.toFixed(2));
 
         $("valor_total").innerText = resultado;
 
@@ -651,15 +653,10 @@ function js_marcaLinha(obj, sequencia){
           $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) >= 1 ?
                                           parseInt($("total_de_itens").innerText, 10) - 1 : 0;
 
-          if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value).toFixed(2)){
-            var vlr_unitario = $("valor"+sequencia).value;
-          }
-          else var vlr_unitario = $("vlrunitario"+sequencia).value;
+          var vlr_unitario = $("vlrunitario"+sequencia).value;
+          var temp = parseFloat($("valor_total").innerText) - parseFloat(vlr_unitario) * parseFloat(qtd_anterior);
 
-          var temp = (parseFloat($("valor_total").innerText) - parseFloat(vlr_unitario) * parseFloat($("quantidade"+sequencia).value)).toFixed(2);
-          let resultado = formataValor(temp);
-
-          $("valor_total").innerText = resultado;
+          $("valor_total").innerText = formataValor(temp.toFixed(2));
         }
       }
 
@@ -667,6 +664,7 @@ function js_marcaLinha(obj, sequencia){
 }
 
 function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
+    quan = quan.replace(',', '.');
     if (max<quan){
 
         alert("Informe uma quantidade valida!!");
@@ -680,7 +678,9 @@ function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
 
     var valorAntigo = $("valor"+sequencia).value;
     //  Insere novo valor na coluna
-    $("valor"+sequencia).value = definePontoFlutuante(round(new Number(quan * valoruni), 2));
+
+    $("valor"+sequencia).value = formataValor(round(new Number(quan * valoruni), 2));
+
     let recebeTotal = 0;
     //  Atualiza valor total
     if($("chk"+sequencia).checked){
@@ -733,19 +733,41 @@ function definePontoFlutuante(temp){
 }
 
 function formataValor(valor){
-  let numFormat = valor.toString().split('.');
+  if(!valor){
+    return valor;
+  }
+
+  let numFormat = '';
+  let caractere = '';
+  if(valor.toString().includes(','))
+    caractere = ',';
+  if(valor.toString().includes('.'))
+    caractere = '.';
+
+  if(caractere)
+    numFormat = valor.toString().split(caractere);
+
+
   let valorFinal = '';
-  if(valor){
+  if(valor && numFormat){
     if(numFormat.length > 1){
       if(numFormat[1].length == 1)
         numFormat[1] += '0';
     }else{
       numFormat[0] += '.00';
     }
-    valorFinal = numFormat.join('.');
-  }else{
+
+
+    if(numFormat.length > 1){
+
+      valorFinal = numFormat.join('.');
+    }
+
+  }
+  else{
     valorFinal = definePontoFlutuante(valor);
   }
+
   return valorFinal;
 }
 
