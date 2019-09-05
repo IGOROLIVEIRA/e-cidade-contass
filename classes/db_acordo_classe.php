@@ -2099,5 +2099,100 @@ class cl_acordo {
 
     }
 
+    /**
+     * Retorna toda a movimentação do acordo com seus saldo.
+     * @param $iAcordo
+     * @return string
+     */
+
+    function sql_query_todoacordo($iAcordo){
+        $sSql = "SELECT DISTINCT ac20_ordem,
+                    pc01_codmater,
+                    pc01_descrmater,
+                    ac20_quantidade AS qtdcontratada,
+                    SUM(
+                            (SELECT e62_quant AS emp
+                             FROM empempitem
+                             WHERE e62_numemp = e60_numemp
+                                 AND e62_item = pc01_codmater)) AS quantidadeempenhada,
+                    (SELECT e62_vlrun
+                     FROM empempitem
+                     WHERE e62_numemp = e60_numemp) AS valorunitario,
+                    SUM(
+                            (SELECT e62_vltot
+                             FROM empempitem
+                             WHERE e62_numemp = e60_numemp
+                                 AND e62_item = pc01_codmater)) AS valortotalemp,
+                    SUM(
+                            (SELECT coalesce(SUM(e37_qtd),0)
+                             FROM empanuladoitem
+                             WHERE e37_empanulado = e94_codanu)) AS qtdanulado,
+                    SUM(
+                            (SELECT coalesce(SUM(e94_valor),0)
+                             FROM empanulado
+                             WHERE e94_numemp = e60_numemp)) AS valoranulado,
+                    SUM(
+                            (SELECT e72_qtd
+                             FROM empnotaitem
+                             WHERE e72_empempitem = e62_sequencial)) AS quantidadeliquidada,
+                    SUM(
+                            (SELECT e72_vlrliq
+                             FROM empnotaitem
+                             WHERE e72_empempitem = e62_sequencial)) AS valortotalliquidado,
+                    SUM(
+                            (SELECT coalesce(SUM(e72_vlranu),0) AS anu
+                             FROM empnotaitem
+                             WHERE e72_empempitem = e62_sequencial)) AS valoranuladoliq,
+                    SUM(
+                            (SELECT coalesce(SUM(m52_quant),0) AS qtd
+                             FROM matordemitem
+                             WHERE m52_codordem = m51_codordem)) AS qtdemoc,
+                    SUM(
+                            (SELECT coalesce(SUM(m52_valor),0) AS vlr
+                             FROM matordemitem
+                             WHERE m52_codordem = m51_codordem)) AS vlremoc
+    FROM acordo
+    INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+    INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+    INNER JOIN pcmater ON ac20_pcmater = pc01_codmater
+    LEFT JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+    LEFT JOIN acordoitemexecutadoempautitem ON ac19_acordoitemexecutado = ac29_sequencial
+    LEFT JOIN empautitem ON (ac19_autori,ac19_sequen) = (e55_autori,e55_sequen)
+    AND e55_item = pcmater.pc01_codmater
+    LEFT JOIN empautoriza ON e54_autori = e55_autori
+    LEFT JOIN empempaut ON e61_autori = e54_autori
+    LEFT JOIN empempenho ON e60_numemp = e61_numemp
+    LEFT JOIN empanulado ON e94_numemp = e60_numemp
+    LEFT JOIN empanuladoitem ON e37_empanulado = e94_codanu
+    LEFT JOIN empempitem ON e60_numemp =e62_numemp
+    AND e62_item = pcmater.pc01_codmater
+    LEFT JOIN empnotaitem ON e72_empempitem=e62_sequencial
+    LEFT JOIN empnota ON e69_codnota = e72_codnota
+    LEFT JOIN empnotaord ON m72_codnota = e69_codnota
+    LEFT JOIN matordem ON m51_codordem = m72_codordem
+    LEFT JOIN matordemitem ON m52_codordem = m51_codordem
+    INNER JOIN cgm ON z01_numcgm = ac16_contratado
+    WHERE ac16_sequencial = $iAcordo
+        AND ac26_acordoposicaotipo = 1
+        AND ac16_origem IN (1,2,3)
+    GROUP BY ac20_ordem,
+             pc01_codmater,
+             pc01_descrmater,
+             qtdcontratada,
+             e62_quant,
+             e62_vlrun,
+             e62_vltot,
+             e37_qtd,
+             e37_vlranu,
+             e94_valor,
+             valorunitario,
+             acordo.ac16_numero,
+             acordo.ac16_anousu,
+             cgm.z01_nome
+    ORDER BY ac20_ordem";
+
+        return $sSql;
+    }
+
 }
 ?>
