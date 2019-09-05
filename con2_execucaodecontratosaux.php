@@ -165,9 +165,9 @@ class ExecucaoDeContratos{
 
     }
 
-    public function getInformacoesAcordo($iAcordo){
+    public function getInformacoesAcordo($iAcordo,$iPosicao){
         $oDaoAcordo = db_utils::getDao('acordo');
-        $sSqlDadosAcordo = $oDaoAcordo->sql_query_todoacordo($iAcordo);
+        $sSqlDadosAcordo = $oDaoAcordo->sql_query_todoacordo($iAcordo,$iPosicao);
         $rsdadosAcordo = $oDaoAcordo->sql_record($sSqlDadosAcordo);
 
         for ($iRowItem = 0; $iRowItem < $oDaoAcordo->numrows; $iRowItem++) {

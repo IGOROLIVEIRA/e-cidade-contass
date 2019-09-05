@@ -8,7 +8,7 @@ function execucaoDeContratosSemQuebra($iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$ac1
     $oExecucaoDeContratos = new ExecucaoDeContratos();
     $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
     $aInformacoesacordo = null;
-    $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo());
+    $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oAcordo->getUltimaPosicao()->getTipo());
 
     $aLinhasRenderizadas      = array();
 
@@ -17,15 +17,17 @@ function execucaoDeContratosSemQuebra($iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$ac1
     }
 
     foreach ($aInformacoesacordo as $iK => $oAcordoiten) {
+//        echo "<pre>"; print_r($oAcordoiten);die();
         $valorageraroc = 0;
         $valorageraroc = $oAcordoiten->quantidadeempenhada - $oAcordoiten->qtdemoc;
 
         $vlraempenhar  = 0;
         $vlraempenhar  = $oAcordoiten->qtdcontratada - $oAcordoiten->quantidadeempenhada;
+        $sDescricaoitem   = $oExecucaoDeContratos->limitarTexto($oAcordoiten->pc01_descrmater,45);
 
         $aLinhasRenderizadas[] = array(
             'coditem'         => $oAcordoiten->pc01_codmater,
-            'descricaoitem'   => $oAcordoiten->pc01_descrmater,
+            'descricaoitem'   => $sDescricaoitem,
             'qrdcontratada'   => $oAcordoiten->qtdcontratada,
             'valorunitario'   => $oAcordoiten->valorunitario,
             'qtdempenhada'    => $oAcordoiten->quantidadeempenhada,

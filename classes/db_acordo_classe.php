@@ -2105,7 +2105,7 @@ class cl_acordo {
      * @return string
      */
 
-    function sql_query_todoacordo($iAcordo){
+    function sql_query_todoacordo($iAcordo,$iPosicao){
         $sSql = "SELECT DISTINCT ac20_ordem,
                     pc01_codmater,
                     pc01_descrmater,
@@ -2115,9 +2115,7 @@ class cl_acordo {
                              FROM empempitem
                              WHERE e62_numemp = e60_numemp
                                  AND e62_item = pc01_codmater)) AS quantidadeempenhada,
-                    (SELECT e62_vlrun
-                     FROM empempitem
-                     WHERE e62_numemp = e60_numemp) AS valorunitario,
+                    ac20_valorunitario AS valorunitario,
                     SUM(
                             (SELECT e62_vltot
                              FROM empempitem
@@ -2173,7 +2171,7 @@ class cl_acordo {
     LEFT JOIN matordemitem ON m52_codordem = m51_codordem
     INNER JOIN cgm ON z01_numcgm = ac16_contratado
     WHERE ac16_sequencial = $iAcordo
-        AND ac26_acordoposicaotipo = 1
+        AND ac26_acordoposicaotipo = $iPosicao
         AND ac16_origem IN (1,2,3)
     GROUP BY ac20_ordem,
              pc01_codmater,
