@@ -8,9 +8,11 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
 
   $oAcordo = new Acordo($iAcordo);
   $aEmpenhamentos = $oAcordo->getAutorizacoesEntreDatas($ac16_datainicio,$ac16_datafim);
+  $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oAcordo->getUltimaPosicao()->getCodigo(),$ac16_datainicio,$ac16_datafim);
+
   $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
 
-  if(empty($aEmpenhamentos)){
+  if(empty($aInformacoesacordo)){
       db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
   }
 

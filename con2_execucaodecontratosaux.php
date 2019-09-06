@@ -165,9 +165,22 @@ class ExecucaoDeContratos{
 
     }
 
-    public function getInformacoesAcordo($iAcordo,$iPosicao){
+    public function getInformacoesAcordo($iAcordo,$iPosicao,$sDataInicial, $sDataFinal){
+
+        $sSqlDataDeEmissao = '';
+        if( empty($sDataInicial) && !empty($sDataFinal) ){
+            $sSqlDataDeEmissao = " AND e54_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
+        }
+        if( !empty($sDataInicial) && empty($sDataFinal) ){
+            $sSqlDataDeEmissao = " AND e54_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+        }
+        if( !empty($sDataInicial) && !empty($sDataFinal) ){
+            $sSqlDataDeEmissao = " AND (e54_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+            $sSqlDataDeEmissao .= "                   AND '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."') ";
+        }
+
         $oDaoAcordo = db_utils::getDao('acordo');
-        $sSqlDadosAcordo = $oDaoAcordo->sql_query_todoacordo($iAcordo,$iPosicao);
+        $sSqlDadosAcordo = $oDaoAcordo->sql_query_todoacordo($iAcordo,$iPosicao,$sSqlDataDeEmissao);
         $rsdadosAcordo = $oDaoAcordo->sql_record($sSqlDadosAcordo);
 
         for ($iRowItem = 0; $iRowItem < $oDaoAcordo->numrows; $iRowItem++) {
