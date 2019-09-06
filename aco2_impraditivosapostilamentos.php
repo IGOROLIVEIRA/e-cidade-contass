@@ -132,22 +132,33 @@ for ($contador=0; $contador < $numrows; $contador++) {
     $oPdf->setfont('arial', '', 7);
     $oAcordo = db_utils::fieldsMemory($result, $contador);
 
-    $oPdf->setx(113);
     $old_y = $oPdf->gety();
-    $value_x = $oPdf->getx();
-
 
     if($oAcordo->ac27_sequencial && $oAcordo->ac27_descricao){
      $sequencial_descricao = "'".$oAcordo->ac27_sequencial / $oAcordo->ac27_descricao."'";
     }else $sequencial_descricao = 'Não houve alteração de valor';
 
-    $oPdf->MultiCell(35, $iAlt, $sequencial_descricao, 1, 'C', 0, 0);
 
-    $new_y = $oPdf->gety();
-    $nova_altura = $new_y - $old_y;
+    if(strlen($sequencial_descricao) > strlen($oAcordo->z01_nome)){
+      $oPdf->setx(113);
+      $oPdf->MultiCell(35, $iAlt, $sequencial_descricao, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
+      $oPdf->sety($old_y);
+      $oPdf->setx(28);
+      $oPdf->MultiCell(60, $nova_altura, $oAcordo->z01_nome, 1, 'C', 0, 0);
+    }else{
+      $oPdf->setx(28);
+      $oPdf->MultiCell(60, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
+      $oPdf->sety($old_y);
+      $oPdf->setx(113);
+      $oPdf->MultiCell(35, $nova_altura, $sequencial_descricao, 1, 'C', 0, 0);
+    }
+
+    $nova_altura = $oPdf->gety() - $old_y;
     $oPdf->sety($old_y);
+    $oPdf->setx(10);
     $oPdf->Cell(18, $nova_altura, $oAcordo->ac16_sequencial.'/'.$oAcordo->ac16_anousu, 1, 0, 'C', 0);
-    $oPdf->Cell(60, $nova_altura, $oAcordo->z01_nome, 1, 0, 'C', 0);
 
     if($oAcordo->si03_sequencial){
       $numero_tipo = '1/Apostilamento';
@@ -157,8 +168,9 @@ for ($contador=0; $contador < $numrows; $contador++) {
       $numero_tipo = '3/Aditivo';
     }
 
-    $oPdf->Cell(25, $nova_altura, $numero_tipo, 1, 0, 'C', 0);
-    $oPdf->setx($value_x + 35);
+    $oPdf->setx(88);
+    $oPdf->Cell(25, $nova_altura, $numero_tipo, 'TB', 0, 'C', 0);
+    $oPdf->setx(148);
 
     if($oAcordo->ac35_dataassinaturatermoaditivo){
       $assinatura = $oAcordo->ac35_dataassinaturatermoaditivo;
@@ -168,7 +180,7 @@ for ($contador=0; $contador < $numrows; $contador++) {
       $assinatura = $oAcordo->si03_dataassinacontrato;
     }
 
-    $oPdf->Cell(30, $nova_altura, formataData($assinatura, false), 1, 0, 'C', 0);
+    $oPdf->Cell(30, $nova_altura, formataData($assinatura, false), 'TB', 0, 'C', 0);
     $oPdf->Cell(23, $nova_altura, formataData($oAcordo->ac16_datafim, false), 1, 1, 'C', 0);
 
     $troca=0;
