@@ -416,6 +416,15 @@ function js_validaCaracteres(texto, campo){
   /* Remove os caracteres contidos no array charBuscados */
   novoTexto = novoTexto.match(/[^;\*\\\.:\"\']/gm);
 
+  for(let cont=0; cont < novoTexto.length; cont++){
+
+    /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+    if(novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216){
+      novoTexto[cont] = '';
+      erro = true;
+    }
+  }
 
   if(erro){
     alert('Caractere não permitido para inclusão!');
