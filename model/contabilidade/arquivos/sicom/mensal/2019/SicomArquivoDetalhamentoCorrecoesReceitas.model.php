@@ -257,7 +257,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                     $aDadosAgrupados[$sHash10] = $oDados10;
 
                 }
-                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oDadosRec->saldo_arrecadado;
+                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDocVlr->c70_valor;
 
                 /**
                  * agrupar registro 11
@@ -292,8 +292,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                    WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
                               LEFT JOIN conlancam ON c74_codlan = c70_codlan
                               LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
-                              INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
-                              INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
+                              INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
                               LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
                               WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                   AND o70_instit = " . db_getsession('DB_instit') . "

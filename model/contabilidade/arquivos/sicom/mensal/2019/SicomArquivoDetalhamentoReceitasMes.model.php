@@ -141,7 +141,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
         $aDadosAgrupados = array();
 
-        $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte FROM conlancamrec
+        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+
+            $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
+
+            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte FROM conlancamrec
                JOIN conlancamdoc ON c71_codlan = c74_codlan
                JOIN conhistdoc ON c71_coddoc = c53_coddoc
                JOIN conlancam ON c70_codlan = c74_codlan
@@ -149,6 +153,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+                 AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
+                        OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
                ORDER BY 4, 3";
 
@@ -162,11 +168,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
       $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr, 0);
 
-      if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
+      if (($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
 
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-
-            $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
             if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
 
@@ -214,7 +217,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                     $aDadosAgrupados[$sHash10] = $oDados10;
 
                 }
-                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oDadosRec->saldo_arrecadado;
+                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDocVlr->c70_valor;
 
                 /**
                  * agrupar registro 11
@@ -248,8 +251,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                                  WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
                               LEFT JOIN conlancam ON c74_codlan = c70_codlan
                               LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
-                              INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
-                              INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
+                              INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
                               LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
                               WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                 AND o70_instit = " . db_getsession('DB_instit') . "
@@ -259,8 +262,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
                                      END)
                                 AND conlancamrec.c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-                                AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
-                                      OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
+                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
+                                      OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                               GROUP BY 1,2,3,4,c53_tipo,c70_valor,c206_nroconvenio,c206_dataassinatura
                               ORDER BY 1,4,3";
                     $result = db_query($sSql);
