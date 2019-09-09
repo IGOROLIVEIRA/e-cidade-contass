@@ -664,7 +664,31 @@ function js_marcaLinha(obj, sequencia){
 }
 
 function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
-    quan = quan.replace(',', '.');
+    quan = quan.replace(/,/g, '.');
+
+    let contDot = 0;
+    let novaQuantidade = '';
+    for(cont=0;cont<quan.length;cont++){
+
+      if(quan[cont] != '.'){
+        novaQuantidade += quan[cont];
+      }else{
+        contDot+=1;
+        if(contDot > 1){
+          novaQuantidade += '';
+        }else{
+          novaQuantidade += quan[cont];
+        }
+      }
+    }
+
+    if(contDot > 1){
+      alert('Valor Decimal já inserido');
+    }
+
+    document.getElementById(`quantidade${sequencia}`).value = novaQuantidade;
+    quan = novaQuantidade;
+
     if (max<quan){
 
         alert("Informe uma quantidade valida!!");
