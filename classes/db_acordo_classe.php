@@ -2186,5 +2186,16 @@ class cl_acordo {
         return $sSql;
     }
 
+    public function sql_itens_acordo($sCampos,$iAcordo,$iCodMater){
+        $sSql = "SELECT $sCampos
+                    FROM acordo
+                    INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+                    INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+                    WHERE ac16_sequencial = $iAcordo
+                        AND ac26_acordoposicaotipo = 1
+                        AND ac20_pcmater = $iCodMater";
+        return $sSql;
+    }
+
 }
 ?>

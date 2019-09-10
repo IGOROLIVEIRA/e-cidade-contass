@@ -59,7 +59,7 @@ class ExecucaoDeContratos{
 
     }
 
-    public static function imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null){
+    public static function imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null,$sElemento,$reduzido){
 
         $oPdf->SetFont('Arial','B',$iFonte);
 
@@ -71,7 +71,9 @@ class ExecucaoDeContratos{
         if($iQuebra == '2'){
 
             $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
-            $oPdf->Cell(50 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
+            $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
+            $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
+            $oPdf->Cell(50 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
             $oPdf->Ln();
 
         }
@@ -169,13 +171,13 @@ class ExecucaoDeContratos{
 
         $sSqlDataDeEmissao = '';
         if( empty($sDataInicial) && !empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND e54_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
+            $sSqlDataDeEmissao = " AND e60_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
         }
         if( !empty($sDataInicial) && empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND e54_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+            $sSqlDataDeEmissao = " AND e60_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
         }
         if( !empty($sDataInicial) && !empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND (e54_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
+            $sSqlDataDeEmissao = " AND (e60_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
             $sSqlDataDeEmissao .= "                   AND '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."') ";
         }
 
@@ -234,13 +236,13 @@ class ExecucaoDeContratos{
         $sCamposEmpenho .= "         ,case when pcorcamval.pc23_obs is not null";
         $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
         $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
-        $sCamposEmpenho .= "         end as observacao";
+        $sCamposEmpenho .= "         end as observacao,e60_vlremp,";
+        $sCamposEmpenho .= "         o58_orgao||'.'||o58_unidade||'.'||o58_funcao||'.'||o58_subfuncao||'.'||o58_programa||'.'||o58_projativ||'.'||o56_elemento as elemento,o58_coddot";
 
         $oDaoEmpenho      = db_utils::getDao("empempenho");
 
         $sSqlItensEmpenho = $oDaoEmpenho->sql_query_itens_consulta_empenho($iCodigoEmpenho,$sCamposEmpenho,'ricodmater');
         $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensEmpenho);
-
         $aItensRetorno = array();
 
         for ($iRowItem = 0; $iRowItem < $oDaoEmpenho->numrows; $iRowItem++) {
@@ -254,6 +256,15 @@ class ExecucaoDeContratos{
 
         return $aItensRetorno;
 
+    }
+
+    public static function getItensContrato($iContrato,$iCodigoMaterial){
+        $oDaoItensAcordo = db_utils::getDao("acordo");
+        $sCampos = "acordoitem.*";
+        $sSqlItens = $oDaoItensAcordo->sql_itens_acordo($sCampos,$iContrato,$iCodigoMaterial);
+        $rsResultItens = $oDaoItensAcordo->sql_record($sSqlItens);
+
+        return db_utils::fieldsMemory($rsResultItens,0)->ac20_quantidade;
     }
 
     /*
@@ -349,16 +360,25 @@ class ExecucaoDeContratos{
 
         $dQuantidadeEmOrdemDeCompra = 0;
         $dQuantidadeAnuladaEmOrdemDeCompra = 0;
+        $ValorEmOrdemDeCompra = 0;
+        $aOrdem = array();
 
         foreach($aOrdensDeEmpenho as $ordemDeEmpenho){
 
             $oOrdemDeCompra = self::quantidadeEmOrdemDeCompra( (int)$ordemDeEmpenho->ordem, (int)$iCodEmp, (int)$iCodMat );
-            $dQuantidadeEmOrdemDeCompra += (double)$oOrdemDeCompra->quantidade;
+            $dQuantidadeEmOrdemDeCompra        += (double)$oOrdemDeCompra->quantidade;
             $dQuantidadeAnuladaEmOrdemDeCompra += (double)$oOrdemDeCompra->qtdanulada;
+            $ValorEmOrdemDeCompra              += (double)$oOrdemDeCompra->valorordem;
 
+            $oOrdem = new stdClass();
+            $oOrdem->quantidade = (double)$dQuantidadeEmOrdemDeCompra - (double)$dQuantidadeAnuladaEmOrdemDeCompra;
+            $oOrdem->quantidadeAnulada = $dQuantidadeAnuladaEmOrdemDeCompra;
+            $oOrdem->valor = $ValorEmOrdemDeCompra;
+
+            $aOrdem[] = $oOrdem;
         }
 
-        return (double)$dQuantidadeEmOrdemDeCompra - (double)$dQuantidadeAnuladaEmOrdemDeCompra;
+        return $aOrdem;
 
     }
 

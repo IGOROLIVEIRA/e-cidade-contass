@@ -8,13 +8,8 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
 
   $oAcordo = new Acordo($iAcordo);
   $aEmpenhamentos = $oAcordo->getAutorizacoesEntreDatas($ac16_datainicio,$ac16_datafim);
-  $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oAcordo->getUltimaPosicao()->getCodigo(),$ac16_datainicio,$ac16_datafim);
 
   $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
-
-  if(empty($aInformacoesacordo)){
-      db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
-  }
 
   $iQtdAnulada = 0;
   $iNumItens = 0;
@@ -32,7 +27,6 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
     $iNumItens += count($aEmpenho);
 
     foreach($aEmpenho as $iK => $oItem){
-
       $dQuantidadeEmOrdemDeCompra = null;
       $iQtdEmpenhada = (int)$oItem->quantidade;
 
@@ -51,6 +45,7 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
         (int)$oEmpenhamento->codigoempenho,
         (int)$oItem->codigo_material
       );
+
       $dQtdSolicitada = isset($dQuantidadeEmOrdemDeCompra) ? (double)$dQuantidadeEmOrdemDeCompra : 0;
       $dTotalSolicitado = $oItem->valor_unitario * $dQtdSolicitada;
 
@@ -71,7 +66,8 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
 
       $dQtdSolicitar    = (double)$sQtdEmpenhada - (double)$sQtdSolicitada - (double)$sQtdAnulada;
       $sQtdSolicitar    = empty($dQtdSolicitar)?"0":(string)$dQtdSolicitar;
-
+      $iQtdaGerarOC     = $sQtdEmpenhada - $dQuantidadeEmOrdemDeCompra[0]->quantidade;
+      $iQtdaEmpenhar    = $oExecucaoDeContratos->getItensContrato($oAcordo->getCodigo(),$oItem->codigo_material) - $sQtdEmpenhada;
       unset($iQtdAnulada);
 
     // Verifica se a posição de escrita está próxima do fim da página.
@@ -85,20 +81,7 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
       if($oPdf->GetY() >= 170){
         $oPdf->AddPage('L');
       }
-      $oExecucaoDeContratos->imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento, $iFonte, $iQuebra);
-
-    }
-
-    // Define a cor de fundo da linha
-    if ($iK % 2 === 0) {
-
-      $iCorFundo    = 0;
-      $oPdf->SetFillColor(220);
-
-    } else {
-
-      $iCorFundo    = 1;
-      $oPdf->SetFillColor(240);
+      $oExecucaoDeContratos->imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento, $iFonte, $iQuebra,null,null,$oItem->elemento,$oItem->o58_coddot);
 
     }
 
@@ -108,14 +91,16 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
     }
     $oPdf->SetFont('Arial','',$iFonte-1);
 
-      $oPdf->Cell(18 ,$iAlt,$oItem->codigo_material,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(124 ,$iAlt,$oExecucaoDeContratos->limitarTexto($oItem->descricao_material,68),'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(22 ,$iAlt,$sValorUnitario,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(25 ,$iAlt,$sQtdEmpenhada,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(20 ,$iAlt,$sQtdAnulada,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(24 ,$iAlt,$sQtdSolicitada,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(25 ,$iAlt,$sTotalSolicitado,'TBR',0,'C',$iCorFundo);
-      $oPdf->Cell(22 ,$iAlt,$sQtdSolicitar,'TBR',0,'C',$iCorFundo);
+      $oPdf->Cell(18 ,$iAlt,$oItem->codigo_material,'TBR',0,'C','');
+      $oPdf->Cell(83 ,$iAlt,$oExecucaoDeContratos->limitarTexto($oItem->descricao_material,44),'TBR',0,'C','');
+      $oPdf->Cell(25 ,$iAlt,$oExecucaoDeContratos->getItensContrato($oAcordo->getCodigo(),$oItem->codigo_material),'TBR',0,'C','');
+      $oPdf->Cell(18 ,$iAlt,$sValorUnitario,'TBR',0,'C','');
+      $oPdf->Cell(25 ,$iAlt,$sQtdEmpenhada,'TBR',0,'C','');
+      $oPdf->Cell(20 ,$iAlt,$sQtdAnulada,'TBR',0,'C','');
+      $oPdf->Cell(20 ,$iAlt,$dQuantidadeEmOrdemDeCompra[0]->quantidade,'TBR',0,'C','');
+      $oPdf->Cell(21 ,$iAlt,'R$'.number_format($dQuantidadeEmOrdemDeCompra[0]->valor,2,',','.'),'TBR',0,'C','');
+      $oPdf->Cell(26 ,$iAlt,$iQtdaGerarOC,'TBR',0,'C','');
+      $oPdf->Cell(22 ,$iAlt,$iQtdaEmpenhar,'TBR',0,'C','');
     $oPdf->Ln();
 
   }

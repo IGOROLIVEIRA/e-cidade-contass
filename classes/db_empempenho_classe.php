@@ -2001,6 +2001,7 @@ class cl_empempenho {
         $sql .= "                                                    and pcorcamjulgpai.pc24_pontuacao      = 1 ";
         $sql .= "       left join pcorcamval     as pcorcamvalpai     on pcorcamvalpai.pc23_orcamitem       = pcorcamjulgpai.pc24_orcamitem ";
         $sql .= "                                                    and pcorcamvalpai.pc23_orcamforne      = pcorcamjulgpai.pc24_orcamforne ";
+        $sql .= "       left join orcdotacao on o58_coddot = e60_coddot and o58_anousu = e60_anousu";
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){

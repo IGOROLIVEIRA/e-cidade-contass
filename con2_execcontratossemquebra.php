@@ -9,7 +9,7 @@ function execucaoDeContratosSemQuebra($iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$dIn
     $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
 
     $aInformacoesacordo = null;
-    $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oAcordo->getUltimaPosicao()->getCodigo());
+    $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oAcordo->getUltimaPosicao()->getCodigo(),$dInicio,$dFim);
 
     $aLinhasRenderizadas      = array();
 
@@ -75,7 +75,7 @@ function execucaoDeContratosSemQuebra($iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$dIn
 
         $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],'TBR',0,'C','');
         $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],'TBR',0,'C','');
-        $oPdf->Cell(24  ,$iAlt, $aLinha['qrdcontratada'],'TBR',0,'C','');
+        $oPdf->Cell(25  ,$iAlt, $aLinha['qrdcontratada'],'TBR',0,'C','');
         $oPdf->Cell(18  ,$iAlt, 'R$ '.$aLinha['valorunitario'],'TBR',0,'C','');
         $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],'TBR',0,'C','');
         $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],'TBR',0,'C','');
