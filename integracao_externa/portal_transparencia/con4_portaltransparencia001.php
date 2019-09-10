@@ -194,6 +194,25 @@ db_query($connDestino,"BEGIN;");
 
 try {
 
+  // SALVA PESSOAS QUE ACESSARAM DADOS DE FOLHA DE PAGAMENTO DO TRANSPARENCIA NO E-CIDADE
+  $sSqlMaxRequisitante = "SELECT MAX(db149_data) AS maxdata FROM requisitantes_transparencia";
+  $rsMaxRequisitantes = db_query($connOrigem, $sSqlMaxRequisitante);
+  
+  $sSqlRequisitantes = "SELECT * FROM transparencia.requisitantes";
+  if(!empty(db_utils::fieldsMemory($rsMaxRequisitantes,0)->maxdata)) {
+    $sSqlRequisitantes .= " WHERE data > '".db_utils::fieldsMemory($rsMaxRequisitantes,0)->maxdata."'";
+  }
+  $rsRequisitantes = db_query($connDestino, $sSqlRequisitantes);
+  for ( $iInd=0; $iInd < pg_num_rows($rsRequisitantes); $iInd++ ) {
+
+    $oRequisitante = db_utils::fieldsMemory($rsRequisitantes,$iInd);
+    $sSqlInserirRequisitante = "INSERT INTO requisitantes_transparencia
+    (db149_matricula,db149_cpf,db149_nome,db149_data)
+    VALUES 
+    ({$oRequisitante->matricula},'{$oRequisitante->cpf}','{$oRequisitante->nome}','{$oRequisitante->data}')";
+
+    $rsRequisitantes = db_query($connOrigem, $sSqlInserirRequisitante);
+  }
 
     // RENOMEIA DE SCHEMAS ANTIGOS ************************************************************************************//
 
