@@ -2161,8 +2161,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     $xordem .= "o58_programa,o54_descr,";
   }
   if ($primeiro_fim >= 6) {
-    $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,";
-    $xordem .= "o58_projativ,o55_descr,o55_finali,";
+    $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
+    $xordem .= "o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
   }
   if ($primeiro_fim >= 7) {
     $junta .= "o58_elemento,o56_descr,";
