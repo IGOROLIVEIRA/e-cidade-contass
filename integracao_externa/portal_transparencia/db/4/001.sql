@@ -108,5 +108,5 @@ id serial primary key,
 matricula int8,
 cpf varchar(11),
 nome varchar(200),
-data date
+data timestamp
 );
