@@ -59,15 +59,11 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
       $sValorUnitario   = $dValorUnitario === '-' ? $dValorUnitario : 'R$'.number_format((double)$dValorUnitario,2,',','.');
       $sQtdEmpenhada    = empty($iQtdEmpenhada)?"0":(string)$iQtdEmpenhada;
       $sQtdAnulada      = empty($iQtdAnulada)?"0":(string)$iQtdAnulada;
-      $sQtdSolicitada   = empty($dQtdSolicitada)?"0":(string)$dQtdSolicitada;
-
-      $sTotalSolicitado = empty($dTotalSolicitado)?"0":(string)$dTotalSolicitado;
-      $sTotalSolicitado = 'R$'.number_format($sTotalSolicitado,2,',','.');
-
-      $dQtdSolicitar    = (double)$sQtdEmpenhada - (double)$sQtdSolicitada - (double)$sQtdAnulada;
-      $sQtdSolicitar    = empty($dQtdSolicitar)?"0":(string)$dQtdSolicitar;
       $iQtdaGerarOC     = $sQtdEmpenhada - $dQuantidadeEmOrdemDeCompra[0]->quantidade;
-      $iQtdaEmpenhar    = $oExecucaoDeContratos->getItensContrato($oAcordo->getCodigo(),$oItem->codigo_material) - $sQtdEmpenhada;
+      $sQtdContratada   = $oExecucaoDeContratos->getItensContrato($oAcordo->getCodigo(),$oItem->codigo_material);
+      $sQtdEmpAcordo    = $oExecucaoDeContratos->getQtdEmpenhada($oItem->codigo_material,$oAcordo->getCodigo());
+
+      $sQtdAempenhar    = $sQtdContratada - $sQtdEmpAcordo[0]->qtdempenhada;
       unset($iQtdAnulada);
 
     // Verifica se a posição de escrita está próxima do fim da página.
@@ -97,10 +93,10 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
       $oPdf->Cell(18 ,$iAlt,$sValorUnitario,'TBR',0,'C','');
       $oPdf->Cell(25 ,$iAlt,$sQtdEmpenhada,'TBR',0,'C','');
       $oPdf->Cell(20 ,$iAlt,$sQtdAnulada,'TBR',0,'C','');
-      $oPdf->Cell(20 ,$iAlt,$dQuantidadeEmOrdemDeCompra[0]->quantidade,'TBR',0,'C','');
+      $oPdf->Cell(20 ,$iAlt,$dQuantidadeEmOrdemDeCompra[0]->quantidade == null ? '0' : $dQuantidadeEmOrdemDeCompra[0]->quantidade,'TBR',0,'C','');
       $oPdf->Cell(21 ,$iAlt,'R$'.number_format($dQuantidadeEmOrdemDeCompra[0]->valor,2,',','.'),'TBR',0,'C','');
       $oPdf->Cell(26 ,$iAlt,$iQtdaGerarOC,'TBR',0,'C','');
-      $oPdf->Cell(22 ,$iAlt,$iQtdaEmpenhar,'TBR',0,'C','');
+      $oPdf->Cell(22 ,$iAlt,$sQtdAempenhar,'TBR',0,'C','');
     $oPdf->Ln();
 
   }

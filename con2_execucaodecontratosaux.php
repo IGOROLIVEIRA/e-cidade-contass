@@ -49,7 +49,7 @@ class ExecucaoDeContratos{
 
         // 4ª linha
         $oPdf->cell(70,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal());
-        $oPdf->Cell(50 ,$iAlt,'Valor Total: '.number_format($oAcordo->getValorContrato(),2,',','.'));
+        $oPdf->Cell(50 ,$iAlt,'Valor Total Atual: '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
         // 5ª linha
