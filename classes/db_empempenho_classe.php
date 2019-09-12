@@ -1148,8 +1148,9 @@ class cl_empempenho {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
-        $sql .= "      inner join matordemitem on m52_numemp          =  e60_numemp";
-        $sql .= "      inner join matordem     on m51_codordem        = m52_codordem";
+        $sql .= "      inner join empempitem on e62_numemp = e60_numemp";
+        $sql .= "      left join matordemitem on m52_numemp          =  e60_numemp";
+        $sql .= "      left join matordem     on m51_codordem        = m52_codordem";
         $sql .= "      inner join cgm          on matordem.m51_numcgm = cgm.z01_numcgm ";
         $sql2 = "";
         if($dbwhere==""){
@@ -2149,6 +2150,22 @@ class cl_empempenho {
             $sSql .= " where {$sWhere}";
         }
         return $sSql;
+    }
+
+    public function sql_query_contrato_empenho($iItem,$iAcordo){
+
+        $sql = "select sum(e62_quant) as qtdempenhada from acordoposicao
+            inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+            inner join acordoitemexecutado on ac29_acordoitem = ac20_sequencial
+            inner join acordoitemexecutadoempautitem on ac19_acordoitemexecutado = ac29_sequencial
+            inner join empautitem on (e55_autori, e55_sequen) = (ac19_autori, ac19_sequen)
+            inner join empautoriza on e55_autori = e54_autori
+            inner join empempaut on e61_autori = e54_autori
+            inner join empempenho on e60_numemp = e61_numemp
+            inner join empempitem on e62_numemp = e60_numemp and e62_item = $iItem
+            where ac26_acordo = $iAcordo and e62_item = $iItem";
+
+        return $sql;
     }
 
     public function sql_query_empenho_classificacao_nota($sCampos = "*", $sWhere = null) {

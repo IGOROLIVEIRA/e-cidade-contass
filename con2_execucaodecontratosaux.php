@@ -17,8 +17,6 @@ class ExecucaoDeContratos{
             $dDataAssinatura = 'Não informado';
         }
 
-//    $dDataAssinatura = empty( $oAcordo->getDataAssinatura() ) ? 'Não informado' : date("d/m/Y", strtotime( $oAcordo->getDataAssinatura() ));
-
         $oPdf->SetFont('Arial','B',$iFonte);
         $oPdf->SetFillColor(220);
 
@@ -51,7 +49,7 @@ class ExecucaoDeContratos{
 
         // 4ª linha
         $oPdf->cell(70,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal());
-        $oPdf->Cell(50 ,$iAlt,'Valor Total: '.$oAcordo->getValorContrato());
+        $oPdf->Cell(50 ,$iAlt,'Valor Total: '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
         // 5ª linha
@@ -155,13 +153,15 @@ class ExecucaoDeContratos{
         if((int)$iP4 !== 1){
 
             $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
-            $oPdf->Cell(83,$iAlt,'Descrição Item',1,0,'C',1);
-            $oPdf->Cell(22 ,$iAlt,'Valor. Unit.',1,0,'C',1);
+            $oPdf->Cell(83 ,$iAlt,'Descrição Item',1,0,'C',1);
+            $oPdf->Cell(25 ,$iAlt,'Qt. Contratada',1,0,'C',1);
+            $oPdf->Cell(18 ,$iAlt,'Valor. Unit.',1,0,'C',1);
             $oPdf->Cell(25 ,$iAlt,'Qt. Empenhada',1,0,'C',1);
             $oPdf->Cell(20 ,$iAlt,'Qt. Anulada',1,0,'C',1);
-            $oPdf->Cell(24 ,$iAlt,'Qtd. solicitada',1,0,'C',1);
-            $oPdf->Cell(25 ,$iAlt,'Total solicitado',1,0,'C',1);
-            $oPdf->Cell(22 ,$iAlt,'Qt. a solicitar',1,0,'C',1);
+            $oPdf->Cell(20 ,$iAlt,'Qtd. em OC',1,0,'C',1);
+            $oPdf->Cell(21 ,$iAlt,'Valor em OC',1,0,'C',1);
+            $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
+            $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
             $oPdf->Ln();
         }
 
@@ -193,6 +193,26 @@ class ExecucaoDeContratos{
         }
 
         return $aItensRetorno;
+    }
+
+    public static function getQtdOrdemdecompra($iEmpenho,$iCodMater){
+        $sCamposEmpenho   = "*";
+        $oDaoEmpenho      = db_utils::getDao("empempenho");
+        $sSqlItensOrdem   = $oDaoEmpenho->sql_query_codord(null,$sCamposEmpenho,null,"e60_numemp=$iEmpenho and e62_item = $iCodMater");
+//        die($sSqlItensOrdem);
+        $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensOrdem);
+
+        return db_utils::getCollectionByRecord($rsBuscaEmpenho,0);
+
+    }
+
+    public function getQtdEmpenhada($iItem,$iContrato){
+        $sCamposEmpenho   = "*";
+        $oDaoEmpenho      = db_utils::getDao("empempenho");
+        $sSqlQtdemp   = $oDaoEmpenho->sql_query_contrato_empenho($iItem,$iContrato);
+        $rsBuscaQtdEmpenho   = $oDaoEmpenho->sql_record($sSqlQtdemp);
+
+        return db_utils::getCollectionByRecord($rsBuscaQtdEmpenho,0);
     }
 
     public static function consultarNumOrdem($sCodigoempenho){
