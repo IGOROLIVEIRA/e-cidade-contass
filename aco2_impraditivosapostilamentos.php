@@ -50,8 +50,13 @@ switch ($listagem) {
       if($where){
         $where .= ' and ';
       }
-      $where .= " ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
-      $where .= " OR si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' AND '".formataData($data_final, true)."'";
+      $where .= " (CASE
+                    WHEN si03_dataassinacontrato IS NOT NULL
+                     THEN si03_dataassinacontrato
+                     ELSE ac35_dataassinaturatermoaditivo
+                  END) BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
+
+      $orderBy .= 'ac16_numero, ac26_numero';
     }
 
     if($data_inicial && $data_final && $iAcordo){
@@ -117,12 +122,18 @@ switch ($listagem) {
     break;
 }
 
-$campos = " ac16_sequencial,
+$campos = " ac16_numero,
+            ac16_sequencial,
+            ac26_numero,
             ac16_anousu,
             z01_nome,
             ac26_acordoposicaotipo||'-'||ac27_descricao AS tipoaditivo,
-            ac35_dataassinaturatermoaditivo as data_assinatura,
-            si03_dataassinacontrato as assinatura_apostilamento,
+            (case
+                  when
+                    si03_dataassinacontrato is not null
+                    then si03_dataassinacontrato
+                    else ac35_dataassinaturatermoaditivo
+                end) as data_assinatura,
             ac18_datafim as vigencia_final,
             ac35_sequencial";
 
@@ -181,9 +192,10 @@ for ($contador=0; $contador < $numrows; $contador++) {
     $oAcordo = db_utils::fieldsMemory($result, $contador);
     $oPdf->sety($old_y);
 
-
     $oPdf->sety($old_y);
     $old_y = $oPdf->gety();
+    $oAcordo->tipoaditivo = formataAcento($oAcordo->tipoaditivo);
+
 
     $tamanhoAditivo = strlen($oAcordo->tipoaditivo);
     $tamanhoNome = strlen($oAcordo->z01_nome);
@@ -215,15 +227,14 @@ for ($contador=0; $contador < $numrows; $contador++) {
 
     $oPdf->sety($old_y);
     $oPdf->setx(10);
-    $oPdf->Cell(16, $nova_altura, $oAcordo->ac16_sequencial.'/'.$oAcordo->ac16_anousu, 'TLB', 0, 'C', 0);
+    $oPdf->Cell(16, $nova_altura, $oAcordo->ac16_numero.'/'.$oAcordo->ac16_anousu, 'TLB', 0, 'C', 0);
 
-    if($oAcordo->assinatura_apostilamento){
-      $numero_tipo = '1/Apostilamento';
-      $data_assinatura = formataData($oAcordo->assinatura_apostilamento, false);
+    if($oAcordo->si03_dataassinacontrato){
+      $numero_tipo = $oAcordo->ac26_numero.'/Apostilamento';
     }else {
-      $numero_tipo = '3/Aditivo';
-      $data_assinatura = formataData($oAcordo->data_assinatura, false);
+      $numero_tipo = $oAcordo->ac26_numero.'/Aditivo';
     }
+    $data_assinatura = formataData($oAcordo->data_assinatura, false);
 
     $oPdf->setx(94);
     $oPdf->Cell(22, $nova_altura, $numero_tipo, 'TB', 0, 'C', 0);
@@ -284,6 +295,11 @@ function trataString($nome){
   else {
     return $nome;
   }
+}
+
+function formataAcento($palavra){
+  $palavra_formatada = str_replace('crêsc', 'crésc', $palavra);
+  return $palavra_formatada;
 }
 
 ?>
