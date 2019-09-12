@@ -63,8 +63,12 @@ switch ($listagem) {
       if($where){
         $where .= ' and ';
       }
-      $where .= " (ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."' and ac16_sequencial = ".$iAcordo.")";
-      $where .= " OR (si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' AND '".formataData($data_final, true)."' and ac16_sequencial = ".$iAcordo.")";
+
+      $where .= " (CASE
+                    WHEN si03_dataassinacontrato IS NOT NULL
+                     THEN si03_dataassinacontrato
+                     ELSE ac35_dataassinaturatermoaditivo
+                  END) BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."' and ac16_sequencial = ".$iAcordo;
     }
 
     if(!$data_inicial && !$data_final && $iAcordo){
@@ -96,7 +100,7 @@ switch ($listagem) {
       $where .= ' and ';
 
     $where .= " si03_dataassinacontrato IS NULL";
-    $orderBy .= 'ac35_dataassinaturatermoaditivo ';
+    $orderBy .= 'data_assinatura ';
 
     break;
 
@@ -118,7 +122,7 @@ switch ($listagem) {
       $where .= ' and ';
     }
     $where .= " ac35_dataassinaturatermoaditivo IS NULL ";
-    $orderBy .= 'si03_dataassinacontrato';
+    $orderBy .= 'data_assinatura';
     break;
 }
 
@@ -127,6 +131,7 @@ $campos = " ac16_numero,
             ac26_numero,
             ac16_anousu,
             z01_nome,
+            si03_dataassinacontrato,
             ac26_acordoposicaotipo||'-'||ac27_descricao AS tipoaditivo,
             (case
                   when
@@ -141,7 +146,6 @@ if(!$orderBy){
   $orderBy .= ' ac16_sequencial';
 }
 
-
 $sSql = "SELECT DISTINCT ".$campos."
           FROM acordo
           INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
@@ -149,7 +153,6 @@ $sSql = "SELECT DISTINCT ".$campos."
           INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
           LEFT JOIN acordoposicaotipo ON ac27_sequencial = ac26_acordoposicaotipo
           INNER JOIN cgm on z01_numcgm = ac16_contratado ".$sSql2." where ".$where. " ORDER BY ".$orderBy;
-
 
 $result = $acordo->sql_record($sSql);
 $numrows = $acordo->numrows;
