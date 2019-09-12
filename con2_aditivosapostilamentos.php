@@ -191,7 +191,7 @@ function checaFiltros(){
   }
 
   if(dataInicial > dataFinal){
-    alert('Data inicial menor que a data final.');
+    alert('Data inicial menor que a data final. Verifique.');
     return false;
   }
 

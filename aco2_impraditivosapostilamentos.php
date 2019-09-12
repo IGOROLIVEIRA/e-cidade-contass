@@ -37,21 +37,13 @@ $lista = '';
 $where = '';
 $orderBy = '';
 
-if($iAcordo){
-  $where = " ac16_sequencial = ".$iAcordo;
-  $orderBy = ' ac16_sequencial ';
-}
-
-if(!$iAcordo){
-  $orderBy = ' ac16_sequencial ';
-}
+// if($iAcordo){
+//   $where = " ac16_sequencial = ".$iAcordo;
+//   // $orderBy = ' ac16_sequencial ';
+// }
 
 if($orderBy)
   $orderBy .= ', ';
-
-if($where){
-  $where .= ' and ';
-}
 
 switch ($listagem) {
   case 0:
@@ -59,41 +51,101 @@ switch ($listagem) {
     $sSql2  = " LEFT JOIN apostilamento on si03_acordo = ac16_sequencial ";
     $sSql2 .= " LEFT JOIN acordoposicaoaditamento on ac35_acordoposicao = ac26_sequencial ";
 
-    if($data_inicial && $data_final){
+    if($data_inicial && $data_final && !$iAcordo){
+      if($where){
+        $where .= ' and ';
+      }
       $where .= " ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
       $where .= " OR si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' AND '".formataData($data_final, true)."'";
     }
 
-    $orderBy .= 'si03_dataassinacontrato, ac35_dataassinaturatermoaditivo';
+    if($data_inicial && $data_final && $iAcordo){
+      if($where){
+        $where .= ' and ';
+      }
+      $where .= " (ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."' and ac16_sequencial = ".$iAcordo.")";
+      $where .= " OR (si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' AND '".formataData($data_final, true)."' and ac16_sequencial = ".$iAcordo.")";
+    }
+
+    if(!$data_inicial && !$data_final && $iAcordo){
+      if($where){
+        $where .= ' and ';
+      }
+      $where .= " ac16_sequencial = ".$iAcordo;
+      $where .= " and (ac35_dataassinaturatermoaditivo is not null ";
+      $where .= " OR si03_dataassinacontrato is not null) ";
+    }
 
     break;
 
   case 1:
     $lista  = "Somente Aditivos";
     $sSql2  = " INNER JOIN acordoposicaoaditamento on ac35_acordoposicao = ac26_sequencial ";
-    $where .= " ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
+    $sSql2 .= " LEFT JOIN apostilamento on si03_acordo = ac16_sequencial ";
+    if($data_inicial && $data_final)
+      $where .= " ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
 
-    $orderBy .= 'ac35_dataassinaturatermoaditivo';
+
+    if($iAcordo){
+      if($where)
+        $where .= ' and ';
+      $where .= ' ac16_sequencial = '.$iAcordo;
+    }
+
+    if($where)
+      $where .= ' and ';
+
+    $where .= " si03_dataassinacontrato IS NULL";
+    $orderBy .= 'ac35_dataassinaturatermoaditivo ';
 
     break;
 
   case 2:
     $lista  = 'Somente Apostilamentos';
     $sSql2 .= " INNER JOIN apostilamento on si03_acordo = ac16_sequencial ";
-    $where .= " si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
+    $sSql2 .= " LEFT JOIN acordoposicaoaditamento on ac35_acordoposicao = ac26_sequencial ";
+
+    if($data_inicial && $data_final){
+      $where .= " si03_dataassinacontrato BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
+    }
+
+    if($iAcordo){
+      if($where)
+        $where .= ' and ';
+      $where .= ' ac16_sequencial = '.$iAcordo;
+    }
+    if($where){
+      $where .= ' and ';
+    }
+    $where .= " ac35_dataassinaturatermoaditivo IS NULL ";
     $orderBy .= 'si03_dataassinacontrato';
     break;
 }
 
+$campos = " ac16_sequencial,
+            ac16_anousu,
+            z01_nome,
+            ac26_acordoposicaotipo||'-'||ac27_descricao AS tipoaditivo,
+            ac35_dataassinaturatermoaditivo as data_assinatura,
+            si03_dataassinacontrato as assinatura_apostilamento,
+            ac18_datafim as vigencia_final,
+            ac35_sequencial";
 
-$sSql = "SELECT *
+if(!$orderBy){
+  $orderBy .= ' ac16_sequencial';
+}
+
+
+$sSql = "SELECT DISTINCT ".$campos."
           FROM acordo
           INNER JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+          INNER JOIN acordovigencia ON ac18_acordoposicao = ac26_sequencial
           INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
-          LEFT JOIN acordoposicaotipo ON ac27_sequencial = ac20_acordoposicaotipo
+          LEFT JOIN acordoposicaotipo ON ac27_sequencial = ac26_acordoposicaotipo
           INNER JOIN cgm on z01_numcgm = ac16_contratado ".$sSql2." where ".$where. " ORDER BY ".$orderBy;
 
 
+// print_r($sSql);die('Fim...');
 $result = $acordo->sql_record($sSql);
 $numrows = $acordo->numrows;
 
@@ -110,7 +162,8 @@ $oPdf->SetAutoPageBreak(false);
 $oPdf->SetFont('Arial', 'B', 8);
 
 $iFonte     = 9;
-$iAlt       = 8;
+$iAlt       = 6;
+$nova_altura = 6;
 
 $head3 .= "Relatório de Aditivos e Apostilamentos\n";
 $head5 = 'Listar '.$lista;
@@ -127,62 +180,60 @@ for ($contador=0; $contador < $numrows; $contador++) {
     if($oPdf->gety() > $oPdf->h - 32 || $troca != 0 ){
       $oPdf->addpage("");
       setHeader($oPdf, 9);
+      $old_y = $oPdf->gety();
     }
 
     $oPdf->setfont('arial', '', 7);
     $oAcordo = db_utils::fieldsMemory($result, $contador);
+    $oPdf->sety($old_y);
 
+
+    $oPdf->sety($old_y);
     $old_y = $oPdf->gety();
 
-    if($oAcordo->ac27_sequencial && $oAcordo->ac27_descricao){
-     $sequencial_descricao = "'".$oAcordo->ac27_sequencial / $oAcordo->ac27_descricao."'";
-    }else $sequencial_descricao = 'Não houve alteração de valor';
+    $tamanhoAditivo = strlen($oAcordo->tipoaditivo);
+    $tamanhoNome = strlen($oAcordo->z01_nome);
 
-
-    if(strlen($sequencial_descricao) > strlen($oAcordo->z01_nome)){
-      $oPdf->setx(113);
-      $oPdf->MultiCell(35, $iAlt, $sequencial_descricao, 1, 'C', 0, 0);
-      $nova_altura = $oPdf->gety() - $old_y;
-      $oPdf->sety($old_y);
-      $oPdf->setx(28);
-      $oPdf->MultiCell(60, $nova_altura, $oAcordo->z01_nome, 1, 'C', 0, 0);
-    }else{
-      $oPdf->setx(28);
-      $oPdf->MultiCell(60, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
-      $nova_altura = $oPdf->gety() - $old_y;
+    if($tamanhoAditivo >= 32){
       $oPdf->sety($old_y);
       $oPdf->setx(113);
-      $oPdf->MultiCell(35, $nova_altura, $sequencial_descricao, 1, 'C', 0, 0);
+      $oPdf->MultiCell(35, $iAlt, $oAcordo->tipoaditivo, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
+      $oPdf->sety($old_y);
+      $oPdf->setx(26);
+      $oPdf->MultiCell(65, $nova_altura, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
+    }else {
+      $oPdf->sety($old_y);
+      $oPdf->setx(26);
+      $oPdf->MultiCell(65, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
+      $oPdf->sety($old_y);
+      $oPdf->setx(113);
+      $oPdf->MultiCell(35, $nova_altura, $oAcordo->tipoaditivo, 1, 'C', 0, 0);
+      $nova_altura = $oPdf->gety() - $old_y;
     }
 
-    $nova_altura = $oPdf->gety() - $old_y;
     $oPdf->sety($old_y);
     $oPdf->setx(10);
-    $oPdf->Cell(18, $nova_altura, $oAcordo->ac16_sequencial.'/'.$oAcordo->ac16_anousu, 1, 0, 'C', 0);
+    $oPdf->Cell(16, $nova_altura, $oAcordo->ac16_sequencial.'/'.$oAcordo->ac16_anousu, 'TLB', 0, 'C', 0);
 
-    if($oAcordo->si03_sequencial){
+    if($oAcordo->assinatura_apostilamento){
       $numero_tipo = '1/Apostilamento';
-    }
-
-    if($oAcordo->ac35_sequencial){
+      $data_assinatura = formataData($oAcordo->assinatura_apostilamento, false);
+    }else {
       $numero_tipo = '3/Aditivo';
+      $data_assinatura = formataData($oAcordo->data_assinatura, false);
     }
 
-    $oPdf->setx(88);
-    $oPdf->Cell(25, $nova_altura, $numero_tipo, 'TB', 0, 'C', 0);
+    $oPdf->setx(91);
+    $oPdf->Cell(22, $nova_altura, $numero_tipo, 'TB', 0, 'C', 0);
     $oPdf->setx(148);
 
-    if($oAcordo->ac35_dataassinaturatermoaditivo){
-      $assinatura = $oAcordo->ac35_dataassinaturatermoaditivo;
-    }
-
-    if($oAcordo->si03_dataassinacontrato){
-      $assinatura = $oAcordo->si03_dataassinacontrato;
-    }
-
-    $oPdf->Cell(30, $nova_altura, formataData($assinatura, false), 'TB', 0, 'C', 0);
-    $oPdf->Cell(23, $nova_altura, formataData($oAcordo->ac16_datafim, false), 1, 1, 'C', 0);
-
+    $oPdf->Cell(28, $nova_altura, ($data_assinatura == '' ? '-' : $data_assinatura), 'TB', 0, 'C', 0);
+    $oPdf->Cell(23, $nova_altura, ($data_assinatura == '' ? '-' : $data_assinatura), 1, 1, 'C', 0);
+    $old_y = $oPdf->gety();
+    $nova_altura = $iAlt;
     $troca=0;
 }
 
@@ -196,11 +247,11 @@ $oPdf->Output();
 function setHeader($oPdf, $iHeigth) {
   $oPdf->setfont('arial', 'b', 8);
   $oPdf->setfillcolor(235);
-  $oPdf->Cell(18,  $iHeigth, "Contrato", 1, 0, "C", 1);
-  $oPdf->Cell(60,  $iHeigth, "Fornecedor", 1, 0, "C", 1);
-  $oPdf->Cell(25,  $iHeigth, "Número/Tipo", 1, 0, "C", 1);
+  $oPdf->Cell(16,  $iHeigth, "Contrato", 1, 0, "C", 1);
+  $oPdf->Cell(65,  $iHeigth, "Fornecedor", 1, 0, "C", 1);
+  $oPdf->Cell(22,  $iHeigth, "Número/Tipo", 1, 0, "C", 1);
   $oPdf->Cell(35,  $iHeigth, "Tipo de Alteração", 1, 0, "C", 1);
-  $oPdf->Cell(30,  $iHeigth, "Data de Assinatura", 1, 0, "C", 1);
+  $oPdf->Cell(28,  $iHeigth, "Data de Assinatura", 1, 0, "C", 1);
   $oPdf->Cell(23,  $iHeigth, "Vigência Final", 1, 1, "C", 1);
 }
 
