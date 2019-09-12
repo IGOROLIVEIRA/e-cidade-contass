@@ -37,11 +37,6 @@ $lista = '';
 $where = '';
 $orderBy = '';
 
-// if($iAcordo){
-//   $where = " ac16_sequencial = ".$iAcordo;
-//   // $orderBy = ' ac16_sequencial ';
-// }
-
 if($orderBy)
   $orderBy .= ', ';
 
@@ -145,7 +140,6 @@ $sSql = "SELECT DISTINCT ".$campos."
           INNER JOIN cgm on z01_numcgm = ac16_contratado ".$sSql2." where ".$where. " ORDER BY ".$orderBy;
 
 
-// print_r($sSql);die('Fim...');
 $result = $acordo->sql_record($sSql);
 $numrows = $acordo->numrows;
 
@@ -194,22 +188,27 @@ for ($contador=0; $contador < $numrows; $contador++) {
     $tamanhoAditivo = strlen($oAcordo->tipoaditivo);
     $tamanhoNome = strlen($oAcordo->z01_nome);
 
+    $nome = trataString($oAcordo->z01_nome);
+
     if($tamanhoAditivo >= 32){
       $oPdf->sety($old_y);
-      $oPdf->setx(113);
+      $oPdf->setx(116);
       $oPdf->MultiCell(35, $iAlt, $oAcordo->tipoaditivo, 1, 'C', 0, 0);
       $nova_altura = $oPdf->gety() - $old_y;
       $oPdf->sety($old_y);
       $oPdf->setx(26);
-      $oPdf->MultiCell(65, $nova_altura, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      if(strlen($nome) > 36){
+        $oPdf->MultiCell(68, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      }
+      else $oPdf->MultiCell(68, $nova_altura, $oAcordo->z01_nome, 1, 'C', 0, 0);
       $nova_altura = $oPdf->gety() - $old_y;
     }else {
       $oPdf->sety($old_y);
       $oPdf->setx(26);
-      $oPdf->MultiCell(65, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
+      $oPdf->MultiCell(68, $iAlt, $oAcordo->z01_nome, 1, 'C', 0, 0);
       $nova_altura = $oPdf->gety() - $old_y;
       $oPdf->sety($old_y);
-      $oPdf->setx(113);
+      $oPdf->setx(116);
       $oPdf->MultiCell(35, $nova_altura, $oAcordo->tipoaditivo, 1, 'C', 0, 0);
       $nova_altura = $oPdf->gety() - $old_y;
     }
@@ -226,12 +225,12 @@ for ($contador=0; $contador < $numrows; $contador++) {
       $data_assinatura = formataData($oAcordo->data_assinatura, false);
     }
 
-    $oPdf->setx(91);
+    $oPdf->setx(94);
     $oPdf->Cell(22, $nova_altura, $numero_tipo, 'TB', 0, 'C', 0);
-    $oPdf->setx(148);
+    $oPdf->setx(151);
 
     $oPdf->Cell(28, $nova_altura, ($data_assinatura == '' ? '-' : $data_assinatura), 'TB', 0, 'C', 0);
-    $oPdf->Cell(23, $nova_altura, ($data_assinatura == '' ? '-' : $data_assinatura), 1, 1, 'C', 0);
+    $oPdf->Cell(20, $nova_altura, formataData($oAcordo->vigencia_final, false), 1, 1, 'C', 0);
     $old_y = $oPdf->gety();
     $nova_altura = $iAlt;
     $troca=0;
@@ -248,11 +247,11 @@ function setHeader($oPdf, $iHeigth) {
   $oPdf->setfont('arial', 'b', 8);
   $oPdf->setfillcolor(235);
   $oPdf->Cell(16,  $iHeigth, "Contrato", 1, 0, "C", 1);
-  $oPdf->Cell(65,  $iHeigth, "Fornecedor", 1, 0, "C", 1);
+  $oPdf->Cell(68,  $iHeigth, "Fornecedor", 1, 0, "C", 1);
   $oPdf->Cell(22,  $iHeigth, "Número/Tipo", 1, 0, "C", 1);
   $oPdf->Cell(35,  $iHeigth, "Tipo de Alteração", 1, 0, "C", 1);
   $oPdf->Cell(28,  $iHeigth, "Data de Assinatura", 1, 0, "C", 1);
-  $oPdf->Cell(23,  $iHeigth, "Vigência Final", 1, 1, "C", 1);
+  $oPdf->Cell(20,  $iHeigth, "Vigência Final", 1, 1, "C", 1);
 }
 
 function formataData($data, $consulta){
@@ -269,6 +268,22 @@ function formataData($data, $consulta){
   $stringTratada = explode($caractere_explode, $data);
   $dataFinal = join($caractere_join, array_reverse($stringTratada));
   return $dataFinal;
+}
+
+function trataString($nome){
+  $nome = str_replace(' ', '', $nome);
+  $buscados = array('Á', 'Ã', 'Â', 'À', 'É', 'Ê', 'È', 'Í', 'Ì', 'Ô', 'Ó', 'Ò', 'Ú', 'Ù', 'Ç');
+  $realocados = array('A', 'A', 'A', 'A', 'E', 'E', 'E', 'I', 'I', 'O', 'O', 'O', 'U', 'U', 'C');
+  $nome = preg_replace('/\./', '', $nome);
+  $nomeTratado = str_replace("$buscados", $realocados, $nome);
+  $resultado = preg_replace('/[a-z]/gi', '', $nomeTratado);
+
+  if($resultado){
+    return $resultado;
+  }
+  else {
+    return $nome;
+  }
 }
 
 ?>
