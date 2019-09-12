@@ -64,7 +64,7 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
         $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
         $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-        if ($pc01_data <= $c99_datapat) {
+        if (strtotime($pc01_data) <= strtotime($c99_datapat)) {
             $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
             $sqlerro  = true;
             db_msgbox($erro_msg);
