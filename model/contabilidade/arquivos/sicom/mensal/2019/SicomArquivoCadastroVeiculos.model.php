@@ -218,7 +218,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
         $rsResult10 = db_query($sSql);
-//db_criatabela($rsResult10);die($sSql);
         if (pg_num_rows($rsResult10) > 0) {
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -932,7 +931,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc40->si149_tiporegistro = 40;
                 $clcvc40->si149_codorgao = $oDados40->codorgao;
-                $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
+                $clcvc40->si149_codunidadesub = $oDados40->codunidadesub;
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 if($oDados40->tipobaixa == 99){

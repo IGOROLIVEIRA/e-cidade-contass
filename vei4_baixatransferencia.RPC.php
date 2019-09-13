@@ -87,11 +87,13 @@ switch ($oParam->exec){
 
             $rsTransferencia = buscaTransferencia();
             $oRetorno->transferencia = $transferencia = db_utils::fieldsMemory($rsTransferencia,0);
+            $rsUnidadeSubAnterior = buscaVeiculos($oParam->veiculos);
             $rsUnidadeAtual   = buscaUnidade($oParam->departamento_atual, $nAnoUsu ,$nInstit);
             $rsUnidadeDestino = buscaUnidade($oParam->departamento_destino, $nAnoUsu ,$nInstit);
 
             $aUnidadeAnterior = db_utils::fieldsMemory($rsUnidadeAtual,0);
             $aUnidadeAtual    = db_utils::fieldsMemory($rsUnidadeDestino,0);
+            $aVeiculos        = db_utils::fieldsMemory($rsUnidadeSubAnterior,0);
 
             $rsVeiculos    = buscaVeiculos($oParam->veiculos);
             $dadosVeiculos = db_utils::getCollectionByRecord($rsVeiculos);
@@ -103,7 +105,7 @@ switch ($oParam->exec){
                 $oVeicTransf->ve81_codigoant          = $dadosVeiculo->ve01_codigoant;
                 $oVeicTransf->ve81_placa              = $dadosVeiculo->ve01_placa;
                 $oVeicTransf->ve81_codunidadesubatual = $aUnidadeAtual->codunidadesub;
-                $oVeicTransf->ve81_codunidadesubant   = $aUnidadeAnterior->codunidadesub;
+                $oVeicTransf->ve81_codunidadesubant   = $aVeiculos->ve01_codunidadesub;
                 //OC 9284
 
                 //situacao 1
