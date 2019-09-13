@@ -85,7 +85,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
          * selecionar arquivo xml com dados das receitas
          */
         $sSql = "SELECT * FROM db_config ";
-        $sSql .= "	WHERE prefeitura = 't'";
+        $sSql .= "  WHERE prefeitura = 't'";
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
@@ -210,50 +210,52 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                 $sHash11 = $oDadosRec->o70_codigo;
                 if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
-                    $sSql = "
-          SELECT taborc.k02_estorc,
-       CASE
-           WHEN substr(taborc.k02_estorc,2,4) IN ('1218','7218') THEN cgm.z01_cgccpf
-           ELSE ''
-       END AS z01_cgccpf,
-       o70_codrec,
-       o15_codtri,
-       SUM(CASE
-               WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
-               WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
-               ELSE 0::FLOAT8
-           END) AS c70_valor,
-           c206_nroconvenio,
-           c206_dataassinatura
-          FROM conlancamrec
-          INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
-          INNER JOIN orctiporec ON o70_codigo = o15_codigo
-          LEFT JOIN conlancamcorrente on c86_conlancam = c74_codlan
-          LEFT JOIN corplacaixa on (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
-          LEFT JOIN placaixarec on k81_seqpla = k82_seqpla
-          LEFT JOIN convconvenios on c206_sequencial = k81_convenio
-          LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
-           AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
-                             WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
-          LEFT JOIN conlancam ON c74_codlan = c70_codlan
-          LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
-          INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
-          INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
-          LEFT JOIN cgm ON k81_numcgm = cgm.z01_numcgm
-          WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
-            AND o70_instit = " . db_getsession('DB_instit') . "
-            AND (CASE
-                    WHEN substr(taborc.k02_estorc,1,2) = '49'
-                        THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
-                    ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
-                 END)
-            AND conlancamrec.c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-          GROUP BY 1,2,3,4,c53_tipo,c70_valor,c206_nroconvenio,c206_dataassinatura
-          ORDER BY 1,4,3";
+                    $var = trim("\ ");
+                    $sSql = "SELECT taborc.k02_estorc,
+                                    CASE
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
+                                        WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') THEN cgm.z01_cgccpf
+                                        ELSE ''
+                                    END AS z01_cgccpf,
+                                    o70_codrec,
+                                    o15_codtri,
+                                    SUM(CASE
+                                            WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
+                                            WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
+                                            ELSE 0::FLOAT8
+                                        END) AS c70_valor,
+                                    c206_nroconvenio,
+                                    c206_dataassinatura
+                             FROM conlancamrec
+                             INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+                             INNER JOIN orctiporec ON o70_codigo = o15_codigo
+                             LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
+                             LEFT JOIN corplacaixa ON (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
+                             LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
+                             LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
+                             LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
+                             AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
+                                       WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
+                             INNER JOIN conlancam ON c74_codlan = c70_codlan
+                             JOIN conlancamcompl ON c72_codlan = c70_codlan
+                             LEFT JOIN empempenho ON
+                                 (SELECT btrim(split_part(REGEXP_REPLACE(c72_complem, '^([^-]*)empenho(.*?)', E'".$var.$var."2|".$var.$var."1'), 'no valor', 1)) empenho FROM conlancamcompl t1
+                                  WHERE t1.c72_codlan = conlancamcompl.c72_codlan) = e60_codemp||'/'||e60_anousu
+                             LEFT JOIN cgm ON e60_numcgm = z01_numcgm
+                             LEFT JOIN cgm t2 ON k81_numcgm = t2.z01_numcgm
+                             INNER JOIN conlancamdoc ON c71_codlan = c74_codlan
+                             INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                             WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
+                               AND o70_instit = " . db_getsession('DB_instit') . "
+                               AND (CASE
+                                        WHEN substr(taborc.k02_estorc,1,2) = '49' THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10) ."'
+                                        ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
+                                    END)
+                               AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
+                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
+                             ORDER BY 1, 4, 3";
+                    
                     $result = db_query($sSql);
-
-//          echo $sSql;
-//          db_criatabela($result);
 
                     $aDadosCgm11 = array();
 
