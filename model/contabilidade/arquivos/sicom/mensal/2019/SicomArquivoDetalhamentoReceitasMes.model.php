@@ -85,7 +85,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
          * selecionar arquivo xml com dados das receitas
          */
         $sSql = "SELECT * FROM db_config ";
-        $sSql .= "  WHERE prefeitura = 't'";
+        $sSql .= "	WHERE prefeitura = 't'";
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
@@ -105,12 +105,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
         $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
-//    db_criatabela($rsResult10);
-        /*$sSql   = "SELECT * FROM infocomplementaresinstit WHERE si09_tipoinstit != 2";
-        $rsPref = db_query($sSql);
-        if (pg_num_rows($rsPref) > 0) {
-            $rsResult10 = 0;
-        }*/
+        // db_criatabela($rsResult10);
 
         $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
         $rsResult = db_query($sSql);
@@ -142,12 +137,39 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             '193113', '172401', '247199', '247299', '176299', '172199', '172134',
             '160099', '112299', '176202', '242201', '242202', '222900', '193199',
             '191199', '176101', '160004', '132810', '132820', '132830', '192210',
-            '242102', /*'199099',*/ '247101', '172402', '172233');
+            '242102', '247101', '172402', '172233');
 
         $aDadosAgrupados = array();
+
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
             $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
+
+            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte FROM conlancamrec
+               JOIN conlancamdoc ON c71_codlan = c74_codlan
+               JOIN conhistdoc ON c71_coddoc = c53_coddoc
+               JOIN conlancam ON c70_codlan = c74_codlan
+               JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+               JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
+               WHERE c74_anousu = ". db_getsession("DB_anousu") ."
+                 AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+                 AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
+                        OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
+                 AND o57_fonte = '{$oDadosRec->o57_fonte}'
+               ORDER BY 4, 3";
+
+      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x 
+                    WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
+                        OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))";
+
+      $rsDocRec = db_query($sSql);
+      $rsDocRecVlr = db_query($sSqlValor);
+
+      $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
+      $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr, 0);
+
+      if (($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
+
             if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
 
@@ -181,13 +203,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                 if (!isset($aDadosAgrupados[$sHash10])) {
 
-                    /*if (substr($oDadosRec->o57_fonte, 0, 1) == 49) {
-                      $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
-                    } else
-                    if (substr($oDadosRec->o57_fonte, 0, 1) == 4) {
-                      $sNaturezaReceita = substr($oDadosRec->o57_fonte, 0, 8);
-                    }*/
-
                     $oDados10 = new stdClass();
                     $oDados10->si25_tiporegistro = 10;
                     $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
@@ -202,7 +217,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                     $aDadosAgrupados[$sHash10] = $oDados10;
 
                 }
-                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oDadosRec->saldo_arrecadado;
+                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDocVlr->c70_valor;
 
                 /**
                  * agrupar registro 11
@@ -252,9 +267,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
                                     END)
                                AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
+                               AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
+                                      OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
                              ORDER BY 1, 4, 3";
-                    
+
                     $result = db_query($sSql);
 
                     $aDadosCgm11 = array();
@@ -290,10 +307,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                     $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
                 }
             }
-
-        }
-        //echo "<pre>";print_r($aDadosAgrupados);exit;
-
+         }
+      }
 
         /*
          * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2019!
