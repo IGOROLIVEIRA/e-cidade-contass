@@ -21,7 +21,7 @@ class Siope {
     //@var string
     public $dtFim;
     //var array
-    public $despesas;
+    public $despesas = array();
 
     public function setAno($iAnoUsu) {
         $this->iAnoUsu = $iAnoUsu;
@@ -77,9 +77,7 @@ class Siope {
 
     }
 
-    public function setDespesa() {
-
-        $aDespesas = array();
+    public function setDespesas() {
 
         $clselorcdotacao = new cl_selorcdotacao();
         $clselorcdotacao->setDados($this->filtros);
@@ -92,6 +90,13 @@ class Siope {
         if (pg_num_rows($result) == 0) {
             throw new Exception ("Nenhum registro encontrado.");
         }
+
+        $xorgao     = 0;
+        $xunidade   = 0;
+        $xfuncao    = 0;
+        $xsubfuncao = 0;
+        $xprograma  = 0;
+        $xprojativ  = 0;
 
         for ($i = 0; $i < pg_numrows($result); $i++) {
 
@@ -126,58 +131,148 @@ class Siope {
                     $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})")) or die($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})") . pg_last_error());
                     $aDadosAgrupados = array();
 
+                    $sHashDesp = $oDespesa->o58_elemento;
+
+                    if (!isset($aDadosAgrupados[$sHashDesp])) {
+                        $oDesp = array();
+                        $oDesp['o58_codigo']        = $oDespesa->o58_codigo;
+                        $oDesp['o58_elemento']      = $oDespesa->o58_elemento;
+                        $oDesp['o58_subfuncao']     = $oDespesa->o58_subfuncao;
+                        $oDesp['o55_tipopasta']     = $oDespesa->o55_tipopasta;
+                        $oDesp['o55_tipoensino']    = $oDespesa->o55_tipoensino;
+                        $oDesp['dot_atualizada']    = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
+
+                        $aDadosAgrupados[$sHashDesp] = $oDesp;
+                    }
+
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
                         $oDadosMes = db_utils::fieldsMemory($resDepsMes, $contDesp);
 
-                        $sHash = $oDadosMes->o56_elemento;
+                        $sHashDespDesd = $oDadosMes->o56_elemento;
+                        if (isset($aDadosAgrupados[$sHashDesp])) {
 
-                        if (!isset($aDadosAgrupados[$sHash])) {
-                            $oDespesas = new stdClass();
-                            $oDespesas->o56_elemento    = $oDadosMes->o56_elemento;
-                            $oDespesas->o56_descr       = $oDadosMes->o56_descr;
-                            $oDespesas->empenhado       = $oDadosMes->empenhado;
-                            $oDespesas->liquidado       = $oDadosMes->liquidado;
-                            $oDespesas->pagamento       = $oDadosMes->pagamento;
-                            $aDadosAgrupados[$sHash]    = $oDespesas;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_elemento']        = $oDadosMes->o56_elemento;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_descr']           = $oDadosMes->o56_descr;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['empenhado']           = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['liquidado']           = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['pagamento']           = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_elemento']        = $oDespesa->o58_elemento;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_codigo']          = $oDespesa->o58_codigo;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_subfuncao']       = $oDespesa->o58_subfuncao;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipopasta']       = $oDespesa->o55_tipopasta;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipoensino']      = $oDespesa->o55_tipoensino;
+
+                        } else {
+                            $oDespDesd = array();
+
+                            $oDespDesd['o56_elemento']      = $oDadosMes->o56_elemento;
+                            $oDespDesd['o56_descr']         = $oDadosMes->o56_descr;
+                            $oDespDesd['empenhado']         = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
+                            $oDespDesd['liquidado']         = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
+                            $oDespDesd['pagamento']         = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
+                            $oDespDesd['o58_elemento']      = $oDespesa->o56_elemento;
+                            $oDespDesd['o58_codigo']        = $oDespesa->o58_codigo;
+                            $oDespDesd['o58_subfuncao']     = $oDespesa->o58_subfuncao;
+                            $oDespDesd['o55_tipopasta']     = $oDespesa->o55_tipopasta;
+                            $oDespDesd['o55_tipoensino']    = $oDespesa->o55_tipoensino;
+
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd] = $oDespDesd;
                         }
 
                     }
 
-                    $resDepsAteMes = db_query($cldesdobramento->sql2($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})")) or die($cldesdobramento->sql2($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})") . pg_last_error());
-
-                    for ($contDesp = 0; $contDesp < pg_num_rows($resDepsAteMes); $contDesp++) {
-                        $oDadosAteMes = db_utils::fieldsMemory($resDepsAteMes, $contDesp);
-                        $sHash = $oDadosAteMes->o56_elemento;
-                        if (isset($aDadosAgrupados[$sHash])) {
-                            $aDadosAgrupados[$sHash]->empenhadoa            = $oDadosAteMes->empenhadoa;
-                            $aDadosAgrupados[$sHash]->empenhado_estornadoa  = $oDadosAteMes->empenhado_estornadoa;
-                            $aDadosAgrupados[$sHash]->liquidadoa            = $oDadosAteMes->liquidadoa;
-                            $aDadosAgrupados[$sHash]->liquidado_estornadoa  = $oDadosAteMes->liquidado_estornadoa;
-                            $aDadosAgrupados[$sHash]->pagamentoa            = $oDadosAteMes->pagamentoa;
-                            $aDadosAgrupados[$sHash]->pagamento_estornadoa  = $oDadosAteMes->pagamento_estornadoa;
-                        }
+                    if(!empty($aDadosAgrupados)) {
+                        array_push($this->despesas, $aDadosAgrupados);
                     }
 
-                    asort($aDadosAgrupados);
-                    foreach ($aDadosAgrupados as $objElementos) {
-                        $aDespesas[$sHash]->elemento        = $objElementos->o56_elemento;
-                        $aDespesas[$sHash]->empenhado       = $objElementos->empenhado;
-                        $aDespesas[$sHash]->liquidado       = $objElementos->liquidado;
-                        $aDespesas[$sHash]->pagamento       = $objElementos->pagamento;
-                        $aDespesas[$sHash]->o58_codigo      = $objElementos->o58_codigo;
-                        $aDespesas[$sHash]->o58_subfuncao   = $objElementos->o58_subfuncao;
-                        $aDespesas[$sHash]->o55_tipopasta   = $objElementos->o55_tipopasta;
-                        $aDespesas[$sHash]->o55_tipoensino  = $objElementos->o55_tipoensino;
-                    }
                 }
             }
         }
-
-        $this->despesas = $aDespesas;
     }
 
     public function getDespesas() {
         return $this->despesas;
+    }
+
+    public function montaTabela() {
+
+        ini_set('display_errors', 'On');
+        error_reporting(E_ALL);
+
+        echo '<table border="1">';
+        echo '  <tr>';
+        echo '      <td>Tipo</td>';
+        echo '      <td>Cod Inst</td>';
+        echo '      <td>Recurso</td>';
+        echo '      <td>Sub Função</td>';
+        echo '      <td>Elem Desp</td>';
+        echo '      <td>Elem Desp Desd</td>';
+        echo '      <td>Descrição</td>';
+        echo '      <td>Dot Atu</td>';
+        echo '      <td>Desp Emp</td>';
+        echo '      <td>Desp Liq</td>';
+        echo '      <td>Desp Pag</td>';
+        echo '      <td>Desp Orç</td>';
+        echo '      <td>Dot Atualizada</td>';
+        echo '      <td>Tipo Pasta</td>';
+        echo '      <td>Tipo Ensino</td>';
+        echo '  </tr>';
+
+        foreach($this->despesas as $despesa) {
+
+            foreach($despesa as $linhaDespesa) {
+
+                $sChaveElem = $linhaDespesa['o58_elemento'];
+
+                echo '<tr>';
+                echo '  <td>V</td>';
+                echo '  <td>1</td>';
+                echo '  <td>'.$linhaDespesa['o58_codigo'].'</td>';
+                echo '  <td>'.$linhaDespesa['o58_subfuncao'].'</td>';
+                echo '  <td>'.$linhaDespesa['o58_elemento'].'</td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td></td>';
+                echo '  <td>'.db_formatar($linhaDespesa['dot_atualizada'], 'f').'</td>';
+                echo '  <td>'.$linhaDespesa['o55_tipopasta'].'</td>';
+                echo '  <td>'.$linhaDespesa['o55_tipoensino'].'</td>';
+                echo '</tr>';
+
+                if(isset($linhaDespesa[$sChaveElem])) {
+
+                    foreach ($linhaDespesa[$sChaveElem] as $linhaDespDesd) {
+
+                        echo '<tr>';
+                        echo '  <td>V</td>';
+                        echo '  <td>1</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_codigo'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_subfuncao'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_elemento'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o56_elemento'].'</td>';
+                        echo '  <td></td>';
+                        echo '  <td></td>';
+                        echo '  <td>'.db_formatar($linhaDespDesd['empenhado'], 'f').'</td>';
+                        echo '  <td>'.db_formatar($linhaDespDesd['liquidado'], 'f').'</td>';
+                        echo '  <td>'.db_formatar($linhaDespDesd['pagamento'], 'f').'</td>';
+                        echo '  <td></td>';
+                        echo '  <td></td>';
+                        echo '  <td>'.$linhaDespDesd['o55_tipopasta'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o55_tipoensino'].'</td>';
+                        echo '</tr>';
+
+                    }
+
+                }
+
+            }
+
+        }
+        echo '</table>';
+
     }
 
 }

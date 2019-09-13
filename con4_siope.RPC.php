@@ -38,11 +38,8 @@ switch ($oParam->exec) {
             $siope->setBimestre($iBimestre);
             $siope->setPeriodo($iBimestre);
             $siope->setFiltros();
-            $siope->setDespesa();
-            echo '<pre>';
-            print_r($siope);
-            echo '</pre>';
-            die();
+            $siope->setDespesas();
+            $siope->montaTabela();
 
         } catch(Exception $eErro) {
 
