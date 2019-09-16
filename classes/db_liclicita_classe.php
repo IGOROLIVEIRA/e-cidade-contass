@@ -411,8 +411,6 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
-        } else {
-            echo $this->l20_tipoprocesso = 0;
         }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
