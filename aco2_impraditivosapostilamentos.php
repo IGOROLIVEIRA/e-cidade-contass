@@ -123,6 +123,7 @@ switch ($listagem) {
 
 $campos = " ac16_numero,
             ac16_sequencial,
+            ac26_numero,
             (CASE
                   WHEN ac26_numeroapostilamento <> '' THEN ac26_numeroapostilamento
                   ELSE ac26_numeroaditamento
