@@ -169,7 +169,7 @@ if(isset($incluir)){
 		}
 
 		//verifica se existe licitação por edital
-		$edital=$l20_edital+1;
+		// $edital=$l20_edital+1;
 		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital=$edital and l20_anousu=$anousu"));
 
 		if ($clpccflicitanum->numrows>0){
@@ -198,7 +198,7 @@ if(isset($incluir)){
                 $sqlerro  = true;
             }
 				}
-		
+
 				if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
 
 					$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
@@ -206,16 +206,16 @@ if(isset($incluir)){
 						$erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
-		
+
 				}
-				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) { 
-		
+				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
+
 					$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
 					if (!$verifica) {
 						$erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
-		
+
 				}
 
 		if ($sqlerro == false){
