@@ -82,7 +82,7 @@ $oPdf->SetFillColor(220);
 $oPdf->SetAutoPageBreak(false);
 
 $iFonte     = 9;
-$iAlt       = 6;
+$iAlt       = 7;
 
 $head4 .= "Relatório de Execução de Contratos\n";
 

@@ -52,8 +52,10 @@ class ExecucaoDeContratos{
         $oPdf->Cell(50 ,$iAlt,'Valor Total Atual: '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
+        $oPdf->SetFont('Arial','',$iFonte);
+        $oPdf->SetFillColor(220);
         // 5ª linha
-        $oPdf->MultiCell(250,$iAlt,'Objeto: '. $oAcordo->getObjeto().' a '. $oAcordo->getDataFinal(),0,1,'C');
+        $oPdf->MultiCell(250,$iAlt,'Objeto: '. $oAcordo->getObjeto(),0,1,'C');
 
     }
 
