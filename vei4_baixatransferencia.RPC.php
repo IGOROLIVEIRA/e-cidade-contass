@@ -98,6 +98,7 @@ switch ($oParam->exec){
             $rsVeiculos    = buscaVeiculos($oParam->veiculos);
             $dadosVeiculos = db_utils::getCollectionByRecord($rsVeiculos);
 
+
             foreach ($dadosVeiculos as $dadosVeiculo) {
                 $oVeicTransf = new cl_veiculostransferencia;
                 $oVeicTransf->ve81_transferencia      = $transferencia->ve80_sequencial;
@@ -105,7 +106,11 @@ switch ($oParam->exec){
                 $oVeicTransf->ve81_codigoant          = $dadosVeiculo->ve01_codigoant;
                 $oVeicTransf->ve81_placa              = $dadosVeiculo->ve01_placa;
                 $oVeicTransf->ve81_codunidadesubatual = $aUnidadeAtual->codunidadesub;
-                $oVeicTransf->ve81_codunidadesubant   = $aVeiculos->ve01_codunidadesub;
+                if($aVeiculos->ve01_codunidadesub == ""){
+                    $oVeicTransf->ve81_codunidadesubant = $aUnidadeAnterior->codunidadesub;
+                }else{
+                    $oVeicTransf->ve81_codunidadesubant   = $aVeiculos->ve01_codunidadesub;
+                }
                 //OC 9284
 
                 //situacao 1
