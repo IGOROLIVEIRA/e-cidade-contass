@@ -73,7 +73,7 @@ function execucaoDeContratosSemQuebra($iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$dIn
         }
         $oPdf->SetFont('Arial','',$iFonte-1);
 
-        $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],'TBR',0,'C','');
+        $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],1,0,'C','');
         $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],'TBR',0,'C','');
         $oPdf->Cell(25  ,$iAlt, $aLinha['qrdcontratada'],'TBR',0,'C','');
         $oPdf->Cell(18  ,$iAlt, 'R$ '.$aLinha['valorunitario'],'TBR',0,'C','');

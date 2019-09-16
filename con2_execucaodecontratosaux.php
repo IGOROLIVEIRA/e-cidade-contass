@@ -21,17 +21,17 @@ class ExecucaoDeContratos{
         $oPdf->SetFillColor(220);
 
         // 1ª linha
-        $oPdf->Cell(70 ,$iAlt,'Cód. do Acordo: '.$oAcordo->getCodigo(),0,0,'L',0);
+        $oPdf->Cell(90 ,$iAlt,'Cód. do Acordo: '.$oAcordo->getCodigo(),0,0,'L',0);
         $oPdf->Cell(150 ,$iAlt,'Contratado: '.$oAcordo->getContratado()->getNome(),0,0,'L',0);
 
         // 2ª linha
         $oPdf->Ln();
-        $oPdf->Cell(70 ,$iAlt,'Nº Contrato: '.$oAcordo->getNumero().'/'.$oAcordo->getAno(),0,0,'L',0);
+        $oPdf->Cell(90 ,$iAlt,'Nº Contrato: '.$oAcordo->getNumero().'/'.$oAcordo->getAno(),0,0,'L',0);
         $oPdf->Cell(150 ,$iAlt,"Departamento Responsável: $sDepartamentoResponsavel",0,0,'L',0);
 
         // 3ª linha
         $oPdf->Ln();
-        $oPdf->Cell(70 ,$iAlt,"Data de Assinatura: $dDataAssinatura",0,0,'L',0);
+        $oPdf->Cell(90 ,$iAlt,"Data de Assinatura: $dDataAssinatura",0,0,'L',0);
 
         if(!empty($aLicitacoesVinculadas)){
 
@@ -48,7 +48,7 @@ class ExecucaoDeContratos{
         $oPdf->ln();
 
         // 4ª linha
-        $oPdf->cell(70,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal());
+        $oPdf->cell(90,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal(),0);
         $oPdf->Cell(50 ,$iAlt,'Valor Total Atual: '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
