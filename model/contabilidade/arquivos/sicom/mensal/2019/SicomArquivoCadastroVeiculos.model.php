@@ -367,6 +367,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                      veicabast.ve70_dtabast,
                      veicmanut.ve62_dtmanut,
                      veiculostransf.ve81_codunidadesubatual,
+                     veiculostransf.ve81_codunidadesubant,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
                      CASE
@@ -417,13 +418,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                   LEFT JOIN (SELECT ve81_codigo,
                  max(ve81_transferencia) ve81_transferencia,
                  ve81_codunidadesubatual,
+                 ve81_codunidadesubant,
                  ve81_codigonovo
           FROM veiculostransferencia ve80_sequencial
           inner join transferenciaveiculos on ve81_transferencia = ve80_sequencial
           where DATE_PART('YEAR',transferenciaveiculos.ve80_dt_transferencia) = " . db_getsession("DB_anousu") . "
           and DATE_PART('MONTH',transferenciaveiculos.ve80_dt_transferencia) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
           GROUP BY ve81_codigo,
-                   ve81_codunidadesubatual,
+                   ve81_codunidadesubant,
                    ve81_codigonovo,
                    ve81_codunidadesubatual
           ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
@@ -460,7 +462,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                            veiculostransf.ve81_codigo,
                            transferenciaveiculos.ve80_dt_transferencia,
                            veicabast.ve70_dtabast,
-                           veiculostransf.ve81_codunidadesubatual
+                           veiculostransf.ve81_codunidadesubatual,ve81_codunidadesubant
                     UNION
                     SELECT '20' AS tipoRegistro,
                     si09_codorgaotce AS codOrgao,
@@ -475,6 +477,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     veicabast.ve70_dtabast,
                     veicmanut.ve62_dtmanut,
                     veiculostransf.ve81_codunidadesubatual,
+                    veiculostransf.ve81_codunidadesubant,
                     veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
@@ -520,6 +523,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     LEFT JOIN (SELECT ve81_codigo,
                  max(ve81_transferencia) ve81_transferencia,
                  ve81_codunidadesubatual,
+                 ve81_codunidadesubant,
                  ve81_codigonovo
           FROM veiculostransferencia ve80_sequencial
           inner join transferenciaveiculos on ve81_transferencia = ve80_sequencial
@@ -527,6 +531,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           and DATE_PART('MONTH',transferenciaveiculos.ve80_dt_transferencia) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
           GROUP BY ve81_codigo,
                    ve81_codunidadesubatual,
+                   ve81_codunidadesubant,
                    ve81_codigonovo,
                    ve81_codunidadesubatual
           ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
@@ -557,7 +562,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              transferenciaveiculos.ve80_dt_transferencia,
                              veicabast.ve70_dtabast,
                              veicmanut.ve62_dtmanut,
-                             veiculostransf.ve81_codunidadesubatual) as teste";
+                             veiculostransf.ve81_codunidadesubatual,veiculostransf.ve81_codunidadesubant) as teste";
 
         $rsResult20 = db_query($sSql);
 
@@ -593,7 +598,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                          * verifica se o veiculo tem codunidadesubant no cadastro tabela veiculos campo ve01_codunidadesub
                          */
                         if($oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0){
-                            $codUnidadeSub = $oResult20->ve01_codunidadesub;
+                            $codUnidadeSub = $oResult20->ve81_codunidadesubant;
                         }else{
                             $codUnidadeSub = $oResult20->codunidadesub;
                         }
