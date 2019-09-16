@@ -89,17 +89,12 @@ switch ($listagem) {
     if($data_inicial && $data_final)
       $where .= " ac35_dataassinaturatermoaditivo BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
 
-
     if($iAcordo){
       if($where)
         $where .= ' and ';
       $where .= ' ac16_sequencial = '.$iAcordo;
     }
 
-    if($where)
-      $where .= ' and ';
-
-    $where .= " si03_dataassinacontrato IS NULL";
     $orderBy .= 'data_assinatura ';
 
     break;
@@ -128,9 +123,13 @@ switch ($listagem) {
 
 $campos = " ac16_numero,
             ac16_sequencial,
-            ac26_numero,
+            (CASE
+                  WHEN ac26_numeroapostilamento <> '' THEN ac26_numeroapostilamento
+                  ELSE ac26_numeroaditamento
+                  END) as numero,
             ac16_anousu,
             z01_nome,
+            si03_sequencial,
             si03_dataassinacontrato,
             ac26_acordoposicaotipo||'-'||ac27_descricao AS tipoaditivo,
             (case
@@ -144,6 +143,11 @@ $campos = " ac16_numero,
 
 if(!$orderBy){
   $orderBy .= ' ac16_sequencial';
+}
+
+if($where){
+  $where .= ' and ';
+  $where .= ' ac26_acordoposicaotipo <> 1 ';
 }
 
 $sSql = "SELECT DISTINCT ".$campos."
@@ -232,10 +236,10 @@ for ($contador=0; $contador < $numrows; $contador++) {
     $oPdf->setx(10);
     $oPdf->Cell(16, $nova_altura, $oAcordo->ac16_numero.'/'.$oAcordo->ac16_anousu, 'TLB', 0, 'C', 0);
 
-    if($oAcordo->si03_dataassinacontrato){
-      $numero_tipo = $oAcordo->ac26_numero.'/Apostilamento';
+    if($oAcordo->ac35_sequencial){
+      $numero_tipo = $oAcordo->numero.'/Aditivo';
     }else {
-      $numero_tipo = $oAcordo->ac26_numero.'/Aditivo';
+      $numero_tipo = $oAcordo->numero.'/Apostilamento';
     }
     $data_assinatura = formataData($oAcordo->data_assinatura, false);
 
