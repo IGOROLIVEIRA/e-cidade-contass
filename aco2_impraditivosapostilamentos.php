@@ -56,7 +56,7 @@ switch ($listagem) {
                      ELSE ac35_dataassinaturatermoaditivo
                   END) BETWEEN '".formataData($data_inicial, true)."' and '".formataData($data_final, true)."'";
 
-      $orderBy .= 'ac16_numero, ac26_numero';
+      $orderBy .= ' ac16_anousu ASC, ac16_numero, ac26_numero';
     }
 
     if($data_inicial && $data_final && $iAcordo){
@@ -95,7 +95,7 @@ switch ($listagem) {
       $where .= ' ac16_sequencial = '.$iAcordo;
     }
 
-    $orderBy .= 'data_assinatura ';
+    $orderBy .= 'ac16_anousu ASC, data_assinatura';
 
     break;
 
@@ -117,11 +117,11 @@ switch ($listagem) {
       $where .= ' and ';
     }
     $where .= " ac35_dataassinaturatermoaditivo IS NULL ";
-    $orderBy .= 'data_assinatura';
+    $orderBy .= 'ac16_anousu ASC, data_assinatura';
     break;
 }
 
-$campos = " ac16_numero,
+$campos = " ac16_numero::integer,
             ac16_sequencial,
             ac26_numero,
             (CASE
@@ -157,6 +157,7 @@ $sSql = "SELECT DISTINCT ".$campos."
           LEFT JOIN acordoposicaotipo ON ac27_sequencial = ac26_acordoposicaotipo
           INNER JOIN cgm on z01_numcgm = ac16_contratado ".$sSql2." where ".$where. " ORDER BY ".$orderBy;
 
+// print_r($sSql);die();
 $result = $acordo->sql_record($sSql);
 $numrows = $acordo->numrows;
 
