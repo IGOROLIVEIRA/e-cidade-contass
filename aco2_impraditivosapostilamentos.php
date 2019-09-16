@@ -132,12 +132,10 @@ $campos = " ac16_numero,
             si03_sequencial,
             si03_dataassinacontrato,
             ac26_acordoposicaotipo||'-'||ac27_descricao AS tipoaditivo,
-            (case
-                  when
-                    si03_dataassinacontrato is not null
-                    then si03_dataassinacontrato
-                    else ac35_dataassinaturatermoaditivo
-                end) as data_assinatura,
+            (CASE
+              WHEN ac35_dataassinaturatermoaditivo IS NOT NULL THEN ac35_dataassinaturatermoaditivo
+              ELSE si03_dataapostila
+            END) AS data_assinatura,
             ac18_datafim as vigencia_final,
             ac35_sequencial";
 
