@@ -154,9 +154,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             FROM pagordem
             JOIN pagordemele ON e53_codord = e50_codord
             JOIN empempenho ON e50_numemp = e60_numemp
-            JOIN orcdotacao ON o58_anousu = e60_anousu AND e60_coddot = o58_coddot
-            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade =o41_unidade
-            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+            JOIN orcdotacao ON (e60_anousu, e60_coddot) = (o58_anousu, o58_coddot)
+            JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (o41_anousu, o41_orgao, o41_unidade)
+            JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
             JOIN conlancamord ON c80_codord = e50_codord
             JOIN conlancamdoc ON c71_codlan = c80_codlan
             JOIN conlancam ON c70_codlan = c71_codlan
@@ -336,68 +336,65 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           }
 
-          $sSql12 = "select 12 as tiporegistro,
-                   e82_codord as codreduzidoop,
-                   case when e96_codigo = 1 then 5
-                  when e96_codigo = 2 then 1
-                  else 99
-                   end as tipodocumentoop,
-                   case when e96_codigo = 2 then e86_cheque
-                  else null
-                   end as nrodocumento,
-                   c61_reduz as codctb,
-                   o15_codigo as codfontectb,
-                   e50_data as dtemissao,
-                   k12_valor as vldocumento,
-                   e96_descr as desctipodocumentoop,c23_conlancam as codlan
-              from empagemov
-              inner join empage on empage.e80_codage = empagemov.e81_codage
-              inner join empord on empord.e82_codmov = empagemov.e81_codmov
-              inner join empempenho on empempenho.e60_numemp = empagemov.e81_numemp
-              left join empagemovforma on empagemovforma.e97_codmov = empagemov.e81_codmov
-              left join empageforma on empageforma.e96_codigo = empagemovforma.e97_codforma
-              left join empagepag on empagepag.e85_codmov = empagemov.e81_codmov
-              left join empagetipo on empagetipo.e83_codtipo = empagepag.e85_codtipo
-              left join empageconf on empageconf.e86_codmov = empagemov.e81_codmov
-              left join empageconfgera on empageconfgera.e90_codmov = empagemov.e81_codmov and empageconfgera.e90_cancelado = 'f'
-              left join saltes on saltes.k13_conta = empagetipo.e83_conta
-              left join empagegera on empagegera.e87_codgera = empageconfgera.e90_codgera
-              left join empagedadosret on empagedadosret.e75_codgera = empagegera.e87_codgera
-              left join empagedadosretmov on empagedadosretmov.e76_codret = empagedadosret.e75_codret
-              and empagedadosretmov.e76_codmov = empagemov.e81_codmov
-              left join empagedadosretmovocorrencia on empagedadosretmovocorrencia.e02_empagedadosretmov = empagedadosretmov.e76_codmov
-              and empagedadosretmovocorrencia.e02_empagedadosret = empagedadosretmov.e76_codret
-              left join errobanco on errobanco.e92_sequencia = empagedadosretmovocorrencia.e02_errobanco
-              left join empageconfche on empageconfche.e91_codmov = empagemov.e81_codmov and empageconfche.e91_ativo is true
-              left join corconf on corconf.k12_codmov = empageconfche.e91_codcheque and corconf.k12_ativo is true
-              left join corempagemov on corempagemov.k12_codmov = empagemov.e81_codmov
-              left join pagordemele on e53_codord = empord.e82_codord
-              left join empagenotasordem on e43_empagemov = e81_codmov
-              left join coremp on coremp.k12_id = corempagemov.k12_id
-              and coremp.k12_data = corempagemov.k12_data
-              and coremp.k12_autent = corempagemov.k12_autent
-                   join pagordem on e50_numemp = k12_empen and k12_codord  = e50_codord
-                   join corrente on coremp.k12_autent = corrente.k12_autent
-              and coremp.k12_data = corrente.k12_data
-              and coremp.k12_id = corrente.k12_id
-              and corrente.k12_estorn != true
-                   join conplanoreduz on c61_reduz = k12_conta and c61_anousu = " . db_getsession("DB_anousu") . "
-                   join conplano on c61_codcon = c60_codcon
-                    and c61_anousu = c60_anousu
-              left join conplanoconta on c63_codcon = c60_codcon
-                    and c60_anousu = c63_anousu
-                    join corgrupocorrente cg on cg.k105_autent = corrente.k12_autent
-                    join orcdotacao on (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
-                    join orctiporec on o58_codigo = o15_codigo
-                    and cg.k105_data = corrente.k12_data
-                    and cg.k105_id = corrente.k12_id
-              join conlancamcorgrupocorrente on c23_corgrupocorrente = cg.k105_sequencial and c23_conlancam = {$oEmpPago->lancamento}
-              where e80_instit = " . db_getsession("DB_instit") . "
-              and k12_codord = {$oEmpPago->ordem} and e81_cancelado is null";
+          $sSql12 = "SELECT 12 AS tiporegistro,
+                            e82_codord AS codreduzidoop,
+                            CASE
+                                WHEN e96_codigo = 4 AND c60_codsis = 5 THEN 5
+                                WHEN e96_codigo = 1 THEN 5
+                                WHEN e96_codigo = 2 THEN 1
+                                ELSE 99
+                            END AS tipodocumentoop,
+                            CASE
+                                WHEN e96_codigo = 2 THEN e86_cheque
+                                ELSE NULL
+                            END AS nrodocumento,
+                            c61_reduz AS codctb,
+                            o15_codigo AS codfontectb,
+                            e50_data AS dtemissao,
+                            k12_valor AS vldocumento,
+                            CASE
+                                WHEN c60_codsis = 5 THEN ''
+                                ELSE e96_descr
+                            END desctipodocumentoop,
+                            c23_conlancam AS codlan
+                     FROM empagemov
+                     INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
+                     INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+                     INNER JOIN empempenho ON empempenho.e60_numemp = empagemov.e81_numemp
+                     LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
+                     LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
+                     LEFT JOIN empagepag ON empagepag.e85_codmov = empagemov.e81_codmov
+                     LEFT JOIN empagetipo ON empagetipo.e83_codtipo = empagepag.e85_codtipo
+                     LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
+                     LEFT JOIN empageconfgera ON (empageconfgera.e90_codmov, empageconfgera.e90_cancelado) = (empagemov.e81_codmov, 'f')
+                     LEFT JOIN saltes ON saltes.k13_conta = empagetipo.e83_conta
+                     LEFT JOIN empagegera ON empagegera.e87_codgera = empageconfgera.e90_codgera
+                     LEFT JOIN empagedadosret ON empagedadosret.e75_codgera = empagegera.e87_codgera
+                     LEFT JOIN empagedadosretmov ON (empagedadosretmov.e76_codret, empagedadosretmov.e76_codmov) = (empagedadosret.e75_codret, empagemov.e81_codmov)
+                     LEFT JOIN empagedadosretmovocorrencia ON (empagedadosretmovocorrencia.e02_empagedadosretmov, empagedadosretmovocorrencia.e02_empagedadosret) = (empagedadosretmov.e76_codmov, empagedadosretmov.e76_codret)
+                     LEFT JOIN errobanco ON errobanco.e92_sequencia = empagedadosretmovocorrencia.e02_errobanco
+                     LEFT JOIN empageconfche ON empageconfche.e91_codmov = empagemov.e81_codmov AND empageconfche.e91_ativo IS TRUE
+                     LEFT JOIN corconf ON corconf.k12_codmov = empageconfche.e91_codcheque AND corconf.k12_ativo IS TRUE
+                     LEFT JOIN corempagemov ON corempagemov.k12_codmov = empagemov.e81_codmov
+                     LEFT JOIN pagordemele ON e53_codord = empord.e82_codord
+                     LEFT JOIN empagenotasordem ON e43_empagemov = e81_codmov
+                     LEFT JOIN coremp ON (coremp.k12_id, coremp.k12_data, coremp.k12_autent) = (corempagemov.k12_id, corempagemov.k12_data, corempagemov.k12_autent)
+                     JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
+                     JOIN corrente ON (coremp.k12_autent, coremp.k12_data, coremp.k12_id) = (corrente.k12_autent, corrente.k12_data, corrente.k12_id) AND corrente.k12_estorn != TRUE
+                     JOIN conplanoreduz ON c61_reduz = k12_conta AND c61_anousu = " . db_getsession("DB_anousu") . "
+                     JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                     LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c60_anousu = c63_anousu
+                     JOIN corgrupocorrente cg ON cg.k105_autent = corrente.k12_autent
+                     JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                     JOIN orctiporec ON o58_codigo = o15_codigo AND (cg.k105_data, cg.k105_id) = (corrente.k12_data, corrente.k12_id)
+                     JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = cg.k105_sequencial AND c23_conlancam = {$oEmpPago->lancamento}
+                     WHERE e80_instit = " . db_getsession("DB_instit") . "
+                       AND k12_codord = {$oEmpPago->ordem}
+                       AND e81_cancelado IS NULL";
 
           $rsPagOrd12 = db_query($sSql12);
-          //db_criatabela($rsPagOrd12);
-          //echo pg_last_error();echo $sSql12;
+          // db_criatabela($rsPagOrd12);
+          // echo pg_last_error();echo $sSql12;
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
           /**
