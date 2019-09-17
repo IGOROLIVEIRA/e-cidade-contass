@@ -1,6 +1,7 @@
 <?php
 
 require_once("classes/db_orcorgao_classe.php");
+require_once("classes/db_naturdessiope_classe.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("model/SiopeCsv.model.php");
@@ -22,6 +23,8 @@ class Siope {
     public $dtFim;
     //var array
     public $despesas = array();
+    //var boolean
+    public $despOrcada;
 
     public function setAno($iAnoUsu) {
         $this->iAnoUsu = $iAnoUsu;
@@ -83,55 +86,43 @@ class Siope {
         $clselorcdotacao->setDados($this->filtros);
 
         $sele_work  = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$this->iAnoUsu  ";
-
         $sqlprinc   = db_dotacaosaldo(8, 1, 4, true, $sele_work, $this->iAnoUsu, $this->dtIni, $this->dtFim, 8, 0, true);
         $result     = db_query($sqlprinc) or die(pg_last_error());
+
+        if($this->despOrcada) {
+
+            $sAnoSeg            = ($this->iAnoUsu+1);
+            $sele_workAnoSeg    = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$sAnoSeg  ";
+            $sqlprincAnoSeg     = db_dotacaosaldo(8, 1, 4, true, $sele_workAnoSeg, $sAnoSeg, "01-01-$sAnoSeg", "01-01-$sAnoSeg", 8, 0, true);
+            $resultAnoSeg       = db_query($sqlprincAnoSeg) or die(pg_last_error());
+
+        }
 
         if (pg_num_rows($result) == 0) {
             throw new Exception ("Nenhum registro encontrado.");
         }
 
-        $xorgao     = 0;
-        $xunidade   = 0;
-        $xfuncao    = 0;
-        $xsubfuncao = 0;
-        $xprograma  = 0;
-        $xprojativ  = 0;
-
         for ($i = 0; $i < pg_numrows($result); $i++) {
+
+            ini_set('display_errors', 'On');
+            error_reporting(E_ALL);
 
             $oDespesa = db_utils::fieldsMemory($result, $i);
 
-            if ($oDespesa->o58_orgao != $xorgao && $oDespesa->o58_orgao != 0) {
-                $xorgao = $oDespesa->o58_orgao;
-            }
-            if ($oDespesa->o58_orgao . $oDespesa->o58_unidade != $xunidade && $oDespesa->o58_unidade != 0) {
-                $xunidade = $oDespesa->o58_orgao . $oDespesa->o58_unidade;
-            }
-            if ($oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao != $xfuncao && $oDespesa->o58_funcao != 0) {
-                $xfuncao = $oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao;
-            }
-            if ($oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao != $xsubfuncao && $oDespesa->o58_subfuncao != 0) {
-                $xsubfuncao = $oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao;
-            }
-            if ($oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao . $oDespesa->o58_programa != $xprograma && $oDespesa->o58_programa != 0) {
-                $xprograma = $oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao . $oDespesa->o58_programa;
-            }
-            if ($oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao . $oDespesa->o58_programa . $oDespesa->o58_projativ != $xprojativ && $oDespesa->o58_projativ != 0) {
-                $xprojativ = $oDespesa->o58_orgao . $oDespesa->o58_unidade . $oDespesa->o58_funcao . $oDespesa->o58_subfuncao . $oDespesa->o58_programa . $oDespesa->o58_projativ;
+            if($this->despOrcada) {
+                $oDespesaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
             }
 
             if ($oDespesa->o58_codigo > 0) {
 
                 if ($oDespesa->o58_elemento != "") {
 
-                    $sele_work2 = " 1=1 and o58_orgao in ({$oDespesa->o58_orgao}) and ( ( o58_orgao = {$oDespesa->o58_orgao} and o58_unidade = {$oDespesa->o58_unidade} ) ) and o58_funcao in ({$oDespesa->o58_funcao}) and o58_subfuncao in ({$oDespesa->o58_subfuncao}) and o58_programa in ({$oDespesa->o58_programa}) and o58_projativ in ({$oDespesa->o58_projativ}) and (o56_elemento like '" . substr($oDespesa->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesa->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
-
-                    $cldesdobramento = new cl_desdobramento();
-                    $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})")) or die($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})") . pg_last_error());
-                    $aDadosAgrupados = array();
-
-                    $sHashDesp = $oDespesa->o58_elemento;
+                    $sele_work2         = " 1=1 and o58_orgao in ({$oDespesa->o58_orgao}) and ( ( o58_orgao = {$oDespesa->o58_orgao} and o58_unidade = {$oDespesa->o58_unidade} ) ) and o58_funcao in ({$oDespesa->o58_funcao}) and o58_subfuncao in ({$oDespesa->o58_subfuncao}) and o58_programa in ({$oDespesa->o58_programa}) and o58_projativ in ({$oDespesa->o58_projativ}) and (o56_elemento like '" . substr($oDespesa->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesa->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
+                    $cldesdobramento    = new cl_desdobramento();
+                    $resDepsMes         = db_query($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'')) or die($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'') . pg_last_error());
+                    $oNaturdessiope     = $this->getNaturDesSiope($oDespesa->o58_elemento);
+                    $sHashDesp          = $oDespesa->o58_elemento;
+                    $aDadosAgrupados    = array();
 
                     if (!isset($aDadosAgrupados[$sHashDesp])) {
                         $oDesp = array();
@@ -141,12 +132,17 @@ class Siope {
                         $oDesp['o55_tipopasta']     = $oDespesa->o55_tipopasta;
                         $oDesp['o55_tipoensino']    = $oDespesa->o55_tipoensino;
                         $oDesp['dot_atualizada']    = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
+                        $oDesp['desp_orcada']       = $this->despOrcada ? $oDespesaAnoSeg->dot_ini : '';
+                        $oDesp['elemento_siope']    = $oNaturdessiope->c223_natdespecidade;
+                        $oDesp['descricao_siope']   = $oNaturdessiope->c223_descricao;
 
                         $aDadosAgrupados[$sHashDesp] = $oDesp;
                     }
 
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
-                        $oDadosMes = db_utils::fieldsMemory($resDepsMes, $contDesp);
+
+                        $oDadosMes          = db_utils::fieldsMemory($resDepsMes, $contDesp);
+                        $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento);
 
                         $sHashDespDesd = $oDadosMes->o56_elemento;
                         if (isset($aDadosAgrupados[$sHashDesp])) {
@@ -161,6 +157,8 @@ class Siope {
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_subfuncao']       = $oDespesa->o58_subfuncao;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipopasta']       = $oDespesa->o55_tipopasta;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipoensino']      = $oDespesa->o55_tipoensino;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['elemento_siope']      = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['descricao_siope']     = $oNaturdessiopeDesd->c223_descricao;
 
                         } else {
                             $oDespDesd = array();
@@ -175,6 +173,8 @@ class Siope {
                             $oDespDesd['o58_subfuncao']     = $oDespesa->o58_subfuncao;
                             $oDespDesd['o55_tipopasta']     = $oDespesa->o55_tipopasta;
                             $oDespDesd['o55_tipoensino']    = $oDespesa->o55_tipoensino;
+                            $oDespDesd['elemento_siope']    = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $oDespDesd['descricao_siope']   = $oNaturdessiopeDesd->c223_descricao;
 
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd] = $oDespDesd;
                         }
@@ -194,28 +194,61 @@ class Siope {
         return $this->despesas;
     }
 
-    public function montaTabela() {
+    public function setCodPlanilha() {
 
-        ini_set('display_errors', 'On');
-        error_reporting(E_ALL);
+        foreach($this->despesas as $despesa) {
+
+            foreach ($despesa as $linhaDespesa) {
+                echo '<pre>';
+                print_r($linhaDespesa);
+                echo '</pre>';
+                die();
+
+            }
+
+        }
+
+    }
+
+    public function getNaturDesSiope($elemento) {
+
+        $clnaturdessiope    = new cl_naturdessiope();
+        $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11)));
+        $oNaturdessiope     = db_utils::fieldsMemory($rsNaturdessiope, 0);
+
+        return $oNaturdessiope;
+
+    }
+
+    public function setDespesasOrcadas() {
+
+        if($this->iBimestre == 6) {
+            $this->despOrcada = true;
+        } else {
+            $this->despOrcada = false;
+        }
+
+    }
+
+    public function montaTabela() {
 
         echo '<table border="1">';
         echo '  <tr>';
-        echo '      <td>Tipo</td>';
+        echo '      <td>Tp</td>';
         echo '      <td>Cod Inst</td>';
-        echo '      <td>Recurso</td>';
-        echo '      <td>Sub Função</td>';
+        echo '      <td>Rec</td>';
+        echo '      <td>S Fun</td>';
         echo '      <td>Elem Desp</td>';
-        echo '      <td>Elem Desp Desd</td>';
+        echo '      <td>Elem Desdob</td>';
+        echo '      <td>Elem Siop</td>';
         echo '      <td>Descrição</td>';
-        echo '      <td>Dot Atu</td>';
-        echo '      <td>Desp Emp</td>';
-        echo '      <td>Desp Liq</td>';
-        echo '      <td>Desp Pag</td>';
+        echo '      <td>D Emp</td>';
+        echo '      <td>D Liq</td>';
+        echo '      <td>D Pag</td>';
         echo '      <td>Desp Orç</td>';
         echo '      <td>Dot Atualizada</td>';
-        echo '      <td>Tipo Pasta</td>';
-        echo '      <td>Tipo Ensino</td>';
+        echo '      <td>T Pas</td>';
+        echo '      <td>T Ens</td>';
         echo '  </tr>';
 
         foreach($this->despesas as $despesa) {
@@ -231,12 +264,12 @@ class Siope {
                 echo '  <td>'.$linhaDespesa['o58_subfuncao'].'</td>';
                 echo '  <td>'.$linhaDespesa['o58_elemento'].'</td>';
                 echo '  <td></td>';
-                echo '  <td></td>';
-                echo '  <td></td>';
-                echo '  <td></td>';
-                echo '  <td></td>';
-                echo '  <td></td>';
-                echo '  <td></td>';
+                echo '  <td>'.$linhaDespesa['elemento_siope'].'</td>';
+                echo '  <td>'.$linhaDespesa['descricao_siope'].'</td>';
+                echo '  <td>0,00</td>';
+                echo '  <td>0,00</td>';
+                echo '  <td>0,00</td>';
+                echo '  <td>'.db_formatar($linhaDespesa['desp_orcada'], 'f').'</td>';
                 echo '  <td>'.db_formatar($linhaDespesa['dot_atualizada'], 'f').'</td>';
                 echo '  <td>'.$linhaDespesa['o55_tipopasta'].'</td>';
                 echo '  <td>'.$linhaDespesa['o55_tipoensino'].'</td>';
@@ -253,13 +286,13 @@ class Siope {
                         echo '  <td>'.$linhaDespDesd['o58_subfuncao'].'</td>';
                         echo '  <td>'.$linhaDespDesd['o58_elemento'].'</td>';
                         echo '  <td>'.$linhaDespDesd['o56_elemento'].'</td>';
-                        echo '  <td></td>';
-                        echo '  <td></td>';
+                        echo '  <td>'.$linhaDespDesd['elemento_siope'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['descricao_siope'].'</td>';
                         echo '  <td>'.db_formatar($linhaDespDesd['empenhado'], 'f').'</td>';
                         echo '  <td>'.db_formatar($linhaDespDesd['liquidado'], 'f').'</td>';
                         echo '  <td>'.db_formatar($linhaDespDesd['pagamento'], 'f').'</td>';
-                        echo '  <td></td>';
-                        echo '  <td></td>';
+                        echo '  <td>0,00</td>';
+                        echo '  <td>0,00</td>';
                         echo '  <td>'.$linhaDespDesd['o55_tipopasta'].'</td>';
                         echo '  <td>'.$linhaDespDesd['o55_tipoensino'].'</td>';
                         echo '</tr>';

@@ -36,9 +36,11 @@ switch ($oParam->exec) {
             $siope->setAno($iAnoUsu);
             $siope->setInstit($iInstit);
             $siope->setBimestre($iBimestre);
-            $siope->setPeriodo($iBimestre);
+            $siope->setPeriodo();
             $siope->setFiltros();
+            $siope->setDespesasOrcadas();
             $siope->setDespesas();
+            $siope->setCodPlanilha();
             $siope->montaTabela();
 
         } catch(Exception $eErro) {
