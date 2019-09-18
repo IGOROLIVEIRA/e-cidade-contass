@@ -7,7 +7,6 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
     $oAcordo    = new Acordo($iAcordo);
     $oExecucaoDeContratos = new ExecucaoDeContratos();
     $aPosicoes   = $oAcordo->getPosicoes();
-
     $iTotalDeRegistros = null;
 
     if(empty($aPosicoes) || count($aPosicoes) < 2){
@@ -22,32 +21,118 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
 
     // Percorre todas as posições de um acordo
     foreach ($aPosicoes as $iKp => $oPosicao) {
-        $aInformacoesacordo = null;
-        $aInformacoesacordo = $oExecucaoDeContratos->getInformacoesAcordo($oAcordo->getCodigo(),$oPosicao->getCodigo(),$ac16_datainicio,$ac16_datafim);
+
+        $aEmpenhos = ExecucaoDeContratos::empenhosDeUmaPosicao($oPosicao->getCodigo(),$ac16_datainicio,$ac16_datafim);
+
+        if(empty($aEmpenhos)){
+            continue;
+        }
+
+        // Gera um array com o código de cada material de cada empenho
+        $aMateriais = array_unique(ExecucaoDeContratos::arrayDeMateriais($oExecucaoDeContratos, $aEmpenhos, 3), SORT_REGULAR);
 
         $aLinhasRenderizadas = array();
 
         // Percorre cada código de material
-        foreach ($aInformacoesacordo as $iKm => $oMaterial){
-            $valorageraroc = 0;
-            $valorageraroc = $oMaterial->quantidadeempenhada - $oMaterial->qtdemoc;
+        foreach ($aMateriais as $iKm => $oMaterial){
 
-            $vlraempenhar  = 0;
-            $vlraempenhar  = $oMaterial->qtdcontratada - $oMaterial->quantidadeempenhada;
-            $sDescricaoitem   = $oExecucaoDeContratos->limitarTexto($oMaterial->pc01_descrmater,45);
+            // Declaração das variáveis utilizadas na renderização do PDF
+            $iCodItem                 = null;
+            $sDescricaoitem           = null;
+            $dValorUnitario           = null;
+            $sValorUnitario           = null;
+            $dValorUnitarioProvisorio = null;
+            $sQtdEmpenhada            = null;
+            $iQtdEmpenhada            = null;
+            $dQtdAnulada              = null;
+            $sQtdAnulada              = null;
+            $sQtdEmOrdemdeCompra      = null;
+            $dVlrOrdemDeCompra        = null;
+            $iQtdEmOrdem              = null;
+            $iVlrEmOrdem              = null;
+            $iQtdEmOrdemAnulado       = null;
+            $dQtdOrdemDeCompra        = null;
+            $dVlrAgerarOrdem          = null;
 
-            $aLinhasRenderizadas[] = array(
-                'coditem'         => $oMaterial->pc01_codmater,
-                'descricaoitem'   => $sDescricaoitem,
-                'qrdcontratada'   => $oMaterial->qtdcontratada,
-                'valorunitario'   => $oMaterial->valorunitario,
-                'qtdempenhada'    => (int)$oMaterial->quantidadeempenhada == null ? '0' :(int)$oMaterial->quantidadeempenhada,
-                'qtdanulada'      => $oMaterial->qtdanulado,
-                'qtdemoc'         => $oMaterial->qtdemoc,
-                'valoremoc'       => $oMaterial->vlremoc,
-                'valorageraroc'   => $valorageraroc,
-                'aempenhar'       => $vlraempenhar,
-            );
+            foreach($aEmpenhos as $oEmpenho){
+
+                if(empty($oEmpenho->e61_numemp)){
+                    continue;
+                }
+
+                $aEmpenho = $oExecucaoDeContratos->consultarItensEmpenho((int)$oEmpenho->e61_numemp);
+
+                foreach($aEmpenho as $oItem){
+
+                    // Barreira contra itens com código de material diferente do código de material atual ($sCodMaterial)
+                    if($oItem->codigo_material !== $oMaterial->codigo){
+                        continue;
+                    }
+
+                    $iQtdEmpenhada += (int)$oItem->quantidade;
+
+                    foreach($oExecucaoDeContratos->itensAnulados(
+                        (int)$oEmpenho->e61_numemp,
+                        (int)$oItem->codigo_material
+                    ) as $oAnulado){
+                        $iQtdAnulada += (int)$oAnulado->quantidade;
+                    }
+
+                    $dQtdAnulada += isset($iQtdAnulada) ? (double)$iQtdAnulada : 0;
+                    unset($iQtdAnulada);
+
+                    if(empty($oItem->codigo_material)){
+                        continue;
+                    }
+
+                    $dQuantidadeEmOrdemDeCompra = ExecucaoDeContratos::quantidadeTotalEmOrdensDeCompra(
+                        (int)$oEmpenho->e61_numemp,
+                        (int)$oItem->codigo_material
+                    );
+                    $iQtdEmOrdem = 0;
+
+                    foreach($dQuantidadeEmOrdemDeCompra as $oOrdem){
+
+                        $iQtdEmOrdem += $oOrdem->quantidade;
+                        $iVlrEmOrdem = $oOrdem->valor;
+                        $iQtdEmOrdemAnulado += $oOrdem->quantidadeAnulada;
+                        $iVlrEmOrdemAnulado = $iQtdEmOrdemAnulado * $oOrdem->valor;
+                    };
+
+                    $dQtdOrdemDeCompra += isset($iQtdEmOrdem) ? (double)$iQtdEmOrdem : 0;
+                    $dVlrOrdemDeCompra = $iVlrEmOrdem * $dQtdOrdemDeCompra;
+                    $dValorUnitarioProvisorio = (double)$oItem->valor_unitario;
+                }
+
+                // Bloco que verifica se há valores unitários diferentes para o mesmo item em todos os empenhos
+                if(empty($dValorUnitario)){
+                    $dValorUnitario = (double)$dValorUnitarioProvisorio;
+                } else if((double)$dValorUnitario !== (double)$dValorUnitarioProvisorio){
+                    $dValorUnitario = '-';
+                }
+
+            }
+
+            // BLOCO DE PRÉ-RENDERIZAÇÃO
+            $dVlrTotalEmpenhado = $dValorUnitario * $iQtdEmpenhada;
+            $iCodItem              = $oMaterial->codigo;
+            $sDescricaoitem        = $oExecucaoDeContratos->limitarTexto($oMaterial->descricao,68);
+            $sQtdContratadaPosicao = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oMaterial->codigo,$oPosicao->getCodigo())->ac20_quantidade;
+            $sValorUnitario        = isset($dValorUnitario) && $dValorUnitario !== '-' ? 'R$'.number_format((double)$dValorUnitario,2,',','.') : '-';
+            $sQtdEmpenhada         = empty($iQtdEmpenhada) ? "0" : (string)$iQtdEmpenhada;
+            $sQtdAnulada           = empty($dQtdAnulada) ? "0" : (string)$dQtdAnulada;
+            $sQtdEmOrdemdeCompra   = empty($dQtdOrdemDeCompra) ? "0" : (string)$dQtdOrdemDeCompra;
+            $sVlrEmOrdemdeCompra   = isset($dVlrOrdemDeCompra) && $dVlrOrdemDeCompra !== '-' ? 'R$'.number_format((double)$dVlrOrdemDeCompra,2,',','.') : '-';
+            $dVlrAgerarOrdem       = $dVlrTotalEmpenhado - $dVlrOrdemDeCompra;
+            $sVlrAgerarOrdem       = isset($dVlrAgerarOrdem) && $dVlrAgerarOrdem !== '-' ? 'R$'.number_format((double)$dVlrAgerarOrdem,2,',','.') : '-';
+            $dQtdAempenhar         = $sQtdContratadaPosicao - $iQtdEmpenhada + $dQtdAnulada;
+            $sQtdAempenhar         = empty($dQtdAempenhar) ? "0" :(string)$dQtdAempenhar;
+            unset($dValorUnitario);
+            unset($iQtdEmpenhada);
+            unset($dQtdAnulada);
+            unset($dQtdOrdemDeCompra);
+            unset($dTotalSolicitado);
+            unset($dQtdSolicitar);
 
             /*===========================================================================||
             ||                             RENDERIZAÇÃO NO PDF                           ||
@@ -62,7 +147,20 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $oPdf->AddPage('L');
             }
 
-            $iKm === 0 ? $oExecucaoDeContratos->imprimirCabecalhoTabela($oPdf, $iAlt, null, $iFonte, $iQuebra, $oPosicao) : null;
+            $iKm === 0 ? $oExecucaoDeContratos->imprimirCabecalhoTabela($oPdf, $iAlt, null, $iFonte, $iQuebra, $oPosicao,null,null,null,null) : null;
+
+            $aLinhasRenderizadas[] = array(
+                'coditem'                   => $iCodItem,
+                'descricaoitem'             => $sDescricaoitem,
+                'qtdcontratada'             => $sQtdContratadaPosicao,
+                'valorunitario'             => $sValorUnitario,
+                'qtdempenhada'              => $sQtdEmpenhada,
+                'qtdanulada'                => $sQtdAnulada,
+                'qtdemordemdecompra'        => $sQtdEmOrdemdeCompra,
+                'vlremordemdecompra'        => $sVlrEmOrdemdeCompra,
+                'qtdagerarordemdecompra'    => $sVlrAgerarOrdem,
+                'qtdaempenhar'              => $sQtdAempenhar,
+            );
 
         }
 
@@ -90,16 +188,16 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
             }
             $oPdf->SetFont('Arial','',$iFonte-1);
 
-            $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],'TBR',0,'C','');
-            $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],'TBR',0,'C','');
-            $oPdf->Cell(25  ,$iAlt, $aLinha['qrdcontratada'],'TBR',0,'C','');
-            $oPdf->Cell(18  ,$iAlt, 'R$ '.$aLinha['valorunitario'],'TBR',0,'C','');
-            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],'TBR',0,'C','');
-            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],'TBR',0,'C','');
-            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdemoc'],'TBR',0,'C','');
-            $oPdf->Cell(21  ,$iAlt, 'R$ '.$aLinha['valoremoc'],'TBR',0,'C','');
-            $oPdf->Cell(26  ,$iAlt, 'R$ '.$aLinha['valorageraroc'],'TBR',0,'C','');
-            $oPdf->Cell(22  ,$iAlt, $aLinha['aempenhar'],'TBR',0,'C','');
+            $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],        'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],  'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdcontratada'],  'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(18  ,$iAlt, $aLinha['valorunitario'],  'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],   'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],     'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdemordemdecompra'],  'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(21  ,$iAlt, $aLinha['vlremordemdecompra'],'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(26  ,$iAlt, $aLinha['qtdagerarordemdecompra'],'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(22  ,$iAlt, $aLinha['qtdaempenhar'],   'TBR',0,'C',$iCorFundo);
             $oPdf->Ln();
 
             $iNumItens++;

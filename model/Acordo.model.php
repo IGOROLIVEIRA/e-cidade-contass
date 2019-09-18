@@ -2703,7 +2703,7 @@ class Acordo
    * @param integer [$iAutoriza] codigo da Autorizacao
    * @return array
    */
-  public function getAutorizacoesEntreDatas($sDataInicial, $sDataFinal)
+  public function getAutorizacoesEntreDatas($sDataInicial, $sDataFinal1,$iSeqPosicao)
   {
 
     $sSqlDataDeEmissao = '';
@@ -2733,7 +2733,7 @@ class Acordo
     $sSqlAutorizacoes .= "        inner join empautoriza on e54_autori = e55_autori ";
     $sSqlAutorizacoes .= "        left join empempaut on e61_autori = e54_autori ";
     $sSqlAutorizacoes .= "        left join empempenho on e61_numemp = e60_numemp ";
-    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} and ac26_sequencial = $iSeqPosicao";
     $sSqlAutorizacoes .= $sSqlDataDeEmissao;
     $sSqlAutorizacoes .= "  group by e54_autori,";
     $sSqlAutorizacoes .= "  e54_emiss,  ";
@@ -2761,7 +2761,7 @@ class Acordo
     $sSqlAutorizacoes .= "        inner join empempenho    on ac39_numemp = e60_numemp ";
     $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
     $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
-    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+    $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} and ac26_sequencial = $iSeqPosicao";
     $sSqlAutorizacoes .= $sSqlDataDeEmissao ;
     $sSqlAutorizacoes .= "  order by codemp asc";
 

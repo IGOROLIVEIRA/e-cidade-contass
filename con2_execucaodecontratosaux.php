@@ -59,7 +59,7 @@ class ExecucaoDeContratos{
 
     }
 
-    public static function imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null,$sElemento,$reduzido){
+    public static function imprimirCabecalhoTabela($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null,$sElemento,$reduzido,$sTotalEmp){
 
         $oPdf->SetFont('Arial','B',$iFonte);
 
@@ -73,13 +73,13 @@ class ExecucaoDeContratos{
             $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
             $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
             $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
-            $oPdf->Cell(50 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+            $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+            $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".$sTotalEmp,0,0,'L',0);
             $oPdf->Ln();
 
         }
 
         if($iQuebra == '3'  && (int)$oPosicao->getTipo() !== 1){
-
             $sApostilamentoOuAditamento = "Nº aditivo: ";
             $iNumApostilamentoOuAditamento = $oPosicao->getNumeroAditamento();
 
@@ -94,6 +94,7 @@ class ExecucaoDeContratos{
             $oPdf->Ln();
 
         }
+
         if( $iQuebra == '3' && (int)$oPosicao->getTipo() === 1 ){
             $oPdf->Cell(35 ,$iAlt,"Sem aditamento",0,0,'L',0);
             $oPdf->Ln();
@@ -201,7 +202,6 @@ class ExecucaoDeContratos{
         $sCamposEmpenho   = "*";
         $oDaoEmpenho      = db_utils::getDao("empempenho");
         $sSqlItensOrdem   = $oDaoEmpenho->sql_query_codord(null,$sCamposEmpenho,null,"e60_numemp=$iEmpenho and e62_item = $iCodMater");
-//        die($sSqlItensOrdem);
         $rsBuscaEmpenho   = $oDaoEmpenho->sql_record($sSqlItensOrdem);
 
         return db_utils::getCollectionByRecord($rsBuscaEmpenho,0);
@@ -259,7 +259,8 @@ class ExecucaoDeContratos{
         $sCamposEmpenho .= "              then pcorcamval.pc23_obs";
         $sCamposEmpenho .= "              else pcorcamvalpai.pc23_obs";
         $sCamposEmpenho .= "         end as observacao,e60_vlremp,";
-        $sCamposEmpenho .= "         o58_orgao||'.'||o58_unidade||'.'||o58_funcao||'.'||o58_subfuncao||'.'||o58_programa||'.'||o58_projativ||'.'||o56_elemento as elemento,o58_coddot";
+        $sCamposEmpenho .= "         o58_orgao||'.'||o58_unidade||'.'||o58_funcao||'.'||o58_subfuncao||'.'||o58_programa||'.'||o58_projativ||'.'||o56_elemento as elemento,o58_coddot,
+        rnSaldoOrdem";
 
         $oDaoEmpenho      = db_utils::getDao("empempenho");
 
@@ -280,13 +281,13 @@ class ExecucaoDeContratos{
 
     }
 
-    public static function getItensContrato($iContrato,$iCodigoMaterial){
+    public static function getItensContratoPosicao($iContrato,$iCodigoMaterial,$iPosicao){
         $oDaoItensAcordo = db_utils::getDao("acordo");
         $sCampos = "acordoitem.*";
-        $sSqlItens = $oDaoItensAcordo->sql_itens_acordo($sCampos,$iContrato,$iCodigoMaterial);
+        $sSqlItens = $oDaoItensAcordo->sql_itens_acordo($sCampos,$iContrato,$iCodigoMaterial,$iPosicao);
         $rsResultItens = $oDaoItensAcordo->sql_record($sSqlItens);
 
-        return db_utils::fieldsMemory($rsResultItens,0)->ac20_quantidade;
+        return db_utils::fieldsMemory($rsResultItens,0);
     }
 
     /*
@@ -388,9 +389,9 @@ class ExecucaoDeContratos{
         foreach($aOrdensDeEmpenho as $ordemDeEmpenho){
 
             $oOrdemDeCompra = self::quantidadeEmOrdemDeCompra( (int)$ordemDeEmpenho->ordem, (int)$iCodEmp, (int)$iCodMat );
-            $dQuantidadeEmOrdemDeCompra        += (double)$oOrdemDeCompra->quantidade;
-            $dQuantidadeAnuladaEmOrdemDeCompra += (double)$oOrdemDeCompra->qtdanulada;
-            $ValorEmOrdemDeCompra              += (double)$oOrdemDeCompra->valorordem;
+            $dQuantidadeEmOrdemDeCompra        = (double)$oOrdemDeCompra->quantidade;
+            $dQuantidadeAnuladaEmOrdemDeCompra = (double)$oOrdemDeCompra->qtdanulada;
+            $ValorEmOrdemDeCompra              = (double)$oOrdemDeCompra->valorordem;
 
             $oOrdem = new stdClass();
             $oOrdem->quantidade = (double)$dQuantidadeEmOrdemDeCompra - (double)$dQuantidadeAnuladaEmOrdemDeCompra;
@@ -424,7 +425,6 @@ class ExecucaoDeContratos{
 
         $oPdf->SetFont('Arial','B',$iFonte);
 
-        $oPdf->Ln();
         $oPdf->Cell(278 ,$iAlt-3,'',0,1,'C',0);
         $oPdf->Cell(34 ,$iAlt,'Total de Registros:',0,0,'L',0);
         $oPdf->Cell(30 ,$iAlt,''.is_null($iNumItens) ? count($aMateriais) : $iNumItens.'',0,0,'L',0);

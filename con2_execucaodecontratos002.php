@@ -87,9 +87,6 @@ $iAlt       = 7;
 $head4 .= "Relatório de Execução de Contratos\n";
 
 switch($iQuebra){
-  case '1':
-    $head4 .= "Quebra: Não";
-    break;
 
   case '2':
     $head4 .= "Quebra: Por empenho";
@@ -115,9 +112,6 @@ if( empty($ac16_datainicio) && !empty($ac16_datafim) ){
 $oPdf->AddPage('L');
 
 switch($iQuebra){
-  case '1':
-    execucaoDeContratosSemQuebra($iFonte,$iAlt,(int)$ac16_sequencial,$oPdf,$iQuebra,$ac16_datainicio,$ac16_datafim);
-    break;
 
   case '2':
     execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,(int)$ac16_sequencial,$oPdf,$iQuebra,$ac16_datainicio,$ac16_datafim);
