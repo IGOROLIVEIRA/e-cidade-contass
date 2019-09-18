@@ -134,16 +134,16 @@ if(isset($incluir)){
 	    $sqlerro = true;
 	  }
 
-	  if ($sqlerro == false){
+	  // if ($sqlerro == false){
       // #1
-	    // // $clpccflicitapar->l25_numero=$l25_numero+1;
+	    // $clpccflicitapar->l25_numero=$l25_numero+1;
 	    // $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
-	  }
+	  // }
 
 	  //numeração geral
 
 	  if ($clpccflicitanum->numrows>0){
-		  db_fieldsmemory($result_numgeral,0);
+      db_fieldsmemory($result_numgeral,0);
       $l20_edital=$l24_numero;
     } else {
 		  $erro_msg="Configure a numeração de licitação por edital.";
@@ -151,13 +151,13 @@ if(isset($incluir)){
 	  }
 
 
-	  if ($sqlerro == false){
+	  // if ($sqlerro == false){
       // #2
 		  // $clpccflicitanum->l24_numero=$l24_numero+1;
 		  // $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
-	  } else {
-	    $sqlerro = true;
-	  }
+	  // } else {
+	  //   $sqlerro = true;
+	  // }
 
 
 	  //verifica se já existe licitação por modadlidade
@@ -229,6 +229,7 @@ if(isset($incluir)){
 		  $clliclicita->l20_instit      = db_getsession("DB_instit");
 
       $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+
 
       $clliclicita->incluir(null);
 		  if ($clliclicita->erro_status=="0"){
