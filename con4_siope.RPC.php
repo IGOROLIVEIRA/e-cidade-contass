@@ -40,7 +40,6 @@ switch ($oParam->exec) {
             $siope->setFiltros();
             $siope->setDespesasOrcadas();
             $siope->setDespesas();
-            $siope->setCodPlanilha();
             $siope->montaTabela();
 
         } catch(Exception $eErro) {
