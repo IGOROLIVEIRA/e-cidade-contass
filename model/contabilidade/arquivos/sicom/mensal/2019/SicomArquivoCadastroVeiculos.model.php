@@ -434,6 +434,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
                   AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                            and ve01_codigo = 11
+
                   GROUP BY veiculos.ve01_codigo,
                            ve62_atestado,
                            o58_orgao,
@@ -540,6 +542,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                              and ve01_codigo = 11
                     GROUP BY infocomplementaresinstit.si09_codorgaotce,
                              unveic.o41_codtri,
                              orveic.o40_codtri,
@@ -564,7 +567,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              veicmanut.ve62_dtmanut,
                              veiculostransf.ve81_codunidadesubatual,veiculostransf.ve81_codunidadesubant) as teste";
 
-        $rsResult20 = db_query($sSql);
+        $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
         /**
          * registro 20
@@ -589,7 +592,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                         /**
                          * verifica se o veiculo tem codigoant no cadastro tabela veiculos campo ve01_codigoant
                          */
-                        if ($oResult20->ve01_codigoant != null && $oResult20->ve01_codigoant == "0"){
+                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
                             $codveiculo = $oResult20->ve01_codigo;
                         }else{
                             $codveiculo = $oResult20->ve01_codigoant;
@@ -612,7 +615,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 //MANUTENÇÃO
                 else{
                     if($oResult20->ve62_dtmanut < $oResult20->ve80_dt_transferencia){
-                        if ($oResult20->ve01_codigoant != null && $oResult20->ve01_codigoant == "0"){
+                        if ($oResult20->ve01_codigoant == "" && $oResult20->ve01_codigoant == "0"){
                             $codveiculo = $oResult20->ve01_codigo;
                         }else{
                             $codveiculo = $oResult20->ve01_codigoant;
@@ -630,7 +633,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 }
 
             }else{
-                if ($oResult20->ve01_codigoant == null && $oResult20->ve01_codigoant == 0){
+                if ($oResult20->ve01_codigoant == "" && $oResult20->ve01_codigoant == "0"){
                     $codveiculo = $oResult20->ve01_codigo;
                 }else{
                     $codveiculo = $oResult20->ve01_codigoant;
