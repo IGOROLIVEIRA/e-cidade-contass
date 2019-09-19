@@ -114,17 +114,16 @@ class ExecucaoDeContratos{
 
     }
 
-    public static function imprimirCabecalhoTabela4($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $oPosicao = null, $iP4, $iKp = null){
+    public static function imprimirCabecalhoTabela4($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null,$sElemento,$reduzido,$sTotalEmp){
 
         $oPdf->SetFont('Arial','B',$iFonte);
 
-        $iKp !== 0 ? $oPdf->Ln() : null;
+        $oPdf->Ln();
         if($oPdf->GetY() > 190){
             $oPdf->AddPage('L');
         }
 
-        if( (int)$iP4 === 1 && (int)$oPosicao->getTipo() !== 1 ){
-
+        if($iQuebra == '4'  && (int)$oPosicao->getTipo() !== 1){
             $sApostilamentoOuAditamento = "Nº aditivo: ";
             $iNumApostilamentoOuAditamento = $oPosicao->getNumeroAditamento();
 
@@ -139,35 +138,38 @@ class ExecucaoDeContratos{
 
         }
 
-        if( (int)$oPosicao->getTipo() === 1 && $iKp === 0 ){
-
-            $oPdf->Ln();
+        if( $iQuebra == '4' && (int)$oPosicao->getTipo() === 1 ){
             $oPdf->Cell(35 ,$iAlt,"Sem aditamento",0,0,'L',0);
+        }
+    }
 
+    public function imprimirCabecalhoEmp($oPdf, $iAlt, $oEmpenhamento = null, $iFonte, $iQuebra, $oPosicao = null, $iP4 = null,$sElemento,$reduzido,$sTotalEmp){
+
+        $oPdf->SetFont('Arial','B',$iFonte);
+
+        $oPdf->Ln();
+        if($oPdf->GetY() > 170){
+            $oPdf->AddPage('L');
         }
 
-        if( (int)$iP4 === 2 ){
+        $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
+        $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
+        $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
+        $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+        $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".$sTotalEmp,0,0,'L',0);
+        $oPdf->Ln();
 
-            $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->e60_codemp/$oEmpenhamento->e60_anousu",0,0,'L',0);
-            $oPdf->Cell(50 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->e60_emiss)),0,0,'L',0);
-            $oPdf->Ln();
-
-        }
-        if((int)$iP4 !== 1){
-
-            $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
-            $oPdf->Cell(83 ,$iAlt,'Descrição Item',1,0,'C',1);
-            $oPdf->Cell(25 ,$iAlt,'Qt. Contratada',1,0,'C',1);
-            $oPdf->Cell(18 ,$iAlt,'Valor. Unit.',1,0,'C',1);
-            $oPdf->Cell(25 ,$iAlt,'Qt. Empenhada',1,0,'C',1);
-            $oPdf->Cell(20 ,$iAlt,'Qt. Anulada',1,0,'C',1);
-            $oPdf->Cell(20 ,$iAlt,'Qtd. em OC',1,0,'C',1);
-            $oPdf->Cell(21 ,$iAlt,'Valor em OC',1,0,'C',1);
-            $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
-            $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
-            $oPdf->Ln();
-        }
-
+        $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
+        $oPdf->Cell(83 ,$iAlt,'Descrição Item',1,0,'C',1);
+        $oPdf->Cell(25 ,$iAlt,'Qt. Contratada',1,0,'C',1);
+        $oPdf->Cell(18 ,$iAlt,'Valor. Unit.',1,0,'C',1);
+        $oPdf->Cell(25 ,$iAlt,'Qt. Empenhada',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Qt. Anulada',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Qtd. em OC',1,0,'C',1);
+        $oPdf->Cell(21 ,$iAlt,'Valor em OC',1,0,'C',1);
+        $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
+        $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
+        $oPdf->Ln();
     }
 
     public function getInformacoesAcordo($iAcordo,$iPosicao,$sDataInicial, $sDataFinal){
@@ -326,17 +328,17 @@ class ExecucaoDeContratos{
         // Gera um array com o código de cada material de cada empenho
         foreach($aEmpenhamentos as $oEmpenhamento){
 
-                $iCodEmpenho = $iCodRel === 3 ? (int)$oEmpenhamento->e61_numemp : (int)$oEmpenhamento->codigoempenho;
+            $iCodEmpenho = $iCodRel === 3 ? (int)$oEmpenhamento->e61_numemp : (int)$oEmpenhamento->codigoempenho;
 
-                if(empty($iCodEmpenho)){
-                    continue;
-                }
+            if(empty($iCodEmpenho)){
+                continue;
+            }
 
-                $aEmpenho = $oExecucaoDeContratos->consultarItensEmpenho($iCodEmpenho);
-                // Percorre os itens do empenho atual para extrair dele o código do material
-                foreach ($aEmpenho as $oItem){
-                    $aCodigosDosMateriais[] = (object) array('codigo'=>$oItem->codigo_material,'descricao'=>$oItem->descricao_material);
-                }
+            $aEmpenho = $oExecucaoDeContratos->consultarItensEmpenho($iCodEmpenho);
+            // Percorre os itens do empenho atual para extrair dele o código do material
+            foreach ($aEmpenho as $oItem){
+                $aCodigosDosMateriais[] = (object) array('codigo'=>$oItem->codigo_material,'descricao'=>$oItem->descricao_material);
+            }
 
         }
 
