@@ -18,12 +18,12 @@ if($telefone){
 $this->objpdf->sety(10);
 $this->objpdf->setx(170);
 $this->objpdf->Setfont("times", "B", 12);
-$this->objpdf->cell(20, 5, $this->p58_numero, 0, 0, 'R');
-$this->objpdf->setxy(180, 15);
-$this->objpdf->cell(20, 5, '/'.$this->p58_ano, 0, 0, 'L');
-$descrdepto = pg_result($resproc,0,1);
-
 $sNumeroProtocolo = $this->p58_numero."/".$this->p58_ano;
+$this->objpdf->cell(20, 5, $sNumeroProtocolo, 0, 0, 'R');
+// $this->objpdf->setxy(180, 15);
+// $this->objpdf->cell(20, 5, '/'.$this->p58_ano, 0, 0, 'L');
+// $descrdepto = pg_result($resproc,0,1);
+
 $this->objpdf->sety(15);
 $this->objpdf->setx(160);
 
@@ -188,14 +188,14 @@ if ($numrows_doc > 0) {
 //-------------------------------------------------------------------------------------------------
 $this->objpdf->Setfont("Times", "", 12);
 $this->objpdf->rect(15, 240, 89, 25, '');
-$this->objpdf->SetXY(15, 240);
+$this->objpdf->SetXY(15, 243);
 $this->objpdf->cell(89, 25, "Requerente / Titular", 0, 0, 'C');
-$this->objpdf->SetXY(18, 239);
+$this->objpdf->SetXY(18, 238);
 $this->objpdf->cell(80, 20, " ", 0, 1, 'L', 0, '', '_');
 $this->objpdf->rect(104, 240, 89, 25, '');
-$this->objpdf->SetXY(104, 240);
+$this->objpdf->SetXY(104, 243);
 $this->objpdf->cell(89, 25, "Instituição", 0, 0, 'C');
-$this->objpdf->SetXY(108, 239);
+$this->objpdf->SetXY(108, 238);
 $this->objpdf->cell(80, 20, " ", 0, 1, 'L', 0, '', '_');
 $this->objpdf->SetXY(120, 258);
 $this->objpdf->cell(50, 8, "Data ____/____/_______", 0, 1, 'R');
