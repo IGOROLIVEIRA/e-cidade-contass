@@ -430,12 +430,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                    ve81_codunidadesubatual
           ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
                   LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
-                  INNER JOIN veicabast ON ve70_veiculos = veiculos.ve01_codigo
+                  LEFT JOIN veicabast ON ve70_veiculos = veiculos.ve01_codigo
                   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
                   AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                            and ve01_codigo = 11
-
                   GROUP BY veiculos.ve01_codigo,
                            ve62_atestado,
                            o58_orgao,
@@ -542,7 +540,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                              and ve01_codigo = 11
                     GROUP BY infocomplementaresinstit.si09_codorgaotce,
                              unveic.o41_codtri,
                              orveic.o40_codtri,
@@ -567,7 +564,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              veicmanut.ve62_dtmanut,
                              veiculostransf.ve81_codunidadesubatual,veiculostransf.ve81_codunidadesubant) as teste";
 
-        $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
+        $rsResult20 = db_query($sSql);
 
         /**
          * registro 20
