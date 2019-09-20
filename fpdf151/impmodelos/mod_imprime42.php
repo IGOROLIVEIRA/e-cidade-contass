@@ -86,8 +86,10 @@ if (trim($this->p58_requer ) != trim($this->z01_nome )) {
 $this->objpdf->Setfont("times", "B", 12);
 $this->objpdf->cell(28, 6, "ENDEREÇO: ", 0, 0, 'L');
 $this->objpdf->Setfont("times", "", 11);
-$this->objpdf->cell(75, 6, $this->z01_ender . ($this->z01_numero  != "" ? ", " : "").$this->z01_numero .
-  ($this->z01_compl  != "" ? " - " : "").$this->z01_compl.($this->z01_bairro != "" ? ", " : "").$this->z01_bairro, 0, 1, 'L');
+$this->objpdf->multicell(148, 6, $this->z01_ender . ($this->z01_numero  != "" ? ", " : "").$this->z01_numero .
+  ($this->z01_compl  != "" ? " - " : "").$this->z01_compl.($this->z01_bairro != "" ? ", " : "").$this->z01_bairro, 0, 1, "L");
+// $this->objpdf->cell(75, 6, $this->z01_ender . ($this->z01_numero  != "" ? ", " : "").$this->z01_numero .
+//   ($this->z01_compl  != "" ? " - " : "").$this->z01_compl.($this->z01_bairro != "" ? ", " : "").$this->z01_bairro, 0, 1, 'L');
 
 
 $this->objpdf->Setfont("times", "B", 12);
@@ -100,7 +102,7 @@ $this->objpdf->Setfont("times", "B", 30);
 $this->objpdf->rect(15, 110, 178, 120, '');
 
 $this->objpdf->Setfont("times", "B", 12);
-$this->objpdf->setxy(17, $this->objpdf->gety()+17);
+$this->objpdf->setxy(17, 112);
 $this->objpdf->cell(50, 6, "OBSERVAÇÕES: ", 0, 1, 'L');
 $this->objpdf->Setfont("times", "", 10);
 
@@ -129,7 +131,7 @@ if (pg_num_rows($resproc)) {
   $resultdepto = pg_exec($sqldepto);
   $impdepto = pg_result($resultdepto,0,0);
   if ($impdepto == 't') {
-    $this->objpdf->setx(13);
+    $this->objpdf->setx(17);
     $this->objpdf->cell(0, 6, "DEPARTAMENTO PADRÃO: $coddepto - $descrdepto", 0, 1, 'L', 1);
   }
 }
@@ -156,9 +158,9 @@ if ($this->result_vars != ""){
      }
            $imprime_str .= ucfirst($rotulo).": ".$conteudo."\n";
      }
-     $this->objpdf->setx(13);
+     $this->objpdf->setx(17);
 
-     $this->objpdf->multicell(0, 5, $imprime_str,0,1,"L");
+     $this->objpdf->multicell(174, 5, $imprime_str,0,1,"L");
 }
 $this->objpdf->Setfont("Times", "", 12);
 
