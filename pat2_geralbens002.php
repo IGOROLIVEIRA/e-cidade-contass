@@ -101,6 +101,11 @@ if ($bens_convenio == "T") {
     $head7 = "Bens: Com Convênio";
 }
 
+if($cgmFornecedor){
+  if(!$head5){
+    $head6 = 'CGM: '.utf8_decode($nomeFornecedor);
+  }else $head5 = 'CGM: '.utf8_decode($nomeFornecedor);
+}
 
 if (isset($quebra_por) && $quebra_por != "" && $imp_classi == "S") {
 
@@ -281,8 +286,14 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
     }
 }
 
-$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
+if($cgmFornecedor){
+  if($where_instit){{
+    $where_instit .= ' and ';
+    $where_instit .=  ' t52_numcgm = '.$cgmFornecedor.' ';
+  }}
+}
 
+$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
 $result = $clbens->sql_record($sqlrelatorio);
 if ($clbens->numrows == 0) {
 
