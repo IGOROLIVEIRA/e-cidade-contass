@@ -134,28 +134,30 @@ if(isset($incluir)){
 	    $sqlerro = true;
 	  }
 
-	  if ($sqlerro == false){
-	    $clpccflicitapar->l25_numero=$l25_numero+1;
-	    $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
-	  }
+	  // if ($sqlerro == false){
+      // #1
+	    // $clpccflicitapar->l25_numero=$l25_numero+1;
+	    // $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
+	  // }
 
 	  //numeração geral
 
 	  if ($clpccflicitanum->numrows>0){
-		  db_fieldsmemory($result_numgeral,0);
-		  $l20_edital=$l24_numero;
-	  } else {
+      db_fieldsmemory($result_numgeral,0);
+      $l20_edital=$l24_numero;
+    } else {
 		  $erro_msg="Configure a numeração de licitação por edital.";
 		  $sqlerro = true;
 	  }
 
 
-	  if ($sqlerro == false){
-		  $clpccflicitanum->l24_numero=$l24_numero+1;
-		  $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
-	  } else {
-	    $sqlerro = true;
-	  }
+	  // if ($sqlerro == false){
+      // #2
+		  // $clpccflicitanum->l24_numero=$l24_numero+1;
+		  // $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
+	  // } else {
+	  //   $sqlerro = true;
+	  // }
 
 
 	  //verifica se já existe licitação por modadlidade
@@ -170,7 +172,7 @@ if(isset($incluir)){
 
 		//verifica se existe licitação por edital
 		$edital=$l20_edital+1;
-		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital=$edital and l20_anousu=$anousu"));
+		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital= $edital and l20_anousu=$anousu"));
 
 		if ($clpccflicitanum->numrows>0){
 		  $erro_msg="Já existe licitação número $l20_edital.Verificar numeração por edital.";
@@ -198,7 +200,7 @@ if(isset($incluir)){
                 $sqlerro  = true;
             }
 				}
-		
+
 				if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
 
 					$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
@@ -206,22 +208,19 @@ if(isset($incluir)){
 						$erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
-		
+
 				}
-				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) { 
-		
+				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
+
 					$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
 					if (!$verifica) {
 						$erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
 						$sqlerro = true;
 					}
-		
+
 				}
 
 		if ($sqlerro == false){
-
-			$l20_numero=$l20_numero+1;
-		  $l20_edital=$l20_edital+1;
 
 		  $clliclicita->l20_numero      = $l20_numero;
 		  $clliclicita->l20_edital      = $l20_edital;
@@ -231,14 +230,13 @@ if(isset($incluir)){
 
       $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
 
-		  $clliclicita->incluir(null);
 
+      $clliclicita->incluir(null);
 		  if ($clliclicita->erro_status=="0"){
 		  	$erro_msg = $clliclicita->erro_msg;
 		  	$sqlerro=true;
 		  }
-
-		}
+    }
 
 		if ( !$sqlerro && $lprocsis == 's') {
 
@@ -275,11 +273,21 @@ if(isset($incluir)){
 
 	  $codigo   = $clliclicita->l20_codigo;
 		$tipojulg = $clliclicita->l20_tipojulg;
+
+    if($sqlerro == false){
+      $clpccflicitapar->l25_numero=$l25_numero+1;
+      $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
+
+      $clpccflicitanum->l24_numero=$l24_numero+1;
+      $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
+    }
+
 		db_fim_transacao(false);
 	  //db_fim_transacao($sqlerro);
 	}
 }
 $l20_liclocal = 0;
+
 ?>
 <html>
 <head>
