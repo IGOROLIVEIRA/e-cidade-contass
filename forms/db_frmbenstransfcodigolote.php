@@ -76,7 +76,7 @@
 <script>
 
 let ordenacao = '';
-
+document.getElementById('placa').style.width = '100px';
 document.getElementById('placa').addEventListener("keyup", () => {
   let valor = document.form1.placa.value;
   filtraBens(valor);
@@ -84,7 +84,8 @@ document.getElementById('placa').addEventListener("keyup", () => {
 
 let headers = document.getElementsByTagName('th');
 
-for(let cont=0; cont < headers.length; cont++){
+for(let cont=0; cont < headers.length - 1; cont++){
+  headers[cont].style.textDecoration = "underline";
   headers[cont].addEventListener('click', () => {
     extraiItens(headers[cont].innerText);
   });
