@@ -630,7 +630,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 }
 
             }else{
-                if ($oResult20->ve01_codigoant == "" && $oResult20->ve01_codigoant == "0"){
+                if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
                     $codveiculo = $oResult20->ve01_codigo;
                 }else{
                     $codveiculo = $oResult20->ve01_codigoant;
