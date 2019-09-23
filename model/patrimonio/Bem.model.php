@@ -277,6 +277,8 @@ class Bem {
       $oDadosBaixa->databaixa  = db_formatar($oDadosBem->t55_baixa, "d");
       $oDadosBaixa->motivo     = $oDadosBem->t55_motivo;
       $oDadosBaixa->observacao = $oDadosBem->t55_obs;
+      $oDadosBaixa->destino    = $oDadosBem->t55_destino;
+      $oDadosBaixa->sDestino   = $this->retornaDestino($this->iCodigoBem);
       $this->oDadosBaixa       = $oDadosBaixa;
     }
 
@@ -1079,11 +1081,12 @@ class Bem {
     }
 
     $oDaoBensBaixa = db_utils::getDao("bensbaix");
-    $oDaoBensBaixa->t55_codbem = $this->getCodigoBem();
-    $oDaoBensBaixa->t55_baixa  = implode("-", array_reverse(explode("/", $dtBaixa)));
-    $oDaoBensBaixa->t55_motivo = $iMotivoBaixa;
-    $oDaoBensBaixa->t55_obs    = $sObservacao;
+    $oDaoBensBaixa->t55_codbem  = $this->getCodigoBem();
+    $oDaoBensBaixa->t55_baixa   = implode("-", array_reverse(explode("/", $dtBaixa)));
+    $oDaoBensBaixa->t55_motivo  = $iMotivoBaixa;
+    $oDaoBensBaixa->t55_obs     = $sObservacao;
     $oDaoBensBaixa->t55_destino = $iDestino;
+
 
       /**
        * Verificamos se existe regra pra fazer o lançamento contábil pelo Motivo da Baixa do Bem.
@@ -1462,6 +1465,16 @@ class Bem {
       }
     }
     return $this->oNotaFiscal;
+  }
+
+
+  public function retornaDestino($codigoBem){
+    $sql = 'SELECT z01_nome FROM bens LEFT JOIN bensbaix ON t52_bem = t55_codbem
+      LEFT JOIN cgm ON z01_numcgm = t55_destino where t52_bem = '.$codigoBem;
+
+    $rsDados = db_query($sql);
+    $sDestino = db_utils::fieldsMemory($rsDados,0)->z01_nome;
+    return $sDestino;
   }
 
   /**
