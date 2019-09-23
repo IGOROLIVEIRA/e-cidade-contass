@@ -21,10 +21,18 @@ class Siope {
     public $dtIni;
     //@var string
     public $dtFim;
-    //var array
-    public $despesas = array();
-    //var boolean
+    //@var array
+    public $aDespesas = array();
+    //@var array
+    public $aDespesasAgrupadas = array();
+    //@var boolean
     public $despOrcada;
+
+    public function gerarSiope() {
+
+        die('gerar siope csv');
+
+    }
 
     public function setAno($iAnoUsu) {
         $this->iAnoUsu = $iAnoUsu;
@@ -104,9 +112,6 @@ class Siope {
 
         for ($i = 0; $i < pg_numrows($result); $i++) {
 
-            ini_set('display_errors', 'On');
-            error_reporting(E_ALL);
-
             $oDespesa = db_utils::fieldsMemory($result, $i);
 
             if($this->despOrcada) {
@@ -125,6 +130,8 @@ class Siope {
                     $aDadosAgrupados    = array();
 
                     if (!isset($aDadosAgrupados[$sHashDesp])) {
+
+                        /**
                         $oDesp = array();
                         $oDesp['o58_codigo']        = $oDespesa->o58_codigo;
                         $oDesp['o58_elemento']      = $oDespesa->o58_elemento;
@@ -136,57 +143,107 @@ class Siope {
                         $oDesp['elemento_siope']    = $oNaturdessiope->c223_natdespecidade;
                         $oDesp['descricao_siope']   = $oNaturdessiope->c223_descricao;
                         $oDesp['cod_planilha']      = $this->getCodPlanilha($oDespesa);
-
                         $aDadosAgrupados[$sHashDesp] = $oDesp;
+                         */
+
+                        $aArrayTemp     = array();
+
+                        $aArrayTemp['o58_codigo']       = $oDespesa->o58_codigo;
+                        $aArrayTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
+                        $aArrayTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_natdespecidade;
+                        $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
+                        $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
+                        $aArrayTemp['desp_orcada']      = $this->despOrcada ? $oDespesaAnoSeg->dot_ini : 0;
+                        $aArrayTemp['empenhado']        = 0;
+                        $aArrayTemp['liquidado']        = 0;
+                        $aArrayTemp['pagamento']        = 0;
+
+                        array_push($this->aDespesas, $aArrayTemp);
+
                     }
 
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
 
                         $oDadosMes          = db_utils::fieldsMemory($resDepsMes, $contDesp);
                         $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento);
+                        $sHashDespDesd      = $oDadosMes->o56_elemento;
 
-                        $sHashDespDesd = $oDadosMes->o56_elemento;
                         if (isset($aDadosAgrupados[$sHashDesp])) {
 
+                            /**
+                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_codigo']          = $oDespesa->o58_codigo;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_elemento']        = $oDadosMes->o56_elemento;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_descr']           = $oDadosMes->o56_descr;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['empenhado']           = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['liquidado']           = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['pagamento']           = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_elemento']        = $oDespesa->o58_elemento;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_codigo']          = $oDespesa->o58_codigo;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_subfuncao']       = $oDespesa->o58_subfuncao;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipopasta']       = $oDespesa->o55_tipopasta;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipoensino']      = $oDespesa->o55_tipoensino;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['elemento_siope']      = $oNaturdessiopeDesd->c223_natdespecidade;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['descricao_siope']     = $oNaturdessiopeDesd->c223_descricao;
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['cod_planilha']        = $this->getCodPlanilha($oDespesa);
+                             */
+
+                            $aArrayDesdTemp = array();
+
+                            $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
+                            $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
+                            $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
+                            $aArrayDesdTemp['dot_atualizada']   = 0;
+                            $aArrayDesdTemp['desp_orcada']      = 0;
+                            $aArrayDesdTemp['empenhado']        = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
+                            $aArrayDesdTemp['liquidado']        = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
+                            $aArrayDesdTemp['pagamento']        = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
+
+                            array_push($this->aDespesas, $aArrayDesdTemp);
 
                         } else {
-                            $oDespDesd = array();
 
+                            /**
+                            $oDespDesd = array();
+                            $oDespDesd['o58_codigo']        = $oDespesa->o58_codigo;
                             $oDespDesd['o56_elemento']      = $oDadosMes->o56_elemento;
                             $oDespDesd['o56_descr']         = $oDadosMes->o56_descr;
                             $oDespDesd['empenhado']         = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
                             $oDespDesd['liquidado']         = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
                             $oDespDesd['pagamento']         = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
                             $oDespDesd['o58_elemento']      = $oDespesa->o56_elemento;
-                            $oDespDesd['o58_codigo']        = $oDespesa->o58_codigo;
                             $oDespDesd['o58_subfuncao']     = $oDespesa->o58_subfuncao;
                             $oDespDesd['o55_tipopasta']     = $oDespesa->o55_tipopasta;
                             $oDespDesd['o55_tipoensino']    = $oDespesa->o55_tipoensino;
                             $oDespDesd['elemento_siope']    = $oNaturdessiopeDesd->c223_natdespecidade;
                             $oDespDesd['descricao_siope']   = $oNaturdessiopeDesd->c223_descricao;
                             $oDespDesd['cod_planilha']      = $this->getCodPlanilha($oDespesa);
-
                             $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd] = $oDespDesd;
+                            */
+
+                            $aArrayDesdTemp = array();
+
+                            $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
+                            $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
+                            $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
+                            $aArrayDesdTemp['dot_atualizada']   = 0;
+                            $aArrayDesdTemp['desp_orcada']      = 0;
+                            $aArrayDesdTemp['empenhado']        = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
+                            $aArrayDesdTemp['liquidado']        = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
+                            $aArrayDesdTemp['pagamento']        = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
+
+                            array_push($this->aDespesas, $aArrayDesdTemp);
                         }
 
                     }
 
+                    /**
                     if(!empty($aDadosAgrupados)) {
-                        array_push($this->despesas, $aDadosAgrupados);
-                    }
+                        array_push($this->aDespesas, $aDadosAgrupados);
+                    } */
 
                 }
             }
@@ -194,7 +251,88 @@ class Siope {
     }
 
     public function getDespesas() {
-        return $this->despesas;
+        return $this->aDespesas;
+    }
+
+    public function ordenaDespesas() {
+
+        $sort = array();
+        foreach($this->aDespesas as $k=>$v) {
+            $sort[$k] = $v['o58_codigo'];
+        }
+
+        array_multisort($sort, SORT_ASC, $this->aDespesas);
+
+    }
+
+    public function agrupaDespesas() {
+
+        $aDespAgrup = array();
+
+        foreach($this->aDespesas as $row) {
+
+            list($o58_codigo, $o58_subfuncao, $cod_planilha, $elemento_siope, $descricao_siope, $dot_atualizada, $desp_orcada, $empenhado, $liquidado, $pagamento) = array_values($row);
+
+            if ($o58_codigo == 118 || $o58_codigo == 218 || $o58_codigo == 119 || $o58_codigo == 219) {
+
+                $iSubTotalDot = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada'] : 0;
+                $iSubTotalEmp = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado'] : 0;
+                $iSubTotalLiq = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['liquidado']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['liquidado'] : 0;
+                $iSubTotalPag = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['pagamento']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['pagamento'] : 0;
+                $iSubTotalDes = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada'] : 0;
+
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada']  = ($iSubTotalDot + $dot_atualizada);
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado']       = ($iSubTotalEmp + $empenhado);
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['liquidado']       = ($iSubTotalLiq + $liquidado);
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['pagamento']       = ($iSubTotalPag + $pagamento);
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada']     = ($iSubTotalDes + $desp_orcada);
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['o58_codigo']      = $o58_codigo;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['o58_subfuncao']   = $o58_subfuncao;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['cod_planilha']    = $cod_planilha;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['elemento_siope']  = $elemento_siope;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['descricao_siope'] = $descricao_siope;
+
+            } else {
+
+                $iSubTotalDot = isset($aDespAgrup[$cod_planilha][$elemento_siope]['dot_atualizada']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['dot_atualizada'] : 0;
+                $iSubTotalEmp = isset($aDespAgrup[$cod_planilha][$elemento_siope]['empenhado']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['empenhado'] : 0;
+                $iSubTotalLiq = isset($aDespAgrup[$cod_planilha][$elemento_siope]['liquidado']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['liquidado'] : 0;
+                $iSubTotalPag = isset($aDespAgrup[$cod_planilha][$elemento_siope]['pagamento']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['pagamento'] : 0;
+                $iSubTotalDes = isset($aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada'] : 0;
+
+                $aDespAgrup[$cod_planilha][$elemento_siope]['dot_atualizada']   = ($iSubTotalDot + $dot_atualizada);
+                $aDespAgrup[$cod_planilha][$elemento_siope]['empenhado']        = ($iSubTotalEmp + $empenhado);
+                $aDespAgrup[$cod_planilha][$elemento_siope]['liquidado']        = ($iSubTotalLiq + $liquidado);
+                $aDespAgrup[$cod_planilha][$elemento_siope]['pagamento']        = ($iSubTotalPag + $pagamento);
+                $aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada']      = ($iSubTotalDes + $desp_orcada);
+                $aDespAgrup[$cod_planilha][$elemento_siope]['o58_codigo']       = $o58_codigo;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['o58_subfuncao']    = $o58_subfuncao;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['cod_planilha']     = $cod_planilha;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['elemento_siope']   = $elemento_siope;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['descricao_siope']  = $descricao_siope;
+
+            }
+
+        }
+
+        foreach ($aDespAgrup as $recurso => $aAgrupado) {
+
+            if ($recurso == 118 || $recurso == 218 || $recurso == 119 || $recurso == 219) {
+                foreach ($aAgrupado as $elementos) {
+
+                    foreach ($elementos as $elemento) {
+                        array_push($this->aDespesasAgrupadas, $elemento);
+                    }
+                }
+            } else {
+
+                foreach ($aAgrupado as $elem) {
+                    array_push($this->aDespesasAgrupadas, $elem);
+                }
+
+            }
+        }
+
     }
 
     public function getCodPlanilha($oDespesa) {
@@ -231,6 +369,7 @@ class Siope {
         echo '  <tr>';
         echo '      <td>Tp</td>';
         echo '      <td>Cod Inst</td>';
+        echo '      <td>Rec</td>';
         echo '      <td>Cod Plan</td>';
         echo '      <td>Elem</td>';
         echo '      <td>Descrição</td>';
@@ -239,15 +378,14 @@ class Siope {
         echo '      <td>D Liq</td>';
         echo '      <td>D Pag</td>';
         echo '      <td>Desp Orç</td>';
-//        echo '      <td>Rec</td>';
-//        echo '      <td>SubF</td>';
-//        echo '      <td>Ens</td>';
-//        echo '      <td>Past</td>';
-//        echo '      <td>Elem Desp</td>';
-//        echo '      <td>Elem Desdob</td>';
+        echo '      <td>SubF</td>';
+        echo '      <td>Ens</td>';
+        echo '      <td>Past</td>';
+        echo '      <td>Elem Desp</td>';
+        echo '      <td>Elem Desdob</td>';
         echo '  </tr>';
 
-        foreach($this->despesas as $despesa) {
+        foreach($this->aDespesas as $despesa) {
 
             foreach($despesa as $linhaDespesa) {
 
@@ -256,6 +394,7 @@ class Siope {
                 echo '<tr>';
                 echo '  <td>V</td>';
                 echo '  <td>1</td>';
+                echo '  <td>'.$linhaDespesa['o58_codigo'].'</td>';
                 echo '  <td>'.$linhaDespesa['cod_planilha'].'</td>';
                 echo '  <td>'.$linhaDespesa['elemento_siope'].'</td>';
                 echo '  <td>'.$linhaDespesa['descricao_siope'].'</td>';
@@ -264,11 +403,11 @@ class Siope {
                 echo '  <td>0,00</td>';
                 echo '  <td>0,00</td>';
                 echo '  <td>'.db_formatar($linhaDespesa['desp_orcada'], 'f').'</td>';
-//                echo '  <td>'.$linhaDespesa['o58_codigo'].'</td>';
-//                echo '  <td>'.$linhaDespesa['o58_subfuncao'].'</td>';
-//                echo '  <td>'.$linhaDespesa['o55_tipoensino'].'</td>';
-//                echo '  <td>'.$linhaDespesa['o55_tipopasta'].'</td>';
-//                echo '  <td>'.$linhaDespesa['o58_elemento'].'</td>';
+                echo '  <td>'.$linhaDespesa['o58_subfuncao'].'</td>';
+                echo '  <td>'.$linhaDespesa['o55_tipoensino'].'</td>';
+                echo '  <td>'.$linhaDespesa['o55_tipopasta'].'</td>';
+                echo '  <td>'.$linhaDespesa['o58_elemento'].'</td>';
+                echo '  <td>'.$linhaDespesa['o56_elemento'].'</td>';
                 echo '</tr>';
 
                 if(isset($linhaDespesa[$sChaveElem])) {
@@ -278,6 +417,7 @@ class Siope {
                         echo '<tr>';
                         echo '  <td>V</td>';
                         echo '  <td>1</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_codigo'].'</td>';
                         echo '  <td>'.$linhaDespDesd['cod_planilha'].'</td>';
                         echo '  <td>'.$linhaDespDesd['elemento_siope'].'</td>';
                         echo '  <td>'.$linhaDespDesd['descricao_siope'].'</td>';
@@ -286,12 +426,11 @@ class Siope {
                         echo '  <td>'.db_formatar($linhaDespDesd['liquidado'], 'f').'</td>';
                         echo '  <td>'.db_formatar($linhaDespDesd['pagamento'], 'f').'</td>';
                         echo '  <td>0,00</td>';
-//                        echo '  <td>'.$linhaDespDesd['o58_codigo'].'</td>';
-//                        echo '  <td>'.$linhaDespDesd['o58_subfuncao'].'</td>';
-//                        echo '  <td>'.$linhaDespDesd['o55_tipoensino'].'</td>';
-//                        echo '  <td>'.$linhaDespDesd['o55_tipopasta'].'</td>';
-//                        echo '  <td>'.$linhaDespDesd['o58_elemento'].'</td>';
-//                        echo '  <td>'.$linhaDespDesd['o56_elemento'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_subfuncao'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o55_tipoensino'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o55_tipopasta'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o58_elemento'].'</td>';
+                        echo '  <td>'.$linhaDespDesd['o56_elemento'].'</td>';
                         echo '</tr>';
 
                     }
@@ -302,6 +441,45 @@ class Siope {
 
         }
         echo '</table>';
+
+    }
+
+    public function montaTabelaFinal() {
+
+        echo '<table border="1">';
+        echo '  <tr>';
+        echo '      <td>Tp</td>';
+        echo '      <td>Cod Inst</td>';
+        echo '      <td>Rec</td>';
+        echo '      <td>SubF</td>';
+        echo '      <td>Cod Plan</td>';
+        echo '      <td>Elem</td>';
+        echo '      <td>Descrição</td>';
+        echo '      <td>D Atua</td>';
+        echo '      <td>D Emp</td>';
+        echo '      <td>D Liq</td>';
+        echo '      <td>D Pag</td>';
+        echo '      <td>Desp Orç</td>';
+        echo '  </tr>';
+
+        foreach ($this->aDespesasAgrupadas as $despesa) {
+
+            echo '<tr>';
+            echo '  <td>V</td>';
+            echo '  <td>1</td>';
+            echo '  <td>'.$despesa['o58_codigo'].'</td>';
+            echo '  <td>'.$despesa['cod_planilha'].'</td>';
+            echo '  <td>'.$despesa['o58_subfuncao'].'</td>';
+            echo '  <td>'.$despesa['elemento_siope'].'</td>';
+            echo '  <td>'.$despesa['descricao_siope'].'</td>';
+            echo '  <td>'.db_formatar($despesa['dot_atualizada'], 'f').'</td>';
+            echo '  <td>'.db_formatar($despesa['empenhado'], 'f').'</td>';
+            echo '  <td>'.db_formatar($despesa['liquidado'], 'f').'</td>';
+            echo '  <td>'.db_formatar($despesa['pagamento'], 'f').'</td>';
+            echo '  <td>'.db_formatar($despesa['desp_orcada'], 'f').'</td>';
+            echo '</tr>';
+
+        }
 
     }
 
