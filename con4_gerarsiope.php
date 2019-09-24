@@ -54,27 +54,61 @@ $aBimestres = array(
 </head>
 <body bgcolor="#cccccc" style="margin-top: 25px;">
 <form id='form1' name="form1" method="post" action="" enctype="multipart/form-data">
-    <div class="center container">
-        <fieldset class="fieldS1"> <legend>SIOPE</legend>
-            <div class="formatdiv" align="left">
-                <strong>Bimestre de Referência:&nbsp;</strong>
-                <select name="bimestre" class="formatselect">
-<!--                    <option value="">Selecione...</option>-->
-                    <?php foreach ($aBimestres as $key => $value) : ?>
-                        <option value="<?= $key ?>" >
-                            <?= $value ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div id="siope" class="recebe">&nbsp;</div>
+    <div class="center container" style="display: table">
+        <fieldset>
+            <legend>
+                <b>Siope</b>
+            </legend>
+            <table style='empty-cells: show; border-collapse: collapse;'>
+                <tr>
+                    <td colspan="4">
+                        <fieldset>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <strong>Bimestre de Referência:&nbsp;</strong>
+                                        <select name="bimestre" class="formatselect">
+                                            <option value="">Selecione...</option>
+                                            <?php foreach ($aBimestres as $key => $value) : ?>
+                                                <option value="<?= $key ?>" >
+                                                    <?= $value ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">Item</td>
+                    <td>Arquivos Gerados</td>
+                </tr>
+                <tr>
+                    <td style="border: 2px groove white; padding-right: 100px;" valign="top">
+                        <input type="checkbox" value="receita" id="receita" disabled/>
+                        <label for="receita">Receita</label><br>
+                        <input type="checkbox" value="Despesa" id="Despesa" />
+                        <label for="Despesa">Despesa</label><br>
+                    </td>
+                    <td style="border: 2px groove white;" valign="top">
+                    </td>
+                    <td style="border: 2px groove white;" valign="top">
+                        <div id='arquivo' style="width: 200px; height: 250px; overflow: scroll;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </fieldset>
-        <fieldset id="arquivo" class="fieldS2" style="display: none">
-        </fieldset>
-        <div class="formatdiv" align="center">
-            <input type="button" value="Processar" onclick="gerarSiope()">
+        <div style="text-align: center;">
+            <input type="button" id="btnMarcarTodos" value="Marcar Todos" onclick="js_marcaTodos();" />
+            <input type="button" id="btnLimparTodos" value="Limpar Todos" onclick="js_limpa();"/>
+            <input type="button" id="btnProcessar" value="Processar"
+                   onclick="js_gerarSiope();" />
         </div>
     </div>
+
 </form>
 <script>
     function novoAjax(params, onComplete) {
@@ -86,9 +120,23 @@ $aBimestres = array(
         });
 
     }
-    function gerarSiope() {
+    function js_gerarSiope() {
 
-        var iBimestre     = document.form1.bimestre.value;
+        var aArquivosSelecionados   = new Array();
+        var iBimestre               = document.form1.bimestre.value;
+        var aArquivos               = $$("input[type='checkbox']");
+
+        aArquivos.each(function (oElemento, iIndice) {
+
+            if (oElemento.checked) {
+                aArquivosSelecionados.push(oElemento.value);
+            }
+        });
+        if (aArquivosSelecionados.length == 0) {
+
+            alert("Nenhum arquivo foi selecionado para ser gerado");
+            return false;
+        }
 
         if (!iBimestre) {
             alert("Selecione o bimestre");
@@ -107,10 +155,9 @@ $aBimestres = array(
                 js_removeObj('div_aguarde');
                 alert("Processo concluído com sucesso!");
                 var sArquivo = document.getElementById('arquivo');
-                var sLink = "<legend>Arquivos Gerados</legend>";
-                console.log(oRetorno.result);
-                // sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
-                // sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
+                var sLink = "";
+                sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
+                sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
                 sArquivo.innerHTML = sLink;
                 sArquivo.style.display = "inline-block";
             } else {
@@ -119,6 +166,22 @@ $aBimestres = array(
             }
         });
 
+    }
+
+    function js_marcaTodos() {
+
+        var aCheckboxes = $$('input[type=checkbox]');
+        aCheckboxes.each(function(oCheckbox) {
+            oCheckbox.checked = true;
+        });
+    }
+
+    function js_limpa() {
+
+        var aCheckboxes = $$('input[type=checkbox]');
+        aCheckboxes.each(function (oCheckbox) {
+            oCheckbox.checked = false;
+        });
     }
 </script>
 <? db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>

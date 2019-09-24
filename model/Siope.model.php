@@ -16,7 +16,7 @@ class Siope {
     //@var integer
     public $iBimestre;
     //@var string
-    public $filtros;
+    public $sFiltros;
     //@var string
     public $dtIni;
     //@var string
@@ -26,12 +26,28 @@ class Siope {
     //@var array
     public $aDespesasAgrupadas = array();
     //@var boolean
-    public $despOrcada;
+    public $lDespOrcada;
+    //@var string
+    public $sNomeArquivo;
+    //@var integer
+    public $iErroSQL;
 
     public function gerarSiope() {
 
-        die('gerar siope csv');
+        $aDados = $this->aDespesasAgrupadas;
 
+        $csv = new SiopeCsv;
+        $csv->setNomeArquivo($this->getNomeArquivo());
+        $csv->gerarArquivoCSV($aDados);
+
+    }
+
+    public function setNomeArquivo($sNomeArq) {
+        $this->sNomeArquivo = $sNomeArq;
+    }
+
+    public function getNomeArquivo() {
+        return $this->sNomeArquivo;
     }
 
     public function setAno($iAnoUsu) {
@@ -46,18 +62,26 @@ class Siope {
         $this->iBimestre = $iBimestre;
     }
 
+    public function getErroSQL() {
+        return $this->iErroSQL;
+    }
+
+    public function setErroSQL($iErroSQL) {
+        $this->iErroSQL = $iErroSQL;
+    }
+
     public function setFiltros() {
 
         $clorcorgao       = new cl_orcorgao;
         $result           = db_query($clorcorgao->sql_query_file('', '', 'o40_orgao', 'o40_orgao asc', 'o40_instit = '.$this->iInstit.' and o40_anousu = '.$this->iAnoUsu));
-        $this->filtros    = "instit_{$this->iInstit}-funcao_12-";
+        $this->sFiltros    = "instit_{$this->iInstit}-funcao_12-";
 
         if (pg_num_rows($result) > 1) {
             for ($i = 0; $i < pg_numrows($result); $i++) {
-                $this->filtros .= "orgao_".db_utils::fieldsMemory($result, $i)->o40_orgao."-";
+                $this->sFiltros .= "orgao_".db_utils::fieldsMemory($result, $i)->o40_orgao."-";
             }
         } else {
-            $this->filtros = 'geral';
+            $this->sFiltros = 'geral';
         }
 
     }
@@ -91,13 +115,13 @@ class Siope {
     public function setDespesas() {
 
         $clselorcdotacao = new cl_selorcdotacao();
-        $clselorcdotacao->setDados($this->filtros);
+        $clselorcdotacao->setDados($this->sFiltros);
 
         $sele_work  = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$this->iAnoUsu  ";
         $sqlprinc   = db_dotacaosaldo(8, 1, 4, true, $sele_work, $this->iAnoUsu, $this->dtIni, $this->dtFim, 8, 0, true);
         $result     = db_query($sqlprinc) or die(pg_last_error());
 
-        if($this->despOrcada) {
+        if($this->lDespOrcada) {
 
             $sAnoSeg            = ($this->iAnoUsu+1);
             $sele_workAnoSeg    = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$sAnoSeg  ";
@@ -114,7 +138,7 @@ class Siope {
 
             $oDespesa = db_utils::fieldsMemory($result, $i);
 
-            if($this->despOrcada) {
+            if($this->lDespOrcada) {
                 $oDespesaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
             }
 
@@ -131,21 +155,6 @@ class Siope {
 
                     if (!isset($aDadosAgrupados[$sHashDesp])) {
 
-                        /**
-                        $oDesp = array();
-                        $oDesp['o58_codigo']        = $oDespesa->o58_codigo;
-                        $oDesp['o58_elemento']      = $oDespesa->o58_elemento;
-                        $oDesp['o58_subfuncao']     = $oDespesa->o58_subfuncao;
-                        $oDesp['o55_tipopasta']     = $oDespesa->o55_tipopasta;
-                        $oDesp['o55_tipoensino']    = $oDespesa->o55_tipoensino;
-                        $oDesp['dot_atualizada']    = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
-                        $oDesp['desp_orcada']       = $this->despOrcada ? $oDespesaAnoSeg->dot_ini : '';
-                        $oDesp['elemento_siope']    = $oNaturdessiope->c223_natdespecidade;
-                        $oDesp['descricao_siope']   = $oNaturdessiope->c223_descricao;
-                        $oDesp['cod_planilha']      = $this->getCodPlanilha($oDespesa);
-                        $aDadosAgrupados[$sHashDesp] = $oDesp;
-                         */
-
                         $aArrayTemp     = array();
 
                         $aArrayTemp['o58_codigo']       = $oDespesa->o58_codigo;
@@ -154,7 +163,7 @@ class Siope {
                         $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_natdespecidade;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
-                        $aArrayTemp['desp_orcada']      = $this->despOrcada ? $oDespesaAnoSeg->dot_ini : 0;
+                        $aArrayTemp['desp_orcada']      = $this->lDespOrcada ? $oDespesaAnoSeg->dot_ini : 0;
                         $aArrayTemp['empenhado']        = 0;
                         $aArrayTemp['liquidado']        = 0;
                         $aArrayTemp['pagamento']        = 0;
@@ -170,22 +179,6 @@ class Siope {
                         $sHashDespDesd      = $oDadosMes->o56_elemento;
 
                         if (isset($aDadosAgrupados[$sHashDesp])) {
-
-                            /**
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_codigo']          = $oDespesa->o58_codigo;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_elemento']        = $oDadosMes->o56_elemento;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o56_descr']           = $oDadosMes->o56_descr;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['empenhado']           = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['liquidado']           = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['pagamento']           = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_elemento']        = $oDespesa->o58_elemento;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o58_subfuncao']       = $oDespesa->o58_subfuncao;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipopasta']       = $oDespesa->o55_tipopasta;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['o55_tipoensino']      = $oDespesa->o55_tipoensino;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['elemento_siope']      = $oNaturdessiopeDesd->c223_natdespecidade;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['descricao_siope']     = $oNaturdessiopeDesd->c223_descricao;
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd]['cod_planilha']        = $this->getCodPlanilha($oDespesa);
-                             */
 
                             $aArrayDesdTemp = array();
 
@@ -203,24 +196,6 @@ class Siope {
                             array_push($this->aDespesas, $aArrayDesdTemp);
 
                         } else {
-
-                            /**
-                            $oDespDesd = array();
-                            $oDespDesd['o58_codigo']        = $oDespesa->o58_codigo;
-                            $oDespDesd['o56_elemento']      = $oDadosMes->o56_elemento;
-                            $oDespDesd['o56_descr']         = $oDadosMes->o56_descr;
-                            $oDespDesd['empenhado']         = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
-                            $oDespDesd['liquidado']         = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
-                            $oDespDesd['pagamento']         = ($oDadosMes->pagamento - $oDadosMes->pagamento_estornado);
-                            $oDespDesd['o58_elemento']      = $oDespesa->o56_elemento;
-                            $oDespDesd['o58_subfuncao']     = $oDespesa->o58_subfuncao;
-                            $oDespDesd['o55_tipopasta']     = $oDespesa->o55_tipopasta;
-                            $oDespDesd['o55_tipoensino']    = $oDespesa->o55_tipoensino;
-                            $oDespDesd['elemento_siope']    = $oNaturdessiopeDesd->c223_natdespecidade;
-                            $oDespDesd['descricao_siope']   = $oNaturdessiopeDesd->c223_descricao;
-                            $oDespDesd['cod_planilha']      = $this->getCodPlanilha($oDespesa);
-                            $aDadosAgrupados[$sHashDesp][$sHashDesp][$sHashDespDesd] = $oDespDesd;
-                            */
 
                             $aArrayDesdTemp = array();
 
@@ -240,11 +215,6 @@ class Siope {
 
                     }
 
-                    /**
-                    if(!empty($aDadosAgrupados)) {
-                        array_push($this->aDespesas, $aDadosAgrupados);
-                    } */
-
                 }
             }
         }
@@ -257,11 +227,11 @@ class Siope {
     public function ordenaDespesas() {
 
         $sort = array();
-        foreach($this->aDespesas as $k=>$v) {
+        foreach($this->aDespesasAgrupadas as $k=>$v) {
             $sort[$k] = $v['o58_codigo'];
         }
 
-        array_multisort($sort, SORT_ASC, $this->aDespesas);
+        array_multisort($sort, SORT_ASC, $this->aDespesasAgrupadas);
 
     }
 
@@ -281,6 +251,9 @@ class Siope {
                 $iSubTotalPag = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['pagamento']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['pagamento'] : 0;
                 $iSubTotalDes = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada'] : 0;
 
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['cod_planilha']    = $cod_planilha;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['elemento_siope']  = $elemento_siope;
+                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['descricao_siope'] = $descricao_siope;
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada']  = ($iSubTotalDot + $dot_atualizada);
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado']       = ($iSubTotalEmp + $empenhado);
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['liquidado']       = ($iSubTotalLiq + $liquidado);
@@ -288,9 +261,6 @@ class Siope {
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['desp_orcada']     = ($iSubTotalDes + $desp_orcada);
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['o58_codigo']      = $o58_codigo;
                 $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['o58_subfuncao']   = $o58_subfuncao;
-                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['cod_planilha']    = $cod_planilha;
-                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['elemento_siope']  = $elemento_siope;
-                $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['descricao_siope'] = $descricao_siope;
 
             } else {
 
@@ -300,6 +270,9 @@ class Siope {
                 $iSubTotalPag = isset($aDespAgrup[$cod_planilha][$elemento_siope]['pagamento']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['pagamento'] : 0;
                 $iSubTotalDes = isset($aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada']) ? $aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada'] : 0;
 
+                $aDespAgrup[$cod_planilha][$elemento_siope]['cod_planilha']     = $cod_planilha;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['elemento_siope']   = $elemento_siope;
+                $aDespAgrup[$cod_planilha][$elemento_siope]['descricao_siope']  = $descricao_siope;
                 $aDespAgrup[$cod_planilha][$elemento_siope]['dot_atualizada']   = ($iSubTotalDot + $dot_atualizada);
                 $aDespAgrup[$cod_planilha][$elemento_siope]['empenhado']        = ($iSubTotalEmp + $empenhado);
                 $aDespAgrup[$cod_planilha][$elemento_siope]['liquidado']        = ($iSubTotalLiq + $liquidado);
@@ -307,9 +280,6 @@ class Siope {
                 $aDespAgrup[$cod_planilha][$elemento_siope]['desp_orcada']      = ($iSubTotalDes + $desp_orcada);
                 $aDespAgrup[$cod_planilha][$elemento_siope]['o58_codigo']       = $o58_codigo;
                 $aDespAgrup[$cod_planilha][$elemento_siope]['o58_subfuncao']    = $o58_subfuncao;
-                $aDespAgrup[$cod_planilha][$elemento_siope]['cod_planilha']     = $cod_planilha;
-                $aDespAgrup[$cod_planilha][$elemento_siope]['elemento_siope']   = $elemento_siope;
-                $aDespAgrup[$cod_planilha][$elemento_siope]['descricao_siope']  = $descricao_siope;
 
             }
 
@@ -332,6 +302,65 @@ class Siope {
 
             }
         }
+
+    }
+
+    public function geraLinhaVazia() {
+
+        if ($this->verficaFonte119219()) {
+
+            if (!$this->verificaFonte118218()) {
+
+                $aArrayZerado = array();
+
+                $aArrayZerado['o58_codigo']       = 118;
+                $aArrayZerado['o58_subfuncao']    = 0;
+                $aArrayZerado['cod_planilha']     = 0;
+                $aArrayZerado['elemento_siope']   = 0;
+                $aArrayZerado['descricao_siope']  = 0;
+                $aArrayZerado['dot_atualizada']   = 0;
+                $aArrayZerado['desp_orcada']      = 0;
+                $aArrayZerado['empenhado']        = 0;
+                $aArrayZerado['liquidado']        = 0;
+                $aArrayZerado['pagamento']        = 0;
+
+                array_push($this->aDespesasAgrupadas, $aArrayZerado);
+
+            }
+
+        }
+
+    }
+
+    public function verficaFonte119219() {
+
+        $lReturn = false;
+
+        foreach ($this->aDespesasAgrupadas as $despesa) {
+            if ($despesa['o58_codigo'] == 119 || $despesa['o58_codigo'] == 219) {
+                if ($despesa['o58_subfuncao'] == 361 || $despesa['o58_subfuncao'] == 365 || $despesa['o58_subfuncao'] == 366 || $despesa['o58_subfuncao'] == 367) {
+                    if (substr($despesa['elemento_siope'], 0, 3) == 331) {
+                        $lReturn = true;
+                    }
+                }
+            }
+        }
+
+        return $lReturn;
+
+    }
+
+    public function verificaFonte118218() {
+
+        $lReturn = false;
+
+        foreach ($this->aDespesasAgrupadas as $despesa) {
+            if ($despesa['o58_codigo'] == 118 || $despesa['o58_codigo'] == 218) {
+                $lReturn = true;
+            }
+        }
+
+        return $lReturn;
 
     }
 
@@ -468,8 +497,8 @@ class Siope {
             echo '  <td>V</td>';
             echo '  <td>1</td>';
             echo '  <td>'.$despesa['o58_codigo'].'</td>';
-            echo '  <td>'.$despesa['cod_planilha'].'</td>';
             echo '  <td>'.$despesa['o58_subfuncao'].'</td>';
+            echo '  <td>'.$despesa['cod_planilha'].'</td>';
             echo '  <td>'.$despesa['elemento_siope'].'</td>';
             echo '  <td>'.$despesa['descricao_siope'].'</td>';
             echo '  <td>'.db_formatar($despesa['dot_atualizada'], 'f').'</td>';
@@ -496,11 +525,15 @@ class Siope {
     public function setDespesasOrcadas() {
 
         if($this->iBimestre == 6) {
-            $this->despOrcada = true;
+            $this->lDespOrcada = true;
         } else {
-            $this->despOrcada = false;
+            $this->lDespOrcada = false;
         }
 
+    }
+
+    public function getElementoFormat($elemento) {
+        return substr($elemento, 0, 1).".".substr($elemento, 1, 2).".".substr($elemento, 3, 2).".".substr($elemento, 5, 2).".".substr($elemento, 7, 2).".".substr($elemento, 9, 2);
     }
 
     public function getCod101201($iSubFuncao, $iTipoEnsino, $iTipoPasta) {

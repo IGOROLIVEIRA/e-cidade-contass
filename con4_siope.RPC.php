@@ -40,10 +40,21 @@ switch ($oParam->exec) {
             $siope->setFiltros();
             $siope->setDespesasOrcadas();
             $siope->setDespesas();
-            $siope->ordenaDespesas();
             $siope->agrupaDespesas();
-            $siope->montaTabelaFinal();
+            $siope->geraLinhaVazia();
+            $siope->ordenaDespesas();
+            $siope->setNomeArquivo($sNomeArq);
+            $siope->gerarSiope();
 
+            if ($siope->getErroSQL() > 0 ) {
+                throw new Exception ("Ocorreu um erro ao gerar IC ".$siope->getErroSQL());
+            }
+
+            $oRetorno->caminho = $oRetorno->nome = "{$siope->getNomeArquivo()}.csv";
+
+            system("rm -f {$siope->getNomeArquivo()}.zip");
+            system("bin/zip -q {$siope->getNomeArquivo()}.zip $oRetorno->caminho");
+            $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$siope->getNomeArquivo()}.zip";
 
         } catch(Exception $eErro) {
 
