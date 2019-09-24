@@ -128,7 +128,7 @@ if(isset($incluir)){
 
 	  if ($clpccflicitapar->numrows > 0){
 	    db_fieldsmemory($result_modalidade,0,2);
-	    $l20_numero=$l25_numero;
+	    $l20_numero=$l25_numero+1;
 	  } else {
 	    $erro_msg="Configure a numeração de licitação por modalidade.";
 	    $sqlerro = true;
@@ -144,7 +144,7 @@ if(isset($incluir)){
 
 	  if ($clpccflicitanum->numrows>0){
       db_fieldsmemory($result_numgeral,0);
-      $l20_edital=$l24_numero;
+      $l20_edital=$l24_numero+1;
     } else {
 		  $erro_msg="Configure a numeração de licitação por edital.";
 		  $sqlerro = true;
@@ -260,7 +260,7 @@ if(isset($incluir)){
 			$clliclicitasituacao->l11_obs         = "Licitação em andamento.";
 	    $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
 	    $clliclicitasituacao->l11_hora        = DB_hora();
-		  $clliclicitasituacao->incluir($l11_sequencial);
+      $clliclicitasituacao->incluir($l11_sequencial);
 
 	    $erro_msg = " Licitação {$l03_descr} número {$l20_numero} incluida com sucesso.";
 
@@ -269,12 +269,9 @@ if(isset($incluir)){
 	      $sqlerro = true;
 		  }
 
-	  }
+	    $codigo   = $clliclicita->l20_codigo;
+		  $tipojulg = $clliclicita->l20_tipojulg;
 
-	  $codigo   = $clliclicita->l20_codigo;
-		$tipojulg = $clliclicita->l20_tipojulg;
-
-    if($sqlerro == false){
       $clpccflicitapar->l25_numero=$l25_numero+1;
       $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
 
