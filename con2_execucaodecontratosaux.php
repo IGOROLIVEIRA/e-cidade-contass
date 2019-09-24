@@ -249,6 +249,15 @@ class ExecucaoDeContratos{
 
   }
 
+  public static function getValoresEmpenho($iEmpenho){
+      $oDaoEmpempenho    = db_utils::getDao("empempenho");
+      $sSqlEmpempenho    = $oDaoEmpempenho->sql_query(null,"e60_vlremp,e60_vlrliq,e60_vlrpag,e60_vlranu",null,$iEmpenho);
+      $rsValoresEmp      = $oDaoEmpempenho->sql_record($sSqlEmpempenho);
+      $aValoresEmp[]     = db_utils::fieldsMemory($rsValoresEmp, 0);
+//      echo "<pre>"; print_r($aValoresEmp);die();
+      return $aValoresEmp;
+  }
+
   public static function arrayDeMateriais($oExecucaoDeContratos, $aEmpenhamentos, $iCodRel = null){
 
     $aCodigosDosMateriais = array();

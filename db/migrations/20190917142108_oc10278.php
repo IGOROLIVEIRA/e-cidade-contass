@@ -25,8 +25,11 @@ class Oc10278 extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
+    public function up()
     {
+        $sql = "insert into db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Execução Financeira','Execução Financeira','con2_execucaofinanceira001.php',1,1,'Execução Financeira','t');
+                insert into db_menu values(8595,(SELECT max(id_item) FROM db_itensmenu),4,8251);";
 
+        $this->execute($sql);
     }
 }
