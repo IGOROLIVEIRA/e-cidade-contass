@@ -609,24 +609,36 @@ switch ($oParam->exec) {
         $oCgm->setLogradouroComercial('');
         $oCgm->setComplementoComercial('');
      }
+        if(!empty($oParam->pessoa->z01_cadast)){
+            $anousu = db_getsession('DB_anousu');
+            $instituicao = db_getsession('DB_instit');
+            $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+            $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-      try {
-
-        $oCgm->save();
-        if ($oParam->action == "incluir") {
-
-          $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
-        } else if ($oParam->action == "alterar") {
-
-          $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (".$oCgm->getCodigo().")\\n\\n");
+            if ($oParam->pessoa->z01_cadast <= $c99_datapat) {
+                $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                $sqlErro  = true;
+            }
         }
 
-      } catch (Exception $erro) {
+        if (!$sqlErro) {
+            try {
+                $oCgm->save();
+                if ($oParam->action == "incluir") {
 
-        $sqlErro = true;
-        $oRetorno->status = 2;
-        $oRetorno->message = urlencode($erro->getMessage());
-      }
+                    $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                } else if ($oParam->action == "alterar") {
+
+                    $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                }
+
+            } catch (Exception $erro) {
+
+                $sqlErro = true;
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode($erro->getMessage());
+            }
+        }
     //Aqui vai manipular o cidadaocgm
 
       if (!$sqlErro) {
