@@ -230,16 +230,37 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	  db_fieldsmemory($this->recorddositens,$ii);
 	  $this->objpdf->Setfont('Arial','',7);
 
+
+    /* Realizar a consulta de item anulado */
+
+    $sql = " SELECT m52_valor
+              FROM matordemitem
+              INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp
+              INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
+              AND empempitem.e62_sequen = matordemitem.m52_sequen
+              INNER JOIN empempenho ON empempenho.e60_numemp = empempitem.e62_numemp
+              INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+              INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
+              INNER JOIN db_depart ON db_depart.coddepto = matordem.m51_depto
+              INNER JOIN orcelemento ON orcelemento.o56_codele = empempitem.e62_codele
+              AND orcelemento.o56_anousu = empempenho.e60_anousu
+              INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item
+                WHERE m52_codordem =  ".$this->numordem." and e62_item = ".pg_result($this->recorddositens,$ii,$this->codmater);
+
+    $resItens = @db_query($sql);
+    $valorItemAnulado = db_utils::fieldsMemory($resItens,0)->m52_valor;
+
 	  $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem);
     if (pg_result($this->recorddositens,$ii,$this->Snumero) != "") {
       $descricaoitem .= "\n\n".'SOLICITAÇÃO: '.pg_result($this->recorddositens,$ii,$this->Snumero);
-	  }
+    }
 
     $obsitem  = pg_result($this->recorddositens,$ii,$this->observacaoitem);
     $obsitem  = substr($obsitem,0,1421);
-	$obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
+	  $obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
+
+    $obsitem .=
     $sObsItem = $obsitem;
-    //$sObsItem = substr($obsitem,0,1421);
 
     //// troca de pagina
 	  if( ($this->objpdf->gety() > $this->objpdf->h - 140 && $pagina == 1 )
@@ -351,7 +372,13 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 				                      $descricaoitem."\n",
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
   			                      db_formatar(pg_result($this->recorddositens,$ii,$this->valoritem),'f')),3,false,4,0,true);
-     $xtotal += pg_result($this->recorddositens,$ii,$this->valoritem);
+
+     if($valorItemAnulado){
+        $xtotal -= eval($valorItemAnulado);
+     }else{
+        $xtotal += pg_result($this->recorddositens,$ii,$this->valoritem);
+     }
+
    }else if ($iVoltaImp == 1){
      $sObsItem = $sTextoaImprimir; //resto do texto
    }
@@ -403,6 +430,11 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
                                               3,
                                               ($this->objpdf->h - $iAlturaFinal)
                                               );
+    if($valorItemAnulado){
+      $this->objpdf->Setfont('Arial','B',8);
+      $this->objpdf->text($this->objpdf->getx()+56, $this->objpdf->gety()-3, "(ANULADO)");
+    }
+
      if ($sObsItem != "") {
 
        $iVoltaImp       = 1;
