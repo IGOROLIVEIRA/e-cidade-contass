@@ -23,7 +23,7 @@ class SiopeCsv extends Siope {
 
         foreach($aDados as $value) {
 
-            $sLinha  = "V;1;".$value['cod_planilha'].";";
+            $sLinha  = "V;1;".$value['cod_planilha'].$this->sDelim;
             $sLinha .= $this->getElementoFormat($value['elemento_siope']).$this->sDelim;
             $sLinha .= $value['descricao_siope'].$this->sDelim;
             $sLinha .= number_format($value['dot_atualizada'], 2, ',', '').$this->sDelim;

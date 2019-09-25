@@ -89,8 +89,8 @@ $aBimestres = array(
                     <td style="border: 2px groove white; padding-right: 100px;" valign="top">
                         <input type="checkbox" value="receita" id="receita" disabled/>
                         <label for="receita">Receita</label><br>
-                        <input type="checkbox" value="Despesa" id="Despesa" />
-                        <label for="Despesa">Despesa</label><br>
+                        <input type="checkbox" value="despesa" id="despesa" />
+                        <label for="despesa">Despesa</label><br>
                     </td>
                     <td style="border: 2px groove white;" valign="top">
                     </td>
@@ -147,6 +147,7 @@ $aBimestres = array(
         var params = {
             exec: 'gerarSiope',
             bimestre: iBimestre,
+            arquivos: aArquivosSelecionados
         };
 
         novoAjax(params, function(e) {
