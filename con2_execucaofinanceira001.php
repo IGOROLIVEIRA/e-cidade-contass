@@ -138,7 +138,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
             if ($('pc60_numcgm').value != '') {
 
                 sFuncaoPesquisa   = "func_pcforne.php?pesquisa_chave="+$F('pc60_numcgm');
-                sFuncaoPesquisa  += "&funcao_js=parent.js_completaFornecedor2";
+                sFuncaoPesquisa  += "&iParam=true&funcao_js=parent.js_completaFornecedor2";
             } else {
                 $('z01_nome').value = '';
             }
@@ -154,6 +154,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     }
 
     function js_completaFornecedor2(codigo,nome) {
+
         $('z01_nome').value  = nome;
         $('pc60_numcgm').focus();
         db_iframe_acordofornecedor.hide();
@@ -169,6 +170,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
         for (var iContrato = 0; iContrato < oContratos.length; iContrato++) {
             aContratos.push(oContratos[iContrato].sCodigo);
+        }
+
+        if(aContratos.length != 0 && iFornecedor != ''){
+            alert("Mensagem Deborah");
+            return false;
         }
 
         if (dtVigenciaInicial != '' && dtVigenciaFinal != '') {

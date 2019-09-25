@@ -20,9 +20,7 @@ require_once("con2_execcontratosquebraaditivoempenho.php");
 require_once("con2_execucaodecontratosaux.php");
 
 db_postmemory($HTTP_GET_VARS);
-//ini_set('display_errors','on');
-$arrayContratos = preg_split("/[\s,]+/", $aContratos);
-
+//echo "<pre>"; var_dump($HTTP_GET_VARS); die();
 
 $oPdf  = new PDF();
 $oPdf->Open();
@@ -30,39 +28,44 @@ $oPdf->AliasNbPages();
 $oPdf->SetTextColor(0,0,0);
 $oPdf->SetFillColor(220);
 $oPdf->SetAutoPageBreak(false);
+$oExecucaoFinanceita = new ExecucaoDeContratos();
 
 $iFonte     = 9;
 $iAlt       = 6;
 
 $head4 = "Relatório de Execução Financeira\n";
 
-if( empty($ac16_datainicio) && !empty($ac16_datafim) ){
-    $head4 .= "\nPeríodo: até $ac16_datafim";
-}else if( !empty($ac16_datainicio) && empty($ac16_datafim) ){
-    $head4 .= "\nPeríodo: a partir de $ac16_datainicio";
-}else if( !empty($ac16_datainicio) && !empty($ac16_datafim) ){
-    $head4 .= "\nPeríodo: de $ac16_datainicio até $ac16_datafim";
+if( empty($dtVigenciaInicial) && !empty($dtVigenciaFinal) ){
+    $head4 .= "\nPeríodo: até $dtVigenciaFinal";
+}else if( !empty($dtVigenciaInicial) && empty($dtVigenciaFinal) ){
+    $head4 .= "\nPeríodo: a partir de $dtVigenciaInicial";
+}else if( !empty($dtVigenciaInicial) && !empty($dtVigenciaFinal) ){
+    $head4 .= "\nPeríodo: de $dtVigenciaInicial até $dtVigenciaFinal";
 }
 
-$oPdf->AddPage('L');
-
+if($aContratos == ""){
+    $arrayContratos = ExecucaoDeContratos::getAcordosFornecedor($fornecedor);
+}else{
+    $arrayContratos = preg_split("/[\s,]+/", $aContratos);
+}
+//echo "<pre>"; print_r($arrayContratos);die();
 foreach ($arrayContratos as $iContrato){
-//    echo "<pre>"; print_r($iContrato);die();
+
+    $oPdf->AddPage('L');
+
     $oAcordo    = new Acordo($iContrato);
-    $oExecucaoFinanceita = new ExecucaoDeContratos();
-//    $oExecucaoFinanceita->imprimircabecalho($oPdf,$oAcordo);
     $oPosicoes   = $oAcordo->getPosicoes();
     $iTotalDeRegistros = null;
-//        echo "<pre>"; print_r($aPosicoes);die();
+
     $oPdf->SetFont('Arial','B',10);
     $oPdf->ln();
-    $oPdf->cell(55 ,10,"Acordo: ".$oAcordo->getCodigo()                                     ,"TBL" ,0,"L",1,0);
-    $oPdf->cell(100,10,"Fornecedor: ".$oAcordo->getContratado()->getNome()                  ,"TB"  ,0,"L",1,0);
-    $oPdf->cell(65 ,10,"Valor do Contrato: ".$oAcordo->getValorContrato()                   ,"TB"  ,0,"L",1,0);
-    $oPdf->cell(63 ,10,"Vigência: ".$oAcordo->getDataInicial()." á ".$oAcordo->getDataFinal() ,"TBR" ,1,"L",1,0);
+    $oPdf->cell(40 ,10,"Acordo: ".$oAcordo->getNumero()."/".$oAcordo->getAno(),"TBL" ,0,"L",1,0);
+    $oPdf->cell(120,10,"Fornecedor: ".$oAcordo->getContratado()->getNome(),"TB"  ,0,"L",1,0);
+    $oPdf->cell(65 ,10,"Valor do Contrato: ".'R$'.number_format((double)$oAcordo->getValorContrato(),2,',','.'),"TB"  ,0,"L",1,0);
+    $oPdf->cell(58 ,10,"Vigência: ".$oAcordo->getDataInicial()." á ".$oAcordo->getDataFinal() ,"TBR" ,1,"L",1,0);
     $oPdf->cell(98,10,""                         ,"TBRL",0,"L",1,0);
     $oPdf->cell(96,10,"Movimentação do Empenho"  ,"TBRL",0,"C",1,0);
-    $oPdf->cell(89 ,10,"Saldo a Pagar:"          ,"TBRL",1,"C",1,0);
+    $oPdf->cell(89 ,10,"Saldo a Pagar"          ,"TBRL",1,"C",1,0);
     //linha cabeçalho
     $oPdf->cell(18 ,10,"Empenho"                 ,"TBRL",0,"C",1,0);
     $oPdf->cell(30 ,10,"Data de Emissão"         ,"TBRL",0,"C",1,0);
@@ -71,14 +74,21 @@ foreach ($arrayContratos as $iContrato){
     $oPdf->cell(24 ,10,"Empenhado"               ,"TBRL",0,"C",1,0);
     $oPdf->cell(23 ,10,"Liquidado"               ,"TBRL",0,"C",1,0);
     $oPdf->cell(23 ,10,"Anulado"                 ,"TBRL",0,"C",1,0);
-    $oPdf->cell(26 ,10,"Pago"                 ,"TBRL",0,"C",1,0);
+    $oPdf->cell(26 ,10,"Pago"                    ,"TBRL",0,"C",1,0);
     $oPdf->cell(30 ,10,"Liquidado"               ,"TBRL",0,"C",1,0);
-    $oPdf->cell(30 ,10,"Não Liquidado"               ,"TBRL",0,"C",1,0);
-    $oPdf->cell(29 ,10,"Geral"                 ,"TBRL",1,"C",1,0);
+    $oPdf->cell(30 ,10,"Não Liquidado"           ,"TBRL",0,"C",1,0);
+    $oPdf->cell(29 ,10,"Geral"                   ,"TBRL",1,"C",1,0);
 
+    $sTotalEmpenhado = 0;
+    $sTotalLiquidado = 0;
+    $sTotalAnulado = 0;
+    $sTotalPago = 0;
+    $sTotalLiquidadoNaoPago = 0;
+    $sTotalNaoLiquidado = 0;
+    $sTotalGeral = 0;
     foreach ($oPosicoes as $aPosicao){
-        $aEmpenhos = ExecucaoDeContratos::empenhosDeUmaPosicao($aPosicao->getCodigo(),$ac16_datainicio,$ac16_datafim);
-//echo "<pre>"; print_r($aEmpenhos);
+        $aEmpenhos = ExecucaoDeContratos::empenhosDeUmaPosicao($aPosicao->getCodigo(),$dtVigenciaInicial,$dtVigenciaFinal);
+
         if(empty($aEmpenhos)){
             continue;
         }
@@ -111,10 +121,21 @@ foreach ($arrayContratos as $iContrato){
 
             $aDescricaoposicao = quebrarTexto($sDescricaoposicao,21);
             $iAlt = $iAlt*(count($aDescricaoposicao));
+
             $aValoresEmp  = ExecucaoDeContratos::getValoresEmpenho($oEmp->e60_numemp);
             $vlrLiqaPagar =  $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlrpag;
             $vlrNaoLiq    = $aValoresEmp[0]->e60_vlremp - $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlranu;
-            $vlorGeral    = 0;
+            $vlorGeral    = $vlrLiqaPagar - $vlrNaoLiq;
+
+            $sTotalEmpenhado        += $aValoresEmp[0]->e60_vlremp;
+            $sTotalLiquidado        += $aValoresEmp[0]->e60_vlrliq;
+            $sTotalAnulado          += $aValoresEmp[0]->e60_vlranu;
+            $sTotalPago             += $aValoresEmp[0]->e60_vlrpag;
+            $sTotalLiquidadoNaoPago += $vlrLiqaPagar;
+            $sTotalNaoLiquidado     += $vlrNaoLiq;
+            $sTotalGeral            += $vlorGeral;
+
+            $oPdf->SetFont('Arial','',10);
             $oPdf->cell(18,$iAlt,$oEmp->e60_codemp."/".$oEmp->e60_anousu,"TBRL",0,"C",0,0);
             $oPdf->cell(30,$iAlt,$sDataEmissao,"TBRL",0,"C",0,0);
             multiCell($oPdf, $aDescricaoposicao, 10, $iAlt, 39);
@@ -126,7 +147,6 @@ foreach ($arrayContratos as $iContrato){
             $oPdf->cell(30,$iAlt,'R$'.number_format((double)$vlrLiqaPagar,2,',','.'),"TBRL",0,"C",0,0);
             $oPdf->cell(30,$iAlt,'R$'.number_format((double)$vlrNaoLiq,2,',','.'),"TBRL",0,"C",0,0);
             $oPdf->cell(29,$iAlt,'R$'.number_format((double)$vlorGeral,2,',','.'),"TBRL",1,"C",0,0);
-            $oPdf->cell(29,$iAlt,"","TBRL",1,"C",0,0);
 
             // Verifica se a posição de escrita está próxima ao fim da página.
             if($oPdf->GetY() > 190){
@@ -138,6 +158,16 @@ foreach ($arrayContratos as $iContrato){
             }
         }
     }
+    $oPdf->SetFont('Arial','B',10);
+    $oPdf->cell(98,10,"VALOR TOTAL: ","TBRL",0,"R",1,0);
+    $oPdf->cell(24,10,'R$'.number_format((double)$sTotalEmpenhado,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(23,10,'R$'.number_format((double)$sTotalLiquidado,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(23,10,'R$'.number_format((double)$sTotalAnulado,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(26,10,'R$'.number_format((double)$sTotalPago,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(30,10,'R$'.number_format((double)$sTotalLiquidadoNaoPago,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(30,10,'R$'.number_format((double)$sTotalNaoLiquidado,2,',','.'),"TBRL",0,"C",1,0);
+    $oPdf->cell(29,10,'R$'.number_format((double)$sTotalGeral,2,',','.'),"TBRL",1,"C",1,0);
+
 }
 
 function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {

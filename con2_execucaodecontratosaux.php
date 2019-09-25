@@ -249,12 +249,23 @@ class ExecucaoDeContratos{
 
   }
 
+  public static function getAcordosFornecedor($iFornecedor){
+      $oDaoAcordo    = db_utils::getDao("acordo");
+      $sSqlAcordos = $oDaoAcordo->sql_query(null,"ac16_sequencial",null,"ac16_contratado = $iFornecedor");
+      $rsBuscaAcordo = $oDaoAcordo->sql_record($sSqlAcordos);
+      $aAcordosRetorno = array();
+      for ($iRowItem = 0; $iRowItem < pg_num_rows($rsBuscaAcordo); $iRowItem++) {
+          $aAcordosRetorno[] = db_utils::fieldsMemory($rsBuscaAcordo, $iRowItem);
+      }
+
+      return $aAcordosRetorno;
+  }
+
   public static function getValoresEmpenho($iEmpenho){
       $oDaoEmpempenho    = db_utils::getDao("empempenho");
       $sSqlEmpempenho    = $oDaoEmpempenho->sql_query(null,"e60_vlremp,e60_vlrliq,e60_vlrpag,e60_vlranu",null,$iEmpenho);
       $rsValoresEmp      = $oDaoEmpempenho->sql_record($sSqlEmpempenho);
       $aValoresEmp[]     = db_utils::fieldsMemory($rsValoresEmp, 0);
-//      echo "<pre>"; print_r($aValoresEmp);die();
       return $aValoresEmp;
   }
 
