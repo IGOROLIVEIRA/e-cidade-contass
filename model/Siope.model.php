@@ -1,6 +1,7 @@
 <?php
 
 require_once("classes/db_orcorgao_classe.php");
+require_once("classes/db_orcdotacao_classe.php");
 require_once("classes/db_naturdessiope_classe.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
@@ -112,6 +113,21 @@ class Siope {
 
     }
 
+    public function getDespOrcAnoSeg($iCodDot) {
+
+        $clorcdotacao = new cl_orcdotacao;
+        $sSql = $clorcdotacao->sql_query_file (($this->iAnoUsu+1),$iCodDot,'o58_valor',null,"");
+
+        $rsDotIni = db_query($sSql);
+
+        if(pg_num_rows($rsDotIni) > 0) {
+            return db_utils::fieldsMemory($rsDotIni, 0)->o58_valor;
+        } else {
+            return 0;
+        }
+
+    }
+
     public function setDespesas() {
 
         $clselorcdotacao = new cl_selorcdotacao();
@@ -121,15 +137,6 @@ class Siope {
         $sqlprinc   = db_dotacaosaldo(8, 1, 4, true, $sele_work, $this->iAnoUsu, $this->dtIni, $this->dtFim, 8, 0, true);
         $result     = db_query($sqlprinc) or die(pg_last_error());
 
-        if($this->lDespOrcada) {
-
-            $sAnoSeg            = ($this->iAnoUsu+1);
-            $sele_workAnoSeg    = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$sAnoSeg  ";
-            $sqlprincAnoSeg     = db_dotacaosaldo(8, 1, 4, true, $sele_workAnoSeg, $sAnoSeg, "01-01-$sAnoSeg", "01-01-$sAnoSeg", 8, 0, true);
-            $resultAnoSeg       = db_query($sqlprincAnoSeg) or die(pg_last_error());
-
-        }
-
         if (pg_num_rows($result) == 0) {
             throw new Exception ("Nenhum registro encontrado.");
         }
@@ -137,10 +144,6 @@ class Siope {
         for ($i = 0; $i < pg_numrows($result); $i++) {
 
             $oDespesa = db_utils::fieldsMemory($result, $i);
-
-            if($this->lDespOrcada) {
-                $oDespesaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
-            }
 
             if ($oDespesa->o58_codigo > 0) {
 
@@ -163,7 +166,7 @@ class Siope {
                         $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_natdespecidade;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
-                        $aArrayTemp['desp_orcada']      = $this->lDespOrcada ? $oDespesaAnoSeg->dot_ini : 0;
+                        $aArrayTemp['desp_orcada']      = $this->lDespOrcada ? $this->getDespOrcAnoSeg($oDespesa->o58_coddot) : 0;
                         $aArrayTemp['empenhado']        = 0;
                         $aArrayTemp['liquidado']        = 0;
                         $aArrayTemp['pagamento']        = 0;
