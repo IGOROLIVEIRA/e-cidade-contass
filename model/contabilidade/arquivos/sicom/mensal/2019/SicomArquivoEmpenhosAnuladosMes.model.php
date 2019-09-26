@@ -153,7 +153,8 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                                               WHEN o41_codtri = '0'
                                                    OR NULL THEN o41_unidade::varchar
                                               ELSE o41_codtri
-                                          END),3,0) AS codunidadesub
+                                          END),3,0) AS codunidadesub,
+                                          c70_codlan
             FROM conlancam
             JOIN conlancamcompl ON c70_codlan = c72_codlan
             JOIN conlancamemp ON c75_codlan = c70_codlan
