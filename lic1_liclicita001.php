@@ -161,21 +161,19 @@ if(isset($incluir)){
 
 
 	  //verifica se já existe licitação por modadlidade
-		$numero=$l20_numero+1;
-		$sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null,"l25_numero as xx",null,"l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$numero and l20_anousu=$anousu");
+    $sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null,"l25_numero as xx",null,"l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
 		$result_verif_licitamod=$clpccflicitapar->sql_record( $sqlveriflicitamod );
 
 		if ($clpccflicitapar->numrows>0){
-		  $erro_msg="Já existe licitação número $l20_numero.Verificar o cadastro por modalidade.";
+		  $erro_msg="Já existe licitação número $l20_numero.Verificar o cadastro por modalidade."; // Trocar l20_numero por numero
 		  $sqlerro = true;
 		}
 
 		//verifica se existe licitação por edital
-		$edital=$l20_edital+1;
-		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital= $edital and l20_anousu=$anousu"));
+		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital= $l20_edital and l20_anousu=$anousu"));
 
 		if ($clpccflicitanum->numrows>0){
-		  $erro_msg="Já existe licitação número $l20_edital.Verificar numeração por edital.";
+		  $erro_msg="Já existe licitação número $l20_edital.Verificar numeração por edital."; // Trocar l20_edital por edital
 		  $sqlerro = true;
 		}
 
