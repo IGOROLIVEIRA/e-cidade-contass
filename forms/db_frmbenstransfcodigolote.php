@@ -75,6 +75,12 @@
 
 <script>
 
+
+/*
+  Array para recuperar todos os itens marcados quando fizer o uso do filtro da placa e a lista for atualizada.
+*/
+var itens = [];
+
 let ordenacao = '';
 document.getElementById('placa').style.width = '100px';
 document.getElementById('placa').addEventListener("keyup", () => {
@@ -218,11 +224,10 @@ function preencheLista(aBens){
       }
 
       sCheck = "<input class='chk' type='checkbox' id='"+t52_bem+"|"+situacao+"' "+sChecked+">";
-
       let dataFormatada = t52_dtaqu.includes('/') ? t52_dtaqu : js_formatar(t52_dtaqu,"d");
 
       sLinha +=  "<tr>";
-      sLinha +=  "  <td class='linhagrid'>"+sCheck+"                                      </td>";
+      sLinha +=  "  <td class='linhagrid marcador'>"+sCheck+"                                      </td>";
       sLinha +=  "  <td class='linhagrid'> "+t52_bem.urlDecode()+"&nbsp;                   </td>";
       sLinha +=  "  <td class='linhagrid'> "+t64_descr.urlDecode()+"&nbsp;                 </td>";
       sLinha +=  "  <td class='linhagrid'> "+t52_descr.urlDecode()+"&nbsp;                 </td>";
@@ -236,6 +241,35 @@ function preencheLista(aBens){
     }
   }
   $('listaBens').innerHTML = sLinha;
+
+  let linhas = document.getElementsByClassName('marcador');
+
+  for(let i in linhas){
+    if(linhas[i].children){
+      linhas[i].children[0].addEventListener('click', (e)=>{
+        if(!itens.includes(e.target.id)){
+          itens.push(e.target.id);
+        }else{
+          itens = itens.filter((element) => {
+            return element != e.target.id;
+          });
+        }
+      });
+    }
+  }
+
+  if(itens.length){
+    itens.forEach(elemento => {
+      for(let pos in linhas){
+        if(linhas[pos].firstChild){
+          if(linhas[pos].firstChild.id == elemento){
+            linhas[pos].firstChild.setAttribute("checked", "checked");
+            break;
+          }
+        }
+      }
+    });
+  }
 
 }
 
