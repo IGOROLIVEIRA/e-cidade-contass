@@ -163,7 +163,7 @@ class Siope {
                         $aArrayTemp['o58_codigo']       = $oDespesa->o58_codigo;
                         $aArrayTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
                         $aArrayTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
-                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_natdespecidade;
+                        $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
                         $aArrayTemp['desp_orcada']      = $this->lDespOrcada ? $this->getDespOrcAnoSeg($oDespesa->o58_coddot) : 0;
@@ -188,7 +188,7 @@ class Siope {
                             $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
                             $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
                             $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
-                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
                             $aArrayDesdTemp['dot_atualizada']   = 0;
                             $aArrayDesdTemp['desp_orcada']      = 0;
@@ -205,7 +205,7 @@ class Siope {
                             $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
                             $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
                             $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
-                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_natdespecidade;
+                            $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
                             $aArrayDesdTemp['dot_atualizada']   = 0;
                             $aArrayDesdTemp['desp_orcada']      = 0;

@@ -90,7 +90,7 @@ class cl_naturdessiope {
                 $this->erro_banco = "Natureza da despesa Siope já Cadastrado";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             } else {
-                $this->erro_sql   = "Elemento da despesa MSC ($this->c222_natdespecidade."-".$this->c222_natdespsiope) nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Natureza da despesa Siope ($this->c222_natdespecidade."-".$this->c222_natdespsiope) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             }
@@ -206,7 +206,7 @@ class cl_naturdessiope {
         $result = db_query($sql.$sql2);
         if ($result==false) {
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Elemento da despesa MSC nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Natureza da despesa Siope nao Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : ".$c222_natdespecidade."-".$c222_natdespsiope;
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -216,7 +216,7 @@ class cl_naturdessiope {
         } else {
             if (pg_affected_rows($result)==0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Elemento da despesa MSC nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Natureza da despesa Siope nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_sql .= "Valores : ".$c222_natdespecidade."-".$c222_natdespsiope;
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -359,7 +359,7 @@ class cl_naturdessiope {
             $sql .= $campos;
         }
         $sql .= " from naturdessiope ";
-        $sql .= ' inner join eledessiope on eledessiope.c223_natdespecidade = naturdessiope.c222_natdespsiope ';
+        $sql .= ' inner join eledessiope on eledessiope.c223_eledespecidade = naturdessiope.c222_natdespsiope ';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c222_natdespecidade!=null ) {

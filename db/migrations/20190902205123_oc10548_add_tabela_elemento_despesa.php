@@ -21,15 +21,15 @@ class Oc10548AddTabelaElementoDespesa extends PostgresMigration
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES (32, (select max(codarq) from db_sysarquivo));
          
         -- INSERE db_syscampo
-        INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c223_natdespecidade', 	'varchar(11) ', 'Siope', 		'', 'Siope', 	 11, false, true, false, 0, 'text', 'Siope');
+        INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c223_eledespecidade', 	'varchar(11) ', 'Siope', 		'', 'Siope', 	 11, false, true, false, 0, 'text', 'Siope');
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c223_descricao', 		'varchar(100)', 'Descrição', 	'', 'Descrição', 100, false, true, false, 0, 'text', 'Descrição');
          
         -- INSERE db_sysarqcamp
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c223_natdespecidade'), 1, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c223_eledespecidade'), 1, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c223_descricao'), 2, 0);
          
         -- CRIA TABELA
-        CREATE TABLE eledessiope(c223_natdespecidade varchar(11) NOT NULL , c223_descricao varchar(100) NOT NULL );
+        CREATE TABLE eledessiope(c223_eledespecidade varchar(11) NOT NULL , c223_descricao varchar(100) NOT NULL );
         
         -- INSERE ELEMENTO DESPESA
         INSERT INTO eledessiope VALUES
