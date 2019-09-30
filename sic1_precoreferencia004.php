@@ -87,7 +87,9 @@ ORDER BY pc11_seq) as x GROUP BY
                      end as mediapercentual,
                 pc01_codmater,
                 si01_datacotacao,
-                pc80_criterioadjudicacao
+                pc80_criterioadjudicacao,
+                pc01_tabela,
+                pc01_taxa
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
@@ -100,9 +102,9 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,pc80_criterioadjudicacao ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
-;
-
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa 
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
+//die($sSql);
 $rsResult = db_query($sSql) or die(pg_last_error());
 $oLinha = null;
 
@@ -134,67 +136,31 @@ ob_start();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Relatório</title>
     <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
     <style type="text/css">
-        .content {
-            width: 1070px;
-        }
-
-        .table {
-            font-size: 10px;
-            background: url("imagens/px_preto.jpg") repeat center;
-            background-repeat: repeat-y;
-            background-position: 0 50px;
-        }
-
-        .table .tr {
-        }
-        .col-valor_total-valor,
-        .col-valor_total-text {
-        }
-
-        .col-item { width: 45px; }
-        .col-descricao_item {
-            width: 650px;
-        }
-        .col-valor_un {
-            width: 80px;
-            padding-right: 5px;
-        }
-        .col-quant {
-            width: 60px;
-        }
-        .col-un {
-            width: 45px;
-        }
-        .col-total {
-            width: 90px;
-            padding-left: 5px;
-        }
-        .col-valor_total-text {
-            width: 925px;
-            padding-left: 5px;
-        }
-        .col-valor_total-valor {
-            width: 120px;
-            padding-right: 5px;
-        }
-
-        .row .col-un,
-        .row .col-total,
-        .row .col-quant,
-        .row .col-valor_un,
-        .row .col-valor_un {
-        }
-        .linha-vertical {
-            border-top: 2px solid;
+        .item-menu{
+            border: 1px solid #000000;
             text-align: center;
-            margin-top: 80px;
-            margin-left: 19%;
-            width: 50%;
+            font-weight: bold;
+        }
+
+        .item-text-descicao {
+            border: 1px solid #000000;
+            text-align: justify;
+        }
+        .item-text{
+            border: 1px solid #000000;
+            text-align: center;
+        }
+        .item-text-total{
+            font-weight: bold;
+        }
+
+        .item-menu-color{
+            background: #f5f5f0;
 
         }
     </style>
@@ -204,30 +170,29 @@ ob_start();
 <?php
 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
     echo <<<HTML
-<div class="content">
 
-    <div class="table" autosize="1">
-        <div class="tr bg_eb">
-            <div class="th col-item align-center">ITEM</div>
-            <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
-            <div class="th col-valor_un align-right"><strong>TAXA/TABELA</strong></div>
-            <div class="th col-valor_un align-right">VALOR UN</div>
-            <div class="th col-quant align-center">QUANT</div>
-            <div class="th col-un align-center">UN</div>
-            <div class="th "><strong>TOTAL</strong></div>
-        </div>
+    <table class="table">
+        <tr class="">
+            <td class="item-menu item-menu-color">ITEM</td>
+            <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
+            <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
+            <td class="item-menu item-menu-color">VALOR UN</td>
+            <td class="item-menu item-menu-color">QUANT</td>
+            <td class="item-menu item-menu-color">UN</td>
+            <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
+        </tr>
 HTML;
 }else{
     echo <<<HTML
-  <div class="table" autosize="1">
-    <div class="tr bg_eb">
-      <div class="th col-item align-center">ITEM</div>
-      <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
-      <div class="th col-valor_un align-right">VALOR UN</div>
-      <div class="th col-quant align-center">QUANT</div>
-      <div class="th col-un align-center">UN</div>
-      <div class="th col-total align-right">TOTAL</div>
-    </div>
+  <table class="table">
+    <tr class="">
+      <td class="item-menu item-menu-color">ITEM</td>
+      <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
+      <td class="item-menu item-menu-color">VALOR UN</td>
+      <td class="item-menu item-menu-color">QUANT</td>
+      <td class="item-menu item-menu-color">UN</td>
+      <td class="item-menu item-menu-color">TOTAL</td>
+    </tr>
 HTML;
 }
 ?>
@@ -247,64 +212,50 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     $oDadosDaLinha = new stdClass();
     $oDadosDaLinha->item = $iCont + 1;
     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
-    $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-    if($oResult->mediapercentual == 0){
-        $oDadosDaLinha->mediapercentual = "";
+    if($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t"){
+        $oDadosDaLinha->valorUnitario = "-";
+        $oDadosDaLinha->quantidade = "-";
+        if($oResult->mediapercentual == 0){
+            $oDadosDaLinha->mediapercentual = "";
+        }else{
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
+        }
+        $oDadosDaLinha->unidadeDeMedida = "-";
+        $oDadosDaLinha->total = "R$".number_format($lTotal, 2, ",", ".");
     }else{
-        $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
+        $oDadosDaLinha->valorUnitario = "R$".number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
+        $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+        if($oResult->mediapercentual == 0){
+            $oDadosDaLinha->mediapercentual = "-";
+        }else{
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
+        }
+        $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+        $oDadosDaLinha->total = "R$".number_format($lTotal, 2, ",", ".");
     }
-    $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-    $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
         echo <<<HTML
-        <div class="tr row">
-          <div class="td col-item align-center">
-            {$oDadosDaLinha->item}
-          </div>
-          <div class="td col-descricao_item align-justify">
-            {$oDadosDaLinha->descricao}
-          </div>
-          <div class="td col-valor_un align-right">
-            {$oDadosDaLinha->mediapercentual}
-          </div>
-          <div class="td col-valor_un align-right">
-            R$ {$oDadosDaLinha->valorUnitario}
-          </div>          
-          <div class="td col-quant align-center">
-            {$oDadosDaLinha->quantidade}
-          </div>
-          <div class="td col-un align-center">
-            {$oDadosDaLinha->unidadeDeMedida}
-          </div>
-          <div class="">
-            R$ {$oDadosDaLinha->total}
-          </div>
-        </div>
+        <tr class="">
+          <td class="item-text">{$oDadosDaLinha->item}</td>
+          <td class="item-text-descicao">{$oDadosDaLinha->descricao}</td>
+          <td class="item-text">{$oDadosDaLinha->mediapercentual}</td>
+          <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>          
+          <td class="item-text">{$oDadosDaLinha->quantidade}</td>
+          <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
+          <td class="item-text">{$oDadosDaLinha->total}</td>
+        </tr>
 HTML;
     }else{
         echo <<<HTML
-        <div class="tr row">
-          <div class="td col-item align-center">
-            {$oDadosDaLinha->item}
-          </div>
-          <div class="td col-descricao_item align-justify">
-            {$oDadosDaLinha->descricao}
-          </div>
-          <div class="td col-valor_un align-right">
-            R$ {$oDadosDaLinha->valorUnitario}
-          </div>
-          <div class="td col-quant align-center">
-            {$oDadosDaLinha->quantidade}
-          </div>
-          <div class="td col-un align-center">
-            {$oDadosDaLinha->unidadeDeMedida}
-          </div>
-          <div class="td col-total align-right">
-            R$ {$oDadosDaLinha->total}
-          </div>
-        </div>
+        <tr class="">
+          <td class="item-text">{$oDadosDaLinha->item}</td>
+          <td class="item-text-descicao">{$oDadosDaLinha->descricao}</td>
+          <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>
+          <td class="item-text">{$oDadosDaLinha->quantidade}</td>
+          <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
+          <td class="item-text">{$oDadosDaLinha->total}</td>
+        </tr>
 HTML;
     }
 
@@ -312,29 +263,35 @@ HTML;
 
 ?>
 
-<div class="tr bg_eb">
-    <div class="th col-valor_total-text align-left">
-        VALOR TOTAL DOS ITENS
-    </div>
-    <div class="th col-valor_total-valor align-right">
+<tr style="">
+    <td colspan="5" class="item-menu-color">
+        VALOR TOTAL ESTIMADO
+    </td>
+    <td class="item-menu-color">
         <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
-    </div>
-</div>
-</div>
+    </td>
+</tr>
+</table>
 
-</div>
 
-<div class="linha-vertical">
-    <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
-</div>
+
 
 <?php
     if($oLinha!=null || trim($oLinha)!=""){
 
         echo <<<HTML
-            <div class="linha-vertical">
-                <strong>{$oLinha}</strong>
-            </div>     
+<table style="margin-left: 360px">
+    <tr>
+        <td style="border-bottom: 1px solid #000000;"></td>
+    </tr>
+    <tr>
+        <td style="width: 460px; text-align: center">
+            <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
+        </td>
+    </tr>
+
+</table>
+
 HTML;
 
 }
@@ -348,7 +305,7 @@ HTML;
 $html = ob_get_contents();
 
 ob_end_clean();
-
+//echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 
