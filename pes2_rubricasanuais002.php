@@ -37,7 +37,7 @@ $clrotulo->label('r06_pd');
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
 
-
+$joinrhlotavinc = "";
 if($sel != 0){
   $result_sel = db_query("select r44_where , r44_descr from selecao where r44_selec = {$sel} and r44_instit = " . db_getsession('DB_instit'));
   if(pg_numrows($result_sel) > 0){
@@ -45,6 +45,9 @@ if($sel != 0){
     $wherepes .= " and ".$r44_where;
     $head6 = $r44_descr;
     $erroajuda = " ou seleção informada é inválida";
+    if (strpos($r44_where,"RH25_RECURSO") !== false) {
+      $joinrhlotavinc = "left join rhlotavinc ON rhlotavinc.rh25_codigo = rhlotaexe.rh26_codigo and rh25_anousu=rh02_anousu";
+    }
   }
 }
 
@@ -236,7 +239,7 @@ from rhpessoal
                                and rh26_anousu = o40_anousu
                                and o40_instit  = rh02_instit
                                and o40_anousu  = rh02_anousu
-       
+     {$joinrhlotavinc}
   where 1 = 1
    $wherepes
    group by rh01_regist, z01_nome
