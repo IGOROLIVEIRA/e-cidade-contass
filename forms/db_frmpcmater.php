@@ -60,12 +60,12 @@ function js_executaIframe(val) {
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc01_descrmater?>"> <?=@$Lpc01_descrmater?>    </td>
-    <td> <? db_textarea('pc01_descrmater',0,75,$Ipc01_descrmater,true,'text',$db_opcao,'','','','80') ?>
-    </td>
+    <td> <? db_textarea('pc01_descrmater',0,75,$Ipc01_descrmater,true,'text',$db_opcao,"onkeyup = 'return js_validaCaracteres(this.value, pc01_descrmater.id)';",'','','80') ?>
+  </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc01_complmater?>">       <?=@$Lpc01_complmater?>    </td>
-    <td> <? db_textarea('pc01_complmater',0,75,$Ipc01_complmater,true,'text',$db_opcao) ?>
+    <td> <? db_textarea('pc01_complmater',0,75,$Ipc01_complmater,true,'text',$db_opcao, "onkeyup = 'return js_validaCaracteres(this.value, pc01_complmater.id)';") ?>
     </td>
   </tr>
   <tr>
@@ -388,5 +388,59 @@ function js_enviacodmater(chave,descr){
           pcmater0011.document.form1.submit();";
   }
   ?>
+
+function js_validaCaracteres(texto, campo){
+  let temporario = '';
+  temporario = texto.replace(/\n/g, ' ');
+
+  /*Caracteres não permitidos na descrição e complemento material*/
+  let charBuscados = [";", "'", "\"", "\\", "*", ":", "."];
+  let novoTexto = temporario;
+  let erro = '';
+
+  charBuscados.map(caractere => {
+    if(texto.includes(caractere)){
+      erro = true;
+    }
+  })
+
+
+  if(window.event){
+    /* Lança o erro quando a tecla Enter é pressionada. */
+    if(window.event.keyCode == 13){
+      erro = true;
+      novoTexto = texto.replace(/(\r\n|\n|\r)/g, '');
+    }
+  }
+
+  /* Remove os caracteres contidos no array charBuscados */
+  novoTexto = novoTexto.match(/[^;\*\\\.:\"\']/gm);
+
+  for(let cont=0; cont < novoTexto.length; cont++){
+
+    /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+    if(novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216){
+      novoTexto[cont] = '';
+      erro = true;
+    }
+  }
+
+  if(erro){
+    alert('Caractere não permitido para inclusão!');
+  }
+
+  novoTexto = novoTexto.join('');
+
+  switch(campo){
+    case 'pc01_descrmater':
+      document.form1.pc01_descrmater.value = novoTexto;
+      break;
+
+    case 'pc01_complmater':
+      document.form1.pc01_complmater.value = novoTexto;
+      break;
+  }
+}
 
 </script>

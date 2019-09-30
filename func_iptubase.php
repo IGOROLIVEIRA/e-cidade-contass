@@ -263,37 +263,80 @@ if(isset($j14_codigo)){
         if(isset($campos)==false){
            $campos = "iptubase.*";
         }
-        $sql = " select distinct
-                        j01_matric,
-                        j40_refant,
-                        (select rvnome as z01_nome from fc_busca_envolvidos(false, (select fc_regrasconfig from fc_regrasconfig(1)), 'M', iptubase.j01_matric) limit 1),
-                        z01_numcgm as db_z01_numcgm,
-                        case when j39_numero is null
-                          then 'Terr'
-                          else 'Pred'
-                        end as Tipo,
-                        case when ruase.j14_codigo is null
-                          then ruas.j14_nome
-                          else ruase.j14_nome
-                        end as j14_nome,
-                        case when j39_numero is null
-                          then 0
-                          else j39_numero
-                        end as j39_numero,j13_descr,j04_quadraregimo,j04_loteregimo,
-                        j39_compl, j34_setor, j34_quadra, j34_lote, j01_baixa
-                   from iptubase
-                        left outer join iptubaseregimovel on j04_matric = j01_matric
-                        inner join      lote          on j34_idbql        = j01_idbql
-                        left join       bairro        on  lote.j34_bairro = bairro.j13_codi
-                        left outer join testpri       on j49_idbql        = j01_idbql
-                        left outer join ruas          on j14_codigo       = j49_codigo
-                        inner join cgm                on z01_numcgm       = j01_numcgm
-                        left outer join iptuconstr    on j01_matric       = j39_matric
-                                                     and j39_idprinc is true
-                        left outer join iptuant       on j01_matric       = j40_matric
-                        left outer join ruas as ruase on ruase.j14_codigo = j39_codigo
-                        left outer join loteloc       on j06_idbql        = j01_idbql
-                        left       join setorloc      on j05_codigo       = j06_setorloc";
+        $sql = "SELECT *
+                    FROM (
+                    SELECT DISTINCT j01_matric,
+                                    j40_refant,
+                      (SELECT rvnome AS z01_nome
+                       FROM fc_busca_envolvidos(FALSE,
+                                                  (SELECT fc_regrasconfig
+                                                   FROM fc_regrasconfig(1)), 'M', iptubase.j01_matric)
+                       LIMIT 1), z01_numcgm AS db_z01_numcgm,
+                                 'Pred' AS Tipo,
+                                 ruase.j14_nome AS j14_nome,
+                                 CASE
+                                     WHEN j39_numero IS NULL THEN 0
+                                     ELSE j39_numero
+                                 END AS j39_numero,
+                                 j13_descr,
+                                 j04_quadraregimo,
+                                 j04_loteregimo,
+                                 j39_compl,
+                                 j34_setor,
+                                 j34_quadra,
+                                 j34_lote,
+                                 j01_baixa,
+                                 j39_codigo
+                    FROM iptubase
+                    LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
+                    INNER JOIN lote ON j34_idbql = j01_idbql
+                    LEFT JOIN bairro ON lote.j34_bairro = bairro.j13_codi
+                    LEFT OUTER JOIN testpri ON j49_idbql = j01_idbql
+                    LEFT OUTER JOIN ruas ON j14_codigo = j49_codigo
+                    INNER JOIN cgm ON z01_numcgm = j01_numcgm
+                    INNER JOIN iptuconstr ON j01_matric = j39_matric
+                    AND j39_idprinc IS TRUE
+                    LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
+                    LEFT OUTER JOIN ruas AS ruase ON ruase.j14_codigo = j39_codigo
+                    LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
+                    LEFT JOIN setorloc ON j05_codigo = j06_setorloc
+                    UNION
+                    SELECT DISTINCT j01_matric,
+                                    j40_refant,
+                      (SELECT rvnome AS z01_nome
+                       FROM fc_busca_envolvidos(FALSE,
+                                                  (SELECT fc_regrasconfig
+                                                   FROM fc_regrasconfig(1)), 'M', iptubase.j01_matric)
+                       LIMIT 1), z01_numcgm AS db_z01_numcgm,
+                                 'Terr' AS Tipo,
+                                 ruas.j14_nome AS j14_nome,
+                                 j15_numero j39_numero,
+                                 j13_descr,
+                                 j04_quadraregimo,
+                                 j04_loteregimo,
+                                 j15_compl AS j39_compl,
+                                 j34_setor,
+                                 j34_quadra,
+                                 j34_lote,
+                                 j01_baixa,
+                                 j14_codigo as j39_codigo
+                    FROM iptubase
+                    LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
+                    INNER JOIN lote ON j34_idbql = j01_idbql
+                    INNER JOIN testada ON j36_idbql = lote.j34_idbql
+                    LEFT JOIN bairro ON lote.j34_bairro = bairro.j13_codi
+                    INNER JOIN testpri ON j49_idbql = j01_idbql
+                    INNER JOIN ruas ON j14_codigo = j49_codigo
+                    INNER JOIN cgm ON z01_numcgm = j01_numcgm
+                    LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
+                    LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
+                    LEFT JOIN setorloc ON j05_codigo = j06_setorloc
+                    INNER JOIN testadanumero ON testada.j36_idbql = testadanumero.j15_idbql
+                    AND testada.j36_face = testadanumero.j15_face
+                    WHERE NOT EXISTS
+                        (SELECT 1
+                         FROM iptuconstr
+                         WHERE j01_matric = j39_matric)) as x";
         $sql2 = "";
         if(isset($chave_j01_matric) && (trim($chave_j01_matric)!="") ){
 //           $sql = $cliptubase->sql_query($chave_j01_matric,$campos,"j01_matric");

@@ -364,7 +364,7 @@ $aTiposRetencoesINSS = array(
                        onclick="js_cancelar();" <?= ($db_opcao == 1 || isset($db_opcaoal) || $hasServico ? "style='visibility:hidden;'" : "") ?> >
                 <input name="recibo" type="submit" <?= ($hasRecibo || !$hasServico ? "disabled" : "") ?> onclick='return js_emiteRecibo(<?= $oPar->q60_notaavulsavlrmin; ?>)'
                        id="recibo" value="Emitir Recibo">
-                <input name='notaavulsa' <?= (!$hasRecibo ? 'style="display:none;"' : '') ?> onclick='return js_verificaNota();' type='submit' id='nota'
+                <input name='notaavulsa' <?= (!$hasServico ? 'style="display:none;"' : '') ?> onclick='return js_verificaNota();' type='submit' id='nota'
                        value='Emitir nota'>
                 <?
                 $fTotal = 0;

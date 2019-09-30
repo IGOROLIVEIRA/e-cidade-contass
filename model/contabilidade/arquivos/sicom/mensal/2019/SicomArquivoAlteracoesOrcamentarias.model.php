@@ -378,7 +378,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                              ELSE 98
                          END) AS tipoDecretoAlteracao,
                         si09_codorgaotce AS codOrgao,
-                        substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o15_codtri AS codorigem,
+                        substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
                         o47_codsup,
                         CASE
                             WHEN o41_subunidade != 0
