@@ -56,13 +56,15 @@ foreach ($arrayContratos as $iContrato){
     $oAcordo    = new Acordo($iContrato);
     $oPosicoes   = $oAcordo->getPosicoes();
     $iTotalDeRegistros = null;
+    $oDataInicial  = $oAcordo->getDataInicialVigenciaOriginal();
+    $oDataFinal    = $oAcordo->getDataFinalVigenciaOriginal();
 
     $oPdf->SetFont('Arial','B',10);
     $oPdf->ln();
     $oPdf->cell(40 ,10,"Acordo: ".$oAcordo->getNumero()."/".$oAcordo->getAno(),"TBL" ,0,"L",1,0);
     $oPdf->cell(120,10,"Fornecedor: ".$oAcordo->getContratado()->getNome(),"TB"  ,0,"L",1,0);
     $oPdf->cell(65 ,10,"Valor do Contrato: ".'R$'.number_format((double)$oAcordo->getValorContrato(),2,',','.'),"TB"  ,0,"L",1,0);
-    $oPdf->cell(58 ,10,"Vigência: ".$oAcordo->getDataInicial()." á ".$oAcordo->getDataFinal() ,"TBR" ,1,"L",1,0);
+    $oPdf->cell(58 ,10,"Vigência: ".$oDataInicial->getDate(DBDate::DATA_PTBR)." a ".$oDataFinal->getDate(DBDate::DATA_PTBR) ,"TBR" ,1,"L",1,0);
     $oPdf->cell(98,10,""                         ,"TBRL",0,"L",1,0);
     $oPdf->cell(96,10,"Movimentação do Empenho"  ,"TBRL",0,"C",1,0);
     $oPdf->cell(89 ,10,"Saldo a Pagar"          ,"TBRL",1,"C",1,0);
@@ -117,12 +119,21 @@ foreach ($arrayContratos as $iContrato){
                 case 17:
                     $sDescricaoposicao = "Apostilamento";
                     break;
+                case 11:
+                    $sDescricaoposicao = "Acréscimo e Decréscimo de Itens";
+                    break;
+                case 9:
+                    $sDescricaoposicao = "Acréscimo de Item(ns)";
+                    break;
+                case 10:
+                    $sDescricaoposicao = "Decréscimo de Item(ns)";
+                    break;
             }
 
             $aDescricaoposicao = quebrarTexto($sDescricaoposicao,21);
             $iAlt = $iAlt*(count($aDescricaoposicao));
 
-            $aValoresEmp  = ExecucaoDeContratos::getValoresEmpenho($oEmp->e60_numemp);
+            $aValoresEmp  = ExecucaoDeContratos::getValoresEmpenho($oEmp->e61_numemp);
             $vlrLiqaPagar =  $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlrpag;
             $vlrNaoLiq    = $aValoresEmp[0]->e60_vlremp - $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlranu;
             $vlorGeral    = $vlrLiqaPagar - $vlrNaoLiq;

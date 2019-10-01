@@ -143,7 +143,6 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
                 $('z01_nome').value = '';
             }
         }
-        js_criarDBLancador();
         js_OpenJanelaIframe('top.corpo', 'db_iframe_acordofornecedor', sFuncaoPesquisa, 'Pesquisar Fornecedor',lMostra);
     }
     function js_completaFornecedor(codigo,nome) {
