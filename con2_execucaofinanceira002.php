@@ -128,6 +128,9 @@ foreach ($arrayContratos as $iContrato){
                 case 10:
                     $sDescricaoposicao = "Decréscimo de Item(ns)";
                     break;
+                case 14:
+                    $sDescricaoposicao = "Acréscimo/Decréscimo de item(ns) conjugado";
+                    break;
             }
 
             $aDescricaoposicao = quebrarTexto($sDescricaoposicao,21);
