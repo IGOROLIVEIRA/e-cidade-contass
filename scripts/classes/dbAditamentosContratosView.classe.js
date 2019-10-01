@@ -204,10 +204,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += " <input type='hidden' value='' id='vigenciaFinalCompara'>";
     sContent += " <input type='button' disabled value='Adicionar Itens' id='btnItens' style='display: none'>";
     sContent += " <input type='button' disabled id='btnAditar' value='Salvar " + me.sLabelBotao + "'> ";
+    sContent += " <input type='button' value='Remover Item' id='btnRemoveItem'>";
     sContent += " <input type='button' id='btnPesquisarAcordo' value='Pesquisar Acordo' > ";
 
     oNode.innerHTML = sContent;
     oNode.style.display = '';
+
+    document.getElementById('btnRemoveItem').addEventListener('click', ()=>{
+      me.removeItens()
+    })
 
     /**
      * Pesquisa acordos
@@ -615,7 +620,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         nValorTotal = 0;
         aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
-
             var oValorDotacao = new DBTextField("valordot" + iDot, "valordot" + iDot, js_formatar(oDotacao.valor, "f"));
             oValorDotacao.addStyle("width", "100%");
             oValorDotacao.setClassName("text-right");
@@ -638,7 +642,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             aLinha[2] = oBotaoRemover.outerHTML;
 
             oGridDotacoes.addRow(aLinha);
-
             nValorTotal += oDotacao.valor;
         });
 
@@ -862,6 +865,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
         });
 
+        return;
+
         if (Object.keys(oSelecionados).length == 0 && $('oCboTipoAditivo').value != 6 && $('oCboTipoAditivo').value != 7) {
             return alert('Nenhum item selecionado para aditar.');
         }
@@ -935,6 +940,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
 
+
+            // console.log('Qtde anterior: ', oItem.qtdeanterior);
             // /*comentado para atender a OC 6387*/
             // if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13) {
             //
@@ -964,6 +971,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             if (oSelecionados[iIndice] != undefined) {
+
+                document.getElementById('btnRemoveItem').style.disabled = false;
                 oItemAdicionar.quantidade    = oSelecionados[iIndice].aCells[5].getValue().getNumber();
                 oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[6].getValue());
                 oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
@@ -1124,7 +1133,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     /**
-     * Abre a window de novo item
+     * Abre a window de novo Item
      */
     this.novoItem = function () {
 
@@ -1154,6 +1163,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         sContent += "      <td id='ctntxtQuantidade'>";
         sContent += "      </td>";
         sContent += "    </tr>";
+
         sContent += "    <tr>";
         sContent += "      <td>";
         sContent += "        <b>Valor Unitário:</b>";
@@ -1161,6 +1171,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         sContent += "      <td id='ctntxtVlrUnitario'>";
         sContent += "      </td>";
         sContent += "    </tr>";
+        sContent += "    <tr id='servico-quantidade' style='display:none;'>";
+        sContent += "      <td style='width:139px;'>";
+        sContent += "         <b>Serviço Controlado por Quantidades:</b>";
+        sContent += "      </td>";
+        sContent += "      <td id='ctnCboServicoQuantidade'></td>";
+        sContent += "    </tr>";
+
         sContent += "    <tr>";
         sContent += "      <td>";
         sContent += "        <b>Desdobramento:</b>";
@@ -1265,6 +1282,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         oCboDesdobramento = new DBComboBox('oCboDesdobramento', 'oCboDesdobramento', new Array("Selecione"));
         oCboDesdobramento.show($('ctnCboDesdobramento'));
+
+        oCboServicoQuantidade = new DBComboBox('oCboServicoQuantidade', 'oCboServicoQuantidade', new Array("Não", "Sim"));
+        oCboServicoQuantidade.show($('ctnCboServicoQuantidade'));
 
         oCboUnidade = new DBComboBox('oCboUnidade', 'oCboUnidade', new Array("Selecione"));
         oCboUnidade.show($('ctnCboUnidade'));
@@ -1392,6 +1412,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         var nQuantidade = oTxtQuantidade.getValue();
         var nValorUnitario = oTxtVlrUnitario.getValue();
         var iUnidade = oCboUnidade.getValue();
+        var iServico = oCboServicoQuantidade.getValue();
         var iElemento = oCboDesdobramento.getValue();
         var dtDataInicialItem = oTxtDataInicialItem.getValue();
         var dtDataFinalItem = oTxtDataFinalItem.getValue();
@@ -1409,23 +1430,36 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         var oNovoMaterial = new Object();
-        oNovoMaterial.codigo = '';
+        oNovoMaterial.codigo = oTxtMaterial.getValue();
         oNovoMaterial.codigoitem = oTxtMaterial.getValue();
         oNovoMaterial.descricaoitem = oTxtDescrMaterial.getValue();
         oNovoMaterial.resumo = sResumo;
         oNovoMaterial.unidade = iUnidade;
         oNovoMaterial.codigoelemento = iElemento;
         oNovoMaterial.elemento = $('oCboDesdobramento').options[$('oCboDesdobramento').selectedIndex].getAttribute('elemento');
-        oNovoMaterial.quantidade = nQuantidade.getNumber();
-        oNovoMaterial.valorunitario = nValorUnitario.getNumber();
-        oNovoMaterial.valor = new Number(oNovoMaterial.quantidade) * new Number(oNovoMaterial.valorunitario);
+        oNovoMaterial.quantidade = typeof(nQuantidade) == 'string' ? nQuantidade.replace(/\,/, '.') : nQuantidade;
+        oNovoMaterial.valorunitario = typeof(nValorUnitario) == 'string' ? nValorUnitario.replace(/\,/, '.') : nValorUnitario;
+        oNovoMaterial.qtdeanterior = oNovoMaterial.quantidade;
+        oNovoMaterial.vlunitanterior = oNovoMaterial.valorunitario;
+        oNovoMaterial.valor = new Number(nQuantidade.getNumber()) * new Number(nValorUnitario.getNumber());
         oNovoMaterial.aPeriodos = me.aPeriodoItensNovos;
         oNovoMaterial.dotacoes = new Array();
         oNovoMaterial.novo = true;
-        oNovoMaterial.qtdeanterior = '';
-        oNovoMaterial.vlunitanterior = '';
         oNovoMaterial.periodoini = dtDataInicialItem;
         oNovoMaterial.periodofim = dtDataFinalItem;
+        oNovoMaterial.servico = iServico;
+
+        let itemCadastrado = false;
+        aItensPosicao.forEach((item, index) => {
+          if(item.codigo == oNovoMaterial.codigo){
+            itemCadastrado = true;
+          }
+        })
+
+        if(itemCadastrado){
+          alert('Item já está inserido na lista. Verifique.');
+          return;
+        }
 
         aItensPosicao.push(oNovoMaterial);
         me.preencheItens(aItensPosicao);
@@ -1444,15 +1478,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         aDadosHintGrid = new Array();
 
         aItens.each(function (oItem, iSeq) {
-            var aLinha = new Array();
-
-            aLinha[0] = oItem.codigoitem;
-            aLinha[1] = oItem.descricaoitem.urlDecode();
-            aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
-            aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
+          var aLinha = new Array();
+          aLinha[0] = oItem.codigoitem;
+          aLinha[1] = oItem.descricaoitem.urlDecode();
+          aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
+          aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
 
             if (!oItem.novo) {
-
                 if (iTipoAditamento == 2) {
                     oItem.valorunitario = 0;
                     oItem.valor = 0;
@@ -1489,7 +1521,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             aLinha[4] = oInputQuantidade.toInnerHtml();
 
-            oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 3));
+            oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 3)); //
             oInputUnitario.addStyle("width", "100%");
             oInputUnitario.setClassName("text-right");
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
@@ -1550,6 +1582,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                  * Condicoes adicionadas para bloquear os campos conforme
                  * tipo de Aditivo selecionado na tela
                  */
+
                 if ($('oCboTipoAditivo').value == 5 || $('oCboTipoAditivo').value == 2) {
                     oInputQuantidade.setReadOnly(true);
                     //oInputQuantidade.setValue( js_formatar(0, "f", 3));
@@ -1647,6 +1680,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             }
 
+            if(!oItem.controlaquantidade){
+              if(oItem.servico == '1'){
+                oInputQuantidade.setReadOnly(false);
+                aLinha[4] = oInputQuantidade.toInnerHtml();
+                oInputUnitario.setReadOnly(true);
+                aLinha[5] = oInputUnitario.toInnerHtml();
+              }else{
+                oInputQuantidade.setReadOnly(true);
+                aLinha[4] = oInputQuantidade.toInnerHtml();
+                oInputUnitario.setReadOnly(false);
+                aLinha[5] = oInputUnitario.toInnerHtml();
+              }
+            }
 
             me.oGridItens.addRow(aLinha, false, me.lBloqueiaItem, (me.lBloqueiaItem || iTipoAditamento == 5 || oItem.novo));
 
@@ -1740,7 +1786,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_pcmater',
-                'func_pcmater.php?funcao_js=parent.' + me.sInstance + '.mostraMaterial|pc01_codmater|pc01_descrmater',
+                'func_pcmater.php?funcao_js=parent.' + me.sInstance + '.mostraMaterial|pc01_codmater|pc01_descrmater|pc01_servico',
                 'Pesquisar Materiais',
                 true
             );
@@ -1761,9 +1807,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
     }
 
-    this.mostrapcmater = function (chave, erro) {
+    this.mostrapcmater = function (chave1, chave2, erro) {
 
-        oTxtDescrMaterial.setValue(chave);
+        me.mostraSelectServico(chave2);
+
+        oTxtDescrMaterial.setValue(chave1);
         if (erro == true) {
             oTxtMaterial.setValue('');
         } else {
@@ -1771,12 +1819,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
     }
 
-    this.mostraMaterial = function (chave1, chave2) {
+    this.mostraMaterial = function (chave1, chave2, chave3) {
+
+        me.mostraSelectServico(chave3);
 
         oTxtMaterial.setValue(chave1);
         oTxtDescrMaterial.setValue(chave2);
         db_iframe_pcmater.hide();
         me.getElementosMateriais();
+    }
+
+    this.mostraSelectServico = (servico) => {
+      let mostra = servico == 't' ? '' : 'none';
+      $('servico-quantidade').style.display = mostra;
     }
 
     /**
@@ -1822,6 +1877,101 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
+
+    }
+
+    this.removeItens = () => {
+      let listaItens = me.oGridItens.aRows;
+      let listaCodigos = [];
+      let numeroLinha = [];
+      let listaInvalida = [];
+
+
+      let marcados = document.getElementsByClassName('marcado');
+
+      for (let cont = 0; cont < marcados.length; cont++) {
+        numeroLinha.push(marcados[cont].id.substr(-1));
+      }
+
+
+      listaItens.forEach((item, index) => {
+        if(item.isSelected){
+          let sCodigo = item.aCells[0].content.replace(/ \s /g, '').split(' ');
+
+          /* Regex para extrair somente os números da string */
+          let regra = /\d+/g;
+
+          sCodigo = sCodigo[2].substr(17, sCodigo.length - 1).replace("'", '');
+          sCodigo = regra.exec(sCodigo);
+
+          if(!listaCodigos.includes(sCodigo)){
+            listaCodigos.push(sCodigo);
+          }
+
+        }
+      })
+
+      let itensConfirmados = [];
+      for(let cont=0; cont<numeroLinha.length; cont++){
+         itensConfirmados.push(aItensPosicao[numeroLinha[cont]].codigoitem);
+      }
+
+      if(numeroLinha.length){
+
+        let resposta = confirm('Deseja remover itens '+itensConfirmados.join(',')+'? ');
+
+        if(resposta){
+          let listaValida = [];
+          let itensAceitos = [];
+
+          if(numeroLinha.length > 1){
+            for (var cont = 0; cont < numeroLinha.length; cont++) {
+              if(aItensPosicao[numeroLinha[cont]].novo){
+                listaValida.push(numeroLinha[cont]);
+                itensAceitos.push(aItensPosicao[numeroLinha[cont]].codigoitem);
+                aItensPosicao.splice(numeroLinha[cont], 1);
+              }
+              else{
+                listaInvalida.push(aItensPosicao[numeroLinha[cont]].codigoitem);
+              }
+            }
+          }else{
+            listaValida.push(numeroLinha[0])
+            itensAceitos.push(aItensPosicao[0].codigoitem);
+          }
+
+          if(listaInvalida.length){
+
+            if(listaInvalida.length > 1){
+
+              for(let cont=0;cont<numeroLinha.length;cont++){
+                me.oGridItens.aRows[numeroLinha[cont]].isSelected = false;
+              }
+
+              let itensNaoRemovidos = listaInvalida.join(', ');
+              alert('Os itens '+itensNaoRemovidos+' não podem ser removidos!');
+            } else{
+              me.oGridItens.aRows[numeroLinha[0]].isSelected = false;
+              alert('O item '+listaInvalida[0]+' não pode ser excluído!');
+            }
+          }
+
+          if(listaValida.length){
+
+            if(itensAceitos.length > 1){
+              alert('Os itens '+itensAceitos.join(', ')+' foram removidos!');
+            }else{
+              alert('O item '+itensAceitos[0]+' foi removido!');
+            }
+            me.oGridItens.removeRow(listaValida);
+            me.oGridItens.renderRows();
+          }
+
+
+
+        }
+      }else alert('Selecione algum item para ser removido.')
+
 
     }
 
