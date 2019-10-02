@@ -53,7 +53,7 @@ quantidade     numeric not null,
 valor          numeric,
 resumo         text,
 fornecedor     varchar(200) not null,
-unidade_medida varchar(20) not null,
+unidade_medida varchar(40) not null,
 CONSTRAINT licitacoes_itens_id_pk PRIMARY KEY (id));
 
 create index licitacoes_itens_licitacao_id_in on licitacoes_itens(licitacao_id);
