@@ -699,20 +699,24 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
               if ($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != '') {
                 $sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar
-                                           ||(c63_agencia::integer)::varchar
-                                           ||c63_dvagencia
-                                           ||(c63_conta::integer)::varchar
-                                           ||c63_dvconta
-                                           ||CASE
-                                                 WHEN db83_tipoconta IN (2, 3) THEN 2
-                                                 ELSE 1
-                                             END AS contadebito,
-                                            c61_reduz,
-                                            CASE
-                                                 WHEN db83_tipoconta IN (2, 3) THEN 2
-                                                 ELSE 1
-                                             END AS tipo,
-                                            o15_codtri
+                                          ||(c63_agencia::integer)::varchar
+                                          ||c63_dvagencia
+                                          ||(c63_conta::integer)::varchar
+                                          ||c63_dvconta
+                                          ||CASE
+                                                WHEN db83_tipoconta IN (2, 3) THEN 2
+                                                ELSE 1
+                                            END AS contadebito,
+                                          CASE
+                                              WHEN db83_tipoaplicacao  != 0 OR db83_tipoaplicacao  != NULL THEN db83_tipoaplicacao
+                                          ELSE NULL
+                                          END tipoaplicao,
+                                          c61_reduz,
+                                          CASE
+                                               WHEN db83_tipoconta IN (2, 3) THEN 2
+                                               ELSE 1
+                                           END AS tipo,
+                                          o15_codtri
                                     FROM saltes
                                     JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = " . db_getsession("DB_anousu") . "
                                     JOIN conplanoconta ON c63_codcon = c61_codcon AND c63_anousu = c61_anousu
@@ -736,9 +740,9 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                   $iCodSis = db_utils::fieldsMemory($rsCodSis, 0)->c60_codsis;
                 } else {
 
-                  $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito;
+                  $tipoApliCta = db_utils::fieldsMemory($rsConta, 0)->tipoaplicao;
+                  $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito.$tipoApliCta;
                   $conta = $aBancosAgrupados[$contaTransf]->si95_codctb;
-                  //$recurso = db_utils::fieldsMemory($rsConta, 0)->o15_codtri;
                   $recurso = $aBancosAgrupados[$contaTransf]->recurso;
 
                 }
