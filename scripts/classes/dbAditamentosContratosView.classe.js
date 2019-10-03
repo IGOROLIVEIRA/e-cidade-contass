@@ -204,7 +204,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += " <input type='hidden' value='' id='vigenciaFinalCompara'>";
     sContent += " <input type='button' disabled value='Adicionar Itens' id='btnItens' style='display: none'>";
     sContent += " <input type='button' disabled id='btnAditar' value='Salvar " + me.sLabelBotao + "'> ";
-    sContent += " <input type='button' value='Remover Item' id='btnRemoveItem'>";
+    sContent += " <input type='button' value='Remover Item' id='btnRemoveItem' style='display: none'>";
     sContent += " <input type='button' id='btnPesquisarAcordo' value='Pesquisar Acordo' > ";
 
     oNode.innerHTML = sContent;
@@ -1447,8 +1447,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oNovoMaterial.unidade = iUnidade;
         oNovoMaterial.codigoelemento = iElemento;
         oNovoMaterial.elemento = $('oCboDesdobramento').options[$('oCboDesdobramento').selectedIndex].getAttribute('elemento');
-        oNovoMaterial.quantidade = typeof(nQuantidade) == 'string' ? nQuantidade.replace(/\,/, '.') : nQuantidade;
-        oNovoMaterial.valorunitario = typeof(nValorUnitario) == 'string' ? nValorUnitario.replace(/\,/, '.') : nValorUnitario;
+        oNovoMaterial.quantidade = typeof(nQuantidade) == 'string' ? nQuantidade.replace('.', '').replace(/\,/, '.') : nQuantidade;
+        oNovoMaterial.valorunitario = typeof(nValorUnitario) == 'string' ? nValorUnitario.replace('.', '').replace(/\,/, '.') : nValorUnitario;
         oNovoMaterial.qtdeanterior = oNovoMaterial.quantidade;
         oNovoMaterial.vlunitanterior = oNovoMaterial.valorunitario;
         oNovoMaterial.valor = new Number(nQuantidade.getNumber()) * new Number(nValorUnitario.getNumber());
@@ -1877,6 +1877,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('oTextAreaDescricaoAlteracao').readOnly = false;
 
         }
+
+        if($('oCboTipoAditivo').value == 12){
+          $('btnRemoveItem').style.display = '';
+        }else $('btnRemoveItem').style.display = 'none';
 
         if ($('oCboTipoAditivo').value == 14) {
 
