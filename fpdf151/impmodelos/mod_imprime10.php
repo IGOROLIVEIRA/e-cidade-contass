@@ -233,7 +233,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 
     /* Realizar a consulta de item anulado */
 
-    $sql = " SELECT m52_valor
+    $sql = " SELECT m52_valor,
+                    m36_vrlanu
               FROM matordemitem
               INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp
               INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
@@ -248,7 +249,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
                 WHERE m52_codordem =  ".$this->numordem." and e62_item = ".pg_result($this->recorddositens,$ii,$this->codmater);
 
     $resItens = @db_query($sql);
-    $valorItemAnulado = db_utils::fieldsMemory($resItens,0)->m52_valor;
+    $valorItemAnulado = db_utils::fieldsMemory($resItens,0)->m36_vrlanu;
+    $valorItem = db_utils::fieldsMemory($resItens,0)->m52_valor;
 
 	  $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem);
     if (pg_result($this->recorddositens,$ii,$this->Snumero) != "") {
@@ -373,8 +375,9 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
   			                      db_formatar(pg_result($this->recorddositens,$ii,$this->valoritem),'f')),3,false,4,0,true);
 
-     if($valorItemAnulado){
-        $xtotal -= eval($valorItemAnulado);
+     if($valorItemAnulado > 0){
+        $xtotal += $valorItem;
+        $xtotal -= $valorItemAnulado;
      }else{
         $xtotal += pg_result($this->recorddositens,$ii,$this->valoritem);
      }
@@ -430,9 +433,12 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
                                               3,
                                               ($this->objpdf->h - $iAlturaFinal)
                                               );
-    if($valorItemAnulado){
+    if($valorItemAnulado == $valorItem && $valorItemAnulado > 0){
       $this->objpdf->Setfont('Arial','B',8);
       $this->objpdf->text($this->objpdf->getx()+56, $this->objpdf->gety()-3, "(ANULADO)");
+    }else if($valorItemAnulado < $valorItem){
+      $this->objpdf->Setfont('Arial','B',8);
+      $this->objpdf->text($this->objpdf->getx()+56, $this->objpdf->gety()-3, "(ANULADO PARCIALMENTE)");
     }
 
      if ($sObsItem != "") {
