@@ -402,11 +402,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
            * Enter description here ...
            * @var unknown_type
            */
-          $sqlReten = "SELECT sum(e23_valorretencao) as descontar
-                       from retencaopagordem
-                       join retencaoreceitas on  e23_retencaopagordem = e20_sequencial
-                       join retencaotiporec on e23_retencaotiporec = e21_sequencial
-                        where e23_ativo = true and e20_pagordem = {$oEmpPago->ordem}";
+          $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
+                       FROM retencaopagordem
+                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
+                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                         AND e20_pagordem = {$oEmpPago->ordem}
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIs = db_query($sqlReten);
 
           if (pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar > 0) {
@@ -626,22 +628,27 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           }
           $nVolorOp = 0;
           if ($saldopag > 0 && $aInformado[$sHash]->retencao == 1) {
-            $sSql13 = "select 13 as tiporegistro,
-                               e20_pagordem as codreduzidoop,
-                               case when e21_retencaotipocalc = 5 then 4
-                        when e21_retencaotipocalc in (3,4,7) then 1
-                        when e21_retencaotipocalc in (1,2) then 3
-                        else lpad(k02_reduz,4,0)::integer
-                               end as tiporetencao,
-                               case when e21_retencaotipocalc not in (1,2,3,4,5,7) then e21_descricao
-                                    else null end as descricaoretencao,
-                               e23_valorretencao as vlrentencao
-              from retencaopagordem
-              join retencaoreceitas on  e23_retencaopagordem = e20_sequencial
-              join retencaotiporec on e23_retencaotiporec = e21_sequencial
-              left join tabrec tr on tr.k02_codigo = e21_receita
-              left join tabplan tp on tp.k02_codigo = e21_receita and k02_anousu = " . db_getsession("DB_anousu") . "
-                   where e23_ativo = true and e20_pagordem = {$oEmpPago->ordem}";
+            $sSql13 = "SELECT 13 AS tiporegistro,
+                              e20_pagordem AS codreduzidoop,
+                              CASE
+                                  WHEN e21_retencaotipocalc = 5 THEN 4
+                                  WHEN e21_retencaotipocalc IN (3, 4, 7) THEN 1
+                                  WHEN e21_retencaotipocalc IN (1, 2) THEN 3
+                                  ELSE lpad(k02_reduz,4,0)::integer
+                              END AS tiporetencao,
+                              CASE
+                                  WHEN e21_retencaotipocalc NOT IN (1, 2, 3, 4, 5, 7) THEN e21_descricao
+                                  ELSE NULL
+                              END AS descricaoretencao,
+                              e23_valorretencao AS vlrentencao
+                       FROM retencaopagordem
+                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
+                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       LEFT JOIN tabrec tr ON tr.k02_codigo = e21_receita
+                       LEFT JOIN tabplan tp ON tp.k02_codigo = e21_receita AND k02_anousu = " . db_getsession("DB_anousu") . "
+                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                         AND e20_pagordem = {$oEmpPago->ordem}
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
             $rsPagOrd13 = db_query($sSql13);//db_criatabela($rsPagOrd13);
 
@@ -907,11 +914,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
            * Enter description here ...
            * @var unknown_type
            */
-          $sqlReten = "SELECT sum(e23_valorretencao) as descontar
-                         from retencaopagordem
-                         join retencaoreceitas on  e23_retencaopagordem = e20_sequencial
-                         join retencaotiporec on e23_retencaotiporec = e21_sequencial
-                          where e23_ativo = true and e20_pagordem = {$oEmpPago->ordem}";
+          $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
+                       FROM retencaopagordem
+                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
+                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                         AND e20_pagordem = {$oEmpPago->ordem}
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIs = db_query($sqlReten);
           if ($aInformado[$sHash]->retencao == 0) {
             if (pg_num_rows($rsReteIs) > 0) {
@@ -1137,21 +1146,27 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           }
 
           if ($saldopag >= 0 && $retencao2 == 0) {
-            $sSql13 = "select 13 as tiporegistro,
-                               e20_pagordem as codreduzidoop,
-                               case when e21_retencaotipocalc = 5 then 4
-                        when e21_retencaotipocalc in (3,4,7) then 1
-                        when e21_retencaotipocalc in (1,2) then 3
-                        else lpad(k02_reduz,4,0)::integer
-                               end as tiporetencao,
-                               case when e21_retencaotipocalc not in (1,2,3,4,5,7) then e21_descricao else null end as descricaoretencao,
-                               e23_valorretencao as vlrentencao
-              from retencaopagordem
-              join retencaoreceitas on  e23_retencaopagordem = e20_sequencial
-              join retencaotiporec on e23_retencaotiporec = e21_sequencial
-              left join tabrec tr on tr.k02_codigo = e21_receita
-              left join tabplan tp on tp.k02_codigo = e21_receita and k02_anousu = " . db_getsession("DB_anousu") . "
-                   where e23_ativo = true and e20_pagordem = {$oEmpPago->ordem}";
+            $sSql13 = "SELECT 13 AS tiporegistro,
+                              e20_pagordem AS codreduzidoop,
+                              CASE
+                                  WHEN e21_retencaotipocalc = 5 THEN 4
+                                  WHEN e21_retencaotipocalc IN (3, 4, 7) THEN 1
+                                  WHEN e21_retencaotipocalc IN (1, 2) THEN 3
+                                  ELSE lpad(k02_reduz,4,0)::integer
+                              END AS tiporetencao,
+                              CASE
+                                  WHEN e21_retencaotipocalc NOT IN (1, 2, 3, 4, 5, 7) THEN e21_descricao
+                                  ELSE NULL
+                              END AS descricaoretencao,
+                              e23_valorretencao AS vlrentencao
+                       FROM retencaopagordem
+                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
+                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       LEFT JOIN tabrec tr ON tr.k02_codigo = e21_receita
+                       LEFT JOIN tabplan tp ON tp.k02_codigo = e21_receita AND k02_anousu = " . db_getsession("DB_anousu") . "
+                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                         AND e20_pagordem = {$oEmpPago->ordem}
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
             $rsPagOrd13 = db_query($sSql13);//db_criatabela($rsPagOrd13);
 
