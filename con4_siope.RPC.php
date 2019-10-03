@@ -24,7 +24,9 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
-$sNomeArq           = "Siope";
+$sNomeArqDespesa    = "Siope-despesa";
+$sNomeArqReceita    = "Siope-receita";
+$sNomeZip           = "Siope";
 
 switch ($oParam->exec) {
 
@@ -34,43 +36,63 @@ switch ($oParam->exec) {
 
             if (count($oParam->arquivos) > 0) {
 
-                foreach ($oParam->arquivos as $sArquivo) {
+                $sArquivosZip = "";
+
+                foreach ($oParam->arquivos as $index => $sArquivo) {
 
                     if ($sArquivo == 'despesa') {
 
-                        $siope = new Siope;
-                        $siope->setAno($iAnoUsu);
-                        $siope->setInstit($iInstit);
-                        $siope->setBimestre($iBimestre);
-                        $siope->setPeriodo();
-                        $siope->setFiltros();
-                        $siope->setDespesasOrcadas();
-                        $siope->setDespesas();
-                        $siope->agrupaDespesas();
-                        $siope->geraLinhaVazia();
-                        $siope->ordenaDespesas();
-                        $siope->setNomeArquivo($sNomeArq);
-                        $siope->gerarSiope();
+                        $siopeDespesa = new Siope;
+                        $siopeDespesa->setAno($iAnoUsu);
+                        $siopeDespesa->setInstit($iInstit);
+                        $siopeDespesa->setBimestre($iBimestre);
+                        $siopeDespesa->setPeriodo();
+                        $siopeDespesa->setFiltrosDespesa();
+                        $siopeDespesa->setDespesasOrcadas();
+                        $siopeDespesa->setDespesas();
+                        $siopeDespesa->agrupaDespesas();
+                        $siopeDespesa->geraLinhaVazia();
+                        $siopeDespesa->ordenaDespesas();
+                        $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
+                        $siopeDespesa->gerarSiopeDespesa();
 
-                        if ($siope->getErroSQL() > 0 ) {
-                            throw new Exception ("Ocorreu um erro ao gerar IC ".$siope->getErroSQL());
+                        if ($siopeDespesa->getErroSQL() > 0 ) {
+                            throw new Exception ("Ocorreu um erro ao gerar Siope ".$siopeDespesa->getErroSQL());
                         }
 
-                        $oRetorno->caminho = $oRetorno->nome = "{$siope->getNomeArquivo()}.csv";
-
-                        system("rm -f {$siope->getNomeArquivo()}.zip");
-                        system("bin/zip -q {$siope->getNomeArquivo()}.zip $oRetorno->caminho");
-                        $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$siope->getNomeArquivo()}.zip";
+                        $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
+                        $sArquivosZip .= " {$siopeDespesa->getNomeArquivo()}.csv ";
 
                     }
 
                     if ($sArquivo == 'receita') {
 
+                        $siopeReceita = new Siope();
+                        $siopeReceita->setAno($iAnoUsu);
+                        $siopeReceita->setInstit($iInstit);
+                        $siopeReceita->setBimestre($iBimestre);
+                        $siopeReceita->setPeriodo();
+                        $siopeReceita->setFiltrosReceita();
+                        $siopeReceita->setDespesasOrcadas();
+                        $siopeReceita->setReceitas();
+                        $siopeReceita->agrupaReceitas();
+                        $siopeReceita->setNomeArquivo($sNomeArqReceita);
+                        $siopeReceita->gerarSiopeReceita();
 
+                        if ($siopeReceita->getErroSQL() > 0 ) {
+                            throw new Exception ("Ocorreu um erro ao gerar Siope ".$siopeReceita->getErroSQL());
+                        }
+
+                        $oRetorno->arquivos->$index->nome = "{$siopeReceita->getNomeArquivo()}.csv";
+                        $sArquivosZip .= " {$siopeReceita->getNomeArquivo()}.csv ";
 
                     }
 
                 }
+
+                system("rm -f {$sNomeZip}.zip");
+                system("bin/zip -q {$sNomeZip}.zip $sArquivosZip");
+                $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$sNomeZip}.zip";
 
             }
 

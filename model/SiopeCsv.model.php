@@ -16,27 +16,52 @@ class SiopeCsv extends Siope {
     //@var String
     protected $sLinha;
 
-    public function gerarArquivoCSV($aDados) {
+    public function gerarArquivoCSV(array $aDados, $tipo = null) {
 
-        $this->sArquivo = $this->getNomeArquivo();
-        $this->abreArquivo();
+        if ($tipo == 1) {
 
-        foreach($aDados as $value) {
+            $this->sArquivo = $this->getNomeArquivo();
+            $this->abreArquivo();
 
-            $sLinha  = "V;1;".$value['cod_planilha'].$this->sDelim;
-            $sLinha .= $this->getElementoFormat($value['elemento_siope']).$this->sDelim;
-            $sLinha .= $value['descricao_siope'].$this->sDelim;
-            $sLinha .= number_format($value['dot_atualizada'], 2, ',', '').$this->sDelim;
-            $sLinha .= number_format($value['empenhado'], 2, ',', '').$this->sDelim;
-            $sLinha .= number_format($value['liquidado'], 2, ',', '').$this->sDelim;
-            $sLinha .= number_format($value['pagamento'], 2, ',', '').$this->sDelim;
-            $sLinha .= number_format($value['desp_orcada'], 2, ',', '').$this->sDelim;
+            foreach ($aDados as $value) {
 
-            fputs($this->_arquivo, $sLinha);
-            fputs($this->_arquivo, "\r\n");
+                $sLinha = "V;1;" . $value['cod_planilha'] . $this->sDelim;
+                $sLinha .= $this->getElementoFormat($value['elemento_siope']) . $this->sDelim;
+                $sLinha .= $value['descricao_siope'] . $this->sDelim;
+                $sLinha .= number_format($value['dot_atualizada'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['empenhado'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['liquidado'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['pagamento'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['desp_orcada'], 2, ',', '') . $this->sDelim;
+
+                fputs($this->_arquivo, $sLinha);
+                fputs($this->_arquivo, "\r\n");
+            }
+
+            $this->fechaArquivo();
+
+        } elseif ($tipo == 2) {
+
+            $this->sArquivo = $this->getNomeArquivo();
+            $this->abreArquivo();
+
+            foreach ($aDados as $value) {
+
+                $sLinha = "V;1;1" . $this->sDelim;
+                $sLinha .= $this->getNaturezaFormat($value['natureza']) . $this->sDelim;
+                $sLinha .= $value['descricao'] . $this->sDelim;
+                $sLinha .= number_format($value['prev_atualizada'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['rec_realizada'], 2, ',', '') . $this->sDelim;
+                $sLinha .= number_format($value['rec_orcada'], 2, ',', '') . $this->sDelim;
+
+                fputs($this->_arquivo, $sLinha);
+                fputs($this->_arquivo, "\r\n");
+
+            }
+
+            $this->fechaArquivo();
+
         }
-
-        $this->fechaArquivo();
 
     }
 

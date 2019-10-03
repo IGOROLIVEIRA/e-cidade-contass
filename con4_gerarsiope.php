@@ -87,7 +87,7 @@ $aBimestres = array(
                 </tr>
                 <tr>
                     <td style="border: 2px groove white; padding-right: 100px;" valign="top">
-                        <input type="checkbox" value="receita" id="receita" disabled/>
+                        <input type="checkbox" value="receita" id="receita" />
                         <label for="receita">Receita</label><br>
                         <input type="checkbox" value="despesa" id="despesa" />
                         <label for="despesa">Despesa</label><br>
@@ -157,7 +157,9 @@ $aBimestres = array(
                 alert("Processo concluído com sucesso!");
                 var sArquivo = document.getElementById('arquivo');
                 var sLink = "";
-                sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
+                for (const [i, arquivo] of Object.entries(oRetorno.arquivos)) {
+                    sLink += "<br><a href='db_download.php?arquivo="+arquivo.nome+"'>"+arquivo.nome+"</a>";
+                }
                 sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
                 sArquivo.innerHTML = sLink;
                 sArquivo.style.display = "inline-block";
