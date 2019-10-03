@@ -612,12 +612,20 @@ switch($oParam->exec) {
 
         $oContrato = $_SESSION["oContrato"];
         $dataFimVigencia = implode("-",array_reverse(explode("/",$oContrato->getUltimaPosicao(true)->getVigenciaFinal())));
+        $dataAssinatura = implode("-",array_reverse(explode("/",$oContrato->getDataAssinatura())));
         $dataAutorizacao = date("Y-m-d",db_getsession("DB_datausu"));
         $gerarAutorizacao = array();
 
         if($dataAutorizacao > $dataFimVigencia){
             $gerarAutorizacao[0] = false;
             $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gararAutorizacao[2] = true;
+            $gararAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
+        }elseif($dataAutorizacao < $dataAssinatura){
+            $gerarAutorizacao[0] = false;
+            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gararAutorizacao[2] = false;
+            $gararAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
         }else{
             $gerarAutorizacao[0] = true;
             $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
