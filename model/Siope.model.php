@@ -77,7 +77,7 @@ class Siope {
         $result           = db_query($clorcorgao->sql_query_file('', '', 'o40_orgao', 'o40_orgao asc', 'o40_instit = '.$this->iInstit.' and o40_anousu = '.$this->iAnoUsu));
         $this->sFiltros    = "instit_{$this->iInstit}-funcao_12-";
 
-        if (pg_num_rows($result) > 1) {
+        if (pg_num_rows($result) > 0) {
             for ($i = 0; $i < pg_numrows($result); $i++) {
                 $this->sFiltros .= "orgao_".db_utils::fieldsMemory($result, $i)->o40_orgao."-";
             }
