@@ -74,7 +74,7 @@ class ExecucaoDeContratos{
             $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
             $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
             $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
-            $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".$sTotalEmp,0,0,'L',0);
+            $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
             $oPdf->Ln();
 
         }
@@ -170,34 +170,6 @@ class ExecucaoDeContratos{
         $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
         $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
         $oPdf->Ln();
-    }
-
-    public function getInformacoesAcordo($iAcordo,$iPosicao,$sDataInicial, $sDataFinal){
-
-        $sSqlDataDeEmissao = '';
-        if( empty($sDataInicial) && !empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND e60_emiss <= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."'";
-        }
-        if( !empty($sDataInicial) && empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND e60_emiss >= '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
-        }
-        if( !empty($sDataInicial) && !empty($sDataFinal) ){
-            $sSqlDataDeEmissao = " AND (e60_emiss BETWEEN '".date("Y-m-d", strtotime(str_replace('/','-',$sDataInicial)))."'";
-            $sSqlDataDeEmissao .= "                   AND '".date("Y-m-d", strtotime(str_replace('/','-',$sDataFinal)))."') ";
-        }
-
-        $oDaoAcordo = db_utils::getDao('acordo');
-        $sSqlDadosAcordo = $oDaoAcordo->sql_query_todoacordo($iAcordo,$iPosicao,$sSqlDataDeEmissao);
-        $rsdadosAcordo = $oDaoAcordo->sql_record($sSqlDadosAcordo);
-
-        for ($iRowItem = 0; $iRowItem < $oDaoAcordo->numrows; $iRowItem++) {
-
-            $oStdItem = db_utils::fieldsMemory($rsdadosAcordo, $iRowItem);
-            $aItensRetorno[] = $oStdItem;
-
-        }
-
-        return $aItensRetorno;
     }
 
     public static function getQtdOrdemdecompra($iEmpenho,$iCodMater){
@@ -321,6 +293,26 @@ class ExecucaoDeContratos{
 
     }
 
+    public static function getAcordosFornecedor($iFornecedor){
+        $oDaoAcordo    = db_utils::getDao("acordo");
+        $sSqlAcordos = $oDaoAcordo->sql_query(null,"ac16_sequencial",null,"ac16_contratado = $iFornecedor");
+        $rsBuscaAcordo = $oDaoAcordo->sql_record($sSqlAcordos);
+        $aAcordosRetorno = array();
+        for ($iRowItem = 0; $iRowItem < pg_num_rows($rsBuscaAcordo); $iRowItem++) {
+            $aAcordosRetorno[] = db_utils::fieldsMemory($rsBuscaAcordo, $iRowItem);
+        }
+
+        return $aAcordosRetorno;
+    }
+
+    public static function getValoresEmpenho($iEmpenho){
+        $oDaoEmpempenho    = db_utils::getDao("empempenho");
+        $sSqlEmpempenho    = $oDaoEmpempenho->sql_query(null,"e60_vlremp,e60_vlrliq,e60_vlrpag,e60_vlranu",null,"e60_numemp = $iEmpenho",null,null);
+        $rsValoresEmp      = $oDaoEmpempenho->sql_record($sSqlEmpempenho);
+        $aValoresEmp[]     = db_utils::fieldsMemory($rsValoresEmp, 0);
+        return $aValoresEmp;
+    }
+
     public static function arrayDeMateriais($oExecucaoDeContratos, $aEmpenhamentos, $iCodRel = null){
 
         $aCodigosDosMateriais = array();
@@ -427,6 +419,7 @@ class ExecucaoDeContratos{
 
         $oPdf->SetFont('Arial','B',$iFonte);
 
+        $oPdf->Ln();
         $oPdf->Cell(278 ,$iAlt-3,'',0,1,'C',0);
         $oPdf->Cell(34 ,$iAlt,'Total de Registros:',0,0,'L',0);
         $oPdf->Cell(30 ,$iAlt,''.is_null($iNumItens) ? count($aMateriais) : $iNumItens.'',0,0,'L',0);

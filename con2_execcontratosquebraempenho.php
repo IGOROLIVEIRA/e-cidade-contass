@@ -7,9 +7,11 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
     $oExecucaoDeContratos = new ExecucaoDeContratos();
     $oAcordo = new Acordo($iAcordo);
     $oPosicoes = $oAcordo->getPosicoes();
+    $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
     $iNumItens = 0;
 
-
+// Imprime o cabeçalho na primeira página
+    $oExecucaoDeContratos->imprimirCabecalhoAcordos($oPdf, $iAlt, $iFonte, $oAcordo, $aLicitacoesVinculadas);
     foreach ($oPosicoes as $iP => $oPosicao){
 
         $aEmpenhamentosPosicao = $oAcordo->getAutorizacoesEntreDatas($ac16_datainicio,$ac16_datafim,$oPosicao->getCodigo());
