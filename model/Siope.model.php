@@ -411,9 +411,9 @@ class Siope {
                 $aReceita['natureza_de']        = db_formatar($oReceita->o57_fonte,'receita');
                 $aReceita['natureza']           = $oNaturrecsiope->c225_elerececidade;
                 $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
-                $aReceita['prev_atualizada']    = ($oReceita->saldo_inicial + $oReceita->saldo_prevadic_acum);
-                $aReceita['rec_realizada']      = $oReceita->saldo_arrecadado;
-                $aReceita['rec_orcada']         = $this->lDespOrcada ? $this->getRecOrcAnoSeg($oReceita->o70_codrec) : 0;
+                $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
+                $aReceita['rec_orcada']         = $this->lDespOrcada ? abs($this->getRecOrcAnoSeg($oReceita->o70_codrec)) : 0;
 
                 array_push($this->aReceitas, $aReceita);
             }
