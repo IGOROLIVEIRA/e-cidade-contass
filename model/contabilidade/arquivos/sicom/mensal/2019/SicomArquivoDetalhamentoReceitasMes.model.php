@@ -252,11 +252,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                              AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
                                        WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
                              INNER JOIN conlancam ON c74_codlan = c70_codlan
-                             JOIN conlancamcompl ON c72_codlan = c70_codlan
-                             LEFT JOIN empempenho ON
-                                 (SELECT btrim(split_part(REGEXP_REPLACE(c72_complem, '^([^-]*)empenho(.*?)', E'".$var.$var."2|".$var.$var."1'), 'no valor', 1)) empenho FROM conlancamcompl t1
-                                  WHERE t1.c72_codlan = conlancamcompl.c72_codlan) = e60_codemp||'/'||e60_anousu
-                             LEFT JOIN cgm ON e60_numcgm = z01_numcgm
+                             INNER JOIN conlancamcompl ON c72_codlan = c70_codlan
+                             LEFT JOIN conlancamcgm ON c72_codlan = c76_codlan
+                             LEFT JOIN cgm ON c76_numcgm = z01_numcgm
                              LEFT JOIN cgm t2 ON k81_numcgm = t2.z01_numcgm
                              INNER JOIN conlancamdoc ON c71_codlan = c74_codlan
                              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
@@ -270,7 +268,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
-                             ORDER BY 1, 4, 3";
+                             ORDER BY 1, 4, 2";
 
                     $result = db_query($sSql);
 
