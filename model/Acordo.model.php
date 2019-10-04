@@ -1793,7 +1793,7 @@ class Acordo
 
       $oDaoAcordoVigencia = db_utils::getDao("acordovigencia");
       $sWhere             = "ac26_acordo  = {$this->getCodigoAcordo()}";
-      $sOrder             = "ac26_sequencial asc";
+      $sOrder             = "ac26_sequencial desc";
       $sSql               = $oDaoAcordoVigencia->sql_query(null, "*", $sOrder, $sWhere);
 
       $rsResultado = $oDaoAcordoVigencia->sql_record($sSql);

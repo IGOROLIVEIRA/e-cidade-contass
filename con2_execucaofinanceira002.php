@@ -48,7 +48,6 @@ if($aContratos == ""){
 }else{
     $arrayContratos = preg_split("/[\s,]+/", $aContratos);
 }
-//echo "<pre>"; print_r($arrayContratos);die();
 foreach ($arrayContratos as $iContrato){
 
     $oPdf->AddPage('L');
@@ -139,7 +138,7 @@ foreach ($arrayContratos as $iContrato){
             $aValoresEmp  = ExecucaoDeContratos::getValoresEmpenho($oEmp->e61_numemp);
             $vlrLiqaPagar =  $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlrpag;
             $vlrNaoLiq    = $aValoresEmp[0]->e60_vlremp - $aValoresEmp[0]->e60_vlrliq - $aValoresEmp[0]->e60_vlranu;
-            $vlorGeral    = $vlrLiqaPagar - $vlrNaoLiq;
+            $vlorGeral    = $vlrNaoLiq - $vlrLiqaPagar;
 
             $sTotalEmpenhado        += $aValoresEmp[0]->e60_vlremp;
             $sTotalLiquidado        += $aValoresEmp[0]->e60_vlrliq;
@@ -180,7 +179,7 @@ foreach ($arrayContratos as $iContrato){
     $oPdf->cell(26,10,'R$'.number_format((double)$sTotalPago,2,',','.'),"TBRL",0,"C",1,0);
     $oPdf->cell(30,10,'R$'.number_format((double)$sTotalLiquidadoNaoPago,2,',','.'),"TBRL",0,"C",1,0);
     $oPdf->cell(30,10,'R$'.number_format((double)$sTotalNaoLiquidado,2,',','.'),"TBRL",0,"C",1,0);
-    $oPdf->cell(29,10,'R$'.number_format((double)$sTotalGeral,2,',','.'),"TBRL",1,"C",1,0);
+    $oPdf->cell(29,10,'R$'.number_format((double)abs($sTotalGeral),2,',','.'),"TBRL",1,"C",1,0);
 
 }
 
@@ -216,7 +215,6 @@ function quebrarTexto($texto,$tamanho){
     return $aTextoNovo;
 
 }
-//die();
 $oPdf->SetFont('Arial','',$iFonte-1);
 
 $oPdf->Output();

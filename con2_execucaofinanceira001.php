@@ -172,7 +172,12 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         }
 
         if(aContratos.length != 0 && iFornecedor != ''){
-            alert("Mensagem Deborah");
+            alert("Não foi retornado nenhum registro para a seleção.");
+            return false;
+        }
+
+        if(aContratos.length == 0 && iFornecedor == ''){
+            alert("Não foi retornado nenhum registro para a seleção.");
             return false;
         }
 
