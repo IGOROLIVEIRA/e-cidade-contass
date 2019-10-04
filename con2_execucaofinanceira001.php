@@ -127,7 +127,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         oLancadorContrato.setParametrosPesquisa("func_acordoinstit.php", ['ac16_sequencial', 'z01_nome']);
         oLancadorContrato.show($("sContainer"));
     }
-    
+
     function pesquisaFornecedor(lMostra) {
 
         var sFuncaoPesquisa   = 'func_pcforne.php?funcao_js=parent.js_completaFornecedor|';
@@ -177,7 +177,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         }
 
         if(aContratos.length == 0 && iFornecedor == ''){
-            alert("Não foi retornado nenhum registro para a seleção.");
+            alert("Selecione uma opção de filtro (Acordo ou Fornecedor)");
             return false;
         }
 
