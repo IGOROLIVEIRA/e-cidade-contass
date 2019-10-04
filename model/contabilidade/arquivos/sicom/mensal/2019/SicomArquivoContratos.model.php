@@ -408,6 +408,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                       CASE WHEN l2.l20_anousu = NULL THEN NULL ELSE l2.l20_anousu END AS anousumanual,
                       CASE WHEN l2.l20_codepartamento = NULL THEN NULL ELSE l2.l20_codepartamento END AS departmanual,
                       CASE WHEN l2.l20_naturezaobjeto = NULL THEN NULL ELSE l2.l20_naturezaobjeto END AS naturezamanual,
+                      ac02_acordonatureza,
                       ac16_veiculodivulgacao
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -429,6 +430,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN adesaoregprecos ON si06_sequencial = ac16_adesaoregpreco
                 LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
+                INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
                 WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
                 AND ac16_dataassinatura >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
@@ -543,7 +545,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if($oDados10->tipoprocesso == '' || $oDados10->tipoprocesso == 0){
                 $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocessolicitacao;
             }else $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
-            $clcontratos10->si83_naturezaobjeto = $oDados10->ac16_acordogrupo;
+            $clcontratos10->si83_naturezaobjeto = $oDados10->ac02_acordonatureza;
             $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 500);
             $clcontratos10->si83_tipoinstrumento = $oDados10->ac16_acordocategoria;
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio;
