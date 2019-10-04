@@ -589,7 +589,7 @@ if($x->consultarDataDoSistema == true){
         }else{
 
             if (erro == false) {
-                alert("Contrato assinado em  " + oRetorno[3] + ", não será possível gerar autorização de empenho.");
+                alert("Contrato assinado em "+oRetorno[3]+", gerar autorização após essa data");
                 location.reload();
             }else{
                 js_removeObj("msgbox");
