@@ -21,7 +21,7 @@ require_once("con2_execucaodecontratosaux.php");
 
 db_postmemory($HTTP_GET_VARS);
 //echo "<pre>"; var_dump($HTTP_GET_VARS); die();
-
+ini_set('display_errors','on');
 $oPdf  = new PDF();
 $oPdf->Open();
 $oPdf->AliasNbPages();
@@ -52,7 +52,8 @@ foreach ($arrayContratos as $iContrato){
 
     $oPdf->AddPage('L');
 
-    $oAcordo    = new Acordo($iContrato);
+    $oAcordo    = new Acordo($iContrato->ac16_sequencial);
+
     $oPosicoes   = $oAcordo->getPosicoes();
     $iTotalDeRegistros = null;
     $oDataInicial  = $oAcordo->getDataInicialVigenciaOriginal();
