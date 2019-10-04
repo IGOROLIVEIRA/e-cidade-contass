@@ -56,7 +56,7 @@ foreach ($arrayContratos as $iContrato){
     $oPosicoes   = $oAcordo->getPosicoes();
     $iTotalDeRegistros = null;
     $oDataInicial  = $oAcordo->getDataInicialVigenciaOriginal();
-    $oDataFinal    = $oAcordo->getDataFinalVigenciaOriginal();
+    $oDataFinal    = $oAcordo->getVigenciaFinalOriginal();
 
     $oPdf->SetFont('Arial','B',10);
     $oPdf->ln();

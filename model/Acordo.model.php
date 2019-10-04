@@ -1396,6 +1396,14 @@ class Acordo
       return $this->DataFinalVigenciaOriginal;
     }
 
+    public function getVigenciaFinalOriginal(){
+
+            $this->BuscaVigenciaFinalOriginal();
+
+        return $this->DataFinalVigenciaOriginal;
+
+    }
+
     /**
      * adiciona uma penalidade ao contrato
      * @param acordoPenalidade $aPenalidades
@@ -1793,7 +1801,7 @@ class Acordo
 
       $oDaoAcordoVigencia = db_utils::getDao("acordovigencia");
       $sWhere             = "ac26_acordo  = {$this->getCodigoAcordo()}";
-      $sOrder             = "ac26_sequencial desc";
+      $sOrder             = "ac26_sequencial asc";
       $sSql               = $oDaoAcordoVigencia->sql_query(null, "*", $sOrder, $sWhere);
 
       $rsResultado = $oDaoAcordoVigencia->sql_record($sSql);
@@ -1804,6 +1812,25 @@ class Acordo
       $oStdDados                         = db_utils::fieldsMemory($rsResultado, 0);
       $this->DataInicialVigenciaOriginal = new DBDate($oStdDados->ac18_datainicio);
       $this->DataFinalVigenciaOriginal   = new DBDate($oStdDados->ac18_datafim);
+
+    }
+
+    private function BuscaVigenciaFinalOriginal()
+    {
+
+        $oDaoAcordoVigencia = db_utils::getDao("acordovigencia");
+        $sWhere             = "ac26_acordo  = {$this->getCodigoAcordo()}";
+        $sOrder             = "ac26_sequencial desc";
+        $sSql               = $oDaoAcordoVigencia->sql_query(null, "*", $sOrder, $sWhere);
+
+        $rsResultado = $oDaoAcordoVigencia->sql_record($sSql);
+
+        if ($oDaoAcordoVigencia->numrows == 0) {
+            throw new DBException("Erro Técnico: erro ao buscar dados vigência original do contrato");
+        }
+        $oStdDados                         = db_utils::fieldsMemory($rsResultado, 0);
+        $this->DataInicialVigenciaOriginal = new DBDate($oStdDados->ac18_datainicio);
+        $this->DataFinalVigenciaOriginal   = new DBDate($oStdDados->ac18_datafim);
 
     }
 
