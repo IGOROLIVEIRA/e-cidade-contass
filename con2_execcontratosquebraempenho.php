@@ -77,7 +77,7 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $oPdf->Cell(18, $iAlt, $oItem->codigo_material, 'TBRL', 0, 'C', '');
                 $oPdf->Cell(83, $iAlt, $oExecucaoDeContratos->limitarTexto($oItem->descricao_material, 44), 'TBR', 0, 'C', '');
                 $oPdf->Cell(25, $iAlt, $sQtdContratadaPosicao, 'TBR', 0, 'C', '');
-                $oPdf->Cell(18 ,$iAlt,$sVlrUnitarioPosicao,'TBR',0,'C','');
+                $oPdf->Cell(18 ,$iAlt,'R$ '.number_format($sVlrUnitarioPosicao,2,',','.'),'TBR',0,'C','');
                 $oPdf->Cell(25 ,$iAlt,$sQtdEmpenhada,'TBR',0,'C','');
                 $oPdf->Cell(20 ,$iAlt,$sQtdAnulada,'TBR',0,'C','');
                 $oPdf->Cell(20 ,$iAlt,$iQtdEmOrdem,'TBR',0,'C','');

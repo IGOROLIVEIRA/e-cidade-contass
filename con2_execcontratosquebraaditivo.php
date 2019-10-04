@@ -188,16 +188,16 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
             }
             $oPdf->SetFont('Arial','',$iFonte-1);
 
-            $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],        'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],  'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdcontratada'],  'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(18  ,$iAlt, $aLinha['valorunitario'],  'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],   'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],     'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdemordemdecompra'],  'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(21  ,$iAlt, $aLinha['vlremordemdecompra'],'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(26  ,$iAlt, $aLinha['qtdagerarordemdecompra'],'TBR',0,'C',$iCorFundo);
-            $oPdf->Cell(22  ,$iAlt, $aLinha['qtdaempenhar'],   'TBR',0,'C',$iCorFundo);
+            $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],        'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],  'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdcontratada'],  'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(18  ,$iAlt, $aLinha['valorunitario'],  'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],   'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],     'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdemordemdecompra'],  'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(21  ,$iAlt, $aLinha['vlremordemdecompra'],'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(26  ,$iAlt, $aLinha['qtdagerarordemdecompra'],'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(22  ,$iAlt, $aLinha['qtdaempenhar'],   'TBRL',0,'C',$iCorFundo);
             $oPdf->Ln();
 
             $iNumItens++;
