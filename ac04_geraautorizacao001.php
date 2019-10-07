@@ -136,7 +136,7 @@ if($x->consultarDataDoSistema == true){
 </head>
 <style>
     /*#e54_numerl{*/
-        /*width: 98px;*/
+    /*width: 98px;*/
     /*}*/
     #e54_nummodalidade{
         width: 110px;
@@ -575,13 +575,23 @@ if($x->consultarDataDoSistema == true){
     function js_validavigencia(oAjax){
         var oRetorno = JSON.parse(oAjax.responseText);
         let erro = oRetorno[0];
-console.log(oRetorno);
-        if (erro == false){
-            console.log("entrou");
-            alert("Contrato com vigência até "+ oRetorno[1] +", não será possível gerar autorização de empenho.");
-            location.reload();
+        let tipoerro = oRetorno[2];
+
+        if(tipoerro==true){
+            if (erro == false){
+                alert("Contrato com vigência até "+ oRetorno[1] +", não será possível gerar autorização de empenho.");
+                location.reload();
+            }else{
+                js_removeObj("msgbox");
+            }
         }else{
-            js_removeObj("msgbox");
+
+            if (erro == false) {
+                alert("Contrato assinado em "+oRetorno[3]+", gerar autorização após essa data");
+                location.reload();
+            }else{
+                js_removeObj("msgbox");
+            }
         }
     }
 
@@ -661,7 +671,7 @@ console.log(oRetorno);
             $('e54_codcomdescr').value = oRetorno.pc50_codcom;
             tipoLic  = oRetorno.l03_tipo;
             $('e54_numerl').value = oRetorno.iEdital+'/'+oRetorno.iAnoLicitacao;
-                $('e54_nummodalidade').value = oRetorno.iNumModalidade;
+            $('e54_nummodalidade').value = oRetorno.iNumModalidade;
             $('iSequenciaCaracteristica').value = '000';
             $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
             js_buscarTipoLicitacao(oRetorno.pc50_codcom);
@@ -822,13 +832,13 @@ console.log(oRetorno);
 
         oGridItens.renderRows();
         aDadosHintGrid.each(function(oHint, id) {
-          var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
-          oDBHint.setText(oHint.sText);
-          oDBHint.setShowEvents(aEventsIn);
-          oDBHint.setHideEvents(aEventsOut);
-          oDBHint.setPosition('B', 'L');
-          oDBHint.setUseMouse(true);
-          oDBHint.make($(oHint.idLinha), 2);
+            var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+            oDBHint.setText(oHint.sText);
+            oDBHint.setShowEvents(aEventsIn);
+            oDBHint.setHideEvents(aEventsOut);
+            oDBHint.setPosition('B', 'L');
+            oDBHint.setUseMouse(true);
+            oDBHint.make($(oHint.idLinha), 2);
         });
 
         aItensPosicao.each(function (oItem, iLinha){
@@ -1492,13 +1502,13 @@ console.log(oRetorno);
             return false;
         }
 
-      $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
-      $('e54_numerl').value = oRetorno.iProcesso;
-      $('e54_codcom').value = oRetorno.sTipo;
-      $('e54_codcomdescr').value = oRetorno.sTipo;
-      $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-      $('iSequenciaCaracteristica').value = '000';
-      $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
+        $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
+        $('e54_numerl').value = oRetorno.iProcesso;
+        $('e54_codcom').value = oRetorno.sTipo;
+        $('e54_codcomdescr').value = oRetorno.sTipo;
+        $('e54_nummodalidade').value = oRetorno.iNumModalidade;
+        $('iSequenciaCaracteristica').value = '000';
+        $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
 
         setInformacoesAutorizacao();
 
