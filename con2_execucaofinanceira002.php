@@ -20,8 +20,6 @@ require_once("con2_execcontratosquebraaditivoempenho.php");
 require_once("con2_execucaodecontratosaux.php");
 
 db_postmemory($HTTP_GET_VARS);
-//echo "<pre>"; var_dump($HTTP_GET_VARS); die();
-ini_set('display_errors','on');
 $oPdf  = new PDF();
 $oPdf->Open();
 $oPdf->AliasNbPages();
@@ -42,11 +40,21 @@ if( empty($dtVigenciaInicial) && !empty($dtVigenciaFinal) ){
 }else if( !empty($dtVigenciaInicial) && !empty($dtVigenciaFinal) ){
     $head4 .= "\nPeríodo: de $dtVigenciaInicial até $dtVigenciaFinal";
 }
+$oContratosRelatorio = array();
 
 if($aContratos == ""){
-    $arrayContratos = ExecucaoDeContratos::getAcordosFornecedor($fornecedor);
+    $oContratosRelatorio = ExecucaoDeContratos::getAcordosFornecedor($fornecedor);
+    foreach ($oContratosRelatorio as $ik => $oCo){
+        $arrayContratos[$ik] = $oCo;
+    }
+
 }else{
-    $arrayContratos = preg_split("/[\s,]+/", $aContratos);
+    $oContratosRelatorio = preg_split("/[\s,]+/", $aContratos);
+    $oContratos =  new stdClass();
+    foreach ($oContratosRelatorio as $ik => $oCo){
+        $oContratos->ac16_sequencial = $oCo;
+        $arrayContratos[$ik] = $oContratos;
+    }
 }
 foreach ($arrayContratos as $iContrato){
 
