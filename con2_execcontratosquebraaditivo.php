@@ -49,7 +49,6 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
             $sQtdEmOrdemdeCompra      = null;
             $dVlrOrdemDeCompra        = null;
             $iQtdEmOrdem              = null;
-            $iVlrEmOrdem              = null;
             $iQtdEmOrdemAnulado       = null;
             $dQtdOrdemDeCompra        = null;
             $dVlrAgerarOrdem          = null;
@@ -90,17 +89,17 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
                         (int)$oItem->codigo_material
                     );
                     $iQtdEmOrdem = 0;
-
+                    $iVlrEmOrdem = 0;
                     foreach($dQuantidadeEmOrdemDeCompra as $oOrdem){
 
                         $iQtdEmOrdem += $oOrdem->quantidade;
-                        $iVlrEmOrdem = $oOrdem->valor;
+                        $iVlrEmOrdem += $oOrdem->valor;
                         $iQtdEmOrdemAnulado += $oOrdem->quantidadeAnulada;
                         $iVlrEmOrdemAnulado = $iQtdEmOrdemAnulado * $oOrdem->valor;
                     };
 
                     $dQtdOrdemDeCompra += isset($iQtdEmOrdem) ? (double)$iQtdEmOrdem : 0;
-                    $dVlrOrdemDeCompra = $iVlrEmOrdem * $dQtdOrdemDeCompra;
+                    $dVlrOrdemDeCompra = $iVlrEmOrdem;
                     $dValorUnitarioProvisorio = (double)$oItem->valor_unitario;
                 }
 
