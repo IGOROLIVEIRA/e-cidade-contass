@@ -574,9 +574,7 @@ if($x->consultarDataDoSistema == true){
 
     function js_validavigencia(oAjax){
         var oRetorno = JSON.parse(oAjax.responseText);
-        console.log(oRetorno);
         let erro = oRetorno[0];
-        //true = vigencia false=assinatura
         let tipoerro = oRetorno[2];
 
         if(tipoerro==true){
