@@ -1845,8 +1845,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('servico-quantidade').style.display = mostra;
 
       let controlaQuantidade = document.getElementById('oCboServicoQuantidade').value;
-
-      if(!Number(controlaQuantidade)){
+      console.log('Controla quantidade: ', controlaQuantidade);
+      console.log('Serviço? ', servico);
+      if(!Number(controlaQuantidade) && servico == 't'){
         oTxtQuantidade.setValue("1,000");
         oTxtQuantidade.setReadOnly(true);
       }
