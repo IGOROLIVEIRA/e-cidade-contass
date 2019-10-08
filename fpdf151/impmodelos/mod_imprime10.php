@@ -234,7 +234,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
     /* Realizar a consulta de item anulado */
 
     $sql = " SELECT m52_valor,
-                    m36_vrlanu
+                    m36_vrlanu,
+                    m36_qtd
               FROM matordemitem
               INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp
               INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
@@ -247,10 +248,11 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
               AND orcelemento.o56_anousu = empempenho.e60_anousu
               INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item
                 WHERE m52_codordem =  ".$this->numordem." and e62_item = ".pg_result($this->recorddositens,$ii,$this->codmater);
-
+    
     $resItens = @db_query($sql);
     $valorItemAnulado = db_utils::fieldsMemory($resItens,0)->m36_vrlanu;
     $valorItem = db_utils::fieldsMemory($resItens,0)->m52_valor;
+    $qtdAnulada = db_utils::fieldsMemory($resItens,0)->m36_qtd;
 
 	  $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem);
     if (pg_result($this->recorddositens,$ii,$this->Snumero) != "") {
@@ -371,10 +373,15 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
    		$valorItemTotal = pg_result($this->recorddositens,$ii,$this->valoritem) - $valorItemAnulado;
    	}else $valorItemTotal = pg_result($this->recorddositens,$ii,$this->valoritem);
 
+
+   	if($qtdAnulada > 0){
+   		$qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem) - $qtdAnulada;
+   	}else $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem);
+
      $this->objpdf->Row_multicell(array(pg_result($this->recorddositens,$ii,$this->codmater),
 	                            pg_result($this->recorddositens,$ii,$this->empempenho)."/"
                              .pg_result($this->recorddositens,$ii,$this->anousuemp),
-			pg_result($this->recorddositens, $ii, $this->quantitem), pg_result($this->recorddositens, $ii, $this->unid),
+			$qtdItem, pg_result($this->recorddositens, $ii, $this->unid),
 				                      $descricaoitem."\n",
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
   			                      db_formatar($valorItemTotal,'f')),3,false,4,0,true);
