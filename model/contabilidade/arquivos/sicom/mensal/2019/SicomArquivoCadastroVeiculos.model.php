@@ -564,7 +564,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                              veicmanut.ve62_dtmanut,
                              veiculostransf.ve81_codunidadesubatual,veiculostransf.ve81_codunidadesubant) as teste";
 
-        $rsResult20 = db_query($sSql);
+        $rsResult20 = db_query($sSql); //db_criatabela($rsResult20); die();
 
         /**
          * registro 20
@@ -604,6 +604,13 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                             $codUnidadeSub = $oResult20->codunidadesub;
                         }
 
+                    }elseif ($oResult20->ve70_dtabast == $oResult20->ve80_dt_transferencia){
+                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
+                            $codveiculo = $oResult20->ve81_codigonovo;
+                        }else{
+                            $codveiculo = $oResult20->ve01_codigoant;
+                        }
+                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
                     }else{
                         if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
                             $codveiculo = $oResult20->ve01_codigo;
