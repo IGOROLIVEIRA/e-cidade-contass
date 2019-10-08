@@ -729,6 +729,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         aItensPosicao[iLinha].dotacoes.push(oDotacao);
         me.preencheGridDotacoes(iLinha);
+        $('oTxtDotacao').value = '';
+        $('oTxtValorDotacao').value = '';
+        $('oTxtSaldoDotacao').value = '';
+
     }
 
     this.getSaldoDotacao = function (iDotacao) {
@@ -1277,7 +1281,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oTxtVlrUnitario.setValue("0,000");
         oTxtVlrUnitario.setClassName("text-right");
         oTxtVlrUnitario.show($('ctntxtVlrUnitario'));
-
+        
 
         oCboDesdobramento = new DBComboBox('oCboDesdobramento', 'oCboDesdobramento', new Array("Selecione"));
         oCboDesdobramento.show($('ctnCboDesdobramento'));
@@ -1691,18 +1695,32 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             }
 
-            if(!oItem.controlaquantidade){
-              if(oItem.servico == 't'){
-                oInputQuantidade.setReadOnly(false);
+            // if(!oItem.controlaquantidade){
+            //   if(oItem.servico == 't'){
+            //     oInputQuantidade.setReadOnly(false);
+            //     aLinha[4] = oInputQuantidade.toInnerHtml();
+            //     oInputUnitario.setReadOnly(true);
+            //     aLinha[5] = oInputUnitario.toInnerHtml();
+            //   }else{
+            //     oInputQuantidade.setReadOnly(true);
+            //     aLinha[4] = oInputQuantidade.toInnerHtml();
+            //     oInputUnitario.setReadOnly(false);
+            //     aLinha[5] = oInputUnitario.toInnerHtml();
+            //   }
+            // }
+
+            if(!oItem.periodoini && !oItem.periodofim){
+                let datainicio = $('oTxtDataInicial').value.replace('-', '');
+                let datafim = $('oTxtDataFinal').value.replace('-', '');
+                aLinha[11] = datainicio;
+                aLinha[12] = datafim;
+            }
+
+            if(oItem.novo && oItem.novo !== undefined){
+                oInputQuantidade.setReadOnly(true);
                 aLinha[4] = oInputQuantidade.toInnerHtml();
                 oInputUnitario.setReadOnly(true);
                 aLinha[5] = oInputUnitario.toInnerHtml();
-              }else{
-                oInputQuantidade.setReadOnly(true);
-                aLinha[4] = oInputQuantidade.toInnerHtml();
-                oInputUnitario.setReadOnly(false);
-                aLinha[5] = oInputUnitario.toInnerHtml();
-              }
             }
 
             me.oGridItens.addRow(aLinha, false, me.lBloqueiaItem, (me.lBloqueiaItem || iTipoAditamento == 5 || oItem.novo));
@@ -1845,8 +1863,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('servico-quantidade').style.display = mostra;
 
       let controlaQuantidade = document.getElementById('oCboServicoQuantidade').value;
-      console.log('Controla quantidade: ', controlaQuantidade);
-      console.log('Serviço? ', servico);
+      
       if(!Number(controlaQuantidade) && servico == 't'){
         oTxtQuantidade.setValue("1,000");
         oTxtQuantidade.setReadOnly(true);
