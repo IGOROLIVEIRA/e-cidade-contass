@@ -71,7 +71,10 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
     $anousu = db_getsession("DB_anousu");
     $anousu_aux = $anousu-1;
     $dtfim_aux  = $anousu_aux.'-12-31';
+
+    // DADOS DA RECEITA NO ANO ANTERIOR
     $oUltimoano = db_receitasaldo(11,1,3,true,$db_filtro,$anousu-1,$dtini,$dtfim_aux,false,' * ',true,0);
+
     $oUltimoano = db_utils::getColectionByRecord($oUltimoano);
     foreach ($oUltimoano as $oDados) {
         if($oDados->o57_fonte == "410000000000000"){
@@ -112,6 +115,8 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
     }
     db_query("drop table if exists work_receita");
 
+        // DADOS DA RECEITA NO ANO ATUAL
+
     $dtini_aux = $anousu.'-01-01';
     $oAnoatual = db_receitasaldo(11,1,3,true,$db_filtro,$anousu,$dtini_aux,$dtfim,false,' * ',true,0);
     $oAnoatual = db_utils::getColectionByRecord($oAnoatual);
@@ -131,7 +136,23 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412180111000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180211000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100431000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180121000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180221000000"){
             $fCSICRPPS+=$oDados->saldo_arrecadado;
         }
 
@@ -139,7 +160,23 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fCPRPPS+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412180131000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180231000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100461000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180141000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180241000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
@@ -147,11 +184,35 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412180151000000"){
+            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180251000000"){
+            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100481000000"){
             $fRRCPPSJ+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412180161000000"){
+            $fRRCPPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180261000000"){
+            $fRRCPPSJ+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "419900311000000"){
+            $fCFRP+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "419900311010000"){
+            $fCFRP+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "419900311020000"){
             $fCFRP+=$oDados->saldo_arrecadado;
         }
 
@@ -516,8 +577,8 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Ativo Civil oriunda do
-                Pagto.Sent.JudiciaIs
+            <td class="s3 bdleft" colspan="2">(-) Rec.Contrib.Servidor Ativo Civil oriunda do
+                Pagto.Sent.Judiciais
             </td>
             <td class="s5">
                 <?php
@@ -528,7 +589,7 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Inativo Civil oriunda do
+            <td class="s3 bdleft" colspan="2">(-) Rec.Contrib.Servidor Inativo Civil oriunda do
                 Pagto.Sent.Judiciais
             </td>
             <td class="s5">
@@ -540,7 +601,7 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.de Rec.da Contrib.Pensionista sob Pagto.Sent.Judiciais</td>
+            <td class="s3 bdleft" colspan="2">(-) Rec.da Contrib.Pensionista sob Pagto.Sent.Judiciais</td>
             <td class="s5">
                 <?php
                 echo db_formatar($fRRCPPSJ, "f");
