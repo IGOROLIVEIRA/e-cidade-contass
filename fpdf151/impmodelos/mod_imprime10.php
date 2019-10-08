@@ -367,14 +367,18 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 
    if ($iVoltaImp == 0) {
 
+   	if($valorItemAnulado){
+   		$valorItemTotal = pg_result($this->recorddositens,$ii,$this->valoritem) - $valorItemAnulado;
+   	}else $valorItemTotal = pg_result($this->recorddositens,$ii,$this->valoritem);
+
      $this->objpdf->Row_multicell(array(pg_result($this->recorddositens,$ii,$this->codmater),
 	                            pg_result($this->recorddositens,$ii,$this->empempenho)."/"
                              .pg_result($this->recorddositens,$ii,$this->anousuemp),
 			pg_result($this->recorddositens, $ii, $this->quantitem), pg_result($this->recorddositens, $ii, $this->unid),
 				                      $descricaoitem."\n",
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
-  			                      db_formatar(pg_result($this->recorddositens,$ii,$this->valoritem),'f')),3,false,4,0,true);
-
+  			                      db_formatar($valorItemTotal,'f')),3,false,4,0,true);
+     
      if($valorItemAnulado > 0){
         $xtotal += $valorItem;
         $xtotal -= $valorItemAnulado;
