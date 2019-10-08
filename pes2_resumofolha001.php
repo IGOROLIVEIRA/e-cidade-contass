@@ -63,6 +63,27 @@ if (isset($mesfolha) && !empty($mesfolha)) {
 
 $DBtxt23 = DBPessoal::getAnoFolha();
 $DBtxt25 = DBPessoal::getMesFolha();
+
+$oDaoInss = db_utils::getDao('inssirf');
+        
+$sCampos  = " distinct                                  ";
+$sCampos .= " case r33_codtab                           ";
+$sCampos .= "      when 2 then 0                        ";
+$sCampos .= "      when 1 then 5                        ";
+$sCampos .= "      else (cast(r33_codtab as integer)- 2)";
+$sCampos .= " end as r33_codtab,                        ";
+$sCampos .= " case r33_codtab                           ";
+$sCampos .= "      when 2 then 'Todos'                  ";
+$sCampos .= "      when 1 then 'Sem Prev.'              ";
+$sCampos .= "      else r33_nome                        ";
+$sCampos .= " end as r33_nome                           ";
+
+$sWhere   =  " r33_anousu       = ".db_anofolha();
+$sWhere  .=  "   and r33_mesusu = ".db_mesfolha();
+$sWhere  .=  "   and r33_instit = ".db_getsession('DB_instit');
+        
+$sQueryInss  = $oDaoInss->sql_query_file('r33_codtab',null, $sCampos, null, $sWhere);
+$rsPrevidencia = db_query($sQueryInss);
 ?>
 <html>
 <head>
@@ -116,7 +137,9 @@ $DBtxt25 = DBPessoal::getMesFolha();
             <td>
               <label>Tabela de Previdências:</label>
             </td>
-            <td id="ContainerPrevidencia"></td>
+            <?
+            db_multiploselect("r33_codtab", "r33_nome", "nselecionados", "sselecionados", $rsPrevidencia, array(), 4, 250);
+            ?>
           </tr>
           <tr>
             <td colspan="2">
@@ -159,7 +182,6 @@ $DBtxt25 = DBPessoal::getMesFolha();
 <script src="scripts/widgets/dbtextField.widget.js"></script>
 <script src="scripts/classes/DBViewTipoFiltrosFolha.js"></script>
 <script src="scripts/classes/DBViewFormularioFolha/ComboRegime.js"></script>
-<script src="scripts/classes/DBViewFormularioFolha/ComboPrevidencia.js"></script>
 <script src="scripts/classes/DBViewFormularioFolha/ComboVinculo.js"></script>
 <script>
   var oTiposFiltrosFolha;
@@ -361,18 +383,17 @@ $DBtxt25 = DBPessoal::getMesFolha();
     }
 
     oQuery.sVinculo     = $F('Vinculo');
-    oQuery.iPrevidencia = $F('Previdencia');
-
-    var aPrevidencias   = $('Previdencia').options;
-
-    for (var iIndice = 0; iIndice < aPrevidencias.length; iIndice++) {
-
-      var previdencia = aPrevidencias[iIndice];
-
-      if (previdencia.selected) {
-        oQuery.sPrevidencia = previdencia.text;
-      }
+    
+    var selecionados = "";
+    var descrselecionados = "";
+    var virgula_ssel = "";
+    for(var i=0; i<document.form1.sselecionados.length; i++){
+      selecionados+= virgula_ssel + document.form1.sselecionados.options[i].value;
+      descrselecionados+= virgula_ssel + document.form1.sselecionados.options[i].text;
+      virgula_ssel = ",";
     }
+    oQuery.iPrevidencia = selecionados;
+    oQuery.sPrevidencia = descrselecionados;
 
     oQuery.sOrdem = $F('tipo_filtro');
 
@@ -509,7 +530,6 @@ $DBtxt25 = DBPessoal::getMesFolha();
      * Monta os componentes para o formulario
      */
     var oComboRegime       = new DBViewFormularioFolha.ComboRegime();
-    var oComboPrevidencia  = new DBViewFormularioFolha.ComboPrevidencia();
     var oComboVinculo      = new DBViewFormularioFolha.ComboVinculo();
     oTiposFiltrosFolha     = new DBViewFormularioFolha.DBViewTipoFiltrosFolha(<?=db_getsession("DB_instit")?>);
     oTiposFiltrosFolha.sInstancia     = 'oTiposFiltrosFolha';
@@ -518,7 +538,6 @@ $DBtxt25 = DBPessoal::getMesFolha();
      * Renderiza os componentes em seus respectivos contaners
      */
     oComboRegime.show($('ContainerRegime'));
-    oComboPrevidencia.show($('ContainerPrevidencia'));
     oComboVinculo.show($('ContainerVinculo'));
     oTiposFiltrosFolha.show($('containnerTipoFiltrosFolha'));
 
@@ -561,14 +580,6 @@ $DBtxt25 = DBPessoal::getMesFolha();
       oGridTipoFolha.aRows[1].select(true);
     })
   })();
-</script>
-
-<script>
-  var x = top.corpo.document.getElementById('Previdencia');
-  var option = document.createElement("option");
-  option.text = "0 - Todos";
-  option.value = "0";
-  x.add(option, x[0]);
 </script>
 
 </html>
