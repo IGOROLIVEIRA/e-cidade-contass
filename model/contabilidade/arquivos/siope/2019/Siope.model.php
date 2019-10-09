@@ -7,7 +7,6 @@ require_once("classes/db_naturdessiope_classe.php");
 require_once("classes/db_naturrecsiope_classe.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
-require_once("model/SiopeCsv.model.php");
 
 
 class Siope {
@@ -29,6 +28,8 @@ class Siope {
     //@var array
     public $aReceitas = array();
     //@var array
+    public $aReceitasAnoSeg = array();
+    //@var array
     public $aDespesasAgrupadas = array();
     //@var array
     public $aReceitasAgrupadas = array();
@@ -38,14 +39,24 @@ class Siope {
     public $sNomeArquivo;
     //@var integer
     public $iErroSQL;
+    //@var integer
+    public $status;
+    //@var string
+    public $sMensagem;
 
     public function gerarSiopeDespesa() {
 
         $aDados = $this->aDespesasAgrupadas;
 
-        $csv = new SiopeCsv;
-        $csv->setNomeArquivo($this->getNomeArquivo());
-        $csv->gerarArquivoCSV($aDados, 1);
+        if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/SiopeCsv.model.php")) {
+
+            require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/SiopeCsv.model.php");
+
+            $csv = new SiopeCsv;
+            $csv->setNomeArquivo($this->getNomeArquivo());
+            $csv->gerarArquivoCSV($aDados, 1);
+
+        }
 
     }
 
@@ -53,9 +64,15 @@ class Siope {
 
         $aDados = $this->aReceitasAgrupadas;
 
-        $csv = new SiopeCsv();
-        $csv->setNomeArquivo($this->getNomeArquivo());
-        $csv->gerarArquivoCSV($aDados, 2);
+        if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/SiopeCsv.model.php")) {
+
+            require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/SiopeCsv.model.php");
+
+            $csv = new SiopeCsv();
+            $csv->setNomeArquivo($this->getNomeArquivo());
+            $csv->gerarArquivoCSV($aDados, 2);
+
+        }
 
     }
 
@@ -370,26 +387,53 @@ class Siope {
 
         $aRecAgrup = array();
 
-        foreach($this->aReceitas as $row) {
+        foreach($this->aReceitas as $index => $row) {
 
-            list($natureza_de, $natureza, $descricao, $prev_atualizada, $rec_realizada, $rec_orcada) = array_values($row);
-
+            list($natureza, $descricao, $prev_atualizada, $rec_realizada) = array_values($row);
 
             $iSubTotalPrev      = isset($aRecAgrup[$natureza]['prev_atualizada']) ? $aRecAgrup[$natureza]['prev_atualizada'] : 0;
             $iSubTotalRec       = isset($aRecAgrup[$natureza]['rec_realizada']) ? $aRecAgrup[$natureza]['rec_realizada'] : 0;
-            $iSubTotalRecOrc    = isset($aRecAgrup[$natureza]['rec_orcada']) ? $aRecAgrup[$natureza]['rec_orcada'] : 0;
 
-            $aRecAgrup[$natureza]['natureza_de']       = $natureza_de;
             $aRecAgrup[$natureza]['natureza']          = $natureza;
             $aRecAgrup[$natureza]['descricao']         = $descricao;
             $aRecAgrup[$natureza]['prev_atualizada']   = ($iSubTotalPrev + $prev_atualizada);
             $aRecAgrup[$natureza]['rec_realizada']     = ($iSubTotalRec + $rec_realizada);
-            $aRecAgrup[$natureza]['rec_orcada']        = ($iSubTotalRecOrc + $rec_orcada);
 
         }
 
-        foreach($aRecAgrup as $aAgrupado) {
-            array_push($this->aReceitasAgrupadas, $aAgrupado);
+        if ($this->lDespOrcada) {
+
+            $aRecAgrupAnoSeg = array();
+
+            foreach ($this->aReceitasAnoSeg as $index => $row) {
+
+                list($natureza, $descricao, $rec_orcada) = array_values($row);
+
+                $iSubTotalRecOrc = isset($aRecAgrupAnoSeg[$natureza]['rec_orcada']) ? $aRecAgrupAnoSeg[$natureza]['rec_orcada'] : 0;
+
+                $aRecAgrupAnoSeg[$natureza]['natureza']     = $natureza;
+                $aRecAgrupAnoSeg[$natureza]['descricao']    = $descricao;
+                $aRecAgrupAnoSeg[$natureza]['rec_orcada']   = ($iSubTotalRecOrc + $rec_orcada);
+
+            }
+
+        }
+
+        if (count($aRecAgrup) >= count($aRecAgrupAnoSeg)) {
+
+            foreach($aRecAgrup as $chave => $aAgrupado) {
+                $aAgrupado['rec_orcada'] = $this->lDespOrcada ? $aRecAgrupAnoSeg[$chave]['rec_orcada'] : 0;
+                array_push($this->aReceitasAgrupadas, $aAgrupado);
+            }
+
+        } else {
+
+            foreach($aRecAgrupAnoSeg as $chave => $aAgrupado) {
+                $aAgrupado['prev_atualizada']   = isset($aRecAgrup[$chave]['prev_atualizada']) ? $aRecAgrup[$chave]['prev_atualizada']: 0;
+                $aAgrupado['rec_realizada']     = isset($aRecAgrup[$chave]['rec_realizada']) ? $aRecAgrup[$chave]['rec_realizada'] : 0;
+                array_push($this->aReceitasAgrupadas, $aAgrupado);
+            }
+
         }
 
     }
@@ -402,20 +446,47 @@ class Siope {
 
             $oReceita = db_utils::fieldsMemory($result, $i);
 
-            if($oReceita->o70_codrec > 0) {
+            if ($oReceita->o70_codrec > 0) {
 
                 $oNaturrecsiope = $this->getNaturRecSiope($oReceita->o57_fonte);
 
                 $aReceita = array();
 
-                $aReceita['natureza_de']        = db_formatar($oReceita->o57_fonte,'receita');
                 $aReceita['natureza']           = $oNaturrecsiope->c225_elerececidade;
                 $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
                 $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
                 $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
-                $aReceita['rec_orcada']         = $this->lDespOrcada ? abs($this->getRecOrcAnoSeg($oReceita->o70_codrec)) : 0;
 
                 array_push($this->aReceitas, $aReceita);
+
+            }
+
+        }
+
+        if ($this->lDespOrcada) {
+
+            db_query('drop table work_receita');
+            $iAnoSeg = $this->iAnoUsu+1;
+            $resultAnoSeg = db_receitasaldo(11, 1, 3, true, $this->sFiltros, $iAnoSeg, "{$iAnoSeg}-01-01", "{$iAnoSeg}-01-01", false, ' * ', true, 0);
+
+            for ($i = 0; $i < pg_num_rows($resultAnoSeg); $i++) {
+
+                $oReceitaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
+
+                if ($oReceitaAnoSeg->o70_codrec > 0) {
+
+                    $oNaturrecsiope = $this->getNaturRecSiope($oReceitaAnoSeg->o57_fonte);
+
+                    $aReceitaAnoSeg = array();
+
+                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiope->c225_elerececidade;
+                    $aReceitaAnoSeg['descricao']    = $oNaturrecsiope->c225_descricao;
+                    $aReceitaAnoSeg['rec_orcada']   = abs($oReceitaAnoSeg->saldo_inicial);
+
+                    array_push($this->aReceitasAnoSeg, $aReceitaAnoSeg);
+
+                }
+
             }
 
         }
@@ -509,126 +580,6 @@ class Siope {
 
     }
 
-    public function montaTabela() {
-
-        echo '<table border="1">';
-        echo '  <tr>';
-        echo '      <td>Tp</td>';
-        echo '      <td>Cod Inst</td>';
-        echo '      <td>Rec</td>';
-        echo '      <td>Cod Plan</td>';
-        echo '      <td>Elem</td>';
-        echo '      <td>Descrição</td>';
-        echo '      <td>D Atua</td>';
-        echo '      <td>D Emp</td>';
-        echo '      <td>D Liq</td>';
-        echo '      <td>D Pag</td>';
-        echo '      <td>Desp Orç</td>';
-        echo '      <td>SubF</td>';
-        echo '      <td>Ens</td>';
-        echo '      <td>Past</td>';
-        echo '      <td>Elem Desp</td>';
-        echo '      <td>Elem Desdob</td>';
-        echo '  </tr>';
-
-        foreach($this->aDespesas as $despesa) {
-
-            foreach($despesa as $linhaDespesa) {
-
-                $sChaveElem = $linhaDespesa['o58_elemento'];
-
-                echo '<tr>';
-                echo '  <td>V</td>';
-                echo '  <td>1</td>';
-                echo '  <td>'.$linhaDespesa['o58_codigo'].'</td>';
-                echo '  <td>'.$linhaDespesa['cod_planilha'].'</td>';
-                echo '  <td>'.$linhaDespesa['elemento_siope'].'</td>';
-                echo '  <td>'.$linhaDespesa['descricao_siope'].'</td>';
-                echo '  <td>'.db_formatar($linhaDespesa['dot_atualizada'], 'f').'</td>';
-                echo '  <td>0,00</td>';
-                echo '  <td>0,00</td>';
-                echo '  <td>0,00</td>';
-                echo '  <td>'.db_formatar($linhaDespesa['desp_orcada'], 'f').'</td>';
-                echo '  <td>'.$linhaDespesa['o58_subfuncao'].'</td>';
-                echo '  <td>'.$linhaDespesa['o55_tipoensino'].'</td>';
-                echo '  <td>'.$linhaDespesa['o55_tipopasta'].'</td>';
-                echo '  <td>'.$linhaDespesa['o58_elemento'].'</td>';
-                echo '  <td>'.$linhaDespesa['o56_elemento'].'</td>';
-                echo '</tr>';
-
-                if(isset($linhaDespesa[$sChaveElem])) {
-
-                    foreach ($linhaDespesa[$sChaveElem] as $linhaDespDesd) {
-
-                        echo '<tr>';
-                        echo '  <td>V</td>';
-                        echo '  <td>1</td>';
-                        echo '  <td>'.$linhaDespDesd['o58_codigo'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['cod_planilha'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['elemento_siope'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['descricao_siope'].'</td>';
-                        echo '  <td>0,00</td>';
-                        echo '  <td>'.db_formatar($linhaDespDesd['empenhado'], 'f').'</td>';
-                        echo '  <td>'.db_formatar($linhaDespDesd['liquidado'], 'f').'</td>';
-                        echo '  <td>'.db_formatar($linhaDespDesd['pagamento'], 'f').'</td>';
-                        echo '  <td>0,00</td>';
-                        echo '  <td>'.$linhaDespDesd['o58_subfuncao'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['o55_tipoensino'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['o55_tipopasta'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['o58_elemento'].'</td>';
-                        echo '  <td>'.$linhaDespDesd['o56_elemento'].'</td>';
-                        echo '</tr>';
-
-                    }
-
-                }
-
-            }
-
-        }
-        echo '</table>';
-
-    }
-
-    public function montaTabelaFinal() {
-
-        echo '<table border="1">';
-        echo '  <tr>';
-        echo '      <td>Tp</td>';
-        echo '      <td>Cod Inst</td>';
-        echo '      <td>Rec</td>';
-        echo '      <td>SubF</td>';
-        echo '      <td>Cod Plan</td>';
-        echo '      <td>Elem</td>';
-        echo '      <td>Descrição</td>';
-        echo '      <td>D Atua</td>';
-        echo '      <td>D Emp</td>';
-        echo '      <td>D Liq</td>';
-        echo '      <td>D Pag</td>';
-        echo '      <td>Desp Orç</td>';
-        echo '  </tr>';
-
-        foreach ($this->aDespesasAgrupadas as $despesa) {
-
-            echo '<tr>';
-            echo '  <td>V</td>';
-            echo '  <td>1</td>';
-            echo '  <td>'.$despesa['o58_codigo'].'</td>';
-            echo '  <td>'.$despesa['o58_subfuncao'].'</td>';
-            echo '  <td>'.$despesa['cod_planilha'].'</td>';
-            echo '  <td>'.$despesa['elemento_siope'].'</td>';
-            echo '  <td>'.$despesa['descricao_siope'].'</td>';
-            echo '  <td>'.db_formatar($despesa['dot_atualizada'], 'f').'</td>';
-            echo '  <td>'.db_formatar($despesa['empenhado'], 'f').'</td>';
-            echo '  <td>'.db_formatar($despesa['liquidado'], 'f').'</td>';
-            echo '  <td>'.db_formatar($despesa['pagamento'], 'f').'</td>';
-            echo '  <td>'.db_formatar($despesa['desp_orcada'], 'f').'</td>';
-            echo '</tr>';
-
-        }
-
-    }
-
     public function getNaturDesSiope($elemento) {
 
         $clnaturdessiope    = new cl_naturdessiope();
@@ -643,10 +594,18 @@ class Siope {
 
 
         $clnaturrecsiope    = new cl_naturrecsiope();
-        $rsNaturrecsiope    = db_query($clnaturrecsiope->sql_query_siope(substr($natureza, 0, 15)));
-        $oNaturrecsiope     = db_utils::fieldsMemory($rsNaturrecsiope, 0);
+        $rsNaturrecsiope    = db_query($clnaturrecsiope->sql_query_siope(substr($natureza, 0, 15),"", $this->iAnoUsu));
 
-        return $oNaturrecsiope;
+        if (pg_num_rows($rsNaturrecsiope) > 0) {
+            $oNaturrecsiope = db_utils::fieldsMemory($rsNaturrecsiope, 0);
+            return $oNaturrecsiope;
+        } else {
+            $this->status = 2;
+            if (strpos($this->sMensagem, $natureza) === false){
+                $this->sMensagem .= "{$natureza} ";
+            }
+        }
+
 
     }
 

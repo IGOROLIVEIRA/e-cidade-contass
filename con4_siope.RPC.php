@@ -9,7 +9,6 @@ require_once("libs/JSON.php");
 require_once("std/DBDate.php");
 require_once("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
-require_once('model/Siope.model.php');
 require_once("classes/db_orcorgao_classe.php");
 
 db_postmemory($_POST);
@@ -38,53 +37,64 @@ switch ($oParam->exec) {
 
                 $sArquivosZip = "";
 
-                foreach ($oParam->arquivos as $index => $sArquivo) {
+                if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/Siope.model.php")) {
 
-                    if ($sArquivo == 'despesa') {
+                    require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/Siope.model.php");
 
-                        $siopeDespesa = new Siope;
-                        $siopeDespesa->setAno($iAnoUsu);
-                        $siopeDespesa->setInstit($iInstit);
-                        $siopeDespesa->setBimestre($iBimestre);
-                        $siopeDespesa->setPeriodo();
-                        $siopeDespesa->setFiltrosDespesa();
-                        $siopeDespesa->setDespesasOrcadas();
-                        $siopeDespesa->setDespesas();
-                        $siopeDespesa->agrupaDespesas();
-                        $siopeDespesa->geraLinhaVazia();
-                        $siopeDespesa->ordenaDespesas();
-                        $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
-                        $siopeDespesa->gerarSiopeDespesa();
+                    foreach ($oParam->arquivos as $index => $sArquivo) {
 
-                        if ($siopeDespesa->getErroSQL() > 0 ) {
-                            throw new Exception ("Ocorreu um erro ao gerar Siope ".$siopeDespesa->getErroSQL());
+                        if ($sArquivo == 'despesa') {
+
+                            $siopeDespesa = new Siope;
+                            $siopeDespesa->setAno($iAnoUsu);
+                            $siopeDespesa->setInstit($iInstit);
+                            $siopeDespesa->setBimestre($iBimestre);
+                            $siopeDespesa->setPeriodo();
+                            $siopeDespesa->setFiltrosDespesa();
+                            $siopeDespesa->setDespesasOrcadas();
+                            $siopeDespesa->setDespesas();
+                            $siopeDespesa->agrupaDespesas();
+                            $siopeDespesa->geraLinhaVazia();
+                            $siopeDespesa->ordenaDespesas();
+                            $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
+                            $siopeDespesa->gerarSiopeDespesa();
+
+                            if ($siopeDespesa->getErroSQL() > 0) {
+                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopeDespesa->getErroSQL());
+                            }
+
+                            $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
+                            $sArquivosZip .= " {$siopeDespesa->getNomeArquivo()}.csv ";
+
                         }
 
-                        $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
-                        $sArquivosZip .= " {$siopeDespesa->getNomeArquivo()}.csv ";
+                        if ($sArquivo == 'receita') {
 
-                    }
+                            $siopeReceita = new Siope();
+                            $siopeReceita->setAno($iAnoUsu);
+                            $siopeReceita->setInstit($iInstit);
+                            $siopeReceita->setBimestre($iBimestre);
+                            $siopeReceita->setPeriodo();
+                            $siopeReceita->setFiltrosReceita();
+                            $siopeReceita->setDespesasOrcadas();
+                            $siopeReceita->setReceitas();
+                            $siopeReceita->agrupaReceitas();
+                            $siopeReceita->setNomeArquivo($sNomeArqReceita);
+                            $siopeReceita->gerarSiopeReceita();
 
-                    if ($sArquivo == 'receita') {
+                            if ($siopeReceita->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Receita. De/Para dos seguintes estruturais não encontrado: {$siopeReceita->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
 
-                        $siopeReceita = new Siope();
-                        $siopeReceita->setAno($iAnoUsu);
-                        $siopeReceita->setInstit($iInstit);
-                        $siopeReceita->setBimestre($iBimestre);
-                        $siopeReceita->setPeriodo();
-                        $siopeReceita->setFiltrosReceita();
-                        $siopeReceita->setDespesasOrcadas();
-                        $siopeReceita->setReceitas();
-                        $siopeReceita->agrupaReceitas();
-                        $siopeReceita->setNomeArquivo($sNomeArqReceita);
-                        $siopeReceita->gerarSiopeReceita();
+                            if ($siopeReceita->getErroSQL() > 0) {
+                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopeReceita->getErroSQL());
+                            }
 
-                        if ($siopeReceita->getErroSQL() > 0 ) {
-                            throw new Exception ("Ocorreu um erro ao gerar Siope ".$siopeReceita->getErroSQL());
+                            $oRetorno->arquivos->$index->nome = "{$siopeReceita->getNomeArquivo()}.csv";
+                            $sArquivosZip .= " {$siopeReceita->getNomeArquivo()}.csv ";
+
                         }
-
-                        $oRetorno->arquivos->$index->nome = "{$siopeReceita->getNomeArquivo()}.csv";
-                        $sArquivosZip .= " {$siopeReceita->getNomeArquivo()}.csv ";
 
                     }
 
@@ -99,7 +109,7 @@ switch ($oParam->exec) {
         } catch(Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \n \n {$eErro->getMessage()}";
+            $sGetMessage       = "Arquivo retornou com erro: \n \n {$eErro->getMessage()}";
             $oRetorno->message = $sGetMessage;
 
         }

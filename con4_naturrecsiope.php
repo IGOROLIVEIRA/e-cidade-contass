@@ -11,7 +11,7 @@ $clnaturrecsiope = new cl_naturrecsiope;
 
 if(isset($incluir)){
     db_inicio_transacao();
-    $clnaturrecsiope->incluir($c224_natrececidade,$c224_natrecsiope);
+    $clnaturrecsiope->incluir($c224_natrececidade,$c224_natrecsiope, $c224_anousu);
     db_fim_transacao();
 }
 

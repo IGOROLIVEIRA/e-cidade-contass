@@ -22,6 +22,7 @@ class cl_naturrecsiope {
     public $campos = "
                  c224_natrececidade = varchar(15) = E-Cidade
                  c224_natrecsiope = varchar(15) = Siope
+                 c224_anousu = int4 = Ano
                  ";
 
     //funcao construtor da classe
@@ -46,9 +47,11 @@ class cl_naturrecsiope {
         if ($exclusao==false) {
             $this->c224_natrececidade = ($this->c224_natrececidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_natrececidade"]:$this->c224_natrececidade);
             $this->c224_natrecsiope = ($this->c224_natrecsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_natrecsiope"]:$this->c224_natrecsiope);
+            $this->c224_anousu = ($this->c224_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_anousu"]:$this->c224_anousu);
         } else {
             $this->c224_natrececidade = ($this->c224_natrececidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_natrececidade"]:$this->c224_natrececidade);
             $this->c224_natrecsiope = ($this->c224_natrecsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_natrecsiope"]:$this->c224_natrecsiope);
+            $this->c224_anousu = ($this->c224_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c224_anousu"]:$this->c224_anousu);
         }
     }
 
@@ -76,10 +79,12 @@ class cl_naturrecsiope {
         $sql = "insert into naturrecsiope(
                                        c224_natrececidade
                                       ,c224_natrecsiope
+                                      ,c224_anousu
                        )
                 values (
                                 '$this->c224_natrececidade'
                                ,'$this->c224_natrecsiope'
+                               ,'$this->c224_anousu'
                       )";
         $result = db_query($sql);
         if ($result==false) {
@@ -140,6 +145,7 @@ class cl_naturrecsiope {
                 return false;
             }
         }
+        $sql .= " c224_anousu = ".$this->c224_anousu." ";
         $sql .= " where ";
         if ($c224_natrececidade!=null) {
             $sql .= " c224_natrececidade = '$this->c224_natrececidade'";
@@ -330,6 +336,14 @@ class cl_naturrecsiope {
                 }
                 $sql2 .= " naturrecsiope.c224_natrecsiope = '$c224_natrecsiope' ";
             }
+            if ($c224_anousu!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturrecsiope.c224_anousu = '$c224_anousu' ";
+            }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
@@ -346,7 +360,7 @@ class cl_naturrecsiope {
         return $sql;
     }
 
-    function sql_query_siope ( $c224_natrececidade=null, $c224_natrecsiope="",$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_siope ( $c224_natrececidade=null, $c224_natrecsiope="",$c224_anousu="",$campos="*",$ordem=null,$dbwhere="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -359,7 +373,7 @@ class cl_naturrecsiope {
             $sql .= $campos;
         }
         $sql .= " from naturrecsiope ";
-        $sql .= ' inner join elerecsiope on substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_elerececidade';
+        $sql .= ' inner join elerecsiope on substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_elerececidade and naturrecsiope.c224_anousu = elerecsiope.c225_anousu';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c224_natrececidade!=null ) {
@@ -372,6 +386,14 @@ class cl_naturrecsiope {
                     $sql2 .= " where ";
                 }
                 $sql2 .= " naturrecsiope.c224_natrecsiope = '$c224_natrecsiope' ";
+            }
+            if ($c224_anousu!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturrecsiope.c224_anousu = '$c224_anousu' ";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";

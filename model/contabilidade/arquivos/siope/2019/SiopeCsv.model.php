@@ -1,7 +1,5 @@
 <?php
 
-require_once("model/Siope.model.php");
-
 class SiopeCsv extends Siope {
 
     //@var String
@@ -47,15 +45,19 @@ class SiopeCsv extends Siope {
 
             foreach ($aDados as $value) {
 
-                $sLinha = "V;1;1" . $this->sDelim;
-                $sLinha .= $this->getNaturezaFormat($value['natureza']) . $this->sDelim;
-                $sLinha .= $value['descricao'] . $this->sDelim;
-                $sLinha .= number_format($value['prev_atualizada'], 2, ',', '') . $this->sDelim;
-                $sLinha .= number_format($value['rec_realizada'], 2, ',', '') . $this->sDelim;
-                $sLinha .= number_format($value['rec_orcada'], 2, ',', '') . $this->sDelim;
+                if (!($value['prev_atualizada'] == 0 && $value['rec_realizada'] == 0 && $value['rec_orcada'] == 0)) {
 
-                fputs($this->_arquivo, $sLinha);
-                fputs($this->_arquivo, "\r\n");
+                    $sLinha = "V;1;1" . $this->sDelim;
+                    $sLinha .= $this->getNaturezaFormat($value['natureza']) . $this->sDelim;
+                    $sLinha .= $value['descricao'] . $this->sDelim;
+                    $sLinha .= number_format($value['prev_atualizada'], 2, ',', '') . $this->sDelim;
+                    $sLinha .= number_format($value['rec_realizada'], 2, ',', '') . $this->sDelim;
+                    $sLinha .= number_format($value['rec_orcada'], 2, ',', '') . $this->sDelim;
+
+                    fputs($this->_arquivo, $sLinha);
+                    fputs($this->_arquivo, "\r\n");
+
+                }
 
             }
 
