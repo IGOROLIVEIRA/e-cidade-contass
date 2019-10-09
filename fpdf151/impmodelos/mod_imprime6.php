@@ -108,32 +108,34 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     // retangulo dos dados do credor
     $this->objpdf->rect($xcol + 106, $xlin + 2, 96, 21, 2, 'DF', '1234');
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->text($xcol + 108, $xlin + 4, 'Dados do Credor:');
+    $this->objpdf->text($xcol + 107, $xlin + 4, 'Dados do Credor:');
     $this->objpdf->Setfont('Arial', 'B', 8);
     $this->objpdf->text($xcol + 107, $xlin + 7, 'Nº Credor');
     $this->objpdf->text($xcol + 150, $xlin + 7, (strlen($this->cnpj) == 11 ? 'CPF' : 'CNPJ'));
     $this->objpdf->text($xcol + 107, $xlin + 10, 'Nome');
-    $this->objpdf->text($xcol + 107, $xlin + 13, 'Endereço');
-    $this->objpdf->text($xcol + 107, $xlin + 16, 'Município');
+    $this->objpdf->text($xcol + 107, $xlin + 13, 'Município');
+    $this->objpdf->text($xcol + 107, $xlin + 16, 'Endereço');
+    $this->objpdf->text($xcol + 107, $xlin + 19, 'Bairro');
 
     if ($this->dadosbancoemprenho == 't') {
         $this->objpdf->text($xcol + 107, $xlin + 22, 'Banco/Ag./Conta');
     }
-    $this->objpdf->text($xcol + 107, $xlin + 19, 'Telefone');
-    $this->objpdf->text($xcol + 150, $xlin + 19, 'Fax');
+    $this->objpdf->text($xcol + 150, $xlin + 22, 'Telefone');
+    $this->objpdf->text($xcol + 107, $xlin + 22, 'Número');
 
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 124, $xlin + 7, ': ' . $this->numcgm);
     $this->objpdf->text($xcol + 158, $xlin + 7, ': ' . (strlen($this->cnpj) == 11 ? db_formatar($this->cnpj, 'cpf') : db_formatar($this->cnpj, 'cnpj')));
     $this->objpdf->text($xcol + 124, $xlin + 10, ': ' . $this->nome);
-    $this->objpdf->text($xcol + 124, $xlin + 13, ': ' . $this->ender . '  ' . $this->compl);
-    $this->objpdf->text($xcol + 124, $xlin + 16, ': ' . $this->munic . '-' . $this->ufFornecedor . '    CEP : ' . $this->cep);
+    $this->objpdf->text($xcol + 124, $xlin + 13, ': ' . $this->munic . '-' . $this->ufFornecedor . '    CEP : ' . $this->cep);
+    $this->objpdf->text($xcol + 124, $xlin + 16, ': ' . $this->ender . '  ' . $this->compl);
+    $this->objpdf->text($xcol + 124, $xlin + 19, ': ' . $this->bairro);
 
     if ($this->dadosbancoemprenho == 't') {
         $this->objpdf->text($xcol + 131, $xlin + 22, ': ' . $this->iBancoFornecedor . ' / ' . $this->iAgenciaForncedor . ' / ' . $this->iContaForncedor);
     }
-    $this->objpdf->text($xcol + 124, $xlin + 19, ': ' . $this->telefone);
-    $this->objpdf->text($xcol + 157, $xlin + 19, ': ' . $this->fax);
+    $this->objpdf->text($xcol + 162, $xlin + 22, ': ' . $this->telefone);
+    $this->objpdf->text($xcol + 124, $xlin + 22, ': ' . $this->numero);
 
     // retangulo dos valores
     $this->objpdf->rect($xcol + 106, $xlin + 24, 96, 9, 2, 'DF', '1234');
