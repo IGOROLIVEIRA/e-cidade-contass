@@ -33,9 +33,11 @@ include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
 require_once("classes/db_consexecucaoorc_classe.php");
+require_once("classes/db_db_config_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $oPeriodo = new Periodo($o116_periodo);
+$cldbconfig = new cl_db_config();
 
 $oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 $oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
@@ -56,8 +58,20 @@ if (count($aInstits) > 1) {
         $oInstit = new Instituicao($iInstit);
     }
 }
+/**
+ * pego todas as instituições OC10823;
+ */
+$rsInstits = $cldbconfig->sql_record($cldbconfig->sql_query(null,"codigo",null,null));
+$ainstitunticoes = array();
+for($i=0; $i < pg_num_rows($rsInstits); $i++){
+    $odadosInstint = db_utils::fieldsMemory($rsInstits,$i);
+    $ainstitunticoes[]= $odadosInstint->codigo;
+}
+$iInstituicoes = implode(',',$ainstitunticoes);
+
+
 db_inicio_transacao();
-function getDespesasReceitas($instits,$dtini,$dtfim){
+function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
     $fTotalarrecadado=0;
     $fCSACRPPS=0;//412102907
     $fCSICRPPS=0;//412102909
@@ -67,7 +81,7 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
     $fRRCPPSJ=0;//412102919
     $fCFRP=0;//4192210
 
-    $db_filtro = " o70_instit in({$instits}) ";
+    $db_filtro = " o70_instit in({$iInstituicoes}) ";
     $anousu = db_getsession("DB_anousu");
     $anousu_aux = $anousu-1;
     $dtfim_aux  = $anousu_aux.'-12-31';
@@ -259,7 +273,7 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
     );
 }
 
-$aDespesasReceitas = getDespesasReceitas($instits,$dtini,$dtfim);
+$aDespesasReceitas = getDespesasReceitas($iInstituicoes,$dtini,$dtfim);
 
 $fTotalReceitasArrecadadas = $aDespesasReceitas['fTotalReceitasArrecadadas'];
 $fCSACRPPS = $aDespesasReceitas['fCSACRPPS'];
@@ -274,7 +288,7 @@ $sWhereDespesa = " o58_instit in({$instits})";
 //Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
 criaWorkDotacao($sWhereDespesa, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
 
-$sWhereReceita = "o70_instit in ({$instits})";
+$sWhereReceita = "o70_instit in ({$iInstituicoes})";
 //Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
 criarWorkReceita($sWhereReceita, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
 
