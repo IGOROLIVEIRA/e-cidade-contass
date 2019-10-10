@@ -112,6 +112,34 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fCFRP+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412100421000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100422000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100431000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100441000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100461000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100471000000"){
+            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100481000000"){
+            $fRRCPPSJ+=$oDados->saldo_arrecadado;
+        }
+
     }
     db_query("drop table if exists work_receita");
 
