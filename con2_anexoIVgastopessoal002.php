@@ -609,9 +609,6 @@ ob_start();
         $fRCI = 0;
 
         ?>
-        </td>
-        </tr>
-        -->
         <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
             <td class="s5">
