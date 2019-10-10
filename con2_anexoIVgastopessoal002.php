@@ -87,15 +87,15 @@ for($i=0; $i < pg_num_rows($rsTipoinstit); $i++){
 /**
  * Verifico institu para retornar o percentual Permitido pela Lei Complementar
  */
-    $iVerifica = null;
+$iVerifica = null;
 
-    if($iCont == 1 && in_array("1",$aTipoistituicao)){
-        $iVerifica = 1;
-    } elseif ($iCont > 1 && !(in_array("1",$aTipoistituicao ))){
-        $iVerifica = 2;
-    }else{
-        $iVerifica = 3;
-    }
+if($iCont == 1 && in_array("1",$aTipoistituicao)){
+    $iVerifica = 1;
+} elseif ($iCont > 1 && !(in_array("1",$aTipoistituicao ))){
+    $iVerifica = 2;
+}else{
+    $iVerifica = 3;
+}
 
 db_inicio_transacao();
 function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
@@ -184,7 +184,7 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
     }
     db_query("drop table if exists work_receita");
 
-        // DADOS DA RECEITA NO ANO ATUAL
+    // DADOS DA RECEITA NO ANO ATUAL
 
     $dtini_aux = $anousu.'-01-01';
     $oAnoatual = db_receitasaldo(11,1,3,true,$db_filtro,$anousu,$dtini_aux,$dtfim,false,' * ',true,0);
@@ -446,23 +446,23 @@ ob_start();
             $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
             foreach ($aDespesas as $oDespesa) :
 
-              if ($oDespesa->o58_elemento == '3317170000000') {
-                  /**
-                   * Solicitado por Wesley@contass em 28/03/2017
-                   */
-                  //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
-                  $oDespesa->liquidado = $oDespesa->liquidado;
-              }
-              $fTotalLiquidado += $oDespesa->liquidado;
-              ?>
-              <tr style='height:19px;'>
-                  <td class="s3 bdleft" colspan="2">
-                      <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
-                  </td>
-                  <td class="s5">
-                      <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
-                  </td>
-              </tr>
+                if ($oDespesa->o58_elemento == '3317170000000') {
+                    /**
+                     * Solicitado por Wesley@contass em 28/03/2017
+                     */
+                    //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                    $oDespesa->liquidado = $oDespesa->liquidado;
+                }
+                $fTotalLiquidado += $oDespesa->liquidado;
+                ?>
+                <tr style='height:19px;'>
+                    <td class="s3 bdleft" colspan="2">
+                        <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                    </td>
+                    <td class="s5">
+                        <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
+                    </td>
+                </tr>
             <?php endforeach; ?>
             <tr style='height:19px;'>
                 <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
@@ -550,10 +550,10 @@ ob_start();
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                     //}
                 }
                 echo db_formatar($fSaldoIndenizacaoDemissaoServidores, "f");
@@ -600,22 +600,18 @@ ob_start();
                 $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
                 $fRCL += $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
                 echo db_formatar($fTotalReceitasArrecadadas, "f");
-                //echo db_formatar($fRCL, "f");
                 ?>
             </td>
         </tr>
-        <!--
-                      <tr style='height:19px;'>
-                        <td class="s3 bdleft" colspan="2">(-) Receita Corrente Intraorçamentária</td>
-                        <td class="s5">
-                          <?php
-        //$aDadosRCI = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '47%'");
-        $fRCI = 0;//count($aDadosRCI) > 0 ? $aDadosRCI[0]->saldo_arrecadado : 0;
-        //echo db_formatar($fRCI, "f");
+
+        <?php
+
+        $fRCI = 0;
+
         ?>
-                        </td>
-                      </tr>
-                    -->
+        </td>
+        </tr>
+        -->
         <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
             <td class="s5">
@@ -723,7 +719,7 @@ ob_start();
             <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
             <td class="s8">
                 <?php
-                $fRCLBase = $fRCL - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
+                $fRCLBase = $fTotalReceitasArrecadadas - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
                 echo db_formatar($fRCLBase, "f");
                 ?>
             </td>
@@ -740,31 +736,31 @@ ob_start();
             <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
         </tr>
         <?
-    if($iVerifica == 1):
-?>
-        <tr style='height:20px;'>
-            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-            <td class="s6">6%</td>
-            <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
-        </tr>
-<?
-elseif ($iVerifica == 2 ):
-?>
-        <tr style='height:20px;'>
-            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-            <td class="s6">54%</td>
-            <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
-        </tr>
+        if($iVerifica == 1):
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">6%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
+            </tr>
+        <?
+        elseif ($iVerifica == 2 ):
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">54%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
+            </tr>
         <?
         else:
-        ?>
-        <tr style='height:20px;'>
-            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-            <td class="s6">60%</td>
-            <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
-        </tr>
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">60%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
+            </tr>
         <?
-         endif;
+        endif;
         ?>
         </tbody>
     </table>
