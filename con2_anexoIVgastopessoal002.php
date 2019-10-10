@@ -33,11 +33,9 @@ include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
 require_once("classes/db_consexecucaoorc_classe.php");
-require_once("classes/db_infocomplementaresinstit_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $oPeriodo = new Periodo($o116_periodo);
-$clinfocomplementaresinstit = new cl_infocomplementaresinstit();
 
 $oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 $oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
@@ -58,47 +56,8 @@ if (count($aInstits) > 1) {
         $oInstit = new Instituicao($iInstit);
     }
 }
-/**
- * pego todas as instituições OC10823;
- */
-$rsInstits = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null,"si09_sequencial,si09_tipoinstit",null,null));
-
-$ainstitunticoes = array();
-for($i=0; $i < pg_num_rows($rsInstits); $i++){
-    $odadosInstint = db_utils::fieldsMemory($rsInstits,$i);
-    $ainstitunticoes[]= $odadosInstint->si09_sequencial;
-}
-$iInstituicoes = implode(',',$ainstitunticoes);
-
-$rsTipoinstit = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null,"si09_sequencial,si09_tipoinstit",null,"si09_sequencial in( {$instits})"));
-
-/**
- * busco o tipo de instituicao
- */
-$ainstitunticoes = array();
-$aTipoistituicao = array();
-
-for($i=0; $i < pg_num_rows($rsTipoinstit); $i++){
-    $odadosInstint = db_utils::fieldsMemory($rsTipoinstit,$i);
-    $aTipoistituicao[]= $odadosInstint->si09_tipoinstit;
-    $iCont = pg_num_rows($rsTipoinstit);
-}
-
-/**
- * Verifico institu para retornar o percentual Permitido pela Lei Complementar
- */
-$iVerifica = null;
-
-if($iCont == 1 && in_array("1",$aTipoistituicao)){
-    $iVerifica = 1;
-} elseif ($iCont > 1 && !(in_array("1",$aTipoistituicao ))){
-    $iVerifica = 2;
-}else{
-    $iVerifica = 3;
-}
-
 db_inicio_transacao();
-function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
+function getDespesasReceitas($instits,$dtini,$dtfim){
     $fTotalarrecadado=0;
     $fCSACRPPS=0;//412102907
     $fCSICRPPS=0;//412102909
@@ -108,7 +67,7 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
     $fRRCPPSJ=0;//412102919
     $fCFRP=0;//4192210
 
-    $db_filtro = " o70_instit in({$iInstituicoes}) ";
+    $db_filtro = " o70_instit in({$instits}) ";
     $anousu = db_getsession("DB_anousu");
     $anousu_aux = $anousu-1;
     $dtfim_aux  = $anousu_aux.'-12-31';
@@ -300,7 +259,7 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
     );
 }
 
-$aDespesasReceitas = getDespesasReceitas($iInstituicoes,$dtini,$dtfim);
+$aDespesasReceitas = getDespesasReceitas($instits,$dtini,$dtfim);
 
 $fTotalReceitasArrecadadas = $aDespesasReceitas['fTotalReceitasArrecadadas'];
 $fCSACRPPS = $aDespesasReceitas['fCSACRPPS'];
@@ -315,7 +274,7 @@ $sWhereDespesa = " o58_instit in({$instits})";
 //Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
 criaWorkDotacao($sWhereDespesa, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
 
-$sWhereReceita = "o70_instit in ({$iInstituicoes})";
+$sWhereReceita = "o70_instit in ({$instits})";
 //Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
 criarWorkReceita($sWhereReceita, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
 
@@ -600,15 +559,22 @@ ob_start();
                 $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
                 $fRCL += $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
                 echo db_formatar($fTotalReceitasArrecadadas, "f");
+                //echo db_formatar($fRCL, "f");
                 ?>
             </td>
         </tr>
-
-        <?php
-
-        $fRCI = 0;
-
+        <!--
+                      <tr style='height:19px;'>
+                        <td class="s3 bdleft" colspan="2">(-) Receita Corrente Intraorçamentária</td>
+                        <td class="s5">
+                          <?php
+        //$aDadosRCI = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '47%'");
+        $fRCI = 0;//count($aDadosRCI) > 0 ? $aDadosRCI[0]->saldo_arrecadado : 0;
+        //echo db_formatar($fRCI, "f");
         ?>
+                        </td>
+                      </tr>
+                    -->
         <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
             <td class="s5">
@@ -716,7 +682,7 @@ ob_start();
             <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
             <td class="s8">
                 <?php
-                $fRCLBase = $fTotalReceitasArrecadadas - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
+                $fRCLBase = $fRCL - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
                 echo db_formatar($fRCLBase, "f");
                 ?>
             </td>
@@ -732,33 +698,12 @@ ob_start();
             <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
             <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
         </tr>
-        <?
-        if($iVerifica == 1):
-            ?>
-            <tr style='height:20px;'>
-                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                <td class="s6">6%</td>
-                <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
-            </tr>
-        <?
-        elseif ($iVerifica == 2 ):
-            ?>
-            <tr style='height:20px;'>
-                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                <td class="s6">54%</td>
-                <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
-            </tr>
-        <?
-        else:
-            ?>
-            <tr style='height:20px;'>
-                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                <td class="s6">60%</td>
-                <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
-            </tr>
-        <?
-        endif;
-        ?>
+
+        <tr style='height:20px;'>
+            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+            <td class="s6">60.00%</td>
+            <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
+        </tr>
         </tbody>
     </table>
 </div>
