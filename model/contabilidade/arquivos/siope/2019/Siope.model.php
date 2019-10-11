@@ -2,7 +2,9 @@
 
 require_once("classes/db_orcorgao_classe.php");
 require_once("classes/db_orcdotacao_classe.php");
+require_once("classes/db_orcreceita_classe.php");
 require_once("classes/db_naturdessiope_classe.php");
+require_once("classes/db_naturrecsiope_classe.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 
@@ -24,9 +26,15 @@ class Siope {
     //@var array
     public $aDespesas = array();
     //@var array
+    public $aReceitas = array();
+    //@var array
+    public $aReceitasAnoSeg = array();
+    //@var array
     public $aDespesasAnoSeg = array();
     //@var array
     public $aDespesasAgrupadas = array();
+    //@var array
+    public $aReceitasAgrupadas = array();
     //@var array
     public $aDespesasAnoSegAgrupadas = array();
     //@var array
@@ -54,6 +62,22 @@ class Siope {
             $csv = new SiopeCsv;
             $csv->setNomeArquivo($this->getNomeArquivo());
             $csv->gerarArquivoCSV($aDados, 1);
+
+        }
+
+    }
+
+    public function gerarSiopeReceita() {
+
+        $aDados = $this->aReceitasAgrupadas;
+
+        if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/SiopeCsv.model.php")) {
+
+            require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/SiopeCsv.model.php");
+
+            $csv = new SiopeCsv();
+            $csv->setNomeArquivo($this->getNomeArquivo());
+            $csv->gerarArquivoCSV($aDados, 2);
 
         }
 
@@ -87,7 +111,7 @@ class Siope {
         $this->iErroSQL = $iErroSQL;
     }
 
-    public function setFiltros() {
+    public function setFiltrosDespesa() {
 
         $clorcorgao       = new cl_orcorgao;
         $result           = db_query($clorcorgao->sql_query_file('', '', 'o40_orgao', 'o40_orgao asc', 'o40_instit = '.$this->iInstit.' and o40_anousu = '.$this->iAnoUsu));
@@ -100,6 +124,32 @@ class Siope {
         } else {
             $this->sFiltros = 'geral';
         }
+
+    }
+
+    public function setFiltrosReceita() {
+
+        $sql = 'select id_instit 
+                    from db_config 
+                        join db_userinst on db_config.codigo = db_userinst.id_instit 
+                        join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
+                    where db_usuarios.id_usuario = '.db_getsession("DB_id_usuario");
+
+        $result = db_query($sql);
+
+        if (pg_num_rows($result) > 0) {
+            $filtro = 'o70_instit in (';
+
+            for ($i = 0; $i < pg_numrows($result); $i++) {
+                $filtro .= db_utils::fieldsMemory($result, $i)->id_instit;
+                if($i+1 < pg_num_rows($result)) {
+                    $filtro .= ',';
+                }
+            }
+            $filtro .= ')';
+        }
+
+        $this->sFiltros = $filtro;
 
     }
 
@@ -138,6 +188,22 @@ class Siope {
 
         if(pg_num_rows($rsDotIni) > 0) {
             return db_utils::fieldsMemory($rsDotIni, 0)->o58_valor;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public function getRecOrcAnoSeg($iCodRec) {
+
+        $clorcreceita = new cl_orcreceita;
+        $iAnoSeg = $this->iAnoUsu+1;
+        $sSql = $clorcreceita->sql_query_file(null,null,"o70_valor",null,"{$this->sFiltros} and o70_anousu = {$iAnoSeg} and o70_codrec = {$iCodRec}");
+
+        $rsRecIni = db_query($sSql);
+
+        if(pg_num_rows($rsRecIni) > 0) {
+            return db_utils::fieldsMemory($rsRecIni, 0)->o70_valor;
         } else {
             return 0;
         }
@@ -462,6 +528,116 @@ class Siope {
 
     }
 
+    public function agrupaReceitas() {
+
+        $aRecAgrup = array();
+
+        foreach($this->aReceitas as $index => $row) {
+
+            list($natureza, $descricao, $prev_atualizada, $rec_realizada) = array_values($row);
+
+            $iSubTotalPrev      = isset($aRecAgrup[$natureza]['prev_atualizada']) ? $aRecAgrup[$natureza]['prev_atualizada'] : 0;
+            $iSubTotalRec       = isset($aRecAgrup[$natureza]['rec_realizada']) ? $aRecAgrup[$natureza]['rec_realizada'] : 0;
+
+            $aRecAgrup[$natureza]['natureza']          = $natureza;
+            $aRecAgrup[$natureza]['descricao']         = $descricao;
+            $aRecAgrup[$natureza]['prev_atualizada']   = ($iSubTotalPrev + $prev_atualizada);
+            $aRecAgrup[$natureza]['rec_realizada']     = ($iSubTotalRec + $rec_realizada);
+
+        }
+
+        if ($this->lDespOrcada) {
+
+            $aRecAgrupAnoSeg = array();
+
+            foreach ($this->aReceitasAnoSeg as $index => $row) {
+
+                list($natureza, $descricao, $rec_orcada) = array_values($row);
+
+                $iSubTotalRecOrc = isset($aRecAgrupAnoSeg[$natureza]['rec_orcada']) ? $aRecAgrupAnoSeg[$natureza]['rec_orcada'] : 0;
+
+                $aRecAgrupAnoSeg[$natureza]['natureza']     = $natureza;
+                $aRecAgrupAnoSeg[$natureza]['descricao']    = $descricao;
+                $aRecAgrupAnoSeg[$natureza]['rec_orcada']   = ($iSubTotalRecOrc + $rec_orcada);
+
+            }
+
+        }
+
+        if (count($aRecAgrup) >= count($aRecAgrupAnoSeg)) {
+
+            foreach($aRecAgrup as $chave => $aAgrupado) {
+                $aAgrupado['rec_orcada'] = $this->lDespOrcada ? $aRecAgrupAnoSeg[$chave]['rec_orcada'] : 0;
+                array_push($this->aReceitasAgrupadas, $aAgrupado);
+            }
+
+        } else {
+
+            foreach($aRecAgrupAnoSeg as $chave => $aAgrupado) {
+                $aAgrupado['prev_atualizada']   = isset($aRecAgrup[$chave]['prev_atualizada']) ? $aRecAgrup[$chave]['prev_atualizada']: 0;
+                $aAgrupado['rec_realizada']     = isset($aRecAgrup[$chave]['rec_realizada']) ? $aRecAgrup[$chave]['rec_realizada'] : 0;
+                array_push($this->aReceitasAgrupadas, $aAgrupado);
+            }
+
+        }
+
+    }
+
+    public function setReceitas() {
+
+        $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
+
+        for ($i = 0; $i < pg_num_rows($result); $i++) {
+
+            $oReceita = db_utils::fieldsMemory($result, $i);
+
+            if ($oReceita->o70_codrec > 0) {
+
+                $oNaturrecsiope = $this->getNaturRecSiope($oReceita->o57_fonte);
+
+                $aReceita = array();
+
+                $aReceita['natureza']           = $oNaturrecsiope->c225_elerececidade;
+                $aReceita['descricao']          = $oNaturrecsiope->c225_descricao;
+                $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                $aReceita['rec_realizada']      = abs($oReceita->saldo_arrecadado);
+
+                array_push($this->aReceitas, $aReceita);
+
+            }
+
+        }
+
+        if ($this->lDespOrcada) {
+
+            db_query('drop table work_receita');
+            $iAnoSeg = $this->iAnoUsu+1;
+            $resultAnoSeg = db_receitasaldo(11, 1, 3, true, $this->sFiltros, $iAnoSeg, "{$iAnoSeg}-01-01", "{$iAnoSeg}-01-01", false, ' * ', true, 0);
+
+            for ($i = 0; $i < pg_num_rows($resultAnoSeg); $i++) {
+
+                $oReceitaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
+
+                if ($oReceitaAnoSeg->o70_codrec > 0) {
+
+                    $oNaturrecsiope = $this->getNaturRecSiope($oReceitaAnoSeg->o57_fonte);
+
+                    $aReceitaAnoSeg = array();
+
+                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiope->c225_elerececidade;
+                    $aReceitaAnoSeg['descricao']    = $oNaturrecsiope->c225_descricao;
+                    $aReceitaAnoSeg['rec_orcada']   = abs($oReceitaAnoSeg->saldo_inicial);
+
+                    array_push($this->aReceitasAnoSeg, $aReceitaAnoSeg);
+
+                }
+
+            }
+
+        }
+
+    }
+
     public function geraLinhaVazia() {
 
         if ($this->verficaFonte119219()) {
@@ -566,6 +742,25 @@ class Siope {
 
     }
 
+    public function getNaturRecSiope($natureza) {
+
+
+        $clnaturrecsiope    = new cl_naturrecsiope();
+        $rsNaturrecsiope    = db_query($clnaturrecsiope->sql_query_siope(substr($natureza, 0, 15),"", $this->iAnoUsu));
+
+        if (pg_num_rows($rsNaturrecsiope) > 0) {
+            $oNaturrecsiope = db_utils::fieldsMemory($rsNaturrecsiope, 0);
+            return $oNaturrecsiope;
+        } else {
+            $this->status = 2;
+            if (strpos($this->sMensagem, $natureza) === false){
+                $this->sMensagem .= "{$natureza} ";
+            }
+        }
+
+
+    }
+
     public function setDespesasOrcadas() {
 
         if($this->iBimestre == 6) {
@@ -578,6 +773,10 @@ class Siope {
 
     public function getElementoFormat($elemento) {
         return substr($elemento, 0, 1).".".substr($elemento, 1, 2).".".substr($elemento, 3, 2).".".substr($elemento, 5, 2).".".substr($elemento, 7, 2).".".substr($elemento, 9, 2);
+    }
+
+    public function getNaturezaFormat($natureza) {
+        return substr($natureza, 0, 1).".".substr($natureza, 1, 2).".".substr($natureza, 3, 2).".".substr($natureza, 5, 2).".".substr($natureza, 7, 2).".".substr($natureza, 9, 2);
     }
 
     public function getCod101201($iSubFuncao, $iTipoEnsino, $iTipoPasta) {

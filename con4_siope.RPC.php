@@ -23,7 +23,6 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
-$sNomeArq           = "Siope";
 $sNomeArqDespesa    = "Siope-despesa";
 $sNomeArqReceita    = "Siope-receita";
 $sNomeZip           = "Siope";
@@ -77,6 +76,29 @@ switch ($oParam->exec) {
 
                         if ($sArquivo == 'receita') {
 
+                            $siopeReceita = new Siope();
+                            $siopeReceita->setAno($iAnoUsu);
+                            $siopeReceita->setInstit($iInstit);
+                            $siopeReceita->setBimestre($iBimestre);
+                            $siopeReceita->setPeriodo();
+                            $siopeReceita->setFiltrosReceita();
+                            $siopeReceita->setDespesasOrcadas();
+                            $siopeReceita->setReceitas();
+                            $siopeReceita->agrupaReceitas();
+                            $siopeReceita->setNomeArquivo($sNomeArqReceita);
+                            $siopeReceita->gerarSiopeReceita();
+
+                            if ($siopeReceita->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Receita. De/Para dos seguintes estruturais não encontrado: {$siopeReceita->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
+
+                            if ($siopeReceita->getErroSQL() > 0) {
+                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopeReceita->getErroSQL());
+                            }
+
+                            $oRetorno->arquivos->$index->nome = "{$siopeReceita->getNomeArquivo()}.csv";
+                            $sArquivosZip .= " {$siopeReceita->getNomeArquivo()}.csv ";
 
                         }
 
@@ -94,7 +116,7 @@ switch ($oParam->exec) {
         } catch(Exception $eErro) {
 
             $oRetorno->status  = 2;
-            $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \n \n {$eErro->getMessage()}";
+            $sGetMessage       = "Arquivo retornou com erro: \n \n {$eErro->getMessage()}";
             $oRetorno->message = $sGetMessage;
 
         }
