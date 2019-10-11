@@ -33,11 +33,11 @@ include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
 require_once("classes/db_consexecucaoorc_classe.php");
-require_once("classes/db_db_config_classe.php");
+require_once("classes/db_infocomplementaresinstit_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $oPeriodo = new Periodo($o116_periodo);
-$cldbconfig = new cl_db_config();
+$clinfocomplementaresinstit = new cl_infocomplementaresinstit();
 
 $oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 $oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
@@ -61,14 +61,41 @@ if (count($aInstits) > 1) {
 /**
  * pego todas as instituições OC10823;
  */
-$rsInstits = $cldbconfig->sql_record($cldbconfig->sql_query(null,"codigo",null,null));
+$rsInstits = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null,"si09_instit,si09_tipoinstit",null,null));
+
 $ainstitunticoes = array();
 for($i=0; $i < pg_num_rows($rsInstits); $i++){
     $odadosInstint = db_utils::fieldsMemory($rsInstits,$i);
-    $ainstitunticoes[]= $odadosInstint->codigo;
+    $ainstitunticoes[]= $odadosInstint->si09_instit;
 }
 $iInstituicoes = implode(',',$ainstitunticoes);
 
+$rsTipoinstit = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null,"si09_sequencial,si09_tipoinstit",null,"si09_instit in( {$instits})"));
+
+/**
+ * busco o tipo de instituicao
+ */
+$ainstitunticoes = array();
+$aTipoistituicao = array();
+
+for($i=0; $i < pg_num_rows($rsTipoinstit); $i++){
+    $odadosInstint = db_utils::fieldsMemory($rsTipoinstit,$i);
+    $aTipoistituicao[]= $odadosInstint->si09_tipoinstit;
+    $iCont = pg_num_rows($rsTipoinstit);
+}
+
+/**
+ * Verifico institu para retornar o percentual Permitido pela Lei Complementar
+ */
+$iVerifica = null;
+
+if($iCont == 1 && in_array("1",$aTipoistituicao)){
+    $iVerifica = 1;
+} elseif ($iCont >= 1 && !(in_array("1",$aTipoistituicao ))){
+    $iVerifica = 2;
+}else{
+    $iVerifica = 3;
+}
 
 db_inicio_transacao();
 function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
@@ -366,11 +393,11 @@ ob_start();
     <table class="waffle" cellspacing="0" cellpadding="0">
         <tbody>
         <tr>
-            <th id="1606692746C0" style="width:463px" class="bdtop column-headers-background">&nbsp;</th>
-            <th id="1606692746C1" style="width:92px" class="bdtop column-headers-background">&nbsp;</th>
-            <th id="1606692746C2" style="width:106px" class="bdtop column-headers-background">&nbsp;</th>
+            <th id="1606692746C0" style="width:463px" class="bdtop bdleft column-headers-background">&nbsp;</th>
+            <th id="1606692746C1" style="width:92px" class="bdtop  column-headers-background">&nbsp;</th>
+            <th id="1606692746C2" style="width:106px" class="bdtop bdright column-headers-background">&nbsp;</th>
         </tr>
-        <tr style='height:19px;'>
+        <tr style='height:19px; border-top: 1px solid black'>
             <td class="s0 bdleft" colspan="3">ANEXO IV</td>
         </tr>
         <tr style='height:19px;'>
@@ -712,12 +739,33 @@ ob_start();
             <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
             <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
         </tr>
-
-        <tr style='height:20px;'>
-            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-            <td class="s6">60.00%</td>
-            <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
-        </tr>
+        <?
+        if($iVerifica == 1):
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">6%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.06, "f") ?></td>
+            </tr>
+        <?
+        elseif ($iVerifica == 2 ):
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">54%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.54, "f") ?></td>
+            </tr>
+        <?
+        else:
+            ?>
+            <tr style='height:20px;'>
+                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+                <td class="s6">60%</td>
+                <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
+            </tr>
+        <?
+        endif;
+        ?>
         </tbody>
     </table>
 </div>
@@ -728,6 +776,7 @@ ob_start();
 
 $html = ob_get_contents();
 ob_end_clean();
+//echo $html;
 
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
