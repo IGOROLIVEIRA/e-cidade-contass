@@ -1,5 +1,7 @@
 <?php
 
+require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/Siope.model.php");
+
 class SiopeCsv extends Siope {
 
     //@var String

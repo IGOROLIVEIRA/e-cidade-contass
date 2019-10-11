@@ -59,6 +59,11 @@ switch ($oParam->exec) {
                             $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
                             $siopeDespesa->gerarSiopeDespesa();
 
+                            if ($siopeDespesa->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes estruturais não encontrado: {$siopeDespesa->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
+
                             if ($siopeDespesa->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopeDespesa->getErroSQL());
                             }

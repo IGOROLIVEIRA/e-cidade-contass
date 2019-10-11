@@ -30,9 +30,15 @@ class Siope {
     //@var array
     public $aReceitasAnoSeg = array();
     //@var array
+    public $aDespesasAnoSeg = array();
+    //@var array
     public $aDespesasAgrupadas = array();
     //@var array
     public $aReceitasAgrupadas = array();
+    //@var array
+    public $aDespesasAnoSegAgrupadas = array();
+    //@var array
+    public $aDespesasAgrupadasFinal = array();
     //@var boolean
     public $lDespOrcada;
     //@var string
@@ -44,9 +50,10 @@ class Siope {
     //@var string
     public $sMensagem;
 
+
     public function gerarSiopeDespesa() {
 
-        $aDados = $this->aDespesasAgrupadas;
+        $aDados = $this->aDespesasAgrupadasFinal;
 
         if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/SiopeCsv.model.php")) {
 
@@ -583,10 +590,17 @@ class Siope {
     public function getNaturDesSiope($elemento) {
 
         $clnaturdessiope    = new cl_naturdessiope();
-        $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11)));
-        $oNaturdessiope     = db_utils::fieldsMemory($rsNaturdessiope, 0);
+        $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11),"", $this->iAnoUsu));
 
-        return $oNaturdessiope;
+        if (pg_num_rows($rsNaturdessiope) > 0) {
+            $oNaturdessiope = db_utils::fieldsMemory($rsNaturdessiope, 0);
+            return $oNaturdessiope;
+        } else {
+            $this->status = 2;
+            if (strpos($this->sMensagem, $elemento) === false){
+                $this->sMensagem .= "{$elemento} ";
+            }
+        }
 
     }
 
@@ -605,7 +619,6 @@ class Siope {
                 $this->sMensagem .= "{$natureza} ";
             }
         }
-
 
     }
 
