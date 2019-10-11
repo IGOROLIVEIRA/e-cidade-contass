@@ -67,7 +67,6 @@ class SiopeCsv extends Siope {
 
         }
 
-
     }
 
     function abreArquivo() {

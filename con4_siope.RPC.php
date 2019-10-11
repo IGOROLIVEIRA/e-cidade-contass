@@ -27,7 +27,6 @@ $sNomeArqDespesa    = "Siope-despesa";
 $sNomeArqReceita    = "Siope-receita";
 $sNomeZip           = "Siope";
 
-
 switch ($oParam->exec) {
 
     case 'gerarSiope':
@@ -35,6 +34,8 @@ switch ($oParam->exec) {
         try {
 
             if (count($oParam->arquivos) > 0) {
+
+                $sArquivosZip = "";
 
                 if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/Siope.model.php")) {
 
@@ -49,7 +50,7 @@ switch ($oParam->exec) {
                             $siopeDespesa->setInstit($iInstit);
                             $siopeDespesa->setBimestre($iBimestre);
                             $siopeDespesa->setPeriodo();
-                            $siopeDespesa->setFiltros();
+                            $siopeDespesa->setFiltrosDespesa();
                             $siopeDespesa->setDespesasOrcadas();
                             $siopeDespesa->setDespesas();
                             $siopeDespesa->agrupaDespesas();
@@ -70,7 +71,6 @@ switch ($oParam->exec) {
 
                             $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
                             $sArquivosZip .= " {$siopeDespesa->getNomeArquivo()}.csv ";
-
 
                         }
 
@@ -109,7 +109,6 @@ switch ($oParam->exec) {
                 system("rm -f {$sNomeZip}.zip");
                 system("bin/zip -q {$sNomeZip}.zip $sArquivosZip");
                 $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$sNomeZip}.zip";
-
 
             }
 

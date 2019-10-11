@@ -758,7 +758,6 @@ class Siope {
             }
         }
 
-
     }
 
     public function setDespesasOrcadas() {
