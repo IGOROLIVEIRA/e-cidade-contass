@@ -11,7 +11,7 @@ $clnaturdessiope = new cl_naturdessiope;
 
 if(isset($incluir)){
     db_inicio_transacao();
-    $clnaturdessiope->incluir($c222_natdespecidade,$c222_natdespsiope);
+    $clnaturdessiope->incluir($c222_natdespecidade,$c222_natdespsiope, $c222_anousu);
     db_fim_transacao();
 }
 

@@ -28,6 +28,7 @@ $clnaturdessiope->rotulo->label();
                 </td>
             </tr>
         </table>
+        <input name="c222_anousu" value="<?= db_getsession("DB_anousu") ?>" type="hidden" >
         <input style="display:none" name="novo" type="submit" id="novo" value="Novo" onclick="novaNat();">
         <input name="incluir" type="submit" id="incluir" value="Incluir">
         <input style="display:none" name="excluir" type="submit" id="excluir" value="Excluir">

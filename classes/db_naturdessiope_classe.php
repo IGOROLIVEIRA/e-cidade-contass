@@ -22,6 +22,7 @@ class cl_naturdessiope {
     public $campos = "
                  c222_natdespecidade = varchar(11) = E-Cidade
                  c222_natdespsiope = varchar(11) = Siope
+                 c222_anousu = int4 = Ano
                  ";
 
     //funcao construtor da classe
@@ -46,14 +47,16 @@ class cl_naturdessiope {
         if ($exclusao==false) {
             $this->c222_natdespecidade = ($this->c222_natdespecidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespecidade"]:$this->c222_natdespecidade);
             $this->c222_natdespsiope = ($this->c222_natdespsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespsiope"]:$this->c222_natdespsiope);
+            $this->c222_anousu = ($this->c222_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_anousu"]:$this->c222_anousu);
         } else {
             $this->c222_natdespecidade = ($this->c222_natdespecidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespecidade"]:$this->c222_natdespecidade);
             $this->c222_natdespsiope = ($this->c222_natdespsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespsiope"]:$this->c222_natdespsiope);
+            $this->c222_anousu = ($this->c222_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_anousu"]:$this->c222_anousu);
         }
     }
 
     // funcao para inclusao
-    function incluir ($c222_natdespecidade,$c222_natdespsiope) {
+    function incluir ($c222_natdespecidade,$c222_natdespsiope, $c222_anousu) {
         $this->atualizacampos();
         $this->c222_natdespecidade = $c222_natdespecidade;
         $this->c222_natdespsiope = $c222_natdespsiope;
@@ -76,10 +79,12 @@ class cl_naturdessiope {
         $sql = "insert into naturdessiope(
                                        c222_natdespecidade
                                       ,c222_natdespsiope
+                                      ,c222_anousu
                        )
                 values (
                                 '$this->c222_natdespecidade'
                                ,'$this->c222_natdespsiope'
+                               ,'$this->c222_anousu'
                       )";
         $result = db_query($sql);
         if ($result==false) {
@@ -140,6 +145,7 @@ class cl_naturdessiope {
                 return false;
             }
         }
+        $sql .= " c222_anousu = ".$this->c222_anousu." ";
         $sql .= " where ";
         if ($c222_natdespecidade!=null) {
             $sql .= " c222_natdespecidade = '$this->c222_natdespecidade'";
@@ -330,6 +336,15 @@ class cl_naturdessiope {
                 }
                 $sql2 .= " naturdessiope.c222_natdespsiope = '$c222_natdespsiope' ";
             }
+            if ($c222_anousu!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturdessiope.c222_anousu = '$c222_anousu' ";
+            }
+
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
@@ -346,7 +361,7 @@ class cl_naturdessiope {
         return $sql;
     }
 
-    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="",$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="", $c222_anousu="",$campos="*",$ordem=null,$dbwhere="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -359,7 +374,7 @@ class cl_naturdessiope {
             $sql .= $campos;
         }
         $sql .= " from naturdessiope ";
-        $sql .= ' inner join eledessiope on eledessiope.c223_eledespecidade = naturdessiope.c222_natdespsiope ';
+        $sql .= ' inner join eledessiope on eledessiope.c223_eledespecidade = naturdessiope.c222_natdespsiope and naturdessiope.c222_anousu = eledessiope.c223_anousu ';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c222_natdespecidade!=null ) {
@@ -373,6 +388,15 @@ class cl_naturdessiope {
                 }
                 $sql2 .= " naturdessiope.c222_natdespsiope = '$c222_natdespsiope' ";
             }
+            if ($c222_anousu!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturdessiope.c222_anousu = '$c222_anousu' ";
+            }
+
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }

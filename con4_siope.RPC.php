@@ -9,7 +9,6 @@ require_once("libs/JSON.php");
 require_once("std/DBDate.php");
 require_once("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
-require_once('model/Siope.model.php');
 require_once("classes/db_orcorgao_classe.php");
 
 db_postmemory($_POST);
@@ -25,6 +24,10 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
 $sNomeArq           = "Siope";
+$sNomeArqDespesa    = "Siope-despesa";
+$sNomeArqReceita    = "Siope-receita";
+$sNomeZip           = "Siope";
+
 
 switch ($oParam->exec) {
 
@@ -34,43 +37,57 @@ switch ($oParam->exec) {
 
             if (count($oParam->arquivos) > 0) {
 
-                foreach ($oParam->arquivos as $sArquivo) {
+                if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/Siope.model.php")) {
 
-                    if ($sArquivo == 'despesa') {
+                    require_once("model/contabilidade/arquivos/siope/" . db_getsession("DB_anousu") . "/Siope.model.php");
 
-                        $siope = new Siope;
-                        $siope->setAno($iAnoUsu);
-                        $siope->setInstit($iInstit);
-                        $siope->setBimestre($iBimestre);
-                        $siope->setPeriodo();
-                        $siope->setFiltros();
-                        $siope->setDespesasOrcadas();
-                        $siope->setDespesas();
-                        $siope->agrupaDespesas();
-                        $siope->geraLinhaVazia();
-                        $siope->ordenaDespesas();
-                        $siope->setNomeArquivo($sNomeArq);
-                        $siope->gerarSiope();
+                    foreach ($oParam->arquivos as $index => $sArquivo) {
 
-                        if ($siope->getErroSQL() > 0 ) {
-                            throw new Exception ("Ocorreu um erro ao gerar IC ".$siope->getErroSQL());
+                        if ($sArquivo == 'despesa') {
+
+                            $siopeDespesa = new Siope;
+                            $siopeDespesa->setAno($iAnoUsu);
+                            $siopeDespesa->setInstit($iInstit);
+                            $siopeDespesa->setBimestre($iBimestre);
+                            $siopeDespesa->setPeriodo();
+                            $siopeDespesa->setFiltros();
+                            $siopeDespesa->setDespesasOrcadas();
+                            $siopeDespesa->setDespesas();
+                            $siopeDespesa->agrupaDespesas();
+                            $siopeDespesa->geraLinhaVazia();
+                            $siopeDespesa->ordenaDespesas();
+                            $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
+                            $siopeDespesa->gerarSiopeDespesa();
+
+                            if ($siopeDespesa->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes elementos não encontrado: {$siopeDespesa->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
+
+
+                            if ($siopeDespesa->getErroSQL() > 0) {
+                                throw new Exception ("Ocorreu um erro ao gerar IC " . $siopeDespesa->getErroSQL());
+                            }
+
+                            $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
+                            $sArquivosZip .= " {$siopeDespesa->getNomeArquivo()}.csv ";
+
+
                         }
 
-                        $oRetorno->caminho = $oRetorno->nome = "{$siope->getNomeArquivo()}.csv";
-
-                        system("rm -f {$siope->getNomeArquivo()}.zip");
-                        system("bin/zip -q {$siope->getNomeArquivo()}.zip $oRetorno->caminho");
-                        $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$siope->getNomeArquivo()}.zip";
-
-                    }
-
-                    if ($sArquivo == 'receita') {
+                        if ($sArquivo == 'receita') {
 
 
+                        }
 
                     }
 
                 }
+
+                system("rm -f {$sNomeZip}.zip");
+                system("bin/zip -q {$sNomeZip}.zip $sArquivosZip");
+                $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$sNomeZip}.zip";
+
 
             }
 

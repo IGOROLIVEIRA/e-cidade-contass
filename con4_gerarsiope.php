@@ -157,7 +157,10 @@ $aBimestres = array(
                 alert("Processo concluído com sucesso!");
                 var sArquivo = document.getElementById('arquivo');
                 var sLink = "";
-                sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminho+"'>"+oRetorno.nome+"</a>";
+                for (const [i, arquivo] of Object.entries(oRetorno.arquivos)) {
+                    sLink += "<br><a href='db_download.php?arquivo="+arquivo.nome+"'>"+arquivo.nome+"</a>";
+                }
+
                 sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
                 sArquivo.innerHTML = sLink;
                 sArquivo.style.display = "inline-block";
