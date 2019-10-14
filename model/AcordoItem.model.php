@@ -913,7 +913,7 @@ class AcordoItem {
     $oDaoAcordoItem->ac20_ordem             = $this->getOrdem();
     $oDaoAcordoItem->ac20_resumo            = addslashes($this->getResumo());
     $oDaoAcordoItem->ac20_tipocontrole      = $this->getTipocontrole();
-    $oDaoAcordoItem->ac20_servicoquantidade = !$this->getServicoQuantidade() ? 'f' : $this->getServicoQuantidade();
+    $oDaoAcordoItem->ac20_servicoquantidade = $this->getServicoQuantidade();
 
     /**
      * Define se será alterado o contrato ou incluído um novo
