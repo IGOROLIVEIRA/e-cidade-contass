@@ -331,7 +331,7 @@ if(isset($j14_codigo)){
                     LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
                     LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
                     LEFT JOIN setorloc ON j05_codigo = j06_setorloc
-                    INNER JOIN testadanumero ON testada.j36_idbql = testadanumero.j15_idbql
+                    LEFT JOIN testadanumero ON testada.j36_idbql = testadanumero.j15_idbql
                     AND testada.j36_face = testadanumero.j15_face
                     WHERE NOT EXISTS
                         (SELECT 1
