@@ -109,7 +109,7 @@ $rsResult = db_query($sSql) or die(pg_last_error());
 $oLinha = null;
 
 $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
-$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+//$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
 $sWhere .= " AND db03_instit = db02_instit ";
 $sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
 
@@ -224,6 +224,12 @@ ob_start();
             background: #f5f5f0;
             font-weight: bold;
         }
+
+        .item-total-color{
+            background: #f5f5f0;
+            font-weight: bold;
+            width: 935px;
+        }
     </style>
 </head>
 <body>
@@ -306,6 +312,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
           <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
           <td class="item-text">{$oDadosDaLinha->total}</td>
         </tr>
+
 HTML;
     }else{
         echo <<<HTML
@@ -336,34 +343,29 @@ HTML;
 
 ?>
 
-<tr style="">
-    <td colspan="5" class="item-menu-color">
+<div style="tr row">
+    <div class="td item-total-color">
         VALOR TOTAL ESTIMADO
-    </td>
-    <td class="item-menu-color">
+    </div>
+    <div class="td item-menu-color">
         <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
-    </td>
-</tr>
+    </div>
+</div>
+
 </table>
-
-
+</div>
+<div class="linha-vertical">
+    <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
+</div>
 
 
 <?php
-    if($oLinha!=null || trim($oLinha)!=""){
+if($oLinha!=null || trim($oLinha)!=""){
 
-        echo <<<HTML
-<table style="margin-left: 360px">
-    <tr>
-        <td style="border-bottom: 1px solid #000000;"></td>
-    </tr>
-    <tr>
-        <td style="width: 460px; text-align: center">
-            <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
-        </td>
-    </tr>
-
-</table>
+    echo <<<HTML
+            <div class="linha-vertical">
+                <strong>{$oLinha}</strong>
+            </div>   
 
 HTML;
 
@@ -378,7 +380,6 @@ HTML;
 $html = ob_get_contents();
 
 ob_end_clean();
-//echo $html;
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 
