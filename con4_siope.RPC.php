@@ -60,7 +60,7 @@ switch ($oParam->exec) {
                             $siopeDespesa->gerarSiopeDespesa();
 
                             if ($siopeDespesa->status == 2) {
-                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes estruturais não encontrado: {$siopeDespesa->sMensagem}";
+                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes elementos não encontrado: {$siopeDespesa->sMensagem}";
                                 $oRetorno->status = 2;
                             }
 
