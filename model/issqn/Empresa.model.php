@@ -93,8 +93,13 @@ class Empresa {
       if ( $oDaoIssBase->erro_status == "0" ) {
         throw new DBException(_M(self::MENSAGENS . 'erro_buscar_inscricao'));
       }
-      
+
       $oDadosEmpresa               = db_utils::fieldsMemory($rsDadosEmpresa, 0);
+
+      if(empty($oDadosEmpresa->q02_dtinic)){
+        throw new LogicException('Alvará de sem data de inicio configurada. Entre em contato com o suporte.');
+      }
+
       $this->iInscricao            = $oDadosEmpresa->q02_inscr;
       $this->oCgmEmpresa           = CgmFactory::getInstanceByCgm($oDadosEmpresa->q02_numcgm);
       $this->oDataInicioAtividades = new DBDate($oDadosEmpresa->q02_dtinic);
