@@ -64,9 +64,8 @@ switch ($oParam->exec) {
                                 $oRetorno->status = 2;
                             }
 
-
                             if ($siopeDespesa->getErroSQL() > 0) {
-                                throw new Exception ("Ocorreu um erro ao gerar IC " . $siopeDespesa->getErroSQL());
+                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopeDespesa->getErroSQL());
                             }
 
                             $oRetorno->arquivos->$index->nome = "{$siopeDespesa->getNomeArquivo()}.csv";
