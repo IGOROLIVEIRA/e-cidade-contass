@@ -124,7 +124,7 @@ $head3 = "Preço de Referência";
 $head5 = "Processo de Compra: $codigo_preco";
 $head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao)));
 
-$mPDF = new Relatorio('', 'A4-L');
+$mPDF = new Relatorio('', 'A4-L',0,"",7,7,50);
 
 $mPDF
     ->addInfo($head3, 2)
@@ -195,7 +195,7 @@ ob_start();
         .linha-vertical {
             border-top: 2px solid;
             text-align: center;
-            margin-top: 80px;
+            margin-top: 100px;
             margin-left: 19%;
             width: 50%;
 
