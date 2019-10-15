@@ -583,7 +583,7 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
          * Percorre as colunas(meses) das linhas 2,3 e 4 para atribuir o somatório às colunas da linha 1
          */
         foreach($oDadosLinhaDespesaBruta->colunameses as $iKey => $colunaMes){
-          $oDespesaBruta->linhas[1]->colunameses[$iKey]->nValor += (int)$colunaMes->nValor;
+          $oDespesaBruta->linhas[1]->colunameses[$iKey]->nValor += $colunaMes->nValor;
         }
 
       }
@@ -596,7 +596,7 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
          * Percorre as colunas(meses) das linhas 6, 7 e 8 para atribuir o somatório às colunas da linha 5
          */
         foreach($oDadosLinhaDespesaBruta->colunameses as $iKey => $colunaMes){
-          $oDespesaBruta->linhas[5]->colunameses[$iKey]->nValor += (int)$colunaMes->nValor;
+          $oDespesaBruta->linhas[5]->colunameses[$iKey]->nValor += $colunaMes->nValor;
         }
 
       }
