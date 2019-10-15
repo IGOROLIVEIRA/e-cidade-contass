@@ -1,7 +1,7 @@
 <?php
 
 require_once("con2_execucaodecontratosaux.php");
-//ini_set('display_errors','on');
+
 function execucaoDeContratosQuebraPorAditivoEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,$oPdf,$iQuebra,$ac16_datainicio = null,$ac16_datafim = null){
 
     $oExecucaoDeContratos = new ExecucaoDeContratos();
