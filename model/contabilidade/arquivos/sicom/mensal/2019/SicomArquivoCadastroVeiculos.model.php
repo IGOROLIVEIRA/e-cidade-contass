@@ -475,7 +475,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     veiculos.ve01_codigoant,
                     transferenciaveiculos.ve80_dt_transferencia,
                     veicabast.ve70_dtabast,
-                    veicmanut.ve62_dtmanut,
+                    null as ve62_dtmanut,
                     veiculostransf.ve81_codunidadesubatual,
                     veiculostransf.ve81_codunidadesubant,
                     veiculos.ve01_codunidadesub,
