@@ -148,7 +148,7 @@ $clrotulo->label("nomeinst");
     </td>
     <td>
 	<?
-	  db_input('o55_descr',55,$Io55_descr,true,'text',$db_opcao,"")
+	  db_input('o55_descr',53,$Io55_descr,true,'text',$db_opcao,"")
 	?>
     </td>
   </tr>
@@ -171,7 +171,7 @@ $clrotulo->label("nomeinst");
     <td>
 	<?
 	  db_input('o55_orcproduto',10,$Io55_orcproduto,true,'text',$db_opcao,"onChange='js_pesquisaProduto(false);'");
-	  db_input('o22_descrprod',40,"",true,'text',3);
+	  db_input('o22_descrprod',41,"",true,'text',3);
 	?>
     </td>
   </tr>
@@ -185,7 +185,7 @@ $clrotulo->label("nomeinst");
 	<?
 	  db_input('o13_sequencial' ,10,"",true,'hidden',3);
 	  db_input('o13_unidaderesp',10,$Io13_unidaderesp,true,'text',$db_opcao,"onChange='js_pesquisaUnidadeResp(false);'");
-	  db_input('o20_descricao'  ,40,"",true,'text',3);
+	  db_input('o20_descricao'  ,41,"",true,'text',3);
 	?>
     </td>
   </tr>
@@ -228,7 +228,7 @@ $clrotulo->label("nomeinst");
 	  $aTipoAcao = array('1'=>'Orçamentária',
 			     		 '2'=>'Não-Orçamentária');
 
-	  db_select('o55_tipoacao',$aTipoAcao,true,$db_opcao,"style='width:300px;'");
+	  db_select('o55_tipoacao',$aTipoAcao,true,$db_opcao,"style='width:100%;'");
 	?>
     </td>
   </tr>
@@ -244,7 +244,7 @@ $clrotulo->label("nomeinst");
 								   '4'=>'Transferência Voluntária',
 	  							   '5'=>'Transferência em Linha de Crédito');
 
-	  db_select('o55_formaimplementacao',$aFormaImplementacao,true,$db_opcao,"style='width:300px;'");
+	  db_select('o55_formaimplementacao',$aFormaImplementacao,true,$db_opcao,"style='width:100%;'");
 	?>
     </td>
   </tr>
@@ -276,6 +276,44 @@ $clrotulo->label("nomeinst");
 	<?
 	  db_textarea('o55_baselegal',0,52,$Io55_baselegal,true,'text',$db_opcao,"")
 	?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$To55_tipoensino?>">
+        <?=@$Lo55_tipoensino?>
+    </td>
+    <td>
+        <?
+        $aTipoEnsino = array(
+                '0'=>'Selecione',
+                '1'=>'Ensino Fundamental',
+                '2'=>'Ensino Médio',
+                '3'=>'Ensino Profissional',
+                '4'=>'Ensino Superior',
+                '5'=>'Educação Infantil (Creche)',
+                '6'=>'Educação Infantil (Pré-Escola)',
+                '7'=>'Não se Aplica'
+        );
+
+        db_select('o55_tipoensino',$aTipoEnsino,true,$db_opcao,"style='width:100%;'");
+        ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$To55_tipopasta?>">
+        <?=@$Lo55_tipopasta?>
+    </td>
+    <td>
+        <?
+        $aTipoPasta = array(
+                '0'=>'Selecione',
+                '1'=>'Merenda Escolar',
+                '2'=>'Transporte Escolar',
+                '3'=>'Não se Aplica',
+            );
+
+        db_select('o55_tipopasta',$aTipoPasta,true,$db_opcao,"style='width:100%;'");
+        ?>
     </td>
   </tr>
   <tr>
