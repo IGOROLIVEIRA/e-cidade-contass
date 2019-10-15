@@ -850,9 +850,9 @@ class Siope {
     public function setOrcado() {
 
         if($this->iBimestre == 6) {
-            $this->lDespOrcada = true;
+            $this->lOrcada = true;
         } else {
-            $this->lDespOrcada = false;
+            $this->lOrcada = false;
         }
 
     }
