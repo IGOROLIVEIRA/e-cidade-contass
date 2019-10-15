@@ -51,7 +51,7 @@ switch ($oParam->exec) {
                             $siopeDespesa->setBimestre($iBimestre);
                             $siopeDespesa->setPeriodo();
                             $siopeDespesa->setFiltrosDespesa();
-                            $siopeDespesa->setDespesasOrcadas();
+                            $siopeDespesa->setOrcado();
                             $siopeDespesa->setDespesas();
                             $siopeDespesa->agrupaDespesas();
                             $siopeDespesa->geraLinhaVazia();
@@ -81,9 +81,10 @@ switch ($oParam->exec) {
                             $siopeReceita->setBimestre($iBimestre);
                             $siopeReceita->setPeriodo();
                             $siopeReceita->setFiltrosReceita();
-                            $siopeReceita->setDespesasOrcadas();
+                            $siopeReceita->setOrcado();
                             $siopeReceita->setReceitas();
                             $siopeReceita->agrupaReceitas();
+                            $siopeReceita->ordenaReceitas();
                             $siopeReceita->setNomeArquivo($sNomeArqReceita);
                             $siopeReceita->gerarSiopeReceita();
 
