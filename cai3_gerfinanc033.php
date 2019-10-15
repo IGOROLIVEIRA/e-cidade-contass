@@ -602,7 +602,7 @@ inner join cfiptu on j21_anousu = j18_anousu and j21_receit = j18_rpredi
 where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limit 1) as totaliptu
           from iptucalc
            left outer join iptucale on j22_matric = j23_matric and j22_anousu = j23_anousu
-      where j23_matric = $origem
+      where j23_matric = $origem AND j23_anousu = ".db_getsession('DB_anousu')."
       group by iptucalc.j23_anousu,
                             iptucalc.j23_matric ,
                             iptucalc.j23_testad ,
@@ -662,6 +662,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
                    inner join iptunump on j20_anousu = j23_anousu
                                       and j20_matric = j23_matric
              where j20_numpre = $k00_numpre
+               and j23_anousu = ".db_getsession('DB_anousu')."
                and j22_matric = $j01_matric";
     $sqlres = db_query($sql);
     if (pg_numrows($sqlres) > 0) {
@@ -676,6 +677,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
                    inner join iptunump on j20_anousu = j23_anousu
                                       and j20_matric = j23_matric
              where j20_numpre = $k00_numpre
+               and j23_anousu = ".db_getsession('DB_anousu')."
                and j23_matric = $j01_matric";
     $sqlres = db_query($sql);
 
