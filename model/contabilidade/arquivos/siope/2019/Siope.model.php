@@ -36,11 +36,15 @@ class Siope {
     //@var array
     public $aReceitasAgrupadas = array();
     //@var array
+    public $aReceitasAnoSegAgrupadas = array();
+    //@var array
     public $aDespesasAnoSegAgrupadas = array();
     //@var array
     public $aDespesasAgrupadasFinal = array();
     //@var boolean
-    public $lDespOrcada;
+    public $aReceitasAgrupadasFinal = array();
+    //@var boolean
+    public $lOrcada;
     //@var string
     public $sNomeArquivo;
     //@var integer
@@ -69,7 +73,7 @@ class Siope {
 
     public function gerarSiopeReceita() {
 
-        $aDados = $this->aReceitasAgrupadas;
+        $aDados = $this->aReceitasAgrupadasFinal;
 
         if (file_exists("model/contabilidade/arquivos/siope/".db_getsession("DB_anousu")."/SiopeCsv.model.php")) {
 
@@ -111,6 +115,9 @@ class Siope {
         $this->iErroSQL = $iErroSQL;
     }
 
+    /**
+     * Adiciona filtros da instituição, função 12 (Educação) e todos os orgãos
+     */
     public function setFiltrosDespesa() {
 
         $clorcorgao       = new cl_orcorgao;
@@ -127,6 +134,9 @@ class Siope {
 
     }
 
+    /**
+     * Adiciona filtros de todas as instituições
+     */
     public function setFiltrosReceita() {
 
         $sql = 'select id_instit 
@@ -153,6 +163,9 @@ class Siope {
 
     }
 
+    /**
+     * Retorna datas correspondente ao período do bimestre, sempre cumulativo.
+     */
     public function setPeriodo() {
 
         $iBimestre  = $this->iBimestre;
@@ -179,37 +192,14 @@ class Siope {
 
     }
 
-    public function getDespOrcAnoSeg($iCodDot) {
-
-        $clorcdotacao = new cl_orcdotacao;
-        $sSql = $clorcdotacao->sql_query_file (($this->iAnoUsu+1),$iCodDot,'o58_valor',null,"");
-
-        $rsDotIni = db_query($sSql);
-
-        if(pg_num_rows($rsDotIni) > 0) {
-            return db_utils::fieldsMemory($rsDotIni, 0)->o58_valor;
-        } else {
-            return 0;
-        }
-
-    }
-
-    public function getRecOrcAnoSeg($iCodRec) {
-
-        $clorcreceita = new cl_orcreceita;
-        $iAnoSeg = $this->iAnoUsu+1;
-        $sSql = $clorcreceita->sql_query_file(null,null,"o70_valor",null,"{$this->sFiltros} and o70_anousu = {$iAnoSeg} and o70_codrec = {$iCodRec}");
-
-        $rsRecIni = db_query($sSql);
-
-        if(pg_num_rows($rsRecIni) > 0) {
-            return db_utils::fieldsMemory($rsRecIni, 0)->o70_valor;
-        } else {
-            return 0;
-        }
-
-    }
-
+    /**
+     * Busca as despesas conforme relatório de Despesa por Item/Desdobramento.
+     * Especificamente: a DESPESA EMPENHADA, o valor da DESPESA LIQUIDADA, o valor da DESPESA PAGA por SUBFUNÇÃO,
+     * FONTE DE RECURSOS, TIPO DE ENSINO - SIOPE,  TIPO DE PASTA - SIOPE e ELEMENTO DA DESPESA COM DESDOBRAMENTO.
+     *
+     * Busca a DOTAÇÃO ATUALIZADA com base no relatório Balancete da Despesa.
+     * Busca também o CAMPO ORÇADO do ano seguinte.
+     */
     public function setDespesas() {
 
         $clselorcdotacao = new cl_selorcdotacao();
@@ -219,7 +209,10 @@ class Siope {
         $sqlprinc   = db_dotacaosaldo(8, 1, 4, true, $sele_work, $this->iAnoUsu, $this->dtIni, $this->dtFim, 8, 0, true);
         $result     = db_query($sqlprinc) or die(pg_last_error());
 
-        if ($this->lDespOrcada) {
+        /**
+         * Caso seja 6º Bimestre, campo ORÇADO será alimentado através do relatório Balancete da Despesa no exercício subsequente ao de referência.
+         */
+        if ($this->lOrcada) {
             $iAnoSeg          = $this->iAnoUsu+1;
             $sele_workAnoSeg  = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($this->iInstit) and  o58_anousu=$iAnoSeg  ";
             $sqlprincAnoSeg   = db_dotacaosaldo(8, 1, 4, true, $sele_workAnoSeg, $iAnoSeg, "$iAnoSeg-01-01", "$iAnoSeg-01-01", 8, 0, true);
@@ -230,6 +223,10 @@ class Siope {
             throw new Exception ("Nenhum registro encontrado.");
         }
 
+        /**
+         * Organiza despesas com respectivos desdobramentos.
+         * Realiza De/Para da despesa com natureza siope.
+         */
         for ($i = 0; $i < pg_numrows($result); $i++) {
 
             $oDespesa = db_utils::fieldsMemory($result, $i);
@@ -308,7 +305,10 @@ class Siope {
             }
         }
 
-        if ($this->lDespOrcada) {
+        /**
+         * Organiza despesas do ano subsequente.
+         */
+        if ($this->lOrcada) {
 
             for ($i = 0; $i < pg_numrows($resultAnoSeg); $i++) {
 
@@ -354,6 +354,9 @@ class Siope {
         return $this->aDespesas;
     }
 
+    /**
+     * Ordena as despesas pela fonte de recursos em ordem crescente.
+     */
     public function ordenaDespesas() {
 
         $sort = array();
@@ -365,10 +368,31 @@ class Siope {
 
     }
 
+    /**
+     * Ordena receitas com base na substr da natureza 4.11.12 para permaneça agrupadas.
+     */
+    public function ordenaReceitas() {
+
+        $sort = array();
+        foreach ($this->aReceitasAgrupadasFinal as $k => $v) {
+            $sort[$k] = substr($v['natureza'], 0, 5);
+        }
+
+        array_multisort($sort, SORT_ASC, $this->aReceitasAgrupadasFinal);
+
+    }
+
+    /**
+     * Agrupa despesas somando valores pelo CÓDIGO DE PLANILHA e ELEMENTO DA DESPESA iguais.
+     * EXCETO quando a fonte de recursos for 118, 218, 119 ou 219, o agrupamento é pelo CÓDIGO DE PLANILHA, FONTE DE RECURSOS e ELEMENTO DA DESPESA.
+     */
     public function agrupaDespesas() {
 
         $aDespAgrup = array();
 
+        /**
+         * Agrupa despesas do ano corrente.
+         */
         foreach($this->aDespesas as $row) {
 
             list($o58_codigo, $o58_subfuncao, $cod_planilha, $elemento_siope, $descricao_siope, $dot_atualizada, $empenhado, $liquidado, $pagamento) = array_values($row);
@@ -437,7 +461,10 @@ class Siope {
 
         }
 
-        if ($this->lDespOrcada) {
+        /**
+         * Agrupa despesas do ano seguinte.
+         */
+        if ($this->lOrcada) {
 
             $aDespAgrupAnoSeg = array();
 
@@ -495,6 +522,10 @@ class Siope {
 
             }
 
+            /**
+             * Une os dois arrays do ano corrente com o ano seguinte.
+             * ***Pode haver registros no ano seguinte que não estão no ano corrente.***
+             */
             foreach ($this->aDespesasAgrupadas as $index => $despesa) {
 
                 if (isset($this->aDespesasAnoSegAgrupadas[$index])) {
@@ -528,10 +559,16 @@ class Siope {
 
     }
 
+    /**
+     * Agrupa receitas pela natureza da receita.
+     */
     public function agrupaReceitas() {
 
         $aRecAgrup = array();
 
+        /**
+         * Agrupa receitas do ano corrente.
+         */
         foreach($this->aReceitas as $index => $row) {
 
             list($natureza, $descricao, $prev_atualizada, $rec_realizada) = array_values($row);
@@ -546,10 +583,17 @@ class Siope {
 
         }
 
-        if ($this->lDespOrcada) {
+        foreach ($aRecAgrup as $aAgrupado) {
+            $this->aReceitasAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
+        }
+
+        if ($this->lOrcada) {
 
             $aRecAgrupAnoSeg = array();
 
+            /**
+             * Agrupa receitas do ano seguinte.
+             */
             foreach ($this->aReceitasAnoSeg as $index => $row) {
 
                 list($natureza, $descricao, $rec_orcada) = array_values($row);
@@ -562,27 +606,51 @@ class Siope {
 
             }
 
-        }
+            foreach ($aRecAgrupAnoSeg as $aAgrupado) {
+                $this->aReceitasAnoSegAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
+            }
 
-        if (count($aRecAgrup) >= count($aRecAgrupAnoSeg)) {
+            /**
+             * Une os dois arrays do ano corrente com o ano seguinte.
+             * ***Pode haver registros no ano seguinte que não estão no ano corrente.***
+             */
+            foreach ($this->aReceitasAgrupadas as $index => $receita) {
 
-            foreach($aRecAgrup as $chave => $aAgrupado) {
-                $aAgrupado['rec_orcada'] = $this->lDespOrcada ? $aRecAgrupAnoSeg[$chave]['rec_orcada'] : 0;
-                array_push($this->aReceitasAgrupadas, $aAgrupado);
+                if (isset($this->aReceitasAnoSegAgrupadas[$index])) {
+                    $receita['rec_orcada'] = $this->aReceitasAnoSegAgrupadas[$index]['rec_orcada'];
+                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
+                    array_push($this->aReceitasAgrupadasFinal, $receita);
+                } else {
+                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
+                    array_push($this->aReceitasAgrupadasFinal, $despesa);
+                }
+
+            }
+
+            foreach ($this->aReceitasAnoSegAgrupadas as $index => $receita) {
+
+                if (!isset($receita['flag']) || $receita['flag'] != 1) {
+                    $receita['dot_atualizada'] = isset($this->aReceitasAgrupadas[$index]['prev_atualizada']) ? $this->aReceitasAgrupadas[$index]['prev_atualizada'] : 0;
+                    $receita['empenhado'] = isset($this->aReceitasAgrupadas[$index]['rec_realizada']) ? $this->aReceitasAgrupadas[$index]['rec_realizada'] : 0;
+                    array_push($this->aReceitasAgrupadasFinal, $receita);
+                }
+
             }
 
         } else {
 
-            foreach($aRecAgrupAnoSeg as $chave => $aAgrupado) {
-                $aAgrupado['prev_atualizada']   = isset($aRecAgrup[$chave]['prev_atualizada']) ? $aRecAgrup[$chave]['prev_atualizada']: 0;
-                $aAgrupado['rec_realizada']     = isset($aRecAgrup[$chave]['rec_realizada']) ? $aRecAgrup[$chave]['rec_realizada'] : 0;
-                array_push($this->aReceitasAgrupadas, $aAgrupado);
-            }
+            $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
 
         }
 
     }
 
+    /**
+     * Busca as receitas conforme relatório do Balancete da Receita
+     * Especificamente: PREVISÃO ATUALIZADA DA RECEITA (previsão inicial + previsão adicional da receita), RECEITA REALIZADA e NATUREZA DA RECEITA.
+     *
+     * Busca também a RECEITA ORÇADA do ano seguinte.
+     */
     public function setReceitas() {
 
         $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
@@ -608,7 +676,10 @@ class Siope {
 
         }
 
-        if ($this->lDespOrcada) {
+        /**
+         * Caso seja 6º Bimestre, campo ORÇADO será alimentado através do relatório Balancete da Receita no exercício subsequente ao de referência.
+         */
+        if ($this->lOrcada) {
 
             db_query('drop table work_receita');
             $iAnoSeg = $this->iAnoUsu+1;
@@ -638,6 +709,10 @@ class Siope {
 
     }
 
+    /**
+     * Caso tenha uma despesa com fonte de recursos 119 ou 219, nas subfunções 361, 365, 366 e 367 e com elementos começados por ?331?,
+     * Verifica se há uma linha correspondente com a fonte de recursos 118 ou 218, caso não haja, inclui uma linha com dados zerados.
+     */
     public function geraLinhaVazia() {
 
         if ($this->verficaFonte119219()) {
@@ -697,6 +772,9 @@ class Siope {
 
     }
 
+    /**
+     * Cód Planilha recebe valor de acordo com fonte de recursos, subfunção, tipo de ensino siope e tipo de pasta siope.
+     */
     public function getCodPlanilha($oDespesa) {
 
         if ($oDespesa->o58_codigo == 101 || $oDespesa->o58_codigo == 201) {
@@ -725,6 +803,9 @@ class Siope {
 
     }
 
+    /**
+     * Realiza De/Para da Natureza da despesa com tabela eledessiope composta pelo Cód Elemento e Descrição
+     */
     public function getNaturDesSiope($elemento) {
 
         $clnaturdessiope    = new cl_naturdessiope();
@@ -742,6 +823,9 @@ class Siope {
 
     }
 
+    /**
+     * Realiza De/Para da Natureza da despesa com tabela elerecsiope composta pela Natureza Receita e Descrição
+     */
     public function getNaturRecSiope($natureza) {
 
 
@@ -760,7 +844,10 @@ class Siope {
 
     }
 
-    public function setDespesasOrcadas() {
+    /**
+     * Se 6º bimestre, set true para buscar os valores dos anos seguintes.
+     */
+    public function setOrcado() {
 
         if($this->iBimestre == 6) {
             $this->lDespOrcada = true;
