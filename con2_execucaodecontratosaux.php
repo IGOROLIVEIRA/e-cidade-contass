@@ -73,7 +73,7 @@ class ExecucaoDeContratos{
             $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
             $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
             $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
-            $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+            $oPdf->Cell(30 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
             $oPdf->Cell(50 ,$iAlt,"Total do Empenho: R$ ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
             $oPdf->Ln();
 
