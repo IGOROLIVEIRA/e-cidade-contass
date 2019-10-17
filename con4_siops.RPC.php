@@ -48,9 +48,17 @@ switch ($oParam->exec) {
                             $siopsDespesa->setInstit($iInstit);
                             $siopsDespesa->setBimestre($iBimestre);
                             $siopsDespesa->setPeriodo();
+                            $siopsDespesa->setFiltrosDespesa();
+                            $siopsDespesa->setOrcado();
+                            $siopsDespesa->setDespesas();
+
+                            echo '<pre>';
+                            print_r($siopsDespesa);
+                            echo '</pre>';
+                            die();
 
                             if ($siopsDespesa->getErroSQL() > 0) {
-                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopsDespesa->getErroSQL());
+                                throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsDespesa->getErroSQL());
                             }
 
                         }
@@ -65,7 +73,7 @@ switch ($oParam->exec) {
 
 
                             if ($siopsReceita->getErroSQL() > 0) {
-                                throw new Exception ("Ocorreu um erro ao gerar Siope " . $siopsReceita->getErroSQL());
+                                throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsReceita->getErroSQL());
                             }
 
                         }

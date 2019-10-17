@@ -375,7 +375,7 @@ class cl_naturdessiops {
             $sql .= $campos;
         }
         $sql .= " from naturdessiops ";
-        $sql .= ' inner join eledessiops on eledessiope.c228_eledespecidade = naturdessiops.c226_natdespsiops and naturdessiops.c226_anousu = eledessiops.c228_anousu ';
+        $sql .= ' inner join eledessiops on eledessiops.c227_eledespsiops = naturdessiops.c226_natdespsiops and naturdessiops.c226_anousu = eledessiops.c227_anousu ';
         $sql2 = "";
         if ($dbwhere=="") {
             if ($c226_natdespecidade!=null ) {

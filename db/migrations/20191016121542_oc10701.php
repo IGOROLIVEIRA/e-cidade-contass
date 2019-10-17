@@ -56,7 +56,7 @@ class Oc10701 extends PostgresMigration
         -- CRIA TABELA ELEMENTO DESPESA
 
         -- INSERE db_sysarquivo
-        INSERT INTO db_sysarquivo (codarq, nomearq, descricao, sigla, dataincl, rotulo, tipotabela, naolibclass, naolibfunc, naolibprog, naolibform) VALUES ((select max(codarq)+1 from db_sysarquivo), 'elerecsiops', 'Elemento Despesa Siops', 'c227 ', '2019-10-16', 'Elemento Despesa Siops', 0, false, false, false, false);
+        INSERT INTO db_sysarquivo (codarq, nomearq, descricao, sigla, dataincl, rotulo, tipotabela, naolibclass, naolibfunc, naolibprog, naolibform) VALUES ((select max(codarq)+1 from db_sysarquivo), 'eledessiops', 'Elemento Despesa Siops', 'c227 ', '2019-10-16', 'Elemento Despesa Siops', 0, false, false, false, false);
          
         -- INSERE db_sysarqmod
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES (32, (select max(codarq) from db_sysarquivo));
@@ -76,7 +76,7 @@ class Oc10701 extends PostgresMigration
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c227_anousu'), 5, 0);
          
         -- CRIA TABELA
-        CREATE TABLE elerecsiops(c227_eledespsiops varchar(10) NOT NULL , c227_descricao varchar(250) NOT NULL, c227_campo varchar(3), c227_linha varchar(5), c227_anousu integer NOT NULL DEFAULT 0);
+        CREATE TABLE eledessiops(c227_eledespsiops varchar(10) NOT NULL , c227_descricao varchar(250) NOT NULL, c227_campo varchar(3), c227_linha varchar(5), c227_anousu integer NOT NULL DEFAULT 0);
 
         -- INSERE NATUREZA DESPESA SIOPS
         INSERT INTO naturdessiops VALUES
@@ -1589,7 +1589,7 @@ class Oc10701 extends PostgresMigration
         ('4699990000', '4699000000', '2019');
 
         -- INSERE ELEMENTO DESPESA SIOPS
-        INSERT INTO elerecsiops VALUES
+        INSERT INTO eledessiops VALUES
         ('3000000000', 'DESPESAS CORRENTES', '351', '#L0', '2019'),
         ('3100000000', 'PESSOAL E ENCARGOS SOCIAIS', '352', '#L1', '2019'),
         ('3130000000', 'Transferências a Estados e ao Distrito Federal', '353', '#L2', '2019'),
