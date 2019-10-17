@@ -49,7 +49,7 @@ class ExecucaoDeContratos{
 
         // 4ª linha
         $oPdf->cell(90,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal(),0);
-        $oPdf->Cell(50 ,$iAlt,'Valor Total Atual: '.number_format($oAcordo->getValorContrato(),2,',','.'));
+        $oPdf->Cell(50 ,$iAlt,'Valor do Contrato Original: R$ '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
         $oPdf->SetFont('Arial','',$iFonte);
@@ -73,8 +73,8 @@ class ExecucaoDeContratos{
             $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
             $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
             $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
-            $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
-            $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
+            $oPdf->Cell(30 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+            $oPdf->Cell(50 ,$iAlt,"Total do Empenho: R$ ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
             $oPdf->Ln();
 
         }
@@ -155,8 +155,8 @@ class ExecucaoDeContratos{
         $oPdf->Cell(50 ,$iAlt,"Empenho: $oEmpenhamento->empenho",0,0,'L',0);
         $oPdf->Cell(60 ,$iAlt,"Data: ".date('d/m/Y', strtotime($oEmpenhamento->dataemissao)),0,0,'L',0);
         $oPdf->Cell(80 ,$iAlt,"Dotação: ".$sElemento,0,0,'L',0);
-        $oPdf->Cell(40 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
-        $oPdf->Cell(50 ,$iAlt,"Total do Empenho: ".$sTotalEmp,0,0,'L',0);
+        $oPdf->Cell(30 ,$iAlt,"Reduzido: ".$reduzido,0,0,'L',0);
+        $oPdf->Cell(50 ,$iAlt,"Total do Empenho: R$ ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
         $oPdf->Ln();
 
         $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
