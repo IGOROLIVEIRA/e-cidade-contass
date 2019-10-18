@@ -102,7 +102,8 @@ class cl_cgmalt {
    var $z05_nasc_mes = null; 
    var $z05_nasc_ano = null; 
    var $z05_nasc = null; 
-   var $z05_fax = null; 
+   var $z05_fax = null;
+   var $z05_obs;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  z05_sequencia = int8 = Sequencial 
@@ -153,7 +154,8 @@ class cl_cgmalt {
                  z05_contato = varchar(40) = Contato 
                  z05_sexo = varchar(1) = Sexo 
                  z05_nasc = date = Data de Nasc. 
-                 z05_fax = varchar(12) = Fax 
+                 z05_fax = varchar(12) = Fax
+                 z05_obs = text 
                  ";
    //funcao construtor da classe 
    function cl_cgmalt() { 
@@ -250,6 +252,7 @@ class cl_cgmalt {
          }
        }
        $this->z05_fax = ($this->z05_fax == ""?@$GLOBALS["HTTP_POST_VARS"]["z05_fax"]:$this->z05_fax);
+       $this->z05_obs = ($this->z05_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["z05_obs"]:$this->z05_obs);
      }else{
        $this->z05_sequencia = ($this->z05_sequencia == ""?@$GLOBALS["HTTP_POST_VARS"]["z05_sequencia"]:$this->z05_sequencia);
      }
@@ -416,7 +419,8 @@ class cl_cgmalt {
                                       ,z05_contato 
                                       ,z05_sexo 
                                       ,z05_nasc 
-                                      ,z05_fax 
+                                      ,z05_fax
+                                      ,z05_obs 
                        )
                 values (
                                 $this->z05_sequencia 
@@ -468,6 +472,7 @@ class cl_cgmalt {
                                ,'$this->z05_sexo' 
                                ,".($this->z05_nasc == "null" || $this->z05_nasc == ""?"null":"'".$this->z05_nasc."'")." 
                                ,'$this->z05_fax' 
+                               ,'$this->z05_obs' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -841,6 +846,10 @@ class cl_cgmalt {
        $sql  .= $virgula." z05_fax = '$this->z05_fax' ";
        $virgula = ",";
      }
+     if(trim($this->z05_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z05_obs"])){
+       $sql  .= $virgula." z05_obs = '$this->z05_obs' ";
+       $virgula = ",";
+     }
      $sql .= " where ";
      if($z05_sequencia!=null){
        $sql .= " z05_sequencia = $this->z05_sequencia";
@@ -1183,5 +1192,41 @@ class cl_cgmalt {
      }
      return $sql;
   }
+
+    function sql_cgmaltcgm ( $z05_sequencia=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from cgmalt ";
+        $sql .= "      inner join db_usuarios on db_usuarios.id_usuario  = cgmalt.z05_login_alt";
+        $sql .= "      inner join cgm on cgm.z01_numcgm  = cgmalt.z05_numcgm";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($z05_sequencia!=null ){
+                $sql2 .= " where cgmalt.z05_sequencia = $z05_sequencia ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

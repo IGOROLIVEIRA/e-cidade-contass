@@ -257,6 +257,9 @@ $clrotulo->label("z01_nomefanta");
 		  $oTabDetalhes->add('documemntos', 'Documentos',
 		                     "prot1_lancdoc001.php?z06_numcgm={$oGet->numcgm}&consulta=true&createOnParent=true");
 
+        $oTabDetalhes->add('Histórico', 'Histórico',
+                             "prot3_consultacgmnovo008.php{$sGetUrl}");
+
 		  if ($oCgmModel->isFisico()) {
 		    $oTabDetalhes->add('emprego', 'Emprego', "prot3_consultacgmnovo006.php{$sGetUrl}");
 		  }
