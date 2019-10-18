@@ -169,12 +169,12 @@ db_app::load("estilos.css, grid.style.css");
             if (isset($descricao) && $descricao == 'true') {
 
               if (isset($isLancador) && $isLancador == "true") {
-                echo "<script>".$funcao_js."('$ac16_resumoobjeto',false);</script>";
+                echo "<script>".$funcao_js."('$z01_nome',false);</script>";
               } else {
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto', false, '$ac16_origem');</script>";
+                echo "<script>".$funcao_js."('$ac16_sequencial','$z01_nome', false, '$ac16_origem');</script>";
               }
             } else {
-              echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
+              echo "<script>".$funcao_js."('$z01_nome',false);</script>";
             }
           }else{
             if (isset($descricao) && $descricao == 'true') {
