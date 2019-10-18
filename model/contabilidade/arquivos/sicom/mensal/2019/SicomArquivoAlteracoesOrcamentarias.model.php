@@ -9,7 +9,7 @@ require_once("classes/db_aoc142019_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarAOC.model.php");
 
 /**
- * AlteraÃ§Ãµes OrÃ§amentÃ¡rias Sicom Acompanhamento Mensal
+ * Alterações Orçamentárias Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
  */
@@ -171,13 +171,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
      where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
         $rsResult10 = db_query($sSql);
-        //db_criatabela($rsResult10);
+
         $sSqlPrefeitura = "select * from infocomplementaresinstit where  si09_instit =" . db_getsession("DB_instit") . " and si09_tipoinstit = 2";
         $rsPrefeitura = db_query($sSqlPrefeitura);
-        //db_criatabela($rsPrefeitura);
-        //$sSql     = "select * from orcprojetolei where o138_altpercsuplementacao = 2 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
-        //$rsResultLei = db_query($sSql);
-        // && pg_num_rows($rsResultLei) > 0
 
         if (pg_num_rows($rsPrefeitura) > 0) {
 
@@ -276,8 +272,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     where o39_codproj in ({$oDados10->codigovinc})";
 
                 }
-
-
                 $rsResult12 = db_query($sSql);
                 //db_criatabela($rsResult12);echo $sSql;
 
@@ -432,8 +426,17 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $oDadosSql14 = db_utils::fieldsMemory($rsResult, $iCont14);
 
+                  if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98){
+
                     $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorigem . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
                     $sHash .= $oDadosSql14->codsubfuncao . $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
+
+                  }else{
+
+                    $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao . $oDadosSql14->codsubfuncao;
+                    $sHash .= $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
+
+                  }
 
                     if ($oDadosSql14->tiporegistro == 14) {
                         $aCodOrigem[$oDadosSql14->o47_codsup][14][] = $sHash;
@@ -531,8 +534,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     }
 
                     /**
-                     * 15 â€“ AlteraÃ§Ãµes OrÃ§amentÃ¡rias de ReduÃ§Ã£o
-                     * Novo Registro Inserido a partir de 2019, conforme layout VersÃ£o 8.0_2019
+                     * 15 ? Alterações Orçamentárias de Redução
+                     * Novo Registro Inserido a partir de 2019, conforme layout Versão 8.0_2019
                      *
                      */
 
