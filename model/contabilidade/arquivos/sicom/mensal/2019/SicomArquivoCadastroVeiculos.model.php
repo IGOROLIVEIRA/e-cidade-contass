@@ -172,10 +172,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       SELECT DISTINCT '10' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
                       veiculostransf.ve81_codunidadesubatual AS codunidadesub,
-                      CASE
-                          WHEN veiculostransf.ve81_codigonovo is NULL THEN veiculostransf.ve81_codigo
-                          ELSE veiculostransf.ve81_codigonovo
-                      END AS codVeiculo,
+                      veiculostransf.ve81_codigo codVeiculo,
                       veiculostransf.ve81_codunidadesubatual AS ve01_codunidadesub,
                       tipoveiculos.si04_tipoveiculo AS tpVeiculo,
                       tipoveiculos.si04_especificacao AS subTipoVeiculo,
@@ -202,9 +199,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       INNER JOIN tipoveiculos ON (veiculos.ve01_codigo=tipoveiculos.si04_veiculos)
       INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = " . db_getsession("DB_anousu") . "
       INNER JOIN veicbaixa on veicbaixa.ve04_veiculo = veiculos.ve01_codigo
-      INNER JOIN(select ve81_codigo, max(ve81_transferencia) ve81_transferencia, ve81_codunidadesubatual,ve81_codigonovo
+      INNER JOIN(select ve81_codigo, max(ve81_transferencia) ve81_transferencia, ve81_codunidadesubatual
                       from veiculostransferencia
-                        group by ve81_codigo, ve81_codunidadesubatual, ve81_codigonovo
+                        group by ve81_codigo, ve81_codunidadesubatual
                           order by ve81_codigo
                   ) veiculostransf on veiculostransf.ve81_codigo = veiculos.ve01_codigo
       INNER JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
@@ -218,6 +215,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
         $rsResult10 = db_query($sSql);
+
         if (pg_num_rows($rsResult10) > 0) {
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -360,14 +358,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                                 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
-                     veiculostransf.ve81_codigonovo,
-                     veiculos.ve01_codigo,
-                     veiculos.ve01_codigoant,
-                     transferenciaveiculos.ve80_dt_transferencia,
-                     veicabast.ve70_dtabast,
-                     veicmanut.ve62_dtmanut,
-                     veiculostransf.ve81_codunidadesubatual,
-                     veiculostransf.ve81_codunidadesubant,
+                     case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
                      CASE
@@ -415,22 +406,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                   LEFT JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu
                   AND unemp.o41_orgao = orcemp.o40_orgao
                   INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
-                  LEFT JOIN (SELECT ve81_codigo,
-                 max(ve81_transferencia) ve81_transferencia,
-                 ve81_codunidadesubatual,
-                 ve81_codunidadesubant,
-                 ve81_codigonovo
-          FROM veiculostransferencia ve80_sequencial
-          inner join transferenciaveiculos on ve81_transferencia = ve80_sequencial
-          where DATE_PART('YEAR',transferenciaveiculos.ve80_dt_transferencia) = " . db_getsession("DB_anousu") . "
-          and DATE_PART('MONTH',transferenciaveiculos.ve80_dt_transferencia) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-          GROUP BY ve81_codigo,
-                   ve81_codunidadesubant,
-                   ve81_codigonovo,
-                   ve81_codunidadesubatual
-          ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
-                  LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
-                  LEFT JOIN veicabast ON ve70_veiculos = veiculos.ve01_codigo
                   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
                   AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
@@ -455,14 +430,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                            ve62_origemgasto,
                            veicmanut.ve62_tipogasto,
                            veicmanut.ve62_descr,
-                           veicmanut.ve62_dtmanut,
                            pc01_codmater,
-                           pc01_descrmater,
-                           veiculostransf.ve81_codigonovo,
-                           veiculostransf.ve81_codigo,
-                           transferenciaveiculos.ve80_dt_transferencia,
-                           veicabast.ve70_dtabast,
-                           veiculostransf.ve81_codunidadesubatual,ve81_codunidadesubant
+                           pc01_descrmater
                     UNION
                     SELECT '20' AS tipoRegistro,
                     si09_codorgaotce AS codOrgao,
@@ -470,14 +439,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculostransf.ve81_codigonovo,
-                    veiculos.ve01_codigo,
-                    veiculos.ve01_codigoant,
-                    transferenciaveiculos.ve80_dt_transferencia,
-                    veicabast.ve70_dtabast,
-                    null as ve62_dtmanut,
-                    veiculostransf.ve81_codunidadesubatual,
-                    veiculostransf.ve81_codunidadesubant,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
                     veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
@@ -520,52 +482,28 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     LEFT JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao AND orcdotacao.o58_unidade = unemp.o41_unidade AND unemp.o41_anousu = orcdotacao.o58_anousu
                     LEFT JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu AND unemp.o41_orgao = orcemp.o40_orgao
                     LEFT JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
-                    LEFT JOIN (SELECT ve81_codigo,
-                 max(ve81_transferencia) ve81_transferencia,
-                 ve81_codunidadesubatual,
-                 ve81_codunidadesubant,
-                 ve81_codigonovo
-          FROM veiculostransferencia ve80_sequencial
-          inner join transferenciaveiculos on ve81_transferencia = ve80_sequencial
-          where DATE_PART('YEAR',transferenciaveiculos.ve80_dt_transferencia) = " . db_getsession("DB_anousu") . "
-          and DATE_PART('MONTH',transferenciaveiculos.ve80_dt_transferencia) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-          GROUP BY ve81_codigo,
-                   ve81_codunidadesubatual,
-                   ve81_codunidadesubant,
-                   ve81_codigonovo,
-                   ve81_codunidadesubatual
-          ORDER BY ve81_codigo ) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
-                    LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
-                    LEFT JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     GROUP BY infocomplementaresinstit.si09_codorgaotce,
                              unveic.o41_codtri,
-                             orveic.o40_codtri,
-                             orveic.o40_orgao,
-                             unveic.o41_unidade,
-                             veiculos.ve01_codigoant,
-                             veiculos.ve01_codigo,
-                             unemp.o41_codtri,
-                             orcemp.o40_codtri,
-                             orcdotacao.o58_orgao,
-                             orcdotacao.o58_unidade,
-                             empempenho.e60_codemp,
-                             empempenho.e60_emiss,
-                             veicabast.ve70_veiculoscomb,
-                             empveiculos.si05_atestado,
-                             unveic.o41_subunidade,
-                             codmater,
-                             veiculostransf.ve81_codigonovo,
-                             veiculostransf.ve81_codigo,
-                             transferenciaveiculos.ve80_dt_transferencia,
-                             veicabast.ve70_dtabast,
-                             veicmanut.ve62_dtmanut,
-                             veiculostransf.ve81_codunidadesubatual,veiculostransf.ve81_codunidadesubant) as teste";
+		                     orveic.o40_codtri,
+		                     orveic.o40_orgao,
+		                     unveic.o41_unidade,
+		                     veiculos.ve01_codigoant,
+		                     veiculos.ve01_codigo,
+		                     unemp.o41_codtri,
+		                     orcemp.o40_codtri,
+		                     orcdotacao.o58_orgao,
+		                     orcdotacao.o58_unidade,
+		                     empempenho.e60_codemp,
+		                     empempenho.e60_emiss,
+		                     veicabast.ve70_veiculoscomb,
+		                     empveiculos.si05_atestado,
+		                     unveic.o41_subunidade,
+		                     codmater) as teste";
 
-        $rsResult20 = db_query($sSql); //db_criatabela($rsResult20); die();
-
+        $rsResult20 = db_query($sSql) or die(pg_last_error());
         /**
          * registro 20
          */
@@ -573,95 +511,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
             $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-            /**
-             * Aqui verifico a existencia de transferencia para gerar o novo codigo do veiculo e codunidadesub no SICOM
-             * OC9284
-             */
 
-            if($oResult20->ve80_dt_transferencia != ""){
-
-                //ABASTECIMENTO
-                $tipogastoabast = array(01,02,03,04,05);
-                if(in_array($oResult20->tipogasto,$tipogastoabast)){
-
-                    if($oResult20->ve70_dtabast < $oResult20->ve80_dt_transferencia){
-
-                        /**
-                         * verifica se o veiculo tem codigoant no cadastro tabela veiculos campo ve01_codigoant
-                         */
-                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
-                            $codveiculo = $oResult20->ve01_codigo;
-                        }else{
-                            $codveiculo = $oResult20->ve01_codigoant;
-                        }
-
-                        /**
-                         * verifica se o veiculo tem codunidadesubant no cadastro tabela veiculos campo ve01_codunidadesub
-                         */
-                        if($oResult20->ve01_codunidadesub != '' && $oResult20->ve01_codunidadesub != "0"){
-                            $codUnidadeSub = $oResult20->ve81_codunidadesubant;
-                        }else{
-                            $codUnidadeSub = $oResult20->codunidadesub;
-                        }
-
-                    }elseif ($oResult20->ve70_dtabast == $oResult20->ve80_dt_transferencia){
-                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
-                            $codveiculo = $oResult20->ve81_codigonovo;
-                        }else{
-                            $codveiculo = $oResult20->ve01_codigoant;
-                        }
-                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
-                    }else{
-                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
-                            $codveiculo = $oResult20->ve01_codigo;
-                        }else{
-                            $codveiculo = $oResult20->ve01_codigoant;
-                        }
-                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
-                    }
-                }
-                //MANUTENÇÃO
-                else{
-                    if($oResult20->ve62_dtmanut < $oResult20->ve80_dt_transferencia){
-                        if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
-                            $codveiculo = $oResult20->ve01_codigo;
-                        }else{
-                            $codveiculo = $oResult20->ve01_codigoant;
-                        }
-
-                        if($oResult20->ve01_codunidadesub != '' && $oResult20->ve01_codunidadesub != "0"){
-                            $codUnidadeSub = $oResult20->ve01_codunidadesub;
-                        }else{
-                            $codUnidadeSub = $oResult20->codunidadesub;
-                        }
-                    }else{
-                        $codveiculo = $oResult20->ve81_codigonovo;
-                        $codUnidadeSub = $oResult20->ve81_codunidadesubatual;
-                    }
-                }
-
-            }else{
-                if ($oResult20->ve01_codigoant == "" || $oResult20->ve01_codigoant == "0"){
-                    $codveiculo = $oResult20->ve01_codigo;
-                }else{
-                    $codveiculo = $oResult20->ve01_codigoant;
-                }
-
-                if($oResult20->ve01_codunidadesub != '' && $oResult20->ve01_codunidadesub != "0"){
-                    $codUnidadeSub = $oResult20->ve01_codunidadesub;
-                }else{
-                    $codUnidadeSub = $oResult20->codunidadesub;
-                }
-            }
-            //FIM OC9284
-
-            $sHash20 = $codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
+            $sHash20 = $oResult20->codveiculo . $oResult20->codmater . $oResult20->nroempenho . $oResult20->dtempenho . $oResult20->tipogasto . $oResult20->atestadocontrole;
 
             if (!isset($aDadosAgrupados20[$sHash20])) {
 
                 $oDados20 = new stdClass();
 
-                if ($oResult20->subunidade != 0 &&$oResult20->subunidade = null) {
+                if ($oResult20->subunidade != 0 ||$oResult20->subunidade = null) {
                     /*
                     * O campo codUnidadeSubEmpenho torna-se de
                     * preenchimento obrigatório se a origem do gasto foi
@@ -679,8 +536,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $oDados20->si147_tiporegistro = 20;
                 $oDados20->si147_codorgao = $oResult20->codorgao;
-                $oDados20->si147_codunidadesub = $codUnidadeSub;
-                $oDados20->si147_codveiculo = $codveiculo;
+                $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
+                $oDados20->si147_codveiculo = $oResult20->codveiculo;
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
                 $oDados20->si147_nroempenho = $oResult20->nroempenho;
@@ -702,13 +559,13 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                  */
 
                 $sSqlKm = "select min(ve60_medidasaida) as km_inicial, max(ve61_medidadevol) as km_final
-                                  FROM veiculos.veicmanut  as veicmanut
-                                  inner join veicmanutretirada on ve65_veicmanut = ve62_codigo
-                                  inner join veicretirada on ve65_veicretirada = ve60_codigo
-                                  inner join veicdevolucao on ve61_veicretirada = ve60_codigo
-                              WHERE veicmanut.ve62_veiculos =  $codveiculo
-                              AND  DATE_PART('YEAR',veicmanut.ve62_dtmanut)= " . db_getsession("DB_anousu") . "
-                              AND DATE_PART('MONTH',veicmanut.ve62_dtmanut)=  " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+								  FROM veiculos.veicmanut  as veicmanut
+								  inner join veicmanutretirada on ve65_veicmanut = ve62_codigo
+								  inner join veicretirada on ve65_veicretirada = ve60_codigo
+								  inner join veicdevolucao on ve61_veicretirada = ve60_codigo
+							  WHERE veicmanut.ve62_veiculos =  $oResult20->codveiculo
+							  AND  DATE_PART('YEAR',veicmanut.ve62_dtmanut)= " . db_getsession("DB_anousu") . "
+							  AND DATE_PART('MONTH',veicmanut.ve62_dtmanut)=  " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                 $oDadosVeiculo = pg_fetch_object(pg_query($sSqlKm));
 
@@ -756,71 +613,35 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
          * Registro 30
          */
         $sSql = " SELECT '30' AS tipoRegistro,
-               si09_codorgaotce AS codOrgao,
-               CASE
-                   WHEN (unveic.o41_codtri::INT != 0
-                         AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
-                   WHEN (unveic.o41_codtri::INT = 0
-                         AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
-                   WHEN (unveic.o41_codtri::INT != 0
-                         AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
-                   ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
-               END AS codunidadesub,
-               veiculos.ve01_codigo,
-               veiculos.ve01_codigoant,
-               veiculostransf.ve81_codigonovo,
-               veiculostransf.ve80_dt_transferencia,
-               veiculostransf.ve81_codunidadesubatual,
-               veiculostransf.ve81_codunidadesubant,
-               veiculos.ve01_codunidadesub,
-               CASE
-                   WHEN veiculostransf.ve81_codigonovo IS NULL THEN veiculos.ve01_codigo
-                   ELSE veiculostransf.ve81_codigonovo
-               END AS codVeiculo,
-               veiculostransf.ve81_codunidadesubatual,
-               veiculos.ve01_codunidadesub,
-               transporteescolar.v200_escola AS nomeEstabelecimento,
-               transporteescolar.v200_localidade AS localidade,
-               transporteescolar.v200_diasrodados AS qtdeDiasRodados,
-               transporteescolar.v200_distancia AS distanciaEstabelecimento,
-               transporteescolar.v200_numpassageiros AS numeroPassageiros,
-               transporteescolar.v200_turno AS turnos,
-               o41_subunidade AS subunidade
-        FROM veiculos.veiculos AS veiculos
-        INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
-        INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
-        INNER JOIN configuracoes.db_depart AS db_depart ON (veiccadcentral.ve36_coddepto =db_depart.coddepto)
-        INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
-        INNER JOIN transporteescolar ON ve01_codigo = v200_veiculo
-        INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
-        INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
-        LEFT JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
-        INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
-        LEFT JOIN
-            (SELECT ve81_codigo,
-                    max(ve81_transferencia) ve81_transferencia,
-                    ve81_codunidadesubatual,
-                    ve81_codigonovo,ve80_dt_transferencia,ve81_codunidadesubant
-             FROM veiculostransferencia ve80_sequencial
-          inner join transferenciaveiculos on ve81_transferencia = ve80_sequencial
-          where DATE_PART('YEAR',transferenciaveiculos.ve80_dt_transferencia) = " . db_getsession("DB_anousu") . "
-          and DATE_PART('MONTH',transferenciaveiculos.ve80_dt_transferencia) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-             GROUP BY ve81_codigo,
-                      ve81_codunidadesubatual,
-                      ve81_codigonovo,
-                      ve81_codunidadesubatual,
-                      ve80_dt_transferencia,
-                      ve81_codunidadesubant
-             ORDER BY ve81_codigo) veiculostransf ON veiculostransf.ve81_codigo = veiculos.ve01_codigo
-        LEFT JOIN transferenciaveiculos ON transferenciaveiculos.ve80_sequencial = veiculostransf.ve81_transferencia
-        WHERE v200_anousu = " . db_getsession("DB_anousu") . "
-        AND v200_periodo = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-        AND db_config.codigo =" . db_getsession("DB_instit");
+       si09_codorgaotce AS codOrgao,
+       CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
+	    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
+	    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
+            ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
+       case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+       veiculos.ve01_codunidadesub,
+       transporteescolar.v200_escola AS nomeEstabelecimento,
+       transporteescolar.v200_localidade AS localidade,
+       transporteescolar.v200_diasrodados AS qtdeDiasRodados,
+       transporteescolar.v200_distancia AS distanciaEstabelecimento,
+       transporteescolar.v200_numpassageiros AS numeroPassageiros,
+       transporteescolar.v200_turno AS turnos,
+       o41_subunidade AS subunidade
+		FROM veiculos.veiculos AS veiculos
+		INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
+		INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
+		INNER JOIN configuracoes.db_depart AS db_depart ON (veiccadcentral.ve36_coddepto =db_depart.coddepto)
+		INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
+		INNER JOIN transporteescolar ON ve01_codigo = v200_veiculo
+		INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
+		INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
+		LEFT JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
+		INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
+		WHERE v200_anousu = " . db_getsession("DB_anousu") . "
+		AND v200_periodo = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+		AND db_config.codigo =" . db_getsession("DB_instit");
 
         $rsResult30 = db_query($sSql);
-
-//        echo $sSql; db_criatabela($rsResult30); die();
-
         /**
          * registro 30
          */
@@ -831,63 +652,14 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc30 = new cl_cvc302019();
                 $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
-                if($oDados30->ve80_dt_transferencia != ""){
-
-                    $sDataTransf = implode("/",(array_reverse(explode("-",$oDados30->ve80_dt_transferencia))));
-                    $sPartesTransf = explode("/", $sDataTransf);
-                    $iMesTransf = $sPartesTransf[1];
-
-                    if($this->sDataFinal['5'] . $this->sDataFinal['6'] < $iMesTransf){
-
-                        /**
-                         * verifica se o veiculo tem codigoant no cadastro tabela veiculos campo ve01_codigoant
-                         */
-                        if ($oDados30->ve01_codigoant == "" || $oDados30->ve01_codigoant == "0"){
-                            $codveiculo = $oDados30->ve01_codigo;
-                        }else{
-                            $codveiculo = $oDados30->ve01_codigoant;
-                        }
-
-                        /**
-                         * verifica se o veiculo tem codunidadesubant no cadastro tabela veiculos campo ve01_codunidadesub
-                         */
-                        if($oDados30->ve01_codunidadesub != '' && $oDados30->ve01_codunidadesub != "0"){
-                            $codUnidadeSub = $oDados30->ve81_codunidadesubant;
-                        }else{
-                            $codUnidadeSub = $oDados30->codunidadesub;
-                        }
-
-                    }else{
-                        if ($oDados30->ve01_codigoant == "" || $oDados30->ve01_codigoant == "0"){
-                            $codveiculo = $oDados30->ve01_codigo;
-                        }else{
-                            $codveiculo = $oDados30->ve01_codigoant;
-                        }
-                        $codUnidadeSub = $oDados30->ve81_codunidadesubatual;
-                    }
-                }else{
-                    if ($oDados30->ve01_codigoant == "" || $oDados30->ve01_codigoant == "0"){
-                        $codveiculo = $oDados30->ve01_codigo;
-                    }else{
-                        $codveiculo = $oDados30->ve01_codigoant;
-                    }
-
-                    //codunidadesub
-                    if($oDados30->ve01_codunidadesub != "" && $oDados30->ve01_codunidadesub != "0"){
-                        $codUnidadeSub = $oDados30->ve01_codunidadesub;
-                    }else{
-                        $codUnidadeSub = $oDados30->codunidadesub;
-                    }
-                }
-
                 if ($oDados30->subunidade == 1) {
                     $oDados30->codunidadesub .= str_pad($oDados30->subunidade, 3, "0", STR_PAD_LEFT);
                 }
 
                 $clcvc30->si148_tiporegistro = 30;
                 $clcvc30->si148_codorgao = $oDados30->codorgao;
-                $clcvc30->si148_codunidadesub = $codUnidadeSub;
-                $clcvc30->si148_codveiculo = $codveiculo;
+                $clcvc30->si148_codunidadesub = $oDados30->ve01_codunidadesub != '' || $oDados30->ve01_codunidadesub != 0 ? $oDados30->ve01_codunidadesub : $oDados30->codunidadesub;
+                $clcvc30->si148_codveiculo = $oDados30->codveiculo;
                 $clcvc30->si148_nomeestabelecimento = $this->removeCaracteres($oDados30->nomeestabelecimento);
                 $clcvc30->si148_localidade = $this->removeCaracteres($oDados30->localidade);
                 $clcvc30->si148_qtdediasrodados = $oDados30->qtdediasrodados;
@@ -916,11 +688,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                           AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                     ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                 END AS codunidadesub,
-                ve01_codunidadesub,
                 CASE
-                    WHEN veiculostransferencia.ve81_codigoant IS NULL THEN veiculostransferencia.ve81_codigo
-                    WHEN veiculostransferencia.ve81_codigoant = 0 THEN veiculostransferencia.ve81_codigo
-                    ELSE veiculostransferencia.ve81_codigoant
+                    WHEN veiculos.ve01_codigoant IS NULL
+                         OR veiculos.ve01_codigoant = 0 THEN veiculos.ve01_codigo
+                    ELSE veiculos.ve01_codigoant
                 END AS codVeiculo,
                 veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
                 veicbaixa.ve04_motivo AS descBaixa,
@@ -938,7 +709,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       INNER JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
       INNER JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
       INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
-      LEFT JOIN veiculostransferencia ON ve81_codigo=ve01_codigo
       INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veicitensobrig.ve09_veiculos=veicbaixa.ve04_veiculo)
       AND db01_anousu = " . db_getsession("DB_anousu") . "
       INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
@@ -955,12 +725,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       SELECT DISTINCT '40' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
                       veiculostransferencia.ve81_codunidadesubant AS codunidadesub,
-                      ve01_codunidadesub,
-                        CASE
-                            WHEN veiculostransferencia.ve81_codigoant IS NULL THEN veiculostransferencia.ve81_codigo
-                            WHEN veiculostransferencia.ve81_codigoant = 0 THEN veiculostransferencia.ve81_codigo
-                            ELSE veiculostransferencia.ve81_codigoant
-                        END AS codVeiculo,
+                      CASE
+                          WHEN veiculos.ve01_codigoant IS NULL
+                               OR veiculos.ve01_codigoant = 0 THEN veiculos.ve01_codigo
+                          ELSE veiculos.ve01_codigoant
+                      END AS codVeiculo,
                       veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
                       veicbaixa.ve04_motivo AS descBaixa,
                       veicbaixa.ve04_data AS dtBaixa
@@ -974,10 +743,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       LEFT JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
       LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
                                                         AND empempenho.e60_anousu = orcdotacao.o58_anousu)
-      LEFT JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
-      LEFT JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
+      INNER JOIN veiculos.veicitensobrig AS veicitensobrig ON (veiculos.ve01_codigo=veicitensobrig.ve09_veiculos)
+      INNER JOIN veiculos.veiccaditensobrig AS veiccaditensobrig ON (veicitensobrig.ve09_veiccaditensobrig=veiccaditensobrig.ve08_sequencial)
       INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
-      LEFT JOIN veiculos.veicbaixa AS veicbaixa ON (veiculos.ve01_codigo=veicbaixa.ve04_veiculo)
+      INNER JOIN veiculos.veicbaixa AS veicbaixa ON (veicitensobrig.ve09_veiculos=veicbaixa.ve04_veiculo)
       AND db01_anousu = " . db_getsession("DB_anousu") . "
       LEFT JOIN veiculostransferencia on ve81_codigo=ve01_codigo
       INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
@@ -992,6 +761,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           AND DATE_PART('MONTH',veicbaixa.ve04_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
         $rsResult40 = db_query($sSql);
+
         /**
          * registro 40
          */
@@ -1007,7 +777,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc40->si149_tiporegistro = 40;
                 $clcvc40->si149_codorgao = $oDados40->codorgao;
-                $clcvc40->si149_codunidadesub = $oDados40->codunidadesub;
+                $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 if($oDados40->tipobaixa == 99){
