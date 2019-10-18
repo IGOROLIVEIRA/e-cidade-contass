@@ -49,13 +49,16 @@ if($aContratos == ""){
     }
 
 }else{
-    $oContratosRelatorio = preg_split("/[\s,]+/", $aContratos);
-    $oContratos =  new stdClass();
-    foreach ($oContratosRelatorio as $ik => $oCo){
+    $oContratosRelatorio = explode(",", $aContratos);
+
+    $arrayContratos = array();
+    foreach ($oContratosRelatorio as $oCo){
+        $oContratos =  new stdClass();
         $oContratos->ac16_sequencial = $oCo;
-        $arrayContratos[$ik] = $oContratos;
+        $arrayContratos[] = $oContratos;
     }
 }
+
 foreach ($arrayContratos as $iContrato){
 
     $oPdf->AddPage('L');
