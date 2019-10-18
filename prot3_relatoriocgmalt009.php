@@ -101,7 +101,7 @@ foreach ($arrayCgmsAlt as $cgm){
     $oPdf->SetFont('Arial','',10);
     multiCell($oPdf, $aDescricaoposicao, 5, $iAlts, 145);
     $data = implode("/",(array_reverse(explode("-",$oRegistroCgmAlt->z05_data_alt))));
-    $oPdf->cell(45,$iAlts,$data,"TBRL",0,"D",0,0);
+    $oPdf->cell(45,$iAlts,$data,"TBRL",0,"C",0,0);
 
 }
 
