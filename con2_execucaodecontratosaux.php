@@ -295,7 +295,7 @@ class ExecucaoDeContratos{
 
     public static function getAcordosFornecedor($iFornecedor){
         $oDaoAcordo    = db_utils::getDao("acordo");
-        $sSqlAcordos = $oDaoAcordo->sql_query(null,"ac16_sequencial",null,"ac16_contratado = $iFornecedor");
+        $sSqlAcordos = $oDaoAcordo->sql_query(null,"ac16_sequencial","ac16_anousu","ac16_contratado = $iFornecedor");
         $rsBuscaAcordo = $oDaoAcordo->sql_record($sSqlAcordos);
         $aAcordosRetorno = array();
         for ($iRowItem = 0; $iRowItem < pg_num_rows($rsBuscaAcordo); $iRowItem++) {

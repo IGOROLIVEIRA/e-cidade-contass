@@ -77,7 +77,7 @@ $oRotuloAcordo->label();
                 <td colspan="3">
                     <?php
                     db_inputdata('dtVigenciaInicial', '', '', '', true, 'text', 1, "");
-                    echo " <b>á</b> ";
+                    echo " <b>a</b> ";
                     db_inputdata('dtVigenciaFinal', '', '', '', true, 'text', 1, "");
                     ?>
                 </td>
