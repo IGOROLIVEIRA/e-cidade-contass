@@ -58,11 +58,15 @@ if($cldb_usuarios->numrows > 0){
   db_fieldsmemory($usu,0);
   $t93_id_usuario = $idus;
 }
-$depart = $cldb_depart->sql_record($cldb_depart->sql_query_file($iddepart,"descrdepto"));
-if($cldb_depart->numrows){
-  db_fieldsmemory($depart,0);
-  $t93_depart = $iddepart;
+//var_dump($transfdireta);die();
+if($transfdireta == "false"){
+    $depart = $cldb_depart->sql_record($cldb_depart->sql_query_file($iddepart,"descrdepto"));
+    if($cldb_depart->numrows){
+      db_fieldsmemory($depart,0);
+      $t93_depart = $iddepart;
+    }
 }
+
 ?>
 <form class="container" name="form1" method="post" action="<?=$db_action?>">
   <fieldset>
@@ -92,19 +96,36 @@ if($cldb_depart->numrows){
           ?>
         </td>
       </tr>
+
+        <?php if($transfdireta == "true"):?>
       <tr>
         <td nowrap title="<?=@$Tt93_depart?>">
           <?
-            db_ancora(@$Lt93_depart,"",3);
+            db_ancora(@$Lt93_depart,"js_pesquisat93_depart(true)",$db_opcao);
           ?>
         </td>
         <td> 
           <?
-            db_input('t93_depart',8,@$It93_depart,true,'text',3,"");
+            db_input('t93_depart',8,@$It93_depart,true,'text',$db_opcao,"onchange='js_pesquisat93_depart(false)'");
             db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
           ?>
         </td>
       </tr>
+        <?php else:?>
+            <tr>
+                <td nowrap title="<?=@$Tt93_depart?>">
+                    <?
+                    db_ancora(@$Lt93_depart,"",3);
+                    ?>
+                </td>
+                <td>
+                    <?
+                    db_input('t93_depart',8,@$It93_depart,true,'text',3,"");
+                    db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
+                    ?>
+                </td>
+            </tr>
+        <?php endif;?>
       <tr>
         <td nowrap title="<?=@$Tt94_depart?>">
           <?
@@ -185,6 +206,31 @@ function js_mostradb_depart1(chave1,chave2){
   document.form1.depto_destino.value = chave2;
   db_iframe_depart.hide();
 }
+
+function js_pesquisat93_depart(mostra){
+    if(mostra==true){
+        js_OpenJanelaIframe('top.corpo.iframe_benstransf','db_iframe_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1t93_depart|coddepto|descrdepto&chave_t93_depart='+document.form1.t93_depart.value+'&db_param=<?=($db_param)?>','Pesquisa',true);
+    }else{
+        if(document.form1.t93_depart.value != ''){
+            js_OpenJanelaIframe('top.corpo.iframe_benstransf','db_iframe_depart','func_db_depart.php?pesquisa_chave='+document.form1.t93_depart.value+'&funcao_js=parent.js_mostradb_departt93_depart&chave_t93_depart='+document.form1.t93_depart.value+'&db_param=<?=($db_param)?>','Pesquisa',false);
+        }else{
+            document.form1.t93_depart.value = '';
+        }
+    }
+}
+function js_mostradb_departt93_depart(chave,erro){
+    document.form1.depto_destino.value = chave;
+    if(erro==true){
+        document.form1.t93_depart.focus();
+        document.form1.descrdepto.value = '';
+    }
+}
+function js_mostradb_depart1t93_depart(chave1,chave2){
+    document.form1.t93_depart.value = chave1;
+    document.form1.descrdepto.value = chave2;
+    db_iframe_depart.hide();
+}
+
 function js_pesquisa(){
   js_OpenJanelaIframe('top.corpo.iframe_benstransf','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_preenchepesquisa|t93_codtran&t93=true&db_param=<?=($db_param)?>','Pesquisa',true);
 }

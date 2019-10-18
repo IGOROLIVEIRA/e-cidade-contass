@@ -60,8 +60,13 @@ $db_opcao = 1;
  	 $clcriaabas->sizecampo  = array("benstransf"=>"20","benstransfcodigo"=>"20");
  	 $clcriaabas->title      = array("benstransf"=>"Gerar transferência","benstransfcodigo"=>"Itens da transferência");
 //	 $clcriaabas->src = array("benscorlanc"=>"pat1_benscorlanc005.php");
-//die($db_param);
-	 $clcriaabas->src        = array("benstransf"=>"pat1_benstransf004.php?db_param=$db_param");
+     if (isset($direta) == "true" && $direta != NULL){
+         $transfdireta = 'true';
+     }else{
+         $transfdireta = 'false';
+     }
+//     var_dump($transfdireta);die();
+     $clcriaabas->src        = array("benstransf"=>"pat1_benstransf004.php?db_param=$db_param&transfdireta=$transfdireta");
 	 $clcriaabas->disabled   = array("benstransfcodigo"=>"true"); 
 	 $clcriaabas->cria_abas(); 
        ?> 
