@@ -27,13 +27,15 @@ class Oc10728 extends AbstractMigration
      */
     public function up()
     {
-        $sql = "ALTER TABLE cgmalt ADD COLUMN z05_obs text;
+        $sql = <<<SQL
+ 
+             ALTER TABLE cgmalt ADD COLUMN z05_obs text;
                                    
              CREATE OR REPLACE FUNCTION public.fc_cgm_altexc()
              RETURNS trigger
              LANGUAGE plpgsql
-            AS $function$
-            
+            AS 
+            $$
             DECLARE
             
                 iSizeCnpjCpf   integer     default 0;
@@ -299,9 +301,8 @@ class Oc10728 extends AbstractMigration
                         END IF;
                     RETURN NEW; 
                 END;
-            $function$
-
-        ";
+            $$
+SQL;
         $this->execute($sql);
     }
 }
