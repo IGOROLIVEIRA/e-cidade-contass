@@ -93,7 +93,7 @@ if(isset($incluir)){
   }    
   db_fim_transacao($sqlerro);
 }
-
+die("aqui");
 ?>
 <html>
 <head>
@@ -122,7 +122,7 @@ if(isset($incluir)){
     };
   }else{
   //  db_msgbox($db_param);
-   db_redireciona("pat1_benstransf005.php?liberaaba=true&chavepesquisa=$t93_codtran&t93_depart=$t93_depart&db_param=$db_param");
+   db_redireciona("pat1_benstransf005.php?liberaaba=true&chavepesquisa=$t93_codtran&t93_depart=$t93_depart&db_param=$db_param&transfdireta=$transfdireta");
   }
 }
 ?>

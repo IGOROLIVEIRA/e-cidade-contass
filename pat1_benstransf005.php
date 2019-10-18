@@ -136,7 +136,7 @@ if(isset($chavepesquisa) || (isset($alterar) && $sqlerro == false)){
   <script>     
       function js_db_libera(){
          parent.document.formaba.benstransfcodigo.disabled=false;
-         top.corpo.iframe_benstransfcodigo.location.href='pat1_benstransfcodigo001.php?t95_codtran=".@$t93_codtran."&t93_depart=$t93_depart&db_param=$db_param&depto='+document.form1.t94_depart.value;
+         top.corpo.iframe_benstransfcodigo.location.href='pat1_benstransfcodigo001.php?t95_codtran=".@$t93_codtran."&t93_depart=$t93_depart&db_param=$db_param&transfdireta=$transfdireta&depto='+document.form1.t94_depart.value;
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('benstransfcodigo');";

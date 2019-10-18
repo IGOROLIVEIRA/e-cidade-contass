@@ -190,13 +190,19 @@ if(isset($db_param) && $db_param=='int'){
       </table>
 
     </fieldset>
-
+<?php if($transfdireta == "true"):?>
     <div style="margin-top: 10px;">
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
+      <input name="<?=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?>" type="button" id="" value="Confirmar">
       <input name="novo" type="button" id="" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
     </div>
-
-
+<?php else:?>
+      <div style="margin-top: 10px;">
+          <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
+          <input name="<?=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?>" type="button" id="" value="Confirmar">
+          <input name="novo" type="button" id="" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
+      </div>
+      <?php endif;?>
     <table style="margin-top: 10px;">
       <tr>
         <td valign="top"  align="center">

@@ -55,11 +55,18 @@ $db_opcao = 1;
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
+
+     if (isset($direta) == "true" && $direta != NULL){
+         $transfdireta = 'true';
+     }else{
+         $transfdireta = 'false';
+     }
+
 	$clcriaabas->identifica = array("benstransf"=>"Gera transferência","benstransfcodigo"=>"Itens da tranferência"); 
 	$clcriaabas->sizecampo  = array("benstransf"=>"20","benstransfcodigo"=>"20");
 	$clcriaabas->title      = array("benstransf"=>"Gerar transferência","benstransfcodigo"=>"Itens da transferência");
 //	$clcriaabas->src = array("benscorlanc"=>"pat1_benscorlanc005.php");
-	$clcriaabas->src        = array("benstransf"=>"pat1_benstransf005.php?db_param=$db_param");
+	$clcriaabas->src        = array("benstransf"=>"pat1_benstransf005.php?db_param=$db_param&transfdireta=$transfdireta");
 	$clcriaabas->disabled   =  array("benstransfcodigo"=>"true"); 
 	$clcriaabas->cria_abas(); 
      ?> 
