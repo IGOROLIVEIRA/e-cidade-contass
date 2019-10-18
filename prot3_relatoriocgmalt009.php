@@ -6,9 +6,9 @@ require_once("classes/db_cgmalt_classe.php");
 
 
 db_postmemory($HTTP_GET_VARS);
-//ini_set('display_errors','on');
+
 $arrayCgmsAlt = preg_split("/[\s,]+/", $aCgmsAlt);
-//echo "<pre>"; print_r($arrayCgmsAlt);die();
+
 
 
 $oPdf  = new PDF();
@@ -59,8 +59,8 @@ foreach ($arrayCgmsAlt as $cgm){
     $oPdf->cell(145,$iAlt,$oRegistroCgmAlt->z05_nomefanta,0,1,"D",0,0);
     $oPdf->cell(45,$iAlt,"CPF/CNPJ:",0,0,"D",0,0);
     $oPdf->cell(145,$iAlt,$oRegistroCgmAlt->z05_cgccpf,0,1,"D",0,0);
-    $oPdf->cell(45,$iAlt,"Obs:",0,0,"D",0,0);
-    $oPdf->cell(145,$iAlt,$oRegistroCgmAlt->z05_obs,0,1,"D",0,0);
+//    $oPdf->cell(45,$iAlt,"Obs:",0,0,"D",0,0);
+//    $oPdf->cell(145,$iAlt,$oRegistroCgmAlt->z05_obs,0,1,"D",0,0);
 
     $oPdf->SetFont('Arial','B',10);
     $oPdf->ln();
@@ -91,13 +91,50 @@ foreach ($arrayCgmsAlt as $cgm){
     $oPdf->cell(45,$iAlt,"",0,1,"D",0,0);
 
     $oPdf->SetFont('Arial','B',15);
+
+    $aDescricaoposicao = quebrarTexto($oRegistroCgmAlt->z05_obs,60);
+    $iAlts = $iAlt*(count($aDescricaoposicao));
+
     $oPdf->ln();
     $oPdf->ln();
     $oPdf->cell(190,$iAlt,"Justificativa de Alteração","TBRL",1,"D",1,0);
     $oPdf->SetFont('Arial','',10);
-    $oPdf->cell(145,$iAlt,$oRegistroCgmAlt->z05_obs,"TBRL",0,"D",0,0);
-    $oPdf->cell(45,$iAlt,$oRegistroCgmAlt->z05_data_alt,"TBRL",1,"D",0,0);
+    multiCell($oPdf, $aDescricaoposicao, 5, $iAlts, 145);
+    $data = implode("/",(array_reverse(explode("-",$oRegistroCgmAlt->z05_data_alt))));
+    $oPdf->cell(45,$iAlts,$data,"TBRL",0,"D",0,0);
 
 }
 
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {
+    $pos_x = $oPdf->x;
+    $pos_y = $oPdf->y;
+    $oPdf->cell($iTamCampo, $iTam, "", 1, 0, "D", 0);
+    $oPdf->x = $pos_x;
+    $oPdf->y = $pos_y;
+    foreach ($aTexto as $sTexto) {
+        $sTexto=ltrim($sTexto);
+        $oPdf->cell($iTamCampo, $iTamFixo, $sTexto, 0, 1, 'D', 0);
+        $oPdf->x=$pos_x;
+    }
+    $oPdf->x = $pos_x+$iTamCampo;
+    $oPdf->y = $pos_y;
+}
+
+function quebrarTexto($texto,$tamanho){
+
+    $aTexto = explode(" ", $texto);
+    $string_atual = "";
+    foreach ($aTexto as $word) {
+        $string_ant = $string_atual;
+        $string_atual .= " ".$word;
+        if (strlen($string_atual) > $tamanho) {
+            $aTextoNovo[] = $string_ant;
+            $string_ant   = "";
+            $string_atual = $word;
+        }
+    }
+    $aTextoNovo[] = $string_atual;
+    return $aTextoNovo;
+
+}
 $oPdf->Output();
