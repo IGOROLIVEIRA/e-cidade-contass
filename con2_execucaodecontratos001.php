@@ -115,7 +115,7 @@ $oRotulo->label("ac16_resumoobjeto");
               </td>
               <td colspan="3">
                 <?php
-                $aFiltros = array(1 => "Não", 2 => "Por empenho", 3 => "Por aditivo", 4 => "Por aditivo e empenho");
+                $aFiltros = array( 2 => "Por empenho", 3 => "Por aditivo", 4 => "Por aditivo e empenho");
                 db_select("iQuebra", $aFiltros, true, 1, "class='select'");
                 ?>
               </td>
