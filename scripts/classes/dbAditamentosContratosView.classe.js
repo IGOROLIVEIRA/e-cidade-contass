@@ -1028,10 +1028,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 }*/
 
                 if (($('oCboTipoAditivo').value == 9
-                        || $('oCboTipoAditivo').value == 10
-                        || $('oCboTipoAditivo').value == 11
-                        || $('oCboTipoAditivo').value == 14
-                    ) && valorAditadoReal == 0) {
+                    || $('oCboTipoAditivo').value == 10
+                    || $('oCboTipoAditivo').value == 11
+                    || $('oCboTipoAditivo').value == 14
+                ) && valorAditadoReal == 0) {
                     lAditar = false;
                     return alert("Desmarque os itens que não foram aditados!");
                 }
@@ -1529,7 +1529,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (iTipoAditamento != 6) {
 
 
-                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
+                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueivalorunt(" + iSeq +","+$('oCboTipoAditivo').value + ")");
                 oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
@@ -1542,7 +1542,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
+                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueiquantidade("+ iSeq +","+$('oCboTipoAditivo').value +")");
                 oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
@@ -1768,13 +1768,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.renderRows();
 
         aDadosHintGrid.each(function(oHint, id) {
-          var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
-          oDBHint.setText(oHint.sText);
-          oDBHint.setShowEvents(aEventsIn);
-          oDBHint.setHideEvents(aEventsOut);
-          oDBHint.setPosition('B', 'L');
-          oDBHint.setUseMouse(true);
-          oDBHint.make($(oHint.idLinha), 2);
+            var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
+            oDBHint.setText(oHint.sText);
+            oDBHint.setShowEvents(aEventsIn);
+            oDBHint.setHideEvents(aEventsOut);
+            oDBHint.setPosition('B', 'L');
+            oDBHint.setUseMouse(true);
+            oDBHint.make($(oHint.idLinha), 2);
         });
     }
 
@@ -1808,6 +1808,23 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.salvarInfoDotacoes(iLinha);
     }
+
+    this.js_bloqueivalorunt = function (iLinha,iTipo) {
+
+        if(iTipo == 14){
+            document.getElementById('valorunitario'+iLinha).disabled = true;
+            document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
+        }
+
+    };
+
+    this.js_bloqueiquantidade = function (iLinha,iTipo) {
+
+        if(iTipo == 14) {
+            document.getElementById('quantidade' + iLinha).disabled = true;
+            document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
+        }
+    };
 
     this.pesquisaMaterial = function (mostra) {
 
