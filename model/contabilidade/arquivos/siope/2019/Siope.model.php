@@ -622,7 +622,7 @@ class Siope {
                     array_push($this->aReceitasAgrupadasFinal, $receita);
                 } else {
                     $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
-                    array_push($this->aReceitasAgrupadasFinal, $despesa);
+                    array_push($this->aReceitasAgrupadasFinal, $receita);
                 }
 
             }
