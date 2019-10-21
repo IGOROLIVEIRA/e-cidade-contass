@@ -738,7 +738,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                        $oDadosBusca = $oDados10->ac16_origem == self::ORIGEM_LICITACAO ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
 
-                       echo "<pre>";var_dump($oDadosBusca);die();
+//                        echo "<pre>";var_dump($oDadosBusca);die();
                        foreach ($oDadosBusca as $oDados12) {
                           
                            //Se a origem for licitao
