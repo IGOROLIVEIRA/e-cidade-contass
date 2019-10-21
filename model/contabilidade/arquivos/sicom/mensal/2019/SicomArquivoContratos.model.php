@@ -730,144 +730,145 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             }
                         }
                     }
-//                    else{
-//
-//                        /**
-//                         * Aqui  tratado apenas os contratos de origem Licitao, Empenho e Processo de Compras quando HOUVER empenho. Quando no houver  tratado no if anterior.
-//                         */
-//
-//                        $oDadosBusca = $oDados10->ac16_origem == self::ORIGEM_LICITACAO ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
-//
-////                        echo "<pre>";var_dump($oDadosBusca);die();
-//                        foreach ($oDadosBusca as $oDados12) {
-//                            //Se a origem for licitao
-//                            if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_codigo != '') {
-//                                $sSql = "SELECT distinct on (o58_coddot)
-//                                o58_coddot,
-//                                CASE WHEN o40_codtri = '0'
-//                                OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
-//                                CASE WHEN o41_codtri = '0'
-//                                OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
-//                                o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
-//                                o56_elemento,o15_codtri,o58_valor,o41_subunidade from
-//                                liclicitem
-//                                INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
-//                                INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-//                                join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo)
-//                                join orcdotacao on (pcdotac.pc13_anousu = orcdotacao.o58_anousu) and (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
-//                                and (orcdotacao.o58_instit = " . db_getsession("DB_instit") . ")
-//                                join orcelemento on o58_codele = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
-//                                join orctiporec on o58_codigo = o15_codigo
-//                                join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
-//                                join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
-//                                JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-//                                where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
-//                                $rsDados = db_query($sSql);
-//                            }
-//                            if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && $oDados12->getNumero() != '') {
-//                                $sSql = "SELECT distinct on (o58_coddot)
-//                         o58_coddot,
-//                         CASE WHEN o40_codtri = '0'
-//            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
-//                         CASE WHEN o41_codtri = '0'
-//              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
-//              o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
-//                      o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho
-//                      join orcdotacao on e60_coddot = o58_coddot
-//                      join orcelemento on o58_codele = o56_codele and o56_anousu =   " . db_getsession("DB_anousu") . "
-//                      join orctiporec on o58_codigo = o15_codigo
-//                      join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
-//                      join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
-//                      JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-//                      where o58_anousu =  " . db_getsession("DB_anousu") . " and e60_anousu = " . db_getsession("DB_anousu") . "
-//                      and e60_numemp = {$oDados12->getNumero()}";
-//                                $rsDados = db_query($sSql);
-//                            }
-//                            if (pg_num_rows($rsDados) == 0 && $oDados10->l20_codigo != '') {
-//                                $sSql = "SELECT distinct on (o58_coddot)
-//                         o58_coddot,
-//                         CASE WHEN o40_codtri = '0'
-//            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
-//                         CASE WHEN o41_codtri = '0'
-//              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
-//                         o58_funcao,
-//                         o58_subfuncao,
-//                         o58_programa,
-//                         o58_projativ,
-//                         o55_origemacao,
-//                         o56_elemento,
-//                         o15_codtri,
-//                         o58_valor,
-//                         o41_subunidade
-//                  FROM solicitem
-//                  JOIN pcdotac ON (pcdotac.pc13_codigo = solicitem.pc11_codigo)
-//                  JOIN orcdotacao ON (pcdotac.pc13_anousu = orcdotacao.o58_anousu)
-//                  AND (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
-//                  AND (orcdotacao.o58_instit = 1)
-//                  JOIN orcelemento ON o58_codele = o56_codele
-//                  AND o56_anousu = " . db_getsession("DB_anousu") . "
-//                  JOIN orctiporec ON o58_codigo = o15_codigo
-//                  JOIN orcprojativ ON o55_projativ = o58_projativ
-//                  AND o55_anousu = o58_anousu
-//                  JOIN orcunidade ON o58_orgao = o41_orgao
-//                  AND o58_unidade = o41_unidade
-//                  AND o58_anousu = o41_anousu
-//                  JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-//                  WHERE pc11_numero in (select solicitacao.pc53_solicitafilho from solicitavinculo compilacao
-//                  join solicitavinculo abertura on compilacao.pc53_solicitafilho = abertura.pc53_solicitafilho
-//                  join solicitavinculo estimativa on estimativa.pc53_solicitapai = abertura.pc53_solicitapai
-//                  join solicitavinculo solicitacao on estimativa.pc53_solicitafilho = solicitacao.pc53_solicitapai
-//                  where compilacao.pc53_solicitafilho = (select solicitem.pc11_numero FROM liclicitem
-//                  INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
-//                  INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-//                  WHERE liclicitem.l21_codliclicita = {$oDados10->l20_codigo} order by pc11_numero desc limit 1))";
-//                                $rsDados = db_query($sSql);
-//                            }
-//
-//                            for ($iContDot = 0; $iContDot < pg_num_rows($rsDados); $iContDot++) {
-//                                $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);
-//
-//                                $sHash = $oAcordo->getCodigo() . $sCodorgao . str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-//                                $sHash .= $oDadosElemento->o58_funcao . $oDadosElemento->o58_subfuncao . $oDadosElemento->o58_programa . $oDadosElemento->o58_projativ;
-//                                $sHash .= $oDadosElemento->o56_elemento . $oDadosElemento->o15_codtri;
-//
-//                                if (!isset($aDadosAgrupados12[$sHash])) {
-//
-//                                    $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-//                                    if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
-//                                        $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
-//                                    }
-//                                    $result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
-//                                        $oAcordo->getAno(), $oAcordo->getDataAssinatura(), $oAcordo->getDataAssinatura());
-//                                    if (pg_num_rows($result) > 0) {
-//                                        $oDot = db_utils::fieldsMemory($result, 0);
-//                                        $oDadosElemento->o58_valor = ($oDot->dot_ini + $oDot->suplementado_acumulado - $oDot->reduzido_acumulado) - $oDot->empenhado_acumulado + $oDot->anulado_acumulado;
-//                                    }
-//
-//                                    $oContrato12 = new stdClass();
-//                                    $oContrato12->si85_tiporegistro = 12;
-//                                    $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
-//                                    $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
-//                                    $oContrato12->si85_codorgao = $sCodorgao;
-//                                    $oContrato12->si85_codunidadesub = $sCodUnidade;
-//                                    $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
-//                                    $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
-//                                    $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
-//                                    $oContrato12->si85_idacao = $oDadosElemento->o58_projativ;
-//                                    $oContrato12->si85_idsubacao = $oDadosElemento->o55_origemacao;
-//                                    $oContrato12->si85_naturezadespesa = $oDadosElemento->o56_elemento;
-//                                    $oContrato12->si85_codfontrecursos = $oDadosElemento->o15_codtri;
-//                                    $oContrato12->si85_vlrecurso = $oDadosElemento->o58_valor;
-//                                    $oContrato12->si85_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-//                                    $oContrato12->si85_instit = db_getsession("DB_instit");
-//                                    $aDadosAgrupados12[$sHash] = $oContrato12;
-//
-//                                } else {
-//                                    $aDadosAgrupados12[$sHash]->si85_vlrecurso += $oDadosElemento->o58_valor;
-//                                }
-//                            }
-//                        }
-//                    }
+                   else{
+
+                       /**
+                        * Aqui  tratado apenas os contratos de origem Licitao, Empenho e Processo de Compras quando HOUVER empenho. Quando no houver  tratado no if anterior.
+                        */
+
+                       $oDadosBusca = $oDados10->ac16_origem == self::ORIGEM_LICITACAO ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
+
+                       echo "<pre>";var_dump($oDadosBusca);die();
+                       foreach ($oDadosBusca as $oDados12) {
+                          
+                           //Se a origem for licitao
+                           if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_codigo != '') {
+                               $sSql = "SELECT distinct on (o58_coddot)
+                               o58_coddot,
+                               CASE WHEN o40_codtri = '0'
+                               OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+                               CASE WHEN o41_codtri = '0'
+                               OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
+                               o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
+                               o56_elemento,o15_codtri,o58_valor,o41_subunidade from
+                               liclicitem
+                               INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
+                               INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+                               join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo)
+                               join orcdotacao on (pcdotac.pc13_anousu = orcdotacao.o58_anousu) and (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
+                               and (orcdotacao.o58_instit = " . db_getsession("DB_instit") . ")
+                               join orcelemento on o58_codele = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
+                               join orctiporec on o58_codigo = o15_codigo
+                               join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
+                               join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
+                               JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                               where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
+                               $rsDados = db_query($sSql);
+                           }
+                           if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && $oDados12->getNumero() != '') {
+                               $sSql = "SELECT distinct on (o58_coddot)
+                        o58_coddot,
+                        CASE WHEN o40_codtri = '0'
+           OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+                        CASE WHEN o41_codtri = '0'
+             OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
+             o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
+                     o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho
+                     join orcdotacao on e60_coddot = o58_coddot
+                     join orcelemento on o58_codele = o56_codele and o56_anousu =   " . db_getsession("DB_anousu") . "
+                     join orctiporec on o58_codigo = o15_codigo
+                     join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
+                     join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
+                     JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                     where o58_anousu =  " . db_getsession("DB_anousu") . " and e60_anousu = " . db_getsession("DB_anousu") . "
+                     and e60_numemp = {$oDados12->getNumero()}";
+                               $rsDados = db_query($sSql);
+                           }
+                           if (pg_num_rows($rsDados) == 0 && $oDados10->l20_codigo != '') {
+                               $sSql = "SELECT distinct on (o58_coddot)
+                        o58_coddot,
+                        CASE WHEN o40_codtri = '0'
+           OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+                        CASE WHEN o41_codtri = '0'
+             OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
+                        o58_funcao,
+                        o58_subfuncao,
+                        o58_programa,
+                        o58_projativ,
+                        o55_origemacao,
+                        o56_elemento,
+                        o15_codtri,
+                        o58_valor,
+                        o41_subunidade
+                 FROM solicitem
+                 JOIN pcdotac ON (pcdotac.pc13_codigo = solicitem.pc11_codigo)
+                 JOIN orcdotacao ON (pcdotac.pc13_anousu = orcdotacao.o58_anousu)
+                 AND (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
+                 AND (orcdotacao.o58_instit = 1)
+                 JOIN orcelemento ON o58_codele = o56_codele
+                 AND o56_anousu = " . db_getsession("DB_anousu") . "
+                 JOIN orctiporec ON o58_codigo = o15_codigo
+                 JOIN orcprojativ ON o55_projativ = o58_projativ
+                 AND o55_anousu = o58_anousu
+                 JOIN orcunidade ON o58_orgao = o41_orgao
+                 AND o58_unidade = o41_unidade
+                 AND o58_anousu = o41_anousu
+                 JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                 WHERE pc11_numero in (select solicitacao.pc53_solicitafilho from solicitavinculo compilacao
+                 join solicitavinculo abertura on compilacao.pc53_solicitafilho = abertura.pc53_solicitafilho
+                 join solicitavinculo estimativa on estimativa.pc53_solicitapai = abertura.pc53_solicitapai
+                 join solicitavinculo solicitacao on estimativa.pc53_solicitafilho = solicitacao.pc53_solicitapai
+                 where compilacao.pc53_solicitafilho = (select solicitem.pc11_numero FROM liclicitem
+                 INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
+                 INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+                 WHERE liclicitem.l21_codliclicita = {$oDados10->l20_codigo} order by pc11_numero desc limit 1))";
+                               $rsDados = db_query($sSql);
+                           }
+
+                           for ($iContDot = 0; $iContDot < pg_num_rows($rsDados); $iContDot++) {
+                               $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);
+
+                               $sHash = $oAcordo->getCodigo() . $sCodorgao . str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
+                               $sHash .= $oDadosElemento->o58_funcao . $oDadosElemento->o58_subfuncao . $oDadosElemento->o58_programa . $oDadosElemento->o58_projativ;
+                               $sHash .= $oDadosElemento->o56_elemento . $oDadosElemento->o15_codtri;
+
+                               if (!isset($aDadosAgrupados12[$sHash])) {
+
+                                   $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
+                                   if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
+                                       $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
+                                   }
+                                   $result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
+                                       $oAcordo->getAno(), $oAcordo->getDataAssinatura(), $oAcordo->getDataAssinatura());
+                                   if (pg_num_rows($result) > 0) {
+                                       $oDot = db_utils::fieldsMemory($result, 0);
+                                       $oDadosElemento->o58_valor = ($oDot->dot_ini + $oDot->suplementado_acumulado - $oDot->reduzido_acumulado) - $oDot->empenhado_acumulado + $oDot->anulado_acumulado;
+                                   }
+
+                                   $oContrato12 = new stdClass();
+                                   $oContrato12->si85_tiporegistro = 12;
+                                   $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
+                                   $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
+                                   $oContrato12->si85_codorgao = $sCodorgao;
+                                   $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                   $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
+                                   $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
+                                   $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
+                                   $oContrato12->si85_idacao = $oDadosElemento->o58_projativ;
+                                   $oContrato12->si85_idsubacao = $oDadosElemento->o55_origemacao;
+                                   $oContrato12->si85_naturezadespesa = $oDadosElemento->o56_elemento;
+                                   $oContrato12->si85_codfontrecursos = $oDadosElemento->o15_codtri;
+                                   $oContrato12->si85_vlrecurso = $oDadosElemento->o58_valor;
+                                   $oContrato12->si85_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                   $oContrato12->si85_instit = db_getsession("DB_instit");
+                                   $aDadosAgrupados12[$sHash] = $oContrato12;
+
+                               } else {
+                                   $aDadosAgrupados12[$sHash]->si85_vlrecurso += $oDadosElemento->o58_valor;
+                               }
+                           }
+                       }
+                   }
                 }
 
                 foreach ($aDadosAgrupados12 as $oDadosReg12) {
