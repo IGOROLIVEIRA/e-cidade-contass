@@ -380,7 +380,7 @@ AND e60_codemp = '$codemp'";
             $iderp102019->si179_disponibilidadecaixa = $empnaoliq->c223_vlrdisrpnp > 0 ? 1 : 2;
 
             if ($empnaoliq->c223_vlrdisrpnp > 0 && $empnaoliq->c223_vlrdisrpnp != $empnaoliq->c223_vlrnaoliquidado && ($empnaoliq->c223_vlrdisrpnp > 0 ? 1 : 2) == 1) {
-                $iderp102019->si179_tiporegistro = 10;
+                $iderp102019->si179_tiporegistro = 10; 
                 $iderp102019->si179_codorgao = $sCodorgao;
                 $iderp102019->si179_codunidadesub = $this->getCodUnidSub($empnaoliq->c223_codemp, $empnaoliq->c223_anousu);
                 $iderp102019->si179_nroempenho = $empnaoliq->c223_codemp;
