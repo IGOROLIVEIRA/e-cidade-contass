@@ -51,11 +51,8 @@ switch ($oParam->exec) {
                             $siopsDespesa->setFiltrosDespesa();
                             $siopsDespesa->setOrcado();
                             $siopsDespesa->setDespesas();
-
-                            echo '<pre>';
-                            print_r($siopsDespesa);
-                            echo '</pre>';
-                            die();
+                            $siopsDespesa->agrupaDespesas();
+                            $siopsDespesa->gerarSiopsDespesa();
 
                             if ($siopsDespesa->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsDespesa->getErroSQL());

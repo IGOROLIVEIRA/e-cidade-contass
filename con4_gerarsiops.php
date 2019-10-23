@@ -86,7 +86,7 @@ $aBimestres = array(
                 </tr>
                 <tr>
                     <td style="border: 2px groove white; padding-right: 100px;" valign="top">
-                        <input type="checkbox" value="receita" id="receita" />
+                        <input type="checkbox" value="receita" id="receita" disabled/>
                         <label for="receita">Receita</label><br>
                         <input type="checkbox" value="despesa" id="despesa" />
                         <label for="despesa">Despesa</label><br>
