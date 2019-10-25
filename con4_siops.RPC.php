@@ -45,7 +45,7 @@ switch ($oParam->exec) {
 
                             $siopsDespesa = new Siops;
                             $siopsDespesa->setAno($iAnoUsu);
-                            $siopsDespesa->setInstit($iInstit);
+                            $siopsDespesa->setInstit();
                             $siopsDespesa->setBimestre($iBimestre);
                             $siopsDespesa->setPeriodo();
                             $siopsDespesa->setFiltrosDespesa();
@@ -53,6 +53,11 @@ switch ($oParam->exec) {
                             $siopsDespesa->setDespesas();
                             $siopsDespesa->agrupaDespesas();
                             $siopsDespesa->gerarSiopsDespesa();
+
+                            foreach ($siopsDespesa->getNomesArquivos() as $key => $arquivo) {
+                                $sArquivosZip .= " {$arquivo}.IMPT ";
+                                $oRetorno->arquivos->$key->nome = "{$arquivo}.IMPT";
+                            }
 
                             if ($siopsDespesa->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsDespesa->getErroSQL());

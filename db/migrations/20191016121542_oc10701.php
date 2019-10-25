@@ -78,6 +78,27 @@ class Oc10701 extends PostgresMigration
         -- CRIA TABELA
         CREATE TABLE eledessiops(c227_eledespsiops varchar(10) NOT NULL , c227_descricao varchar(250) NOT NULL, c227_campo varchar(3), c227_linha varchar(5), c227_anousu integer NOT NULL DEFAULT 0);
 
+        -- CRIA TABELA NOME ARQUIVOS
+        
+        -- INSERE db_sysarquivo
+        INSERT INTO db_sysarquivo (codarq, nomearq, descricao, sigla, dataincl, rotulo, tipotabela, naolibclass, naolibfunc, naolibprog, naolibform) VALUES ((select max(codarq)+1 from db_sysarquivo), 'nomearqdessiops', 'Nome Arquivo Despesa Siops', 'c228 ', '2019-10-24', 'Nome Arquivo Despesa Siops', 0, false, false, false, false);
+         
+        -- INSERE db_sysarqmod
+        INSERT INTO db_sysarqmod (codmod, codarq) VALUES (32, (select max(codarq) from db_sysarquivo));
+         
+        -- INSERE db_syscampo
+        INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c228_codplanilha', 	    'varchar(5) ',  'Código Planilha', 	'', 'Código Planilha', 	10,  false, true, false, 0, 'text', 'Código Planilha');
+        INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c228_nomearquivo', 		'varchar(80)',  'Nome Arquivo', 	'', 'Nome Arquivo',     80,  false, true, false, 0, 'text', 'Nome Arquivo');
+        INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c228_anousu', 		    'int4',         'Ano', 	            '', 'Ano',              4,   false, true, false, 0, 'text', 'Ano');
+         
+        -- INSERE db_sysarqcamp
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c228_codplanilha'), 1, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c228_nomearquivo'), 2, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'c228_anousu'), 3, 0);
+         
+        -- CRIA TABELA
+        CREATE TABLE nomearqdessiops(c228_codplanilha varchar(5) NOT NULL , c228_nomearquivo varchar(80) NOT NULL, c228_anousu integer NOT NULL DEFAULT 0);
+        
         -- INSERE NATUREZA DESPESA SIOPS
         INSERT INTO naturdessiops VALUES
         ('3171700000', '3171000000', '2019'),
@@ -1930,6 +1951,64 @@ class Oc10701 extends PostgresMigration
         ('4674000000', 'Transferências a Consórcios Públicos mediante contrato de rateio à conta de recursos de que trata o art. 25 da Lei Complementar nº 141, de 2012', '699', '#L337', '2019'),
         ('4690000000', 'Aplicações Diretas', '700', '#L338', '2019'),
         ('4699000000', 'A Definir', '701', '#L339', '2019');
+
+        INSERT INTO nomearqdessiops VALUES
+        ('3_11', 'Desp_Rec_Ordinarios_Administ', '2019'),
+        ('3_12', 'Desp_Rec_Ordinarios_Aten_Basica', '2019'),
+        ('3_13', 'Desp_Rec_Ordinarios_Assis_Hosp', '2019'),
+        ('3_14', 'Desp_Rec_Ordinarios_Supor_Prof', '2019'),
+        ('3_15', 'Desp_Rec_Ordinarios_Vigil_Sanit', '2019'),
+        ('3_16', 'Desp_Rec_Ordinarios_Vigil_Epid', '2019'),
+        ('3_17', 'Desp_Rec_Ordinarios_Alim_Nutr', '2019'),
+        ('3_18', 'Desp_Rec_Ordinarios_Inf_Compl', '2019'),
+        ('4_11', 'Desp_Rec_Impostos_Transf_Administ', '2019'),
+        ('4_12', 'Desp_Rec_Impostos_Transf_Aten_Basica', '2019'),
+        ('4_13', 'Desp_Rec_Impostos_Transf_Assis_Hosp', '2019'),
+        ('4_14', 'Desp_Rec_Impostos_Transf_Supor_Prof', '2019'),
+        ('4_15', 'Desp_Rec_Impostos_Transf_Vigil_Sanit', '2019'),
+        ('4_16', 'Desp_Rec_Impostos_Transf_Vigil_Epid', '2019'),
+        ('4_17', 'Desp_Rec_Impostos_Transf_Alim_Nutr', '2019'),
+        ('4_18', 'Desp_Rec_Impostos_Transf_Inf_Compl', '2019'),
+        ('5_11', 'Desp_Rec_Sus_Federal_Administ', '2019'),
+        ('5_12', 'Desp_Rec_Sus_Federal_Aten_Basica', '2019'),
+        ('5_13', 'Desp_Rec_Sus_Federal_Assis_Hosp', '2019'),
+        ('5_14', 'Desp_Rec_Sus_Federal_Supor_Prof', '2019'),
+        ('5_15', 'Desp_Rec_Sus_Federal_Vigil_Sanit', '2019'),
+        ('5_16', 'Desp_Rec_Sus_Federal_Vigil_Epid', '2019'),
+        ('5_17', 'Desp_Rec_Sus_Federal_Alim_Nutr', '2019'),
+        ('5_18', 'Desp_Rec_Sus_Federal_Inf_Compl', '2019'),
+        ('6_11', 'Desp_Rec_Sus_Estadual_Administ', '2019'),
+        ('6_12', 'Desp_Rec_Sus_Estadual_Aten_Basica', '2019'),
+        ('6_13', 'Desp_Rec_Sus_Estadual_Assis_Hosp', '2019'),
+        ('6_14', 'Desp_Rec_Sus_Estadual_Supor_Prof', '2019'),
+        ('6_15', 'Desp_Rec_Sus_Estadual_Vigil_Sanit', '2019'),
+        ('6_16', 'Desp_Rec_Sus_Estadual_Vigil_Epid', '2019'),
+        ('6_17', 'Desp_Rec_Sus_Estadual_Alim_Nutr', '2019'),
+        ('6_18', 'Desp_Rec_Sus_Estadual_Inf_Compl', '2019'),
+        ('7_11', 'Desp_Rec_Convenios_Administ', '2019'),
+        ('7_12', 'Desp_Rec_Convenios_Aten_Basica', '2019'),
+        ('7_13', 'Desp_Rec_Convenios_Assis_Hosp', '2019'),
+        ('7_14', 'Desp_Rec_Convenios_Supor_Prof', '2019'),
+        ('7_15', 'Desp_Rec_Convenios_Vigil_Sanit', '2019'),
+        ('7_16', 'Desp_Rec_Convenios_Vigil_Epid', '2019'),
+        ('7_17', 'Desp_Rec_Convenios_Alim_Nutr', '2019'),
+        ('7_18', 'Desp_Rec_Convenios_Inf_Compl', '2019'),
+        ('8_11', 'Desp_Rec_Oper_Credito_Administ', '2019'),
+        ('8_12', 'Desp_Rec_Oper_Credito_Aten_Basica', '2019'),
+        ('8_13', 'Desp_Rec_Oper_Credito_Assis_Hosp', '2019'),
+        ('8_14', 'Desp_Rec_Oper_Credito_Supor_Prof', '2019'),
+        ('8_15', 'Desp_Rec_Oper_Credito_Vigil_Sanit', '2019'),
+        ('8_16', 'Desp_Rec_Oper_Credito_Vigil_Epid', '2019'),
+        ('8_17', 'Desp_Rec_Oper_Credito_Alim_Nutr', '2019'),
+        ('8_18', 'Desp_Rec_Oper_Credito_Inf_Compl', '2019'),
+        ('10_11', 'Desp_Outros_Rec_Administ', '2019'),
+        ('10_12', 'Desp_Outros_Rec_Aten_Basica', '2019'),
+        ('10_13', 'Desp_Outros_Rec_Assis_Hosp', '2019'),
+        ('10_14', 'Desp_Outros_Rec_Supor_Prof', '2019'),
+        ('10_15', 'Desp_Outros_Rec_Vigil_Sanit', '2019'),
+        ('10_16', 'Desp_Outros_Rec_Vigil_Epid', '2019'),
+        ('10_17', 'Desp_Outros_Rec_Alim_Nutr', '2019'),
+        ('10_18', 'Desp_Outros_Rec_Inf_Compl', '2019');
 
         COMMIT;
 

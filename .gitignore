@@ -20,3 +20,4 @@ updatedb/scripts*
 libs/..cache/
 *.yml
 integracao_externa/portal_transparencia/log/
+*.IMPT
