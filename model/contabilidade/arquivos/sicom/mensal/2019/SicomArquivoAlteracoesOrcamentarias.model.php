@@ -165,7 +165,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
        from
        orcsuplem
        join orcsuplemval  on o47_codsup = o46_codsup
-       join orcprojeto    on o46_codlei = o39_codproj and o39_codproj in (347, 348)
+       join orcprojeto    on o46_codlei = o39_codproj /*and o39_codproj in (347, 348)*/
        join db_config on prefeitura  = 't'
        join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
@@ -365,13 +365,13 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                     WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006) THEN 15
                                 END AS tipoRegistro,
                                 o46_codlei AS codReduzidoDecreto,
-                                (CASE
-                                     WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
-                                     WHEN o46_tiposup = 1002 THEN 4
-                                     WHEN o46_tiposup = 1003 THEN 1
-                                     WHEN o46_tiposup IN (1004, 1005, 1007, 1008, 1009, 1010) THEN 2
-                                     ELSE 98
-                                 END) AS tipoDecretoAlteracao,
+                                CASE
+                                   WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
+                                   WHEN o46_tiposup = 1002 THEN 4
+                                   WHEN o46_tiposup = 1003 THEN 1
+                                   WHEN o46_tiposup IN (1004, 1005, 1007, 1008, 1009, 1010) THEN 2
+                                   ELSE 98
+                                 END AS tipoDecretoAlteracao,
                                 si09_codorgaotce AS codOrgao,
                                 substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
                                 o47_codsup,
@@ -514,14 +514,12 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                             }
                         }
                     }else{
+                        $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
 
-                        $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);                        
+                        $sHash  = $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao . $oDadosSql14->codsubfuncao;
+                        $sHash .= $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
 
-                        $sHash1  = $oDadosSql14Vlr->codorgao . $oDadosSql14Vlr->codunidadesub . $oDadosSql14Vlr->codfuncao . $oDadosSql14Vlr->codsubfuncao;
-                        $sHash1 .= $oDadosSql14Vlr->codprograma . $oDadosSql14Vlr->idacao . $oDadosSql14Vlr->naturezadespesa . $oDadosSql14Vlr->codfontrecursos;
-                        echo "<pre>"; print_r($aDadosAgrupados14[$sHash1]);
-
-                        if (!isset($aDadosAgrupados14[$sHash1])) {
+                        if (!isset($aDadosAgrupados14[$sHash])){
 
                             $oDados14 = new stdClass();
                             $oDados14->si42_tiporegistro = 14;
@@ -542,11 +540,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                             $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                             $oDados14->si42_reg10 = $claoc10->si38_sequencial;
                             $oDados14->si42_instit = db_getsession("DB_instit");
-                            $aDadosAgrupados14[$sHash1] = $oDados14;
-
-                        } else {
-
-                            $aDadosAgrupados14[$sHash1]->si42_vlacrescimoreducao += $oDadosSql14Vlr->vlacrescimoreducao;
+                            $aDadosAgrupados14[$sHash] = $oDados14;
+                        }else{
+                            $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
                         }
                     }
                 }
