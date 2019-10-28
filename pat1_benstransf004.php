@@ -93,7 +93,7 @@ if(isset($incluir)){
   }    
   db_fim_transacao($sqlerro);
 }
-die("aqui");
+
 ?>
 <html>
 <head>
