@@ -36,7 +36,7 @@ class SiopeIMPT extends Siops {
             $sLinha .= $value['linha_siops'] . $this->sDelim;
             $sLinha .= "#C7" . $this->sDelim;;
 
-            fputs($this->_arquivo, $sLinha);
+            fputs($this->_arquivo, utf8_encode($sLinha));
             fputs($this->_arquivo, "\r\n");
 
         }
