@@ -104,7 +104,7 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa 
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
-//die($sSql);
+// die($sSql);
 $rsResult = db_query($sSql) or die(pg_last_error());
 $oLinha = null;
 
@@ -270,10 +270,13 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-//      if($quant_casas == 2){
-    $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
-//      }
-//      else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
+     if($quant_casas){
+        $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+     }
+     // if($quant_casas == 2){
+     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+     // }
+     // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
 
     $nTotalItens += $lTotal;
     $oDadosDaLinha = new stdClass();
@@ -288,9 +291,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = "-";
-        $oDadosDaLinha->total = "R$".number_format($lTotal, 2, ",", ".");
+        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }else{
-        $oDadosDaLinha->valorUnitario = "R$".number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
+        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         if($oResult->mediapercentual == 0){
             $oDadosDaLinha->mediapercentual = "-";
@@ -298,7 +301,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-        $oDadosDaLinha->total = "R$".number_format($lTotal, 2, ",", ".");
+        $oDadosDaLinha->total = number_format($lTotal, $quant_casas, ",", ".");
     }
 
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
