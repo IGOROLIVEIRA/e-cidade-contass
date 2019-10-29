@@ -145,7 +145,11 @@ $lValidaRepr = isset($validaRepresentante);
           $result = $clpcforne->sql_record($clpcforne->sql_query($pesquisa_chave, $campos, null, '', $lValidaRepr));
           if ($clpcforne->numrows!=0) {
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc60_dtlanc',false);</script>";
+            if($iParam == true){
+                echo "<script>".$funcao_js."('$pc60_numcgm','$z01_nome',false);</script>";
+            }else{
+                echo "<script>".$funcao_js."('$pc60_dtlanc',false);</script>";
+            }
           } else {
             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

@@ -263,45 +263,43 @@ if(isset($j14_codigo)){
         if(isset($campos)==false){
            $campos = "iptubase.*";
         }
-        $sql = "SELECT *
-                    FROM (
-                    SELECT DISTINCT j01_matric,
-                                    j40_refant,
-                      (SELECT rvnome AS z01_nome
-                       FROM fc_busca_envolvidos(FALSE,
-                                                  (SELECT fc_regrasconfig
-                                                   FROM fc_regrasconfig(1)), 'M', iptubase.j01_matric)
-                       LIMIT 1), z01_numcgm AS db_z01_numcgm,
-                                 'Pred' AS Tipo,
-                                 ruase.j14_nome AS j14_nome,
-                                 CASE
-                                     WHEN j39_numero IS NULL THEN 0
-                                     ELSE j39_numero
-                                 END AS j39_numero,
-                                 j13_descr,
-                                 j04_quadraregimo,
-                                 j04_loteregimo,
-                                 j39_compl,
-                                 j34_setor,
-                                 j34_quadra,
-                                 j34_lote,
-                                 j01_baixa,
-                                 j39_codigo
-                    FROM iptubase
-                    LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
-                    INNER JOIN lote ON j34_idbql = j01_idbql
-                    LEFT JOIN bairro ON lote.j34_bairro = bairro.j13_codi
-                    LEFT OUTER JOIN testpri ON j49_idbql = j01_idbql
-                    LEFT OUTER JOIN ruas ON j14_codigo = j49_codigo
-                    INNER JOIN cgm ON z01_numcgm = j01_numcgm
-                    INNER JOIN iptuconstr ON j01_matric = j39_matric
-                    AND j39_idprinc IS TRUE
-                    LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
-                    LEFT OUTER JOIN ruas AS ruase ON ruase.j14_codigo = j39_codigo
-                    LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
-                    LEFT JOIN setorloc ON j05_codigo = j06_setorloc
-                    UNION
-                    SELECT DISTINCT j01_matric,
+          $sSqlPredial = "SELECT DISTINCT j01_matric,
+                                          j40_refant,
+                                          (SELECT rvnome AS z01_nome
+                                           FROM fc_busca_envolvidos(FALSE,
+                                                                      (SELECT fc_regrasconfig
+                                                                       FROM fc_regrasconfig(1)), 'M', iptubase.j01_matric)
+                                          LIMIT 1), z01_numcgm AS db_z01_numcgm,
+                                          'Pred' AS Tipo,
+                                          ruase.j14_nome AS j14_nome,
+                                          CASE
+                                              WHEN j39_numero IS NULL THEN 0
+                                              ELSE j39_numero
+                                          END AS j39_numero,
+                                          j13_descr,
+                                          j04_quadraregimo,
+                                          j04_loteregimo,
+                                          j39_compl,
+                                          j34_setor,
+                                          j34_quadra,
+                                          j34_lote,
+                                          j01_baixa,
+                                          j39_codigo
+                                FROM iptubase
+                                LEFT OUTER JOIN iptubaseregimovel ON j04_matric = j01_matric
+                                INNER JOIN lote ON j34_idbql = j01_idbql
+                                LEFT JOIN bairro ON lote.j34_bairro = bairro.j13_codi
+                                LEFT OUTER JOIN testpri ON j49_idbql = j01_idbql
+                                LEFT OUTER JOIN ruas ON j14_codigo = j49_codigo
+                                INNER JOIN cgm ON z01_numcgm = j01_numcgm
+                                INNER JOIN iptuconstr ON j01_matric = j39_matric
+                                AND j39_idprinc IS TRUE
+                                LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
+                                LEFT OUTER JOIN ruas AS ruase ON ruase.j14_codigo = j39_codigo
+                                LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
+                                LEFT JOIN setorloc ON j05_codigo = j06_setorloc ";
+          $sSqlUnion = " union ";
+          $sSqlTerritorial  = "SELECT DISTINCT j01_matric,
                                     j40_refant,
                       (SELECT rvnome AS z01_nome
                        FROM fc_busca_envolvidos(FALSE,
@@ -331,12 +329,14 @@ if(isset($j14_codigo)){
                     LEFT OUTER JOIN iptuant ON j01_matric = j40_matric
                     LEFT OUTER JOIN loteloc ON j06_idbql = j01_idbql
                     LEFT JOIN setorloc ON j05_codigo = j06_setorloc
-                    INNER JOIN testadanumero ON testada.j36_idbql = testadanumero.j15_idbql
+                    LEFT JOIN testadanumero ON testada.j36_idbql = testadanumero.j15_idbql
                     AND testada.j36_face = testadanumero.j15_face
-                    WHERE NOT EXISTS
+                    ";
+          $sWhereTerritorial = " NOT EXISTS
                         (SELECT 1
                          FROM iptuconstr
-                         WHERE j01_matric = j39_matric)) as x";
+                         WHERE j01_matric = j39_matric) ";
+          $sql = "select * from ({$sSqlPredial}{$sSqlUnion}{$sSqlTerritorial} where {$sWhereTerritorial}) as x";
         $sql2 = "";
         if(isset($chave_j01_matric) && (trim($chave_j01_matric)!="") ){
 //           $sql = $cliptubase->sql_query($chave_j01_matric,$campos,"j01_matric");
@@ -347,8 +347,9 @@ if(isset($j14_codigo)){
            $sql3 = " order by j40_refant";
 
        }else if(isset($j14_codigo) && (trim($j14_codigo)!="") ){
-           //$sql = $cliptubase->sql_query("",$campos,"j01_numcgm"," j01_numcgm like '$chave_j01_numcgm%' ");
-           $sql2 = " where j39_codigo = $j14_codigo ";
+            $sql2 = " and 1 = 1";
+           $sWhereRuaPredial = " where j39_codigo = $j14_codigo ";
+           $sWhereRuaTerritorial = " where j14_codigo = $j14_codigo ";
            $sql3 = " order by j39_numero";
         }else if(isset($z01_nome) && (trim($z01_nome)!="") ){
            $sql2 = " where z01_nome like '$z01_nome%'";
@@ -412,7 +413,7 @@ if(isset($j14_codigo)){
            $repassa = array('dblov'=>'0');
 
              if($sql2!=""){
-                $sql = "select * from ($sql $sql2) as x $sql3";
+                $sql = "select * from ({$sSqlPredial}{$sWhereRuaPredial}{$sql2}{$sSqlUnion}{$sSqlTerritorial}{$sWhereRuaTerritorial}{$sql2} and {$sWhereTerritorial}) as x {$sql3}";
                $sql2 = "";
              }
 

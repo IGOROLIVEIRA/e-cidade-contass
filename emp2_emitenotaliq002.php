@@ -346,6 +346,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->nome             = $z01_nome;
    $pdf1->cnpj             = $z01_cgccpf;
    $pdf1->ender            = $z01_ender;
+   $pdf1->bairro           = $z01_bairro;
    $pdf1->cep              = $z01_cep;
    $pdf1->ufFornecedor     = $z01_uf;
    $pdf1->munic            = $z01_munic;
@@ -390,7 +391,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->texto		       = db_getsession("DB_login").'  -  '.date("d-m-Y",db_getsession("DB_datausu")).'    '.db_hora(db_getsession("DB_datausu"));
 
    $pdf1->telef            = $z01_telef;
-   $pdf1->fax              = $z01_fax;
+   $pdf1->fax              = $z01_numero;
 
    /**
     * Variáveis utilizadas na assinatura. Sómente utilizada na impressão por movimento
