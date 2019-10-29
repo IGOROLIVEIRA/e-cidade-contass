@@ -59,6 +59,11 @@ switch ($oParam->exec) {
                                 $oRetorno->arquivos->$key->nome = "{$arquivo}.IMPT";
                             }
 
+                            if ($siopsDespesa->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Despesa. De/Para dos seguintes elementos não encontrado: {$siopsDespesa->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
+
                             if ($siopsDespesa->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsDespesa->getErroSQL());
                             }
