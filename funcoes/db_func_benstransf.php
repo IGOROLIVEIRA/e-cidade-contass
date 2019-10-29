@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "benstransf.t93_codtran,benstransf.t93_data,benstransf.t93_depart,db_depart.descrdepto,t93_depart,descrdepto,benstransf.t93_id_usuario,nome";
+$campos = "benstransf.t93_codtran,benstransf.t93_data,benstransf.t93_depart,db_depart.descrdepto,benstransf.t93_id_usuario,nome";
 ?>
