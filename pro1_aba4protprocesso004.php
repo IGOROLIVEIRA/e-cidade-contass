@@ -95,6 +95,15 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     max-width: 30px;
     text-align: center;;
 }
+#inserir{
+  padding-left: 19px;
+  padding-right: 19px;
+  margin-top: 3px;
+  margin-left:113px;
+}
+td{
+  padding-top:20px;
+}
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -109,10 +118,7 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
 <input type="hidden" name="dattab">
 <input type="hidden" name="valtab">
 <table border='0'>
-  <tr height="20px">
-    <td></td>
-    <td></td>
-  </tr>
+
   <tr>
     <td  align="right" nowrap title="<?=$Tm51_codordem?>">
       <? db_ancora(@$Lm51_codordem,"js_pesquisa_matordem(true);",1); ?>
@@ -125,17 +131,11 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     </td>
   </tr>
 
-  <tr height="16px">
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  </tr>
+
   <tr>
     <td></td>
     <td align="left">
-      <input style="margin-left: 128px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
+      <input type="button" id="inserir" value="Incluir" onclick="incluir();">
     </td>
   </tr>
   </table>

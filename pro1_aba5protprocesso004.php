@@ -49,6 +49,7 @@ $clpcmater->rotulo->label();
 $clcgm->rotulo->label();
 
 $clempempenho->rotulo->label();
+
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
@@ -98,7 +99,25 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     border: 0 none;
     outline: 0;
     max-width: 30px;
-    text-align: center;;
+    text-align: center;
+}
+#inserir{
+  padding-left: 17px;
+  padding-right: 17px;
+  margin-top: 4px;
+}
+input{
+  width:78px;
+}
+.formulario{
+  width: 100%;
+}
+.ancora{
+  width: 16px;
+  padding-left:7px;
+}
+td{
+  padding-top: 6px;
 }
 </style>
 
@@ -114,31 +133,34 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     <input type="hidden" name="dattab">
     <input type="hidden" name="valtab">
 <table border='0'>
-  <tr height="18px">
-    <td></td>
-    <td></td>
-  </tr>
-    <table border='0'>
+    <table border='0' class="formulario">
       <tr>
+        <br/>
+        <td width="26%"></td>
         <td align="right" nowrap title="<?=$Te53_codord?>">
-          <? db_ancora(@$Le53_codord,"js_buscae53_codord(true)",1); ?>
+          <? db_ancora(@$Le53_codord,"js_buscae53_codord(true, e53_codord_ini)",1); ?>
         </td>
         <td align="left" nowrap>
           <?
-            db_input("e53_codord",6,$Ie53_codord,true,"text",4,"onchange='js_buscae53_codord(false);'");
-            db_input("z01_nome",40,"$Iz01_nome",true,"text",3);
+            db_input("e53_codord_ini",12,$Ie53_codord,true,"text", 12,"onchange='js_buscae53_codord(false, e53_codord_ini);'");
           ?>
         </td>
+        <td class="ancora">
+          <? db_ancora("à","js_buscae53_codord(true, e53_codord_fim)",1); ?>
+        </td>
+
+        <td>
+          <?
+            db_input("e53_codord_fim",12,$Ie53_codord,true,"text", 12,"onchange='js_buscae53_codord(false, e53_codord_fim);'");
+          ?>
+        </td>
+        <td width="34%"></td>
       </tr>
 
-      <tr height="16px">
-        <td></td>
-        <td></td>
-      </tr>
       <tr>
-        <td></td>
-        <td align="left">
-          <input style="margin-left: 125px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
+        <td align="center" colspan="6">
+          <br/>
+          <input type="button" id="inserir" value="Incluir" onclick="incluir();">
         </td>
       </tr>
     </table>
@@ -172,64 +194,140 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
 <script type="text/javascript" src="scripts/strings.js"></script>
 <script>
 
-function js_buscae53_codord(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_pagordemele','func_prot_pagordemele.php?funcao_js=parent.js_mostracodord1|e53_codord|z01_nome|e50_data|e53_valor','Pesquisa',true);
-  }else{
-     if(document.form1.e53_codord.value != ''){
-        js_OpenJanelaIframe('','db_iframe_pagordemele','func_prot_pagordemele.php?prot=1&pesquisa_chave='+document.form1.e53_codord.value+'&funcao_js=parent.js_mostracodord','Pesquisa',false);
-     }
-  }
+limpaCampos();
+
+function limpaCampos(){
+  let doc = document.form1;
+  doc.e53_codord_ini.value = '';
+  doc.e53_codord_fim.value = '';
 }
-function js_mostracodord(chave1, chave2, chave3, chave4, erro){
-  document.form1.e53_codord.value   = chave1;
-  document.form1.z01_nome.value     = chave2;
+
+function js_buscae53_codord(mostra, campo){
+
+  if(campo.name == 'e53_codord_ini'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_pagordemele_ini','func_prot_pagordemele.php?funcao_js=parent.js_mostracodord1|e53_codord|e50_data|e53_valor','Pesquisa',true);
+    }else{
+       if(document.form1.e53_codord_ini.value != ''){
+          js_OpenJanelaIframe('','db_iframe_pagordemele1','func_prot_pagordemele.php?prot=1&pesquisa_chave='+document.form1.e53_codord_ini.value+'&funcao_js=parent.js_mostracodord_ini','Pesquisa',false);
+       }
+    }
+  }
+
+  if(campo.name == 'e53_codord_fim'){
+    if(mostra==true){
+      js_OpenJanelaIframe('','db_iframe_pagordemele_fim','func_prot_pagordemele.php?funcao_js=parent.js_mostracodord2|e53_codord|e50_data|e53_valor','Pesquisa',true);
+    }else{
+       if(document.form1.e53_codord_fim.value != ''){
+          js_OpenJanelaIframe('','db_iframe_pagordemele2','func_prot_pagordemele.php?prot=1&pesquisa_chave='+document.form1.e53_codord_fim.value+'&funcao_js=parent.js_mostracodord_fim','Pesquisa',false);
+       }
+    }
+  }
+
+}
+
+function js_mostracodord_ini(chave1, chave2, chave3, chave4, erro){
+  document.form1.e53_codord_ini.value   = chave1;
   document.form1.dattab.value       = chave3;
   document.form1.valtab.value       = chave4;
   if(erro==true){
-    document.form1.e53_codord.focus();
-    document.form1.e53_codord.value = '';
-
+    document.form1.e53_codord_ini.focus();
+    document.form1.e53_codord_ini.value = '';
   }
 }
 
 function js_mostracodord1(chave1, chave2, chave3, chave4){
-  document.form1.e53_codord.value   = chave1;
-  document.form1.z01_nome.value     = chave2;
+  document.form1.e53_codord_ini.value   = chave1;
   document.form1.dattab.value       = chave3;
   document.form1.valtab.value       = chave4;
-  db_iframe_pagordemele.hide();
+  db_iframe_pagordemele_ini.hide();
+
+}
+
+function js_mostracodord_fim(chave1, chave2, chave3, chave4, erro){
+  document.form1.e53_codord_fim.value   = chave1;
+  document.form1.dattab.value       = chave3;
+  document.form1.valtab.value       = chave4;
+  if(erro==true){
+    document.form1.e53_codord_fim.focus();
+    document.form1.e53_codord_fim.value = '';
+  }
+}
+
+function js_mostracodord2(chave1, chave2, chave3, chave4){
+  document.form1.e53_codord_fim.value   = chave1;
+  document.form1.dattab.value       = chave3;
+  document.form1.valtab.value       = chave4;
+  db_iframe_pagordemele_fim.hide();
 
 }
 
 var table_autpagamentos = document.getElementById('table_autpagamentos');
-function novoAjax(params, onComplete) {
+function novoAjax(params, onComplete, async=true) {
 
   var request = new Ajax.Request('pro4_protocolos.RPC.php', {
     method:'post',
     parameters:'json='+Object.toJSON(params),
-    onComplete: onComplete
+    onComplete: onComplete,
+    asynchronous: async
   });
 
 }
 
-function incluir() {
+function pesquisaOrdens(){
+  let oParam = new Object();
+  let doc = document.form1;
 
-  var protocolo      = document.form1.protocolo.value;
-  var autpagamento   = document.form1.e53_codord.value;
+  if(doc.e53_codord_ini.value){
+    oParam.ordem_ini = doc.e53_codord_ini.value;
+  }
+  if(doc.e53_codord_fim.value){
+    oParam.ordem_fim = doc.e53_codord_fim.value;
+  }
+
+  if(parseInt(oParam.ordem_ini) > parseInt(oParam.ordem_fim)){
+      alert('Valor da última ordem é menor que a ordem inicial');
+      return false;
+    }
+
+  let listaOrdens = [];
+
+  oParam.exec = 'pesquisaOrdens';
+  novoAjax(oParam, function(e){
+    let response = JSON.parse(e.responseText);
+    listaOrdens = [...response.ordens];
+  }, false);
+
+  return listaOrdens;
+}
+
+function incluir() {
+  let doc = document.form1;
+  var protocolo      = doc.protocolo.value;
   var protocoloVazio = protocolo == '';
-  var autpagamentoVazio = autpagamento == '';
+
   if (protocoloVazio) {
     alert('Ocorreu um erro na geração do protocolo!');
     return;
   }
 
-  if (autpagamentoVazio) {
-    alert('Informe uma ordem de pagamento!');
+  if (!doc.e53_codord_ini.value && !doc.e53_codord_fim.value) {
+    alert('Informe pelo menos uma ordem de pagamento!');
     return;
   }
 
-  incluirAutPagamento(protocolo,autpagamento);
+  let aOrdens = pesquisaOrdens();
+  let aCodOrdens = [];
+
+  aOrdens.forEach(ordem => {
+    aCodOrdens.push(ordem.e53_codord);
+  });
+
+  incluirAutPagamento(protocolo, aOrdens);
+
+  if(aCodOrdens.length == 100){
+    alert(`Intervalo de 100 registros inseridos ${aCodOrdens[0]} à ${aCodOrdens[aCodOrdens.length - 1]}`);
+  }
 }
 
 function incluirAutPagamento(iProtocolo, iAutPagamento) {
@@ -244,8 +342,8 @@ function incluirAutPagamento(iProtocolo, iAutPagamento) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
         pesquisaProtocolo(iProtocolo);
-        document.form1.e53_codord.value = "";
-        document.form1.z01_nome.value   = "";
+        document.form1.e53_codord_ini.value = "";
+        document.form1.e53_codord_fim.value = "";
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
@@ -359,6 +457,7 @@ function excluir(protocolo) {
       return;
     }
   });
+  limpaCampos();
 }
 
 function verificaAutPagamentos() {

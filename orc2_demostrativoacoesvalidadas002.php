@@ -41,31 +41,29 @@ $oDaoPPALei = db_utils::getDao("ppalei");
 $oPPAVersao      = new ppaVersao($oGet->ppaversao);
 $sListaInstit    = str_replace("-", ",", $oGet->sListaInstit);
 $sWhere  = "      o05_ppaversao = {$oGet->ppaversao}	 						"; 
-$sWhere .= "  and o05_anoreferencia between {$oGet->anoini} and {$oGet->anofin} ";																	
+$sWhere .= "  AND o05_anoreferencia BETWEEN {$oGet->anoini} AND {$oGet->anofin} ";																	
 $sWhereAcao = $sWhere;
 $controle   = $oGet->lQuebra == "true"?true:false;
 $sWherePrograma  = "";
 $sWhereOrgao     = "";
 if (isset($oGet->programa) && $oGet->programa != "") {
-  $sWherePrograma = " and o08_programa in ({$oGet->programa})"; 
+  $sWherePrograma = " AND o08_programa IN ({$oGet->programa})"; 
 }
 
 if (isset($oGet->orgao) && $oGet->orgao != "") {
-  $sWhereOrgao = " and o08_orgao in({$oGet->orgao}) ";  
+  $sWhereOrgao = " AND o08_orgao IN({$oGet->orgao}) ";  
 }
 
-$sSqlEstimativa  = " select distinct o08_programa,		  "; // Programa
-$sSqlEstimativa .= " 		o54_descr 			   "; // Descrição Programa
-$sSqlEstimativa .= "  from ppadotacao 																				   	    	         ";
-$sSqlEstimativa .= " 	   inner join ppaestimativadespesa 	  on o08_sequencial = o07_coddot			   		 	 ";
-$sSqlEstimativa .= "	   inner join ppaestimativa        	  on o07_ppaestimativa = o05_sequencial		    	 	 ";
-$sSqlEstimativa .= "       inner join orcprograma   	  	  on orcprograma.o54_anousu = ".db_getsession('DB_anousu');
-$sSqlEstimativa .= "      						   			 and orcprograma.o54_programa = ppadotacao.o08_programa  	 	 ";
-$sSqlEstimativa .= "       left  join orcindicaprograma 	  on orcindicaprograma.o18_orcprograma = orcprograma.o54_programa 	 	 ";
-$sSqlEstimativa .= "      						   		 	 and orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu');
-$sSqlEstimativa .= " where $sWhere ";
-$sSqlEstimativa .= "   and o08_instit in({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}";
-$sSqlEstimativa .= " order by o08_programa";  
+$sSqlEstimativa  = " SELECT DISTINCT o08_programa, /* Programa do PPA */
+                                     o54_descr /* Descrição do Programa */
+                    FROM ppadotacao
+                    INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
+                    INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
+                    INNER JOIN orcprograma ON orcprograma.o54_anousu = ".db_getsession('DB_anousu')." AND orcprograma.o54_programa = ppadotacao.o08_programa
+                    LEFT JOIN orcindicaprograma ON orcindicaprograma.o18_orcprograma = orcprograma.o54_programa AND orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu')."
+                    WHERE $sWhere
+                      AND o08_instit IN ({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}
+                    ORDER BY o08_programa";  
 
 $rsEstimativa 	   = pg_query($sSqlEstimativa); 
 $iLinhasEstimativa = pg_num_rows($rsEstimativa);
@@ -81,52 +79,84 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   
   $oDados->iPrograma     	 = $oDadosEstimativa->o08_programa;
   $oDados->sPrograma     	 = $oDadosEstimativa->o54_descr;
+
+  if ($iModelo == 2) {
+
+    $sWhere = " o55_anousu = {$oGet->iAno} ";
+
+    $sSqlAcoes = " SELECT DISTINCT o55_projativ o08_projativ,
+                          o55_descr,
+                          o55_anousu o05_anoreferencia,
+                          (SELECT sum(o28_valor) FROM orcprojativprogramfisica
+                           WHERE o28_orcprojativ = ppadotacao.o08_projativ
+                             AND o28_anoref = o05_anoreferencia) AS o28_valor,
+                          upper(o55_especproduto) o22_descrprod,
+                          upper(o55_descrunidade) o55_descrunidade,
+                          o55_valorunidade,
+                          o20_descricao,
+                          CASE
+                              WHEN o55_tipo = 1 THEN 'Projeto'
+                              WHEN o55_tipo = 2 THEN 'Atividade'
+                              WHEN o55_tipo = 3 THEN 'Operações Especiais'
+                          END AS tipo,
+                          round(CASE
+                                    WHEN ppadotacao.o08_projativ IS NULL THEN sum(o58_valor)
+                                    ELSE (SELECT DISTINCT sum(o58_valor) FROM orcprojativ
+                                          JOIN orcdotacao ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
+                                          WHERE o55_projativ = ppadotacao.o08_projativ
+                                              AND (o58_programa, o55_anousu) = ({$oDados->iPrograma}, {$oGet->iAno}))
+                                END,2) AS valor
+                   FROM orcprojativ
+                   LEFT JOIN ppadotacao ON orcprojativ.o55_projativ = ppadotacao.o08_projativ AND orcprojativ.o55_anousu = o08_ano
+                   LEFT JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
+                   LEFT JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
+                   LEFT JOIN orcproduto ON orcproduto.o22_codproduto = orcprojativ.o55_orcproduto
+                   LEFT JOIN orcprojativunidaderesp ON o13_orcprojativ = o55_projativ AND o13_anousu = o55_anousu
+                   LEFT JOIN unidaderesp ON o13_unidaderesp = o20_sequencial
+                   INNER JOIN orcdotacao ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
+                   INNER JOIN orctiporec ON orctiporec.o15_codigo = o58_codigo
+                   WHERE $sWhere
+                     AND o58_programa = {$oDados->iPrograma}
+                     AND o58_instit IN ({$sListaInstit})
+                   GROUP BY o55_projativ, o08_projativ, o15_tipo, o55_tipo, o55_descr, o55_especproduto, o20_descricao, o55_descrunidade, o55_valorunidade, o55_anousu, o05_anoreferencia
+                   ORDER BY o08_projativ, o05_anoreferencia";
+
+  } elseif ($iModelo == 1) {
+
+    $sSqlAcoes = " SELECT o08_projativ,
+                          o55_descr,
+                          o05_anoreferencia,
+                          (SELECT sum(o28_valor) FROM orcprojativprogramfisica
+                           WHERE o28_orcprojativ = ppadotacao.o08_projativ
+                             AND o28_anoref = o05_anoreferencia) AS o28_valor,
+                          o22_descrprod,
+                          o55_descrunidade,
+                          o55_valorunidade,
+                          o20_descricao,
+                          CASE
+                              WHEN o55_tipo = 1 THEN 'Projeto'
+                              WHEN o55_tipo = 2 THEN 'Atividade'
+                              WHEN o55_tipo = 3 THEN 'Operações Especiais'
+                          END AS tipo,
+                          round(sum(o05_valor),0) AS valor
+                   FROM ppadotacao
+                   INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
+                   INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
+                   INNER JOIN orcprojativ ON orcprojativ.o55_projativ = ppadotacao.o08_projativ AND orcprojativ.o55_anousu = o08_ano
+                   LEFT JOIN orcproduto ON orcproduto.o22_codproduto = orcprojativ.o55_orcproduto
+                   INNER JOIN orctiporec ON orctiporec.o15_codigo = ppadotacao.o08_recurso
+                   LEFT JOIN orcprojativunidaderesp ON o13_orcprojativ = o55_projativ AND o13_anousu = o55_anousu
+                   LEFT JOIN unidaderesp ON o13_unidaderesp = o20_sequencial
+                   WHERE $sWhere
+                     AND o08_programa = {$oDados->iPrograma}
+                     AND o08_instit IN ({$sListaInstit})
+                   GROUP BY o08_projativ, o15_tipo, o55_tipo, o55_descr, o22_descrprod, o20_descricao, o55_descrunidade, o55_valorunidade, o05_anoreferencia
+                   ORDER BY o08_projativ, o05_anoreferencia";
+
+  }
   
+  $rsConsultaAcoes 	= pg_query($sSqlAcoes);
   
-  $sSqlAcoes  = "   select o08_projativ, 																		 ";
-  $sSqlAcoes .= "          o55_descr, 																				     ";
-  $sSqlAcoes .= "          o05_anoreferencia,																		     ";
-  $sSqlAcoes .= "          ( select sum(o28_valor) 
-  							   from orcprojativprogramfisica 
-  							  where o28_orcprojativ = ppadotacao.o08_projativ  
-  							    and o28_anoref		= o05_anoreferencia ) as o28_valor, 																				     ";
-  $sSqlAcoes .= "          o22_descrprod, 																			     ";
-  $sSqlAcoes .= "          o55_descrunidade, 																		     ";
-  $sSqlAcoes .= "          o55_valorunidade, 																	  	     ";
-  $sSqlAcoes .= "          o20_descricao,																  	    		 ";
-  $sSqlAcoes .= "          case when o55_tipo = 1 then 'Projeto'														 ";
-  $sSqlAcoes .= "               when o55_tipo = 2 then 'Atividade'														 ";
-  $sSqlAcoes .= "               when o55_tipo = 3 then 'Operações Especiais' end as tipo,								     ";
-  $sSqlAcoes .= "          round(sum(o05_valor),0) as valor				 ";
-  $sSqlAcoes .= "     from ppadotacao 												    	       					     		   ";
-  $sSqlAcoes .= " 	       inner join ppaestimativadespesa 	       on o08_sequencial   		    = o07_coddot	   		           ";
-  $sSqlAcoes .= "	         inner join ppaestimativa        	  	   on o07_ppaestimativa 	    = o05_sequencial 		     	   ";
-  $sSqlAcoes .= "          inner join orcprojativ   	   	   	     on orcprojativ.o55_projativ  = ppadotacao.o08_projativ   	   ";
-  $sSqlAcoes .= "         								  	 	                  and orcprojativ.o55_anousu    = o08_ano";
-  $sSqlAcoes .= "		   left  join orcproduto          		         on orcproduto.o22_codproduto = orcprojativ.o55_orcproduto 	   ";  
-  $sSqlAcoes .= "		   inner join orctiporec         	 	           on orctiporec.o15_codigo     = ppadotacao.o08_recurso	 	   ";
-  $sSqlAcoes .= "		   left  join orcprojativunidaderesp           on o13_orcprojativ  			= o55_projativ ";
-  $sSqlAcoes .= "		                                              and o13_anousu     			= o55_anousu ";
-  $sSqlAcoes .= "		   left join unidaderesp                      on o13_unidaderesp 			= o20_sequencial ";
-  $sSqlAcoes .= "    where $sWhere								 								 ";
-  $sSqlAcoes .= "      and o08_programa  = {$oDados->iPrograma}    ";	
-  $sSqlAcoes .= " and o08_instit in({$sListaInstit}) ";
-  $sSqlAcoes .= " group by o08_projativ, 													 ";
-  $sSqlAcoes .= " 		   o15_tipo,																 ";
-  $sSqlAcoes .= " 		   o55_tipo,																 ";
-  $sSqlAcoes .= "          o55_descr, 														 ";	
-  $sSqlAcoes .= "          o22_descrprod, 												 ";
-  $sSqlAcoes .= "          o20_descricao, 												 ";
-  $sSqlAcoes .= "          o55_descrunidade,  										 ";
-  $sSqlAcoes .= "          o55_valorunidade, 											 ";
-  $sSqlAcoes .= "          o05_anoreferencia											 ";
-  //$sSqlAcoes .= "          o28_valor		 													 ";
-  //$sSqlAcoes .= " order by o08_orgao,                             ";
-  $sSqlAcoes .= " order by o08_projativ,											     ";
-  $sSqlAcoes .= "          o05_anoreferencia;											 ";
-  //echo $sSqlAcoes;exit;
-  $rsConsultaAcoes 	= pg_query($sSqlAcoes);  
-  //db_criatabela($rsConsultaAcoes);
   $iLinhasAcoes    	= pg_num_rows($rsConsultaAcoes);
   $aAcoes 			= array();
   

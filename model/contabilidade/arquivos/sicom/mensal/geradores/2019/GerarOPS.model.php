@@ -126,7 +126,7 @@ class GerarOPS extends GerarAM
 
             $aCSVOPS12['si134_tiporegistro']        = $this->padLeftZero($aOPS12['si134_tiporegistro'], 2);
             $aCSVOPS12['si134_codreduzidoop']       = substr($aOPS12['si134_codreduzidoop'], 0, 15);
-            $aCSVOPS12['si134_tipodocumentoop']     = substr($aOPS12['si134_tipodocumentoop'], 0, 2);
+            $aCSVOPS12['si134_tipodocumentoop']     = $this->padLeftZero(substr($aOPS12['si134_tipodocumentoop'], 0, 2), 2);
             $aCSVOPS12['si134_nrodocumento']        = $aOPS12['si134_nrodocumento'] == '' ? " " : substr($aOPS12['si134_nrodocumento'], 0, 15);
             $aCSVOPS12['si134_codctb']              = substr($aOPS12['si134_codctb'], 0, 20) == 0 ? " " : substr($aOPS12['si134_codctb'], 0, 20);
             $aCSVOPS12['si134_codfontectb']         = $this->padLeftZero($aOPS12['si134_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aOPS12['si134_codfontectb'], 3);

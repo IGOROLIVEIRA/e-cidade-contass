@@ -8,7 +8,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarHOMOLIC.model.php");
 
 /**
- * Homologação da Licitação Sicom Acompanhamento Mensal
+ * Homologaï¿½ï¿½o da Licitaï¿½ï¿½o Sicom Acompanhamento Mensal
  * @author Johnatan Alves
  * @package Contabilidade
  */
@@ -95,7 +95,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
   }
 
   /**
-   * Homologação da Licitação do mes para gerar o arquivo
+   * Homologaï¿½ï¿½o da Licitaï¿½ï¿½o do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
@@ -209,6 +209,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 		                                                  '54') order by liclicita.l20_edital";
 
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    
     $aLicitacoes = array();
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -324,7 +325,8 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
-    $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);
+    $rsResult20 = db_query($sSql);
+
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
       $clhomolic20 = new cl_homolic202019();
@@ -406,7 +408,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
   WHERE db_config.codigo=" . db_getsession("DB_instit") . " AND pcorcamjulg.pc24_pontuacao = 1
   AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
-    $rsResult30 = db_query($sSql);//db_criatabela($rsResult30);
+    $rsResult30 = db_query($sSql);
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
       $clhomolic30 = new cl_homolic303018();

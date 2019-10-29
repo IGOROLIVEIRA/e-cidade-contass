@@ -29,6 +29,7 @@ require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
  * @package Contabilidade
  * @revision Rodrigo e Igor
  */
+
 class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
     /**
@@ -112,6 +113,19 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
         return $iTipoInstit;
+    }
+
+    /**
+    * Busca código fundo tce mg pertecente no cadastro da instituição. Caso não seja cadastrado, retorna o valor padrão "00000000"
+    */
+    public function getCodFundo(){
+        $sSqlCodFundo = "select si09_codfundotcemg from infocomplementaresinstit where si09_instit = " . db_getsession('DB_instit');
+        $sCodFundo = db_utils::fieldsMemory(db_query($sSqlCodFundo), 0)->si09_codfundotcemg;
+        if ($sCodFundo == "") {
+            return "00000000";
+        } else {
+            return str_pad($sCodFundo, 8, '0', STR_PAD_LEFT);
+        }
     }
 
     /**
@@ -333,6 +347,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
         $rsReg10 = db_query($sqlReg10);
 
+        /**
+         * Busca código fundo tce mg pertecente no cadastro da instituição
+         */
+        $sCodFundo = $this->getCodFundo();
+
         $aDadosAgrupados10 = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsReg10); $iCont++) {
 
@@ -409,7 +428,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalancete->si177_tiporegistro = "10";
                 $obalancete->si177_contacontaabil = $oReg10->contacontabil;
-                $obalancete->si177_codfundo = "00000000";
+                $obalancete->si177_codfundo = $sCodFundo;
                 $obalancete->si177_saldoinicial = ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial * -1 : $nSaldoInicial);
                 $obalancete->si177_totaldebitos = $nDebitos;
                 $obalancete->si177_totalcreditos = $nCreditos;
@@ -715,7 +734,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $obalancete11->si178_tiporegistro = 11;
                                 $obalancete11->si178_contacontaabil = $oContas10->si177_contacontaabil;
-                                $obalancete11->si178_codfundo = "00000000";
+                                $obalancete11->si178_codfundo = $sCodFundo;
                                 $obalancete11->si178_codorgao = $oReg11->codorgao;
                                 $obalancete11->si178_codunidadesub = $oReg11->codunidadesub;
                                 $obalancete11->si178_codfuncao = $oReg11->codfuncao;
@@ -911,7 +930,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete12 = new stdClass();
                                     $obalancete12->si179_tiporegistro = 12;
                                     $obalancete12->si179_contacontabil = $oContas10->si177_contacontaabil;
-                                    $obalancete12->si179_codfundo = "00000000";
+                                    $obalancete12->si179_codfundo = $sCodFundo;
                                     $obalancete12->si179_naturezareceita = str_replace(" ", "", $sNaturezaReceita);
                                     $obalancete12->si179_codfontrecursos = $objContas->o15_codtri;
                                     $obalancete12->si179_saldoinicialcr = $oReg12Saldo->saldoanterior;
@@ -948,7 +967,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $obalancete23->si190_tiporegistro = 23;
                                     $obalancete23->si190_contacontabil = $oContas10->si177_contacontaabil;
-                                    $obalancete23->si190_codfundo = "00000000";
+                                    $obalancete23->si190_codfundo = $sCodFundo;
                                     $obalancete23->si190_naturezareceita = $sNaturezaReceita;
                                     $obalancete23->si190_saldoinicialnatreceita = $oReg12Saldo->saldoanterior;
                                     $obalancete23->si190_naturezasaldoinicialnatreceita = $oReg12Saldo->saldoanterior >= 0 ? 'D' : 'C';
@@ -1007,7 +1026,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $obalancete13->si180_tiporegistro = 13;
                         $obalancete13->si180_contacontabil = $oDadoImportado->si180_contacontabil;
-                        $obalancete13->si180_codfundo = "00000000";
+                        $obalancete13->si180_codfundo = $sCodFundo;
                         $obalancete13->si180_codprograma = $oDadoImportado->si180_codprograma;
                         $obalancete13->si180_idacao = $oDadoImportado->si180_idacao;
                         $obalancete13->si180_idsubacao = $oDadoImportado->si180_idsubacao;
@@ -1024,6 +1043,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     }
 
                 } else {
+
                     /*
                      * Busca as dotacoes
                      */
@@ -1039,7 +1059,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o55_origemacao as idsubacao,
 					                substr(o56_elemento,2,6) as naturezadadespesa,
 					                '00' as subelemento,
-					                o15_codtri as codfontrecursos
+					                o15_codtri as codfontrecursos,
+                                    si09_codfundotcemg as codfundo
                                   from
                                   orcdotacao
                                   join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1158,7 +1179,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $obalancete13->si180_tiporegistro = 13;
                                     $obalancete13->si180_contacontabil = $oContas10->si177_contacontaabil;
-                                    $obalancete13->si180_codfundo = "00000000";
+                                    $obalancete13->si180_codfundo = $sCodFundo;
                                     $obalancete13->si180_codprograma = $oReg13->codprograma;
                                     $obalancete13->si180_idacao = $oReg13->idacao;
                                     $obalancete13->si180_idsubacao = $oReg13->idsubacao;
@@ -1529,7 +1550,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $obalancete14->si181_tiporegistro = 14;
                                 $obalancete14->si181_contacontabil = $oContas10->si177_contacontaabil;
-                                $obalancete14->si181_codfundo = "00000000";
+                                $obalancete14->si181_codfundo = $sCodFundo;
                                 $obalancete14->si181_nroempenho = $oReg14->nroempenho;
                                 $obalancete14->si181_anoinscricao = $oReg14->anoinscricao;
                                 $obalancete14->si181_saldoinicialrsp = $oReg14Saldo->saldoanterior;
@@ -1576,8 +1597,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf
-                                        FROM
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
+                                               identificadorfinanceiro
+                                          FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
                                                   c61_reduz,
@@ -1587,7 +1609,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1605,17 +1627,16 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $oReg15Saldo = db_utils::fieldsMemory($rsReg15saldos, $iContSaldo15);
 
-                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro;
+                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oReg15Saldo->identificadorfinanceiro;
 
                         $oReg15Saldo->anterior = $oReg15Saldo->naturezasaldoinicialsf == 'C' ? $oReg15Saldo->anterior * -1 : $oReg15Saldo->anterior;
 
-                        if (!isset($aContasReg10[$reg10Hash]->reg15[$sHash15])) {
-
+                        if (!isset($aContasReg10[$reg10Hash]->reg15[$sHash15])){
                             $obalancete15 = new stdClass();
                             $obalancete15->si182_tiporegistro = 15;
                             $obalancete15->si182_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete15->si182_codfundo = "00000000";
-                            $obalancete15->si182_atributosf = $oContas10->identificadorfinanceiro;
+                            $obalancete15->si182_atributosf = $oReg15Saldo->identificadorfinanceiro;
+                            $obalancete15->si182_codfundo = $sCodFundo;
                             $obalancete15->si182_saldoinicialsf = $oReg15Saldo->anterior;
                             $obalancete15->si182_naturezasaldoinicialsf = $obalancete15->anterior >= 0 ? 'D' : 'C';
                             $obalancete15->si182_totaldebitossf = $oReg15Saldo->debitos;
@@ -1627,13 +1648,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $aContasReg10[$reg10Hash]->reg15[$sHash15] = $obalancete15;
 
-                        } else {
+                        } else{
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldoinicialsf += $oReg15Saldo->anterior;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_totaldebitossf += $oReg15Saldo->debitos;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_totalcreditossf += $oReg15Saldo->creditos;
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldofinalsf += ($oReg15Saldo->anterior + $oReg15Saldo->debitos - $oReg15Saldo->creditos) == '' ? 0 : ($oReg15Saldo->anterior + $oReg15Saldo->debitos - $oReg15Saldo->creditos);
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_naturezasaldofinalsf = ($aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldofinalsf >= 0 ? 'D' : 'C');
                             $aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_naturezasaldoinicialsf = ($aContasReg10[$reg10Hash]->reg15[$sHash15]->si182_saldoinicialsf >= 0 ? 'D' : 'C');
+
                         }
                     }
                 }
@@ -1675,7 +1697,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1686,7 +1709,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1714,7 +1737,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $obalancete16->si183_tiporegistro = 16;
                                 $obalancete16->si183_contacontabil = $oContas10->si177_contacontaabil;
-                                $obalancete16->si183_codfundo = "00000000";
+                                $obalancete16->si183_codfundo = $sCodFundo;
                                 $obalancete16->si183_atributosf = $oContas10->identificadorfinanceiro;
                                 $obalancete16->si183_codfontrecursos = $oReg16Font->codfontrecursos;
                                 $obalancete16->si183_saldoinicialfontsf = $oReg16Saldo->saldoanterior;
@@ -1823,7 +1846,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1834,7 +1858,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1865,7 +1889,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete17 = new stdClass();
                                     $obalancete17->si184_tiporegistro = 17;
                                     $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
-                                    $obalancete17->si184_codfundo = "00000000";
+                                    $obalancete17->si184_codfundo = $sCodFundo;
                                     $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
                                     $obalancete17->si184_codctb = $iCodCtb;
                                     $obalancete17->si184_codfontrecursos = $objContasctb->codfontrecursos;
@@ -1903,7 +1927,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1914,7 +1939,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1945,7 +1970,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                         $obalancete17 = new stdClass();
                                         $obalancete17->si184_tiporegistro = 17;
                                         $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
-                                        $obalancete17->si184_codfundo = "00000000";
+                                        $obalancete17->si184_codfundo = $sCodFundo;
                                         $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
                                         $obalancete17->si184_codctb = $iCodCtb;
                                         $obalancete17->si184_codfontrecursos = $objContasctb->codfontrecursos;
@@ -2105,7 +2130,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $obalancete18->si185_tiporegistro = 18;
                                 $obalancete18->si185_contacontabil = $oContas10->si177_contacontaabil;
-                                $obalancete18->si185_codfundo = "00000000";
+                                $obalancete18->si185_codfundo = $sCodFundo;
                                 $obalancete18->si185_codfontrecursos = $objContasfr->codfontrecursos;
                                 $obalancete18->si185_saldoinicialfr = $oReg18Saldo->saldoanterior;
                                 $obalancete18->si185_naturezasaldoinicialfr = $oReg18Saldo->saldoanterior >= 0 ? 'D' : 'C';
@@ -2176,7 +2201,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $obalancete19->si186_tiporegistro = 19;
                             $obalancete19->si186_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete19->si186_codfundo = "00000000";
+                            $obalancete19->si186_codfundo = $sCodFundo;
                             $obalancete19->cnpjconsorcio = $objContasconsor->cnpjconsorcio;
                             $obalancete19->si186_saldoinicialconsor = $oReg19Saldo->saldoanterior;
                             $obalancete19->si186_naturezasaldoinicialconsor = $oReg19Saldo->saldoanterior >= 0 ? 'D' : 'C';
@@ -2246,7 +2271,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $obalancete20->si187_tiporegistro = 20;
                             $obalancete20->si187_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete20->si187_codfundo = "00000000";
+                            $obalancete20->si187_codfundo = $sCodFundo;
                             $obalancete20->si187_cnpjconscfcio = $objContasconscf->cnpjconscfcio;
                             $obalancete20->si187_tiporecurso = $objContasconscf->tiporecurso;
                             $obalancete20->si187_codfuncao = $objContasconscf->codfuncao;
@@ -2322,7 +2347,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $obalancete21->si188_tiporegistro = 21;
                             $obalancete21->si188_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete21->si188_codfundo = "00000000";
+                            $obalancete21->si188_codfundo = $sCodFundo;
                             $obalancete21->si188_cnpjconsorfrcio = $objContasconsorfr->cnpjconsorfrcio;
                             $obalancete21->si188_codfontrecursos = $objContasconsorfr->codfontrecursos;
                             $obalancete21->si188_saldoinicialconsorfr = $oReg21Saldo->saldoanterior;
@@ -2393,7 +2418,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $obalancete22->si189_tiporegistro = 22;
                             $obalancete22->si189_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete22->si189_codfundo = "00000000";
+                            $obalancete22->si189_codfundo = $sCodFundo;
                             $obalancete22->si189_atributosf = $objContasctbsf->atributosf;
                             $obalancete22->si189_codctb = $objContasctbsf->codctb;
                             $obalancete22->si189_saldoinicialctbsf = $oReg22Saldo->saldoanterior;
@@ -2530,7 +2555,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $obalancete24->si191_tiporegistro = 24;
                             $obalancete24->si191_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete24->si191_codfundo = "00000000";
+                            $obalancete24->si191_codfundo = $sCodFundo;
                             if($this->getTipoinstit(db_getsession("DB_instit")) == 2){
                                 $obalancete24->si191_codorgao = $this->getCodOrgaoTce(1);
                                 $obalancete24->si191_codunidadesub = $this->getCodUnidadeTce(1);
@@ -2582,7 +2607,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialnrsf,
                                                substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalnrsf,
-                                               c60_estrut
+                                               c60_estrut,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -2593,7 +2619,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   p.c60_consistemaconta,
                                                   o.c60_estrut
                                            FROM conplanoexe e
@@ -2622,7 +2648,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete25 = new stdClass();
                             $obalancete25->si195_tiporegistro = 25;
                             $obalancete25->si195_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete25->si195_codfundo = "00000000";
+                            $obalancete25->si195_codfundo = $sCodFundo;
                             $obalancete25->si195_atributosf = $oContas10->identificadorfinanceiro;
                             $obalancete25->si195_naturezareceita = substr($oReg25Saldo->c60_estrut,1,8);
                             $obalancete25->si195_saldoinicialnrsf = $oReg25Saldo->anterior;
@@ -2667,7 +2693,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
                                                substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
-                                               nrodocumentopessoaatributosf,z01_numcgm
+                                               nrodocumentopessoaatributosf,z01_numcgm,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -2678,7 +2705,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta,
                                                   cgm.z01_cgccpf as nrodocumentopessoaatributosf,z01_numcgm
                                            FROM conplanoexe e
@@ -2708,7 +2735,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete26 = new stdClass();
                             $obalancete26->si196_tiporegistro = 26;
                             $obalancete26->si196_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete26->si196_codfundo = "00000000";
+                            $obalancete26->si196_codfundo = $sCodFundo;
                             $obalancete26->si196_tipodocumentopessoaatributosf = strlen($oReg26Saldo->nrodocumentopessoaatributosf) > 11 ? 2 : 1;
                             $obalancete26->si196_nrodocumentopessoaatributosf = $oReg26Saldo->nrodocumentopessoaatributosf;
                             $obalancete26->si196_atributosf = $oContas10->identificadorfinanceiro;
@@ -2766,7 +2793,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             $obalancete10->si177_tiporegistro = $oDado10->si177_tiporegistro;
             $obalancete10->si177_contacontaabil = $oDado10->si177_contacontaabil;
-            $obalancete10->si177_codfundo = "00000000";
+            $obalancete10->si177_codfundo = $sCodFundo;
             $obalancete10->si177_saldoinicial = number_format(abs($oDado10->si177_saldoinicial), 2, '.', '');
             $obalancete10->si177_naturezasaldoinicial = $oDado10->si177_saldoinicial == 0 ? $oDado10->naturezasaldo : ($oDado10->si177_saldoinicial > 0 ? 'D' : 'C');
             $obalancete10->si177_totaldebitos = number_format(abs($oDado10->si177_totaldebitos), 2, '.', '');
@@ -2788,7 +2815,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg11->si178_tiporegistro = $reg11->si178_tiporegistro;
                 $obalreg11->si178_contacontaabil = $reg11->si178_contacontaabil;
-                $obalreg11->si178_codfundo = "00000000";
+                $obalreg11->si178_codfundo = $sCodFundo;
                 $obalreg11->si178_codorgao = $reg11->si178_codorgao;
                 $obalreg11->si178_codunidadesub = $reg11->si178_codunidadesub;
                 $obalreg11->si178_codfuncao = $reg11->si178_codfuncao;
@@ -2823,7 +2850,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg12->si179_tiporegistro = $reg12->si179_tiporegistro;
                 $obalreg12->si179_contacontabil = $reg12->si179_contacontabil;
-                $obalreg12->si179_codfundo = "00000000";
+                $obalreg12->si179_codfundo = $sCodFundo;
                 $obalreg12->si179_naturezareceita = $reg12->si179_naturezareceita;
                 $obalreg12->si179_codfontrecursos = $reg12->si179_codfontrecursos;
                 $obalreg12->si179_saldoinicialcr = number_format(abs($reg12->si179_saldoinicialcr == '' ? 0 : $reg12->si179_saldoinicialcr), 2, ".", "");
@@ -2854,7 +2881,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $obalreg13->si180_tiporegistro = $reg13->si180_tiporegistro;
                     $obalreg13->si180_contacontabil = $reg13->si180_contacontabil;
-                    $obalreg13->si180_codfundo = "00000000";
+                    $obalreg13->si180_codfundo = $sCodFundo;
                     $obalreg13->si180_codprograma = $reg13->si180_codprograma;
                     $obalreg13->si180_idacao = $reg13->si180_idacao;
                     $obalreg13->si180_idsubacao = $reg13->si180_idsubacao;
@@ -2869,7 +2896,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $obalreg13->si180_tiporegistro = $reg13->si180_tiporegistro;
                     $obalreg13->si180_contacontabil = $reg13->si180_contacontabil;
-                    $obalreg13->si180_codfundo = "00000000";
+                    $obalreg13->si180_codfundo = $sCodFundo;
                     $obalreg13->si180_codprograma = $reg13->si180_codprograma;
                     $obalreg13->si180_idacao = $reg13->si180_idacao;
                     $obalreg13->si180_idsubacao = $reg13->si180_idsubacao;
@@ -2897,7 +2924,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg14->si181_tiporegistro = $reg14->si181_tiporegistro;
                 $obalreg14->si181_contacontabil = $reg14->si181_contacontabil;
-                $obalreg14->si181_codfundo = "00000000";
+                $obalreg14->si181_codfundo = $sCodFundo;
                 $obalreg14->si181_codorgao = $reg14->si181_codorgao;
                 $obalreg14->si181_codunidadesub = $reg14->si181_codunidadesub;
                 $obalreg14->si181_codunidadesuborig = $reg14->si181_codunidadesuborig;
@@ -2928,14 +2955,13 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     throw new Exception($obalreg14->erro_msg);
                 }
             }
-
             foreach ($oDado10->reg15 as $reg15) {
 
                 $obalreg15 = new cl_balancete152019();
 
                 $obalreg15->si182_tiporegistro = $reg15->si182_tiporegistro;
                 $obalreg15->si182_contacontabil = $reg15->si182_contacontabil;
-                $obalreg15->si182_codfundo = "00000000";
+                $obalreg15->si182_codfundo = $sCodFundo;
                 $obalreg15->si182_atributosf = $reg15->si182_atributosf;
                 $obalreg15->si182_saldoinicialsf = number_format(abs($reg15->si182_saldoinicialsf == '' ? 0 : $reg15->si182_saldoinicialsf), 2, ".", "");
                 $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldoinicialsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldoinicialsf > 0 ? 'D' : 'C');
@@ -2961,7 +2987,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg16->si183_tiporegistro = $reg16->si183_tiporegistro;
                 $obalreg16->si183_contacontabil = $reg16->si183_contacontabil;
-                $obalreg16->si183_codfundo = "00000000";
+                $obalreg16->si183_codfundo = $sCodFundo;
                 $obalreg16->si183_atributosf = $reg16->si183_atributosf;
                 $obalreg16->si183_codfontrecursos = $reg16->si183_codfontrecursos;
                 $obalreg16->si183_saldoinicialfontsf = number_format(abs($reg16->si183_saldoinicialfontsf == '' ? 0 : $reg16->si183_saldoinicialfontsf), 2, ".", "");
@@ -2988,7 +3014,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg17->si184_tiporegistro = $reg17->si184_tiporegistro;
                 $obalreg17->si184_contacontabil = $reg17->si184_contacontabil;
-                $obalreg17->si184_codfundo = "00000000";
+                $obalreg17->si184_codfundo = $sCodFundo;
                 $obalreg17->si184_atributosf = $reg17->si184_atributosf;
                 $obalreg17->si184_codctb = $reg17->si184_codctb;
                 $obalreg17->si184_codfontrecursos = $reg17->si184_codfontrecursos;
@@ -3044,7 +3070,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg18->si185_tiporegistro = $reg18->si185_tiporegistro;
                 $obalreg18->si185_contacontabil = $reg18->si185_contacontabil;
-                $obalreg18->si185_codfundo = "00000000";
+                $obalreg18->si185_codfundo = $sCodFundo;
                 $obalreg18->si185_codfontrecursos = $reg18->si185_codfontrecursos;
                 $obalreg18->si185_saldoinicialfr = number_format(abs($reg18->si185_saldoinicialfr == '' ? 0 : $reg18->si185_saldoinicialfr), 2, ".", "");
                 $obalreg18->si185_naturezasaldoinicialfr = $reg18->si185_saldoinicialfr == 0 ? $oDado10->naturezasaldo : ($reg18->si185_saldoinicialfr > 0 ? 'D' : 'C');
@@ -3071,7 +3097,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg19->si186_tiporegistro = $reg19->si186_tiporegistro;
                 $obalreg19->si186_contacontabil = $reg19->si186_contacontabil;
-                $obalreg19->si186_codfundo = "00000000";
+                $obalreg19->si186_codfundo = $sCodFundo;
                 $obalreg19->si186_cnpjconsorcio = $reg19->si186_cnpjconsorcio;
                 $obalreg19->si186_saldoinicialconsor = number_format(abs($reg19->si186_saldoinicialconsor == '' ? 0 : $reg19->si186_saldoinicialconsor), 2, ".", "");
                 $obalreg19->si186_naturezasaldoinicialconsor = $reg19->si186_saldoinicialfontsf >= 0 ? 'D' : 'C';
@@ -3097,7 +3123,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg20->si187_tiporegistro = $reg20->si187_tiporegistro;
                 $obalreg20->si187_contacontabil = $reg20->si187_contacontabil;
-                $obalreg20->si187_codfundo = "00000000";
+                $obalreg20->si187_codfundo = $sCodFundo;
                 $obalreg20->si187_cnpjconsorcio = $reg20->si187_cnpjconsorcio;
                 $obalreg20->si187_tiporecurso = $reg20->si187_tiporecurso;
                 $obalreg20->si187_codfuncao = $reg20->si187_codfuncao;
@@ -3129,7 +3155,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg21->si188_tiporegistro = $reg21->si188_tiporegistro;
                 $obalreg21->si188_contacontabil = $reg21->si188_contacontabil;
-                $obalreg21->si188_codfundo = "00000000";
+                $obalreg21->si188_codfundo = $sCodFundo;
                 $obalreg21->si188_cnpjconsorcio = $reg21->si188_cnpjconsorcio;
                 $obalreg21->si188_codfontrecursos = $reg21->si188_codfontrecursos;
                 $obalreg21->si188_saldoinicialconsorfr = number_format(abs($reg21->si188_saldoinicialconsorfr == '' ? 0 : $reg21->si188_saldoinicialconsorfr), 2, ".", "");
@@ -3156,7 +3182,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg22->si189_tiporegistro = $reg22->si189_tiporegistro;
                 $obalreg22->si189_contacontabil = $reg22->si189_contacontabil;
-                $obalreg22->si189_codfundo = "00000000";
+                $obalreg22->si189_codfundo = $sCodFundo;
                 $obalreg22->si189_atributosf = $reg22->si189_atributosf;
                 $obalreg22->si189_codctb = $reg22->si189_codctb;
                 $obalreg22->si189_saldoInicialctbsf = number_format(abs($reg22->si189_saldoinicialctbsf == '' ? 0 : $reg22->si189_saldoinicialctbsf), 2, ".", "");
@@ -3183,7 +3209,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg23->si190_tiporegistro = $reg23->si190_tiporegistro;
                 $obalreg23->si190_contacontabil = $reg23->si190_contacontabil;
-                $obalreg23->si190_codfundo = "00000000";
+                $obalreg23->si190_codfundo = $sCodFundo;
                 $obalreg23->si190_naturezareceita = $reg23->si190_naturezareceita;
                 $obalreg23->si190_saldoinicialnatreceita = number_format(abs($reg23->si190_saldoinicialnatreceita == '' ? 0 : $reg23->si190_saldoinicialnatreceita), 2, ".", "");
                 $obalreg23->si190_naturezasaldoinicialnatreceita = $reg23->si190_saldoinicialnatreceita == 0 ? $oDado10->naturezasaldo : ($reg23->si190_saldoinicialnatreceita > 0 ? 'D' : 'C');
@@ -3209,7 +3235,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg24->si191_tiporegistro = $reg24->si191_tiporegistro;
                 $obalreg24->si191_contacontabil = $reg24->si191_contacontabil;
-                $obalreg24->si191_codfundo = "00000000";
+                $obalreg24->si191_codfundo = $sCodFundo;
                 $obalreg24->si191_codorgao = $reg24->si191_codorgao;
                 $obalreg24->si191_codunidadesub = $reg24->si191_codunidadesub;
                 $obalreg24->si191_saldoinicialorgao = number_format(abs($reg24->si191_saldoinicialorgao == '' ? 0 : $reg24->si191_saldoinicialorgao), 2, ".", "");
@@ -3262,7 +3288,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg26->si196_tiporegistro = $reg26->si196_tiporegistro;
                 $obalreg26->si196_contacontabil = $reg26->si196_contacontabil;
-                $obalreg26->si196_codfundo = "00000000";
+                $obalreg26->si196_codfundo = $sCodFundo;
                 $obalreg26->si196_tipodocumentopessoaatributosf = $reg26->si196_tipodocumentopessoaatributosf;
                 $obalreg26->si196_nrodocumentopessoaatributosf = $reg26->si196_nrodocumentopessoaatributosf;
                 $obalreg26->si196_atributosf = $reg26->si196_atributosf;
@@ -3290,7 +3316,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalreg27->si197_tiporegistro = $reg27->si197_tiporegistro;
                 $obalreg27->si197_contacontabil = $reg27->si197_contacontabil;
-                $obalreg27->si197_codfundo = "00000000";
+                $obalreg27->si197_codfundo = $sCodFundo;
                 $obalreg27->si197_codorgao = $reg27->si197_codorgao;
                 $obalreg27->si197_codunidadesub = $reg27->si197_codunidadesub;
                 $obalreg27->si179_codfontrecursos = $reg27->si179_codfontrecursos;

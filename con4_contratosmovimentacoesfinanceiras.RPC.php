@@ -410,18 +410,17 @@ switch($oParam->exec) {
             foreach ($oParam->aPosicoes as $oPosicao) {
 
                 $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
-
                 $DataAssinatura = implode("-",array_reverse(explode("/",$oAcordoPosicao->getDataAssinatura())));
 
-                if($c99_datapat != "" && $DataAssinatura <= $c99_datapat){
+                if(($c99_datapat != "" && $DataAssinatura != '') && $DataAssinatura <= $c99_datapat){
                     $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $oRetorno->status = 1;
                     throw new BusinessException($erro_msg);
                 }else {
                     if ($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
-                        $oAcordoPosicao->remover();
+                      $oAcordoPosicao->remover();
                     } else {
-                        throw new BusinessException(" Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último ");
+                      throw new BusinessException(" Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último ");
                     }
                     db_fim_transacao(false);
                     $oRetorno->status = 2;
@@ -613,12 +612,20 @@ switch($oParam->exec) {
 
         $oContrato = $_SESSION["oContrato"];
         $dataFimVigencia = implode("-",array_reverse(explode("/",$oContrato->getUltimaPosicao(true)->getVigenciaFinal())));
+        $dataAssinatura = implode("-",array_reverse(explode("/",$oContrato->getDataAssinatura())));
         $dataAutorizacao = date("Y-m-d",db_getsession("DB_datausu"));
         $gerarAutorizacao = array();
 
         if($dataAutorizacao > $dataFimVigencia){
             $gerarAutorizacao[0] = false;
             $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gerarAutorizacao[2] = true;
+            $gerarAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
+        }elseif($dataAutorizacao < $dataAssinatura){
+            $gerarAutorizacao[0] = false;
+            $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));
+            $gerarAutorizacao[2] = false;
+            $gerarAutorizacao[3] = implode("/",array_reverse(explode("-",$dataAssinatura)));
         }else{
             $gerarAutorizacao[0] = true;
             $gerarAutorizacao[1] = implode("/",array_reverse(explode("-",$dataFimVigencia)));

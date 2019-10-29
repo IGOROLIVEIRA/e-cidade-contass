@@ -683,6 +683,16 @@ if ($db_opcao == 1) {
               ?>
           </td>
       </tr>
+      <tr>
+          <td nowrap title="<?=@$Tsi09_codfundotcemg?>">
+              <?=@$Lsi09_codfundotcemg?>
+          </td>
+          <td>
+              <?
+              db_input('si09_codfundotcemg',12,$Isi09_codfundotcemg,true,'text',$db_opcao,"",0);
+              ?>
+          </td>
+      </tr>
 	  <tr>
 	    <td nowrap title="<?=@$Tsi09_opcaosemestralidade?>">
 	       <?=@$Lsi09_opcaosemestralidade?>

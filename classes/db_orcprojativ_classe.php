@@ -56,7 +56,9 @@ class cl_orcprojativ {
    var $o55_detalhamentoimp = null; 
    var $o55_origemacao = null; 
    var $o55_baselegal = null; 
-   var $o55_orcproduto = 0; 
+   var $o55_orcproduto = 0;
+   var $o55_tipoensino = 0;
+   var $o55_tipopasta = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  o55_anousu = int4 = Exercício 
@@ -74,6 +76,8 @@ class cl_orcprojativ {
                  o55_origemacao = text = Origem da Ação 
                  o55_baselegal = text = Base Legal 
                  o55_orcproduto = int4 = Produto 
+                 o55_tipoensino = int4 = Tipo de Ensino - Siope
+                 o55_tipopasta = int4 = Tipo de Pasta - Siope
                  ";
    //funcao construtor da classe 
    function cl_orcprojativ() { 
@@ -108,6 +112,8 @@ class cl_orcprojativ {
        $this->o55_origemacao = ($this->o55_origemacao == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_origemacao"]:$this->o55_origemacao);
        $this->o55_baselegal = ($this->o55_baselegal == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_baselegal"]:$this->o55_baselegal);
        $this->o55_orcproduto = ($this->o55_orcproduto == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_orcproduto"]:$this->o55_orcproduto);
+       $this->o55_tipoensino = ($this->o55_tipoensino == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_tipoensino"]:$this->o55_tipoensino);
+       $this->o55_tipopasta = ($this->o55_tipopasta == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_tipopasta"]:$this->o55_tipopasta);
      }else{
        $this->o55_anousu = ($this->o55_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_anousu"]:$this->o55_anousu);
        $this->o55_projativ = ($this->o55_projativ == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_projativ"]:$this->o55_projativ);
@@ -191,6 +197,24 @@ class cl_orcprojativ {
        $this->erro_status = "0";
        return false;
      }
+    if(($this->o55_tipoensino == 0)){
+       $this->erro_sql = " É obrigatório selecionar o Tipo de Ensino - Siope.";
+       $this->erro_campo = "o55_tipoensino";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+    }
+    if(($this->o55_tipopasta == 0)){
+       $this->erro_sql = " É obrigatório selecionar o Tipo de Pasta - Siope.";
+       $this->erro_campo = "o55_tipopasta";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+    }
      $sql = "insert into orcprojativ(
                                        o55_anousu 
                                       ,o55_tipo 
@@ -207,6 +231,8 @@ class cl_orcprojativ {
                                       ,o55_origemacao 
                                       ,o55_baselegal 
                                       ,o55_orcproduto 
+                                      ,o55_tipoensino
+                                      ,o55_tipopasta
                        )
                 values (
                                 $this->o55_anousu 
@@ -224,6 +250,8 @@ class cl_orcprojativ {
                                ,'$this->o55_origemacao' 
                                ,'$this->o55_baselegal' 
                                ,$this->o55_orcproduto 
+                               ,$this->o55_tipoensino 
+                               ,$this->o55_tipopasta 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -331,6 +359,32 @@ class cl_orcprojativ {
          return false;
        }
      }
+    if(trim($this->o55_tipoensino)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o55_tipoensino"])){
+       $sql  .= $virgula." o55_tipoensino = '$this->o55_tipoensino' ";
+       $virgula = ",";
+       if(trim($this->o55_tipoensino) == 0 ){
+           $this->erro_sql = " É obrigatório selecionar o Tipo de Ensino - Siope.";
+           $this->erro_campo = "o55_tipoensino";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+    }
+    if(trim($this->o55_tipopasta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o55_tipopasta"])){
+       $sql  .= $virgula." o55_tipopasta = '$this->o55_tipopasta' ";
+       $virgula = ",";
+       if(trim($this->o55_tipopasta) == 0 ){
+           $this->erro_sql = " É obrigatório selecionar o Tipo de Pasta - Siope.";
+           $this->erro_campo = "o55_tipopasta";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+    }
      if(trim($this->o55_finali)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o55_finali"])){ 
        $sql  .= $virgula." o55_finali = '$this->o55_finali' ";
        $virgula = ",";

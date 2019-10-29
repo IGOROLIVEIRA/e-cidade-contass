@@ -236,7 +236,7 @@ class cl_ctb102019
                                ,$this->si95_nroseqaplicacao 
                                ,'$this->si95_desccontabancaria' 
                                ,$this->si95_contaconvenio 
-                               ,$this->si95_nroconvenio 
+                               ,'$this->si95_nroconvenio'
                                ," . ($this->si95_dataassinaturaconvenio == "null" || $this->si95_dataassinaturaconvenio == "" ? "null" : "'" . $this->si95_dataassinaturaconvenio . "'") . " 
                                ,$this->si95_mes 
                                ,$this->si95_instit 

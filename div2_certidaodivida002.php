@@ -322,6 +322,11 @@ for ($numcertid = 0; $numcertid < $numero; $numcertid++) {
          drawDebitos($pdf, $oCDA, $oPardiv,$totexe=="t"?true:false, $reemissao =="t"?true:false);
          break;
 
+       case "quadro_debito_origem_honorarios" :
+
+         drawDebitosHonorarios($pdf, $oCDA, $oPardiv,$totexe=="t"?true:false, $reemissao =="t"?true:false);
+         break;
+
        case "quadro_debito_origem_corrigido" :
 
          drawDebitosOrigemCorrigido($pdf, $oCDA, $oPardiv,$totexe=="t"?true:false, $reemissao =="t"?true:false,true);
@@ -962,6 +967,301 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
       $pdf->Cell(10,5,db_formatar($oTotalGeral[$iTipo]->valormulta ,'f'),1,0,"R",0);
       $pdf->Cell(10,5,db_formatar($oTotalGeral[$iTipo]->valorjuros,'f'),1,0,"R",0);
       $pdf->Cell(15,5,db_formatar($oTotalGeral[$iTipo]->valortotal,'f'),1,1,"R",0);
+      $pdf->setfont('','B',9);
+
+      $pdf->Ln(5);
+    }
+  }
+}
+
+/**
+ * Escreve o quadro de Divida com a coluna de honorários
+ *
+ * @param pdf3 $pdf
+ * @param cda $oCertidao
+ */
+
+function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao) {
+
+  global $tipo, $lImpFolha;
+  $aDebitos         = $oCertidao->getDebitos($lReemissao);
+  if ($tipo == 1) {
+
+
+    if ( count($aDebitos) > 0 ) {
+
+      $lEscreveHeader = true;
+      $iY = 0;
+      foreach ($aDebitos as $oProcedencias) {
+
+
+
+        /*if ($pdf->gety() > $pdf->h -30) {
+
+          $pdf->addPage();
+          $pdf->SetFont('ARIAL','B',11);
+          $pdf->multicell(0,5,"CERTIDÃO DE DÍVIDA ATIVA N".CHR(176)." ".$oCertidao->getCodigo()."/{$oCertidao->getAno()}",0,"C",0,0);
+          $pdf->ln(8);
+          $pdf->setfont('','B',9);
+          $lEscreveHeader = true;
+        }*/
+
+        if ($lEscreveHeader) {
+
+          $pdf->SetFont('','',7);
+          $pdf->Ln(3);
+          $pdf->MultiCell(0,5,'P R O C E D Ê N C I A ',0,"C",0);
+          $pdf->Ln(3);
+          $pdf->SetFont('','B',7);
+          $pdf->Cell(15,5,"DÍVIDA",1,0,"C",1);
+          $pdf->Cell(15,5,"T.PROCED",1,0,"C",1);
+          $pdf->Cell(18,5,"CÓD. PROCED",1,0,"C",1);
+          $pdf->Cell(50,5,"PROCEDÊNCIA",1,0,"C",1);
+          $pdf->Cell(30,5,"DATA DE INSCRIÇÃO",1,0,"C",1);
+          $pdf->Cell(15,5,"ORIGEM",1,0,"C",1);
+          $pdf->Cell(15,5,"LIVRO",1,0,"C",1);
+          $pdf->Cell(15,5,"FOLHA",1,0,"C",1);
+          $pdf->Cell(15,5,"EXERCÍCIO",1,1,"C",1);
+          $lEscreveHeader = false;
+        }
+
+        $sSqlTipoProcedencia  = "select case when v03_tributaria = 1 then 'TRIB'";
+        $sSqlTipoProcedencia .= "            when v03_tributaria = 2 then 'N.TRIB' ";
+        $sSqlTipoProcedencia .= "            when v03_tributaria = 3 then 'TCE' end as tipoproced ";
+        $sSqlTipoProcedencia .= "  from proced ";
+        $sSqlTipoProcedencia .= " where v03_codigo = {$oProcedencias->codigoprocedencia} limit 1";
+        $rsProcedencia        = db_query($sSqlTipoProcedencia);
+        $sProcedencia         = db_utils::fieldsMemory($rsProcedencia, 0)->tipoproced;
+        $pdf->SetFont('','',7);
+        $pdf->Cell(15,5,$oProcedencias->codigodivida,1,0,"C",0);
+        $pdf->Cell(15,5, $sProcedencia, 1,0,"C",0);
+        $pdf->Cell(18,5,$oProcedencias->codigoprocedencia,1,0,"C",0);
+        $pdf->Cell(50,5,$oProcedencias->procedencia,1,0,"C",0);
+        $pdf->Cell(30,5,db_formatar($oProcedencias->datainscricao,'d'),1,0,"C",0);
+        $pdf->Cell(15,5,$oProcedencias->origem,1,0,"C",0);
+        $pdf->Cell(15,5,$oProcedencias->livro,1,0,"C",0);
+        $pdf->Cell(15,5,$oProcedencias->folha,1,0,"C",0);
+        $pdf->Cell(15,5,$oProcedencias->exercicio,1,1,"C",0);
+        $iY++;
+        if ($oPardiv->v04_imphistcda == "t" && isset($oProcedencias->v01_obs)) {
+
+          $pdf->SetFont('','I',5);
+          $pdf->setX(10);
+          $pdf->Cell(188,4,"Observação: $oProcedencias->observacao",1,1,"L",0);
+          $pdf->SetFont('','',7);
+
+        }
+      }
+    }
+
+  } else if ($tipo == 2) {
+
+    $aDebitosOrdenado = array();
+    $aTotaisAno       = array();
+    $oTotalGeral      = array();
+
+    foreach ($aDebitos as $oDebito) {
+
+      $aDebitosOrdenado[$oDebito->procedenciatributaria][] = $oDebito;
+      if (!isset($aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio])) {
+
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrhis = $oDebito->valorhistorico;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrcor = $oDebito->valorcorrigido;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrmul = $oDebito->valormulta;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrjur = $oDebito->valorjuros;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->valorhonorarios = getValorHonorarios($oDebito->valortotal);
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrtot = $oDebito->valortotal;
+        if ($oDebito->certidmassa != 0) {
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->valorhonorarios = getValorHonorarios($oDebito->valorcorrigido);
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrtot = $oDebito->valorcorrigido;
+        }
+
+      } else {
+
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrhis += $oDebito->valorhistorico;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrcor += $oDebito->valorcorrigido;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrmul += $oDebito->valormulta;
+        $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrjur += $oDebito->valorjuros;
+
+        if ($oDebito->certidmassa != 0) {
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->valorhonorarios = getValorHonorarios($oDebito->valorcorrigido);
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrtot += $oDebito->valorcorrigido;
+        } else {
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->valorhonorarios = getValorHonorarios($oDebito->valortotal);
+          $aTotaisAno[$oDebito->procedenciatributaria][$oDebito->exercicio]->vlrtot += $oDebito->valortotal;
+        }
+      }
+      if (!isset($oTotalGeral[$oDebito->procedenciatributaria])) {
+
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorhistorico  = $oDebito->valorhistorico;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorcorrigido  = $oDebito->valorcorrigido;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valormulta      = $oDebito->valormulta;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorjuros      = $oDebito->valorjuros;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios = getValorHonorarios($oDebito->valortotal);
+        $oTotalGeral[$oDebito->procedenciatributaria]->valortotal      = $oDebito->valortotal;
+        if ($oDebito->certidmassa != 0) {
+          $oTotalGeral[$oDebito->procedenciatributaria]->valortotal    = $oDebito->valorcorrigido;
+        }
+      } else {
+
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorhistorico += $oDebito->valorhistorico;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorcorrigido += $oDebito->valorcorrigido;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valormulta     += $oDebito->valormulta;
+        $oTotalGeral[$oDebito->procedenciatributaria]->valorjuros     += $oDebito->valorjuros;
+        if ($oDebito->certidmassa != 0) {
+          $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios = getValorHonorarios($oDebito->valorcorrigido);
+          $oTotalGeral[$oDebito->procedenciatributaria]->valortotal += $oDebito->valorcorrigido;
+        } else {
+          $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios = getValorHonorarios($oDebito->valortotal);
+          $oTotalGeral[$oDebito->procedenciatributaria]->valortotal += $oDebito->valortotal;
+
+        }
+      }
+    }
+
+    /**
+     * Escrevemos o quadro dos creditos ;
+     */
+    foreach ($aDebitosOrdenado as $iTipo => $aTipo) {
+
+      /*if ($pdf->gety() > $pdf->h -35) {
+
+        $pdf->addPage();
+        $pdf->SetFont('ARIAL','B',11);
+        $pdf->multicell(0,5,"CERTIDÃO DE DÍVIDA ATIVA N".CHR(176)." ".$oCertidao->getCodigo()."/{$oCertidao->getAno()}",0,"C",0,0);
+        $pdf->ln(8);
+        $pdf->setfont('','B',9);
+
+      }*/
+      $pdf->ln(3);
+      if ($iTipo == 1) {
+
+        $pdf->MultiCell(0,5,'C R É D I T O    T R I B U T Á R I O ',0,"C",0);
+      } else {
+
+        $pdf->setfont('','B',9);
+        $pdf->MultiCell(0,5,'C R É D I T O  N Ã O  T R I B U T Á R I O ',0,"C",0);
+      }
+      $pdf->SetFont('','B',6);
+      $pdf->Cell(10,5,"1 EXERC.",1,0,"C",1);
+      $pdf->Cell(9,5,"PARC",1,0,"C",1);
+      $pdf->Cell(30,5,"PROCEDÊNCIA",1,0,"C",1);
+      $pdf->Cell(16,5,"DATA INSCR.",1,0,"C",1);
+      $pdf->Cell(16,5,"DATA VENC.",1,0,"C",1);
+      $pdf->Cell(20,5,"VLR HIST.",1,0,"C",1);
+      $pdf->Cell(20,5,"CORRIGIDO",1,0,"C",1);
+      $pdf->Cell(18,5,"MULTA",1,0,"C",1);
+      $pdf->Cell(18,5,"JUROS",1,0,"C",1);
+      $pdf->Cell(17,5,"HONORÁRIOS",1,0,"C",1);
+      $pdf->Cell(20,5,"TOTAL",1,1,"C",1);
+      $lEscreveTotal      = false;
+      $iExercicioAnterior = null;
+      $pagina             = 0;
+      $iY = 0;
+
+      foreach ($aTipo as $oDebito) {
+
+        if ( $oDebito->exercicio != $iExercicioAnterior && $lEscreveTotal && $lTotaliza) {
+
+          $pdf->SetFont('','B',6);
+          $pdf->Cell(81,5,"TOTAL EXERCICIO - {$iExercicioAnterior}",1,0,"C",0);
+          $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrhis,'f'),1,0,"R",0);
+          $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrcor,'f'),1,0,"R",0);
+          $pdf->Cell(18,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrmul,'f'),1,0,"R",0);
+          $pdf->Cell(18,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrjur,'f'),1,0,"R",0);
+          $pdf->Cell(17,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->valorhonorarios,'f'),1,0,"R",0);
+          $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrtot,'f'),1,1,"R",0);
+          $pdf->setfont('','B',9);
+
+        }
+        $lEscreveTotal = true;
+        if ($iY > 272){
+
+          $pdf->AddPage();
+          /*$pdf->SetFont('ARIAL','B',11);
+          $pdf->multicell(0,5,"CERTIDÃO DE DÍVIDA ATIVA N".CHR(176)." ".$oCertidao->getCodigo()."/{$oCertidao->getAno()}",0,"C",0,0);
+          $pdf->ln(8);*/
+          $pdf->SetFont('','B',6);
+          $pdf->Cell(10,5,"2 EXERC.",1,0,"C",1);
+          $pdf->Cell(9,5,"PARC",1,0,"C",1);
+          $pdf->Cell(30,5,"PROCEDÊNCIA",1,0,"C",1);
+          $pdf->Cell(16,5,"DATA INSCR.",1,0,"C",1);
+          $pdf->Cell(16,5,"DATA VENC.",1,0,"C",1);
+          $pdf->Cell(20,5,"VLR HIST.",1,0,"C",1);
+          $pdf->Cell(20,5,"CORRIGIDO",1,0,"C",1);
+          $pdf->Cell(18,5,"MULTA",1,0,"C",1);
+          $pdf->Cell(18,5,"JUROS",1,0,"C",1);
+          $pdf->Cell(17,5,"HONORÁRIOS",1,0,"C",1);
+          $pdf->Cell(20,5,"TOTAL",1,1,"C",1);
+          $pagina = $pdf->PageNo();
+
+        }
+
+        $pdf->SetFont('','',6);
+        $pdf->Cell(10,5,$oDebito->exercicio,1,0,"C",0);
+        $pdf->Cell(9,5,$oDebito->numpar,1,0,"C",0);
+        $pdf->Cell(30,5,$oDebito->procedencia,1,0,"L",0);
+        $pdf->Cell(16,5,db_formatar($oDebito->datainscricao,'d'),1,0,"C",0);
+        $pdf->Cell(16,5,db_formatar($oDebito->datavencimento,'d'),1,0,"C",0);
+        $pdf->Cell(20,5,db_formatar($oDebito->valorhistorico,'f')    ,1,0,"R",0);
+        $pdf->Cell(20,5,db_formatar($oDebito->valorcorrigido,'f')    ,1,0,"R",0);
+        if ($oDebito->certidmassa == 0) {
+
+          $pdf->Cell(18,5,db_formatar($oDebito->valormulta,'f'),1,0,"R",0);
+          $pdf->Cell(18,5,db_formatar($oDebito->valorjuros,'f'),1,0,"R",0);
+          $pdf->Cell(17,5,db_formatar(getValorHonorarios($oDebito->valortotal),'f'),1,0,"R",0);
+          $pdf->Cell(20,5,db_formatar($oDebito->valortotal,'f')   ,1,1,"R",0);
+
+        } else {
+
+          $pdf->Cell(18,5,db_formatar(0,'f')      ,1,0,"R",0);
+          $pdf->Cell(18,5,db_formatar(0,'f')      ,1,0,"R",0);
+          $pdf->Cell(17,5,db_formatar(getValorHonorarios($oDebito->valortotal),'f'),1,0,"R",0);
+          $pdf->Cell(20,5,db_formatar($oDebito->valorcorrigido,'f'),1,1,"R",0);
+
+        }
+        if ( $oPardiv->v04_imphistcda == "t" && isset($oDebito->observacao)) {
+
+          $pdf->SetFont('','I',5);
+          $pdf->setX(10);
+
+          $pdf->SetAligns(array('J'));
+          $pdf->SetWidths(array(194));
+          $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
+
+          $pdf->SetFont('','',6);
+
+        }
+
+        $iExercicioAnterior = $oDebito->exercicio;
+        $iY = $pdf->GetY();
+
+      }
+
+      /**
+       * Escreve o total do ultimo ano
+       */
+      if (($lEscreveTotal && $lTotaliza)) {
+
+         $pdf->SetFont('','B',6);
+         $pdf->Cell(81,5,"TOTAL EXERCICIO - {$iExercicioAnterior}",1,0,"C",0);
+         $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrhis,'f'),1,0,"R",0);
+         $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrcor,'f'),1,0,"R",0);
+         $pdf->Cell(18,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrmul,'f'),1,0,"R",0);
+         $pdf->Cell(18,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrjur,'f'),1,0,"R",0);
+         $pdf->Cell(17,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->valorhonorarios,'f'),1,0,"R",0);
+         $pdf->Cell(20,5,db_formatar($aTotaisAno[$iTipo][$iExercicioAnterior]->vlrtot,'f'),1,1,"R",0);
+         $pdf->setfont('','B',9);
+
+      }
+      $pdf->SetFont('','B',6);
+      $pdf->Cell(81,5,"TOTAL",1,0,"C",0);
+      $pdf->Cell(20,5,db_formatar($oTotalGeral[$iTipo]->valorhistorico,'f'),1,0,"R",0);
+      $pdf->Cell(20,5,db_formatar($oTotalGeral[$iTipo]->valorcorrigido,'f'),1,0,"R",0);
+      $pdf->Cell(18,5,db_formatar($oTotalGeral[$iTipo]->valormulta ,'f'),1,0,"R",0);
+      $pdf->Cell(18,5,db_formatar($oTotalGeral[$iTipo]->valorjuros,'f'),1,0,"R",0);
+      $pdf->Cell(17,5,db_formatar($oTotalGeral[$iTipo]->valorhonorarios,'f'),1,0,"R",0);
+      $pdf->Cell(20,5,db_formatar($oTotalGeral[$iTipo]->valortotal,'f'),1,1,"R",0);
       $pdf->setfont('','B',9);
 
       $pdf->Ln(5);
@@ -3034,3 +3334,13 @@ function drawDebitosInflator($pdf, cda $oCertidao, $oPardiv, $sInflator, $lTotal
     }
   }
 }
+
+/**
+ * Calcula o valor dos honorários
+ * @param float $nValorTotal
+ * @todo criar parametro (pardiv ou parjuridico) indicando o percentual de honorarios
+ * @return float
+ */
+function getValorHonorarios($nValorTotal) {
+    return $nValorTotal*0.1;
+};

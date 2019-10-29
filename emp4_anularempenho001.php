@@ -52,39 +52,43 @@ $clorcdotacao    = new cl_orcdotacao;
 $clempautoriza   = new cl_empautoriza;
 $clempparametro  = new cl_empparametro;
 $db_opcao        = 22;
+
+$rsEmpParametro = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu")));
+$sTipoDeAnulacaoPadrao = db_utils::fieldsMemory($rsEmpParametro, 0)->e30_tipoanulacaopadrao;
+
 if(isset($numemp)){
 
-  $db_opcao = 1;
-  $db_botao = true;
+    $db_opcao = 1;
+    $db_botao = true;
 }
 ?>
-<html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
-<style>
-.saldocentavos {background-color:#d1f07c;}
-</style>
-</head>
-<body style="margin-top: 20px;" >
-  <div class="container">
-	<?php
-  require_once(Modification::getFile("forms/db_frmempanularempenho.php"));
-  ?>
-  </div>
-</body>
-</html>
+    <html>
+    <head>
+        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Expires" CONTENT="0">
+        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+        <link href="estilos.css" rel="stylesheet" type="text/css">
+        <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
+        <style>
+            .saldocentavos {background-color:#d1f07c;}
+        </style>
+    </head>
+    <body style="margin-top: 20px;" >
+    <div class="container">
+        <?php
+        require_once(Modification::getFile("forms/db_frmempanularempenho.php"));
+        ?>
+    </div>
+    </body>
+    </html>
 <?php
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 if ($db_opcao == 22) {
-	echo "<script>document.form1.pesquisar.click();</script>";
+    echo "<script>document.form1.pesquisar.click();</script>";
 } else {
-  echo "<script>js_consultaEmpenho({$numemp});</script>";
+    echo "<script>js_consultaEmpenho({$numemp});</script>";
 }
 ?>

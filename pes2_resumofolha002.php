@@ -226,7 +226,7 @@ try {
    */
   if ( !empty($oParametros->iPrevidencia) ) {
 
-    $aWhere['previdencia'] = "rh02_tbprev = {$oParametros->iPrevidencia}";
+    $aWhere['previdencia'] = "rh02_tbprev in ({$oParametros->iPrevidencia})";
 
     if ( $oParametros->iPrevidencia != TIPO_PREVIDENCIA_SEM_PREVIDENCIA ) {
       $head4 = "PREVIDÊNCIA : {$oParametros->sPrevidencia}";
@@ -234,7 +234,7 @@ try {
       $head4 = "PREVIDÊNCIA : FUNCIONÁRIOS SEM PREVIDÊNCIA";
     }
   } else {
-    $head4 = "PREVIDÊNCIA : 0 - Todos";
+    $head4 = "PREVIDÊNCIA : Todos";
   }
 
   if( !empty($sDescricaoSelecao) ){

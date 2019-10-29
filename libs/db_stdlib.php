@@ -2208,7 +2208,11 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
           } else {
             $var_data = "//";
           }
-        } else if( pg_fieldtype( $result, $j ) == "float8" || pg_fieldtype( $result, $j ) == "float4" ) {
+        } else if(pg_fieldtype( $result, $j ) == "timestamp") {
+          $data_hora = split(" ", pg_result( $result, $i, $j ));
+          $matriz_data = split( "-", $data_hora[0] );
+          $var_data    = $matriz_data[2] . "/" . $matriz_data[1] . "/" . $matriz_data[0]. " " .$data_hora[1];
+        }else if( pg_fieldtype( $result, $j ) == "float8" || pg_fieldtype( $result, $j ) == "float4" ) {
           $var_data = db_formatar( pg_result( $result, $i, $j ), 'f', ' ');
         } else if( pg_fieldtype( $result, $j ) == "bool" ) {
           $var_data  = ( pg_result( $result, $i, $j ) == 'f' || pg_result( $result, $i, $j ) == '' ? 'Não' : 'Sim' );

@@ -36,6 +36,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_conplano_classe.php");
 require_once("classes/db_orcfontes_classe.php");
 require_once("classes/db_orcelemento_classe.php");
+require_once("classes/db_conplanocontacorrente_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -79,6 +80,26 @@ if (isset($alterar) && trim(@$alterar) != ""){
          $sWhere       = "c60_codcon = {$codcon}";
          $sSqlConPlan  = $clconplano->sql_query_file(null,null,"max(conplano.c60_anousu) as anomax",null,$sWhere);
          $rsSqlConPlan = $clconplano->sql_record($sSqlConPlan);
+
+         //Busca conta corrente para verificar se o novo estrutural informado está de acordo com a conta corrente existente
+         $clconplanocontacorrente = new cl_conplanocontacorrente;
+         $sSqlConCorr  = $clconplanocontacorrente->sql_query_file(null, "c18_contacorrente", null, "c18_codcon = {$codcon}");
+         $rsSqlConCorr = $clconplanocontacorrente->sql_record($sSqlConCorr);
+         $sConCorr     = db_utils::fieldsMemory($rsSqlConCorr, 0)->c18_contacorrente;
+//         print_r($sSqlConCorr);die();
+//         echo $sConCorr.'<br>';
+//         echo $c18_contacorrente.'<br>';die();
+         if($clconplanocontacorrente->numrows > 0) {
+
+             if($sConCorr != $c18_contacorrente) {
+
+                 $erro_msg = 'Usuário: Não será possível realizar a alteração. As contas informadas possuem associações de conta corrente distintas.';
+                 $sqlerro = true;
+                 break;
+
+             }
+
+         }
 
          if ($clconplano->numrows > 0) {
 
@@ -133,7 +154,6 @@ if (isset($alterar) && trim(@$alterar) != ""){
 		         }
            }
          }
-
        }
      }
 
@@ -196,6 +216,8 @@ if (isset($alterar) && trim(@$alterar) != ""){
      var virgula      = "";
      var lista_codcon = "";
 
+     document.form1.c18_contacorrente.value = js_verificaContaEstrutural(document.form1.chave_c60_estrut_alt.value);
+
      for(i = 0; i < conplano.document.form1.elements.length; i++){
           if (conplano.document.form1.elements[i].type == "checkbox"){
                if (conplano.document.form1.elements[i].checked == true ){
@@ -252,6 +274,7 @@ if (isset($alterar) && trim(@$alterar) != ""){
     <?
       db_input("c60_estrut",15,@$Ic60_estrut,true,"text",4,"","chave_c60_estrut");
       db_input("c60_codcon",15,0,true,"hidden",3);
+      db_input("c18_contacorrente",15,0,true,"hidden",3);
 
       if (isset($chave_c60_estrut) && trim(@$chave_c60_estrut) != ""){
            $resultado = $clconplano->sql_record($clconplano->sql_query_file(null,null,"*","c60_estrut",
@@ -425,6 +448,66 @@ if (isset($alterar) && trim(@$alterar) != ""){
                }
           }
      }
+  }
+
+  /**
+   * Função que retorna conta corrente de acordo com o inicial do estrutural
+   */
+
+  function js_verificaContaEstrutural(sEstrutural) {
+
+      let aEstC100 = [
+          '52111', '521120101', '5211202', '5211203', '5211204', '5211205', '5211206', '5211299', '5212101', '5212102',
+          '52129', '6211', '6212', '6213101', '62132', '62133', '62134', '62135', '62136', '62139'
+      ];
+
+      let aEstC101 = [
+          '5111', '5112', '5221101', '522110201', '522110209', '5221201', '522120201', '522120202', '522120203',
+          '522120301', '522120302', '522120303', '5221301', '5221302', '5221303', '5221304', '5221305', '5221306',
+          '5221307', '5221309', '5221399', '522190101', '522190109', '522190201', '522190209', '5221904', '5222101',
+          '5222102', '522210901', '522210909', '522220101', '522220109', '522220201', '522220209', '522220901',
+          '522220909', '5222901', '5222902', '5229101', '5229102', '5229103', '522920101', '522920102', '522920103',
+          '522920104', '6111', '6112', '6113', '62211', '6221201', '6221202', '6221299', '6221399', '6222101', '6222102',
+          '622210901', '622210909', '622220101', '622220201', '622220901', '622220909', '62229', '62231', '6229101',
+          '6229102', '622920101', '622920102', '622920103', '622920104', '7531', '7532', '7533', '7534', '8531', '85321',
+          '85322', '85323', '85324', '85331', '85332', '85333', '85334', '85335', '85336', '85337', '85338', '85341',
+          '85342', '85343', '85344', '85345'
+      ];
+
+      let aEstC102 = [
+          '6221301', '6221302', '6221303', '6221304', '6221305', '6221306', '6221307'
+      ];
+
+      let aEstC106 = [
+          '5311', '5312', '5313', '5316', '5317', '5321', '5322', '5326', '5327', '6311', '6312', '6313', '6314',
+          '6315', '6316', '63171', '63172', '63191', '63199', '6321', '6322', '6326', '6327', '63291', '63299'
+      ];
+
+      for (var i = 0; i < aEstC100.length; i++) {
+          if(sEstrutural.split('.').join('').substr(0, aEstC100[i].length).includes(aEstC100[i])){
+              return 100;
+          }
+      }
+
+      for (var i = 0; i < aEstC101.length; i++) {
+          if(sEstrutural.split('.').join('').substr(0, aEstC101[i].length).includes(aEstC101[i])){
+              return 101;
+          }
+      }
+
+      for (var i = 0; i < aEstC102.length; i++) {
+          if(sEstrutural.split('.').join('').substr(0, aEstC102[i].length).includes(aEstC102[i])){
+              return 102;
+          }
+      }
+
+      for (var i = 0; i < aEstC106.length; i++) {
+          if(sEstrutural.split('.').join('').substr(0, aEstC106[i].length).includes(aEstC106[i])){
+              return 106;
+          }
+      }
+
+      return 103;
   }
 
 <?

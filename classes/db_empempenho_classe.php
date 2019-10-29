@@ -186,7 +186,7 @@ class cl_empempenho {
         }else{
             $this->e60_numemp = ($this->e60_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numemp"]:$this->e60_numemp);
         }
-            $this->e60_tipodespesa = ($this->e60_tipodespesa == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"]:$this->e60_tipodespesa);
+        $this->e60_tipodespesa = ($this->e60_tipodespesa == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"]:$this->e60_tipodespesa);
     }
     // funcao para inclusao
     function incluir ($e60_numemp){
@@ -1036,7 +1036,7 @@ class cl_empempenho {
         return $result;
     }
     // funcao do sql
-    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento =""){
+    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento ="", $limit = ''){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1096,6 +1096,9 @@ class cl_empempenho {
                 $virgula = ",";
             }
         }
+        if($limit){
+          $sql.=" limit $limit ";
+        }
         return $sql;
     }
     // funcao do sql
@@ -1145,8 +1148,9 @@ class cl_empempenho {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
-        $sql .= "      inner join matordemitem on m52_numemp          =  e60_numemp";
-        $sql .= "      inner join matordem     on m51_codordem        = m52_codordem";
+        $sql .= "      inner join empempitem on e62_numemp = e60_numemp";
+        $sql .= "      left join matordemitem on m52_numemp          =  e60_numemp";
+        $sql .= "      left join matordem     on m51_codordem        = m52_codordem";
         $sql .= "      inner join cgm          on matordem.m51_numcgm = cgm.z01_numcgm ";
         $sql2 = "";
         if($dbwhere==""){
@@ -1558,7 +1562,7 @@ class cl_empempenho {
 
         return $sSql;
     }
-    function sql_query_relatorio ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){//aqui
+    function sql_query_relatorio ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $sqlanulado=""){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1573,22 +1577,17 @@ class cl_empempenho {
         $sql .= " from empempenho ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
         $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
-        $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot
-     = empempenho.e60_coddot";
+        $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
         $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
         $sql .= "      inner join db_config  as a on   a.codigo = orcdotacao.o58_instit";
         $sql .= "      inner join orctiporec  on  orctiporec.o15_codigo = orcdotacao.o58_codigo";
         $sql .= "      inner join orcfuncao  on  orcfuncao.o52_funcao = orcdotacao.o58_funcao";
         $sql .= "      inner join orcsubfuncao  on  orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao";
-        $sql .= "      inner join orcprograma  on  orcprograma.o54_anousu = orcdotacao.o58_anousu
-                             and  orcprograma.o54_programa     = orcdotacao.o58_programa";
+        $sql .= "      inner join orcprograma  on  orcprograma.o54_anousu = orcdotacao.o58_anousu and  orcprograma.o54_programa     = orcdotacao.o58_programa";
         $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = orcdotacao.o58_codele and orcelemento.o56_anousu = orcdotacao.o58_anousu ";
-        $sql .= "      inner join orcprojativ  on  orcprojativ.o55_anousu = orcdotacao.o58_anousu and  orcprojativ.o55_projativ
-     = orcdotacao.o58_projativ";
-        $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao
-     = orcdotacao.o58_orgao";
-        $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao
-     = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
+        $sql .= "      inner join orcprojativ  on  orcprojativ.o55_anousu = orcdotacao.o58_anousu and  orcprojativ.o55_projativ = orcdotacao.o58_projativ";
+        $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao = orcdotacao.o58_orgao";
+        $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
         $sql .= "      left join empemphist on empemphist.e63_numemp = empempenho.e60_numemp ";
         $sql .= "      left join emphist on emphist.e40_codhist = empemphist.e63_codhist";
         $sql .= "      inner join pctipocompra on pctipocompra.pc50_codcom = empempenho.e60_codcom ";
@@ -1605,7 +1604,7 @@ class cl_empempenho {
         $sql .= " INNER JOIN empempaut ON e61_numemp = e60_numemp ";
         $sql .= " INNER JOIN empautoriza ON e54_autori = e61_autori ";
         $sql .= " INNER JOIN db_depart ON e54_gestaut = coddepto ";
-
+        $sql .= $sqlanulado;
 
         $sql2 = "";
         if($dbwhere==""){
@@ -2003,6 +2002,7 @@ class cl_empempenho {
         $sql .= "                                                    and pcorcamjulgpai.pc24_pontuacao      = 1 ";
         $sql .= "       left join pcorcamval     as pcorcamvalpai     on pcorcamvalpai.pc23_orcamitem       = pcorcamjulgpai.pc24_orcamitem ";
         $sql .= "                                                    and pcorcamvalpai.pc23_orcamforne      = pcorcamjulgpai.pc24_orcamforne ";
+        $sql .= "       left join orcdotacao on o58_coddot = e60_coddot and o58_anousu = e60_anousu";
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){
@@ -2152,6 +2152,22 @@ class cl_empempenho {
         return $sSql;
     }
 
+    public function sql_query_contrato_empenho($iItem,$iAcordo){
+
+        $sql = "select sum(e62_quant) as qtdempenhada from acordoposicao
+            inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+            inner join acordoitemexecutado on ac29_acordoitem = ac20_sequencial
+            inner join acordoitemexecutadoempautitem on ac19_acordoitemexecutado = ac29_sequencial
+            inner join empautitem on (e55_autori, e55_sequen) = (ac19_autori, ac19_sequen)
+            inner join empautoriza on e55_autori = e54_autori
+            inner join empempaut on e61_autori = e54_autori
+            inner join empempenho on e60_numemp = e61_numemp
+            inner join empempitem on e62_numemp = e60_numemp and e62_item = $iItem
+            where ac26_acordo = $iAcordo and e62_item = $iItem";
+
+        return $sql;
+    }
+
     public function sql_query_empenho_classificacao_nota($sCampos = "*", $sWhere = null) {
 
         $sSql  = " select {$sCampos} ";
@@ -2176,15 +2192,15 @@ class cl_empempenho {
 
     public function verificaConvenioSicomMSC($codigo, $ano, $dados) {
 
-     $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
+        $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
 
-      $sSQL = "
+        $sSQL = "
           select {$dados->campo}
            from {$dados->tabela}
             join orcdotacao on (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
              where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
               and o58_codigo in (122,123,124,142)";
 
-      return pg_num_rows(db_query($sSQL));
+        return pg_num_rows(db_query($sSQL));
     }
 }

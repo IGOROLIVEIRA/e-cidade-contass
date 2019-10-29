@@ -155,6 +155,16 @@ if (isset($it14_guia) && !empty($it14_guia)) {
 			            ?>
 			          </td>
 			        </tr>
+					  <tr>
+						  <td>
+							  <b>Localização:</b>
+						  </td>
+						  <td colspan="5">
+							  <?
+							  db_input('it18_localimovel',100,"",true,'text',3,"");
+							  ?>
+						  </td>
+					  </tr>
 					<? if ( $tipo == "urbano" ) {?>
 					<tr>
 					  <td>
