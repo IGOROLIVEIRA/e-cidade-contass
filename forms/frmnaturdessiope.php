@@ -31,7 +31,7 @@ $clnaturdessiope->rotulo->label();
                 </td>
                 <td>
                     <?
-                    $xx = array("t"=>"SIM","f"=>"NAO");
+                    $xx = array("f"=>"NAO","t"=>"SIM");
                     db_select('c222_previdencia',$xx,true,1,"");
                     ?>
                 </td>
