@@ -397,7 +397,7 @@ class Siope {
 
             list($o58_codigo, $o58_subfuncao, $cod_planilha, $elemento_siope, $descricao_siope, $dot_atualizada, $empenhado, $liquidado, $pagamento) = array_values($row);
 
-            if ($o58_codigo == 118 || $o58_codigo == 218 || $o58_codigo == 119 || $o58_codigo == 219) {
+            if (($o58_codigo == 118 || $o58_codigo == 218 || $o58_codigo == 119 || $o58_codigo == 219) && (substr($elemento_siope, 0, 3) == 331)) {
 
                 $iSubTotalDot = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['dot_atualizada'] : 0;
                 $iSubTotalEmp = isset($aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado']) ? $aDespAgrup[$o58_codigo][$cod_planilha][$elemento_siope]['empenhado'] : 0;
@@ -444,8 +444,12 @@ class Siope {
                 foreach ($aAgrupado as $elementos) {
 
                     foreach ($elementos as $elemento) {
-                        $chave1 = $elemento['o58_codigo'].$elemento['cod_planilha'].$elemento['elemento_siope'];
-                        $this->aDespesasAgrupadas[$chave1] = $elemento;
+
+                        if(substr($elemento['elemento_siope'], 0, 3) == 331) {
+                            $chave1 = $elemento['o58_codigo'] . $elemento['cod_planilha'] . $elemento['elemento_siope'];
+                            $this->aDespesasAgrupadas[$chave1] = $elemento;
+                        }
+
                     }
 
                 }
