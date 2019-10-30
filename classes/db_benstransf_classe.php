@@ -514,6 +514,7 @@ class cl_benstransf {
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      left outer join benstransfdes on benstransf.t93_codtran = benstransfdes.t94_codtran";
      $sql .= "      left outer join benstransfcodigo on benstransf.t93_codtran = benstransfcodigo.t95_codtran";
+     $sql .= "      left join db_depart as dp2 on dp2.coddepto = benstransfdes.t94_depart ";
      $sql2 = "";
      if($dbwhere==""){
        if($t93_codtran!=null ){
