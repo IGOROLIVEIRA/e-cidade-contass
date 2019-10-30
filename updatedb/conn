@@ -19,6 +19,7 @@ e-cidade			5432	pmvarzelandia
 e-cidade			5432	pmclarodospocoes
 e-cidade			5432	cii-amaje
 e-cidade			5432	mctrans
+e-cidade            5432    cmarinos
 
 pmcapitaoeneas      5432    ecidadepref
 pmclarodospocoes    5432    ecidadepref
@@ -58,7 +59,6 @@ prevcap				5432	e-cidade
 prevponte39			5432	e-cidade
 cmburitizeiro       5432    e-cidade
 samu                5432    e-cidade
-cmarinos			5432    e-cidade
 cmjanauba           5432    e-cidade
 cmibiai             5432    e-cidade
 
