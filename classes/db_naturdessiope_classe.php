@@ -380,7 +380,7 @@ class cl_naturdessiope {
         return $sql;
     }
 
-    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="", $c222_anousu="",$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="", $c222_anousu="", $c222_previdencia="",$campos="*",$ordem=null,$dbwhere="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -414,6 +414,14 @@ class cl_naturdessiope {
                     $sql2 .= " where ";
                 }
                 $sql2 .= " naturdessiope.c222_anousu = '$c222_anousu' ";
+            }
+            if ($c222_previdencia!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturdessiope.c222_previdencia = '$c222_previdencia' ";
             }
 
         } else if ($dbwhere != "") {

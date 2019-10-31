@@ -623,6 +623,8 @@ class Oc10927 extends PostgresMigration
         ('34691930000', '34600000000', '2019', 't'),
         ('34691990000', '34600000000', '2019', 't');
 
+        INSERT INTO eledessiope VALUES
+        ('33391970000', 'Aporte para Cobertura do Déficit Atuarial do RPPS', '2019');
 
         COMMIT;
 
