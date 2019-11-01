@@ -154,7 +154,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             FROM pagordem
             JOIN pagordemele ON e53_codord = e50_codord
             JOIN empempenho ON e50_numemp = e60_numemp
-            JOIN orcdotacao ON (e60_anousu, e60_coddot, 26909) = (o58_anousu, o58_coddot, e50_codord)
+            JOIN orcdotacao ON (e60_anousu, e60_coddot) = (o58_anousu, o58_coddot)
             JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (o41_anousu, o41_orgao, o41_unidade)
             JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
             JOIN conlancamord ON c80_codord = e50_codord
