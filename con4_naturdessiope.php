@@ -11,7 +11,13 @@ $clnaturdessiope = new cl_naturdessiope;
 
 if(isset($incluir)){
     db_inicio_transacao();
-    $clnaturdessiope->incluir($c222_natdespecidade,$c222_natdespsiope, $c222_anousu);
+    $clnaturdessiope->incluir($c222_natdespecidade,$c222_natdespsiope, $c222_anousu, $c222_previdencia);
+    db_fim_transacao();
+}
+
+if(isset($alterar)){
+    db_inicio_transacao();
+    $clnaturdessiope->alterar($c222_natdespecidade,$c222_natdespsiope,$c222_previdencia);
     db_fim_transacao();
 }
 
@@ -54,6 +60,20 @@ if(isset($excluir)){
     </script>
 <?
 if(isset($incluir)){
+    if($clnaturdessiope->erro_status=="0"){
+        $clnaturdessiope->erro(true,false);
+        $db_botao=true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if($clnaturdessiope->erro_campo!=""){
+            echo "<script> document.form1.".$clnaturdessiope->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clnaturdessiope->erro_campo.".focus();</script>";
+        }
+    }else{
+        $clnaturdessiope->erro(true,true);
+    }
+}
+
+if(isset($alterar)){
     if($clnaturdessiope->erro_status=="0"){
         $clnaturdessiope->erro(true,false);
         $db_botao=true;

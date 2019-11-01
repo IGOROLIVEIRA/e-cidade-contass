@@ -238,7 +238,6 @@ class Siope {
                     $sele_work2         = " 1=1 and o58_orgao in ({$oDespesa->o58_orgao}) and ( ( o58_orgao = {$oDespesa->o58_orgao} and o58_unidade = {$oDespesa->o58_unidade} ) ) and o58_funcao in ({$oDespesa->o58_funcao}) and o58_subfuncao in ({$oDespesa->o58_subfuncao}) and o58_programa in ({$oDespesa->o58_programa}) and o58_projativ in ({$oDespesa->o58_projativ}) and (o56_elemento like '" . substr($oDespesa->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesa->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
                     $cldesdobramento    = new cl_desdobramento();
                     $resDepsMes         = db_query($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'')) or die($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})",'') . pg_last_error());
-                    $oNaturdessiope     = $this->getNaturDesSiope($oDespesa->o58_elemento);
                     $sHashDesp          = $oDespesa->o58_elemento;
                     $aDadosAgrupados    = array();
 
@@ -248,7 +247,14 @@ class Siope {
 
                         $aArrayTemp['o58_codigo']       = $oDespesa->o58_codigo;
                         $aArrayTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
-                        $aArrayTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                        $aArrayTemp['cod_planilha']     = $iCodPlan = $this->getCodPlanilha($oDespesa);
+
+                        if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
+                            $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                        } else {
+                            $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                        }
+
                         $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
                         $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
                         $aArrayTemp['dot_atualizada']   = ($oDespesa->dot_ini + $oDespesa->suplementado_acumulado - $oDespesa->reduzido_acumulado);
@@ -263,7 +269,6 @@ class Siope {
                     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
 
                         $oDadosMes          = db_utils::fieldsMemory($resDepsMes, $contDesp);
-                        $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento);
                         $sHashDespDesd      = $oDadosMes->o56_elemento;
 
                         if (isset($aDadosAgrupados[$sHashDesp])) {
@@ -272,7 +277,14 @@ class Siope {
 
                             $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
                             $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
-                            $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                            $aArrayDesdTemp['cod_planilha']     = $iCodPlan = $this->getCodPlanilha($oDespesa);
+
+                            if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                            } else {
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                            }
+
                             $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
                             $aArrayDesdTemp['dot_atualizada']   = 0;
@@ -288,9 +300,17 @@ class Siope {
 
                             $aArrayDesdTemp['o58_codigo']       = $oDespesa->o58_codigo;
                             $aArrayDesdTemp['o58_subfuncao']    = $oDespesa->o58_subfuncao;
-                            $aArrayDesdTemp['cod_planilha']     = $this->getCodPlanilha($oDespesa);
+                            $aArrayDesdTemp['cod_planilha']     = $iCodPlan = $this->getCodPlanilha($oDespesa);
+
+                            if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                            } else {
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                            }
+
                             $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
                             $aArrayDesdTemp['descricao_siope']  = $oNaturdessiopeDesd->c223_descricao;
+
                             $aArrayDesdTemp['dot_atualizada']   = 0;
                             $aArrayDesdTemp['empenhado']        = ($oDadosMes->empenhado - $oDadosMes->empenhado_estornado);
                             $aArrayDesdTemp['liquidado']        = ($oDadosMes->liquidado - $oDadosMes->liquidado_estornado);
@@ -302,7 +322,9 @@ class Siope {
                     }
 
                 }
+
             }
+
         }
 
         /**
@@ -321,7 +343,6 @@ class Siope {
                         $sele_work2 = " 1=1 and o58_orgao in ({$oDespesaAnoSeg->o58_orgao}) and ( ( o58_orgao = {$oDespesaAnoSeg->o58_orgao} and o58_unidade = {$oDespesaAnoSeg->o58_unidade} ) ) and o58_funcao in ({$oDespesaAnoSeg->o58_funcao}) and o58_subfuncao in ({$oDespesaAnoSeg->o58_subfuncao}) and o58_programa in ({$oDespesaAnoSeg->o58_programa}) and o58_projativ in ({$oDespesaAnoSeg->o58_projativ}) and (o56_elemento like '" . substr($oDespesaAnoSeg->o58_elemento, 0, 7) . "%') and o58_codigo in ({$oDespesaAnoSeg->o58_codigo}) and o58_instit in ({$this->iInstit}) and o58_anousu={$this->iAnoUsu} ";
                         $cldesdobramento = new cl_desdobramento();
                         $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})", '')) or die($cldesdobramento->sql($sele_work2, $this->dtIni, $this->dtFim, "({$this->iInstit})", '') . pg_last_error());
-                        $oNaturdessiope = $this->getNaturDesSiope($oDespesaAnoSeg->o58_elemento);
                         $sHashDesp = $oDespesaAnoSeg->o58_elemento;
                         $aDadosAgrupados = array();
 
@@ -331,9 +352,17 @@ class Siope {
 
                             $aArrayTemp['o58_codigo'] = $oDespesaAnoSeg->o58_codigo;
                             $aArrayTemp['o58_subfuncao'] = $oDespesaAnoSeg->o58_subfuncao;
-                            $aArrayTemp['cod_planilha'] = $this->getCodPlanilha($oDespesaAnoSeg);
-                            $aArrayTemp['elemento_siope'] = $oNaturdessiope->c223_eledespecidade;
-                            $aArrayTemp['descricao_siope'] = $oNaturdessiope->c223_descricao;
+                            $aArrayTemp['cod_planilha'] = $iCodPlan = $this->getCodPlanilha($oDespesaAnoSeg);
+
+                            if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
+                                $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                            } else {
+                                $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                            }
+
+                            $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
+                            $aArrayTemp['descricao_siope']  = $oNaturdessiope->c223_descricao;
+
                             $aArrayTemp['desp_orcada'] = $oDespesaAnoSeg->dot_ini;
 
                             array_push($this->aDespesasAnoSeg, $aArrayTemp);
@@ -810,10 +839,10 @@ class Siope {
     /**
      * Realiza De/Para da Natureza da despesa com tabela eledessiope composta pelo Cód Elemento e Descrição
      */
-    public function getNaturDesSiope($elemento) {
+    public function getNaturDesSiope($elemento, $previdencia) {
 
         $clnaturdessiope    = new cl_naturdessiope();
-        $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11),"", $this->iAnoUsu));
+        $rsNaturdessiope    = db_query($clnaturdessiope->sql_query_siope(substr($elemento, 0, 11),"", $this->iAnoUsu, $previdencia));
 
         if (pg_num_rows($rsNaturdessiope) > 0) {
             $oNaturdessiope = db_utils::fieldsMemory($rsNaturdessiope, 0);
