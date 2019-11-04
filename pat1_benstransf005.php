@@ -72,7 +72,12 @@ if(isset($alterar)){
       $clapolice->erro_campo = "t93_data_dia";
     }
   }
-  if($sqlerro == false){  
+  if($sqlerro == false){
+      if($transfdireta = "true"){
+          $clbenstransf->t93_tipo = 2;
+      }else{
+          $clbenstransf->t93_tipo = 1;
+      }
     $clbenstransf->alterar($t93_codtran);
     if($clbenstransf->erro_status==0){
       $sqlerro=true;
