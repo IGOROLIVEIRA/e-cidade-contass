@@ -164,11 +164,12 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
             LEFT JOIN cgm o ON o.z01_numcgm = o41_ordpagamento
             WHERE c80_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-                AND c71_coddoc IN (5, 35, 37)
-                AND e60_instit = " . db_getsession("DB_instit") . "
+              AND c71_coddoc IN (5, 35, 37)
+              AND e60_instit = " . db_getsession("DB_instit") . "
             ORDER BY e50_codord, c80_codlan";
-    // $sSql;exit;
+
     $rsEmpenhosPagosGeral = db_query($sSql);
+    //db_criatabela($rsEmpenhosPagosGeral);
 
     //db_criatabela($rsEmpenhosPagosGeral);
     //$aCaracteres = array("°",chr(13),chr(10),"'",);
@@ -190,7 +191,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             and c70_data <= '" . $this->sDataFinal . "' and c80_codord = {$oEmpPago->ordem}";
       $rsQuantExtornos = db_query($sSqlExtornos);
 
-      //db_criatabela($rsQuantExtornos);
       if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
         $sHash = $oEmpPago->ordem;
 
@@ -415,11 +415,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIsIs = db_query($sqlReten);
 
-          if (pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar > 0) {
+          if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
 
-            $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIs, 0)->descontar;
+            $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
             if ($nVolorOp == 0) {
-              $saldopag = db_utils::fieldsMemory($rsReteIs, 0)->descontar;
+              $saldopag = db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
             } else {
               $saldopag = $nVolorOp;
             }
@@ -433,6 +433,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $nVolorOp = $oEmpPago->valor;
             $saldopag = $nVolorOp;
           }
+          //echo $oEmpPago->valor."<br>".$saldopag."<br>".$nVolorOp."<br>";
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
             $clops12 = new cl_ops122019();
@@ -802,7 +803,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           $rsPagOrd11 = db_query($sSql11);
 
-
           $reg11 = db_utils::fieldsMemory($rsPagOrd11, 0);
 
           if (pg_num_rows($rsPagOrd11) > 0) {
@@ -916,11 +916,12 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIs = db_query($sqlReten);
+
           if ($aInformado[$sHash]->retencao == 0) {
+
             if (pg_num_rows($rsReteIs) > 0) {
 
               $retencao2 = $aInformado[$sHash]->retencao;
-
 
               $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIs, 0)->descontar;
               $saldopag = $nVolorOp;
@@ -929,7 +930,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 $nVolorOp = $oEmpPago->valor;
                 $aInformado[$sHash]->retencao = 0;
               }
-
 
             } else {
               $nVolorOp = $oEmpPago->valor;
@@ -1014,8 +1014,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       si95_digitoverificadorcontabancaria = c63_dvconta and
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
-            $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste3"); 
-            
+            $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste3");
+
             $ContaPag = db_utils::fieldsMemory($rsResultContaPag)->contapag;
 
             $FontContaPag = db_utils::fieldsMemory($rsResultContaPag)->fonte;
@@ -1107,7 +1107,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . " and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") as x order by contapag desc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste4");
-            //echo $sSqlContaPagFont;db_criatabela($rsResultContaPag);
+
             $ContaPag2 = db_utils::fieldsMemory($rsResultContaPag)->contapag;
 
             $FontContaPag2 = db_utils::fieldsMemory($rsResultContaPag)->fonte;
@@ -1157,8 +1157,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
-            $rsPagOrd13 = db_query($sSql13);//db_criatabela($rsPagOrd13);
-
+            $rsPagOrd13 = db_query($sSql13);
 
             if (pg_num_rows($rsPagOrd13) > 0) {
 
@@ -1207,10 +1206,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 }
               }
 
-
             }
           }
-
 
         }
 
@@ -1221,5 +1218,4 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     $oGerarOPS->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
     $oGerarOPS->gerarDados();
   }
-
 }
