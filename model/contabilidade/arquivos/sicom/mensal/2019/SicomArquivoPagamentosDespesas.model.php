@@ -169,9 +169,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             ORDER BY e50_codord, c80_codlan";
 
     $rsEmpenhosPagosGeral = db_query($sSql);
-    //db_criatabela($rsEmpenhosPagosGeral);
 
-    //db_criatabela($rsEmpenhosPagosGeral);
     //$aCaracteres = array("°",chr(13),chr(10),"'",);
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -401,6 +399,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        AND e81_cancelado IS NULL";
 
           $rsPagOrd12 = db_query($sSql12);
+
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
           /**
@@ -415,7 +414,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIsIs = db_query($sqlReten);
 
-          if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
+          if (pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar > 0) {
 
             $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
             if ($nVolorOp == 0) {
@@ -433,7 +432,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $nVolorOp = $oEmpPago->valor;
             $saldopag = $nVolorOp;
           }
-          //echo $oEmpPago->valor."<br>".$saldopag."<br>".$nVolorOp."<br>";
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
             $clops12 = new cl_ops122019();
@@ -705,7 +703,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           }
 
         } else {
-
           /*
            * CASO JA EXISTE UMA ORDEM DE PAGAMENTO INFORMADA NO ARRAY O SISTEMA VERIFICARA NOVAMENTE O LANCAMENTO CONTABIL DE
            * PAGAMENTO PARA INFORMAR COMO UM NOVO PAGAMENTO
