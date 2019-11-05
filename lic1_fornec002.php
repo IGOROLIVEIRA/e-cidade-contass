@@ -577,7 +577,7 @@ $iNumCgmForn  = db_utils::fieldsMemory($result_fornaba, 0)->pc21_numcgm;
         var param2 = $('l20_codigo').value;
         var param3 = $('cgmaba').value;
 
-        top.corpo.iframe_db_cred.location.href='lic1_credenciamento001?pc20_codorc='+param1+'&l20_codigo='+param2+'&l205_fornecedor='+param3;
+        top.corpo.iframe_db_cred.location.href='lic1_credenciamento001.php?pc20_codorc='+param1+'&l20_codigo='+param2+'&l205_fornecedor='+param3;
         //parent.document.formaba.db_cred.disabled=false;
         //parent.document.formaba.db_hab.disabled=false;
 
