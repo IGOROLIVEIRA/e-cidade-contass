@@ -64,7 +64,7 @@ try{
         case 'getCredforne':
             $aItens = array();
 
-            $resultcredforne = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_fornecedor = {$oParam->forne}"));
+            $resultcredforne = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_fornecedor = {$oParam->forne} and l205_licitacao = {$oParam->licitacao}"));
             if(pg_num_rows($resultcredforne) != 0){
                 $oRetorno->result = $nenhumresultado;
                 for ($iContItens = 0; $iContItens < pg_num_rows($resultcredforne); $iContItens++) {
@@ -80,7 +80,7 @@ try{
 
         case 'excluirCred':
 
-            $clcredenciamento->excluir(null,$oParam->forne);
+            $clcredenciamento->excluir(null,$oParam->forne,$oParam->licitacao);
 
             if ($clcredenciamento->erro_status == 0) {
                 $sqlerro = true;
