@@ -225,7 +225,7 @@ try {
    * Validando Previdencia
    */
   if ( !empty($oParametros->iPrevidencia) ) {
-
+    $oParametros->iPrevidencia = str_replace("5","0",$oParametros->iPrevidencia);
     $aWhere['previdencia'] = "rh02_tbprev in ({$oParametros->iPrevidencia})";
 
     if ( $oParametros->iPrevidencia != TIPO_PREVIDENCIA_SEM_PREVIDENCIA ) {
