@@ -136,13 +136,13 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     <div style="width: 46%; padding-left: 28%; padding-top: 5px;">
         <input id="Salvar" type="submit" value="Salvar" name="Salvar" onclick="">
         <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="excluirCred()">
-        <input id="Julgar" type="button" name="Julgar" value="Julgar" onclick="julgarLic()" >
+        <input id="Julgar" type="button" name="Julgar" value="Julgar" onclick="julgarLic()" disabled>
     </div>
 </form>
 <script>
 
     BuscarCredenciamento(document.getElementById('l205_fornecedor').value);
-
+    getCredenciamento();
     /**
      * Retorna todos os itens
      */
@@ -390,6 +390,43 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         } else if (response.erro == false) {
             alert('Licitação julgada com Sucesso !');
             location.reload();
+        }
+    }
+
+    /**
+     * faço uma consulta para verificar se existe intens credenciados em caso possitivo bloqueio
+     * @returns {boolean}
+     */
+    function getCredenciamento() {
+        try {
+            verificaCred({
+                exec: 'getCredenciamento',
+                licitacao: <?php echo $l20_codigo?>,
+            }, oValidabtnJulgar);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function verificaCred(params, onComplete) {
+        // js_divCarregando('Aguarde julgando Licitação', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(oRetornoitems) {
+                // js_removeObj('div_aguarde');
+                onComplete(oRetornoitems);
+            }
+        });
+    }
+
+    function oValidabtnJulgar(res) {
+        var oRetornoitens = JSON.parse(res.responseText);
+        let qtditens = oRetornoitens.itens.length;
+
+        if(qtditens > 0){
+            document.getElementById('Julgar').disabled = false;
         }
     }
 </script>
