@@ -347,6 +347,19 @@ try{
             $oRetorno->dtlimitecredenciamento = $oItens->l20_dtlimitecredenciamento;
 
             break;
+
+        case 'getCredenciamento':
+            $aItensCred = array();
+
+            $result = $clcredenciamento->sql_record($clcredenciamento->sql_query_file(null,"*",null,"l205_licitacao = {$oParam->licitacao}"));
+
+            for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
+                $oItens = db_utils::fieldsMemory($result, $iContItens);
+                $aItensCred[] = $oItens;
+            }
+            $oRetorno->itens = $aItensCred;
+
+            break;
     }
 
     db_fim_transacao (true);
