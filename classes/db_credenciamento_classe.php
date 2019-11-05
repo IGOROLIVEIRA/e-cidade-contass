@@ -388,7 +388,7 @@ class cl_credenciamento {
         }
     }
     // funcao para exclusao
-    function excluir ($l205_sequencial=null,$dbwhere=null) {
+    function excluir ($l205_sequencial=null,$dbwhere=null, $licitacao) {
         if($dbwhere==null || $dbwhere==""){
             $resaco = $this->sql_record($this->sql_query_file($l205_sequencial));
         }else{
@@ -419,7 +419,7 @@ class cl_credenciamento {
                 $sql2 .= " l205_sequencial = $l205_sequencial ";
             }
         }else{
-            $sql2 = "l205_fornecedor = $dbwhere ";
+            $sql2 = "l205_fornecedor = $dbwhere and l205_licitacao = $licitacao";
         }
         $result = db_query($sql.$sql2);
         if($result==false){

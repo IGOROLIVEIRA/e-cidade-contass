@@ -280,6 +280,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
             BuscarCredAjax({
                 exec: 'getCredforne',
                 forne: fornecedor,
+                licitacao: <?= $l20_codigo?>
             }, preenchercampos);
         } catch(e) {
             alert(e.toString());
@@ -302,7 +303,6 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     function preenchercampos(oRetornoitems) {
         var oRetornoitens = JSON.parse(oRetornoitems.responseText);
         let fornecedor = document.getElementById('l205_fornecedor').value;
-
         let itens = getItensMarcados();
         document.getElementById('l205_datacred').value = "";
         itens.forEach(function (item, x) {
@@ -326,6 +326,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
             excluirCredAjax({
                 exec: 'excluirCred',
                 forne: fornecedor,
+                licitacao: <?= $l20_codigo?>
             }, retornoexcluirAjax);
         } catch(e) {
             alert(e.toString());
