@@ -193,13 +193,13 @@ if(isset($db_param) && $db_param=='int'){
 <?php if($transfdireta == "true"):?>
     <div style="margin-top: 10px;">
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
-      <input name="<?=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?>" type="button" id="" value="Confirmar">
+      <input name="<?=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?>" type="button" id="" value="Confirmar" onclick="js_conTrasfDireta()">
       <input name="novo" type="button" id="" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
     </div>
 <?php else:?>
       <div style="margin-top: 10px;">
           <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
-          <input name="<?=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?>" type="button" id="" value="Confirmar">
+<!--          <input name="--><?//=($db_opcao==1?"Confirmar":($db_opcao==2||$db_opcao==22?"Confirmar":"Cancelar"))?><!--" type="button" id="" value="Confirmar">-->
           <input name="novo" type="button" id="" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
       </div>
       <?php endif;?>
@@ -326,5 +326,52 @@ if(isset($db_param) && $db_param=='int'){
     document.form1.t95_situac.value = chave1;
     document.form1.t70_descr.value = chave2;
     db_iframe_situabens.hide();
+  }
+
+  function js_conTrasfDireta() {
+      let t96_codtran = document.getElementById('t95_codtran').value;
+
+      try {
+          realizaTransfDireta({
+              exec: 'Transferir',
+              t96_codtran: t96_codtran,
+          }, oRetTransfDireta);
+      } catch(e) {
+          alert(e.toString());
+      }
+      return false;
+  }
+
+  function realizaTransfDireta(params, onComplete) {
+      // js_divCarregando('Aguarde Realizando Transferencia', 'div_aguarde');
+      var request = new Ajax.Request('pat1_benstransfdireta.RPC.php', {
+          method:'post',
+          parameters:'json=' + JSON.stringify(params),
+          onComplete: function(oRetornotransf) {
+              // js_removeObj('div_aguarde');
+              onComplete(oRetornotransf);
+          }
+      });
+  }
+
+  function oRetTransfDireta(res) {
+      var response = JSON.parse(res.responseText);
+      if (response.status != 1) {
+          alert(response.erro);
+
+      } else if (response.erro == false) {
+
+          alert('Transferencia Realizada com Sucesso !');
+
+          if(confirm(_M('patrimonial.patrimonio.db_frmbenstransfconf.deseja_imprimir'))) {
+
+              jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.getElementById('t95_codtran').value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+              document.form1.t96_codtran.style.backgroundColor='';
+              jan.moveTo(0,0);
+          }
+          // document.form1.t96_codtran.value='';
+          // document.form1.nome_transf.value='';
+          location.href='pat1_benstransf002.php?db_param=int&direta=true';
+      }
   }
 </script>

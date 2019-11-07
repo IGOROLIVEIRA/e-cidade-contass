@@ -58,7 +58,7 @@ if($cldb_usuarios->numrows > 0){
   db_fieldsmemory($usu,0);
   $t93_id_usuario = $idus;
 }
-//var_dump($transfdireta);die();
+
 if($transfdireta == "false"){
     $depart = $cldb_depart->sql_record($cldb_depart->sql_query_file($iddepart,"descrdepto"));
     if($cldb_depart->numrows){
@@ -107,7 +107,7 @@ if($transfdireta == "false"){
         <td> 
           <?
             db_input('t93_depart',8,@$It93_depart,true,'text',$db_opcao,"onchange='js_pesquisat93_depart(false)'");
-            db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
+            db_input('descrdepto',40,$Idescrdepto,true,'text',3,'',"descrdepto");
           ?>
         </td>
       </tr>
@@ -163,6 +163,13 @@ if($transfdireta == "false"){
           </fieldset>
         </td>
       </tr>
+        <tr>
+            <td style="display: none">
+                <?
+                    db_input('t93_tipo',1,@$It93_tipo,true,'text',3,"");
+                ?>
+            </td>
+        </tr>
     </table>
   </fieldset>
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  <?=(($db_opcao==1||$db_opcao==2||$db_opcao==22)?"onClick = 'return ver_depto_destino()'":"")?>>
@@ -232,7 +239,7 @@ function js_mostradb_depart1t93_depart(chave1,chave2){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_benstransf','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_preenchepesquisa|t93_codtran&t93=true&db_param=<?=($db_param)?>','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo.iframe_benstransf','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_preenchepesquisa|t93_codtran&t93=true&db_param=<?=($db_param)?>&transfdireta=<?=$transfdireta?>','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_benstransf.hide();
