@@ -251,7 +251,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     }
 
     function salvarCredAjax(params, onComplete) {
-        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -267,7 +267,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         if (response.status != 1) {
             alert(response.erro);
         } else if (response.erro == false) {
-            alert('Credenciamento salvo com Sucesso !');
+            alert('Credenciamento salvo com sucesso !');
             location.reload();
         }
     }
@@ -351,7 +351,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         if (response.status != 1) {
             alert(response.erro);
         } else if (response.erro == false) {
-            alert('Credenciamento excluido com Sucesso !');
+            alert('Credenciamento excluido com sucesso !');
             location.reload();
         }
     }
@@ -388,7 +388,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         if (response.status != 1) {
             alert(response.erro);
         } else if (response.erro == false) {
-            alert('Licitação julgada com Sucesso !');
+            alert('Licitação julgada com sucesso !');
             location.reload();
         }
     }

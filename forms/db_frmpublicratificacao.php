@@ -360,7 +360,7 @@ $clliclicita->rotulo->label();
     }
 
     function salvarCredAjax(params, onComplete) {
-        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -376,7 +376,7 @@ $clliclicita->rotulo->label();
         if (response.status != 1) {
             alert(response.message.urlDecode());
         } else if (response.erro == false) {
-            alert('Salvo Com Sucesso!');
+            alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
         }
     }
@@ -421,7 +421,7 @@ $clliclicita->rotulo->label();
     }
 
     function aHomoAjax(params, onComplete) {
-        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -437,7 +437,7 @@ $clliclicita->rotulo->label();
         if (response.status != 1) {
             alert(urlDecode(response.message));
         } else if (response.erro == false) {
-            alert('Salvo Com Sucesso!');
+            alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
         }
     }
@@ -459,7 +459,7 @@ $clliclicita->rotulo->label();
     }
 
     function carregarItens(params, onComplete) {
-        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -506,7 +506,7 @@ $clliclicita->rotulo->label();
     }
 
     function excluirhomologacao(params, onComplete) {
-        js_divCarregando('Aguarde Salvando', 'div_aguarde');
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
@@ -522,7 +522,7 @@ $clliclicita->rotulo->label();
         if (oRetornoitens.status != 1) {
             alert(oRetornoitens);
         } else if (oRetornoitens.erro == false) {
-            alert('Homologação excluida com Sucesso !');
+            alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
         }
     }
