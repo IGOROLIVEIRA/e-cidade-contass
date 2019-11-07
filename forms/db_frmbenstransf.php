@@ -226,7 +226,7 @@ function js_pesquisat93_depart(mostra){
     }
 }
 function js_mostradb_departt93_depart(chave,erro){
-    document.form1.depto_destino.value = chave;
+    document.form1.descrdepto.value = chave;
     if(erro==true){
         document.form1.t93_depart.focus();
         document.form1.descrdepto.value = '';
