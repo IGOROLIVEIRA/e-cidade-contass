@@ -45,7 +45,7 @@ $clbenstransfcodigo = new cl_benstransfcodigo;
 db_postmemory($HTTP_POST_VARS);
 $db_opcao = 22;
 $db_botao = false;
-
+//var_dump($transfdireta);exit("aqui");
 if(isset($alterar)){
   $sqlerro = false;
   if ($db_param=="int"){
@@ -65,7 +65,6 @@ if(isset($alterar)){
   db_inicio_transacao();
   if($t93_data_dia!="" && $t93_data_mes!="" && $t93_data_ano!=""){
     $data = $t93_data_ano."-".$t93_data_mes."-".$t93_data_dia;
-//    db_msgbox($data.'-------------'.date("Y-m-d"));
     if($data<date("Y-m-d")){
       $sqlerro = true;
       $erro_msg = _M("patrimonial.patrimonio.db_frmbenstransf.data_invalida");
@@ -73,11 +72,7 @@ if(isset($alterar)){
     }
   }
   if($sqlerro == false){
-      if($transfdireta = "true"){
-          $clbenstransf->t93_tipo = 2;
-      }else{
-          $clbenstransf->t93_tipo = 1;
-      }
+      $clbenstransf->t93_tipo = $t93_tipo;
     $clbenstransf->alterar($t93_codtran);
     if($clbenstransf->erro_status==0){
       $sqlerro=true;
@@ -101,12 +96,23 @@ if(isset($chavepesquisa) || isset($alterar)){
     $t93_codtran=$chavepesquisa;
   }
   //rotina q traz data da transferência, descrição do depto de destino e o código da transferência depois de atualizado.
-  $result = $clbenstransfdes->sql_record($clbenstransfdes->sql_query($t93_codtran,null,"t94_codtran as t93_codtran,t94_depart,db_depart.descrdepto as depto_destino,t93_data,t93_obs"));
+  $result = $clbenstransfdes->sql_record($clbenstransfdes->sql_query($t93_codtran,null,"t94_codtran as t93_codtran,t94_depart,db_depart.descrdepto as depto_destino,t93_data,t93_obs,a.descrdepto as descrdepto"));
   if($clbenstransfdes->numrows>0){
     db_fieldsmemory($result,0);
   }
   $db_opcao = 2;
   $db_botao = true;
+
+    $resulttipo = $clbenstransf->sql_record($clbenstransf->sql_query($t93_codtran,"benstransf.*"));
+    if($clbenstransf->numrows>0){
+        db_fieldsmemory($resulttipo,0);
+    }
+
+    if($t93_tipo == "2"){
+        $transfdireta = "true";
+    }else{
+        $transfdireta = "false";
+    }
 }
 ?>
 <html>

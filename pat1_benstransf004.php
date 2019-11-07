@@ -48,6 +48,15 @@ $cldb_depusu = new cl_db_depusu;
 $db_opcao = 1;
 $db_botao = true;
 
+if(isset($transfdireta)){
+
+    if($transfdireta == "true"){
+        $t93_tipo = 2;
+    }else{
+        $t93_tipo = 1;
+    }
+}
+
 if(isset($incluir)){
     $sqlerro=false;
 
@@ -76,13 +85,7 @@ if(isset($incluir)){
         }
     }
     if($sqlerro==false){
-        if($transfdireta = "true"){
-            $clbenstransf->t93_tipo = 2;
-        }else{
-            $clbenstransf->t93_tipo = 1;
-        }
         $clbenstransf->incluir(null);
-
         $t93_codtran = $clbenstransf->t93_codtran;
         $t93_depart  = $clbenstransf->t93_depart;
         $t93_tipo    = $clbenstransf->t93_tipo;

@@ -33,7 +33,7 @@ include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 $clcriaabas     = new cl_criaabas;
 $db_opcao = 1;
-//echo "<br><br><br>".$db_param."<br><br><br>";
+
 ?>
 <html>
 <head>
@@ -59,14 +59,7 @@ $db_opcao = 1;
 	 $clcriaabas->identifica = array("benstransf"=>"Gera transferência","benstransfcodigo"=>"Itens da tranferência"); 
  	 $clcriaabas->sizecampo  = array("benstransf"=>"20","benstransfcodigo"=>"20");
  	 $clcriaabas->title      = array("benstransf"=>"Gerar transferência","benstransfcodigo"=>"Itens da transferência");
-//	 $clcriaabas->src = array("benscorlanc"=>"pat1_benscorlanc005.php");
-     if (isset($direta) == "true" && $direta != NULL){
-         $transfdireta = 'true';
-     }else{
-         $transfdireta = 'false';
-     }
-//     var_dump($transfdireta);die();
-     $clcriaabas->src        = array("benstransf"=>"pat1_benstransf004.php?db_param=$db_param&transfdireta=$transfdireta");
+     $clcriaabas->src        = array("benstransf"=>"pat1_benstransf004.php?db_param=$db_param&transfdireta=$direta");
 	 $clcriaabas->disabled   = array("benstransfcodigo"=>"true"); 
 	 $clcriaabas->cria_abas(); 
        ?> 
