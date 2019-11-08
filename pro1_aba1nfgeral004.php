@@ -153,7 +153,10 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
     <tr>
       <td align="center" valign="top">
         <?php
-        $where = " p58_instit = " . db_getsession("DB_instit");
+        $where = " p58_instit = " . db_getsession("DB_instit")."
+        AND p58_codproc NOT IN (SELECT p111_codproc FROM nfaberturaprocesso)
+        AND p58_codproc NOT IN (SELECT p112_codproc FROM nfprevisaopagamento)";
+
         $campos = "p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,z01_nome,p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer";
         if (!empty($p58_codproc)) {
           $nrProcesso = explode("/", $p58_codproc);
