@@ -113,6 +113,14 @@ try{
         case 'salvarHomo':
 
             /**
+             * busco o codtipocom
+             */
+
+            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
+
+            $l20_codtipocom = pg_result($result,0,0);
+
+            /**
              * realiza as alterações na licitaçao
              */
 
@@ -121,23 +129,44 @@ try{
 
             $rsCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"max(l205_datacred) as l205_datacred",null,"l205_licitacao = $oParam->licitacao"));
 
-            $l20_codtipocom = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_codtipocom))));
-            $l20_datacria = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria))));
-            $l205_datacred  = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($rsCredenciamento,0)->l205_datacred))));
+            $l20_datacria = strtotime(implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria)))));
+            $l205_datacred  = strtotime(implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($rsCredenciamento,0)->l205_datacred)))));
+            $l20_dtpubratificacao = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtpubratificacao)))));
+            $l20_dtlimitecredenciamento = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtlimitecredenciamento)))));
 
             if($oParam->l20_dtpubratificacao != null){
-                if($oParam->l20_dtpubratificacao < $l20_datacria){
+                if($l20_dtpubratificacao < $l20_datacria){
                     throw new Exception ("A Data da Publicação Termo Ratificação deve ser posterior a Data de Recebimento da Documentacao.");
                 }
             }
 
-            if($oParam->l20_dtlimitecredenciamento != null){
-                if ($oParam->l20_dtlimitecredenciamento < $l205_datacred){
-                    throw new Exception ("A Data final do Credenciamento deve ser maior ou igual a data do ultimo Credenciamento.");
-                }
+            if($oParam->l20_dtpubratificacao == null || $oParam->l20_dtpubratificacao == null){
+                throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação não Informado.");
             }
 
-            $clliclicita->l20_codtipocom = implode("/",(array_reverse(explode("-",$l20_codtipocom))));
+//            if($oParam->l20_dtlimitecredenciamento != null){
+//                if ($l20_dtlimitecredenciamento > $l205_datacred){
+//                    throw new Exception ("A Data final do Credenciamento deve ser maior ou igual a data do ultimo Credenciamento.");
+//                }
+//            }
+
+            if($l20_dtlimitecredenciamento == null || $oParam->l20_dtlimitecredenciamento == ""){
+                throw new Exception ("Usuário: Campo Data Limite Credenciamento não Informado.");
+            }
+
+            if($oParam->l20_veicdivulgacao == null || $oParam->l20_veicdivulgacao == ""){
+                throw new Exception ("Usuário: Campo veículo de divulgação não Informado.");
+            }
+
+            if($oParam->l20_justificativa == null || $oParam->l20_justificativa == ""){
+                throw new Exception ("Usuário: Campo Justificativa não Informado.");
+            }
+
+            if($oParam->l20_razao == null || $oParam->l20_razao == ""){
+                throw new Exception ("Usuário: Campo Razão não Informado.");
+            }
+
+            $clliclicita->l20_codtipocom = $l20_codtipocom;
             $clliclicita->l20_datacria = implode("/",(array_reverse(explode("-",$l20_datacria))));
             $clliclicita->l205_datacred = implode("/",(array_reverse(explode("-",$l205_datacred))));
             $clliclicita->l20_codigo = $oParam->licitacao;
@@ -220,6 +249,14 @@ try{
             $l203_homologaadjudicacao = pg_result($result,0,0);
 
             /**
+             * busco o codtipocom
+             */
+
+            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
+
+            $l20_codtipocom = pg_result($result,0,0);
+
+            /**
              * alterando a data de homologação e adjundicação
              */
 
@@ -257,10 +294,6 @@ try{
             /**
              * altero a licitação
              */
-
-            $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
-
-            $l20_codtipocom = pg_result($result,0,0);
 
             $clliclicita->l20_codtipocom = $l20_codtipocom;
             $clliclicita->l20_codigo = $oParam->licitacao;
