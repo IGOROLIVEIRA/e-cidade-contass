@@ -166,7 +166,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             WHERE c80_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
               AND c71_coddoc IN (5, 35, 37)
               AND e60_instit = " . db_getsession("DB_instit") . "
-            ORDER BY e50_codord, c80_codlan";
+            ORDER BY e50_codord, c70_valor DESC";
 
     $rsEmpenhosPagosGeral = db_query($sSql);
 
@@ -414,7 +414,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIsIs = db_query($sqlReten);
 
-          if (pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar > 0) {
+          if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
 
             $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
             if ($nVolorOp == 0) {
@@ -902,42 +902,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
-          /**
-           * VERIFICA SE HOUVE RETENCAO NA ORDEM. CASO TENHA O VALOR SERA SUBTRAIDO NO VALOR DO LANCAMENTO.
-           */
-          $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
-                       FROM retencaopagordem
-                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
-                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
-                         AND e20_pagordem = {$oEmpPago->ordem}
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
-          $rsReteIs = db_query($sqlReten);
-
-          if ($aInformado[$sHash]->retencao == 0) {
-
-            if (pg_num_rows($rsReteIs) > 0) {
-
-              $retencao2 = $aInformado[$sHash]->retencao;
-
-              $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIs, 0)->descontar;
-              $saldopag = $nVolorOp;
-              $aInformado[$sHash]->retencao = 1;
-              if ($nVolorOp < 0) {
-                $nVolorOp = $oEmpPago->valor;
-                $aInformado[$sHash]->retencao = 0;
-              }
-
-            } else {
-              $nVolorOp = $oEmpPago->valor;
-              $saldopag = $nVolorOp;
-            }
-          } else {
-            $retencao2 = 1;
-            $aInformado[$sHash]->retencao = 0;
-            $nVolorOp = $oEmpPago->valor;
-          }
-
+          $retencao2 = 1;
+          $aInformado[$sHash]->retencao = 0;
+          $nVolorOp = $oEmpPago->valor;
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
 
@@ -1130,82 +1097,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           if ($clops12->erro_status == 0) {
             throw new Exception($clops12->erro_msg);
           }
-
-          if ($saldopag >= 0 && $retencao2 == 0) {
-            $sSql13 = "SELECT 13 AS tiporegistro,
-                              e20_pagordem AS codreduzidoop,
-                              CASE
-                                  WHEN e21_retencaotipocalc = 5 THEN 4
-                                  WHEN e21_retencaotipocalc IN (3, 4, 7) THEN 1
-                                  WHEN e21_retencaotipocalc IN (1, 2) THEN 3
-                                  ELSE lpad(k02_reduz,4,0)::integer
-                              END AS tiporetencao,
-                              CASE
-                                  WHEN e21_retencaotipocalc NOT IN (1, 2, 3, 4, 5, 7) THEN e21_descricao
-                                  ELSE NULL
-                              END AS descricaoretencao,
-                              e23_valorretencao AS vlrentencao
-                       FROM retencaopagordem
-                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
-                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
-                       LEFT JOIN tabrec tr ON tr.k02_codigo = e21_receita
-                       LEFT JOIN tabplan tp ON tp.k02_codigo = e21_receita AND k02_anousu = " . db_getsession("DB_anousu") . "
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
-                         AND e20_pagordem = {$oEmpPago->ordem}
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
-
-            $rsPagOrd13 = db_query($sSql13);
-
-            if (pg_num_rows($rsPagOrd13) > 0) {
-
-
-              $aOps23 = array();
-              for ($iCont13 = 0; $iCont13 < pg_num_rows($rsPagOrd13); $iCont13++) {
-
-                $reg13 = db_utils::fieldsMemory($rsPagOrd13, $iCont13);
-                $sHash = $reg13->tiporetencao . $reg11->e50_codord;
-                if (!isset($aOps23[$sHash])) {
-                  $clops13 = new stdClass();
-
-                  $clops13->si135_tiporegistro = $reg13->tiporegistro;
-                  $clops13->si135_codreduzidoop = $reg11->codreduzidoop;
-                  $clops13->si135_tiporetencao = $reg13->tiporetencao;
-                  $clops13->si135_descricaoretencao = substr($reg13->descricaoretencao, 0, 50);
-                  $clops13->si135_vlretencao = $reg13->vlrentencao;
-                  $clops13->si135_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                  $clops13->si135_reg10 = $clops10->si132_sequencial;
-                  $clops13->si135_instit = db_getsession("DB_instit");
-
-                  $aOps23[$sHash] = $clops13;
-                } else {
-                  $aOps23[$sHash]->si135_vlretencao += $reg13->vlrentencao;
-                }
-              }
-
-              foreach ($aOps23 as $oOps23ag) {
-
-                $clops13 = new cl_ops132019();
-
-                $clops13->si135_tiporegistro = $oOps23ag->si135_tiporegistro;
-                $clops13->si135_codreduzidoop = $oOps23ag->si135_codreduzidoop;
-                $clops13->si135_tiporetencao = $oOps23ag->si135_tiporetencao;
-                $clops13->si135_descricaoretencao = substr($oOps23ag->si135_descricaoretencao, 0, 50);
-                $clops13->si135_vlretencao = $oOps23ag->si135_vlretencao;
-                $clops13->si135_mes = $oOps23ag->si135_mes;
-                $clops13->si135_reg10 = $oOps23ag->si135_reg10;
-                $clops13->si135_instit = $oOps23ag->si135_instit;
-
-                $clops13->incluir(null);
-                if ($clops13->erro_status == 0) {
-                  echo "<pre>";
-                  print_r($clops13);
-                  throw new Exception($clops13->erro_msg);
-                }
-              }
-
-            }
-          }
-
         }
 
       }
