@@ -286,58 +286,6 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
               UNION
 
               SELECT DISTINCT pcmater.pc01_codmater,
-                              pcmater.pc01_descrmater,
-                              o56_elemento,
-                              o56_descr,
-                              pc07_codele,
-                              pcmater.pc01_servico,
-                              pc23_orcamforne,
-                              z01_numcgm,
-                              pc23_quant,
-                              pc23_vlrun,
-                              pc23_valor,
-                              pc80_criterioadjudicacao,
-                              pcmater.pc01_servico,
-                              'item' as tipoitem,
-                              pctabela.pc94_sequencial
-              FROM liclicitem
-              LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
-              LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-              LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-              LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-              LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
-              LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-              LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-              LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
-              LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-              LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-              LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
-              LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
-              LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-              LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
-              LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-                          AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-              LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
-              LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-              LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-              LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
-              LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
-              LEFT JOIN pctabelaitem ON pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
-              LEFT JOIN pcmater itemtabela2 ON itemtabela2.pc01_codmater = itemtabela.pc01_codmater
-              LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = itemtabela.pc01_codmater
-              INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
-                          AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
-              WHERE l20_codigo =
-                      (SELECT e54_codlicitacao
-                      FROM empautoriza
-                      WHERE e54_autori = {$iCodigoAutorizacao})
-                  AND pc24_pontuacao=1
-                  AND pcmater.pc01_tabela = 'f'
-                  AND pcmater.pc01_taxa = 'f'
-
-              UNION
-
-              SELECT DISTINCT pcmater.pc01_codmater,
                       pcmater.pc01_descrmater,
                       o56_elemento,
                       o56_descr,
