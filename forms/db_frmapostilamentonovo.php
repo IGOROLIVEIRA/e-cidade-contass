@@ -37,7 +37,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    db_input('si03_numapostilamento', 10, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
+                    db_input('si03_numapostilamento', 2, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
                     ?>
 
                     <?=@$Lsi03_dataapostila ?>

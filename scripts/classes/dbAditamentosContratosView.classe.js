@@ -398,7 +398,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          * Numero do aditamento
          */
         me.oTxtNumeroAditamento = new DBTextField('oTxtNumeroAditamento', me.sInstance + '.oTxtNumeroAditamento', '', 10);
-        me.oTxtNumeroAditamento.setMaxLength(20);
+        me.oTxtNumeroAditamento.setMaxLength(2);
         me.oTxtNumeroAditamento.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '')");
         me.oTxtNumeroAditamento.show($('ctnTxtNumeroAditamento'));
 
