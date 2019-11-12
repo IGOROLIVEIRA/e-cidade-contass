@@ -77,6 +77,11 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
         $sEstrutural = "39";
     }
 }
+    if ($taxatabela == "false"){
+        $libera = false;
+    }else{
+        $libera = true;
+    }
 
 ?>
     <html>
@@ -116,6 +121,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
 
                             <td width="96%" align="left" nowrap><? db_input("pc01_descrmater", 80, $Ipc01_descrmater, true, "text", 4, "", "chave_pc01_descrmater"); ?></td>
                         </tr>
+                        <?php if($libera == true ): ?>
                         <?php if (!empty($aTabFonec)) : ?>
                             <tr>
                                 <td width="4%" align="right" nowrap title="<?= $Tpc94_sequencial ?>">
@@ -148,6 +154,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                                     document.getElementById('form2').submit();
                                 }
                             </script>
+                        <?php endif; ?>
                         <?php endif; ?>
                         <tr>
                             <td colspan="2" align="center">
