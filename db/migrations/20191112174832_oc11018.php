@@ -45,7 +45,7 @@ class Oc11018 extends AbstractMigration
         
         ALTER TABLE cgmalt ALTER COLUMN z05_nome TYPE varchar(120);
         
-        UPDATE db_syscampo SET tamanho = 120 WHERE codcam = 217
+        UPDATE db_syscampo SET tamanho = 120 WHERE codcam = 217;
         
         --CRIAR VIEW empresa
         
@@ -731,6 +731,7 @@ class Oc11018 extends AbstractMigration
         GRANT SELECT ON TABLE venal TO plugin;
         
         COMMIT;
+
 SQL;
         $this->execute($sql);
     }
