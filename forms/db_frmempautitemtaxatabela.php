@@ -419,7 +419,7 @@ function js_troca(codele) {
   <table>
     <tr>
     <td colspan='2' align='center'>
-    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=($db_opcao == 22) ? "onclick='return js_verificar();'" : ''?>  >
+    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=($db_opcao == 2 ||$db_opcao == 1) ? "onclick='return js_verificar();'" : ''?>  >
     <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
       </td>
     </tr>
@@ -562,8 +562,10 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
   document.form1.e55_item.value        = chave1;
   document.form1.pc01_descrmater.value = chave2;
   document.form1.pc07_codele.value     = codele;
-  chave7 == 't' ? document.form1.e55_quant.value = chave3 : "";
-  chave7 == 't' ? document.form1.e55_vluni.value = chave4 : "";
+  document.form1.e55_quant.value = "";
+  document.form1.e55_vluni.value = "";
+  // chave7 == 't' ? document.form1.e55_quant.value = chave3 : "";
+  // chave7 == 't' ? document.form1.e55_vluni.value = chave4 : "";
   chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
   document.form1.pc80_criterioadjudicacao.value  = chave6;
   document.form1.totalad.value = chave5;
