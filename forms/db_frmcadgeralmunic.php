@@ -233,7 +233,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         </td>
         <td nowrap title="<?=@$Tz01_nome?>" colspan="3">
           <?
-            db_input ( 'z01_nome', 120, $Iz01_nome, true, 'text', $db_opcao, 'onblur=js_copiaNome();', '', '', 'width: 100%;');
+            db_input ( 'z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onblur=js_copiaNome();', '', '', 'width: 100%;');
           ?>
         </td>
       </tr>
@@ -628,7 +628,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
         </td>
         <td nowrap title="<?=@$Tz01_nome?>" colspan="3">
           <?
-            db_input ( 'z01_nome', 120, $Iz01_nome, true, 'text', $db_opcao, 'onBlur="js_ToUperCampos(\'z01_nome\');js_copiaNome();" onkeyup="";' );
+            db_input ( 'z01_nome', 50, $Iz01_nome, true, 'text', $db_opcao, 'onBlur="js_ToUperCampos(\'z01_nome\');js_copiaNome();" onkeyup="";' );
           ?>
         </td>
       </tr>
