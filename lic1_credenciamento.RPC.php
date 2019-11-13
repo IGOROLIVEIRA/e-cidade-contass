@@ -134,11 +134,11 @@ try{
             $l20_dtpubratificacao = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtpubratificacao)))));
             $l20_dtlimitecredenciamento = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtlimitecredenciamento)))));
 
-            if($oParam->l20_dtpubratificacao != null){
-                if($l20_dtpubratificacao < $l20_datacria){
-                    throw new Exception ("A Data da Publicação Termo Ratificação deve ser posterior a Data de Recebimento da Documentacao.");
-                }
-            }
+//            if($oParam->l20_dtpubratificacao != null){
+//                if($l20_dtpubratificacao < $l20_datacria){
+//                    throw new Exception ("A Data da Publicação Termo Ratificação deve ser posterior a Data de Recebimento da Documentacao.");
+//                }
+//            }
 
             if($oParam->l20_dtpubratificacao == null || $oParam->l20_dtpubratificacao == null){
                 throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação não Informado.");
