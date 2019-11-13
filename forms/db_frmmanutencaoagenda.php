@@ -1832,7 +1832,7 @@ if (count($aParametrosEmpenho) > 0) {
         if (obj.checked) {
 
             $('showautenticar').style.visibility = 'visible';
-            $('autenticar').checked               = true;
+            $('autenticar').checked               = false;
             $('showreemissao').style.visibility = 'visible';
 
         } else {
