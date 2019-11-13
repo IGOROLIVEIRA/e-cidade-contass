@@ -149,6 +149,34 @@ $clrotulo->label("o15_codigo");
                                          <div>&nbsp;</div>
                                       </td>
                                   </tr>
+                                  <tr>
+                                    <td style="">
+                                      Opção Semestralidade:
+                                    <div>&nbsp;</div>
+                                    </td>
+                                    <td class="file-submit">
+                                      <input type="file" name="OPCAOSEMESTRALIDADE" />
+                                      <div id="recebe_up_opsemest" class="recebe">&nbsp;</div>
+                                    </td>
+                                    <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=OPCAOSEMESTRALIDADE','recebe_up_opsemest','Carregando...','Erro ao carregar')" />
+                                         <div>&nbsp;</div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="">
+                                      Desopção Semestralidade:
+                                    <div>&nbsp;</div>
+                                    </td>
+                                    <td class="file-submit">
+                                      <input type="file" name="DESOPCAOSEMESTRALIDADE" />
+                                      <div id="recebe_up_desopsemest" class="recebe">&nbsp;</div>
+                                    </td>
+                                    <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=DESOPCAOSEMESTRALIDADE','recebe_up_desopsemest','Carregando...','Erro ao carregar')" />
+                                         <div>&nbsp;</div>
+                                      </td>
+                                  </tr>
                               </table>
                           </div>
                       </div>
