@@ -449,7 +449,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho10->especificaoempenho), 0, 200))); // campo 16
             $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
             if (date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) || $oEmpenho10->dataassinaturacontrato == null) {
-                $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
+                if ($oEmpenho10->despdeccontrato == 1) {
+                    $oDadosEmpenho10->si106_despdeccontrato = 4; // campo 17
+                } else {
+                    $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
+                }
                 if ($oEmpenho10->despdeccontrato == 3) {
                     $oDadosEmpenho10->si106_codorgaorespcontrato = $sCodorgao->codorgao; // campo 18
                 } else {
