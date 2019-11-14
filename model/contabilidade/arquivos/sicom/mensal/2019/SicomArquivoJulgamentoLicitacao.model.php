@@ -493,7 +493,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
         foreach ($aLicitacoes as $lic) {
 
 
-            $sSql = " SELECT distinct '40' as tipoRegistro,
+            $sSql = " SELECT '40' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -525,7 +525,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "  AND liclicitasituacao.l11_licsituacao = 1
 	AND liclicita.l20_codigo = $lic
-	ORDER BY dtjulgamento DESC LIMIT 1";
+	ORDER BY l11_sequencial DESC LIMIT 1";
 
             $rsResult40 = db_query($sSql);
 
