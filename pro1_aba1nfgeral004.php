@@ -151,27 +151,27 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
   </form>
   <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
     <tr>
-      <td align="center" valign="top">
-        <?php
-        $where = " p58_instit = " . db_getsession("DB_instit")."
+        <td align="center" valign="top">
+            <?php
+            $where = " p58_instit = " . db_getsession("DB_instit")."
         AND p58_codproc NOT IN (SELECT p111_codproc FROM nfaberturaprocesso)
         AND p58_codproc NOT IN (SELECT p112_codproc FROM nfprevisaopagamento)";
 
-        $campos = "p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,z01_nome,p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer";
-        if (!empty($p58_codproc)) {
-          $nrProcesso = explode("/", $p58_codproc);
-          !empty($where) ? $where .= " and p58_codproc = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} " : $where .= " p58_codproc = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} ";
-        }
-        if (!empty($p58_numero)) {
-          !empty($where) ? $where .= " and p58_numero = {$p58_numero} " : $where .= " p58_numero = {$p58_numero} ";
-        }
-        if (!empty($p58_requer)) {
-          !empty($where) ? $where .= " and p58_requer like '%{$p58_requer}%' " : $where .= " p58_requer like '%{$p58_requer}%' ";
-        }
-        if (!empty($p51_codigo)) {
-          !empty($where) ? $where .= " and p51_codigo = {$p51_codigo} " : $where .= " p51_codigo = {$p51_codigo} ";
-        }
-        $sql = $clprotprocesso->sql_query("", $campos, " p58_codproc desc ", $where);
+            $campos = "p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,z01_nome,p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer";
+            if (!empty($p58_codproc)) {
+                $nrProcesso = explode("/", $p58_codproc);
+                !empty($where) ? $where .= " and p58_codproc = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} " : $where .= " p58_codproc = {$nrProcesso[0]} and p58_ano = {$nrProcesso[1]} ";
+            }
+            if (!empty($p58_numero)) {
+                !empty($where) ? $where .= " and p58_numero = {$p58_numero} " : $where .= " p58_numero = {$p58_numero} ";
+            }
+            if (!empty($p58_requer)) {
+                !empty($where) ? $where .= " and p58_requer like '%{$p58_requer}%' " : $where .= " p58_requer like '%{$p58_requer}%' ";
+            }
+            if (!empty($p51_codigo)) {
+                !empty($where) ? $where .= " and p51_codigo = {$p51_codigo} " : $where .= " p51_codigo = {$p51_codigo} ";
+            }
+            $sql = $clprotprocesso->sql_query("", $campos, " p58_codproc desc ", $where);
 
         $repassa = array();
         if (isset($p58_codproc)) {
@@ -496,19 +496,19 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
         aLiquidacaobtn = document.getElementById(aLinha.aCells[5].getId()).children[1];
         aLiquidacaobtn.disabled = false;
 
-        aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
-        aPrevisao.readOnly = false;
-        aPrevisao.removeClassName('readonly');
-        aPrevisao.value = "";
-        aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
-        aPrevisaobtn.disabled = false;
+                aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
+                aPrevisao.readOnly = false;
+                aPrevisao.removeClassName('readonly');
+                aPrevisao.value = "";
+                aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
+                aPrevisaobtn.disabled = false;
 
-        aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
-        aNpagamento.readOnly = true;
-        aNpagamento.addClassName('readonly');
-        aNpagamento.value = "";
+                aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
+                aNpagamento.readOnly = true;
+                aNpagamento.addClassName('readonly');
+                aNpagamento.value = "";
 
-        break;
+                break;
 
             case '3':
 
@@ -525,46 +525,46 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
                 aLiquidacaobtn = document.getElementById(aLinha.aCells[5].getId()).children[1];
                 aLiquidacaobtn.disabled = true;
 
-        aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
-        aPrevisao.readOnly = true;
-        aPrevisao.addClassName('readonly');
-        aPrevisao.value = "";
-        aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
-        aPrevisaobtn.disabled = true;
+                aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
+                aPrevisao.readOnly = true;
+                aPrevisao.addClassName('readonly');
+                aPrevisao.value = "";
+                aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
+                aPrevisaobtn.disabled = true;
 
-        aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
-        aNpagamento.readOnly = false;
-        aNpagamento.removeClassName('readonly');
-        aNpagamento.value = "";
+                aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
+                aNpagamento.readOnly = false;
+                aNpagamento.removeClassName('readonly');
+                aNpagamento.value = "";
 
-        break;
+                break;
 
-      default:
-        aNfe = document.getElementById(aLinha.aCells[4].getId()).children[0];
-        aNfe.readOnly = true;
-        aNfe.addClassName('readonly');
-        aNfe.value = "";
+            default:
+                aNfe = document.getElementById(aLinha.aCells[4].getId()).children[0];
+                aNfe.readOnly = true;
+                aNfe.addClassName('readonly');
+                aNfe.value = "";
 
-        aLiquidacao = document.getElementById(aLinha.aCells[5].getId()).children[0];
-        aLiquidacao.readOnly = true;
-        aLiquidacao.addClassName('readonly');
-        aLiquidacao.value = "";
-        aLiquidacaobtn = document.getElementById(aLinha.aCells[5].getId()).children[1];
-        aLiquidacaobtn.disabled = true;
+                aLiquidacao = document.getElementById(aLinha.aCells[5].getId()).children[0];
+                aLiquidacao.readOnly = true;
+                aLiquidacao.addClassName('readonly');
+                aLiquidacao.value = "";
+                aLiquidacaobtn = document.getElementById(aLinha.aCells[5].getId()).children[1];
+                aLiquidacaobtn.disabled = true;
 
-        aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
-        aPrevisao.readOnly = true;
-        aPrevisao.addClassName('readonly');
-        aPrevisao.value = "";
-        aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
-        aPrevisaobtn.disabled = true;
+                aPrevisao = document.getElementById(aLinha.aCells[6].getId()).children[0];
+                aPrevisao.readOnly = true;
+                aPrevisao.addClassName('readonly');
+                aPrevisao.value = "";
+                aPrevisaobtn = document.getElementById(aLinha.aCells[6].getId()).children[1];
+                aPrevisaobtn.disabled = true;
 
-        aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
-        aNpagamento.readOnly = true;
-        aNpagamento.addClassName('readonly');
-        aNpagamento.value = "";
+                aNpagamento = document.getElementById(aLinha.aCells[7].getId()).children[0];
+                aNpagamento.readOnly = true;
+                aNpagamento.addClassName('readonly');
+                aNpagamento.value = "";
+        }
+
     }
-    
-  }
 
 </script>
