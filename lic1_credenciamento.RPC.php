@@ -150,7 +150,7 @@ try{
 //                }
 //            }
 
-            if($l20_dtlimitecredenciamento == null || $oParam->l20_dtlimitecredenciamento == ""){
+            if($oParam->l20_dtlimitecredenciamento == ""){
                 throw new Exception ("Usuário: Campo Data Limite Credenciamento não Informado.");
             }
 
@@ -167,7 +167,7 @@ try{
             }
 
             $clliclicita->l20_codtipocom = $l20_codtipocom;
-            $clliclicita->l20_datacria = implode("/",(array_reverse(explode("-",$l20_datacria))));
+            $clliclicita->l20_datacria = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria))));
             $clliclicita->l205_datacred = implode("/",(array_reverse(explode("-",$l205_datacred))));
             $clliclicita->l20_codigo = $oParam->licitacao;
             $clliclicita->l20_tipoprocesso = $oParam->l20_tipoprocesso;
