@@ -363,7 +363,7 @@ if(isset($db_param) && $db_param=='int'){
 
           alert('Transferencia Realizada com Sucesso !');
 
-          if(confirm(_M('patrimonial.patrimonio.db_frmbenstransfconf.deseja_imprimir'))) {
+          if(confirm('Deseja imprimir relatorio?')) {
 
               jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.getElementById('t95_codtran').value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
               document.form1.t96_codtran.style.backgroundColor='';
