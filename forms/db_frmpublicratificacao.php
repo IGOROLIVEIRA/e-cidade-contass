@@ -32,7 +32,7 @@ $clliclicita->rotulo->label();
                 <td>
                     <?
                     $al20_tipoprocesso = array("0"=>"","101"=>"Dispensa","100"=>"Inexigibilidade","102"=>"Inexigibilidade por credenciamento/chamada pública","103"=>"Dispensa por chamada publica");
-                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,$db_opcao,"style=width: 100%;","","");
+                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,3,"style=width: 100%;","","");
                     ?>
                 </td>
             </tr>
@@ -65,7 +65,7 @@ $clliclicita->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
                     ?>
                 </td>
             </tr>
@@ -76,7 +76,7 @@ $clliclicita->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
                     ?>
                 </td>
             </tr>
@@ -87,7 +87,7 @@ $clliclicita->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
                     ?>
                 </td>
             </tr>
