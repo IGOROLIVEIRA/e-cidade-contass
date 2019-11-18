@@ -369,9 +369,6 @@ if(isset($db_param) && $db_param=='int'){
               document.form1.t96_codtran.style.backgroundColor='';
               jan.moveTo(0,0);
           }
-          // document.form1.t96_codtran.value='';
-          // document.form1.nome_transf.value='';
-          location.href='pat1_benstransf002.php?db_param=int&direta=true';
       }
   }
 </script>
