@@ -36,6 +36,7 @@ require_once("model/CgmFactory.model.php");
 require_once("model/endereco.model.php");
 require_once("model/configuracao/endereco/Estado.model.php");
 require_once("model/configuracao/endereco/Municipio.model.php");
+require_once("classes/db_condataconf_classe.php");
 
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
@@ -253,7 +254,6 @@ switch ($oParam->exec) {
             $oCgmFisico->z01_obs           = urlencode($oCgm->getObs());
 
             $oCgmFisico->z04_rhcbo         = $oCgm->getCBO();
-            $oCgmFisico->z01_notificaemail = $oCgm->getNotificalEmail();
             $oCgmFisico->z01_ibge          = $oCgm->getIbge();
 
             $oRetorno->cgm = $oCgmFisico;
@@ -289,7 +289,6 @@ switch ($oParam->exec) {
             $oCgmJuridico->z01_cxpostal    = $oCgm->getCaixaPostal();
             $oCgmJuridico->z01_cxposcon    = $oCgm->getCaixaPostalComercial();
             $oCgmJuridico->z01_obs         = urlencode($oCgm->getObs());
-            $oCgmJuridico->z01_notificaemail = $oCgm->getNotificalEmail();
 
             $oRetorno->cgm = $oCgmJuridico;
         }
@@ -329,6 +328,7 @@ switch ($oParam->exec) {
     case 'incluirAlterar' :
 
         $sqlErro = false;
+        $clcondataconf = new cl_condataconf;
 
         $oRetorno->action     = $oParam->action;
 
@@ -345,7 +345,6 @@ switch ($oParam->exec) {
 
                 $oCgm = CgmFactory::getInstanceByCgm($oParam->pessoa->z01_numcgm);
             }
-
             $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
             $oCgm->setCpf($oParam->pessoa->z01_cgccpf);
             $oCgm->setIdentidade($oParam->pessoa->z01_ident);
@@ -445,6 +444,19 @@ switch ($oParam->exec) {
                     $oCgm->setComplementoComercial('');
                 }
             }
+
+            if(!empty($oParam->pessoa->z01_cadast)){
+                $anousu = db_getsession('DB_anousu');
+                $instituicao = db_getsession('DB_instit');
+                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                    $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                    $sqlErro  = true;
+                }
+            }
+
             if (!$sqlErro) {
                 try {
 
@@ -536,7 +548,6 @@ switch ($oParam->exec) {
             $oCgm->setTelefoneComercial($oParam->pessoa->z01_telcon);
             $oCgm->setCelularComercial($oParam->pessoa->z01_celcon);
             $oCgm->setEmailComercial(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_emailc)));
-            $oCgm->setNotificalEmail($oParam->pessoa->z01_notificaemail);
             $oCgm->setNire($oParam->nire->z08_nire);
             //Campos novos criados
             $oCgm->setCadastro($oParam->pessoa->z01_cadast);
@@ -599,23 +610,35 @@ switch ($oParam->exec) {
                 $oCgm->setLogradouroComercial('');
                 $oCgm->setComplementoComercial('');
             }
+            if(!empty($oParam->pessoa->z01_cadast)){
+                $anousu = db_getsession('DB_anousu');
+                $instituicao = db_getsession('DB_instit');
+                $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-            try {
-
-                $oCgm->save();
-                if ($oParam->action == "incluir") {
-
-                    $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
-                } else if ($oParam->action == "alterar") {
-
-                    $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (".$oCgm->getCodigo().")\\n\\n");
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                    $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                    $sqlErro  = true;
                 }
+            }
 
-            } catch (Exception $erro) {
+            if (!$sqlErro) {
+                try {
+                    $oCgm->save();
+                    if ($oParam->action == "incluir") {
 
-                $sqlErro = true;
-                $oRetorno->status = 2;
-                $oRetorno->message = urlencode($erro->getMessage());
+                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                    } else if ($oParam->action == "alterar") {
+
+                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                    }
+
+                } catch (Exception $erro) {
+
+                    $sqlErro = true;
+                    $oRetorno->status = 2;
+                    $oRetorno->message = urlencode($erro->getMessage());
+                }
             }
             //Aqui vai manipular o cidadaocgm
 
