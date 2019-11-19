@@ -254,6 +254,7 @@ switch ($oParam->exec) {
             $oCgmFisico->z01_obs           = urlencode($oCgm->getObs());
 
             $oCgmFisico->z04_rhcbo         = $oCgm->getCBO();
+            $oCgmFisico->z01_notificaemail = $oCgm->getNotificalEmail();
             $oCgmFisico->z01_ibge          = $oCgm->getIbge();
 
             $oRetorno->cgm = $oCgmFisico;
@@ -289,6 +290,7 @@ switch ($oParam->exec) {
             $oCgmJuridico->z01_cxpostal    = $oCgm->getCaixaPostal();
             $oCgmJuridico->z01_cxposcon    = $oCgm->getCaixaPostalComercial();
             $oCgmJuridico->z01_obs         = urlencode($oCgm->getObs());
+            $oCgmJuridico->z01_notificaemail = $oCgm->getNotificalEmail();
 
             $oRetorno->cgm = $oCgmJuridico;
         }
@@ -345,6 +347,7 @@ switch ($oParam->exec) {
 
                 $oCgm = CgmFactory::getInstanceByCgm($oParam->pessoa->z01_numcgm);
             }
+
             $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
             $oCgm->setCpf($oParam->pessoa->z01_cgccpf);
             $oCgm->setIdentidade($oParam->pessoa->z01_ident);
@@ -548,6 +551,7 @@ switch ($oParam->exec) {
             $oCgm->setTelefoneComercial($oParam->pessoa->z01_telcon);
             $oCgm->setCelularComercial($oParam->pessoa->z01_celcon);
             $oCgm->setEmailComercial(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_emailc)));
+            $oCgm->setNotificalEmail($oParam->pessoa->z01_notificaemail);
             $oCgm->setNire($oParam->nire->z08_nire);
             //Campos novos criados
             $oCgm->setCadastro($oParam->pessoa->z01_cadast);
@@ -624,13 +628,14 @@ switch ($oParam->exec) {
 
             if (!$sqlErro) {
                 try {
+
                     $oCgm->save();
                     if ($oParam->action == "incluir") {
 
-                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
                     } else if ($oParam->action == "alterar") {
 
-                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (" . $oCgm->getCodigo() . ")\\n\\n");
+                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (".$oCgm->getCodigo().")\\n\\n");
                     }
 
                 } catch (Exception $erro) {
