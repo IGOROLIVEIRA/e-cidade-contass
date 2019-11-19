@@ -25,14 +25,12 @@ class Oc11018revert extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
+    public function up()
     {
-        $sql =
-        <<<SQL
+        $sql = <<<SQL
                 
         BEGIN;
         SELECT fc_startsession();
-        
         
         DROP VIEW empresa;
         DROP VIEW cadastro_portaria;
@@ -401,14 +399,14 @@ class Oc11018revert extends AbstractMigration
                         END AS z01_cgccpf, 
                         CASE
                             WHEN promite.z01_nome IS NULL THEN cgm.z01_nome::text
-                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS \"coalesce\"
+                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS "coalesce"
                                FROM cfiptu
                               ORDER BY cfiptu.j18_anousu DESC
                              LIMIT 1)) || substr(promite.z01_nome, 1, 29)::text
                         END AS z01_nome, 
                         CASE
                             WHEN promite.z01_nome IS NULL THEN cgm.z01_nome::text
-                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS \"coalesce\"
+                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS "coalesce"
                                FROM cfiptu
                               ORDER BY cfiptu.j18_anousu DESC
                              LIMIT 1)) || promite.z01_nome::text
@@ -630,7 +628,7 @@ class Oc11018revert extends AbstractMigration
                     iptubase.j01_idbql, iptubase.j01_baixa, 
                         CASE
                             WHEN promite.z01_nome IS NULL OR fc_regrasconfig(1) = 1 THEN cgm.z01_nome::text
-                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS \"coalesce\"
+                            ELSE (( SELECT COALESCE(btrim(cfiptu.j18_textoprom::text) || ' '::text, ''::text) AS "coalesce"
                                FROM cfiptu
                               ORDER BY cfiptu.j18_anousu DESC
                              LIMIT 1)) || substr(promite.z01_nome, 1, 29)::text
