@@ -5616,6 +5616,129 @@ class cl_estrutura_sistema {
             }
         }
         return db_utils::getColectionByRecord(db_query($sql));
+    }
+
+
+    /**
+     * Busca o saldo da despesa, jutamente com tabela empenho para verificar data de julgamento da sentença
+     * @param null $o58_elemento
+     * @param string $campos
+     * @param null $ordem
+     * @param string $dbwhere
+     * @return array|stdClass[]
+     */
+    function getSaldoDespesaSentenca($o58_elemento=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from work_dotacao ";
+        $sql .= " inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu ";
+        $sql .= " inner join empempenho on o58_coddot = e60_coddot and o58_anousu = e60_anousu ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($o58_elemento!=null ){
+                $sql2 .= " where work_dotacao.o58_elemento = '{$o58_elemento}' ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return db_utils::getColectionByRecord(db_query($sql));
+
+    }
+
+    /**
+     * Busca valor liquidado pelo desdobramento, passando elemento em nível analítico
+     * @param $where
+     * @param $aAnousu
+     * @param $instit
+     * @param $dtIni
+     * @param $dtFim
+     * @param string $fonte
+     * @param $group
+     * @return array|stdClass[]
+     */
+    function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
+
+        $aDatas = array();
+        $dt_inicial = "";
+        $dt_final   = "";
+        if (count($aAnousu) == 2) {
+            $aDatas[$aAnousu[0]] = $dtIni.'a'.$aAnousu[0].'-12-31';
+            $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
+        }
+
+        $sql = " SELECT SUM(
+                        CASE WHEN C53_TIPO = 20 
+                            THEN ROUND(c70_VALOR, 2) 
+                        ELSE (
+                            CASE WHEN C53_TIPO = 21 
+                                THEN ROUND(c70_VALOR * -(1::FLOAT8),2) 
+                            ELSE 0::FLOAT8 END) 
+                        END ) 
+                    AS LIQUIDADO
+                    FROM conlancamele
+                        INNER JOIN conlancam                    
+                            ON c70_codlan = c67_codlan
+                        INNER JOIN conlancamdoc
+                            ON c70_codlan = c71_codlan
+                        INNER JOIN conhistdoc 
+                            ON c53_coddoc = c71_coddoc
+                        INNER JOIN conplanoorcamentoanalitica 
+                            ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
+                        INNER JOIN conplanoorcamento 
+                            ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                        INNER JOIN conlancamemp 
+                            ON c70_codlan = c75_codlan
+                        INNER JOIN empempenho 
+                            ON e60_numemp = c75_numemp ";
+
+        if($fonte!="") {
+            $sql .= " INNER JOIN orcdotacao ON e60_coddot=o58_coddot AND e60_anousu=o58_anousu ";
+        }
+
+        $sql .= "WHERE ".$where;
+
+        $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
+        $sql .= " AND e60_instit = {$instit}";
+        $sql .= " AND c61_instit = {$instit}";
+        $sql .= " AND c53_tipo IN (20, 21)";
+        $sql .= " AND (";
+        $i = 1;
+        foreach($aAnousu as $anousu) {
+            $dt_inicial = explode("a",$aDatas[$anousu]);
+            $dt_final   = explode("a",$aDatas[$anousu]);
+            $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
+            if($i < count($aAnousu)) {
+                $sql .= " OR ";
+            }
+            $i++;
+        }
+        $sql .= ")";
+        if($fonte!="") {
+            $sql .= " AND o58_codigo IN ({$fonte}) ";
+        }
+        $sql .= " {$group}";
+
+        return db_utils::getColectionByRecord(db_query($sql));
 
     }
 
