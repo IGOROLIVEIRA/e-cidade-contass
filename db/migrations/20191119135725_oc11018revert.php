@@ -50,9 +50,6 @@ class Oc11018revert extends AbstractMigration
         SET z01_nome=SUBSTR(z01_nome, 0, 40)
         WHERE length(z01_nome) > 40;
 
-        UPDATE cgm
-        SET z01_nomecomple=SUBSTR(z01_nomecomple, 0, 100)
-        WHERE length(z01_nomecomple) > 100;
 
         ALTER TABLE cgm
         ALTER COLUMN z01_nome TYPE varchar(100);
@@ -66,6 +63,10 @@ class Oc11018revert extends AbstractMigration
 
         ALTER TABLE cgmalt
         ALTER COLUMN z05_nomefanta TYPE varchar(100);
+
+        UPDATE cgm
+        SET z01_nomecomple=SUBSTR(z01_nomecomple, 0, 100)
+        WHERE length(z01_nomecomple) > 100;
 
         UPDATE db_syscampo
         SET tamanho = 40
