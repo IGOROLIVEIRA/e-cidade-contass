@@ -32,7 +32,7 @@ $clliclicita->rotulo->label();
                 <td>
                     <?
                     $al20_tipoprocesso = array("0"=>"","101"=>"Dispensa","100"=>"Inexigibilidade","102"=>"Inexigibilidade por credenciamento/chamada pública","103"=>"Dispensa por chamada publica");
-                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,3,"style=width: 100%;","","");
+                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,3,"","","");
                     ?>
                 </td>
             </tr>

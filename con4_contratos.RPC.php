@@ -1268,7 +1268,7 @@ switch($oParam->exec) {
                         if ($oContrato->getOrigem() == 2) {
 
                             if($iTipocompraTribunal == "103" || $iTipocompraTribunal == "104") {
-                                $oPosicao->adicionarItemDeCredenciamento($iLicitacao,$iContratado,$oItem->codigo, $oItem,$iCodigoAcordo);
+                                $oPosicao->adicionarItemDeCredenciamento($iLicitacao,$iContratado,$oItem->codigo, $oItem,$iCodigoAcordo,$iTipocompraTribunal);
                             }else{
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }

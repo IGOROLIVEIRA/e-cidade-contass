@@ -243,6 +243,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
             salvarCredAjax({
                 exec: 'SalvarCred',
                 itens: itensEnviar,
+                licitacao:<?= $l20_codigo?>
             }, retornoAjax);
         } catch(e) {
             alert(e.toString());
@@ -265,7 +266,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     function retornoAjax(res) {
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
-            alert(response.erro);
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Credenciamento salvo com sucesso !');
             location.reload();

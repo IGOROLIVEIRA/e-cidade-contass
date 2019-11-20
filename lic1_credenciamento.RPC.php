@@ -33,6 +33,10 @@ try{
 
         case 'SalvarCred':
 
+            $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento",null,null));
+            db_fieldsmemory($rsLimiteCred,0)->l20_dtlimitecredenciamento;
+            $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
+
             foreach ($oParam->itens as $item){
 
                 $clcredenciamento->l205_fornecedor = $item->l205_fornecedor;
@@ -41,11 +45,15 @@ try{
                 $clcredenciamento->l205_licitacao = $item->l205_licitacao;
                 $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
 
-                $resultitem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
+                $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
+                db_fieldsmemory($rsItem,0)->l205_sequencial;
 
-                db_fieldsmemory($resultitem,0)->l205_sequencial;
 
-                if ($resultitem == 0) {
+                if($item->l205_datacred > $dtLimitecredenciamento){
+                    throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                }
+
+                if ($rsItem == 0) {
                     $clcredenciamento->incluir(null);
                 } else {
                     $clcredenciamento->l205_sequencial = $l205_sequencial;
