@@ -697,7 +697,7 @@ class AcordoPosicao {
      * @param integer $iLicitem codigo do item da licitacao
      * @return AcordoItem
      */
-    public function adicionarItemDeCredenciamento($iLicitacao,$iFornecedor,$iLicitem, $oItemAcordo = null,$iContrato) {
+    public function adicionarItemDeCredenciamento($iLicitacao,$iFornecedor,$iLicitem, $oItemAcordo = null,$iContrato,$iTipocompraTribunal) {
 
         $oDaoLiclicitem = db_utils::getDao("liclicitem");
         $sWhere = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1 AND l21_codigo = {$iLicitem} limit 1";
@@ -725,6 +725,7 @@ class AcordoPosicao {
             $oItem->setIContratado($iFornecedor);
             $oItem->setIQtdcontratada($oItemAcordo->quantidade);
             $oItem->setILicitem($iLicitem);
+            $oItem->setITipocompratribunal($iTipocompraTribunal);
 
             /**
              * pesquisamos as dotacoes do item
