@@ -328,13 +328,13 @@ db_app::load("DBFormCache.js");
     window.onload = function () {
         var codlicitacao = document.form1.e54_codlicitacao.value;
         if (codlicitacao != "") {
-            //js_pesquisa_fornecedor(codlicitacao);
-            let e54_numerl = document.form1.e54_numerl.value;
+            js_pesquisa_fornecedor(codlicitacao);
+            /*let e54_numerl = document.form1.e54_numerl.value;
             if (e54_numerl.indexOf("/") == -1) {
               document.form1.e54_numerll.value = document.form1.e54_numerl.value+"/"+document.form1.e54_anousu.value;
             } else {
                 document.form1.e54_numerll.value = document.form1.e54_numerl.value;
-            }
+            }*/
         }
     }
 
@@ -524,16 +524,16 @@ db_app::load("DBFormCache.js");
 
         document.form1.e54_numerl.value  = chave2;
         document.form1.e54_numerll.value = chave2+"/"+chave3;
-        var e54_codcom = document.getElementById("e54_codcomS"),
+        let e54_codcom = document.getElementById("e54_codcomS"),
             e54_tipol  = document.getElementById("e54_tipolS");
 
-        for (var i = 0; i < e54_codcom.options.length; i++) {
+        for (let i = 0; i < e54_codcom.options.length; i++) {
             if (e54_codcom.options[i].value == chave4) {
                 e54_codcom.options[i].selected = true;
                 break;
             }
         }
-        for (var i = 0; i < e54_tipol.options.length; i++) {
+        for (let i = 0; i < e54_tipol.options.length; i++) {
             if (e54_tipol.options[i].value == chave5) {
                 e54_tipol.options[i].selected = true;
                 break;
@@ -545,10 +545,9 @@ db_app::load("DBFormCache.js");
     }
 
     function js_pesquisa_fornecedor(codlicitacao) {
+
+        document.getElementById("e54_numcgm").innerHTML = "";
         let razaoSocial = document.getElementById("e54_numcgm");
-        for (let i = 0; i <= razaoSocial.options.length; i++) {
-            razaoSocial.remove(razaoSocial.selectedIndex[i]);
-        }
         let params = {
             exec: 'getFonercedoresLic',
             licitacao: codlicitacao

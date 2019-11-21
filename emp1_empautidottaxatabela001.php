@@ -113,6 +113,7 @@ if(isset($confirmar)){
                                    from empautoriza
                                     where e54_autori = {$e56_autori}
                                   )
+              AND e54_autori = {$e56_autori}                    
   ";
 
   $rsConsultaT       = db_query($sSQLitenstabela);
