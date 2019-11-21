@@ -86,16 +86,19 @@ class GerarEXT extends GerarAM
         $aCSVEXT20['si165_vlsaldoanteriorfonte']  = $this->sicomNumberReal(abs($aEXT20['si165_vlsaldoanteriorfonte']), 2);
         
         if($aEXT20['si165_vlsaldoanteriorfonte'] == 0){
-          //$aCSVEXT20['si165_natsaldoanteriorfonte']  
-          if(pg_num_rows($clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ".$aEXT20['si165_codext']." )"))) > 0){
+          //$aCSVEXT20['si165_natsaldoanteriorfonte'] 
+          
+          $clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ". $aEXT20['si165_codext'] ." " ));
 
-          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", " c61_anousu = 2019 and c61_codtce = ".$aEXT20['si165_codext']));  
+          if($clconplano->numrows > 0) {
 
-            $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
+            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", "c61_codtce = ".$aEXT20['si165_codext'] ."" ));  
+
+             $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
           }else{
 
-            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo == 1 then 'D' when c60_naturezasaldo == 2 then 'C' end as c60_naturezasaldo ", "", " c61_anousu = 2019 and c61_reduz = ".$aEXT20['si165_codext']));  
+            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo == 1 then 'D' when c60_naturezasaldo == 2 then 'C' end as c60_naturezasaldo ", "", "c61_reduz = ". $aEXT20['si165_codext'] .""));  
 
             $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
@@ -112,14 +115,14 @@ class GerarEXT extends GerarAM
         if($aEXT20['si165_vlsaldoatualfonte'] == 0){
           //$aCSVEXT20['si165_natsaldoanteriorfonte']  
           
-          if(pg_num_rows($clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ".$aEXT20['si165_codext']." )"))) > 0){
+          if($clconplano->numrows > 0) {
 
-          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", " c61_anousu = 2019 and c61_codtce = ".$aEXT20['si165_codext']));  
+          $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", " c61_anousu = 2019 and c61_codtce = ".$aEXT20['si165_codext'].""));  
             $aCSVEXT20['si165_natsaldoatualfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
           }else{
 
-            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", " c61_anousu = 2019 and c61_reduz = ".$aEXT20['si165_codext']));  
+            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", "c61_reduz = ".$aEXT20['si165_codext'].""));  
 
             $aCSVEXT20['si165_natsaldoatualfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
