@@ -29,7 +29,7 @@ class Oc10813 extends PostgresMigration
         -- INSERINDO db_syscampo
         INSERT INTO public.db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c229_fonte                              ', 'int4                                    ', 'Receita', '0', 'Receita', 6, false, false, false, 1, 'text', 'Receita');
         INSERT INTO public.db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c229_convenio                           ', 'int4                                    ', 'Convênio', '0', 'Convênio', 6, false, false, false, 1, 'text', 'Convênio');
-        INSERT INTO public.db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c229_vlprevisto                         ', 'float8                                  ', 'Valor Previsto', '0', 'Valor Previsto', 14, false, false, false, 4, 'text', 'Valor Previsto');
+        INSERT INTO public.db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c229_vlprevisto                         ', 'float8                                  ', 'Valor Previsto do Convênio', '0', 'Valor Previsto do Convênio', 14, false, false, false, 4, 'text', 'Valor Previsto do Convênio');
         INSERT INTO public.db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'c229_anousu                             ', 'int4                                    ', 'Ano', '0', 'Ano', 4, false, false, false, 1, 'text', 'Ano');
          
         -- INSERINDO db_sysarqcamp
@@ -47,7 +47,7 @@ class Oc10813 extends PostgresMigration
             c229_convenio           int4 NOT NULL default 0,
             c229_vlprevisto         float8 NOT NULL default 0,
             c229_anousu             int4 default 0,
-            CONSTRAINT prevconvenioreceita_font_convenio_pk PRIMARY KEY (c229_fonte, c229_convenio));
+            CONSTRAINT prevconvenioreceita_font_convenio_ano_pk PRIMARY KEY (c229_fonte, c229_convenio, c229_anousu));
         
         ALTER TABLE prevconvenioreceita ADD CONSTRAINT prevconvenioreceita_fonte_fk FOREIGN KEY (c229_anousu,c229_fonte) REFERENCES orcreceita;
 

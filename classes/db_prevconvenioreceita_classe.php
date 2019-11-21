@@ -83,7 +83,7 @@ class cl_prevconvenioreceita {
         }
     }
     // funcao para inclusao
-    function incluir ($c229_convenio, $c229_fonte){
+    function incluir (){
         $this->atualizacampos();
         if($this->c229_fonte == null ){
             $this->erro_sql = " Campo Receita nao Informado.";
@@ -129,12 +129,12 @@ class cl_prevconvenioreceita {
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-                $this->erro_sql   = "Tabela com convenios ($this->c229_convenio, $this->c229_fonte) nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Tabela com convenios ($this->c229_fonte, $this->c229_convenio, $this->c229_anousu) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_banco = "Tabela com convenios já Cadastrado";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             }else{
-                $this->erro_sql   = "Tabela com convenios ($this->c229_convenio, $this->c229_fonte) nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "Tabela com convenios ($this->c229_fonte, $this->c229_convenio, $this->c229_anousu) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             }
@@ -144,7 +144,7 @@ class cl_prevconvenioreceita {
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : ".$this->c229_convenio. ' - ' .$this->c229_fonte;
+        $this->erro_sql .= "Valores : $this->c229_fonte, $this->c229_convenio, $this->c229_anousu";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
@@ -152,7 +152,7 @@ class cl_prevconvenioreceita {
         return true;
     }
     // funcao para alteracao
-    function alterar ($c229_convenio=null, $c229_fonte=null) {
+    function alterar ($c229_fonte=null, $c229_convenio=null, $c229_anousu=null) {
         $this->atualizacampos();
         $sql = " update prevconvenioreceita set ";
         $virgula = "";
@@ -186,7 +186,7 @@ class cl_prevconvenioreceita {
             $sql  .= $virgula." c229_vlprevisto = $this->c229_vlprevisto ";
             $virgula = ",";
             if(trim($this->c229_vlprevisto) == null ){
-                $this->erro_sql = " Campo Convenio nao Informado.";
+                $this->erro_sql = " Campo Valor Previsto nao Informado.";
                 $this->erro_campo = "c229_vlprevisto";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -198,17 +198,20 @@ class cl_prevconvenioreceita {
 
         $sql .= " where ";
         if($c229_convenio!=null){
-            $sql .= " c229_convenio = $this->c229_convenio";
+            $sql .= " c229_convenio = $c229_convenio";
         }
         if($c229_fonte!=null){
-            $sql .= " c229_fonte = $this->c229_fonte";
+            $sql .= " and c229_fonte = $this->c229_fonte";
+        }
+        if($c229_anousu!=null){
+            $sql .= " and c229_anousu = $this->c229_anousu";
         }
 
         $result = db_query($sql);
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Tabela com convenio nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ($this->c229_convenio, $this->c229_fonte)";
+            $this->erro_sql   = "Tabela previsao convenio receita nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql .= "Valores : ($this->c229_fonte, $this->c229_convenio)";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
@@ -217,8 +220,8 @@ class cl_prevconvenioreceita {
         }else{
             if(pg_affected_rows($result)==0){
                 $this->erro_banco = "";
-                $this->erro_sql = "Tabela com convenio nao foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : ($this->c229_convenio, $this->c229_fonte)";
+                $this->erro_sql = "Tabela previsao convenio receita nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql .= "Valores : ($this->c229_fonte, $this->c229_convenio)";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
                 $this->erro_status = "1";
@@ -227,7 +230,7 @@ class cl_prevconvenioreceita {
             }else{
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ($this->c229_convenio, $this->c229_fonte)";
+                $this->erro_sql .= "Valores : ($this->c229_fonte, $this->c229_convenio)";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
                 $this->erro_status = "1";
@@ -237,7 +240,7 @@ class cl_prevconvenioreceita {
         }
     }
     // funcao para exclusao
-    function excluir ($c229_convenio=null, $c229_fonte=null,$dbwhere=null) {
+    function excluir ($c229_convenio=null, $c229_fonte=null,$c229_anousu=null,$dbwhere=null) {
         if($dbwhere==null || $dbwhere==""){
             $resaco = $this->sql_record($this->sql_query_file($c229_convenio, $c229_fonte));
         }else{
@@ -259,6 +262,12 @@ class cl_prevconvenioreceita {
                     $sql2 .= " and ";
                 }
                 $sql2 .= " c229_fonte = $c229_fonte ";
+            }
+            if($c229_anousu != ""){
+                if($sql2!=""){
+                    $sql2 .= " and ";
+                }
+                $sql2 .= " c229_anousu = $c229_anousu ";
             }
         }else{
             $sql2 = $dbwhere;
@@ -331,6 +340,7 @@ class cl_prevconvenioreceita {
             $sql .= $campos;
         }
         $sql .= " from prevconvenioreceita ";
+        $sql .= "   left join convconvenios on c229_convenio = c206_sequencial ";
         $sql2 = "";
         if($dbwhere==""){
             if($c229_fonte!=null ){

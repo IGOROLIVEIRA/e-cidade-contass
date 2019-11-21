@@ -30,19 +30,13 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
-include("classes/cl_prevconvenioreceita.php");
+include("classes/db_prevconvenioreceita_classe.php");
+include("classes/db_convconvenios_classe.php");
 include("dbforms/db_classesgenericas.php");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
-//$cl_prevconvenioreceita->rotulo->label();
-
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-
-//echo $iCodRec.'<br>';
-//echo $sReceita.'<br>';
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 
 $clprevconvenioreceita = new cl_prevconvenioreceita;
@@ -50,41 +44,65 @@ $clprevconvenioreceita->rotulo->label("c229_fonte");
 $clprevconvenioreceita->rotulo->label("c229_convenio");
 $clprevconvenioreceita->rotulo->label("c229_vlprevisto");
 $c229_anousu = db_getsession('DB_anousu');
-
-if(isset($c229_fonte)){
-//    echo 'tem fonte.<br>';
-}
-
-if(isset($opcao) && $opcao=="alterar"){
-    $db_opcao = 1;
-//    echo "<script>
-//          js_OpenJanelaIframe('','db_iframe_newparag','con4_docparag006.php?chavepesquisa=$db02_idparag','Altera Paragrafo',true,0);
-//        </script>";
-//    $db02_idparag="";
-//    $db02_descr="";
-}elseif(isset($opcao) && $opcao=="excluir" || isset($db_opcao) && $db_opcao==3){
-    $db_opcao = 3;
-}else{
-    $db_opcao = 1;
-}
+$db_botao = true;
 
 if(isset($incluir)){
+    $sqlerro = false;
+
+    if($c229_vlprevisto > $valor_atribuir) {
+        $erro_msg = 'Valor previsto para o convênio não pode ser maior que o saldo a atribuir';
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+    } else {
+        db_inicio_transacao();
+        $clprevconvenioreceita->c229_fonte = $c229_fonte;
+        $clprevconvenioreceita->c229_convenio = $c229_convenio;
+        $clprevconvenioreceita->c229_vlprevisto = $c229_vlprevisto;
+        $clprevconvenioreceita->c229_anousu = db_getsession('DB_anousu');
+        $clprevconvenioreceita->incluir();
+        $erro_msg = $clprevconvenioreceita->erro_msg;
+        if ($clprevconvenioreceita->erro_status == 0) {
+            $sqlerro = true;
+        } else {
+            $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+        }
+        db_fim_transacao($sqlerro);
+    }
+
+}else if(isset($alterar)){
+    $sqlerro=false;
+
+    if($c229_vlprevisto > $fValorPrev) {
+        $erro_msg = 'Valor previsto para o convênio não pode ser maior que o saldo a atribuir';
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+    } else {
+            db_inicio_transacao();
+            $clprevconvenioreceita->c229_convenio = $c229_convenio;
+            $clprevconvenioreceita->c229_fonte = $c229_fonte;
+            $clprevconvenioreceita->c229_anousu = $c229_anousu;
+            $clprevconvenioreceita->c229_vlprevisto = $c229_vlprevisto;
+            $clprevconvenioreceita->alterar($c229_fonte, $iConvenioTemp, $c229_anousu);
+            $erro_msg = $clprevconvenioreceita->erro_msg;
+            if ($clprevconvenioreceita->erro_status == 0) {
+                $sqlerro = true;
+            } else {
+                $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+            }
+            db_fim_transacao($sqlerro);
+        }
+}else if(isset($excluir)){
     $sqlerro=false;
     db_inicio_transacao();
-    $clprevconvenioreceita->c229_fonte = $c229_fonte;
-    $clprevconvenioreceita->c229_convenio = $c229_convenio;
-    $clprevconvenioreceita->c229_vlprevisto = $c229_vlprevisto;
-    $clprevconvenioreceita->c229_anousu = db_getsession('DB_anousu');
-    $clprevconvenioreceita->incluir($c229_anousu, $c229_fonte);
+    $clprevconvenioreceita->c229_convenio   = $c229_convenio;
+    $clprevconvenioreceita->c229_fonte      = $c229_fonte;
+    $clprevconvenioreceita->c229_anousu     = $c229_anousu;
+    $clprevconvenioreceita->excluir($c229_convenio, $c229_fonte, $c229_anousu);
     $erro_msg=$clprevconvenioreceita->erro_msg;
     if ($clprevconvenioreceita->erro_status==0){
         $sqlerro=true;
     }else{
-        $c229_anousu="";
-        $c229_fonte="";
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
     }
     db_fim_transacao($sqlerro);
-
 }
 ?>
 
@@ -92,6 +110,10 @@ if(isset($incluir)){
 <html>
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <?
+    db_app::load("scripts.js, strings.js, prototype.js,datagrid.widget.js, widgets/dbautocomplete.widget.js");
+    db_app::load("widgets/windowAux.widget.js");
+    ?>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -125,19 +147,22 @@ if(isset($incluir)){
 </html>
 
 <?php
-if(isset($incluir) ||  isset($excluir)){
-if($sqlerro==true){
-    $clprevconvenioreceita->erro(true,false);
-if($clprevconvenioreceita->erro_campo!=""){
-echo "<script> parent.document.form1.".$clprevconvenioreceita->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-echo "<script> parent.document.form1.".$clprevconvenioreceita->erro_campo.".focus();</script>";
-}
-}else{
-db_msgbox($erro_msg);
-echo "<script>
-    document.form1.pesquisar.click();
-</script>";
+if(isset($incluir) ||  isset($excluir) || isset($alterar)){
 
-}
+    if($sqlerro==true){
+        $clprevconvenioreceita->erro(true,false);
+        if($clprevconvenioreceita->erro_campo!=""){
+            if($alterar) {
+                echo "<script> js_limpa();</script>";
+            }else {
+                echo "<script> document.form1." . $clprevconvenioreceita->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+                echo "<script> document.form1." . $clprevconvenioreceita->erro_campo . ".focus();</script>";
+            }
+
+        }
+    }else{
+        db_msgbox($erro_msg);
+    }
+
 }
 ?>
