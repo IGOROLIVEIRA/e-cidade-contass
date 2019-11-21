@@ -481,12 +481,19 @@ function js_troca(codele) {
 
     let qt    =  new Number(document.form1.e55_quant.value);
     let qtant =  new Number(document.form1.e55_quant_ant.value);
+    let vluni =  new Number(document.form1.e55_vluni.value);
     let vltot =  new Number(document.form1.e55_vltot.value);
     let total =  new Number(document.form1.totalad.value);
     let utili =  new Number(document.form1.utilizado.value);
+    let dispo =  new Number(document.form1.disponivel.value);
 
-    if (qt > qtant) {
-      alert('Quantidade do item não pode ser maior que saldo total!');
+    if (isNaN(qt) || qt <= 0) {
+      alert('Quantidade do item é inválida!');
+      return false;
+    }
+
+    if (isNaN(vluni) || vluni <= 0) {
+      alert('Valor unitário é inválido!');
       return false;
     }
 
@@ -564,8 +571,6 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
   document.form1.pc07_codele.value     = codele;
   document.form1.e55_quant.value = "";
   document.form1.e55_vluni.value = "";
-  // chave7 == 't' ? document.form1.e55_quant.value = chave3 : "";
-  // chave7 == 't' ? document.form1.e55_vluni.value = chave4 : "";
   chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
   document.form1.pc80_criterioadjudicacao.value  = chave6;
   document.form1.totalad.value = chave5;
@@ -582,9 +587,6 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
     let totitens = JSON.parse(e.responseText).itens;
     document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
     document.form1.disponivel.value = new Number(chave5 - totitens[0].totalitens) > 0 ? new Number(chave5 - totitens[0].totalitens) : "0";
-
-    let totitensqt = JSON.parse(e.responseText).itensqt;
-    document.form1.e55_quant.value = new Number(chave3 - totitensqt[0].totalitensqt);
 
     js_consulta();
     document.form1.e55_quant.focus();
