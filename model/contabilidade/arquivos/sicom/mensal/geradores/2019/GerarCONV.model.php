@@ -32,6 +32,12 @@ class GerarCONV extends GerarAM
     $sSql3 = "select * from conv202019 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
     $rsCONV20 = db_query($sSql3);
 
+    $sSql4 = "select * from conv302019 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
+    $rsCONV30 = db_query($sSql4);
+
+    $sSql5 = "select * from conv312019 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
+    $rsCONV31 = db_query($sSql5);
+
     //echo $sSql."-".$sSql3; exit;
 
 
@@ -111,6 +117,46 @@ class GerarCONV extends GerarAM
         $this->adicionaLinha();
 
       }
+
+        /**
+         *
+         * Registros 30
+         */
+        for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCONV30); $iCont4++) {
+
+            $aCONV30 = pg_fetch_array($rsCONV30, $iCont4);
+
+            $aCSVCONV30['si203_tiporegistro']                 = $this->padLeftZero($aCONV30['si203_tiporegistro'], 2);
+            $aCSVCONV30['si203_codreceita']                   = $aCONV30['si203_codreceita'];
+            $aCSVCONV30['si203_codorgao']                     = $this->padLeftZero($aCONV30['si203_codorgao'], 2);
+            $aCSVCONV30['si203_naturezareceita']              = substr($aCONV30['si203_naturezareceita'], 1, 8);
+            $aCSVCONV30['si203_codfontrecursos']              = $this->padLeftZero($aCONV30['si203_codfontrecursos'], 3);
+            $aCSVCONV30['si203_vlprevisao']                   = $this->sicomNumberReal($aCONV30['si203_vlprevisao'], 2);
+
+            $this->sLinha = $aCSVCONV30;
+            $this->adicionaLinha();
+
+        }
+
+        /**
+         *
+         * Registros 31
+         */
+        for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
+
+            $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
+
+            $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
+            $aCSVCONV31['si204_codreceita']                   = $aCONV31['si204_codreceita'];
+            $aCSVCONV31['si204_prevorcamentoassin']           = $aCONV31['si204_prevorcamentoassin'];
+            $aCSVCONV31['si204_nroconvenio']                  = $aCONV31['si204_nroconvenio'];
+            $aCSVCONV31['si204_dataassinatura']               = $this->sicomDate($aCONV31['si204_dataassinatura']);
+            $aCSVCONV31['si204_vlprevisaoconvenio']           = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
+
+            $this->sLinha = $aCSVCONV31;
+            $this->adicionaLinha();
+
+        }
 
 
       $this->fechaArquivo();
