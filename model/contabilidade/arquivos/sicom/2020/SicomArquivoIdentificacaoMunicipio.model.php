@@ -95,6 +95,8 @@ class SicomArquivoIdentificacaoMunicipio extends SicomArquivoBase implements iPa
     $sSql .= "	WHERE prefeitura = 't'";
 
 	$rsInst = db_query($sSql);
+  echo $sSql;
+  db_criatabela($rsInst);
 	$oInst = db_utils::fieldsMemory($rsInst, 0);
 
     $oDadosMunicipio = new stdClass();
