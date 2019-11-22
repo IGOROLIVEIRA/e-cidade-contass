@@ -90,17 +90,17 @@ switch($oParam->exec) {
       /**
        * Verificar se existe pelo menos um pdf de leis antes de tentar processar
        */
-     //  if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
-     //        && !file_exists("LOA{$ano}.pdf") && !file_exists("ANEXOS_LOA.pdf")) {
-     //  	$oRetorno->status  = 2;
-     //    $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
-     //    $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
-     //    break;
+       //  if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
+       //        && !file_exists("LOA{$ano}.pdf") && !file_exists("ANEXOS_LOA.pdf")) {
+       //  	$oRetorno->status  = 2;
+       //    $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
+       //    $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+       //    break;
     	// }
-      	$oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
-      	$oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
-    	$oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
-    	$oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
+     //  $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
+     //  $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
+    	// $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
+    	// $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
     	$oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
 
     	$oEscritorCSV = new padArquivoEscritorCSV();
