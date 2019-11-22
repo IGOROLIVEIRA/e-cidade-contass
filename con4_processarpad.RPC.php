@@ -159,7 +159,7 @@ switch($oParam->exec) {
         }
       }
 
-      $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
+      
 
 
 
@@ -168,6 +168,7 @@ switch($oParam->exec) {
       }
 
       if (count($oParam->arquivos) > 0) {
+        $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
         $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
       }
 
