@@ -111,7 +111,7 @@ switch($oParam->exec) {
       foreach ($oParam->arquivos as $sArquivo) {
 
         $sArquivoPath = "model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php";
-
+        echo $sArquivoPath;
         if (file_exists($sArquivoPath)) {
 
           require_once($sArquivoPath);
