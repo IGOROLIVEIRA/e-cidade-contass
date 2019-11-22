@@ -293,11 +293,11 @@ function js_processar() {
         aArquivosSelecionados.push(oElemento.value);
     }
   });  
-  if (aArquivosSelecionados.length == 0) {
+  // if (aArquivosSelecionados.length == 0) {
     
-    alert("Nenhum arquivo foi selecionado para ser gerado");
-    return false;
-  }
+  //   alert("Nenhum arquivo foi selecionado para ser gerado leras");
+  //   return false;
+  // }
   js_divCarregando('Aguarde, processando arquivos','msgBox');
   var oParam           = new Object();
   oParam.exec          = "processarSicomAnual";
