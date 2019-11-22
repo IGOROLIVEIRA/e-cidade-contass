@@ -99,8 +99,8 @@ switch($oParam->exec) {
     	// }
 
 
-      if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
-              && !file_exists("LOA{$ano}.pdf") && !file_exists("ANEXOS_LOA.pdf")) {
+      if (file_exists("PPA{$ano}.pdf") && file_exists("LDO{$ano}.pdf")
+              && file_exists("LOA{$ano}.pdf") && file_exists("ANEXOS_LOA.pdf")) {
         $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
         $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
       	$oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
