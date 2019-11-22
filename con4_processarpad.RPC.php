@@ -124,7 +124,7 @@ switch($oParam->exec) {
         $oEscritorCSV->adicionarArquivo("DESOPCAOSEMESTRALIDADE.pdf", "DESOPCAOSEMESTRALIDADE.pdf");
         $iVerifica=1;
       }
-      if($iVerifica=1){
+      if($iVerifica==1){
         $oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
         $oEscritorCSV = new padArquivoEscritorCSV();
       }
@@ -167,9 +167,9 @@ switch($oParam->exec) {
 
 
 
-      // if($iVerifica=1){
-      //   $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
-      // }
+      if($iVerifica==1){
+        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
+      }
 
       $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
