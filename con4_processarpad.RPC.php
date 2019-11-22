@@ -70,14 +70,12 @@ switch($oParam->exec) {
     break;
 
   case "processarSicomAnual" :
-    // ini_set('display_errors', 'On');
-    // error_reporting(E_ALL);
     /**
      * sempre usar essa funcao para pegar o ano
      */
     $sDataInicial = db_getsession("DB_anousu").'-01-01';
     $sDataFinal   = db_getsession("DB_anousu")."-12-31";
-    if (count($oParam->arquivos) > 0) {
+    
 
     	$sSql  = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = ".db_getsession('DB_instit');
 
@@ -129,8 +127,6 @@ switch($oParam->exec) {
         $oEscritorCSV = new padArquivoEscritorCSV();
       }
 
-      
-
     	/*
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
@@ -171,9 +167,12 @@ switch($oParam->exec) {
         $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
       }
 
-      $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
+      if (count($oParam->arquivos) > 0) {
+        $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
+      }
+
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
-    }
+    
     break;
 
 
