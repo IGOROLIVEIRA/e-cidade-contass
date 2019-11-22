@@ -125,7 +125,7 @@ class cl_cgm {
     var $z01_pis = null;
     var $z01_obs = null;
     var $z01_incmunici = 0;
-    var $z01_notificaemail = null;
+    var $z01_notificaemail = 't';
     var $z01_ibge = null;
 
     // cria propriedade com as variaveis do arquivo
@@ -405,6 +405,10 @@ class cl_cgm {
         }
         if($this->z01_ibge == null ){
             $this->z01_ibge = "null";
+        }
+
+        if($this->z01_notificaemail == null ){
+            $this->z01_notificaemail = "t";
         }
 
         if($z01_numcgm == "" || $z01_numcgm == null ){
