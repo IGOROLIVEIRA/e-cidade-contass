@@ -70,7 +70,8 @@ switch($oParam->exec) {
     break;
 
   case "processarSicomAnual" :
-
+    // ini_set('display_errors', 'On');
+    // error_reporting(E_ALL);
     /**
      * sempre usar essa funcao para pegar o ano
      */
@@ -98,20 +99,37 @@ switch($oParam->exec) {
      //      break;
     	// }
 
-
-      if (file_exists("PPA{$ano}.pdf") || file_exists("LDO{$ano}.pdf")
-              || file_exists("LOA{$ano}.pdf") || file_exists("ANEXOS_LOA.pdf") 
-              || file_exists("OPCAOSEMESTRALIDADE.pdf") || file_exists("DESOPCAOSEMESTRALIDADE.pdf")
-         ) {
+      $iVerifica=0;
+      if (file_exists("PPA{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
+        $iVerifica=1;
+      } 
+      if(file_exists("LDO{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
-      	$oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
-      	$oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
-      	$oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
-
-      	$oEscritorCSV = new padArquivoEscritorCSV();
-
+        $iVerifica=1;
       }
+      if(file_exists("LOA{$ano}.pdf")){
+        $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
+        $iVerifica=1;
+      } 
+      if(file_exists("ANEXOS_LOA.pdf")){
+        $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
+        $iVerifica=1;
+      }
+      if(file_exists("OPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("OPCAOSEMESTRALIDADE.pdf", "OPCAOSEMESTRALIDADE.pdf");
+        $iVerifica=1;
+      }
+      if(file_exists("DESOPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("DESOPCAOSEMESTRALIDADE.pdf", "DESOPCAOSEMESTRALIDADE.pdf");
+        $iVerifica=1;
+      }
+      if($iVerifica=1){
+        $oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
+        $oEscritorCSV = new padArquivoEscritorCSV();
+      }
+
+      
 
     	/*
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
@@ -146,12 +164,13 @@ switch($oParam->exec) {
       }
 
       $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
-      if (file_exists("PPA{$ano}.pdf") || file_exists("LDO{$ano}.pdf")
-              || file_exists("LOA{$ano}.pdf") || file_exists("ANEXOS_LOA.pdf") 
-              || file_exists("OPCAOSEMESTRALIDADE.pdf") || file_exists("DESOPCAOSEMESTRALIDADE.pdf")
-         ) {
-        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
-      }
+
+
+
+      // if($iVerifica=1){
+      //   $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
+      // }
+
       $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
     }
