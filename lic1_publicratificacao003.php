@@ -34,6 +34,11 @@ if(isset($chavepesquisa)){
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+    #l20_tipoprocesso_select_descr{
+        width: 99%;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
 <?
