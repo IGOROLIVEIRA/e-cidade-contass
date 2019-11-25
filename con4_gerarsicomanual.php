@@ -263,6 +263,8 @@ $clrotulo->label("o15_codigo");
           <input type="button" id="btnLimparTodos" value="Limpar Todos" onclick="js_limpa();"/>
           <input type="button" id="btnProcessar" value="Processar"
             onclick="js_processar();" />
+          <input type="button" id="btnExcArq" value="Excluir Arquivos"
+            onclick="js_excluirArquivos();" />
         </div>
       </div>
     </form>
@@ -442,6 +444,21 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	    oCheckbox.checked = false;
 	  }); 
 	}
+
+  function js_excluirArquivos(){
+
+    js_divCarregando('Aguarde, exclusão de documentos','msgBox');
+    var oParam           = new Object();
+    oParam.exec          = "excluirArquivosIP";
+    var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
+                                  {
+                                    method:'post',
+                                    parameters:'json='+Object.toJSON(oParam),
+                                    onComplete:js_retornoProcessamento
+                                  }
+          );
+    
+  }
 
 
 </script>
