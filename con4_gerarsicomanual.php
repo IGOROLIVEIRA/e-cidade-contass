@@ -261,10 +261,10 @@ $clrotulo->label("o15_codigo");
         <div style="text-align: center;">
           <input type="button" id="btnMarcarTodos" value="Marcar Todos" onclick="js_marcaTodos();" />
           <input type="button" id="btnLimparTodos" value="Limpar Todos" onclick="js_limpa();"/>
+          <input type="button" id="btnExcArq" value="Excluir Anexos"
+            onclick="js_excluirArquivos();" />
           <input type="button" id="btnProcessar" value="Processar"
             onclick="js_processar();" />
-          <input type="button" id="btnExcArq" value="Excluir Arquivos"
-            onclick="js_excluirArquivos();" />
         </div>
       </div>
     </form>
