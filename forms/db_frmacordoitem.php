@@ -1689,6 +1689,7 @@ db_app::load("estilos.css, grid.style.css");
                 oDadosItens.dtFinal = aRow[13];
                 oDadosItens.servico = aRow[14];
                 oDadosItens.elemento = aRow[15];
+                oDadosItens.qtdDisponivel = aRow[10];
 
                 if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
 
@@ -1704,8 +1705,8 @@ db_app::load("estilos.css, grid.style.css");
                     throw $break;
                 }
 
-                if(Number(oDadosItens.qtdcontratada) > Number(oDadosItens.quantidade)){
-                    alert('Quantidade indisponivel saldo atual para o item e:'+oDadosItens.quantidade);
+                if(Number(oDadosItens.quantidade) > Number(oDadosItens.qtdDisponivel)){
+                    alert('Quantidade indisponivel saldo atual para o item e:'+oDadosItens.qtdDisponivel);
                     lErro = true;
                     throw $break;
                 }
