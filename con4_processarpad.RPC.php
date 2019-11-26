@@ -193,17 +193,13 @@ switch($oParam->exec) {
         }
       }
 
-      
-
-
-
-      if($iVerifica==1){
-        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
-      }
-
       if (count($oParam->arquivos) > 0) {
         $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
         $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
+      }
+
+      if($iVerifica==1){
+        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
       }
 
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
