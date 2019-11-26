@@ -23,7 +23,7 @@
         </table>
         <table>
             <tr>
-                <th class="table_header" style="width: 500px;">Receita</th>
+                <th class="table_header" style="width: 750px;">Receita</th>
                 <th class="table_header" style="width: 100px;">Valor Previsto</th>
                 <th class="table_header" style="width: 100px;">Vlr. Convênios Assinados</th>
                 <th class="table_header" style="width: 100px;">Vlr. Convênios sem Assinatura</th>
@@ -38,11 +38,11 @@
 
             <table class="DBGrid">
 
-                <td class="linhagrid" style="width: 500px">
+                <td class="linhagrid" style="width: 750px">
                     <?php
                     $sSubEstrut = substr($oRec->o57_fonte, 0, 10);
                     $sRec = $sSubEstrut. ' - '.$oRec->o57_finali. ' Fonte - '.$oRec->o70_codigo;
-                    db_ancora("<b>{$sRec}</b>", "js_associacaoConvenioPrevisaoReceita({$oRec->o70_codrec}, {$sSubEstrut}, '{$oRec->o57_finali}', {$oRec->o70_valor}, {$index});", 1);
+                    db_ancora("<b>{$sRec}</b>", "js_associacaoConvenioPrevisaoReceita({$oRec->o70_codrec}, {$sSubEstrut}, '{$oRec->o57_finali}', {$oRec->o70_valor}, {$index}, {$oRec->o70_codigo});", 1);
                     ?>
                 </td>
 
@@ -66,8 +66,8 @@
 </div>
 <script>
 
-    function js_associacaoConvenioPrevisaoReceita(iCodRec, sEstRec, sReceita, fValorPrev, index){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sEstRec+' - '+sReceita+'&fValorPrev='+fValorPrev+'&index='+index,'Associa Convênio',true);
+    function js_associacaoConvenioPrevisaoReceita(iCodRec, sEstRec, sReceita, fValorPrev, index, iFonte){
+        js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sEstRec+' - '+sReceita+'&fValorPrev='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associa Convênio',true);
     }
 
 </script>

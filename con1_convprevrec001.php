@@ -8,32 +8,6 @@ require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 include("classes/db_orcfontes_classe.php");
 
-//$recurso = $HTTP_POST_VARS;
-//
-////echo "<pre>";
-//foreach ($recurso as $item){
-//
-//    foreach ($item as $fonte) {
-//
-//        $cldisponibilidadecaixa->c224_fonte = $fonte['fonte'];
-//        $cldisponibilidadecaixa->c224_vlrcaixabruta = $fonte['vlr_dispCaixaBruta'];
-//        $cldisponibilidadecaixa->c224_rpexercicioanterior = $fonte['vlr_rpExerAnteriores'];
-//        $cldisponibilidadecaixa->c224_vlrrestoarecolher = $fonte['vlr_restArecolher'];
-//        $cldisponibilidadecaixa->c224_vlrrestoregativofinanceiro = $fonte['vlr_restRegAtivoFinan'];
-//        $cldisponibilidadecaixa->c224_vlrdisponibilidadecaixa = $fonte['vlr_DispCaixa'];
-//        $cldisponibilidadecaixa->c224_anousu = db_getsession("DB_anousu");
-//        $cldisponibilidadecaixa->c224_instit = db_getsession("DB_instit");
-//        $result = $cldisponibilidadecaixa->sql_record($cldisponibilidadecaixa->sql_query(null,"c224_fonte",null," c224_fonte = {$fonte['fonte']}"));
-//        db_fieldsmemory($result,0)->c224_fonte;
-//        if($c224_fonte == null){
-//            $cldisponibilidadecaixa->incluir();
-//        }else{
-//            $cldisponibilidadecaixa->alterar(null);
-//        }
-//
-//    }
-//}
-
 ?>
 <html>
 <head>

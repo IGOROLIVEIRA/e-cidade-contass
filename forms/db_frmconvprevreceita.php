@@ -35,6 +35,7 @@ if(isset($opcao) && $opcao=="alterar"){
                     <td colspan="2">
                         <?
                         db_input('c229_fonte',0,$Ic229_fonte,true,'hidden',3,"");
+                        db_input('fonte',0,'',true,'hidden',3,"");
                         db_input('total_assinado',0,'',true,'hidden',3,"");
                         db_input('sReceita',80,'',true,'text',3,"")
                         ?>
@@ -121,7 +122,7 @@ if(isset($opcao) && $opcao=="alterar"){
 <script>
     function js_pesquisaConvenio(mostra) {
         if(mostra) {
-            js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_preenchepesquisa|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true, '0', '1');
+            js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_preenchepesquisa|c206_sequencial|c206_objetoconvenio|c206_tipocadastro&iFonte='+<?= $iFonte ?>, 'Pesquisa', true, '0', '1');
         } else {
             if(document.form1.c229_convenio.value != ''){
                 js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.c229_convenio.value+'&funcao_js=parent.js_preenchepesquisa1','Pesquisa',false);
@@ -131,14 +132,16 @@ if(isset($opcao) && $opcao=="alterar"){
         }
     }
 
-    function js_preenchepesquisa(sequencial, objeto){
+    function js_preenchepesquisa(sequencial, objeto, fonte){
         db_iframe_convconvenios.hide();
-        document.form1.c229_convenio.value  = sequencial;
-        document.form1.sObjeto.value        = objeto;
+        document.form1.c229_convenio.value    = sequencial;
+        document.form1.sObjeto.value          = objeto;
+        document.form1.fonte.value            = fonte;
     }
 
-    function js_preenchepesquisa1(objeto, erro) {
+    function js_preenchepesquisa1(objeto, erro, fonte) {
         document.form1.sObjeto.value = objeto;
+        document.form1.fonte.value = fonte;
         if(erro==true){
             document.form1.c229_convenio.focus();
             document.form1.c229_convenio.value = '';

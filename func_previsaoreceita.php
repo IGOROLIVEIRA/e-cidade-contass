@@ -49,7 +49,10 @@ $db_botao = true;
 if(isset($incluir)){
     $sqlerro = false;
 
-    if($c229_vlprevisto > $valor_atribuir) {
+    if($fonte==0 || $fonte == null) {
+        $erro_msg = 'O convênio selecionado não possui fonte associada, atualize o cadastro e tente novamente';
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+    }elseif($c229_vlprevisto > $valor_atribuir) {
         $erro_msg = 'Valor previsto para o convênio não pode ser maior que o saldo a atribuir';
         $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
     } else {

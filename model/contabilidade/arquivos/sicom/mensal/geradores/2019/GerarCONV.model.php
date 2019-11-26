@@ -41,7 +41,7 @@ class GerarCONV extends GerarAM
     //echo $sSql."-".$sSql3; exit;
 
 
-    if (pg_num_rows($rsCONV10) == 0 && pg_num_rows($rsCONV20) == 0) {
+    if (pg_num_rows($rsCONV10) == 0 && pg_num_rows($rsCONV20) == 0 && pg_num_rows($rsCONV30) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
