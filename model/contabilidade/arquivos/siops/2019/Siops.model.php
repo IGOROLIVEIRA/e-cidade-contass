@@ -79,6 +79,10 @@ class Siops {
 
     public function gerarSiopsReceita() {
 
+        echo '<pre>';
+        print_r($this->aReceitasAgrupadasFinal);
+        echo '</pre>';
+        die();
         $aDados = $this->aReceitasAgrupadasFinal;
 
         if (file_exists("model/contabilidade/arquivos/siops/".db_getsession("DB_anousu")."/SiopsIMPT.model.php")) {
@@ -631,8 +635,8 @@ class Siops {
                 $aReceita['natureza']           = $oNaturrecsiops->c231_elerecsiops;
                 $aReceita['campo']              = $oNaturrecsiops->c231_campo;
                 $aReceita['linha']              = $oNaturrecsiops->c231_linha;
-                $aReceita['prev_inicial']       = abs($oReceita->saldo_inicial);
-                $aReceita['prev_atualizada']    = (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
+                $aReceita['prev_inicial']       = $oReceita->saldo_inicial;
+                $aReceita['prev_atualizada']    = ($oReceita->saldo_inicial + $oReceita->saldo_prevadic_acum);
                 $aReceita['total_receitas']     = ($aReceita['rec_realizada'] - ($aReceita['ded_receita'] + $aReceita['ded_fundeb']));
 
                 array_push($this->aReceitas, $aReceita);
@@ -663,7 +667,7 @@ class Siops {
                     $aReceitaAnoSeg['natureza']     = $oNaturrecsiops->c231_elerecsiops;
                     $aReceitaAnoSeg['campo']        = $oNaturrecsiops->c231_campo;
                     $aReceitaAnoSeg['linha']        = $oNaturrecsiops->c231_linha;
-                    $aReceitaAnoSeg['rec_orcada']   = abs($oReceitaAnoSeg->saldo_inicial);
+                    $aReceitaAnoSeg['rec_orcada']   = $oReceitaAnoSeg->saldo_inicial;
 
                     array_push($this->aReceitasAnoSeg, $aReceitaAnoSeg);
 
