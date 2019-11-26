@@ -5,22 +5,22 @@ require_once("libs/db_utils.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
-include("classes/db_naturrecsiope_classe.php");
+include("classes/db_naturrecsiops_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
-$clnaturrecsiope = new cl_naturrecsiope;
-die('receita despesa siops');
+$clnaturrecsiops = new cl_naturrecsiops;
+
 if(isset($incluir)){
     db_inicio_transacao();
-    $clnaturrecsiope->incluir($c224_natrececidade,$c224_natrecsiope, $c224_anousu);
+    $clnaturrecsiops->incluir($c230_natrececidade,$c230_natrecsiops, $c230_anousu);
     db_fim_transacao();
 }
 
 if(isset($excluir)){
     db_inicio_transacao();
-    $clnaturrecsiope->excluir($c224_natrececidade,$c224_natrecsiope);
+    $clnaturrecsiops->excluir($c230_natrececidade,$c230_natrecsiops);
     db_fim_transacao();
 } else if(isset($chavepesquisa)){
-    $result = $clnaturrecsiope->sql_record($clnaturrecsiope->sql_query($chavepesquisa));
+    $result = $clnaturrecsiops->sql_record($clnaturrecsiops->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
     $db_botao = true;
 }
@@ -40,7 +40,7 @@ if(isset($excluir)){
     </table>
     <center>
         <?
-        include("forms/frmnaturrecsiope.php");
+        include("forms/frmnaturrecsiops.php");
         ?>
     </center>
     </td>
@@ -50,30 +50,30 @@ if(isset($excluir)){
     </html>
 <?
 if(isset($incluir)){
-    if($clnaturrecsiope->erro_status=="0"){
-        $clnaturrecsiope->erro(true,false);
+    if($clnaturrecsiops->erro_status=="0"){
+        $clnaturrecsiops->erro(true,false);
         $db_botao=true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-        if($clnaturrecsiope->erro_campo!=""){
-            echo "<script> document.form1.".$clnaturrecsiope->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1.".$clnaturrecsiope->erro_campo.".focus();</script>";
+        if($clnaturrecsiops->erro_campo!=""){
+            echo "<script> document.form1.".$clnaturrecsiops->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clnaturrecsiops->erro_campo.".focus();</script>";
         }
     }else{
-        $clnaturrecsiope->erro(true,true);
+        $clnaturrecsiops->erro(true,true);
     }
 }
 
 if(isset($excluir)){
-    if($clnaturrecsiope->erro_status=="0"){
-        $clnaturrecsiope->erro(true,false);
+    if($clnaturrecsiops->erro_status=="0"){
+        $clnaturrecsiops->erro(true,false);
         $db_botao=true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-        if($clnaturrecsiope->erro_campo!=""){
-            echo "<script> document.form1.".$clnaturrecsiope->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1.".$clnaturrecsiope->erro_campo.".focus();</script>";
+        if($clnaturrecsiops->erro_campo!=""){
+            echo "<script> document.form1.".$clnaturrecsiops->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clnaturrecsiops->erro_campo.".focus();</script>";
         }
     }else{
-        $clnaturrecsiope->erro(true,true);
+        $clnaturrecsiops->erro(true,true);
     }
 }
 ?>
