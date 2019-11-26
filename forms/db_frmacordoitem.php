@@ -1706,7 +1706,7 @@ db_app::load("estilos.css, grid.style.css");
                 }
 
                 if(Number(oDadosItens.quantidade) > Number(oDadosItens.qtdDisponivel)){
-                    alert('Quantidade indisponivel saldo atual para o item e:'+oDadosItens.qtdDisponivel);
+                    alert('A quantidade disponível para o item '+oDadosItens.codigomaterial+' é '+oDadosItens.qtdDisponivel);
                     lErro = true;
                     throw $break;
                 }
