@@ -76,25 +76,27 @@ $db_opcao       = 1;
      <?
   	   $clcriaabas->identifica = array("bens"        => "Cadastro de bens",
   	                                   "bensimoveis" => "Dados do imóvel",
-  	                                   "bensmater"=>"Dados do material"
+  	                                   "bensmater"=>"Dados do material",
+                                       "bensfotos" => "Fotos"
   	                                  );
   	   
   	   $clcriaabas->sizecampo  = array("bens"        => "20",
   	                                   "bensimoveis" => "20",
-  	                                   "bensmater"   => "20");
+  	                                   "bensmater"   => "20",
+                                       "bensfotos"   => "20");
   	   
   	   $clcriaabas->title      =  array("bens"        => "Cadastrar bens",
   	                                    "bensimoveis" => "Ativar bem como imóvel",
-  	                                    "bensmater"   => "Ativar bem como material"
+  	                                    "bensmater"   => "Ativar bem como material",
+                                        "bensfotos"   => "Fotos"
   	                                   );
    	   
        if ($lFormNovo) {
          $clcriaabas->src = array("bens"=>"pat1_bensnovo004.php".$iCodigoEmpNotaItem);
-//          $clcriaabas->src = array("bens"=>"pat1_bens004.php");
        } else {
   	     $clcriaabas->src = array("bens"=>"pat1_bens004.php");
-       }
-  	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true","bensbaix"=>"true"); 
+  	   }
+  	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true","bensbaix"=>"true", "bensfotos"=>"true");
   	   $clcriaabas->cria_abas(); 
 	 ?> 
 	 </td>

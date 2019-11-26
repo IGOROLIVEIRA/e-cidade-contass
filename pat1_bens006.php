@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -31,6 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_bens_classe.php");
+include("classes/db_bemfoto_classe.php");
 include("classes/db_clabens_classe.php");
 include("classes/db_bensmater_classe.php");
 include("classes/db_bensimoveis_classe.php");
@@ -63,6 +64,7 @@ $clbenscedente            = new cl_benscedente;
 $cldepartdiv              = new cl_departdiv;
 $cldb_estrut              = new cl_db_estrut;
 $clbens                   = new cl_bens;
+$clbemfoto                = new cl_bemfoto;
 $clbensmater              = new cl_bensmater;
 $clbensimoveis            = new cl_bensimoveis;
 $clclabens                = new cl_clabens;
@@ -95,7 +97,7 @@ if(isset($excluir)){
       if ($clbensmaterialempempenho->erro_status == 0) {
     	  $sqlerro=true;
     	  $erro_msg = $clbensmaterialempempenho->erro_msg;
-      } 
+      }
     }
     if ($sqlerro == false) {
       $clbensdepreciacao->excluir('',"t44_bens = $t52_bem");
@@ -123,7 +125,7 @@ if(isset($excluir)){
       if ($clbensmater->erro_status == 0) {
     	  $sqlerro=true;
     	  $erro_msg = $clbensmater->erro_msg;
-      }	
+      }
     }
     if ($sqlerro == false) {
       $clhistbem->excluir('',"t56_codbem = $t52_bem");
@@ -153,11 +155,18 @@ if(isset($excluir)){
     	  $erro_msg = $clbens->erro_msg;
       }
     }
-  
+    if ($sqlerro == false) {
+        $clbemfoto->excluir('', "t54_numbem = $t52_bem");
+        if ($clbemfoto->erro_status == 0) {
+            $sqlerro=true;
+            $erro_msg = $clbemfoto->erro_msg;
+        }
+    }
+
   db_fim_transacao($sqlerro);
-  
+
   if($sqlerro == true){
-    $erro_msg = 'Erro ao excluir bem: '.$erro_msg;   
+    $erro_msg = 'Erro ao excluir bem: '.$erro_msg;
   }else{
     $erro_msg = 'Bem excluido com sucesso';
   }
@@ -168,7 +177,7 @@ if(isset($excluir)){
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clbens->sql_record($clbens->sql_query($chavepesquisa)); 
+   $result = $clbens->sql_record($clbens->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -182,8 +191,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmbens.php");
@@ -215,6 +224,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_bensimoveis.location.href='pat1_bensimoveis001.php?db_opcaoal=33&t54_codbem=".@$t52_bem."';
          parent.document.formaba.bensmater.disabled=false;
          top.corpo.iframe_bensmater.location.href='pat1_bensmater001.php?db_opcaoal=33&t53_codbem=".@$t52_bem."';
+         parent.document.formaba.bensfotos.disabled=false;
+         top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?db_opcaoal=33&t52_codbem=".@$t52_bem."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('bensimoveis');";

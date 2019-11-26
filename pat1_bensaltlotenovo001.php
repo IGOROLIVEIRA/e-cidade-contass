@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -96,7 +96,7 @@ div#fieldsetInclusaoBensGlobal  table tr td {
   }
   /* pega a segunda td */
  div#fieldsetInclusaoBensGlobaltable tr td + td {
-    
+
   }
   /* pega a terceira td */
 div#fieldsetInclusaoBensGlobal  table tr td + td + td {
@@ -114,14 +114,14 @@ div#fieldsetInclusaoBensGlobal  table tr td + td + td + td {
   .leiutura{
     background-color: #DEB887;
   }
-  
+
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_carregaDadosForm(<?=$db_opcao?>);" >
 <br><br>
 <table valign="top" marginwidth="0" width="600" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
         <center>
           <?
             include("forms/db_frm_bensglobalnovo.php");
@@ -132,14 +132,14 @@ div#fieldsetInclusaoBensGlobal  table tr td + td + td + td {
 </table>
 </body>
 </html>
-
-<? 
- db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
-  
 <?
-  if (isset($alterar) && $erro_msg!="") {
-    
+// db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+?>
+
+<?
+
+   if (isset($alterar) && $erro_msg!="") {
+
     db_msgbox($erro_msg);
     if ($sqlerro==true) {
       if($clbens->erro_campo!=""){
@@ -147,8 +147,16 @@ div#fieldsetInclusaoBensGlobal  table tr td + td + td + td {
         echo "<script> document.form1.".$clbens->erro_campo.".focus();</script>";
       };
     }
+    echo "<script>console.log('É esse mesmo...')</script>";
+    echo "<script>console.log('Lote: ', document.getElementById('cod_lote'))</script>";
   }
- if(($db_opcao==22||$db_opcao==33) && $msg_erro==""){
+
+if(($db_opcao==22||$db_opcao==33) && $msg_erro==""){
     echo "<script>js_pesquisa();</script>";
+    echo "<script>parent.document.formaba.bensfotos.disabled = false;</script>";
+
+//    echo "<script>top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?cod_lote={$F('cod_lote')}`</script>";
+//    echo "<script>top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_lote=${$F('cod_lote')}`</script>";
+
  }
 ?>

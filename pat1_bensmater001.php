@@ -258,4 +258,10 @@ if (isset($importar) && $importar == true){
 if(isset($alterar) || isset($excluir) || isset($incluir)){
     db_msgbox($erro_msg);
 }
+
+// Trecho para redirecionar para a aba de fotos
+if(isset($alterar) || isset($incluir)){
+    echo "<script>top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?desabilita=false&t52_codbem=$t53_codbem';</script>";
+    echo "<script>parent.mo_camada('bensfotos');</script>";
+}
 ?>

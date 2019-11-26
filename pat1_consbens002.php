@@ -132,6 +132,26 @@ if ($oBem->getCedente() != null) {
 <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
 <style type='text/css'>
 .valores {background-color:#FFFFFF}
+    table{
+        width: 100%;
+    }
+    tr:first-child td:last-child{
+        text-align: center;
+    }
+
+    tr:first-child td:last-child img{
+        width: 166px;
+        height: 166px;
+        border: 0;
+    }
+
+    #bem tr td:first-child{
+        width: 10%;
+    }
+
+    #fotobem{
+      cursor: pointer;
+    }
 </style>
 </head>
 
@@ -143,7 +163,7 @@ if ($oBem->getCedente() != null) {
       <strong>Dados do Bem:</strong>
     </legend>
 
-    <table>
+    <table id="bem">
 
       <tr>
         <td>
@@ -171,6 +191,17 @@ if ($oBem->getCedente() != null) {
               echo $oClassificacao->getDescricao();
             }
           ?>
+        </td>
+        <td rowspan="10">
+            <?
+            $principal = $oBem->getFotoPrincipal();
+            if($principal):
+                $mostrarimagem = "func_mostrarimagem.php?oid=".$principal;
+                $href = "<img src='".$mostrarimagem."' id='fotobem' ondblclick='exibeImagem(".$oBem->getCodigoBem().");'>";
+                echo $href;
+            else: ?>
+                <img src="imagens/moveis.png" id='preview'>
+            <?endif;?>
         </td>
       </tr>
 
@@ -346,11 +377,13 @@ if ($oBem->getCedente() != null) {
         <td>
           <strong>Observações: </strong>
         </td>
-        <td class="valores" colspan="7">
+        <td class="valores" colspan="5">
            <?php echo $oBem->getObservacao(); ?>
         </td>
       </tr>
     </table>
+      <div id="teste" style="display:none">
+      </div>
 
   </fieldset>
 
@@ -369,3 +402,9 @@ if ($oBem->getCedente() != null) {
   ?>
 </body>
 </html>
+<script>
+
+    function exibeImagem(id_bem){
+        js_OpenJanelaIframe('top.corpo','iframe_fotos','func_imagem.php?bem='+id_bem,'', true, 50, 150, 980, 430);
+    }
+</script>

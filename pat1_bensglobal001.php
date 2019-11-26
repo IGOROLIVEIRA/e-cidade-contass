@@ -613,7 +613,6 @@ if (isset($incluir)) {
 
 <?
 if(isset($incluir)){
-
   if (trim(@$erro_msg)!=""){
        db_msgbox($erro_msg);
   }

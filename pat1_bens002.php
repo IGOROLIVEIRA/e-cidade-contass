@@ -31,6 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
+include("");
 require_once("libs/db_utils.php");
 
 $lFormNovo          = false;
@@ -74,19 +75,21 @@ $db_opcao       = 1;
      <?
 	   $clcriaabas->identifica = array("bens"        => "Cadastro de bens",
 	                                   "bensimoveis" => "Dados do imóvel",
-	                                   "bensmater"   => "Dados do material"
+	                                   "bensmater"   => "Dados do material",
+                                       "bensfotos"   => "Fotos"
 	                                   );
 	   if ($lFormNovo){
 	     $clcriaabas->src = array("bens"=>"pat1_bensnovo005.php");
-	   } else {
+       } else {
 	     $clcriaabas->src = array("bens"=>"pat1_bens005.php");
-	   } 
+       }
      $clcriaabas->title      =  array("bens"        => "Cadastrar bens",
                                       "bensimoveis" => "Ativar bem como imóvel",
-                                      "bensmater"   => "Ativar bem como material"
+                                      "bensmater"   => "Ativar bem como material",
+                                      "bensfotos"   => "Fotos"
                                       );
-     $clcriaabas->sizecampo  = array("bens"=>"20","bensimoveis"=>"20","bensmater"=>"20");
-	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true"); 
+     $clcriaabas->sizecampo  = array("bens"=>"20","bensimoveis"=>"20","bensmater"=>"20", "bensfotos"=>"20");
+	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true", "fotos"=>"true");
 	   $clcriaabas->cria_abas(); 
        ?> 
        </td>
