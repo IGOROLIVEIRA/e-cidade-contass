@@ -198,7 +198,7 @@ switch($oParam->exec) {
 
 
       if($iVerifica==1){
-        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
+        $oEscritorCSV->adicionarArquivo("DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
       }
 
       if (count($oParam->arquivos) > 0) {
