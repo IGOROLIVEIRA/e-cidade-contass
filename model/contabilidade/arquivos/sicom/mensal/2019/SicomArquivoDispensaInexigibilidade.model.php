@@ -300,7 +300,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
         liclicita.l20_anousu as exercicioLicitacao,
         liclicita.l20_edital as nroProcessoLicitatorio,
-        cflicita.l03_pctipocompratribunal as tipoProcesso,
+        cflicita.l03_pctipocompratribunal as tipoprocesso,
         case when liclicita.l20_dataaber is null then liclicita.l20_datacria else liclicita.l20_dataaber end as dtAbertura,
         liclicita.l20_naturezaobjeto as naturezaObjeto,
         liclicita.l20_objeto as objeto,
@@ -326,8 +326,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
         $rsResult10 = db_query($sSql);
 
-        $arraydispensa = array(101,103);
-
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
             $dispensa10 = new cl_dispensa102019();
@@ -338,10 +336,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
             $dispensa10->si74_codunidadesubresp = $oDados10->codunidadesubresp;
             $dispensa10->si74_exercicioprocesso = $oDados10->exerciciolicitacao;
             $dispensa10->si74_nroprocesso = $oDados10->nroprocessolicitatorio;
-            if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
+            if ($oDados10->tipoprocesso == "101") {
                 $dispensa10->si74_tipoprocesso = 1;
-            } else {
+            } else if($oDados10->tipoprocesso == "100"){
                 $dispensa10->si74_tipoprocesso = 2;
+            } else if($oDados10->tipoprocesso == "102"){
+                $dispensa10->si74_tipoprocesso = 3;
+            } else if ($oDados10->tipoprocesso == "103"){
+                $dispensa10->si74_tipoprocesso = 4;
             }
             $dispensa10->si74_dtabertura = $oDados10->dtabertura;
             $dispensa10->si74_naturezaobjeto = $oDados10->naturezaobjeto;
@@ -381,7 +383,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
                     liclicita.l20_anousu as exercicioLicitacao,
                     liclicita.l20_edital as nroProcessoLicitatorio,
-                    cflicita.l03_pctipocompratribunal as tipoProcesso,
                     liclicitemlote.l04_codigo as nroLote,
                     liclicitemlote.l04_descricao as dscLote
                     FROM liclicita
@@ -415,10 +416,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                     $dispensa11->si75_codunidadesubresp = $oDados11->codunidadesubresp;
                     $dispensa11->si75_exercicioprocesso = $oDados11->exerciciolicitacao;
                     $dispensa11->si75_nroprocesso = $oDados11->nroprocessolicitatorio;
-                    if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                        $dispensa10->si74_tipoprocesso = 1;
-                    } else {
-                        $dispensa10->si74_tipoprocesso = 2;
+                    if ($oDados10->tipoprocesso == "101") {
+                      $dispensa11->si75_tipoprocesso = 1;
+                    } else if($oDados10->tipoprocesso == "100"){
+                      $dispensa11->si75_tipoprocesso = 2;
+                    } else if($oDados10->tipoprocesso == "102"){
+                      $dispensa11->si75_tipoprocesso = 3;
+                    } else if ($oDados10->tipoprocesso == "103"){
+                      $dispensa11->si75_tipoprocesso = 4;
                     }
                     $dispensa11->si75_nrolote = $oDados11->nrolote;
                     $dispensa11->si75_dsclote = $oDados11->dsclote;
@@ -474,7 +479,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                  LIMIT 1) AS codUnidadeSubResp,
                             liclicita.l20_anousu AS exercicioLicitacao,
                             liclicita.l20_edital AS nroProcessoLicitatorio,
-                            cflicita.l03_pctipocompratribunal AS tipoProcesso,
                             (pcmater.pc01_codmater::varchar || (CASE
                                                                     WHEN matunid.m61_codmatunid IS NULL THEN 1
                                                                     ELSE matunid.m61_codmatunid
@@ -515,10 +519,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                         $dispensa12->si76_codunidadesubresp = $oDados12->codunidadesubresp;
                         $dispensa12->si76_exercicioprocesso = $oDados12->exerciciolicitacao;
                         $dispensa12->si76_nroprocesso = $oDados12->nroprocessolicitatorio;
-                        if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                            $dispensa10->si74_tipoprocesso = 1;
-                        } else {
-                            $dispensa10->si74_tipoprocesso = 2;
+                        if ($oDados10->tipoprocesso == "101") {
+                          $dispensa12->si76_tipoprocesso = 1;
+                        } else if($oDados10->tipoprocesso == "100"){
+                          $dispensa12->si76_tipoprocesso = 2;
+                        } else if($oDados10->tipoprocesso == "102"){
+                          $dispensa12->si76_tipoprocesso = 3;
+                        } else if ($oDados10->tipoprocesso == "103"){
+                          $dispensa12->si76_tipoprocesso = 4;
                         }
                         $dispensa12->si76_nroitem = $iCont12 + 1;
                         $dispensa12->si76_coditem = $oDados12->coditem;
@@ -569,7 +577,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                  LIMIT 1) AS codUnidadeSubResp,
                             liclicita.l20_anousu AS exercicioLicitacao,
                             liclicita.l20_edital AS nroProcessoLicitatorio,
-                            cflicita.l03_pctipocompratribunal AS tipoProcesso,
                             (pcmater.pc01_codmater::varchar || (CASE
                                                                     WHEN matunid.m61_codmatunid IS NULL THEN 1
                                                                     ELSE matunid.m61_codmatunid
@@ -608,10 +615,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                     $dispensa12->si76_codunidadesubresp = $oDados12->codunidadesubresp;
                     $dispensa12->si76_exercicioprocesso = $oDados12->exerciciolicitacao;
                     $dispensa12->si76_nroprocesso = $oDados12->nroprocessolicitatorio;
-                    if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                        $dispensa10->si74_tipoprocesso = 1;
-                    } else {
-                        $dispensa10->si74_tipoprocesso = 2;
+                    if ($oDados10->tipoprocesso == "101") {
+                      $dispensa12->si76_tipoprocesso = 1;
+                    } else if($oDados10->tipoprocesso == "100"){
+                      $dispensa12->si76_tipoprocesso = 2;
+                    } else if($oDados10->tipoprocesso == "102"){
+                      $dispensa12->si76_tipoprocesso = 3;
+                    } else if ($oDados10->tipoprocesso == "103"){
+                      $dispensa12->si76_tipoprocesso = 4;
                     }
                     $dispensa12->si76_nroitem = $iCont12 + 1;
                     $dispensa12->si76_coditem = $oDados12->coditem;
@@ -651,7 +662,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
            WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
                 liclicita.l20_anousu as exercicioLicitacao,
                 liclicita.l20_edital as nroProcessoLicitatorio,
-                cflicita.l03_pctipocompratribunal as tipoProcesso,
                 dispensa112019.si75_nrolote as nroLote,
                 (pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem
                 FROM liclicitem
@@ -688,10 +698,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa13->si77_codunidadesubresp = $oDados13->codunidadesubresp;
                 $dispensa13->si77_exercicioprocesso = $oDados13->exerciciolicitacao;
                 $dispensa13->si77_nroprocesso = $oDados13->nroprocessolicitatorio;
-                if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                    $dispensa13->si77_tipoprocesso = 1;
-                } else {
-                    $dispensa13->si77_tipoprocesso = 2;
+                if ($oDados10->tipoprocesso == "101") {
+                  $dispensa13->si77_tipoprocesso = 1;
+                } else if($oDados10->tipoprocesso == "100"){
+                  $dispensa13->si77_tipoprocesso = 2;
+                } else if($oDados10->tipoprocesso == "102"){
+                  $dispensa13->si77_tipoprocesso = 3;
+                } else if ($oDados10->tipoprocesso == "103"){
+                  $dispensa13->si77_tipoprocesso = 4;
                 }
                 $dispensa13->si77_nrolote = $oDados13->nrolote;
                 $dispensa13->si77_coditem = $oDados13->coditem;
@@ -726,7 +740,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		cflicita.l03_pctipocompratribunal as tipoProcesso,
 		(CASE parecerlicitacao.l200_tipoparecer WHEN 2 THEN 6
 			ELSE 7
 		END) as tipoResp,
@@ -763,7 +776,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		cflicita.l03_pctipocompratribunal as tipoProcesso,
 		(CASE liccomissaocgm.l31_tipo WHEN '1' THEN 1
 		WHEN '2' THEN 4 WHEN '3' THEN 2 WHEN '4' THEN 3 WHEN '8' THEN 5 END) as tipoResp,
 		cgm.z01_cgccpf as nroCPFResp		
@@ -791,10 +803,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa14->si78_codunidadesubres = $oDados14->codunidadesubresp;
                 $dispensa14->si78_exercicioprocesso = $oDados14->exerciciolicitacao;
                 $dispensa14->si78_nroprocesso = $oDados14->nroprocessolicitatorio;
-                if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                    $dispensa14->si78_tipoprocesso = 1;
-                } else {
-                    $dispensa14->si78_tipoprocesso = 2;
+                if ($oDados10->tipoprocesso == "101") {
+                  $dispensa14->si78_tipoprocesso = 1;
+                } else if($oDados10->tipoprocesso == "100"){
+                  $dispensa14->si78_tipoprocesso = 2;
+                } else if($oDados10->tipoprocesso == "102"){
+                  $dispensa14->si78_tipoprocesso = 3;
+                } else if ($oDados10->tipoprocesso == "103"){
+                  $dispensa14->si78_tipoprocesso = 4;
                 }
                 $dispensa14->si78_tiporesp = $oDados14->tiporesp;
                 $dispensa14->si78_nrocpfresp = $oDados14->nrocpfresp;
@@ -828,7 +844,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
-		cflicita.l03_pctipocompratribunal as tipoProcesso,
 		dispensa112019.si75_nrolote as nroLote,
 		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 		itemprecoreferencia.si02_vlprecoreferencia as vlCotPrecosUnitario,
@@ -875,10 +890,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                     $oDados15->si79_codunidadesubresp = $oResult15->codunidadesubresp;
                     $oDados15->si79_exercicioprocesso = $oResult15->exerciciolicitacao;
                     $oDados15->si79_nroprocesso = $oResult15->nroprocessolicitatorio;
-                    if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                        $oDados15->si79_tipoprocesso = 1;
-                    } else {
-                        $oDados15->si79_tipoprocesso = 2;
+                    if ($oDados10->tipoprocesso == "101") {
+                      $oDados15->si79_tipoprocesso = 1;
+                    } else if($oDados10->tipoprocesso == "100"){
+                      $oDados15->si79_tipoprocesso = 2;
+                    } else if($oDados10->tipoprocesso == "102"){
+                      $oDados15->si79_tipoprocesso = 3;
+                    } else if ($oDados10->tipoprocesso == "103"){
+                      $oDados15->si79_tipoprocesso = 4;
                     }
                     $oDados15->si79_nrolote = $oResult15->nrolote;
                     $oDados15->si79_coditem = $oResult15->coditem;
@@ -940,7 +959,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
            WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
                 liclicita.l20_anousu as exercicioLicitacao,
                 liclicita.l20_edital as nroProcessoLicitatorio,	
-                cflicita.l03_pctipocompratribunal as tipoProcesso,
                 infocomplementaresinstit.si09_codorgaotce as codorgaotce,
                 CASE WHEN o41_subunidade != 0
                 OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -992,10 +1010,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa16->si80_codunidadesubresp = $oDados16->codunidadesubresp;
                 $dispensa16->si80_exercicioprocesso = $oDados16->exerciciolicitacao;
                 $dispensa16->si80_nroprocesso = $oDados16->nroprocessolicitatorio;
-                if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                    $dispensa16->si80_tipoprocesso = 1;
-                } else {
-                    $dispensa16->si80_tipoprocesso = 2;
+                if ($oDados10->tipoprocesso == "101") {
+                  $dispensa16->si80_tipoprocesso = 1;
+                } else if($oDados10->tipoprocesso == "100"){
+                  $dispensa16->si80_tipoprocesso = 2;
+                } else if($oDados10->tipoprocesso == "102"){
+                  $dispensa16->si80_tipoprocesso = 3;
+                } else if ($oDados10->tipoprocesso == "103"){
+                  $dispensa16->si80_tipoprocesso = 4;
                 }
                 $dispensa16->si80_codorgao = $oDados16->codorgaotce;
                 $dispensa16->si80_codunidadesub = $oDados16->codunidadesub;
@@ -1042,7 +1064,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
                 liclicita.l20_anousu as exercicioLicitacao,
                 liclicita.l20_edital as nroProcessoLicitatorio,
-                cflicita.l03_pctipocompratribunal as tipoProcesso,
                 (CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
                     ELSE 2
                 END) as tipoDocumento,
@@ -1104,12 +1125,15 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                     $oDados17->si81_codunidadesubresp = $oResult17->codunidadesubresp;
                     $oDados17->si81_exercicioprocesso = $oResult17->exerciciolicitacao;
                     $oDados17->si81_nroprocesso = $oResult17->nroprocessolicitatorio;
-                    if (in_array($oDados10->tipoprocesso, $arraydispensa)) {
-                        $oDados17->si81_tipoprocesso = 1;
-                    } else {
-                        $oDados17->si81_tipoprocesso = 2;
+                    if ($oDados10->tipoprocesso == "101") {
+                      $oDados17->si81_tipoprocesso = 1;
+                    } else if($oDados10->tipoprocesso == "100"){
+                      $oDados17->si81_tipoprocesso = 2;
+                    } else if($oDados10->tipoprocesso == "102"){
+                      $oDados17->si81_tipoprocesso = 3;
+                    } else if ($oDados10->tipoprocesso == "103"){
+                      $oDados17->si81_tipoprocesso = 4;
                     }
-                    $oDados17->si81_tipoprocesso = $oResult17->tipoprocesso;
                     $oDados17->si81_tipodocumento = $oResult17->tipodocumento;
                     $oDados17->si81_nrodocumento = $oResult17->nrodocumento;
                     $oDados17->si81_nroinscricaoestadual = $oResult17->nroinscricaoestadual;
@@ -1220,7 +1244,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
              LIMIT 1) AS codUnidadeSubResp,
                         liclicita.l20_anousu AS exercicioLicitacao,
                         liclicita.l20_edital AS nroProcessoLicitatorio,
-                        cflicita.l03_pctipocompratribunal AS tipoProcesso,
+                        cflicita.l03_pctipocompratribunal AS tipoprocesso,
                         (pcmater.pc01_codmater::varchar || (CASE
                                                                 WHEN matunid.m61_codmatunid IS NULL THEN 1
                                                                 ELSE matunid.m61_codmatunid
@@ -1273,10 +1297,14 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa18->si82_codunidadesubresp = $oDados18->codunidadesubresp;
                 $dispensa18->si82_exercicioprocesso = $oDados18->exerciciolicitacao;
                 $dispensa18->si82_nroprocesso = $oDados18->nroprocessolicitatorio;
-                if (in_array($oDados18->tipoprocesso, $arraydispensa)) {
-                    $dispensa18->si82_tipoprocesso = 1;
-                } else {
-                    $dispensa18->si82_tipoprocesso = 2;
+                if ($oDados18->tipoprocesso == "101") {
+                  $dispensa18->si82_tipoprocesso = 1;
+                } else if($oDados18->tipoprocesso == "100"){
+                  $dispensa18->si82_tipoprocesso = 2;
+                } else if($oDados18->tipoprocesso == "102"){
+                  $dispensa18->si82_tipoprocesso = 3;
+                } else if ($oDados18->tipoprocesso == "103"){
+                  $dispensa18->si82_tipoprocesso = 4;
                 }
                 $dispensa18->si82_tipoprocesso = $oDados18->tipoprocesso;
                 $dispensa18->si82_tipodocumento = $oDados18->tipodocumento;
@@ -1313,6 +1341,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
     }
 }
-     
 
- 
+
+

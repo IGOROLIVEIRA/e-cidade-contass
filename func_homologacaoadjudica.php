@@ -17,13 +17,13 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_homologacaoadjudica.hide();">
              </td>
@@ -32,8 +32,8 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
         /*if(isset($campos)==false){
@@ -44,7 +44,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
            }
         }*/
       	$campos = "
-        l202_sequencial,l202_licitacao, 
+        distinct l202_sequencial,l202_licitacao, 
         pctipocompra.pc50_descr,
         liclicita.l20_numero,
       	l20_edital,
