@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf1.php");
@@ -54,26 +54,26 @@ $iAnoUsuInicial = db_getsession("DB_anousu");
 $iAnoUsuFinal   = db_getsession("DB_anousu");
 
 if (isset($oGet->numeroProcessoInicial) && !empty($oGet->numeroProcessoInicial)) {
-		
+
 	$aProcessoInicial        = explode("/", $oGet->numeroProcessoInicial);
 	$aProcessoFinal          = explode("/", $oGet->numeroProcessoFinal);
 	$iNumeroProcessoInicical = $aProcessoInicial[0];
 	$iNumeroProcessoFinal    = $aProcessoFinal[0];
-	
+
 	if ($oGet->numeroProcessoInicial != '' ) {
-		
+
 		if (count($aProcessoInicial) > 1) {
 			$iAnoUsuInicial = $aProcessoInicial[1];
 		}
 	}
-	
+
 	if ($oGet->numeroProcessoFinal != '') {
-	
+
 		if (count($aProcessoFinal) > 1) {
 			$iAnoUsuFinal = $aProcessoFinal[1];
 		}
 	}
-	
+
 	if (empty($iNumeroProcessoFinal) || $iNumeroProcessoFinal == '') {
 		$iNumeroProcessoFinal = $iNumeroProcessoInicical;
 	}
@@ -89,10 +89,10 @@ if (isset($oGet->codproc)  && !empty($oGet->codproc) ) {
 	$oProcesso = new ProcessoProtocolo($oGet->codproc);
 	$iNumeroProcessoInicical = $oProcesso->getNumeroProcesso();
 	$iAnoUsuInicial          = $oProcesso->getAnoProcesso();
-	
+
 	$iAnoUsuFinal            = $iAnoUsuInicial;
 	$iNumeroProcessoFinal    = $iNumeroProcessoInicical;
-	
+
 }
 
 
@@ -140,18 +140,18 @@ $oDaoProtPocesso = db_utils::getDao('protprocesso');
  * Verifica se o parâmetro não esta setado como Documento Template
  */
 if ($oProtParam->p90_modelcapaproc != 3) {
-  
+
   $result = db_query($sql);
-  
+
   $numrows = pg_numrows($result);
-  
+
   if (pg_numrows($result) == 0) {
-  	
+
     db_redireciona('db_erros.php?fechar=true&db_erro=Processo nao cadastrado!');
     exit;
   }
-  
-  
+
+
   $pdf = new pdf1();
   $pdf->Open();
   $result_param = $clprotparam->sql_record($clprotparam->sql_query_file(null,"*",null,"p90_instit = ".db_getsession("DB_instit")));
@@ -163,16 +163,16 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   }else if (isset($p90_modelcapaproc)&&$p90_modelcapaproc==1){
     $modelo = 41;
   }else if (isset($p90_modelcapaproc)&&$p90_modelcapaproc==2){
-    $modelo = 42;
+    $modelo = '42_novo';
   }else{
     $modelo = 40;
   }
   $pdf1 = new db_impcarne($pdf, "$modelo");
   $pdf1->telefinstit = pg_result(db_query("select telef from db_config where codigo = ".db_getsession("DB_instit")),0,0);
-  
+
   for($w=0;$w<$numrows;$w++){
     db_fieldsmemory($result,$w);
-  
+
     $dtprocinfo = explode("/", $dtproc);
     $pdf1->anoproc 	   = $dtprocinfo[2];
     $pdf1->p58_codproc = $p58_codproc;
@@ -195,64 +195,64 @@ if ($oProtParam->p90_modelcapaproc != 3) {
     $pdf1->nome	   = $nome;
     $pdf1->p58_obs	   = $p58_obs;
     $pdf1->p58_numeracao = $p58_numeracao;
-  
+
     if (isset($p90_imprimevar) and $p90_imprimevar == "t"){
       $pdf1->result_vars = $clprocvar->sql_record($clprocvar->sql_query_varconteudo($p58_codproc,
       null,
   											                                                                     "distinct rotulo,
-  											                                                                     p55_conteudo,p55_codcam", 
+  											                                                                     p55_conteudo,p55_codcam",
   	                                                                                         "p55_codcam"));
     } else {
       $pdf1->result_vars = "";
     }
-  
+
     $pdf1->imprime();
   }
   $pdf1->objpdf->Output();
-  
+
 } else {
-  
+
   ini_set("error_reporting","E_ALL & ~NOTICE");
   $sDescrDoc        = date("YmdHis").db_getsession("DB_id_usuario");
   $sNomeRelatorio   = "tmp/geraCapaProtocolo{$sDescrDoc}.pdf";
   $sCaminhoSalvoSxw = "tmp/capa_protocolo_{$sDescrDoc}.sxw";
-  
+
   /*
    * implentando uma logica para descobrir os codproc pelos numero do processo selecionado
   * para passarmos para o agata
   */
-  
+
   $rsCodProc = $oDaoProtPocesso->sql_record($sql);
   if ($oDaoProtPocesso->numrows > 0) {
-  
+
   	$iCodProcInicial = db_utils::fieldsMemory($rsCodProc, 0)->p58_codproc;
   	$iCodProcFinal   = db_utils::fieldsMemory($rsCodProc, $oDaoProtPocesso->numrows - 1)->p58_codproc;
   }
-  
+
   // Caminho onde esta o .agt
   $sAgt = "protocolo/capa_processo.agt";
-  
+
    // Parâmetros Utilizado no .agt
   $aParam                      = array();
   $aParam['$codigo_processo']  = $iCodProcInicial;
-  
+
   // Se for imprimir mais de uma capa
   if (isset($iCodProcFinal) && !empty($iCodProcFinal)) {
     $aParam['$codigo_processo_fim'] = $iCodProcFinal  ;
   } else {
     $aParam['$codigo_processo_fim'] = $iCodProcInicial;
   }
-  
+
   $aParam['$codigo_instituicao']  = $iCodigoInstituicao;
   $aParam['$codigo_departamento'] = $iCodigoDepartamento;
-  
+
   db_stdClass::oo2pdf($oProtParam->db82_templatetipo,
-                      $oProtParam->p90_db_documentotemplate, 
-                      $sAgt, 
-                      $aParam, 
-                      $sCaminhoSalvoSxw, 
+                      $oProtParam->p90_db_documentotemplate,
+                      $sAgt,
+                      $aParam,
+                      $sCaminhoSalvoSxw,
                       $sNomeRelatorio);
-  
+
 }
 
 
