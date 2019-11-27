@@ -79,10 +79,6 @@ class Siops {
 
     public function gerarSiopsReceita() {
 
-        echo '<pre>';
-        print_r($this->aReceitasAgrupadasFinal);
-        echo '</pre>';
-        die();
         $aDados = $this->aReceitasAgrupadasFinal;
 
         if (file_exists("model/contabilidade/arquivos/siops/".db_getsession("DB_anousu")."/SiopsIMPT.model.php")) {
