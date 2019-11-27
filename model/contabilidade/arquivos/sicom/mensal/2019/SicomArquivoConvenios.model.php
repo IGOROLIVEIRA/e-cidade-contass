@@ -254,7 +254,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
                         left join orcreceita on o57_codfon = o70_codfon and o57_anousu = o70_anousu 
                         left join prevconvenioreceita on c229_anousu = o70_anousu and c229_fonte = o70_codrec 
                     where substr(o57_fonte,1,7) in ('41321001', '41321005',' 4171808','4171810','4172810','4173810','4174801','4174810','4176801','4176810','4241808','4241810','4242810','4243810','4244801', '4244810') 
-                      and o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession("DB_anousu")." group by 1, 2, 3, 4, 5 ";
+                      and o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession("DB_anousu")." and o70_instit = ".db_getsession("DB_instit")." group by 1, 2, 3, 4, 5 ";
 
         $rsResult30 = db_query($sSql);
 
