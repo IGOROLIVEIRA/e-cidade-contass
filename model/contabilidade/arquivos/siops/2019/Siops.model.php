@@ -4,7 +4,7 @@ require_once("classes/db_orcorgao_classe.php");
 require_once("classes/db_orcdotacao_classe.php");
 require_once("classes/db_orcreceita_classe.php");
 require_once("classes/db_naturdessiops_classe.php");
-//require_once("classes/db_naturrecsiope_classe.php");
+require_once("classes/db_naturrecsiops_classe.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libcontabilidade.php");
 
@@ -58,8 +58,6 @@ class Siops {
 
 
     public function gerarSiopsDespesa() {
-        ini_set('display_errors', 'On');
-        error_reporting(E_ALL);
 
         if (file_exists("model/contabilidade/arquivos/siops/".db_getsession("DB_anousu")."/SiopsIMPT.model.php")) {
 
@@ -71,9 +69,25 @@ class Siops {
                 $this->setNomesArquivos($sNomeArquivo);
                 $impt = new SiopeIMPT;
                 $impt->setNomeArquivo($sNomeArquivo);
-                $impt->gerarArquivoIMPT($aDados);
+                $impt->gerarArquivoIMPT($aDados, 1);
 
             }
+
+        }
+
+    }
+
+    public function gerarSiopsReceita() {
+
+        $aDados = $this->aReceitasAgrupadasFinal;
+
+        if (file_exists("model/contabilidade/arquivos/siops/".db_getsession("DB_anousu")."/SiopsIMPT.model.php")) {
+
+            require_once("model/contabilidade/arquivos/siops/" . db_getsession("DB_anousu") . "/SiopsIMPT.model.php");
+
+            $impt = new SiopeIMPT;
+            $impt->setNomeArquivo($this->getNomeArquivo());
+            $impt->gerarArquivoIMPT($aDados, 2);
 
         }
 
@@ -175,6 +189,27 @@ class Siops {
      */
     public function setFiltrosReceita() {
 
+        $sql = 'select id_instit 
+                    from db_config 
+                        join db_userinst on db_config.codigo = db_userinst.id_instit 
+                        join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
+                    where db_usuarios.id_usuario = '.db_getsession("DB_id_usuario");
+
+        $result = db_query($sql);
+
+        if (pg_num_rows($result) > 0) {
+            $filtro = 'o70_instit in (';
+
+            for ($i = 0; $i < pg_numrows($result); $i++) {
+                $filtro .= db_utils::fieldsMemory($result, $i)->id_instit;
+                if($i+1 < pg_num_rows($result)) {
+                    $filtro .= ',';
+                }
+            }
+            $filtro .= ')';
+        }
+
+        $this->sFiltros = $filtro;
 
     }
 
@@ -462,6 +497,95 @@ class Siops {
 
     }
 
+    public function agrupaReceitas() {
+
+        $aReceitaAgrup = array();
+
+        foreach ($this->aReceitas as $row) {
+
+            list($rec_realizada, $ded_receita, $rec_asps, $ded_fundeb, $natureza, $campo, $linha, $prev_inicial, $prev_atualizada, $total_receitas) = array_values($row);
+
+            $iSubRecRealizada       = isset($aReceitaAgrup[$natureza]['rec_realizada']) ? $aReceitaAgrup[$natureza]['rec_realizada'] : 0;
+            $iSubDedReceita         = isset($aReceitaAgrup[$natureza]['ded_receita']) ? $aReceitaAgrup[$natureza]['ded_receita'] : 0;
+            $iSubRecAsps            = isset($aReceitaAgrup[$natureza]['rec_asps']) ? $aReceitaAgrup[$natureza]['rec_asps'] : 0;
+            $iSubDedFundeb          = isset($aReceitaAgrup[$natureza]['ded_fundeb']) ? $aReceitaAgrup[$natureza]['ded_fundeb'] : 0;
+            $iSubPrevInicial        = isset($aReceitaAgrup[$natureza]['prev_inicial']) ? $aReceitaAgrup[$natureza]['prev_inicial'] : 0;
+            $iSubPrevAtualizada     = isset($aReceitaAgrup[$natureza]['prev_atualizada']) ? $aReceitaAgrup[$natureza]['prev_atualizada'] : 0;
+            $iSubTotReceitas        = isset($aReceitaAgrup[$natureza]['total_receitas']) ? $aReceitaAgrup[$natureza]['total_receitas'] : 0;
+
+            $aReceitaAgrup[$natureza]['rec_realizada']      = ($iSubRecRealizada + $rec_realizada);
+            $aReceitaAgrup[$natureza]['ded_receita']        = ($iSubDedReceita + $ded_receita);
+            $aReceitaAgrup[$natureza]['rec_asps']           = ($iSubRecAsps + $rec_asps);
+            $aReceitaAgrup[$natureza]['ded_fundeb']         = ($iSubDedFundeb + $ded_fundeb);
+            $aReceitaAgrup[$natureza]['prev_inicial']       = ($iSubPrevInicial + $prev_inicial);
+            $aReceitaAgrup[$natureza]['prev_atualizada']    = ($iSubPrevAtualizada + $prev_atualizada);
+            $aReceitaAgrup[$natureza]['total_receitas']     = ($iSubTotReceitas + $total_receitas);
+            $aReceitaAgrup[$natureza]['natureza']           = $natureza;
+            $aReceitaAgrup[$natureza]['campo']              = $campo;
+            $aReceitaAgrup[$natureza]['linha']              = $linha;
+            $aReceitaAgrup[$natureza]['rec_orcada']         = 0;
+
+        }
+
+        if ($this->lOrcada) {
+
+            $aRecAgrupAnoSeg = array();
+
+            foreach ($this->aReceitasAnoSeg as $row) {
+
+                list($natureza, $campo, $linha, $rec_orcada) = array_values($row);
+
+                $iSubTotalRecOrc = isset($aRecAgrupAnoSeg[$natureza]['rec_orcada']) ? $aRecAgrupAnoSeg[$natureza]['rec_orcada'] : 0;
+
+                $aRecAgrupAnoSeg[$natureza]['natureza']     = $natureza;
+                $aRecAgrupAnoSeg[$natureza]['campo']        = $campo;
+                $aRecAgrupAnoSeg[$natureza]['linha']        = $linha;
+                $aRecAgrupAnoSeg[$natureza]['rec_orcada']   = ($iSubTotalRecOrc + $rec_orcada);
+
+            }
+
+            /**
+             * Une os dois arrays do ano corrente com o ano seguinte.
+             * ***Pode haver registros no ano seguinte que não estão no ano corrente.***
+             */
+
+            foreach ($aReceitaAgrup as $cod => $receita) {
+
+                if (isset($aRecAgrupAnoSeg[$cod])) {
+                    $receita['rec_orcada']                  = $aRecAgrupAnoSeg[$cod]['rec_orcada'];
+                    $aRecAgrupAnoSeg[$cod]['flag']          = 1;
+                    $this->aReceitasAgrupadasFinal[$cod]    = $receita;
+                } else {
+                    $aRecAgrupAnoSeg[$cod]['flag']          = 1;
+                    $receita['rec_orcada']                  = 0;
+                    $this->aReceitasAgrupadasFinal[$cod]    = $receita;
+                }
+
+            }
+
+            foreach ($aRecAgrupAnoSeg as $cod => $receita) {
+
+                if (!isset($receita['flag']) || $receita['flag'] != 1) {
+                    $receita['rec_realizada']               = $aReceitaAgrup[$cod]['rec_realizada'];
+                    $receita['ded_receita']                 = $aReceitaAgrup[$cod]['ded_receita'];
+                    $receita['rec_asps']                    = $aReceitaAgrup[$cod]['rec_asps'];
+                    $receita['ded_fundeb']                  = $aReceitaAgrup[$cod]['ded_fundeb'];
+                    $receita['prev_inicial']                = $aReceitaAgrup[$cod]['prev_inicial'];
+                    $receita['prev_atualizada']             = $aReceitaAgrup[$cod]['prev_atualizada'];
+                    $receita['total_receitas']              = $aReceitaAgrup[$cod]['total_receitas'];
+                    $this->aReceitasAgrupadasFinal[$cod]    = $receita;
+                }
+
+            }
+
+        } else {
+
+            $this->aReceitasAgrupadasFinal = $aReceitaAgrup;
+
+        }
+
+    }
+
     public function getDespesas() {
         return $this->aDespesas;
     }
@@ -471,6 +595,83 @@ class Siops {
      */
     public function setReceitas() {
 
+        $result = db_receitasaldo(11,1,3,true,$this->sFiltros,$this->iAnoUsu,$this->dtIni,$this->dtFim,false,' * ',true,0);
+
+        for ($i = 0; $i < pg_num_rows($result); $i++) {
+
+            $oReceita = db_utils::fieldsMemory($result, $i);
+
+            if ($oReceita->o70_codrec > 0) {
+
+                $oNaturrecsiops = $this->getNaturRecSiops($oReceita->o57_fonte);
+
+                $aReceita = array();
+
+                $aReceita['rec_realizada']      = 0;
+                $aReceita['ded_receita']        = 0;
+                $aReceita['rec_asps']           = 0;
+                $aReceita['ded_fundeb']         = 0;
+
+                if(in_array(substr($oReceita->o57_fonte, 0, 2), array('41', '42', '47', '48'))) {
+                    $aReceita['rec_realizada']  = abs($oReceita->saldo_arrecadado);
+                }
+
+                if(in_array(substr($oReceita->o57_fonte, 0, 3), array('491', '492', '493', '496', '498', '499'))) {
+                    $aReceita['ded_receita']    = abs($oReceita->saldo_arrecadado);
+                }
+
+                if(in_array($oNaturrecsiops->c231_elerecsiops, array('1112010000', '1112020000', '1112043100', '1112043400', '1112080000', '1113050100', '1113050200', '1113060000', '1721010200', '1721010500', '1721360000', '1722010100', '1722010200', '1722010400', '1911080000', '1911380000', '1911390000', '1911400000', '1911440000', '1913080000', '1913110000', '1913120000', '1913130000', '1913250000', '1931040000', '1931110000', '1931120000', '1931130000', '1931210000', '7112010000', '7112040000', '7113060000'))) {
+                    $aReceita['rec_asps']       = abs(($aReceita['rec_realizada'] - $aReceita['ded_receita']));
+                }
+
+                if(substr($oReceita->o57_fonte, 0, 3) == '495') {
+                    $aReceita['ded_fundeb']     = abs($oReceita->saldo_arrecadado);
+                }
+
+                $aReceita['natureza']           = $oNaturrecsiops->c231_elerecsiops;
+                $aReceita['campo']              = $oNaturrecsiops->c231_campo;
+                $aReceita['linha']              = $oNaturrecsiops->c231_linha;
+                $aReceita['prev_inicial']       = $oReceita->saldo_inicial;
+                $aReceita['prev_atualizada']    = ($oReceita->saldo_inicial + $oReceita->saldo_prevadic_acum);
+                $aReceita['total_receitas']     = ($aReceita['rec_realizada'] - ($aReceita['ded_receita'] + $aReceita['ded_fundeb']));
+
+                array_push($this->aReceitas, $aReceita);
+
+            }
+
+        }
+
+        /**
+         * Caso seja 6º Bimestre, campo ORÇADO será alimentado através do relatório Balancete da Receita no exercício subsequente ao de referência.
+         */
+        if ($this->lOrcada) {
+
+            db_query('drop table work_receita');
+            $iAnoSeg = $this->iAnoUsu+1;
+            $resultAnoSeg = db_receitasaldo(11, 1, 3, true, $this->sFiltros, $iAnoSeg, "{$iAnoSeg}-01-01", "{$iAnoSeg}-01-01", false, ' * ', true, 0);
+
+            for ($i = 0; $i < pg_num_rows($resultAnoSeg); $i++) {
+
+                $oReceitaAnoSeg = db_utils::fieldsMemory($resultAnoSeg, $i);
+
+                if ($oReceitaAnoSeg->o70_codrec > 0) {
+
+                    $oNaturrecsiops = $this->getNaturRecSiops($oReceitaAnoSeg->o57_fonte);
+
+                    $aReceitaAnoSeg = array();
+
+                    $aReceitaAnoSeg['natureza']     = $oNaturrecsiops->c231_elerecsiops;
+                    $aReceitaAnoSeg['campo']        = $oNaturrecsiops->c231_campo;
+                    $aReceitaAnoSeg['linha']        = $oNaturrecsiops->c231_linha;
+                    $aReceitaAnoSeg['rec_orcada']   = $oReceitaAnoSeg->saldo_inicial;
+
+                    array_push($this->aReceitasAnoSeg, $aReceitaAnoSeg);
+
+                }
+
+            }
+
+        }
 
     }
 
@@ -649,19 +850,18 @@ class Siops {
      */
     public function getNaturRecSiops($natureza) {
 
+        $clnaturrecsiops    = new cl_naturrecsiops();
+        $rsNaturrecsiops    = db_query($clnaturrecsiops->sql_query_siops(substr($natureza, 1, 14),"", $this->iAnoUsu));
 
-//        $clnaturrecsiope    = new cl_naturrecsiope();
-//        $rsNaturrecsiope    = db_query($clnaturrecsiope->sql_query_siope(substr($natureza, 0, 15),"", $this->iAnoUsu));
-//
-//        if (pg_num_rows($rsNaturrecsiope) > 0) {
-//            $oNaturrecsiope = db_utils::fieldsMemory($rsNaturrecsiope, 0);
-//            return $oNaturrecsiope;
-//        } else {
-//            $this->status = 2;
-//            if (strpos($this->sMensagem, $natureza) === false){
-//                $this->sMensagem .= "{$natureza} ";
-//            }
-//        }
+        if (pg_num_rows($rsNaturrecsiops) > 0) {
+            $oNaturrecsiops = db_utils::fieldsMemory($rsNaturrecsiops, 0);
+            return $oNaturrecsiops;
+        } else {
+            $this->status = 2;
+            if (strpos($this->sMensagem, $natureza) === false){
+                $this->sMensagem .= "{$natureza} ";
+            }
+        }
 
     }
 
@@ -683,7 +883,7 @@ class Siops {
     }
 
     public function getNaturezaFormat($natureza) {
-//        return substr($natureza, 0, 1).".".substr($natureza, 1, 2).".".substr($natureza, 3, 2).".".substr($natureza, 5, 2).".".substr($natureza, 7, 2).".".substr($natureza, 9, 2);
+        return substr($natureza, 0, 1).".".substr($natureza, 1, 1).".".substr($natureza, 2, 2).".".substr($natureza, 4, 2).".".substr($natureza, 6, 2).".".substr($natureza, 8, 2);
     }
 
 

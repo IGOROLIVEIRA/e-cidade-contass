@@ -24,6 +24,8 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
 $sNomeZip           = "Siops";
+$sNomeSiopsRec      = "Receita_Siops";
+$index              = 0;
 
 switch ($oParam->exec) {
 
@@ -39,7 +41,7 @@ switch ($oParam->exec) {
 
                     require_once("model/contabilidade/arquivos/siops/" . db_getsession("DB_anousu") . "/Siops.model.php");
 
-                    foreach ($oParam->arquivos as $index => $sArquivo) {
+                    foreach ($oParam->arquivos as $sArquivo) {
 
                         if ($sArquivo == 'despesa') {
 
@@ -57,6 +59,7 @@ switch ($oParam->exec) {
                             foreach ($siopsDespesa->getNomesArquivos() as $key => $arquivo) {
                                 $sArquivosZip .= " {$arquivo}.IMPT ";
                                 $oRetorno->arquivos->$key->nome = "{$arquivo}.IMPT";
+                                $index = $key+1;
                             }
 
                             if ($siopsDespesa->status == 2) {
@@ -77,11 +80,24 @@ switch ($oParam->exec) {
                             $siopsReceita->setInstit($iInstit);
                             $siopsReceita->setBimestre($iBimestre);
                             $siopsReceita->setPeriodo();
-
+                            $siopsReceita->setFiltrosReceita();
+                            $siopsReceita->setOrcado();
+                            $siopsReceita->setReceitas();
+                            $siopsReceita->agrupaReceitas();
+                            $siopsReceita->setNomeArquivo($sNomeSiopsRec);
+                            $siopsReceita->gerarSiopsReceita();
 
                             if ($siopsReceita->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Siops " . $siopsReceita->getErroSQL());
                             }
+
+                            if ($siopsReceita->status == 2) {
+                                $oRetorno->message = "Não foi possível gerar a Receita. De/Para dos seguintes estruturais não encontrado: {$siopsReceita->sMensagem}";
+                                $oRetorno->status = 2;
+                            }
+
+                            $oRetorno->arquivos->$index->nome = "{$siopsReceita->getNomeArquivo()}.IMPT";
+                            $sArquivosZip .= " {$siopsReceita->getNomeArquivo()}.IMPT ";
 
                         }
 
