@@ -1229,6 +1229,7 @@ class cl_termo {
      $sql .= "      inner join db_config  on db_config.codigo      = termo.v07_instit      ";
      $sql .= "      inner join arrenumcgm on arrenumcgm.k00_numpre = termo.v07_numpre      ";
      $sql .= "      inner join cgm resp   on resp.z01_numcgm       = arrenumcgm.k00_numcgm ";
+     $sql .= "      inner join db_usuarios on termo.v07_login      = db_usuarios.id_usuario";
      $sql2 = "";
      if($dbwhere==""){
        if($v07_parcel!=null ){
