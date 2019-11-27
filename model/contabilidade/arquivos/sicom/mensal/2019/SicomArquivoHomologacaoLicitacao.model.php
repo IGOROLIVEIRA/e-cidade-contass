@@ -435,7 +435,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           AND liclicita.l20_codigo in (".implode(",", $aLicitacoes).")  order by liclicita.l20_edital ";
 
         $rsResult30 = db_query($sSql);
-        $aDadosAgrupados30 = array();  
+        $aDadosAgrupados30 = array();
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
           $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
@@ -498,12 +498,13 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 
 
     $rsResult40 = db_query($sSql);
+//    db_criatabela($rsResult40);
     $aDadosAgrupados40 = array();
     for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
       $clhomolic40 = new cl_homolic402019();
       $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
-      $sHash10 = $oDados30->exerciciolicitacao . $oDados30->nroprocessolicitatorio . $oDados30->nrodocumento . $oDados30->nrolote . $oDados30->coditem;
+      $sHash10 = $oDados40->exerciciolicitacao . $oDados40->nroprocessolicitatorio . $oDados40->nrodocumento . $oDados40->nrolote . $oDados40->coditem;
       $sHash40 = '40'.$sHash10;
 
       if(!$aDadosAgrupados40[$sHash40]){
@@ -521,11 +522,6 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
         $aDadosAgrupados40[$sHash40] = $clhomolic40;
       }
     }
-
-
-      // }
-
-  // }
 
   foreach ($aDadosAgrupados as $oDadosAgrupados) {
 
@@ -605,18 +601,18 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
       $clhomolic40 = new cl_homolic402019();
 
       $clhomolic40->si65_tiporegistro = 40;
-      $clhomolic40->si65_codorgao = $oDados40->codorgaoresp;
-      $clhomolic40->si65_codunidadesub = $oDados40->codunidadesubresp;
-      $clhomolic40->si65_exerciciolicitacao = $oDados40->exerciciolicitacao;
-      $clhomolic40->si65_nroprocessolicitatorio = $oDados40->nroprocessolicitatorio;
-      $clhomolic40->si65_dthomologacao = $oDados40->dthomologacao;
-      $clhomolic40->si65_dtadjudicacao = $oDados40->dtadjudicacao;
+      $clhomolic40->si65_codorgao = $oDadosAgrupados->si65_codorgao;
+      $clhomolic40->si65_codunidadesub = $oDadosAgrupados->si65_codunidadesub;
+      $clhomolic40->si65_exerciciolicitacao = $oDadosAgrupados->si65_exerciciolicitacao;
+      $clhomolic40->si65_nroprocessolicitatorio = $oDadosAgrupados->si65_nroprocessolicitatorio;
+      $clhomolic40->si65_dthomologacao = $oDadosAgrupados->si65_dthomologacao;
+      $clhomolic40->si65_dtadjudicacao = $oDadosAgrupados->si65_dtadjudicacao;
       $clhomolic40->si65_instit = db_getsession("DB_instit");
       $clhomolic40->si65_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clhomolic40->incluir(null);
 
-      if ($clhomolic30->erro_status == 0) {
-        throw new Exception($clhomolic30->erro_msg);
+      if ($clhomolic40->erro_status == 0) {
+        throw new Exception($clhomolic40->erro_msg);
       }
     }
 
