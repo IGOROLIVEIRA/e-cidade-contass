@@ -41,7 +41,7 @@ $oGet    = db_utils::postmemory($_GET);
 
 //echo ($cltermo->sql_query_consulta(null,"cgm.z01_nome as z01_nome,resp.z01_nome as nomecontr,termo.*",null," v07_parcel = {$oGet->parcelamento}"));
 
-$rsTermo   = $cltermo->sql_record($cltermo->sql_query_consulta(null,"cgm.z01_numcgm as z01_numcgm,cgm.z01_nome,resp.z01_nome as nomecontr,resp.z01_numcgm as cgmcontr,termo.*",null," v07_parcel = {$oGet->parcelamento}"));
+$rsTermo   = $cltermo->sql_record($cltermo->sql_query_consulta(null,"cgm.z01_numcgm as z01_numcgm,cgm.z01_nome,resp.z01_nome as nomecontr,resp.z01_numcgm as cgmcontr,termo.*, db_usuarios.nome as nome_usuario",null," v07_parcel = {$oGet->parcelamento}"));
 
 if ( $cltermo->numrows > 0 ) {
   $oTermo  = db_utils::fieldsMemory($rsTermo,0);    
@@ -142,7 +142,11 @@ function js_marca(obj){
       <tr>
         <td><b>Historico :</b></td>
         <td colspan="3" class='texto'><?=$oTermo->v07_hist?>   </td>
-      </tr>    
+      </tr>
+        <tr>
+            <td><b>Usuário :</b></td>
+            <td colspan="3" class='texto'><?=$oTermo->nome_usuario?>   </td>
+      </tr>
     </table>
 </fieldset>
 </td>
