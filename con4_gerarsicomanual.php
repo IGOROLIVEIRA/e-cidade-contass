@@ -145,7 +145,7 @@ $clrotulo->label("o15_codigo");
                                       <div id="recebe_up_anexos" class="recebe">&nbsp;</div>
                                     </td>
                                     <td>
-                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=ANEXOS_LOA','recebe_up_anexos','Carregando...','Erro ao carregar')" />
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=ANEXOS_LOA&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_anexos','Carregando...','Erro ao carregar')" />
                                          <div>&nbsp;</div>
                                       </td>
                                   </tr>
@@ -159,7 +159,7 @@ $clrotulo->label("o15_codigo");
                                       <div id="recebe_up_opsemest" class="recebe">&nbsp;</div>
                                     </td>
                                     <td>
-                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=OPCAOSEMESTRALIDADE','recebe_up_opsemest','Carregando...','Erro ao carregar')" />
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=OPCAOSEMESTRALIDADE&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_opsemest','Carregando...','Erro ao carregar')" />
                                          <div>&nbsp;</div>
                                       </td>
                                   </tr>
@@ -173,7 +173,7 @@ $clrotulo->label("o15_codigo");
                                       <div id="recebe_up_desopsemest" class="recebe">&nbsp;</div>
                                     </td>
                                     <td>
-                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=DESOPCAOSEMESTRALIDADE','recebe_up_desopsemest','Carregando...','Erro ao carregar')" />
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=DESOPCAOSEMESTRALIDADE&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_desopsemest','Carregando...','Erro ao carregar')" />
                                          <div>&nbsp;</div>
                                       </td>
                                   </tr>

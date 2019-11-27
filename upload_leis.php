@@ -17,15 +17,15 @@ switch ($sNomeCampo){
 		break;
 	}
 	case "ANEXOS_LOA":{
-		$sNomeArquivo = "ANEXOS_LOA.pdf";
+		$sNomeArquivo = "ANEXOS_LOA{$iAnoReferencia}.pdf";
 		break;
 	}
 	case "OPCAOSEMESTRALIDADE":{
-		$sNomeArquivo = "OPCAOSEMESTRALIDADE.pdf";
+		$sNomeArquivo = "OPCAOSEMESTRALIDADE{$iAnoReferencia}.pdf";
 		break;
 	}
 	case "DESOPCAOSEMESTRALIDADE":{
-		$sNomeArquivo = "DESOPCAOSEMESTRALIDADE.pdf";
+		$sNomeArquivo = "DESOPCAOSEMESTRALIDADE{$iAnoReferencia}.pdf";
 		break;
 	}
 
