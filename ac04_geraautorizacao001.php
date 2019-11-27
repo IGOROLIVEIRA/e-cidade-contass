@@ -733,7 +733,8 @@ if($x->consultarDataDoSistema == true){
             var vTotalAut = oItem.valorunitario * nQtdeAut;
 
             //var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
-            var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
+            // var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
+            var nValorAut = js_formatar(vTotalAut.toFixed(2), "f",2);
 
             aLinha    = new Array();
             aLinha[0] = oItem.codigomaterial;
@@ -748,7 +749,8 @@ if($x->consultarDataDoSistema == true){
 
             // Valor total
             //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
-            aLinha[4] = js_roundDecimal(vTotal,2);
+            // aLinha[4] = js_roundDecimal(vTotal,2);
+            aLinha[4] = vTotal.toFixed(2);
 
             /**
              * Caso for serviço e o mesmo não for controlado por quantidade, setamos a sua quantidade para 1
@@ -941,7 +943,8 @@ if($x->consultarDataDoSistema == true){
             return;
         }
 
-        $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        $("valoritem"+iSeq).value = js_formatar(value.toFixed(2),'f',2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
     }
 
@@ -1072,7 +1075,8 @@ if($x->consultarDataDoSistema == true){
 
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
-            nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
+            // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1199,9 +1203,10 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
+            // oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
             // $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
-            $("valordot"+iDot).value = js_formatar(js_roundDecimal(oGridDotacoes.aRows[iDot].aCells[3].getValue(), 2), "f",2);
+            $("valordot"+iDot).value = js_formatar((oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
     /**
