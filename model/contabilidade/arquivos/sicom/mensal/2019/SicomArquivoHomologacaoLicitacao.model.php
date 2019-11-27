@@ -435,7 +435,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           AND liclicita.l20_codigo in (".implode(",", $aLicitacoes).")  order by liclicita.l20_edital ";
 
         $rsResult30 = db_query($sSql);
-        $aDadosAgrupados30 = array();
+        $aDadosAgrupados30 = array();  
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
           $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
