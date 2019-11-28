@@ -974,9 +974,9 @@ if($x->consultarDataDoSistema == true){
 
             var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
 
-            aLinha.aCells[7].content.setValue(js_formatar(js_roundDecimal(nValorTotal,2), "f",2));
+            aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f",2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
-            $("valoritem" + iLinha).value = js_formatar(js_roundDecimal(nValorTotal,2), "f",2);
+            $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
         }
         //js_salvarInfoDotacoes(iLinha, lVerificaDot);
     }
@@ -1172,7 +1172,7 @@ if($x->consultarDataDoSistema == true){
 
     function js_ajustaValorDot(Obj, iDot, tipo) {
 
-        var nValor         = new Number(Obj.value);
+        var nValor         = new js_strToFloat(Obj.value);
         var nTotalDotacoes = oGridDotacoes.sum(3, false);
         var nValorAut      = js_strToFloat(oDadosItem.aCells[7].getValue());
 
@@ -1184,7 +1184,7 @@ if($x->consultarDataDoSistema == true){
             Obj.value = nValorObjeto;
         } else {
             if(tipo != 2) {
-                var nNovaQuantDot = (nValor * Number(oDadosItem.aCells[6].getValue())) / js_strToFloat(oDadosItem.aCells[7].getValue());
+                var nNovaQuantDot = (nValor * js_strToFloat(oDadosItem.aCells[6].getValue())) / js_strToFloat(oDadosItem.aCells[7].getValue());
             }else{
                 var nNovaQuantDot = 1;
             }
@@ -1205,8 +1205,7 @@ if($x->consultarDataDoSistema == true){
         } else {
             // oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
             oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
-            // $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
-            $("valordot"+iDot).value = js_formatar((oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
+            $("valordot"+iDot).value = js_formatar(js_strToFloat(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
     /**
