@@ -60,8 +60,8 @@
                     <td class="linhagrid" style="width: 750px; text-align: left;">
                         <?php
                         $sSubEstrut = substr($oRec->o57_fonte, 0, 10);
-                        $sRec = $sSubEstrut. ' - '.$oRec->o57_finali. ' Fonte - '.$oRec->o70_codigo;
-                        db_ancora("<b>{$sRec}</b>", "js_associacaoConvenioPrevisaoReceita({$oRec->o70_codrec}, {$sSubEstrut}, '{$oRec->o57_finali}', {$oRec->o70_valor}, {$index}, {$oRec->o70_codigo});", 1);
+                        $sRec = $sSubEstrut. ' - '.$oRec->o57_finali. ' - Fonte - '.$oRec->o70_codigo;
+                        db_ancora("<b>{$sRec}</b>", "js_associacaoConvenioPrevisaoReceita({$oRec->o70_codrec}, '{$sRec}', {$oRec->o70_valor}, {$index}, {$oRec->o70_codigo});", 1);
                         ?>
                     </td>
 
@@ -86,8 +86,9 @@
 </div>
 <script>
 
-    function js_associacaoConvenioPrevisaoReceita(iCodRec, sEstRec, sReceita, fValorPrev, index, iFonte){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sEstRec+' - '+sReceita+'&fValorPrev='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associa Convênio',true);
+    function js_associacaoConvenioPrevisaoReceita(iCodRec, sReceita, fValorPrev, index, iFonte){
+        console.log(sReceita);
+        js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sReceita+'&fValorPrev='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associação de Convênio à Previsão da Receita',true);
     }
 
 </script>

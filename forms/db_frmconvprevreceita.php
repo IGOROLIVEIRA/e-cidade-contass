@@ -3,7 +3,7 @@
 $sqlConvAssoc = $clprevconvenioreceita->sql_query("",'','COALESCE(SUM(c229_vlprevisto),0) total_assinado',"","c229_fonte = {$c229_fonte} and c229_anousu = ".db_getsession('DB_anousu'));
 db_fieldsmemory($clprevconvenioreceita->sql_record($sqlConvAssoc), 0);
 
-$valor_atribuir = number_format(($fValorPrev - $total_assinado), 2, '.', '.');
+$valor_atribuir = ($fValorPrev - $total_assinado);
 
 if(isset($opcao) && $opcao=="alterar"){
     $db_opcao = 2;
@@ -37,7 +37,7 @@ if(isset($opcao) && $opcao=="alterar"){
                         db_input('c229_fonte',0,$Ic229_fonte,true,'hidden',3,"");
                         db_input('fonte',0,'',true,'hidden',3,"");
                         db_input('total_assinado',0,'',true,'hidden',3,"");
-                        db_input('sReceita',80,'',true,'text',3,"")
+                        db_input('sReceita',100,'',true,'text',3,"")
                         ?>
                     </td>
                 </tr>
@@ -55,7 +55,7 @@ if(isset($opcao) && $opcao=="alterar"){
                     </td>
                     <td>
                         <?
-                        db_input('sObjeto',70,'',true,'text',3,"");
+                        db_input('sObjeto',90,'',true,'text',3,"");
                         ?>
                     </td>
                 </tr>

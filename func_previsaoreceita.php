@@ -55,6 +55,9 @@ if(isset($incluir)){
     }elseif($c229_vlprevisto > $valor_atribuir) {
         $erro_msg = 'Valor previsto para o convênio não pode ser maior que o saldo a atribuir';
         $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+    }elseif(pg_num_rows(db_query($clprevconvenioreceita->sql_query_file("", "", "*", null, "c229_fonte = {$c229_fonte} and c229_convenio = {$c229_convenio} and c229_anousu = {$c229_anousu}"))) > 0) {
+        $erro_msg = 'Convênio já associado a esta receita!';
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
     } else {
         db_inicio_transacao();
         $clprevconvenioreceita->c229_fonte = $c229_fonte;
@@ -76,6 +79,9 @@ if(isset($incluir)){
 
     if($c229_vlprevisto > $fValorPrev) {
         $erro_msg = 'Valor previsto para o convênio não pode ser maior que o saldo a atribuir';
+        $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
+    }elseif($c229_convenio != $iConvenioTemp && pg_num_rows(db_query($clprevconvenioreceita->sql_query_file("", "", "*", null, "c229_fonte = {$c229_fonte} and c229_convenio = {$c229_convenio} and c229_anousu = {$c229_anousu}"))) > 0) {
+        $erro_msg = 'Convênio já associado a esta receita!';
         $c229_convenio = $c229_vlprevisto = $sObjeto = $valor_atribuir = "";
     } else {
             db_inicio_transacao();
