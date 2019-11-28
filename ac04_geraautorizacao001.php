@@ -1184,7 +1184,7 @@ if($x->consultarDataDoSistema == true){
             Obj.value = nValorObjeto;
         } else {
             if(tipo != 2) {
-                var nNovaQuantDot = (nValor * js_strToFloat(oDadosItem.aCells[6].getValue())) / js_strToFloat(oDadosItem.aCells[7].getValue());
+                var nNovaQuantDot = (nValor * Number(oDadosItem.aCells[6].getValue())) / js_strToFloat(oDadosItem.aCells[7].getValue());
             }else{
                 var nNovaQuantDot = 1;
             }
