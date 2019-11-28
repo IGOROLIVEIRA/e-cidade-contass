@@ -48,9 +48,10 @@ try{
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
                 db_fieldsmemory($rsItem,0)->l205_sequencial;
 
-
-                if($item->l205_datacred > $dtLimitecredenciamento){
+                if($dtLimitecredenciamento != ""){
+                  if($item->l205_datacred > $dtLimitecredenciamento){
                     throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
+                  }
                 }
 
                 if ($rsItem == 0) {
