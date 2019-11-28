@@ -1203,9 +1203,8 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            // oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
             oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
-            $("valordot"+iDot).value = js_formatar(js_strToFloat(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
+            $("valordot"+iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
     /**
