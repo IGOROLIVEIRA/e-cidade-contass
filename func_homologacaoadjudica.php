@@ -35,6 +35,11 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
   <tr>
     <td align="center" valign="top">
       <?
+      if($validadispensa == "true"){
+        $where = "pc50_pctipocompratribunal not in (100,101,103,102)";
+      }else{
+        $where = null;
+      }
       if(!isset($pesquisa_chave)){
         /*if(isset($campos)==false){
            if(file_exists("funcoes/db_func_homologacaoadjudica.php")==true){
@@ -50,7 +55,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
       	l20_edital,
       	l20_anousu,
       	l202_datahomologacao,l202_dataadjudicacao";
-	         $sql = $clhomologacaoadjudica->sql_query('',$campos);
+	         $sql = $clhomologacaoadjudica->sql_query('',$campos,'',$where);
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
