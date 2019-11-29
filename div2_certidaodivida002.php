@@ -1109,10 +1109,10 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                 $oTotalGeral[$oDebito->procedenciatributaria]->valormulta     += $oDebito->valormulta;
                 $oTotalGeral[$oDebito->procedenciatributaria]->valorjuros     += $oDebito->valorjuros;
                 if ($oDebito->certidmassa != 0) {
-                    $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios = getValorHonorarios($oDebito->valorcorrigido);
+                    $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios += getValorHonorarios($oDebito->valorcorrigido);
                     $oTotalGeral[$oDebito->procedenciatributaria]->valortotal += $oDebito->valorcorrigido;
                 } else {
-                    $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios = getValorHonorarios($oDebito->valortotal);
+                    $oTotalGeral[$oDebito->procedenciatributaria]->valorhonorarios += getValorHonorarios($oDebito->valortotal);
                     $oTotalGeral[$oDebito->procedenciatributaria]->valortotal += $oDebito->valortotal;
 
                 }
