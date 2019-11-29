@@ -143,24 +143,15 @@ try{
             $l20_dtpubratificacao = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtpubratificacao)))));
             $l20_dtlimitecredenciamento = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtlimitecredenciamento)))));
 
-//            if($oParam->l20_dtpubratificacao != null){
-//                if($l20_dtpubratificacao < $l20_datacria){
-//                    throw new Exception ("A Data da Publicação Termo Ratificação deve ser posterior a Data de Recebimento da Documentacao.");
-//                }
-//            }
-
             if($oParam->l20_dtpubratificacao == null || $oParam->l20_dtpubratificacao == null){
                 throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação não Informado.");
             }
 
-//            if($oParam->l20_dtlimitecredenciamento != null){
-//                if ($l20_dtlimitecredenciamento > $l205_datacred){
-//                    throw new Exception ("A Data final do Credenciamento deve ser maior ou igual a data do ultimo Credenciamento.");
-//                }
-//            }
+            if($oParam->l20_tipoprocesso == "103" ||  $oParam->l20_tipoprocesso == "102") {
 
-            if($oParam->l20_dtlimitecredenciamento == ""){
+              if ($oParam->l20_dtlimitecredenciamento == "") {
                 throw new Exception ("Usuário: Campo Data Limite Credenciamento não Informado.");
+              }
             }
 
             if($oParam->l20_veicdivulgacao == null || $oParam->l20_veicdivulgacao == ""){
@@ -173,6 +164,18 @@ try{
 
             if($oParam->l20_razao == null || $oParam->l20_razao == ""){
                 throw new Exception ("Usuário: Campo Razão não Informado.");
+            }
+
+            if (strlen($oParam->l20_razao) < 10 || strlen($oParam->l20_razao) > 250) {
+                throw new Exception ("O campo Razão deve ter no mínimo 10 caracteres e no máximo 250");
+            }
+
+            if (strlen($oParam->l20_justificativa) < 10 || strlen($oParam->l20_justificativa) > 250) {
+                throw new Exception ("O campo justificativa deve ter no mínimo 10 caracteres e no máximo 250");
+            }
+
+            if (strlen($oParam->l20_veicdivulgacao) < 10 || strlen($oParam->l20_veicdivulgacao) > 80) {
+                throw new Exception ("O campo Veiculo deve ter no mínimo 10 caracteres e no máximo 80");
             }
 
             $clliclicita->l20_codtipocom = $l20_codtipocom;

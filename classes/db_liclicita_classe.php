@@ -1250,24 +1250,6 @@ class cl_liclicita
 
             $sql .= $virgula . " l20_veicdivulgacao = '$this->l20_veicdivulgacao'";
             $virgula = ",";
-            if (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50) {
-
-                $this->erro_msg = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-
-            } else if (trim($this->l20_veicdivulgacao) == null) {
-
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Veiculo de Divulgação";
-                $this->erro_campo = "l20_veicdivulgacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-
-            }
         } else {
             $sql .= $virgula . " l20_veicdivulgacao = ''";
             $virgula = ",";
@@ -1277,16 +1259,6 @@ class cl_liclicita
         if (trim($this->l20_justificativa != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativa"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_justificativa = '$this->l20_justificativa' ";
             $virgula = ",";
-
-            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
-                $this->erro_sql = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-                $this->erro_campo = "l20_justificativa";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         } else {
             $sql .= $virgula . " l20_justificativa = ''";
             $virgula = ",";
@@ -1295,26 +1267,6 @@ class cl_liclicita
         if (trim($this->l20_razao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_razao = '$this->l20_razao' ";
             $virgula = ",";
-
-            if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
-                $this->erro_sql = "O campo Razão deve ter no mínimo 10 caracteres e no máximo 250";
-                $this->erro_campo = "l20_razao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-
-            if (trim($this->l20_razao) == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Razão";
-                $this->erro_campo = "l20_razao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         } else {
             $sql .= $virgula . " l20_razao = ''";
             $virgula = ",";
