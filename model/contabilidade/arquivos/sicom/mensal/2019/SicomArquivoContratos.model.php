@@ -553,7 +553,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oAcordo = new Acordo($oDados10->ac16_sequencial);
             $clcontratos10->si83_vlcontrato = $oDados10->ac16_valor;
             //OC10386
-            if($oDados10->ac16_acordogrupo == '4' || $oDados10->ac16_acordogrupo == '5'){
+            if($oDados10->ac02_acordonatureza == '4' || $oDados10->ac02_acordonatureza == '5'){
                 $clcontratos10->si83_formafornecimento = '';
                 $clcontratos10->si83_formapagamento = '';
                 $clcontratos10->si83_prazoexecucao = '';
@@ -587,7 +587,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              */
 
             //OC10386
-            if($oDados10->ac16_acordogrupo != "4" && $oDados10->ac16_acordogrupo != "5") {
+            if($oDados10->ac02_acordonatureza != "4" && $oDados10->ac02_acordonatureza != "5") {
 
                 $aDadosAgrupados = array();
                 foreach ($oAcordo->getItensPosicaoInicial() as $oItens) {
