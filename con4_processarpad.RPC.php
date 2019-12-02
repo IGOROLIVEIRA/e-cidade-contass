@@ -36,14 +36,14 @@ switch($oParam->exec) {
       if(file_exists("LOA{$ano}.pdf")){
         array_map( "unlink", glob( "LOA{$ano}.pdf" ) );
       } 
-      if(file_exists("ANEXOS_LOA{$ano}.pdf")){
-        array_map( "unlink", glob( "ANEXOS_LOA{$ano}.pdf" ) );
+      if(file_exists("ANEXOS_LOA.pdf")){
+        array_map( "unlink", glob( "ANEXOS_LOA.pdf" ) );
       }
-      if(file_exists("OPCAOSEMESTRALIDADE{$ano}.pdf")){
-        array_map( "unlink", glob( "OPCAOSEMESTRALIDADE{$ano}.pdf" ) );
+      if(file_exists("OPCAOSEMESTRALIDADE.pdf")){
+        array_map( "unlink", glob( "OPCAOSEMESTRALIDADE.pdf" ) );
       }
-      if(file_exists("DESOPCAOSEMESTRALIDADE{$ano}.pdf")){
-        array_map( "unlink", glob( "DESOPCAOSEMESTRALIDADE{$ano}.pdf" ) );
+      if(file_exists("DESOPCAOSEMESTRALIDADE.pdf")){
+        array_map( "unlink", glob( "DESOPCAOSEMESTRALIDADE.pdf" ) );
       }
   }catch (Exception $eErro) {
           $oRetorno->status  = 2;
@@ -144,16 +144,16 @@ switch($oParam->exec) {
         $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
         $iVerifica=1;
       } 
-      if(file_exists("ANEXOS_LOA{$ano}.pdf")){
-        $oEscritorCSV->adicionarArquivo("ANEXOS_LOA{$ano}.pdf", "ANEXOS_LOA{$ano}.pdf");
+      if(file_exists("ANEXOS_LOA.pdf")){
+        $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
         $iVerifica=1;
       }
-      if(file_exists("OPCAOSEMESTRALIDADE{$ano}.pdf")){
-        $oEscritorCSV->adicionarArquivo("OPCAOSEMESTRALIDADE{$ano}.pdf", "OPCAOSEMESTRALIDADE{$ano}.pdf");
+      if(file_exists("OPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("OPCAOSEMESTRALIDADE.pdf", "OPCAOSEMESTRALIDADE.pdf");
         $iVerifica=1;
       }
-      if(file_exists("DESOPCAOSEMESTRALIDADE{$ano}.pdf")){
-        $oEscritorCSV->adicionarArquivo("DESOPCAOSEMESTRALIDADE{$ano}.pdf", "DESOPCAOSEMESTRALIDADE{$ano}.pdf");
+      if(file_exists("DESOPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("DESOPCAOSEMESTRALIDADE.pdf", "DESOPCAOSEMESTRALIDADE.pdf");
         $iVerifica=1;
       }
       if($iVerifica==1){
