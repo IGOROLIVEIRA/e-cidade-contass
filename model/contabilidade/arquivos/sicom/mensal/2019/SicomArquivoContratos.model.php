@@ -740,7 +740,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
 //                        echo "<pre>";var_dump($oDadosBusca);die();
                        foreach ($oDadosBusca as $oDados12) {
-                          
+
                            //Se a origem for licitao
                            if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_codigo != '') {
                                $sSql = "SELECT distinct on (o58_coddot)
@@ -1108,7 +1108,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                             if ($matServico->pc01_servico == 't') {
                                 if ($matServico->ac20_servicoquantidade == 'f') {
-                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                                 } else {
                                     $clcontratos21->si88_valorunitarioitem = $oAcordoItem->getValorUnitario();
                                 }
