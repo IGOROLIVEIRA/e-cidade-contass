@@ -839,8 +839,9 @@ switch($oParam->exec) {
             $oItemContrato->setPeriodos($oParam->material->aPeriodo);
             $oItemContrato->setMarca($oParam->material->sMarca);
             $oItemContrato->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
-            $oItemContrato->setILicitacao($oContrato->getLicitacao());
-            $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
+            //removido pois impedia a inclusao de itens no acordo normal
+//            $oItemContrato->setILicitacao($oContrato->getLicitacao());
+//            $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
             $oItemContrato->save();
 
             $oPosicao->adicionarItens($oItemContrato);
