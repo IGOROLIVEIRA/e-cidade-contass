@@ -76,6 +76,8 @@ if ($clempparametro->numrows > 0){
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/limitaCaracteres.js"></script>
 <?
 if ($db_opcao==1){
   $flag=1;
@@ -264,7 +266,7 @@ function js_somavalor(){
       }
     }
 
-  document.form1.somavalor.value=somavalor.toFixed(2);
+  document.form1.somavalor.value=js_formatar(somavalor, 'f', 2);
 }
 
 /*OC3770*/
@@ -331,26 +333,12 @@ function js_calcvaltaxa(valor,param,nome){
   }
 }
 
-function validaCaracteres(item, campo){
-  let valor_final = 0;
-  
-  if(item.includes('.')){
-    
-    let valor = item.split('.');
-    
-    if(valor[1].length > 4 ){
-      valor_final = valor[1].substr(0, 4);
-    }else valor_final = valor[1];
-
-    let numero_valido = valor[0]+'.'+valor_final;
-    
-    if(valor[1]){
-      eval("document.form1.vlrun_"+campo+".value='"+numero_valido+"'");
+function passaValores(valor, campo){
+    let [erro, valorRecebido] = validaCaracteres(valor, campo);
+    if(erro){
+        alert(erro);
     }
-
-  }
-
-  return;
+    document.getElementById(campo).value = valorRecebido;
 }
 
 /*FIM - OC3770*/
@@ -533,7 +521,7 @@ else {
 
     if($clpcorcamval->numrows>0){
       if(strpos($$valor,".")==""){
-        $$valor .= ".00";
+//        $$valor .= ".00";
       }
     }
     if(!isset($$qtd) || isset($$qtd) && $$qtd==''){
@@ -578,7 +566,7 @@ else {
     /*FIM - OC3770*/
         echo "
     <td align='center'  class='bordas_corp'>";
-      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onkeyup='validaCaracteres(this.value,$pc22_orcamitem);'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onkeyup='validaCaracteres(this.value,$pc22_orcamitem);'");
+      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onkeyup='passaValores(this.value,this.id);'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onkeyup='passaValores(this.value,this.id);'");
       echo "
     </td>
     <td align='center'  class='bordas_corp' width='15%'>";
@@ -605,7 +593,7 @@ echo"
       <b>Total:</b>
       <?
       if (isset($somavalor)){
-      $somavalor =db_formatar($somavalor,"p","e","2");
+      $somavalor =db_formatar($somavalor,"f", "e", 2);
       }
       db_input("somavalor",10,"",true,'text',3,"");
 
