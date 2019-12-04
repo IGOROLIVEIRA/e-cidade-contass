@@ -4,20 +4,29 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_precoreferencia_classe.php");
+include("classes/db_pcproc_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
+$clpcproc = new cl_pcproc;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $clprecoreferencia->excluir($si01_sequencial);
+  $sSql = $clpcproc->sql_query_dados_licitacao(null, '*', '', 'pc80_codproc ='.$si01_processocompra);
+  $rSql = $clpcproc->sql_record($sSql);
+  if(!$clpcproc->numrows){
+    $clprecoreferencia->excluir($si01_sequencial);
+  }else{
+    $db_botao = true;
+    $db_opcao = 33;
+  }
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
-   $result = $clprecoreferencia->sql_record($clprecoreferencia->sql_query($chavepesquisa)); 
+   $result = $clprecoreferencia->sql_record($clprecoreferencia->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -32,7 +41,7 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -40,8 +49,8 @@ if(isset($excluir)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmprecoreferencia.php");
@@ -64,6 +73,9 @@ if(isset($excluir)){
   }
 }
 if($db_opcao==33){
+  if($clpcproc->numrows > 0){
+    echo "<script>alert('Existe licitação vinculada a esse Preço de Referência');</script>";
+  }
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
