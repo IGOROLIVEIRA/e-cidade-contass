@@ -422,7 +422,6 @@ function passaValoresOnBlur(valor, campo){
               $result_lancados = $clpcorcamval->sql_record($clpcorcamval->sql_query_file(@$pc21_orcamforne,@$pc22_orcamitem,"pc23_quant ,pc23_valor as valor_$pc22_orcamitem,pc23_vlrun as vlrun_$pc22_orcamitem,pc23_obs as obs_$pc22_orcamitem,pc23_validmin  as pc23_validmin_$pc22_orcamitem,pc23_perctaxadesctabela as percdesctaxa_$pc22_orcamitem","pc23_orcamitem"));
            }
 
-
            if ( $clpcorcamval->numrows > 0 ) {
               db_fieldsmemory($result_lancados,0);
            } else {
@@ -519,17 +518,16 @@ else {
     $vlrun     = "vlrun_$pc22_orcamitem";
     $valor     = "valor_$pc22_orcamitem";
     $qtdorcada = "pc23_quant_$pc22_orcamitem" ;
-
     $arr_vlnomesitens[$i]       = "vlrun_$pc22_orcamitem";
     $arr_valoresitens[$i]       = $pc11_vlrun;
     $arr_quantitens[$i]         = $pc11_quant;
     $arr_vtnomesitens[$i]       = "valor_$pc22_orcamitem";
 
-    if($clpcorcamval->numrows>0){
-      if(strpos($$valor,".")==""){
+//    if($clpcorcamval->numrows>0){
+//      if(strpos($$valor,".")==""){
 //        $$valor .= ".00";
-      }
-    }
+//      }
+//    }
 //    if($clpcorcamval->numrows>0){
       if(strpos($$vlrun,".")==""){
         $$vlrun .= ".0000";
@@ -540,9 +538,9 @@ else {
           while(strlen($decimais) < 4){
             $decimais .= '0';
           }
+          $valor_montado = $valor_tratado[0].'.'.$decimais;
+          $$vlrun = $valor_montado;
         }
-        $valor_montado = $valor_tratado[0].'.'.$decimais;
-        $$vlrun = $valor_montado;
       }
 //    }
     if(!isset($$qtd) || isset($$qtd) && $$qtd==''){
