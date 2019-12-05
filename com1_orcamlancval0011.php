@@ -334,10 +334,16 @@ function js_calcvaltaxa(valor,param,nome){
 }
 
 function passaValores(valor, campo){
-    let [erro, valorRecebido] = validaCaracteres(valor, campo);
-    if(erro){
+
+    let [erro, valorRecebido] = validaCaracteres(valor, false);
+    if(erro)
         alert(erro);
-    }
+
+    document.getElementById(campo).value = valorRecebido;
+}
+
+function passaValoresOnBlur(valor, campo){
+    let [erro, valorRecebido] = validaCaracteres(valor, true);
     document.getElementById(campo).value = valorRecebido;
 }
 
@@ -524,6 +530,21 @@ else {
 //        $$valor .= ".00";
       }
     }
+//    if($clpcorcamval->numrows>0){
+      if(strpos($$vlrun,".")==""){
+        $$vlrun .= ".0000";
+      }else{
+        $valor_tratado = explode('.', $$vlrun);
+        if(strlen($valor_tratado[1]) < 4){
+          $decimais = $valor_tratado[1];
+          while(strlen($decimais) < 4){
+            $decimais .= '0';
+          }
+        }
+        $valor_montado = $valor_tratado[0].'.'.$decimais;
+        $$vlrun = $valor_montado;
+      }
+//    }
     if(!isset($$qtd) || isset($$qtd) && $$qtd==''){
       $$qtd = $pc11_quant;
     }
@@ -566,7 +587,7 @@ else {
     /*FIM - OC3770*/
         echo "
     <td align='center'  class='bordas_corp'>";
-      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onkeyup='passaValores(this.value,this.id);'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onkeyup='passaValores(this.value,this.id);'");
+      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' ; onblur='passaValoresOnBlur(this.value, this.id);'; onkeyup='passaValores(this.value, this.id);';" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' ; onblur='passaValoresOnBlur(this.value, this.id);';onkeyup='passaValores(this.value, this.id);'");
       echo "
     </td>
     <td align='center'  class='bordas_corp' width='15%'>";
