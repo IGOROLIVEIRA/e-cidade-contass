@@ -5,6 +5,9 @@ function validaCaracteres(valor, preenche=null){
   let aValor = valor.split('.');
   let decimais = '';
 
+  if(!aValor[0])
+    aValor[0] = '0';
+
   if(valor.includes('.')){
     if(aValor[1].length > 4){
       decimais = aValor[1];
