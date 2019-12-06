@@ -1022,6 +1022,27 @@ class SicomDcasp2020 extends AbstractMigration
         ALTER TABLE ONLY dvpdcasp302020
         ADD CONSTRAINT dvpdcasp302020_sequ_pk PRIMARY KEY (si218_sequencial);
 
+        CREATE TABLE idedcasp2020
+        (
+          si200_sequencial integer NOT NULL DEFAULT 0,
+          si200_codmunicipio character varying(5) NOT NULL,
+          si200_cnpjorgao character varying(14) NOT NULL,
+          si200_codorgao character varying(2) NOT NULL,
+          si200_tipoorgao character varying(2) NOT NULL,
+          si200_tipodemcontabil integer NOT NULL DEFAULT 0,
+          si200_exercicioreferencia integer NOT NULL DEFAULT 0,
+          si200_datageracao date NOT NULL,
+          si200_codcontroleremessa character varying(20),
+          si200_anousu integer NOT NULL DEFAULT 0,
+          si200_instit integer NOT NULL DEFAULT 0,
+          CONSTRAINT idedcasp2020_sequ_pk PRIMARY KEY (si200_sequencial)
+        )
+        WITH (
+          OIDS=TRUE
+      );
+        ALTER TABLE idedcasp2020
+        OWNER TO dbportal;
+
 SQL;
         $this->execute($sql);
     }
