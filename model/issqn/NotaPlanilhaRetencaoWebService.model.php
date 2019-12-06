@@ -195,8 +195,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
                $oCGM = CgmFactory::getInstanceByType(1);
                $oCGM->setCpf($this->sCnpjPrestador);
              }
-             $oCGM->setNome(substr(urldecode($this->sNome),0,40));
-             $oCGM->setNomeCompleto(substr(urldecode($this->sNome),0,100));
+             $oCGM->setNome(substr(pg_escape_string(urldecode($this->sNome)),0,40));
+             $oCGM->setNomeCompleto(substr(pg_escape_string(urldecode($this->sNome)),0,100));
 
              /*seta os endereços*/
              $iCodEndereco = $this->incluirEndereco();
@@ -229,8 +229,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
            if (!is_object($oCGM)) {
                $oCGM = CgmFactory::getInstanceByType(1);
                $oCGM->setCpf($this->sCpfPrestador);
-               $oCGM->setNome(utf8_decode(urldecode($this->sNome)));
-               $oCGM->setNomeCompleto(utf8_decode(urldecode($this->sNome)));
+               $oCGM->setNome(utf8_decode(pg_escape_string(urldecode($this->sNome))));
+               $oCGM->setNomeCompleto(utf8_decode(pg_escape_string(urldecode($this->sNome))));
 
                $iCodEndereco = $this->incluirEndereco();
                $oEnderecoPrimario   = endereco::findEnderecoByCodigo($iCodEndereco, false);
@@ -267,7 +267,7 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
        * Seta os dados necessários para salvar a Nota
        */
       $this->setCodigoPlanilha  ( $this->iCodPlanilha );
-      $this->setNome            ( utf8_decode(urldecode($this->sNome)) );
+      $this->setNome            ( utf8_decode(pg_escape_string(urldecode($this->sNome))) );
       $this->setDataOperacao    ( $this->oDataNf );
       $this->setTipoLancamento  ( $this->getTipoLancamento() );
       $this->setRetido          ( $this->isRetido() );
@@ -282,7 +282,7 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
       $this->setValorDeducao    ( $this->nValorDeducao );
       $this->setValorBase       ( $this->nValorBaseCalculo );
       $this->setValorImposto    ( $this->nValorImpostoRetido );
-      $this->setDescricaoServico( utf8_decode(urldecode($this->sServicoPrestado)) );
+      $this->setDescricaoServico( utf8_decode(pg_escape_string(urldecode($this->sServicoPrestado))) );
 
       /**
        * Salva os dados da nota
