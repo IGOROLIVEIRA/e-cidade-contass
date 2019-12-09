@@ -1245,6 +1245,10 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                         liclicita.l20_anousu AS exercicioLicitacao,
                         liclicita.l20_edital AS nroProcessoLicitatorio,
                         cflicita.l03_pctipocompratribunal AS tipoprocesso,
+                        (CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
+                    ELSE 2
+                END) as tipoDocumento,
+                cgm.z01_cgccpf as nrodocumento,
                         (pcmater.pc01_codmater::varchar || (CASE
                                                                 WHEN matunid.m61_codmatunid IS NULL THEN 1
                                                                 ELSE matunid.m61_codmatunid
@@ -1267,6 +1271,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
         FROM credenciamento
         INNER JOIN liclicita ON (credenciamento.l205_licitacao=liclicita.l20_codigo)
         INNER JOIN habilitacaoforn ON (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
+        INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor = pcforne.pc60_numcgm)
+        INNER JOIN cgm on (pcforne.pc60_numcgm = cgm.z01_numcgm)
         INNER JOIN liclicitem ON (liclicita.l20_codigo = liclicitem.l21_codliclicita)
         INNER JOIN cflicita ON (liclicita.l20_codtipocom = cflicita.l03_codigo)
         INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -1285,7 +1291,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
             AND DATE_PART('YEAR',l205_datacred)= " . db_getsession("DB_anousu") . "
             AND DATE_PART('MONTH',l205_datacred)= ".$this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-            $rsResult18 = db_query($sSql);//db_criatabela($rsResult18);die($sSql);
+            $rsResult18 = db_query($sSql);//echo $sSql; db_criatabela($rsResult18);die($sSql);
 
             for ($iCont18 = 0; $iCont18 < pg_num_rows($rsResult18); $iCont18++) {
 
@@ -1306,7 +1312,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 } else if ($oDados18->tipoprocesso == "103"){
                   $dispensa18->si82_tipoprocesso = 4;
                 }
-                $dispensa18->si82_tipoprocesso = $oDados18->tipoprocesso;
                 $dispensa18->si82_tipodocumento = $oDados18->tipodocumento;
                 $dispensa18->si82_nrodocumento = $oDados18->nrodocumento;
                 $dispensa18->si82_datacredenciamento = $oDados18->datacredenciamento;
@@ -1319,6 +1324,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa18->si82_dtvalidadecertidaoregularidadeinssd = $oDados18->datavalidadecertidaoregularidadeinss;
                 $dispensa18->si82_nrocertidaoregularidadefgts = $oDados18->nrocertidaoregularidadefgts;
                 $dispensa18->si82_dtemissaocertidaoregularidadefgts = $oDados18->dataemissaocertidaoregularidadefgts;
+                $dispensa18->si82_dtvalidadecertidaoregularidadefgts = $oDados18->datavalidadecertidaoregularidadefgts;
                 $dispensa18->si82_nrocndt = $oDados18->nrocndt;
                 $dispensa18->si82_dtemissaocndt = $oDados18->dtemissaocndt;
                 $dispensa18->si82_dtvalidadecndt = $oDados18->dtvalidadecndt;
