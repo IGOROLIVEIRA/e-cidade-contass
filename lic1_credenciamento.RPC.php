@@ -135,13 +135,16 @@ try{
 
             db_inicio_transacao();
             $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom,l20_datacria",null,"l20_codigo = $oParam->licitacao"));
-
             $rsCredenciamento = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"max(l205_datacred) as l205_datacred",null,"l205_licitacao = $oParam->licitacao"));
 
-            $l20_datacria = strtotime(implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria)))));
+            $l20_datacria = implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($result,0)->l20_datacria))));
             $l205_datacred  = strtotime(implode("/",(array_reverse(explode("-",db_utils::fieldsMemory($rsCredenciamento,0)->l205_datacred)))));
             $l20_dtpubratificacao = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtpubratificacao)))));
             $l20_dtlimitecredenciamento = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtlimitecredenciamento)))));
+
+            if($oParam->l20_dtpubratificacao < $l20_datacria){
+              throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação menor que data de criação.");
+            }
 
             if($oParam->l20_dtpubratificacao == null || $oParam->l20_dtpubratificacao == null){
                 throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação não Informado.");
