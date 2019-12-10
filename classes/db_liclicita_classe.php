@@ -125,7 +125,9 @@ class cl_liclicita
   var $l20_diames = null;
   var $l20_execucaoentrega = null;
   var $l20_criterioadjudicacao = null;
-
+  var $l20_nroedital = null;
+  /* Valor 1 para cadastro inicial da Licitação - demanda para atender o SICOM 2020 */
+  var $l20_cadinicial = '1';
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -187,738 +189,748 @@ class cl_liclicita
                  l20_diames=int8= Dia mes
                  l20_execucaoentrega=int8= Execucao da entrega
                  l20_criterioadjudicacao = int4 = Criterio de adjudicacao
-
-
+                 l20_nroedital = int8 = Número Edital Licitação
+                 l20_cadinicial = int8 = Identificador cadastro inicial
                  ";
 
-  //funcao construtor da classe
-  function cl_liclicita()
-  {
-    //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("liclicita");
-    $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
-  }
-
-  //funcao erro
-  function erro($mostra, $retorna)
-  {
-    if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
-      echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
-      if ($retorna == true) {
-        echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
-      }
+    //funcao construtor da classe
+    function cl_liclicita()
+    {
+        //classes dos rotulos dos campos
+        $this->rotulo = new rotulo("liclicita");
+        $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
-  }
 
-  // funcao para atualizar campos
-  function atualizacampos($exclusao = false)
-  {
-    if ($exclusao == false) {
-      $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
-      $this->l20_codtipocom = ($this->l20_codtipocom == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codtipocom"] : $this->l20_codtipocom);
-      $this->l20_numero = ($this->l20_numero == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_numero"] : $this->l20_numero);
-      $this->l20_id_usucria = ($this->l20_id_usucria == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_id_usucria"] : $this->l20_id_usucria);
-      if ($this->l20_datacria == "") {
-        $this->l20_datacria_dia = ($this->l20_datacria_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_dia"] : $this->l20_datacria_dia);
-        $this->l20_datacria_mes = ($this->l20_datacria_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_mes"] : $this->l20_datacria_mes);
-        $this->l20_datacria_ano = ($this->l20_datacria_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_ano"] : $this->l20_datacria_ano);
-        if ($this->l20_datacria_dia != "") {
-          $this->l20_datacria = $this->l20_datacria_ano . "-" . $this->l20_datacria_mes . "-" . $this->l20_datacria_dia;
+    //funcao erro
+    function erro($mostra, $retorna)
+    {
+        if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
+            echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
+            if ($retorna == true) {
+                echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
+            }
         }
-      }
-      $this->l20_horacria = ($this->l20_horacria == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horacria"] : $this->l20_horacria);
-      if ($this->l20_dataaber == "") {
-        $this->l20_dataaber_dia = ($this->l20_dataaber_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_dia"] : $this->l20_dataaber_dia);
-        $this->l20_dataaber_mes = ($this->l20_dataaber_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_mes"] : $this->l20_dataaber_mes);
-        $this->l20_dataaber_ano = ($this->l20_dataaber_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_ano"] : $this->l20_dataaber_ano);
-        if ($this->l20_dataaber_dia != "") {
-          $this->l20_dataaber = $this->l20_dataaber_ano . "-" . $this->l20_dataaber_mes . "-" . $this->l20_dataaber_dia;
+    }
+
+    // funcao para atualizar campos
+    function atualizacampos($exclusao = false)
+    {
+        if ($exclusao == false) {
+            $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
+            $this->l20_codtipocom = ($this->l20_codtipocom == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codtipocom"] : $this->l20_codtipocom);
+            $this->l20_numero = ($this->l20_numero == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_numero"] : $this->l20_numero);
+            $this->l20_id_usucria = ($this->l20_id_usucria == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_id_usucria"] : $this->l20_id_usucria);
+            if ($this->l20_datacria == "") {
+                $this->l20_datacria_dia = ($this->l20_datacria_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_dia"] : $this->l20_datacria_dia);
+                $this->l20_datacria_mes = ($this->l20_datacria_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_mes"] : $this->l20_datacria_mes);
+                $this->l20_datacria_ano = ($this->l20_datacria_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datacria_ano"] : $this->l20_datacria_ano);
+                if ($this->l20_datacria_dia != "") {
+                    $this->l20_datacria = $this->l20_datacria_ano . "-" . $this->l20_datacria_mes . "-" . $this->l20_datacria_dia;
+                }
+            }
+            $this->l20_horacria = ($this->l20_horacria == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horacria"] : $this->l20_horacria);
+            if ($this->l20_dataaber == "") {
+                $this->l20_dataaber_dia = ($this->l20_dataaber_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_dia"] : $this->l20_dataaber_dia);
+                $this->l20_dataaber_mes = ($this->l20_dataaber_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_mes"] : $this->l20_dataaber_mes);
+                $this->l20_dataaber_ano = ($this->l20_dataaber_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaber_ano"] : $this->l20_dataaber_ano);
+                if ($this->l20_dataaber_dia != "") {
+                    $this->l20_dataaber = $this->l20_dataaber_ano . "-" . $this->l20_dataaber_mes . "-" . $this->l20_dataaber_dia;
+                }
+            }
+            if ($this->l20_dtpublic == "") {
+                $this->l20_dtpublic_dia = ($this->l20_dtpublic_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_dia"] : $this->l20_dtpublic_dia);
+                $this->l20_dtpublic_mes = ($this->l20_dtpublic_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_mes"] : $this->l20_dtpublic_mes);
+                $this->l20_dtpublic_ano = ($this->l20_dtpublic_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_ano"] : $this->l20_dtpublic_ano);
+                if ($this->l20_dtpublic_dia != "") {
+                    $this->l20_dtpublic = $this->l20_dtpublic_ano . "-" . $this->l20_dtpublic_mes . "-" . $this->l20_dtpublic_dia;
+                }
+            }
+
+            if ($this->l20_dtpubratificacao == "") {
+                $this->l20_dtpubratificacao_dia = ($this->l20_dtpubratificacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_dia"] : $this->l20_dtpubratificacao_dia);
+                $this->l20_dtpubratificacao_mes = ($this->l20_dtpubratificacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_mes"] : $this->l20_dtpubratificacao_mes);
+                $this->l20_dtpubratificacao_ano = ($this->l20_dtpubratificacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_ano"] : $this->l20_dtpubratificacao_ano);
+                if ($this->l20_dtpubratificacao_dia != "") {
+                    $this->l20_dtpubratificacao = $this->l20_dtpubratificacao_ano . "-" . $this->l20_dtpubratificacao_mes . "-" . $this->l20_dtpubratificacao_dia;
+                }
+            }
+
+
+            $this->l20_horaaber = ($this->l20_horaaber == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horaaber"] : $this->l20_horaaber);
+            $this->l20_local = ($this->l20_local == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_local"] : $this->l20_local);
+            $this->l20_objeto = ($this->l20_objeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_objeto"] : $this->l20_objeto);
+            $this->l20_tipojulg = ($this->l20_tipojulg == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipojulg"] : $this->l20_tipojulg);
+            $this->l20_liccomissao = ($this->l20_liccomissao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_liccomissao"] : $this->l20_liccomissao);
+            $this->l20_liclocal = ($this->l20_liclocal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_liclocal"] : $this->l20_liclocal);
+            $this->l20_procadmin = ($this->l20_procadmin == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_procadmin"] : $this->l20_procadmin);
+            $this->l20_correto = ($this->l20_correto == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l20_correto"] : $this->l20_correto);
+            $this->l20_instit = ($this->l20_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_instit"] : $this->l20_instit);
+            $this->l20_licsituacao = ($this->l20_licsituacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_licsituacao"] : $this->l20_licsituacao);
+            $this->l20_edital = ($this->l20_edital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_edital"] : $this->l20_edital);
+            $this->l20_anousu = ($this->l20_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_anousu"] : $this->l20_anousu);
+            $this->l20_usaregistropreco = ($this->l20_usaregistropreco == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l20_usaregistropreco"] : $this->l20_usaregistropreco);
+            $this->l20_localentrega = ($this->l20_localentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_localentrega"] : $this->l20_localentrega);
+            $this->l20_prazoentrega = ($this->l20_prazoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_prazoentrega"] : $this->l20_prazoentrega);
+            $this->l20_condicoespag = ($this->l20_condicoespag == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_condicoespag"] : $this->l20_condicoespag);
+            $this->l20_validadeproposta = ($this->l20_validadeproposta == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"] : $this->l20_validadeproposta);
+            $this->l20_razao = ($this->l20_razao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_razao"] : $this->l20_razao);
+            $this->l20_formacontroleregistropreco = ($this->l20_formacontroleregistropreco == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_formacontroleregistropreco"] : $this->l20_formacontroleregistropreco);
+            $this->l20_justificativa = ($this->l20_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_justificativa"] : $this->l20_justificativa);
+            $this->l20_aceitabilidade = ($this->l20_aceitabilidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_aceitabilidade"] : $this->l20_aceitabilidade);
+            $this->l20_equipepregao = ($this->l20_equipepregao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_equipepregao"] : $this->l20_equipepregao);
+            $this->l20_nomeveiculo2 = ($this->l20_nomeveiculo2 == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo2"] : $this->l20_nomeveiculo2);
+            if ($this->l20_datapublicacao2 == "") {
+                $this->l20_datapublicacao2_dia = ($this->l20_datapublicacao2_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_dia"] : $this->l20_datapublicacao2_dia);
+                $this->l20_datapublicacao2_mes = ($this->l20_datapublicacao2_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_mes"] : $this->l20_datapublicacao2_mes);
+                $this->l20_datapublicacao2_ano = ($this->l20_datapublicacao2_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_ano"] : $this->l20_datapublicacao2_ano);
+                if ($this->l20_datapublicacao2_dia != "") {
+                    $this->l20_datapublicacao2 = $this->l20_datapublicacao2_ano . "-" . $this->l20_datapublicacao2_mes . "-" . $this->l20_datapublicacao2_dia;
+                }
+            }
+            $this->l20_nomeveiculo1 = ($this->l20_nomeveiculo1 == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo1"] : $this->l20_nomeveiculo1);
+            if ($this->l20_datapublicacao1 == "") {
+                $this->l20_datapublicacao1_dia = ($this->l20_datapublicacao1_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_dia"] : $this->l20_datapublicacao1_dia);
+                $this->l20_datapublicacao1_mes = ($this->l20_datapublicacao1_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_mes"] : $this->l20_datapublicacao1_mes);
+                $this->l20_datapublicacao1_ano = ($this->l20_datapublicacao1_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_ano"] : $this->l20_datapublicacao1_ano);
+                if ($this->l20_datapublicacao1_dia != "") {
+                    $this->l20_datapublicacao1 = $this->l20_datapublicacao1_ano . "-" . $this->l20_datapublicacao1_mes . "-" . $this->l20_datapublicacao1_dia;
+                }
+            }
+            if ($this->l20_datadiario == "") {
+                $this->l20_datadiario_dia = ($this->l20_datadiario_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_dia"] : $this->l20_datadiario_dia);
+                $this->l20_datadiario_mes = ($this->l20_datadiario_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_mes"] : $this->l20_datadiario_mes);
+                $this->l20_datadiario_ano = ($this->l20_datadiario_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_ano"] : $this->l20_datadiario_ano);
+                if ($this->l20_datadiario_dia != "") {
+                    $this->l20_datadiario = $this->l20_datadiario_ano . "-" . $this->l20_datadiario_mes . "-" . $this->l20_datadiario_dia;
+                }
+            }
+            if ($this->l20_recdocumentacao == "") {
+                $this->l20_recdocumentacao_dia = ($this->l20_recdocumentacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_dia"] : $this->l20_recdocumentacao_dia);
+                $this->l20_recdocumentacao_mes = ($this->l20_recdocumentacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_mes"] : $this->l20_recdocumentacao_mes);
+                $this->l20_recdocumentacao_ano = ($this->l20_recdocumentacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_ano"] : $this->l20_recdocumentacao_ano);
+                if ($this->l20_recdocumentacao_dia != "") {
+                    $this->l20_recdocumentacao = $this->l20_recdocumentacao_ano . "-" . $this->l20_recdocumentacao_mes . "-" . $this->l20_recdocumentacao_dia;
+                }
+            }
+
+            $this->l20_numeroconvidado = ($this->l20_numeroconvidado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_numeroconvidado"] : $this->l20_numeroconvidado);
+            $this->l20_descontotab = ($this->l20_descontotab == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descontotab"] : $this->l20_descontotab);
+            $this->l20_regimexecucao = ($this->l20_regimexecucao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_regimexecucao"] : $this->l20_regimexecucao);
+            $this->l20_naturezaobjeto = ($this->l20_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"] : $this->l20_naturezaobjeto);
+            $this->l20_tipliticacao = ($this->l20_tipliticacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipliticacao"] : $this->l20_tipliticacao);
+            $this->l20_tipnaturezaproced = ($this->l20_tipnaturezaproced == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipnaturezaproced"] : $this->l20_tipnaturezaproced);
+
+            $this->l20_critdesempate = ($this->l20_critdesempate == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_critdesempate"] : $this->l20_critdesempate);
+            $this->l20_destexclusiva = ($this->l20_destexclusiva == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_destexclusiva"] : $this->l20_destexclusiva);
+            $this->l20_subcontratacao = ($this->l20_subcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_subcontratacao"] : $this->l20_subcontratacao);
+            $this->l20_limitcontratacao = ($this->l20_limitcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_limitcontratacao"] : $this->l20_limitcontratacao);
+            $this->l20_tipoprocesso = ($this->l20_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"] : $this->l20_tipoprocesso);
+            $this->l20_regata = ($this->l20_regata == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_regata"] : $this->l20_regata);
+            $this->l20_interporrecurso = ($this->l20_interporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_interporrecurso"] : $this->l20_interporrecurso);
+            $this->l20_descrinterporrecurso = ($this->l20_descrinterporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descrinterporrecurso"] : $this->l20_descrinterporrecurso);
+            $this->l20_veicdivulgacao = ($this->l20_veicdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"] : $this->l20_veicdivulgacao);
+
+            $this->l20_clausulapro = ($this->l20_clausulapro == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_clausulapro"] : $this->l20_clausulapro);
+            $this->l20_codepartamento = ($this->l20_codepartamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"] : $this->l20_codepartamento);
+            $this->l20_diames = ($this->l20_diames == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_diames"] : $this->l20_diames);
+            $this->l20_execucaoentrega = ($this->l20_execucaoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_execucaoentrega"] : $this->l20_execucaoentrega);
+            $this->l20_nroedital = ($this->l20_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nroedital"] : $this->l20_nroedital);
+            $this->l20_cadinicial = ($this->l20_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"] : $this->l20_cadinicial);
+
+        } else {
+            $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
         }
-      }
-      if ($this->l20_dtpublic == "") {
-        $this->l20_dtpublic_dia = ($this->l20_dtpublic_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_dia"] : $this->l20_dtpublic_dia);
-        $this->l20_dtpublic_mes = ($this->l20_dtpublic_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_mes"] : $this->l20_dtpublic_mes);
-        $this->l20_dtpublic_ano = ($this->l20_dtpublic_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpublic_ano"] : $this->l20_dtpublic_ano);
-        if ($this->l20_dtpublic_dia != "") {
-          $this->l20_dtpublic = $this->l20_dtpublic_ano . "-" . $this->l20_dtpublic_mes . "-" . $this->l20_dtpublic_dia;
+    }
+
+    // funcao para inclusao aqui
+    function incluir($l20_codigo, $convite)
+    {
+        $this->atualizacampos();
+
+        $tribunal = $this->buscartribunal($this->l20_codtipocom);
+
+        if ($tribunal == 48 && ($this->l20_numeroconvidado == "" || $this->l20_numeroconvidado == null)) {
+            $this->erro_sql = "Você informou o tipo de modalidade  CONVITE. Para esta modalidade é \\n\\n obrigatorio preencher o campo Numero Convidado";
+            $this->erro_campo = "l20_numeroconvidado";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
         }
-      }
 
-      if ($this->l20_dtpubratificacao == "") {
-        $this->l20_dtpubratificacao_dia = ($this->l20_dtpubratificacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_dia"] : $this->l20_dtpubratificacao_dia);
-        $this->l20_dtpubratificacao_mes = ($this->l20_dtpubratificacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_mes"] : $this->l20_dtpubratificacao_mes);
-        $this->l20_dtpubratificacao_ano = ($this->l20_dtpubratificacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao_ano"] : $this->l20_dtpubratificacao_ano);
-        if ($this->l20_dtpubratificacao_dia != "") {
-          $this->l20_dtpubratificacao = $this->l20_dtpubratificacao_ano . "-" . $this->l20_dtpubratificacao_mes . "-" . $this->l20_dtpubratificacao_dia;
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_dtpubratificacao == null) {
+                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
+                $this->erro_campo = "l20_dtpubratificacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
-      }
 
 
-      $this->l20_horaaber = ($this->l20_horaaber == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_horaaber"] : $this->l20_horaaber);
-      $this->l20_local = ($this->l20_local == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_local"] : $this->l20_local);
-      $this->l20_objeto = ($this->l20_objeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_objeto"] : $this->l20_objeto);
-      $this->l20_tipojulg = ($this->l20_tipojulg == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipojulg"] : $this->l20_tipojulg);
-      $this->l20_liccomissao = ($this->l20_liccomissao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_liccomissao"] : $this->l20_liccomissao);
-      $this->l20_liclocal = ($this->l20_liclocal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_liclocal"] : $this->l20_liclocal);
-      $this->l20_procadmin = ($this->l20_procadmin == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_procadmin"] : $this->l20_procadmin);
-      $this->l20_correto = ($this->l20_correto == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l20_correto"] : $this->l20_correto);
-      $this->l20_instit = ($this->l20_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_instit"] : $this->l20_instit);
-      $this->l20_licsituacao = ($this->l20_licsituacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_licsituacao"] : $this->l20_licsituacao);
-      $this->l20_edital = ($this->l20_edital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_edital"] : $this->l20_edital);
-      $this->l20_anousu = ($this->l20_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_anousu"] : $this->l20_anousu);
-      $this->l20_usaregistropreco = ($this->l20_usaregistropreco == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l20_usaregistropreco"] : $this->l20_usaregistropreco);
-      $this->l20_localentrega = ($this->l20_localentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_localentrega"] : $this->l20_localentrega);
-      $this->l20_prazoentrega = ($this->l20_prazoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_prazoentrega"] : $this->l20_prazoentrega);
-      $this->l20_condicoespag = ($this->l20_condicoespag == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_condicoespag"] : $this->l20_condicoespag);
-      $this->l20_validadeproposta = ($this->l20_validadeproposta == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"] : $this->l20_validadeproposta);
-      $this->l20_razao = ($this->l20_razao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_razao"] : $this->l20_razao);
-      $this->l20_formacontroleregistropreco = ($this->l20_formacontroleregistropreco == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_formacontroleregistropreco"] : $this->l20_formacontroleregistropreco);
-      $this->l20_justificativa = ($this->l20_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_justificativa"] : $this->l20_justificativa);
-      $this->l20_aceitabilidade = ($this->l20_aceitabilidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_aceitabilidade"] : $this->l20_aceitabilidade);
-      $this->l20_equipepregao = ($this->l20_equipepregao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_equipepregao"] : $this->l20_equipepregao);
-      $this->l20_nomeveiculo2 = ($this->l20_nomeveiculo2 == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo2"] : $this->l20_nomeveiculo2);
-      if ($this->l20_datapublicacao2 == "") {
-        $this->l20_datapublicacao2_dia = ($this->l20_datapublicacao2_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_dia"] : $this->l20_datapublicacao2_dia);
-        $this->l20_datapublicacao2_mes = ($this->l20_datapublicacao2_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_mes"] : $this->l20_datapublicacao2_mes);
-        $this->l20_datapublicacao2_ano = ($this->l20_datapublicacao2_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2_ano"] : $this->l20_datapublicacao2_ano);
-        if ($this->l20_datapublicacao2_dia != "") {
-          $this->l20_datapublicacao2 = $this->l20_datapublicacao2_ano . "-" . $this->l20_datapublicacao2_mes . "-" . $this->l20_datapublicacao2_dia;
+        if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
+            $this->erro_sql = " Campo condicoes de pagamento nao Informado.";
+            $this->erro_campo = "l20_condicoespag";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
         }
-      }
-      $this->l20_nomeveiculo1 = ($this->l20_nomeveiculo1 == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo1"] : $this->l20_nomeveiculo1);
-      if ($this->l20_datapublicacao1 == "") {
-        $this->l20_datapublicacao1_dia = ($this->l20_datapublicacao1_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_dia"] : $this->l20_datapublicacao1_dia);
-        $this->l20_datapublicacao1_mes = ($this->l20_datapublicacao1_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_mes"] : $this->l20_datapublicacao1_mes);
-        $this->l20_datapublicacao1_ano = ($this->l20_datapublicacao1_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1_ano"] : $this->l20_datapublicacao1_ano);
-        if ($this->l20_datapublicacao1_dia != "") {
-          $this->l20_datapublicacao1 = $this->l20_datapublicacao1_ano . "-" . $this->l20_datapublicacao1_mes . "-" . $this->l20_datapublicacao1_dia;
+
+
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_razao == null || $this->l20_razao == "") {
+                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+                $this->erro_campo = "l20_razao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
-      }
-      if ($this->l20_datadiario == "") {
-        $this->l20_datadiario_dia = ($this->l20_datadiario_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_dia"] : $this->l20_datadiario_dia);
-        $this->l20_datadiario_mes = ($this->l20_datadiario_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_mes"] : $this->l20_datadiario_mes);
-        $this->l20_datadiario_ano = ($this->l20_datadiario_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_datadiario_ano"] : $this->l20_datadiario_ano);
-        if ($this->l20_datadiario_dia != "") {
-          $this->l20_datadiario = $this->l20_datadiario_ano . "-" . $this->l20_datadiario_mes . "-" . $this->l20_datadiario_dia;
+
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
+                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+                $this->erro_campo = "l20_dtpubratificacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
-      }
-      if ($this->l20_recdocumentacao == "") {
-        $this->l20_recdocumentacao_dia = ($this->l20_recdocumentacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_dia"] : $this->l20_recdocumentacao_dia);
-        $this->l20_recdocumentacao_mes = ($this->l20_recdocumentacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_mes"] : $this->l20_recdocumentacao_mes);
-        $this->l20_recdocumentacao_ano = ($this->l20_recdocumentacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_ano"] : $this->l20_recdocumentacao_ano);
-        if ($this->l20_recdocumentacao_dia != "") {
-          $this->l20_recdocumentacao = $this->l20_recdocumentacao_ano . "-" . $this->l20_recdocumentacao_mes . "-" . $this->l20_recdocumentacao_dia;
+
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
+                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
+                $this->erro_campo = "l20_tipoprocesso";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }else{
+          $this->l20_tipoprocesso = 0;
         }
-      }
 
-      $this->l20_numeroconvidado = ($this->l20_numeroconvidado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_numeroconvidado"] : $this->l20_numeroconvidado);
-      $this->l20_descontotab = ($this->l20_descontotab == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descontotab"] : $this->l20_descontotab);
-      $this->l20_regimexecucao = ($this->l20_regimexecucao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_regimexecucao"] : $this->l20_regimexecucao);
-      $this->l20_naturezaobjeto = ($this->l20_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"] : $this->l20_naturezaobjeto);
-      $this->l20_tipliticacao = ($this->l20_tipliticacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipliticacao"] : $this->l20_tipliticacao);
-      $this->l20_tipnaturezaproced = ($this->l20_tipnaturezaproced == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipnaturezaproced"] : $this->l20_tipnaturezaproced);
-
-      $this->l20_critdesempate = ($this->l20_critdesempate == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_critdesempate"] : $this->l20_critdesempate);
-      $this->l20_destexclusiva = ($this->l20_destexclusiva == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_destexclusiva"] : $this->l20_destexclusiva);
-      $this->l20_subcontratacao = ($this->l20_subcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_subcontratacao"] : $this->l20_subcontratacao);
-      $this->l20_limitcontratacao = ($this->l20_limitcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_limitcontratacao"] : $this->l20_limitcontratacao);
-      $this->l20_tipoprocesso = ($this->l20_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"] : $this->l20_tipoprocesso);
-      $this->l20_regata = ($this->l20_regata == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_regata"] : $this->l20_regata);
-      $this->l20_interporrecurso = ($this->l20_interporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_interporrecurso"] : $this->l20_interporrecurso);
-      $this->l20_descrinterporrecurso = ($this->l20_descrinterporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descrinterporrecurso"] : $this->l20_descrinterporrecurso);
-      $this->l20_veicdivulgacao = ($this->l20_veicdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"] : $this->l20_veicdivulgacao);
-      $this->l20_dtlimitecredenciamento = ($this->l20_dtlimitecredenciamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"] : $this->l20_dtlimitecredenciamento);
-
-      $this->l20_clausulapro = ($this->l20_clausulapro == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_clausulapro"] : $this->l20_clausulapro);
-      $this->l20_codepartamento = ($this->l20_codepartamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"] : $this->l20_codepartamento);
-      $this->l20_diames = ($this->l20_diames == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_diames"] : $this->l20_diames);
-      $this->l20_execucaoentrega = ($this->l20_execucaoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_execucaoentrega"] : $this->l20_execucaoentrega);
-
-    } else {
-      $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
-    }
-  }
-
-  // funcao para inclusao aqui
-  function incluir($l20_codigo, $convite)
-  {
-    $this->atualizacampos();
-
-    $tribunal = $this->buscartribunal($this->l20_codtipocom);
-
-    if ($tribunal == 48 && ($this->l20_numeroconvidado == "" || $this->l20_numeroconvidado == null)) {
-      $this->erro_sql = "Você informou o tipo de modalidade  CONVITE. Para esta modalidade é \\n\\n obrigatorio preencher o campo Numero Convidado";
-      $this->erro_campo = "l20_numeroconvidado";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if ($this->l20_dtpubratificacao == null) {
-//                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
-//                $this->erro_campo = "l20_dtpubratificacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
-
-
-    if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
-      $this->erro_sql = " Campo condicoes de pagamento nao Informado.";
-      $this->erro_campo = "l20_condicoespag";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-
-    if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-      if ($this->l20_razao == null || $this->l20_razao == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-        $this->erro_campo = "l20_razao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-//                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-//                $this->erro_campo = "l20_dtpubratificacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
-
-    if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-      if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
-        $this->erro_campo = "l20_tipoprocesso";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    } else {
-      $this->l20_tipoprocesso = 0;
-    }
-
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
-//                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
-//                $this->erro_campo = "l20_veicdivulgacao";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
-
-    if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-
-      if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
-        $this->erro_msg = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-
-      if (trim($this->l20_justificativa) == null) {
-        $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Justificativa";
-        $this->erro_campo = "l20_justificativa";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-    if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-
-      if (trim($this->l20_razao) == null || (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250)) {
-        $this->erro_sql = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-        $this->erro_campo = "l20_razao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-    if ($this->l20_numero == null) {
-      $this->erro_sql = " Campo Numeração nao Informado.";
-      $this->erro_campo = "l20_numero";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_id_usucria == null) {
-      $this->erro_sql = " Campo Cod. Usuário nao Informado.";
-      $this->erro_campo = "l20_id_usucria";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_datacria == null) {
-      $this->erro_sql = " Campo Data Criação nao Informado.";
-      $this->erro_campo = "l20_datacria";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_horacria == null) {
-      $this->erro_sql = " Campo Hora Criação nao Informado.";
-      $this->erro_campo = "l20_horacria";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-    if ($this->l20_horaaber == null) {
-      $this->l20_horaaber = $this->l20_horacria;
-    }
-    // validacao sicom
-    if ($this->l20_dtpublic != null) {
-
-      if ($this->l20_dtpublic < $this->l20_datacria) {
-        //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-        $this->erro_sql = " A Data da Publicação em Edital Veiculo 1 deve ser anterior a Data de Recebimento da Documentação";
-        $this->erro_campo = "l20_datapublicacao1";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-    if ($this->l20_datapublicacao2 != null) {
-      if ($this->l20_datapublicacao2 > $this->l20_recdocumentacao) {
-        //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-        $this->erro_sql = " A Data da Publicação em Edital Veiculo 2 deve ser anterior a Data de Recebimento da Documentação";
-        $this->erro_campo = "l20_datapublicacao2";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-    if ($this->l20_datapublicacao1 != null) {
-      if ($this->l20_datacria > $this->l20_datapublicacao1) {
-
-        $this->erro_sql = " A data da publicação em Edital Veiculo 1 deve ser superior  ou igual a data de criação.";
-        $this->erro_campo = "l20_datapublicacao1";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-    if ($this->l20_datapublicacao2 != null) {
-      if ($this->l20_datacria > $this->l20_datapublicacao2) {
-
-        $this->erro_sql = " A data da publicação em Edital Veiculo 2 deve ser superior ou igual a data de criação.";
-        $this->erro_campo = "l20_datapublicacao2";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-    //alterado
-    if ($this->l20_recdocumentacao != null) {
-      if ($tribunal != 50) {
-        if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-
-          $this->erro_sql = " A data informada no campo  Recebimento Documentação deve ser  superior a   Data Edital/Convite.";
-          $this->erro_campo = "l20_recdocumentacao";
-          $this->erro_banco = "";
-          $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-          $this->erro_status = "0";
-          return false;
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
+                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
+                $this->erro_campo = "l20_veicdivulgacao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
-      }
-    }
 
-    if($this->l20_datacria != null && $this->l20_dataaber != null) {
-      if($this->l20_datacria > $this->l20_dataaber){
-        $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-        $this->erro_campo = "l20_dataaber";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
-    if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-      $this->erro_sql = " Campo Data Edital/Convite não Informado.";
-      $this->erro_campo = "l20_dataaber";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_dtpublic == null) {
-      $this->l20_dtpublic = 'null';
-    }
+            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
+                $this->erro_msg = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
 
-    if ($this->l20_objeto == null) {
-      $this->erro_sql = " Campo Objeto não Informado.";
-      $this->erro_campo = "l20_objeto";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    } else {
+            if (trim($this->l20_justificativa) == null) {
+                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Justificativa";
+                $this->erro_campo = "l20_justificativa";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
-      if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 500) {
-        $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 500 \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
-    }
-    if ($this->l20_tipojulg == null) {
-      $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
-      $this->erro_campo = "l20_tipojulg";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_liclocal == null) {
-      $this->erro_sql = " Campo Código do Local da Licitação não Informado.";
-      $this->erro_campo = "l20_liclocal";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_procadmin == null) {
-      $this->l20_procadmin = "";
-    }
-    if ($this->l20_correto == null) {
-      $this->erro_sql = " Campo Correto não Informado.";
-      $this->erro_campo = "l20_correto";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_instit == null) {
-      $this->erro_sql = " Campo Instituição não Informado.";
-      $this->erro_campo = "l20_instit";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_licsituacao == null) {
-      $this->erro_sql = " Campo Situação da Licitação não Informado.";
-      $this->erro_campo = "l20_licsituacao";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_edital == null) {
-      $this->erro_sql = " Campo Licitacao não Informado.";
-      $this->erro_campo = "l20_edital";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_anousu == null) {
-      $this->erro_sql = " Campo Exercício não Informado.";
-      $this->erro_campo = "l20_anousu";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_usaregistropreco == null) {
-      $this->erro_sql = " Campo Registro Preço não Informado.";
-      $this->erro_campo = "l20_usaregistropreco";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+            if (trim($this->l20_razao) == null || (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250)) {
+                $this->erro_sql = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
+                $this->erro_campo = "l20_razao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
-    if ($tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-      if ($this->l20_equipepregao == null) {
-        $this->erro_sql = " Campo Comissão de Licitação não Informado!";
-        $this->erro_campo = "l20_equipepregao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+        if ($this->l20_numero == null) {
+            $this->erro_sql = " Campo Numeração nao Informado.";
+            $this->erro_campo = "l20_numero";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_id_usucria == null) {
+            $this->erro_sql = " Campo Cod. Usuário nao Informado.";
+            $this->erro_campo = "l20_id_usucria";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_datacria == null) {
+            $this->erro_sql = " Campo Data Criação nao Informado.";
+            $this->erro_campo = "l20_datacria";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_horacria == null) {
+            $this->erro_sql = " Campo Hora Criação nao Informado.";
+            $this->erro_campo = "l20_horacria";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
+        if ($this->l20_horaaber == null) {
+            $this->l20_horaaber = $this->l20_horacria;
+        }
+                // validacao sicom
+                if ($this->l20_dtpublic != null) {
+                    // aqui
+                    if ($this->l20_dtpublic < $this->l20_datacria) {
+                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
+                $this->erro_sql = " A Data da Publicação em Edital Veiculo 1 deve ser anterior a Data de Recebimento da Documentação";
+                $this->erro_campo = "l20_datapublicacao1";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+                }
 
-    if ($this->l20_numeroconvidado == null) {
-      $this->l20_numeroconvidado = 'null';
-    }
+                if ($this->l20_datapublicacao2 != null) {
+                    if ($this->l20_datapublicacao2 > $this->l20_recdocumentacao) {
+                        //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
+                        $this->erro_sql = " A Data da Publicação em Edital Veiculo 2 deve ser anterior a Data de Recebimento da Documentação";
+                        $this->erro_campo = "l20_datapublicacao2";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
 
-    if ($this->l20_datapublicacao1 == null) {
-      $this->l20_datapublicacao1 = 'null';
-    } else {
-      $this->l20_datapublicacao1 = "'$this->l20_datapublicacao1'";
-    }
-    if ($this->l20_datapublicacao2 == null) {
-      $this->l20_datapublicacao2 = 'null';
-    } else {
-      $this->l20_datapublicacao2 = "'$this->l20_datapublicacao2'";
-    }
-    if ($this->l20_dtpublic == null) {
-      $this->erro_sql = " Campo Data de Publicação em Diário Oficial não Informado.";
-      $this->erro_campo = "l20_dtpublic";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                if ($this->l20_datapublicacao1 != null) {
+                    if ($this->l20_datacria > $this->l20_datapublicacao1) {
 
-    if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-      $this->erro_sql = " Campo Recebimento Documentação não Informado.";
-      $this->erro_campo = "l20_recdocumentacao";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                        $this->erro_sql = " A data da publicação em Edital Veiculo 1 deve ser superior  ou igual a data de criação.";
+                        $this->erro_campo = "l20_datapublicacao1";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
 
-    if ($this->l20_numeroconvidado == null) {
-      $this->l20_numeroconvidado = 'null';
-    }
-    /*if ($this->l20_descontotab == null) {
-        $this->erro_sql = " Campo Desconto Tabela não Informado.";
-        $this->erro_campo = "l20_descontotab";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-    }*/
+                if ($this->l20_datapublicacao2 != null) {
+                    if ($this->l20_datacria > $this->l20_datapublicacao2) {
 
-    if ($this->l20_naturezaobjeto == null) {
-      $this->erro_sql = " Campo Natureza do Objeto não Informado.";
-      $this->erro_campo = "l20_naturezaobjeto";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_naturezaobjeto == '1' || $this->l20_naturezaobjeto == 1) {
-      if ($this->l20_regimexecucao == 0 || $this->l20_regimexecucao == "0") {
-        $this->erro_sql = " Campo Regime da Execução não Informado.";
-        $this->erro_campo = "l20_regimexecucao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    } else {
-      $this->l20_regimexecucao = 'NULL';// aqui
-    }
+                        $this->erro_sql = " A data da publicação em Edital Veiculo 2 deve ser superior ou igual a data de criação.";
+                        $this->erro_campo = "l20_datapublicacao2";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
+                //alterado
+                if ($this->l20_recdocumentacao != null) {
+                    if ($tribunal != 50) {
+                        if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
 
-    if ($this->l20_prazoentrega == null) {
-      $this->erro_sql = " Campo Prazo de entrega não Informado.";
-      $this->erro_campo = "l20_prazoentrega";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                            $this->erro_sql = " A data informada no campo  Recebimento Documentação deve ser  superior a   Data Edital/Convite.";
+                            $this->erro_campo = "l20_recdocumentacao";
+                            $this->erro_banco = "";
+                            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                            $this->erro_status = "0";
+                            return false;
+                        }
+                    }
+                }
 
-    if ($this->l20_tipnaturezaproced == null) {
-      $this->erro_sql = " Campo Tipo da Natureza do Procedimento não foi informada.";
-      $this->erro_campo = "l20_tipnaturezaproced";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                if($this->l20_datacria != null && $this->l20_dataaber != null) {
+                    if($this->l20_datacria > $this->l20_dataaber){
+                        $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                        $this->erro_campo = "l20_dataaber";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
 
-    /*valida combos */
-    if ($this->l20_critdesempate == null) {
-      $this->erro_sql = " Campo  Critério de desempate não foi informado.";
-      $this->erro_campo = "l20_critdesempate";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_destexclusiva == null) {
-      $this->erro_sql = " Campo Destinação Exclusiva não foi informada.";
-      $this->erro_campo = "l20_destexclusiva";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_subcontratacao == null) {
-      $this->erro_sql = " Campo Sub. Contratação  não foi informada.";
-      $this->erro_campo = "l20_subcontratacao ";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->l20_limitcontratacao == null) {
-      $this->erro_sql = " Campo Limite Contratação não foi informada.";
-      $this->erro_campo = "l20_limitcontratacao";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
+                    $this->erro_sql = " Campo Data Edital/Convite não Informado.";
+                    $this->erro_campo = "l20_dataaber";
+                    $this->erro_banco = "";
+                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_status = "0";
+                    return false;
+                }
+                if ($this->l20_dtpublic == null) {
+                    $this->l20_dtpublic = 'null';
+                }
 
+                if ($this->l20_objeto == null) {
+                    $this->erro_sql = " Campo Objeto não Informado.";
+                    $this->erro_campo = "l20_objeto";
+                    $this->erro_banco = "";
+                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_status = "0";
+                    return false;
+                } else {
 
-    if ($this->l20_execucaoentrega == null) {
-      $this->erro_sql = " Campo execucao entrega não foi informado.";
-      $this->erro_campo = "l20_execucaoentrega";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+                    if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 500) {
+                        $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 500 \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
 
+                }
+                if ($this->l20_tipojulg == null) {
+                    $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
+                    $this->erro_campo = "l20_tipojulg";
+                    $this->erro_banco = "";
+                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                    $this->erro_status = "0";
+                    return false;
+                }
+        if ($this->l20_liclocal == null) {
+            $this->erro_sql = " Campo Código do Local da Licitação não Informado.";
+            $this->erro_campo = "l20_liclocal";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_procadmin == null) {
+            $this->l20_procadmin = "";
+        }
+        if ($this->l20_correto == null) {
+            $this->erro_sql = " Campo Correto não Informado.";
+            $this->erro_campo = "l20_correto";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_instit == null) {
+            $this->erro_sql = " Campo Instituição não Informado.";
+            $this->erro_campo = "l20_instit";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_licsituacao == null) {
+            $this->erro_sql = " Campo Situação da Licitação não Informado.";
+            $this->erro_campo = "l20_licsituacao";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_edital == null) {
+            $this->erro_sql = " Campo Licitacao não Informado.";
+            $this->erro_campo = "l20_edital";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_nroedital == null) {
+            $this->erro_sql = " Campo Numero Edital não Informado.";
+            $this->erro_campo = "l20_nroedital";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_anousu == null) {
+            $this->erro_sql = " Campo Exercício não Informado.";
+            $this->erro_campo = "l20_anousu";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_usaregistropreco == null) {
+            $this->erro_sql = " Campo Registro Preço não Informado.";
+            $this->erro_campo = "l20_usaregistropreco";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
-    if ($this->l20_codepartamento == null) {
-      $this->erro_sql = " Campo codigo departamento não foi informado.";
-      $this->erro_campo = "l20_codepartamento";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-    if ($this->l20_diames == null) {
-      $this->erro_sql = " Campo Unid.Execucao/Entrega entrega não foi informado.";
-      $this->erro_campo = "l20_diames";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-    if ($this->l20_criterioadjudicacao == null) {
-      $this->l20_criterioadjudicacao = "3";
-    }
-
-    if ($l20_codigo == "" || $l20_codigo == null) {
-      $result = db_query("select nextval('liclicita_l20_codigo_seq')");
-      if ($result == false) {
-        $this->erro_banco = str_replace("\n", "", @pg_last_error());
-        $this->erro_sql = "Verifique o cadastro da sequencia: liclicita_l20_codigo_seq do campo: l20_codigo";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-      $this->l20_codigo = pg_result($result, 0, 0);
-    } else {
-      $result = db_query("select last_value from liclicita_l20_codigo_seq");
-      if (($result != false) && (pg_result($result, 0, 0) < $l20_codigo)) {
-        $this->erro_sql = " Campo l20_codigo maior que último número da sequencia.";
-        $this->erro_banco = "Sequencia menor que este número.";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      } else {
-        $this->l20_codigo = $l20_codigo;
-      }
-    }
-    if (($this->l20_codigo == null) || ($this->l20_codigo == "")) {
-      $this->erro_sql = " Campo l20_codigo nao declarado.";
-      $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+        if ($tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
+            if ($this->l20_equipepregao == null) {
+                $this->erro_sql = " Campo Comissão de Licitação não Informado!";
+                $this->erro_campo = "l20_equipepregao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
 
-    if ($convite != "" || $convite != null) {
-      $sql = "select  l45_data from  licpregao  inner join liclicita on liclicita.l20_equipepregao=licpregao.l45_sequencial where l20_codigo= $this->l20_codigo";
+        if ($this->l20_numeroconvidado == null) {
+            $this->l20_numeroconvidado = 'null';
+        }
 
-      $result = db_query($sql);
-      $l45_data = pg_result($result, 0, 0);
-      if ($l45_data > $this->l20_datacria) {
-        $this->erro_sql = " A data da equipe de pregão  não deve ser superior a data da criação .";
-        $this->erro_campo = "l20_equipepregao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+        if ($this->l20_datapublicacao1 == null) {
+            $this->l20_datapublicacao1 = 'null';
+        } else {
+            $this->l20_datapublicacao1 = "'$this->l20_datapublicacao1'";
+        }
+        if ($this->l20_datapublicacao2 == null) {
+            $this->l20_datapublicacao2 = 'null';
+        } else {
+            $this->l20_datapublicacao2 = "'$this->l20_datapublicacao2'";
+        }
+        if ($this->l20_dtpublic == null) {
+            $this->erro_sql = " Campo Data de Publicação em Diário Oficial não Informado.";
+            $this->erro_campo = "l20_dtpublic";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
-    $sql = "insert into liclicita(
+        if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
+            $this->erro_sql = " Campo Recebimento Documentação não Informado.";
+            $this->erro_campo = "l20_recdocumentacao";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        if ($this->l20_numeroconvidado == null) {
+            $this->l20_numeroconvidado = 'null';
+        }
+        /*if ($this->l20_descontotab == null) {
+            $this->erro_sql = " Campo Desconto Tabela não Informado.";
+            $this->erro_campo = "l20_descontotab";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }*/
+
+        if ($this->l20_naturezaobjeto == null) {
+            $this->erro_sql = " Campo Natureza do Objeto não Informado.";
+            $this->erro_campo = "l20_naturezaobjeto";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_naturezaobjeto == '1' || $this->l20_naturezaobjeto == 1) {
+            if ($this->l20_regimexecucao == 0 || $this->l20_regimexecucao == "0") {
+                $this->erro_sql = " Campo Regime da Execução não Informado.";
+                $this->erro_campo = "l20_regimexecucao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        } else {
+            $this->l20_regimexecucao = 'NULL';// aqui
+        }
+
+        if ($this->l20_prazoentrega == null) {
+            $this->erro_sql = " Campo Prazo de entrega não Informado.";
+            $this->erro_campo = "l20_prazoentrega";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        if ($this->l20_tipnaturezaproced == null) {
+            $this->erro_sql = " Campo Tipo da Natureza do Procedimento não foi informada.";
+            $this->erro_campo = "l20_tipnaturezaproced";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        /*valida combos */
+        if ($this->l20_critdesempate == null) {
+            $this->erro_sql = " Campo  Critério de desempate não foi informado.";
+            $this->erro_campo = "l20_critdesempate";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_destexclusiva == null) {
+            $this->erro_sql = " Campo Destinação Exclusiva não foi informada.";
+            $this->erro_campo = "l20_destexclusiva";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_subcontratacao == null) {
+            $this->erro_sql = " Campo Sub. Contratação  não foi informada.";
+            $this->erro_campo = "l20_subcontratacao ";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->l20_limitcontratacao == null) {
+            $this->erro_sql = " Campo Limite Contratação não foi informada.";
+            $this->erro_campo = "l20_limitcontratacao";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+
+        if ($this->l20_execucaoentrega == null) {
+            $this->erro_sql = " Campo execucao entrega não foi informado.";
+            $this->erro_campo = "l20_execucaoentrega";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+
+        if ($this->l20_codepartamento == null) {
+            $this->erro_sql = " Campo codigo departamento não foi informado.";
+            $this->erro_campo = "l20_codepartamento";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        if ($this->l20_diames == null) {
+            $this->erro_sql = " Campo Unid.Execucao/Entrega entrega não foi informado.";
+            $this->erro_campo = "l20_diames";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        if ($this->l20_criterioadjudicacao == null) {
+            $this->l20_criterioadjudicacao = "3";
+        }
+
+        if ($l20_codigo == "" || $l20_codigo == null) {
+            $result = db_query("select nextval('liclicita_l20_codigo_seq')");
+            if ($result == false) {
+                $this->erro_banco = str_replace("\n", "", @pg_last_error());
+                $this->erro_sql = "Verifique o cadastro da sequencia: liclicita_l20_codigo_seq do campo: l20_codigo";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+            $this->l20_codigo = pg_result($result, 0, 0);
+        } else {
+            $result = db_query("select last_value from liclicita_l20_codigo_seq");
+            if (($result != false) && (pg_result($result, 0, 0) < $l20_codigo)) {
+                $this->erro_sql = " Campo l20_codigo maior que último número da sequencia.";
+                $this->erro_banco = "Sequencia menor que este número.";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else {
+                $this->l20_codigo = $l20_codigo;
+            }
+        }
+        if (($this->l20_codigo == null) || ($this->l20_codigo == "")) {
+            $this->erro_sql = " Campo l20_codigo nao declarado.";
+            $this->erro_banco = "Chave Primaria zerada.";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+
+        if ($convite != "" || $convite != null) {
+            $sql = "select  l45_data from  licpregao  inner join liclicita on liclicita.l20_equipepregao=licpregao.l45_sequencial where l20_codigo= $this->l20_codigo";
+
+            $result = db_query($sql);
+            $l45_data = pg_result($result, 0, 0);
+            if ($l45_data > $this->l20_datacria) {
+                $this->erro_sql = " A data da equipe de pregão  não deve ser superior a data da criação .";
+                $this->erro_campo = "l20_equipepregao";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        $sql = "insert into liclicita(
                                  l20_codigo
                 ,l20_edital
                 ,l20_codtipocom
@@ -970,6 +982,8 @@ class cl_liclicita
                 ,l20_formacontroleregistropreco
                 ,l20_criterioadjudicacao
                 ,l20_dtlimitecredenciamento
+                ,l20_nroedital
+                ,l20_cadinicial
                        )
                 values (
 
@@ -1025,195 +1039,197 @@ class cl_liclicita
                 ,$this->l20_formacontroleregistropreco
                 ,$this->l20_criterioadjudicacao
                 ," . ($this->l20_dtlimitecredenciamento == "null" || $this->l20_dtlimitecredenciamento == "" ? "null" : "'" . $this->l20_dtlimitecredenciamento . "'") . "
+                ,$this->l20_nroedital
+                ,$this->l20_cadinicial
                       )";
 
-    $result = db_query($sql);
-    if ($result == false) {
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "liclicita ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
+        $result = db_query($sql);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
+                $this->erro_sql = "liclicita ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "liclicita já Cadastrado";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            } else {
+                $this->erro_sql = "liclicita ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            }
+            $this->erro_status = "0";
+            $this->numrows_incluir = 0;
+            return false;
+        }
+        $this->erro_banco = "";
+        $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
+        $this->erro_sql .= "Valores : " . $this->l20_codigo;
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "liclicita já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      } else {
-        $this->erro_sql = "liclicita ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      }
-      $this->erro_status = "0";
-      $this->numrows_incluir = 0;
-      return false;
-    }
-    $this->erro_banco = "";
-    $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-    $this->erro_sql .= "Valores : " . $this->l20_codigo;
-    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-    $this->erro_status = "1";
-    $this->numrows_incluir = pg_affected_rows($result);
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-        && ($lSessaoDesativarAccount === false))
-    ) {
-      $resaco = $this->sql_record($this->sql_query_file($this->l20_codigo));
-      if (($resaco != false) || ($this->numrows != 0)) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,7589,'$this->l20_codigo','I')");
-        $resac = db_query("insert into db_acount values($acount,1260,7589,'','" . AddSlashes(pg_result($resaco, 0, 'l20_codigo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7590,'','" . AddSlashes(pg_result($resaco, 0, 'l20_codtipocom')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7594,'','" . AddSlashes(pg_result($resaco, 0, 'l20_numero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7592,'','" . AddSlashes(pg_result($resaco, 0, 'l20_id_usucria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7591,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datacria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7593,'','" . AddSlashes(pg_result($resaco, 0, 'l20_horacria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7595,'','" . AddSlashes(pg_result($resaco, 0, 'l20_dataaber')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7596,'','" . AddSlashes(pg_result($resaco, 0, 'l20_dtpublic')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7597,'','" . AddSlashes(pg_result($resaco, 0, 'l20_horaaber')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7598,'','" . AddSlashes(pg_result($resaco, 0, 'l20_local')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7599,'','" . AddSlashes(pg_result($resaco, 0, 'l20_objeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7782,'','" . AddSlashes(pg_result($resaco, 0, 'l20_tipojulg')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7909,'','" . AddSlashes(pg_result($resaco, 0, 'l20_liccomissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,7908,'','" . AddSlashes(pg_result($resaco, 0, 'l20_liclocal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,8986,'','" . AddSlashes(pg_result($resaco, 0, 'l20_procadmin')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,10010,'','" . AddSlashes(pg_result($resaco, 0, 'l20_correto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,10103,'','" . AddSlashes(pg_result($resaco, 0, 'l20_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,10287,'','" . AddSlashes(pg_result($resaco, 0, 'l20_licsituacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,12605,'','" . AddSlashes(pg_result($resaco, 0, 'l20_edital')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,12606,'','" . AddSlashes(pg_result($resaco, 0, 'l20_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,15270,'','" . AddSlashes(pg_result($resaco, 0, 'l20_usaregistropreco')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,15424,'','" . AddSlashes(pg_result($resaco, 0, 'l20_localentrega')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,15425,'','" . AddSlashes(pg_result($resaco, 0, 'l20_prazoentrega')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,15426,'','" . AddSlashes(pg_result($resaco, 0, 'l20_condicoespag')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,15427,'','" . AddSlashes(pg_result($resaco, 0, 'l20_validadeproposta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009528,'','" . AddSlashes(pg_result($resaco, 0, 'l20_razao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009527,'','" . AddSlashes(pg_result($resaco, 0, 'l20_justificativa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009526,'','" . AddSlashes(pg_result($resaco, 0, 'l20_aceitabilidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009525,'','" . AddSlashes(pg_result($resaco, 0, 'l20_equipepregao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009524,'','" . AddSlashes(pg_result($resaco, 0, 'l20_nomeveiculo2')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009522,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datapublicacao2')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009520,'','" . AddSlashes(pg_result($resaco, 0, 'l20_nomeveiculo1')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009519,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datapublicacao1')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009518,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datadiario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009517,'','" . AddSlashes(pg_result($resaco, 0, 'l20_recdocumentacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009515,'','" . AddSlashes(pg_result($resaco, 0, 'l20_numeroconvidado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009514,'','" . AddSlashes(pg_result($resaco, 0, 'l20_descontotab')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009513,'','" . AddSlashes(pg_result($resaco, 0, 'l20_regimexecucao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009512,'','" . AddSlashes(pg_result($resaco, 0, 'l20_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,1260,2009511,'','" . AddSlashes(pg_result($resaco, 0, 'l20_tipliticacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
-    return true;
-  }
-
-  // funcao para alteracao
-  function alterar($l20_codigo = null, $convite, $ibuscartribunal = null)
-  {
-
-    if (empty($this->l20_tipliticacao)) {
-      $this->l20_tipliticacao = 0;
+        $this->erro_status = "1";
+        $this->numrows_incluir = pg_affected_rows($result);
+        $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+        if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+                && ($lSessaoDesativarAccount === false))
+        ) {
+            $resaco = $this->sql_record($this->sql_query_file($this->l20_codigo));
+            if (($resaco != false) || ($this->numrows != 0)) {
+                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+                $resac = db_query("insert into db_acountkey values($acount,7589,'$this->l20_codigo','I')");
+                $resac = db_query("insert into db_acount values($acount,1260,7589,'','" . AddSlashes(pg_result($resaco, 0, 'l20_codigo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7590,'','" . AddSlashes(pg_result($resaco, 0, 'l20_codtipocom')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7594,'','" . AddSlashes(pg_result($resaco, 0, 'l20_numero')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7592,'','" . AddSlashes(pg_result($resaco, 0, 'l20_id_usucria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7591,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datacria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7593,'','" . AddSlashes(pg_result($resaco, 0, 'l20_horacria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7595,'','" . AddSlashes(pg_result($resaco, 0, 'l20_dataaber')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7596,'','" . AddSlashes(pg_result($resaco, 0, 'l20_dtpublic')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7597,'','" . AddSlashes(pg_result($resaco, 0, 'l20_horaaber')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7598,'','" . AddSlashes(pg_result($resaco, 0, 'l20_local')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7599,'','" . AddSlashes(pg_result($resaco, 0, 'l20_objeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7782,'','" . AddSlashes(pg_result($resaco, 0, 'l20_tipojulg')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7909,'','" . AddSlashes(pg_result($resaco, 0, 'l20_liccomissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,7908,'','" . AddSlashes(pg_result($resaco, 0, 'l20_liclocal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,8986,'','" . AddSlashes(pg_result($resaco, 0, 'l20_procadmin')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,10010,'','" . AddSlashes(pg_result($resaco, 0, 'l20_correto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,10103,'','" . AddSlashes(pg_result($resaco, 0, 'l20_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,10287,'','" . AddSlashes(pg_result($resaco, 0, 'l20_licsituacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,12605,'','" . AddSlashes(pg_result($resaco, 0, 'l20_edital')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,12606,'','" . AddSlashes(pg_result($resaco, 0, 'l20_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,15270,'','" . AddSlashes(pg_result($resaco, 0, 'l20_usaregistropreco')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,15424,'','" . AddSlashes(pg_result($resaco, 0, 'l20_localentrega')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,15425,'','" . AddSlashes(pg_result($resaco, 0, 'l20_prazoentrega')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,15426,'','" . AddSlashes(pg_result($resaco, 0, 'l20_condicoespag')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,15427,'','" . AddSlashes(pg_result($resaco, 0, 'l20_validadeproposta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009528,'','" . AddSlashes(pg_result($resaco, 0, 'l20_razao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009527,'','" . AddSlashes(pg_result($resaco, 0, 'l20_justificativa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009526,'','" . AddSlashes(pg_result($resaco, 0, 'l20_aceitabilidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009525,'','" . AddSlashes(pg_result($resaco, 0, 'l20_equipepregao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009524,'','" . AddSlashes(pg_result($resaco, 0, 'l20_nomeveiculo2')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009522,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datapublicacao2')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009520,'','" . AddSlashes(pg_result($resaco, 0, 'l20_nomeveiculo1')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009519,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datapublicacao1')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009518,'','" . AddSlashes(pg_result($resaco, 0, 'l20_datadiario')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009517,'','" . AddSlashes(pg_result($resaco, 0, 'l20_recdocumentacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009515,'','" . AddSlashes(pg_result($resaco, 0, 'l20_numeroconvidado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009514,'','" . AddSlashes(pg_result($resaco, 0, 'l20_descontotab')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009513,'','" . AddSlashes(pg_result($resaco, 0, 'l20_regimexecucao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009512,'','" . AddSlashes(pg_result($resaco, 0, 'l20_naturezaobjeto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,1260,2009511,'','" . AddSlashes(pg_result($resaco, 0, 'l20_tipliticacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+        }
+        return true;
     }
 
-    if (empty($this->l20_naturezaobjeto)) {
-      $this->l20_naturezaobjeto = 0;
-    }
+            // funcao para alteracao
+            function alterar($l20_codigo = null, $convite, $ibuscartribunal = null)
+            {
 
-    $this->atualizacampos();
-    $convite = trim(strtoupper($convite));
+                if (empty($this->l20_tipliticacao)) {
+                    $this->l20_tipliticacao = 0;
+                }
+
+                if (empty($this->l20_naturezaobjeto)) {
+                    $this->l20_naturezaobjeto = 0;
+                }
+
+                $this->atualizacampos();
+                $convite = trim(strtoupper($convite));
 
 
-    if ($ibuscartribunal == null) {
-      $tribunal = $this->buscartribunal($this->l20_codtipocom);
-    }
+                if ($ibuscartribunal == null) {
+                    $tribunal = $this->buscartribunal($this->l20_codtipocom);
+                }
 
-    $sql = " update liclicita set ";
-    $virgula = "";
+                $sql = " update liclicita set ";
+                $virgula = "";
 
-    if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-      $sql .= $virgula . " l20_local = null ";
-      $virgula = ",";
-    } else {
-      if (trim($this->l20_local != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_local"]))) {
+                if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+                    $sql .= $virgula . " l20_local = null ";
+                    $virgula = ",";
+                } else {
+                    if (trim($this->l20_local != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_local"]))) {
 
-        $sql .= $virgula . " l20_local = '$this->l20_local' ";
-        $virgula = ",";
-      } else {
-        $sql .= $virgula . " l20_local = ''";
-        $virgula = ",";
-      }
-    }
-    if (trim($this->l20_localentrega != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_localentrega"]))) {
+                        $sql .= $virgula . " l20_local = '$this->l20_local' ";
+                        $virgula = ",";
+                    } else {
+                        $sql .= $virgula . " l20_local = ''";
+                        $virgula = ",";
+                    }
+                }
+                if (trim($this->l20_localentrega != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_localentrega"]))) {
 
-      $sql .= $virgula . " l20_localentrega = '$this->l20_localentrega' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_localentrega = ''";
-      $virgula = ",";
-    }
+                    $sql .= $virgula . " l20_localentrega = '$this->l20_localentrega' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_localentrega = ''";
+                    $virgula = ",";
+                }
 
-    //alteração do campo l20_tipliticacao e l20_naturezaobjeto
-    if (trim($this->l20_tipliticacao != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipliticacao"]))) {
-      $sql .= $virgula . " l20_tipliticacao = '$this->l20_tipliticacao' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_tipliticacao = 0";
-      $virgula = ",";
-    }
+                //alteração do campo l20_tipliticacao e l20_naturezaobjeto
+                if (trim($this->l20_tipliticacao != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipliticacao"]))) {
+                    $sql .= $virgula . " l20_tipliticacao = '$this->l20_tipliticacao' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_tipliticacao = 0";
+                    $virgula = ",";
+                }
 
     if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
       $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
       $virgula = ",";
     }
 
-    if (trim($this->l20_validadeproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]))) {
-      $sql .= $virgula . " l20_validadeproposta = '$this->l20_validadeproposta' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_validadeproposta = ''";
-      $virgula = ",";
-    }
+                if (trim($this->l20_validadeproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]))) {
+                    $sql .= $virgula . " l20_validadeproposta = '$this->l20_validadeproposta' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_validadeproposta = ''";
+                    $virgula = ",";
+                }
 
-    if (trim($this->l20_aceitabilidade != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_aceitabilidade"]))) {
-      $sql .= $virgula . " l20_aceitabilidade = '$this->l20_aceitabilidade' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_aceitabilidade = ''";
-      $virgula = ",";
-    }
+                if (trim($this->l20_aceitabilidade != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_aceitabilidade"]))) {
+                    $sql .= $virgula . " l20_aceitabilidade = '$this->l20_aceitabilidade' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_aceitabilidade = ''";
+                    $virgula = ",";
+                }
 
-    if (trim($this->l20_nomeveiculo1 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo1"]))) {
-      $sql .= $virgula . " l20_nomeveiculo1 = '$this->l20_nomeveiculo1' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_nomeveiculo1 = ''";
-      $virgula = ",";
-    }
+                if (trim($this->l20_nomeveiculo1 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo1"]))) {
+                    $sql .= $virgula . " l20_nomeveiculo1 = '$this->l20_nomeveiculo1' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_nomeveiculo1 = ''";
+                    $virgula = ",";
+                }
 
-    if (trim($this->l20_nomeveiculo2 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo2"]))) {
-      $sql .= $virgula . " l20_nomeveiculo2 = '$this->l20_nomeveiculo2' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_nomeveiculo2 = ''";
-      $virgula = ",";
-    }
+                if (trim($this->l20_nomeveiculo2 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nomeveiculo2"]))) {
+                    $sql .= $virgula . " l20_nomeveiculo2 = '$this->l20_nomeveiculo2' ";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_nomeveiculo2 = ''";
+                    $virgula = ",";
+                }
 
 
-    if (trim($this->l20_numeroconvidado != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_numeroconvidado"]))) {
-      if (trim($this->l20_numeroconvidado == null)) {
-        $this->l20_numeroconvidado = 'null';
-      }
-      $sql .= $virgula . " l20_numeroconvidado = $this->l20_numeroconvidado ";
-      $virgula = ",";
-      if ($this->l20_numeroconvidado == null && $tribunal == 30) {
-        $this->erro_sql = "Você informou o tipo de modalidade  CONVITE. Para esta modalidade é \\n\\n obrigatorio preencher o campo Numero Convidado";
-        $this->erro_campo = "l20_numeroconvidado";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+                if (trim($this->l20_numeroconvidado != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_numeroconvidado"]))) {
+                    if (trim($this->l20_numeroconvidado == null)) {
+                        $this->l20_numeroconvidado = 'null';
+                    }
+                    $sql .= $virgula . " l20_numeroconvidado = $this->l20_numeroconvidado ";
+                    $virgula = ",";
+                    if ($this->l20_numeroconvidado == null && $tribunal == 30) {
+                        $this->erro_sql = "Você informou o tipo de modalidade  CONVITE. Para esta modalidade é \\n\\n obrigatorio preencher o campo Numero Convidado";
+                        $this->erro_campo = "l20_numeroconvidado";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                }
 
     if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao '";
@@ -1254,7 +1270,7 @@ class cl_liclicita
 //            }
     }
 
-    if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
+        if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
 
       $sql .= $virgula . " l20_veicdivulgacao = '$this->l20_veicdivulgacao'";
       $virgula = ",";
@@ -1624,19 +1640,47 @@ class cl_liclicita
       }
     }
 
-    if (trim($this->l20_edital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_edital"]))) {
-      $sql .= $virgula . " l20_edital = $this->l20_edital ";
-      $virgula = ",";
-      if (trim($this->l20_edital) == null) {
-        $this->erro_sql = " Campo Licitacao nao Informado.";
-        $this->erro_campo = "l20_edital";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+        if (trim($this->l20_edital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_edital"]))) {
+            $sql .= $virgula . " l20_edital = $this->l20_edital ";
+            $virgula = ",";
+            if (trim($this->l20_edital) == null) {
+                $this->erro_sql = " Campo Licitacao nao Informado.";
+                $this->erro_campo = "l20_edital";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_nroedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nroedital"]))) {
+            $sql .= $virgula . " l20_nroedital = $this->l20_nroedital ";
+            $virgula = ",";
+            if (trim($this->l20_nroedital) == null) {
+                $this->erro_sql = " Campo Número Edital nao Informado.";
+                $this->erro_campo = "l20_nroedital";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (trim($this->l20_cadinicial != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"]))) {
+            $sql .= $virgula . " l20_cadinicial = $this->l20_cadinicial ";
+            $virgula = ",";
+            // if (trim($this->l20_cadinicial) == null) {
+            //     $this->erro_sql = " Campo Número Edital nao Informado.";
+            //     $this->erro_campo = "l20_cadinicial";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            //     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
+        }
 
     if (trim($this->l20_anousu != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_anousu"]))) {
       $sql .= $virgula . " l20_anousu = $this->l20_anousu ";
