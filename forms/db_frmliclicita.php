@@ -149,19 +149,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <?php if(db_getsession("DB_anousu") >= 2019) :?>
-                                    <tr id="linha_nroedital">
-                                        <td nowrap title="<?=@$Tl20_nroedital?>">
-                                            <?=@$Ll20_nroedital?>
-                                        </td>
-                                        <td>
-                                            <?
-                                            $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1 ? 3 : 1;
-                                            db_input('l20_nroedital',10,$Il20_nroedital,true,'text',$mostra,"");
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
+                                <tr id="linha_nroedital">
+                                    <td nowrap title="<?=@$Tl20_nroedital?>">
+                                        <?=@$Ll20_nroedital?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
+                                        ?>
+                                    </td>
+                                </tr>
 
                                 <tr>
                                     <td nowrap title="<?=@$Tl20_codtipocom?>">
@@ -1672,7 +1669,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
           opcoes.add(new Option('5- Execução Direta', 5));
           opcoes.add(new Option('6- Contratação Integrada'), 6);
           opcoes.add(new Option('7- Contratação Semi Integrada', 7));
-        }  
+        }
       }
       
     }

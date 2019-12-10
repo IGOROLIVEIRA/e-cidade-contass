@@ -75,7 +75,7 @@ if(isset($alterar)){
     }
   }
 
-  /* Tratamento do campo l20_nroedital. */
+  /* Tratamento do campo l20_nroedital */
   $clliclicita_edital = new cl_liclicita;
   $result_geral_edital=$clliclicita_edital->sql_record($clliclicita_edital->sql_query_file(null,"max(l20_nroedital) as nroedital",null,"l20_instit=$instit and l20_instit = ".db_getsession('DB_instit'). "and l20_anousu = ".db_getsession("DB_anousu")));
   
@@ -149,8 +149,8 @@ if(isset($alterar)){
     $nomeinstit = $oInstit->nomeinst;
   }
 
-  $result_edital = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "pccfeditalnum.*, nomeinst", "l47_anousu desc", "l47_anousu = {$anousu} and l47_instit = {$instit} and l47_numero = (select max(l47_numero) from pccfeditalnum)"));
-  
+  $result_edital = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query(null, "pccfeditalnum.*, nomeinst", "l47_anousu desc", "l47_anousu = {$anousu} and l47_instit = {$instit}"));
+
   if($clpccfeditalnum->numrows > 0){
     db_fieldsmemory($result_edital, 0);
   }else{
