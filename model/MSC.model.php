@@ -792,7 +792,11 @@ class MSC {
           WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
-        natdespesa AS nd,
+        CASE 
+          WHEN substr(c60_estrut, 1, 3) = '522' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+          WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
+          ELSE natdespesa
+        END AS nd,
         null AS es,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
@@ -817,7 +821,8 @@ class MSC {
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
     case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
-            db21_tipoinstit,
+      c60_estrut,
+      db21_tipoinstit,
       c61_reduz,
       c61_codcon,
       c61_codigo,
@@ -866,7 +871,11 @@ class MSC {
           WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
           ELSE o15_codstn
         END AS fr,
-        natdespesa AS nd,
+        CASE 
+          WHEN substr(c60_estrut, 1, 3) = '522' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+          WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
+          ELSE natdespesa
+        END AS nd,
         null AS es,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
@@ -891,7 +900,8 @@ class MSC {
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
     case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
-            db21_tipoinstit,
+      c60_estrut,
+      db21_tipoinstit,
       c61_reduz,
       c61_codcon,
       c61_codigo,
