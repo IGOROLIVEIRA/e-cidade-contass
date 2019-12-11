@@ -324,7 +324,7 @@ if ($modelo == 1) {
 
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
             if ($quant_casas == 2) {
-                $total_media += (round($total_unit / $iContOrcamento * $quant, 2));
+                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
                 $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
                 $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
             } else {
@@ -344,21 +344,20 @@ if ($modelo == 1) {
             /*FIM - OC3770*/
 
             if ($quant_casas == 2) {
-                $pdf->cell(20, $alt, round($total_unit / $iContOrcamento * $quant, 2), 0, 1, "C", 0);
-                
-                // $pdf->cell(20, $alt, number_format(round($total_unit / $iContOrcamento * $quant, 2), $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
+                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
             } else {
                 $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
             }
 
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
             if ($quant_casas == 2) {
-                $total_media += round(($total_unit / $iContOrcamento) * $quant, 2);
+                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
             } else {
                 $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
             }
         }
     }
+
     $troca = 1;
     for($y = 0; $y < $numrows_forne; $y ++) {
         db_fieldsmemory($result_forne, $y);
@@ -379,7 +378,6 @@ if ($modelo == 1) {
             "pc23_orcamforne=$pc21_orcamforne");
         $result_valor = $clpcorcamval->sql_record($sSqlJulg);
         db_fieldsmemory($result_valor);
-
         if($vltotal > 0) {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
@@ -391,7 +389,6 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
         if($pc80_criterioadjudicacao == 1){
             $pdf->cell(224, $alt, $total_mediapercentualtaxa . "%", 0, 0, "R", 0);
