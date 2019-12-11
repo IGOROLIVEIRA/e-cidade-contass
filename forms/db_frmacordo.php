@@ -1464,7 +1464,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if(iOrigem == 1){
           document.getElementById('tradesaoregpreco').style.display = "none";
-          document.getElementById('trLicitacao').style.display = "none";
+          document.getElementById('trLicitacao').style.display = "";
           document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
