@@ -162,7 +162,6 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             <td nowrap title="CGM do Município" align="right">
                                 <strong>CGM do Município:</strong>
                             </td>
-                            <td nowrap title="<?=$Tz01_dtfalecimento?>" align="left">
                             <td align="right">
                                 <?
                                 $x = array ("t" => "Sim", "f" => "Não" );
