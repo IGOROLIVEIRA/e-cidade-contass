@@ -42,72 +42,72 @@ require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
 if ($db_opcao == 1) {
 
-  /*
-   * verifica na tabela licitaparam se deve utilizar processo do sistema
-   */
-  $oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+    /*
+     * verifica na tabela licitaparam se deve utilizar processo do sistema
+     */
+    $oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
 
-  if(isset($oParamLicicita[0]->l12_escolheprotocolo) && $oParamLicicita[0]->l12_escolheprotocolo == 't') {
-    $lprocsis = 's';
-  } else {
-    $lprocsis = 'n';
-  }
+    if(isset($oParamLicicita[0]->l12_escolheprotocolo) && $oParamLicicita[0]->l12_escolheprotocolo == 't') {
+        $lprocsis = 's';
+    } else {
+        $lprocsis = 'n';
+    }
 
-  /*
-   * verifica se existe apenas 1 cl_liclocal
-   */
-  $oLicLocal = new cl_liclocal();
-  $rsLicLocal = $oLicLocal->sql_record($oLicLocal->sql_query_file());
-  if( $oLicLocal->numrows == 1 ) {
-    db_fieldsmemory($rsLicLocal,0);
-    $l20_liclocal = $l26_codigo;
-  }
+    /*
+     * verifica se existe apenas 1 cl_liclocal
+     */
+    $oLicLocal = new cl_liclocal();
+    $rsLicLocal = $oLicLocal->sql_record($oLicLocal->sql_query_file());
+    if( $oLicLocal->numrows == 1 ) {
+        db_fieldsmemory($rsLicLocal,0);
+        $l20_liclocal = $l26_codigo;
+    }
 
-  /*
-   * verifica se existe apenas 1 cl_liccomissao
-   */
-  $oLicComissao = new cl_liccomissao();
-  $rsLicComissao = db_query($oLicComissao->sql_query_file());
-  if( pg_num_rows($rsLicComissao) == 1 ) {
-    db_fieldsmemory($rsLicComissao,0);
-    $l20_liccomissao = $l30_codigo;
-  }
+    /*
+     * verifica se existe apenas 1 cl_liccomissao
+     */
+    $oLicComissao = new cl_liccomissao();
+    $rsLicComissao = db_query($oLicComissao->sql_query_file());
+    if( pg_num_rows($rsLicComissao) == 1 ) {
+        db_fieldsmemory($rsLicComissao,0);
+        $l20_liccomissao = $l30_codigo;
+    }
 
 }
 
 if($l20_codepartamento!=null) {
-  $result_depto = $cldb_depart->sql_record($cldb_depart->sql_query_file($l20_codepartamento, 'descrdepto'));
-  if ($cldb_depart->numrows != 0) {
-    db_fieldsmemory($result_depto, 0);
-    $l20_descricaodep = $descrdepto;
-  }
+    $result_depto = $cldb_depart->sql_record($cldb_depart->sql_query_file($l20_codepartamento, 'descrdepto'));
+    if ($cldb_depart->numrows != 0) {
+        db_fieldsmemory($result_depto, 0);
+        $l20_descricaodep = $descrdepto;
+    }
 }
 $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 ?>
 
 <style type="text/css">
-  .fieldsetinterno {
-    border:0px;
-    border-top:2px groove white;
-    margin-top:10px;
+    .fieldsetinterno {
+        border:0px;
+        border-top:2px groove white;
+        margin-top:10px;
 
-  }
-  fieldset table tr > td {
-    width: 180px;
-    white-space: nowrap
-  }
+    }
+    fieldset table tr > td {
+        width: 180px;
+        white-space: nowrap
+    }
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
-  <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
-  <center>
+<input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
+    <center>
 
-    <table align=center style="margin-top:25px;">
-      <tr><td>
+        <table align=center style="margin-top:25px;">
+            <tr><td>
 
-          <fieldset>
-            <legend><strong>Licitação</strong></legend>
+                    <fieldset>
+                        <legend><strong>Licitação</strong></legend>
 
-            <fieldset style="border:0px;">
+                        <fieldset style="border:0px;">
 
                             <table border="0">
                                 <tr>
@@ -149,16 +149,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <tr id="linha_nroedital">
-                                    <td nowrap title="<?=@$Tl20_nroedital?>">
-                                        <?=@$Ll20_nroedital?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
-                                        ?>
-                                    </td>
-                                </tr>
+                                <?php if(db_getsession("DB_anousu") >= 2019) :?>
+                                    <tr id="linha_nroedital">
+                                        <td nowrap title="<?=@$Tl20_nroedital?>">
+                                            <?=@$Ll20_nroedital?>
+                                        </td>
+                                        <td>
+                                            <?
+                                            $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1 ? 3 : 1;
+                                            db_input('l20_nroedital',10,$Il20_nroedital,true,'text',$mostra,"");
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
 
                                 <tr>
                                     <td nowrap title="<?=@$Tl20_codtipocom?>">
@@ -226,17 +229,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                <tr>
-                  <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
-                    <?=@$Ll20_tipliticacao?>
-                  </td>
-                  <td>
-                    <?
-                    $arr_tipo = array("0"=>"Selecione","1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
-                    db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
-                    ?>
-                  </td>
-                </tr>
+                                <tr>
+                                    <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
+                                        <?=@$Ll20_tipliticacao?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $arr_tipo = array("0"=>"Selecione","1"=>"1- Menor Preço","2"=>"2- Melhor Técnica",
+                                          "3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
+                                        db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
 
 
                                 <tr>
@@ -257,7 +261,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_naturezaobjeto = array("0"=>"Selecione","1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens", "7"=>"7-Compras para obras e/ou serviços de engenharia");
+                                        $al20_naturezaobjeto = array("0"=>"Selecione","1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens");
+                                        if(db_getsession('DB_anousu') >= 2019){
+                                            $al20_naturezaobjeto[7] = "7-Compras para obras e/ou serviços de engenharia";
+                                        }
                                         db_select("l20_naturezaobjeto",$al20_naturezaobjeto,true,$db_opcao, "onchange='js_regime(this.value)'");
                                         ?>
                                     </td>
@@ -283,7 +290,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                       if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
                                         $l20_criterioadjudicacao = "";
                                       }
-                                      $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual", "3" => "Menor preço global");
+                                      $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+                                      if(db_getsession('DB_anousu') >= 2019){
+                                        $aCriterios["3"] = "Menor preço global";
+                                      }
                                       db_select("l20_criterioadjudicacao", $aCriterios, true, '');
                                       ?>
                                   </td>
@@ -816,6 +826,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     js_busca();
 
+
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc,res) {
 
@@ -980,22 +991,24 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         let tiposLicitacoes = document.getElementById('l20_tipliticacao').options;
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
-        if(oRetorno.tribunal == 107){
-            tiposLicitacoes.add(new Option("5- Maior Oferta de Preço", 5));
-            tiposLicitacoes.add(new Option("6- Maior Retorno Econômico", 6));
+        let anousu = "<?php echo db_getsession('DB_anousu');?>";
+        if(anousu >= 2019){
+            if(oRetorno.tribunal == 107){
+                tiposLicitacoes.add(new Option("5- Maior Oferta de Preço", 5));
+                tiposLicitacoes.add(new Option("6- Maior Retorno Econômico", 6));
 
 
-        }else{
-            /* Remove tipos de licitações */
-            if(tiposLicitacoes.item(6)){
-                tiposLicitacoes.remove(6);
+            }else{
+                /* Remove tipos de licitações */
+                if(tiposLicitacoes.item(6)){
+                    tiposLicitacoes.remove(6);
+                }
+                if(tiposLicitacoes.item(5)){
+                    tiposLicitacoes.remove(5);
+                }
+
             }
-            if(tiposLicitacoes.item(5)){
-                tiposLicitacoes.remove(5);
-            }
-
         }
-        console.log('Tipos obtidos: ', tiposLicitacoes);
 
       if ($F('l20_equipepregao') != '') {
         let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
@@ -1398,53 +1411,53 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function novoAjax(params, onComplete) {
 
-        var request = new Ajax.Request('lic4_licitacao.RPC.php', {
-            method:'post',
-            parameters:'json='+Object.toJSON(params),
-            onComplete: onComplete
-        });
+      var request = new Ajax.Request('lic4_licitacao.RPC.php', {
+        method:'post',
+        parameters:'json='+Object.toJSON(params),
+        onComplete: onComplete
+      });
 
     }
 
     function verificaMembrosModalidade(modalidade) {
-        var params = {
-            exec: 'VerificaMembrosModalidade',
-            equipepregao: $F('l20_equipepregao'),
-            modalidade: modalidade
-        };
+      var params = {
+        exec: 'VerificaMembrosModalidade',
+        equipepregao: $F('l20_equipepregao'),
+        modalidade: modalidade
+      };
 
-        novoAjax(params, function(e) {
-            var oRetorno = JSON.parse(e.responseText);
-            if (oRetorno.validaMod == 0) {
-                if (modalidade == 'pregao') {
-                    alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio");
-                    document.form1.l20_equipepregao.value = "";
-                    document.form1.l20_equipepregao.focus();
-                    return false;
-                }
-                else if (modalidade == 'outros') {
-                    alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio");
-                    document.form1.l20_equipepregao.value = "";
-                    document.form1.l20_equipepregao.focus();
-                    return false;
-                }
-            }
-        });
+      novoAjax(params, function(e) {
+      var oRetorno = JSON.parse(e.responseText);
+        if (oRetorno.validaMod == 0) {
+          if (modalidade == 'pregao') {
+            alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio");
+            document.form1.l20_equipepregao.value = "";
+            document.form1.l20_equipepregao.focus();
+            return false;
+          }
+          else if (modalidade == 'outros') {
+            alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio");
+            document.form1.l20_equipepregao.value = "";
+            document.form1.l20_equipepregao.focus();
+            return false;
+          }
+        }
+      });
     }
 
     function js_pregao(iCodigoProcesso, sNome, lErro) {
 
-        document.form1.l20_equipepregao.value = iCodigoProcesso;
-        db_iframe_proc.hide();
+      document.form1.l20_equipepregao.value = iCodigoProcesso;
+      db_iframe_proc.hide();
 
-        let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
+      let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
 
-        if (modalidade == 52 || modalidade == 53) {
-            verificaMembrosModalidade("pregao");
-        }
-        else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
-            verificaMembrosModalidade("outros");
-        }
+      if (modalidade == 52 || modalidade == 53) {
+        verificaMembrosModalidade("pregao");
+      }
+      else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
+        verificaMembrosModalidade("outros");
+      }
 
     }
 
@@ -1473,8 +1486,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_verificaCritAdj(valor) {
-        var codtipocom = $F('l20_codtipocom');
-        return valor == codtipocom;
+      var codtipocom = $F('l20_codtipocom');
+      return valor == codtipocom;
     }
 
     function js_confirmadatas() {
@@ -1487,21 +1500,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var verifica       = matriz.find(js_verificaCritAdj);
 
         if (verifica) {
-            if (!critadjudicac) {
-                alert("Informe Critério de Adjudicação");
-                return false;
-            }
+          if (!critadjudicac) {
+            alert("Informe Critério de Adjudicação");
+            return false;
+          }
         }
 
         if( js_CompararDatas(dataCriacao, dataPublicacao, '<=') ) {
             if( js_CompararDatas(dataPublicacao, dataAbertura, '<=') ) {
-              <?
-              if($db_opcao==2 || $db_opcao==22) {
-                echo 'return js_confirmar();';
-              } else {
-                echo 'return true;';
-              }
-              ?>
+                <?
+                  if($db_opcao==2 || $db_opcao==22) {
+                      echo 'return js_confirmar();';
+                  } else {
+                      echo 'return true;';
+                  }
+                ?>
             } else {
 
                 /*alert("A Data Edital/Convite deve ser maior ou igual a Data de Publicação.");
@@ -1636,33 +1649,32 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_regime(valor){
+        let anousuario = "<?php echo db_getsession('DB_anousu');?>";
 
-      let opcoes = document.getElementById('l20_regimexecucao').options;
+        if(anousuario >= 2019){
+          let opcoes = document.getElementById('l20_regimexecucao').options;
 
-      if (document.getElementById('modalidade_tribunal').value){
-
-        if(valor == 1){
-         /* Remove tipos de regimes de Execução */
-
-          if(opcoes.item(7)){
-            opcoes.remove(7);
-          }
-          if(opcoes.item(6)){
-            opcoes.remove(6);
-          }
-
-          if(opcoes.item(5)){
-            opcoes.remove(5);
-          }
-        }
+          if (document.getElementById('modalidade_tribunal').value){
+            console.log('Opcoes: ', opcoes);
+            if(valor != 7){
+              if(opcoes.item(7)){
+                opcoes.remove(7);
+              }
+              if(opcoes.item(6)){
+                opcoes.remove(6);
+              }
+              if(opcoes.item(5)){
+                opcoes.remove(5);
+              }
+            }
 
         if(valor == 7){
           opcoes.add(new Option('5- Execução Direta', 5));
           opcoes.add(new Option('6- Contratação Integrada'), 6);
           opcoes.add(new Option('7- Contratação Semi Integrada', 7));
-        }
+        }  
       }
-
+      
     }
 
 
