@@ -19,7 +19,6 @@ class GerarABERLIC extends GerarAM
 
     public function gerarDados()
     {
-
         $this->sArquivo = "ABERLIC";
         $this->abreArquivo();
 
@@ -56,17 +55,19 @@ class GerarABERLIC extends GerarAM
              *
              * Registros 10, 11, 12
              */
+            
             for ($iCont = 0; $iCont < pg_num_rows($rsABERLIC10); $iCont++) {
-
                 $aABERLIC10 = pg_fetch_array($rsABERLIC10, $iCont);
 
                 $aCSVABERLIC10['si46_tiporegistro']               = $this->padLeftZero($aABERLIC10['si46_tiporegistro'], 2);
+                $aCSVABERLIC10['si46_tipocadastro']               = $this->padLeftZero($aABERLIC10['si46_tipocadastro'], 1);
                 $aCSVABERLIC10['si46_codorgaoresp']               = $this->padLeftZero($aABERLIC10['si46_codorgaoresp'], 2);
                 $aCSVABERLIC10['si46_codunidadesubresp']          = $this->padLeftZero($aABERLIC10['si46_codunidadesubresp'], 5);
                 $aCSVABERLIC10['si46_exerciciolicitacao']         = $this->padLeftZero($aABERLIC10['si46_exerciciolicitacao'], 4);
                 $aCSVABERLIC10['si46_nroprocessolicitatorio']     = substr($aABERLIC10['si46_nroprocessolicitatorio'], 0, 12);
                 $aCSVABERLIC10['si46_codmodalidadelicitacao']     = $this->padLeftZero($aABERLIC10['si46_codmodalidadelicitacao'], 1);
-                $aCSVABERLIC10['si46_nromodalidade']              = substr($aABERLIC10['si46_nromodalidade'], 0, 10);
+                $aCSVABERLIC10['si46_nroedital']                  = substr($aABERLIC10['si46_nroedital'], 0, 10);
+                $aCSVABERLIC10['si46_exercicioedital']            = $this->padLeftZero($aABERLIC10['si46_exerciciolicitacao'], 4);
                 $aCSVABERLIC10['si46_naturezaprocedimento']       = $this->padLeftZero($aABERLIC10['si46_naturezaprocedimento'], 1);
                 $aCSVABERLIC10['si46_dtabertura']                 = $this->sicomDate($aABERLIC10['si46_dtabertura']);
                 $aCSVABERLIC10['si46_dteditalconvite']            = $this->sicomDate($aABERLIC10['si46_dteditalconvite']);
@@ -174,7 +175,7 @@ class GerarABERLIC extends GerarAM
                         $aCSVABERLIC14['si50_dtcotacao']              = $this->sicomDate($aABERLIC14['si50_dtcotacao']);
                         $aCSVABERLIC14['si50_vlrefpercentual']        = $this->sicomNumberReal($aABERLIC14['si50_vlrefpercentual'], 2);
 
-                        if($aABERLIC10['si46_criterioadjudicacao'] == 2){
+                        if($aABERLIC10['si46_criterioadjudicacao'] == 2 || $aABERLIC10['si46_criterioadjudicacao'] == 3){
                             $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal(0,4);
                         }else{
                             $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal($aABERLIC14['si50_vlcotprecosunitario'], 4);
