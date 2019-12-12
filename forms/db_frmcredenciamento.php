@@ -49,7 +49,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 
     if(!empty($l20_codigo)) {
 
-        $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, ";
+        $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, si02_vlprecoreferencia, ";
         $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, pc11_resum, pc23_obs";
         $sOrdem   = "l21_ordem";
         $sWhere   = "l21_codliclicita = {$l20_codigo} ";
@@ -112,8 +112,8 @@ $cliframe_seleciona = new cl_iframe_seleciona;
                         </td>
 
                         <td class="linhagrid" style="width: 80px">
-                            <?= $aItem->pc11_vlrun ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc11_vlrun ?>" id="<?= $iItem?>">
+                            <?= $aItem->si02_vlprecoreferencia ?>
+                            <input type="hidden" name="" value="<?= $aItem->si02_vlprecoreferencia ?>" id="<?= $iItem?>">
                         </td>
 
                         <td class="linhagrid" style="width: 120px">
