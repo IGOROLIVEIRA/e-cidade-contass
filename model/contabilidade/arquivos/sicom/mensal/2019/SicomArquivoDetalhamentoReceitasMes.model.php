@@ -295,15 +295,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
                             $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
                             $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
-                            if($sHashCgm == ''){
-                                $oDados11->si26_vlarrecadadofonte = $oDadosRec->saldo_arrecadado;
-                            } else {
-                                $oDados11->si26_vlarrecadadofonte = $oCodFontRecursos->c70_valor;
-                            }
                             $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                             $aDadosCgm11[$sHashCgm] = $oDados11;
                         }
+                        $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                     }
 
                     $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
