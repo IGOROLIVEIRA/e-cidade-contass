@@ -108,7 +108,7 @@ if(isset($incluir)){
   	if(in_array(db_utils::fieldsMemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocomdescr,"distinct l03_pctipocompratribunal")),0)->l03_pctipocompratribunal,array("52","53"))){
   		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('','*'));
   		if($cldecretopregao->numrows == 0){
-  			$erro_msg="Não há decreto prego";
+  			$erro_msg="Não há decreto pregão";
     		$sqlerro = true;
   		}
   	}
@@ -126,9 +126,9 @@ if(isset($incluir)){
 	}
 
 	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"*",null,"l47_instit=$instit and l47_anousu=$anousu"));
-
+	
 	if ($clpccfeditalnum->numrows==0){
-	 $erro_msg="Verifique se esta configurado a numeração de licitação por edital.";
+	 $erro_msg="Verifique se esta configurado a numeração do edital por licitação.";
 	 $sqlerro = true;
 	}
 	
@@ -246,15 +246,15 @@ if(isset($incluir)){
 		}
 
 		if ($sqlerro == false){
-			$clliclicita->l20_numero      = $l20_numero;
-			$clliclicita->l20_edital      = $l20_edital;
-			$clliclicita->l20_anousu      =  $anousu;
+			$clliclicita->l20_numero      	  =  $l20_numero;
+			$clliclicita->l20_edital      	  =  $l20_edital;
+			$clliclicita->l20_anousu      	  =  $anousu;
+			$clliclicita->l20_exercicioedital =  $anousu;
 			$clliclicita->l20_licsituacao = '0';
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
       		$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
 
-      		print_r(pg_last_error());
       		$clliclicita->incluir(null);
 		  	if ($clliclicita->erro_status=="0"){
 		  		$erro_msg = $clliclicita->erro_msg;

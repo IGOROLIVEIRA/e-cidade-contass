@@ -8,7 +8,8 @@ class Oc11211 extends PostgresMigration
     {
         $sql= "
             ALTER TABLE liclicita ADD COLUMN l20_nroedital bigint;
-            ALTER TABLE liclicita ADD COLUMN l20_cadinicial char(1);
+            ALTER TABLE liclicita ADD COLUMN l20_cadinicial integer;
+            ALTER TABLE liclicita ADD COLUMN l20_exercicioedital integer;
             
             UPDATE db_itensmenu SET descricao = 'Configuração de Numeração', help = 'Configuração de Numeração' WHERE id_item = 4689;
 
@@ -34,8 +35,7 @@ class Oc11211 extends PostgresMigration
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l47_instit'), 1, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l47_anousu'), 2, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l47_numero'), 3, 0);
-
-
+        
         ";
         $this->execute($sql);
     }
@@ -44,6 +44,7 @@ class Oc11211 extends PostgresMigration
         $sql= "
             ALTER TABLE liclicita DROP COLUMN l20_nroedital;
             ALTER TABLE liclicita DROP COLUMN l20_cadinicial;
+            ALTER TABLE liclicita DROP COLUMN l20_exercicioedital;
 
             UPDATE db_itensmenu
             SET descricao = 'Configuração de Processo Licitatório', help = 'Configuração de Processo Licitatório'
