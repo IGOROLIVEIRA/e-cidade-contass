@@ -10,13 +10,17 @@ require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitasituacao_classe.php");
 include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_credenciamento_classe.php");
+include("classes/db_habilitacaoforn_classe.php");
+include("classes/db_parecerlicitacao_classe.php");
 
-$clcredenciamento       = new cl_credenciamento;
+$clcredenciamento      = new cl_credenciamento;
 $clitenshomologacao    = new cl_itenshomologacao;
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
 $clliclicitasituacao   = new cl_liclicitasituacao;
 $clliclicita           = new cl_liclicita;
 $clliclicitasituacao   = new cl_liclicitasituacao;
+$clhabilitacaoforn     = new cl_habilitacaoforn();
+$clparecerlicitacao    = new cl_parecerlicitacao();
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -37,7 +41,10 @@ try{
             db_fieldsmemory($rsLimiteCred,0)->l20_dtlimitecredenciamento;
             $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
 
-            foreach ($oParam->itens as $item){
+          foreach ($oParam->itens as $item){
+                $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
+                db_fieldsmemory($rsHabilitacao,0);
+                $dtHabilitacaoforne = (implode("/",(array_reverse(explode("-",$l206_datahab)))));
 
                 $clcredenciamento->l205_fornecedor = $item->l205_fornecedor;
                 $clcredenciamento->l205_datacred = $item->l205_datacred;
@@ -47,6 +54,10 @@ try{
 
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
                 db_fieldsmemory($rsItem,0)->l205_sequencial;
+
+                if($item->l205_datacred < $dtHabilitacaoforne){
+                   throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                }
 
                 if($dtLimitecredenciamento != ""){
                   if($item->l205_datacred > $dtLimitecredenciamento){
@@ -66,6 +77,7 @@ try{
                     $erro_msg = $clcredenciamento->erro_msg;
                     break;
                 }
+              $oRetorno->sequecialforne = $item->sequenciaforne;
             }
 
             break;
@@ -128,6 +140,16 @@ try{
             $result = $clliclicita->sql_record($clliclicita->sql_query_file(null,"l20_codtipocom",null,"l20_codigo = $oParam->licitacao"));
 
             $l20_codtipocom = pg_result($result,0,0);
+
+            /**
+             * validação do parecer
+             *
+             */
+            $rsParecer = $clparecerlicitacao->sql_record($clparecerlicitacao->sql_query_file(null,"*",null,"l200_licitacao = $oParam->licitacao"));
+
+            if(pg_num_rows($rsParecer) == 0){
+              throw new Exception ("Usuário: Licitação sem Parecer cadastrado.");
+            }
 
             /**
              * realiza as alterações na licitaçao

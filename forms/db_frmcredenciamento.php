@@ -17,8 +17,8 @@ $cliframe_seleciona = new cl_iframe_seleciona;
                 </td>
                 <td>
                     <?
-                    $sWhere  = "pc21_codorc=".@$pc20_codorc;
-                    $result_forn = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
+                    $sWhere  = "l206_licitacao=".@$l20_codigo;
+                    $result_forn = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query(null,"l206_fornecedor,z01_nome","",$sWhere));
                     db_selectrecord("l205_fornecedor",$result_forn,true,$db_opcao,"","","","","BuscarCredenciamento(this.value)");
                     ?>
                 </td>
@@ -231,7 +231,10 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         try {
             itens.forEach(function (item) {
                 let coditem = item.id;
+                let sequencial = document.getElementById("l205_fornecedor").selectedIndex;
+
                 var novoItem = {
+                    sequenciaforne:        sequencial,
                     l205_fornecedor:       document.getElementById('l205_fornecedor').value,
                     l205_datacred:         document.getElementById('l205_datacred').value,
                     l205_item:             coditem,
@@ -265,11 +268,14 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 
     function retornoAjax(res) {
         var response = JSON.parse(res.responseText);
+        console.log(response);
         if (response.status != 1) {
             alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Credenciamento salvo com sucesso !');
-            location.reload();
+            document.getElementById("l205_fornecedor").selectedIndex = response.sequecialforne + 1;
+            document.getElementById("l205_fornecedordescr").selectedIndex = response.sequecialforne + 1;
+            BuscarCredenciamento(document.getElementById('l205_fornecedor').value);
         }
     }
 
