@@ -4,6 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_conv102020_classe.php");
 require_once("classes/db_conv112020_classe.php");
 require_once("classes/db_conv202020_classe.php");
+require_once("classes/db_conv212020_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarCONV.model.php");
 
 /**
@@ -64,6 +65,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     $clconv10 = new cl_conv102020();
     $clconv11 = new cl_conv112020();
     $clconv20 = new cl_conv202020();
+    $clconv21 = new cl_conv212020();
     $clconv30 = new cl_conv302020();
     $clconv31 = new cl_conv312020();
 
@@ -105,6 +107,17 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clconv20->erro_msg);
       }
     }
+
+      /*
+       * excluir informacoes do mes selecionado registro 21
+       */
+      $result = $clconv21->sql_record($clconv21->sql_query(null, "*", null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instint = " . db_getsession("DB_instit")));
+      if (pg_num_rows($result) > 0) {
+          $clconv21->excluir(null, "si232_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si232_instint = " . db_getsession("DB_instit"));
+          if ($clconv21->erro_status == 0) {
+              throw new Exception($clconv21->erro_msg);
+          }
+      }
 
     /*
      * excluir informacoes do mes selecionado registro 30
@@ -210,11 +223,11 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     }
 
     /*
-        * selecionar informacoes registro 20
+        * selecionar informacoes registro 20 e 21
       */
       $sSql = "select * from convdetalhatermos cdt
                inner join convconvenios cc on cc.c206_sequencial = cdt.c208_codconvenio
-               where c208_dataassinaturatermoaditivo >= '{$this->sDataInicial}' and c208_dataassinaturatermoaditivo <= '{$this->sDataFinal}'
+               where c208_datacadastro >= '{$this->sDataInicial}' and c208_datacadastro <= '{$this->sDataFinal}'
                and c206_instit = " . db_getsession("DB_instit");
 
       $rsResult20 = db_query($sSql);
@@ -230,6 +243,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         $clconv20->si94_dtassinaturaconvoriginal = $oDados20->c206_dataassinatura;
         $clconv20->si94_nroseqtermoaditivo = $oDados20->c208_nroseqtermo;
         $clconv20->si94_dscalteracao = $oDados20->c208_dscalteracao;
+        $clconv20->si94_codconvaditivo = $oDados20->c206_sequencial.$oDados20->c208_sequencial;
         $clconv20->si94_dtassinaturatermoaditivo = $oDados20->c208_dataassinaturatermoaditivo;
         $clconv20->si94_datafinalvigencia = $oDados20->c208_datafinalvigencia;
         $clconv20->si94_valoratualizadoconvenio = $oDados20->c208_valoratualizadoconvenio;
@@ -240,6 +254,19 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         $clconv20->incluir(null);
         if ($clconv20->erro_status == 0) {
           throw new Exception($clconv20->erro_msg);
+        }
+
+        $clconv21 = new cl_conv212020();
+        $clconv21->si232_tiporegistro = 21;
+        $clconv21->si232_codconvaditivo = $oDados20->c206_sequencial.$oDados20->c208_sequencial;
+        $clconv21->si232_tipotermoaditivo = $oDados20->c208_tipotermoaditivo;
+        $clconv21->si232_dsctipotermoaditivo = $oDados20->c208_dsctipotermoaditivo;
+        $clconv21->si232_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $clconv21->si232_instint = db_getsession("DB_instit");
+
+        $clconv21->incluir(null);
+        if ($clconv21->erro_status == 0) {
+            throw new Exception($clconv21->erro_msg);
         }
 
       }

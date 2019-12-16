@@ -30,7 +30,10 @@ class cl_convdetalhatermos {
    var $c208_valoratualizadoconvenio = 0; 
    var $c208_valoratualizadocontrapartida = 0; 
    var $c208_codconvenio = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $c208_tipotermoaditivo = 0;
+   var $c208_dsctipotermoaditivo = 0;
+   var $c208_datacadastro = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c208_sequencial = int8 = sequencial 
                  c208_nroseqtermo = int8 = Sequencial  do Termo Aditivo 
@@ -40,6 +43,9 @@ class cl_convdetalhatermos {
                  c208_valoratualizadoconvenio = float8 = Valor atualizado do Convênio 
                  c208_valoratualizadocontrapartida = float8 = Valor atualizado da Contrapartida 
                  c208_codconvenio = int8 = Cod convenio 
+                 c208_tipotermoaditivo = int8 = Tipo do Termo Aditivo
+                 c208_dsctipotermoaditivo = varchar(250) = Descrição Tipo do Termo Aditivo
+                 c208_datacadastro = date = Data de Cadastro
                  ";
    //funcao construtor da classe 
    function cl_convdetalhatermos() { 
@@ -78,9 +84,19 @@ class cl_convdetalhatermos {
             $this->c208_datafinalvigencia = $this->c208_datafinalvigencia_ano."-".$this->c208_datafinalvigencia_mes."-".$this->c208_datafinalvigencia_dia;
          }
        }
+       if($this->c208_datacadastro == ""){
+         $this->c208_datacadastro_dia = ($this->c208_datacadastro_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_datacadastro_dia"]:$this->c208_datacadastro_dia);
+         $this->c208_datacadastro_mes = ($this->c208_datacadastro_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_datacadastro_mes"]:$this->c208_datacadastro_mes);
+         $this->c208_datacadastro_ano = ($this->c208_datacadastro_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_datacadastro_ano"]:$this->c208_datacadastro_ano);
+         if($this->c208_datacadastro_dia != ""){
+           $this->c208_datacadastro = $this->c208_datacadastro_ano."-".$this->c208_datacadastro_mes."-".$this->c208_datacadastro_dia;
+         }
+       }
        $this->c208_valoratualizadoconvenio = ($this->c208_valoratualizadoconvenio == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_valoratualizadoconvenio"]:$this->c208_valoratualizadoconvenio);
        $this->c208_valoratualizadocontrapartida = ($this->c208_valoratualizadocontrapartida == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_valoratualizadocontrapartida"]:$this->c208_valoratualizadocontrapartida);
        $this->c208_codconvenio = ($this->c208_codconvenio == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_codconvenio"]:$this->c208_codconvenio);
+       $this->c208_tipotermoaditivo = ($this->c208_tipotermoaditivo == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_tipotermoaditivo"]:$this->c208_tipotermoaditivo);
+       $this->c208_dsctipotermoaditivo = ($this->c208_dsctipotermoaditivo == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_dsctipotermoaditivo"]:$this->c208_dsctipotermoaditivo);
      }else{
        $this->c208_sequencial = ($this->c208_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c208_sequencial"]:$this->c208_sequencial);
      }
@@ -97,9 +113,36 @@ class cl_convdetalhatermos {
        $this->erro_status = "0";
        return false;
      }
+     if($this->c208_datacadastro == null ){
+       $this->erro_sql = " Campo Data Cadastro nao Informado.";
+       $this->erro_campo = "c208_datacadastro";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->c208_dscalteracao == null ){ 
        $this->erro_sql = " Campo Descrição da  alteração nao Informado.";
        $this->erro_campo = "c208_dscalteracao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->c208_tipotermoaditivo == null ){
+       $this->erro_sql = " Campo Tipo Termo Aditivo nao Informado.";
+       $this->erro_campo = "c208_tipotermoaditivo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->c208_tipotermoaditivo == 99 && $this->c208_dsctipotermoaditivo == null){
+       $this->erro_sql = " Campo Descrição do Tipo Termo Aditivo nao Informado.";
+       $this->erro_campo = "c208_dsctipotermoaditivo";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -192,6 +235,9 @@ class cl_convdetalhatermos {
                                       ,c208_valoratualizadoconvenio 
                                       ,c208_valoratualizadocontrapartida 
                                       ,c208_codconvenio 
+                                      ,c208_tipotermoaditivo
+                                      ,c208_dsctipotermoaditivo
+                                      ,c208_datacadastro
                        )
                 values (
                                 $this->c208_sequencial 
@@ -202,6 +248,9 @@ class cl_convdetalhatermos {
                                ,$this->c208_valoratualizadoconvenio 
                                ,$this->c208_valoratualizadocontrapartida 
                                ,$this->c208_codconvenio 
+                               ,$this->c208_tipotermoaditivo
+                               ,'$this->c208_dsctipotermoaditivo'
+                               ,'$this->c208_datacadastro'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -374,6 +423,49 @@ class cl_convdetalhatermos {
        if(trim($this->c208_codconvenio) == null ){ 
          $this->erro_sql = " Campo Cod convenio nao Informado.";
          $this->erro_campo = "c208_codconvenio";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->c208_tipotermoaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c208_tipotermoaditivo"])){
+       $sql  .= $virgula." c208_tipotermoaditivo = $this->c208_tipotermoaditivo ";
+       $virgula = ",";
+       if(trim($this->c208_tipotermoaditivo) == null ){
+         $this->erro_sql = " Campo Tipo Termo Aditivo nao Informado.";
+         $this->erro_campo = "c208_tipotermoaditivo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if($this->c208_tipotermoaditivo == 99) {
+       if (trim($this->c208_dsctipotermoaditivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c208_dsctipotermoaditivo"])) {
+         $sql .= $virgula . " c208_dsctipotermoaditivo = '$this->c208_dsctipotermoaditivo' ";
+         $virgula = ",";
+         if (trim($this->c208_dsctipotermoaditivo) == null) {
+           $this->erro_sql = " Campo Descrição do Tipo Termo Aditivo nao Informado.";
+           $this->erro_campo = "c208_dsctipotermoaditivo";
+           $this->erro_banco = "";
+           $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
+       }
+     } else {
+       $sql .= $virgula . " c208_dsctipotermoaditivo = ''";
+     }
+     if(trim($this->c208_datacadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c208_datacadastro"])){
+       $sql  .= $virgula." c208_datacadastro = '$this->c208_datacadastro' ";
+       $virgula = ",";
+       if(trim($this->c208_datacadastro) == null ){
+         $this->erro_sql = "  Campo Data Cadastro nao Informado.";
+         $this->erro_campo = "c208_datacadastro";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
