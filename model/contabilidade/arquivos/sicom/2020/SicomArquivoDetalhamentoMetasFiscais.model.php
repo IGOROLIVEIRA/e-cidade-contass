@@ -102,7 +102,7 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
     $aValorImpactoSaldo             = $oValorImpactoSaldo->getValoresColunas();
 
 // Define todos anos utilizados no relatório apartir do ano de referência
-    $iAnoRef = db_getsession("DB_anousu");
+    $iAnoRef = db_getsession("DB_anousu")-1;
     $iAno1   = $iAnoRef;
     $iAno2   = $iAnoRef+1;
     $iAno3   = $iAnoRef+2;
