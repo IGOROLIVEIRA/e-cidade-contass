@@ -822,10 +822,11 @@ switch($oParam->exec) {
 
         try {
 
-                    db_inicio_transacao();
-                    $oItemContrato = new AcordoItem();
-                    $oContrato     = $_SESSION["oContrato"];
-                    $oPosicao      = $oContrato->getUltimaPosicao();
+            db_inicio_transacao();
+            $oItemContrato = new AcordoItem();
+            $oContrato     = $_SESSION["oContrato"];
+            $oPosicao      = $oContrato->getUltimaPosicao();
+            $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
 
             $oItemContrato->setCodigoPosicao($oPosicao->getCodigo());
             $oItemContrato->setElemento($oParam->material->iElemento);
