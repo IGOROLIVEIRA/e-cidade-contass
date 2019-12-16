@@ -83,7 +83,7 @@ function js_imprime(virada){
 
     // Consulta todas instituições
 
-    $sSqlConsultaInstit = " select codigo,nomeinst from db_config where db21_tipoinstit in (1,2,5)";
+    $sSqlConsultaInstit = "SELECT codigo, nomeinst, db21_tipoinstit FROM db_config WHERE db21_tipoinstit IN (1,2,5) ORDER BY 1";
     $rsConsultaInstit   = db_query($sSqlConsultaInstit);
     $iLinhasInstit      = pg_num_rows($rsConsultaInstit);
 
@@ -93,41 +93,6 @@ function js_imprime(virada){
     	$aInstit[$oInstit->codigo] = $oInstit->nomeinst;
     }
     $sListaInstit = implode(",",$aInstit);
-
-
-    // Verifica se existe virada já processada para os itens selecionados
-    // Caso exista então valida se o processamento é do exercício anterior
-
-    /*$sSqlVirada  = " select distinct c31_db_viradacaditem,                                                         ";
-    $sSqlVirada .= "        case                                                                                   ";
-    $sSqlVirada .= "          when exists( select *                                                                ";
-    $sSqlVirada .= "                         from db_virada a                                                      ";
-    $sSqlVirada .= "                              inner join db_viradaitem b on b.c31_db_virada = a.c30_sequencial ";
-    $sSqlVirada .= "                        where b.c31_db_viradacaditem = db_viradaitem.c31_db_viradacaditem      ";
-    $sSqlVirada .= "                          and a.c30_anodestino = {$iAnoOrigem}) then false                     ";
-    $sSqlVirada .= "          else true                                                                            ";
-    $sSqlVirada .= "        end as erro                                                                            ";
-    $sSqlVirada .= "   from db_virada                                                                              ";
-    $sSqlVirada .= "        inner join db_viradaitem on c31_db_virada = c30_sequencial                             ";
-    $sSqlVirada .= "  where c31_db_viradacaditem in ({$sListaItens}) and c31_db_viradacaditem not in(23,24,13)        ";
-
-    $rsConsultaVirada = db_query($sSqlVirada);
-    $iLinhasVirada    = pg_num_rows($rsConsultaVirada);
-
-    if ( $iLinhasVirada > 0 ) {
-    	$aListaItemErro = array();
-    	for ( $iInd=0; $iInd < $iLinhasVirada; $iInd++ ) {
-    		$oItemVirada = db_utils::fieldsMemory($rsConsultaVirada,$iInd);
-    		if ( $oItemVirada->erro == 't') {
-          $aListaItemErro[] = $oItemVirada->c31_db_viradacaditem;
-          $sqlerro = true;
-    	  }
-    	}
-   	  if ( $sqlerro ) {
-        $erro_msg  = "Processamento Interrompido!";
-        $erro_msg .= "\\nItem de virada nº ".implode(",",$aListaItemErro)." sem processamento no exercício anterior";
-  	  }
-    }*/
 
     // Verifica apartir dos itens informados se deve ser feito a validação do orçamento
 
@@ -143,9 +108,8 @@ function js_imprime(virada){
 	    if ( !$sqlerro ) {
 
 		    // Verifica se existe uma versão do PPA homologada
-		    $sSqlPPAVersao    = " select *                        ";
-		    $sSqlPPAVersao   .= "   from ppaversao                ";
-		    $sSqlPPAVersao   .= "  where o119_versaofinal is true ";
+		    $sSqlPPAVersao    = " SELECT * FROM ppaversao        ";
+		    $sSqlPPAVersao   .= " WHERE o119_versaofinal IS TRUE ";
 		    $rsPPAVersao      = db_query($sSqlPPAVersao);
 		    $iLinhasPPAVersao = pg_num_rows($rsPPAVersao);
 
@@ -188,12 +152,10 @@ function js_imprime(virada){
 		    	foreach ( $aInstit as $iInstit => $sDescrInstit ) {
 
 		      	// Verifica se existe cadastro de contas para o exercício de destino
-		        $sSqlConPlano  = " select *                                                ";
-		        $sSqlConPlano .= "  from conplanoreduz                                     ";
-		        $sSqlConPlano .= "       inner join conplanoexe on c62_anousu = c61_anousu ";
-		        $sSqlConPlano .= "                             and c62_reduz  = c61_reduz  ";
-		        $sSqlConPlano .= " where c61_instit = {$iInstit}                           ";
-		        $sSqlConPlano .= "   and c61_anousu = {$iAnoDestino} limit 1;              ";
+		        $sSqlConPlano  = " SELECT * FROM conplanoreduz                                            ";
+		        $sSqlConPlano .= " JOIN conplanoexe ON (c62_anousu, c62_reduz) = (c61_anousu, c61_reduz)  ";
+		        $sSqlConPlano .= " WHERE c61_instit = {$iInstit}                                          ";
+		        $sSqlConPlano .= "   AND c61_anousu = {$iAnoDestino} LIMIT 1                              ";
 
 		        $rsConPlano    = db_query($sSqlConPlano);
 
@@ -202,33 +164,32 @@ function js_imprime(virada){
 		        	$sqlerro  = true;
 		        }
 
-		        // Verifica se existe alguma receita configurada para o exercício de destino
-				$sSqlOrcReceita  = " select orcreceita.*                         ";
-				$sSqlOrcReceita .= "   from orcreceita                           ";
-				$sSqlOrcReceita .= "   join db_config on o70_instit = codigo     ";
-				$sSqlOrcReceita .= "  where prefeitura = 't'                     ";
-				$sSqlOrcReceita .= "    and o70_anousu = {$iAnoDestino} limit 1; ";
+            if ($oInstit->db21_tipoinstit == 1){
 
-		        $rsOrcReceita    = db_query($sSqlOrcReceita);
+              // Verifica se existe alguma receita configurada para o exercício de destino
+              $sSqlOrcReceita  = "SELECT * FROM orcreceita                 ";
+              $sSqlOrcReceita .= "WHERE o70_anousu = {$iAnoDestino} LIMIT 1";
 
-		        if ( pg_num_rows($rsOrcReceita) == 0 ) {
-		          $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-		          $sqlerro  = true;
+              $rsOrcReceita    = db_query($sSqlOrcReceita);
+
+              if ( pg_num_rows($rsOrcReceita) == 0 ) {
+                $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+                $sqlerro  = true;
+              }
+
+              // Verifica se existe alguma conta de despesa cadastrada para o exercício de destino
+              $sSqlOrcDotacao  = " SELECT * FROM orcdotacao                  ";
+              $sSqlOrcDotacao .= " WHERE o58_instit = {$iInstit}             ";
+              $sSqlOrcDotacao .= "   AND o58_anousu = {$iAnoDestino} limit 1 ";
+
+              $rsOrcDotacao    = db_query($sSqlOrcDotacao);
+
+              if ( pg_num_rows($rsOrcDotacao) == 0 ) {
+                $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+                $sqlerro  = true;
+              }
 		        }
-
-		        // Verifica se existe alguma conta de despesa cadastrada para o exercício de destino
-		        $sSqlOrcDotacao  = " select *                                    ";
-		        $sSqlOrcDotacao .= "   from orcdotacao                           ";
-		        $sSqlOrcDotacao .= "  where o58_instit = {$iInstit}              ";
-		        $sSqlOrcDotacao .= "    and o58_anousu = {$iAnoDestino} limit 1; ";
-
-		        $rsOrcDotacao    = db_query($sSqlOrcDotacao);
-
-		        if ( pg_num_rows($rsOrcDotacao) == 0 ) {
-		          $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-		          $sqlerro  = true;
-		        }
-		      }
+		    	}
 
 		      if ( $sqlerro ) {
 		        $erro_msg  = "Processamento Interrompido!\\n";
@@ -261,7 +222,7 @@ function js_imprime(virada){
 	      for ($iItem=0; $iItem<$iCountItem; $iItem++) {
 	        if (($aItem[$iItem] != "") && ($sqlerro == false)) {
 
-	          $sqlcaditem = "select * from db_viradacaditem where c33_sequencial=".$aItem[$iItem];
+	          $sqlcaditem = "SELECT * FROM db_viradacaditem WHERE c33_sequencial=".$aItem[$iItem];
 	          $resultcaditem = db_query($sqlcaditem);
 	          db_fieldsmemory($resultcaditem, 0);
 
@@ -280,7 +241,7 @@ function js_imprime(virada){
 	            //echo "<br>$sArquivoItemVirada";
 	            if(file_exists($sArquivoItemVirada)) {
 	              // Seta Variavel Para Erro, caso houver
-	              $erro_msg = "Erro ao processar item {$c33_sequencial}-{$c33_descricao}!\\n";
+                $erro_msg = "Erro ao processar item {$c33_sequencial}-{$c33_descricao}!\\n";
 
 	              $sMensagemTermometroItem = "Processando Item {$c33_sequencial}-{$c33_descricao}...";
 
