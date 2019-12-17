@@ -622,7 +622,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 //    }
 //
 //$pdf1->resumo  = substr(str_replace("\n", " ", $pdf1->resumo), 0, 400);
-    $pdf1->resumo  = substr($pdf1->resumo, 0, 400);
+    $pdf1->resumo  = substr($pdf1->resumo, 0, 730);
 
     if (!empty($e54_praent)) {
         $pdf1->prazo_ent              = $e54_praent;
