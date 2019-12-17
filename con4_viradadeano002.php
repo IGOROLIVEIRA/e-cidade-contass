@@ -108,95 +108,95 @@ function js_imprime(virada){
 	    if ( !$sqlerro ) {
 
 		    // Verifica se existe uma versão do PPA homologada
-		    $sSqlPPAVersao    = " SELECT * FROM ppaversao        ";
-		    $sSqlPPAVersao   .= " WHERE o119_versaofinal IS TRUE ";
-		    $rsPPAVersao      = db_query($sSqlPPAVersao);
-		    $iLinhasPPAVersao = pg_num_rows($rsPPAVersao);
+		    // $sSqlPPAVersao    = " SELECT * FROM ppaversao        ";
+		    // $sSqlPPAVersao   .= " WHERE o119_versaofinal IS TRUE ";
+		    // $rsPPAVersao      = db_query($sSqlPPAVersao);
+		    // $iLinhasPPAVersao = pg_num_rows($rsPPAVersao);
 
-		  	if ( $iLinhasPPAVersao > 0 ) {
+		  	// if ( $iLinhasPPAVersao > 0 ) {
 
-		  		$aListaInstitErro = array();
+		  	// 	$aListaInstitErro = array();
 
-			    foreach ( $aInstit as $iInstit => $sDescrInstit ) {
+			  //   foreach ( $aInstit as $iInstit => $sDescrInstit ) {
 
-			    	// Verifica se existe vinculação do PPA com orçamento
-					$sSqlPPAIntegracao  = " select ppaintegracao.*                	 ";
-					$sSqlPPAIntegracao .= "   from ppaintegracao                  	 ";
-					$sSqlPPAIntegracao .= "	  join db_config on o123_instit = codigo ";
-					$sSqlPPAIntegracao .= "  where o123_ano      = {$iAnoDestino} 	 ";
-					$sSqlPPAIntegracao .= "    and prefeitura = 't'     		     ";
-					$sSqlPPAIntegracao .= "    and o123_situacao = 1              	 ";
-					$sSqlPPAIntegracao .= "    and o123_tipointegracao = 1        	 ";
+			  //   	// Verifica se existe vinculação do PPA com orçamento
+					// $sSqlPPAIntegracao  = " select ppaintegracao.*                	 ";
+					// $sSqlPPAIntegracao .= "   from ppaintegracao                  	 ";
+					// $sSqlPPAIntegracao .= "	  join db_config on o123_instit = codigo ";
+					// $sSqlPPAIntegracao .= "  where o123_ano      = {$iAnoDestino} 	 ";
+					// $sSqlPPAIntegracao .= "    and prefeitura = 't'     		     ";
+					// $sSqlPPAIntegracao .= "    and o123_situacao = 1              	 ";
+					// $sSqlPPAIntegracao .= "    and o123_tipointegracao = 1        	 ";
 
-			      $rsPPAIntegracao    = db_query($sSqlPPAIntegracao);
+			  //     $rsPPAIntegracao    = db_query($sSqlPPAIntegracao);
 
-		        if ( pg_num_rows($rsPPAIntegracao) == 0 ) {
-		        	$aListaInstitErro[] = $sDescrInstit;
-		          $sqlerro  = true;
-		        }
-		      }
+		   //      if ( pg_num_rows($rsPPAIntegracao) == 0 ) {
+		   //      	$aListaInstitErro[] = $sDescrInstit;
+		   //        $sqlerro  = true;
+		   //      }
+		   //    }
 
-		      if ( $sqlerro ) {
-		      	if ( count($aListaInstitErro) > 1 ) {
-		          $erro_msg  = "Exportação do PPA para Orçamento não encontrado nas instituições:\\n";
-		          $erro_msg .= implode("\\n",$aListaInstitErro);
-		       	} else {
-			        $erro_msg  = "Exportação do PPA para Orçamento não encontrado na instituiçao {$aListaInstitErro[0]}!";
-		      	}
-		      }
+		   //    if ( $sqlerro ) {
+		   //    	if ( count($aListaInstitErro) > 1 ) {
+		   //        $erro_msg  = "Exportação do PPA para Orçamento não encontrado nas instituições:\\n";
+		   //        $erro_msg .= implode("\\n",$aListaInstitErro);
+		   //     	} else {
+			  //       $erro_msg  = "Exportação do PPA para Orçamento não encontrado na instituiçao {$aListaInstitErro[0]}!";
+		   //    	}
+		   //    }
 
-		    } else {
+		   //  } else {
 
 		    	$sErroMsg = '';
 
 		    	foreach ( $aInstit as $iInstit => $sDescrInstit ) {
 
 		      	// Verifica se existe cadastro de contas para o exercício de destino
-		        $sSqlConPlano  = " SELECT * FROM conplanoreduz                                            ";
-		        $sSqlConPlano .= " JOIN conplanoexe ON (c62_anousu, c62_reduz) = (c61_anousu, c61_reduz)  ";
-		        $sSqlConPlano .= " WHERE c61_instit = {$iInstit}                                          ";
-		        $sSqlConPlano .= "   AND c61_anousu = {$iAnoDestino} LIMIT 1                              ";
+                  $sSqlConPlano  = " SELECT * FROM conplanoreduz                                            ";
+                  $sSqlConPlano .= " JOIN conplanoexe ON (c62_anousu, c62_reduz) = (c61_anousu, c61_reduz)  ";
+                  $sSqlConPlano .= " WHERE c61_instit = {$iInstit}                                          ";
+                  $sSqlConPlano .= "   AND c61_anousu = {$iAnoDestino} LIMIT 1                              ";
 
-		        $rsConPlano    = db_query($sSqlConPlano);
+                  $rsConPlano    = db_query($sSqlConPlano);
 
-		        if ( pg_num_rows($rsConPlano) == 0 ) {
-		          $sErroMsg = "Cadastro de contas para o exercício {$iAnoDestino} não encontrado na instituição {$sDescrInstit}!\\n";
-		        	$sqlerro  = true;
-		        }
+                  if ( pg_num_rows($rsConPlano) == 0 ) {
+                    $sErroMsg = "Cadastro de contas para o exercício {$iAnoDestino} não encontrado na instituição {$sDescrInstit}!\\n";
+                    $sqlerro  = true;
+                }
 
-            if ($oInstit->db21_tipoinstit == 1){
+                if ($oInstit->db21_tipoinstit == 1){
 
               // Verifica se existe alguma receita configurada para o exercício de destino
-              $sSqlOrcReceita  = "SELECT * FROM orcreceita                 ";
-              $sSqlOrcReceita .= "WHERE o70_anousu = {$iAnoDestino} LIMIT 1";
+                  $sSqlOrcReceita  = "SELECT * FROM orcreceita                 ";
+                  $sSqlOrcReceita .= "WHERE o70_anousu = {$iAnoDestino} LIMIT 1";
 
-              $rsOrcReceita    = db_query($sSqlOrcReceita);
+                  $rsOrcReceita    = db_query($sSqlOrcReceita);
 
-              if ( pg_num_rows($rsOrcReceita) == 0 ) {
-                $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-                $sqlerro  = true;
-              }
+                  if ( pg_num_rows($rsOrcReceita) == 0 ) {
+                    $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+                    $sqlerro  = true;
+                }
 
               // Verifica se existe alguma conta de despesa cadastrada para o exercício de destino
-              $sSqlOrcDotacao  = " SELECT * FROM orcdotacao                  ";
-              $sSqlOrcDotacao .= " WHERE o58_instit = {$iInstit}             ";
-              $sSqlOrcDotacao .= "   AND o58_anousu = {$iAnoDestino} limit 1 ";
+                $sSqlOrcDotacao  = " SELECT * FROM orcdotacao                  ";
+                $sSqlOrcDotacao .= " WHERE o58_instit = {$iInstit}             ";
+                $sSqlOrcDotacao .= "   AND o58_anousu = {$iAnoDestino} limit 1 ";
 
-              $rsOrcDotacao    = db_query($sSqlOrcDotacao);
+                $rsOrcDotacao    = db_query($sSqlOrcDotacao);
 
-              if ( pg_num_rows($rsOrcDotacao) == 0 ) {
-                $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-                $sqlerro  = true;
-              }
-		        }
-		    	}
+                if ( pg_num_rows($rsOrcDotacao) == 0 ) {
+                    $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+                    $sqlerro  = true;
+                }
+            }
+        }
 
-		      if ( $sqlerro ) {
-		        $erro_msg  = "Processamento Interrompido!\\n";
-		        $erro_msg .= $sErroMsg;
-		      }
-		    }
-	    }
+	   if ( $sqlerro ) {
+	     $erro_msg  = "Processamento Interrompido!\\n";
+	     $erro_msg .= $sErroMsg;
+	   }
+	 // }
+	  }
     }
 
     if ( !$sqlerro ) {
