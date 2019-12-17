@@ -766,7 +766,6 @@ if (isset($p->incluir)) {
         }
       }
     }
-    die("Conseguimos...");
 
     //importando orcfontesdes
     $sql1 = "select 1 from orcfontesdes where o60_anousu = " . $clconaberturaexe->c91_anousudestino;
