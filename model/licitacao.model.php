@@ -811,9 +811,10 @@ class licitacao {
 
         $sCampos = "l21_codigo AS codigo,pc01_codmater AS codigomaterial,pc01_descrmater AS material,
         pc23_vlrun AS valorunitario,pc01_servico AS servico,1 AS origem,pc18_codele AS elemento,pc23_quant AS quantidade,
-        pc23_valor AS valortotal,l20_numero AS numero,l213_qtdlicitada,l213_qtdcontratada";
+        pc23_valor AS valortotal,l20_numero AS numero,sum(l213_qtdcontratada) as l213_qtdcontratada";
 
-        $sWhere = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1";
+        $sWhere  = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1";
+        $sWhere .="GROUP BY l21_codigo,pc01_codmater,pc23_vlrun,pc18_codele,pc23_quant,pc23_valor,l20_numero";
         $sSqlItensCred = $oDaoLiclicitem->sql_query_soljulgCredenciamento(null,$sCampos,null,$sWhere);
         $rsItenscred = db_query($sSqlItensCred);
         return db_utils::getCollectionByRecord($rsItenscred, false, false, true);
