@@ -1576,7 +1576,7 @@ db_app::load("estilos.css, grid.style.css");
         oRetorno.itens.each(function (oRow, iSeq) {
             if(iTipoCompra === '103' || iTipoCompra === '104') {
                 var aLinha = new Array();
-                var QtdDisponivel = Number(oRow.quantidade) - Number(oRow.l213_qtdcontratada);
+                var QtdDisponivel =  Number(oRow.quantidade) -  Number(oRow.l213_qtdcontratada);
 
                 aCodigos.push(oRow.codigo);
                 oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
@@ -1593,7 +1593,11 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[6] = js_formatar(oRow.valortotal, 'f');
                 aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
                 aLinha[8] = "";
-                aLinha[9]  = Number(QtdDisponivel);
+                if(QtdDisponivel == 0){
+                    aLinha[9]  = '0';
+                }else{
+                    aLinha[9]  = QtdDisponivel;
+                }
                 aLinha[10] = oTxtQtdContratada.toInnerHtml();
                 aLinha[11] = oTxtDataEmissaoInicial.toInnerHtml();
                 aLinha[12] = oTxtDataEmissaoFinal.toInnerHtml();
