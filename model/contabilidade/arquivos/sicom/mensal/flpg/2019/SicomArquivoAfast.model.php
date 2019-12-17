@@ -128,6 +128,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             AND r45_situac <> 5
             AND (r45_mesusu = {$iMes} OR (r45_mesusu > {$iMes} AND DATE_PART('MONTH',r45_dtafas) = {$iMes}))
             AND rh02_instit = ".db_getsession("DB_instit")."
+            AND r45_dtafas >= '2018-01-01'
             GROUP BY r45_regist,si199_tipoafastamento
             ";
 
@@ -136,6 +137,10 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
+
+            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2019-11-01') {
+              continue;
+            }
 
             if($iMes == 01) {
 
@@ -415,6 +420,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             AND r45_situac <> 5
             AND r45_mesusu = {$iMes}
             AND rh02_instit = ".db_getsession("DB_instit")."
+            AND r45_dtafas >= '2018-01-01'
             GROUP BY r45_regist,
             si199_tipoafastamento,
             r45_dtlanc,
@@ -428,6 +434,10 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResultafast30); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResultafast30, $iCont);
+
+            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2019-11-01') {
+              continue;
+            }
 
             if(($oDados->si199_tipoafastamento == 8 || $oDados->si199_tipoafastamento == 7)
                && !in_array($oDados->si201_codvinculopessoa, $aRegistros20)
