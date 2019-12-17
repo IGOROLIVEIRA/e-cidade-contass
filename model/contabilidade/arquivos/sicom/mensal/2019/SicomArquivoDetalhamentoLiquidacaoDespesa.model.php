@@ -120,6 +120,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
             JOIN cgm ON e60_numcgm = z01_numcgm
             JOIN pagordemele ON e53_codord = e50_codord
             JOIN pagordemnota ON e71_codord = e50_codord
+            JOIN conlancamord ON c80_codord = e50_codord
             JOIN orctiporec ON o58_codigo = o15_codigo
             LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
             WHERE e50_data >= '" . $this->sDataInicial . "' AND e50_data <= '" . $this->sDataFinal . "'
