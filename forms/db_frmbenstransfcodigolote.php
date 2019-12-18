@@ -63,6 +63,7 @@
       <td>
         <input name="transf" type="submit"  value="Transferência em Lote" onClick="return js_valida();"    >
         <input name="rel"    type="button"  value="Relatório"             onClick="js_imprime();" disabled >
+        <input name="rel"    type="button"  value="Confirmar"             onClick="js_conTrasfLote();" >
         <?
           db_input("t95_codtran",10,"",true,"hidden");
           db_input("lista"      ,10,"",true,"hidden");
@@ -447,5 +448,51 @@ function ordenaLista(listaGeral, listaReferencia, campo)
 
   preencheLista(listaOrdenada);
 }
+
+function js_conTrasfLote() {
+    let t96_codtran = document.form1.t95_codtran.value;
+
+    try {
+        realizaTransfLote({
+            exec: 'Transferir',
+            t96_codtran: t96_codtran,
+        }, oRetTransfLote);
+    } catch(e) {
+        alert(e.toString());
+    }
+    return false;
+}
+
+function realizaTransfLote(params, onComplete) {
+    js_divCarregando('Aguarde Realizando Transferencia', 'div_aguarde');
+    var request = new Ajax.Request('pat1_benstransfdireta.RPC.php', {
+        method:'post',
+        parameters:'json=' + JSON.stringify(params),
+        onComplete: function(oRetornotransf) {
+            // js_removeObj('div_aguarde');
+            onComplete(oRetornotransf);
+        }
+    });
+}
+
+function oRetTransfLote(res) {
+    var response = JSON.parse(res.responseText);
+    js_removeObj('div_aguarde');
+    if (response.status != 1) {
+        alert(response.erro);
+
+    } else if (response.erro == false) {
+
+        alert('Transferencia Realizada com Sucesso !');
+
+        if(confirm('Deseja imprimir relatorio?')) {
+
+            jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.getElementById('t95_codtran').value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+            document.form1.t96_codtran.style.backgroundColor='';
+            jan.moveTo(0,0);
+        }
+    }
+}
+
 
 </script>
