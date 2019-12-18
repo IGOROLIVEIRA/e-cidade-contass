@@ -509,7 +509,7 @@ db_app::load("dbtextFieldData.widget.js");
             </tr>
         </table>
 
-        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
+        <input name="<?= ($db_opcao == 1 ? "aco1_acordo004" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
                type="button"
                id="db_opcao"
                value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
@@ -1141,7 +1141,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function jsPesquisaContratadoHabilitado() {
 
-        if ($('ac16_origem').value == 3) {
+        if ($('ac16_origem').value == 3 || $('ac16_origem').value == 1) {
             var nLicitacao = $('ac16_licitacao').value;
 
             if (nLicitacao == '') {
@@ -1464,7 +1464,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if(iOrigem == 1){
           document.getElementById('tradesaoregpreco').style.display = "none";
-          document.getElementById('trLicitacao').style.display = "none";
+          document.getElementById('trLicitacao').style.display = "";
           document.getElementById('trlicoutroorgao').style.display = "none";
         }
 

@@ -549,6 +549,13 @@ switch($oParam->exec) {
             $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
           }
 
+          if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2){
+             if($oParam->contrato->iLicitacao == ""){
+               $lAcordoValido = false;
+               $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+             }
+          }
+
           if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
             $lAcordoValido = false;
             $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
@@ -1419,13 +1426,13 @@ switch($oParam->exec) {
 
         $oContrato     = $_SESSION["oContrato"];
         $oPosicao      = $oContrato->getUltimaPosicao();
-        
+
         $dbwhere = " ac20_acordoposicao = {$oPosicao->getCodigo()} and ac20_pcmater = {$oParam->ac20_pcmater} ";
         $oDaoAcordoItem = db_utils::getDao("acordoitem");
         $sSQL = $oDaoAcordoItem->sql_query_file(null, "ac20_sequencial", null, $dbwhere);
         $oDaoAcordoItem->sql_record($sSQL);
         if ($oDaoAcordoItem->numrows > 0) {
-          throw new Exception("Item {$oParam->ac20_pcmater} já incluído!"); 
+          throw new Exception("Item {$oParam->ac20_pcmater} já incluído!");
         }
       } catch (Exception $eErro) {
 
