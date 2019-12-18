@@ -239,7 +239,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
         $clconv20->si94_tiporegistro = 20;
         $clconv20->si94_codorgao = $sCodorgao;
-        $clconv20->si94_nroconvenio = $oDados20->c208_nroseqtermo;
+        $clconv20->si94_nroconvenio = $oDados20->c206_nroconvenio;
         $clconv20->si94_dtassinaturaconvoriginal = $oDados20->c206_dataassinatura;
         $clconv20->si94_nroseqtermoaditivo = $oDados20->c208_nroseqtermo;
         $clconv20->si94_dscalteracao = $oDados20->c208_dscalteracao;
