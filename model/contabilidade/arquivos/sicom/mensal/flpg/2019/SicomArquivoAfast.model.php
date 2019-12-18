@@ -138,10 +138,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2019-11-01') {
-              continue;
-            }
-
             if($iMes == 01) {
 
                 /**
@@ -434,10 +430,6 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
         for ($iCont = 0; $iCont < pg_num_rows($rsResultafast30); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResultafast30, $iCont);
-
-            if ($oDados->si199_tipoafastamento == 7  && $this->sDataInicial >= '2019-11-01') {
-              continue;
-            }
 
             if(($oDados->si199_tipoafastamento == 8 || $oDados->si199_tipoafastamento == 7)
                && !in_array($oDados->si201_codvinculopessoa, $aRegistros20)
