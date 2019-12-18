@@ -603,7 +603,7 @@ db_app::load("estilos.css, grid.style.css");
         iTipoContrato = oRetorno.iTipoContrato;
         var iTipocompra = oRetorno.tipocompra;
 
-        if(iTipocompra === '103' || iTipocompra === '104'){
+        if(iTipocompra === '103' || iTipocompra === '102'){
             if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
 
                 $('FormularioManual').style.display = '';
@@ -1346,7 +1346,7 @@ db_app::load("estilos.css, grid.style.css");
         oGridItensOrigem = new DBGrid('gridItensOrigem');
         oGridItensOrigem.nameInstance = 'oGridItensOrigem';
         oGridItensOrigem.setCheckbox(0);
-        if(itipocompra === '103' || itipocompra === '104'){
+        if(itipocompra === '103' || itipocompra === '102'){
             oGridItensOrigem.setCellAlign(new Array("right","right","right","left",'right','right','right',"left","center","center","center","center","center","center","center"));
 
             oGridItensOrigem.setCellWidth(new Array("10%",'1%',"10%","40%",'10%','10%','10%',"10%","1%","20%","20%","15%","15%","15%","15%"));
@@ -1574,7 +1574,7 @@ db_app::load("estilos.css, grid.style.css");
 
         var aCodigos = new Array();
         oRetorno.itens.each(function (oRow, iSeq) {
-            if(iTipoCompra === '103' || iTipoCompra === '104') {
+            if(iTipoCompra === '103' || iTipoCompra === '102') {
                 var aLinha = new Array();
                 var QtdDisponivel =  Number(oRow.quantidade) -  Number(oRow.l213_qtdcontratada);
 
@@ -1583,6 +1583,7 @@ db_app::load("estilos.css, grid.style.css");
                 oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
                 oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
+                oTxtQtdContratada.addEvent("onBlur", "js_ValidaCamposText(this,1)");
 
                 aLinha[0] = oRow.codigo;
                 aLinha[1] = iTotalLinhas;
@@ -1675,7 +1676,7 @@ db_app::load("estilos.css, grid.style.css");
         var aListaItens = new Array();
         var oDadosItens;
         var lErro = false;
-        if (iTipoCompra === '103' || iTipoCompra === '104'){
+        if (iTipoCompra === '103' || iTipoCompra === '102'){
             console.log(aListaCheckbox);
             aListaCheckbox.each(function (aRow) {
                 var VlrTotal = 0
@@ -1711,6 +1712,12 @@ db_app::load("estilos.css, grid.style.css");
 
                 if(Number(oDadosItens.quantidade) > Number(oDadosItens.qtdDisponivel)){
                     alert('A quantidade disponível para o item '+oDadosItens.codigomaterial+' é '+oDadosItens.qtdDisponivel);
+                    lErro = true;
+                    throw $break;
+                }
+
+                if(Number(oDadosItens.qtdDisponivel) == 0){
+                    alert('Não e possivel salvar itens com quantidade 0. Item codigo:'+oDadosItens.codigomaterial);
                     lErro = true;
                     throw $break;
                 }

@@ -868,7 +868,7 @@ switch($oParam->exec) {
 
             $iTipocompraTribunal      = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
 
-            if( $iTipocompraTribunal == "103" || $iTipocompraTribunal == "104") {
+            if( $iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                 $aItens               = $oPosicao->getItens();
                 $aDadosSelecaoAcordo      = array();
 
@@ -1199,7 +1199,7 @@ switch($oParam->exec) {
 
             if ($oContrato->getOrigem() == 2) {
 
-                if( $iTipocompraTribunal == "103" || $iTipocompraTribunal == "104"){
+                if( $iTipocompraTribunal == "103" || $iTipocompraTribunal == "102"){
                     $aItens = licitacao::getItensPorFornecedorCredenciamento($oContrato->getContratado()->getCodigo(),$oContrato->getLicitacao());
                 }else{
                     $aItens = licitacao::getItensPorFornecedor($_SESSION["dadosSelecaoAcordo"],$oContrato->getContratado()->getCodigo(), 0);
@@ -1240,7 +1240,7 @@ switch($oParam->exec) {
 
                     foreach ($oParam->aLista as $iIndice => $oItem ) {
 
-                        if($iTipocompraTribunal == "103" || $iTipocompraTribunal == "104"){
+                        if($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102"){
                             $iExecucaoInicial = db_formatar($oContrato->getDataInicial(), 'd') ;
                             $iExecucaoFinal   = db_formatar($oContrato->getDataFinal(), 'd');
                         }else{
@@ -1268,7 +1268,7 @@ switch($oParam->exec) {
 
                         if ($oContrato->getOrigem() == 2) {
 
-                            if($iTipocompraTribunal == "103" || $iTipocompraTribunal == "104") {
+                            if($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                                 $oPosicao->adicionarItemDeCredenciamento($iLicitacao,$iContratado,$oItem->codigo, $oItem,$iCodigoAcordo,$iTipocompraTribunal);
                             }else{
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);

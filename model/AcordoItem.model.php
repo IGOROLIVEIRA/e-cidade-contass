@@ -1029,7 +1029,7 @@ class AcordoItem {
          * OC8339
          */
 
-        if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "104") {
+        if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
             $cl_credenciamentosaldo->l213_licitacao = $this->getILicitacao();
             $cl_credenciamentosaldo->l213_item = $this->getCodigo();
             $cl_credenciamentosaldo->l213_qtdcontratada = $this->getIQtdcontratada();
@@ -1051,7 +1051,7 @@ class AcordoItem {
              * OC8339
              */
 
-            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "104") {
+            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
                 $rsCredenciamentosaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query_file(null, "*", null, "l213_licitacao = {$this->getILicitacao()} and l213_item={$this->getCodigo()} and l213_contratado={$this->getIContratado()} and l213_acordo = {$this->getIContrato()}"));
                 $oCredenciamentosaldo = db_utils::fieldsMemory($rsCredenciamentosaldo, 0);
                 $cl_credenciamentosaldo->l213_qtdlicitada = $oCredenciamentosaldo->l213_qtdlicitada;
@@ -1070,7 +1070,7 @@ class AcordoItem {
              * OC8339
              */
 
-            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "104") {
+            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
                 $cl_credenciamentosaldo->l213_item = $this->getCodigo();
                 $cl_credenciamentosaldo->l213_qtdlicitada = $this->getQuantidade();
                 $cl_credenciamentosaldo->incluir();
