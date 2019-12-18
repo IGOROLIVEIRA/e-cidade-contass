@@ -226,6 +226,16 @@ class cl_convdetalhatermos {
        $this->erro_status = "0";
        return false;
      }
+     $result = $this->sql_record($this->sql_query_file(null,"*", "", "c208_nroseqtermo = {$this->c208_nroseqtermo} and c208_codconvenio = {$this->c208_codconvenio}"));
+     if(pg_num_rows($result) > 0) {
+       $this->erro_sql = " Campo Numero do Aditivo ja existe.";
+       $this->erro_banco = "";
+       $this->erro_campo = "c208_nroseqtermo";
+       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      $sql = "insert into convdetalhatermos(
                                        c208_sequencial 
                                       ,c208_nroseqtermo 
@@ -503,6 +513,16 @@ class cl_convdetalhatermos {
        }
      }
      $result = db_query($sql);
+     $result = $this->sql_record($this->sql_query_file(null,"*", "", "c208_nroseqtermo = {$this->c208_nroseqtermo} and c208_codconvenio = {$this->c208_codconvenio}"));
+     if(pg_num_rows($result) > 1) {
+       $this->erro_sql = " Campo Numero do Aditivo ja existe.";
+       $this->erro_banco = "";
+       $this->erro_campo = "c208_nroseqtermo";
+       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "convdetalhatermos nao Alterado. Alteracao Abortada.\\n";
