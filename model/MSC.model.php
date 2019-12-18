@@ -820,7 +820,7 @@ class MSC {
       c61_instit
      from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
-    case when c211_mscestrut is null then substr(c19_estrutural,2,8) else c211_mscestrut end as natdespesa,
+    case when c211_mscestrut is null then substr(o56_elemento,2,8) else c211_mscestrut end as natdespesa,
       c60_estrut,
       db21_tipoinstit,
       c61_reduz,
@@ -837,7 +837,10 @@ class MSC {
           inner join db_config ON codigo = r.c61_instit
           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
           inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
-          left join elemdespmsc on substr(c19_estrutural,2,8) = c211_elemdespestrut
+          left join empempenho on e60_numemp=c19_numemp
+          left join empelemento on e64_numemp = e60_numemp
+          LEFT JOIN orcelemento ON o56_codele=e64_codele AND o56_anousu=e60_anousu
+          left join elemdespmsc on substr(o56_elemento,2,8) = c211_elemdespestrut
           left outer join consistema on c60_codsis = c52_codsis
           left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
           left join orctiporec on c19_orctiporec = o15_codigo
