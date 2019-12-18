@@ -82,11 +82,6 @@ class Oc11335 extends AbstractMigration
             revisão, leitura, cópia e/ou divulgação do conteúdo deste "e-mail" são estritamente proibidas e não autorizadas. Por favor, apague o<br>
             conteúdo do "e-mail" e notifique a remetente imediatamente. Agradecemos a colaboração.' WHERE p110_sequencial = 3;
             
-            UPDATE tiposnotificacao
-            SET p110_textoemail =
-                    'Atraso de Pagamento',
-                    'Senhor fornecedor, Comunicamos o atraso do pagamento',
-                    0);
         COMMIT;            
 STRING;
     }
