@@ -32,11 +32,14 @@ class GerarCONV extends GerarAM
     $sSql3 = "select * from conv202020 where si94_mes = " . $this->iMes . " and si94_instit = " . db_getsession("DB_instit");
     $rsCONV20 = db_query($sSql3);
 
-    $sSql4 = "select * from conv302020 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
-    $rsCONV30 = db_query($sSql4);
+    $sSql4 = "select * from conv212020 where si232_mes = " . $this->iMes . " and si232_instint = " . db_getsession("DB_instit");
+    $rsCONV21 = db_query($sSql4);
 
-    $sSql5 = "select * from conv312020 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
-    $rsCONV31 = db_query($sSql5);
+    $sSql5 = "select * from conv302020 where si203_mes = " . $this->iMes . " and si203_instit = " . db_getsession("DB_instit");
+    $rsCONV30 = db_query($sSql5);
+
+    $sSql6 = "select * from conv312020 where si204_mes = " . $this->iMes . " and si204_instit = " . db_getsession("DB_instit");
+    $rsCONV31 = db_query($sSql6);
 
     //echo $sSql."-".$sSql3; exit;
 
@@ -96,7 +99,7 @@ class GerarCONV extends GerarAM
 
       /**
        *
-       * Registros 20
+       * Registros 20 e 21
        */
       for ($iCont3 = 0; $iCont3 < pg_num_rows($rsCONV20); $iCont3++) {
 
@@ -107,6 +110,7 @@ class GerarCONV extends GerarAM
         $aCSVCONV20['si94_nroconvenio']                   = substr($aCONV20['si94_nroconvenio'], 0, 30);
         $aCSVCONV20['si94_dtassinaturaconvoriginal']      = $this->sicomDate($aCONV20['si94_dtassinaturaconvoriginal']);
         $aCSVCONV20['si94_nroseqtermoaditivo']            = $this->padLeftZero($aCONV20['si94_nroseqtermoaditivo'], 2);
+        $aCSVCONV20['si94_codconvaditivo']                = $aCONV20['si94_codconvaditivo'];
         $aCSVCONV20['si94_dscalteracao']                  = substr($aCONV20['si94_dscalteracao'], 0, 500);
         $aCSVCONV20['si94_dtassinaturatermoaditivo']      = $this->sicomDate($aCONV20['si94_dtassinaturatermoaditivo']);
         $aCSVCONV20['si94_datafinalvigencia']             = $this->sicomDate($aCONV20['si94_datafinalvigencia']);
@@ -115,6 +119,24 @@ class GerarCONV extends GerarAM
 
         $this->sLinha = $aCSVCONV20;
         $this->adicionaLinha();
+
+        for ($iCont2 = 0; $iCont2 < pg_num_rows($rsCONV21); $iCont2++) {
+
+          $aCONV21 = pg_fetch_array($rsCONV21, $iCont2);
+
+          if ($aCONV20['si94_codconvaditivo'] == $aCONV21['si232_codconvaditivo']) {
+
+            $aCSVCONV21['si232_tiporegistro']         = $this->padLeftZero($aCONV21['si232_tiporegistro'], 2);
+            $aCSVCONV21['si232_codconvaditivo']       = $aCONV21['si232_codconvaditivo'];
+            $aCSVCONV21['si232_tipotermoaditivo']     = $this->padLeftZero($aCONV21['si232_tipotermoaditivo'], 2);
+            $aCSVCONV21['si232_dsctipotermoaditivo']  = substr($aCONV21['si232_dsctipotermoaditivo'], 0, 250);
+
+            $this->sLinha = $aCSVCONV21;
+            $this->adicionaLinha();
+
+          }
+
+        }
 
       }
 
