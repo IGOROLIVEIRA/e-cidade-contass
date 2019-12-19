@@ -520,9 +520,9 @@ class cl_liclicitem {
      }
      $sql .= " from liclicitem ";
      $sql .= "      inner join pcprocitem           on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+     $sql .= "      inner join pcorcamitemproc      on pc31_pcprocitem                     = pc81_codprocitem";
      $sql .= "      inner join pcproc               on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
-     $sql .= "      left  join precoreferencia      on precoreferencia.si01_processocompra = pcproc.pc80_codproc";
-     $sql .= "      left  join itemprecoreferencia  on precoreferencia.si01_sequencial     = itemprecoreferencia.si02_precoreferencia";
+     $sql .= "      left  join itemprecoreferencia  on si02_itemproccompra                 = pcorcamitemproc.pc31_orcamitem";
      $sql .= "      inner join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
      $sql .= "      inner join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
      $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
