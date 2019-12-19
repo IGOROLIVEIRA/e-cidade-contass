@@ -63,7 +63,7 @@
       <td>
         <input name="transf" type="submit"  value="Transferência em Lote" onClick="return js_valida();"    >
         <input name="rel"    type="button"  value="Relatório"             onClick="js_imprime();" disabled >
-        <input name="rel"    type="button"  value="Confirmar"             onClick="js_conTrasfLote();" >
+        <input name="con"    type="button"  value="Confirmar"             onClick="js_conTrasfLote();" disabled >
         <?
           db_input("t95_codtran",10,"",true,"hidden");
           db_input("lista"      ,10,"",true,"hidden");
@@ -221,6 +221,7 @@ function preencheLista(aBens){
 
         sChecked = "checked";
         document.form1.rel.disabled = false;
+        document.form1.con.disabled = false;
         document.form1.transf.value = "Alterar";
       }
 
