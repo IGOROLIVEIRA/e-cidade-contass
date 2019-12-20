@@ -1002,9 +1002,10 @@ class AcordoItem {
     	$this->setOrdem($this->getProximaPosicao());
     }
 
-    $nValorUnitario     = (float)$this->getValorUnitario();
+    $nValorUnitario     = (float)round(str_replace(',','.',$this->getValorUnitario()),2);
     $nValorAditado      = (float)$this->getValorAditado();//OC5304
     $nQuantidadeAditada = (float)$this->getQuantiAditada();//OC5304
+
     $oDaoAcordoItem = db_utils::getDao("acordoitem");
     $oDaoAcordoItem->ac20_acordoposicao     = $this->getCodigoPosicao();
     $oDaoAcordoItem->ac20_acordoposicaotipo = $this->getCodigoPosicaoTipo();

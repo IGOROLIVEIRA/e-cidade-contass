@@ -715,7 +715,7 @@ class AcordoPosicao {
             if ($oItemLicitacao->pc17_unid == '') {
                 $oItem->setUnidade(1);
             }
-            $oItem->setValorUnitario($oItemLicitacao->pc23_vlrun);
+            $oItem->setValorUnitario($oItemAcordo->valorunitario);
             $oItem->setOrigem($oItemLicitacao->l21_codigo, 2);
             $oItem->setValorTotal($oItemAcordo->quantidade*$oItemAcordo->valorunitario);
             $oItem->setResumo($oItemLicitacao->pc11_resum);
