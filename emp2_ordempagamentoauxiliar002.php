@@ -208,7 +208,7 @@ if ($oDaoOrdemAuxiliar->numrows > 0) {
                     $pos_x = $oPdf->x;
                     $pos_y = $oPdf->y;
                     foreach ($aSubgrupo as $subgrupo_novo) {
-                        $oPdf->MultiCell(110,$alt_novo,substr($subgrupo_novo,0,115),0,"L", $iPreencher);
+                        $oPdf->cell(110,$alt_novo,substr($subgrupo_novo,0,110),0,1,"L",$iPreencher);
                         $oPdf->x=$pos_x;
                     }
                     $oPdf->x = $pos_x+110;
