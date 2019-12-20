@@ -37,9 +37,6 @@ require_once("classes/db_bemfoto_classe.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
-//var_dump($oGet);
-$db_opcao = 1;
-$db_botao = true;
 
 $clbem           = new cl_bens;
 $clbem->rotulo->label();
@@ -67,15 +64,6 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
       db_app::load("estilos.css,grid.style.css");
     ?>
   </head>
-  <style>
-    .normal * {
-      background: #D3D3D3;
-      pointer-events: none;
-    }
-    div.body-container{
-      background: #D3D3D3;
-    }
-  </style>
   <body class="body-default">
     <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
     <center>
@@ -93,8 +81,8 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
                   </td>
                   <td valign='top'>
                     <?
-                     db_input("uploadfile",30,0,true,"file",1);
-                     db_input("namefile",30,0,true,"hidden",1);
+                     db_input("uploadfile",30,0,true,"file",$db_opcaoal);
+                     db_input("namefile",30,0,true,"hidden",$db_opcaoal);
                     ?>
                   </td>
                 </tr>
@@ -104,7 +92,7 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
                   </td>
                   <td>
                     <?
-                      db_select("t54_fotoativa", array("t" => "Sim", "f"=> "Não"), true, 1);
+                      db_select("t54_fotoativa", array("t" => "Sim", "f"=> "Não"), true, $db_opcaoal);
                     ?>
                   </td>
                 </tr>
@@ -138,7 +126,7 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
               </legend>
               <div id='ctnDbGridFotos'>
               </div>
-              </fieldset>
+            </fieldset>
           </td>
         </tr>
       </table>
@@ -160,10 +148,6 @@ var iNumBem = '<?=$oGet->t52_codbem?>';
 var iLote = '<?=$oGet->cod_lote?>';
 var tela_inativa = '<?=$oGet->db_opcaoal?>';
 
-if(tela_inativa == 33){
-    js_desabilitaCampos();
-}
-
 var sUrlRpc = "pat1_bensnovo.RPC.php";
 
 oGridFotos              = new DBGrid('gridFotos');
@@ -173,6 +157,9 @@ oGridFotos.setCellAlign(new Array("right","center","center","center","center","c
 oGridFotos.setHeader(new Array("Codigo","Data","Hora","Pric","Ativa","Ver","Ação"));
 oGridFotos.show($('ctnDbGridFotos'));
 
+if(tela_inativa == 33){
+    js_desabilitaCampos();
+}
  /**
   * Cria um listener para subir a imagem, e criar um preview da mesma
   */
@@ -283,7 +270,6 @@ oGridFotos.show($('ctnDbGridFotos'));
  }
 
  function js_retornoGetFotos(oAjax) {
-
    var oRetorno = eval('('+oAjax.responseText+')');
    oGridFotos.clearAll(true);
    oRetorno.itens.each(function(oFoto, id) {
@@ -352,10 +338,10 @@ oGridFotos.show($('ctnDbGridFotos'));
  }
 
  function js_desabilitaCampos(){
+     document.getElementById('ctnDbGridFotos').style['pointer-events'] = 'none';
      document.getElementById('t54_fotoativa').disabled = true;
      document.getElementById('t54_principal').disabled = true;
      document.getElementById('btnSalvar').disabled = true;
      document.getElementById('uploadfile').disabled = true;
-     // document.getElementById('body-container-gridFotos').disabled = true;
  }
 </script>
