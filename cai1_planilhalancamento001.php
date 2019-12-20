@@ -270,6 +270,38 @@ if ($oInstit->db21_usasisagua == "t") {
     </td>
   </tr>
 
+  <!-- Regularização de Repasse -->
+  <tr id="regrepasse" style="display: none;">
+      <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_regrepasse?>"><?=$Lk81_regrepasse?></td>
+      <td colspan='3'>
+        <?
+        $aOpcoes = array('' => 'Selecione', '1' => 'Sim', '2' => 'Não');
+        db_select("k81_regrepasse",$aOpcoes,true,1,"class='input-menor' onChange='toogleRegRepasse(this.value)'");
+        ?>
+      </td>
+
+  </tr>
+
+  <!-- Exercício -->
+  <tr id="exercicio" style="display: none;">
+      <td nowrap title="<?= @$Tk81_exerc ?>"><?echo $Lk81_exerc?></td>
+      <td colspan='3'>
+        <?
+        db_input('k81_exerc',11,$Ik81_exerc,true,'text',$db_opcao,"");
+        ?>
+      </td>
+  </tr>
+
+  <!-- Ref a Emenda Parlamentar -->
+  <tr>
+      <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_emparlamentar?>"><?=$Lk81_emparlamentar?></td>
+      <td colspan='3'>
+        <?
+        $aOpcoes = array('' => 'Selecione', '1' => '1 - Emenda parlamentar individual', '2' => '2 - Emenda parlamentar de bancada', '3' => '3 - Não se aplica');
+        db_select("k81_emparlamentar",$aOpcoes,true,1,"class='input-menor'");
+        ?>
+      </td>
+  </tr>
   <!--Convênio-->
   <tr>
     <td nowrap title="<?= @$Tk81_convenio ?>"><?echo $Lk81_convenio?></td>
@@ -357,6 +389,8 @@ if ($oInstit->db21_usasisagua == "t") {
 
 const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
 sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
+
+document.getElementById("k81_emparlamentar").options[3].selected = true;
 
 function js_pesquisak81_convenio(mostra) {
   if(mostra==true){
@@ -767,6 +801,40 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
     js_getCgmConta($('k81_conta').value);
    }
 
+   estruts = ['41728011', '41728012', '41758011', '41728991'];
+
+   if(estruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+       document.getElementById('regrepasse').style.display = "table-row";
+       if($('k81_regrepasse').value != '') {
+           document.getElementById("k81_regrepasse").options[$('k81_regrepasse').value].selected = true;
+           if($('k81_regrepasse').value == 1) {
+               document.getElementById('exercicio').style.display = "table-row";
+           } else {
+               document.getElementById('exercicio').style.display = "none";
+           }
+       }else {
+           document.getElementById("k81_regrepasse").options[0].selected = true;
+       }
+
+   } else {
+       document.getElementById('regrepasse').style.display = "none";
+       document.getElementById('exercicio').style.display = "none";
+       document.getElementById('k81_exerc').value = "";
+       document.getElementById("k81_regrepasse").options[0].selected = "true";
+   }
+
+   aFontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+
+   if($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && aFontes.indexOf($('recurso').value) == -1) {
+       if($('k81_emparlamentar').value != '') {
+           document.getElementById("k81_emparlamentar").options[$('k81_emparlamentar').value].selected = true;
+       }else {
+           document.getElementById("k81_emparlamentar").options[0].selected = true;
+       }
+   } else {
+       document.getElementById("k81_emparlamentar").options[3].selected = true;
+   }
+
    js_verificaReceita();
    js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
@@ -787,6 +855,26 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    }else{
        console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
+   }
+
+   aEstruts = ['41728011', '41728012', '41758011', '41728991'];
+
+   if(aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+       document.getElementById('regrepasse').style.display = "table-row";
+       document.getElementById("k81_regrepasse").options[0].selected = true;
+   } else {
+       document.getElementById('regrepasse').style.display = "none";
+       document.getElementById('exercicio').style.display = "none";
+       document.getElementById('k81_exerc').value = "";
+       document.getElementById("k81_regrepasse").options[0].selected = "true";
+   }
+
+   fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+
+   if($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) == -1) {
+       document.getElementById("k81_emparlamentar").options[0].selected = true;
+   } else {
+       document.getElementById("k81_emparlamentar").options[3].selected = true;
    }
 
    db_iframe_tabrec.hide();
@@ -975,6 +1063,35 @@ function js_addReceita () {
     return false;
   }
 
+  aEstruts = ['41728011', '41728012', '41758011', '41728991'];
+
+  if(aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+      if($('k81_regrepasse').value == '') {
+          alert("É obrigatório informar o Regularização de Repasse.");
+          return false;
+      } else if($('k81_regrepasse').value == 1) {
+          if($('k81_exerc').value == '') {
+              alert("É obrigatório informar o Ano.");
+              return false;
+          }
+      }
+  }
+
+  fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+
+  if( $('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf( $('recurso').value ) == -1 ) {
+      if($('k81_emparlamentar').value == '') {
+          alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+          return false;
+      }
+  } else {
+      if($('k81_emparlamentar').value != 3) {
+          alert("O campo Referente a Emenda Parlamentar deve ser: '3 - Não se aplica' para a receita selecionada.");
+          return false;
+
+      }
+  }
+
   if ($F('k81_numcgm') == '' &&  $F('j01_matric') == '' &&  $F('q02_inscr') =='' ) {
 
     alert("Informe a origem.");
@@ -1059,6 +1176,13 @@ function js_addReceita () {
   oReceita.k81_codigo      = $F('k81_codigo');
   oReceita.k81_codigodescr = $F('k81_codigodescr');
 
+  //Regularização Repasse
+  oReceita.k81_regrepasse  = $F('k81_regrepasse');
+  oReceita.k81_exerc       = $F('k81_exerc');
+
+  //Referente a Emenda Parlamentar
+  oReceita.k81_emparlamentar = $F('k81_emparlamentar');
+
   //Característica Peculiar
   oReceita.c58_sequencial  = $F('c58_sequencial');
 
@@ -1131,6 +1255,13 @@ function js_criaDeducao(oAjax){
     oReceita.k81_codigo      = $F('k81_codigo');
     oReceita.k81_codigodescr = $F('k81_codigodescr');
 
+    //Regularização Repasse
+    oReceita.k81_regrepasse  = $F('k81_regrepasse');
+    oReceita.k81_exerc       = $F('k81_exerc');
+
+    //Referente a Emenda Parlamentar
+    oReceita.k81_emparlamentar = $F('k81_emparlamentar');
+
     //Característica Peculiar
     oReceita.c58_sequencial  = $F('c58_sequencial');
 
@@ -1202,6 +1333,9 @@ function js_mostraReceita(iIndice) {
   $('k81_valor').value       = aReceitas[iIndice].k81_valor;
   $('k81_obs').value         = aReceitas[iIndice].k81_obs;
   $('recurso').value         = aReceitas[iIndice].recurso;
+  $('k81_regrepasse').value  = aReceitas[iIndice].k81_regrepasse;
+  $('k81_exerc').value       = aReceitas[iIndice].k81_exerc;
+  $('k81_emparlamentar').value = aReceitas[iIndice].k81_emparlamentar;
   $('k81_operbanco').value   = aReceitas[iIndice].k81_operbanco;
   $('k81_convenio').value    = aReceitas[iIndice].k81_convenio;
 
@@ -1243,6 +1377,9 @@ function js_salvarPlanilha() {
         oReceita.sObservacao           = encodeURIComponent(tagString(oReceitaTela.k81_obs));
         oReceita.nValor                = oReceitaTela.k81_valor;
         oReceita.iRecurso              = oReceitaTela.recurso;
+        oReceita.iRegRepasse           = oReceitaTela.k81_regrepasse;
+        oReceita.iExerc                = oReceitaTela.k81_exerc;
+        oReceita.iEmParlamentar        = oReceitaTela.k81_emparlamentar;
         oReceita.iReceita              = oReceitaTela.k81_receita;
         oReceita.dtRecebimento         = oReceitaTela.k81_datareceb;
         oReceita.sOperacaoBancaria     = oReceitaTela.k81_operbanco;
@@ -1422,6 +1559,9 @@ function js_completaImportar (oAjax) {
       oReceitaImportada.k81_datareceb     = oReceita.dtRecebimento;
       oReceitaImportada.k81_obs           = oReceita.sObservacao.urlDecode();
       oReceitaImportada.recurso           = oReceita.iRecurso;
+      oReceitaImportada.k81_regrepasse    = oReceita.iRegRepasse;
+      oReceitaImportada.k81_exerc         = oReceita.iExerc;
+      oReceitaImportada.k81_emparlamentar = oReceita.iEmParlamentar;
       oReceitaImportada.k81_valor         = oReceita.nValor;
       oReceitaImportada.k81_operbanco     = oReceita.sOperacaoBancaria.urlDecode();
       oReceitaImportada.k81_convenio      = convenio = oReceita.iConvenio;
@@ -1584,4 +1724,14 @@ function js_retornoAutenticacao (oAjax) {
     alert(oRetorno.message.urlDecode());
   }
 }
+
+function toogleRegRepasse(opcao) {
+    if (opcao == 1) {
+        document.getElementById('exercicio').style.display = "table-row";
+    } else if(opcao == 2 || opcao == '') {
+        document.getElementById('exercicio').style.display = "none";
+        document.getElementById('k81_exerc').value = "";
+    }
+}
+
 </script>

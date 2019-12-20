@@ -125,6 +125,9 @@ switch ($oParam->exec) {
         $oReceitaPlanilha->setOperacaoBancaria($oReceitas->sOperacaoBancaria);
         $oReceitaPlanilha->setOrigem($oReceitas->iOrigem);
         $oReceitaPlanilha->setRecurso(new Recurso($oReceitas->iRecurso));
+        $oReceitaPlanilha->setRegularizacaoRepasse($oReceitas->iRegRepasse);
+        $oReceitaPlanilha->setRegExercicio($oReceitas->iExerc);
+        $oReceitaPlanilha->setEmendaParlamentar($oReceitas->iEmParlamentar);
         $oReceitaPlanilha->setTipoReceita($oReceitas->iReceita);
         $oReceitaPlanilha->setValor($oReceitas->nValor);
         $oReceitaPlanilha->setConvenio($iConvenio);
@@ -203,6 +206,9 @@ switch ($oParam->exec) {
         $oReceita->sObservacao           = urlencode($oReceitaPlanilha->getObservacao());
         $oReceita->sOperacaoBancaria     = $oReceitaPlanilha->getOperacaoBancaria();
         $oReceita->iRecurso              = $oReceitaPlanilha->getRecurso()->getCodigoRecurso();
+        $oReceita->iRegRepasse           = $oReceitaPlanilha->getRegularizacaoRepasse();
+        $oReceita->iExerc                = $oReceitaPlanilha->getRegExercicio();
+        $oReceita->iEmParlamentar        = $oReceitaPlanilha->getEmendaParlamentar();
         $oReceita->nValor                = $oReceitaPlanilha->getValor();
         $oReceita->iConvenio             = $oReceitaPlanilha->getConvenio();
 
@@ -291,6 +297,9 @@ switch ($oParam->exec) {
         $oReceitaPlanilha->setOperacaoBancaria($oReceitas->sOperacaoBancaria);
         $oReceitaPlanilha->setOrigem($oReceitas->iOrigem);
         $oReceitaPlanilha->setRecurso(new Recurso($oReceitas->iRecurso));
+        $oReceitaPlanilha->setRegularizacaoRepasse($oReceitas->iRegRepasse);
+        $oReceitaPlanilha->setRegExercicio($oReceitas->iExerc);
+        $oReceitaPlanilha->setEmendaParlamentar($oReceitas->iEmParlamentar);
         $oReceitaPlanilha->setTipoReceita($oReceitas->iReceita);
         $oReceitaPlanilha->setValor($oReceitas->nValor);
         $oReceitaPlanilha->setConvenio($iConvenio);

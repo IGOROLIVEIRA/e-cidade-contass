@@ -49,6 +49,9 @@ class cl_placaixarec {
    var $k81_valor = 0;
    var $k81_obs = null;
    var $k81_codigo = 0;
+   var $k81_regrepasse = null;
+   var $k81_exerc = null;
+   var $k81_emparlamentar = 0;
    var $k81_datareceb_dia = null;
    var $k81_datareceb_mes = null;
    var $k81_datareceb_ano = null;
@@ -67,6 +70,9 @@ class cl_placaixarec {
                  k81_valor = float8 = Valor
                  k81_obs = text = Observação
                  k81_codigo = int4 = Recurso
+                 k81_regrepasse = int4 = Regularização de Repasse
+                 k81_exerc = int8 = Exercício
+                 k81_emparlamentar = int4 = Emenda Parlamentar
                  k81_datareceb = date = Data Recebimento
                  k81_operbanco = varchar(20) = Operação banco
                  k81_origem = int4 = Origem
@@ -99,6 +105,9 @@ class cl_placaixarec {
        $this->k81_valor = ($this->k81_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_valor"]:$this->k81_valor);
        $this->k81_obs = ($this->k81_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_obs"]:$this->k81_obs);
        $this->k81_codigo = ($this->k81_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_codigo"]:$this->k81_codigo);
+       $this->k81_regrepasse = ($this->k81_regrepasse == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_regrepasse"]:$this->k81_regrepasse);
+       $this->k81_exerc = ($this->k81_exerc == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_exerc"]:$this->k81_exerc);
+       $this->k81_emparlamentar = ($this->k81_emparlamentar == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_emparlamentar"]:$this->k81_emparlamentar);
        if($this->k81_datareceb == ""){
          $this->k81_datareceb_dia = ($this->k81_datareceb_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_datareceb_dia"]:$this->k81_datareceb_dia);
          $this->k81_datareceb_mes = ($this->k81_datareceb_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["k81_datareceb_mes"]:$this->k81_datareceb_mes);
@@ -157,6 +166,15 @@ class cl_placaixarec {
      if($this->k81_codigo == null ){
        $this->erro_sql = " Campo Recurso nao Informado.";
        $this->erro_campo = "k81_codigo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->k81_emparlamentar == null ){
+       $this->erro_sql = " Campo Emenda Parlamentar nao Informado.";
+       $this->erro_campo = "k81_emparlamentar";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -245,6 +263,9 @@ class cl_placaixarec {
                                       ,k81_numcgm
                                       ,k81_concarpeculiar
                                       ,k81_convenio
+                                      ,k81_regrepasse
+                                      ,k81_exerc
+                                      ,k81_emparlamentar
                        )
                 values (
                                 $this->k81_seqpla
@@ -260,6 +281,9 @@ class cl_placaixarec {
                                ,$this->k81_numcgm
                                ,'$this->k81_concarpeculiar'
                                ,".($this->k81_convenio == "null" || $this->k81_convenio == ""?"null":"{$this->k81_convenio}")."
+                               ,".($this->k81_regrepasse == "null" || $this->k81_regrepasse == ""?"null":"{$this->k81_regrepasse}")."
+                               ,".($this->k81_exerc == "null" || $this->k81_exerc == ""?"null":"{$this->k81_exerc}")."
+                               ,$this->k81_emparlamentar
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -393,6 +417,19 @@ class cl_placaixarec {
          return false;
        }
      }
+     if(trim($this->k81_emparlamentar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_emparlamentar"])){
+       $sql  .= $virgula." k81_emparlamentar = $this->k81_emparlamentar ";
+       $virgula = ",";
+       if(trim($this->k81_emparlamentar) == null ){
+         $this->erro_sql = " Campo Emenda Parlamentar nao Informado.";
+         $this->erro_campo = "k81_emparlamentar";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      if(trim($this->k81_datareceb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_datareceb_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["k81_datareceb_dia"] !="") ){
        $sql  .= $virgula." k81_datareceb = '$this->k81_datareceb' ";
        $virgula = ",";
@@ -466,6 +503,14 @@ class cl_placaixarec {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->k81_regrepasse)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_regrepasse"])){
+       $sql  .= $virgula." k81_regrepasse = $this->k81_regrepasse ";
+       $virgula = ",";
+     }
+     if(trim($this->k81_exerc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_exerc"])){
+       $sql  .= $virgula." k81_exerc = $this->k81_exerc ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($k81_seqpla!=null){
