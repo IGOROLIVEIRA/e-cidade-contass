@@ -40,6 +40,14 @@ $clcflicita  = new cl_cflicita;
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
+echo 'Opção selecionada...';
+var_dump($db_opcao);
+
+if($db_opcao == 1){
+  echo 'Enter from include...';
+  die('End...');
+}
+
 ?>
 <html>
 <head>
@@ -47,6 +55,7 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
 

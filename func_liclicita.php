@@ -303,6 +303,47 @@ $sWhereContratos = " and 1 = 1 ";
           ";
                 }
 
+                if (isset($edital) && $edital == true) {
+                  
+                    $sql = "
+                      SELECT DISTINCT liclicita.l20_codigo,
+                            liclicita.l20_edital,
+                            liclicita.l20_anousu,
+                            pctipocompra.pc50_descr,
+                            liclicita.l20_numero,
+                            liclicita.l20_objeto,
+                            (CASE 
+                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
+                              THEN liclicita.l20_dtpublic
+                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
+                              THEN liclicita.l20_datacria
+                            END) as dl_Data_Referencia,
+                            'Pendente' as status
+                        FROM liclicita
+                        INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
+                        INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+                        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                        INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal
+                        INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
+                        INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao
+                        INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm
+                        INNER JOIN db_config AS dbconfig ON dbconfig.codigo = cflicita.l03_instit
+                        INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                        INNER JOIN bairro ON bairro.j13_codi = liclocal.l26_bairro
+                        INNER JOIN ruas ON ruas.j14_codigo = liclocal.l26_lograd
+                        LEFT JOIN liclicitaproc ON liclicitaproc.l34_liclicita = liclicita.l20_codigo
+                        LEFT JOIN protprocesso ON protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
+                        LEFT JOIN liclicitem ON liclicita.l20_codigo = l21_codliclicita
+                        LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
+                        LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+                        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                        WHERE l20_instit = 1
+                            AND (pc80_criterioadjudicacao = 1
+                                 OR pc80_criterioadjudicacao = 2) AND EXTRACT (YEAR from l20_dataaber) >= 2019
+                        ORDER BY l20_codigo
+          ";
+                }
+
                 $aRepassa = array();
 
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
