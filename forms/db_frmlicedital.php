@@ -35,7 +35,7 @@
 
 $clliclicita->rotulo->label();
 $clrotulo = new rotulocampo;
-// $clrotulo->label("l20_nroedital");
+$clrotulo->label("l20_nroedital");
 $clrotulo->label("l20_numero");
 $clrotulo->label("l20_codtipocom");
 $db_opcao = 1;
@@ -44,15 +44,18 @@ $db_botao = true;
 ?>
 <style type="text/css">
 .fieldsetinterno {
-		border:0px;
-		border-top:2px groove white;
-		margin-top:10px;
+	border:0px;
+	border-top:2px groove white;
+	margin-top:10px;
 		
 }
 fieldset table tr > td {
-		width: 180px;
-		white-space: nowrap
- }  
+	width: 180px;
+	white-space: nowrap
+}  
+.label-textarea{
+	vertical-align: top;
+}
 </style>
 <form name="form1" method="post" action="" onsubmit="">
 	<center>
@@ -71,45 +74,40 @@ fieldset table tr > td {
 	    <b>Número do Edital:</b>
 	   </td>
 	   <td> 
-	     <?
+	    <?
 	       db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
-	       
-	     ?>
+	    ?>
 	   </td>
 	 </tr>
 	 <tr>
 	    <td nowrap title="<?=@$Tl20_codepartamento?>">
-	        <?
-	        	db_ancora("Processo","js_pesquisal20_processo(true);",$db_opcao)
-			?>
+	    	<b>Processo:</b>
 	    </td>
 	    <td>
-	        <?
-	        db_input('l20_edital',10,$Il20_edital,true,'text',$db_opcao,"onchange='';");
-	        db_input('l20_descricaodep',45,$Il20_descricaodep,true,'text',3,"");
-	        ?>
+	      <?
+	        db_input('l20_edital',10,$Il20_edital,true,'text',3,"onchange='';");
+	        db_input('l20_objeto',45,$Il20_descricaodep,true,'text',3,"");
+	      ?>
 	    </td>
 	</tr>
 	<tr>
 	    <td nowrap title="<?=@$Tl20_codepartamento?>">
-	        <?
-	        	db_ancora("Modalidade","js_pesquisal20_processo(true);",$db_opcao)
-			?>
+	    	<b>Modalidade:</b>
 	    </td>
 	    <td>
 	        <?
-	        db_input('l20_edital',10,$Il20_edital,true,'text',$db_opcao,"onchange='';");
-	        db_input('l20_descricaodep',45,$Il20_descricaodep,true,'text',3,"");
+	        db_input('l20_numero',10,$Il20_edital,true,'text',3,"onchange='';");
+	        db_input('l20_descricao',45,$Il20_descricaodep,true,'text',3,"");
 	        ?>
 	    </td>
 	</tr>
 	<tr>
-	  <td nowrap title="Links da publicação">
+	  <td class="label-textarea" nowrap title="Links da publicação">
 	    <b>Links da publicação:</b>
 	  </td>
 	  <td>
         <?
-        	db_textarea('links',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+        	db_textarea('links',4,56,$Il20_razao,true,'text',1, '', '', '', 200);
         ?>
       </td>
 	</tr>
@@ -120,17 +118,17 @@ fieldset table tr > td {
 	  <td>
         <?
 	        $arr_tipo = array("0"=>"Selecione","1"=>"1- Próprio","2"=>"2- Estadual","3"=>"3- Federal","4"=>"4- Próprio e Estadual", "5"=> "5- Próprio e Federal", "9"=> "9- Outros");
-	        db_select("origem_recurso",$arr_tipo,true,$db_opcao);
+	        db_select("origem_recurso",$arr_tipo,true,1);
 	    ?>
 	  </td>
 	</tr>
 	<tr>
-	  <td nowrap title="Descrição do recurso">
+	  <td class="label-textarea" nowrap title="Descrição do recurso">
 	    <b>Descrição do Recurso:</b>
 	  </td>
 	  <td>
         <?
-        	db_textarea('dsecricao_recurso',0,53,'',true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+        	db_textarea('descricao_recurso',4,56,'',true,'text',1,"", '', '', 250);
         ?>
       </td>
 	</tr>
@@ -139,7 +137,7 @@ fieldset table tr > td {
 	    	<b>Data de Envio:</b>
 	  	</td>
 		<td>
-			<?= db_inputdata("l20_datacria",@$l20_datacria_dia,@$l20_datacria_mes,@$l20_datacria_ano,true,'text',$db_opcao);?>
+			<?= db_inputdata("data_referencia",'', '', '',true,'text',1);?>
 		</td>
 	</tr>
 	   </table>
@@ -157,32 +155,38 @@ fieldset table tr > td {
  
 <script>
 	
-	function limitaTextarea(valor){
-        var qnt = valor.value;
-        quantidade = 80;
-        total = qnt.length;
-
-        if(total <= quantidade) {
-            resto = quantidade- total;
-            document.getElementById('contador').innerHTML = resto;
-        } else {
-            document.getElementById(valor.name).value = qnt.substr(0, quantidade);
-            alert("Olá. Para atender  as normas do TCE MG / SICOM, este campo é  limitado. * LIMITE ALCANÇADO * !");
-        }
-    }
-
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|l20_nroedital|l20_numero|pc50_descr|dl_Data_Referencia|l20_objeto','Pesquisa',true,"0");
     }
+
+    function js_preenchepesquisa(codigo, edital, nroedital, numero, descricao, data, objeto){
+    	let dataFormatada = js_formatar(data, 'd');
+    	document.getElementById('l20_edital').value = edital;
+    	document.getElementById('l20_numero').value = numero;
+    	document.getElementById('l20_nroedital').value = nroedital;
+    	document.getElementById('l20_descricao').value = descricao;
+    	document.getElementById('data_referencia').value = dataFormatada;
+    	document.getElementById('l20_objeto').value = objeto;
+    	db_iframe_liclicita.hide();
+	}
 
     function js_salvarEdital(){
-    	alert('Calma jovem...');
+    	let descricao = document.getElementById('descricao_recurso').value;
+    	let origem_recurso = document.getElementById('origem_recurso').value;
+
+    	if(origem_recurso == 9 && !descricao){
+    		alert('Campo descrição da origem do recurso é obrigatório');
+    		return false;
+    	}
     }
 
-    function js_pesquisal20_processo(){
-    	console.log('l20_processo');
+    function limpaCampos(){
+    	document.getElementById('l20_edital').value = '';
+    	document.getElementById('l20_numero').value = '';
+    	document.getElementById('l20_nroedital').value = '';
+    	document.getElementById('l20_descricao').value = '';
+    	document.getElementById('data_referencia').value = '';
+    	document.getElementById('l20_objeto').value = '';
     }
-
 
 </script> 
- 
