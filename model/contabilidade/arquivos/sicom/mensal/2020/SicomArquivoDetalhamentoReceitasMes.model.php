@@ -104,7 +104,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         $clrec11 = new cl_rec112020();
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
-        $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
+        $rsResult10 = db_receitasaldosicom(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
         // db_criatabela($rsResult10);
 
         $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
@@ -210,6 +210,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                     $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
                     $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
                     $oDados10->si25_naturezareceita = $sNaturezaReceita;
+                    $oDados10->si25_regularizacaorepasse = $oDadosRec->k81_regrepasse;
+                    $oDados10->si25_exercicio = $oDadosRec->k81_exerc;
+                    $oDados10->si25_emendaparlamentar = $oDadosRec->k81_emparlamentar;
                     $oDados10->si25_vlarrecadado = 0;
                     $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $oDados10->Reg11 = array();
@@ -341,6 +344,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             $clrec10->si25_ededucaodereceita = $oDados10->si25_ededucaodereceita;
             $clrec10->si25_identificadordeducao = $oDados10->si25_identificadordeducao;
             $clrec10->si25_naturezareceita = $oDados10->si25_naturezareceita;
+            $clrec10->si25_regularizacaorepasse = $oDados10->si25_regularizacaorepasse;
+            $clrec10->si25_exercicio = $oDados10->si25_exercicio;
+            $clrec10->si25_emendaparlamentar = $oDados10->si25_emendaparlamentar;
             $clrec10->si25_vlarrecadado = abs($oDados10->si25_vlarrecadado);
             $clrec10->si25_mes = $oDados10->si25_mes;
             $clrec10->si25_instit = db_getsession("DB_instit");
