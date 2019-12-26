@@ -41,685 +41,714 @@ require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
 if ($db_opcao == 1) {
 
-    /*
-     * verifica na tabela licitaparam se deve utilizar processo do sistema
-     */
-    $oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+  /*
+   * verifica na tabela licitaparam se deve utilizar processo do sistema
+   */
+  $oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
 
-    if(isset($oParamLicicita[0]->l12_escolheprotocolo) && $oParamLicicita[0]->l12_escolheprotocolo == 't') {
-        $lprocsis = 's';
-    } else {
-        $lprocsis = 'n';
-    }
+  if(isset($oParamLicicita[0]->l12_escolheprotocolo) && $oParamLicicita[0]->l12_escolheprotocolo == 't') {
+    $lprocsis = 's';
+  } else {
+    $lprocsis = 'n';
+  }
 
-    /*
-     * verifica se existe apenas 1 cl_liclocal
-     */
-    $oLicLocal = new cl_liclocal();
-    $rsLicLocal = $oLicLocal->sql_record($oLicLocal->sql_query_file());
-    if( $oLicLocal->numrows == 1 ) {
-        db_fieldsmemory($rsLicLocal,0);
-        $l20_liclocal = $l26_codigo;
-    }
+  /*
+   * verifica se existe apenas 1 cl_liclocal
+   */
+  $oLicLocal = new cl_liclocal();
+  $rsLicLocal = $oLicLocal->sql_record($oLicLocal->sql_query_file());
+  if( $oLicLocal->numrows == 1 ) {
+    db_fieldsmemory($rsLicLocal,0);
+    $l20_liclocal = $l26_codigo;
+  }
 
-    /*
-     * verifica se existe apenas 1 cl_liccomissao
-     */
-    $oLicComissao = new cl_liccomissao();
-    $rsLicComissao = db_query($oLicComissao->sql_query_file());
-    if( pg_num_rows($rsLicComissao) == 1 ) {
-        db_fieldsmemory($rsLicComissao,0);
-        $l20_liccomissao = $l30_codigo;
-    }
+  /*
+   * verifica se existe apenas 1 cl_liccomissao
+   */
+  $oLicComissao = new cl_liccomissao();
+  $rsLicComissao = db_query($oLicComissao->sql_query_file());
+  if( pg_num_rows($rsLicComissao) == 1 ) {
+    db_fieldsmemory($rsLicComissao,0);
+    $l20_liccomissao = $l30_codigo;
+  }
 
 }
 
 if($l20_codepartamento!=null) {
-    $result_depto = $cldb_depart->sql_record($cldb_depart->sql_query_file($l20_codepartamento, 'descrdepto'));
-    if ($cldb_depart->numrows != 0) {
-        db_fieldsmemory($result_depto, 0);
-        $l20_descricaodep = $descrdepto;
-    }
+  $result_depto = $cldb_depart->sql_record($cldb_depart->sql_query_file($l20_codepartamento, 'descrdepto'));
+  if ($cldb_depart->numrows != 0) {
+    db_fieldsmemory($result_depto, 0);
+    $l20_descricaodep = $descrdepto;
+  }
 }
 $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 ?>
 
 <style type="text/css">
-    .fieldsetinterno {
-        border:0px;
-        border-top:2px groove white;
-        margin-top:10px;
+  .fieldsetinterno {
+    border:0px;
+    border-top:2px groove white;
+    margin-top:10px;
 
-    }
-    fieldset table tr > td {
-        width: 180px;
-        white-space: nowrap
-    }
+  }
+  fieldset table tr > td {
+    width: 180px;
+    white-space: nowrap
+  }
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
-    <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
-    <center>
+  <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
+  <center>
 
-        <table align=center style="margin-top:25px;">
-            <tr><td>
+    <table align=center style="margin-top:25px;">
+      <tr><td>
 
-                    <fieldset>
-                        <legend><strong>Licitação</strong></legend>
+          <fieldset>
+            <legend><strong>Licitação</strong></legend>
 
-                        <fieldset style="border:0px;">
+            <fieldset style="border:0px;">
 
-                            <table border="0">
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_codigo?>">
-                                        <?=@$Ll20_codigo?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_codigo',10,$Il20_codigo,true,'text',3,"");
-                                        if ($db_opcao == 1 || $db_opcao == 11){
-                                            $l20_correto = 'f';
-                                        }
-                                        db_input("l20_correto",1,"",true,"hidden",3);
-                                        if ($db_botao == false && @$l20_correto == 't'){
-                                            ?>
-                                            &nbsp;&nbsp;<font color="#FF0000"><b>Licitação já julgada</b></font>
-                                            <?
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_edital?>">
-                                        <?=@$Ll20_edital?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_edital',10,$Il20_edital,true,'text',3,"");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_numero?>">
-                                        <?=@$Ll20_numero?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_numero',10,$Il20_numero,true,'text',3,"");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_codtipocom?>">
-                                        <b>
-                                            <?
-                                            db_ancora("Modalidade :","js_pesquisal20_codtipocom(true);",3);
-                                            ?>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $result_tipo=$clcflicita->sql_record($clcflicita->sql_query_numeracao(null,"l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
-                                        if ($clcflicita->numrows==0){
-                                            db_msgbox("Nenhuma Modalidade cadastrada!!");
-                                            $result_tipo="";
-                                            $db_opcao=3;
-                                            $db_botao = false;
-                                            db_input("l20_codtipocom",10,"",true,"text");
-                                            db_input("l20_codtipocom",40,"",true,"text");
-                                        } else {
-                                            db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
-                                            if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
-                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-                                            }
-                                        }
-                                        ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
+              <table border="0">
+                <tr>
+                  <td nowrap title="<?=@$Tl20_codigo?>">
+                    <?=@$Ll20_codigo?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_codigo',10,$Il20_codigo,true,'text',3,"");
+                    if ($db_opcao == 1 || $db_opcao == 11){
+                      $l20_correto = 'f';
+                    }
+                    db_input("l20_correto",1,"",true,"hidden",3);
+                    if ($db_botao == false && @$l20_correto == 't'){
+                      ?>
+                      &nbsp;&nbsp;<font color="#FF0000"><b>Licitação já julgada</b></font>
+                      <?
+                    }
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_edital?>">
+                    <?=@$Ll20_edital?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_edital',10,$Il20_edital,true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_numero?>">
+                    <?=@$Ll20_numero?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_numero',10,$Il20_numero,true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_codtipocom?>">
+                    <b>
+                      <?
+                      db_ancora("Modalidade :","js_pesquisal20_codtipocom(true);",3);
+                      ?>
+                    </b>
+                  </td>
+                  <td>
+                    <?
+                    $result_tipo=$clcflicita->sql_record($clcflicita->sql_query_numeracao(null,"l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
+                    if ($clcflicita->numrows==0){
+                      db_msgbox("Nenhuma Modalidade cadastrada!!");
+                      $result_tipo="";
+                      $db_opcao=3;
+                      $db_botao = false;
+                      db_input("l20_codtipocom",10,"",true,"text");
+                      db_input("l20_codtipocom",40,"",true,"text");
+                    } else {
+                      db_selectrecord("l20_codtipocom",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
+                      if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
+                        echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
+                      }
+                    }
+                    ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
 
-                                    </td>
-                                </tr>
+                  </td>
+                </tr>
 
-                                <tr style="display: none">
-                                    <td nowrap title="<?=@$Tl20_id_usucria?>">
-                                        <?
-                                        db_ancora(@$Ll20_id_usucria,"js_pesquisal20_id_usucria(true);",3);
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $usuario=db_getsession("DB_id_usuario");
-                                        $result_usuario=$cldb_usuarios->sql_record($cldb_usuarios->sql_query_file($usuario));
-                                        if ($cldb_usuarios->numrows>0){
-                                            db_fieldsmemory($result_usuario,0);
-                                        }
-                                        $l20_id_usucria=$id_usuario;
-                                        db_input('l20_id_usucria',10,$Il20_id_usucria,true,'text',3," onchange='js_pesquisal20_id_usucria(false);'")
-                                        ?>
-                                        <?
-                                        db_input('nome',45,$Inome,true,'text',3,'')
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr style="display: none">
+                  <td nowrap title="<?=@$Tl20_id_usucria?>">
+                    <?
+                    db_ancora(@$Ll20_id_usucria,"js_pesquisal20_id_usucria(true);",3);
+                    ?>
+                  </td>
+                  <td>
+                    <?
+                    $usuario=db_getsession("DB_id_usuario");
+                    $result_usuario=$cldb_usuarios->sql_record($cldb_usuarios->sql_query_file($usuario));
+                    if ($cldb_usuarios->numrows>0){
+                      db_fieldsmemory($result_usuario,0);
+                    }
+                    $l20_id_usucria=$id_usuario;
+                    db_input('l20_id_usucria',10,$Il20_id_usucria,true,'text',3," onchange='js_pesquisal20_id_usucria(false);'")
+                    ?>
+                    <?
+                    db_input('nome',45,$Inome,true,'text',3,'')
+                    ?>
+                  </td>
+                </tr>
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_codepartamento?>">
-                                        <?
-                                        db_ancora("Cod.Departamento","js_pesquisal20_codepartamento(true);",$db_opcao)
+                <tr>
+                  <td nowrap title="<?=@$Tl20_codepartamento?>">
+                    <?
+                    db_ancora("Cod.Departamento","js_pesquisal20_codepartamento(true);",$db_opcao)
 
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_codepartamento',10,$Il20_codepartamento,true,'text',$db_opcao,"onchange='js_pesquisal20_codepartamento(false)';");
-                                        db_input('l20_descricaodep',45,$Il20_descricaodep,true,'text',3,"");
-                                        ?>
-                                    </td>
-                                </tr>
+                    ?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_codepartamento',10,$Il20_codepartamento,true,'text',$db_opcao,"onchange='js_pesquisal20_codepartamento(false)';");
+                    db_input('l20_descricaodep',45,$Il20_descricaodep,true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
-                                        <?=@$Ll20_tipliticacao?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $arr_tipo = array("0"=>"Selecione","1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
-                                        db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
-                                        ?>
-                                    </td>
-                                </tr>
-
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_tipnaturezaproced?>" id="tipnaturezaproced">
-                                        <?=@$Ll20_tipnaturezaproced?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $al20_tipnaturezaproced =array("0"=>"Selecione","1"=>"1-Licitação Normal","2"=>"2-Registro de Preço","3"=>"3-Credenciamento/Chamada");
-                                        db_select("l20_tipnaturezaproced",$al20_tipnaturezaproced,true,$db_opcao,"onchange='js_naturezaprocedimento(this.value);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_naturezaobjeto?>">
-                                        <?=@$Ll20_naturezaobjeto?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $al20_naturezaobjeto = array("0"=>"Selecione","1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens" );
-                                        db_select("l20_naturezaobjeto",$al20_naturezaobjeto,true,$db_opcao,"onchange='js_regime(this.value);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_regimexecucao?>">
-                                        <?=@$Ll20_regimexecucao?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $al20_regimexecucao = array("0"=>"Não se Aplica","1"=>"1- Empreitada por Preço Global","2"=>"2- Empreitada por Preço Unitário","3"=>"3- Empreitada Integral","4"=>"4- Tarefa","5"=>"5-Execução Direta");
-                                        db_select("l20_regimexecucao",$al20_regimexecucao,true,$db_opcao);
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="descontotab">
-                                        <label class="bold">Critério de Adjudicação:</label>
-                                    </td>
-                                    <td>
-                                        <? //OC3770
-                                        if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
-                                            $l20_criterioadjudicacao = "";
-                                        }
-                                        $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
-                                        db_select("l20_criterioadjudicacao", $aCriterios, true, '');
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
+                    <?=@$Ll20_tipliticacao?>
+                  </td>
+                  <td>
+                    <?
+                    $arr_tipo = array("0"=>"Selecione","1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
+                    db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
+                    ?>
+                  </td>
+                </tr>
 
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_numeroconvidado?>" id="numeroconvidado">
-                                        <?=@$Ll20_numeroconvidado?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_numeroconvidado',3,$Il20_numeroconvidado,true,'text',$db_opcao,"","","#E6E4F1")
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_tipnaturezaproced?>" id="tipnaturezaproced">
+                    <?=@$Ll20_tipnaturezaproced?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_tipnaturezaproced =array("0"=>"Selecione","1"=>"1-Licitação Normal","2"=>"2-Registro de Preço","3"=>"3-Credenciamento/Chamada");
+                    db_select("l20_tipnaturezaproced",$al20_tipnaturezaproced,true,$db_opcao,"onchange='js_naturezaprocedimento(this.value);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_naturezaobjeto?>">
+                    <?=@$Ll20_naturezaobjeto?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_naturezaobjeto = array("0"=>"Selecione","1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens" );
+                    db_select("l20_naturezaobjeto",$al20_naturezaobjeto,true,$db_opcao,"onchange='js_regime(this.value);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_regimexecucao?>">
+                    <?=@$Ll20_regimexecucao?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_regimexecucao = array("0"=>"Não se Aplica","1"=>"1- Empreitada por Preço Global","2"=>"2- Empreitada por Preço Unitário","3"=>"3- Empreitada Integral","4"=>"4- Tarefa","5"=>"5-Execução Direta");
+                    db_select("l20_regimexecucao",$al20_regimexecucao,true,$db_opcao);
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="descontotab">
+                    <label class="bold">Critério de Adjudicação:</label>
+                  </td>
+                  <td>
+                    <? //OC3770
+                    if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
+                      $l20_criterioadjudicacao = "";
+                    }
+                    $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+                    db_select("l20_criterioadjudicacao", $aCriterios, true, '');
+                    ?>
+                  </td>
+                </tr>
 
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_execucaoentrega?>">
-                                        <?=@$Ll20_execucaoentrega?>
-                                    </td>
-                                    <td>
-                                        <? $al20_diames = array("1"=>"Dias","2"=>"Mes");
-                                        db_select("l20_diames",$al20_diames,true,$db_opcao);
-                                        db_input('l20_execucaoentrega',3,$Il20_execucaoentrega,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_numeroconvidado?>" id="numeroconvidado">
+                    <?=@$Ll20_numeroconvidado?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_numeroconvidado',3,$Il20_numeroconvidado,true,'text',$db_opcao,"","","#E6E4F1")
+                    ?>
+                  </td>
+                </tr>
 
 
-
-                            </table>
-                        </fieldset>
-
-                        <fieldset class="fieldsetinterno">
-                            <legend><strong>Datas</strong></legend>
-                            <table>
-                                <tr>
-                                    <td nowrap title="Data Abertura Proc. Adm.">
-                                        <b>Data Abertura Proc. Adm. :</b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        if(!isset($l20_datacria)) {
-                                            $l20_datacria_dia=date('d',db_getsession("DB_datausu"));
-                                            $l20_datacria_mes=date('m',db_getsession("DB_datausu"));
-                                            $l20_datacria_ano=date('Y',db_getsession("DB_datausu"));
-                                        }
-                                        db_inputdata("l20_datacria",@$l20_datacria_dia,@$l20_datacria_mes,@$l20_datacria_ano,true,'text',$db_opcao);
-                                        ?>
-                                        <?=@$Ll20_horacria?>
-                                        <?
-                                        if ($db_opcao == 1 || $db_opcao == 11){
-                                            $l20_horacria=db_hora();
-                                        }
-                                        echo "&nbsp;";db_input('l20_horacria',5,$Il20_horacria,true,'text',3,"");echo "hh:mm";
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
-                                        <b> Data Emis/Alt Edital/Convite : </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata("l20_dataaber",@$l20_dataaber_dia,@$l20_dataaber_mes,@$l20_dataaber_ano,true,'text',$db_opcao);
-                                        ?>
-                                        <?=@$Ll20_horaaber?>
-                                        <?
-                                        if (empty($l20_horaaber)) {
-                                            $l20_horaaber= db_hora();
-                                        }
-                                        db_input('l20_horaaber', 5, $Il20_horaaber, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");echo "hh:mm";
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_execucaoentrega?>">
+                    <?=@$Ll20_execucaoentrega?>
+                  </td>
+                  <td>
+                    <? $al20_diames = array("1"=>"Dias","2"=>"Mes");
+                    db_select("l20_diames",$al20_diames,true,$db_opcao);
+                    db_input('l20_execucaoentrega',3,$Il20_execucaoentrega,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
 
 
 
-                                <tr>
-                                    <td nowrap title="Data Publicação DO" id="dtpublic">
-                                        <b>Data Publicação DO : </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata('l20_dtpublic',@$l20_dtpublic_dia,@$l20_dtpublic_mes,@$l20_dtpublic_ano,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
+              </table>
+            </fieldset>
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_recdocumentacao?>" id="recdocumentacao">
-                                        <?=@$Ll20_recdocumentacao?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata('l20_recdocumentacao',@$l20_recdocumentacao_dia,@$l20_recdocumentacao_mes,@$l20_recdocumentacao_ano,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
+            <fieldset class="fieldsetinterno">
+              <legend><strong>Datas</strong></legend>
+              <table>
+                <tr>
+                  <td nowrap title="Data Abertura Proc. Adm.">
+                    <b>Data Abertura Proc. Adm. :</b>
+                  </td>
+                  <td>
+                    <?
+                    if(!isset($l20_datacria)) {
+                      $l20_datacria_dia=date('d',db_getsession("DB_datausu"));
+                      $l20_datacria_mes=date('m',db_getsession("DB_datausu"));
+                      $l20_datacria_ano=date('Y',db_getsession("DB_datausu"));
+                    }
+                    db_inputdata("l20_datacria",@$l20_datacria_dia,@$l20_datacria_mes,@$l20_datacria_ano,true,'text',$db_opcao);
+                    ?>
+                    <?=@$Ll20_horacria?>
+                    <?
+                    if ($db_opcao == 1 || $db_opcao == 11){
+                      $l20_horacria=db_hora();
+                    }
+                    echo "&nbsp;";db_input('l20_horacria',5,$Il20_horacria,true,'text',3,"");echo "hh:mm";
+                    ?>
+                  </td>
+                </tr>
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_datapublicacao1?>" id="datapublicacao1">
-                                        <?=@$Ll20_datapublicacao1?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata('l20_datapublicacao1',@$l20_datapublicacao1_dia,@$l20_datapublicacao1_mes,@$l20_datapublicacao1_ano,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_nomeveiculo1?>" id="nomeveiculo1">
-                                        <?=@$Ll20_nomeveiculo1?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_nomeveiculo1',50,$Il20_nomeveiculo1,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_datapublicacao2?>" id="datapublicacao2">
-                                        <?=@$Ll20_datapublicacao2?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata('l20_datapublicacao2',@$l20_datapublicacao2_dia,@$l20_datapublicacao2_mes,@$l20_datapublicacao2_ano,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_nomeveiculo2?>" id="nomeveiculo2">
-                                        <?=@$Ll20_nomeveiculo2?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_nomeveiculo2',50,$Il20_nomeveiculo2,true,'text',$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                            </table>
-
-                        </fieldset>
-
-                        <fieldset>
-                            <legend><strong>Detalhamento para ME e EPP  </strong></legend>
-                            <table>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_critdesempate?>">
-                                        <?=@$Ll20_critdesempate?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
-                                        db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
-                                        ?>
-                                    <td>
-                                        <?=@$Ll20_subcontratacao?>
-                                    </td>
-                                    <td>
-                                        <?$al20_subcontratacao = array("2"=>"Não","1"=>"Sim");
-                                        db_select("l20_subcontratacao",$al20_subcontratacao,true,$db_opcao);
-                                        ?>
-                                    </td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_destexclusiva?>">
-                                        <?=@$Ll20_destexclusiva?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
-                                        db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
-                                        ?>
-                                    <td>
-                                        <?=@$Ll20_limitecontratacao?>
-                                    </td>
-                                    <td>
-                                        <?$al20_limitcontratacao = array("2"=>"Não","1"=>"Sim");
-                                        db_select("l20_limitcontratacao",$al20_limitcontratacao,true,$db_opcao);
-                                        ?>
-                                    </td>
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
-
-                        <fieldset>
-                            <legend><strong>Informações Adicionais  </strong></legend>
-                            <table>
-
-                                <tr id="trTipoJulgamento">
-                                    <td nowrap title="<?=@$Tl20_tipojulg?>">
-                                        <?=@$Ll20_tipojulg?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $arr_tipo = array("1"=>"Por item","3"=>"Por lote");
-                                        db_select("l20_tipojulg",$arr_tipo,true, $lBloqueadoRegistroPreco);
-                                        db_input("tipojulg",1,"",true,"hidden",3,"");
-                                        db_input("confirmado",1,"",true,"hidden",3,"");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="usaregistropreco">
-                                        <?=@$Ll03_usaregistropreco?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        if (!isset($l20_usaregistropreco)) {
-                                            $l20_usaregistropreco = "f";
-                                        }
-                                        db_select("l20_usaregistropreco",array("t"=>"Sim", "f"=>"Não"),true,$db_opcao,"");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_liclocal?>">
-                                        <?
-                                        db_ancora(@$Ll20_liclocal,"js_pesquisal20_liclocal(true);",$db_opcao);
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_liclocal',10,$Il20_liclocal,true,'text',$db_opcao," onchange='js_pesquisal20_liclocal(false);'")
-                                        ?>
-
-                                    </td>
-                                </tr>
-                                <?
-                                if(db_getsession("DB_anousu") >= 2016){
-                                    ?>
-                                    <tr>
-
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'hidden',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }else {
-                                    ?>
-                                    <tr>
-                                        <td nowrap title="<?=@$Tl20_liccomissao?>">
-                                            <?
-                                            db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }
-                                ?>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_equipepregao?>" id="equipepregao">
-                                        <?
-                                        db_ancora(@$Ll20_equipepregao,"js_pesquisal20_equipepregao(true);",$db_opcao);
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_equipepregao',10,$Il20_equipepregao,true,'text',$db_opcao," onchange='js_pesquisal20_equipepregao(false);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr id="formacontraleregistropreco" >
-                                    <td nowrap title="<?=@$Tl20_formacontroleregistropreco?>">
-                                        <?=@$Ll20_formacontroleregistropreco?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        if (!isset($ll20_formacontroleregistropreco)) {
-                                            $ll20_formacontroleregistropreco = "1";
-                                        }
-                                        db_select("l20_formacontroleregistropreco", array("1"=>"Por Quantidade", "2" => "Por Valor"), true, $lBloqueadoRegistroPreco, "onchange='verificaTipoJulgamento()'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <b>Processo do Sistema:</b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $aProcSistema = array("s"=>"Sim",
-                                            "n"=>"Não");
-                                        db_select('lprocsis',$aProcSistema,true,$db_opcao,"onChange='js_mudaProc(this.value);'");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <?=@$Ll20_procadmin?>
-                                    </td>
-                                    <td>
-                                        <? db_input('l20_procadmin',21,$Il20_procadmin,true,'text',$db_opcao,"")?>
-                                    </td>
-                                </tr>
-                                <tr id="procSis">
-                                    <td nowrap title="<?=@$Tl34_protprocesso?>">
-                                        <?
-                                        db_ancora($Ll34_protprocesso,"js_pesquisal34_protprocesso(true);",$db_opcao);
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('p58_numero', 15, $Ip58_numero, true, 'text', $db_opcao,"onChange='js_pesquisal34_protprocesso(false);'");
-                                        db_input('l34_protprocesso', 15, $Il34_protprocesso, true, 'hidden', $db_opcao);
-                                        db_input('l34_protprocessodescr',45,"",  true,'text',3,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                            </table>
-
-                        </fieldset>
-
-                        <fieldset class="fieldsetinterno">
-                            <legend><b>Outras Informações</b></legend>
-
-                            <table>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_local?>" id="local">
-                                        <?=@$Ll20_local?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_local',0,57,$Il20_local,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_objeto?>">
-                                        <?=@$Ll20_objeto?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_objeto',0,57,$Il20_objeto,true,'text',$db_opcao,"onkeyup='limitaTextareaobj(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_localentrega?>">
-                                        <?=@$Ll20_localentrega?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_localentrega',0,57,$Il20_localentrega,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_prazoentrega?>">
-                                        <?=@$Ll20_prazoentrega?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_prazoentrega',0,57,$Il20_prazoentrega,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_condicoespag?>">
-                                        <?=@$Ll20_condicoespag?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_condicoespag',0,57,$Il20_condicoespag,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_validadeproposta?>">
-                                        <?=@$Ll20_validadeproposta?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_validadeproposta',0,57,$Il20_validadeproposta,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
+                    <b> Data Emis/Alt Edital/Convite : </b>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata("l20_dataaber",@$l20_dataaber_dia,@$l20_dataaber_mes,@$l20_dataaber_ano,true,'text',$db_opcao);
+                    ?>
+                    <?=@$Ll20_horaaber?>
+                    <?
+                    if (empty($l20_horaaber)) {
+                      $l20_horaaber= db_hora();
+                    }
+                    db_input('l20_horaaber', 5, $Il20_horaaber, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");echo "hh:mm";
+                    ?>
+                  </td>
+                </tr>
 
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_clausulapro?>">
-                                        <?=@$Ll20_clausulapro?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_clausulapro',0,57,$Il20_clausulapro,true,'text',$db_opcao,"onkeyup='limitaTextareacpro(this);'",'','#E6E4F1');
-                                        ?>
-                                    </td>
-                                </tr>
+
+                <tr>
+                  <td nowrap title="Data Publicação DO" id="dtpublic">
+                    <b>Data Publicação DO : </b>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata('l20_dtpublic',@$l20_dtpublic_dia,@$l20_dtpublic_mes,@$l20_dtpublic_ano,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_recdocumentacao?>" id="recdocumentacao">
+                    <?=@$Ll20_recdocumentacao?>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata('l20_recdocumentacao',@$l20_recdocumentacao_dia,@$l20_recdocumentacao_mes,@$l20_recdocumentacao_ano,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_datapublicacao1?>" id="datapublicacao1">
+                    <?=@$Ll20_datapublicacao1?>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata('l20_datapublicacao1',@$l20_datapublicacao1_dia,@$l20_datapublicacao1_mes,@$l20_datapublicacao1_ano,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_nomeveiculo1?>" id="nomeveiculo1">
+                    <?=@$Ll20_nomeveiculo1?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_nomeveiculo1',50,$Il20_nomeveiculo1,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_datapublicacao2?>" id="datapublicacao2">
+                    <?=@$Ll20_datapublicacao2?>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata('l20_datapublicacao2',@$l20_datapublicacao2_dia,@$l20_datapublicacao2_mes,@$l20_datapublicacao2_ano,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_nomeveiculo2?>" id="nomeveiculo2">
+                    <?=@$Ll20_nomeveiculo2?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_nomeveiculo2',50,$Il20_nomeveiculo2,true,'text',$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+
+              </table>
+
+            </fieldset>
+
+            <fieldset>
+              <legend><strong>Detalhamento para ME e EPP  </strong></legend>
+              <table>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_critdesempate?>">
+                    <?=@$Ll20_critdesempate?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
+                    db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
+                    ?>
+                  <td>
+                    <?=@$Ll20_subcontratacao?>
+                  </td>
+                  <td>
+                    <?$al20_subcontratacao = array("2"=>"Não","1"=>"Sim");
+                    db_select("l20_subcontratacao",$al20_subcontratacao,true,$db_opcao);
+                    ?>
+                  </td>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_destexclusiva?>">
+                    <?=@$Ll20_destexclusiva?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
+                    db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
+                    ?>
+                  <td>
+                    <?=@$Ll20_limitecontratacao?>
+                  </td>
+                  <td>
+                    <?$al20_limitcontratacao = array("2"=>"Não","1"=>"Sim");
+                    db_select("l20_limitcontratacao",$al20_limitcontratacao,true,$db_opcao);
+                    ?>
+                  </td>
+                  </td>
+                </tr>
+              </table>
+            </fieldset>
+
+            <fieldset>
+              <legend><strong>Informações Adicionais  </strong></legend>
+              <table>
+
+                <tr id="trTipoJulgamento">
+                  <td nowrap title="<?=@$Tl20_tipojulg?>">
+                    <?=@$Ll20_tipojulg?>
+                  </td>
+                  <td>
+                    <?
+                    $arr_tipo = array("1"=>"Por item","3"=>"Por lote");
+                    db_select("l20_tipojulg",$arr_tipo,true, $lBloqueadoRegistroPreco);
+                    db_input("tipojulg",1,"",true,"hidden",3,"");
+                    db_input("confirmado",1,"",true,"hidden",3,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="usaregistropreco">
+                    <?=@$Ll03_usaregistropreco?>
+                  </td>
+                  <td>
+                    <?
+                    if (!isset($l20_usaregistropreco)) {
+                      $l20_usaregistropreco = "f";
+                    }
+                    db_select("l20_usaregistropreco",array("t"=>"Sim", "f"=>"Não"),true,$db_opcao,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_liclocal?>">
+                    <?
+                    db_ancora(@$Ll20_liclocal,"js_pesquisal20_liclocal(true);",$db_opcao);
+                    ?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_liclocal',10,$Il20_liclocal,true,'text',$db_opcao," onchange='js_pesquisal20_liclocal(false);'")
+                    ?>
+
+                  </td>
+                </tr>
+                <?
+                if(db_getsession("DB_anousu") >= 2016){
+                  ?>
+                  <tr>
+
+                    <td>
+                      <?
+                      db_input('l20_liccomissao',10,$Il20_liccomissao,true,'hidden',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
+                      ?>
+                    </td>
+                  </tr>
+                  <?
+                }else {
+                  ?>
+                  <tr>
+                    <td nowrap title="<?=@$Tl20_liccomissao?>">
+                      <?
+                      db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
+                      ?>
+                    </td>
+                    <td>
+                      <?
+                      db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
+                      ?>
+                    </td>
+                  </tr>
+                  <?
+                }
+                ?>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_equipepregao?>" id="equipepregao">
+                    <?
+                    db_ancora(@$Ll20_equipepregao,"js_pesquisal20_equipepregao(true);",$db_opcao);
+                    ?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_equipepregao',10,$Il20_equipepregao,true,'text',$db_opcao," onchange='js_pesquisal20_equipepregao(false);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr id="formacontraleregistropreco" >
+                  <td nowrap title="<?=@$Tl20_formacontroleregistropreco?>">
+                    <?=@$Ll20_formacontroleregistropreco?>
+                  </td>
+                  <td>
+                    <?
+                    if (!isset($ll20_formacontroleregistropreco)) {
+                      $ll20_formacontroleregistropreco = "1";
+                    }
+                    db_select("l20_formacontroleregistropreco", array("1"=>"Por Quantidade", "2" => "Por Valor"), true, $lBloqueadoRegistroPreco, "onchange='verificaTipoJulgamento()'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <b>Processo do Sistema:</b>
+                  </td>
+                  <td>
+                    <?
+                    $aProcSistema = array("s"=>"Sim",
+                      "n"=>"Não");
+                    db_select('lprocsis',$aProcSistema,true,$db_opcao,"onChange='js_mudaProc(this.value);'");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <?=@$Ll20_procadmin?>
+                  </td>
+                  <td>
+                    <? db_input('l20_procadmin',21,$Il20_procadmin,true,'text',$db_opcao,"")?>
+                  </td>
+                </tr>
+                <tr id="procSis">
+                  <td nowrap title="<?=@$Tl34_protprocesso?>">
+                    <?
+                    db_ancora($Ll34_protprocesso,"js_pesquisal34_protprocesso(true);",$db_opcao);
+                    ?>
+                  </td>
+                  <td>
+                    <?
+                    db_input('p58_numero', 15, $Ip58_numero, true, 'text', $db_opcao,"onChange='js_pesquisal34_protprocesso(false);'");
+                    db_input('l34_protprocesso', 15, $Il34_protprocesso, true, 'hidden', $db_opcao);
+                    db_input('l34_protprocessodescr',45,"",  true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
+
+              </table>
+
+            </fieldset>
+
+            <fieldset class="fieldsetinterno">
+              <legend><b>Outras Informações</b></legend>
+
+              <table>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_local?>" id="local">
+                    <?=@$Ll20_local?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_local',0,57,$Il20_local,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_objeto?>">
+                    <?=@$Ll20_objeto?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_objeto',0,57,$Il20_objeto,true,'text',$db_opcao,"onkeyup='limitaTextareaobj(this);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_localentrega?>">
+                    <?=@$Ll20_localentrega?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_localentrega',0,57,$Il20_localentrega,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_prazoentrega?>">
+                    <?=@$Ll20_prazoentrega?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_prazoentrega',0,57,$Il20_prazoentrega,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_condicoespag?>">
+                    <?=@$Ll20_condicoespag?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_condicoespag',0,57,$Il20_condicoespag,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_validadeproposta?>">
+                    <?=@$Ll20_validadeproposta?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_validadeproposta',0,57,$Il20_validadeproposta,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
 
 
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_aceitabilidade?>" id="aceitabilidade">
-                                        <b>Critério de Aceitabilidade:</b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_aceitabilidade',0,57,$Il20_aceitabilidade,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_clausulapro?>">
+                    <?=@$Ll20_clausulapro?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_clausulapro',0,57,$Il20_clausulapro,true,'text',$db_opcao,"onkeyup='limitaTextareacpro(this);'",'','#E6E4F1');
+                    ?>
+                  </td>
+                </tr>
 
-                            </table>
-                        </fieldset>
 
-                    </fieldset>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_aceitabilidade?>" id="aceitabilidade">
+                    <b>Critério de Aceitabilidade:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_aceitabilidade',0,57,$Il20_aceitabilidade,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
 
-                </td></tr>
-        </table>
+              </table>
+            </fieldset>
+            <fieldset>
+              <legend><b>Dispensa/Inexigibilidade</b></legend>
 
-    </center>
+              <table>
+                <tr>
+                  <td nowrap title="<?=@$Tl20_justificativa?>">
+                    <?=@$Ll20_justificativa?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
 
-    <?/*
+                <tr>
+                  <td nowrap title="<?=@$Tl20_razao?>">
+                    <?=@$Ll20_razao?>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
+                    ?>
+                  </td>
+                </tr>
+
+              </table>
+            </fieldset>
+
+          </fieldset>
+          </fieldset>
+
+        </td></tr>
+    </table>
+
+  </center>
+
+  <?/*
    if ($db_opcao==2 || $db_opcao==22){
         $jscript = "onClick='return js_confirmar();'";
    } else {
         $jscript = "";
    }<?=$jscript?>*/
-    ?>
+  ?>
 
 
-    <input name="<?=($db_opcao==1?'incluir':($db_opcao==2||$db_opcao==22?'alterar':'excluir'))?>" type="submit" id="db_opcao"
-           value="<?=($db_opcao==1?'Incluir':($db_opcao==2||$db_opcao==22?'Alterar':'Excluir'))?>"
-        <?=($db_botao==false?'disabled':'') ?>  onClick="return js_confirmadatas()">
-    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+  <input name="<?=($db_opcao==1?'incluir':($db_opcao==2||$db_opcao==22?'alterar':'excluir'))?>" type="submit" id="db_opcao"
+         value="<?=($db_opcao==1?'Incluir':($db_opcao==2||$db_opcao==22?'Alterar':'Excluir'))?>"
+    <?=($db_botao==false?'disabled':'') ?>  onClick="return js_confirmadatas()">
+  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
@@ -794,13 +823,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             // document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
             // document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
             // document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
-            // document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-            // document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
+            document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
+            document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
 
             // document.getElementById("l20_veicdivulgacao").disabled=false;
             // document.getElementById("l20_dtpubratificacao").disabled=false;
-            // document.getElementById("l20_justificativa").disabled=false;
-            // document.getElementById("l20_razao").disabled=false;
+            document.getElementById("l20_justificativa").disabled=false;
+            document.getElementById("l20_razao").disabled=false;
             // document.getElementById("l20_tipoprocesso").disabled=false;
             //document.getElementById("l20_dtpubratificacao").value='';
 
@@ -846,8 +875,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             // document.getElementById("l20_veicdivulgacao").disabled=true;
             // document.getElementById("l20_dtpubratificacao").disabled=true;
-            // document.getElementById("l20_justificativa").disabled=true;
-            // document.getElementById("l20_razao").disabled=true;
+            document.getElementById("l20_justificativa").disabled=true;
+            document.getElementById("l20_razao").disabled=true;
             // document.getElementById("l20_tipoprocesso").disabled=true;
             //document.getElementById("l20_dtpubratificacao").value='';
 
@@ -908,8 +937,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     /*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
     // document.getElementById("l20_veicdivulgacao").disabled=true;
     // document.getElementById("l20_dtpubratificacao").disabled=true;
-    // document.getElementById("l20_justificativa").disabled=true;
-    // document.getElementById("l20_razao").disabled=true;
+    document.getElementById("l20_justificativa").disabled=true;
+    document.getElementById("l20_razao").disabled=true;
     // document.getElementById("l20_tipoprocesso").disabled=true;
     //document.getElementById("l20_dtpubratificacao").value='';
 
@@ -917,21 +946,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
     campo=campo.replace(" ", "");
-    // if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
+    if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
     //     document.getElementById("l20_veicdivulgacao").disabled=false;
     //     document.getElementById("l20_dtpubratificacao").disabled=false;
-    //     document.getElementById("l20_justificativa").disabled=false;
-    //     document.getElementById("l20_razao").disabled=false;
+        document.getElementById("l20_justificativa").disabled=false;
+        document.getElementById("l20_razao").disabled=false;
     //     document.getElementById("l20_tipoprocesso").disabled=false;
     //     document.getElementById("l20_dtpubratificacao").value='';
     //
     //     document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
     //     document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
     //     document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
-    //     document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-    //     document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
+        document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
+        document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
     //
-    // }
+    }
 
     function js_busca(){
 
@@ -1186,14 +1215,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
     function js_preenchepesquisa(chave){
         db_iframe_liclicita.hide();
-        <?
-        if($db_opcao!=1){
-        echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave;";
-        ?>
+      <?
+      if($db_opcao!=1){
+      echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave;";
+      ?>
         parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao='+chave;
-        <?
-        }
-        ?>
+      <?
+      }
+      ?>
     }
     function js_pesquisal20_liclocal(mostra){
         if(mostra==true){
@@ -1394,13 +1423,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if( js_CompararDatas(dataCriacao, dataPublicacao, '<=') ) {
             if( js_CompararDatas(dataPublicacao, dataAbertura, '<=') ) {
-                <?
-                if($db_opcao==2 || $db_opcao==22) {
-                    echo 'return js_confirmar();';
-                } else {
-                    echo 'return true;';
-                }
-                ?>
+              <?
+              if($db_opcao==2 || $db_opcao==22) {
+                echo 'return js_confirmar();';
+              } else {
+                echo 'return true;';
+              }
+              ?>
             } else {
 
                 /*alert("A Data Edital/Convite deve ser maior ou igual a Data de Publicação.");
@@ -1455,8 +1484,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     // document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';
     // document.form1.l20_veicdivulgacao.style.backgroundColor='#E6E4F1';
-    // document.form1.l20_justificativa.style.backgroundColor='#E6E4F1';
-    // document.form1.l20_razao.style.backgroundColor='#E6E4F1';
+    document.form1.l20_justificativa.style.backgroundColor='#E6E4F1';
+    document.form1.l20_razao.style.backgroundColor='#E6E4F1';
     document.getElementById("l20_numeroconvidado").readOnly=true;
 
     var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
@@ -1512,11 +1541,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     <?
     if($db_opcao == 1) {
-        echo "js_mudaProc('{$lprocsis}');";
+      echo "js_mudaProc('{$lprocsis}');";
     } else {
-        if ( (isset($l34_protprocesso) && trim($l34_protprocesso) != '') ) {
-            echo "js_mudaProc('s');";
-        }
+      if ( (isset($l34_protprocesso) && trim($l34_protprocesso) != '') ) {
+        echo "js_mudaProc('s');";
+      }
     }
     ?>
 
@@ -1540,7 +1569,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 </script>
 <?
 if ( empty($l34_liclicita)) {
-    echo "<script>
+  echo "<script>
          document.form1.lprocsis.value = 'n';
          $('procSis').style.display = 'none';
          $('procAdm').style.display = '';
