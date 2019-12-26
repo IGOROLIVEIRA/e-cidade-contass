@@ -1273,7 +1273,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function jsPesquisaContratadoHabilitado() {
 
-        if ($('ac16_origem').value == 3) {
+        if ($('ac16_origem').value == 3 || $('ac16_origem').value == 1) {
             var nLicitacao = $('ac16_licitacao').value;
 
             if (nLicitacao == '') {
