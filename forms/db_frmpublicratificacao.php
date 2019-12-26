@@ -70,27 +70,27 @@ $clliclicita->rotulo->label();
                 </td>
             </tr>
 
-            <tr>
-                <td nowrap title="<?=@$Tl20_justificativa?>">
-                    <strong>Justificativa:</strong>
-                </td>
-                <td>
-                    <?
-                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                    ?>
-                </td>
-            </tr>
-
-            <tr>
-                <td nowrap title="<?=@$Tl20_razao?>">
-                    <strong>Razão:</strong>
-                </td>
-                <td>
-                    <?
-                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-                    ?>
-                </td>
-            </tr>
+<!--            <tr>-->
+<!--                <td nowrap title="--><?//=@$Tl20_justificativa?><!--">-->
+<!--                    <strong>Justificativa:</strong>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    --><?//
+//                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
+//                    ?>
+<!--                </td>-->
+<!--            </tr>-->
+<!---->
+<!--            <tr>-->
+<!--                <td nowrap title="--><?//=@$Tl20_razao?><!--">-->
+<!--                    <strong>Razão:</strong>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    --><?//
+//                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
+//                    ?>
+<!--                </td>-->
+<!--            </tr>-->
         </table>
     </fieldset>
     <?php
@@ -349,8 +349,8 @@ $clliclicita->rotulo->label();
                 l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
                 l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
                 l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
-                l20_justificativa          : document.getElementById('l20_justificativa').value,
-                l20_razao                  : document.getElementById('l20_razao').value,
+                // l20_justificativa          : document.getElementById('l20_justificativa').value,
+                // l20_razao                  : document.getElementById('l20_razao').value,
                 itens                      : itensEnviar,
             }, retornoAjax);
         } catch(e) {
@@ -410,8 +410,8 @@ $clliclicita->rotulo->label();
                 l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
                 l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
                 l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
-                l20_justificativa          : document.getElementById('l20_justificativa').value,
-                l20_razao                  : document.getElementById('l20_razao').value,
+                // l20_justificativa          : document.getElementById('l20_justificativa').value,
+                // l20_razao                  : document.getElementById('l20_razao').value,
                 itens                      : itensEnviar,
             }, oRetornoAjax);
         } catch(e) {

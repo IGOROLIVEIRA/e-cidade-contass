@@ -183,21 +183,21 @@ try{
                 throw new Exception ("Usuário: Campo veículo de divulgação não Informado.");
             }
 
-            if($oParam->l20_justificativa == null || $oParam->l20_justificativa == ""){
-                throw new Exception ("Usuário: Campo Justificativa não Informado.");
-            }
+//            if($oParam->l20_justificativa == null || $oParam->l20_justificativa == ""){
+//                throw new Exception ("Usuário: Campo Justificativa não Informado.");
+//            }
 
-            if($oParam->l20_razao == null || $oParam->l20_razao == ""){
-                throw new Exception ("Usuário: Campo Razão não Informado.");
-            }
+//            if($oParam->l20_razao == null || $oParam->l20_razao == ""){
+//                throw new Exception ("Usuário: Campo Razão não Informado.");
+//            }
 
-            if (strlen($oParam->l20_razao) < 10 || strlen($oParam->l20_razao) > 250) {
-                throw new Exception ("O campo Razão deve ter no mínimo 10 caracteres e no máximo 250");
-            }
+//            if (strlen($oParam->l20_razao) < 10 || strlen($oParam->l20_razao) > 250) {
+//                throw new Exception ("O campo Razão deve ter no mínimo 10 caracteres e no máximo 250");
+//            }
 
-            if (strlen($oParam->l20_justificativa) < 10 || strlen($oParam->l20_justificativa) > 250) {
-                throw new Exception ("O campo justificativa deve ter no mínimo 10 caracteres e no máximo 250");
-            }
+//            if (strlen($oParam->l20_justificativa) < 10 || strlen($oParam->l20_justificativa) > 250) {
+//                throw new Exception ("O campo justificativa deve ter no mínimo 10 caracteres e no máximo 250");
+//            }
 
             if (strlen($oParam->l20_veicdivulgacao) < 10 || strlen($oParam->l20_veicdivulgacao) > 80) {
                 throw new Exception ("O campo Veiculo deve ter no mínimo 10 caracteres e no máximo 80");
@@ -211,8 +211,8 @@ try{
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
             $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
             $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;
-            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
-            $clliclicita->l20_razao = $oParam->l20_razao;
+//            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
+//            $clliclicita->l20_razao = $oParam->l20_razao;
             $clliclicita->alterar($oParam->licitacao,null,null);
 
             if ($clliclicita->erro_status == "0") {
@@ -338,8 +338,8 @@ try{
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
             $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
             $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;
-            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
-            $clliclicita->l20_razao = $oParam->l20_razao;
+//            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
+//            $clliclicita->l20_razao = $oParam->l20_razao;
             $clliclicita->alterar($oParam->licitacao,null,null);
 
             if ($clliclicita->erro_status == "0") {
