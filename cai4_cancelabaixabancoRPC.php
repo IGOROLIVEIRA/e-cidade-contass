@@ -191,41 +191,197 @@ switch ($oParam->exec) {
 function cancelaAutenticacao($iCodCla) {
 
   if ( !db_utils::inTransaction() ) {
-  	throw new Exception("Nenhuma transação com o banco de dados encontrada!");
+    throw new Exception("Nenhuma transação com o banco de dados encontrada!");
   }
 
   if (empty($iCodCla)) {
-     throw new ParameterException("Código da Classificação não declarada!");
+    throw new ParameterException("Código da Classificação não declarada!");
   }
 
-  $oDaoDiscla      = db_utils::getDao("discla");
-  $oDaoCorcla      = db_utils::getDao("corcla");
-  $oDaoCorrenteId  = db_utils::getDao("correnteid");
-  $oDaoCorNump     = db_utils::getDao("cornump");
-  $oDaoCorAutent   = db_utils::getDao("corautent");
-  $oDaoCorrente    = db_utils::getDao("corrente");
-  $oDaoConciliaCor = db_utils::getDao("conciliacor");
+  $oDaoDiscla                  = new cl_discla();
+  $oDaoCorcla                  = new cl_corcla();
+  $oDaoCorrenteId              = new cl_correnteid();
+  $oDaoCorNump                 = new cl_cornump();
+  $oDaoCorNumpDesconto         = new cl_cornumpdesconto();
+  $oDaoCorAutent               = new cl_corautent();
+  $oDaoCorrente                = new cl_corrente();
+  $oDaoConciliaCor             = new cl_conciliacor();
+  $oDaoConLancamCgm            = new cl_conlancamcgm();
+  $oDaoConLancamRec            = new cl_conlancamrec();
+  $oDaoConLancamCompl          = new cl_conlancamcompl();
+  $oDaoConLancamDoc            = new cl_conlancamdoc();
+  $oDaoConLancamCorrente       = new cl_conlancamcorrente();
+  $oDaoConLancamPag            = new cl_conlancampag();
+  $oDaoConLancamVal            = new cl_conlancamval();
+  $oDaoConLancamConCarpeculiar = new cl_conlancamconcarpeculiar();
+  $oDaoConLancamInstit         = new cl_conlancaminstit();
+  $oDaoConLancamOrdem          = new cl_conlancamordem();
+  $oDaoConLancam               = new cl_conlancam();
+  $oDaoCorHist                 = new cl_corhist();
+  $oDaoCorAutent               = new cl_corautent();
+  $oDaoConDataConf             = new cl_condataconf();
+  $oDaoContaCorrenteDetalhe    = new cl_contacorrentedetalheconlancamval();
 
   $sSqlAutenticacao = $oDaoCorcla->sql_query_file(null, null, null, "*", null, "k12_codcla = {$iCodCla}");
   $rsAutenticacao   = $oDaoCorcla->sql_record($sSqlAutenticacao);
   $iQtdRegistros    = $oDaoCorcla->numrows;
+
   if ($iQtdRegistros > 0) {
 
-    if (USE_PCASP && db_getsession("DB_anousu") > 2012) {
-      throw new BusinessException("Arquivo Autenticado!\\nOperação não permitida!");
-    }
-
     for ($iAutenticacao = 0; $iAutenticacao < $iQtdRegistros; $iAutenticacao++) {
+
       $oAutenticacao = db_utils::fieldsMemory($rsAutenticacao, $iAutenticacao);
 
-      $sWhere  = "k84_id = {$oAutenticacao->k12_id} ";
+      $sWhere = "    c99_data   >= '{$oAutenticacao->k12_data}'::date
+                 and c99_instit  = " . db_getsession('DB_instit');
+      $sSqlValidaFechamentoContabilidade = $oDaoConDataConf->sql_query(null, null, '*', null, $sWhere);
+      $rsValidaFechamentoContabilidade   = $oDaoConDataConf->sql_record($sSqlValidaFechamentoContabilidade);
+      if ($oDaoConDataConf->numrows > 0) {
+
+        $sMsg  = "Operação não permitida!\n";
+        $sMsg .= "A data de encerramento da contabilidade é posterior a data de autenticação.\n";
+        throw new Exception($sMsg);
+      }
+
+      /**
+       * Excluimos os lancamentos contabeis vinculados a classificacao
+       */
+      $sWhere  = "    c86_id     = {$oAutenticacao->k12_id}     ";
+      $sWhere .= "and c86_autent = {$oAutenticacao->k12_autent} ";
+      $sWhere .= "and c86_data   = '{$oAutenticacao->k12_data}' ";
+      $sSqlLancamentos = $oDaoConLancamCorrente->sql_query(null, 'c86_conlancam' , null, $sWhere);
+      $rsLancamentos   = $oDaoConLancamCorrente->sql_record( $sSqlLancamentos );
+      $oLancamentosVinculados = db_utils::getCollectionByRecord( $rsLancamentos );
+
+      foreach ($oLancamentosVinculados as $iIndice => $oLancamento) {
+
+        $oDaoConLancamCgm->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancamCgm->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamCgm gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamCgm->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamRec->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancamRec->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamRec gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamRec->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamCompl->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancamCompl->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamCompl gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamCompl->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamDoc->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancamDoc->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamDoc gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamDoc->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $sWhere  = "    c86_id     = {$oAutenticacao->k12_id}     ";
+        $sWhere .= "and c86_autent = {$oAutenticacao->k12_autent} ";
+        $sWhere .= "and c86_data   = '{$oAutenticacao->k12_data}' ";
+        $oDaoConLancamCorrente->excluir(null, $sWhere);
+        if ($oDaoConLancamCorrente->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamCorrente gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamDoc->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamPag->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancamPag->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamPag gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamPag->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $sWhereContaCorrenteDetalhe = " c28_conlancamval in (select c69_sequen from conlancamval where c69_codlan = {$oLancamento->c86_conlancam}) ";
+        $oDaoContaCorrenteDetalhe->excluir(null, $sWhereContaCorrenteDetalhe);
+        if ($oDaoContaCorrenteDetalhe->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela contacorrentedetalheconlancamval gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoContaCorrenteDetalhe->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+
+        $oDaoConLancamVal->excluir(null, " c69_codlan = {$oLancamento->c86_conlancam} ");
+        if ($oDaoConLancamVal->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamVal gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamVal->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamConCarpeculiar->excluir(null, " c08_codlan = {$oLancamento->c86_conlancam} ");
+        if ($oDaoConLancamConCarpeculiar->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamConCarpeculiar gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamConCarpeculiar->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamInstit->excluir(null, " c02_codlan = {$oLancamento->c86_conlancam} ");
+        if ($oDaoConLancamInstit->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamInstit gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamInstit->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancamOrdem->excluir(null, " c03_codlan = {$oLancamento->c86_conlancam} ");
+        if ($oDaoConLancamOrdem->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancamOrdem gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancamOrdem->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+        $oDaoConLancam->excluir($oLancamento->c86_conlancam);
+        if ($oDaoConLancam->erro_status == "0") {
+
+          $sMsg  = "Erro ao excluir dados da tabela ConLancam gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+          $sMsg .= "Erro: {$oDaoConLancam->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+          throw new Exception($sMsg);
+        }
+
+      }
+
+      $oDaoCorHist->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
+      if ($oDaoCorHist->erro_status == "0") {
+
+        $sMsg  = "Erro ao excluir dados da tabela CorHist gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+        $sMsg .= "Erro: {$oDaoCorHist->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+        throw new Exception($sMsg);
+      }
+
+      $oDaoCorAutent->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
+      if ($oDaoCorAutent->erro_status == "0") {
+
+        $sMsg  = "Erro ao excluir dados da tabela CorAutent gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+        $sMsg .= "Erro: {$oDaoCorAutent->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+        throw new Exception($sMsg);
+      }
+
+      $sWhere  = "    k84_id     = {$oAutenticacao->k12_id}     ";
       $sWhere .= "and k84_autent = {$oAutenticacao->k12_autent} ";
-      $sWhere .= "and k84_data = '{$oAutenticacao->k12_data}' ";
+      $sWhere .= "and k84_data   = '{$oAutenticacao->k12_data}' ";
       $oDaoConciliaCor->sql_record($oDaoConciliaCor->sql_query_file(null, "k84_sequencial", null, $sWhere));
       if ($oDaoConciliaCor->numrows > 0) {
-          $sMsg  = "[ 0 ] - Procedimento não poderá ser realizado!\n";
-          $sMsg .= "Foram encontrados registros de conciliação bancária para a autenticação.\n";
-          throw new Exception($sMsg);
+        $sMsg  = "[ 0 ] - Procedimento não poderá ser realizado!\n";
+        $sMsg .= "Foram encontrados registros de conciliação bancária para a autenticação.\n";
+        throw new Exception($sMsg);
       }
 
       $oDaoCorcla->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
@@ -234,7 +390,6 @@ function cancelaAutenticacao($iCodCla) {
         $sMsg  = "[ 1 ] - Erro ao excluir dados da tabela Corcla gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
         $sMsg .= "Erro: {$oDaoCorcla->erro_msg} - ".str_replace('"',"\'",pg_last_error());
         throw new Exception($sMsg);
-
       }
 
       $sWhere  = "k56_id = {$oAutenticacao->k12_id}";
@@ -246,24 +401,30 @@ function cancelaAutenticacao($iCodCla) {
         $sMsg  = "[ 2 ] - Erro ao excluir dados da tabela CorrenteId gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
         $sMsg .= "Erro: {$oDaoCorrenteId->erro_msg} - ".str_replace('"',"\'",pg_last_error());
         throw new Exception($sMsg);
+      }
 
+      $oDaoCorNumpDesconto->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
+      if ($oDaoCorNumpDesconto->erro_status == "0") {
+
+        $sMsg  = "[ 3 ] - Erro ao excluir dados da tabela CorNumpDesconto gerados pela baixa do arquivo na classificação {$iCodcla}.\n\n";
+        $sMsg .= "Erro: {$oDaoCorNumpDesconto->erro_msg} - ".str_replace('"',"\'",pg_last_error());
+        throw new Exception($sMsg);
       }
 
       $oDaoCorNump->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
       if ($oDaoCorNump->erro_status == "0") {
 
-        $sMsg  = "[ 3 ] - Erro ao excluir dados da tabela Cornump gerados pela baixa do arquivo na classificação {$iCodcla}.\n\n";
+        $sMsg  = "[ 4 ] - Erro ao excluir dados da tabela Cornump gerados pela baixa do arquivo na classificação {$iCodcla}.\n\n";
         $sMsg .= "Erro: {$oDaoCorNump->erro_msg} - ".str_replace('"',"\'",pg_last_error());
         throw new Exception($sMsg);
-
       }
 
       $oDaoCorAutent->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
       if ($oDaoCorAutent->erro_status == "0") {
 
-        $sMsg  = "[ 4 ] - Erro ao excluir dados da tabela CorAutent gerados pela baixa do arquivo na classificação {$iCodcla}.\n\n";
+        $sMsg  = "[ 5 ] - Erro ao excluir dados da tabela CorAutent gerados pela baixa do arquivo na classificação {$iCodcla}.\n\n";
         $sMsg .= "Erro: {$oDaoCorAutent->erro_msg} - ".str_replace('"',"\'",pg_last_error());
-        throw new Exception();
+        throw new Exception($sMsg);
 
       }
 
@@ -271,14 +432,14 @@ function cancelaAutenticacao($iCodCla) {
        * Verifica se existe registro na conciliapendcorrente, se existir não pode ser deletado da Corrente
        */
       $sWhere = "k89_id = {$oAutenticacao->k12_id} and k89_data = '{$oAutenticacao->k12_data}' and k89_autent = {$oAutenticacao->k12_autent}";
-
       $oDaoConciliaPendCorrente = db_utils::getDao('conciliapendcorrente');
       $sSqlConciliaPendCorrente = $oDaoConciliaPendCorrente->sql_query_file(null, "*", null, $sWhere);
 
       $rsConciliaPendCorrente   = db_query($sSqlConciliaPendCorrente);
 
       if (pg_num_rows($rsConciliaPendCorrente) > 0) {
-        $sMsg  = "[ 0 ] - Procedimento não poderá ser realizado!\n";
+
+        $sMsg  = "[ 6 ] - Procedimento não poderá ser realizado!\n";
         $sMsg .= "Foram encontrados registros de conciliação bancária Pendentes.\n";
         throw new Exception($sMsg);
       }
@@ -286,10 +447,9 @@ function cancelaAutenticacao($iCodCla) {
       $oDaoCorrente->excluir($oAutenticacao->k12_id, $oAutenticacao->k12_data, $oAutenticacao->k12_autent);
       if ($oDaoCorrente->erro_status == "0") {
 
-        $sMsg  = "[ 5 ] - Erro ao excluir dados da tabela Corrente gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
+        $sMsg  = "[ 7 ] - Erro ao excluir dados da tabela Corrente gerados pela baixa do arquivo na classificação {$iCodCla}.\n\n";
         $sMsg .= "Erro: {$oDaoCorrente->erro_msg} - ".str_replace('"',"\'",pg_last_error());
-        throw new Exception();
-
+        throw new Exception($sMsg);
       }
 
     }
@@ -300,9 +460,10 @@ function cancelaAutenticacao($iCodCla) {
   $oDaoDiscla->codcla = $iCodCla;
   $oDaoDiscla->alterar($iCodCla);
   if ($oDaoDiscla->erro_status == "0") {
-    $sMsg  = "[ 6 ] - Erro ao alterar a data da autenticação da discla.\n\n";
+
+    $sMsg  = "[ 8 ] - Erro ao alterar a data da autenticação da discla.\n\n";
     $sMsg .= "Erro: {$oDaoDiscla->erro_msg} - ".str_replace('"',"\'",pg_last_error());
-    throw new Exception();
+    throw new Exception($sMsg);
   }
 
   return true;

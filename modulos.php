@@ -412,7 +412,7 @@ $sNome             = pg_result($rsUsuarioLogado,0,1);
       $sSql .= "                                    ) as x                                               ";
       $sSql .= "                        order by data desc, hora desc                                    ";
 
-      $result = db_query($sSql);
+      $result = 0;
 
       if( $result > 0 ){
 
