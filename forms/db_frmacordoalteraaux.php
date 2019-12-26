@@ -41,11 +41,11 @@ $clrotulo->label("ac16_licitacao");
 $clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
-    $db_action = "aco1_acordo004.php";
+  $db_action = "aco1_acordo004.php";
 } else if ($db_opcao == 2 || $db_opcao == 22) {
-    $db_action = "aco1_acordo005.php";
+  $db_action = "aco1_acordo005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
-    $db_action = "aco1_acordo006.php";
+  $db_action = "aco1_acordo006.php";
 }
 
 $aClassificacao = array();
@@ -55,11 +55,11 @@ $rsClassificacao = $oDaoAcordoClassificacao->sql_record($sSqlClassificacao);
 $aClassificacao[0] = "Selecione";
 if ($oDaoAcordoClassificacao->numrows > 0) {
 
-    for ($iIndiceClassificacao = 0; $iIndiceClassificacao < $oDaoAcordoClassificacao->numrows; $iIndiceClassificacao++) {
+  for ($iIndiceClassificacao = 0; $iIndiceClassificacao < $oDaoAcordoClassificacao->numrows; $iIndiceClassificacao++) {
 
-        $oDadosClassificacao = db_utils::fieldsMemory($rsClassificacao, $iIndiceClassificacao);
-        $aClassificacao[$oDadosClassificacao->ac46_sequencial] = $oDadosClassificacao->ac46_descricao;
-    }
+    $oDadosClassificacao = db_utils::fieldsMemory($rsClassificacao, $iIndiceClassificacao);
+    $aClassificacao[$oDadosClassificacao->ac46_sequencial] = $oDadosClassificacao->ac46_descricao;
+  }
 
 }
 
@@ -70,11 +70,11 @@ $sSqlLeis = $oDaoAcordoLeis->sql_query_file();
 $rsLeis = $oDaoAcordoLeis->sql_record($sSqlLeis);
 if ($oDaoAcordoLeis->numrows > 0) {
 
-    for ($iIndiceLeis = 0; $iIndiceLeis < $oDaoAcordoLeis->numrows; $iIndiceLeis++) {
+  for ($iIndiceLeis = 0; $iIndiceLeis < $oDaoAcordoLeis->numrows; $iIndiceLeis++) {
 
-        $oAcordoLeis = db_utils::fieldsMemory($rsLeis, $iIndiceLeis);
-        $aLeis[$oAcordoLeis->ac54_sequencial] = $oAcordoLeis->ac54_descricao;
-    }
+    $oAcordoLeis = db_utils::fieldsMemory($rsLeis, $iIndiceLeis);
+    $aLeis[$oAcordoLeis->ac54_sequencial] = $oAcordoLeis->ac54_descricao;
+  }
 
 }
 
@@ -82,456 +82,456 @@ db_app::load("dbtextFieldData.widget.js");
 
 ?>
 <style>
-    .fieldsetinterno {
-        border: 0px;
-        border-top: 2px groove white;
-        border-bottom: 2px groove white;
-    }
+  .fieldsetinterno {
+    border: 0px;
+    border-top: 2px groove white;
+    border-bottom: 2px groove white;
+  }
 
-    td {
-        white-space: nowrap
-    }
+  td {
+    white-space: nowrap
+  }
 
-    .table-vigencia td {
-        width: 8%;
-        white-space: nowrap
-    }
+  .table-vigencia td {
+    width: 8%;
+    white-space: nowrap
+  }
 
-    #ac02_descricao, #nomecontratado, #descrdepto, #ac08_descricao {
-        width: 75%;
-    }
+  #ac02_descricao, #nomecontratado, #descrdepto, #ac08_descricao {
+    width: 75%;
+  }
 
-    #ac16_objeto {
-        width: 100%;
-    }
+  #ac16_objeto {
+    width: 100%;
+  }
 </style>
 <form name="form1" method="post" action="<?= $db_action ?>">
-    <center>
-        <table border="0" cellspacing="0" cellpadding="0" width="36%">
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
+  <center>
+    <table border="0" cellspacing="0" cellpadding="0" width="36%">
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+          <fieldset>
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tr>
                 <td>
-                    <fieldset>
-                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
-                            <tr>
-                                <td>
-                                    <fieldset style='border:0px'>
-                                        <table border="0" cellpadding="0" width="100%">
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_sequencial ?>">
-                                                    <?= @$Lac16_sequencial ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
-                                                    ?>
-                                                </td>
-                                            </tr>
+                  <fieldset style='border:0px'>
+                    <table border="0" cellpadding="0" width="100%">
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_sequencial ?>">
+                          <?= @$Lac16_sequencial ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
+                          ?>
+                        </td>
+                      </tr>
 
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_datainclusao ?>">
-                                                    <?= @$Lac16_datainclusao ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    $ac16_datainclusao = $ac16_datainclusao != "" ? $ac16_datainclusao : date("d/m/Y");
-                                                    db_input('ac16_datainclusao', 10, $Iac16_datainclusao, true, 'text', 3, "");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_anousu ?>">
-                                                    <strong>Ano do Acordo:</strong>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    $ac16_anousu = $ac16_anousu != "" ? $ac16_anousu : db_getsession('DB_anousu');
-                                                    db_input('ac16_anousu', 10, $Iac16_anousu, true, 'text', $db_opcao,"");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_origem ?>">
-                                                    <?= @$Lac16_origem ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    if(db_getsession('DB_anousu') <= 2017) {
-                                                        $aValores = array(
-                                                            0 => 'Selecione',
-                                                            1 => 'Processo de Compras',
-                                                            2 => 'Licitação',
-                                                            3 => 'Manual',
-                                                            6 => 'Empenho'
-                                                        );
-                                                    }else{
-                                                        $aValores = array(
-                                                            0 => 'Selecione',
-                                                            1 => 'Processo de Compras',
-                                                            2 => 'Licitação',
-                                                            3 => 'Manual'
-                                                        );
-                                                    }
-                                                    db_select('ac16_origem', $aValores, true, $db_opcao,
-                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();' style='width:100%;'");
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_datainclusao ?>">
+                          <?= @$Lac16_datainclusao ?>
+                        </td>
+                        <td>
+                          <?
+                          $ac16_datainclusao = $ac16_datainclusao != "" ? $ac16_datainclusao : date("d/m/Y");
+                          db_input('ac16_datainclusao', 10, $Iac16_datainclusao, true, 'text', 3, "");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_anousu ?>">
+                          <strong>Ano do Acordo:</strong>
+                        </td>
+                        <td>
+                          <?
+                          $ac16_anousu = $ac16_anousu != "" ? $ac16_anousu : db_getsession('DB_anousu');
+                          db_input('ac16_anousu', 10, $Iac16_anousu, true, 'text', $db_opcao,"");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_origem ?>">
+                          <?= @$Lac16_origem ?>
+                        </td>
+                        <td>
+                          <?
+                          if(db_getsession('DB_anousu') <= 2017) {
+                            $aValores = array(
+                              0 => 'Selecione',
+                              1 => 'Processo de Compras',
+                              2 => 'Licitação',
+                              3 => 'Manual',
+                              6 => 'Empenho'
+                            );
+                          }else{
+                            $aValores = array(
+                              0 => 'Selecione',
+                              1 => 'Processo de Compras',
+                              2 => 'Licitação',
+                              3 => 'Manual'
+                            );
+                          }
+                          db_select('ac16_origem', $aValores, true, $db_opcao,
+                            " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();' style='width:100%;'");
 
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_tipoorigem ?>">
-                                                    <?= @$Lac16_tipoorigem ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    $aValores = array(
-                                                        0 => 'Selecione',
-                                                        1 => '1 - Não ou dispensa por valor',
-                                                        2 => '2 - Licitação',
-                                                        3 => '3 - Dispensa ou Inexigibilidade',
-                                                        4 => '4 - Adesão à ata de registro de preços',
-                                                        5 => '5 - Licitação realizada por outro órgão ou entidade',
-                                                        6 => '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
-                                                        7 => '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
-                                                        8 => '8 - Licitação realizada por consorcio público',
-                                                        9 => '9 - Licitação realizada por outro ente da federação',
-                                                    );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_tipoorigem ?>">
+                          <?= @$Lac16_tipoorigem ?>
+                        </td>
+                        <td>
+                          <?
+                          $aValores = array(
+                            0 => 'Selecione',
+                            1 => '1 - Não ou dispensa por valor',
+                            2 => '2 - Licitação',
+                            3 => '3 - Dispensa ou Inexigibilidade',
+                            4 => '4 - Adesão à ata de registro de preços',
+                            5 => '5 - Licitação realizada por outro órgão ou entidade',
+                            6 => '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
+                            7 => '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
+                            8 => '8 - Licitação realizada por consorcio público',
+                            9 => '9 - Licitação realizada por outro ente da federação',
+                          );
+                          db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
 
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap title="<?@$Tac16_licoutroorgao?>">
-                                                    <?=
-                                                    db_ancora("Licitação Outro Órgão:","js_pesquisaac16_licoutroorgao(true)",$db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_licoutroorgao', 10, $Iac16_licoutroorgao, true, 'text', $db_opcao,"onchange='js_pesquisaac16_licoutroorgao(false)';");
-                                                    db_input('z01_nome', 43, $Iac02_sequencial, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id="tradesaoregpreco" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap title="<?@$Tac16_adesaoregpreco?>">
-                                                    <?=
-                                                    db_ancora("Adesão de Registro Preço:","js_pesquisaaadesaoregpreco(true)",$db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_adesaoregpreco', 10, $Iac16_adesaoregpreco, true, 'text', $db_opcao,"onchange='js_pesquisaaadesaoregpreco(false)';");
-                                                    db_input('si06_objetoadesao', 43, $Iac02_sequencial, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap>
-                                                    <?
-                                                    db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
-                                                        "onchange='js_pesquisa_liclicita(false)'");
-                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_acordogrupo ?>">
-                                                    <?
-                                                    db_ancora("Natureza do Contrato:", "js_pesquisaac16_acordogrupo(true);", $db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', $db_opcao,
-                                                        "onchange='js_pesquisaac16_acordogrupo(false);'");
-                                                    db_input('ac02_descricao', 30, $Iac02_sequencial, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_numeroacordo ?>">
-                                                    <?= @$Lac16_numeroacordo ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    //$ac16_numeroacordo = $ac16_numeroacordo != "" ? $ac16_numeroacordo : Acordo::getProximoNumeroDoAno($ac16_anousu,db_getsession('DB_instit'));
-                                                    db_input('ac16_numeroacordo', 10, $Iac16_numeroacordo, true, 'text', $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_contratado ?>">
-                                                    <?
-                                                    db_ancora(@$Lac16_contratado, "jsPesquisaContratadoHabilitado();", $db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', 3,
-                                                        "onchange='js_pesquisaac16_contratado(false);'");
-                                                    db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_deptoresponsavel ?>">
-                                                    <?
-                                                    db_ancora("<b>Depto Responsável: </b>", "js_pesquisaac16_deptoresponsavel(true);",
-                                                        $db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_deptoresponsavel', 10, $Iac16_deptoresponsavel, true, 'text',
-                                                        $db_opcao, "onchange='js_pesquisaac16_deptoresponsavel(false)';");
-                                                    db_input('descrdepto', 30, $Idescrdepto, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_acordocomissao ?>">
-                                                    <?
-                                                    db_ancora('<b>Comissão:</b>', "onchange=js_pesquisaac16_acordocomissao(true)",
-                                                        $db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_acordocomissao', 10, $Iac16_acordocomissao, true, 'text', $db_opcao,
-                                                        "onchange=js_pesquisaac16_acordocomissao(false)");
-                                                    db_input('ac08_descricao', 30, $Iac08_descricao, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_lei ?>">
-                                                    <?= @$Lac16_lei ?>
-                                                </td>
-                                                <td>
-                                                    <?
+                          ?>
+                        </td>
+                      </tr>
+                      <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                        <td nowrap title="<?@$Tac16_licoutroorgao?>">
+                          <?=
+                          db_ancora("Licitação Outro Órgão:","js_pesquisaac16_licoutroorgao(true)",$db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_licoutroorgao', 10, $Iac16_licoutroorgao, true, 'text', $db_opcao,"onchange='js_pesquisaac16_licoutroorgao(false)';");
+                          db_input('z01_nome', 43, $Iac02_sequencial, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr id="tradesaoregpreco" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                        <td nowrap title="<?@$Tac16_adesaoregpreco?>">
+                          <?=
+                          db_ancora("Adesão de Registro Preço:","js_pesquisaaadesaoregpreco(true)",$db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_adesaoregpreco', 10, $Iac16_adesaoregpreco, true, 'text', $db_opcao,"onchange='js_pesquisaaadesaoregpreco(false)';");
+                          db_input('si06_objetoadesao', 43, $Iac02_sequencial, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                        <td nowrap>
+                          <?
+                          db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
+                            "onchange='js_pesquisa_liclicita(false)'");
+                          db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_acordogrupo ?>">
+                          <?
+                          db_ancora("Natureza do Contrato:", "js_pesquisaac16_acordogrupo(true);", $db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', $db_opcao,
+                            "onchange='js_pesquisaac16_acordogrupo(false);'");
+                          db_input('ac02_descricao', 30, $Iac02_sequencial, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_numeroacordo ?>">
+                          <?= @$Lac16_numeroacordo ?>
+                        </td>
+                        <td>
+                          <?
+                          //$ac16_numeroacordo = $ac16_numeroacordo != "" ? $ac16_numeroacordo : Acordo::getProximoNumeroDoAno($ac16_anousu,db_getsession('DB_instit'));
+                          db_input('ac16_numeroacordo', 10, $Iac16_numeroacordo, true, 'text', $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_contratado ?>">
+                          <?
+                          db_ancora(@$Lac16_contratado, "jsPesquisaContratadoHabilitado();", $db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', 3,
+                            "onchange='js_pesquisaac16_contratado(false);'");
+                          db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_deptoresponsavel ?>">
+                          <?
+                          db_ancora("<b>Depto Responsável: </b>", "js_pesquisaac16_deptoresponsavel(true);",
+                            $db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_deptoresponsavel', 10, $Iac16_deptoresponsavel, true, 'text',
+                            $db_opcao, "onchange='js_pesquisaac16_deptoresponsavel(false)';");
+                          db_input('descrdepto', 30, $Idescrdepto, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_acordocomissao ?>">
+                          <?
+                          db_ancora('<b>Comissão:</b>', "onchange=js_pesquisaac16_acordocomissao(true)",
+                            $db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_acordocomissao', 10, $Iac16_acordocomissao, true, 'text', $db_opcao,
+                            "onchange=js_pesquisaac16_acordocomissao(false)");
+                          db_input('ac08_descricao', 30, $Iac08_descricao, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_lei ?>">
+                          <?= @$Lac16_lei ?>
+                        </td>
+                        <td>
+                          <?
 
-                                                    db_select('ac16_lei', $aLeis, true, $db_opcao,
-                                                        " style='width:100%;'");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_numeroprocesso ?>">
-                                                    <strong>Processo Administrativo:</strong>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_numeroprocesso', 50, $Iac16_numeroprocesso, true, 'text', $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_qtdrenovacao ?>">
-                                                    <?= $Lac16_qtdrenovacao; ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_qtdrenovacao', 2, @$Iac16_qtdrenovacao, true, 'text', $db_opcao,
-                                                        "", "", "");
-                                                    db_select("ac16_tipounidtempo", getValoresPadroesCampo("ac16_tipounidtempo"),
-                                                        true, $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <b>Contrato Emergencial:</b>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    $aEmergencial = array("f" => "Não", "t" => "Sim");
-                                                    db_select("ac26_emergencial", $aEmergencial, true, $db_opcao, "style='width:100%'");
-                                                    ?>
-                                                </td>
-                                            </tr>
+                          db_select('ac16_lei', $aLeis, true, $db_opcao,
+                            " style='width:100%;'");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_numeroprocesso ?>">
+                          <strong>Processo Administrativo:</strong>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_numeroprocesso', 50, $Iac16_numeroprocesso, true, 'text', $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_qtdrenovacao ?>">
+                          <?= $Lac16_qtdrenovacao; ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_qtdrenovacao', 2, @$Iac16_qtdrenovacao, true, 'text', $db_opcao,
+                            "", "", "");
+                          db_select("ac16_tipounidtempo", getValoresPadroesCampo("ac16_tipounidtempo"),
+                            true, $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <b>Contrato Emergencial:</b>
+                        </td>
+                        <td>
+                          <?
+                          $aEmergencial = array("f" => "Não", "t" => "Sim");
+                          db_select("ac26_emergencial", $aEmergencial, true, $db_opcao, "style='width:100%'");
+                          ?>
+                        </td>
+                      </tr>
 
-                                            <tr>
-                                                <td>
-                                                    <b>Períodos por Mês Comercial:</b>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    /*$iCampo = 1;
-                                                    $sDisabled = ($db_opcao != 1 || $db_opcao != "1") ? " disabled " : "";
-                                                    if ($db_opcao == 2 || $db_opcao == 22) {
-                                                        $iCampo = 1;
-                                                    }*/
+                      <tr>
+                        <td>
+                          <b>Períodos por Mês Comercial:</b>
+                        </td>
+                        <td>
+                          <?
+                          /*$iCampo = 1;
+                          $sDisabled = ($db_opcao != 1 || $db_opcao != "1") ? " disabled " : "";
+                          if ($db_opcao == 2 || $db_opcao == 22) {
+                              $iCampo = 1;
+                          }*/
 
-                                                    $aDivisaoPeriodos = array("true" => "SIM", "false" => "NÃO");
-                                                    db_select("ac16_periodocomercial", $aDivisaoPeriodos, true, $db_opcao, "style='width:100%'");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="Tipo de Instrumento">
-                                                    <?
-                                                    db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac50_sequencial', 10, $Iac50_descricao, true, 'text', $db_opcao,
-                                                        "onchange=js_pesquisaac50_descricao(false)");
-                                                    db_input('ac50_descricao', 30, $Iac50_descricao, true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
+                          $aDivisaoPeriodos = array("true" => "SIM", "false" => "NÃO");
+                          db_select("ac16_periodocomercial", $aDivisaoPeriodos, true, $db_opcao, "style='width:100%'");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="Tipo de Instrumento">
+                          <?
+                          db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);
+                          ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac50_sequencial', 10, $Iac50_descricao, true, 'text', $db_opcao,
+                            "onchange=js_pesquisaac50_descricao(false)");
+                          db_input('ac50_descricao', 30, $Iac50_descricao, true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
 
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_formafornecimento ?>">
-                                                    <?= @$Lac16_formafornecimento ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_formafornecimento', 50, $Iac16_formafornecimento, true, 'text', $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="<?= @$Tac16_formapagamento ?>">
-                                                    <?= @$Lac16_formapagamento ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_textarea('ac16_formapagamento', 3, 48, $Iac16_objeto, true, 'text', $db_opcao, "", "", "", "100");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id='trValorAcordo'>
-                                                <td nowrap title="<?= @$Tac50_descricao ?>">
-                                                    <strong>Valor do Acordo:</strong>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                    db_input('ac16_valor', 10, $Iac16_valor, true, 'text', $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_formafornecimento ?>">
+                          <?= @$Lac16_formafornecimento ?>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_formafornecimento', 50, $Iac16_formafornecimento, true, 'text', $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="<?= @$Tac16_formapagamento ?>">
+                          <?= @$Lac16_formapagamento ?>
+                        </td>
+                        <td>
+                          <?
+                          db_textarea('ac16_formapagamento', 3, 48, $Iac16_objeto, true, 'text', $db_opcao, "", "", "", "100");
+                          ?>
+                        </td>
+                      </tr>
+                      <tr id='trValorAcordo'>
+                        <td nowrap title="<?= @$Tac50_descricao ?>">
+                          <strong>Valor do Acordo:</strong>
+                        </td>
+                        <td>
+                          <?php
+                          db_input('ac16_valor', 10, $Iac16_valor, true, 'text', $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
 
 
-                                        </table>
-                                    </fieldset>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <fieldset class='fieldsetinterno'>
-                                        <legend>
-                                            <b>Vigência</b>
-                                        </legend>
-                                        <table cellpadding="0" border="0" width="100%" class="table-vigencia">
-                                            <tr>
-                                                <td width="1%">
-                                                    <b>Inicio:</b>
-                                                </td>
-                                                <td>
-                                                  <input type="hidden" id="ac16_datainicio1" name="ac16_datainicio1">
-                                                  <input type="hidden" id="ac16_datafim1" name="ac16_datafim1">
-                                                    <?
-                                                    $iCampo = 1;
-
-                                                    db_inputdata('ac16_datainicio', @$ac16_datainicio_dia, @$ac16_datainicio_mes,
-                                                        @$ac16_datainicio_ano, true, 'text', $iCampo,
-                                                        "onchange='return js_somardias();'", "", "",
-                                                        "return parent.js_somardias();");
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <b>Fim:</b>
-                                                </td>
-                                                <td>
-                                                    <?
-
-                                                    db_inputdata('ac16_datafim', @$ac16_datafim_dia, @$ac16_datafim_mes, @$ac16_datafim_ano,
-                                                        true, 'text', $iCampo, "onchange='return js_somardias();'",
-                                                        "", "", "return parent.js_somardias();");
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <b>Dias:</b>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('diasvigencia', 10, "", true, 'text', 3);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td nowrap title="Prazo de Execução">
-                                                    <strong>Prazo de Execução:</strong>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input('ac16_qtdperiodo', 2, @$Iac16_qtdperiodo, true, 'text', $db_opcao,
-                                                        "", "", "");
-                                                    db_select("ac16_tipounidtempoperiodo", getValoresPadroesCampo("ac16_tipounidtempoperiodo"),
-                                                        true, $db_opcao);
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </fieldset>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td nowrap title="<?= @$Tac16_objeto ?>" colspan="2">
-                                    <fieldset>
-                                        <legend><?= @$Lac16_objeto ?></legend>
-                                        <?
-                                        db_textarea('ac16_objeto', 3, 58, $Iac16_objeto, true, 'text', $db_opcao, "");
-                                        ?>
-                                    </fieldset>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
+                    </table>
+                  </fieldset>
                 </td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <fieldset class='fieldsetinterno'>
+                    <legend>
+                      <b>Vigência</b>
+                    </legend>
+                    <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                      <tr>
+                        <td width="1%">
+                          <b>Inicio:</b>
+                        </td>
+                        <td>
+                          <input type="hidden" id="ac16_datainicio1" name="ac16_datainicio1">
+                          <input type="hidden" id="ac16_datafim1" name="ac16_datafim1">
+                          <?
+                          $iCampo = 1;
+
+                          db_inputdata('ac16_datainicio', @$ac16_datainicio_dia, @$ac16_datainicio_mes,
+                            @$ac16_datainicio_ano, true, 'text', $iCampo,
+                            "onchange='return js_somardias();'", "", "",
+                            "return parent.js_somardias();");
+                          ?>
+                        </td>
+                        <td>
+                          <b>Fim:</b>
+                        </td>
+                        <td>
+                          <?
+
+                          db_inputdata('ac16_datafim', @$ac16_datafim_dia, @$ac16_datafim_mes, @$ac16_datafim_ano,
+                            true, 'text', $iCampo, "onchange='return js_somardias();'",
+                            "", "", "return parent.js_somardias();");
+                          ?>
+                        </td>
+                        <td>
+                          <b>Dias:</b>
+                        </td>
+                        <td>
+                          <?
+                          db_input('diasvigencia', 10, "", true, 'text', 3);
+                          ?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td nowrap title="Prazo de Execução">
+                          <strong>Prazo de Execução:</strong>
+                        </td>
+                        <td>
+                          <?
+                          db_input('ac16_qtdperiodo', 2, @$Iac16_qtdperiodo, true, 'text', $db_opcao,
+                            "", "", "");
+                          db_select("ac16_tipounidtempoperiodo", getValoresPadroesCampo("ac16_tipounidtempoperiodo"),
+                            true, $db_opcao);
+                          ?>
+                        </td>
+                      </tr>
+                    </table>
+                  </fieldset>
+                </td>
+              </tr>
+              <tr>
                 <td>&nbsp;</td>
-            </tr>
-        </table>
+              </tr>
+              <tr>
+                <td nowrap title="<?= @$Tac16_objeto ?>" colspan="2">
+                  <fieldset>
+                    <legend><?= @$Lac16_objeto ?></legend>
+                    <?
+                    db_textarea('ac16_objeto', 3, 58, $Iac16_objeto, true, 'text', $db_opcao, "");
+                    ?>
+                  </fieldset>
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
 
-        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
-               type="button"
-               id="db_opcao"
-               value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
-            <?= ($db_botao == false ? "disabled" : "") ?> >
-        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+    <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
+           type="button"
+           id="db_opcao"
+           value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
+      <?= ($db_botao == false ? "disabled" : "") ?> >
+    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 
-        <input name="pesquisarlicitacoes" type="button" id="pesquisarlicitacoes" style="display: none;"
-               value="Julgamentos" onclick="oContrato.verificaLicitacoes();">
+    <input name="pesquisarlicitacoes" type="button" id="pesquisarlicitacoes" style="display: none;"
+           value="Julgamentos" onclick="oContrato.verificaLicitacoes();">
 
-        <input name="pesquisarEmpenhos" type="button" id="pesquisarEmpenhos" value="Empenhos"
-               onclick="js_MostraEmpenhos();" style="display: none; ">
+    <input name="pesquisarEmpenhos" type="button" id="pesquisarEmpenhos" value="Empenhos"
+           onclick="js_MostraEmpenhos();" style="display: none; ">
 
-        <input name="" type="button" id="btImprimirContrato" value="Imprimir" onclick="js_imprimirContrato()">
+    <input name="" type="button" id="btImprimirContrato" value="Imprimir" onclick="js_imprimirContrato()">
 
-    </center>
+  </center>
 </form>
 
 <style>
-    .filtroEmpenho {
+  .filtroEmpenho {
 
-        width: 91px;
-    }
+    width: 91px;
+  }
 </style>
 
 <script>
@@ -1259,11 +1259,11 @@ db_app::load("dbtextFieldData.widget.js");
     function js_preenchepesquisa(chave) {
 
         db_iframe_acordo.hide();
-        <?
-        if($db_opcao!=1){
-            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-        }
-        ?>
+      <?
+      if($db_opcao!=1){
+        echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+      }
+      ?>
 
     }
 
@@ -1273,7 +1273,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function jsPesquisaContratadoHabilitado() {
 
-        if ($('ac16_origem').value == 3 || $('ac16_origem').value == 1) {
+        if ($('ac16_origem').value == 3) {
             var nLicitacao = $('ac16_licitacao').value;
 
             if (nLicitacao == '') {
@@ -1512,9 +1512,9 @@ db_app::load("dbtextFieldData.widget.js");
     $('db_opcao').onclick = oContrato.alteraContrato;
     <?
     if ($db_opcao == 2) {
-        echo "\noContrato.getContrato({$chavepesquisa});\n";
+      echo "\noContrato.getContrato({$chavepesquisa});\n";
     } else {
-        echo "\njs_somardias();\n";
+      echo "\njs_somardias();\n";
     }
     ?>
 
