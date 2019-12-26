@@ -102,16 +102,16 @@ try {
          CASE
              WHEN desp_invest
                   AND sum(round(substr(saldoitens,36,14)::float8,2) + round(substr(saldoitens,51,14)::float8,2)) = round(e62_vltot,2) 
-                    THEN 0::text
+                    THEN 0
              WHEN desp_invest
                   AND sum(round(substr(saldoitens,36,14)::float8,2) + round(substr(saldoitens,51,14)::float8,2)) < round(e62_vltot,2) 
-                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))::text
+                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))
              WHEN (pc01_servico, e62_servicoquantidade,desp_invest) = ('t', 'f', 'f')
                   AND sum(e62_vltot - round(substr(saldoitens,51,14)::float8,2)) > 0 
-                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))::text
+                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))
              WHEN (pc01_servico, e62_servicoquantidade) = ('t', 'f')
-                  AND sum(e62_vltot - round(substr(saldoitens,51,14)::float8,2)) = 0 THEN 0::text
-             ELSE substr(saldoitens,11,10)
+                  AND sum(e62_vltot - round(substr(saldoitens,51,14)::float8,2)) = 0 THEN 0
+             ELSE substr(saldoitens,11,10)::float8
          END saldo_item,
     
          CASE
@@ -225,7 +225,7 @@ foreach ($aConsulta as $aItensEmpenho) {
     $oNovoEmpenhoItem->qtd_lqd         = $aItensEmpenho['qtd_lqd'];
     $oNovoEmpenhoItem->vlr_lqd         = $aItensEmpenho['vlr_lqd'];
     $oNovoEmpenhoItem->vlr_anl         = $aItensEmpenho['vlr_anl'];
-    $oNovoEmpenhoItem->saldo_item      = substr($aItensEmpenho['saldo_item'],0,7);
+    $oNovoEmpenhoItem->saldo_item      = $aItensEmpenho['saldo_item'];
 
     $aItensEmpenhos[$iCredor]->empenhos[$iEmp]->itens[$iCodMat] = $oNovoEmpenhoItem;
 

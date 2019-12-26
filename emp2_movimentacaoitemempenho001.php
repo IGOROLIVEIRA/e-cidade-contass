@@ -111,7 +111,7 @@ function js_consulta003(chave1){
   //db_iframe_empconsulta002.hide();
 }
 function js_limpa(){
-   location.href='emp1_empconsulta001.php';
+   location.href='emp2_movimentacaoitemempenho001.php';
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
