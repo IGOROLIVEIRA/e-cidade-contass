@@ -703,6 +703,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
               <legend><b>Dispensa/Inexigibilidade</b></legend>
 
               <table>
+
+                <tr>
+                  <td nowrap title="<?=@$Tl20_tipoprocesso?>">
+                    <?=@$Ll20_tipoprocesso?>
+                  </td>
+                  <td>
+                    <?
+                    $al20_tipoprocesso = array("0"=>"","1"=>"1-Dispensa","2"=>"2-Inexigibilidade","3"=>"3-Inexigibilidade por credenciamento/chamada pública","4"=>"4-Dispensa por chamada publica");
+                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,$db_opcao);
+                    ?>
+                  </td>
+                </tr>
+
                 <tr>
                   <td nowrap title="<?=@$Tl20_justificativa?>">
                     <?=@$Ll20_justificativa?>

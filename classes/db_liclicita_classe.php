@@ -404,19 +404,19 @@ class cl_liclicita
 //            }
 //        }
 
-//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-//            if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
-//                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
-//                $this->erro_campo = "l20_tipoprocesso";
-//                $this->erro_banco = "";
-//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        } else {
+        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
+                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
+                $this->erro_campo = "l20_tipoprocesso";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        } else {
             $this->l20_tipoprocesso = 0;
-//        }
+        }
 
 //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 //            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
