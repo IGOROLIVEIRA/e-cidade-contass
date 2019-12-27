@@ -112,13 +112,7 @@ class cl_confvencissqnvariavel {
        return false;
      }
        if($this->q144_codvenc_desconto == null ){
-       $this->erro_sql = " Campo Vencimento com Incentivo nao Informado.";
-       $this->erro_campo = "q144_codvenc_desconto";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+           $this->q144_codvenc_desconto = 0;
      }
      if($this->q144_receita == null ){ 
        $this->erro_sql = " Campo Receita nao Informado.";
