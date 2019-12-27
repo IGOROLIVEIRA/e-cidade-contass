@@ -20,6 +20,14 @@ switch ($sNomeCampo){
 		$sNomeArquivo = "ANEXOS_LOA.pdf";
 		break;
 	}
+	case "OPCAOSEMESTRALIDADE":{
+		$sNomeArquivo = "OPCAOSEMESTRALIDADE.pdf";
+		break;
+	}
+	case "DESOPCAOSEMESTRALIDADE":{
+		$sNomeArquivo = "DESOPCAOSEMESTRALIDADE.pdf";
+		break;
+	}
 
 }
 

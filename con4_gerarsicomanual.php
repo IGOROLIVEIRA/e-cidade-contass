@@ -145,7 +145,35 @@ $clrotulo->label("o15_codigo");
                                       <div id="recebe_up_anexos" class="recebe">&nbsp;</div>
                                     </td>
                                     <td>
-                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=ANEXOS_LOA','recebe_up_anexos','Carregando...','Erro ao carregar')" />
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=ANEXOS_LOA&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_anexos','Carregando...','Erro ao carregar')" />
+                                         <div>&nbsp;</div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="">
+                                      Opção Semestralidade:
+                                    <div>&nbsp;</div>
+                                    </td>
+                                    <td class="file-submit">
+                                      <input type="file" name="OPCAOSEMESTRALIDADE" />
+                                      <div id="recebe_up_opsemest" class="recebe">&nbsp;</div>
+                                    </td>
+                                    <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=OPCAOSEMESTRALIDADE&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_opsemest','Carregando...','Erro ao carregar')" />
+                                         <div>&nbsp;</div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="">
+                                      Desopção Semestralidade:
+                                    <div>&nbsp;</div>
+                                    </td>
+                                    <td class="file-submit">
+                                      <input type="file" name="DESOPCAOSEMESTRALIDADE" />
+                                      <div id="recebe_up_desopsemest" class="recebe">&nbsp;</div>
+                                    </td>
+                                    <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis.php?nome_campo=DESOPCAOSEMESTRALIDADE&ano_usu=<?=substr(db_getsession("DB_anousu"),-2) ?>','recebe_up_desopsemest','Carregando...','Erro ao carregar')" />
                                          <div>&nbsp;</div>
                                       </td>
                                   </tr>
@@ -233,6 +261,8 @@ $clrotulo->label("o15_codigo");
         <div style="text-align: center;">
           <input type="button" id="btnMarcarTodos" value="Marcar Todos" onclick="js_marcaTodos();" />
           <input type="button" id="btnLimparTodos" value="Limpar Todos" onclick="js_limpa();"/>
+          <input type="button" id="btnExcArq" value="Excluir Anexos"
+            onclick="js_excluirArquivos();" />
           <input type="button" id="btnProcessar" value="Processar"
             onclick="js_processar();" />
         </div>
@@ -265,11 +295,11 @@ function js_processar() {
         aArquivosSelecionados.push(oElemento.value);
     }
   });  
-  if (aArquivosSelecionados.length == 0) {
+  // if (aArquivosSelecionados.length == 0) {
     
-    alert("Nenhum arquivo foi selecionado para ser gerado");
-    return false;
-  }
+  //   alert("Nenhum arquivo foi selecionado para ser gerado leras");
+  //   return false;
+  // }
   js_divCarregando('Aguarde, processando arquivos','msgBox');
   var oParam           = new Object();
   oParam.exec          = "processarSicomAnual";
@@ -414,6 +444,21 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	    oCheckbox.checked = false;
 	  }); 
 	}
+
+  function js_excluirArquivos(){
+
+    js_divCarregando('Aguarde, exclusão de documentos','msgBox');
+    var oParam           = new Object();
+    oParam.exec          = "excluirArquivosIP";
+    var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
+                                  {
+                                    method:'post',
+                                    parameters:'json='+Object.toJSON(oParam),
+                                    onComplete:js_retornoProcessamento
+                                  }
+          );
+    
+  }
 
 
 </script>
