@@ -20,7 +20,7 @@ class Oc11217 extends PostgresMigration
         VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq='placaixarec' LIMIT 1), (SELECT codcam FROM db_syscampo WHERE nomecam = 'k81_regrepasse'), 14, 0);
 
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel)
-        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'k81_exerc', 'int8', 'Ano', '', 'Ano', 4, FALSE, FALSE, FALSE, 1, 'text', 'Ano');
+        VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'k81_exerc', 'int8', 'Ano de Referência', '', 'Ano de Referência', 4, FALSE, FALSE, FALSE, 1, 'text', 'Ano de Referência');
         
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia)
         VALUES ((SELECT codarq FROM db_sysarquivo WHERE nomearq='placaixarec' LIMIT 1), (SELECT codcam FROM db_syscampo WHERE nomecam = 'k81_exerc'), 15, 0);

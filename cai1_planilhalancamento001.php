@@ -92,8 +92,8 @@ if ($oInstit->db21_usasisagua == "t") {
   ?>
 <style>
 
-  #k81_origem {
-    width: 95px;
+  #k81_origem, #k81_codigo, #k81_regrepasse {
+    width: 83px;
   }
   .tamanho-primeira-col{
     width:150px;
@@ -107,17 +107,22 @@ if ($oInstit->db21_usasisagua == "t") {
     width:400px;
   }
 
-   #k81_codigo {
-     width: 95px;
-   }
    #k81_codigodescr {
-     width: 74%;
+     width: 454px;
+   }
+
+   #k81_emparlamentar {
+       width: 541px;
    }
 
    #k81_obs {
      width:100%;
      height: 50px;
    }
+
+    #k81_valor {
+        width: 100px;
+    }
 
 </style>
 
@@ -269,48 +274,45 @@ if ($oInstit->db21_usasisagua == "t") {
      ?>
     </td>
   </tr>
+  <!--Convênio-->
+  <tr>
+      <td nowrap title="<?= @$Tk81_convenio ?>"><?echo $Lk81_convenio?></td>
+      <td colspan='3'>
+        <?
+        db_input('k81_convenio',11,$Ik81_convenio,true,'text',3,"onChange='js_pesquisak81_convenio(false);'");
+        db_input("c206_objetoconvenio",62,0,true,"text",3);
+        ?>
+      </td>
+  </tr>
 
   <!-- Regularização de Repasse -->
   <tr id="regrepasse" style="display: none;">
       <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_regrepasse?>"><?=$Lk81_regrepasse?></td>
-      <td colspan='3'>
+      <td colspan='1'>
         <?
         $aOpcoes = array('' => 'Selecione', '1' => 'Sim', '2' => 'Não');
         db_select("k81_regrepasse",$aOpcoes,true,1,"class='input-menor' onChange='toogleRegRepasse(this.value)'");
         ?>
       </td>
 
-  </tr>
-
-  <!-- Exercício -->
-  <tr id="exercicio" style="display: none;">
-      <td nowrap title="<?= @$Tk81_exerc ?>"><?echo $Lk81_exerc?></td>
-      <td colspan='3'>
+      <td nowrap title="<?= @$Tk81_exerc ?>" id="exercicioLabel" style="display: none"><?echo $Lk81_exerc?></td>
+      <td id="exercicioInput" style="display: none">
         <?
         db_input('k81_exerc',11,$Ik81_exerc,true,'text',$db_opcao,"");
         ?>
       </td>
+
   </tr>
 
   <!-- Ref a Emenda Parlamentar -->
   <tr>
       <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_emparlamentar?>"><?=$Lk81_emparlamentar?></td>
-      <td colspan='3'>
+      <td colspan='5'>
         <?
         $aOpcoes = array('' => 'Selecione', '1' => '1 - Emenda parlamentar individual', '2' => '2 - Emenda parlamentar de bancada', '3' => '3 - Não se aplica');
         db_select("k81_emparlamentar",$aOpcoes,true,1,"class='input-menor'");
         ?>
       </td>
-  </tr>
-  <!--Convênio-->
-  <tr>
-    <td nowrap title="<?= @$Tk81_convenio ?>"><?echo $Lk81_convenio?></td>
-    <td colspan='3'>
-        <?
-        db_input('k81_convenio',11,$Ik81_convenio,true,'text',3,"onChange='js_pesquisak81_convenio(false);'");
-        db_input("c206_objetoconvenio",62,0,true,"text",3);
-        ?>
-    </td>
   </tr>
 
   <tr id="notificacao-conv" style="display:none;">
@@ -320,7 +322,7 @@ if ($oInstit->db21_usasisagua == "t") {
     </tr>
 
   <!-- Característica Peculiar -->
-  <tr style=''>
+  <tr style='display: none'>
     <td ><b><?db_ancora("C.Peculiar / C.Aplicação :","js_pesquisaPeculiar(true);",$db_opcao);?></b></td>
     <td colspan='3'>
         <?
@@ -808,9 +810,11 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
        if($('k81_regrepasse').value != '') {
            document.getElementById("k81_regrepasse").options[$('k81_regrepasse').value].selected = true;
            if($('k81_regrepasse').value == 1) {
-               document.getElementById('exercicio').style.display = "table-row";
+               document.getElementById('exercicioLabel').style.display = "table-cell";
+               document.getElementById('exercicioInput').style.display = "table-cell";
            } else {
-               document.getElementById('exercicio').style.display = "none";
+               document.getElementById('exercicioLabel').style.display = "none";
+               document.getElementById('exercicioInput').style.display = "none";
            }
        }else {
            document.getElementById("k81_regrepasse").options[0].selected = true;
@@ -818,7 +822,8 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 
    } else {
        document.getElementById('regrepasse').style.display = "none";
-       document.getElementById('exercicio').style.display = "none";
+       document.getElementById('exercicioLabel').style.display = "none";
+       document.getElementById('exercicioInput').style.display = "none";
        document.getElementById('k81_exerc').value = "";
        document.getElementById("k81_regrepasse").options[0].selected = "true";
    }
@@ -864,7 +869,8 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
        document.getElementById("k81_regrepasse").options[0].selected = true;
    } else {
        document.getElementById('regrepasse').style.display = "none";
-       document.getElementById('exercicio').style.display = "none";
+       document.getElementById('exercicioLabel').style.display = "none";
+       document.getElementById('exercicioInput').style.display = "none";
        document.getElementById('k81_exerc').value = "";
        document.getElementById("k81_regrepasse").options[0].selected = "true";
    }
@@ -1727,9 +1733,11 @@ function js_retornoAutenticacao (oAjax) {
 
 function toogleRegRepasse(opcao) {
     if (opcao == 1) {
-        document.getElementById('exercicio').style.display = "table-row";
+        document.getElementById('exercicioLabel').style.display = "table-cell";
+        document.getElementById('exercicioInput').style.display = "table-cell";
     } else if(opcao == 2 || opcao == '') {
-        document.getElementById('exercicio').style.display = "none";
+        document.getElementById('exercicioLabel').style.display = "none";
+        document.getElementById('exercicioInput').style.display = "none";
         document.getElementById('k81_exerc').value = "";
     }
 }
