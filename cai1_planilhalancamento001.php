@@ -869,25 +869,29 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
     js_getCgmConta($('k81_conta').value);
    }
 
-   aEstruts = ['41728011', '41728012', '41758011', '41728991'];
+   if($('anoUsu').value >= 2020) {
 
-   if(aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
-       document.getElementById('regrepasse').style.display = "table-row";
-       document.getElementById("k81_regrepasse").options[0].selected = true;
-   } else {
-       document.getElementById('regrepasse').style.display = "none";
-       document.getElementById('exercicioLabel').style.display = "none";
-       document.getElementById('exercicioInput').style.display = "none";
-       document.getElementById('k81_exerc').value = "";
-       document.getElementById("k81_regrepasse").options[0].selected = "true";
-   }
+       aEstruts = ['41728011', '41728012', '41758011', '41728991'];
 
-   fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+       if (aEstruts.indexOf($('estrutural').value.substr(0, 8)) > -1 || ($('estrutural').value.substr(0, 8) == '42428991' && $('recurso').value == '106')) {
+           document.getElementById('regrepasse').style.display = "table-row";
+           document.getElementById("k81_regrepasse").options[0].selected = true;
+       } else {
+           document.getElementById('regrepasse').style.display = "none";
+           document.getElementById('exercicioLabel').style.display = "none";
+           document.getElementById('exercicioInput').style.display = "none";
+           document.getElementById('k81_exerc').value = "";
+           document.getElementById("k81_regrepasse").options[0].selected = "true";
+       }
 
-   if($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) == -1) {
-       document.getElementById("k81_emparlamentar").options[0].selected = true;
-   } else {
-       document.getElementById("k81_emparlamentar").options[3].selected = true;
+       fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+
+       if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) == -1) {
+           document.getElementById("k81_emparlamentar").options[0].selected = true;
+       } else {
+           document.getElementById("k81_emparlamentar").options[3].selected = true;
+       }
+
    }
 
    db_iframe_tabrec.hide();
