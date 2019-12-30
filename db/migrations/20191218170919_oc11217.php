@@ -35,7 +35,7 @@ class Oc11217 extends PostgresMigration
 
         ALTER TABLE placaixarec ADD COLUMN k81_exerc BIGINT;
         
-        ALTER TABLE placaixarec ADD COLUMN k81_emparlamentar INTEGER NOT NULL DEFAULT 0;
+        ALTER TABLE placaixarec ADD COLUMN k81_emparlamentar INTEGER DEFAULT 0;
 
         -- MODIFICA TABELA SICOM 2020
         
