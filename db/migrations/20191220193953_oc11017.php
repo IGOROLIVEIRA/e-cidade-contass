@@ -46,16 +46,16 @@ class Oc11017 extends PostgresMigration
             $aValues[0] = array($codCam['codcam'],
                           'rh31_novocalculo',
                           'bool',
-                          'Novo Calculo EC nº 103/2019',
+                          'Alíquota Progressiva',
                           'f',
-                          'Novo Calculo EC nº 103/2019',
+                          'Alíquota Progressiva',
                           '1',
                           'f',
                           'f',
                           'f',
                           5,
                           'text',
-                          'Novo Calculo EC nº 103/2019'
+                          'Alíquota Progressiva'
                       );
             $table  = $this->table('db_syscampo', array('schema' => 'configuracoes'));
             $table->insert($aColumns, $aValues)->saveData();
