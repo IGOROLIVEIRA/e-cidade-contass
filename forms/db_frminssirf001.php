@@ -206,6 +206,19 @@ if(isset($codtab) && $codigo_tab <= 2){
             if($alteraform == true){
 	    ?>
                     </tr>
+      <? if($codtab > 2) { ?>
+      <tr>
+          <td nowrap title="<?=$Trh31_novocalculo?>" >
+              <?=$Lrh31_novocalculo?>
+          </td>
+          <td>
+              <?
+              $arrNovoCalculo = array("f"=>"Não","t"=>"Sim");
+              db_select("rh31_novocalculo", $arrNovoCalculo, true, $db_opcao);
+              ?>
+          </td>
+      </tr>
+    <? } ?>
                   </table>
                 </fieldset>
 	      </td>
