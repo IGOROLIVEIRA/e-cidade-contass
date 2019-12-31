@@ -743,6 +743,8 @@ $sqlprinc .= "       j40_refant,";
 $sqlprinc .= "       j34_setor,";
 $sqlprinc .= "       j34_quadra,";
 $sqlprinc .= "       j34_lote,";
+$sqlprinc .= "       j04_quadraregimo,";
+$sqlprinc .= "       j04_loteregimo,";
 $sqlprinc .= "       substr(fc_iptuender,001,40) as j23_ender, ";
 $sqlprinc .= "       substr(fc_iptuender,042,10) as j23_numero, ";
 $sqlprinc .= "       substr(fc_iptuender,053,20) as j23_compl, ";
@@ -766,6 +768,8 @@ $sqlprinc .= "              j40_refant,";
 $sqlprinc .= "              j34_setor,";
 $sqlprinc .= "              j34_quadra,";
 $sqlprinc .= "              j34_lote,";
+$sqlprinc .= "              j04_quadraregimo,";
+$sqlprinc .= "              j04_loteregimo,";
 $sqlprinc .= "              fc_iptuender(j23_matric) ";
 $sqlprinc .= "         from iptucalc  ";
 $sqlprinc .= "              inner join iptubase       on iptubase.j01_matric = iptucalc.j23_matric ";
@@ -776,6 +780,7 @@ $sqlprinc .= "              left  join iptumatzonaentrega on iptumatzonaentrega.
 $sqlprinc .= "              left  join imobil             on imobil.j44_matric = iptubase.j01_matric ";
 $sqlprinc .= "              left  join loteloteam         on loteloteam.j34_idbql = lote.j34_idbql ";
 $sqlprinc .= "              left  join iptuant            on iptuant.j40_matric   = iptubase.j01_matric ";
+$sqlprinc .= "              left  join iptubaseregimovel  on iptubaseregimovel.j04_matric   = iptubase.j01_matric ";
 $sqlprinc .= "        where iptucalc.j23_anousu = $anousu ";
 $sqlprinc .= "        {$whereimobil} {$wherelistamatrics} {$whereloteam}" . ($quantidade != ""?" limit {$quantidade}":"") . " {$sWhereCgm}) as x ";
 
@@ -1377,8 +1382,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad($j23_cxpostal, 10));
               fputs($clabre_arquivo->arquivo, str_pad($j23_dest, 40));
 
-              fputs($clabre_arquivo->arquivo, str_repeat(" ", 3));
-              fputs($clabre_arquivo->arquivo, str_repeat(" ", 5));
+              fputs($clabre_arquivo->arquivo, str_pad($j04_quadraregimo, 8));
+              fputs($clabre_arquivo->arquivo, str_pad($j04_loteregimo, 8));
               if ($j45_descr == "") {
                 fputs($clabre_arquivo->arquivo, str_repeat(" ", 40));
                 fputs($clabre_arquivo->arquivo, str_repeat(" ", 10));
@@ -1512,8 +1517,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, db_contador("CXPENDENT","CAIXA POSTAL DO ENDERECO DE ENTREGA", $contador, 10));
               fputs($clabre_arquivo->arquivo, db_contador("DESTENDENT","DESTINATARIO DO ENDERECO DE ENTREGA", $contador, 40));
 
-              fputs($clabre_arquivo->arquivo, db_contador("BRANCOS","BRANCOS",$contador,3));
-              fputs($clabre_arquivo->arquivo, db_contador("BRANCOS","BRANCOS",$contador,5));
+              fputs($clabre_arquivo->arquivo, db_contador("QUADRAREGIMO","QUADRAREGIMO",$contador,8));
+              fputs($clabre_arquivo->arquivo, db_contador("LOTEREGIMO","LOTEREGIMO",$contador,8));
               fputs($clabre_arquivo->arquivo, db_contador("DESCRISEN","DESCRICAO DO TIPO DE ISENCAO",$contador,40));
               fputs($clabre_arquivo->arquivo, db_contador("LANCISEN","DATA DE LANCAMENTO DA ISENCAO",$contador,10));
 
