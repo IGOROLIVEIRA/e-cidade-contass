@@ -85,6 +85,27 @@ class ReceitaPlanilha {
   private $oRecurso;
 
   /**
+   * Regularização de Repasse
+   * na tabela placaixarec o campo de referencia eh k81_regrepasse
+   * @var integer
+   */
+  private $iRegRepasse;
+
+  /**
+   * Exercicio
+   * na tabela placaixarec o campo de referencia eh k81_exerc
+   * @var integer
+   */
+  private $iExerc;
+
+  /**
+   * Referente a emenda Parlamentar
+   * na tabela placaixarec o campo de referencia eh k81_emparlamentar
+   * @var integer
+   */
+  private $iEmParlamentar;
+
+  /**
    * Data de recebimento
    * @var DBDate
    */
@@ -162,6 +183,9 @@ class ReceitaPlanilha {
         $this->nValor                  = $oReceitaPlanilha->k81_valor;
         $this->sObservacao             = $oReceitaPlanilha->k81_obs;
         $this->oRecurso                = new Recurso($oReceitaPlanilha->k81_codigo);
+        $this->iRegRepasse             = $oReceitaPlanilha->k81_regrepasse;
+        $this->iExerc                  = $oReceitaPlanilha->k81_exerc;
+        $this->iEmParlamentar          = $oReceitaPlanilha->k81_emparlamentar;
         $this->oDataRecebimento        = new DBDate($oReceitaPlanilha->k81_datareceb);
         $this->sOperacaoBancaria       = $oReceitaPlanilha->k81_operbanco;
         $this->iOrigem                 = $oReceitaPlanilha->k81_origem;
@@ -377,6 +401,64 @@ class ReceitaPlanilha {
     $this->iOrigem = $iOrigem;
   }
 
+  /**
+   * A Regularização de Repasse pode assumir os seguintes valores:
+   *  1 - Sim
+   *  2 - Não
+   * @return integer
+   */
+  public function getRegularizacaoRepasse() {
+    return $this->iRegRepasse;
+  }
+
+  /**
+   * A Regularização de Repasse pode assumir os seguintes valores:
+   *  1 - Sim
+   *  2 - Não
+   * @param integer
+   */
+  public function setRegularizacaoRepasse($iRegRepasse) {
+    $this->iRegRepasse = $iRegRepasse;
+  }
+
+  /**
+   * O exercicio será definido quando iRegRepasse for 1
+   * @return integer
+   */
+  public function getRegExercicio() {
+    return $this->iExerc;
+  }
+
+  /**
+   * O exercicio será definido quando iRegRepasse for 1
+   * @param integer
+   */
+  public function setRegExercicio($iExerc) {
+    $this->iExerc = $iExerc;
+  }
+
+  /**
+   * Referente a emenda Parlamentar pode assumir os seguintes valores:
+   * 1 - Emenda parlamentar individual
+   * 2 - Emenda parlamentar de bancada
+   * 3 - não se aplica
+   * @return integer
+   */
+  public function getEmendaParlamentar() {
+    return $this->iEmParlamentar;
+  }
+
+  /**
+   * Referente a emenda Parlamentar pode assumir os seguintes valores:
+   * 1 - Emenda parlamentar individual
+   * 2 - Emenda parlamentar de bancada
+   * 3 - não se aplica
+   * @param integer
+   */
+  public function setEmendaParlamentar($iEmParlamentar) {
+    $this->iEmParlamentar = $iEmParlamentar;
+  }
+
 
   /**
    * CGM vai ser definido de acordo com a origem.
@@ -492,6 +574,9 @@ class ReceitaPlanilha {
     $oDaoReceitaPlanilha->k81_valor          = $this->nValor;
     $oDaoReceitaPlanilha->k81_obs            = addslashes($this->sObservacao);
     $oDaoReceitaPlanilha->k81_codigo         = $this->oRecurso->getCodigoRecurso();
+    $oDaoReceitaPlanilha->k81_regrepasse     = $this->iRegRepasse;
+    $oDaoReceitaPlanilha->k81_exerc          = $this->iExerc;
+    $oDaoReceitaPlanilha->k81_emparlamentar  = $this->iEmParlamentar;
     $oDaoReceitaPlanilha->k81_datareceb      = $this->oDataRecebimento->convertTo(DBDate::DATA_EN);
     $oDaoReceitaPlanilha->k81_operbanco      = $this->sOperacaoBancaria;
     $oDaoReceitaPlanilha->k81_origem         = $this->iOrigem;
