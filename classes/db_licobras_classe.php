@@ -37,19 +37,19 @@ class cl_licobras {
   public $obr01_instit = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 obr01_sequencial = int4 = Sequencial 
-                 obr01_licitacao = int4 = Processo Licitatório 
-                 obr01_dtlancamento = date = Data Lançamento 
-                 obr01_numeroobra = int4 = Nº Obra 
-                 obr01_linkobra = text = Link da Obra 
-                 obr01_tiporesponsavel = int4 = Tipo Responsável 
-                 obr01_responsavel = int4 = Responsável 
-                 obr01_tiporegistro = int4 = Tipo Registro 
-                 obr01_numregistro = text = Numero Registro 
-                 obr01_numartourrt = int4 = Numero da ART ou RRT 
-                 obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra 
-                 obr01_vinculoprofissional = int4 = Vinculo do Prof. com a Adm. Pública 
-                 obr01_instit = int4 = Instituição 
+                 obr01_sequencial = int4 = Sequencial
+                 obr01_licitacao = int4 = Processo Licitatório
+                 obr01_dtlancamento = date = Data Lançamento
+                 obr01_numeroobra = int4 = Nº Obra
+                 obr01_linkobra = text = Link da Obra
+                 obr01_tiporesponsavel = int4 = Tipo Responsável
+                 obr01_responsavel = int4 = Responsável
+                 obr01_tiporegistro = int4 = Tipo Registro
+                 obr01_numregistro = text = Numero Registro
+                 obr01_numartourrt = int4 = Numero da ART ou RRT
+                 obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra
+                 obr01_vinculoprofissional = int4 = Vinculo do Prof. com a Adm. Pública
+                 obr01_instit = int4 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -107,13 +107,17 @@ class cl_licobras {
   function incluir () {
       $this->atualizacampos();
      if ($this->obr01_sequencial == null ) {
-       $this->erro_sql = " Campo Sequencial não informado.";
-       $this->erro_campo = "obr01_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+
+       $result = db_query("select nextval('licobras_obr01_sequencial_seq')");
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: licobras_obr01_sequencial_seq do campo: obr01_sequencial";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+       $this->obr01_sequencial = pg_result($result,0,0);
      }
      if ($this->obr01_licitacao == null ) {
        $this->erro_sql = " Campo Processo Licitatório não informado.";
@@ -224,34 +228,34 @@ class cl_licobras {
        return false;
      }
      $sql = "insert into licobras(
-                                       obr01_sequencial 
-                                      ,obr01_licitacao 
-                                      ,obr01_dtlancamento 
-                                      ,obr01_numeroobra 
-                                      ,obr01_linkobra 
-                                      ,obr01_tiporesponsavel 
-                                      ,obr01_responsavel 
-                                      ,obr01_tiporegistro 
-                                      ,obr01_numregistro 
-                                      ,obr01_numartourrt 
-                                      ,obr01_dtinicioatividades 
-                                      ,obr01_vinculoprofissional 
-                                      ,obr01_instit 
+                                       obr01_sequencial
+                                      ,obr01_licitacao
+                                      ,obr01_dtlancamento
+                                      ,obr01_numeroobra
+                                      ,obr01_linkobra
+                                      ,obr01_tiporesponsavel
+                                      ,obr01_responsavel
+                                      ,obr01_tiporegistro
+                                      ,obr01_numregistro
+                                      ,obr01_numartourrt
+                                      ,obr01_dtinicioatividades
+                                      ,obr01_vinculoprofissional
+                                      ,obr01_instit
                        )
                 values (
-                                $this->obr01_sequencial 
-                               ,$this->obr01_licitacao 
-                               ,".($this->obr01_dtlancamento == "null" || $this->obr01_dtlancamento == ""?"null":"'".$this->obr01_dtlancamento."'")." 
-                               ,$this->obr01_numeroobra 
-                               ,'$this->obr01_linkobra' 
-                               ,$this->obr01_tiporesponsavel 
-                               ,$this->obr01_responsavel 
-                               ,$this->obr01_tiporegistro 
-                               ,'$this->obr01_numregistro' 
-                               ,$this->obr01_numartourrt 
-                               ,".($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == ""?"null":"'".$this->obr01_dtinicioatividades."'")." 
-                               ,$this->obr01_vinculoprofissional 
-                               ,$this->obr01_instit 
+                                $this->obr01_sequencial
+                               ,$this->obr01_licitacao
+                               ,".($this->obr01_dtlancamento == "null" || $this->obr01_dtlancamento == ""?"null":"'".$this->obr01_dtlancamento."'")."
+                               ,$this->obr01_numeroobra
+                               ,'$this->obr01_linkobra'
+                               ,$this->obr01_tiporesponsavel
+                               ,$this->obr01_responsavel
+                               ,$this->obr01_tiporegistro
+                               ,'$this->obr01_numregistro'
+                               ,$this->obr01_numartourrt
+                               ,".($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == ""?"null":"'".$this->obr01_dtinicioatividades."'")."
+                               ,$this->obr01_vinculoprofissional
+                               ,$this->obr01_instit
                       )";
      $result = db_query($sql);
      if ($result==false) {
