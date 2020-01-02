@@ -52,7 +52,7 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((select codmod from db_sysmodulo where nomemod like '%Obras%'), (select max(codarq) from db_sysarquivo));
 
                           -- INSERE db_syscampo
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_sequencial'	 		,'int8' ,'Sequencial'			,'', 'Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Sequencial');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_sequencial'	 		,'int8' ,'Cód. Sequencial'			,'', 'Cód. Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Cód. Sequencial');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_processo'	 		,'int8' ,'Processo Licitatório' ,'', 'Processo Licitatório'	 ,11	,false, false, false, 1, 'int8', 'Processo Licitatório');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_dtlancamento'		,'date' ,'Data Lançamento'		,'', 'Data Lançamento'		 ,16	,false, false, false, 0, 'date', 'Data Lançamento');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_numeroobra'  		,'int8' ,'Nº Obra'				,'', 'Nº Obra'				 ,16	,false, false, false, 1, 'int8', 'Nº Obra');
@@ -147,12 +147,13 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((select codmod from db_sysmodulo where nomemod like '%Obras%'), (select max(codarq) from db_sysarquivo));
 
                           -- INSERE db_syscampo
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_sequencial'	 		,'int8' ,'Sequencial'				,'', 'Sequencial'			 	,11	,false, false, false, 1, 'int8', 'Sequencial');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_sequencial'	 		,'int8' ,'Cód. Sequencial'				,'', 'Cód. Sequencial'			 	,11	,false, false, false, 1, 'int8', 'Cód. Sequencial');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_seqobra'	 		,'int8' ,'Nº Obra' 					,'', 'Nº Obra'	 			 	,11	,false, false, false, 1, 'int8', 'Nº Obra');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_dtlancamento'		,'date' ,'Data Lançamento'			,'', 'Data Lançamento'		 	,10	,false, false, false, 0, 'date', 'Data Lançamento');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_situacao'  			,'int8' ,'Situação'					,'', 'Situação'				 	,16	,false, false, false, 1, 'int8', 'Situação');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_dtsituacao'			,'date' ,'Data Situação'			,'', 'Data Situação'		 	,10	,false, false, false, 0, 'date', 'Data Situação');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_veiculopublicacao'  ,'text' ,'Veículo Publicação'		,'', 'Veículo Publicação'	 	,20	,false, false, false, 0, 'text', 'Veículo Publicação');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_dtpublicacao'			,'date' ,'Data Public. Veic.'			,'', 'Data Public. Veic.'		 	,10	,false, false, false, 0, 'date', 'Data Public. Veic.');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_descrisituacao'  	,'text' ,'Desc. Situação da Obra'	,'', 'Desc. Situação da Obra'	,500,false, false, false, 0, 'text', 'Desc. Situação da Obra');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_motivoparalisacao'  ,'int8' ,'Motivo Paralização'		,'', 'Motivo Paralização'		,11	,false, false, false, 1, 'int8', 'Motivo Paralização');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr02_dtparalizacao'		,'date' ,'Data Paralização'			,'', 'Data Paralização'		 	,10	,false, false, false, 0, 'date', 'Data Paralização');
@@ -167,12 +168,13 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_situacao')		 	 , 4, 0);
                           INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtsituacao')		 , 5, 0);
                           INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_veiculopublicacao') , 6, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_descrisituacao')	 , 7, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_motivoparalisacao') , 8, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtparalizacao')	 , 9, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_outrosmotivos')	 , 10, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtretomada')		 , 11, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_instit')			 , 12, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtpublicacao') , 7, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_descrisituacao')	 , 8, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_motivoparalisacao') , 9, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtparalizacao')	 , 10, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_outrosmotivos')	 , 11, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_dtretomada')		 , 12, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr02_instit')			 , 13, 0);
 
                           -- DROP DA TABELA
 
@@ -181,17 +183,18 @@ class Oc11331 extends AbstractMigration
                           -- Módulo: Obras
                           CREATE TABLE licobrasituacao(
                           obr02_sequencial                int8 NOT NULL ,
-                          obr02_seqobra           		int8 NOT NULL ,
+                          obr02_seqobra           		    int8 NOT NULL ,
                           obr02_dtlancamento              date NOT NULL ,
-                          obr02_situacao          		int8 NOT NULL ,
+                          obr02_situacao          		    int8 NOT NULL ,
                           obr02_dtsituacao                date NOT NULL ,
                           obr02_veiculopublicacao         text NOT NULL ,
+                          obr02_dtpublicacao              date NOT NULL ,
                           obr02_descrisituacao            text NOT NULL ,
                           obr02_motivoparalisacao         int8 NOT NULL ,
                           obr02_dtparalizacao             date NOT NULL ,
                           obr02_outrosmotivos             text NOT NULL ,
                           obr02_dtretomada                date NOT NULL ,
-                          obr02_instit            		int8 NOT NULL );
+                          obr02_instit            		    int8 NOT NULL );
 
 
 

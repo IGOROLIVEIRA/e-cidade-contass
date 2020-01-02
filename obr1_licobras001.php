@@ -20,9 +20,11 @@ if(isset($incluir)){
 
 
   try {
+    if($dtHomologacaolic != null){
+      if($obr01_dtinicioatividades > $dtHomologacaolic){
+        throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
+      }
 
-    if($obr01_dtinicioatividades > $dtHomologacaolic){
-      throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
     }
 
     db_inicio_transacao();

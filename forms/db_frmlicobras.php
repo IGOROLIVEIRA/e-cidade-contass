@@ -10,7 +10,7 @@ $cllicobras->rotulo->label();
         <tr>
           <td nowrap title="<?=@$Tobr01_sequencial?>">
             <input name="oid" type="hidden" value="<?=@$oid?>">
-            <?=@$Lobr01_sequencial?>
+            <strong>Cod. Sequencial:</strong>
           </td>
           <td>
             <?
