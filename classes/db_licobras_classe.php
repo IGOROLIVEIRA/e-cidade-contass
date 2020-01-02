@@ -587,7 +587,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="licobras.oid,*",$ordem=null,$dbwhere="") {
+  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -600,10 +600,12 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
        $sql .= $campos;
      }
      $sql .= " from licobras ";
+     $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+     $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $oid != "" && $oid != null) {
-          $sql2 = " where licobras.oid = '$oid'";
+          $sql2 = " where obr01_sequencial = $oid";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";

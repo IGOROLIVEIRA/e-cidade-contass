@@ -35,7 +35,7 @@ $cllicobras = new cl_licobras;
            $campos = "licobras.oid,licobras.*";
            }
         }
-	         $sql = $cllicobras->sql_query();
+	         $sql = $cllicobras->sql_query(null,$campos,null,null);
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
@@ -48,7 +48,7 @@ $cllicobras = new cl_licobras;
           $result = $cllicobras->sql_record($cllicobras->sql_query($pesquisa_chave));
           if($cllicobras->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+            echo "<script>".$funcao_js."('$l20_edital','$l03_descr','$l20_numero',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

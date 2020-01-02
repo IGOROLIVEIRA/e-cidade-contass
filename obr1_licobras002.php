@@ -4,31 +4,50 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_licobras_classe.php");
+include("classes/db_homologacaoadjudica_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
+$clhomologacaoadjudica = new cl_homologacaoadjudica();
+
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $cllicobras->alterar($oid);
-  db_fim_transacao();
+  $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $obr01_licitacao"));
+  db_fieldsmemory($resulthomologacao,0);
+  $dtHomologacaolic = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
+
+  try {
+    if($dtHomologacaolic != null){
+      if($obr01_dtinicioatividades > $dtHomologacaolic){
+        throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
+      }
+
+    }
+
+    db_inicio_transacao();
+    $db_opcao = 2;
+    $cllicobras->alterar($oid);
+    db_fim_transacao();
+
+  }catch (Exception $eErro){
+    db_msgbox($eErro->getMessage());
+  }
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  $db_opcao = 2;
+  $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
+  db_fieldsmemory($result,0);
+  $db_botao = true;
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   #l20_objeto{
@@ -82,5 +101,5 @@ if($db_opcao==22){
 }
 ?>
 <script>
-js_tabulacaoforms("form1","obr01_licitacao",true,1,"obr01_licitacao",true);
+  js_tabulacaoforms("form1","obr01_licitacao",true,1,"obr01_licitacao",true);
 </script>
