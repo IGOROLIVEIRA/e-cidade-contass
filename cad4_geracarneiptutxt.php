@@ -274,14 +274,18 @@ $temporizador = date("His", mktime(date("H"), date("i"), date("s"), 0, 0, 0));
   $sSqlValorM2 .= '          then j36_testad                                      ';
   $sSqlValorM2 .= '          else j36_testle                                      ';
   $sSqlValorM2 .= '        end as j36_testle,                                     ';
-  $sSqlValorM2 .= '        j81_valorconstr as j37_vlcons                          ';
-  $sSqlValorM2 .= '   from iptuconstr                                             ';
+  $sSqlValorM2 .= '        case when (j81_valorconstr is null or j81_valorconstr = 0)
+       then
+       (select sum(j22_vm2) as j22_vm2 from iptucale where j22_matric = $3 and j22_anousu = $2)
+       else j81_valorconstr end  as j37_vlcons                                    ';
+  $sSqlValorM2 .= '   from iptubase                                               ';
+  $sSqlValorM2 .= '        inner join iptuconstr  on j01_matric = j39_matric      ';
+  $sSqlValorM2 .= '        inner join testpri   on j49_idbql  = $1                ';
   $sSqlValorM2 .= '        inner join testada   on j36_face   = j39_codigo        ';
-  $sSqlValorM2 .= '                            and j36_idbql  = $1                ';
+  $sSqlValorM2 .= '                            and j36_idbql  = j49_idbql         ';
   $sSqlValorM2 .= '        inner join face      on j37_face   = j36_face          ';
   $sSqlValorM2 .= '        left  join facevalor on j81_face   = j37_face          ';
   $sSqlValorM2 .= '                            and j81_anousu = $2                ';
-  $sSqlValorM2 .= '        inner join iptubase  on j01_matric = j39_matric        ';
   $sSqlValorM2 .= '  where j39_matric = $3                                        ';
   $sSqlValorM2 .= '    and j39_dtdemo is null                                     ';
   $sSqlValorM2 .= '    and j01_baixa  is null                                     ';
@@ -1629,7 +1633,10 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $sqlvalorm2 = " select  j49_face as j37_face,
               j81_valorterreno as j37_valor, j37_outros,
                                case when j36_testle = 0 then j36_testad else j36_testle end as j36_testle,
-                               j81_valorconstr as j37_vlcons
+                               case when (j81_valorconstr is null or j81_valorconstr = 0)
+                               then
+                               (select sum(j22_vm2) as j22_vm2 from iptucale where j22_matric = $j01_idbql and j22_anousu = $anousu)
+                               else j81_valorconstr end  as j37_vlcons
                                  from testpri
                                  inner join face on j49_face = j37_face
                                  left  join facevalor on j81_face = j37_face and j81_anousu = $anousu
