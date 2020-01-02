@@ -1091,6 +1091,9 @@ function js_addReceita () {
               if ($('k81_exerc').value == '') {
                   alert("É obrigatório informar o Ano de Referência.");
                   return false;
+              } else if ($('k81_exerc').value.length < 4) {
+                  alert("O campo Ano de Referência deve conter obrigatoriamente 4 caracteres.");
+                  return false;
               }
           }
       }
