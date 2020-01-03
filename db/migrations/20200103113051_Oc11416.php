@@ -33,22 +33,38 @@ class Oc11416 extends AbstractMigration
         SELECT fc_startsession();
 
 
+        INSERT INTO db_estruturavalor
+        VALUES (nextval('db_estruturavalor_db121_sequencial_seq'),
+                5,
+                '160',
+                'Transf. da Uniao Bonus de Ass. Cont. de Partilha de Producao',
+                0,
+                1,
+                1),
+                (nextval('db_estruturavalor_db121_sequencial_seq'),
+                5,
+                '260',
+                'Transf. da Uniao Bonus de Ass. Cont. de Partilha de Producao',
+                0,
+                1,
+                1);
+
         INSERT INTO orctiporec
         VALUES (160,
                 'Transf. da Uniao Bonus de Ass. Cont. de Partilha de Producao',
                 '160',
-                'Transferência da União da parcela dos Bônus de Assinatura de Contrato de Partilha de Produção',
+                'Transferencia da Uniao da parcela dos Bonus de Assinatura de Contrato de Partilha de Producao',
                 2,
                 '2099-12-31',
-                1,
+                (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '160'),
                 19900000), 
-               (260,
+                (260,
                 'Transf. da Uniao Bonus de Ass. Cont. de Partilha de Producao',
                 '260',
-                'Transferência da União da parcela dos Bônus de Assinatura de Contrato de Partilha de Produção',
+                'Transferencia da Uniao da parcela dos Bonus de Assinatura de Contrato de Partilha de Producao',
                 2,
                 '2099-12-31',
-                1,
+                (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '260'),
                 29900000);
 
 
@@ -64,7 +80,7 @@ class Oc11416 extends AbstractMigration
                c60_anousu,
                '417189911020000' AS c60_estrut,
                'TRANSF. CESSAO ONEROSA DO BONUS DE ASS. DO PRE-SAL' AS c60_descr,
-               'TRANSFERÊNCIA DA CESSÃO ONEROSA DO BÔNUS DE ASSINATURA DO PRÉ-SAL' AS c60_finali,
+               'TRANSFERENCIA DA CESSAO ONEROSA DO BONUS DE ASSINATURA DO PRE-SAL' AS c60_finali,
                c60_codsis,
                c60_codcla,
                c60_consistemaconta,
