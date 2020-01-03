@@ -230,6 +230,92 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','obr1_licobrasituacao003.php',1,1,'Exclusão','t');
                           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Situação da Obra%'),(select max(id_item) from db_itensmenu),3,4001223);
 
+                          -- TABELAS E ESTRUTURA licobrasmedicao
+
+					                -- INSERE db_sysarquivo
+                          INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licobrasmedicao','cadastro medicao de obras','obr03','2020-01-03','cadastro medicao de obras',0,'f','f','f','f');
+
+                    	    -- INSERE db_sysarqmod
+                          INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((select codmod from db_sysmodulo where nomemod like '%Obras%'), (select max(codarq) from db_sysarquivo));
+
+  						            -- INSERE db_syscampo
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_sequencial'	 		,'int8' ,'Cód. Sequencial'			,'', 'Cód. Sequencial'			,11	,false, false, false, 1, 'int8', 'Cód. Sequencial');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_seqobra'	 	 		,'int8' ,'Nº Obra' 					,'', 'Nº Obra'	 				,11	,false, false, false, 1, 'int8', 'Nº Obra');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtlancamento'	 		,'date' ,'Data Lançamento'			,'', 'Data Lançamento'			,10	,false, false, false, 0, 'date', 'Data Lançamento');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_nummedicao'	 		,'int8' ,'Nº Medição' 				,'', 'Nº Medição' 				,11	,false, false, false, 1, 'int8', 'Nº Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_tipomedicao'	 		,'int8' ,'Tipo de Medição' 			,'', 'Tipo de Medição' 			,11	,false, false, false, 1, 'int8', 'Tipo de Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtiniciomedicao'	    ,'date' ,'Início da Medição'		,'', 'Início da Medição'		,10	,false, false, false, 0, 'date', 'Início da Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_outrostiposmedicao'  	,'text' ,'Outros tipos de Medição'	,'', 'Outros tipos de Medição'	,500,false, false, false, 0, 'text', 'Outros tipos de Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_descmedicao'  		,'text' ,'Desc. Medição'			,'', 'Desc. Medição'			,500,false, false, false, 0, 'text', 'Desc. Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtfimmedicao'	 		,'date' ,'Fim da Medição'			,'', 'Fim da Medição'			,10	,false, false, false, 0, 'date', 'Fim da Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtentregamedicao'	 	,'date' ,'Entrega da Medição'		,'', 'Entrega da Medição'		,10	,false, false, false, 0, 'date', 'Entrega da Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_vlrmedicao'	 		,'float8' ,'Valor Medição' 			,'', 'Valor Medição' 			,11	,false, false, false, 1, 'float8', 'Valor Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_instit'		 		,'int8' ,'Instituição'				,'', 'Instituição'			 	,11	,false, false, false, 1, 'int8', 'Instituição');
+
+						              -- INSERE db_sysarqcamp
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_sequencial')		 , 1, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_seqobra')			 , 2, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_dtlancamento')		 , 3, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_nummedicao')		 	 , 4, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_tipomedicao')		 , 5, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_dtiniciomedicao') , 6, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_outrostiposmedicao') , 7, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_descmedicao')	 , 8, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_dtfimmedicao') , 9, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_dtentregamedicao')	 , 10, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_vlrmedicao')	 , 11, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr03_instit')		 , 12, 0);
+
+                          -- DROP DA TABELA
+
+                          DROP TABLE IF EXISTS licobrasmedicao CASCADE;
+
+                          -- Módulo: Obras
+                          CREATE TABLE licobrasmedicao(
+                          obr03_sequencial                int8 NOT NULL ,
+                          obr03_seqobra           		  int8 NOT NULL ,
+                          obr03_dtlancamento              date NOT NULL ,
+                          obr03_nummedicao          	  int8 NOT NULL ,
+                          obr03_tipomedicao          	  int8 NOT NULL ,
+                          obr03_dtiniciomedicao           date NOT NULL ,
+                          obr03_outrostiposmedicao        text NOT NULL ,
+                          obr03_descmedicao 	          text NOT NULL ,
+                          obr03_dtfimmedicao              date NOT NULL ,
+                          obr03_dtentregamedicao          date NOT NULL ,
+                          obr03_vlrmedicao		          float8 NOT NULL ,
+                          obr03_instit          		  int8 NOT NULL );
+
+                          -- Criando  sequences
+
+                          CREATE SEQUENCE licobrasmedicao_obr03_sequencial_seq
+                          INCREMENT 1
+                          MINVALUE 1
+                          MAXVALUE 9223372036854775807
+                          START 1
+                          CACHE 1;
+
+                          -- CHAVE ESTRANGEIRA
+                          ALTER TABLE licobrasmedicao ADD PRIMARY KEY (obr03_sequencial);
+
+                          ALTER TABLE licobrasmedicao ADD CONSTRAINT licobrasmedicao_licobras_fk
+                          FOREIGN KEY (obr03_seqobra) REFERENCES licobras (obr01_sequencial);
+
+                           -- MENUS
+
+                          --inserindo menu medicao da obra
+                          INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Medição da Obra','Medição da Obra','',1,1,'Medição da Obra','t');
+                          INSERT INTO db_menu VALUES(32,(select max(id_item) from db_itensmenu),3,4001223);
+
+                          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusão','Inclusão','obr1_licobrasmedicao001.php',1,1,'Inclusão','t');
+                          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Medição da Obra%'),(select max(id_item) from db_itensmenu),1,4001223);
+
+                          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','obr1_licobrasmedicao002.php',1,1,'Alteração','t');
+                          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Medição da Obra%'),(select max(id_item) from db_itensmenu),2,4001223);
+
+                          INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','obr1_licobrasmedicao003.php',1,1,'Exclusão','t');
+                          INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Medição da Obra%'),(select max(id_item) from db_itensmenu),3,4001223);
+
+
                     COMMIT;
 SQL;
 
