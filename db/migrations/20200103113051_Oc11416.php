@@ -93,6 +93,17 @@ class Oc11416 extends AbstractMigration
         AND c60_anousu >= 2019
         ORDER BY 2;
 
+        INSERT INTO conplanoorcamentogrupo
+        SELECT nextval('conplanoorcamentogrupo_c21_sequencial_seq') AS c21_sequencial,
+               c60_anousu AS c21_anousu,
+               c60_codcon AS c21_codcon,
+               16 AS c21_congrupo,
+               1 AS c21_instit
+        FROM conplanoorcamento
+        WHERE c60_estrut = '417189911020000'
+        AND c60_anousu >= 2019;
+
+
         CREATE TEMP TABLE cta_orc_analitica ON COMMIT DROP AS
         SELECT DISTINCT c60_codcon AS c61_codcon,
                2019 AS c61_anousu,
