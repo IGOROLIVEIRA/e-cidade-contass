@@ -172,15 +172,6 @@ class cl_placaixarec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->k81_emparlamentar == null ){
-       $this->erro_sql = " Campo Emenda Parlamentar nao Informado.";
-       $this->erro_campo = "k81_emparlamentar";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->k81_datareceb == null ){
        $this->erro_sql = " Campo Data Recebimento nao Informado.";
        $this->erro_campo = "k81_datareceb_dia";
@@ -283,7 +274,7 @@ class cl_placaixarec {
                                ,".($this->k81_convenio == "null" || $this->k81_convenio == ""?"null":"{$this->k81_convenio}")."
                                ,".($this->k81_regrepasse == "null" || $this->k81_regrepasse == ""?"null":"{$this->k81_regrepasse}")."
                                ,".($this->k81_exerc == "null" || $this->k81_exerc == ""?"null":"{$this->k81_exerc}")."
-                               ,$this->k81_emparlamentar
+                               ,".($this->k81_emparlamentar == "null" || $this->k81_emparlamentar == ""?"null":"{$this->k81_emparlamentar}")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -420,15 +411,6 @@ class cl_placaixarec {
      if(trim($this->k81_emparlamentar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_emparlamentar"])){
        $sql  .= $virgula." k81_emparlamentar = $this->k81_emparlamentar ";
        $virgula = ",";
-       if(trim($this->k81_emparlamentar) == null ){
-         $this->erro_sql = " Campo Emenda Parlamentar nao Informado.";
-         $this->erro_campo = "k81_emparlamentar";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->k81_datareceb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k81_datareceb_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["k81_datareceb_dia"] !="") ){
        $sql  .= $virgula." k81_datareceb = '$this->k81_datareceb' ";
