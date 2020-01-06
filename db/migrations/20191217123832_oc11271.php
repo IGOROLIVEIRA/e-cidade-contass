@@ -12,9 +12,7 @@ class Oc11271 extends AbstractMigration
 				
 				--INSERE o campo status para ser utilizado na inclusão de editais
 				
-        ALTER TABLE liclicita ADD COLUMN l20_status CHAR(1) DEFAULT NULL;
-
-				INSERT into db_menu(id_item, id_item_filho, menusequencia, modulo) values (1818, (select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(menusequencia) from db_menu where id_item = 1818 and modulo = 381)+1, 381);
+        INSERT into db_menu(id_item, id_item_filho, menusequencia, modulo) values (1818, (select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(menusequencia) from db_menu where id_item = 1818 and modulo = 381)+1, 381);
 
 				-- Menu Inclusão
 
