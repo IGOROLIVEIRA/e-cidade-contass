@@ -96,6 +96,7 @@ $db_opcao = 1;
                 case 102:
                 case 103:
                   if($natureza_objeto != 1 && $natureza_objeto != 7){
+                    $aTipos[] = 'Selecione';
                     $aTipos['td'] = 'Termo de Dispensa';
                   }else{
                     $aTipos[] = 'Selecione';
@@ -109,6 +110,7 @@ $db_opcao = 1;
 
                 default:
                   if($natureza_objeto != 1 && $natureza_objeto != 7){
+                    $aTipos[] = 'Selecione';
                     $aTipos['ed'] = 'Edital';
                   }else{
                     $aTipos[] = 'Selecione';
@@ -172,6 +174,12 @@ $db_opcao = 1;
         $('teste').appendChild(iFrame);
     });
 
+    console.log('Cad documento....');
+    console.log($('caddocumento'));
+    if($('caddocumento').length == 2){
+        $('caddocumento').selectedIndex = 1;
+    }
+
     function tipoArquivoValido(tipo){
         let valido = tipo.includes('pdf') || tipo.includes('xml') ? true : false;
         return valido;
@@ -192,7 +200,12 @@ $db_opcao = 1;
             return false;
         }
 
-        if ($F('caddocumento').value == '') {
+        if($F('caddocumento') == 0){
+            alert('Selecione um Tipo Válido!');
+            return false;
+        }
+
+        if ($F('caddocumento') == '' || $F('caddocumento') == null) {
 
             alert('Informe um tipo para o documento!');
             return false;
@@ -226,6 +239,9 @@ $db_opcao = 1;
             alert(oRetorno.message.urlDecode());
         }
         $('namefile').value = '';
+        if($('caddocumento').length == 2)
+          $('caddocumento').selectedIndex = 1;
+
     }
 
     function js_getDocumento() {
