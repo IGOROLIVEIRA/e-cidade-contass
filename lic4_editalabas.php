@@ -61,8 +61,8 @@ if (!isset($db_opcao)){
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
      <?
-     $natureza_objeto = 2;
-     if(db_getsession('DB_anousu') >= 2020 && $natureza_objeto != 1) {
+
+     if(db_getsession('DB_anousu') >= 2020 && $oGet->natureza_objeto != 1) {
          $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
          $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
          $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");

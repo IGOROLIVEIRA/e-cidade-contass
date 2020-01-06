@@ -146,6 +146,15 @@ class cl_liclancedital
       return false;
     }
 
+    if ($this->l47_dataenvio == "" || $this->l47_dataenvio == null) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql = "Verifique a data de envio";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     $sql = "insert into liclancedital(
                           l47_sequencial
                          ,l47_linkpub
@@ -166,9 +175,9 @@ class cl_liclancedital
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "liclancedital ($this->l20_codigo) nao Inclu?do. Inclusao Abortada.";
+        $this->erro_sql = "liclancedital ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "liclancedital j? Cadastrado";
+        $this->erro_banco = "liclancedital já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
         $this->erro_sql = "liclancedital ($this->l20_codigo) nao Inclu?do. Inclusao Abortada.";

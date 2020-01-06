@@ -43,7 +43,7 @@ $db_opcao = 1;
 $db_botao = true;
 $lRegistroPreco = false;
 if (isset($licitacao)&&trim($licitacao)!=""){
-     $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco, l20_nroedital"));
+     $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco, l20_nroedital, l20_naturezaobjeto"));
      if ($clliclicita->numrows > 0){
           db_fieldsmemory($result,0);
 
