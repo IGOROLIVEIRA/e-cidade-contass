@@ -85,29 +85,28 @@ select#depart{
 	   <td>
 	    <?
 	       db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
-	       db_input('l20_codigo',10,$Il20_codigo,true,'text',3,"");
 	    ?>
 	   </td>
 	 </tr>
 	 <tr>
-	    <td nowrap title="<?=@$Tl20_codepartamento?>">
+	    <td nowrap>
 	    	<b>Processo:</b>
 	    </td>
 	    <td>
 	      <?
 	        db_input('l20_edital',10,$Il20_edital,true,'text',3,"onchange='';");
-	        db_input('l20_objeto',45,$Il20_descricaodep,true,'text',3,"");
+	        db_input('l20_objeto',45,$Il20_objeto,true,'text',3,"");
 	      ?>
 	    </td>
 	</tr>
 	<tr>
-	    <td nowrap title="<?=@$Tl20_codepartamento?>">
+	    <td>
 	    	<b>Modalidade:</b>
 	    </td>
 	    <td>
 	        <?
-	        db_input('l20_numero',10,$Il20_edital,true,'text',3,"onchange='';");
-	        db_input('l20_descricao',45,$Il20_descricaodep,true,'text',3,"");
+	        db_input('tipo_tribunal',10,'',true,'text',3,"onchange='';");
+	        db_input('descr_tribunal',45,'',true,'text',3,"");
 	        ?>
 	    </td>
 	</tr>
@@ -117,7 +116,7 @@ select#depart{
 	  </td>
 	  <td>
         <?
-        	db_textarea('links',4,56,$Il20_razao,true,'text',1, '', '', '', 200);
+        	db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
         ?>
       </td>
 	</tr>
@@ -197,17 +196,17 @@ select#depart{
 <script>
 
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|l20_nroedital|l20_numero|pc50_descr|dl_Data_Referencia|l20_objeto','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
     }
+    function js_preenchepesquisa(edital, descricao, data, objeto, tipo){
 
-    function js_preenchepesquisa(codigo, edital, nroedital, numero, descricao, data, objeto){
-    	let dataFormatada = js_formatar(data, 'd');
+      let dataFormatada = js_formatar(data, 'd');
     	document.getElementById('l20_edital').value = edital;
-    	document.getElementById('l20_numero').value = numero;
-    	document.getElementById('l20_nroedital').value = nroedital;
-    	document.getElementById('l20_descricao').value = descricao;
+    	document.getElementById('descr_tribunal').value = descricao;
     	document.getElementById('data_referencia').value = dataFormatada;
     	document.getElementById('l20_objeto').value = objeto;
+    	document.getElementById('tipo_tribunal').value = tipo;
+
     	db_iframe_liclicita.hide();
 	}
 
@@ -229,15 +228,15 @@ select#depart{
 
 
     }
-
-    function limpaCampos(){
-    	document.getElementById('l20_edital').value = '';
-    	document.getElementById('l20_numero').value = '';
-    	document.getElementById('l20_nroedital').value = '';
-    	document.getElementById('l20_descricao').value = '';
-    	document.getElementById('data_referencia').value = '';
-    	document.getElementById('l20_objeto').value = '';
-    }
+    //
+    // function limpaCampos(){
+    // 	document.getElementById('l20_edital').value = '';
+    	// document.getElementById('l20_numero').value = '';
+    // 	document.getElementById('l20_nroedital').value = '';
+    // 	document.getElementById('descricao_recurso').value = '';
+    // 	document.getElementById('data_referencia').value = '';
+    // 	document.getElementById('l20_objeto').value = '';
+    // }
 
     function js_exibeDadosCompl(){
         var idObra = '';

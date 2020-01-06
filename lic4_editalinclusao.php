@@ -44,19 +44,27 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 
-if(isset($incluir)){
-
 //  Realizar busca pelos campos
+  $l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
+  $sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+	   UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto, 
+	   (CASE 
+          WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
+            THEN liclicita.l20_dtpublic
+          WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
+            THEN liclicita.l20_datacria
+          END) as dl_Data_Referencia', '', 'l20_nroedital = '.$l20_nroedital);
+  $rsLicita = $clliclicita->sql_record($sqlLicita);
+  db_fieldsmemory($rsLicita, 0);
 
-  $clliclicita->sql_query('', 'l20_codtipocom, l20_edital', '', 'l20_nroedital = '.$edital);
-
-  $clliclancedital->l47_linkpub = $links;
-  $clliclancedital->l47_origemrecurso = $origem_recurso;
-  $clliclancedital->l47_descrecurso = $descricao_recurso;
-  $clliclancedital->l47_liclicita = $l20_codigo;
-  $clliclancedital->l47_dataenvio = $data_referencia;
-  $clliclancedital->l47_liclicita = $edital;
-  $clliclancedital->incluir(null);
+  if(isset($incluir)){
+    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+    $clliclancedital->l47_linkpub = $links;
+    $clliclancedital->l47_origemrecurso = $origem_recurso;
+    $clliclancedital->l47_descrecurso = $descricao_recurso;
+    $clliclancedital->l47_dataenvio = $data_formatada;
+    $clliclancedital->l47_liclicita = $l20_codigo;
+    $clliclancedital->incluir(null);
 
   if ($clliclancedital->erro_status=="0"){
     $erro_msg = $clliclancedital->erro_msg;
@@ -107,18 +115,18 @@ if(isset($incluir)){
 </body>
 </html>
 <?
+if(isset($incluir) ) {
+    echo "<script>";
+    echo "alert('" . $clliclancedital->erro_sql . "')";
+    echo "</script>";
 
-if(isset($sqlerro)){
-  echo "<script>alert('".$clliclancedital->erro_sql."')</script>";
-}
-
-if(isset($incluir) && !$sqlerro){
-  echo "<script>";
-  echo "alert('".$clliclancedital->erro_sql."')";
-  echo "</script>";
-  echo "<script>";
-  echo "parent.document.formaba.documentos.disabled=false;";
-  echo "parent.mo_camada('documentos');";
-  echo "</script>";
+  if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
+    echo "<script>";
+    echo "parent.document.formaba.documentos.disabled=false;";
+    echo "parent.mo_camada('documentos');";
+    echo "</script>";
+  }
 }
 ?>
+
+
