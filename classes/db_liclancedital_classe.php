@@ -138,7 +138,12 @@ class cl_liclancedital
     }
 
     if ($this->l47_liclicita == "" || $this->l47_liclicita == null) {
-      $this->l47_liclicita = 8;
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql = "Verifique o número do edital";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
     }
 
     $sql = "insert into liclancedital(
