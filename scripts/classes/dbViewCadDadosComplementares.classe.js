@@ -522,7 +522,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oTxtCep = new DBTextField('txtCep'+sId, 'txtCep'+sId, '');
   me.oTxtCep.lReadOnly = true;
 //me.oTxtCep.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
-  me.oTxtCep.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep\",\"f\",\"f\",event)");
+  me.oTxtCep.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep\",\"t\",\"t\",event)");
   me.oTxtCep.addStyle('width', '70px');
 //me.oTxtCep.addStyle('display', 'none');
   me.oTxtCep.setMaxLength(8);
@@ -2217,7 +2217,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   */
   me.oTxtCepEnd = new DBTextField('txtCepEnd'+sId, 'txtCepEnd'+sId, '');
 //me.oTxtCepEnd.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
-  me.oTxtCepEnd.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep Endere?o\",\"f\",\"f\",event)");
+  me.oTxtCepEnd.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep Endereço\",\"f\",\"f\",event)");
   me.oTxtCepEnd.addStyle('width', '100%');
   me.oTxtCepEnd.setMaxLength(8);
   me.oTxtCepEnd.show($('ctnCodigoCepEnd'+sId));
@@ -2294,6 +2294,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oTxtDistrito.addStyle('width', '100%');
   me.oTxtDistrito.setMaxLength(100);
   me.oTxtDistrito.show($('ctnDistrito'+sId));
+  me.oTxtDistrito.addEvent('onKeyUp',"js_ValidaCampos(this,2,\"Campo Distrito\",\"f\",\"t\",event)");
   $('ctnDistrito'+sId).observe('change', me.changeDistrito);
 
 //-------------------------------------Fim da Manipulação do Distrito-------------------------------------------------
@@ -2347,6 +2348,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
   me.oLogradouro = new DBTextField('txtLogradouro'+sId, 'txtLogradouro'+sId, '');
   me.oLogradouro.addStyle('width', '100%');
+  me.oLogradouro.addEvent('onKeyUp',"js_ValidaCampos(this,2,\"Campo Logradouro\",\"f\",\"t\",event)");
   me.oLogradouro.setMaxLength(100);
   me.oLogradouro.show($('ctnDescrLogradouro'+sId));
   $('ctnDescrLogradouro'+sId).observe('change', me.changeLogradouro);
