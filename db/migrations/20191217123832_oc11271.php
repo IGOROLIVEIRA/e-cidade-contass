@@ -7,39 +7,111 @@ class Oc11271 extends AbstractMigration
     public function up()
     {
     	$sql = "
-    		insert into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
+    			INSERT into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
 				values ((select max(id_item) from db_itensmenu) + 1, 'Envio do edital', 'Envio do edital', '', 1, 1, 'Envio do edital', 't');
+				
+				--INSERE o campo status para ser utilizado na inclus�o de editais
+				
+        ALTER TABLE liclicita ADD COLUMN l20_status CHAR(1) DEFAULT NULL;
 
-				insert into db_menu(id_item, id_item_filho, menusequencia, modulo) values (1818, (select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(menusequencia) from db_menu where id_item = 1818 and modulo = 381)+1, 381);
+				INSERT into db_menu(id_item, id_item_filho, menusequencia, modulo) values (1818, (select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(menusequencia) from db_menu where id_item = 1818 and modulo = 381)+1, 381);
 
+				-- Menu Inclus�o
 
-				-- Menu Inclusão
+				INSERT into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
+				values ((select max(id_item) from db_itensmenu) + 1, 'Inclus�o', 'Inclus�o do edital', 'lic4_editalabas.php', 1, 1, 'Inclus�o do edital', 't');
 
-				insert into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
-				values ((select max(id_item) from db_itensmenu) + 1, 'Inclusão', 'Inclusão do edital', 'lic4_editalabas.php', 1, 1, 'Inclusão do edital', 't');
+				INSERT into db_menu (id_item, id_item_filho, menusequencia, modulo) values ((select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(id_item) from db_itensmenu), 1, 381);
 
-				insert into db_menu (id_item, id_item_filho, menusequencia, modulo) values ((select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(id_item) from db_itensmenu), 1, 381);
+        
+        CREATE TABLE liclancedital(
+          l47_sequencial BIGINT NOT NULL PRIMARY KEY,
+          l47_linkpub VARCHAR(200),
+          l47_origemrecurso INTEGER,
+          l47_descrecurso VARCHAR(250),
+          l47_dataenvio DATE,
+          l47_liclicita BIGINT,
+          FOREIGN KEY(l47_liclicita) REFERENCES liclicita(l20_codigo)
+        );
 
-				-- Menu Retificação
+        ALTER TABLE ONLY liclancedital
+              ADD CONSTRAINT liclancedital_fk FOREIGN KEY (l47_liclicita) REFERENCES liclicita(l20_codigo);
 
-				insert into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
-				values ((select max(id_item) from db_itensmenu) + 1, 'Retificação', 'Retificação do edital', 'lic4_editalretificacao.php', 1, 1, 'Retificação do edital', 't');
+        CREATE SEQUENCE liclancedital_l47_sequencial_seq
+                  START WITH 1
+                  INCREMENT BY 1
+                  NO MINVALUE
+                  NO MAXVALUE
+                  CACHE 1;
 
-				insert into db_menu (id_item, id_item_filho, menusequencia, modulo) values ((select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(id_item) from db_itensmenu), 2, 381);
+                  
+        CREATE TABLE editaldocumentos(
+          l48_sequencial BIGINT NOT NULL DEFAULT 0,
+          l48_nomearquivo varchar(100),
+          l48_arquivo oid,
+          l48_tipo varchar(2),
+          l48_edital BIGINT,
+          FOREIGN KEY(l48_edital) REFERENCES liclancedital(l47_sequencial)
+        );
+        
+        CREATE SEQUENCE editaldocumentos_l48_sequencial_seq
+                  START WITH 1
+                  INCREMENT BY 1
+                  NO MINVALUE
+                  NO MAXVALUE
+                  CACHE 1;
+        
+        CREATE TABLE obrasdadoscomplementares(
+          db150_sequencial BIGINT NOT NULL DEFAULT 0,
+          db150_codobra BIGINT NOT NULL,
+          db150_pais INTEGER NOT NULL,
+          db150_estado INTEGER NOT NULL,
+          db150_municipio INTEGER NOT NULL,
+          db150_distrito VARCHAR(100),
+          db150_bairro INTEGER NOT NULL,
+          db150_numero INTEGER,
+          db150_logradouro VARCHAR(100),
+          db150_grauslatitude VARCHAR(2) NOT NULL,
+          db150_minutolatitude VARCHAR(2) NOT NULL,
+          db150_segundolatitude VARCHAR(5) NOT NULL,
+          db150_grauslongitude VARCHAR(2) NOT NULL,
+          db150_minutolongitude VARCHAR(2) NOT NULL,
+          db150_segundolongitude VARCHAR(5) NOT NULL,
+          db150_classeobjeto INTEGER,
+          db150_grupobempublico INTEGER,
+          db150_subgrupobempublico INTEGER,
+          db150_atividadeobra INTEGER,
+          db150_atividadeservico INTEGER,
+          db150_descratividadeservico VARCHAR(150),
+          db150_atividadeservicoesp INTEGER,
+          db150_descratividadeservicoesp VARCHAR(150),
+          db150_bdi FLOAT,
+          db150_liclicita BIGINT
+          PRIMARY KEY(db150_sequencial)
+        );
+        
+        ALTER TABLE ONLY obrasdadoscomplementares
+            ADD CONSTRAINT obrasdadoscomplementares_fk FOREIGN KEY (db150_liclicita) REFERENCES liclicita(l20_codigo);
+        
+        CREATE SEQUENCE obrasdadoscomplementares_db150_sequencial_seq
+          START WITH 1
+          INCREMENT BY 1
+          NO MINVALUE
+          NO MAXVALUE
+          CACHE 1;
 
-				-- Menu Anulação/Revogação
-
-				insert into db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente)
-				values ((select max(id_item) from db_itensmenu) + 1, 'Anulação/Revogação', 'Anulação/Revogação do edital', 'lic4_editalanulacao.php', 1, 1, 'Anulação/Revogação do edital', 't');
-
-				insert into db_menu (id_item, id_item_filho, menusequencia, modulo) values ((select id_item from db_itensmenu where descricao = 'Envio do edital'), (select max(id_item) from db_itensmenu), 3, 381);
-    	";
+      ";
     	$this->execute($sql);
     }
 
     public function down(){
       $sql = "
-          
+          DELETE from db_menu where id_item = (select id_item from db_itensmenu where descricao = 'Envio do edital');
+			    DELETE from db_itensmenu where help = 'Envio do edital';
+          DROP TABLE liclanceditaldocumentos;
+          DROP TABLE liclancedital;
+          DROP TABLE obrasdadoscomplementares;
       ";
+      $this->execute($sql);
     }
 }

@@ -25,10 +25,6 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.lModificado            = false;
   this.iMunicipioAutomatico   = false;
   this.lEnderecoMunicipio     = false;
-  this.lShowCondominio        = true;
-  this.lShowLoteamento        = true;
-  this.lShowPontoReferencia   = true;
-  this.lShowComplemento       = true;
   this.sNameInstance          = sNameInstance;
   this.sNumero                = '';
   this.sId                    = sId;
@@ -36,13 +32,20 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.sCondominio            = '';
   this.sLoteamento            = '';
   this.municiovalidado        = false;
-  this.sPontoReferencia       = '';
   this.sNomeMunicipio         = '';
+  this.sDistrito              = '';
   this.sNomePais              = '';
   this.sNomeRua               = '';
   this.sNomeBairro            = '';
   this.sCepEndereco           = '';
   this.objRetorno             = '';
+  this.iGrausLatitude         = '';
+  this.iMinutoLatitude        = '';
+  this.iSegundoLatitude       = '';
+  this.iGrausLongitude        = '';
+  this.iMinutoLongitude       = '';
+  this.iSegundoLongitude      = '';
+  this.iBdi                   = '';
   this.callBackFunction = function () {
 
   }
@@ -50,9 +53,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
 //  var iWidth = document.width / 1.7;
   var iWidth = 790;
-  //var iWheigth = window.innerHeight / 1.5;
+//var iWheigth = window.innerHeight / 1.5;
   var iWheigth = 460;
-
 
   this.oWindowEndereco  = new windowAux('wndEndereco'+me.sId, 'Dados complementares', iWidth, iWheigth);
 
@@ -63,46 +65,57 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   sContent += "     <table border='0' style=\"border-collapse:collapse;\">";
   sContent += "       <tr >";
   sContent += "         <td id='ctnLabelCep"+sId+"' >";
-  sContent += "           <a href='#' onclick='"+me.sNameInstance+".lookupCep();'><b>Pesquisa Cep:</b></a>";
-  sContent += "         </td>"
+  sContent += "           <a href='#' onclick='"+me.sNameInstance+".lookupCep();'><b>Cep:</b></a>";
+  sContent += "         </td>";
   sContent += "         <td id='ctnCodigoCep"+sId+"' >";
   sContent += "         </td>";
-  sContent += "         <td colspan='3' ><input type='button' id='btnPesquisarCep"+sId+"' value='Pesquisar' ";
-  sContent += "                  onClick='"+me.sNameInstance+".pesquisaCep();' style='display:none'>";
+  sContent += "         <td><input type='button' id='btnPesquisarCep"+sId+"' value='Pesquisar' ";
+  sContent += "            onClick='"+me.sNameInstance+".pesquisaCep();' style='display:none'>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnLabelCodigoObra'>";
+  sContent += "         <b>Cód. Obra:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoObra"+sId+"'></td>";
   sContent += "         </td>";
   sContent += "       </tr>";
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelPais"+sId+"'>";
   sContent += "           <b>País:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoPais"+sId+"' colspan='4'></td>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoPais"+sId+"' colspan='5'></td>";
   sContent += "       </tr>";
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelEstado"+sId+"' >";
   sContent += "           <b>Estado:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoEstado"+sId+"' colspan='4'></td>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoEstado"+sId+"' colspan='5'></td>";
   sContent += "       </tr>";
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelMunicipio"+sId+"' >";
   sContent += "           <b>Município:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoMunicipio"+sId+"' colspan='4'></td>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoMunicipio"+sId+"' colspan='5'></td>";
+  sContent += "       </tr>";
+  sContent += "       <tr>";
+  sContent += "         <td id='ctnLabelDistrito"+sId+"' >";
+  sContent += "           <b>Distrito:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnDistrito"+sId+"' colspan='5'></td>";
   sContent += "       </tr>";
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelBairro"+sId+"' >";
   sContent += "           <b>Bairro:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoBairro"+sId+"' >"
   sContent += "         </td>";
-  sContent += "         <td id='ctnDescrBairro"+sId+"' colspan='3'>";
+  sContent += "         <td id='ctnCodigoBairro"+sId+"' style='display: none'>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnDescrBairro"+sId+"' colspan='5'>";
   sContent += "         </td>";
   sContent += "       </tr>";
-  sContent += "       <tr valign='top'>";
+  sContent += "       <tr valign='top' style='display: none'>";
   sContent += "         <td id='ctnLabelRua"+sId+"' style='width:10%;'>";
   sContent += "           <b>Rua:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoRua"+sId+"' style='width:25%;'>"
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoRua"+sId+"' style='width:25%;'>";
   sContent += "         </td>";
   sContent += "          <td id='ctnCboRuasTipo"+sId+"' style='width:15%;'>";
   sContent += "          </td>";
@@ -112,81 +125,172 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelNumero"+sId+"' >";
   sContent += "           <b>Número:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoNumero"+sId+"' >"
   sContent += "         </td>";
-  sContent += "         <td><input type='button' id='btnPesquisarNumero"+sId+"' value='Pesquisar' ";
-  sContent += "                  onClick='"+me.sNameInstance+".findNumeroByNumero();' disabled='disabled' >";
+  sContent += "         <td id='ctnCodigoNumero"+sId+"' >";
   sContent += "         </td>";
-  sContent += "         <td id='ctnLabelComplemento"+sId+"' style='width: 80px;'>";
-  sContent += "           <b>Complemento:</b>";
+  sContent += "         <td id='ctnLabelLogradouro"+sId+"' >";
+  sContent += "           <b>Logradouro:</b>";
   sContent += "         </td>";
-  sContent += "         <td id='ctnDescrComplemento"+sId+"'>";
+  sContent += "         <td id='ctnDescrLogradouro"+sId+"' colspan='3'>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnDescrComplemento"+sId+"' style='display: none'>";
   sContent += "         </td>";
   sContent += "       </tr>";
-  sContent += "       <tr>";
-  sContent += "         <td id='ctnLabelCepEnd"+sId+"' >";
-  sContent += "           <b>Cep:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoCepEnd"+sId+"' >"
+
+  sContent += "       <tr valign='top'>";
+  sContent += "          <td id='ctnLabelGrausLatitude"+sId+"' style='width:10%;'>";
+  sContent += "           <b>Graus Latitude:</b>";
+  sContent += "          </td>"
+  sContent += "          <td id='ctnGrausLatitude"+sId+"' style='width:25%;'>";
+  sContent += "          </td>";
+
+  sContent += "          <td id='ctnLabelMinutoLatitude"+sId+"'>";
+  sContent += "           <b>Minuto da Latitude:</b>";
+  sContent += "          </td>";
+  sContent += "          <td id='ctnMinutoLatitude"+sId+"'>";
+  sContent += "          </td>";
+
+  sContent += "          <td id='ctnLabelSegundoLatitude"+sId+"' style='padding-left: 51px;'>";
+  sContent += "           <b>Segundo da Latitude:</b>";
+  sContent += "          </td>";
+  sContent += "          <td id='ctnSegundoLatitude"+sId+"'>";
+  sContent += "          </td>";
+  sContent += "        </tr>";
+
+  sContent += "       <tr valign='top'>";
+  sContent += "          <td id='ctnLabelGrausLongitude"+sId+"' style='width:10%;'>";
+  sContent += "           <b>Graus Longitude:</b>";
+  sContent += "          </td>";
+  sContent += "          <td id='ctnGrausLongitude"+sId+"' style='width:25%;'>";
+  sContent += "          </td>";
+
+  sContent += "          <td id='ctnLabelMinutoLongitude"+sId+"'>";
+  sContent += "           <b>Minuto da Longitude:</b>";
+  sContent += "          </td>";
+  sContent += "          <td id='ctnMinutoLongitude"+sId+"'>";
+  sContent += "          </td>";
+
+  sContent += "          <td id='ctnLabelSegundoLongitude"+sId+"' style='padding-left: 51px;'>";
+  sContent += "           <b>Segundo da Longitude:</b>";
+  sContent += "          </td>";
+  sContent += "          <td id='ctnSegundoLongitude"+sId+"'>";
+  sContent += "          </td>";
+  sContent += "        </tr>";
+
+  sContent += "       <tr style='display: none'>";
+  sContent += "         <td id='ctnCodigoCepEnd"+sId+"' >";
   sContent += "         </td>";
   sContent += "         <td colspan='1'> &nbsp;";
   sContent += "         </td>";
   sContent += "         <td id='ctnLabelCodigoIbge"+sId+"' >";
   sContent += "           <b>Código IBGE:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoIbge"+sId+"' >"
+  sContent += "         </td>";
+  sContent += "         <td id='ctnCodigoIbge"+sId+"' >";
   sContent += "         </td>";
   sContent += "         <td colspan='3'> &nbsp;";
   sContent += "         </td>";
   sContent += "       </tr>";
-  sContent += "       <tr id='trCondominio"+sId+"' >";
-  sContent += "         <td id='ctnLabelCondominio"+sId+"' >";
-  sContent += "           <b>Condomínio:</b>";
-  sContent += "         </td>"
+  sContent += "       <tr id='trCondominio"+sId+"' style='display: none'>";
   sContent += "         <td id='ctnDescrCondominio"+sId+"' colspan='4'>";
   sContent += "         </td>";
   sContent += "       </tr>";
-  sContent += "       <tr id='trLoteamento"+sId+"'>";
+  sContent += "       <tr id='trLoteamento"+sId+"' style='display: none'>";
   sContent += "         <td id='ctnLabelLoteamento"+sId+"' >";
   sContent += "           <b>Loteamento:</b>";
-  sContent += "         </td>"
+  sContent += "         </td>";
   sContent += "         <td id='ctnDescrLoteamento"+sId+"' colspan='4'>";
   sContent += "         </td>";
   sContent += "       </tr>";
-  sContent += "       <tr id='trPontoReferencia"+sId+"'>";
+  sContent += "       <tr id='trPontoReferencia"+sId+"' style='display: none'>";
   sContent += "         <td id='ctnLabelPontoReferencia"+sId+"'  nowrap>";
   sContent += "           <b>Ponto Referência:</b>";
-  sContent += "         </td>"
+  sContent += "         </td>";
   sContent += "         <td id='ctnDescrPontoReferencia"+sId+"' colspan='4'>";
   sContent += "         <textarea  id='txtDescrPontoReferencia"+sId+"' rows='5' style='width:100%'></textarea>";
   sContent += "         </td>";
   sContent += "       </tr>";
   sContent += "     </table>";
   sContent += "  </fieldset>";
+  sContent += "  <fieldset style='text-align:center;'>";
+  sContent += "    <legend><b>Obras e serviços :</b></legend>";
+  sContent += "     <table border='0' style=\"border-collapse:collapse;\">";
+  sContent += "       <tr>";
+  sContent += "         <td id='ctnLabelClassesObjeto"+sId+"' >";
+  sContent += "           <b>Classe do objeto:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnClassesObjeto"+sId+"'></td>";
+  sContent += "         <td id='ctnLabelGrupoBemPub"+sId+"' >";
+  sContent += "           <b>Grupo Bem Público:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnGrupoBemPublico"+sId+"'></td>";
+  sContent += "       </tr>";
+  sContent += "       <tr>";
+  sContent += "         <td id='ctnLabelAtividadeObra"+sId+"' >";
+  sContent += "           <b>Atividade da Obra:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnAtividadeObra"+sId+"'></td>";
+  sContent += "         <td id='ctnLabelSubgrupoBem"+sId+"' >";
+  sContent += "           <b>Subgrupo Bem Público:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnSubGrupoBemPublico"+sId+"'></td>";
+  sContent += "       </tr>";
+  sContent += "       <tr>";
+  sContent += "         <td id='ctnLabelAtividadeServico"+sId+"' >";
+  sContent += "           <b>Atividade do Serviço:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnAtividadeServico"+sId+"'></td>";
+  sContent += "         <td id='ctnLabelBdi"+sId+"' >";
+  sContent += "           <b>BDI:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnBdi"+sId+"'></td>";
+  sContent += "       </tr>";
+  sContent += "       <tr id='trAtividadeServico"+sId+"' style='display: none'>";
+  sContent += "         <td id='ctnLabelAtividadeServico"+sId+"'  nowrap>";
+  sContent += "           <b>Descrição Atividade Serviço:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnDescrAtividadeServico"+sId+"' colspan='4'>";
+  sContent += "         <textarea  id='txtDescrAtividadeServico"+sId+"' rows='2' style='width:100%'></textarea>";
+  sContent += "         </td>";
+  sContent += "       </tr>";
+  sContent += "       <tr>";
+  sContent += "         <td id='ctnLabelAtividadeServEsp"+sId+"' >";
+  sContent += "           <b>Atividade dos Serviços Especializados:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnAtividadeServEsp"+sId+"'></td>";
+  sContent += "       </tr>";
+  sContent += "       <tr id='trAtividadeServicoEsp"+sId+"' style='display: none'>";
+  sContent += "         <td id='ctnLabelAtividadeServicoEsp"+sId+"'  nowrap>";
+  sContent += "           <b>Descrição Atividade Serviço Especializado:</b>";
+  sContent += "         </td>";
+  sContent += "         <td id='ctnDescrAtividadeServicoEsp"+sId+"' colspan='4'>";
+  sContent += "         <textarea  id='txtDescrAtividadeServicoEsp"+sId+"' rows='2' style='width:100%'></textarea>";
+  sContent += "         </td>";
+  sContent += "       </tr>";
+  sContent += "     </table >";
+  sContent += "  </fieldset>";
   sContent += "  </div>";
-  sContent += "  <div id='btnAcoes"+sId+"' style='margim-top:5px;'>";
-  sContent += "     <input type='button' id='btnSalvar"+sId+"' value='Salvar' onClick='"+me.sNameInstance+".salvarEndereco();'>";
+  sContent += "  <div id='btnAcoes"+sId+"' style='margin-top:5px;'>";
+  sContent += "     <input type='button' id='btnSalvar"+sId+"' value='Salvar' onClick='"+me.sNameInstance+".salvarDadosComplementares();'>";
   sContent += "     <input type='button' id='btnLimpar"+sId+"' value='Limpar' onClick='"+me.sNameInstance+".limpaForm();'>";
   sContent += "  </div>";
   sContent += "</div>";
   me.oWindowEndereco.setContent(sContent);
 
-  //Metodo para fechar a janela e retornar o endereco salvo
+//Metodo para fechar a janela e retornar o endereco salvo
   me.close = function() {
 
     if (me.getObjetoRetorno() != "") {
-       me.getObjetoRetorno().value = me.getCodigoEndereco();
+      me.getObjetoRetorno().value = me.getCodigoObra();
     }
     me.oWindowEndereco.destroy();
   }
   me.oWindowEndereco.setShutDownFunction(me.close);
   me.oWindowEndereco.allowCloseWithEsc(false);
   this.oMessageBoardEndereco = new DBMessageBoard('msgBoardEndereco'+sId,
-                                                 'Cadastro de Endereço',
-                                                 'Cadastro de Endereço',
-                                                 $('ctnMessageBoard')
-                                                 );
+    'Dados Complementares',
+    '',
+    $('ctnMessageBoard')
+  );
   this.oMessageBoardEndereco.show();
 
   /**
@@ -196,7 +300,6 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
    */
 
   this.setObjetoRetorno = function(oRetorno) {
-
     this.objRetorno = oRetorno;
   }
 
@@ -259,7 +362,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     }
   }
 
-  //Métodos para setar e ler as propriedades
+//Métodos para setar e ler as propriedades
   /**
    *Seta o estado se foi modificado alguma coisa na tela
    *@param {boolean} lModificado
@@ -270,10 +373,10 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     me.lModificado = lModificado;
   }
 
- /**
-  *Retorna o estado se houve alguma modificacao
-  *@return {boolean} true se alterado false se nao alterado
-  */
+  /**
+   *Retorna o estado se houve alguma modificacao
+   *@return {boolean} true se alterado false se nao alterado
+   */
   this.getModificado = function() {
 
     return this.lModificado;
@@ -414,24 +517,53 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.sTxtNomeBairro = null;
 
   /*
-   *Cria o campo de busca do cep
-   */
+  *Cria o campo de busca do cep
+  */
   me.oTxtCep = new DBTextField('txtCep'+sId, 'txtCep'+sId, '');
   me.oTxtCep.lReadOnly = true;
-  //me.oTxtCep.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
+//me.oTxtCep.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
   me.oTxtCep.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep\",\"f\",\"f\",event)");
   me.oTxtCep.addStyle('width', '70px');
-  //me.oTxtCep.addStyle('display', 'none');
+//me.oTxtCep.addStyle('display', 'none');
   me.oTxtCep.setMaxLength(8);
   me.oTxtCep.show($('ctnCodigoCep'+sId));
 
+  /**/
+
+  /**
+   *Retorna o Código da Obra
+   *@return {integer} iCodigoObra
+   */
+  this.getCodigoObra = function() {
+    return this.iCodigoObra;
+  }
+
+  /**
+   *Retorna o codigo da Obra
+   *@return {integer} iCodigoObra
+   */
+  this.setCodigoObra = function(iCodigoObra) {
+    this.iCodigoObra = iCodigoObra;
+  }
+
+  this.changeValorObra = (e) => {
+    me.setCodigoObra(e.target.value);
+    me.getCodigoObra();
+  }
+
+  me.oTxtCodigoObra = new DBTextField('txtCodigoObra'+sId, 'txtCodigoObra'+sId, '');
+  me.oTxtCodigoObra.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Código Obra\",\"f\",\"f\",event)");
+  me.oTxtCodigoObra.addStyle('width', '80px');
+  me.oTxtCodigoObra.setMaxLength(8);
+  me.oTxtCodigoObra.show($('ctnCodigoObra'+sId));
+  $('ctnCodigoObra'+sId).observe('change', me.changeValorObra);
+
   /**
    *Metodo para realizar a busca do endereco pelo cep informado
-   *caso seje retornado algum dado estes serao preenchidos ate
+   *caso seja retornado algum dado estes serao preenchidos ate
    *o campo rua.
    */
   this.pesquisaCep = function() {
-
     if ($('txtCep'+sId).value == '') {
 
       return false;
@@ -439,13 +571,13 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
     if ($('txtCep'+sId).value.length != 8) {
 
-      alert('usuário:\n\nO Cep informado possui menos de 8 digitos.\n\nVerifique para continuar a pesquisa.\n\n');
+      alert('Usuário:\n\nO Cep informado possui menos de 8 digitos.\n\nVerifique para continuar a pesquisa.\n\n');
       return false;
     }
 
     if ($F('txtDescrBairro'+sId).trim() != "" ||
-        $F('txtDescrRua'+sId).trim() != "" ||
-        $F('txtCodigoNumero'+sId).trim() != "") {
+      $F('txtDescrRua'+sId).trim() != "" ||
+      $F('txtCodigoNumero'+sId).trim() != "") {
 
       if(!confirm('usuário:\n\nExistem dados abaixo preenchidos serão perdidos Deseja Continuar?\n\n')){
         $('txtCep'+sId).value = ''
@@ -462,11 +594,11 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     js_divCarregando(msgDiv,'msgBox');
 
     var oAjax = new Ajax.Request(
-                me.sUrlRpc,
-                { parameters: 'json='+Object.toJSON(oPesquisa),
-                  method: 'post',
-                  onComplete : me.retornoFindCep
-                }
+      me.sUrlRpc,
+      { parameters: 'json='+Object.toJSON(oPesquisa),
+        method: 'post',
+        onComplete : me.retornoFindCep
+      }
 
     );
   }
@@ -478,8 +610,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.lookupCep = function() {
 
     js_OpenJanelaIframe('', 'db_iframe_cep',
-                        'func_cep.php?funcao_js=parent.'+me.sNameInstance+'.retornoLookupCep|cep|cp01_bairro',
-                        'Pesquisa CEP', true);
+      'func_cep.php?funcao_js=parent.'+me.sNameInstance+'.retornoLookupCep|cep|cp01_bairro',
+      'Pesquisa CEP', true);
     $('Jandb_iframe_cep').style.zIndex = 100000;
   }
 
@@ -532,76 +664,57 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
       var iNumReg = oRetorno.endereco.length;
 
-      //if (iNumReg == 1) {
+//if (iNumReg == 1) {
 
-        me.clearAll(1);
+      me.clearAll(1);
 
-        me.preencheCboEstados(oRetorno.estados,oRetorno.endereco[0].iestado);
+      me.preencheCboEstados(oRetorno.estados,oRetorno.endereco[0].iestado);
 
-        $('cboCodigoPais'+sId).value = oRetorno.endereco[0].ipais;
-        //$('cboCodigoPais'+sId).style.backgroundColor = '#DEB887';
-        //$('cboCodigoPais'+sId).disabled = true;
-        me.setPais($F('cboCodigoPais'+sId));
+      $('cboCodigoPais'+sId).value = oRetorno.endereco[0].ipais;
+//$('cboCodigoPais'+sId).style.backgroundColor = '#DEB887';
+//$('cboCodigoPais'+sId).disabled = true;
+      me.setPais($F('cboCodigoPais'+sId));
 
-        $('cboCodigoEstado'+sId).value = oRetorno.endereco[0].iestado;
-        //$('cboCodigoEstado'+sId).disabled = true;
-        //$('cboCodigoEstado'+sId).style.backgroundColor = '#DEB887';
-        me.setEstado($F('cboCodigoEstado'+sId));
+      $('cboCodigoEstado'+sId).value = oRetorno.endereco[0].iestado;
+//$('cboCodigoEstado'+sId).disabled = true;
+//$('cboCodigoEstado'+sId).style.backgroundColor = '#DEB887';
+      me.setEstado($F('cboCodigoEstado'+sId));
 
-        $('cboCodigoMunicipio'+sId).value = oRetorno.endereco[0].imunicipio;
-        //$('cboCodigoMunicipio'+sId).style.backgroundColor = '#DEB887';
-        //$('cboCodigoMunicipio'+sId).disabled = true;
-        me.setMunicipio($F('cboCodigoMunicipio'+sId));
+      $('cboCodigoMunicipio'+sId).value = oRetorno.endereco[0].imunicipio;
+//$('cboCodigoMunicipio'+sId).style.backgroundColor = '#DEB887';
+//$('cboCodigoMunicipio'+sId).disabled = true;
+      me.setMunicipio($F('cboCodigoMunicipio'+sId));
 
-        $('txtCodigoBairro'+sId).value = oRetorno.endereco[0].ibairro;
-        //$('txtCodigoBairro'+sId).setAttribute("readonly", "readonly");
-        //$('txtCodigoBairro'+sId).style.backgroundColor = '#DEB887';
-        me.setBairro($F('txtCodigoBairro'+sId));
+      $('txtCodigoBairro'+sId).value = oRetorno.endereco[0].ibairro;
+//$('txtCodigoBairro'+sId).setAttribute("readonly", "readonly");
+//$('txtCodigoBairro'+sId).style.backgroundColor = '#DEB887';
+      me.setBairro($F('txtCodigoBairro'+sId));
 
-        $('txtDescrBairro'+sId).value = oRetorno.endereco[0].sbairro.urlDecode();
-        //$('txtDescrBairro'+sId).setAttribute("readonly", "readonly");
-        //$('txtDescrBairro'+sId).style.backgroundColor = '#DEB887';
-        me.setNomeBairro($F('txtDescrBairro'+sId));
+      $('txtDescrBairro'+sId).value = oRetorno.endereco[0].sbairro.urlDecode();
+//$('txtDescrBairro'+sId).setAttribute("readonly", "readonly");
+//$('txtDescrBairro'+sId).style.backgroundColor = '#DEB887';
+      me.setNomeBairro($F('txtDescrBairro'+sId));
 
-        $('txtCodigoRua'+sId).value = oRetorno.endereco[0].irua;
-        //$('txtCodigoRua'+sId).setAttribute("readonly", "readonly");
-        //$('txtCodigoRua'+sId).style.backgroundColor = '#DEB887';
-        me.setRua($F('txtCodigoRua'+sId));
+      $('txtCodigoRua'+sId).value = oRetorno.endereco[0].irua;
+//$('txtCodigoRua'+sId).setAttribute("readonly", "readonly");
+//$('txtCodigoRua'+sId).style.backgroundColor = '#DEB887';
+      me.setRua($F('txtCodigoRua'+sId));
 
-        $('txtDescrRua'+sId).value = oRetorno.endereco[0].srua.urlDecode();
-        //$('txtDescrRua'+sId).setAttribute("readonly", "readonly");
-        //$('txtDescrRua'+sId).style.backgroundColor = '#DEB887';
-        me.setNomeRua($F('txtDescrRua'+sId));
-        me.setRuasTipo(oRetorno.endereco[0].iruastipo);
-        $('txtCepEnd'+sId).value = $F('txtCep'+sId);
+      $('txtDescrRua'+sId).value = oRetorno.endereco[0].srua.urlDecode();
+//$('txtDescrRua'+sId).setAttribute("readonly", "readonly");
+//$('txtDescrRua'+sId).style.backgroundColor = '#DEB887';
+      me.setNomeRua($F('txtDescrRua'+sId));
+      me.setRuasTipo(oRetorno.endereco[0].iruastipo);
+      $('txtCepEnd'+sId).value = $F('txtCep'+sId);
 
-        //$('txtCepEnd'+sId).setAttribute("readonly", "readonly");
-        //$('txtCepEnd'+sId).style.backgroundColor = '#DEB887';
-        me.setCepEndereco($F('txtCepEnd'+sId));
-        me.oCboRuasTipo.setValue(oRetorno.endereco[0].iruatipo);
+//$('txtCepEnd'+sId).setAttribute("readonly", "readonly");
+//$('txtCepEnd'+sId).style.backgroundColor = '#DEB887';
+      me.setCepEndereco($F('txtCepEnd'+sId));
+      me.oCboRuasTipo.setValue(oRetorno.endereco[0].iruatipo);
 
-     /*} else {
+      /*} else {
 
-    	me.clearAll(1);
-
-        $('cboCodigoPais'+sId).value = oRetorno.endereco[0].ipais;
-        me.setPais($F('cboCodigoPais'+sId));
-        //$('cboCodigoPais'+sId).disabled = true;
-        //$('cboCodigoPais'+sId).style.backgroundColor = '#DEB887';
-
-        me.preencheCboEstados(oRetorno.estados,oRetorno.endereco[0].iestado);
-        //$('cboCodigoEstado'+sId).disabled = true;
-       //$('cboCodigoEstado'+sId).style.backgroundColor = '#DEB887';
-
-        $('cboCodigoMunicipio'+sId).value = oRetorno.endereco[0].imunicipio;
-        me.setMunicipio($F('cboCodigoMunicipio'+sId));
-        //$('cboCodigoMunicipio'+sId).disabled = true;
-        //$('cboCodigoMunicipio'+sId).style.backgroundColor = '#DEB887';
-
-        $('txtCepEnd'+sId).value = $F('txtCep'+sId);
-        me.setCepEndereco($F('txtCepEnd'+sId));
-        //$('txtCepEnd'+sId).setAttribute("readonly", "readonly");
-        //$('txtCepEnd'+sId).style.backgroundColor = '#DEB887';
+      me.clearAll(1);
 
       }*/
 
@@ -624,8 +737,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     if ( $('cboCodigoEstado'+sId).length != 0 && $('cboCodigoEstado'+sId).value != 0) {
 
       var sMessage  = "usuário:\n\nDeseja alterar o País?";
-          sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
-          sMessage += "\n\nDeseja continuar ?";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
+      sMessage += "\n\nDeseja continuar ?";
 
       if (!confirm(sMessage)) {
 
@@ -650,15 +763,15 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 //-------------------------------------Início da Manipulação do Estado--------------------------------------------------
 
   /*
-   *Cria o campo código do Estado
-   */
+  *Cria o campo código do Estado
+  */
   this.changeEstado = function() {
 
     if ($('cboCodigoMunicipio'+sId).length != '' && $('cboCodigoMunicipio'+sId).value != 0) {
 
       var sMessage  = "usuário:\n\nDeseja alterar o Estado?";
-          sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos!";
-          sMessage += "\n\nDeseja continuar ?";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos!";
+      sMessage += "\n\nDeseja continuar ?";
 
       if (!confirm(sMessage)) {
 
@@ -693,7 +806,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     var oAjax = new Ajax.Request(
       me.sUrlRpc,
       {
-    	asynchronous: false,
+        asynchronous: false,
         parameters: 'json='+Object.toJSON(oPesquisa),
         method: 'post',
         onComplete : me.retornofindEstadoByCodigoPais
@@ -730,8 +843,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     js_divCarregando(msgDiv,'msgBox');
 
     /*
-     * Função em ajax que realiza a busca do municipio pelo código informado
-     */
+    * Função em ajax que realiza a busca do municipio pelo código informado
+    */
     $('cboCodigoMunicipio'+sId).options.length = 0;
     var oPesquisa              = new Object();
     oPesquisa.exec             = 'findMunicipioByEstado';
@@ -788,16 +901,16 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
       me.setMunicipio(iCodigoMunicipio);
     }
 
-    // let municipio = codigoMunicipio;
-    // let estado = codigoEstado;
+// let municipio = codigoMunicipio;
+// let estado = codigoEstado;
 
-    // if(municipio && estado){
-    //   console.log('1s ', municipio);
-    //   console.log('2s ', estado);
-      me.buscaDescricoes();
-    //   codigoMunicipio = '';
-    //   codigoEstado = '';
-    // }
+// if(municipio && estado){
+//   console.log('1s ', municipio);
+//   console.log('2s ', estado);
+    me.buscaDescricoes();
+//   codigoMunicipio = '';
+//   codigoEstado = '';
+// }
 
   }
 
@@ -806,8 +919,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     if ( $('txtCodigoBairro'+sId).value != '' || $('txtCodigoRua'+sId).value != '' ) {
 
       var sMessage  = "Usuário:\n\nDeseja alterar o Município?";
-          sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos!";
-          sMessage += "\n\nDeseja continuar ?";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos!";
+      sMessage += "\n\nDeseja continuar ?";
 
       if (!confirm(sMessage)) {
 
@@ -821,8 +934,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
     me.setMunicipio($F('cboCodigoMunicipio'+sId));
 
-    // let municipio = document.getElementById('cboCodigoMunicipio'+sId).value;
-    // let estado    = document.getElementById('cboCodigoEstado'+sId).value;
+// let municipio = document.getElementById('cboCodigoMunicipio'+sId).value;
+// let estado    = document.getElementById('cboCodigoEstado'+sId).value;
     me.buscaDescricoes();
 
   }
@@ -832,6 +945,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboCodigoMunicipio.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
   me.oCboCodigoMunicipio.show($('ctnCodigoMunicipio'+sId));
   $('ctnCodigoMunicipio'+sId).observe('change', me.changeMunicipio);
+
 
   /**
    * Seta o codigo do Municipio
@@ -867,21 +981,444 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     return this.sNomeMunicipio;
   }
 
-  // this.onchangeMunicipio = function(){
-  //   let municipio = document.getElementById('cboCodigoMunicipio'+sId).value;
-  //   let estado    = document.getElementById('cboCodigoEstado'+sId).value;
-  //   me.buscaDescricoes(municipio, estado);
-  // }
 
-  // $('cboCodigoMunicipio'+sId).observe('change', me.onchangeMunicipio);
+  /*-------------------------------------Fim da Manipulação do Município------------------------------------------------*/
 
-/*-------------------------------------Fim da Manipulação do Município------------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Classes do Objeto ------------------------------------------------*/
+  /**
+   * Seta o valor do Classes do Objeto
+   * @param {integer} iClassesObjeto
+   * @return void
+   */
+  this.setClassesObjeto = function(iClassesObjeto){
+    this.iClassesObjeto = iClassesObjeto;
+  }
+
+  /**
+   * Retorna o valor do Classes do Objeto
+   * @return void
+   */
+  this.getClassesObjeto = function(){
+    return this.iClassesObjeto;
+  }
+
+  this.changeClasseObjeto = (e) => {
+    me.setClassesObjeto(e.target.value);
+  }
+
+  me.oCboClasseObjeto = new DBComboBox('cboClasseObjeto'+sId, 'cboClasseObjeto'+sId);
+  me.oCboClasseObjeto.addStyle('width', '90%');
+  me.oCboClasseObjeto.show($('ctnClassesObjeto'+sId));
+  me.oCboClasseObjeto.addItem(0, 'Selecione');
+  me.oCboClasseObjeto.addItem(1, 'Obras');
+  me.oCboClasseObjeto.addItem(2, 'Serviços');
+  me.oCboClasseObjeto.addItem(2, 'Serviços técnicos especializados');
+  $('ctnClassesObjeto'+sId).observe('change', me.changeClasseObjeto);
+
+  /*-------------------------------------Fim da Manipulação do Classes do Objeto ------------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Atividade da Obra ---------------------------------------------*/
+  /**
+   * Seta o valor da Atividade da Obra
+   * @param {integer} iAtividadeObra
+   * @return void
+   */
+  this.setAtividadeObra = function(iAtividadeObra){
+    this.iAtividadeObra = iAtividadeObra;
+  }
+
+  /**
+   * Retorna o valor da Ativiadade Obra
+   * @return void
+   */
+  this.getAtividadeObra = function(){
+    return this.iAtividadeObra;
+  }
+
+  this.changeAtividadeObra = (e) => {
+    me.setAtividadeObra(e.target.value);
+  }
+
+  me.oCboAtividadeObra = new DBComboBox('cboAtividadeObra'+sId, 'cboAtividadeObra'+sId);
+  me.oCboAtividadeObra.addStyle('width', '90%');
+  me.oCboAtividadeObra.show($('ctnAtividadeObra'+sId));
+  me.oCboAtividadeObra.addItem(0, 'Selecione');
+  me.oCboAtividadeObra.addItem(1, 'Ampliação');
+  me.oCboAtividadeObra.addItem(2, 'Construção');
+  me.oCboAtividadeObra.addItem(3, 'Fabricação');
+  me.oCboAtividadeObra.addItem(4, 'Recuperação');
+  me.oCboAtividadeObra.addItem(5, 'Reforma');
+  me.oCboAtividadeObra.addItem(6, 'Restauração');
+  $('ctnAtividadeObra'+sId).observe('change', me.changeAtividadeObra);
+
+  /*-------------------------------------Fim da Manipulação do Atividade da Obra ---------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Atividade do Serviço ---------------------------------------------*/
+  /**
+   * Seta o valor da Atividade do Serviço
+   * @param {integer} iAtividadeServico
+   * @return void
+   */
+  this.setAtividadeServico = function(iAtividadeServico){
+    this.iAtividadeServico = iAtividadeServico;
+  }
+
+  /**
+   * Retorna o valor da Atividade do Servico
+   * @return void
+   */
+  this.getAtividadeServico = function(){
+    return this.iAtividadeServico;
+  }
+
+  this.limitaTamanho = (id, descricao) => {
+    if(descricao.length > 150){
+      alert('É permitido a inserção de até 150 caracteres!');
+      let novaString = descricao.substr(0, descricao.length - 2);
+      $(id).value = novaString;
+    }
+  }
+
+  this.changeAtividadeServico = (e) => {
+    let elemento = e.target;
+    let mostra = elemento.value == '99' ? '' : 'none';
+    document.getElementById('trAtividadeServico'+sId).style.display = mostra;
+    document.getElementById('txtDescrAtividadeServico'+sId).observe('keypress', () => {
+      me.limitaTamanho('txtDescrAtividadeServico'+sId, $('txtDescrAtividadeServico'+sId).value);
+    });
+    me.setAtividadeServico(elemento.value);
+  }
+
+  /* Combo Atividade do Serviço */
+  me.oCboAtividadeServico = new DBComboBox('cboAtividadeServico'+sId, 'cboAtividadeServico'+sId);
+  me.oCboAtividadeServico.addStyle('width', '90%');
+  me.oCboAtividadeServico.show($('ctnAtividadeServico'+sId));
+  me.oCboAtividadeServico.addItem(0, 'Selecione');
+  me.oCboAtividadeServico.addItem(1, 'Adaptação');
+  me.oCboAtividadeServico.addItem(2, 'Conserto');
+  me.oCboAtividadeServico.addItem(3, 'Conservação');
+  me.oCboAtividadeServico.addItem(4, 'Demolição');
+  me.oCboAtividadeServico.addItem(5, 'Instalação');
+  me.oCboAtividadeServico.addItem(6, 'Manutenção');
+  me.oCboAtividadeServico.addItem(7, 'Montagem');
+  me.oCboAtividadeServico.addItem(8, 'Operação');
+  me.oCboAtividadeServico.addItem(9, 'Reparação');
+  me.oCboAtividadeServico.addItem(10, 'Transporte');
+  me.oCboAtividadeServico.addItem(99, 'Outros');
+  $('ctnAtividadeServico'+sId).observe('change', me.changeAtividadeServico);
+
+  /*-------------------------------------Fim da Manipulação do Atividade do Serviço ---------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Atividade do Serviço Especializado ---------------------------------------------*/
+  /**
+   * Seta o valor da Atividade do Serviço Especializado
+   * @param {integer} iAtividadeServicoEspecializado
+   * @return void
+   */
+  this.setAtividadeServicoEspecializado = function(iAtividadeServicoEspecizalizado){
+    this.iAtividadeServicoEspecializado = iAtividadeServicoEspecizalizado;
+  }
+
+  /**
+   * Retorna o valor da Atividade do Serviço Especializado
+   * @return void
+   */
+  this.getAtividadeServicoEspecializado = function(){
+    return this.iAtividadeServicoEspecializado;
+  }
+
+  this.changeAtividadeServicoEspec = (e) => {
+    let elemento = e.target;
+    let mostra = elemento.value == '99' ? '' : 'none';
+    document.getElementById('trAtividadeServicoEsp'+sId).style.display = mostra;
+    $('txtDescrAtividadeServicoEsp'+sId).observe('keypress', () => {
+      let descricao = $('txtDescrAtividadeServicoEsp'+sId).value;
+      let idElemento = 'txtDescrAtividadeServicoEsp'+sId;
+      me.limitaTamanho(idElemento, descricao);
+    });
+    me.setAtividadeServicoEspecializado(elemento.value);
+  }
+
+  /* Combo Atividade dos Serviços Especializados */
+  me.oCboAtividadeServicoEsp = new DBComboBox('cboAtividadeServicoEsp'+sId, 'cboAtividadeServicoEsp'+sId);
+  me.oCboAtividadeServicoEsp.addStyle('width', '90%');
+  me.oCboAtividadeServicoEsp.show($('ctnAtividadeServEsp'+sId));
+  me.oCboAtividadeServicoEsp.addItem(0, 'Selecione');
+  me.oCboAtividadeServicoEsp.addItem(1, 'Projeto e Planejamento');
+  me.oCboAtividadeServicoEsp.addItem(2, 'Estudo técnico');
+  me.oCboAtividadeServicoEsp.addItem(3, 'Parecer');
+  me.oCboAtividadeServicoEsp.addItem(4, 'Perícia');
+  me.oCboAtividadeServicoEsp.addItem(5, 'Avaliação');
+  me.oCboAtividadeServicoEsp.addItem(6, 'Assessoria');
+  me.oCboAtividadeServicoEsp.addItem(7, 'Consultoria');
+  me.oCboAtividadeServicoEsp.addItem(8, 'Auditoria');
+  me.oCboAtividadeServicoEsp.addItem(9, 'Fiscalização');
+  me.oCboAtividadeServicoEsp.addItem(10, 'Supervisão');
+  me.oCboAtividadeServicoEsp.addItem(11, 'Gerenciamento');
+  me.oCboAtividadeServicoEsp.addItem(99, 'Outros');
+  $('ctnAtividadeServEsp'+sId).observe('change', me.changeAtividadeServicoEspec);
+  /*-------------------------------------Fim da Manipulação do Atividade do Serviço Especializado ---------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Grupo Bem Público-------------- ---------------------------------------------*/
+  /**
+   * Seta o valor do Grupo Bem Público
+   * @param {integer} iGrupoBemPublico
+   * @return void
+   */
+  this.setGrupoBemPublico = function(iGrupoBemPublico){
+    this.iGrupoBemPublico = iGrupoBemPublico;
+  }
+
+  /**
+   * Retorna o valor do Grupo Bem Público
+   * @return void
+   */
+  this.getGrupoBemPublico = function(){
+    return this.iGrupoBemPublico;
+  }
+
+  this.changeGrupoBemPub = function(e){
+    let valor = e.target.value;
+    me.setGrupoBemPublico(valor);
+    me.oCboSubGrupoBemPub.clearItens();
+    me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+
+    switch(valor){
+      case '4':
+        me.oCboSubGrupoBemPub.addItem(401, 'Sedes dos poderes executivo, legislativo e judiciário (Palácio do Governo, Prefeitura, Câmara, Fórum etc.)');
+        me.oCboSubGrupoBemPub.addItem(402, 'Sedes das Secretarias, Fundações, Autarquias, Empresas Públicas e de Economia Mista.');
+        me.oCboSubGrupoBemPub.addItem(403, 'Almoxarifados');
+        me.oCboSubGrupoBemPub.addItem(404, 'Oficinas');
+        me.oCboSubGrupoBemPub.addItem(405, 'Pátio de manutenção de equipamentos');
+        me.oCboSubGrupoBemPub.addItem(406, 'Unidade Fazendárias');
+        break;
+
+      case '6':
+        me.oCboSubGrupoBemPub.addItem(601, 'Corpo de bombeiros');
+        me.oCboSubGrupoBemPub.addItem(602, 'Delegacia');
+        me.oCboSubGrupoBemPub.addItem(603, 'Instalações militares');
+        me.oCboSubGrupoBemPub.addItem(604, 'Posto policial');
+        me.oCboSubGrupoBemPub.addItem(605, 'Posto de salvamento');
+        me.oCboSubGrupoBemPub.addItem(606, 'Instituto Médico Legal');
+        me.oCboSubGrupoBemPub.addItem(607, 'Menor Infrator');
+        me.oCboSubGrupoBemPub.addItem(608, 'Unidade Prisional');
+        me.oCboSubGrupoBemPub.addItem(609, 'Cadeia Pública');
+        me.oCboSubGrupoBemPub.addItem(610, 'Penitenci?rias');
+        break;
+
+      case '8':
+        me.oCboSubGrupoBemPub.addItem(801, 'Asilo');
+        me.oCboSubGrupoBemPub.addItem(802, 'Centro social, comunit?rio');
+        me.oCboSubGrupoBemPub.addItem(803, 'Centro de triagem');
+        me.oCboSubGrupoBemPub.addItem(804, 'Creche');
+        me.oCboSubGrupoBemPub.addItem(805, 'Orfanato');
+        me.oCboSubGrupoBemPub.addItem(806, 'Reformatório');
+        me.oCboSubGrupoBemPub.addItem(807, 'Salão de Idoso');
+        break;
+
+      case '10':
+        me.oCboSubGrupoBemPub.addItem(1001, 'Ambulatório');
+        me.oCboSubGrupoBemPub.addItem(1002, 'Hospital');
+        me.oCboSubGrupoBemPub.addItem(1003, 'Centro de saúde');
+        me.oCboSubGrupoBemPub.addItem(1004, 'Posto de saúde');
+        me.oCboSubGrupoBemPub.addItem(1005, 'Unidade básica de saúde - UBS');
+        me.oCboSubGrupoBemPub.addItem(1006, 'Unidade de pronto atendimento - UPA');
+        me.oCboSubGrupoBemPub.addItem(1007, 'Farmácia');
+        me.oCboSubGrupoBemPub.addItem(1008, 'Centro Cirúrgico');
+        me.oCboSubGrupoBemPub.addItem(1009, 'Clínica');
+        me.oCboSubGrupoBemPub.addItem(1010, 'Policlínica');
+        me.oCboSubGrupoBemPub.addItem(1011, 'Laboratório');
+        me.oCboSubGrupoBemPub.addItem(1012, 'Centro de Pesquisas');
+        break;
+
+      case '12':
+        me.oCboSubGrupoBemPub.addItem(1201, 'Colégio');
+        me.oCboSubGrupoBemPub.addItem(1202, 'Escola');
+        me.oCboSubGrupoBemPub.addItem(1203, 'Escola técnica');
+        me.oCboSubGrupoBemPub.addItem(1204, 'Faculdade');
+        me.oCboSubGrupoBemPub.addItem(1205, 'Universidade');
+        me.oCboSubGrupoBemPub.addItem(1206, 'Escola de Aperfeiçoamento');
+        me.oCboSubGrupoBemPub.addItem(1207, 'Pré-escola');
+        me.oCboSubGrupoBemPub.addItem(1208, 'Pós-graduação');
+        break;
+
+      case '13':
+        me.oCboSubGrupoBemPub.addItem(1301, 'Biblioteca');
+        me.oCboSubGrupoBemPub.addItem(1302, 'Cemitério e crematório');
+        me.oCboSubGrupoBemPub.addItem(1303, 'Centro cultural');
+        me.oCboSubGrupoBemPub.addItem(1304, 'Centro de convenção');
+        me.oCboSubGrupoBemPub.addItem(1305, 'Cinema');
+        me.oCboSubGrupoBemPub.addItem(1306, 'Concha acústica');
+        me.oCboSubGrupoBemPub.addItem(1307, 'Jardim botânico, jardim zoológico, horto florestal');
+        me.oCboSubGrupoBemPub.addItem(1308, 'Museu');
+        me.oCboSubGrupoBemPub.addItem(1309, 'Teatro');
+        me.oCboSubGrupoBemPub.addItem(1310, 'Templo');
+        me.oCboSubGrupoBemPub.addItem(1311, 'Igreja');
+        me.oCboSubGrupoBemPub.addItem(1312, 'Patrimônio Histórico');
+        me.oCboSubGrupoBemPub.addItem(1313, 'Conventos');
+        break;
+
+      case '15':
+        me.oCboSubGrupoBemPub.addItem(1501, 'Estacionamento');
+        me.oCboSubGrupoBemPub.addItem(1502, 'Logradouros públicos e vias especiais');
+        me.oCboSubGrupoBemPub.addItem(1503, 'Terminais e estações do sistema de transporte em suas diversas modalidades');
+        me.oCboSubGrupoBemPub.addItem(1504, 'Passeios Públicos');
+        me.oCboSubGrupoBemPub.addItem(1505, 'Passarelas');
+        break;
+      case '16':
+        me.oCboSubGrupoBemPub.addItem(1601, 'Casas Populares');
+        me.oCboSubGrupoBemPub.addItem(1602, 'Unidades Habitacionais');
+        break;
+      case '17':
+        me.oCboSubGrupoBemPub.addItem(1701, 'Estação de captação, bombeamento e adutora de água');
+        me.oCboSubGrupoBemPub.addItem(1702, 'Estação de tratamento de água');
+        me.oCboSubGrupoBemPub.addItem(1703, 'Rede de distribuição de água');
+        me.oCboSubGrupoBemPub.addItem(1704, 'Estação de tratamento de esgoto');
+        me.oCboSubGrupoBemPub.addItem(1705, 'Rede de esgotamento sanitário');
+        me.oCboSubGrupoBemPub.addItem(1706, 'Drenagem pluvial');
+        me.oCboSubGrupoBemPub.addItem(1707, 'Limpeza urbana');
+        me.oCboSubGrupoBemPub.addItem(1708, 'Sistemas de tratamento de resíduos sólidos, incluindo aterros sanitários e usinas de compostagem');
+        me.oCboSubGrupoBemPub.addItem(1709, 'Unidades de reciclagem');
+        me.oCboSubGrupoBemPub.addItem(1710, 'Lavanderia coletiva');
+        me.oCboSubGrupoBemPub.addItem(1711, 'Barragens');
+        me.oCboSubGrupoBemPub.addItem(1712, 'Açudes');
+        me.oCboSubGrupoBemPub.addItem(1713, 'Galerias');
+        me.oCboSubGrupoBemPub.addItem(1714, 'Canalização de Esgoto');
+        me.oCboSubGrupoBemPub.addItem(1715, 'Módulos Sanitários');
+        me.oCboSubGrupoBemPub.addItem(1716, 'Sanitários Públicos');
+        me.oCboSubGrupoBemPub.addItem(1717, 'Matadouros');
+        me.oCboSubGrupoBemPub.addItem(1718, 'Poços Artesianos');
+        me.oCboSubGrupoBemPub.addItem(1719, 'Nascentes, Fontes e Chafarizes');
+        break;
+      case '20':
+        me.oCboSubGrupoBemPub.addItem(2001, 'Armazém ou silo');
+        me.oCboSubGrupoBemPub.addItem(2002, 'Central de abastecimento');
+        me.oCboSubGrupoBemPub.addItem(2003, 'Mercado municipal');
+        me.oCboSubGrupoBemPub.addItem(2004, 'Supermercado');
+        me.oCboSubGrupoBemPub.addItem(2005, 'Feira Coberta');
+        me.oCboSubGrupoBemPub.addItem(2006, 'Irrigação');
+        me.oCboSubGrupoBemPub.addItem(2007, 'Canal de Irrigação');
+        break;
+      case '24':
+        me.oCboSubGrupoBemPub.addItem(2401, 'Correios e telégrafos');
+        me.oCboSubGrupoBemPub.addItem(2402, 'Rádio e televisão');
+        me.oCboSubGrupoBemPub.addItem(2403, 'Telefonia');
+        me.oCboSubGrupoBemPub.addItem(2404, 'Internet');
+        me.oCboSubGrupoBemPub.addItem(2405, 'Redes');
+        me.oCboSubGrupoBemPub.addItem(2406, 'Antenas');
+        break;
+      case '25':
+        me.oCboSubGrupoBemPub.addItem(2501, 'Usinas hidrelétricas, termoelétricas, eólicas e nucleares');
+        me.oCboSubGrupoBemPub.addItem(2502, 'Gasodutos e oleodutos');
+        me.oCboSubGrupoBemPub.addItem(2503, 'Rede de distribuição urbana ? RDU');
+        me.oCboSubGrupoBemPub.addItem(2504, 'Rede de distribuição rural ? RDR');
+        me.oCboSubGrupoBemPub.addItem(2505, 'Energia elétrica');
+        me.oCboSubGrupoBemPub.addItem(2506, 'Linha de transmissão');
+        me.oCboSubGrupoBemPub.addItem(2507, 'Subestação de energia elétrica');
+        me.oCboSubGrupoBemPub.addItem(2508, 'Combustível doméstico canalizado');
+        me.oCboSubGrupoBemPub.addItem(2509, 'Iluminação Pública');
+        me.oCboSubGrupoBemPub.addItem(2510, 'Postos de Abastecimento de veículos, máquinas e equipamentos');
+        me.oCboSubGrupoBemPub.addItem(2511, 'Barragens');
+        break;
+      case '26':
+        me.oCboSubGrupoBemPub.addItem(2601, 'Rodovias');
+        me.oCboSubGrupoBemPub.addItem(2602, 'Ferrovias');
+        me.oCboSubGrupoBemPub.addItem(2603, 'Aeroportos');
+        me.oCboSubGrupoBemPub.addItem(2604, 'Portos');
+        me.oCboSubGrupoBemPub.addItem(2605, 'Hidrovias');
+        me.oCboSubGrupoBemPub.addItem(2606, 'Canais');
+        me.oCboSubGrupoBemPub.addItem(2607, 'Pontes e viadutos');
+        me.oCboSubGrupoBemPub.addItem(2608, 'Mata burro');
+        me.oCboSubGrupoBemPub.addItem(2609, 'Túneis');
+        me.oCboSubGrupoBemPub.addItem(2610, 'Muros de arrimo e obras de contenção');
+        me.oCboSubGrupoBemPub.addItem(2611, 'Canal fluvial');
+        me.oCboSubGrupoBemPub.addItem(2612, 'Passarelas em rodovias');
+        me.oCboSubGrupoBemPub.addItem(2613, 'Obras de arte correntes');
+        me.oCboSubGrupoBemPub.addItem(2614, 'Obras de arte especiais');
+        me.oCboSubGrupoBemPub.addItem(2615, 'Metrô');
+        me.oCboSubGrupoBemPub.addItem(2616, 'Transporte vertical - Elevadores');
+        me.oCboSubGrupoBemPub.addItem(2617, 'Hangar');
+        break;
+      case '27':
+        me.oCboSubGrupoBemPub.addItem(2701, 'Autódromo, kartódromo');
+        me.oCboSubGrupoBemPub.addItem(2702, 'Campo e pista de esporte');
+        me.oCboSubGrupoBemPub.addItem(2703, 'Clube');
+        me.oCboSubGrupoBemPub.addItem(2704, 'Estádio');
+        me.oCboSubGrupoBemPub.addItem(2705, 'Ginásio de esporte');
+        me.oCboSubGrupoBemPub.addItem(2706, 'Hipódromo');
+        me.oCboSubGrupoBemPub.addItem(2707, 'Marina');
+        me.oCboSubGrupoBemPub.addItem(2708, 'Piscina pública');
+        me.oCboSubGrupoBemPub.addItem(2709, 'Parque');
+        me.oCboSubGrupoBemPub.addItem(2710, 'Praça');
+        me.oCboSubGrupoBemPub.addItem(2711, 'Ciclovias');
+        me.oCboSubGrupoBemPub.addItem(2712, 'Parque Aquático');
+        me.oCboSubGrupoBemPub.addItem(2713, 'Unidade Desportiva');
+        me.oCboSubGrupoBemPub.addItem(2714, 'Academias');
+        me.oCboSubGrupoBemPub.addItem(2715, 'Pista de Skate');
+        me.oCboSubGrupoBemPub.addItem(2716, 'Quadra');
+        me.oCboSubGrupoBemPub.addItem(2717, 'Hotel');
+        me.oCboSubGrupoBemPub.addItem(2718, 'Quadra Poliesportiva');
+        break;
+      default:
+// me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+        break;
+    }
+  }
+  /*-------------------------------------Fim da Manipulação do Grupo Bem Público-------------- ---------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do SubGrupo Bem Público-------------- ---------------------------------------------*/
+
+  /**
+   * Seta o valor do SubGrupo Bem Público
+   * @param {integer} iSubGrupoBemPublico
+   * @return void
+   */
+  this.setSubGrupoBemPublico = function(iSubGrupoBemPublico){
+    this.iSubGrupoBemPublico = iSubGrupoBemPublico;
+  }
+
+  /**
+   * Retorna o valor do SubGrupo Bem Público
+   * @return void
+   */
+  this.getSubGrupoBemPublico = function(){
+    return this.iSubGrupoBemPublico;
+  }
+
+  this.changeSubGrupoBemPub = (e) => {
+    me.setSubGrupoBemPublico(e.target.value);
+  }
+
+  me.oCboSubGrupoBemPub = new DBComboBox('cboSubGrupoBemPub'+sId, 'cboSubGrupoBemPub'+sId);
+  me.oCboSubGrupoBemPub.addStyle('width', '100%');
+  me.oCboSubGrupoBemPub.show($('ctnSubGrupoBemPublico'+sId));
+  me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+  $('ctnSubGrupoBemPublico'+sId).observe('change', me.changeSubGrupoBemPub);
+
+  /* Combo Grupo Bem Público */
+  me.oCboGrupoBemPub = new DBComboBox('cboGrupoBemPub'+sId, 'cboGrupoBemPub'+sId);
+  me.oCboGrupoBemPub.addStyle('width', '100%');
+  me.oCboGrupoBemPub.show($('ctnGrupoBemPublico'+sId));
+  me.oCboGrupoBemPub.addItem(0, 'Selecione');
+  me.oCboGrupoBemPub.addItem(4, 'Definição do bem público administração pública');
+  me.oCboGrupoBemPub.addItem(6, 'Definição do bem público segurança pública');
+  me.oCboGrupoBemPub.addItem(8, 'Definição do bem público da assistência social');
+  me.oCboGrupoBemPub.addItem(10, 'Definição do bem público da saúde');
+  me.oCboGrupoBemPub.addItem(12, 'Definição do bem público da educação');
+  me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de saúde');
+  me.oCboGrupoBemPub.addItem(15, 'Definição do bem público de urbanismo');
+  me.oCboGrupoBemPub.addItem(16, 'Definição do bem público de habitação');
+  me.oCboGrupoBemPub.addItem(17, 'Definição do bem público de saneamento');
+  me.oCboGrupoBemPub.addItem(20, 'Definição do bem público para agricultura');
+  me.oCboGrupoBemPub.addItem(24, 'Definição do bem público para comunicação');
+  me.oCboGrupoBemPub.addItem(25, 'Definição do bem público para energia');
+  me.oCboGrupoBemPub.addItem(26, 'Definição do bem público para transportes');
+  me.oCboGrupoBemPub.addItem(27, 'Definição do bem público de desporto e lazer');
+  me.oCboGrupoBemPub.addItem(99, 'Definição do bem público');
+  $('ctnGrupoBemPublico'+sId).observe('change', me.changeGrupoBemPub);
+
+  /*-------------------------------------Início da Manipulação do SubGrupo Bem Público-------------- ---------------------------------------------*/
 /*-------------------------------------Início da Manipulação do Código do IBGE------------------------------------------------*/
 
 
-this.findCodigoIbge = function(municipio, estado) {
-     /*
-     * Função em ajax que realiza a busca do Código do IBGE
+  this.findCodigoIbge = function(municipio, estado) {
+    /*
+    * Função em ajax que realiza a busca do Código do IBGE
     */
 
     var aMunic = document.getElementById('cboCodigoMunicipio'+sId).options;
@@ -902,18 +1439,18 @@ this.findCodigoIbge = function(municipio, estado) {
         onComplete : me.retornofindCodigoIbge
       }
     );
-}
+  }
 
-this.retornofindCodigoIbge = function(obj) {
-  oRetorno = eval('('+obj.responseText+')');
-  me.oTxtCodigoIbge.setValue(oRetorno);
-}
+  this.retornofindCodigoIbge = function(obj) {
+    oRetorno = eval('('+obj.responseText+')');
+    me.oTxtCodigoIbge.setValue(oRetorno);
+  }
 
-me.oTxtCodigoIbge = new DBTextField('txtCodigoIbge'+sId, 'txtCodigoIbge'+sId, '');
-me.oTxtCodigoIbge.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Código do IBGE\",\"f\",\"f\",event)");
-me.oTxtCodigoIbge.addStyle('width', '100%');
-me.oTxtCodigoIbge.setMaxLength(6);
-me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
+  me.oTxtCodigoIbge = new DBTextField('txtCodigoIbge'+sId, 'txtCodigoIbge'+sId, '');
+  me.oTxtCodigoIbge.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Código do IBGE\",\"f\",\"f\",event)");
+  me.oTxtCodigoIbge.addStyle('width', '100%');
+  me.oTxtCodigoIbge.setMaxLength(6);
+  me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
   /**
    *Seta o Código do IBGE
@@ -932,45 +1469,45 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     return this.iCodigoIbge;
   }
 
-/*-------------------------------------Fim do Código IBGE------------------------------------------------*/
-/*-------------------------------------Início da Manipulação do Bairro------------------------------------------------*/
+  /*-------------------------------------Fim do Código IBGE------------------------------------------------*/
+  /*-------------------------------------Início da Manipulação do Bairro------------------------------------------------*/
 
   /*
-   *Metodo para pesquisa da descrição do Bairro pelo codigo
-   */
+  *Metodo para pesquisa da descrição do Bairro pelo codigo
+  */
   this.findBairroByCodigo = function() {
     /*
-     * Validação para verificar se o usuario ja preencheu o cadastro
-     * e esta realizando modificações então exibe alerta na tela.
-     */
+    * Validação para verificar se o usuario ja preencheu o cadastro
+    * e esta realizando modificações ent?o exibe alerta na tela.
+    */
     if ($('txtCodigoRua'+sId).value != '') {
 
       var sMessage  = "usuário:\n\nDeseja alterar o Bairro ? ";
-          sMessage += "\n\n Os dados abaixo já preenchidos serão perdidos ! ";
-          sMessage += "\n\n Deseja continuar ?";
+      sMessage += "\n\n Os dados abaixo já preenchidos serão perdidos ! ";
+      sMessage += "\n\n Deseja continuar ?";
       if (!confirm(sMessage)) {
 
         $('txtCodigoBairro'+sId).value  = me.getBairro();
         $('txtDescrBairro'+sId).value   = me.getNomeBairro();
         return false;
       }else{
-          me.setBairro('');
-          me.setNomeBairro('');
-          me.clearAll(3);
+        me.setBairro('');
+        me.setNomeBairro('');
+        me.clearAll(3);
       }
     }
-    //se vazio retorna sem executar a pesquisa
+//se vazio retorna sem executar a pesquisa
     if ($F('txtCodigoBairro'+sId).trim() == '') {
       $('txtDescrBairro'+sId).value = '';
       me.setBairro('');
       me.setNomeBairro('');
       return false;
     }
-    //valida se esta preenchido o codigo do municipio
+//valida se esta preenchido o codigo do municipio
     if ($F('cboCodigoMunicipio'+sId) == '') {
 
-       $('cboCodigoMunicipio'+sId).value = '';
-       return false;
+      $('cboCodigoMunicipio'+sId).value = '';
+      return false;
     }
 
     var msgDiv = "Aguarde pesquisando bairro pelo código.";
@@ -983,11 +1520,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     oPesquisa.iCodigoMunicipio = $F('cboCodigoMunicipio'+sId);
 
     var oAjax = new Ajax.Request(
-                me.sUrlRpc,
-                { parameters: 'json='+Object.toJSON(oPesquisa),
-                  method: 'post',
-                  onComplete : me.retornofindBairroByCodigo
-                }
+      me.sUrlRpc,
+      { parameters: 'json='+Object.toJSON(oPesquisa),
+        method: 'post',
+        onComplete : me.retornofindBairroByCodigo
+      }
 
     );
   }
@@ -1016,11 +1553,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
   /*
-   *Cria o campo código do  Bairro
-   */
+  *Cria o campo código do  Bairro
+  */
   me.oTxtCodigoBairro = new DBTextField('txtCodigoBairro'+sId, 'txtCodigoBairro'+sId, '');
   me.oTxtCodigoBairro.addStyle('width', '100%');
-  //me.oTxtCodigoBairro.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
+//me.oTxtCodigoBairro.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
   me.oTxtCodigoBairro.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Bairro\",\"f\",\"f\",event)");
   me.oTxtCodigoBairro.show($('ctnCodigoBairro'+sId));
   $('txtCodigoBairro'+sId).observe('change', me.findBairroByCodigo);
@@ -1030,71 +1567,71 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
    *@private
    *@return void
    */
-   this.changeDescrBairro = function() {
+  this.changeDescrBairro = function() {
 
-     if ($('txtCodigoRua'+sId).value != '' && me.oTxtCodigoBairro.getValue() != '') {
+    if ($('txtCodigoRua'+sId).value != '' && me.oTxtCodigoBairro.getValue() != '') {
 
-       var sMessage  = "Usuário:\n\nDeseja alterar o Bairro ? ";
-           sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
-           sMessage += "\n\nDeseja continuar ?";
+      var sMessage  = "Usuário:\n\nDeseja alterar o Bairro ? ";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
+      sMessage += "\n\nDeseja continuar ?";
 
-       /**
-       *1º caso: usuário cancelou a modificaçao
+      /**
+       *1º caso: usuário cancelou a modifica?ao
        */
-       if (!confirm(sMessage)) {
+      if (!confirm(sMessage)) {
 
-         /*
-          * Voltar os dados conforme propriedade da classe
-          */
-          $('txtDescrBairro'+sId).value   = me.getNomeBairro();
-          $('txtCodigoBairro'+sId).value  = me.getBairro();
-          me.setRuasTipo(me.getRuaTipo());
-          me.iBairroAutomatico = false;
-          return false;
+        /*
+        * Voltar os dados conforme propriedade da classe
+        */
+        $('txtDescrBairro'+sId).value   = me.getNomeBairro();
+        $('txtCodigoBairro'+sId).value  = me.getBairro();
+        me.setRuasTipo(me.getRuaTipo());
+        me.iBairroAutomatico = false;
+        return false;
 
-       } else if (me.iBairroAutomatico) {
+      } else if (me.iBairroAutomatico) {
 
-          me.setBairro($('txtCodigoBairro'+sId).value);
-          me.setNomeBairro($('txtDescrBairro'+sId).value);
-          me.iBairroAutomatico = false;
-       } else {
+        me.setBairro($('txtCodigoBairro'+sId).value);
+        me.setNomeBairro($('txtDescrBairro'+sId).value);
+        me.iBairroAutomatico = false;
+      } else {
 
-          me.setBairro('');
-          $('txtCodigoBairro'+sId).value = '';
-          me.setNomeBairro($('txtDescrBairro'+sId).value);
-          me.iBairroAutomatico = false;
+        me.setBairro('');
+        $('txtCodigoBairro'+sId).value = '';
+        me.setNomeBairro($('txtDescrBairro'+sId).value);
+        me.iBairroAutomatico = false;
 
-       }
-       me.clearAll(4);
+      }
+      me.clearAll(4);
 
     } else if (me.iBairroAutomatico) {
 
-       me.setNomeBairro($('txtDescrBairro'+sId).value);
-       me.setBairro($('txtCodigoBairro'+sId).value);
-       me.setRuasTipo(me.oCboRuasTipo.getValue());
-       me.iBairroAutomatico = false;
-     } else {
+      me.setNomeBairro($('txtDescrBairro'+sId).value);
+      me.setBairro($('txtCodigoBairro'+sId).value);
+      me.setRuasTipo(me.oCboRuasTipo.getValue());
+      me.iBairroAutomatico = false;
+    } else {
 
-       me.setNomeBairro($('txtDescrBairro'+sId).value);
-       me.setBairro('');
-       $('txtCodigoBairro'+sId).value = '';
-       me.setRuasTipo(me.oCboRuasTipo.getValue());
-       me.iBairroAutomatico = false;
-     }
-     $('txtDescrBairro'+sId).value = $F('txtDescrBairro'+sId).toUpperCase();
-     me.iBairroAutomatico = false;
+      me.setNomeBairro($('txtDescrBairro'+sId).value);
+      me.setBairro('');
+      $('txtCodigoBairro'+sId).value = '';
+      me.setRuasTipo(me.oCboRuasTipo.getValue());
+      me.iBairroAutomatico = false;
+    }
+    $('txtDescrBairro'+sId).value = $F('txtDescrBairro'+sId).toUpperCase();
+    me.iBairroAutomatico = false;
   }
 
   /*
-   *Cria o campo descrição do Bairro
-   */
+  *Cria o campo descrição do Bairro
+  */
   me.oTxtDescrBairro = new DBTextField('txtDescrBairro'+sId, 'txtDescrBairro'+sId, '');
   me.oTxtDescrBairro.addStyle('width', '100%');
   me.oTxtDescrBairro.show($('ctnDescrBairro'+sId));
-  $('txtDescrBairro'+sId).observe('change', me.changeDescrBairro)
+  $('txtDescrBairro'+sId).observe('change', me.changeDescrBairro);
   /*
-   *Função para realizar a busca pelo autocomplete do Bairro
-   */
+  *Função para realizar a busca pelo autocomplete do Bairro
+  */
   var sUrl = this.sUrlRpc;
   var oParam  = new Object();
   oAutoCompleteBairro = new dbAutoComplete($('txtDescrBairro'+sId), sUrl);
@@ -1102,8 +1639,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   oAutoCompleteBairro.show();
   oAutoCompleteBairro.setQueryStringFunction(function () {
     /*
-     *Função para validar se deve disparar a busca do autocomplete
-     */
+    *Função para validar se deve disparar a busca do autocomplete
+    */
     oAutoCompleteBairro.setValidateFunction(function() {
 
       if (($F('cboCodigoMunicipio'+sId).trim() == '')) {
@@ -1119,19 +1656,19 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     sQuery       = 'json='+Object.toJSON(oParam);
     return sQuery;
   });
- /**
-  *Seta o codigo do bairro
-  *@param {string} iCodigoBairro
-  *@return void
-  */
+  /**
+   *Seta o codigo do bairro
+   *@param {string} iCodigoBairro
+   *@return void
+   */
   this.setBairro = function(iCodigoBairro){
 
     this.iCodigoBairro = iCodigoBairro;
   }
- /**
-  *Retorna o codigo do bairro
-  *@return {string} codigo do bairro
-  */
+  /**
+   *Retorna o codigo do bairro
+   *@return {string} codigo do bairro
+   */
   this.getBairro = function(){
 
     return this.iCodigoBairro;
@@ -1140,9 +1677,9 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
   oAutoCompleteBairro.setCallBackFunction(function(id, label) {
 
-     me.oTxtCodigoBairro.setValue(id);
-     me.oTxtDescrBairro.setValue(label);
-     me.findComplementoBairro(id);
+    me.oTxtCodigoBairro.setValue(id);
+    me.oTxtDescrBairro.setValue(label);
+    me.findComplementoBairro(id);
   });
 
   /**
@@ -1158,11 +1695,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_divCarregando(msgDiv,'msgBox');
 
     var oAjax = new Ajax.Request(
-                me.sUrlRpc,
-                { parameters: 'json='+Object.toJSON(oRua),
-                  method: 'post',
-                  onComplete : me.retornofindComplementoBairro
-                }
+      me.sUrlRpc,
+      { parameters: 'json='+Object.toJSON(oRua),
+        method: 'post',
+        onComplete : me.retornofindComplementoBairro
+      }
 
     );
 
@@ -1202,8 +1739,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     if ( $F('txtCodigoNumero'+sId) != '') {
 
       var sMessage  = "Usuário:\n\nDeseja alterar a Rua ? ";
-          sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
-          sMessage += "\n\nDeseja continuar ?";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
+      sMessage += "\n\nDeseja continuar ?";
 
       if (!confirm(sMessage)) {
 
@@ -1221,7 +1758,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       me.setNomeRua('');
       me.setRua('');
       me.oCboRuasTipo.setEnable();
-      //me.oCboRuasTipo.setValue(3);
+//me.oCboRuasTipo.setValue(3);
 
       return false;
     }
@@ -1261,32 +1798,26 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     } else {
 
       $('txtDescrRua'+sId).value = oRetorno.dados[0].db74_descricao.urlDecode();
-      //$('txtDescrBairro'+sId).value = oRetorno.dados[0].db73_descricao.urlDecode();
-      //$('txtCodigoBairro'+sId).value = oRetorno.dados[0].db73_sequencial;
       me.setRua($F('txtCodigoRua'+sId));
       me.setNomeRua($F('txtDescrRua'+sId));
-      //me.setBairro($F('txtCodigoBairro'+sId));
-      //me.setNomeBairro($F('txtDescrBairro'+sId));
       me.setRuasTipo(oRetorno.dados[0].db85_sequencial);
       me.oCboRuasTipo.setValue(oRetorno.dados[0].db85_ruastipo);
-      //me.oCboRuasTipo.setDisable();
 
     }
   }
 
   /*
-   *Cria o campo código do Rua
-   */
+  *Cria o campo código do Rua
+  */
   me.oTxtCodigoRua = new DBTextField('txtCodigoRua'+sId, 'txtCodigoRua'+sId, '');
   me.oTxtCodigoRua.addStyle('width', '100%');
-  //me.oTxtCodigoRua.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
   me.oTxtCodigoRua.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Rua\",\"f\",\"f\",event)");
   me.oTxtCodigoRua.show($('ctnCodigoRua'+sId));
   $('txtCodigoRua'+sId).observe('change', me.findRuaByCodigo);
 
   /*
-   *Cria o campo descrição do Rua
-   */
+  *Cria o campo descrição do Rua
+  */
   me.oTxtDescrRua = new DBTextField('txtDescrRua'+sId, 'txtDescrRua'+sId, '');
   me.oTxtDescrRua.addStyle('width', '450px');
   me.oTxtDescrRua.show($('ctnDescrRua'+sId));
@@ -1294,78 +1825,77 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   this.changeDescrRua = function () {
 
     /*
-     * No evento onChange do campo descrição realiza
-     * validação para verificar se o campo imediato abaixo
-     * possui um codigo se o mesmo tiver um codigo alerta o usuario
-     * que os dados abaixo serão perdidos. Oferece a opção de continuar ou
-     * cancelar a modificação e preservar os dados informados
-     */
-     if ($('txtCodigoNumero'+sId).value != '' && me.oTxtCodigoRua.getValue() != '') {
+    * No evento onChange do campo descrição realiza
+    * validação para verificar se o campo imediato abaixo
+    * possui um codigo se o mesmo tiver um codigo alerta o usuario
+    * que os dados abaixo serão perdidos. Oferece a opção de continuar ou
+    * cancelar a modificação e preservar os dados informados
+    */
+    if ($('txtCodigoNumero'+sId).value != '' && me.oTxtCodigoRua.getValue() != '') {
 
-       var sMessage  = "Usuário:\n\nDeseja alterar a Rua ? ";
-           sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
-           sMessage += "\n\nDeseja continuar ?";
+      var sMessage  = "Usuário:\n\nDeseja alterar a Rua ? ";
+      sMessage += "\n\nOs dados abaixo já preenchidos serão perdidos ! ";
+      sMessage += "\n\nDeseja continuar ?";
 
-       /**
-       *1º caso: usuário cancelou a modificaçao
+      /**
+       *1º caso: usuário cancelou a modifica?ao
        */
-       if (!confirm(sMessage)) {
+      if (!confirm(sMessage)) {
 
-         /*
-          * Voltar os dados conforme propriedade da classe
-          */
-          $('txtDescrRua'+sId).value   = me.getNomeRua();
-          $('txtCodigoRua'+sId).value  = me.getRua();
-          me.setRuasTipo(me.getRuaTipo());
-          me.iEnderecoAutomatico = false;
-          return false;
+        /*
+        * Voltar os dados conforme propriedade da classe
+        */
+        $('txtDescrRua'+sId).value   = me.getNomeRua();
+        $('txtCodigoRua'+sId).value  = me.getRua();
+        me.setRuasTipo(me.getRuaTipo());
+        me.iEnderecoAutomatico = false;
+        return false;
 
-       } else if (me.iEnderecoAutomatico) {
+      } else if (me.iEnderecoAutomatico) {
 
-          me.setRua($('txtCodigoRua'+sId).value);
-          me.setNomeRua($('txtDescrRua'+sId).value);
+        me.setRua($('txtCodigoRua'+sId).value);
+        me.setNomeRua($('txtDescrRua'+sId).value);
 
 
-          me.iEnderecoAutomatico = false;
-       } else {
+        me.iEnderecoAutomatico = false;
+      } else {
 
-          me.setRua('');
-          $('txtCodigoRua'+sId).value = '';
-          me.setNomeRua($('txtDescrRua'+sId).value);
-          me.iEnderecoAutomatico = false;
+        me.setRua('');
+        $('txtCodigoRua'+sId).value = '';
+        me.setNomeRua($('txtDescrRua'+sId).value);
+        me.iEnderecoAutomatico = false;
 
-       }
+      }
 
-       me.clearAll(5);
+      me.clearAll(5);
 
-     } else if (me.iEnderecoAutomatico) {
+    } else if (me.iEnderecoAutomatico) {
 
-       me.setNomeRua($('txtDescrRua'+sId).value);
-       me.setRua($('txtCodigoRua'+sId).value);
-       me.setRuasTipo(me.oCboRuasTipo.getValue());
-       me.iEnderecoAutomatico = false;
-     } else {
+      me.setNomeRua($('txtDescrRua'+sId).value);
+      me.setRua($('txtCodigoRua'+sId).value);
+      me.setRuasTipo(me.oCboRuasTipo.getValue());
+      me.iEnderecoAutomatico = false;
+    } else {
 
-       me.setNomeRua($('txtDescrRua'+sId).value);
-       me.setRua('');
-       //$('txtCodigoRua'+sId).value = '';
-       me.setRuasTipo(me.oCboRuasTipo.getValue());
-       me.iEnderecoAutomatico = false;
-     }
+      me.setNomeRua($('txtDescrRua'+sId).value);
+      me.setRua('');
+      me.setRuasTipo(me.oCboRuasTipo.getValue());
+      me.iEnderecoAutomatico = false;
+    }
 
-     $('txtDescrRua'+sId).value = $F('txtDescrRua'+sId).toUpperCase();
-     me.iEnderecoAutomatico = false;
+    $('txtDescrRua'+sId).value = $F('txtDescrRua'+sId).toUpperCase();
+    me.iEnderecoAutomatico = false;
 
-     if ($F('txtCodigoRua'+sId).trim() == '') {
-       me.oCboRuasTipo.setEnable();
-     }
+    if ($F('txtCodigoRua'+sId).trim() == '') {
+      me.oCboRuasTipo.setEnable();
+    }
   }
 
   $('txtDescrRua'+sId).observe('change', me.changeDescrRua);
 
   /*
-   *Função para realizar a busca pelo autocomplete da Rua
-   */
+  *Função para realizar a busca pelo autocomplete da Rua
+  */
   var sUrl = this.sUrlRpc;
   var oParam  = new Object();
   oAutoCompleteRua = new dbAutoComplete($('txtDescrRua'+sId), sUrl);
@@ -1373,8 +1903,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   oAutoCompleteRua.show();
 
   /*
-   *Função para validar se deve disparar a busca do autocomplete
-   */
+  *Função para validar se deve disparar a busca do autocomplete
+  */
   oAutoCompleteRua.setValidateFunction(function() {
 
     if (($F('cboCodigoMunicipio'+sId).trim() == '') || (($F('txtCodigoBairro'+sId).trim() == '') && ($F('txtDescrBairro'+sId).trim() != ''))) {
@@ -1445,11 +1975,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       $('txtDescrBairro'+sId).value     = oRetorno[0].sdescrbairro.urlDecode();
       me.setNomeBairro($F('txtDescrBairro'+sId));
       $('txtDescrRua'+sId).value        = oRetorno[0].sdescrrua.urlDecode();
-      //me.setNomeRua($F('txtDescrRua'+sId));
+//me.setNomeRua($F('txtDescrRua'+sId));
       $('txtCodigoRua'+sId).value       = oRetorno[0].icodigorua;
-      //me.setRua($F('txtCodigoRua'+sId));
+//me.setRua($F('txtCodigoRua'+sId));
       me.oCboRuasTipo.setValue(oRetorno[0].icodigoruatipo);
-      //me.oCboRuasTipo.setDisable();
+//me.oCboRuasTipo.setDisable();
       me.setRuaTipo(oRetorno[0].icodigoruatipo);
       me.setRuasTipo(oRetorno[0].icodigoruastipo);
       me.iEnderecoAutomatico = true;
@@ -1473,7 +2003,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
    */
   this.changeRuasTipo = function() {
 
-	me.setModificado(true);
+    me.setModificado(true);
     me.setRuaTipo(me.oCboRuasTipo.getValue());
   }
 
@@ -1486,17 +2016,17 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
    */
   this.findNumeroByNumero = function() {
 
-    //Reset nas propriedades que são dependentes do codigo do número.
+//Reset nas propriedades que s?o dependentes do codigo do número.
     me.setCodigoLocal('');
     me.setCodigoEndereco('');
     me.setLoteamento('');
     me.setCondominio('');
     me.setComplemento('');
     me.setPontoReferencia('');
-    //me.setCepEndereco('');
+//me.setCepEndereco('');
 
     me.setNumero($F('txtCodigoNumero'+sId));
-    //Desabilita o bota de pesquisa
+//Desabilita o bota de pesquisa
     $('btnPesquisarNumero'+sId).disabled = true;
 
     if ($F('txtCodigoRua'+sId) == '') {
@@ -1513,23 +2043,23 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_divCarregando(msgDiv,'mensagemBuscaRua');
 
     var oAjax = new Ajax.Request(
-                me.sUrlRpc,
-                { parameters: 'json='+Object.toJSON(oPesquisa),
-                  method: 'post',
-                  onComplete : function (oAjax) { me.retornofindNumeroByNumero(oAjax); }
-                }
+      me.sUrlRpc,
+      { parameters: 'json='+Object.toJSON(oPesquisa),
+        method: 'post',
+        onComplete : function (oAjax) { me.retornofindNumeroByNumero(oAjax); }
+      }
 
     );
   }
 
   this.retornofindNumeroByNumero = function (oAjax) {
 
-	js_removeObj("mensagemBuscaRua");
+    js_removeObj("mensagemBuscaRua");
     var oRetorno = eval('('+oAjax.responseText+')' );
     if (oRetorno.dados != false){
       $('btnPesquisarNumero'+sId).disabled = true;
       me.exibeGridRua(oRetorno.dados);
-      }else{
+    }else{
       me.setModificado(true);
       $('txtDescrCondominio'+sId).value      = '';
       $('txtDescrLoteamento'+sId).value      = '';
@@ -1551,9 +2081,9 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     me.oWindowGridRua  = new windowAux('wndGridRua'+me.sId, 'Cadastros da Rua', iWidthGrid, iWheigthGrid);
 
     var sContentGridRua  = "<div  id='ctnMessageBoardRua'>";
-        sContentGridRua += "  <div style='width:100%' id='GridRua"+me.sId+"'>";
-        sContentGridRua += "  </div>";
-        sContentGridRua += "</div>";
+    sContentGridRua += "  <div style='width:100%' id='GridRua"+me.sId+"'>";
+    sContentGridRua += "  </div>";
+    sContentGridRua += "</div>";
 
     me.oWindowGridRua.setContent(sContentGridRua);
     me.oWindowGridRua.show();
@@ -1564,7 +2094,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     });
 
 
-    //Define a janela por cima da q chamou
+//Define a janela por cima da q chamou
     me.oWindowGridRua.setChildOf(me.oWindowEndereco);
     /**
      *Defincao da Grid que exibe os complementos cadastrados para a rua e nuemro selecionado
@@ -1574,32 +2104,32 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     me.oGridViewRua.sName        = 'oGridViewRua';
     me.oGridViewRua.setHeight(300);
     me.oGridViewRua.setCellWidth(new Array('10%',
-    		                               '10%',
-                                           '10%',
+      '10%',
+      '10%',
 
-                                           '10%',
-                                           '10%',
-                                           '10%',
+      '10%',
+      '10%',
+      '10%',
 
-                                           '10%',
-                                           '10%',
-                                           '10%',
+      '10%',
+      '10%',
+      '10%',
 
-                                           '10%'));
+      '10%'));
 
     me.oGridViewRua.setHeader(new Array('Cep',
-    		                            'Número',
-                                        'Complemento',
+      'Número',
+      'Complemento',
 
-                                        'Loteamento',
-                                        'Condomínio',
-                                        'SeqLocal',
+      'Loteamento',
+      'Condom?nio',
+      'SeqLocal',
 
-                                        'SeqEnder',
-                                        'PontoRef',
-                                        'SeqRuasTipo',
+      'SeqEnder',
+      'PontoRef',
+      'SeqRuasTipo',
 
-                                        'RuaTipo'));
+      'RuaTipo'));
     me.oGridViewRua.setHeight(200);
     me.oGridViewRua.aHeaders[5].lDisplayed = false;//(false,5);
     me.oGridViewRua.aHeaders[6].lDisplayed = false;//(false,6);
@@ -1614,28 +2144,28 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     if (iNumDados > 0) {
 
       aDados.each(
-                  function (oRua, iIndRua) {
-                    var aRow = new Array();
+        function (oRua, iIndRua) {
+          var aRow = new Array();
 
-                    var sCep = (oRua.db76_cep == '' || oRua.db76_cep == 'null') ? '' : oRua.db76_cep;
+          var sCep = (oRua.db76_cep == '' || oRua.db76_cep == 'null') ? '' : oRua.db76_cep;
 
-                    aRow[0] = sCep;
-                    aRow[1] = oRua.db75_numero;
-                    aRow[2] = oRua.db76_complemento.urlDecode();
-                    aRow[3] = oRua.db76_loteamento.urlDecode().substring(0,30);
-                    aRow[4] = oRua.db76_condominio.urlDecode().substring(0,30);
-                    aRow[5] = oRua.db75_sequencial;
-                    aRow[6] = oRua.db76_sequencial;
-                    aRow[7] = oRua.db76_pontoref.urlDecode();
-                    aRow[8] = oRua.db85_sequencial;
-                    aRow[9] = oRua.db85_ruastipo;
+          aRow[0] = sCep;
+          aRow[1] = oRua.db75_numero;
+          aRow[2] = oRua.db76_complemento.urlDecode();
+          aRow[3] = oRua.db76_loteamento.urlDecode().substring(0,30);
+          aRow[4] = oRua.db76_condominio.urlDecode().substring(0,30);
+          aRow[5] = oRua.db75_sequencial;
+          aRow[6] = oRua.db76_sequencial;
+          aRow[7] = oRua.db76_pontoref.urlDecode();
+          aRow[8] = oRua.db85_sequencial;
+          aRow[9] = oRua.db85_ruastipo;
 
-                    me.oGridViewRua.addRow(aRow);
-                    me.oGridViewRua.aRows[iIndRua].sEvents = "onClick='"+me.sNameInstance+".setEndereco("+iIndRua+");'";
+          me.oGridViewRua.addRow(aRow);
+          me.oGridViewRua.aRows[iIndRua].sEvents = "onClick='"+me.sNameInstance+".setEndereco("+iIndRua+");'";
 
-                  }
+        }
 
-                  );
+      );
       me.oGridViewRua.renderRows();
       $('btnPesquisarNumero'+sId).disabled = true;
 
@@ -1651,10 +2181,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
   this.setEndereco = function(iIndLinha) {
 
-    $('txtDescrCondominio'+sId).value  = me.oGridViewRua.aRows[iIndLinha].aCells[4].getValue().trim();
-    $('txtDescrLoteamento'+sId).value  = me.oGridViewRua.aRows[iIndLinha].aCells[3].getValue().trim();
-    $('txtDescrComplemento'+sId).value = me.oGridViewRua.aRows[iIndLinha].aCells[2].getValue().trim();
-    $('txtDescrPontoReferencia'+sId).value = me.oGridViewRua.aRows[iIndLinha].aCells[7].getValue().trim();
     $('txtCepEnd'+sId).value           = me.oGridViewRua.aRows[iIndLinha].aCells[0].getValue().trim();
     me.setCodigoLocal(me.oGridViewRua.aRows[iIndLinha].aCells[5].getValue());
     me.setCodigoEndereco(me.oGridViewRua.aRows[iIndLinha].aCells[6].getValue());
@@ -1662,27 +2188,24 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     me.setRuasTipo(me.oGridViewRua.aRows[iIndLinha].aCells[8].getValue());
     me.setNumero($F('txtCodigoNumero'+sId));
     me.setCepEndereco($F('txtCepEnd'+sId));
-    me.setComplemento($F('txtDescrComplemento'+sId));
-    me.setCondominio($F('txtDescrCondominio'+sId));
-    me.setPontoReferencia($F('txtDescrPontoReferencia'+sId));
-    me.setLoteamento($F('txtDescrLoteamento'+sId));
 
     me.oWindowGridRua.destroy();
     $('btnPesquisarNumero'+sId).disabled = false;
   }
 
   /*
-   *Cria o campo código do Número
-   */
+  *Cria o campo código do Número
+  */
   me.oTxtCodigoNumero = new DBTextField('txtCodigoNumero'+sId, 'txtCodigoNumero'+sId, '');
-  me.oTxtCodigoNumero.addStyle('width', '100%');
-  //me.oTxtCodigoNumero.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
-  me.oTxtCodigoNumero.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Código Rua\",\"f\",\"f\",event)");
+  me.oTxtCodigoNumero.addStyle('width', '40%');
+//me.oTxtCodigoNumero.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
+  me.oTxtCodigoNumero.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Número\",\"f\",\"f\",event)");
+  me.oTxtCodigoNumero.setMaxLength(4);
   me.oTxtCodigoNumero.show($('ctnCodigoNumero'+sId));
   $('txtCodigoNumero'+sId).observe('change', me.findNumeroByNumero);
   /*
   this.btnPesquisarDisable = function() {
-    $('btnPesquisarNumero'+sId).disabled = true;
+  $('btnPesquisarNumero'+sId).disabled = true;
   }
   $('txtCodigoNumero'+sId).observe('keyup', me.btnPesquisarDisable);
   */
@@ -1690,11 +2213,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 //-------------------------------------Fim da Manipulação do Número-----------------------------------------------------
 //-------------------------------------Inicio da Manipulação do Cep do Endereco-----------------------------------------
   /*
-   *Cria o campo de cep do endereco
-   */
+  *Cria o campo de cep do endereco
+  */
   me.oTxtCepEnd = new DBTextField('txtCepEnd'+sId, 'txtCepEnd'+sId, '');
-  //me.oTxtCepEnd.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
-  me.oTxtCepEnd.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep Endereço\",\"f\",\"f\",event)");
+//me.oTxtCepEnd.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
+  me.oTxtCepEnd.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep Endere?o\",\"f\",\"f\",event)");
   me.oTxtCepEnd.addStyle('width', '100%');
   me.oTxtCepEnd.setMaxLength(8);
   me.oTxtCepEnd.show($('ctnCodigoCepEnd'+sId));
@@ -1718,10 +2241,10 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   $('txtCepEnd'+sId).observe('change', me.onchangeCepEnd);
 
 //-------------------------------------Fim da Manipulação do Cep do Endereco--------------------------------------------
-//-------------------------------------Início da Manipulação do Condomínio----------------------------------------------
+//-------------------------------------Início da Manipulação do Condom?nio----------------------------------------------
   /*
-   *Cria o campo descrição do Condominio
-   */
+  *Cria o campo descrição do Condominio
+  */
   me.oTxtDescrCondominio = new DBTextField('txtDescrCondominio'+sId, 'txtDescrCondominio'+sId, '');
   me.oTxtDescrCondominio.addStyle('width', '100%');
   me.oTxtDescrCondominio.show($('ctnDescrCondominio'+sId));
@@ -1741,12 +2264,279 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
   $('txtDescrCondominio'+sId).observe('change', me.alteraCondominio);
 
-//-------------------------------------Fim da Manipulação do Condomínio-------------------------------------------------
+//-------------------------------------Fim da Manipulação do Condom?nio-------------------------------------------------
+
+
+//-------------------------------------Início da Manipulação do Distrito----------------------------------------------
+
+  /**
+   * Seta a descricao do Distrito do endereco
+   * @param {string} sDistrito
+   * @return void
+   */
+  this.setDistrito = function(sDistrito){
+    this.sDistrito = sDistrito;
+  }
+
+  /**
+   * Retorna a descricao do Municipio do endereco
+   * @return void
+   */
+  this.getDistrito = function(){
+    return this.sDistrito;
+  }
+
+  this.changeDistrito = (event) => {
+    me.setDistrito(event.target.value);
+  }
+
+  me.oTxtDistrito = new DBTextField('txtDistrito'+sId, 'txtDistrito'+sId, '');
+  me.oTxtDistrito.addStyle('width', '100%');
+  me.oTxtDistrito.setMaxLength(100);
+  me.oTxtDistrito.show($('ctnDistrito'+sId));
+  $('ctnDistrito'+sId).observe('change', me.changeDistrito);
+
+//-------------------------------------Fim da Manipulação do Distrito-------------------------------------------------
+//-------------------------------------Início da Manipulação do BDI----------------------------------------------
+  /**
+   * Seta o valor do BDI
+   * @param {integer} iBDI
+   * @return void
+   */
+  this.setBdi = function(iBdi){
+    this.iBdi = iBdi;
+  }
+
+  /**
+   * Retorna o valor do BDI
+   * @return void
+   */
+  this.getBdi = function(){
+    return this.iBdi;
+  }
+
+  this.changeBdi = (event) => {
+     me.setBdi(event.target.value);
+  }
+  me.oBdi = new DBTextField('txtBdi'+sId, 'txtBdi'+sId, '');
+  me.oBdi.addStyle('width', '100%');
+  me.oBdi.show($('ctnBdi'+sId));
+  $('ctnBdi'+sId).observe('change', me.changeBdi);
+//-------------------------------------Fim da Manipulação do BDI-------------------------------------------------
+//-------------------------------------Início da Manipulação do Logradouro----------------------------------------------
+  /**
+   * Seta a descricao do Logradouro
+   * @param {string} sLogradouro
+   * @return void
+   */
+  this.setLogradouro = function(sLogradouro){
+    this.sLogradouro = sLogradouro;
+  }
+
+  /**
+   * Retorna a descricao do Logradouro
+   * @return void
+   */
+  this.getLogradouro = function(){
+    return this.sLogradouro;
+  }
+
+  this.changeLogradouro = (event) => {
+    me.setLogradouro(event.target.value);
+  }
+
+  me.oLogradouro = new DBTextField('txtLogradouro'+sId, 'txtLogradouro'+sId, '');
+  me.oLogradouro.addStyle('width', '100%');
+  me.oLogradouro.setMaxLength(100);
+  me.oLogradouro.show($('ctnDescrLogradouro'+sId));
+  $('ctnDescrLogradouro'+sId).observe('change', me.changeLogradouro);
+//-------------------------------------Fim da Manipulação do Logradouro-------------------------------------------------
+//-------------------------------------Início da Manipulação dos selects------------------------------------------
+
+//-------------------------------------Fim da Manipulação dos selects---------------------------------------------
+//-------------------------------------Início da Manipulação do Grau Latitude------------------------------------------
+  /**
+   * Seta o valor do Grau Latitude
+   * @param {integer} iGrausLatitude
+   * @return void
+   */
+  this.setGrausLatitude = function(iGrausLatitude){
+    this.iGrausLatitude = iGrausLatitude;
+  }
+
+  /**
+   * Retorna o valor do Grau Latitude
+   * @return void
+   */
+  this.getGrausLatitude = function(){
+    return this.iGrausLatitude;
+  }
+
+  this.changeGrausLatitude = (event) => {
+    me.setGrausLatitude(event.target.value);
+  }
+
+  me.oGrausLatitude = new DBTextField('txtGrausLatitude'+sId, 'txtGrausLatitude'+sId, '');
+  me.oGrausLatitude.addStyle('width', '40%');
+  me.oGrausLatitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Graus Latitude\",\"f\",\"f\",event)");
+  me.oGrausLatitude.setMaxLength(2);
+  me.oGrausLatitude.show($('ctnGrausLatitude'+sId));
+  $('ctnGrausLatitude'+sId).observe('change', me.changeGrausLatitude);
+
+//-------------------------------------Fim da Manipulação do Graus Latitude-------------------------------------------------
+//-------------------------------------Início da Manipulação do Minuto Latitude--------------------------------------------
+  /**
+   * Seta o valor do Minuto Latitude
+   * @param {integer} iMinutoLatitude
+   * @return void
+   */
+  this.setMinutosLatitude = function(iMinutoLatitude){
+    this.iMinutoLatitude = iMinutoLatitude;
+  }
+
+  /**
+   * Retorna o valor do Minuto Latitude
+   * @return void
+   */
+  this.getMinutosLatitude = function(){
+    return this.iMinutoLatitude;
+  }
+
+  this.changeMinutoLatitude = (event) => {
+    me.setMinutosLatitude(event.target.value);
+  }
+
+  me.oMinutoLatitude = new DBTextField('txtMinutoLatitude'+sId, 'txtMinutoLatitude'+sId, '');
+  me.oMinutoLatitude.addStyle('width', '80px');
+  me.oMinutoLatitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Minuto Latitude\",\"f\",\"f\",event)");
+  me.oMinutoLatitude.setMaxLength(2);
+  me.oMinutoLatitude.show($('ctnMinutoLatitude'+sId));
+  $('ctnMinutoLatitude'+sId).observe('change', me.changeMinutoLatitude);
+//-------------------------------------Fim da Manipulação do Minuto Latitude--------------------------------------------
+//-------------------------------------Início da Manipulação do Segundo Latitude--------------------------------------------
+  /**
+   * Seta o valor do Segundo Latitude
+   * @param {integer} iSegundoLatitude
+   * @return void
+   */
+  this.setSegundosLatitude = function(iSegundoLatitude){
+    this.iSegundoLatitude = iSegundoLatitude;
+  }
+
+  /**
+   * Retorna o valor do Segundo Latitude
+   * @return void
+   */
+  this.getSegundosLatitude = function(){
+    return this.iSegundoLatitude;
+  }
+
+  this.changeSegundoLatitude = (event) => {
+    me.setSegundosLatitude(event.target.value);
+  }
+
+  me.oSegundoLatitude = new DBTextField('txtSegundoLatitude'+sId, 'txtSegundoLatitude'+sId, '');
+  me.oSegundoLatitude.addStyle('width', '80px');
+  me.oSegundoLatitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Segundo Latitude\",\"f\",\"f\",event)");
+  me.oSegundoLatitude.setMaxLength(5);
+  me.oSegundoLatitude.show($('ctnSegundoLatitude'+sId));
+  $('ctnSegundoLatitude'+sId).observe('change', me.changeSegundoLatitude);
+
+//-------------------------------------Fim da Manipulação do Segundo Latitude-------------------------------------------------
+//-------------------------------------Início da Manipulação do Grau Longitude----------------------------------------------
+  /**
+   * Seta o valor do Grau Longitude
+   * @param {integer} iGrausLongitude
+   * @return void
+   */
+  this.setGrausLongitude = function(iGrausLongitude){
+    this.iGrausLongitude = iGrausLongitude;
+  }
+
+  /**
+   * Retorna o valor do Grau Longitude
+   * @return void
+   */
+  this.getGrausLongitude = function(){
+    return this.iGrausLongitude;
+  }
+
+  this.changeGrausLongitude = (event) => {
+    me.setGrausLongitude(event.target.value);
+  }
+
+  me.oGrausLongitude = new DBTextField('txtGrausLongitude'+sId, 'txtGrausLongitude'+sId, '');
+  me.oGrausLongitude.addStyle('width', '40%');
+  me.oGrausLongitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Graus Longitude\",\"f\",\"f\",event)");
+  me.oGrausLongitude.setMaxLength(2);
+  me.oGrausLongitude.show($('ctnGrausLongitude'+sId));
+  $('ctnGrausLongitude'+sId).observe('change', me.changeGrausLongitude);
+//-------------------------------------Fim da Manipulação do Graus Longitude-------------------------------------------------
+//-------------------------------------Início da Manipulação do Minuto Longitude----------------------------------------------
+  /**
+   * Seta o valor do Minuto Longitude
+   * @param {integer} iMinutoLongitude
+   * @return void
+   */
+  this.setMinutoLongitude = function(iMinutoLongitude){
+    this.iMinutoLongitude = iMinutoLongitude;
+  }
+
+  /**
+   * Retorna o valor do Minuto Longitude
+   * @return void
+   */
+  this.getMinutoLongitude = function(){
+    return this.iMinutoLongitude;
+  }
+
+  this.changeMinutoLongitude = (event) => {
+    me.setMinutoLongitude(event.target.value);
+  }
+
+  me.oMinutosLongitude = new DBTextField('txtMinutoLongitude'+sId, 'txtMinutoLongitude'+sId, '');
+  me.oMinutosLongitude.addStyle('width', '80px');
+  me.oMinutosLongitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Minuto Longitude\",\"f\",\"f\",event)");
+  me.oMinutosLongitude.setMaxLength(2);
+  me.oMinutosLongitude.show($('ctnMinutoLongitude'+sId));
+  $('ctnMinutoLongitude'+sId).observe('change', me.changeMinutoLongitude);
+
+  //-------------------------------------Fim da Manipulação do Minutos Longitude-------------------------------------------------
+  //-------------------------------------Início da Manipulação do Segundo Longitude-------------------------------------------------
+  /**
+   * Seta o valor do Segundo Longitude
+   * @param {integer} iSegundoLongitude
+   * @return void
+   */
+  this.setSegundosLongitude = function(iSegundoLongitude){
+    this.iSegundoLongitude = iSegundoLongitude;
+  }
+
+  /**
+   * Retorna o valor do Segundo Longitude
+   * @return void
+   */
+  this.getSegundosLongitude = function(){
+    return this.iSegundoLongitude;
+  }
+
+  this.changeSegundoLongitude = (event) => {
+    me.setSegundosLongitude(event.target.value);
+  }
+
+  me.oSegundoLongitude = new DBTextField('txtSegundoLongitude'+sId, 'txtSegundoLongitude'+sId, '');
+  me.oSegundoLongitude.addStyle('width', '80px');
+  me.oSegundoLongitude.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Segundo Longitude\",\"f\",\"f\",event)");
+  me.oSegundoLongitude.setMaxLength(5);
+  me.oSegundoLongitude.show($('ctnSegundoLongitude'+sId));
+  $('ctnSegundoLongitude'+sId).observe('change', me.changeSegundoLongitude);
+
+//-------------------------------------Fim da Manipulação do Segundos Longitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Loteamento----------------------------------------------
 
   /*
-   *Cria o campo descrição do Loteamento
-   */
+  *Cria o campo descrição do Loteamento
+  */
   me.oTxtDescrLoteamento = new DBTextField('txtDescrLoteamento'+sId, 'txtDescrLoteamento'+sId, '');
   me.oTxtDescrLoteamento.addStyle('width', '100%');
   me.oTxtDescrLoteamento.show($('ctnDescrLoteamento'+sId));
@@ -1767,8 +2557,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   $('txtDescrLoteamento'+sId).observe('change', me.alteraLoteamento);
 
   /*
-   *Função para realizar a busca pelo autocomplete do Loteamento
-   */
+  *Função para realizar a busca pelo autocomplete do Loteamento
+  */
   var sUrl = this.sUrlRpc;
   var oParam  = new Object();
   oAutoCompleteCondominio = new dbAutoComplete($('txtDescrLoteamento'+sId), sUrl);
@@ -1789,8 +2579,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 //-------------------------------------Início da Manipulação do Complemento---------------------------------------------
 
   /*
-   *Cria o campo descrição do Complemento
-   */
+  *Cria o campo descrição do Complemento
+  */
   me.oTxtDescrComplemento = new DBTextField('txtDescrComplemento'+sId, 'txtDescrComplemento'+sId, '');
   me.oTxtDescrComplemento.addStyle('width', '100%');
   me.oTxtDescrComplemento.show($('ctnDescrComplemento'+sId));
@@ -1813,10 +2603,10 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   $('txtDescrComplemento'+sId).observe('change', me.alteraComplemento);
 
 //-------------------------------------Fim da Manipulação do Complemento------------------------------------------------
-//-------------------------------------Início da Manipulação do Ponto de Referência-------------------------------------
+//-------------------------------------Início da Manipulação do Ponto de Refer?ncia-------------------------------------
 
   this.alteraPontoReferencia = function() {
-    //$('txtDescrPontoReferencia'+sId).value = $F('txtDescrPontoReferencia'+sId).toUpperCase();
+//$('txtDescrPontoReferencia'+sId).value = $F('txtDescrPontoReferencia'+sId).toUpperCase();
 
     if ($F('txtDescrPontoReferencia'+sId).trim() != me.getPontoReferencia()) {
 
@@ -1959,7 +2749,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
   this.getPais = function(){
 
-   return this.iCodigoPais;
+    return this.iCodigoPais;
   }
 
   /**
@@ -2012,7 +2802,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
    */
 
   this.setNomeBairro = function(sNomeBairro){
-    //$('txtDescrPontoReferencia'+sId).value = sNomeBairro;
+//$('txtDescrPontoReferencia'+sId).value = sNomeBairro;
     this.sNomeBairro = sNomeBairro;
   }
 
@@ -2027,24 +2817,24 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
   /**
-   *Seta o codigo do logradouro
-   *@param {string} iCodigoLogradouro
+   *Seta o logradouro
+   *@param {string} sLogradouro
    *@return void
    */
 
-  this.setLogradouro = function(iCodigoLogradouro){
+  this.setLogradouro = function(sLogradouro){
 
-    this.iCodigoLogradouro = iCodigoLogradouro;
+    this.sLogradouro = sLogradouro;
   }
 
   /**
-   *Retorna o codigo do Logradouro
+   *Retorna o Logradouro
    *@return void
    */
 
   this.getLogradouro = function(){
 
-    return this.iCodigoLogradouro;
+    return this.sLogradouro;
   }
 
   /**
@@ -2130,15 +2920,15 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     return this.sCepEndereco;
   }
 
- /**
-  * Método utilizado para verificar se foi informado o código
-  * de endereço caso tenha sido carrega os dados para alteração
-  * se não foi informado carrega a tela com os campos padrões
-  * conforme configurações.
-  */
+  /**
+   * Método utilizado para verificar se foi informado o código
+   * de endereço da obra, caso tenha sido, carrega os dados para alteração
+   * se não foi informado carrega a tela com os campos padrões
+   * conforme configurações.
+   */
   this.buscaEndereco = function() {
 
-    if (me.getCgmMunicipio() == true && me.getCodigoRuaMunicipio() != "") {
+    if (me.getCodigoRuaMunicipio() != "") {
 
       me.clearAll(1);
       var oEndereco = new Object();
@@ -2208,7 +2998,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_removeObj('msgBox');
 
     var oRetorno = eval('('+oAjax.responseText+')');
-    console.log('Return...', oRetorno);
     var sExpReg  = new RegExp('\\\\n','g');
 
     if (oRetorno.status == 2) {
@@ -2299,7 +3088,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     }
   }
 
-    /**
+  /**
    * Processa os dados retornados da consulta do
    * endereço informado para preencher o
    * form com os valores retornados
@@ -2343,8 +3132,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       $('txtCepEnd'+sId).value                = oRetorno.endereco.sCep.urlDecode();
       me.setCepEndereco($F('txtCepEnd'+sId));
 
-      // $('txtCodigoIbge'+sId).value            = oRetorno.endereco.iIbge.urlDecode();
-      // me.setCodigoIbge($F('txtCodigoIbge'+sId));
+// $('txtCodigoIbge'+sId).value            = oRetorno.endereco.iIbge.urlDecode();
+// me.setCodigoIbge($F('txtCodigoIbge'+sId));
 
       $('txtDescrCondominio'+sId).value       = oRetorno.endereco.sCondominio.urlDecode();
       me.setCondominio($F('txtDescrCondominio'+sId));
@@ -2370,7 +3159,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       me.setRuaTipo(oRetorno.endereco.iRuaTipo);
       me.setRuasTipo(oRetorno.endereco.iRuasTipo);
 
-      //$('btnSalvar'+sId).value = 'Alterar';
+//$('btnSalvar'+sId).value = 'Alterar';
     }
 
   }
@@ -2446,7 +3235,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
         var lEnderecoMunicipio = true;
         me.setCgmMunicipio(lEnderecoMunicipio);
-        //me.oTxtCep.setReadOnly(lEnderecoMunicipio);
+//me.oTxtCep.setReadOnly(lEnderecoMunicipio);
         me.oTxtCodigoPais.setReadOnly(lEnderecoMunicipio);
         me.oTxtDescrPais.setReadOnly(lEnderecoMunicipio);
         me.oCboCodigoEstado.setDisable();
@@ -2464,9 +3253,9 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
   }
   /*
-   * Preenche a combobox dos tipos de rua
-   * recebe por parametro array com os dados
-   */
+  * Preenche a combobox dos tipos de rua
+  * recebe por parametro array com os dados
+  */
   this.preencheCboRuasTipo = function(aValues, iCodigoTipo) {
 
     var iCodigoTipo = iCodigoTipo;
@@ -2488,10 +3277,10 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
   /*
-   * Preenche a combobox dos paises recebidos por parametro
-   * aValues array de objetos com os paises
-   * iCodigoPais valor par deixar selecionado o pais
-   */
+  * Preenche a combobox dos paises recebidos por parametro
+  * aValues array de objetos com os paises
+  * iCodigoPais valor par deixar selecionado o pais
+  */
   this.preencheCboPaises = function(aValues, iCodigoPais) {
 
     var iNumPaises  = aValues.length;
@@ -2505,7 +3294,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     }
 
     if (iCodigoPais == '') {
-       iCodigoPais = aValues[0].codigo;
+      iCodigoPais = aValues[0].codigo;
     }
     me.oCboCodigoPais.setValue(iCodigoPais);
 
@@ -2517,10 +3306,10 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
   /*
-   * Preenche a combobox dos estados recebidos por parametro
-   * aValues array de objetos com os estados
-   * iCodigoEstado valor par deixar selecionado o estado
-   */
+  * Preenche a combobox dos estados recebidos por parametro
+  * aValues array de objetos com os estados
+  * iCodigoEstado valor par deixar selecionado o estado
+  */
   this.preencheCboEstados = function(aValues, iCodigoEstado) {
 
     var iNumEstados = aValues.length;
@@ -2546,16 +3335,16 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     me.findMunicipioByEstado();
   }
 
-   /*
-   *Método para limpar os campos da tela conforme
-   *o código informado
-   *1 limpa todos abaixo de Pais
-   *2 limpa todos abaixo de Estado
-   *3 limpa todos abaixo de Municipio
-   *4 limpa todos abaixo de Bairro
-   *5 limpa todos abaixo de Rua
-   *6 limpa todos abaixo de Numero
-   */
+  /*
+  *Método para limpar os campos da tela conforme
+  *o código informado
+  *1 limpa todos abaixo de Pais
+  *2 limpa todos abaixo de Estado
+  *3 limpa todos abaixo de Municipio
+  *4 limpa todos abaixo de Bairro
+  *5 limpa todos abaixo de Rua
+  *6 limpa todos abaixo de Numero
+  */
   this.clearAll = function(iCodigoClear) {
     switch(iCodigoClear) {
       case 1:
@@ -2589,9 +3378,45 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setPontoReferencia('');
         $('txtCodigoIbge'+sId).value            = '';
         me.setCodigoIbge('');
+        $('txtLogradouro'+sId).value = '';
+        me.setCodigoObra('');
+        $('txtCodigoObra'+sId).value = '';
+        me.setLogradouro('');
+        $('txtDistrito'+sId).value = '';
+        me.setDistrito('');
+        $('txtGrausLatitude'+sId).value = '';
+        me.setGrausLatitude('');
+        $('txtMinutoLatitude'+sId).value = '';
+        me.setMinutosLatitude('');
+        $('txtSegundoLatitude'+sId).value = '';
+        me.setSegundosLatitude('');
+        $('txtGrausLongitude'+sId).value = '';
+        me.setGrausLongitude('');
+        $('txtMinutoLongitude'+sId).value = '';
+        me.setMinutoLongitude('');
+        $('txtSegundoLongitude'+sId).value = '';
+        me.setSegundosLongitude('');
+        $('txtLogradouro'+sId).value = '';
+        me.setLogradouro('');
+        $('cboClasseObjeto'+sId).value = 0;
+        me.setClassesObjeto('');
+        $('cboAtividadeObra'+sId).value = 0;
+        me.setAtividadeObra('');
+        $('cboAtividadeServico'+sId).value = 0;
+        me.setAtividadeServico('');
+        $('cboAtividadeServicoEsp'+sId).value = 0;
+        me.setAtividadeServicoEspecializado('');
+        $('cboGrupoBemPub'+sId).value = 0;
+        me.setGrupoBemPublico('');
+        $('cboSubGrupoBemPub'+sId).value = 0;
+        me.setSubGrupoBemPublico('');
+        $('txtDescrAtividadeServico'+sId).value = '';
+        $('txtDescrAtividadeServicoEsp'+sId).value = '';
 
-        //me.oCboRuasTipo.setValue(3);
-        //me.setRuaTipo(3);
+
+
+//me.oCboRuasTipo.setValue(3);
+//me.setRuaTipo(3);
         me.setRuasTipo('');
         me.setCepRua('');
         break;
@@ -2622,8 +3447,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setPontoReferencia('');
         $('txtCodigoIbge'+sId).value            = '';
         me.setCodigoIbge('');
-        //me.oCboRuasTipo.setValue(3);
-        //me.setRuaTipo(3);
+//me.oCboRuasTipo.setValue(3);
+//me.setRuaTipo(3);
         me.setRuasTipo('');
         me.setCepRua('');
         break;
@@ -2652,8 +3477,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setPontoReferencia('');
         $('txtCodigoIbge'+sId).value            = '';
         me.setCodigoIbge('');
-        //me.oCboRuasTipo.setValue(3);
-        //me.setRuaTipo(3);
+//me.oCboRuasTipo.setValue(3);
+//me.setRuaTipo(3);
         me.setRuasTipo('');
         me.setCepRua('');
         break;
@@ -2677,13 +3502,13 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setPontoReferencia('');
         $('txtCodigoIbge'+sId).value            = '';
         me.setCodigoIbge('');
-        //me.oCboRuasTipo.setValue(3);
-        //me.setRuaTipo(3);
+//me.oCboRuasTipo.setValue(3);
+//me.setRuaTipo(3);
         me.setRuasTipo('');
         me.setCepRua('');
         break;
       case 5:
-        //$('txtDescrRua'+sId).value              = '';
+//$('txtDescrRua'+sId).value              = '';
         $('txtCodigoNumero'+sId).value          = '';
         me.setNumero('');
         $('txtCepEnd'+sId).value          = '';
@@ -2699,8 +3524,8 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setPontoReferencia('');
         $('txtCodigoIbge'+sId).value            = '';
         me.setCodigoIbge('');
-        //me.oCboRuasTipo.setValue(3);
-        //me.setRuaTipo(3);
+//me.oCboRuasTipo.setValue(3);
+//me.setRuaTipo(3);
         me.setRuasTipo('');
         me.setCepRua('');
         break;
@@ -2714,100 +3539,144 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     }
   }
 
- /**
-   *Método para salvar um endereco
+  /**
+   *Método para salvar dados Complementares
    */
-  this.salvarEndereco = function() {
+  this.salvarDadosComplementares = function() {
+// Aqui verifico se houve modificação e se o código do endereço esta setado
 
-	//Aqui verifico se houve modificação e se o código do enedereço esta setado
-    if (me.getCodigoEndereco() != '' && me.lModificado == false ) {
+  if (me.getCodigoEndereco() != '' && me.lModificado == false ) {
 
-      me.close();
-      me.callBackFunction();
+    me.close();
+    me.callBackFunction();
+    return false;
+  }
+
+  var oEndereco = new Object();
+
+//
+//   //Verifica se o País foi informado
+  if ($F('cboCodigoPais'+sId).value == '' || $F('cboCodigoPais'+sId).value == 0) {
+
+    $('cboCodigoPais'+sId).focus();
+    alert("usuário:\n\n\País não informado!\n\n");
+    return false;
+  }
+
+  //Verifica se o Municipio foi informado
+  if ($F('cboCodigoMunicipio'+sId).trim() == '' && me.getTipoValidacao() == 1) {
+
+    $('cboCodigoMunicipio'+sId).focus();
+    alert("usuário:\n\n\Município não informado!\n\n");
+    return false;
+  } else if (me.getTipoValidacao() == 2 && $F('cboCodigoMunicipio'+sId) == '') {
+    me.setMunicipio('0');
+    me.setNomeMunicipio('');
+  }
+
+  // Verifica se o código da obra foi informado
+  if($F('txtCodigoObra'+sId).trim() == ''){
+    alert('Campo Código Obra é obrigatório!\n\n');
+    return false;
+  }
+
+  //Verifica se o Bairro foi informado
+  if ($F('txtDescrBairro'+sId).trim() == '' && me.getTipoValidacao() == 1) {
+
+    $('txtCodigoBairro'+sId).focus();
+    alert("Usuário:\n\n\Bairro não informado!\n\n");
+    return false;
+  } else if (me.getTipoValidacao() == 2 && $F('txtDescrBairro'+sId).trim() == '') {
+
+    me.setBairro('0');
+    me.setNomeBairro('');
+  }
+
+  if($F('txtGrausLatitude'+sId).trim() == ''){
+    $('txtGrausLatitude'+sId).focus();
+    alert("Usuário:\n\n\Graus da Latitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('txtMinutoLatitude'+sId).trim() == ''){
+    $('txtMinutoLatitude'+sId).focus();
+    alert("Usuário:\n\n\Minuto da Latitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('txtSegundoLatitude'+sId).trim() == ''){
+    $('txtSegundoLatitude'+sId).focus();
+    alert("Usuário:\n\n\Segundo da Latitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('txtGrausLongitude'+sId).trim() == ''){
+    $('txtGrausLongitude'+sId).focus();
+    alert("Usuário:\n\n\Graus da Longitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('txtMinutoLongitude'+sId).trim() == ''){
+    $('txtMinutoLongitude'+sId).focus();
+    alert("Usuário:\n\n\Minuto da Longitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('txtSegundoLongitude'+sId).trim() == ''){
+    $('txtSegundoLongitude'+sId).focus();
+    alert("Usuário:\n\n\Segundo da Longitude não informado!\n\n");
+    return false;
+  }
+
+  if($F('cboAtividadeServico'+sId) == '99'){
+    if($F('txtDescrAtividadeServico'+sId).trim() == ''){
+      alert('Campo Descrição Atividade Serviço é obrigatório!\n\n');
       return false;
     }
+    oEndereco.descrAtividadeServico = $F('txtDescrAtividadeServico'+sId);
+  }
 
-    var oEndereco = new Object();
-
-
-    if ($F('cboCodigoMunicipio'+sId).trim() == '') {
-      me.setMunicipio('');
-    }
-
-    //Validações de campo em branco
-
-    //Verifica se o País foi imformado
-    if ($F('cboCodigoPais'+sId).value == '' || $F('cboCodigoPais'+sId).value == 0) {
-
-      $('cboCodigoPais'+sId).focus();
-      alert("usuário:\n\n\País não informado!\n\n");
+  if($F('cboAtividadeServicoEsp'+sId) == '99'){
+    if($F('txtDescrAtividadeServicoEsp'+sId).trim() == ''){
+      alert('Campo Descrição Atividade Serviço Especializado é obrigatório!\n\n');
       return false;
     }
+    oEndereco.descrAtividadeServicoEsp = $F('txtDescrAtividadeServicoEsp'+sId);
+  }
 
-    //Verifica se o Municipio foi imformado
-    if ($F('cboCodigoMunicipio'+sId).trim() == '' && me.getTipoValidacao() == 1) {
+  oEndereco.codigoPais               = me.getPais();
+  oEndereco.codigoEstado             = me.getEstado();
+  oEndereco.codigoMunicipio          = me.getMunicipio();
+  oEndereco.distrito                 = me.getDistrito();
+  oEndereco.codigoBairro             = me.getBairro();
+  oEndereco.numero                   = me.getNumero();
+  oEndereco.cepEndereco              = me.getCepEndereco();
+  oEndereco.codigoObra               = me.getCodigoObra();
+  oEndereco.logradouro               = me.getLogradouro();
+  oEndereco.grausLatitude            = me.getGrausLatitude();
+  oEndereco.minutoLatitude           = me.getMinutosLatitude();
+  oEndereco.segundoLatitude          = me.getSegundosLatitude();
+  oEndereco.grausLongitude           = me.getGrausLongitude();
+  oEndereco.minutoLongitude          = me.getMinutoLongitude();
+  oEndereco.segundoLongitude         = me.getSegundosLongitude();
+  oEndereco.classeObjeto             = me.getClassesObjeto();
+  oEndereco.atividadeObra            = me.getAtividadeObra();
+  oEndereco.atividadeServico         = me.getAtividadeServico();
+  oEndereco.atividadeServicoEsp      = me.getAtividadeServicoEspecializado();
+  oEndereco.grupoBemPub              = me.getGrupoBemPublico();
+  oEndereco.subGrupoBemPub           = me.getSubGrupoBemPublico();
+  oEndereco.bdi                      = me.getBdi();
 
-      $('cboCodigoMunicipio'+sId).focus();
-      alert("usuário:\n\n\Município não informado!\n\n");
-      return false;
-    } else if (me.getTipoValidacao() == 2 && $F('cboCodigoMunicipio'+sId) == '') {
-      me.setMunicipio('0');
-      me.setNomeMunicipio('');
-    }
-
-    //Verifica se o Bairro foi imformado
-    if ($F('txtDescrBairro'+sId).trim() == '' && me.getTipoValidacao() == 1) {
-
-      $('txtCodigoBairro'+sId).focus();
-      alert("Usuário:\n\n\Bairro não informado!\n\n");
-      return false;
-    } else if (me.getTipoValidacao() == 2 && $F('txtDescrBairro'+sId).trim() == '') {
-
-      me.setBairro('0');
-      me.setNomeBairro('');
-    }
-
-    //Verifica se a Rua foi imformado
-    if ($F('txtCodigoRua'+sId).trim() == '' && $F('txtDescrRua'+sId).trim() == '') {
-
-      $('txtCodigoRua'+sId).focus();
-      alert("Usuário:\n\n\Nome da rua não informada!\n\n");
-      return false;
-    }
-    //Verifica se o Número foi informado
-
-    if (me.getRua() == '') {
-      me.setRuasTipo('');
-    }
-
-    oEndereco.codigoEstado             = me.getEstado();
-    oEndereco.codigoMunicipio          = me.getMunicipio();
-    oEndereco.codigoBairro             = me.getBairro();
-    oEndereco.descricaoBairro          = me.getNomeBairro().toUpperCase();
-    oEndereco.codigoRua                = me.getRua();
-    oEndereco.descricaoRua             = me.getNomeRua().toUpperCase();
-    oEndereco.codigoLocal              = me.getCodigoLocal();
-    oEndereco.numeroLocal              = me.getNumero();
-    oEndereco.cepEndereco              = me.getCepEndereco();
-    oEndereco.codigoEndereco           = me.getCodigoEndereco();
-    oEndereco.descricaoComplemento     = me.getComplemento().toUpperCase();
-    oEndereco.descricaoLoteamento      = me.getLoteamento().toUpperCase();
-    oEndereco.descricaoCondominio      = me.getCondominio().toUpperCase();
-    oEndereco.codigoRuasTipo           = me.getRuasTipo();
-    oEndereco.codigoRuaTipo            = me.getRuaTipo();
-    oEndereco.descricaoPontoReferencia = me.getPontoReferencia().toUpperCase();
-    oEndereco.codigoCepRua             = me.getCepRua();
-    // oEndereco.codigoIbge               = me.getCodigoIbge();
-
-    oDados = new Object();
-    oDados.exec    = 'salvarEndereco';
-    oDados.endereco = oEndereco;
-
-    var msgDiv = "Salvando endereço aguarde ...";
-    js_divCarregando(msgDiv,'msgBox');
-
-    var aParam = Object.toJSON(oDados);
-
+//
+  oDados = new Object();
+  oDados.exec    = 'salvarDadosComplementares';
+  oDados.endereco = oEndereco;
+//
+  var msgDiv = "Salvando Dados Complementares, aguarde...";
+  js_divCarregando(msgDiv,'msgBox');
+//
+//   var aParam = Object.toJSON(oDados);
+//
     var oAjax = new Ajax.Request(
       me.sUrlRpc,
       {
@@ -2825,7 +3694,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_removeObj('msgBox');
 
     var oRetorno = eval('('+oAjax.responseText+')');
-
     var sExpReg  = new RegExp('\\\\n','g');
 
     if (oRetorno.status == 1) {
@@ -2836,7 +3704,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       me.setBairro(oRetorno.icodigoBairro);
       $('txtCodigoRua'+sId).value       = oRetorno.icodigoRua;
       me.setRua(oRetorno.icodigoRua);
-      //Fecha a janela e preenche o campo com o endereco informado
+//Fecha a janela e preenche o campo com o endereco informado
       me.close();
       me.callBackFunction();
       return false;
@@ -2848,7 +3716,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
   /**
-   * Retorna se o endereco é do municipio
+   * Retorna se o endereco ? do municipio
    * @param bollean lEnderecoMunicipio
    */
   this.getCgmMunicipio = function() {
@@ -2869,7 +3737,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   this.setEnderecoMunicipio = function(lEnderecoMunicipio) {
 
     me.setCgmMunicipio(lEnderecoMunicipio);
-    //me.oTxtCep.setReadOnly(lEnderecoMunicipio);
+//me.oTxtCep.setReadOnly(lEnderecoMunicipio);
 
     if (lEnderecoMunicipio) {
 
@@ -2912,6 +3780,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   me.buscaEndereco();
 
   this.limpaForm = function(){
+
     var iCodEndereco = me.getCodigoEndereco();
     $('txtCep'+sId).value = '';
     me.clearAll(1);
@@ -2948,7 +3817,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
           onComplete : me.preencheCodigo
         });
 
-      }, 300);
+    }, 300);
   }
 
   this.preencheCodigo = function (oAjax){
@@ -2960,3 +3829,4 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   }
 
 }
+

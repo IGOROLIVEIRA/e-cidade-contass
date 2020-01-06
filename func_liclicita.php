@@ -269,7 +269,7 @@ $sWhereContratos = " and 1 = 1 ";
           liclicita.l20_numero,
           liclicita.l20_datacria AS dl_Data_Abertura_Proc_Adm,
           liclicita.l20_dataaber AS dl_Data_Emis_Alt_Edital_Convite,
-          liclicita.l20_dtpublic AS dl_Data_Publicação_DO,
+          liclicita.l20_dtpublic AS dl_Data_Publica??o_DO,
           liclicita.l20_horaaber,
           liclicita.l20_local,
           liclicita.l20_objeto,
@@ -304,13 +304,14 @@ $sWhereContratos = " and 1 = 1 ";
                 }
 
                 if (isset($edital) && $edital == true) {
-                  
+
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
                             liclicita.l20_edital,
                             liclicita.l20_anousu,
                             pctipocompra.pc50_descr,
                             liclicita.l20_numero,
+                            pctipocompra.pc50_pctipocompratribunal,
                             liclicita.l20_objeto,
                             (CASE 
                             WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
@@ -339,7 +340,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         WHERE l20_instit = 1
                             AND (pc80_criterioadjudicacao = 1
-                                 OR pc80_criterioadjudicacao = 2) AND EXTRACT (YEAR from l20_dataaber) >= 2019
+                                 OR pc80_criterioadjudicacao = 2) AND EXTRACT (YEAR from l20_dataaber) >= 2018
                         ORDER BY l20_codigo
           ";
                 }
@@ -363,7 +364,7 @@ $sWhereContratos = " and 1 = 1 ";
                             db_fieldsmemory($result,0);
                             echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                         }else{
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n?o Encontrado',true);</script>";
                         }
                     }
 
@@ -451,7 +452,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                             }
                         } else {
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n?o Encontrado',true);</script>";
                         }
                     }
 

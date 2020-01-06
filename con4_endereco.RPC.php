@@ -32,6 +32,8 @@ require_once ("libs/db_sessoes.php");
 require_once ("dbforms/db_funcoes.php");
 require_once ("libs/JSON.php");
 require_once ("model/endereco.model.php");
+require_once ("model/obrasDadosComplementares.model.php");
+require_once ("classes/db_obrasdadoscomplementares_classe.php");
 require_once ("model/configuracao/endereco/Municipio.model.php");
 
 $oJson    = new services_json();
@@ -409,5 +411,75 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
 
   break;
+
+  case 'salvarDadosComplementares':
+
+    db_inicio_transacao();
+    try {
+
+      $oEndereco = new obrasDadosComplementares(null);
+      $oRetorno->dadoscomplementares = new stdClass();
+
+      $oEndereco->setEstado($oParam->endereco->codigoEstado);
+      $oEndereco->setPais($oParam->endereco->codigoPais);
+      $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
+      $oEndereco->setBairro($oParam->endereco->codigoBairro);
+      $oEndereco->setNumero($oParam->endereco->numero);
+      $oEndereco->setCep($oParam->endereco->cepEndereco);
+      $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
+      $oEndereco->setDistrito($oParam->endereco->distrito);
+      $oEndereco->setLogradouro($oParam->endereco->logradouro);
+      $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
+      $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
+      $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
+      $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
+      $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
+      $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
+      $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
+      $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
+      $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
+      $oEndereco->setDescrAtividadeServico($oParam->endereco->descrAtividadeServico);
+      $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
+      $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
+      $oEndereco->setGrupoBemPublico($oParam->endereco->grupoBemPub);
+      $oEndereco->setSubGrupoBemPublico($oParam->endereco->subGrupoBemPub);
+      $oEndereco->setBdi($oParam->endereco->bdi);
+
+      $oRetorno->dadoscomplementares = $oParam->endereco;
+
+      $oEndereco->salvaDadosComplementares();
+      db_fim_transacao(false);
+
+    }catch (Exception $erro){
+      db_fim_transacao(true);
+      $oRetorno->message  = urlencode($erro->getMessage());
+      $oRetorno->status   = 2;
+    }
+
+    echo $oJson->encode($oRetorno);
+  break;
+
+  case 'findDadosObra' :
+    $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iCodigoObra);
+    $oRetorno->status = 1;
+    echo $oJson->encode($oRetorno);
+  break;
+
+  case 'excluiDadosObra':
+    db_inicio_transacao();
+    try{
+      if($oParam->codObra){
+        $clObras = new cl_obrasdadoscomplementares();
+        $clObras->excluir('', 'db150_codobra = '.$oParam->codObra);
+      }
+      $oRetorno->message = 'Dados do código da Obra '.$oParam->codObra.' excluídos com sucesso!!';
+      db_fim_transacao(false);
+    }catch(Exception $erro){
+      db_fim_transacao(true);
+      $oRetorno->message  = urlencode($erro->getMessage());
+      $oRetorno->status   = 2;
+    }
+    echo $oJson->encode($oRetorno);
+    break;
 }
 ?>

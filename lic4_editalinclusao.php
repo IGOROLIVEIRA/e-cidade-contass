@@ -32,20 +32,31 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
+require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_cflicita_classe.php");
+include("dbforms/db_classesgenericas.php");
 
 $clliclicita = new cl_liclicita;
+$clliclancedital = new cl_liclancedital;
 $clcflicita  = new cl_cflicita;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+$sqlerro = false;
 
-echo 'Opção selecionada...';
-var_dump($db_opcao);
+if(isset($incluir)){
+  $clliclancedital->l47_linkpub = $links;
+  $clliclancedital->l47_origemrecurso = $origem_recurso;
+  $clliclancedital->l47_descrecurso = $descricao_recurso;
+  $clliclancedital->l47_liclicita = $l20_codigo;
+  $clliclancedital->l47_dataenvio = $data_referencia;
+  $clliclancedital->incluir(null);
 
-if($db_opcao == 1){
-  echo 'Enter from include...';
-  die('End...');
+  if ($clliclancedital->erro_status=="0"){
+    $erro_msg = $clliclancedital->erro_msg;
+    $sqlerro=true;
+  }
+
 }
 
 ?>
@@ -57,10 +68,22 @@ if($db_opcao == 1){
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
 
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+  #msgBoardEnderecodadosCompl_title{
+    padding-top: 15px;
+  }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -74,9 +97,18 @@ if($db_opcao == 1){
   </tr>
 </table>
 <script>
-
 </script>
 </body>
 </html>
 <?
+
+if(isset($incluir) && !$sqlerro){
+  echo "<script>";
+  echo "alert('".$clliclancedital->erro_sql."')";
+  echo "</script>";
+  echo "<script>";
+  echo "parent.document.formaba.documentos.disabled=false;";
+  echo "parent.mo_camada('documentos');";
+  echo "</script>";
+}
 ?>
