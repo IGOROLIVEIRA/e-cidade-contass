@@ -7,12 +7,12 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
-
 require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
+require_once("model/EditalDocumento.model.php");
 
-$clliclicita = new cl_liclicita;
+$clliclicita       = new cl_liclicita;
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
 $oRetorno          = new stdClass();
@@ -582,6 +582,91 @@ switch ($oParam->exec) {
         }
 
 
-        break;
+    break;
+
+  case "adicionarDocumento":
+
+    $oEdital = new EditalDocumento;
+    try {
+//        $oEdital->adicionarDocumento($oParam->tipo, $oParam->arquivo);
+        $oEdital->setCodigo('');
+        $oEdital->setArquivo($oParam->arquivo);
+        $oEdital->setTipo($oParam->tipo);
+        $oEdital->setCodigoEdital($oParam->edital);
+
+        $aNomeArquivo = explode("/", $oParam->arquivo);
+        $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
+        $oEdital->setNomeArquivo($sNomeArquivo);
+
+        $oEdital->salvar();
+
+    } catch (Exception $oErro) {
+
+      $oRetorno->message = $oErro->getMessage();
+      $oRetorno->status  = 2;
+    }
+    break;
+
+  case "getDocumento":
+
+
+    if (isset($oParam->edital)) {
+      $iCodigoEdital = $oParam->edital;
+    } else if (isset($oParam->ac16_sequencial)) {
+      $iCodigoEdital = $oParam->l20_codigo;
+    }
+
+    $oEdital          = new EditalDocumento(27);
+    $aEditalDocumento = $oEdital->getDocumentos();
+
+    $oRetorno->dados  = array();
+
+    for($i = 0; $i < count($aEditalDocumento); $i++) {
+
+      $oDocumentos      = new stdClass();
+      $oDocumentos->iCodigo    = $aEditalDocumento[$i]->getCodigo();
+      $oDocumentos->iEdital    = $aEditalDocumento[$i]->getCodigoEdital();
+      $oDocumentos->iTipo = $aEditalDocumento[$i]->getTipo();
+      $oRetorno->dados[] = $oDocumentos;
+    }
+
+    $oRetorno->detalhe    = "documentos";
+    break;
+  case "excluirDocumento":
+
+    $oEdital          = new EditalDocumento($oParam->edital);
+    try {
+      $oEdital->setCodigo($oParam->codigoDocumento);
+      $oEdital->remover();
+    } catch (Exception $oErro) {
+
+      $oRetorno->message = $oErro->getMessage();
+      $oRetorno->status  = 2;
+    }
+
+    break;
+  case "downloadDocumento":
+
+    $oDocumento = new EditalDocumento(null, $oParam->iCodigoDocumento);
+    db_inicio_transacao();
+
+    // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
+    $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
+    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
+    db_fim_transacao(true);
+    $oRetorno->nomearquivo = $sNomeArquivo;
+    // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
+    break;
+
+  case "buscaPeriodosItem":
+
+    $oAcordoItem      = new AcordoItem($oParam->iCodigoItem);
+
+    $oRetorno->iCodigoItem = $oParam->iCodigoItem;
+
+    $oRetorno->nomeItem    = $oAcordoItem->getMaterial()->getDescricao();
+    $oRetorno->periodos    = $oAcordoItem->getPeriodosItem();
+
+    break;
 }
 echo $oJson->encode($oRetorno);
