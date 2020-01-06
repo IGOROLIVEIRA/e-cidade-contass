@@ -2,138 +2,207 @@
 //MODULO: Obras
 $cllicobrasmedicao->rotulo->label();
 ?>
-<form name="form1" method="post" action="">
-  <center>
-    <table border="0">
+<fieldset>
+  <legend>Medição da Obra</legend>
+  <form name="form1" method="post" action="">
+    <center>
+
+      <table border="0" style="margin-left: -14%;">
+        <tr>
+          <td nowrap title="<?=@$Tobr03_sequencial?>">
+            <input name="oid" type="hidden" value="<?=@$oid?>">
+            <?=@$Lobr03_sequencial?>
+          </td>
+          <td>
+            <?
+            db_input('obr03_sequencial',11,$Iobr03_sequencial,true,'text',3,"")
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <?
+            db_ancora('Nº Obra: ',"js_pesquisa_obra(true)",$db_opcao);
+            ?>
+          </td>
+          <td>
+            <?
+            db_input('obr03_seqobra',11,$Iobr03_seqobra,true,'text',$db_opcao,"onchange='js_pesquisa_obra(false)'");
+            ?>
+          </td>
+          <td>
+            <strong>Processo Licitatório: </strong>
+            <?
+            db_input('l20_edital',6,$Il20_edital,true,'text',3,"");
+            ?>
+          </td>
+          <td>
+            <strong>Modalidade: </strong>
+            <?
+            db_input('tipocompra',25,'',true,'text',3,"");
+            ?>
+          </td>
+          <td>
+            <strong>Nº: </strong>
+            <?
+            db_input('l20_numero',6,$Il20_numero,true,'text',3,"");
+            ?>
+          </td>
+
+        </tr>
+      </table>
+      <hr>
+      <table border="0">
+        <tr>
+          <td nowrap title="<?=@$Tobr03_dtlancamento?>">
+            <?=@$Lobr03_dtlancamento?>
+          </td>
+          <td colspan="">
+            <?
+            db_inputdata('obr03_dtlancamento',@$obr03_dtlancamento_dia,@$obr03_dtlancamento_mes,@$obr03_dtlancamento_ano,true,'text',$db_opcao,"")
+            ?>
+          </td>
+          <td nowrap title="<?=@$Tobr03_nummedicao?>">
+            <?=@$Lobr03_nummedicao?>
+            <?
+            db_input('obr03_nummedicao',11,$Iobr03_nummedicao,true,'text',$db_opcao,"")
+            ?>
+          </td>
+          <td nowrap title="<?=@$Tobr03_tipomedicao?>">
+            <?=@$Lobr03_tipomedicao?>
+            <?
+            $aValores = array(
+              0 => 'Selecione',
+              1 => 'Medição a preços iniciais',
+              2 => 'Medição de reajuste',
+              3 => 'Medição complementar',
+              4 => 'Medição final',
+              5 => 'Medição de termo aditivo',
+              6 => 'Outro documento de medição.',
+              7 => 'Concluída e recebida definitivamente',
+              8 => 'Reiniciada');
+            db_select('obr03_tipomedicao', $aValores, true, $db_opcao," onchange=''");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tobr03_dtiniciomedicao?>">
+            <?=@$Lobr03_dtiniciomedicao?>
+          </td>
+          <td>
+            <?
+            db_inputdata('obr03_dtiniciomedicao',@$obr03_dtiniciomedicao_dia,@$obr03_dtiniciomedicao_mes,@$obr03_dtiniciomedicao_ano,true,'text',$db_opcao,"")
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tobr03_outrostiposmedicao?>">
+            <?=@$Lobr03_outrostiposmedicao?>
+          </td>
+          <td colspan="3">
+            <?
+            db_textarea('obr03_outrostiposmedicao',0,0,$Iobr03_outrostiposmedicao,true,'text',$db_opcao,"")
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tobr03_descmedicao?>">
+            <?=@$Lobr03_descmedicao?>
+          </td>
+          <td colspan="3">
+            <?
+            db_textarea('obr03_descmedicao',0,0,$Iobr03_descmedicao,true,'text',$db_opcao,"")
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tobr03_dtfimmedicao?>">
+            <?=@$Lobr03_dtfimmedicao?>
+          </td>
+          <td colspan="">
+            <?
+            db_inputdata('obr03_dtfimmedicao',@$obr03_dtfimmedicao_dia,@$obr03_dtfimmedicao_mes,@$obr03_dtfimmedicao_ano,true,'text',$db_opcao,"")
+            ?>
+          </td>
+
+          <td nowrap title="<?=@$Tobr03_dtentregamedicao?>" colspan="1">
+            <?=@$Lobr03_dtentregamedicao?>
+
+            <?
+            db_inputdata('obr03_dtentregamedicao',@$obr03_dtentregamedicao_dia,@$obr03_dtentregamedicao_mes,@$obr03_dtentregamedicao_ano,true,'text',$db_opcao,"")
+            ?>
+          </td>
+          <td nowrap title="<?=@$Tobr03_vlrmedicao?>">
+            <?=@$Lobr03_vlrmedicao?>
+            <?
+            db_input('obr03_vlrmedicao',11,$Iobr03_vlrmedicao,true,'text',$db_opcao,"");
+            ?>
+          </td>
+        </tr>
+      </table>
+      <hr>
+  </form>
+  <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
+    <table>
       <tr>
-        <td nowrap title="<?=@$Tobr03_sequencial?>">
-          <input name="oid" type="hidden" value="<?=@$oid?>">
-          <?=@$Lobr03_sequencial?>
+        <td>
+          <strong>Foto: </strong>
         </td>
         <td>
-          <?
-          db_input('obr03_sequencial',11,$Iobr03_sequencial,true,'text',3,"")
+          <?php
+          db_input("uploadfile",30,0,true,"file",1);
+          db_input("namefile",30,0,true,"hidden",1);
           ?>
         </td>
-      </tr>
-      <tr>
         <td>
-          <?
-          db_ancora('Nº Obra: ','js_pesquisa_obra(true)',$db_opcao);
-          ?>
+          <strong>Legenda:</strong>
         </td>
         <td>
           <?
-          db_input('obr03_seqobra',11,$Iobr03_seqobra,true,'text',$db_opcao,"onchange='js_pesquisa_obra(false)'")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_dtlancamento?>">
-          <?=@$Lobr03_dtlancamento?>
-        </td>
-        <td>
-          <?
-          db_inputdata('obr03_dtlancamento',@$obr03_dtlancamento_dia,@$obr03_dtlancamento_mes,@$obr03_dtlancamento_ano,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_nummedicao?>">
-          <?=@$Lobr03_nummedicao?>
-        </td>
-        <td>
-          <?
-          db_input('obr03_nummedicao',11,$Iobr03_nummedicao,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_tipomedicao?>">
-          <?=@$Lobr03_tipomedicao?>
-        </td>
-        <td>
-          <?
-          db_input('obr03_tipomedicao',11,$Iobr03_tipomedicao,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_dtiniciomedicao?>">
-          <?=@$Lobr03_dtiniciomedicao?>
-        </td>
-        <td>
-          <?
-          db_inputdata('obr03_dtiniciomedicao',@$obr03_dtiniciomedicao_dia,@$obr03_dtiniciomedicao_mes,@$obr03_dtiniciomedicao_ano,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_outrostiposmedicao?>">
-          <?=@$Lobr03_outrostiposmedicao?>
-        </td>
-        <td>
-          <?
-          db_textarea('obr03_outrostiposmedicao',0,0,$Iobr03_outrostiposmedicao,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_descmedicao?>">
-          <?=@$Lobr03_descmedicao?>
-        </td>
-        <td>
-          <?
-          db_textarea('obr03_descmedicao',0,0,$Iobr03_descmedicao,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_dtfimmedicao?>">
-          <?=@$Lobr03_dtfimmedicao?>
-        </td>
-        <td>
-          <?
-          db_inputdata('obr03_dtfimmedicao',@$obr03_dtfimmedicao_dia,@$obr03_dtfimmedicao_mes,@$obr03_dtfimmedicao_ano,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_dtentregamedicao?>">
-          <?=@$Lobr03_dtentregamedicao?>
-        </td>
-        <td>
-          <?
-          db_inputdata('obr03_dtentregamedicao',@$obr03_dtentregamedicao_dia,@$obr03_dtentregamedicao_mes,@$obr03_dtentregamedicao_ano,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_vlrmedicao?>">
-          <?=@$Lobr03_vlrmedicao?>
-        </td>
-        <td>
-          <?
-          db_input('obr03_vlrmedicao',11,$Iobr03_vlrmedicao,true,'text',$db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Tobr03_instit?>">
-          <?=@$Lobr03_instit?>
-        </td>
-        <td>
-          <?
-          db_input('obr03_instit',11,$Iobr03_instit,true,'text',$db_opcao,"")
+          db_input('obr04_legenda',40,$Iobr04_legenda,true,'text',$db_opcao,"");
           ?>
         </td>
       </tr>
     </table>
+    <input type='button' id='btnAnexar' Value='Anexar' />
+    <div style="width: 600px;">
+      <fieldset>
+        <legend><b>Fotos em Anexo</b></legend>
+        <div id='ctnDbGridDocumentos'>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+  <div id='teste' style='display:none'></div>
   </center>
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+</fieldset>
 </form>
 <script>
+
+  oGridDocumento     = new DBGrid('gridDocumento');
+  oGridDocumento.nameInstance = "oGridDocumento";
+  oGridDocumento.setHeight(200);
+  oGridDocumento.setCellAlign(new Array("right","right"));
+  //oGridDocumento.setCellWidth("20%", "20%", "20%", "20%","20%");
+  oGridDocumento.setHeader(new Array("Codigo","Legenda", "Ação"));
+  oGridDocumento.show($('ctnDbGridDocumentos'));
+
+  /**
+   * Cria um listener para subir a imagem, e criar um preview da mesma
+   */
+  $("uploadfile").observe('change', function() {
+
+    startLoading();
+    var iFrame = document.createElement("iframe");
+    iFrame.src = 'func_uploadfilemedicao.php?clone=form2';
+    iFrame.id  = 'uploadIframe';
+    $('teste').appendChild(iFrame);
+    endLoading();
+  });
+
+
   function js_pesquisa(){
     js_OpenJanelaIframe('top.corpo','db_iframe_licobrasmedicao','func_licobrasmedicao.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
   }
@@ -158,15 +227,15 @@ $cllicobrasmedicao->rotulo->label();
         'Pesquisa Obras',true);
     }else{
 
-      if(document.form1.obr02_seqobra.value != ''){
+      if(document.form1.obr03_seqobra.value != ''){
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_licobrasituacao',
           'func_licobras.php?pesquisa_chave='+
-          document.form1.obr02_seqobra.value+'&funcao_js=parent.js_preencheObra2',
+          document.form1.obr03_seqobra.value+'&funcao_js=parent.js_preencheObra2',
           'Pesquisa',false);
       }else{
-        document.form1.obr02_seqobra.value = '';
+        document.form1.obr03_seqobra.value = '';
       }
     }
   }
@@ -175,7 +244,7 @@ $cllicobrasmedicao->rotulo->label();
    */
   function js_preencheObra(codigo,edital,numero,descrcompra)
   {
-    document.form1.obr02_seqobra.value = codigo;
+    document.form1.obr03_seqobra.value = codigo;
     document.form1.tipocompra.value = descrcompra;
     document.form1.l20_edital.value = edital;
     document.form1.l20_numero.value = numero;
@@ -188,8 +257,137 @@ $cllicobrasmedicao->rotulo->label();
     document.form1.l20_edital.value = edital;
 
     if(erro==true){
-      document.form1.obr02_seqobra.focus();
+      document.form1.obr03_seqobra.focus();
     }
   }
+
+  /***
+   * ROTINA PARA SALVAR ANEXO
+   */
+
+  function startLoading() {
+    js_divCarregando('Aguarde... Carregando Documento','msgbox');
+  }
+
+  function endLoading() {
+    js_removeObj('msgbox');
+  }
+
+  function js_salvarDocumento() {
+    console.log(document.form1.namefile.value);
+
+    if ($F('namefile') == '') {
+
+      alert('Escolha um Documento!');
+      return false;
+    }
+
+    if ($F('ac40_descricao') == '') {
+
+      alert('Informe uma descrição para o documento!');
+      return false;
+    }
+
+    var oParam       = new Object();
+    oParam.exec      = 'salvarAnexo';
+    oParam.acordo    = $F('obr03_seqobra');
+    oParam.descricao = encodeURIComponent($F('obr04_legenda').replace(/\\/g,  "<contrabarra>"));
+    oParam.arquivo   = $F('namefile');
+    js_divCarregando('Aguarde... Salvando Documento','msgbox');
+    var oAjax        = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        method: 'post',
+        asynchronous:false,
+        onComplete : js_retornoSalvarFoto
+      });
+  }
+
+  function js_retornoSalvarFoto(oAjax) {
+
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+    if (oRetorno.status == 1) {
+
+      $('uploadfile').value     = '';
+      $("obr04_legenda").value = "";
+      // js_getDocumento();
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }
+  }
+
+  // function js_getDocumento() {
+  //
+  //   var oParam       = new Object();
+  //   oParam.exec      = 'getDocumento';
+  //   oParam.acordo   = iAcordo;
+  //   var oAjax        = new Ajax.Request(
+  //     sUrlRpc,
+  //     { parameters: 'json='+Object.toJSON(oParam),
+  //       asynchronous:false,
+  //       method: 'post',
+  //       onComplete : js_retornoGetDocumento
+  //     });
+  // }
+
+  // function js_retornoGetDocumento(oAjax) {
+  //
+  //   var oRetorno = eval('('+oAjax.responseText+")");
+  //   oGridDocumento.clearAll(true);
+  //
+  //   if (oRetorno.dados.length == 0) {
+  //     return false;
+  //   }
+  //
+  //   oRetorno.dados.each(function (oDocumento, iSeq) {
+  //
+  //     var aLinha = new Array();
+  //     aLinha[0]  = oDocumento.iCodigo;
+  //     aLinha[1]  = oDocumento.iAcordo;
+  //     aLinha[2]  = decodeURIComponent(oDocumento.sDescricao.replace(/\+/g,  " "));
+  //     aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDocumento.iCodigo+')">';
+  //     aLinha[4]  = '<input type="button" value="E" onclick="js_excluirDocumento('+oDocumento.iCodigo+')">';
+  //     oGridDocumento.addRow(aLinha);
+  //   });
+  //
+  //   oGridDocumento.renderRows();
+  //
+  // }
+  $('btnAnexar').observe("click",js_salvarDocumento);
+  // js_getDocumento();
+
+  // function js_excluirDocumento(iCodigoDocumento) {
+  //
+  //   if (!confirm('Confirma a Exclusão do Documento?')) {
+  //     return false;
+  //   }
+  //   var oParam             = new Object();
+  //   oParam.exec            = 'excluirDocumento';
+  //   oParam.acordo          = iAcordo;
+  //   oParam.codigoDocumento = iCodigoDocumento;
+  //   js_divCarregando('Aguarde... excluindo documento','msgbox');
+  //   var oAjax        = new Ajax.Request(
+  //     sUrlRpc,
+  //     { asynchronous:false,
+  //       parameters: 'json='+Object.toJSON(oParam),
+  //       method: 'post',
+  //       onComplete : js_retornoExcluiDocumento
+  //     });
+  //
+  // }
+  //
+  // function js_retornoExcluiDocumento(oAjax) {
+  //
+  //   js_removeObj("msgbox");
+  //   var oRetorno = eval('('+oAjax.responseText+")");
+  //   if (oRetorno.status == 2) {
+  //
+  //     alert("Não foi possivel excluir o documento:\n "+ oRetorno.message);
+  //   }
+  //
+  //   js_getDocumento();
+  //
+  // }
 
 </script>

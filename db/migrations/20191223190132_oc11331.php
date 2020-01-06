@@ -315,6 +315,52 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','obr1_licobrasmedicao003.php',1,1,'Exclusão','t');
                           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Medição da Obra%'),(select max(id_item) from db_itensmenu),3,4001223);
 
+                          -- TABELAS E ESTRUTURA licobrasanexo
+
+                          -- INSERE db_sysarquivo
+                          INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licobrasanexo','Cadastro de imagens da Medição','obr04','2020-01-03','Cadastro de imagens da Medição',0,'f','f','f','f');
+
+                          -- INSERE db_sysarqmod
+                          INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((select codmod from db_sysmodulo where nomemod like '%Obras%'), (select max(codarq) from db_sysarquivo));
+
+                          -- INSERE db_syscampo
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr04_sequencial'       ,'int8' ,'Cód. Sequencial' ,'', 'Cód. Sequencial' ,11 ,false, false, false, 1, 'int8', 'Cód. Sequencial');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr04_licobrasmedicao'  ,'int8' ,'Obras Medição'   ,'', 'Obras Medição'   ,11 ,false, false, false, 1, 'int8', 'Obras Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr04_codimagem'        ,'int8' ,'codigo da imagem','', 'codigo da imagem',11 ,false, false, false, 0, 'int8', 'codigo da imagem');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr04_legenda'          ,'Varchar' ,'Legenda'         ,'', 'Legenda'         ,40 ,false, false, false, 0, 'Varchar', 'Legenda');
+
+                          -- INSERE db_sysarqcamp
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr04_sequencial')     , 1, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr04_licobrasmedicao'), 2, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr04_codimagem')      , 3, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr04_legenda')        , 4, 0);
+
+                          -- DROP DA TABELA
+
+                          DROP TABLE IF EXISTS licobrasanexo CASCADE;
+
+                          -- Módulo: Obras
+                          CREATE TABLE licobrasanexo(
+                          obr04_sequencial                int8 NOT NULL ,
+                          obr04_licobrasmedicao           int8 NOT NULL ,
+                          obr04_codimagem                 int8 NOT NULL ,
+                          obr04_legenda                   varchar(40) NOT NULL);
+
+
+                          -- Criando  sequences
+
+                          CREATE SEQUENCE licobrasanexo_obr04_sequencial_seq
+                          INCREMENT 1
+                          MINVALUE 1
+                          MAXVALUE 9223372036854775807
+                          START 1
+                          CACHE 1;
+
+                          -- CHAVE ESTRANGEIRA
+                          ALTER TABLE licobrasanexo ADD PRIMARY KEY (obr04_sequencial);
+
+                          ALTER TABLE licobrasanexo ADD CONSTRAINT licobrasanexo_licobrasmedicao_fk
+                          FOREIGN KEY (obr04_licobrasmedicao) REFERENCES licobrasmedicao (obr03_sequencial);
 
                     COMMIT;
 SQL;
