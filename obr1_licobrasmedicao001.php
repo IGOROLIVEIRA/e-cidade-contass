@@ -22,9 +22,23 @@ if(isset($incluir)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+  <?php
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
+  ?>
 </head>
 <style>
+  #obr03_outrostiposmedicao{
+    width: 733px;
+    height: 50px;
+  }
 
+  #obr03_descmedicao{
+    width: 733px;
+    height: 50px;
+  }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-left: 16%; margin-top: 2%;">
