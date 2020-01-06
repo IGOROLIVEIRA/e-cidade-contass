@@ -306,6 +306,7 @@ if (!empty($chaves) && isset($chaves)){
 
                  </script>";
       }
+      echo"<script> parent.parent.window.location.href='lic4_editalabas.php?edital=$edital';</script>";
  	}else{
  		  //db_msgbox(@$erro_msg);
   		db_msgbox("Operação Cancelada!!Contate Suporte!!");

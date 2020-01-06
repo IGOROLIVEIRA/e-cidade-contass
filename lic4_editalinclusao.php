@@ -45,11 +45,17 @@ db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 
 if(isset($incluir)){
+
+//  Realizar busca pelos campos
+
+  $clliclicita->sql_query('', 'l20_codtipocom, l20_edital', '', 'l20_nroedital = '.$edital);
+
   $clliclancedital->l47_linkpub = $links;
   $clliclancedital->l47_origemrecurso = $origem_recurso;
   $clliclancedital->l47_descrecurso = $descricao_recurso;
   $clliclancedital->l47_liclicita = $l20_codigo;
   $clliclancedital->l47_dataenvio = $data_referencia;
+  $clliclancedital->l47_liclicita = $edital;
   $clliclancedital->incluir(null);
 
   if ($clliclancedital->erro_status=="0"){
@@ -101,6 +107,10 @@ if(isset($incluir)){
 </body>
 </html>
 <?
+
+if(isset($sqlerro)){
+  echo "<script>alert('".$clliclancedital->erro_sql."')</script>";
+}
 
 if(isset($incluir) && !$sqlerro){
   echo "<script>";
