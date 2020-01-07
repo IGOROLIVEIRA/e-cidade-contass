@@ -5717,28 +5717,42 @@ class cl_estrutura_sistema {
 
         $sql .= "WHERE ".$where;
 
-        $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
+        if (count($aAnousu) == 2) {
+            $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
+        } else {
+            $sql .= " AND c70_anousu = {$aAnousu[0]}";
+        }
         $sql .= " AND e60_instit = {$instit}";
         $sql .= " AND c61_instit = {$instit}";
         $sql .= " AND c53_tipo IN (20, 21)";
         $sql .= " AND (";
         $i = 1;
         foreach($aAnousu as $anousu) {
-            $dt_inicial = explode("a",$aDatas[$anousu]);
-            $dt_final   = explode("a",$aDatas[$anousu]);
-            $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
-            if($i < count($aAnousu)) {
-                $sql .= " OR ";
-            }
-            $i++;
-        }
-        $sql .= ")";
-        if($fonte!="") {
-            $sql .= " AND o58_codigo IN ({$fonte}) ";
-        }
-        $sql .= " {$group}";
 
-        return db_utils::getColectionByRecord(db_query($sql));
+            if (count($aAnousu) == 2) {
+
+              $dt_inicial = explode("a", $aDatas[$anousu]);
+              $dt_final = explode("a", $aDatas[$anousu]);
+              $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
+              if ($i < count($aAnousu)) {
+                  $sql .= " OR ";
+              }
+              $i++;
+
+            } else {
+
+              $sql .= "(c70_data BETWEEN '{$dtIni}' AND '{$dtFim}') ";
+
+            }
+          }
+
+          $sql .= ")";
+          if($fonte!="") {
+              $sql .= " AND o58_codigo IN ({$fonte}) ";
+          }
+          $sql .= " {$group}";
+
+          return db_utils::getColectionByRecord(db_query($sql));
 
     }
 
