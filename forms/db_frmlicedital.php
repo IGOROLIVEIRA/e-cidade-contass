@@ -39,6 +39,8 @@ $clrotulo->label("l20_numero");
 $clrotulo->label("l20_codtipocom");
 $db_opcao = 1;
 $db_botao = true;
+$natureza_objeto = 1;
+
 
 ?>
 <style type="text/css">
@@ -84,6 +86,7 @@ select#depart{
 	   <td>
 	    <?
 	       db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
+	       db_input('l20_codigo',10,$Il20_codigo,true,'hidden',3);
 	    ?>
 	   </td>
 	 </tr>
@@ -176,7 +179,7 @@ select#depart{
 	    	<b>Data de envio:</b>
 	  	</td>
 		<td>
-			<?= db_inputdata("data_referencia",'', '', '',true,'text',1);?>
+			<?= db_inputdata("data_referencia", '', '', '',true,'text',1);?>
 		</td>
   </tr>
 	   </table>
@@ -197,11 +200,12 @@ select#depart{
       js_pesquisa();
     }
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(edital, descricao, data, objeto, tipo){
+    function js_preenchepesquisa(codigo, edital, descricao, data, objeto, tipo){
 
       let dataFormatada = js_formatar(data, 'd');
+    	document.getElementById('l20_codigo').value = codigo;
     	document.getElementById('l20_edital').value = edital;
     	document.getElementById('descr_tribunal').value = descricao;
     	document.getElementById('data_referencia').value = dataFormatada;
@@ -225,8 +229,7 @@ select#depart{
     	    return false;
       }
 
-    	let datareferencia = document.getElementById('data_referencia').value;
-
+    	datareferencia = document.getElementById('data_referencia').value;
 
     }
     //
@@ -246,8 +249,11 @@ select#depart{
         }
       oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', idObra);
       oDadosComplementares.setObjetoRetorno($('idObra'));
+      oDadosComplementares.setLicitacao("<?=$l20_codigo;?>");
       oDadosComplementares.setCallBackFunction(() => {
-          js_lancaDadosCompCallBack();
+          if(idObra)
+              js_retorno_dadosComplementares();
+          else js_lancaDadosCompCallBack();
       });
       oDadosComplementares.show();
     }
@@ -336,12 +342,11 @@ select#depart{
 
     js_init();
     oDBGrid.clearAll(true);
-    // js_retorno_dadosComplementares();
 
     function js_retorno_dadosComplementares() {
         // js_removeObj("msgBox");
         //
-        // var oRetorno    = eval("("+oAjax.responseText+")");
+        var oRetorno    = eval("("+oAjax.responseText+")");
         // var aDocumentos = oRetorno.aDocumentos;
 
         // oDBGrid.clearAll(true);

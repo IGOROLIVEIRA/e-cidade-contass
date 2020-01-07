@@ -46,6 +46,8 @@ $sqlerro = false;
 
 //  Realizar busca pelos campos
   $l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
+  $l20_nroedital = 2;
+
   $sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
 	   UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto, 
 	   (CASE 
@@ -55,6 +57,7 @@ $sqlerro = false;
             THEN liclicita.l20_datacria
           END) as dl_Data_Referencia', '', 'l20_nroedital = '.$l20_nroedital);
   $rsLicita = $clliclicita->sql_record($sqlLicita);
+
   db_fieldsmemory($rsLicita, 0);
 
   if(isset($incluir)){
@@ -65,6 +68,14 @@ $sqlerro = false;
     $clliclancedital->l47_dataenvio = $data_formatada;
     $clliclancedital->l47_liclicita = $l20_codigo;
     $clliclancedital->incluir(null);
+
+    // Alterar o status da licitação para Aguardando Envio;
+    $clliclicita->l20_cadinicial = 2;
+    $clliclicita->alterar($l20_codigo);
+    if ($clliclicita->erro_status=="0"){
+      $erro_msg = $clliclicita->erro_msg;
+      $sqlerro=true;
+    }
 
   if ($clliclancedital->erro_status=="0"){
     $erro_msg = $clliclancedital->erro_msg;
@@ -123,10 +134,11 @@ if(isset($incluir) ) {
   if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
     echo "<script>";
     echo "parent.document.formaba.documentos.disabled=false;";
-    echo "console.log(parent.document.formaba.documentos);";
     echo "parent.mo_camada('documentos');";
     echo "</script>";
   }
+
+  echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
 }
 ?>
 
