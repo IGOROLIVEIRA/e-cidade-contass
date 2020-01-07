@@ -26,12 +26,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-/*
-*
- Obs.: O campo l20_nroedital não está cadastro no banco ainda. Depende da OC11211 - ABERLIC
-
-*/
 $oGet = db_utils::postMemory($_GET);
+
 $clliclicita->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("l20_nroedital");
@@ -39,203 +35,201 @@ $clrotulo->label("l20_numero");
 $clrotulo->label("l20_codtipocom");
 $db_opcao = 1;
 $db_botao = true;
-$natureza_objeto = 1;
-
 
 ?>
 <style type="text/css">
-.fieldsetinterno {
-	border:0px;
-	border-top:2px groove white;
-	margin-top:10px;
+  .fieldsetinterno {
+    border:0px;
+    border-top:2px groove white;
+    margin-top:10px;
 
-}
-fieldset table tr > td {
-	width: 180px;
-	white-space: nowrap
-}
-.label-textarea{
-	vertical-align: top;
-}
-#tr_inicio_depart table{
-	width:100%;
-}
-select#depart{
-	width:90%;
-}
+  }
+  fieldset table tr > td {
+    width: 180px;
+    white-space: nowrap
+  }
+  .label-textarea{
+    vertical-align: top;
+  }
+  #tr_inicio_depart table{
+    width:100%;
+  }
+  select#depart{
+    width:90%;
+  }
   #obras{
     width: 100%;
   }
 </style>
 <form name="form1" method="post" action="" onsubmit="">
-	<center>
+  <center>
 
-	<table align=center style="margin-top:25px;">
-	<tr><td>
+    <table align=center style="margin-top:25px;">
+      <tr><td>
 
-	<fieldset>
-	<legend><strong>Editais</strong></legend>
+          <fieldset>
+            <legend><strong>Editais</strong></legend>
 
-	<fieldset style="border:0px;">
+            <fieldset style="border:0px;">
 
-	<table border="0">
-	 <tr>
-	   <td nowrap title="<?=@$Tl20_nroedital?>">
-	    <b>Edital:</b>
-	   </td>
-	   <td>
-	    <?
-	       db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
-	       db_input('l20_codigo',10,$Il20_codigo,true,'hidden',3);
-	    ?>
-	   </td>
-	 </tr>
-	 <tr>
-	    <td nowrap>
-	    	<b>Processo:</b>
-	    </td>
-	    <td>
-	      <?
-	        db_input('l20_edital',10,$Il20_edital,true,'text',3,"onchange='';");
-	        db_input('l20_objeto',45,$Il20_objeto,true,'text',3,"");
-	      ?>
-	    </td>
-	</tr>
-	<tr>
-	    <td>
-	    	<b>Modalidade:</b>
-	    </td>
-	    <td>
-	        <?
-	        db_input('tipo_tribunal',10,'',true,'text',3,"onchange='';");
-	        db_input('descr_tribunal',45,'',true,'text',3,"");
-	        ?>
-	    </td>
-	</tr>
-	<tr>
-	  <td class="label-textarea" nowrap title="Links da publicação">
-	    <b>Links da publicação:</b>
-	  </td>
-	  <td>
-        <?
-        	db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
-        ?>
-      </td>
-	</tr>
-	<tr>
-	  <td nowrap title="Links da publicação">
-	    <b>Origem do recurso:</b>
-	  </td>
-	  <td>
-        <?
-	        $arr_tipo = array("0"=>"Selecione","1"=>"1- Próprio","2"=>"2- Estadual","3"=>"3- Federal","4"=>"4- Próprio e Estadual", "5"=> "5- Próprio e Federal", "9"=> "9- Outros");
-	        db_select("origem_recurso",$arr_tipo,true,1);
-	    ?>
-	  </td>
-	</tr>
-	<tr>
-	  <td class="label-textarea" nowrap title="Descrição do recurso">
-	    <b>Descrição do Recurso:</b>
-	  </td>
-	  <td>
-        <?
-        	db_textarea('descricao_recurso',4,56,'',true,'text',1,"", '', '', 150);
-        ?>
-      </td>
-	</tr>
-	<?php if($natureza_objeto): ?>
-		<tr>
-      <td colspan="3">
-      <fieldset>
-        <legend>Obras e Serviços</legend>
-        <table id="obras">
-         <tr>
-			    <td>
-            <?
-			        db_ancora('Dados Complementares:', 'js_exibeDadosCompl();', 1, '', '');
-            ?>
-          </td>
-          <td>
-            <?php
-              db_input('dados_complementares', 45,$Il20_edital,true,'text',3,"onchange='';");
-              db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
-            ?>
-            <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
-          </td>
-		    </tr>
-          <tr>
-            <td colspan="3">
-              <div id="cntDBGrid">
-              </div>
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-      </td>
-    </tr>
-	<?php endif; ?>
-	<tr>
-		<td nowrap title="Data de Envio">
-	    	<b>Data de envio:</b>
-	  	</td>
-		<td>
-			<?= db_inputdata("data_referencia", '', '', '',true,'text',1);?>
-		</td>
-  </tr>
-	   </table>
-	  </fieldset>
-	 </fieldset>
-	</td>
-   </tr>
-  </table>
- </center>
- <input name="<?=($db_opcao==1?'incluir':($db_opcao==2||$db_opcao==22?'alterar':'excluir'))?>" type="submit" id="db_opcao"
-           value="<?=($db_opcao==1?'Incluir':($db_opcao==2||$db_opcao==22?'Alterar':'Excluir'))?>"
-        <?=($db_botao==false?'disabled':'') ?>  onClick="js_salvarEdital();">
-    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+              <table border="0">
+                <tr>
+                  <td nowrap title="<?=@$Tl20_nroedital?>">
+                    <b>Edital:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
+                    db_input('l20_codigo',10,$Il20_codigo,true,'hidden',3);
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap>
+                    <b>Processo:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_input('l20_edital',10,$Il20_edital,true,'text',3,"onchange='';");
+                    db_input('l20_objeto',45,$Il20_objeto,true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Modalidade:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_input('tipo_tribunal',10,'',true,'text',3,"onchange='';");
+                    db_input('descr_tribunal',45,'',true,'text',3,"");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="label-textarea" nowrap title="Links da publicação">
+                    <b>Links da publicação:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap title="Links da publicação">
+                    <b>Origem do recurso:</b>
+                  </td>
+                  <td>
+                    <?
+                    $arr_tipo = array("0"=>"Selecione","1"=>"1- Próprio","2"=>"2- Estadual","3"=>"3- Federal","4"=>"4- Próprio e Estadual", "5"=> "5- Próprio e Federal", "9"=> "9- Outros");
+                    db_select("origem_recurso",$arr_tipo,true,1);
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="label-textarea" nowrap title="Descrição do recurso">
+                    <b>Descrição do Recurso:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_textarea('descricao_recurso',4,56,'',true,'text',1,"", '', '', 150);
+                    ?>
+                  </td>
+                </tr>
+                <?php if($natureza_objeto): ?>
+                  <tr>
+                    <td colspan="3">
+                      <fieldset>
+                        <legend>Obras e Serviços</legend>
+                        <table id="obras">
+                          <tr>
+                            <td>
+                              <?
+                              db_ancora('Dados Complementares:', 'js_exibeDadosCompl();', 1, '', '');
+                              ?>
+                            </td>
+                            <td>
+                              <?php
+                              db_input('dados_complementares', 45,$Il20_edital,true,'text',3,"onchange='';");
+                              db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
+                              ?>
+                              <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="3">
+                              <div id="cntDBGrid">
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </fieldset>
+                    </td>
+                  </tr>
+                <?php endif; ?>
+                <tr>
+                  <td nowrap title="Data de Envio">
+                    <b>Data de envio:</b>
+                  </td>
+                  <td>
+                    <?= db_inputdata("data_referencia", '', '', '',true,'text',1);?>
+                  </td>
+                </tr>
+              </table>
+            </fieldset>
+          </fieldset>
+        </td>
+      </tr>
+    </table>
+  </center>
+  <input name="<?=($db_opcao==1?'incluir':($db_opcao==2||$db_opcao==22?'alterar':'excluir'))?>" type="submit" id="db_opcao"
+         value="<?=($db_opcao==1?'Incluir':($db_opcao==2||$db_opcao==22?'Alterar':'Excluir'))?>"
+    <?=($db_botao==false?'disabled':'') ?>  onClick="js_salvarEdital();">
+  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 
 <script>
     if(!document.getElementById('l20_edital').value){
-      js_pesquisa();
+        js_pesquisa();
     }
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&aguardando_envio=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
     }
     function js_preenchepesquisa(codigo, edital, descricao, data, objeto, tipo){
 
-      let dataFormatada = js_formatar(data, 'd');
-    	document.getElementById('l20_codigo').value = codigo;
-    	document.getElementById('l20_edital').value = edital;
-    	document.getElementById('descr_tribunal').value = descricao;
-    	document.getElementById('data_referencia').value = dataFormatada;
-    	document.getElementById('l20_objeto').value = objeto;
-    	document.getElementById('tipo_tribunal').value = tipo;
+        let dataFormatada = js_formatar(data, 'd');
+        document.getElementById('l20_codigo').value = codigo;
+        document.getElementById('l20_edital').value = edital;
+        document.getElementById('descr_tribunal').value = descricao;
+        document.getElementById('data_referencia').value = dataFormatada;
+        document.getElementById('l20_objeto').value = objeto;
+        document.getElementById('tipo_tribunal').value = tipo;
 
-    	db_iframe_liclicita.hide();
-	}
+        db_iframe_liclicita.hide();
+    }
 
     function js_salvarEdital(){
-    	let descricao = document.getElementById('descricao_recurso').value;
-    	let origem_recurso = document.getElementById('origem_recurso').value;
+        let descricao = document.getElementById('descricao_recurso').value;
+        let origem_recurso = document.getElementById('origem_recurso').value;
 
-    	if(origem_recurso == 9 && !descricao){
-    		alert('Campo descrição da origem do recurso é obrigatório!');
-    		return false;
-    	}
+        if(origem_recurso == 9 && !descricao){
+            alert('Campo descrição da origem do recurso é obrigatório!');
+            return false;
+        }
 
-    	if(origem_recurso == 0){
-    	    alert('Campo Origem do Recurso é obrigatório!');
-    	    return false;
-      }
+        if(origem_recurso == 0){
+            alert('Campo Origem do Recurso é obrigatório!');
+            return false;
+        }
 
-    	datareferencia = document.getElementById('data_referencia').value;
+        datareferencia = document.getElementById('data_referencia').value;
 
     }
     //
     // function limpaCampos(){
     // 	document.getElementById('l20_edital').value = '';
-    	// document.getElementById('l20_numero').value = '';
+    // document.getElementById('l20_numero').value = '';
     // 	document.getElementById('l20_nroedital').value = '';
     // 	document.getElementById('descricao_recurso').value = '';
     // 	document.getElementById('data_referencia').value = '';
@@ -247,15 +241,15 @@ select#depart{
         if ($F('idObra') != ""){
             idObra = $F('idObra');
         }
-      oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', idObra);
-      oDadosComplementares.setObjetoRetorno($('idObra'));
-      oDadosComplementares.setLicitacao("<?=$l20_codigo;?>");
-      oDadosComplementares.setCallBackFunction(() => {
-          if(idObra)
-              js_retorno_dadosComplementares();
-          else js_lancaDadosCompCallBack();
-      });
-      oDadosComplementares.show();
+        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', idObra);
+        oDadosComplementares.setObjetoRetorno($('idObra'));
+        oDadosComplementares.setLicitacao("<?=$l20_codigo;?>");
+        oDadosComplementares.setCallBackFunction(() => {
+            if(idObra)
+                js_retorno_dadosComplementares();
+            else js_lancaDadosCompCallBack();
+        });
+        oDadosComplementares.show();
     }
 
     function js_lancaDadosCompCallBack(){
@@ -276,7 +270,7 @@ select#depart{
                 js_messageBox(strMessageUsuario,'');
                 return false;
             } else {
-              js_PreencheObra(oRetorno.dadoscomplementares);
+                js_PreencheObra(oRetorno.dadoscomplementares);
             }
         }
     }
@@ -323,18 +317,18 @@ select#depart{
         let dadoscomplementares = $('dados_complementares').value;
 
         if(dadoscomplementares != ''){
-          let linhas = oDBGrid.aRows.length;
+            let linhas = oDBGrid.aRows.length;
 
-          let aLinha = new Array();
-          aLinha[0] = linhas+1;
-          aLinha[1] = dadoscomplementares;
-          aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
-            "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
+            let aLinha = new Array();
+            aLinha[0] = linhas+1;
+            aLinha[1] = dadoscomplementares;
+            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
 
-          oDBGrid.addRow(aLinha);
-          oDBGrid.renderRows();
-          $('dados_complementares').value = '';
-          $('idObra').value = '';
+            oDBGrid.addRow(aLinha);
+            oDBGrid.renderRows();
+            $('dados_complementares').value = '';
+            $('idObra').value = '';
         }else{
             alert('Informe algum endereço');
         }
@@ -354,18 +348,18 @@ select#depart{
         // if ( aDocumentos.length > 0 ) {
         //     oDBGrid.setStatus("");
 
-            // aDocumentos.each(function (oDoc) {
-            //     var aLinha = new Array();
-            //     aLinha[0] = '1';
-            //     aLinha[1] = 'Teste';
-            //
-            //     aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'1'+");'>"+
-            //             "<input type='button' value='E' onclick='js_excluiDados("+aLinha+")'>";
-            //
-            //
-            //     oDBGrid.addRow(aLinha);
-            //
-            // oDBGrid.renderRows();
+        // aDocumentos.each(function (oDoc) {
+        //     var aLinha = new Array();
+        //     aLinha[0] = '1';
+        //     aLinha[1] = 'Teste';
+        //
+        //     aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'1'+");'>"+
+        //             "<input type='button' value='E' onclick='js_excluiDados("+aLinha+")'>";
+        //
+        //
+        //     oDBGrid.addRow(aLinha);
+        //
+        // oDBGrid.renderRows();
 
         // } else {
         //     oDBGrid.setStatus("Nenhum Registro Encontrado");
@@ -374,10 +368,10 @@ select#depart{
     }
 
     function js_lancaDadosAlt(valor){
-      let valorTratado = valor.split(',');
-      $('idObra').value = valorTratado[0];
+        let valorTratado = valor.split(',');
+        $('idObra').value = valorTratado[0];
 
-      js_exibeDadosCompl();
+        js_exibeDadosCompl();
     }
 
     function js_excluiDados(valor){
@@ -402,20 +396,20 @@ select#depart{
     }
 
     function js_retornoExclusao(oAjax){
-         let codigoRequisitado = JSON.parse(oAjax.request.parameters.json);
-         let resposta = eval("("+oAjax.responseText+")");
-         alert(resposta.message);
+        let codigoRequisitado = JSON.parse(oAjax.request.parameters.json);
+        let resposta = eval("("+oAjax.responseText+")");
+        alert(resposta.message);
 
-         for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
-             let conteudo = oDBGrid.aRows[cont].aCells[1].content.split(',');
-             if(conteudo[0] == codigoRequisitado.codObra){
-                 let valores = [];
-                 valores.push(cont);
-                 oDBGrid.removeRow(valores);
-             }
-         }
+        for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
+            let conteudo = oDBGrid.aRows[cont].aCells[1].content.split(',');
+            if(conteudo[0] == codigoRequisitado.codObra){
+                let valores = [];
+                valores.push(cont);
+                oDBGrid.removeRow(valores);
+            }
+        }
 
-         oDBGrid.renderRows();
+        oDBGrid.renderRows();
 
     }
 

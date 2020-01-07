@@ -589,16 +589,16 @@ switch ($oParam->exec) {
     $oEdital = new EditalDocumento;
     try {
 //        $oEdital->adicionarDocumento($oParam->tipo, $oParam->arquivo);
-        $oEdital->setCodigo('');
-        $oEdital->setArquivo($oParam->arquivo);
-        $oEdital->setTipo($oParam->tipo);
-        $oEdital->setCodigoEdital($oParam->edital);
+      $oEdital->setCodigo('');
+      $oEdital->setArquivo($oParam->arquivo);
+      $oEdital->setTipo($oParam->tipo);
+      $oEdital->setCodigoEdital($oParam->edital);
 
-        $aNomeArquivo = explode("/", $oParam->arquivo);
-        $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
-        $oEdital->setNomeArquivo($sNomeArquivo);
+      $aNomeArquivo = explode("/", $oParam->arquivo);
+      $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
+      $oEdital->setNomeArquivo($sNomeArquivo);
 
-        $oEdital->salvar();
+      $oEdital->salvar();
 
     } catch (Exception $oErro) {
 
@@ -609,6 +609,7 @@ switch ($oParam->exec) {
 
   case "getDocumento":
 
+    $oEdital          = new EditalDocumento($oParam->edital);
 
     if (isset($oParam->edital)) {
       $iCodigoEdital = $oParam->edital;

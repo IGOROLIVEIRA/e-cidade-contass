@@ -1,4 +1,4 @@
-  <?php
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -45,10 +45,8 @@ db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 
 //  Realizar busca pelos campos
-  $l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
-  $l20_nroedital = 2;
-
-  $sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+$l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
+$sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
 	   UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto, 
 	   (CASE 
           WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
@@ -56,26 +54,28 @@ $sqlerro = false;
           WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
             THEN liclicita.l20_datacria
           END) as dl_Data_Referencia', '', 'l20_nroedital = '.$l20_nroedital);
-  $rsLicita = $clliclicita->sql_record($sqlLicita);
+$rsLicita = $clliclicita->sql_record($sqlLicita);
 
-  db_fieldsmemory($rsLicita, 0);
+db_fieldsmemory($rsLicita, 0);
 
-  if(isset($incluir)){
-    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
-    $clliclancedital->l47_linkpub = $links;
-    $clliclancedital->l47_origemrecurso = $origem_recurso;
-    $clliclancedital->l47_descrecurso = $descricao_recurso;
-    $clliclancedital->l47_dataenvio = $data_formatada;
-    $clliclancedital->l47_liclicita = $l20_codigo;
-    $clliclancedital->incluir(null);
+if(isset($incluir)){
+  $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+  $clliclancedital->l47_linkpub = $links;
+  $clliclancedital->l47_origemrecurso = $origem_recurso;
+  $clliclancedital->l47_descrecurso = $descricao_recurso;
+  $clliclancedital->l47_dataenvio = $data_formatada;
+  $clliclancedital->l47_liclicita = $l20_codigo;
+  $clliclancedital->incluir(null);
 
-    // Alterar o status da licitação para Aguardando Envio;
-    $clliclicita->l20_cadinicial = 2;
-    $clliclicita->alterar($l20_codigo);
-    if ($clliclicita->erro_status=="0"){
-      $erro_msg = $clliclicita->erro_msg;
-      $sqlerro=true;
-    }
+  // Alterar o status da licitação para Aguardando Envio;
+  $clliclicita->l20_cadinicial = 2;
+  $clliclicita->l20_exercicioedital = intval(db_getsession('DB_anousu'));
+  $clliclicita->alterar($l20_codigo);
+
+  if ($clliclicita->erro_status=="0"){
+    $erro_msg = $clliclicita->erro_msg;
+    $sqlerro=true;
+  }
 
   if ($clliclancedital->erro_status=="0"){
     $erro_msg = $clliclancedital->erro_msg;
@@ -87,22 +87,22 @@ $sqlerro = false;
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.maskedinput.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/classes/dbViewCadDadosComplementares.classe.js"></script>
 
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   #msgBoardEnderecodadosCompl_title{
@@ -113,11 +113,11 @@ $sqlerro = false;
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
-    <center>
-    <?
-    include("forms/db_frmlicedital.php");
-    ?>
-    </center>
+      <center>
+        <?
+        include("forms/db_frmlicedital.php");
+        ?>
+      </center>
     </td>
   </tr>
 </table>
@@ -126,20 +126,21 @@ $sqlerro = false;
 </body>
 </html>
 <?
+
 if(isset($incluir) ) {
-    echo "<script>";
-    echo "alert('" . $clliclancedital->erro_sql . "')";
-    echo "</script>";
+  echo "<script>";
+  echo "alert('" . $clliclancedital->erro_sql . "')";
+  echo "</script>";
 
   if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
     echo "<script>";
     echo "parent.document.formaba.documentos.disabled=false;";
     echo "parent.mo_camada('documentos');";
+    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$l20_codigo'";
     echo "</script>";
   }
 
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
 }
 ?>
-
 

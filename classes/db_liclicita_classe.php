@@ -332,13 +332,13 @@ class cl_liclicita
             $this->l20_descrinterporrecurso = ($this->l20_descrinterporrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_descrinterporrecurso"] : $this->l20_descrinterporrecurso);
             $this->l20_veicdivulgacao = ($this->l20_veicdivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"] : $this->l20_veicdivulgacao);
 
-            $this->l20_clausulapro = ($this->l20_clausulapro == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_clausulapro"] : $this->l20_clausulapro);
-            $this->l20_codepartamento = ($this->l20_codepartamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"] : $this->l20_codepartamento);
-            $this->l20_diames = ($this->l20_diames == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_diames"] : $this->l20_diames);
-            $this->l20_execucaoentrega = ($this->l20_execucaoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_execucaoentrega"] : $this->l20_execucaoentrega);
-            $this->l20_nroedital = ($this->l20_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nroedital"] : $this->l20_nroedital);
-            $this->l20_cadinicial = ($this->l20_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"] : $this->l20_cadinicial);
-            $this->l20_exercicioedital = ($this->l20_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"] : $this->l20_exercicioedital);
+      $this->l20_clausulapro = ($this->l20_clausulapro == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_clausulapro"] : $this->l20_clausulapro);
+      $this->l20_codepartamento = ($this->l20_codepartamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"] : $this->l20_codepartamento);
+      $this->l20_diames = ($this->l20_diames == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_diames"] : $this->l20_diames);
+      $this->l20_execucaoentrega = ($this->l20_execucaoentrega == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_execucaoentrega"] : $this->l20_execucaoentrega);
+      $this->l20_nroedital = ($this->l20_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_nroedital"] : $this->l20_nroedital);
+      $this->l20_cadinicial = ($this->l20_cadinicial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"] : $this->l20_cadinicial);
+      $this->l20_exercicioedital = ($this->l20_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"] : $this->l20_exercicioedital);
 
         } else {
             $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
@@ -620,91 +620,91 @@ class cl_liclicita
                         return false;
                     }
 
-                }
-                if ($this->l20_tipojulg == null) {
-                    $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
-                    $this->erro_campo = "l20_tipojulg";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-        if ($this->l20_liclocal == null) {
-            $this->erro_sql = " Campo Código do Local da Licitação não Informado.";
-            $this->erro_campo = "l20_liclocal";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_procadmin == null) {
-            $this->l20_procadmin = "";
-        }
-        if ($this->l20_correto == null) {
-            $this->erro_sql = " Campo Correto não Informado.";
-            $this->erro_campo = "l20_correto";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_instit == null) {
-            $this->erro_sql = " Campo Instituição não Informado.";
-            $this->erro_campo = "l20_instit";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_licsituacao == null) {
-            $this->erro_sql = " Campo Situação da Licitação não Informado.";
-            $this->erro_campo = "l20_licsituacao";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_edital == null) {
-            $this->erro_sql = " Campo Licitacao não Informado.";
-            $this->erro_campo = "l20_edital";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_nroedital == null) {
-            $this->erro_sql = " Campo Numero Edital não Informado.";
-            $this->erro_campo = "l20_nroedital";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_anousu == null) {
-            $this->erro_sql = " Campo Exercício não Informado.";
-            $this->erro_campo = "l20_anousu";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l20_usaregistropreco == null) {
-            $this->erro_sql = " Campo Registro Preço não Informado.";
-            $this->erro_campo = "l20_usaregistropreco";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
+    }
+    if ($this->l20_tipojulg == null) {
+      $this->erro_sql = " Campo Tipo de Julgamento não Informado.";
+      $this->erro_campo = "l20_tipojulg";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_liclocal == null) {
+      $this->erro_sql = " Campo Código do Local da Licitação não Informado.";
+      $this->erro_campo = "l20_liclocal";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_procadmin == null) {
+      $this->l20_procadmin = "";
+    }
+    if ($this->l20_correto == null) {
+      $this->erro_sql = " Campo Correto não Informado.";
+      $this->erro_campo = "l20_correto";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_instit == null) {
+      $this->erro_sql = " Campo Instituição não Informado.";
+      $this->erro_campo = "l20_instit";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_licsituacao == null) {
+      $this->erro_sql = " Campo Situação da Licitação não Informado.";
+      $this->erro_campo = "l20_licsituacao";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_edital == null) {
+      $this->erro_sql = " Campo Licitacao não Informado.";
+      $this->erro_campo = "l20_edital";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_nroedital == null) {
+      $this->erro_sql = " Campo Numero Edital não Informado.";
+      $this->erro_campo = "l20_nroedital";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_anousu == null) {
+      $this->erro_sql = " Campo Exercício não Informado.";
+      $this->erro_campo = "l20_anousu";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->l20_usaregistropreco == null) {
+      $this->erro_sql = " Campo Registro Preço não Informado.";
+      $this->erro_campo = "l20_usaregistropreco";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
         if ($tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             if ($this->l20_equipepregao == null) {
@@ -1257,22 +1257,22 @@ class cl_liclicita
                     }
                 }
 
-    if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
-      $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao '";
-      $virgula = ",";
-      if (trim($this->l20_dtpubratificacao) == null) {
-        $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Tipo de Processo, \\n\\n Data Publicação Termo Ratificação, Veiculo de Divulgação,Justificativa,Razão";
-        $this->erro_campo = "l20_dtpubratificacao";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    } else {
-      $sql .= $virgula . " l20_dtpubratificacao = null";
-      $virgula = ",";
-    }
+                if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
+                    $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao '";
+                    $virgula = ",";
+                    if (trim($this->l20_dtpubratificacao) == null) {
+                        $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Tipo de Processo, \\n\\n Data Publicação Termo Ratificação, Veiculo de Divulgação,Justificativa,Razão";
+                        $this->erro_campo = "l20_dtpubratificacao";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }
+                } else {
+                    $sql .= $virgula . " l20_dtpubratificacao = null";
+                    $virgula = ",";
+                }
 
     if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_dtlimitecredenciamento = '$this->l20_dtlimitecredenciamento '";
@@ -1400,7 +1400,7 @@ class cl_liclicita
         }
 
 
-    if (trim($this->l20_horacria != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]))) {
+        if (trim($this->l20_horacria != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]))) {
 //            if($this->l20_codtipocom == && $this->l20_datacria > $this->l20_dataaber){
 //                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
 //                $this->erro_campo = "l20_datacria";
@@ -1410,28 +1410,28 @@ class cl_liclicita
 //                $this->erro_status = "0";
 //                return false;
 //            }
-      $sql .= $virgula . " l20_horacria = '$this->l20_horacria' ";
-      $virgula = ",";
-      if ($this->l20_horacria == null) {
-        $this->erro_sql = " Campo Hora Criação nao Informado.";
-        $this->erro_campo = "l20_horacria";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+            $sql .= $virgula . " l20_horacria = '$this->l20_horacria' ";
+            $virgula = ",";
+            if ($this->l20_horacria == null) {
+                $this->erro_sql = " Campo Hora Criação nao Informado.";
+                $this->erro_campo = "l20_horacria";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
 
-    if ($this->l20_horaaber == null) {
+        if ($this->l20_horaaber == null) {
 
-      $this->l20_horaaber = '$this->l20_horacria';
-      $sql .= $virgula . " l20_horaaber = '$this->l20_horacria'";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_horaaber = '$this->l20_horaaber'";
-      $virgula = ",";
-    }
+            $this->l20_horaaber = '$this->l20_horacria';
+            $sql .= $virgula . " l20_horaaber = '$this->l20_horacria'";
+            $virgula = ",";
+        } else {
+            $sql .= $virgula . " l20_horaaber = '$this->l20_horaaber'";
+            $virgula = ",";
+        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
             $sql .= $virgula . " l20_dtpublic = null ";
@@ -1694,70 +1694,70 @@ class cl_liclicita
             }
         }
 
-        if (trim($this->l20_edital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_edital"]))) {
-            $sql .= $virgula . " l20_edital = $this->l20_edital ";
-            $virgula = ",";
-            if (trim($this->l20_edital) == null) {
-                $this->erro_sql = " Campo Licitacao nao Informado.";
-                $this->erro_campo = "l20_edital";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        
-        if (trim($this->l20_nroedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nroedital"]))) {
-            $sql .= $virgula . " l20_nroedital = $this->l20_nroedital ";
-            $virgula = ",";
-            if (trim($this->l20_nroedital) == null) {
-                $this->erro_sql = " Campo Número Edital nao Informado.";
-                $this->erro_campo = "l20_nroedital";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        
-        if (trim($this->l20_cadinicial != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"]))) {
-            $sql .= $virgula . " l20_cadinicial = $this->l20_cadinicial ";
-            $virgula = ",";
-            if (trim($this->l20_cadinicial) == null) {
-                $this->erro_sql = " Campo Número Edital nao Informado.";
-                $this->erro_campo = "l20_cadinicial";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+    if (trim($this->l20_edital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_edital"]))) {
+      $sql .= $virgula . " l20_edital = $this->l20_edital ";
+      $virgula = ",";
+      if (trim($this->l20_edital) == null) {
+        $this->erro_sql = " Campo Licitacao nao Informado.";
+        $this->erro_campo = "l20_edital";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
 
-        if (trim($this->l20_exercicioedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"]))) {
-            $sql .= $virgula . " l20_exercicioedital = '$this->l20_exercicioedital' ";
-            $virgula = ",";
-        } else {
-            $sql .= $virgula . " l20_exercicioedital = ''";
-            $virgula = ",";
-        }
+    if (trim($this->l20_nroedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nroedital"]))) {
+      $sql .= $virgula . " l20_nroedital = $this->l20_nroedital ";
+      $virgula = ",";
+      if (trim($this->l20_nroedital) == null) {
+        $this->erro_sql = " Campo Número Edital nao Informado.";
+        $this->erro_campo = "l20_nroedital";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->l20_cadinicial != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_cadinicial"]))) {
+      $sql .= $virgula . " l20_cadinicial = $this->l20_cadinicial ";
+      $virgula = ",";
+      if (trim($this->l20_cadinicial) == null) {
+        $this->erro_sql = " Campo Número Edital nao Informado.";
+        $this->erro_campo = "l20_cadinicial";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->l20_exercicioedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_exercicioedital"]))) {
+      $sql .= $virgula . " l20_exercicioedital = '$this->l20_exercicioedital' ";
+      $virgula = ",";
+    } else {
+      $sql .= $virgula . " l20_exercicioedital = ''";
+      $virgula = ",";
+    }
 
 
-        if (trim($this->l20_anousu != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_anousu"]))) {
-            $sql .= $virgula . " l20_anousu = $this->l20_anousu ";
-            $virgula = ",";
-            if (trim($this->l20_anousu) == null) {
-                $this->erro_sql = " Campo Exercício nao Informado.";
-                $this->erro_campo = "l20_anousu";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+    if (trim($this->l20_anousu != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_anousu"]))) {
+      $sql .= $virgula . " l20_anousu = $this->l20_anousu ";
+      $virgula = ",";
+      if (trim($this->l20_anousu) == null) {
+        $this->erro_sql = " Campo Exercício nao Informado.";
+        $this->erro_campo = "l20_anousu";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
 
         if (trim($this->l20_usaregistropreco != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_usaregistropreco"]))) {
             $sql .= $virgula . " l20_usaregistropreco = '$this->l20_usaregistropreco' ";
@@ -3417,6 +3417,6 @@ class cl_liclicita
   }
 
 
-}
+        }
 
 ?>
