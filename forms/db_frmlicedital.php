@@ -194,11 +194,12 @@ $db_botao = true;
         js_pesquisa();
     }
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&aguardando_envio=1&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&aguardando_envio=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(codigo, edital, descricao, data, objeto, tipo){
+    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo){
 
         let dataFormatada = js_formatar(data, 'd');
+        document.getElementById('l20_nroedital').value = nroedital;
         document.getElementById('l20_codigo').value = codigo;
         document.getElementById('l20_edital').value = edital;
         document.getElementById('descr_tribunal').value = descricao;
