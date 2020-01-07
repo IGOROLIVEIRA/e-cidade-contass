@@ -340,7 +340,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         WHERE l20_instit = 1
                             AND (pc80_criterioadjudicacao = 1
-                                 OR pc80_criterioadjudicacao = 2) AND EXTRACT (YEAR from l20_dataaber) >= 2018
+                                 OR pc80_criterioadjudicacao = 2) AND EXTRACT (YEAR from l20_dataaber) >= 2020
                         ORDER BY l20_codigo
           ";
                 }

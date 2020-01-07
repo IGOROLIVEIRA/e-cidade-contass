@@ -123,6 +123,7 @@ if(isset($incluir) ) {
   if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
     echo "<script>";
     echo "parent.document.formaba.documentos.disabled=false;";
+    echo "console.log(parent.document.formaba.documentos);";
     echo "parent.mo_camada('documentos');";
     echo "</script>";
   }
