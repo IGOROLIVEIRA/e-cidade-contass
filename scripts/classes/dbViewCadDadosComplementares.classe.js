@@ -1,8 +1,6 @@
 DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   var me                = this;
 
-  var iCodigoComplemento= '';
-
   this.iCodigoPais            = '';
   this.iCodigoEstado          = '';
   this.iCodigoMunicipio       = '';
@@ -46,6 +44,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.iMinutoLongitude       = '';
   this.iSegundoLongitude      = '';
   this.iBdi                   = '';
+  this.iLicitacao             = '';
   this.callBackFunction = function () {
 
   }
@@ -310,6 +309,24 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.getObjetoRetorno = function() {
 
     return this.objRetorno;
+  }
+  /**
+   *Seta o objeto que vai receber o numero da Licitação
+   *@param {integer} iLicitacao
+   *return void
+   */
+
+  this.setLicitacao = function(iLicitacao) {
+    this.iLicitacao = iLicitacao;
+  }
+
+  /**
+   *Retorna o número da licitação
+   *@return integer
+   */
+  this.getLicitacao = function() {
+
+    return this.iLicitacao;
   }
   /**
    *Seta se o campo condominio vai estar disponivel na tela
@@ -3668,6 +3685,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   oEndereco.grupoBemPub              = me.getGrupoBemPublico();
   oEndereco.subGrupoBemPub           = me.getSubGrupoBemPublico();
   oEndereco.bdi                      = me.getBdi();
+  oEndereco.licitacao                = me.getLicitacao();
 
 //
   oDados = new Object();

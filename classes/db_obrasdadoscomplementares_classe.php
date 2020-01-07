@@ -68,7 +68,6 @@ class cl_obrasdadoscomplementares {
    var $db150_bdi = 0;
    var $db150_liclicita = 0;
 
-   // var $db150_codigoibge = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                   db150_sequencial = int4 = Código do Endereço
@@ -217,6 +216,22 @@ class cl_obrasdadoscomplementares {
      if($this->db150_descratividadeservicoesp == null){
        $this->db150_descratividadeservicoesp = '';
      }
+     if($this->db150_liclicita == null || $this->db150_liclicita == ""){
+       $this->erro_sql = " Campo db150_liclicita nao declarado.";
+       $this->erro_banco = "Campo db150_liclicita nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->db150_bairro == null || $this->db150_liclicita == ""){
+       $this->erro_sql = " Campo db150_bairro nao declarado.";
+       $this->erro_banco = "Campo db150_bairro nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
 
      $sql = "insert into obrasdadoscomplementares(
                                        db150_sequencial
@@ -255,12 +270,12 @@ class cl_obrasdadoscomplementares {
                                ,'$this->db150_logradouro'
                                ,$this->db150_bairro
                                ,$this->db150_numero
-                               ,$this->db150_grauslatitude
-                               ,$this->db150_minutolatitude
-                               ,$this->db150_segundolatitude
-                               ,$this->db150_grauslongitude
-                               ,$this->db150_minutolongitude
-                               ,$this->db150_segundolongitude
+                               ,'$this->db150_grauslatitude'
+                               ,'$this->db150_minutolatitude'
+                               ,'$this->db150_segundolatitude'
+                               ,'$this->db150_grauslongitude'
+                               ,'$this->db150_minutolongitude'
+                               ,'$this->db150_segundolongitude'
                                ,$this->db150_classeobjeto
                                ,$this->db150_atividadeobra
                                ,$this->db150_atividadeservico
@@ -272,6 +287,7 @@ class cl_obrasdadoscomplementares {
                                ,$this->db150_bdi
                                ,$this->db150_liclicita
                       )";
+     print_r($sql);
      $result = db_query($sql);
 
      if($result==false){
@@ -331,27 +347,27 @@ class cl_obrasdadoscomplementares {
        }
      }
      if(trim($this->db150_pais)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_pais"])){
-       $sql  .= $virgula." db150_pais = '$this->db150_pais' ";
+       $sql  .= $virgula." db150_pais = $this->db150_pais ";
        $virgula = ",";
      }
      if(trim($this->db150_estado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_estado"])){
-       $sql  .= $virgula." db150_estado = '$this->db150_estado' ";
+       $sql  .= $virgula." db150_estado = $this->db150_estado ";
        $virgula = ",";
      }
      if(trim($this->db150_municipio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_municipio"])){
-       $sql  .= $virgula." db150_municipio = '$this->db150_municipio' ";
+       $sql  .= $virgula." db150_municipio = $this->db150_municipio ";
        $virgula = ",";
      }
      if(trim($this->db150_distrito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_distrito"])){
        $sql  .= $virgula." db150_distrito = '$this->db150_distrito' ";
        $virgula = ",";
      }
-     if(trim($this->bairro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["bairro"])){
-       $sql  .= $virgula." bairro = '$this->bairro' ";
+     if(trim($this->db150_bairro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])){
+       $sql  .= $virgula." db150_bairro = $this->db150_bairro ";
        $virgula = ",";
      }
      if(trim($this->db150_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])){
-       $sql  .= $virgula." db150_numero = '$this->db150_numero' ";
+       $sql  .= $virgula." db150_numero = $this->db150_numero ";
        $virgula = ",";
      }
      if(trim($this->db150_logradouro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])){
@@ -383,32 +399,31 @@ class cl_obrasdadoscomplementares {
        $virgula = ",";
      }
      if(trim($this->db150_classeobjeto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_classeobjeto"])){
-       $sql  .= $virgula." $this->db150_classeobjeto = '$this->db150_classeobjeto' ";
+       $sql  .= $virgula." db150_classeobjeto = $this->db150_classeobjeto ";
        $virgula = ",";
      }
      if(trim($this->db150_atividadeobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeobra"])){
-       $sql  .= $virgula." db150_atividadeobra = '$this->db150_atividadeobra' ";
+       $sql  .= $virgula." db150_atividadeobra = $this->db150_atividadeobra ";
        $virgula = ",";
      }
      if(trim($this->db150_atividadeservico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservico"])){
-       $sql  .= $virgula." db150_atividadeservico = '$this->db150_atividadeservico' ";
+       $sql  .= $virgula." db150_atividadeservico = $this->db150_atividadeservico ";
        $virgula = ",";
      }
      if(trim($this->db150_atividadeservicoesp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_atividadeservicoesp"])){
-       $sql  .= $virgula." db150_atividadeservicoesp = '$this->db150_atividadeservicoesp' ";
+       $sql  .= $virgula." db150_atividadeservicoesp = $this->db150_atividadeservicoesp ";
        $virgula = ",";
      }
      if(trim($this->db150_grupobempublico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_grupobempublico"])){
-       $sql  .= $virgula." db150_grupobempublico = '$this->db150_grupobempublico' ";
+       $sql  .= $virgula." db150_grupobempublico = $this->db150_grupobempublico ";
        $virgula = ",";
      }
      if(trim($this->db150_subgrupobempublico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"])){
-       $sql  .= $virgula." $this->db150_subgrupobempublico = '$this->db150_subgrupobempublico' ";
+       $sql  .= $virgula." db150_subgrupobempublico = $this->db150_subgrupobempublico ";
        $virgula = ",";
      }
      if(trim($this->db150_bdi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])){
-       $sql  .= $virgula." bdi = '$this->db150_bdi' ";
-       $virgula = ",";
+       $sql  .= $virgula." db150_bdi = $this->db150_bdi ";
      }
      $sql .= " where ";
      if($db150_sequencial!=null){
