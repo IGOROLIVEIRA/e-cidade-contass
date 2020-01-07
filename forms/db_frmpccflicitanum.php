@@ -37,7 +37,7 @@ $clrotulo->label("l47_numero");
 <center>
 <fieldset>
   <legend align="center">
-    <b>Configuração de Processo Licitatório</b>
+    <b>Configuração de Numeração</b>
   </legend>
 <table border="0">
   <br>
