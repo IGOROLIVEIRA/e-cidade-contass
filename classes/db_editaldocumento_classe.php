@@ -450,6 +450,7 @@ class cl_editaldocumento {
       $sql .= $campos;
     }
     $sql .= " from editaldocumentos ";
+    $sql .= " JOIN liclancedital on liclancedital.l47_sequencial = editaldocumentos.l48_edital ";
     $sql2 = "";
     if($dbwhere==""){
       if($l48_sequencial!=null ){
@@ -468,6 +469,7 @@ class cl_editaldocumento {
         $virgula = ",";
       }
     }
+
     return $sql;
   }
 }

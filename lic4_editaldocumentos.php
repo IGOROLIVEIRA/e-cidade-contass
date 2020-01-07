@@ -157,7 +157,6 @@ $db_opcao = 1;
     oGridDocumento.setHeader(new Array("Codigo","Edital","Tipo","Download", "Ação"));
     oGridDocumento.show($('ctnDbGridDocumentos'));
 
-
     /**
      * Cria um listener para subir a imagem, e criar um preview da mesma
      */
@@ -165,7 +164,7 @@ $db_opcao = 1;
         if(!tipoArquivoValido($('uploadfile').files[0].type)){
             alert('Selecione um arquivo do tipo PDF ou XLS');
             $('uploadfile').value = '';
-          return false;
+            return false;
         }
         startLoading();
         var iFrame = document.createElement("iframe");
@@ -174,8 +173,6 @@ $db_opcao = 1;
         $('teste').appendChild(iFrame);
     });
 
-    console.log('Cad documento....');
-    console.log($('caddocumento'));
     if($('caddocumento').length == 2){
         $('caddocumento').selectedIndex = 1;
     }
@@ -240,7 +237,7 @@ $db_opcao = 1;
         }
         $('namefile').value = '';
         if($('caddocumento').length == 2)
-          $('caddocumento').selectedIndex = 1;
+            $('caddocumento').selectedIndex = 1;
 
     }
 

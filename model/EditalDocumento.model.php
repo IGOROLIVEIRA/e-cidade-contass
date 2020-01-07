@@ -26,9 +26,9 @@
  */
 
 /**
-* controle de Documentos de um Edital
-* @package Contratos
-*/
+ * controle de Documentos de um Edital
+ * @package Contratos
+ */
 class EditalDocumento {
 
   protected $iCodigo;
@@ -44,14 +44,14 @@ class EditalDocumento {
    * @param integer $iCodigo
    */
   public function __construct($iCodigo = null, $iSequencial = null) {
-
     $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
     if (!empty($iCodigo)) {
-       $sSQL                = $oDaoEditalDocumento->sql_query_file(null, '*', null, 'l48_edital='.$iCodigo);
+      $sSQL                = $oDaoEditalDocumento->sql_query_file(null, '*', null, 'l47_liclicita='.$iCodigo);
     }else{
       $sSQL                = $oDaoEditalDocumento->sql_query_file($iSequencial);
     }
     $rsEditalDocumento   = $oDaoEditalDocumento->sql_record($sSQL);
+
     if ($oDaoEditalDocumento->numrows > 0) {
 
       $oEditalDocumento = db_utils::fieldsMemory($rsEditalDocumento, 0);
@@ -71,8 +71,8 @@ class EditalDocumento {
   public function salvar() {
 
     if (empty($this->iCodigo)) {
-     //Salva dados Novos
-     $this->persistirDados();
+      //Salva dados Novos
+      $this->persistirDados();
     }
   }
 
@@ -97,7 +97,7 @@ class EditalDocumento {
        */
       $rDocumento      = fopen($this->getArquivo(), "rb");
       /**
-			 * Pega todo o conte?do do arquivo e coloca no resource
+       * Pega todo o conte?do do arquivo e coloca no resource
        */
       $rDadosDocumento = fread($rDocumento, filesize($this->getArquivo()));
       $oOidBanco       = pg_lo_create();
@@ -135,7 +135,8 @@ class EditalDocumento {
   public function getDocumentos()
   {
     $sCampos = "l48_sequencial, l48_edital, l48_arquivo, l48_tipo ";
-    $sWhere  = " l48_edital = {$this->getCodigoEdital()}";
+
+    $sWhere  = " l47_liclicita = {$this->getCodigoEdital()}";
 
     $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
     $sSqlDocumentos      = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
@@ -176,81 +177,81 @@ class EditalDocumento {
    * @return integer
    */
   public function getCodigo() {
-      return $this->iCodigo;
+    return $this->iCodigo;
   }
 
   /**
-  *
-  * Seta o cdigo do documento
-  */
+   *
+   * Seta o cdigo do documento
+   */
   public function setCodigo($iCodigo) {
-      $this->iCodigo = $iCodigo;
+    $this->iCodigo = $iCodigo;
   }
 
   /**
-  *
-  * Retorna o código do edital
-  * @return integer
-  */
+   *
+   * Retorna o código do edital
+   * @return integer
+   */
   public function getCodigoEdital() {
-      return $this->iCodigoEdital;
+    return $this->iCodigoEdital;
   }
 
   /**
-  *
-  * Seta o código do edital
-  */
+   *
+   * Seta o código do edital
+   */
   public function setCodigoEdital($iCodigoEdital) {
-      $this->iCodigoEdital = $iCodigoEdital;
+    $this->iCodigoEdital = $iCodigoEdital;
   }
 
   /**
-  *
-  * Retorna a descricao do documento
-  * @return string
-  */
+   *
+   * Retorna a descricao do documento
+   * @return string
+   */
   public function getTipo() {
-      return $this->iTipo;
+    return $this->iTipo;
   }
 
   /**
-  *
-  * Seta a descricao do documento
-  */
+   *
+   * Seta a descricao do documento
+   */
   public function setTipo($iTipo) {
-      $this->iTipo = $iTipo;
+    $this->iTipo = $iTipo;
   }
 
   /**
-  *
-  * Retorna o Oid do arquivo salvo
-  * @return Oid
-  */
+   *
+   * Retorna o Oid do arquivo salvo
+   * @return Oid
+   */
   public function getArquivo() {
-      return $this->sArquivo;
+    return $this->sArquivo;
   }
 
   /**
-  *
-  * Seta uma String com caminho/nome do arquivo
-  */
+   *
+   * Seta uma String com caminho/nome do arquivo
+   */
   public function setArquivo($sArquivo) {
-      $this->sArquivo = $sArquivo;
+    $this->sArquivo = $sArquivo;
   }
 
   /**
-  *
-  * Seta o Nome do arquivo com sua extens?o
-  */
+   *
+   * Seta o Nome do arquivo com sua extens?o
+   */
   public function setNomeArquivo($sNomeArquivo) {
     $this->sNomeArquivo = $sNomeArquivo;
   }
 
   /**
-  *
-  * Retorna o Nome do arquivo com sua extens?o
-  * @return String
-  */
+   *
+   * Retorna o Nome do arquivo com sua extens?o
+   * @return String
+   */
   public function getNomeArquivo() {
     return $this->sNomeArquivo;
   }
