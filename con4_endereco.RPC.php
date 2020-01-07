@@ -444,6 +444,7 @@ switch ($oParam->exec) {
       $oEndereco->setGrupoBemPublico($oParam->endereco->grupoBemPub);
       $oEndereco->setSubGrupoBemPublico($oParam->endereco->subGrupoBemPub);
       $oEndereco->setBdi($oParam->endereco->bdi);
+      $oEndereco->setLicita($oParam->endereco->licitacao);
 
       $oRetorno->dadoscomplementares = $oParam->endereco;
 
