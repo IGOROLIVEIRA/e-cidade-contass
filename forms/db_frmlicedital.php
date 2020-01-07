@@ -39,7 +39,6 @@ $clrotulo->label("l20_numero");
 $clrotulo->label("l20_codtipocom");
 $db_opcao = 1;
 $db_botao = true;
-$natureza_objeto = 1;
 
 ?>
 <style type="text/css">
@@ -194,7 +193,9 @@ select#depart{
 </form>
 
 <script>
-
+    if(!document.getElementById('l20_edital').value){
+      js_pesquisa();
+    }
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&edital=1&funcao_js=parent.js_preenchepesquisa|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal','Pesquisa',true,"0");
     }
