@@ -24,17 +24,30 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_libdicionario.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+require_once("classes/db_licobrasanexo_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrotulo = new rotulocampo;
+
 $lFail    = false;
 if(isset($uploadfile)) {
+
+  //codigo da medicao
+  $medicao = $_GET["medicao"];
+
+  //legenda da foto
+  $legenda = $_GET["descricao"];
+
   // Nome do novo arquivo
   $nomearq = $_FILES["uploadfile"]["name"];
 
@@ -44,16 +57,21 @@ if(isset($uploadfile)) {
 
   $diretorio = "imagens/obras/";
 
-  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome);
-
   // Nome do arquivo temporário gerado no /tmp
   $nometmp = $_FILES["uploadfile"]["tmp_name"];
 
   // Seta o nome do arquivo destino do upload
-  $arquivoDocument = db_removeAcentuacao("tmp/$nomearq");
+  $arquivoDocument = "$diretorio"."$novo_nome";
+
+  $cllicobrasanexo = new cl_licobrasanexo();
+  $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
+  $cllicobrasanexo->obr04_codimagem       = $novo_nome;
+  $cllicobrasanexo->obr04_legenda         = $legenda;
+  $cllicobrasanexo->incluir();
+
 
   // Faz um upload do arquivo para o local especificado
-  if(copy($nometmp,$arquivoDocument)) {
+  if(  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome)) {
 
     $href = $arquivoDocument;
 
@@ -72,27 +90,17 @@ if(isset($uploadfile)) {
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-  <script>
-    function js_enviar(){
-      parent.document.form1.localrecebefoto.value = "<?=@$arquivoDocument?>";
-      parent.document.getElementById("fotofunc").innerHTML = "<?=@$href?>";
-      parent.db_iframe_localfoto.hide();
-    }
-    function js_testacampo(){
-      if(document.form1.arquivofoto.value != ""){
-        document.form1.submit();
-      }else{
-        alert("Informe o arquivo.");
-      }
-    }
-  </script>
+  <?php
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
+  ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<center id='teste'>
-  <table border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <?=@$href;?>
-  </table>
-</center>
+<div id="teste2">
+  <input type="text" value="<?=@$novo_nome;?>" id="nomeanexo">
+</div>
 </body>
 </html>
 <script>
@@ -102,21 +110,8 @@ if(isset($uploadfile)) {
 
   if (parent.$(cloneFormulario)) {
     var formteste = parent.$(cloneFormulario).cloneNode(true);
-    $('teste').appendChild(formteste);
+    $('teste2').appendChild(formteste);
     formteste.submit();
   }
-  <?}
-  if (isset($href)) {
-
-    if (!$lFail) {
-
-      echo "parent.$('namefile').value=\"{$href}\";\n";
-    }
-    echo "parent.endLoading();";
-    echo "parent.$('teste').removeChild(parent.$('uploadIframe'));";
-
-
-  }
-  ?>
-
+  <?}?>
 </script>
