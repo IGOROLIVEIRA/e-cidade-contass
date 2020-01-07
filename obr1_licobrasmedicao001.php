@@ -11,8 +11,20 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
+  $cllicobrasmedicao->obr03_seqobra            = $obr03_seqobra;
+  $cllicobrasmedicao->obr03_dtlancamento       = $obr03_dtlancamento;
+  $cllicobrasmedicao->obr03_nummedicao         = $obr03_nummedicao;
+  $cllicobrasmedicao->obr03_tipomedicao        = $obr03_tipomedicao;
+  $cllicobrasmedicao->obr03_dtiniciomedicao    = $obr03_dtiniciomedicao;
+  $cllicobrasmedicao->obr03_outrostiposmedicao = $obr03_outrostiposmedicao;
+  $cllicobrasmedicao->obr03_descmedicao        = $obr03_descmedicao;
+  $cllicobrasmedicao->obr03_dtfimmedicao       = $obr03_dtfimmedicao;
+  $cllicobrasmedicao->obr03_dtentregamedicao   = $obr03_dtentregamedicao;
+  $cllicobrasmedicao->obr03_vlrmedicao         = $obr03_vlrmedicao;
+  $cllicobrasmedicao->obr03_instit             = db_getsession('DB_instit');
   $cllicobrasmedicao->incluir();
   db_fim_transacao();
+  db_redireciona("obr1_licobrasmedicao002.php?&chavepesquisa=$obr03_sequencial");
 }
 ?>
 <html>
@@ -38,6 +50,11 @@ if(isset($incluir)){
   #obr03_descmedicao{
     width: 733px;
     height: 50px;
+  }
+  #incluirmedicao{
+    margin-top: 14px;
+    margin-left: -58px;
+    margin-bottom: 20px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

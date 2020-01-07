@@ -1,70 +1,70 @@
 <?php
 //MODULO: Obras
 //CLASSE DA ENTIDADE licobrasmedicao
-class cl_licobrasmedicao { 
-  // cria variaveis de erro 
-  public $rotulo     = null; 
-  public $query_sql  = null; 
-  public $numrows    = 0; 
-  public $numrows_incluir = 0; 
-  public $numrows_alterar = 0; 
-  public $numrows_excluir = 0; 
-  public $erro_status= null; 
-  public $erro_sql   = null; 
-  public $erro_banco = null;  
-  public $erro_msg   = null;  
-  public $erro_campo = null;  
-  public $pagina_retorno = null; 
-  // cria variaveis do arquivo 
-  public $obr03_sequencial = 0; 
-  public $obr03_seqobra = 0; 
-  public $obr03_dtlancamento_dia = null; 
-  public $obr03_dtlancamento_mes = null; 
-  public $obr03_dtlancamento_ano = null; 
-  public $obr03_dtlancamento = null; 
-  public $obr03_nummedicao = 0; 
-  public $obr03_tipomedicao = 0; 
-  public $obr03_dtiniciomedicao_dia = null; 
-  public $obr03_dtiniciomedicao_mes = null; 
-  public $obr03_dtiniciomedicao_ano = null; 
-  public $obr03_dtiniciomedicao = null; 
-  public $obr03_outrostiposmedicao = null; 
-  public $obr03_descmedicao = null; 
-  public $obr03_dtfimmedicao_dia = null; 
-  public $obr03_dtfimmedicao_mes = null; 
-  public $obr03_dtfimmedicao_ano = null; 
-  public $obr03_dtfimmedicao = null; 
-  public $obr03_dtentregamedicao_dia = null; 
-  public $obr03_dtentregamedicao_mes = null; 
-  public $obr03_dtentregamedicao_ano = null; 
-  public $obr03_dtentregamedicao = null; 
-  public $obr03_vlrmedicao = 0; 
-  public $obr03_instit = 0; 
-  // cria propriedade com as variaveis do arquivo 
+class cl_licobrasmedicao {
+  // cria variaveis de erro
+  public $rotulo     = null;
+  public $query_sql  = null;
+  public $numrows    = 0;
+  public $numrows_incluir = 0;
+  public $numrows_alterar = 0;
+  public $numrows_excluir = 0;
+  public $erro_status= null;
+  public $erro_sql   = null;
+  public $erro_banco = null;
+  public $erro_msg   = null;
+  public $erro_campo = null;
+  public $pagina_retorno = null;
+  // cria variaveis do arquivo
+  public $obr03_sequencial = 0;
+  public $obr03_seqobra = 0;
+  public $obr03_dtlancamento_dia = null;
+  public $obr03_dtlancamento_mes = null;
+  public $obr03_dtlancamento_ano = null;
+  public $obr03_dtlancamento = null;
+  public $obr03_nummedicao = 0;
+  public $obr03_tipomedicao = 0;
+  public $obr03_dtiniciomedicao_dia = null;
+  public $obr03_dtiniciomedicao_mes = null;
+  public $obr03_dtiniciomedicao_ano = null;
+  public $obr03_dtiniciomedicao = null;
+  public $obr03_outrostiposmedicao = null;
+  public $obr03_descmedicao = null;
+  public $obr03_dtfimmedicao_dia = null;
+  public $obr03_dtfimmedicao_mes = null;
+  public $obr03_dtfimmedicao_ano = null;
+  public $obr03_dtfimmedicao = null;
+  public $obr03_dtentregamedicao_dia = null;
+  public $obr03_dtentregamedicao_mes = null;
+  public $obr03_dtentregamedicao_ano = null;
+  public $obr03_dtentregamedicao = null;
+  public $obr03_vlrmedicao = 0;
+  public $obr03_instit = 0;
+  // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 obr03_sequencial = int8 = CÃ³d. Sequencial 
-                 obr03_seqobra = int8 = NÂº Obra 
-                 obr03_dtlancamento = date = Data LanÃ§amento 
-                 obr03_nummedicao = int8 = NÂº MediÃ§Ã£o 
-                 obr03_tipomedicao = int8 = Tipo de MediÃ§Ã£o 
-                 obr03_dtiniciomedicao = date = InÃ­cio da MediÃ§Ã£o 
-                 obr03_outrostiposmedicao = text = Outros tipos de MediÃ§Ã£o 
-                 obr03_descmedicao = text = Desc. MediÃ§Ã£o 
-                 obr03_dtfimmedicao = date = Fim da MediÃ§Ã£o 
-                 obr03_dtentregamedicao = date = Entrega da MediÃ§Ã£o 
-                 obr03_vlrmedicao = float8 = Valor MediÃ§Ã£o 
-                 obr03_instit = int8 = InstituiÃ§Ã£o 
+                 obr03_sequencial = int8 = Cód. Sequencial
+                 obr03_seqobra = int8 = Nº Obra
+                 obr03_dtlancamento = date = Data Lançamento
+                 obr03_nummedicao = int8 = Nº Medição
+                 obr03_tipomedicao = int8 = Tipo de Medição
+                 obr03_dtiniciomedicao = date = Início da Medição
+                 obr03_outrostiposmedicao = text = Outros tipos de Medição
+                 obr03_descmedicao = text = Desc. Medição
+                 obr03_dtfimmedicao = date = Fim da Medição
+                 obr03_dtentregamedicao = date = Entrega da Medição
+                 obr03_vlrmedicao = float8 = Valor Medição
+                 obr03_instit = int8 = Instituição
                  ";
 
-  //funcao construtor da classe 
-  function __construct() { 
+  //funcao construtor da classe
+  function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("licobrasmedicao"); 
+    $this->rotulo = new rotulo("licobrasmedicao");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro 
-  function erro($mostra,$retorna) { 
+  //funcao erro
+  function erro($mostra,$retorna) {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )) {
       echo "<script>alert(\"".$this->erro_msg."\");</script>";
       if ($retorna==true) {
@@ -121,19 +121,22 @@ class cl_licobrasmedicao {
    }
 
   // funcao para inclusao
-  function incluir () { 
+  function incluir () {
       $this->atualizacampos();
-     if ($this->obr03_sequencial == null ) { 
-       $this->erro_sql = " Campo CÃ³d. Sequencial não informado.";
-       $this->erro_campo = "obr03_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if ($this->obr03_sequencial == null ) {
+       $result = db_query("select nextval('licobrasmedicao_obr03_sequencial_seq')");
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: licobrasmedicao_obr03_sequencial_seq do campo: obr02_sequencial";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+       $this->obr03_sequencial = pg_result($result,0,0);
      }
-     if ($this->obr03_seqobra == null ) { 
-       $this->erro_sql = " Campo NÂº Obra não informado.";
+     if ($this->obr03_seqobra == null ) {
+       $this->erro_sql = " Campo Nº Obra não informado.";
        $this->erro_campo = "obr03_seqobra";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -141,8 +144,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_dtlancamento == null ) { 
-       $this->erro_sql = " Campo Data LanÃ§amento não informado.";
+     if ($this->obr03_dtlancamento == null ) {
+       $this->erro_sql = " Campo Data Lançamento não informado.";
        $this->erro_campo = "obr03_dtlancamento_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -150,8 +153,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_nummedicao == null ) { 
-       $this->erro_sql = " Campo NÂº MediÃ§Ã£o não informado.";
+     if ($this->obr03_nummedicao == null ) {
+       $this->erro_sql = " Campo Nº Medição não informado.";
        $this->erro_campo = "obr03_nummedicao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -159,8 +162,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_tipomedicao == null ) { 
-       $this->erro_sql = " Campo Tipo de MediÃ§Ã£o não informado.";
+     if ($this->obr03_tipomedicao == null ) {
+       $this->erro_sql = " Campo Tipo de Medição não informado.";
        $this->erro_campo = "obr03_tipomedicao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -168,8 +171,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_dtiniciomedicao == null ) { 
-       $this->erro_sql = " Campo InÃ­cio da MediÃ§Ã£o não informado.";
+     if ($this->obr03_dtiniciomedicao == null ) {
+       $this->erro_sql = " Campo Início da Medição não informado.";
        $this->erro_campo = "obr03_dtiniciomedicao_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -177,8 +180,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_outrostiposmedicao == null ) { 
-       $this->erro_sql = " Campo Outros tipos de MediÃ§Ã£o não informado.";
+     if ($this->obr03_outrostiposmedicao == null ) {
+       $this->erro_sql = " Campo Outros tipos de Medição não informado.";
        $this->erro_campo = "obr03_outrostiposmedicao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -186,8 +189,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_descmedicao == null ) { 
-       $this->erro_sql = " Campo Desc. MediÃ§Ã£o não informado.";
+     if ($this->obr03_descmedicao == null ) {
+       $this->erro_sql = " Campo Desc. Medição não informado.";
        $this->erro_campo = "obr03_descmedicao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -195,8 +198,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_dtfimmedicao == null ) { 
-       $this->erro_sql = " Campo Fim da MediÃ§Ã£o não informado.";
+     if ($this->obr03_dtfimmedicao == null ) {
+       $this->erro_sql = " Campo Fim da Medição não informado.";
        $this->erro_campo = "obr03_dtfimmedicao_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -204,8 +207,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_dtentregamedicao == null ) { 
-       $this->erro_sql = " Campo Entrega da MediÃ§Ã£o não informado.";
+     if ($this->obr03_dtentregamedicao == null ) {
+       $this->erro_sql = " Campo Entrega da Medição não informado.";
        $this->erro_campo = "obr03_dtentregamedicao_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -213,8 +216,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_vlrmedicao == null ) { 
-       $this->erro_sql = " Campo Valor MediÃ§Ã£o não informado.";
+     if ($this->obr03_vlrmedicao == null ) {
+       $this->erro_sql = " Campo Valor Medição não informado.";
        $this->erro_campo = "obr03_vlrmedicao";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -222,8 +225,8 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_instit == null ) { 
-       $this->erro_sql = " Campo InstituiÃ§Ã£o não informado.";
+     if ($this->obr03_instit == null ) {
+       $this->erro_sql = " Campo Instituição não informado.";
        $this->erro_campo = "obr03_instit";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -232,35 +235,35 @@ class cl_licobrasmedicao {
        return false;
      }
      $sql = "insert into licobrasmedicao(
-                                       obr03_sequencial 
-                                      ,obr03_seqobra 
-                                      ,obr03_dtlancamento 
-                                      ,obr03_nummedicao 
-                                      ,obr03_tipomedicao 
-                                      ,obr03_dtiniciomedicao 
-                                      ,obr03_outrostiposmedicao 
-                                      ,obr03_descmedicao 
-                                      ,obr03_dtfimmedicao 
-                                      ,obr03_dtentregamedicao 
-                                      ,obr03_vlrmedicao 
-                                      ,obr03_instit 
+                                       obr03_sequencial
+                                      ,obr03_seqobra
+                                      ,obr03_dtlancamento
+                                      ,obr03_nummedicao
+                                      ,obr03_tipomedicao
+                                      ,obr03_dtiniciomedicao
+                                      ,obr03_outrostiposmedicao
+                                      ,obr03_descmedicao
+                                      ,obr03_dtfimmedicao
+                                      ,obr03_dtentregamedicao
+                                      ,obr03_vlrmedicao
+                                      ,obr03_instit
                        )
                 values (
-                                $this->obr03_sequencial 
-                               ,$this->obr03_seqobra 
-                               ,".($this->obr03_dtlancamento == "null" || $this->obr03_dtlancamento == ""?"null":"'".$this->obr03_dtlancamento."'")." 
-                               ,$this->obr03_nummedicao 
-                               ,$this->obr03_tipomedicao 
-                               ,".($this->obr03_dtiniciomedicao == "null" || $this->obr03_dtiniciomedicao == ""?"null":"'".$this->obr03_dtiniciomedicao."'")." 
-                               ,'$this->obr03_outrostiposmedicao' 
-                               ,'$this->obr03_descmedicao' 
-                               ,".($this->obr03_dtfimmedicao == "null" || $this->obr03_dtfimmedicao == ""?"null":"'".$this->obr03_dtfimmedicao."'")." 
-                               ,".($this->obr03_dtentregamedicao == "null" || $this->obr03_dtentregamedicao == ""?"null":"'".$this->obr03_dtentregamedicao."'")." 
-                               ,$this->obr03_vlrmedicao 
-                               ,$this->obr03_instit 
+                                $this->obr03_sequencial
+                               ,$this->obr03_seqobra
+                               ,".($this->obr03_dtlancamento == "null" || $this->obr03_dtlancamento == ""?"null":"'".$this->obr03_dtlancamento."'")."
+                               ,$this->obr03_nummedicao
+                               ,$this->obr03_tipomedicao
+                               ,".($this->obr03_dtiniciomedicao == "null" || $this->obr03_dtiniciomedicao == ""?"null":"'".$this->obr03_dtiniciomedicao."'")."
+                               ,'$this->obr03_outrostiposmedicao'
+                               ,'$this->obr03_descmedicao'
+                               ,".($this->obr03_dtfimmedicao == "null" || $this->obr03_dtfimmedicao == ""?"null":"'".$this->obr03_dtfimmedicao."'")."
+                               ,".($this->obr03_dtentregamedicao == "null" || $this->obr03_dtentregamedicao == ""?"null":"'".$this->obr03_dtentregamedicao."'")."
+                               ,$this->obr03_vlrmedicao
+                               ,$this->obr03_instit
                       )";
-     $result = db_query($sql); 
-     if ($result==false) { 
+     $result = db_query($sql);
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
          $this->erro_sql   = "cadastro medicao de obras () nao Incluído. Inclusao Abortada.";
@@ -291,15 +294,15 @@ class cl_licobrasmedicao {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) { 
+  function alterar ( $oid=null ) {
       $this->atualizacampos();
      $sql = " update licobrasmedicao set ";
      $virgula = "";
-     if (trim($this->obr03_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_sequencial"])) { 
+     if (trim($this->obr03_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_sequencial"])) {
        $sql  .= $virgula." obr03_sequencial = $this->obr03_sequencial ";
        $virgula = ",";
-       if (trim($this->obr03_sequencial) == null ) { 
-         $this->erro_sql = " Campo CÃ³d. Sequencial não informado.";
+       if (trim($this->obr03_sequencial) == null ) {
+         $this->erro_sql = " Campo Cód. Sequencial não informado.";
          $this->erro_campo = "obr03_sequencial";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -308,11 +311,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_seqobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_seqobra"])) { 
+     if (trim($this->obr03_seqobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_seqobra"])) {
        $sql  .= $virgula." obr03_seqobra = $this->obr03_seqobra ";
        $virgula = ",";
-       if (trim($this->obr03_seqobra) == null ) { 
-         $this->erro_sql = " Campo NÂº Obra não informado.";
+       if (trim($this->obr03_seqobra) == null ) {
+         $this->erro_sql = " Campo Nº Obra não informado.";
          $this->erro_campo = "obr03_seqobra";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -321,11 +324,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_dtlancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"] !="") ) { 
+     if (trim($this->obr03_dtlancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"] !="") ) {
        $sql  .= $virgula." obr03_dtlancamento = '$this->obr03_dtlancamento' ";
        $virgula = ",";
-       if (trim($this->obr03_dtlancamento) == null ) { 
-         $this->erro_sql = " Campo Data LanÃ§amento não informado.";
+       if (trim($this->obr03_dtlancamento) == null ) {
+         $this->erro_sql = " Campo Data Lançamento não informado.";
          $this->erro_campo = "obr03_dtlancamento_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -333,12 +336,12 @@ class cl_licobrasmedicao {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"])) { 
+     }     else{
+       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtlancamento_dia"])) {
          $sql  .= $virgula." obr03_dtlancamento = null ";
          $virgula = ",";
-         if (trim($this->obr03_dtlancamento) == null ) { 
-           $this->erro_sql = " Campo Data LanÃ§amento não informado.";
+         if (trim($this->obr03_dtlancamento) == null ) {
+           $this->erro_sql = " Campo Data Lançamento não informado.";
            $this->erro_campo = "obr03_dtlancamento_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -348,11 +351,11 @@ class cl_licobrasmedicao {
          }
        }
      }
-     if (trim($this->obr03_nummedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_nummedicao"])) { 
+     if (trim($this->obr03_nummedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_nummedicao"])) {
        $sql  .= $virgula." obr03_nummedicao = $this->obr03_nummedicao ";
        $virgula = ",";
-       if (trim($this->obr03_nummedicao) == null ) { 
-         $this->erro_sql = " Campo NÂº MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_nummedicao) == null ) {
+         $this->erro_sql = " Campo Nº Medição não informado.";
          $this->erro_campo = "obr03_nummedicao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -361,11 +364,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_tipomedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_tipomedicao"])) { 
+     if (trim($this->obr03_tipomedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_tipomedicao"])) {
        $sql  .= $virgula." obr03_tipomedicao = $this->obr03_tipomedicao ";
        $virgula = ",";
-       if (trim($this->obr03_tipomedicao) == null ) { 
-         $this->erro_sql = " Campo Tipo de MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_tipomedicao) == null ) {
+         $this->erro_sql = " Campo Tipo de Medição não informado.";
          $this->erro_campo = "obr03_tipomedicao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -374,11 +377,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_dtiniciomedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"] !="") ) { 
+     if (trim($this->obr03_dtiniciomedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"] !="") ) {
        $sql  .= $virgula." obr03_dtiniciomedicao = '$this->obr03_dtiniciomedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_dtiniciomedicao) == null ) { 
-         $this->erro_sql = " Campo InÃ­cio da MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_dtiniciomedicao) == null ) {
+         $this->erro_sql = " Campo Início da Medição não informado.";
          $this->erro_campo = "obr03_dtiniciomedicao_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -386,12 +389,12 @@ class cl_licobrasmedicao {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"])) { 
+     }     else{
+       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtiniciomedicao_dia"])) {
          $sql  .= $virgula." obr03_dtiniciomedicao = null ";
          $virgula = ",";
-         if (trim($this->obr03_dtiniciomedicao) == null ) { 
-           $this->erro_sql = " Campo InÃ­cio da MediÃ§Ã£o não informado.";
+         if (trim($this->obr03_dtiniciomedicao) == null ) {
+           $this->erro_sql = " Campo Início da Medição não informado.";
            $this->erro_campo = "obr03_dtiniciomedicao_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -401,11 +404,11 @@ class cl_licobrasmedicao {
          }
        }
      }
-     if (trim($this->obr03_outrostiposmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_outrostiposmedicao"])) { 
+     if (trim($this->obr03_outrostiposmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_outrostiposmedicao"])) {
        $sql  .= $virgula." obr03_outrostiposmedicao = '$this->obr03_outrostiposmedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_outrostiposmedicao) == null ) { 
-         $this->erro_sql = " Campo Outros tipos de MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_outrostiposmedicao) == null ) {
+         $this->erro_sql = " Campo Outros tipos de Medição não informado.";
          $this->erro_campo = "obr03_outrostiposmedicao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -414,11 +417,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_descmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_descmedicao"])) { 
+     if (trim($this->obr03_descmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_descmedicao"])) {
        $sql  .= $virgula." obr03_descmedicao = '$this->obr03_descmedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_descmedicao) == null ) { 
-         $this->erro_sql = " Campo Desc. MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_descmedicao) == null ) {
+         $this->erro_sql = " Campo Desc. Medição não informado.";
          $this->erro_campo = "obr03_descmedicao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -427,11 +430,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_dtfimmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"] !="") ) { 
+     if (trim($this->obr03_dtfimmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"] !="") ) {
        $sql  .= $virgula." obr03_dtfimmedicao = '$this->obr03_dtfimmedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_dtfimmedicao) == null ) { 
-         $this->erro_sql = " Campo Fim da MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_dtfimmedicao) == null ) {
+         $this->erro_sql = " Campo Fim da Medição não informado.";
          $this->erro_campo = "obr03_dtfimmedicao_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -439,12 +442,12 @@ class cl_licobrasmedicao {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"])) { 
+     }     else{
+       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"])) {
          $sql  .= $virgula." obr03_dtfimmedicao = null ";
          $virgula = ",";
-         if (trim($this->obr03_dtfimmedicao) == null ) { 
-           $this->erro_sql = " Campo Fim da MediÃ§Ã£o não informado.";
+         if (trim($this->obr03_dtfimmedicao) == null ) {
+           $this->erro_sql = " Campo Fim da Medição não informado.";
            $this->erro_campo = "obr03_dtfimmedicao_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -454,11 +457,11 @@ class cl_licobrasmedicao {
          }
        }
      }
-     if (trim($this->obr03_dtentregamedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"] !="") ) { 
+     if (trim($this->obr03_dtentregamedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"] !="") ) {
        $sql  .= $virgula." obr03_dtentregamedicao = '$this->obr03_dtentregamedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_dtentregamedicao) == null ) { 
-         $this->erro_sql = " Campo Entrega da MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_dtentregamedicao) == null ) {
+         $this->erro_sql = " Campo Entrega da Medição não informado.";
          $this->erro_campo = "obr03_dtentregamedicao_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -466,12 +469,12 @@ class cl_licobrasmedicao {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"])) { 
+     }     else{
+       if (isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtentregamedicao_dia"])) {
          $sql  .= $virgula." obr03_dtentregamedicao = null ";
          $virgula = ",";
-         if (trim($this->obr03_dtentregamedicao) == null ) { 
-           $this->erro_sql = " Campo Entrega da MediÃ§Ã£o não informado.";
+         if (trim($this->obr03_dtentregamedicao) == null ) {
+           $this->erro_sql = " Campo Entrega da Medição não informado.";
            $this->erro_campo = "obr03_dtentregamedicao_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -481,11 +484,11 @@ class cl_licobrasmedicao {
          }
        }
      }
-     if (trim($this->obr03_vlrmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_vlrmedicao"])) { 
+     if (trim($this->obr03_vlrmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_vlrmedicao"])) {
        $sql  .= $virgula." obr03_vlrmedicao = $this->obr03_vlrmedicao ";
        $virgula = ",";
-       if (trim($this->obr03_vlrmedicao) == null ) { 
-         $this->erro_sql = " Campo Valor MediÃ§Ã£o não informado.";
+       if (trim($this->obr03_vlrmedicao) == null ) {
+         $this->erro_sql = " Campo Valor Medição não informado.";
          $this->erro_campo = "obr03_vlrmedicao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -494,11 +497,11 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if (trim($this->obr03_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_instit"])) { 
+     if (trim($this->obr03_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_instit"])) {
        $sql  .= $virgula." obr03_instit = $this->obr03_instit ";
        $virgula = ",";
-       if (trim($this->obr03_instit) == null ) { 
-         $this->erro_sql = " Campo InstituiÃ§Ã£o não informado.";
+       if (trim($this->obr03_instit) == null ) {
+         $this->erro_sql = " Campo Instituição não informado.";
          $this->erro_campo = "obr03_instit";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -509,7 +512,7 @@ class cl_licobrasmedicao {
      }
      $sql .= " where ";
 $sql .= "oid = '$oid'";     $result = db_query($sql);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "cadastro medicao de obras nao Alterado. Alteracao Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -538,8 +541,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     }
   }
 
-  // funcao para exclusao 
-  function excluir ( $oid=null ,$dbwhere=null) { 
+  // funcao para exclusao
+  function excluir ( $oid=null ,$dbwhere=null) {
 
      $sql = " delete from licobrasmedicao
                     where ";
@@ -550,7 +553,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "cadastro medicao de obras nao Excluído. Exclusão Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -579,8 +582,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     }
   }
 
-  // funcao do recordset 
-  function sql_record($sql) { 
+  // funcao do recordset
+  function sql_record($sql) {
      $result = db_query($sql);
      if ($result==false) {
        $this->numrows    = 0;
@@ -603,8 +606,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     return $result;
   }
 
-  // funcao do sql 
-  function sql_query ( $oid = null,$campos="licobrasmedicao.oid,*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query ( $oid = null,$campos="licobrasmedicao.oid,*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -638,8 +641,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     return $sql;
   }
 
-  // funcao do sql 
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

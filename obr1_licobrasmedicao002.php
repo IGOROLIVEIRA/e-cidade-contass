@@ -1,8 +1,12 @@
 <?
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_libdicionario.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
 include("classes/db_licobrasmedicao_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -16,38 +20,52 @@ if(isset($alterar)){
   $cllicobrasmedicao->alterar($oid);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $result = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  $db_opcao = 2;
+  $result = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query($chavepesquisa));
+  db_fieldsmemory($result,0);
+  $db_botao = true;
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <?php
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
+  ?>
 </head>
+<style>
+  #obr03_outrostiposmedicao{
+    width: 733px;
+    height: 50px;
+  }
+
+  #obr03_descmedicao{
+    width: 733px;
+    height: 50px;
+  }
+  #incluirmedicao{
+    margin-top: 14px;
+    margin-left: -58px;
+    margin-bottom: 20px;
+  }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-	<?
-	include("forms/db_frmlicobrasmedicao.php");
-	?>
-    </center>
-	</td>
+<table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-left: 16%; margin-top: 2%;">
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+      <center>
+        <?
+        include("forms/db_frmlicobrasmedicao.php");
+        ?>
+      </center>
+    </td>
   </tr>
 </table>
 <?
@@ -74,5 +92,5 @@ if($db_opcao==22){
 }
 ?>
 <script>
-js_tabulacaoforms("form1","obr03_seqobra",true,1,"obr03_seqobra",true);
+  js_tabulacaoforms("form1","obr03_seqobra",true,1,"obr03_seqobra",true);
 </script>
