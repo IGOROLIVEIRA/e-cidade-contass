@@ -295,7 +295,7 @@ class cl_obrasdadoscomplementares {
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Cadastro de Endereço da Obra ($this->db150_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Cadastro de Endereços da Obra j? Cadastrado";
+         $this->erro_banco = "Cadastro de Endereços da Obra já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
          $this->erro_sql   = "Cadastro de Endereços da Obra ($this->db150_sequencial) nao Incluído. Inclusao Abortada.";
@@ -584,6 +584,7 @@ class cl_obrasdadoscomplementares {
       $sql .= $campos;
     }
     $sql .= " from obrasdadoscomplementares ";
+    $sql .= " JOIN liclicita on l20_codigo = db150_liclicita ";
     $sql2 = "";
     if($dbwhere==""){
       if($db150_sequencial!=null ){

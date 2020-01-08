@@ -577,6 +577,30 @@
 
         $sWhere   = " db150_codobra = ".$iCodigoObra;
 
+        $sQueryObra  = $oDaoObra->sql_query(null,$sCampos,null,$sWhere);
+        $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
+
+        if( $rsQueryObra !== false) {
+          $aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
+        }
+      }
+      return $aRetorno;
+    }
+
+    static function findObraByEdital($iCodigoEdital, $lEncode=true) {
+      $aRetorno = false;
+
+      if (trim($iCodigoEdital) != "") {
+
+        $oDaoObra  = db_utils::getDao('obrasdadoscomplementares');
+        $sCampos   = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db150_distrito as distrito, ";
+        $sCampos  .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
+        $sCampos  .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
+        $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
+        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp";
+
+        $sWhere   = " db150_liclicita = ".$iCodigoEdital;
+
         $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,null,$sWhere);
         $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
 
