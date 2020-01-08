@@ -419,7 +419,6 @@ switch ($oParam->exec) {
 
       $oEndereco = new obrasDadosComplementares(null);
       $oRetorno->dadoscomplementares = new stdClass();
-
       $oEndereco->setEstado($oParam->endereco->codigoEstado);
       $oEndereco->setPais($oParam->endereco->codigoPais);
       $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
@@ -461,7 +460,12 @@ switch ($oParam->exec) {
   break;
 
   case 'findDadosObra' :
-    $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iCodigoObra);
+    if($oParam->iCodigoObra){
+      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iCodigoObra);
+    }
+    if($oParam->iCodigoEdital){
+      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByEdital($oParam->iCodigoEdital);
+    }
     $oRetorno->status = 1;
     echo $oJson->encode($oRetorno);
   break;

@@ -188,11 +188,13 @@ $db_botao = true;
 </form>
 
 <script>
+    let codigoLicitacao = '';
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|' +
             'pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_origemrecurso|l47_descrecurso|dl_Sequencial_Edital|dl_Natureza_objeto','Pesquisa',true,"0");
     }
     function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, origem, recurso, sequencial, natureza_obj){
+        codigoLicitacao = codigo;
         let dataFormatada = js_formatar(data, 'd');
         document.getElementById('l20_nroedital').value = nroedital;
         document.getElementById('l20_codigo').value = codigo;
@@ -237,11 +239,12 @@ $db_botao = true;
         }
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', idObra);
         oDadosComplementares.setObjetoRetorno($('idObra'));
-        oDadosComplementares.setLicitacao("<?=$l20_codigo;?>");
+        oDadosComplementares.setLicitacao(codigoLicitacao);
         oDadosComplementares.setCallBackFunction(() => {
-            if(idObra)
-                js_retorno_dadosComplementares();
-            else js_lancaDadosCompCallBack();
+            // if(idObra)
+            //     js_retorno_dadosComplementares();
+            // else
+            js_lancaDadosCompCallBack();
         });
         oDadosComplementares.show();
     }
@@ -251,11 +254,11 @@ $db_botao = true;
         oEndereco.exec = 'findDadosObra';
         oEndereco.iCodigoObra = $F('idObra');
         js_AjaxCgm(oEndereco, js_retornoDadosObra);
-        js_removeObj('msgBox');
 
         function js_retornoDadosObra(oAjax) {
             js_removeObj('msgBox');
             var oRetorno = eval('('+oAjax.responseText+')');
+            console.log('Retorno: ', oRetorno);
 
             var sExpReg  = new RegExp('\\\\n','g');
 
@@ -306,7 +309,7 @@ $db_botao = true;
         oDBGrid.setHeader(new Array("Código", "Descrição", "Opções"));
         oDBGrid.show($('cntDBGrid'));
         oDBGrid.clearAll(true);
-        js_buscaDadosComplementares(86);
+        js_buscaDadosComplementares(6);
     }
 
     function js_lancaDadosObra(){
@@ -334,9 +337,13 @@ $db_botao = true;
     js_init();
 
 
-    function js_retornoDados(){
+    function js_retornoDados(oAjax){
+        js_removeObj('msgBox');
         var oRetorno    = eval("("+oAjax.responseText+")");
-        console.log('Retorno: ', oRetorno);
+
+        oRetorno.dadoscomplementares.forEach((dado) => {
+            console.log('item: ', dado);
+        })
     }
 
     function js_buscaDadosComplementares(codigo) {
@@ -344,36 +351,6 @@ $db_botao = true;
         oParam.exec = 'findDadosObra';
         oParam.iCodigoEdital = codigo;
         js_AjaxCgm(oParam, js_retornoDados);
-
-        function js_retornoDados(oAjax){
-
-            js_removeObj('msgBox');
-            let retorno = eval("("+oAjax.responseText+")");
-            console.log('Retorno: ', retorno);
-        }
-        // var aDocumentos = oRetorno.aDocumentos;
-
-        // oDBGrid.clearAll(true);
-
-        // if ( aDocumentos.length > 0 ) {
-        //     oDBGrid.setStatus("");
-
-        // aDocumentos.each(function (oDoc) {
-        //     var aLinha = new Array();
-        //     aLinha[0] = '1';
-        //     aLinha[1] = 'Teste';
-        //
-        //     aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'1'+");'>"+
-        //             "<input type='button' value='E' onclick='js_excluiDados("+aLinha+")'>";
-        //
-        //
-        //     oDBGrid.addRow(aLinha);
-        //
-        // oDBGrid.renderRows();
-
-        // } else {
-        //     oDBGrid.setStatus("Nenhum Registro Encontrado");
-        // }
 
     }
 
