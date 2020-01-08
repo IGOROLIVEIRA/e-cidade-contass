@@ -305,7 +305,7 @@ $sWhereContratos = " and 1 = 1 ";
 
                 if (isset($edital) && $edital == true) {
                     if($aguardando_envio){
-                      $sWhere = ' and liclicita.l20_cadinicial = 1';
+                      $sWhere = ' and liclicita.l20_cadinicial = 2';
                     }
 
                     $sql = "
@@ -322,6 +322,8 @@ $sWhereContratos = " and 1 = 1 ";
                               THEN liclicita.l20_dtpublic
                             WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
                               THEN liclicita.l20_datacria
+                            WHEN liclancedital.l47_dataenvio is not null
+                              THEN liclancedital.l47_dataenvio
                             END) as dl_Data_Referencia,
                             (CASE WHEN liclicita.l20_cadinicial = 1 THEN 'PENDENTE'
                                 WHEN liclicita.l20_cadinicial = 2 THEN 'AGUARDANDO ENVIO'
@@ -344,13 +346,13 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
                         LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                        INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = 1
-                           AND EXTRACT (YEAR from l20_dataaber) >= 2020 $sWhere
+                           AND EXTRACT (YEAR from l47_dataenvio) >= 2020 $sWhere
                         ORDER BY l20_codigo
           ";
                 }
                 $aRepassa = array();
-
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
 
