@@ -175,13 +175,13 @@ class cl_liclancedital
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql = "liclancedital ($this->l20_codigo) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql = "liclancedital ($this->l47_edital) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "liclancedital já Cadastrado";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql = "liclancedital ($this->l20_codigo) nao Inclu?do. Inclusao Abortada.";
-        $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql = "liclancedital ($this->l47_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -190,7 +190,7 @@ class cl_liclancedital
     }
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao do edital efetuado com Sucesso\\n";
-    $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -203,15 +203,41 @@ class cl_liclancedital
   function alterar($l47_sequencial = null)
   {
     $this->atualizacampos();
+    $virgula = " ";
     $sql = " update liclancedital set ";
     if (trim($this->l47_linkpub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_linkpub"])) {
       $sql .= $virgula . " l47_linkpub = $this->l47_linkpub ";
       $virgula = ",";
     }
 
-    if (trim($this->l47_origemrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_origemrecurso"])) {
-      $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
-      $virgula = ",";
+    if (trim($this->l47_origemrecurso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) {
+      if (trim($this->l47_origemrecurso) == 0) {
+        $this->erro_sql = " Campo Origem Recurso não Informado.";
+        $this->erro_campo = "l47_origemrecurso";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }else{
+        $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
+        $virgula = ",";
+      }
+    }
+
+    if (trim($this->l47_origemrecurso != "") && $this->l47_origemrecurso == 9) {
+       if (trim($this->l47_descrecurso) == null) {
+          $this->erro_sql = " Campo Descrição da Origem do Recurso não Informado.";
+          $this->erro_campo = "l47_descrecurso";
+          $this->erro_banco = "";
+          $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+      }else{
+        $sql .= $virgula . " l47_descrecurso = $this->l47_descrecurso ";
+        $virgula = ",";
+      }
     }
 
     if (trim($this->l47_descrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_descrecurso"])) {
@@ -231,7 +257,7 @@ class cl_liclancedital
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql = "liclancedital nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->l47_sequencial;
-      $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -281,7 +307,7 @@ class cl_liclancedital
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql = "liclancedital nao Exclu?do. Exclus?o Abortada.\\n";
       $this->erro_sql .= "Valores : " . $l20_codigo;
-      $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -291,7 +317,7 @@ class cl_liclancedital
         $this->erro_banco = "";
         $this->erro_sql = "liclancedital nao Encontrado. Exclus?o n?o Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
-        $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
@@ -300,7 +326,7 @@ class cl_liclancedital
         $this->erro_banco = "";
         $this->erro_sql = "Exclus?o efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
-        $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -317,7 +343,7 @@ class cl_liclancedital
       $this->numrows = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql = "Erro ao selecionar os registros.";
-      $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -326,7 +352,7 @@ class cl_liclancedital
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql = "Record Vazio na Tabela:liclancedital";
-      $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -336,7 +362,7 @@ class cl_liclancedital
 
   // funcao do sql
 
-  function sql_query($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "",$groupby=null)
+  function sql_query($l47_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "",$groupby=null)
   {
     $sql = "select ";
     if ($campos != "*") {
@@ -349,35 +375,12 @@ class cl_liclancedital
     } else {
       $sql .= $campos;
     }
-    $sql .= " from liclancedital ";
-    $sql .= "      inner join db_config         on db_config.codigo = liclancedital.l20_instit";
-    $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclancedital.l20_id_usucria";
-    $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclancedital.l20_codtipocom";
-    $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
-    $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclancedital.l20_liclocal";
-    $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclancedital.l20_liccomissao";
-    $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclancedital.l20_licsituacao";
-    $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
-    $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
-    $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
-    $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
-    $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
-    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
-    $sql .= "      left join liclanceditalproc     on liclanceditalproc.l34_liclancedital = liclancedital.l20_codigo";
-    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclanceditalproc.l34_protprocesso";
-    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
-    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
-    $sql .= "      left join liclicitem on l21_codliclancedital = l20_codigo";
-    $sql .="       left join pcorcamitemlic on pc26_liclicitem=l21_codigo";
-    $sql .="       left join pcorcamitem on pc22_orcamitem=pc26_orcamitem";
-    $sql .="       left join pcorcamjulg on pc24_orcamitem=pc22_orcamitem and pc24_pontuacao = 1";
-    $sql .="       left join pcorcamforne on pc21_orcamforne=pc24_orcamforne";
-    $sql .="       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
-    $sql .="       left join pcorcam on pc20_codorc = pc22_codorc";
+    $sql .= " from liclicita ";
+    $sql .= " LEFT JOIN liclancedital ON liclicita.l20_codigo = l47_liclicita ";
     $sql2 = "";
     if ($dbwhere == "") {
-      if ($l20_codigo != null) {
-        $sql2 .= " where liclancedital.l20_codigo = $l20_codigo ";
+      if ($l47_sequencial != null) {
+        $sql2 .= " where liclancedital.l47_sequencial = $l47_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -408,7 +411,7 @@ class cl_liclancedital
 
 
   // funcao do sql
-  function sql_query_file($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+  function sql_query_file($l47_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
@@ -424,8 +427,8 @@ class cl_liclancedital
     $sql .= " from liclancedital ";
     $sql2 = "";
     if ($dbwhere == "") {
-      if ($l20_codigo != null) {
-        $sql2 .= " where liclancedital.l20_codigo = $l20_codigo ";
+      if ($l47_sequencial != null) {
+        $sql2 .= " where liclancedital.l47_sequencial = $l47_sequencial ";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
