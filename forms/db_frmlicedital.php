@@ -202,7 +202,7 @@ $db_botao = true;
         document.getElementById('l20_objeto').value = objeto;
         document.getElementById('tipo_tribunal').value = tipo;
         document.getElementById('links').value = links;
-        document.getElementById('origem_recurso').value = origem;
+        document.getElementById('origem_recurso').value = origem != '' ? origem : 0;
         document.getElementById('descricao_recurso').value = recurso;
         document.getElementById('l20_naturezaobjeto').value = natureza_obj;
 
@@ -251,6 +251,7 @@ $db_botao = true;
         oEndereco.exec = 'findDadosObra';
         oEndereco.iCodigoObra = $F('idObra');
         js_AjaxCgm(oEndereco, js_retornoDadosObra);
+        js_removeObj('msgBox');
 
         function js_retornoDadosObra(oAjax) {
             js_removeObj('msgBox');
@@ -304,6 +305,8 @@ $db_botao = true;
         oDBGrid.setCellAlign(new Array("center", "left", "center"));
         oDBGrid.setHeader(new Array("Código", "Descrição", "Opções"));
         oDBGrid.show($('cntDBGrid'));
+        oDBGrid.clearAll(true);
+        js_buscaDadosComplementares(86);
     }
 
     function js_lancaDadosObra(){
@@ -329,12 +332,25 @@ $db_botao = true;
     }
 
     js_init();
-    oDBGrid.clearAll(true);
 
-    function js_retorno_dadosComplementares() {
-        // js_removeObj("msgBox");
-        //
+
+    function js_retornoDados(){
         var oRetorno    = eval("("+oAjax.responseText+")");
+        console.log('Retorno: ', oRetorno);
+    }
+
+    function js_buscaDadosComplementares(codigo) {
+        let oParam = new Object();
+        oParam.exec = 'findDadosObra';
+        oParam.iCodigoEdital = codigo;
+        js_AjaxCgm(oParam, js_retornoDados);
+
+        function js_retornoDados(oAjax){
+
+            js_removeObj('msgBox');
+            let retorno = eval("("+oAjax.responseText+")");
+            console.log('Retorno: ', retorno);
+        }
         // var aDocumentos = oRetorno.aDocumentos;
 
         // oDBGrid.clearAll(true);
