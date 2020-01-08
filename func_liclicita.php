@@ -305,7 +305,7 @@ $sWhereContratos = " and 1 = 1 ";
 
                 if (isset($edital) && $edital == true) {
                     if($aguardando_envio){
-                      $sWhere = ' and liclicita.l20_cadinicial = 2';
+                      $sWhere = ' and liclicita.l20_cadinicial = 1';
                     }
 
                     $sql = "
