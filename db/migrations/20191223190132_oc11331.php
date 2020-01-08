@@ -343,7 +343,7 @@ class Oc11331 extends AbstractMigration
                           CREATE TABLE licobrasanexo(
                           obr04_sequencial                int8 NOT NULL ,
                           obr04_licobrasmedicao           int8 NOT NULL ,
-                          obr04_codimagem                 int8 NOT NULL ,
+                          obr04_codimagem                 varchar(40) NOT NULL ,
                           obr04_legenda                   varchar(40) NOT NULL);
 
 
