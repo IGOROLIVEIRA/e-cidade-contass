@@ -60,29 +60,29 @@ $rsLicita = $clliclicita->sql_record($sqlLicita);
 db_fieldsmemory($rsLicita, 0);
 
 if(isset($incluir)){
-  $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
-  $clliclancedital->l47_linkpub = $links;
-  $clliclancedital->l47_origemrecurso = $origem_recurso;
-  $clliclancedital->l47_descrecurso = $descricao_recurso;
-  $clliclancedital->l47_dataenvio = $data_formatada;
-  $clliclancedital->l47_liclicita = $l20_codigo;
-  $clliclancedital->incluir(null);
 
-  // Alterar o status da licitação para Aguardando Envio;
-  $clliclicita->l20_cadinicial = 2;
-  $clliclicita->l20_exercicioedital = intval(db_getsession('DB_anousu'));
-  $clliclicita->alterar($l20_codigo);
+    $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
+    $clliclancedital->l47_linkpub = $links;
+    $clliclancedital->l47_origemrecurso = $origem_recurso;
+    $clliclancedital->l47_descrecurso = $descricao_recurso;
+    $clliclancedital->l47_dataenvio = $data_formatada;
+    $clliclancedital->l47_liclicita = $l20_codigo;
+    $clliclancedital->incluir(null);
 
-  if ($clliclicita->erro_status=="0"){
-    $erro_msg = $clliclicita->erro_msg;
-    $sqlerro=true;
-  }
+    // Alterar o status da licitação para Aguardando Envio;
+    $clliclicita->l20_cadinicial = 2;
+    $clliclicita->l20_exercicioedital = intval(db_getsession('DB_anousu'));
+    $clliclicita->alterar($l20_codigo);
 
-  if ($clliclancedital->erro_status=="0"){
-    $erro_msg = $clliclancedital->erro_msg;
-    $sqlerro=true;
-  }
+    if ($clliclicita->erro_status == "0") {
+      $erro_msg = $clliclicita->erro_msg;
+      $sqlerro = true;
+    }
 
+    if ($clliclancedital->erro_status == "0") {
+      $erro_msg = $clliclancedital->erro_msg;
+      $sqlerro = true;
+    }
 }
 
 ?>

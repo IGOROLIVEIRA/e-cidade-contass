@@ -80,6 +80,7 @@ $db_botao = true;
                     <?
                     db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
                     db_input('l20_codigo',10,$Il20_codigo,true,'hidden',3);
+                    db_input('l20_naturezaobjeto',10,$Il20_naturezaobjeto,true,'hidden',3);
                     ?>
                   </td>
                 </tr>
@@ -136,8 +137,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                <?php if($natureza_objeto): ?>
-                  <tr>
+                  <tr id="td_obras" style="display: <?php $natureza_objeto == 1 ? '' : 'none'?> ">
                     <td colspan="3">
                       <fieldset>
                         <legend>Obras e Serviços</legend>
@@ -166,7 +166,6 @@ $db_botao = true;
                       </fieldset>
                     </td>
                   </tr>
-                <?php endif; ?>
                 <tr>
                   <td nowrap title="Data de Envio">
                     <b>Data de envio:</b>
@@ -190,10 +189,10 @@ $db_botao = true;
 
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_descrecurso|dl_Sequencial_Edital','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|' +
+            'pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_origemrecurso|l47_descrecurso|dl_Sequencial_Edital|dl_Natureza_objeto','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, recurso, sequencial){
-        console.log('SQE: ', sequencial);
+    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, origem, recurso, sequencial, natureza_obj){
         let dataFormatada = js_formatar(data, 'd');
         document.getElementById('l20_nroedital').value = nroedital;
         document.getElementById('l20_codigo').value = codigo;
@@ -203,7 +202,14 @@ $db_botao = true;
         document.getElementById('l20_objeto').value = objeto;
         document.getElementById('tipo_tribunal').value = tipo;
         document.getElementById('links').value = links;
+        document.getElementById('origem_recurso').value = origem;
         document.getElementById('descricao_recurso').value = recurso;
+        document.getElementById('l20_naturezaobjeto').value = natureza_obj;
+
+        if(natureza_obj == 1){
+            document.getElementById('td_obras').style.display = '';
+        }
+
         parent.iframe_documentos.location.href="lic4_editaldocumentos.php?l20_nroedital="+nroedital+"&l20_codigo="+codigo+"&l47_sequencial="+sequencial;
 
         db_iframe_liclicita.hide();
@@ -212,18 +218,6 @@ $db_botao = true;
     function js_salvarEdital(){
         let descricao = document.getElementById('descricao_recurso').value;
         let origem_recurso = document.getElementById('origem_recurso').value;
-
-        if(origem_recurso == 9 && !descricao){
-            alert('Campo descrição da origem do recurso é obrigatório!');
-            return false;
-        }
-
-        if(origem_recurso == 0){
-            alert('Campo Origem do Recurso é obrigatório!');
-            return false;
-        }
-
-        datareferencia = document.getElementById('data_referencia').value;
 
     }
     //
