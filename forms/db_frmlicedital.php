@@ -33,7 +33,6 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("l20_nroedital");
 $clrotulo->label("l20_numero");
 $clrotulo->label("l20_codtipocom");
-$db_opcao = 1;
 $db_botao = true;
 
 ?>
@@ -106,7 +105,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                <tr>
+               <tr>
                   <td class="label-textarea" nowrap title="Links da publicação">
                     <b>Links da publicação:</b>
                   </td>
@@ -190,14 +189,11 @@ $db_botao = true;
 </form>
 
 <script>
-    if(!document.getElementById('l20_edital').value){
-        js_pesquisa();
-    }
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&aguardando_envio=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_descrecurso','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_descrecurso|dl_Sequencial_Edital','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, recurso){
-
+    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, recurso, sequencial){
+        console.log('SQE: ', sequencial);
         let dataFormatada = js_formatar(data, 'd');
         document.getElementById('l20_nroedital').value = nroedital;
         document.getElementById('l20_codigo').value = codigo;
@@ -208,6 +204,7 @@ $db_botao = true;
         document.getElementById('tipo_tribunal').value = tipo;
         document.getElementById('links').value = links;
         document.getElementById('descricao_recurso').value = recurso;
+        parent.iframe_documentos.location.href="lic4_editaldocumentos.php?l20_nroedital="+nroedital+"&l20_codigo="+codigo+"&l47_sequencial="+sequencial;
 
         db_iframe_liclicita.hide();
     }

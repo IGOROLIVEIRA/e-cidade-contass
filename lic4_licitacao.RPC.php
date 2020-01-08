@@ -609,7 +609,7 @@ switch ($oParam->exec) {
 
   case "getDocumento":
 
-    $oEdital          = new EditalDocumento($oParam->edital);
+    $oEdital          = new EditalDocumento($oParam->licitacao);
 
     if (isset($oParam->edital)) {
       $iCodigoEdital = $oParam->edital;
