@@ -76,7 +76,6 @@ if ($oGet->edital){
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
      <?
 
-     if(db_getsession('DB_anousu') >= 2020 && $oGet->natureza_objeto != 1) {
          $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
          $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
          $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
@@ -88,14 +87,7 @@ if ($oGet->edital){
            $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
          }
          $clcriaabas->cria_abas();
-     }else{
-         $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
-         $clcriaabas->sizecampo = array("editais" => "20","documentos" => "20");
-         $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-         $clcriaabas->src = array("editais" => "lic4_editalinclusao.php", "documentos" => "lic4_editaldocumentos.php");
-         $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
-         $clcriaabas->cria_abas();
-     }
+
 	 ?>
 	 </td>
       </tr>
