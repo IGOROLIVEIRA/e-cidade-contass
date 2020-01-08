@@ -48,17 +48,17 @@ class cl_licobrasanexo {
   // funcao para atualizar campos
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
-       $this->obr04_sequencial = ($this->obr04_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_sequencial"]:$this->obr04_sequencial);
-       $this->obr04_licobrasmedicao = ($this->obr04_licobrasmedicao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_licobrasmedicao"]:$this->obr04_licobrasmedicao);
-       $this->obr04_codimagem = ($this->obr04_codimagem == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"]:$this->obr04_codimagem);
-       $this->obr04_legenda = ($this->obr04_legenda == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_legenda"]:$this->obr04_legenda);
-     } else {
-     }
-   }
+      $this->obr04_sequencial = ($this->obr04_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_sequencial"]:$this->obr04_sequencial);
+      $this->obr04_licobrasmedicao = ($this->obr04_licobrasmedicao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_licobrasmedicao"]:$this->obr04_licobrasmedicao);
+      $this->obr04_codimagem = ($this->obr04_codimagem == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"]:$this->obr04_codimagem);
+      $this->obr04_legenda = ($this->obr04_legenda == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_legenda"]:$this->obr04_legenda);
+    } else {
+    }
+  }
 
   // funcao para inclusao
   function incluir () {
-      $this->atualizacampos();
+    $this->atualizacampos();
     if ($this->obr04_sequencial == null ) {
       $result = db_query("select nextval('licobrasanexo_obr04_sequencial_seq')");
       if($result==false){
@@ -70,36 +70,36 @@ class cl_licobrasanexo {
         return false;
       }
       $this->obr04_sequencial = pg_result($result,0,0);
-     }
-     if ($this->obr04_licobrasmedicao == null ) {
-       $this->erro_sql = " Campo Obras Medição não informado.";
-       $this->erro_campo = "obr04_licobrasmedicao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->obr04_codimagem == null ) {
-       $this->erro_sql = " Campo codigo da imagem não informado.";
-       $this->erro_campo = "obr04_codimagem";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->obr04_legenda == null ) {
-       $this->erro_sql = " Campo Legenda não informado.";
-       $this->erro_campo = "obr04_legenda";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+    }
+    if ($this->obr04_licobrasmedicao == null ) {
+      $this->erro_sql = " Campo Obras Medição não informado.";
+      $this->erro_campo = "obr04_licobrasmedicao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->obr04_codimagem == null ) {
+      $this->erro_sql = " Campo codigo da imagem não informado.";
+      $this->erro_campo = "obr04_codimagem";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->obr04_legenda == null ) {
+      $this->erro_sql = " Campo Legenda não informado.";
+      $this->erro_campo = "obr04_legenda";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
-     $sql = "insert into licobrasanexo(
+    $sql = "insert into licobrasanexo(
                                        obr04_sequencial
                                       ,obr04_licobrasmedicao
                                       ,obr04_codimagem
@@ -111,32 +111,32 @@ class cl_licobrasanexo {
                                ,'$this->obr04_codimagem'
                                ,'$this->obr04_legenda'
                       )";
-     $result = db_query($sql);
-     if ($result==false) {
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "Cadastro de imagens da Medição () nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Cadastro de imagens da Medição já Cadastrado";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       } else {
-         $this->erro_sql   = "Cadastro de imagens da Medição () nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       }
-       $this->erro_status = "0";
-       $this->numrows_incluir= 0;
-       return false;
-     }
-     $this->erro_banco = "";
-     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-     $this->erro_status = "1";
-     $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
+    $result = db_query($sql);
+    if ($result==false) {
+      $this->erro_banco = str_replace("\n","",@pg_last_error());
+      if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
+        $this->erro_sql   = "Cadastro de imagens da Medição () nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_banco = "Cadastro de imagens da Medição já Cadastrado";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      } else {
+        $this->erro_sql   = "Cadastro de imagens da Medição () nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      }
+      $this->erro_status = "0";
+      $this->numrows_incluir= 0;
+      return false;
+    }
+    $this->erro_banco = "";
+    $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
+    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+    $this->erro_status = "1";
+    $this->numrows_incluir= pg_affected_rows($result);
+    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+        && ($lSessaoDesativarAccount === false))) {
 
     }
     return true;
@@ -144,83 +144,84 @@ class cl_licobrasanexo {
 
   // funcao para alteracao
   function alterar ( $oid=null ) {
-      $this->atualizacampos();
-     $sql = " update licobrasanexo set ";
-     $virgula = "";
-     if (trim($this->obr04_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_sequencial"])) {
-       $sql  .= $virgula." obr04_sequencial = $this->obr04_sequencial ";
-       $virgula = ",";
-       if (trim($this->obr04_sequencial) == null ) {
-         $this->erro_sql = " Campo Cód. Sequencial não informado.";
-         $this->erro_campo = "obr04_sequencial";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->obr04_licobrasmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_licobrasmedicao"])) {
-       $sql  .= $virgula." obr04_licobrasmedicao = $this->obr04_licobrasmedicao ";
-       $virgula = ",";
-       if (trim($this->obr04_licobrasmedicao) == null ) {
-         $this->erro_sql = " Campo Obras Medição não informado.";
-         $this->erro_campo = "obr04_licobrasmedicao";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->obr04_codimagem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"])) {
-       $sql  .= $virgula." obr04_codimagem = $this->obr04_codimagem ";
-       $virgula = ",";
-       if (trim($this->obr04_codimagem) == null ) {
-         $this->erro_sql = " Campo codigo da imagem não informado.";
-         $this->erro_campo = "obr04_codimagem";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->obr04_legenda)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_legenda"])) {
-       $sql  .= $virgula." obr04_legenda = $this->obr04_legenda ";
-       $virgula = ",";
-       if (trim($this->obr04_legenda) == null ) {
-         $this->erro_sql = " Campo Legenda não informado.";
-         $this->erro_campo = "obr04_legenda";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
-     if ($result==false) {
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Cadastro de imagens da Medição nao Alterado. Alteracao Abortada.\\n";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       $this->numrows_alterar = 0;
-       return false;
-     } else {
-       if (pg_affected_rows($result)==0) {
-         $this->erro_banco = "";
-         $this->erro_sql = "Cadastro de imagens da Medição nao foi Alterado. Alteracao Executada.\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "1";
-         $this->numrows_alterar = 0;
-         return true;
-       } else {
-         $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+    $this->atualizacampos();
+    $sql = " update licobrasanexo set ";
+    $virgula = "";
+    if (trim($this->obr04_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_sequencial"])) {
+      $sql  .= $virgula." obr04_sequencial = $this->obr04_sequencial ";
+      $virgula = ",";
+      if (trim($this->obr04_sequencial) == null ) {
+        $this->erro_sql = " Campo Cód. Sequencial não informado.";
+        $this->erro_campo = "obr04_sequencial";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->obr04_licobrasmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_licobrasmedicao"])) {
+      $sql  .= $virgula." obr04_licobrasmedicao = $this->obr04_licobrasmedicao ";
+      $virgula = ",";
+      if (trim($this->obr04_licobrasmedicao) == null ) {
+        $this->erro_sql = " Campo Obras Medição não informado.";
+        $this->erro_campo = "obr04_licobrasmedicao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->obr04_codimagem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"])) {
+      $sql  .= $virgula." obr04_codimagem = $this->obr04_codimagem ";
+      $virgula = ",";
+      if (trim($this->obr04_codimagem) == null ) {
+        $this->erro_sql = " Campo codigo da imagem não informado.";
+        $this->erro_campo = "obr04_codimagem";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->obr04_legenda)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_legenda"])) {
+      $sql  .= $virgula." obr04_legenda = '$this->obr04_legenda' ";
+      $virgula = ",";
+      if (trim($this->obr04_legenda) == null ) {
+        $this->erro_sql = " Campo Legenda não informado.";
+        $this->erro_campo = "obr04_legenda";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    $sql .= " where ";
+    $sql .= "obr04_sequencial = $oid";
+    $result = db_query($sql);
+    if ($result==false) {
+      $this->erro_banco = str_replace("\n","",@pg_last_error());
+      $this->erro_sql   = "Cadastro de imagens da Medição nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      $this->numrows_alterar = 0;
+      return false;
+    } else {
+      if (pg_affected_rows($result)==0) {
+        $this->erro_banco = "";
+        $this->erro_sql = "Cadastro de imagens da Medição nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "1";
+        $this->numrows_alterar = 0;
+        return true;
+      } else {
+        $this->erro_banco = "";
+        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
@@ -233,98 +234,98 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   // funcao para exclusao
   function excluir ( $oid=null ,$dbwhere=null) {
 
-     $sql = " delete from licobrasanexo
+    $sql = " delete from licobrasanexo
                     where ";
-     $sql2 = "";
-     if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
-     } else {
-       $sql2 = $dbwhere;
-     }
-     $result = db_query($sql.$sql2);
-     if ($result==false) {
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Cadastro de imagens da Medição nao Excluído. Exclusão Abortada.\\n";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       $this->numrows_excluir = 0;
-       return false;
-     } else {
-       if (pg_affected_rows($result)==0) {
-         $this->erro_banco = "";
-         $this->erro_sql = "Cadastro de imagens da Medição nao Encontrado. Exclusão não Efetuada.\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "1";
-         $this->numrows_excluir = 0;
-         return true;
-       } else {
-         $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "1";
-         $this->numrows_excluir = pg_affected_rows($result);
-         return true;
+    $sql2 = "";
+    if ($dbwhere==null || $dbwhere =="") {
+      $sql2 = "obr04_sequencial = $oid";
+    } else {
+      $sql2 = $dbwhere;
+    }
+    $result = db_query($sql.$sql2);
+    if ($result==false) {
+      $this->erro_banco = str_replace("\n","",@pg_last_error());
+      $this->erro_sql   = "Cadastro de imagens da Medição nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      return false;
+    } else {
+      if (pg_affected_rows($result)==0) {
+        $this->erro_banco = "";
+        $this->erro_sql = "Cadastro de imagens da Medição nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "1";
+        $this->numrows_excluir = 0;
+        return true;
+      } else {
+        $this->erro_banco = "";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "1";
+        $this->numrows_excluir = pg_affected_rows($result);
+        return true;
       }
     }
   }
 
   // funcao do recordset
   function sql_record($sql) {
-     $result = db_query($sql);
-     if ($result==false) {
-       $this->numrows    = 0;
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     $this->numrows = pg_numrows($result);
-      if ($this->numrows==0) {
-        $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:licobrasanexo";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+    $result = db_query($sql);
+    if ($result==false) {
+      $this->numrows    = 0;
+      $this->erro_banco = str_replace("\n","",@pg_last_error());
+      $this->erro_sql   = "Erro ao selecionar os registros.";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    $this->numrows = pg_numrows($result);
+    if ($this->numrows==0) {
+      $this->erro_banco = "";
+      $this->erro_sql   = "Record Vazio na Tabela:licobrasanexo";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     return $result;
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="licobrasanexo.oid,*",$ordem=null,$dbwhere="") {
-     $sql = "select ";
-     if ($campos != "*" ) {
-       $campos_sql = explode("#", $campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++) {
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     } else {
-       $sql .= $campos;
-     }
-     $sql .= " from licobrasanexo ";
-     $sql2 = "";
-     if ($dbwhere=="") {
-       if ( $oid != "" && $oid != null) {
-          $sql2 = " where licobrasanexo.oid = '$oid'";
-       }
-     } else if ($dbwhere != "") {
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if ($ordem != null ) {
-       $sql .= " order by ";
-       $campos_sql = explode("#", $ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++) {
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
+  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
+    $sql = "select ";
+    if ($campos != "*" ) {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from licobrasanexo ";
+    $sql2 = "";
+    if ($dbwhere=="") {
+      if ( $oid != "" && $oid != null) {
+        $sql2 = " where obr04_sequencial = $oid";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null ) {
+      $sql .= " order by ";
+      $campos_sql = explode("#", $ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
       }
     }
     return $sql;
@@ -332,31 +333,31 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
 
   // funcao do sql
   function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
-     $sql = "select ";
-     if ($campos != "*" ) {
-       $campos_sql = explode("#", $campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++) {
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     } else {
-       $sql .= $campos;
-     }
-     $sql .= " from licobrasanexo ";
-     $sql2 = "";
-     if ($dbwhere=="") {
-     } else if ($dbwhere != "") {
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if ($ordem != null ) {
-       $sql .= " order by ";
-       $campos_sql = explode("#", $ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++) {
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
+    $sql = "select ";
+    if ($campos != "*" ) {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from licobrasanexo ";
+    $sql2 = "";
+    if ($dbwhere=="") {
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null ) {
+      $sql .= " order by ";
+      $campos_sql = explode("#", $ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
       }
     }
     return $sql;
