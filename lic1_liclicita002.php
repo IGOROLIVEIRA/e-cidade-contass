@@ -163,35 +163,14 @@ if(isset($alterar)){
       $sql = $clliclicita->sql_query_file($l20_codigo, 'l20_nroedital as codigoEdital, l20_codigo as numeroLicitacao');
       $result = $clliclicita->sql_record($sql);
       db_fieldsmemory($result);
-      
+
       if($codigoedital != $l20_nroedital && $clpccfeditalnum->numrows==0){
         $clpccfeditalnum->l47_numero = $l20_nroedital;
         $clpccfeditalnum->l47_anousu = $anousu;
         $clpccfeditalnum->l47_instit = $instit;
         $clpccfeditalnum->incluir();
-      }else{
-        $erro_msg = 'Número do edital já vinculado a Licitação';
-        $sqlerro = true;
       }
     }
-    // else{
-    //   $result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"*",null,"l47_instit=$instit and l47_anousu=$anousu "));
-    //   if ($clpccfeditalnum->numrows==0){
-    //     $l20_nroedital = 1;
-    //     $clpccfeditalnum->l47_numero = $l20_nroedital;
-    //   }else{
-    //     $erro_msg = 'Número do edital já vinculado a Licitação';
-    //     $sqlerro = true;
-    //   }
-    // }
-
-    // if(!$sqlerro){
-    //   $clpccfeditalnum->l47_anousu = $anousu;
-    //   $clpccfeditalnum->l47_instit = $instit;
-    //   $clpccfeditalnum->incluir();
-    // }else{
-    //   $l20_nroedital = '';
-    // }
   }
 
   if ($iLinhasLicLicita > 0) {
@@ -221,7 +200,7 @@ if(isset($alterar)){
         }
       } else {
 
-        $erro_msg = "Veririfque se está configurado a numeração de licitação por modalidade.";
+        $erro_msg = "Verifique se está configurado a numeração de licitação por modalidade.";
         $sqlerro  = true;
       }
     }
@@ -272,7 +251,7 @@ if(isset($alterar)){
 
     }
 
-    
+
   if ($sqlerro == false ){
     $clliclicita->l20_numero       = $iNumero;
     $clliclicita->l20_procadmin    = $sProcAdmin;

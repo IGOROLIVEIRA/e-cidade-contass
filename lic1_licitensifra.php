@@ -34,7 +34,7 @@ require_once("dbforms/db_classesgenericas.php");
 require_once("classes/db_pcproc_classe.php");
 require_once("classes/db_pcprocitem_classe.php");
 require_once("classes/db_liclicitem_classe.php");
-require_once("classes/db_liclicita_classe.php");
+require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_pcorcamitemlic_classe.php");
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_liclicitemlote_classe.php");
@@ -51,7 +51,7 @@ $clpcorcamitemlic   = new cl_pcorcamitemlic;
 $clpcparam          = new cl_pcparam;
 $clliclicitemlote   = new cl_liclicitemlote;
 $clpcorcamitem      = new cl_pcorcamitem;
-$clliclicita        = new cl_liclicita;
+$clliclancedital   = new cl_liclancedital;
 
 $db_opcao=1;
 $db_botao=true;
@@ -296,7 +296,6 @@ if (!empty($chaves) && isset($chaves)){
         db_fim_transacao(false);
       }
     }
-
     if ($sqlerro==false){
       db_msgbox("Inclusão Efetivada com Sucesso!!");
       echo "<script>parent.parent.iframe_liclicita.bloquearRegistroPreco();</script>";
@@ -308,11 +307,12 @@ if (!empty($chaves) && isset($chaves)){
                  </script>";
       }
 
-      $sSql = $clliclicita->sql_query('', 'l20_naturezaobjeto', '', 'l20_nroedital = '.$edital);
-      $rsSql = $clliclicita->sql_record($sSql);
+      $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital', '', 'l20_codigo = '.$licitacao);
+      $rsSql = $clliclancedital->sql_record($sSql);
       $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
+      $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
 
-      if($natureza_objeto == 1){
+      if($natureza_objeto == 1 && $nroedital == 1){
         echo"<script> parent.parent.window.location.href='lic4_editalabas.php?edital=$edital';</script>";
       }
     }else{
