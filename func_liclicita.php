@@ -348,7 +348,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = 1
-                           AND EXTRACT (YEAR from l47_dataenvio) >= 2020 $sWhere
+                           AND EXTRACT (YEAR from l20_dataaber) >= 2020 $sWhere
                         ORDER BY l20_codigo
           ";
                 }
