@@ -136,7 +136,7 @@ class EditalDocumento {
   {
     $sCampos = "l48_sequencial, l48_edital, l48_arquivo, l48_tipo ";
 
-    $sWhere  = " l47_liclicita = {$this->getCodigoEdital()}";
+    $sWhere  = " l48_edital = {$this->getCodigoEdital()}";
 
     $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
     $sSqlDocumentos      = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);

@@ -304,12 +304,14 @@ $sWhereContratos = " and 1 = 1 ";
                 }
 
                 if (isset($edital) && $edital == true) {
+                    $sWhere = '';
                     if($aguardando_envio){
                       $sWhere = ' and liclicita.l20_cadinicial = 1';
                     }
 
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
+                            liclancedital.l47_sequencial as dl_Sequencial_Edital,
                             liclicita.l20_edital,
                             liclicita.l20_nroedital,
                             liclicita.l20_anousu,
@@ -318,9 +320,9 @@ $sWhereContratos = " and 1 = 1 ";
                             pctipocompra.pc50_pctipocompratribunal,
                             liclicita.l20_objeto,
                             (CASE 
-                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
+                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
                               THEN liclicita.l20_dtpublic
-                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
+                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null 
                               THEN liclicita.l20_datacria
                             WHEN liclancedital.l47_dataenvio is not null
                               THEN liclancedital.l47_dataenvio

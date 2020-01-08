@@ -42,42 +42,24 @@ $clcflicita  = new cl_cflicita;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+
 $sqlerro = false;
+$db_opcao = 2;
 
-//  Realizar busca pelos campos
-$l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
+if(isset($alterar)){
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', '');
+  $rsEdital = $clliclancedital->sql_record($sqlEdital);
+  $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
 
-$sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
-	   UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto, 
-	   (CASE 
-          WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
-            THEN liclicita.l20_dtpublic
-          WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
-            THEN liclicita.l20_datacria
-          END) as dl_Data_Referencia', '', 'l20_nroedital = '.$l20_nroedital);
-$rsLicita = $clliclicita->sql_record($sqlLicita);
-
-db_fieldsmemory($rsLicita, 0);
-
-if(isset($incluir)){
   $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
   $clliclancedital->l47_linkpub = $links;
   $clliclancedital->l47_origemrecurso = $origem_recurso;
   $clliclancedital->l47_descrecurso = $descricao_recurso;
   $clliclancedital->l47_dataenvio = $data_formatada;
   $clliclancedital->l47_liclicita = $l20_codigo;
-  $clliclancedital->incluir(null);
+  $clliclancedital->alterar($sequencial);
 
-  // Alterar o status da licitação para Aguardando Envio;
-  $clliclicita->l20_cadinicial = 2;
-  $clliclicita->l20_exercicioedital = intval(db_getsession('DB_anousu'));
-  $clliclicita->alterar($l20_codigo);
-
-  if ($clliclicita->erro_status=="0"){
-    $erro_msg = $clliclicita->erro_msg;
-    $sqlerro=true;
-  }
-
+  
   if ($clliclancedital->erro_status=="0"){
     $erro_msg = $clliclancedital->erro_msg;
     $sqlerro=true;
@@ -116,7 +98,7 @@ if(isset($incluir)){
     <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
       <center>
         <?
-        include("forms/db_frmlicedital.php");
+          include("forms/db_frmlicedital.php");
         ?>
       </center>
     </td>
@@ -128,20 +110,14 @@ if(isset($incluir)){
 </html>
 <?
 
-if(isset($incluir) ) {
+if(isset($alterar) ) {
   echo "<script>";
   echo "alert('" . $clliclancedital->erro_sql . "')";
   echo "</script>";
-
-  if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
-    echo "<script>";
-    echo "parent.document.formaba.documentos.disabled=false;";
-    echo "parent.mo_camada('documentos');";
-    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$l20_codigo'";
-    echo "</script>";
-  }
-
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
+}else{
+  echo "<script>";
+  echo "parent.iframe_editais.js_pesquisa();";
+  echo "</script>";
 }
 ?>
-

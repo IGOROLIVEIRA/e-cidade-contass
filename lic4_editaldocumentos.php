@@ -147,6 +147,9 @@ $db_opcao = 1;
 <script type="text/javascript">
 
     var iLicitacao = '<?php echo $oGet->l20_codigo;?>';
+    var iEdital = '<?php echo $oGet->l20_nroedital;?>';
+    var iSequencial = '<?php echo $oGet->l47_sequencial;?>';
+
     var sUrlRpc = "lic4_licitacao.RPC.php";
 
     oGridDocumento     = new DBGrid('gridDocumento');
@@ -207,10 +210,10 @@ $db_opcao = 1;
             alert('Informe um tipo para o documento!');
             return false;
         }
-        let numeroedital = 27;
+
         var oParam       = new Object();
         oParam.exec      = 'adicionarDocumento';
-        oParam.edital    = numeroedital;
+        oParam.edital    = iSequencial;
         oParam.tipo      = $F('caddocumento');
         oParam.arquivo   = $F('namefile');
         js_divCarregando('Aguarde... Salvando Documento','msgbox');
@@ -245,7 +248,7 @@ $db_opcao = 1;
 
         var oParam       = new Object();
         oParam.exec      = 'getDocumento';
-        oParam.edital   = iLicitacao;
+        oParam.licitacao   = iLicitacao;
         var oAjax        = new Ajax.Request(
             sUrlRpc,
             { parameters: 'json='+Object.toJSON(oParam),

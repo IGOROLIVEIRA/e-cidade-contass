@@ -31,12 +31,26 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
+include("classes/db_liclancedital_classe.php");
+
+$oGet = db_utils::postMemory($_GET);
+//var_dump($oGet);
+$clliclancedital = new cl_liclancedital;
+
+//$sqlLicita = $clliclicita->sql_query('', 'l20_codigo', '', '');
+////$sqlLicita = $clliclicita->sql_query('', 'l20_codigo', '', 'l20_nroedital = '.$l20_nroedital);
+//$rsLicita = $clliclicita->sql_record($sqlLicita);
+//db_criatabela($rsLicita);
+
 
 $clcriaabas     = new cl_criaabas;
-$oGet = db_utils::postMemory($_GET);
-if (!isset($db_opcao)){
+
+if ($oGet->edital){
   $db_opcao = 1;
+}else{
+  $db_opcao = 2;
 }
+
 ?>
 
 <html>
@@ -66,8 +80,13 @@ if (!isset($db_opcao)){
          $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
          $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
          $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-         $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
-         $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
+         if($oGet->edital){
+            $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
+            $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
+         }else{
+           $clcriaabas->src = array("editais" => "lic4_editalalteracao.php", "documentos" => "lic4_editaldocumentos.php");
+           $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
+         }
          $clcriaabas->cria_abas();
      }else{
          $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
