@@ -34,13 +34,45 @@ switch($oParam->exec) {
     for ($iCont = 0; $iCont < pg_num_rows($resultAnexos); $iCont++) {
       $oDadosAnexo = db_utils::fieldsMemory($resultAnexos, $iCont);
 
-        $oDocumentos      = new stdClass();
-        $oDocumentos->iCodigo    = $oDadosAnexo->obr04_sequencial;
-        $oDocumentos->sLegenda   = $oDadosAnexo->obr04_legenda;
-        $oRetorno->dados[] = $oDocumentos;
+      $oDocumentos      = new stdClass();
+      $oDocumentos->iCodigo    = $oDadosAnexo->obr04_sequencial;
+      $oDocumentos->sLegenda   = $oDadosAnexo->obr04_legenda;
+      $oRetorno->dados[] = $oDocumentos;
     }
 
     $oRetorno->detalhe    = "documentos";
+
+    break;
+
+  case 'excluirAnexo':
+
+    $cllicobrasanexos = new cl_licobrasanexo();
+    $resultAnexos = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_sequencial = $oParam->codAnexo"));
+    db_fieldsmemory($resultAnexos,0);
+
+    //cria caminho para o arquivo
+    $anexo = 'imagens/obras/'.$obr04_codimagem;
+
+    //apaga o arquivo no diretorio
+    if(!unlink($anexo)){
+      $erro = true;
+    };
+
+    if($erro == false){
+      $cllicobrasanexos->excluir($obr04_sequencial);
+    }
+    if($erro == true){
+      $oRetorno->message = "Erro ! Arquivo nao excluido contate o Suporte.";
+    }
+    break;
+
+  case 'alterarAnexo':
+
+    $cllicobrasanexos = new cl_licobrasanexo();
+    $ultimoregistro = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"max(obr04_sequencial) as obr04_sequencial",null,""));
+    db_fieldsmemory($ultimoregistro,0);
+    $cllicobrasanexos->obr04_legenda = $oParam->legenda;
+    $cllicobrasanexos->alterar($obr04_sequencial);
 
     break;
 }

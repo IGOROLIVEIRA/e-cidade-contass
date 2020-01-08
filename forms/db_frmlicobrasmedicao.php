@@ -190,6 +190,13 @@ $cllicobrasmedicao->rotulo->label();
   oGridDocumento.setHeader(new Array("Codigo","Legenda", "Ação"));
   oGridDocumento.show($('ctnDbGridDocumentos'));
 
+  function startLoading() {
+    js_divCarregando('Aguarde... Carregando Documento','msgbox');
+  }
+
+  function endLoading() {
+    js_removeObj('msgbox');
+  }
 
   function js_pesquisa(){
     js_OpenJanelaIframe('top.corpo','db_iframe_licobrasmedicao','func_licobrasmedicao.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
@@ -256,42 +263,35 @@ $cllicobrasmedicao->rotulo->label();
    * ROTINA PARA SALVAR ANEXO
    */
 
-  function startLoading() {
-    js_divCarregando('Aguarde... Carregando Documento','msgbox');
-  }
+  js_getAnexo();
 
-  function endLoading() {
-    js_removeObj('msgbox');
-  }
-
-  js_getDocumento();
-
-  function js_salvarDocumento() {
-
+  function js_salvarAnexo() {
+    var medicao = $F('obr03_sequencial');
     var iFrame = document.createElement("iframe");
     iFrame.src = 'func_uploadfilemedicao.php?clone=form2&medicao='+$F('obr03_sequencial')+'&descricao='+$F('obr04_legenda');
     iFrame.id  = 'uploadIframe';
     $('anexo').appendChild(iFrame);
-    js_getDocumento();
   }
 
-  $('btnAnexar').observe("click",js_salvarDocumento);
+  $('btnAnexar').observe("click",js_alterarAnexo);
+  $('uploadfile').observe("change",js_salvarAnexo);
 
-  function js_getDocumento() {
+  function js_getAnexo() {
 
     var oParam        = new Object();
     oParam.exec       = 'getAnexos';
     oParam.codmedicao = $F('obr03_sequencial');
+    js_divCarregando('Aguarde... Carregando Foto','msgbox');
     var oAjax         = new Ajax.Request(
       'obr1_obras.RPC.php',
       { parameters: 'json='+Object.toJSON(oParam),
         asynchronous:false,
         method: 'post',
-        onComplete : js_retornoGetDocumento
+        onComplete : js_retornoGetAnexo
       });
   }
 
-  function js_retornoGetDocumento(oAjax) {
+  function js_retornoGetAnexo(oAjax) {
 
     var oRetorno = eval('('+oAjax.responseText+")");
     oGridDocumento.clearAll(true);
@@ -303,12 +303,87 @@ $cllicobrasmedicao->rotulo->label();
       var aLinha = new Array();
       aLinha[0]  = oDocumento.iCodigo;
       aLinha[1]  = decodeURIComponent(oDocumento.sLegenda.replace(/\+/g,  " "));
-      aLinha[2]  = '<input type="button" value="E" onclick="js_excluirDocumento('+oDocumento.iCodigo+')">';
+      aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')">';
       oGridDocumento.addRow(aLinha);
     });
-
+    js_removeObj("msgbox");
     oGridDocumento.renderRows();
+  }
 
+  function js_alterarAnexo() {
+
+    if ($F('uploadfile') == '') {
+
+      alert('Escolha uma Foto!');
+      return false;
+    }
+
+    if ($F('obr04_legenda') == '') {
+
+      alert('Informe uma Legenda para a foto!');
+      return false;
+    }
+
+    var oParam        = new Object();
+    oParam.exec       = 'alterarAnexo';
+    oParam.codmedicao = $F('obr03_sequencial');
+    oParam.legenda    = $F('obr04_legenda');
+    js_divCarregando('Aguarde... Anexando Foto','msgbox');
+    var oAjax         = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        asynchronous:false,
+        method: 'post',
+        onComplete : js_retornoAlterarAnexo
+      });
+  }
+
+  function js_retornoAlterarAnexo(oAjax) {
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+
+    if (oRetorno.status == 2) {
+      alert(oRetorno.message);
+    }else {
+      alert("Anexo Salvo com Sucesso !");
+      $('uploadfile').value     = '';
+      $('namefile').value       = '';
+      $("obr04_legenda").value  = "";
+      js_getAnexo();
+    }
+  }
+
+  function js_excluirAnexo(iCodigoDocumento) {
+
+    if (!confirm('Confirma a Exclusão do Documento?')) {
+      return false;
+    }
+
+    var oParam             = new Object();
+    oParam.exec            = 'excluirAnexo';
+    oParam.codmedicao      = $F('obr03_sequencial');
+    oParam.codAnexo = iCodigoDocumento;
+    js_divCarregando('Aguarde... excluindo foto','msgbox');
+    var oAjax        = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { asynchronous:false,
+        parameters: 'json='+Object.toJSON(oParam),
+        method: 'post',
+        onComplete : js_retornoexcuirAnexo
+      });
+
+  }
+
+  function js_retornoexcuirAnexo(oAjax) {
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+
+    if (oRetorno.status == 2) {
+      alert(oRetorno.message);
+    }else {
+      alert("Anexo excluido com Sucesso !");
+      js_getAnexo();
+    }
   }
 
   function js_carregar() {

@@ -66,12 +66,13 @@ if(isset($uploadfile)) {
   $cllicobrasanexo = new cl_licobrasanexo();
   $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
   $cllicobrasanexo->obr04_codimagem       = $novo_nome;
-  $cllicobrasanexo->obr04_legenda         = $legenda;
+  $cllicobrasanexo->obr04_legenda         = "obr04_legenda";
   $cllicobrasanexo->incluir();
-
 
   // Faz um upload do arquivo para o local especificado
   if(  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome)) {
+//    echo $medicao;exit;
+
 
     $href = $arquivoDocument;
 
@@ -114,4 +115,5 @@ if(isset($uploadfile)) {
     formteste.submit();
   }
   <?}?>
+
 </script>
