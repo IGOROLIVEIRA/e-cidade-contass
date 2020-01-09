@@ -309,17 +309,17 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	liclicita.l20_dtpubratificacao as dtPublicacaoTermoRatificacao,
 	l20_codigo as codlicitacao,
 	liclicita.l20_veicdivulgacao as veiculoPublicacao,
-	(CASE liclicita.l20_tipojulg WHEN 3 THEN 1		
+	(CASE liclicita.l20_tipojulg WHEN 3 THEN 1
 		ELSE 2
 	END) as processoPorLote
-	FROM liclicita 
+	FROM liclicita
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
-	
+
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo and liclicitasituacao.l11_licsituacao in (1,10)
-	WHERE db_config.codigo= " . db_getsession("DB_instit") . " 
+	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
 	AND pctipocompratribunal.l44_sequencial in (100,101,102,103) AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
 	AND DATE_PART('YEAR',l20_dtpubratificacao)=" . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -446,7 +446,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
-		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as nroItem	
+		(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as nroItem
 		FROM liclicitem
 		INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
@@ -587,8 +587,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		(CASE parecerlicitacao.l200_tipoparecer WHEN 2 THEN 6
 			ELSE 7
 		END) as tipoResp,
-		cgm.z01_cgccpf as nroCPFResp		
-		FROM liclicita 
+		cgm.z01_cgccpf as nroCPFResp
+		FROM liclicita
 		INNER JOIN parecerlicitacao on (liclicita.l20_codigo=parecerlicitacao.l200_licitacao)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -623,13 +623,13 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 		(CASE liccomissaocgm.l31_tipo WHEN '1' THEN 1
 		WHEN '2' THEN 4 WHEN '3' THEN 2 WHEN '4' THEN 3 WHEN '8' THEN 5 END) as tipoResp,
-		cgm.z01_cgccpf as nroCPFResp		
-		FROM liclicita 
+		cgm.z01_cgccpf as nroCPFResp
+		FROM liclicita
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
-		INNER JOIN cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm) 
+		INNER JOIN cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm)
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
@@ -701,7 +701,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN pcorcamitem on (pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem)
 		INNER JOIN pcorcamval on (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem)
 		INNER JOIN precoreferencia on (pcproc.pc80_codproc = precoreferencia.si01_processocompra)
-		INNER JOIN itemprecoreferencia on (precoreferencia.si01_sequencial = itemprecoreferencia.si02_precoreferencia and pcorcamval.pc23_orcamitem = itemprecoreferencia.si02_itemproccompra)	
+		INNER JOIN itemprecoreferencia on (precoreferencia.si01_sequencial = itemprecoreferencia.si02_precoreferencia and pcorcamval.pc23_orcamitem = itemprecoreferencia.si02_itemproccompra)
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
     LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
@@ -788,7 +788,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
-		liclicita.l20_edital as nroProcessoLicitatorio,	
+		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 		infocomplementaresinstit.si09_codorgaotce as codorgaotce,
 		CASE WHEN o41_subunidade != 0
@@ -806,8 +806,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		o55_origemacao as idSubAcao,
 		substr(orcelemento.o56_elemento,2,6) as naturezaDespesa,
 		orctiporec.o15_codtri as codFontRecursos,
-		orcdotacao.o58_valor as vlRecurso			
-		FROM liclicita 
+		orcdotacao.o58_valor as vlRecurso
+		FROM liclicita
 		INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -822,7 +822,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10) 
+		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
 
             $rsResult16 = db_query($sSql);
@@ -900,21 +900,21 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	dispensa112020.si75_nrolote as nroLote,
 	(solicitempcmater.pc16_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcorcamval.pc23_vlrun as vlUnitario,
-	pcorcamval.pc23_quant as quantidade 	
-	FROM liclicita 
+	pcorcamval.pc23_quant as quantidade
+	FROM liclicita
 	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
 	INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
 	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
-	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )      
-	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)      
+	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
+	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
 	INNER JOIN pcorcamjulg ON (pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem )
 	INNER JOIN pcorcamforne ON (pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne)
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)    
+	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
 	LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem AND liclicita.l20_tipojulg = 3)
 	LEFT  JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
@@ -1031,7 +1031,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
-	liclicita.l20_edital as nroProcessoLicitatorio,	
+	liclicita.l20_edital as nroProcessoLicitatorio,
 	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
 		ELSE 2
@@ -1050,8 +1050,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	habilitacaoforn.l206_datavalidadefgts as dataValidadeCertidaoRegularidadeFGTS,
 	habilitacaoforn.l206_numcertidaocndt as nroCNDT,
 	habilitacaoforn.l206_dataemissaocndt as dtEmissaoCNDT,
-	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT 			
-	FROM liclicita 
+	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT
+	FROM liclicita
 	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
 	INNER JOIN credenciamento on (liclicita.l20_codigo=credenciamento.l205_licitacao)
 	INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
@@ -1059,8 +1059,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
-	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )      
-	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)      
+	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
+	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
@@ -1068,7 +1068,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	LEFT JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
-  LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid    
+  LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND liclicitasituacao.l11_licsituacao = 1
@@ -1082,7 +1082,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
         $dispensa18 = new cl_dispensa182020();
                 $oDados18 = db_utils::fieldsMemory($rsResult18, $iCont18);
 
-                $dispensa18->si82_tiporegistro = 18;
+                $dispensa18->si82_tiporegistro = 20;
                 $dispensa18->si82_codorgaoresp = $oDados18->codorgaoresp;
                 $dispensa18->si82_codunidadesubresp = $oDados18->codunidadesubresp;
                 $dispensa18->si82_exercicioprocesso = $oDados18->exerciciolicitacao;
@@ -1124,6 +1124,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
     }
 }
-     
 
- 
+
+
