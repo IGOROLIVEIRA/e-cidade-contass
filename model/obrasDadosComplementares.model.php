@@ -587,7 +587,7 @@
       return $aRetorno;
     }
 
-    static function findObraByEdital($iCodigoEdital, $lEncode=true) {
+    static function findObrasByEdital($iCodigoEdital, $lEncode=true) {
       $aRetorno = false;
 
       if (trim($iCodigoEdital) != "") {

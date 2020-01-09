@@ -222,28 +222,19 @@ $db_botao = true;
         let origem_recurso = document.getElementById('origem_recurso').value;
 
     }
-    //
-    // function limpaCampos(){
-    // 	document.getElementById('l20_edital').value = '';
-    // document.getElementById('l20_numero').value = '';
-    // 	document.getElementById('l20_nroedital').value = '';
-    // 	document.getElementById('descricao_recurso').value = '';
-    // 	document.getElementById('data_referencia').value = '';
-    // 	document.getElementById('l20_objeto').value = '';
-    // }
 
     function js_exibeDadosCompl(){
         var idObra = '';
         if ($F('idObra') != ""){
             idObra = $F('idObra');
         }
-        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', idObra);
+        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '');
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
+        if(idObra){
+            oDadosComplementares.preencheCampos(idObra);
+        }
         oDadosComplementares.setCallBackFunction(() => {
-            // if(idObra)
-            //     js_retorno_dadosComplementares();
-            // else
             js_lancaDadosCompCallBack();
         });
         oDadosComplementares.show();
@@ -293,9 +284,8 @@ $db_botao = true;
         var iNumDados = aDados.length;
         for (var iInd=0; iInd < iNumDados; iInd++) {
             let sEndereco = "";
-            sEndereco += aDados[iInd].codigoobra.urlDecode();
-            sEndereco += ",  "+aDados[iInd].municipio.urlDecode();
-            sEndereco += ",  "+aDados[iInd].distrito.urlDecode();
+            sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
+            sEndereco += ", Distrito: "+aDados[iInd].distrito.urlDecode();
 
             $('dados_complementares').value = sEndereco;
         }
@@ -342,22 +332,31 @@ $db_botao = true;
         var oRetorno    = eval("("+oAjax.responseText+")");
 
         oRetorno.dadoscomplementares.forEach((dado) => {
-            console.log('item: ', dado);
+            let linhas = oDBGrid.aRows.length;
+            let descricaoLinha = `Obra: ${dado.codigoobra}, Distrito: ${dado.distrito}`;
+            let aLinha = new Array();
+            aLinha[0] = linhas+1;
+            aLinha[1] = descricaoLinha;
+            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dado.codigoobra+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
+
+            oDBGrid.addRow(aLinha);
         })
+        oDBGrid.renderRows();
+        $('dados_complementares').value = '';
+        $('idObra').value = '';
     }
 
     function js_buscaDadosComplementares(codigo) {
         let oParam = new Object();
-        oParam.exec = 'findDadosObra';
+        oParam.exec = 'findDadosObraEdital';
         oParam.iCodigoEdital = codigo;
         js_AjaxCgm(oParam, js_retornoDados);
 
     }
 
     function js_lancaDadosAlt(valor){
-        let valorTratado = valor.split(',');
-        $('idObra').value = valorTratado[0];
-
+        $('idObra').value = valor;
         js_exibeDadosCompl();
     }
 

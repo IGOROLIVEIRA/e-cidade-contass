@@ -2139,7 +2139,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
       'Complemento',
 
       'Loteamento',
-      'Condom?nio',
+      'Condomínio',
       'SeqLocal',
 
       'SeqEnder',
@@ -3846,6 +3846,31 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     me.setCodigoIbge(oRetorno);
     $('txtCodigoIbge'+sId).value = oRetorno;
 
+  }
+
+  this.preencheCampos = function(codObra){
+    console.log('Codigo da obra: ', codObra);
+    var oPesquisa         = new Object();
+    oPesquisa.exec        = 'findDadosObra';
+    oPesquisa.iCodigoObra = codObra;
+
+    var msgDiv = "Aguarde carregando lista de estados.";
+    js_divCarregando(msgDiv,'msgBox');
+
+    var oAjax = new Ajax.Request(
+      me.sUrlRpc,
+      {
+        asynchronous: false,
+        parameters: 'json='+Object.toJSON(oPesquisa),
+        method: 'post',
+        onComplete : me.retornoCampos
+      }
+    );
+  }
+
+  this.retornoCampos = function(oAjax){
+    var oRetorno = eval('('+oAjax.responseText+')');
+    console.log('Retorno: ', oRetorno);
   }
 
 }
