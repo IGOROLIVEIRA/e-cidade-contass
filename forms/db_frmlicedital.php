@@ -137,7 +137,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                  <tr id="td_obras" style="display: <?php $natureza_objeto == 1 ? '' : 'none'?> ">
+                  <tr id="td_obras" style="display: none;">
                     <td colspan="3">
                       <fieldset>
                         <legend>Obras e Serviços</legend>
@@ -227,7 +227,7 @@ $db_botao = true;
           <?=$db_opcao = 2;?>
         }
 
-
+            console.log('Licita..', dadoslicitacao);
             let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
             $('numero_edital').value = dadoslicitacao.l20_nroedital;
             $('codigolicitacao').value = dadoslicitacao.l20_codigo;
@@ -239,10 +239,12 @@ $db_botao = true;
             $('links').value = dadoslicitacao.l47_linkpub;
             $('origem_recurso').selectedIndex = dadoslicitacao.l47_origemrecurso != '' ? dadoslicitacao.l47_origemrecurso : 0;
             $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
-            $('naturezaobjeto').value = natureza_obj;
+            $('naturezaobjeto').value = dadoslicitacao.l20_naturezaobjeto;
 
-            if(natureza_obj == 1){
+            if(dadoslicitacao.l20_naturezaobjeto == 1){
                 document.getElementById('td_obras').style.display = '';
+            }else{
+                document.getElementById('td_obras').style.display = 'none';
             }
 
     }
