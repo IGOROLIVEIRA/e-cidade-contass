@@ -79,13 +79,13 @@ if ($oGet->edital){
          $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
          $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
          $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-         if($oGet->edital){
+//         if($oGet->edital){
             $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
             $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
-         }else{
-           $clcriaabas->src = array("editais" => "lic4_editalalteracao.php", "documentos" => "lic4_editaldocumentos.php");
-           $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
-         }
+//         }else{
+//           $clcriaabas->src = array("editais" => "lic4_editalalteracao.php", "documentos" => "lic4_editaldocumentos.php");
+//           $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
+//         }
          $clcriaabas->cria_abas();
 
 	 ?>

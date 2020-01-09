@@ -1709,7 +1709,7 @@ class cl_liclicita
       $sql .= $virgula . " l20_exercicioedital = '$this->l20_exercicioedital' ";
       $virgula = ",";
     } else {
-      $sql .= $virgula . " l20_exercicioedital = ''";
+      $sql .= $virgula . " l20_exercicioedital = null";
       $virgula = ",";
     }
 

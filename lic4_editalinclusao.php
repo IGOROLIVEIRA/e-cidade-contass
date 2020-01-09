@@ -36,54 +36,86 @@ require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_cflicita_classe.php");
 include("dbforms/db_classesgenericas.php");
 
-$clliclicita = new cl_liclicita;
 $clliclancedital = new cl_liclancedital;
+$clliclicita = new cl_liclicita;
 $clcflicita  = new cl_cflicita;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+//var_dump($HTTP_POST_VARS);
+
 $sqlerro = false;
-
+$db_opcao = 2;
 //  Realizar busca pelos campos
-$l20_nroedital = $edital != '' ? $edital : $l20_nroedital;
 
-$sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
-	   UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto, 
-	   (CASE 
-          WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) 
-            THEN liclicita.l20_dtpublic
-          WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) 
-            THEN liclicita.l20_datacria
-          END) as dl_Data_Referencia', '', 'l20_nroedital = '.$l20_nroedital);
-$rsLicita = $clliclicita->sql_record($sqlLicita);
-
-db_fieldsmemory($rsLicita, 0);
+if($numero_edital){
+  $sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+       UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
+       (CASE
+            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54)
+              THEN liclicita.l20_dtpublic
+            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106)
+              THEN liclicita.l20_datacria
+            END) as data_Referencia', '', 'l20_nroedital = '.$numero_edital);
+  $rsLicita = $clliclicita->sql_record($sqlLicita);
+  $licitacao = db_utils::fieldsMemory($rsLicita, 0);
+}
 
 if(isset($incluir)){
+    $sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '', 'l47_liclicita = '.$codigolicitacao);
+    $rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
-    $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
+    if($clliclancedital->numrows == 0){
+      $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
+      $clliclancedital->l47_linkpub = $links;
+      $clliclancedital->l47_origemrecurso = $origem_recurso;
+      $clliclancedital->l47_descrecurso = $descricao_recurso;
+      $clliclancedital->l47_dataenvio = $data_formatada;
+      $clliclancedital->l47_liclicita = $codigolicitacao;
+      $clliclancedital->incluir(null);
+
+      if ($clliclancedital->erro_status) {
+        $erro_msg = $clliclancedital->erro_msg;
+      }
+
+      if($clliclancedital->numrows_incluir){
+        $db_opcao = 2;
+      }
+
+      // Alterar o status da licitação para Aguardando Envio;
+      $clliclicita = new cl_liclicita;
+      $clliclicita->l20_cadinicial = 2;
+      $clliclicita->l20_codigo = $codigolicitacao;
+
+      $clliclicita->alterar($codigolicitacao);
+
+      if ($clliclicita->erro_status == "0") {
+        $erro_msg = $clliclicita->erro_msg;
+      }
+    }
+
+}
+
+if(isset($alterar)){
+
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$numero_edital);
+  $rsEdital = $clliclancedital->sql_record($sqlEdital);
+  $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
+
+  if(isset($sequencial)){
+    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
     $clliclancedital->l47_linkpub = $links;
-    $clliclancedital->l47_origemrecurso = $origem_recurso;
+    $clliclancedital->l47_origemrecurso = intval($origem_recurso);
     $clliclancedital->l47_descrecurso = $descricao_recurso;
     $clliclancedital->l47_dataenvio = $data_formatada;
-    $clliclancedital->l47_liclicita = $l20_codigo;
-    $clliclancedital->incluir(null);
-
-    // Alterar o status da licitação para Aguardando Envio;
-    $clliclicita->l20_cadinicial = 2;
-    $clliclicita->l20_exercicioedital = intval(db_getsession('DB_anousu'));
-    $clliclicita->alterar($l20_codigo);
-
-    if ($clliclicita->erro_status == "0") {
-      $erro_msg = $clliclicita->erro_msg;
-      $sqlerro = true;
-    }
-
-    if ($clliclancedital->erro_status == "0") {
+    $clliclancedital->l47_liclicita = $codigolicitacao;
+    $clliclancedital->alterar($sequencial);
+    if ($clliclancedital->erro_status) {
       $erro_msg = $clliclancedital->erro_msg;
-      $sqlerro = true;
     }
+  }
 }
+
 
 ?>
 <html>
@@ -128,20 +160,24 @@ if(isset($incluir)){
 </html>
 <?
 
-if(isset($incluir) ) {
-  echo "<script>";
-  echo "alert('" . $clliclancedital->erro_sql . "')";
-  echo "</script>";
-
-  if (!$sqlerro && trim($clliclancedital->erro_sql) != '') {
+if(isset($incluir) || isset($alterar)) {
+  if(!$sqlerro){
     echo "<script>";
+    echo "alert('" . $erro_msg . "');";
     echo "parent.document.formaba.documentos.disabled=false;";
-    echo "parent.mo_camada('documentos');";
-    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$l20_codigo'";
+    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$codigolicitacao&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
     echo "</script>";
   }
 
+/*  var iLicitacao = '<?php echo $oGet->l20_codigo;?>';*/
+/*  var iEdital = '<?php echo $oGet->l20_nroedital;?>';*/
+/*  var iSequencial = '<?php echo $oGet->l47_sequencial;?>';*/
+
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
+}else{
+  echo "<script>";
+  echo "parent.iframe_editais.js_pesquisa();";
+  echo "</script>";
 }
 ?>
 

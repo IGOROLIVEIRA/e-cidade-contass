@@ -48,22 +48,24 @@ $db_opcao = 2;
 
 if(isset($alterar)){
 
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', '');
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$l20_nroedital);
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
 
-  $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
-  $clliclancedital->l47_linkpub = $links;
-  $clliclancedital->l47_origemrecurso = $origem_recurso;
-  $clliclancedital->l47_descrecurso = $descricao_recurso;
-  $clliclancedital->l47_dataenvio = $data_formatada;
-  $clliclancedital->l47_liclicita = $l20_codigo;
+  if(isset($sequencial)){
+    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+    $clliclancedital->l47_linkpub = $links;
+    $clliclancedital->l47_origemrecurso = $origem_recurso;
+    $clliclancedital->l47_descrecurso = $descricao_recurso;
+    $clliclancedital->l47_dataenvio = $data_formatada;
+    $clliclancedital->l47_liclicita = $l20_codigo;
 
-  $clliclancedital->alterar($sequencial);
+    $clliclancedital->alterar($sequencial);
 
-  if ($clliclancedital->erro_status=="0"){
-    $erro_msg = $clliclancedital->erro_msg;
-    $sqlerro=true;
+    if ($clliclancedital->erro_status=="0"){
+      $erro_msg = $clliclancedital->erro_msg;
+      $sqlerro=true;
+    }
   }
 
 }
