@@ -171,6 +171,7 @@ class cl_liclancedital
                 ,".($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'")."
                 ,$this->l47_liclicita
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -206,7 +207,7 @@ class cl_liclancedital
     $virgula = " ";
     $sql = " update liclancedital set ";
     if (trim($this->l47_linkpub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_linkpub"])) {
-      $sql .= $virgula . " l47_linkpub = $this->l47_linkpub ";
+      $sql .= $virgula . " l47_linkpub = '$this->l47_linkpub' ";
       $virgula = ",";
     }
 
@@ -235,19 +236,16 @@ class cl_liclancedital
           $this->erro_status = "0";
           return false;
       }else{
-        $sql .= $virgula . " l47_descrecurso = $this->l47_descrecurso ";
+        $sql .= $virgula . " l47_descrecurso = '$this->l47_descrecurso' ";
         $virgula = ",";
       }
     }
 
-    if (trim($this->l47_descrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_descrecurso"])) {
-      $sql .= $virgula . " l47_descrecurso = $this->l47_descrecurso ";
-      $virgula = ",";
-    }
 
     $virgula = "";
 
     $sql .= " where ";
+
     if ($l47_sequencial != null) {
       $sql .= " l47_sequencial = $l47_sequencial";
     }
@@ -461,7 +459,7 @@ class cl_liclancedital
     }
     $sql .= " from liclancedital ";
     $sql .= " JOIN liclicita ON liclicita.l20_codigo = l47_liclicita ";
-    $sql .= " JOIN editaldocumentos ON editaldocumentos.l48_edital = liclancedital.l47_sequencial ";
+    $sql .= " LEFT JOIN editaldocumentos ON editaldocumentos.l48_edital = liclancedital.l47_sequencial ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($l47_sequencial != null) {

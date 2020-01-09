@@ -73,14 +73,14 @@ $db_botao = true;
 
               <table border="0">
                 <tr>
-                  <td nowrap title="<?=@$Tl20_nroedital?>">
+                  <td>
                     <b>Edital:</b>
                   </td>
                   <td>
                     <?
-                    db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
-                    db_input('l20_codigo',10,$Il20_codigo,true,'hidden',3);
-                    db_input('l20_naturezaobjeto',10,$Il20_naturezaobjeto,true,'hidden',3);
+                    db_input('numero_edital',10,'',true,'text',3,"");
+                    db_input('codigolicitacao',10,'',true,'hidden',3);
+                    db_input('naturezaobjeto',10,'',true,'hidden',3);
                     ?>
                   </td>
                 </tr>
@@ -90,8 +90,8 @@ $db_botao = true;
                   </td>
                   <td>
                     <?
-                    db_input('l20_edital',10,$Il20_edital,true,'text',3,"onchange='';");
-                    db_input('l20_objeto',45,$Il20_objeto,true,'text',3,"");
+                    db_input('edital',10,'',true,'text',3,"onchange='';");
+                    db_input('objeto',45,'',true,'text',3,"");
                     ?>
                   </td>
                 </tr>
@@ -150,7 +150,7 @@ $db_botao = true;
                             </td>
                             <td>
                               <?php
-                              db_input('dados_complementares', 45,$Il20_edital,true,'text',3,"onchange='';");
+                              db_input('dados_complementares', 45,'',true,'text',3,"onchange='';");
                               db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
                               ?>
                               <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
@@ -189,32 +189,62 @@ $db_botao = true;
 
 <script>
     let codigoLicitacao = '';
+    let iSequencial = '';
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|l20_edital|' +
-            'pc50_descr|dl_Data_Referencia|l20_objeto|pc50_pctipocompratribunal|l47_linkpub|l47_origemrecurso|l47_descrecurso|dl_Sequencial_Edital|dl_Natureza_objeto','Pesquisa',true,"0");
+        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(nroedital, codigo, edital, descricao, data, objeto, tipo, links, origem, recurso, sequencial, natureza_obj){
-        codigoLicitacao = codigo;
-        let dataFormatada = js_formatar(data, 'd');
-        document.getElementById('l20_nroedital').value = nroedital;
-        document.getElementById('l20_codigo').value = codigo;
-        document.getElementById('l20_edital').value = edital;
-        document.getElementById('descr_tribunal').value = descricao;
-        document.getElementById('data_referencia').value = dataFormatada;
-        document.getElementById('l20_objeto').value = objeto;
-        document.getElementById('tipo_tribunal').value = tipo;
-        document.getElementById('links').value = links;
-        document.getElementById('origem_recurso').value = origem != '' ? origem : 0;
-        document.getElementById('descricao_recurso').value = recurso;
-        document.getElementById('l20_naturezaobjeto').value = natureza_obj;
+    function js_preenchepesquisa(nroedital, codigo, sequencial){
 
-        if(natureza_obj == 1){
-            document.getElementById('td_obras').style.display = '';
+        codigoLicitacao = codigo;
+        js_buscaDadosLicitacao(nroedital);
+        db_iframe_liclicita.hide();
+    }
+
+    function js_buscaDadosLicitacao(valor){
+        var oParam = new Object();
+        oParam.exec = 'findDadosLicitacao';
+        oParam.iCodigoEdital = valor;
+        var oAjax = new Ajax.Request(
+            'lic4_licitacao.RPC.php',
+            { parameters: 'json='+Object.toJSON(oParam),
+                method: 'post',
+                onComplete : js_retornoDadosLicitacao
+            }
+
+        );
+    }
+
+    function js_retornoDadosLicitacao(oAjax){
+        var oRetorno = eval('('+oAjax.responseText+')');
+        let dadoslicitacao = oRetorno.dadosLicitacao;
+        if(dadoslicitacao.l20_cadinicial == '1'){
+            $('db_opcao').name  = 'incluir';
+            $('db_opcao').value = 'Incluir';
+            <?=$db_opcao = 1;?>
+        }else{
+          $('db_opcao').name  = 'alterar';
+          $('db_opcao').value = 'Alterar';
+          <?=$db_opcao = 2;?>
         }
 
-        parent.iframe_documentos.location.href="lic4_editaldocumentos.php?l20_nroedital="+nroedital+"&l20_codigo="+codigo+"&l47_sequencial="+sequencial;
 
-        db_iframe_liclicita.hide();
+            let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
+            $('numero_edital').value = dadoslicitacao.l20_nroedital;
+            $('codigolicitacao').value = dadoslicitacao.l20_codigo;
+            $('edital').value = dadoslicitacao.l20_edital;
+            $('data_referencia').value = dataFormatada;
+            $('objeto').value = dadoslicitacao.l20_objeto;
+            $('tipo_tribunal').value = dadoslicitacao.pc50_pctipocompratribunal;
+            $('descr_tribunal').value = dadoslicitacao.pc50_descr;
+            $('links').value = dadoslicitacao.l47_linkpub;
+            $('origem_recurso').selectedIndex = dadoslicitacao.l47_origemrecurso != '' ? dadoslicitacao.l47_origemrecurso : 0;
+            $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
+            $('naturezaobjeto').value = natureza_obj;
+
+            if(natureza_obj == 1){
+                document.getElementById('td_obras').style.display = '';
+            }
+
     }
 
     function js_salvarEdital(){
@@ -233,10 +263,11 @@ $db_botao = true;
         oDadosComplementares.setLicitacao(codigoLicitacao);
         if(idObra){
             oDadosComplementares.preencheCampos(idObra);
+        }else{
+          oDadosComplementares.setCallBackFunction(() => {
+              js_lancaDadosCompCallBack();
+          });
         }
-        oDadosComplementares.setCallBackFunction(() => {
-            js_lancaDadosCompCallBack();
-        });
         oDadosComplementares.show();
     }
 
@@ -299,7 +330,7 @@ $db_botao = true;
         oDBGrid.setHeader(new Array("Código", "Descrição", "Opções"));
         oDBGrid.show($('cntDBGrid'));
         oDBGrid.clearAll(true);
-        js_buscaDadosComplementares(6);
+        js_buscaDadosComplementares($('numero_edital').value);
     }
 
     function js_lancaDadosObra(){
@@ -338,7 +369,7 @@ $db_botao = true;
             aLinha[0] = linhas+1;
             aLinha[1] = descricaoLinha;
             aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dado.codigoobra+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+dado.codigoobra+'"'+");'>";
 
             oDBGrid.addRow(aLinha);
         })
@@ -361,8 +392,7 @@ $db_botao = true;
     }
 
     function js_excluiDados(valor){
-        let valorTratado = valor.split(',');
-        let resposta = window.confirm('Deseja excluir o endereço do código da obra '+valorTratado[0]+'?');
+        let resposta = window.confirm('Deseja excluir o endereço do código da obra '+valor+'?');
 
         if(resposta){
             var sUrlRpc = "con4_endereco.RPC.php";

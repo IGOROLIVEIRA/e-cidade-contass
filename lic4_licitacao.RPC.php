@@ -669,5 +669,46 @@ switch ($oParam->exec) {
     $oRetorno->periodos    = $oAcordoItem->getPeriodosItem();
 
     break;
+
+  case 'findDadosLicitacao':
+    $oDaoLicEdital = db_utils::getDao("liclicita");
+
+    $campos = "
+                liclicita.l20_codigo,
+                liclancedital.l47_sequencial,
+                liclicita.l20_edital,
+                liclicita.l20_nroedital,
+                liclicita.l20_anousu,
+                pctipocompra.pc50_descr,
+                liclicita.l20_numero,
+                pctipocompra.pc50_pctipocompratribunal,
+                liclicita.l20_objeto,
+                l47_origemrecurso,
+                liclicita.l20_naturezaobjeto,
+                liclicita.l20_cadinicial,
+                liclancedital.l47_linkpub,
+                liclancedital.l47_descrecurso,
+                (CASE
+                     WHEN pc50_pctipocompratribunal IN (48,
+                                                        49,
+                                                        50,
+                                                        52,
+                                                        53,
+                                                        54)
+                          AND liclicita.l20_dtpublic IS NOT NULL THEN liclicita.l20_dtpublic
+                     WHEN pc50_pctipocompratribunal IN (100,
+                                                        101,
+                                                        102,
+                                                        106)
+                          AND liclicita.l20_datacria IS NOT NULL THEN liclicita.l20_datacria
+                     WHEN liclancedital.l47_dataenvio IS NOT NULL THEN liclancedital.l47_dataenvio
+                 END) AS data_Referencia
+    ";
+
+    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_nroedital = '.$oParam->iCodigoEdital);
+    $rsLicEdital = $oDaoLicEdital->sql_record($sSqlLicEdital);
+    $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
+    $oRetorno->dadosLicitacao = $oDados;
+    break;
 }
 echo $oJson->encode($oRetorno);

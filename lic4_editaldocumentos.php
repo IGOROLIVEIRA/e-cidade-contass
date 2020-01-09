@@ -47,8 +47,8 @@ $clrotulo->label("z06_numcgm");
 $clrotulo->label("z01_nome");
 $clrotulo->label("db44_descricao");
 $aTipos = array();
-$codtribunal = 12;//$pc50_pctipocompratribunal;
-$natureza_objeto = 3;//$l20_naturezaobjeto;
+$codtribunal = $oGet->cod_tribunal;
+$natureza_objeto = $oGet->natureza_objeto;
 $db_opcao = 1;
 
 ?>

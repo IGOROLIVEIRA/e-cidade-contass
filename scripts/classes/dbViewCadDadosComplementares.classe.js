@@ -2310,8 +2310,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oTxtDistrito = new DBTextField('txtDistrito'+sId, 'txtDistrito'+sId, '');
   me.oTxtDistrito.addStyle('width', '100%');
   me.oTxtDistrito.setMaxLength(100);
-  me.oTxtDistrito.show($('ctnDistrito'+sId));
   me.oTxtDistrito.addEvent('onKeyUp',"js_ValidaCampos(this,2,\"Campo Distrito\",\"f\",\"t\",event)");
+  me.oTxtDistrito.show($('ctnDistrito'+sId));
   $('ctnDistrito'+sId).observe('change', me.changeDistrito);
 
 //-------------------------------------Fim da Manipulação do Distrito-------------------------------------------------
@@ -3869,8 +3869,48 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   }
 
   this.retornoCampos = function(oAjax){
+    js_removeObj('msgBox');
     var oRetorno = eval('('+oAjax.responseText+')');
-    console.log('Retorno: ', oRetorno);
+    console.log(oRetorno);
+
+    let dadoscomplementares = oRetorno.dadoscomplementares[0];
+    $('txtLogradouro'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
+    me.setLogradouro(dadoscomplementares.logradouro);
+    $('txtDistrito'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
+    me.setDistrito(dadoscomplementares.distrito);
+    $('txtCodigoObra'+sId).value = dadoscomplementares.codigoobra;
+    me.setCodigoObra(dadoscomplementares.codigoobra);
+    $('txtBdi'+sId).value = dadoscomplementares.bdi;
+    me.setBdi(dadoscomplementares.bdi);
+    $('txtGrausLatitude'+sId).value = dadoscomplementares.grauslatitude;
+    me.setGrausLatitude(dadoscomplementares.grauslatitude);
+    $('txtMinutoLatitude'+sId).value = dadoscomplementares.minutolatitude;
+    me.setMinutosLatitude(dadoscomplementares.minutolatitude);
+    $('txtSegundoLatitude'+sId).value = dadoscomplementares.segundolatitude;
+    me.setSegundosLatitude(dadoscomplementares.segundolatitude);
+    $('txtGrausLongitude'+sId).value = dadoscomplementares.grauslongitude;
+    me.setGrausLongitude(dadoscomplementares.grauslongitude);
+    $('txtMinutoLongitude'+sId).value = dadoscomplementares.minutolongitude;
+    me.setMinutoLongitude(dadoscomplementares.minutolongitude);
+    $('txtSegundoLongitude'+sId).value = dadoscomplementares.segundolongitude;
+    me.setSegundosLongitude(dadoscomplementares.segundolongitude);
+    $('txtCodigoNumero'+sId).value = dadoscomplementares.numero;
+    me.setNumero(dadoscomplementares.numero);
+    $('cboClasseObjeto'+sId).selectedIndex = dadoscomplementares.classeobjeto;
+    me.setClassesObjeto(dadoscomplementares.classeobjeto);
+    $('cboAtividadeServico'+sId).selectedIndex = dadoscomplementares.atividadeservico;
+    me.setAtividadeServico(dadoscomplementares.atividadeservico);
+    $('cboAtividadeServicoEsp'+sId).selectedIndex = dadoscomplementares.atividadeservicoesp;
+    me.setAtividadeServicoEspecializado(dadoscomplementares.atividadeservicoesp);
+    $('cboGrupoBemPub'+sId).selectedIndex = dadoscomplementares.grupobempublico;
+    me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
+    $('cboSubGrupoBemPub'+sId).selectedIndex = dadoscomplementares.subgrupobempublico;
+    me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
+
+    $('txtDescrAtividadeServico'+sId).value = dadoscomplementares.descratividadeservico;
+    $('txtDescrAtividadeServicoEsp'+sId).value = dadoscomplementares.descratividadeservicoesp;
+
+
   }
 
 }
