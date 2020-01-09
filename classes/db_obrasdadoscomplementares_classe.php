@@ -287,7 +287,6 @@ class cl_obrasdadoscomplementares {
                                ,$this->db150_bdi
                                ,$this->db150_liclicita
                       )";
-     print_r($sql);
      $result = db_query($sql);
 
      if($result==false){

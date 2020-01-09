@@ -463,12 +463,17 @@ switch ($oParam->exec) {
     if($oParam->iCodigoObra){
       $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iCodigoObra);
     }
-    if($oParam->iCodigoEdital){
-      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByEdital($oParam->iCodigoEdital);
-    }
     $oRetorno->status = 1;
     echo $oJson->encode($oRetorno);
   break;
+
+  case 'findDadosObraEdital' :
+    if($oParam->iCodigoEdital){
+      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->iCodigoEdital);
+    }
+    $oRetorno->status = 1;
+    echo $oJson->encode($oRetorno);
+    break;
 
   case 'excluiDadosObra':
     db_inicio_transacao();
