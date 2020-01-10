@@ -537,7 +537,6 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   *Cria o campo de busca do cep
   */
   me.oTxtCep = new DBTextField('txtCep'+sId, 'txtCep'+sId, '');
-  me.oTxtCep.lReadOnly = true;
 //me.oTxtCep.addEvent('onKeyPress', 'return js_mask(event, "0-9|")');
   me.oTxtCep.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Cep\",\"t\",\"t\",event)");
   me.oTxtCep.addStyle('width', '70px');
@@ -3664,6 +3663,12 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     alert("Usuário:\n\n\Segundo da Longitude não informado!\n\n");
     return false;
   }
+
+    if($F('cboClasseObjeto'+sId) == 0){
+      $('cboClasseObjeto'+sId).focus();
+      alert("Usuário:\n\n\Classe do Objeto não informado!\n\n");
+      return false;
+    }
 
   if($F('cboAtividadeServico'+sId) == '99'){
     if($F('txtDescrAtividadeServico'+sId).trim() == ''){

@@ -313,14 +313,14 @@ class cl_obrasdadoscomplementares {
                                ,$this->db150_subgrupobempublico
                                ,$this->db150_bdi
                                ,$this->db150_liclicita
-                               ,$this->db150_cep
+                               ,'$this->db150_cep'
                       )";
      $result = db_query($sql);
 
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Cadastro de Endereço da Obra ($this->db150_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "Cadastro de Endereço da Obra nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_banco = "Cadastro de Endereços da Obra já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
