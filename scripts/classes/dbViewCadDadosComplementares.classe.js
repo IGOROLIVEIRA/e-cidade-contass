@@ -1200,9 +1200,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     return this.iGrupoBemPublico;
   }
 
-  this.changeGrupoBemPub = function(e){
-    let valor = e.target.value;
-    me.setGrupoBemPublico(valor);
+  this.preencheSubGrupo = function(valor) {
+
     me.oCboSubGrupoBemPub.clearItens();
     me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
 
@@ -1231,7 +1230,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
       case '8':
         me.oCboSubGrupoBemPub.addItem(801, 'Asilo');
-        me.oCboSubGrupoBemPub.addItem(802, 'Centro social, comunit?rio');
+        me.oCboSubGrupoBemPub.addItem(802, 'Centro social, comunitário');
         me.oCboSubGrupoBemPub.addItem(803, 'Centro de triagem');
         me.oCboSubGrupoBemPub.addItem(804, 'Creche');
         me.oCboSubGrupoBemPub.addItem(805, 'Orfanato');
@@ -1333,8 +1332,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
       case '25':
         me.oCboSubGrupoBemPub.addItem(2501, 'Usinas hidrelétricas, termoelétricas, eólicas e nucleares');
         me.oCboSubGrupoBemPub.addItem(2502, 'Gasodutos e oleodutos');
-        me.oCboSubGrupoBemPub.addItem(2503, 'Rede de distribuição urbana ? RDU');
-        me.oCboSubGrupoBemPub.addItem(2504, 'Rede de distribuição rural ? RDR');
+        me.oCboSubGrupoBemPub.addItem(2503, 'Rede de distribuição urbana - RDU');
+        me.oCboSubGrupoBemPub.addItem(2504, 'Rede de distribuição rural - RDR');
         me.oCboSubGrupoBemPub.addItem(2505, 'Energia elétrica');
         me.oCboSubGrupoBemPub.addItem(2506, 'Linha de transmissão');
         me.oCboSubGrupoBemPub.addItem(2507, 'Subestação de energia elétrica');
@@ -1383,9 +1382,15 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
         me.oCboSubGrupoBemPub.addItem(2718, 'Quadra Poliesportiva');
         break;
       default:
-// me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+        me.oCboSubGrupoBemPub.selectedIndex = 0;
         break;
     }
+  }
+
+  this.changeGrupoBemPub = function(e){
+    let valor = e.target.value;
+    me.setGrupoBemPublico(valor);
+    me.preencheSubGrupo(valor);
   }
   /*-------------------------------------Fim da Manipulação do Grupo Bem Público-------------- ---------------------------------------------*/
   /*-------------------------------------Início da Manipulação do SubGrupo Bem Público-------------- ---------------------------------------------*/
@@ -1655,6 +1660,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oTxtDescrBairro = new DBTextField('txtDescrBairro'+sId, 'txtDescrBairro'+sId, '');
   me.oTxtDescrBairro.addStyle('width', '100%');
   me.oTxtDescrBairro.show($('ctnDescrBairro'+sId));
+  me.oTxtDescrBairro.addEvent('onKeyUp',"js_ValidaCampos(this,2,\"Campo Bairro\",\"f\",\"t\",event)");
   $('txtDescrBairro'+sId).observe('change', me.changeDescrBairro);
   /*
   *Função para realizar a busca pelo autocomplete do Bairro
@@ -3441,6 +3447,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
         me.setSubGrupoBemPublico('');
         $('txtDescrAtividadeServico'+sId).value = '';
         $('txtDescrAtividadeServicoEsp'+sId).value = '';
+        me.setBdi('');
+        $('txtBdi'+sId).value = '';
 
 
 
@@ -3679,7 +3687,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
       return false;
     }
 
-    if($F('cboSubGrupoBemPub'+sId) == 0){
+    if($F('cboSubGrupoBemPub'+sId) == 0 && $F('cboGrupoBemPub'+sId) != 99){
       alert('Campo SubGrupo Bem Público é obrigatório!\n\n');
       return false;
     }
@@ -3695,7 +3703,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   oEndereco.distrito                 = me.getDistrito();
   oEndereco.codigoBairro             = me.getBairro();
   oEndereco.numero                   = me.getNumero();
-  oEndereco.cepEndereco              = me.getCepEndereco();
+  oEndereco.cep                      = $('txtCep'+sId).value;
   oEndereco.codigoObra               = me.getCodigoObra();
   oEndereco.logradouro               = me.getLogradouro();
   oEndereco.grausLatitude            = me.getGrausLatitude();
@@ -3712,7 +3720,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   oEndereco.subGrupoBemPub           = me.getSubGrupoBemPublico();
   oEndereco.bdi                      = me.getBdi();
   oEndereco.licitacao                = me.getLicitacao();
-  oEndereco.descrBairro              = $('txtDescrBairropri').value;
+  oEndereco.descrBairro              = $('txtDescrBairro'+sId).value;
 
 //
   oDados = new Object();
@@ -3876,7 +3884,6 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   }
 
   this.preencheCampos = function(codObra){
-    console.log('Codigo da obra: ', codObra);
     var oPesquisa         = new Object();
     oPesquisa.exec        = 'findDadosObra';
     oPesquisa.iCodigoObra = codObra;
@@ -3929,11 +3936,13 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     me.setAtividadeServico(dadoscomplementares.atividadeservico);
     $('cboAtividadeServicoEsp'+sId).selectedIndex = dadoscomplementares.atividadeservicoesp;
     me.setAtividadeServicoEspecializado(dadoscomplementares.atividadeservicoesp);
-    $('cboGrupoBemPub'+sId).selectedIndex = dadoscomplementares.grupobempublico;
+    $('cboGrupoBemPub'+sId).value = dadoscomplementares.grupobempublico;
     me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
-    $('cboSubGrupoBemPub'+sId).selectedIndex = dadoscomplementares.subgrupobempublico;
+    me.preencheSubGrupo(dadoscomplementares.grupobempublico);
+    $('cboSubGrupoBemPub'+sId).value = dadoscomplementares.subgrupobempublico;
     me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
-
+    $('txtDescrBairro'+sId).value = dadoscomplementares.bairro;
+    $('txtCep'+sId).value = dadoscomplementares.cep;
     $('txtDescrAtividadeServico'+sId).value = dadoscomplementares.descratividadeservico;
     $('txtDescrAtividadeServicoEsp'+sId).value = dadoscomplementares.descratividadeservicoesp;
 

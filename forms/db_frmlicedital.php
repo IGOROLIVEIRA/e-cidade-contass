@@ -151,7 +151,7 @@ $db_botao = true;
                             <td>
                               <?php
                               db_input('dados_complementares', 45,'',true,'text',3,"onchange='';");
-                              db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
+                              db_input ('idObra', 10, '', true, 'text', $db_opcao);
                               ?>
                               <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
                             </td>
@@ -188,15 +188,15 @@ $db_botao = true;
 </form>
 
 <script>
-    let codigoLicitacao = '';
     let iSequencial = '';
+    let codigoLicitacao = '';
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
     }
-    function js_preenchepesquisa(nroedital, codigo, sequencial){
-
-        codigoLicitacao = codigo;
+    function js_preenchepesquisa(nroedital, codigo){
         js_buscaDadosLicitacao(nroedital);
+        js_buscaDadosComplementares(codigo);
+        codigoLicitacao = codigo;
         db_iframe_liclicita.hide();
     }
 
@@ -217,6 +217,7 @@ $db_botao = true;
     function js_retornoDadosLicitacao(oAjax){
         var oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
+
         if(dadoslicitacao.l20_cadinicial == '1'){
             $('db_opcao').name  = 'incluir';
             $('db_opcao').value = 'Incluir';
@@ -254,11 +255,7 @@ $db_botao = true;
 
     }
 
-    function js_exibeDadosCompl(){
-        var idObra = '';
-        if ($F('idObra') != ""){
-            idObra = $F('idObra');
-        }
+    function js_exibeDadosCompl(idObra = null){
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '');
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
@@ -331,7 +328,6 @@ $db_botao = true;
         oDBGrid.setHeader(new Array("Código", "Descrição", "Opções"));
         oDBGrid.show($('cntDBGrid'));
         oDBGrid.clearAll(true);
-        js_buscaDadosComplementares($('numero_edital').value);
     }
 
     function js_lancaDadosObra(){
@@ -344,8 +340,11 @@ $db_botao = true;
             let aLinha = new Array();
             aLinha[0] = linhas+1;
             aLinha[1] = dadoscomplementares;
-            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
+            let valores = dadoscomplementares.split(',');
+            let dadosObra = valores[0].split(':');
+
+            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dadosObra[1].trim()+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+dadosObra[1].trim()+'"'+");'>";
 
             oDBGrid.addRow(aLinha);
             oDBGrid.renderRows();
@@ -379,17 +378,17 @@ $db_botao = true;
         $('idObra').value = '';
     }
 
-    function js_buscaDadosComplementares(codigo) {
+    function js_buscaDadosComplementares(licitacao) {
         let oParam = new Object();
         oParam.exec = 'findDadosObraEdital';
-        oParam.iCodigoEdital = codigo;
+        oParam.iLicitacao = licitacao;
         js_AjaxCgm(oParam, js_retornoDados);
 
     }
 
     function js_lancaDadosAlt(valor){
         $('idObra').value = valor;
-        js_exibeDadosCompl();
+        js_exibeDadosCompl(valor);
     }
 
     function js_excluiDados(valor){
@@ -399,8 +398,7 @@ $db_botao = true;
             var sUrlRpc = "con4_endereco.RPC.php";
             let oParam = new Object();
             oParam.exec = 'excluiDadosObra';
-
-            oParam.codObra = valorTratado[0];
+            oParam.codObra = valor;
 
             var oAjax = new Ajax.Request(
                 sUrlRpc,
@@ -419,7 +417,10 @@ $db_botao = true;
 
         for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
             let conteudo = oDBGrid.aRows[cont].aCells[1].content.split(',');
-            if(conteudo[0] == codigoRequisitado.codObra){
+            let obra = conteudo[0].split(':');
+            let codigoObra = obra[1].trim();
+
+            if(codigoObra == codigoRequisitado.codObra){
                 let valores = [];
                 valores.push(cont);
                 oDBGrid.removeRow(valores);

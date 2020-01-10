@@ -67,6 +67,7 @@ class cl_obrasdadoscomplementares {
    var $db150_descratividadeservicoesp = '';
    var $db150_bdi = 0;
    var $db150_liclicita = 0;
+   var $db150_cep = 0;
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -95,6 +96,7 @@ class cl_obrasdadoscomplementares {
                   db150_descratividadeservicoesp = varchar(150) = Descrição da Atividade do Serviço Especializado
                   db150_bdi = int4 = BDI
                   db150_liclicita = int4 = Número da licitação
+                  db150_cep = char(8) = CEP
                  ";
    //funcao construtor da classe
    function cl_obrasdadoscomplementares() {
@@ -139,6 +141,7 @@ class cl_obrasdadoscomplementares {
        $this->db150_subgrupobempublico = ($this->db150_subgrupobempublico == ""?@$GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"]:$this->db150_subgrupobempublico);
        $this->db150_bdi = ($this->db150_bdi == ""?@$GLOBALS["HTTP_POST_VARS"]["$this->db150_bdi"]:$this->db150_bdi);
        $this->db150_liclicita = ($this->db150_liclicita == ""?@$GLOBALS["HTTP_POST_VARS"]["$this->db150_liclicita"]:$this->db150_liclicita);
+       $this->db150_cep = ($this->db150_cep == ""?@$GLOBALS["HTTP_POST_VARS"]["$this->db150_cep"]:$this->db150_cep);
 
      }else{
        $this->db150_sequencial = ($this->db150_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["db150_sequencial"]:$this->db150_sequencial);
@@ -202,13 +205,28 @@ class cl_obrasdadoscomplementares {
        $this->db150_atividadeservicoesp = 0;
      }
      if($this->db150_grupobempublico == null){
-       $this->db150_grupobempublico = 0;
+       $this->erro_sql = " Campo Grupo Bem Público nao declarado.";
+       $this->erro_banco = "Campo db150_grupobempublico nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
      if($this->db150_subgrupobempublico == null){
-       $this->db150_subgrupobempublico = 0;
+       $this->erro_sql = " Campo Sub Grupo Bem Público nao declarado.";
+       $this->erro_banco = "Campo db150_subgrupobempublico nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
      if($this->db150_bdi == null){
-       $this->db150_bdi = 0;
+       $this->erro_sql = " Campo BDI nao declarado.";
+       $this->erro_banco = "Campo db150_bdi nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
      if($this->db150_descratividadeservico == null){
        $this->db150_descratividadeservico = '';
@@ -217,16 +235,24 @@ class cl_obrasdadoscomplementares {
        $this->db150_descratividadeservicoesp = '';
      }
      if($this->db150_liclicita == null || $this->db150_liclicita == ""){
-       $this->erro_sql = " Campo db150_liclicita nao declarado.";
+       $this->erro_sql = " Número da licitação nao declarado.";
        $this->erro_banco = "Campo db150_liclicita nao declarado.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->db150_bairro == null || $this->db150_liclicita == ""){
-       $this->erro_sql = " Campo db150_bairro nao declarado.";
+     if($this->db150_bairro == null || $this->db150_bairro == ""){
+       $this->erro_sql = " Campo Bairro nao declarado.";
        $this->erro_banco = "Campo db150_bairro nao declarado.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->db150_cep == null || $this->db150_cep == ""){
+       $this->erro_sql = " Campo CEP nao declarado.";
+       $this->erro_banco = "Campo db150_cep nao declarado.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -259,6 +285,7 @@ class cl_obrasdadoscomplementares {
                                       ,db150_subgrupobempublico
                                       ,db150_bdi
                                       ,db150_liclicita
+                                      ,db150_cep
                        )
                 values (
                                 $this->db150_sequencial
@@ -286,6 +313,7 @@ class cl_obrasdadoscomplementares {
                                ,$this->db150_subgrupobempublico
                                ,$this->db150_bdi
                                ,$this->db150_liclicita
+                               ,$this->db150_cep
                       )";
      $result = db_query($sql);
 
@@ -333,7 +361,7 @@ class cl_obrasdadoscomplementares {
        }
      }
      if(trim($this->db150_codobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_codobra"])){
-       $sql  .= $virgula." $this->db150_codobra = $this->db150_codobra ";
+       $sql  .= $virgula." db150_codobra = $this->db150_codobra ";
        $virgula = ",";
        if(trim($this->db150_codobra) == null ){
          $this->erro_sql = " Campo Código da Obra não Informado.";
@@ -413,20 +441,56 @@ class cl_obrasdadoscomplementares {
        $sql  .= $virgula." db150_atividadeservicoesp = $this->db150_atividadeservicoesp ";
        $virgula = ",";
      }
-     if(trim($this->db150_grupobempublico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_grupobempublico"])){
+
+     if($this->db150_grupobempublico!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_grupobempublico"])) {
        $sql  .= $virgula." db150_grupobempublico = $this->db150_grupobempublico ";
        $virgula = ",";
+     }else{
+       $this->erro_sql = " Campo Grupo Bem Público não Informado.";
+       $this->erro_campo = "db150_grupobempublico";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
-     if(trim($this->db150_subgrupobempublico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"])){
+     if(trim($this->db150_subgrupobempublico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"])) {
        $sql  .= $virgula." db150_subgrupobempublico = $this->db150_subgrupobempublico ";
        $virgula = ",";
+     }else{
+       $this->erro_sql = " Campo Subgrupo bem público da Obra não Informado.";
+       $this->erro_campo = "db150_subgrupobempublico";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
-     if(trim($this->db150_bdi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])){
+     if(trim($this->db150_bdi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])) {
        $sql  .= $virgula." db150_bdi = $this->db150_bdi ";
+     }else{
+       $this->erro_sql = " Campo BDI não Informado.";
+       $this->erro_campo = "db150_bdi";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if(trim($this->db150_cep)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_cep"])){
+       $sql  .= $virgula." db150_cep = $this->db150_cep ";
+     }else{
+       $this->erro_sql = " Campo CEP da Obra não Informado.";
+       $this->erro_campo = "db150_cep";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
      }
      $sql .= " where ";
      if($db150_sequencial!=null){
-       $sql .= " db150_sequencial = $this->db150_sequencial";
+       $sql .= " db150_sequencial = $db150_sequencial";
      }
      $result = db_query($sql);
      if($result==false){

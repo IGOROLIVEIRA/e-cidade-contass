@@ -84,7 +84,8 @@ class Oc11271 extends AbstractMigration
           db150_atividadeservicoesp INTEGER,
           db150_descratividadeservicoesp VARCHAR(150),
           db150_bdi FLOAT,
-          db150_liclicita BIGINT
+          db150_liclicita BIGINT,
+          db150_cep CHAR(8),
           PRIMARY KEY(db150_sequencial)
         );
         

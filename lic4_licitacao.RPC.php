@@ -593,6 +593,7 @@ switch ($oParam->exec) {
       $oEdital->setArquivo($oParam->arquivo);
       $oEdital->setTipo($oParam->tipo);
       $oEdital->setCodigoEdital($oParam->edital);
+      $oEdital->setLicEdital($oParam->sequencial);
 
       $aNomeArquivo = explode("/", $oParam->arquivo);
       $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);

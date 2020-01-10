@@ -42,7 +42,6 @@ $clcflicita  = new cl_cflicita;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
-//var_dump($HTTP_POST_VARS);
 
 $sqlerro = false;
 $db_opcao = 2;
@@ -105,12 +104,12 @@ if(isset($alterar)){
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
 
-//  if(isset($sequencial)){
-    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+    $data_formatada = explode('/', $data_referencia);
+    $data_envio = join('-', array_reverse($data_formatada));
     $clliclancedital->l47_linkpub = $links;
     $clliclancedital->l47_origemrecurso = intval($origem_recurso);
     $clliclancedital->l47_descrecurso = $descricao_recurso;
-    $clliclancedital->l47_dataenvio = $data_formatada;
+    $clliclancedital->l47_dataenvio = $data_envio;
     $clliclancedital->l47_liclicita = $codigolicitacao;
     $clliclancedital->alterar($sequencial);
 
@@ -120,9 +119,7 @@ if(isset($alterar)){
       $erro_msg = $clliclancedital->erro_sql;
       $sqlerro = true;
     }
-//  }else{
-//    $erro_msg = 'Sequencial não cadastrado na tabela liclancedital';
-//  }
+
 }
 
 

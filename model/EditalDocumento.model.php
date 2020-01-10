@@ -36,11 +36,12 @@ class EditalDocumento {
   protected $iTipo;
   protected $sArquivo;
   protected $sNomeArquivo;
+  protected $iLicEdital;
 
 
   /**
    *
-   * Construtor, se passado par?metro seta todas vari?veis
+   * Construtor, se passado parâmetro seta todas variáveis
    * @param integer $iCodigo
    */
   public function __construct($iCodigo = null, $iSequencial = null) {
@@ -61,6 +62,7 @@ class EditalDocumento {
       $this->setNomeArquivo($oEditalDocumento->l48_nomearquivo);
       $this->setTipo($oEditalDocumento->l48_tipo);
       $this->setCodigoEdital($oEditalDocumento->l48_edital);
+      $this->setLicEdital($iCodigo);
       unset($oEditalDocumento);
     }
   }
@@ -108,8 +110,10 @@ class EditalDocumento {
       $oDaoEditalDocumento->l48_tipo   = $this->getTipo();
       $oDaoEditalDocumento->l48_edital      = $this->getCodigoEdital();
       $oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
+      $oDaoEditalDocumento->l48_liclancedital = $this->getLicEdital();
       $this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
       $oDaoEditalDocumento->incluir(null);
+
 
       if ($oDaoEditalDocumento->erro_status == '0') {
         throw new Exception($oDaoEditalDocumento->erro_msg);
@@ -137,9 +141,9 @@ class EditalDocumento {
     $sCampos = "l48_sequencial, l48_edital, l48_arquivo, l48_tipo ";
 
     $sWhere  = " l48_edital = {$this->getCodigoEdital()}";
-
     $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
     $sSqlDocumentos      = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
+
 
     $rsEditalDocumento   = $oDaoEditalDocumento->sql_record($sSqlDocumentos);
 
@@ -220,6 +224,23 @@ class EditalDocumento {
    */
   public function setTipo($iTipo) {
     $this->iTipo = $iTipo;
+  }
+
+  /**
+   *
+   * Retorna o sequencial do liclancedital
+   * @return string
+   */
+  public function getLicEdital() {
+    return $this->iLicEdital;
+  }
+
+  /**
+   *
+   * Seta a descricao do documento
+   */
+  public function setLicEdital($iLicEdital) {
+    $this->iLicEdital = $iLicEdital;
   }
 
   /**

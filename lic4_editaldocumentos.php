@@ -149,7 +149,6 @@ $db_opcao = 1;
     var iLicitacao = '<?php echo $oGet->l20_codigo;?>';
     var iEdital = '<?php echo $oGet->l20_nroedital;?>';
     var iSequencial = '<?php echo $oGet->l47_sequencial;?>';
-
     var sUrlRpc = "lic4_licitacao.RPC.php";
 
     oGridDocumento     = new DBGrid('gridDocumento');
@@ -159,6 +158,8 @@ $db_opcao = 1;
     //oGridDocumento.setCellWidth("20%", "20%", "20%", "20%","20%");
     oGridDocumento.setHeader(new Array("Codigo","Edital","Tipo","Download", "Ação"));
     oGridDocumento.show($('ctnDbGridDocumentos'));
+
+    js_getDocumento();
 
     /**
      * Cria um listener para subir a imagem, e criar um preview da mesma
@@ -213,7 +214,8 @@ $db_opcao = 1;
 
         var oParam       = new Object();
         oParam.exec      = 'adicionarDocumento';
-        oParam.edital    = iSequencial;
+        oParam.edital    = iEdital;
+        oParam.sequencial    = iSequencial;
         oParam.tipo      = $F('caddocumento');
         oParam.arquivo   = $F('namefile');
         js_divCarregando('Aguarde... Salvando Documento','msgbox');
