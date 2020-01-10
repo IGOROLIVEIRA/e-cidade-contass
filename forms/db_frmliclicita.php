@@ -1671,7 +1671,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
           opcoes.add(new Option('7- Contratação Semi Integrada', 7));
         }
       }
-      
+
     }
 
 
