@@ -60,7 +60,7 @@ if($numero_edital){
   $licitacao = db_utils::fieldsMemory($rsLicita, 0);
 }
 
-if(isset($alterar)){
+if(isset($incluir)){
     $sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '', 'l47_liclicita = '.$codigolicitacao);
     $rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
