@@ -357,7 +357,6 @@ $sWhereContratos = " and 1 = 1 ";
           ";
                 }
                 $aRepassa = array();
-                print_r($sql);
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
 
