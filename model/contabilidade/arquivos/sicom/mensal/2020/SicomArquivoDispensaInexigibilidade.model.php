@@ -1053,7 +1053,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT
 	FROM liclicita
 	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
-	INNER JOIN credenciamento on (liclicita.l20_codigo=credenciamento.l205_licitacao)
+	INNER JOIN credenciamento on (liclicita.l20_codigo=credenciamento.l205_licitacao) and l205_fornecedor = l206_fornecedor
 	INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
 	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
 	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
@@ -1076,7 +1076,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
   AND DATE_PART('MONTH',credenciamento.l205_datacred)=".$this->sDataFinal['5'] . $this->sDataFinal['6'];
 
 
-    $rsResult18 = db_query($sSql);
+    $rsResult18 = db_query($sSql);//echo $sSql; db_criatabela($rsResult18);die();
 
     for ($iCont18 = 0; $iCont18 < pg_num_rows($rsResult18); $iCont18++) {
 
