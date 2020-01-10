@@ -61,7 +61,7 @@ if($numero_edital){
   $licitacao = db_utils::fieldsMemory($rsLicita, 0);
 }
 
-if(isset($incluir)){
+if(isset($alterar)){
     $sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '', 'l47_liclicita = '.$codigolicitacao);
     $rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
@@ -75,7 +75,10 @@ if(isset($incluir)){
       $clliclancedital->incluir(null);
 
       if ($clliclancedital->erro_status) {
-        $erro_msg = $clliclancedital->erro_msg;
+        $erro_msg = $clliclancedital->erro_sql;
+      }else{
+        $erro_msg = $clliclancedital->erro_sql;
+        $sqlerro = true;
       }
 
       if($clliclancedital->numrows_incluir){
@@ -102,7 +105,7 @@ if(isset($alterar)){
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
 
-  if(isset($sequencial)){
+//  if(isset($sequencial)){
     $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
     $clliclancedital->l47_linkpub = $links;
     $clliclancedital->l47_origemrecurso = intval($origem_recurso);
@@ -110,10 +113,16 @@ if(isset($alterar)){
     $clliclancedital->l47_dataenvio = $data_formatada;
     $clliclancedital->l47_liclicita = $codigolicitacao;
     $clliclancedital->alterar($sequencial);
+
     if ($clliclancedital->erro_status) {
-      $erro_msg = $clliclancedital->erro_msg;
+      $erro_msg = $clliclancedital->erro_sql;
+    }else{
+      $erro_msg = $clliclancedital->erro_sql;
+      $sqlerro = true;
     }
-  }
+//  }else{
+//    $erro_msg = 'Sequencial não cadastrado na tabela liclancedital';
+//  }
 }
 
 
@@ -161,18 +170,16 @@ if(isset($alterar)){
 <?
 
 if(isset($incluir) || isset($alterar)) {
+  echo "<script>";
+  echo "alert('" . $erro_msg . "');";
+  echo "</script>";
+
   if(!$sqlerro){
     echo "<script>";
-    echo "alert('" . $erro_msg . "');";
     echo "parent.document.formaba.documentos.disabled=false;";
     echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$codigolicitacao&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
     echo "</script>";
   }
-
-/*  var iLicitacao = '<?php echo $oGet->l20_codigo;?>';*/
-/*  var iEdital = '<?php echo $oGet->l20_nroedital;?>';*/
-/*  var iSequencial = '<?php echo $oGet->l47_sequencial;?>';*/
-
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
 }else{
   echo "<script>";

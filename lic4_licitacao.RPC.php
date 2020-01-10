@@ -688,6 +688,7 @@ switch ($oParam->exec) {
                 liclicita.l20_cadinicial,
                 liclancedital.l47_linkpub,
                 liclancedital.l47_descrecurso,
+                liclancedital.l47_dataenvio,
                 (CASE
                      WHEN pc50_pctipocompratribunal IN (48,
                                                         49,
@@ -701,7 +702,6 @@ switch ($oParam->exec) {
                                                         102,
                                                         106)
                           AND liclicita.l20_datacria IS NOT NULL THEN liclicita.l20_datacria
-                     WHEN liclancedital.l47_dataenvio IS NOT NULL THEN liclancedital.l47_dataenvio
                  END) AS data_Referencia
     ";
 

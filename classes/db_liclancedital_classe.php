@@ -50,6 +50,7 @@ class cl_liclancedital
   var $l47_dataenvio_dia = null;
   var $l47_dataenvio_mes = null;
   var $l47_dataenvio_ano = null;
+  var $l47_dataenvio = null;
   var $l47_liclicita = null;
 
 
@@ -224,6 +225,19 @@ class cl_liclancedital
         $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
         $virgula = ",";
       }
+    }
+    if ($this->l47_dataenvio == "" || !isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"])) {
+        $this->erro_sql = " Campo Data Envio não Informado.";
+        $this->erro_campo = "l47_origemrecurso";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+
+    }else{
+      $sql .= $virgula . " l47_dataenvio = $this->l47_dataenvio ";
+      $virgula = ",";
     }
 
     if (trim($this->l47_origemrecurso != "") && $this->l47_origemrecurso == 9) {

@@ -227,12 +227,11 @@ $db_botao = true;
           <?=$db_opcao = 2;?>
         }
 
-            console.log('Licita..', dadoslicitacao);
             let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
             $('numero_edital').value = dadoslicitacao.l20_nroedital;
             $('codigolicitacao').value = dadoslicitacao.l20_codigo;
             $('edital').value = dadoslicitacao.l20_edital;
-            $('data_referencia').value = dataFormatada;
+            $('data_referencia').value = js_formatar(dadoslicitacao.l47_dataenvio, 'd');
             $('objeto').value = dadoslicitacao.l20_objeto;
             $('tipo_tribunal').value = dadoslicitacao.pc50_pctipocompratribunal;
             $('descr_tribunal').value = dadoslicitacao.pc50_descr;

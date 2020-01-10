@@ -422,7 +422,7 @@ switch ($oParam->exec) {
       $oEndereco->setEstado($oParam->endereco->codigoEstado);
       $oEndereco->setPais($oParam->endereco->codigoPais);
       $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
-      $oEndereco->setBairro($oParam->endereco->codigoBairro);
+      $oEndereco->setBairro($oParam->endereco->descrBairro);
       $oEndereco->setNumero($oParam->endereco->numero);
       $oEndereco->setCep($oParam->endereco->cepEndereco);
       $oEndereco->setCodigoObra($oParam->endereco->codigoObra);

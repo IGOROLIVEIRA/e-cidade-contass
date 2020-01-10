@@ -1020,7 +1020,13 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   }
 
   this.changeClasseObjeto = (e) => {
-    me.setClassesObjeto(e.target.value);
+    let valor = e.target.value;
+    me.setClassesObjeto(valor);
+    if(valor != 1){
+      $('cboAtividadeObra'+sId).disabled = true;
+    }else{
+      $('cboAtividadeObra'+sId).disabled = '';
+    }
   }
 
   me.oCboClasseObjeto = new DBComboBox('cboClasseObjeto'+sId, 'cboClasseObjeto'+sId);
@@ -1031,6 +1037,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboClasseObjeto.addItem(2, 'Serviços');
   me.oCboClasseObjeto.addItem(2, 'Serviços técnicos especializados');
   $('ctnClassesObjeto'+sId).observe('change', me.changeClasseObjeto);
+
 
   /*-------------------------------------Fim da Manipulação do Classes do Objeto ------------------------------------------------*/
   /*-------------------------------------Início da Manipulação do Atividade da Obra ---------------------------------------------*/
@@ -1066,6 +1073,9 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboAtividadeObra.addItem(5, 'Reforma');
   me.oCboAtividadeObra.addItem(6, 'Restauração');
   $('ctnAtividadeObra'+sId).observe('change', me.changeAtividadeObra);
+  $('cboAtividadeObra'+sId).disabled = true;
+
+
 
   /*-------------------------------------Fim da Manipulação do Atividade da Obra ---------------------------------------------*/
   /*-------------------------------------Início da Manipulação do Atividade do Serviço ---------------------------------------------*/
@@ -3663,6 +3673,22 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     oEndereco.descrAtividadeServicoEsp = $F('txtDescrAtividadeServicoEsp'+sId);
   }
 
+    // Verifica se o código da obra foi informado
+    if($F('cboGrupoBemPub'+sId) == 0){
+      alert('Campo Grupo Bem Público é obrigatório!\n\n');
+      return false;
+    }
+
+    if($F('cboSubGrupoBemPub'+sId) == 0){
+      alert('Campo SubGrupo Bem Público é obrigatório!\n\n');
+      return false;
+    }
+
+    if(!$F('txtBdi'+sId)){
+      alert('Campo BDI é obrigatório!\n\n');
+      return false;
+    }
+
   oEndereco.codigoPais               = me.getPais();
   oEndereco.codigoEstado             = me.getEstado();
   oEndereco.codigoMunicipio          = me.getMunicipio();
@@ -3686,6 +3712,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   oEndereco.subGrupoBemPub           = me.getSubGrupoBemPublico();
   oEndereco.bdi                      = me.getBdi();
   oEndereco.licitacao                = me.getLicitacao();
+  oEndereco.descrBairro              = $('txtDescrBairropri').value;
 
 //
   oDados = new Object();
