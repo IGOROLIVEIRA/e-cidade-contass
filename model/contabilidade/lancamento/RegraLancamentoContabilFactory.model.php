@@ -191,6 +191,12 @@ class RegraLancamentoContabilFactory {
     ,1009 => "RegraLancamentoEncerramentoVariacoesPatrimoniais"
     ,1010 => "RegraLancamentoEncerramentoNaturezaOrcamentariaControle"
     ,1011 => "RegraLancamentoEncerramentoRP"
+    ,1012 => "RegraTransferenciaRPNP"
+    ,1013 => "RegraTransferenciaRPNP"
+    ,1014 => "RegraTransferenciaRPNP"
+    ,1015 => "RegraTransferenciaRPNP"
+    ,1016 => "RegraTransferenciaRPNP"
+    ,1017 => "RegraTransferenciaRPNP"
     );
 
     if (! array_key_exists($iDocumento, $aRegras) ) {
