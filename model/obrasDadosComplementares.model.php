@@ -61,12 +61,11 @@
         $sWhere       = " db150_codobra = ".$iCodigoObra;
 
         $oDaoLocal    = db_utils::getDao('obrasdadoscomplementares');
-        var_dump($oDaoLocal);
         $sQueryLocal  = $oDaoLocal->sql_query(null, "*", null, $sWhere);
         $rsQueryLocal = $oDaoLocal->sql_record($sQueryLocal);
 
         if ($rsQueryLocal === false ){
-          throw new Exception('Nenhum endereço de obra encontrado para o código informado('.$iCodigoObra.').');
+          throw new Exception('Nenhum endereço da obra encontrado para o código informado('.$iCodigoObra.').');
         }
 
 //        $oDadosEndereco = db_utils::fieldsMemory($rsQueryLocal,0);

@@ -48,7 +48,7 @@ class cl_obrasdadoscomplementares {
    var $db150_estado = 0;
    var $db150_municipio = 0;
    var $db150_distrito = '';
-   var $db150_bairro = 0;
+   var $db150_bairro = '';
    var $db150_numero = 0;
    var $db150_logradouro = '';
    var $db150_grauslatitude = 0;
@@ -76,7 +76,7 @@ class cl_obrasdadoscomplementares {
                   db150_estado = int4 = Código do Estado
                   db150_municipio = int4 = Código do Município
                   db150_distrito = varchar(150) = Distrito
-                  db150_bairro = varchar(150) = Bairro
+                  db150_bairro = varchar(100) = Bairro
                   db150_numero = int4 = Número do local da obra
                   db150_logradouro = varchar(150) = Logradouro
                   db150_grauslatitude = int4 = Graus da Latitude
@@ -268,7 +268,7 @@ class cl_obrasdadoscomplementares {
                                ,$this->db150_municipio
                                ,'$this->db150_distrito'
                                ,'$this->db150_logradouro'
-                               ,$this->db150_bairro
+                               ,'$this->db150_bairro'
                                ,$this->db150_numero
                                ,'$this->db150_grauslatitude'
                                ,'$this->db150_minutolatitude'
@@ -362,7 +362,7 @@ class cl_obrasdadoscomplementares {
        $virgula = ",";
      }
      if(trim($this->db150_bairro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])){
-       $sql  .= $virgula." db150_bairro = $this->db150_bairro ";
+       $sql  .= $virgula." db150_bairro = '$this->db150_bairro' ";
        $virgula = ",";
      }
      if(trim($this->db150_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])){

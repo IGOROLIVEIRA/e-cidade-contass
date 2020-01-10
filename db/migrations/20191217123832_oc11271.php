@@ -66,7 +66,7 @@ class Oc11271 extends AbstractMigration
           db150_estado INTEGER NOT NULL,
           db150_municipio INTEGER NOT NULL,
           db150_distrito VARCHAR(100),
-          db150_bairro INTEGER NOT NULL,
+          db150_bairro VARCHAR(100),
           db150_numero INTEGER,
           db150_logradouro VARCHAR(100),
           db150_grauslatitude VARCHAR(2) NOT NULL,
