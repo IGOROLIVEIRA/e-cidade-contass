@@ -151,7 +151,7 @@ $db_botao = true;
                             <td>
                               <?php
                               db_input('dados_complementares', 45,'',true,'text',3,"onchange='';");
-                              db_input ('idObra', 10, '', true, 'text', $db_opcao);
+                              db_input ('idObra', 10, '', true, 'hidden', $db_opcao);
                               ?>
                               <input type="button" value="Lançar" id="btnLancarDados" onclick="js_lancaDadosObra();"/>
                             </td>
