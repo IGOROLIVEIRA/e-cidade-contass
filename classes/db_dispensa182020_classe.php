@@ -66,34 +66,34 @@ class cl_dispensa182020
   var $si82_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si82_sequencial = int8 = sequencial 
-                 si82_tiporegistro = int8 = Tipo do registro 
-                 si82_codorgaoresp = varchar(2) = Código do órgão  responsável 
-                 si82_codunidadesubresp = varchar(8) = Código da unidade 
-                 si82_exercicioprocesso = int8 = Exercício em que  foi instaurado 
-                 si82_nroprocesso = varchar(12) = Número sequencial do processo 
-                 si82_tipoprocesso = int8 = Tipo de processo 
-                 si82_tipodocumento = int8 = Tipo do documento 
-                 si82_nrodocumento = varchar(14) = Número do  documento 
-                 si82_datacredenciamento = date = Data do  credenciamento 
-                 si82_nrolote = int8 = Número do Lote 
-                 si82_coditem = int8 = Código do Item 
-                 si82_nroinscricaoestadual = varchar(30) = Número da  Inscrição estadual 
-                 si82_ufinscricaoestadual = varchar(2) = UF da inscrição  estadual 
-                 si82_nrocertidaoregularidadeinss = varchar(30) = Número da certidão  de R do INSS 
-                 si82_dataemissaocertidaoregularidadeinss = date = Data de emissão  da certidão 
-                 si82_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão 
-                 si82_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade 
-                 si82_dtemissaocertidaoregularidadefgts = date = Data de emissão  da certidão 
-                 si82_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidã 
-                 si82_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos 
-                 si82_dtemissaocndt = date = Data de emissão  da certidão 
-                 si82_dtvalidadecndt = date = Data de validade  da certidão 
-                 si82_mes = int8 = Mês 
-                 si82_reg10 = int8 = reg10 
-                 si82_instit = int8 = Instituição 
+                 si82_sequencial = int8 = sequencial
+                 si82_tiporegistro = int8 = Tipo do registro
+                 si82_codorgaoresp = varchar(2) = Código do órgão  responsável
+                 si82_codunidadesubresp = varchar(8) = Código da unidade
+                 si82_exercicioprocesso = int8 = Exercício em que  foi instaurado
+                 si82_nroprocesso = varchar(12) = Número sequencial do processo
+                 si82_tipoprocesso = int8 = Tipo de processo
+                 si82_tipodocumento = int8 = Tipo do documento
+                 si82_nrodocumento = varchar(14) = Número do  documento
+                 si82_datacredenciamento = date = Data do  credenciamento
+                 si82_nrolote = int8 = Número do Lote
+                 si82_coditem = int8 = Código do Item
+                 si82_nroinscricaoestadual = varchar(30) = Número da  Inscrição estadual
+                 si82_ufinscricaoestadual = varchar(2) = UF da inscrição  estadual
+                 si82_nrocertidaoregularidadeinss = varchar(30) = Número da certidão  de R do INSS
+                 si82_dataemissaocertidaoregularidadeinss = date = Data de emissão  da certidão
+                 si82_dtvalidadecertidaoregularidadeinss = date = Data de validade  da certidão
+                 si82_nrocertidaoregularidadefgts = varchar(30) = Número da certidão  de regularidade
+                 si82_dtemissaocertidaoregularidadefgts = date = Data de emissão  da certidão
+                 si82_dtvalidadecertidaoregularidadefgts = date = Data de validade  da certidã
+                 si82_nrocndt = varchar(30) = Número da  Certidão Negativa  de Débitos
+                 si82_dtemissaocndt = date = Data de emissão  da certidão
+                 si82_dtvalidadecndt = date = Data de validade  da certidão
+                 si82_mes = int8 = Mês
+                 si82_reg10 = int8 = reg10
+                 si82_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_dispensa182020()
   {
@@ -101,7 +101,7 @@ class cl_dispensa182020
     $this->rotulo = new rotulo("dispensa182020");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -112,7 +112,7 @@ class cl_dispensa182020
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -196,7 +196,7 @@ class cl_dispensa182020
       $this->si82_sequencial = ($this->si82_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si82_sequencial"] : $this->si82_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si82_sequencial)
   {
@@ -301,60 +301,60 @@ class cl_dispensa182020
       return false;
     }
     $sql = "insert into dispensa182020(
-                                       si82_sequencial 
-                                      ,si82_tiporegistro 
-                                      ,si82_codorgaoresp 
-                                      ,si82_codunidadesubresp 
-                                      ,si82_exercicioprocesso 
-                                      ,si82_nroprocesso 
-                                      ,si82_tipoprocesso 
-                                      ,si82_tipodocumento 
-                                      ,si82_nrodocumento 
-                                      ,si82_datacredenciamento 
-                                      ,si82_nrolote 
-                                      ,si82_coditem 
-                                      ,si82_nroinscricaoestadual 
-                                      ,si82_ufinscricaoestadual 
-                                      ,si82_nrocertidaoregularidadeinss 
-                                      ,si82_dataemissaocertidaoregularidadeinss 
-                                      ,si82_dtvalidadecertidaoregularidadeinss 
-                                      ,si82_nrocertidaoregularidadefgts 
-                                      ,si82_dtemissaocertidaoregularidadefgts 
-                                      ,si82_dtvalidadecertidaoregularidadefgts 
-                                      ,si82_nrocndt 
-                                      ,si82_dtemissaocndt 
-                                      ,si82_dtvalidadecndt 
-                                      ,si82_mes 
-                                      ,si82_reg10 
-                                      ,si82_instit 
+                                       si82_sequencial
+                                      ,si82_tiporegistro
+                                      ,si82_codorgaoresp
+                                      ,si82_codunidadesubresp
+                                      ,si82_exercicioprocesso
+                                      ,si82_nroprocesso
+                                      ,si82_tipoprocesso
+                                      ,si82_tipodocumento
+                                      ,si82_nrodocumento
+                                      ,si82_datacredenciamento
+                                      ,si82_nrolote
+                                      ,si82_coditem
+                                      ,si82_nroinscricaoestadual
+                                      ,si82_ufinscricaoestadual
+                                      ,si82_nrocertidaoregularidadeinss
+                                      ,si82_dataemissaocertidaoregularidadeinss
+                                      ,si82_dtvalidadecertidaoregularidadeinss
+                                      ,si82_nrocertidaoregularidadefgts
+                                      ,si82_dtemissaocertidaoregularidadefgts
+                                      ,si82_dtvalidadecertidaoregularidadefgts
+                                      ,si82_nrocndt
+                                      ,si82_dtemissaocndt
+                                      ,si82_dtvalidadecndt
+                                      ,si82_mes
+                                      ,si82_reg10
+                                      ,si82_instit
                        )
                 values (
-                                $this->si82_sequencial 
-                               ,$this->si82_tiporegistro 
-                               ,'$this->si82_codorgaoresp' 
-                               ,'$this->si82_codunidadesubresp' 
-                               ,$this->si82_exercicioprocesso 
-                               ,'$this->si82_nroprocesso' 
-                               ,$this->si82_tipoprocesso 
-                               ,$this->si82_tipodocumento 
-                               ,'$this->si82_nrodocumento' 
-                               ," . ($this->si82_datacredenciamento == "null" || $this->si82_datacredenciamento == "" ? "null" : "'" . $this->si82_datacredenciamento . "'") . " 
-                               ,$this->si82_nrolote 
-                               ,$this->si82_coditem 
-                               ,'$this->si82_nroinscricaoestadual' 
-                               ,'$this->si82_ufinscricaoestadual' 
-                               ,'$this->si82_nrocertidaoregularidadeinss' 
-                               ," . ($this->si82_dataemissaocertidaoregularidadeinss == "null" || $this->si82_dataemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si82_dataemissaocertidaoregularidadeinss . "'") . " 
-                               ," . ($this->si82_dtvalidadecertidaoregularidadeinss == "null" || $this->si82_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si82_dtvalidadecertidaoregularidadeinss . "'") . " 
-                               ,'$this->si82_nrocertidaoregularidadefgts' 
-                               ," . ($this->si82_dtemissaocertidaoregularidadefgts == "null" || $this->si82_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si82_dtemissaocertidaoregularidadefgts . "'") . " 
-                               ," . ($this->si82_dtvalidadecertidaoregularidadefgts == "null" || $this->si82_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si82_dtvalidadecertidaoregularidadefgts . "'") . " 
-                               ,'$this->si82_nrocndt' 
-                               ," . ($this->si82_dtemissaocndt == "null" || $this->si82_dtemissaocndt == "" ? "null" : "'" . $this->si82_dtemissaocndt . "'") . " 
-                               ," . ($this->si82_dtvalidadecndt == "null" || $this->si82_dtvalidadecndt == "" ? "null" : "'" . $this->si82_dtvalidadecndt . "'") . " 
-                               ,$this->si82_mes 
-                               ,$this->si82_reg10 
-                               ,$this->si82_instit 
+                                $this->si82_sequencial
+                               ,$this->si82_tiporegistro
+                               ,'$this->si82_codorgaoresp'
+                               ,'$this->si82_codunidadesubresp'
+                               ,$this->si82_exercicioprocesso
+                               ,'$this->si82_nroprocesso'
+                               ,$this->si82_tipoprocesso
+                               ,$this->si82_tipodocumento
+                               ,'$this->si82_nrodocumento'
+                               ," . ($this->si82_datacredenciamento == "null" || $this->si82_datacredenciamento == "" ? "null" : "'" . $this->si82_datacredenciamento . "'") . "
+                               ,$this->si82_nrolote
+                               ,$this->si82_coditem
+                               ,'$this->si82_nroinscricaoestadual'
+                               ,'$this->si82_ufinscricaoestadual'
+                               ,'$this->si82_nrocertidaoregularidadeinss'
+                               ," . ($this->si82_dataemissaocertidaoregularidadeinss == "null" || $this->si82_dataemissaocertidaoregularidadeinss == "" ? "null" : "'" . $this->si82_dataemissaocertidaoregularidadeinss . "'") . "
+                               ," . ($this->si82_dtvalidadecertidaoregularidadeinss == "null" || $this->si82_dtvalidadecertidaoregularidadeinss == "" ? "null" : "'" . $this->si82_dtvalidadecertidaoregularidadeinss . "'") . "
+                               ,'$this->si82_nrocertidaoregularidadefgts'
+                               ," . ($this->si82_dtemissaocertidaoregularidadefgts == "null" || $this->si82_dtemissaocertidaoregularidadefgts == "" ? "null" : "'" . $this->si82_dtemissaocertidaoregularidadefgts . "'") . "
+                               ," . ($this->si82_dtvalidadecertidaoregularidadefgts == "null" || $this->si82_dtvalidadecertidaoregularidadefgts == "" ? "null" : "'" . $this->si82_dtvalidadecertidaoregularidadefgts . "'") . "
+                               ,'$this->si82_nrocndt'
+                               ," . ($this->si82_dtemissaocndt == "null" || $this->si82_dtemissaocndt == "" ? "null" : "'" . $this->si82_dtemissaocndt . "'") . "
+                               ," . ($this->si82_dtvalidadecndt == "null" || $this->si82_dtvalidadecndt == "" ? "null" : "'" . $this->si82_dtvalidadecndt . "'") . "
+                               ,$this->si82_mes
+                               ,$this->si82_reg10
+                               ,$this->si82_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -416,7 +416,7 @@ class cl_dispensa182020
     }
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si82_sequencial = null)
   {
@@ -708,7 +708,7 @@ class cl_dispensa182020
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si82_sequencial = null, $dbwhere = null)
   {
@@ -797,7 +797,7 @@ class cl_dispensa182020
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -823,7 +823,7 @@ class cl_dispensa182020
     }
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si82_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -860,7 +860,7 @@ class cl_dispensa182020
     }
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si82_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
