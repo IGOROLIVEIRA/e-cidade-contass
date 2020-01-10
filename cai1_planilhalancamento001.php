@@ -833,7 +833,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 
        aFontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
 
-       if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && aFontes.indexOf($('recurso').value) == -1) {
+       if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && aFontes.indexOf($('recurso').value) != -1) {
            if ($('k81_emparlamentar').value != '') {
                document.getElementById("k81_emparlamentar").options[$('k81_emparlamentar').value].selected = true;
            } else {
@@ -886,7 +886,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 
        fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
 
-       if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) == -1) {
+       if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) != -1) {
            document.getElementById("k81_emparlamentar").options[0].selected = true;
        } else {
            document.getElementById("k81_emparlamentar").options[3].selected = true;
@@ -1100,7 +1100,7 @@ function js_addReceita () {
 
       fontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
 
-      if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) == -1) {
+      if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424' && fontes.indexOf($('recurso').value) != -1) {
           if ($('k81_emparlamentar').value == '') {
               alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
               return false;
