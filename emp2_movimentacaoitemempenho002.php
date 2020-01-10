@@ -319,9 +319,6 @@ tbody {
             <td class="s1" style="border:none;"></td>
             <td class="s1" style="border:none;"></td>
             <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
           </tr>
           <?php foreach($empenhos->itens as $itens) : ?>
           <tr>
@@ -330,8 +327,6 @@ tbody {
             </td>
             <td class="s3" style="border-bottom:1px SOLID #000000; border-right: none;"></td>
             <td class="s3" style="border-bottom:1px SOLID #000000; border-right: none;"></td>
-            <td class="s1" style="border-right: none;"></td>
-            <td class="s1" style="border-right: none;"></td>
             <td class="s1" style="border-right: none;"></td>
             <td></td>
           </tr>
