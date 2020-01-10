@@ -125,7 +125,7 @@ if(isset($incluir)){
 	 $sqlerro = true;
 	}
 
-	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"*",null,"l47_instit=$instit and l47_anousu=$anousu"));
+	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"max(l47_numero) as l47_numero",null,"l47_instit=$instit and l47_anousu=$anousu"));
 
 	if ($clpccfeditalnum->numrows==0){
 	 $erro_msg="Verifique se esta configurado a numeração do edital por licitação.";
