@@ -126,12 +126,12 @@ if(isset($incluir)){
 	}
 
 	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"*",null,"l47_instit=$instit and l47_anousu=$anousu"));
-	
+
 	if ($clpccfeditalnum->numrows==0){
 	 $erro_msg="Verifique se esta configurado a numeração do edital por licitação.";
 	 $sqlerro = true;
 	}
-	
+
 	//numeracao por modalidade
 	if ($sqlerro == false){
 
@@ -195,10 +195,11 @@ if(isset($incluir)){
 		  $erro_msg="Ja existe licitação numero $l20_edital.Verificar numeração por edital.";
 		  $sqlerro = true;
 		}
-		
+
 		//verifica se existe numero do edital
+
 		$result_verif_editalnum=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l47_anousu=$anousu and l20_nroedital= $l20_nroedital and l20_anousu=$anousu"));
-		
+
 		if ($clpccfeditalnum->numrows>0){
 		  $erro_msg="Ja existe edital da licitação com numero $l47_edital.Verificar numeração por edital.";
 		  $sqlerro = true;
@@ -261,7 +262,7 @@ if(isset($incluir)){
 		  		$sqlerro=true;
 		  	}
     	}
-    	
+
 		if ( !$sqlerro && $lprocsis == 's') {
 
 			$clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
@@ -303,7 +304,9 @@ if(isset($incluir)){
       $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
 
       $clpccfeditalnum->l47_numero=$l47_numero+1;
-      $clpccfeditalnum->alterar_where(null,"l47_instit=$instit and l47_anousu=$anousu");
+      $clpccfeditalnum->l47_instit=db_getsession('DB_instit');
+      $clpccfeditalnum->l47_anousu=db_getsession('DB_anousu');
+      $clpccfeditalnum->incluir(null);
     }
 
 		// db_fim_transacao(false);
