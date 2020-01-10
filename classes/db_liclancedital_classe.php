@@ -212,8 +212,11 @@ class cl_liclancedital
       $virgula = ",";
     }
 
+
     if (trim($this->l47_origemrecurso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) {
-      if (trim($this->l47_origemrecurso) == 0) {
+        $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
+        $virgula = ",";
+    }else{
         $this->erro_sql = " Campo Origem Recurso não Informado.";
         $this->erro_campo = "l47_origemrecurso";
         $this->erro_banco = "";
@@ -221,23 +224,19 @@ class cl_liclancedital
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
-      }else{
-        $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
-        $virgula = ",";
-      }
     }
-    if ($this->l47_dataenvio == "" || !isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"])) {
+
+    if ($this->l47_dataenvio != "" || !isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
+      $sql .= $virgula . " l47_dataenvio = '$this->l47_dataenvio' ";
+      $virgula = ",";
+    }else{
         $this->erro_sql = " Campo Data Envio não Informado.";
-        $this->erro_campo = "l47_origemrecurso";
+        $this->erro_campo = "l47_dataenvio";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
-
-    }else{
-      $sql .= $virgula . " l47_dataenvio = $this->l47_dataenvio ";
-      $virgula = ",";
     }
 
     if (trim($this->l47_origemrecurso != "") && $this->l47_origemrecurso == 9) {
@@ -263,6 +262,7 @@ class cl_liclancedital
     if ($l47_sequencial != null) {
       $sql .= " l47_sequencial = $l47_sequencial";
     }
+
     $result = db_query($sql);
 
     if ($result == false) {

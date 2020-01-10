@@ -68,39 +68,33 @@
           throw new Exception('Nenhum endereço da obra encontrado para o código informado('.$iCodigoObra.').');
         }
 
-//        $oDadosEndereco = db_utils::fieldsMemory($rsQueryLocal,0);
+        $oDados = db_utils::fieldsMemory($rsQueryLocal,0);
 //
-//        $this->setCodigoPais($oDadosEndereco->db150_sequencial);
-//        $this->setDescricaoPais($oDadosEndereco->db150_descricao);
-//
-//        $this->setCodigoEstado($oDadosEndereco->db71_sequencial);
-//        $this->setDescricaoEstado($oDadosEndereco->db71_descricao);
-//
-//        $this->setCodigoMunicipio($oDadosEndereco->db72_sequencial);
-//        $this->setDescricaoMunicipio($oDadosEndereco->db72_descricao);
-//
-//        $this->setCodigoBairro($oDadosEndereco->db73_sequencial);
-//        $this->setDescricaoBairro($oDadosEndereco->db73_descricao);
-//
-//        $this->setCodigoRua($oDadosEndereco->db74_sequencial);
-//        $this->setDescricaoRua($oDadosEndereco->db74_descricao);
-//
-//        $this->setCodigoRuasTipo($oDadosEndereco->db85_sequencial);
-//        $this->setCadEnderRuaTipo($oDadosEndereco->db85_ruastipo);
-//
-//        $this->setCodigoLocal($oDadosEndereco->db75_sequencial);
-//        $this->setNumeroLocal($oDadosEndereco->db75_numero);
-//
-//        $this->setCodigoEndereco($oDadosEndereco->db76_sequencial);
-//        $this->setCondominioEndereco($oDadosEndereco->db76_condominio);
-//        $this->setLoteamentoEndereco($oDadosEndereco->db76_loteamento);
-//        $this->setComplementoEndereco($oDadosEndereco->db76_complemento);
-//        $this->setPontoReferenciaEndereco($oDadosEndereco->db76_pontoref);
-//        $this->setCepEndereco($oDadosEndereco->db76_cep);
-//        $this->setCep($oDadosEndereco->db86_cep);
-//        $this->setCodigoCep($oDadosEndereco->db86_sequencial);
-//        $this->setTipoRua($oDadosEndereco->j88_descricao);
-//        $this->setGrausLatitude($oDadosEndereco->);
+        $this->setEstado($oDados->db150_estado);
+        $this->setPais($oDados->db150_pais);
+        $this->setMunicipio($oDados->db150_municipio);
+        $this->setBairro($oDados->db150_bairro);
+        $this->setNumero($oDados->db150_numero);
+        $this->setCep($oDados->db150_cep);
+        $this->setCodigoObra($oDados->db150_codobra);
+        $this->setDistrito($oDados->db150_distrito);
+        $this->setLogradouro($oDados->db150_logradouro);
+        $this->setGrausLatitude($oDados->db150_grauslatitude);
+        $this->setMinutoLatitude($oDados->db150_minutolatitude);
+        $this->setSegundoLatitude($oDados->db150_segundolatitude);
+        $this->setGrausLongitude($oDados->db150_grauslongitude);
+        $this->setMinutoLongitude($oDados->db150_minutolongitude);
+        $this->setSegundoLongitude($oDados->db150_segundolongitude);
+        $this->setClasseObjeto($oDados->db150_classeobjeto);
+        $this->setAtividadeObra($oDados->db150_atividadeObra);
+        $this->setAtividadeServico($oDados->db150_atividadeservico);
+        $this->setDescrAtividadeServico($oDados->db150_descrAtividadeServico);
+        $this->setAtividadeServicoEsp($oDados->db150_atividadeservicoesp);
+        $this->setDescrAtividadeServicoEsp($oDados->db150_descratividadeservicoesp);
+        $this->setGrupoBemPublico($oDados->db150_grupobempublico);
+        $this->setSubGrupoBemPublico($oDados->db150_subgrupobempublico);
+        $this->setBdi($oDados->db150_bdi);
+        $this->setLicita($oDados->db150_liclicita);
       }
 
   }
@@ -524,39 +518,46 @@
     $oDaoObras = db_utils::getDao('obrasdadoscomplementares');
     $sSqlQuery = $oDaoObras->sql_query('', '*', null, 'db150_codobra ='.$this->getCodigoObra());
     $rsQuery   = $oDaoObras->sql_record($sSqlQuery);
+    $oDados = db_utils::fieldsMemory($rsQuery, 0);
 
-    if(!$rsQuery){
-      $oDaoObras->db150_codobra = $this->getCodigoObra();
-      $oDaoObras->db150_pais = $this->getPais();
-      $oDaoObras->db150_estado = $this->getEstado();
-      $oDaoObras->db150_municipio = $this->getMunicipio();
-      $oDaoObras->db150_distrito = $this->getDistrito();
-      $oDaoObras->db150_bairro = $this->getBairro();
-      $oDaoObras->db150_numero = $this->getNumero();
-      $oDaoObras->db150_logradouro = $this->getLogradouro();
-      $oDaoObras->db150_grauslatitude = $this->getGrausLatitude();
-      $oDaoObras->db150_minutolatitude = $this->getMinutoLatitude();
-      $oDaoObras->db150_segundolatitude = $this->getSegundoLatitude();
-      $oDaoObras->db150_grauslongitude = $this->getGrausLongitude();
-      $oDaoObras->db150_minutolongitude = $this->getMinutoLongitude();
-      $oDaoObras->db150_segundolongitude = $this->getSegundoLongitude();
-      $oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
-      $oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
-      $oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
-      $oDaoObras->db150_atividadeobra = $this->getAtividadeObra();
-      $oDaoObras->db150_atividadeservico = $this->getAtividadeServico();
-      $oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
-      $oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
-      $oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
-      $oDaoObras->db150_bdi = $this->getBdi();
-      $oDaoObras->db150_liclicita = $this->getLicita();
+    $oDaoObras->db150_codobra = $this->getCodigoObra();
+    $oDaoObras->db150_pais = $this->getPais();
+    $oDaoObras->db150_estado = $this->getEstado();
+    $oDaoObras->db150_municipio = $this->getMunicipio();
+    $oDaoObras->db150_distrito = $this->getDistrito();
+    $oDaoObras->db150_bairro = $this->getBairro();
+    $oDaoObras->db150_numero = $this->getNumero();
+    $oDaoObras->db150_logradouro = $this->getLogradouro();
+    $oDaoObras->db150_grauslatitude = $this->getGrausLatitude();
+    $oDaoObras->db150_minutolatitude = $this->getMinutoLatitude();
+    $oDaoObras->db150_segundolatitude = $this->getSegundoLatitude();
+    $oDaoObras->db150_grauslongitude = $this->getGrausLongitude();
+    $oDaoObras->db150_minutolongitude = $this->getMinutoLongitude();
+    $oDaoObras->db150_segundolongitude = $this->getSegundoLongitude();
+    $oDaoObras->db150_classeobjeto = $this->getClasseObjeto();
+    $oDaoObras->db150_grupobempublico = $this->getGrupoBemPublico();
+    $oDaoObras->db150_subgrupobempublico = $this->getSubGrupoBemPublico();
+    $oDaoObras->db150_atividadeobra = $this->getAtividadeObra();
+    $oDaoObras->db150_atividadeservico = $this->getAtividadeServico();
+    $oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
+    $oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
+    $oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+    $oDaoObras->db150_bdi = $this->getBdi();
+    $oDaoObras->db150_liclicita = $this->getLicita();
+    $oDaoObras->db150_cep = $this->getCep();
+
+    if(!$oDaoObras->numrows){
+
       $oDaoObras->incluir(null);
-
       if ($oDaoObras->erro_status == '0') {
-
-        throw new Exception($oDaoObras->erro_msg);
+        throw new Exception($oDaoObras->erro_sql);
       } else {
         $this->setCodigoObra($oDaoObras->db150_codobra);
+      }
+    }else{
+      $oDaoObras->alterar($oDados->db150_sequencial);
+      if ($oDaoObras->erro_status == '0') {
+        throw new Exception($oDaoObras->erro_sql);
       }
     }
 
@@ -572,7 +573,8 @@
         $sCampos  .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
         $sCampos  .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
         $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp";
+        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, 
+        db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep";
 
         $sWhere   = " db150_codobra = ".$iCodigoObra;
 
@@ -596,7 +598,7 @@
         $sCampos  .= " db150_bairro as bairro, db150_numero as numero, db150_logradouro as logradouro, db150_grauslatitude as grauslatitude, db150_minutolatitude as minutolatitude,";
         $sCampos  .= " db150_segundolatitude as segundolatitude, db150_grauslongitude as grauslongitude, db150_minutolongitude as minutolongitude, db150_segundolongitude as segundolongitude,";
         $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
-        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp";
+        $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep";
 
         $sWhere   = " db150_liclicita = ".$iCodigoEdital;
 
@@ -604,7 +606,7 @@
         $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
 
         if( $rsQueryObra !== false) {
-          $aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false, $lEncode);
+          $aRetorno = db_utils::getCollectionByRecord($rsQueryObra, false, false);
         }
       }
       return $aRetorno;

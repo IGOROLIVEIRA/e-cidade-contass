@@ -47,6 +47,8 @@ class cl_editaldocumento {
   var $l48_tipo = null;
   var $l48_nomearquivo = null;
   var $l48_arquivo = 0;
+  var $l48_liclancedital = 0;
+
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  l48_sequencial = int4 = Sequencia 
@@ -54,6 +56,7 @@ class cl_editaldocumento {
                  l48_tipo = varchar(2) = Tipo do Edital 
                  l48_nomearquivo = varchar(100) = Nome do Arquivo 
                  l48_arquivo = oid = Arquivos 
+                 l48_liclancedital = int4 = Sequencial da Licitação 
                  ";
   //funcao construtor da classe
   function cl_editaldocumento() {
@@ -78,6 +81,7 @@ class cl_editaldocumento {
       $this->l48_tipo = ($this->l48_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["l48_tipo"]:$this->l48_tipo);
       $this->l48_nomearquivo = ($this->l48_nomearquivo == ""?@$GLOBALS["HTTP_POST_VARS"]["l48_nomearquivo"]:$this->l48_nomearquivo);
       $this->l48_arquivo = ($this->l48_arquivo == ""?@$GLOBALS["HTTP_POST_VARS"]["l48_arquivo"]:$this->l48_arquivo);
+      $this->l48_liclancedital = ($this->l48_liclancedital == ""?@$GLOBALS["HTTP_POST_VARS"]["l48_liclancedital"]:$this->l48_liclancedital);
     }else{
       $this->l48_sequencial = ($this->l48_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l48_sequencial"]:$this->l48_sequencial);
     }
@@ -144,12 +148,21 @@ class cl_editaldocumento {
       $this->erro_status = "0";
       return false;
     }
+    if(($this->l48_liclancedital == null) || ($this->l48_liclancedital == "") ){
+      $this->erro_sql = " Campo l48_liclancedital nao declarado.";
+      $this->erro_banco = "Chave Primaria zerada.";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     $sql = "insert into editaldocumentos(
                                        l48_sequencial 
                                       ,l48_edital 
                                       ,l48_tipo 
                                       ,l48_nomearquivo 
                                       ,l48_arquivo 
+                                      ,l48_liclancedital 
                        )
                 values (
                                 $this->l48_sequencial 
@@ -157,8 +170,8 @@ class cl_editaldocumento {
                                ,'$this->l48_tipo' 
                                ,'$this->l48_nomearquivo' 
                                ,$this->l48_arquivo 
+                               ,$this->l48_liclancedital 
                       )";
-
     $result = db_query($sql);
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -251,6 +264,19 @@ class cl_editaldocumento {
       if(trim($this->l48_arquivo) == null ){
         $this->erro_sql = " Campo Arquivos nao Informado.";
         $this->erro_campo = "l48_arquivo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->l48_liclancedital)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l48_liclancedital"])){
+      $sql  .= $virgula." l48_liclancedital = $this->l48_liclancedital ";
+      $virgula = ",";
+      if(trim($this->l48_liclancedital) == null ){
+        $this->erro_sql = " Campo Sequencial do liclancedital nao Informado.";
+        $this->erro_campo = "l48_liclancedital";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -450,7 +476,7 @@ class cl_editaldocumento {
       $sql .= $campos;
     }
     $sql .= " from editaldocumentos ";
-    $sql .= " JOIN liclancedital on liclancedital.l47_sequencial = editaldocumentos.l48_edital ";
+    $sql .= " JOIN liclancedital on liclancedital.l47_sequencial = editaldocumentos.l48_liclancedital ";
     $sql2 = "";
     if($dbwhere==""){
       if($l48_sequencial!=null ){

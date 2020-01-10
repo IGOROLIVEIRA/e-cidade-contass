@@ -417,38 +417,39 @@ switch ($oParam->exec) {
     db_inicio_transacao();
     try {
 
-      $oEndereco = new obrasDadosComplementares(null);
-      $oRetorno->dadoscomplementares = new stdClass();
-      $oEndereco->setEstado($oParam->endereco->codigoEstado);
-      $oEndereco->setPais($oParam->endereco->codigoPais);
-      $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
-      $oEndereco->setBairro($oParam->endereco->descrBairro);
-      $oEndereco->setNumero($oParam->endereco->numero);
-      $oEndereco->setCep($oParam->endereco->cepEndereco);
-      $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
-      $oEndereco->setDistrito($oParam->endereco->distrito);
-      $oEndereco->setLogradouro($oParam->endereco->logradouro);
-      $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
-      $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
-      $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
-      $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
-      $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
-      $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
-      $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
-      $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
-      $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
-      $oEndereco->setDescrAtividadeServico($oParam->endereco->descrAtividadeServico);
-      $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
-      $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
-      $oEndereco->setGrupoBemPublico($oParam->endereco->grupoBemPub);
-      $oEndereco->setSubGrupoBemPublico($oParam->endereco->subGrupoBemPub);
-      $oEndereco->setBdi($oParam->endereco->bdi);
-      $oEndereco->setLicita($oParam->endereco->licitacao);
+        $oEndereco = new obrasDadosComplementares(null);
+        $oRetorno->dadoscomplementares = new stdClass();
+        $oEndereco->setEstado($oParam->endereco->codigoEstado);
+        $oEndereco->setPais($oParam->endereco->codigoPais);
+        $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
+        $oEndereco->setBairro($oParam->endereco->descrBairro);
+        $oEndereco->setNumero($oParam->endereco->numero);
+        $oEndereco->setCep($oParam->endereco->cep);
+        $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
+        $oEndereco->setDistrito($oParam->endereco->distrito);
+        $oEndereco->setLogradouro($oParam->endereco->logradouro);
+        $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
+        $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
+        $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
+        $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
+        $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
+        $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
+        $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
+        $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
+        $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
+        $oEndereco->setDescrAtividadeServico($oParam->endereco->descrAtividadeServico);
+        $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
+        $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
+        $oEndereco->setGrupoBemPublico(intval($oParam->endereco->grupoBemPub));
+        $oEndereco->setSubGrupoBemPublico(intval($oParam->endereco->subGrupoBemPub));
+        $oEndereco->setBdi($oParam->endereco->bdi);
+        $oEndereco->setLicita($oParam->endereco->licitacao);
+
+
+        $oEndereco->salvaDadosComplementares();
+        db_fim_transacao(false);
 
       $oRetorno->dadoscomplementares = $oParam->endereco;
-
-      $oEndereco->salvaDadosComplementares();
-      db_fim_transacao(false);
 
     }catch (Exception $erro){
       db_fim_transacao(true);
@@ -468,8 +469,8 @@ switch ($oParam->exec) {
   break;
 
   case 'findDadosObraEdital' :
-    if($oParam->iCodigoEdital){
-      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->iCodigoEdital);
+    if($oParam->iLicitacao){
+      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->iLicitacao);
     }
     $oRetorno->status = 1;
     echo $oJson->encode($oRetorno);
@@ -481,8 +482,8 @@ switch ($oParam->exec) {
       if($oParam->codObra){
         $clObras = new cl_obrasdadoscomplementares();
         $clObras->excluir('', 'db150_codobra = '.$oParam->codObra);
+        $oRetorno->message = $clObras->erro_msg;
       }
-      $oRetorno->message = 'Dados do código da Obra '.$oParam->codObra.' excluídos com sucesso!!';
       db_fim_transacao(false);
     }catch(Exception $erro){
       db_fim_transacao(true);
