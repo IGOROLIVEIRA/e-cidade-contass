@@ -450,7 +450,7 @@ mctrans:
     only:
         - master
 
-pmcapitaoeneas:
+prefeituras:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
