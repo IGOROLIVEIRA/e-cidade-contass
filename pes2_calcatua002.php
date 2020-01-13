@@ -1241,9 +1241,10 @@ function calcatua_sprev($anofolha,$mesfolha,$where){
                 case when rh02_abonopermanencia = 't' then 1 else 2 end ||'# '||
                 ' ' ||'# '||
                 '2' ||'# '||
-                (SELECT te01_valor 
-                FROM tetoremuneratorio 
-                 ORDER BY te01_sequencial DESC LIMIT 1) ||'# '||
+                COALESCE((SELECT te01_valor
+                FROM tetoremuneratorio
+                ORDER BY te01_sequencial DESC
+                LIMIT 1)::varchar,' ') ||'# '||
                 ' ' ||'# '||
                 ' ' ||'# '||
                 ' ' ||'# '||
