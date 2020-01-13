@@ -21,11 +21,10 @@ if(isset($incluir)){
   try {
 
     if($dtLancamentoObras != null){
-      if($obr02_dtlancamento >= $dtLancamentoObras){
+      if($obr02_dtlancamento < $dtLancamentoObras){
         throw new Exception ("Usuário: Data de Lançamento deve ser maior ou igual a data de lançamento da Obra.");
       }
     }
-
     db_inicio_transacao();
     $cllicobrasituacao->obr02_seqobra                  = $obr02_seqobra;
     $cllicobrasituacao->obr02_dtlancamento             = $obr02_dtlancamento;
@@ -40,6 +39,13 @@ if(isset($incluir)){
     $cllicobrasituacao->obr02_dtretomada               = $obr02_dtretomada;
     $cllicobrasituacao->obr02_instit                   = db_getsession('DB_instit');
     $cllicobrasituacao->incluir();
+
+    if($cllicobrasituacao->erro_status == 0){
+      $erro = $cllicobrasituacao->erro_msg;
+      db_msgbox($erro);
+      $sqlerro = true;
+    }
+
     db_fim_transacao();
 
   }catch (Exception $eErro){

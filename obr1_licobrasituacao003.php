@@ -13,7 +13,13 @@ $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $cllicobrasituacao->excluir($oid);
+  $cllicobrasituacao->excluir($obr02_sequencial);
+
+  if($cllicobrasituacao->erro_status == 0){
+    $erro = $cllicobrasituacao->erro_msg;
+    db_msgbox($erro);
+    $sqlerro = true;
+  }
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;

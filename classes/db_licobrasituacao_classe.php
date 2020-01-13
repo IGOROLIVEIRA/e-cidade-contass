@@ -241,6 +241,16 @@ class cl_licobrasituacao {
         return false;
       }
 
+      if ($this->obr02_dtretomada == null ) {
+        $this->erro_sql = " Campo Data Retomada não informado.";
+        $this->erro_campo = "obr02_dtretomada_dia";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+
       if($this->obr02_motivoparalisacao == "99"){
         if ($this->obr02_outrosmotivos == null ) {
           $this->erro_sql = " Campo Outros Motivos não informado.";
@@ -254,15 +264,6 @@ class cl_licobrasituacao {
       }
     }
 
-    if ($this->obr02_dtretomada == null ) {
-      $this->erro_sql = " Campo Data Retomada não informado.";
-      $this->erro_campo = "obr02_dtretomada_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
     if ($this->obr02_instit == null ) {
       $this->erro_sql = " Campo Instituição não informado.";
       $this->erro_campo = "obr02_instit";
@@ -334,7 +335,7 @@ class cl_licobrasituacao {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) {
+  function alterar ( $obr02_sequencial=null ) {
     $this->atualizacampos();
     $sql = " update licobrasituacao set ";
     $virgula = "";
@@ -590,7 +591,8 @@ class cl_licobrasituacao {
       }
     }
     $sql .= " where ";
-    $sql .= "oid = '$oid'";     $result = db_query($sql);
+    $sql .= "obr02_sequencial = $obr02_sequencial";
+    $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
       $this->erro_sql   = "cadastro de situacao de obras nao Alterado. Alteracao Abortada.\\n";
@@ -621,13 +623,13 @@ class cl_licobrasituacao {
   }
 
   // funcao para exclusao
-  function excluir ( $oid=null ,$dbwhere=null) {
+  function excluir ( $obr02_sequencial=null ,$dbwhere=null) {
 
     $sql = " delete from licobrasituacao
                     where ";
     $sql2 = "";
     if ($dbwhere==null || $dbwhere =="") {
-      $sql2 = "oid = '$oid'";
+      $sql2 = "obr02_sequencial = '$obr02_sequencial'";
     } else {
       $sql2 = $dbwhere;
     }
@@ -686,7 +688,7 @@ class cl_licobrasituacao {
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="licobrasituacao.oid,*",$ordem=null,$dbwhere="") {
+  function sql_query ( $obr02_sequencial = null,$campos="licobrasituacao.obr02_sequencial,*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);
@@ -701,8 +703,8 @@ class cl_licobrasituacao {
     $sql .= " from licobrasituacao ";
     $sql2 = "";
     if ($dbwhere=="") {
-      if ( $oid != "" && $oid != null) {
-        $sql2 = " where licobrasituacao.oid = '$oid'";
+      if ( $obr02_sequencial != "" && $obr02_sequencial != null) {
+        $sql2 = " where licobrasituacao.obr02_sequencial = $obr02_sequencial";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -721,7 +723,7 @@ class cl_licobrasituacao {
   }
 
   // funcao do sql
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query_file ( $obr02_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);

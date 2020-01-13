@@ -160,10 +160,10 @@ $cllicobras->rotulo->label();
 <script>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_licobras','func_licobras.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_licobraspesquisa','func_licobras.php?funcao_js=parent.js_preenchepesquisa|obr01_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
-    db_iframe_licobras.hide();
+    db_iframe_licobraspesquisa.hide();
     <?
     if($db_opcao!=1){
       echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
