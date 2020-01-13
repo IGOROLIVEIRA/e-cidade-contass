@@ -68,7 +68,7 @@ if ( $oLibDocumento->lErro ){
    die($oLibDocumento->sMsgErro);
 }
 
-$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit"));
+$rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,"*","l20_codigo","l20_codigo=$l20_codigo and l20_instit = $dbinstit"));
 
 if ($clliclicita->numrows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existe registro cadastrado, ou licitação não julgada, ou licitação revogada');
@@ -93,8 +93,9 @@ $oLibDocumento->l03_descr     = $olicitacao->l03_descr;
 $oLibDocumento->l20_procadmin = $olicitacao->l20_procadmin;
 $oLibDocumento->l20_datacria  = substr($olicitacao->l20_datacria,0,4);
 $oLibDocumento->l20_codigo    = $olicitacao->l20_codigo;
-$oLibDocumento->l30_portaria  = $olicitacao->l30_portaria;
+$oLibDocumento->l45_numatonomeacao  = $olicitacao->l45_numatonomeacao;
 $oLibDocumento->l20_objeto    = $olicitacao->l20_objeto;
+$oLibDocumento->l20_equipepregao    = $olicitacao->l20_equipepregao;
 
 $sSqlDbConfig = $cldbconfig->sql_query(null, "*", null, "codigo = {$dbinstit}");
 $result_munic = $cldbconfig->sql_record($sSqlDbConfig);
