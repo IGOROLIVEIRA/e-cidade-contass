@@ -101,9 +101,9 @@ $db_opcao = 1;
                   }else{
                     $aTipos[] = 'Selecione';
                     $aTipos['mc'] = 'Minuta do Contrato';
-                    $aTipos['po'] = 'Planilha Or?ament?ria';
+                    $aTipos['po'] = 'Planilha Orçamentária';
                     $aTipos['cr'] = 'Cronograma';
-                    $aTipos['cb'] = 'Composi??o BDI';
+                    $aTipos['cb'] = 'Composição BDI';
                     $aTipos['fl'] = 'Fotos do local';
                   }
                   break;
@@ -117,7 +117,7 @@ $db_opcao = 1;
                     $aTipos['mc'] = 'Minuta do Contrato';
                     $aTipos['po'] = 'Planilha Orçamentária';
                     $aTipos['cr'] = 'Cronograma';
-                    $aTipos['cb'] = 'Composi??o BDI';
+                    $aTipos['cb'] = 'Composição BDI';
                     $aTipos['fl'] = 'Fotos do local';
                   }
                   break;
@@ -340,7 +340,7 @@ $db_opcao = 1;
         var oRetorno = eval('('+oAjax.responseText+")");
         if (oRetorno.status == 2) {
 
-            alert("N?o foi possivel excluir o documento:\n "+ oRetorno.message);
+            alert("Não foi possivel excluir o documento:\n "+ oRetorno.message);
         }
 
         js_getDocumento();
