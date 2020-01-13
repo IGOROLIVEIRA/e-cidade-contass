@@ -311,7 +311,6 @@ $sWhereContratos = " and 1 = 1 ";
 
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
-                            liclancedital.l47_sequencial as dl_Sequencial_Edital,
                             liclicita.l20_edital,
                             liclicita.l20_nroedital,
                             liclicita.l20_anousu,
