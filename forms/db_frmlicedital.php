@@ -217,15 +217,19 @@ $db_botao = true;
     function js_retornoDadosLicitacao(oAjax){
         var oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
-
+        console.log('Tipo: ',dadoslicitacao);
         if(dadoslicitacao.l20_cadinicial == '1'){
-            $('db_opcao').name  = 'incluir';
-            $('db_opcao').value = 'Incluir';
-            <?=$db_opcao = 1;?>
+            document.location.href="lic4_editalinclusao.php?numero_edital="+dadoslicitacao.l20_nroedital;
+            return;
+            // document.location.href="lic4_editalinclusao.php?numero_edital="+dadoslicitacao.l20_nroedital+'"';
+            //$('db_opcao').name  = 'incluir';
+            //$('db_opcao').value = 'Incluir';
         }else{
-          $('db_opcao').name  = 'alterar';
-          $('db_opcao').value = 'Alterar';
-          <?=$db_opcao = 2;?>
+            document.location.href="lic4_editalalteracao.php?numero_edital="+dadoslicitacao.l20_nroedital;
+            return;
+          //$('db_opcao').name  = 'alterar';
+          //$('db_opcao').value = 'Alterar';
+
         }
             let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
             $('numero_edital').value = dadoslicitacao.l20_nroedital;

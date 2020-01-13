@@ -46,29 +46,45 @@ db_postmemory($HTTP_POST_VARS);
 $sqlerro = false;
 $db_opcao = 2;
 
+if(!isset($alterar)){
+  $sqlEdital = $clliclicita->sql_query_edital('', '*', '', 'l20_nroedital = '.$numero_edital. ' and extract(year from l20_datacria) >= 2020 ');
+  $rsEdital = $clliclicita->sql_record($sqlEdital);
+  $oDados = db_utils::fieldsMemory($rsEdital, 0);
+
+  $numero_edital = $oDados->l20_nroedital;
+  $objeto = $oDados->l20_objeto;
+  $edital = $oDados->l20_edital;
+  $tipo_tribunal = $oDados->l44_sequencial;
+  $descr_tribunal = strtoupper($oDados->l44_descricao);
+  $origem_recurso = $oDados->l47_origemrecurso;
+  $descricao_recurso = $oDados->l47_descrecurso;
+  $links = $oDados->l47_linkpub;
+  $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
+}
+
 if(isset($alterar)){
 
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$l20_nroedital);
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$numero_edital);
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
-  $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
+  $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
 
-  if(isset($sequencial)){
+  if(isset($oDadosEdital->l47_sequencial)){
     $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
     $clliclancedital->l47_linkpub = $links;
     $clliclancedital->l47_origemrecurso = $origem_recurso;
     $clliclancedital->l47_descrecurso = $descricao_recurso;
     $clliclancedital->l47_dataenvio = $data_formatada;
-    $clliclancedital->l47_liclicita = $l20_codigo;
+    $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
 
-    $clliclancedital->alterar($sequencial);
-
-    if ($clliclancedital->erro_status=="0"){
-      $erro_msg = $clliclancedital->erro_msg;
+    $clliclancedital->alterar($oDadosEdital->l47_sequencial);
+    $erro_msg = $clliclancedital->erro_sql;
+    if ($clliclancedital->erro_status == '0'){
       $sqlerro=true;
     }
   }
 
 }
+
 
 ?>
 <html>
@@ -113,14 +129,17 @@ if(isset($alterar)){
 </html>
 <?
 
-if(isset($alterar) ) {
+if(isset($alterar)) {
   echo "<script>";
-  echo "alert('" . $clliclancedital->erro_sql . "')";
+  echo "alert('" . $erro_msg . "');";
   echo "</script>";
-  echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
-}else{
-  echo "<script>";
-  echo "parent.iframe_editais.js_pesquisa();";
-  echo "</script>";
+
+  if(!$sqlerro){
+    echo "<script>";
+    echo "parent.document.formaba.documentos.disabled=false;";
+    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDadosEdital->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$oDadosEdital->l47_sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
+    echo "</script>";
+  }
 }
+  echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
 ?>

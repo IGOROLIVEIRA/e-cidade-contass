@@ -482,7 +482,7 @@ switch ($oParam->exec) {
       if($oParam->codObra){
         $clObras = new cl_obrasdadoscomplementares();
         $clObras->excluir('', 'db150_codobra = '.$oParam->codObra);
-        $oRetorno->message = $clObras->erro_msg;
+        $oRetorno->message = urlencode($clObras->erro_sql);
       }
       db_fim_transacao(false);
     }catch(Exception $erro){
@@ -490,6 +490,7 @@ switch ($oParam->exec) {
       $oRetorno->message  = urlencode($erro->getMessage());
       $oRetorno->status   = 2;
     }
+
     echo $oJson->encode($oRetorno);
     break;
 }
