@@ -108,8 +108,11 @@ class Oc11271 extends AbstractMigration
           DELETE from db_menu where id_item = (select id_item from db_itensmenu where descricao = 'Envio do edital');
 			    DELETE from db_itensmenu where help = 'Envio do edital';
           DROP TABLE liclanceditaldocumentos;
+          DROP SEQUENCE editaldocumentos_l48_sequencial_seq;
           DROP TABLE liclancedital;
+          DROP SEQUENCE liclancedital_l47_sequencial_seq;
           DROP TABLE obrasdadoscomplementares;
+          DROP SEQUENCE obrasdadoscomplementares_db150_sequencial_seq;
       ";
       $this->execute($sql);
     }
