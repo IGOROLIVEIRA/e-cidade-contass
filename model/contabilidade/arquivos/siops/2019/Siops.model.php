@@ -67,7 +67,9 @@ class Siops {
 
             foreach ($this->aDespesasAgrupadasFinal as $cod_plan => $aDados) {
 
-                $sNomeArquivo = $iContador++ .'_'. str_replace(" ","_",preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($this->getNomeArquivoByCod($cod_plan)))));
+                $sContador = $iContador < 10 ? '0'.$iContador++ : $iContador++;
+
+                $sNomeArquivo = $sContador .'_'. str_replace(" ","_",preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($this->getNomeArquivoByCod($cod_plan)))));
                 $this->setNomesArquivos($sNomeArquivo);
                 $impt = new SiopeIMPT;
                 $impt->setNomeArquivo($sNomeArquivo);
