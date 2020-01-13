@@ -240,11 +240,11 @@ $db_botao = true;
             $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
             $('naturezaobjeto').value = dadoslicitacao.l20_naturezaobjeto;
 
-            // if(dadoslicitacao.l20_naturezaobjeto == 1){
+            if(dadoslicitacao.l20_naturezaobjeto == 1){
                 document.getElementById('td_obras').style.display = '';
-            // }else{
-            //     document.getElementById('td_obras').style.display = 'none';
-            // }
+            }else{
+                document.getElementById('td_obras').style.display = 'none';
+            }
 
     }
 
