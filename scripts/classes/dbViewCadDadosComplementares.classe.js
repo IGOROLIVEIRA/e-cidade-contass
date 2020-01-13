@@ -3915,7 +3915,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     let dadoscomplementares = oRetorno.dadoscomplementares[0];
     $('txtLogradouro'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
     me.setLogradouro(dadoscomplementares.logradouro);
-    $('txtDistrito'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
+    $('txtDistrito'+sId).value = dadoscomplementares.distrito.replace('+', ' ');
     me.setDistrito(dadoscomplementares.distrito);
     $('txtCodigoObra'+sId).value = dadoscomplementares.codigoobra;
     me.setCodigoObra(dadoscomplementares.codigoobra);
