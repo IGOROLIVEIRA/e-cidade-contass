@@ -63,9 +63,11 @@ class Siops {
 
             require_once("model/contabilidade/arquivos/siops/" . db_getsession("DB_anousu") . "/SiopsIMPT.model.php");
 
+            $iContador = 1;
+
             foreach ($this->aDespesasAgrupadasFinal as $cod_plan => $aDados) {
 
-                $sNomeArquivo = str_replace(" ","_",preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($this->getNomeArquivoByCod($cod_plan)))));
+                $sNomeArquivo = $iContador++ .'_'. str_replace(" ","_",preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($this->getNomeArquivoByCod($cod_plan)))));
                 $this->setNomesArquivos($sNomeArquivo);
                 $impt = new SiopeIMPT;
                 $impt->setNomeArquivo($sNomeArquivo);
