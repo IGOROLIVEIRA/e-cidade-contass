@@ -3911,7 +3911,6 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.retornoCampos = function(oAjax){
     js_removeObj('msgBox');
     var oRetorno = eval('('+oAjax.responseText+')');
-    console.log(oRetorno);
 
     let dadoscomplementares = oRetorno.dadoscomplementares[0];
     $('txtLogradouro'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
@@ -3938,6 +3937,9 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     me.setNumero(dadoscomplementares.numero);
     $('cboClasseObjeto'+sId).selectedIndex = dadoscomplementares.classeobjeto;
     me.setClassesObjeto(dadoscomplementares.classeobjeto);
+    $('cboAtividadeObra'+sId).disabled = false;
+    $('cboAtividadeObra'+sId).value = dadoscomplementares.atividadeobra;
+    me.setAtividadeObra(dadoscomplementares.atividadeobra);
     $('cboAtividadeServico'+sId).selectedIndex = dadoscomplementares.atividadeservico;
     me.setAtividadeServico(dadoscomplementares.atividadeservico);
     $('cboAtividadeServicoEsp'+sId).selectedIndex = dadoscomplementares.atividadeservicoesp;

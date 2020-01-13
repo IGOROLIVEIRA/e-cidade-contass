@@ -588,10 +588,10 @@
       return $aRetorno;
     }
 
-    static function findObrasByEdital($iCodigoEdital, $lEncode=true) {
+    static function findObrasByEdital($iCodigoLicitacao, $lEncode=true) {
       $aRetorno = false;
 
-      if (trim($iCodigoEdital) != "") {
+      if (trim($iCodigoLicitacao) != "") {
 
         $oDaoObra  = db_utils::getDao('obrasdadoscomplementares');
         $sCampos   = " distinct db150_codobra as codigoobra, db150_pais as pais, db150_estado as estado, db150_municipio as municipio, db150_distrito as distrito, ";
@@ -600,7 +600,7 @@
         $sCampos  .= " db150_classeobjeto as classeobjeto, db150_grupobempublico as grupobempublico, db150_subgrupobempublico as subgrupobempublico, db150_atividadeobra as atividadeobra,";
         $sCampos  .= " db150_atividadeservico as atividadeservico, db150_atividadeservicoesp as atividadeservicoesp, db150_bdi as bdi, db150_descratividadeservico as descratividadeservico, db150_descratividadeservicoesp as descratividadeservicoesp, db150_cep as cep";
 
-        $sWhere   = " db150_liclicita = ".$iCodigoEdital;
+        $sWhere   = " db150_liclicita = ".$iCodigoLicitacao;
 
         $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,null,$sWhere);
         $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
