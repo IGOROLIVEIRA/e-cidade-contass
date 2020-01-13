@@ -128,7 +128,8 @@ class cl_liclicita
   var $l20_nroedital = null;
   var $l20_exercicioedital = null;
   /* Valor 1 para cadastro inicial da Licitação - demanda para atender o SICOM 2020 */
-  var $l20_cadinicial = '1';
+  var $l20_cadinicial = 1;
+
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "

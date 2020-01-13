@@ -44,24 +44,30 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 $sqlerro = false;
-$db_opcao = 2;
+$db_opcao = 1;
 //  Realizar busca pelos campos
 
 if($numero_edital){
-  $sqlLicita = $clliclicita->sql_query('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+  $sqlLicita = $clliclicita->sql_query_edital('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
        UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
-       (CASE
-            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54)
-              THEN liclicita.l20_dtpublic
-            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106)
-              THEN liclicita.l20_datacria
-            END) as data_Referencia', '', 'l20_nroedital = '.$numero_edital);
+       l47_dataenvio', '', 'l20_nroedital = '.$numero_edital.' and EXTRACT(YEAR from l20_datacria) >= 2020 ', '', 1);
   $rsLicita = $clliclicita->sql_record($sqlLicita);
-  $licitacao = db_utils::fieldsMemory($rsLicita, 0);
+
+  $oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
+  $natureza_objeto = $oDadosLicitacao->natureza_objeto;
+  $objeto = $oDadosLicitacao->l20_objeto;
+  $tipo_tribunal = $oDadosLicitacao->tipo_tribunal;
+  $descr_tribunal = $oDadosLicitacao->descr_tribunal;
+  $edital = $oDadosLicitacao->l20_edital;
+  $codigolicitacao = $oDadosLicitacao->l20_codigo;
+
+
+//  $licitacao = db_utils::fieldsMemory($rsLicita, 0);
 }
 
 if(isset($incluir)){
-    $sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '', 'l47_liclicita = '.$codigolicitacao);
+    $sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '',
+      'l47_liclicita = '.$codigolicitacao.' and EXTRACT(YEAR from l20_datacria) >= 2020 ');
     $rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
     if($clliclancedital->numrows == 0){
@@ -80,6 +86,8 @@ if(isset($incluir)){
         $sqlerro = true;
       }
 
+      $sequencial = $clliclancedital->l47_sequencial;
+      
       if($clliclancedital->numrows_incluir){
         $db_opcao = 2;
       }
@@ -94,30 +102,6 @@ if(isset($incluir)){
       if ($clliclicita->erro_status == "0") {
         $erro_msg = $clliclicita->erro_msg;
       }
-    }
-
-}
-
-if(isset($alterar)){
-
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$numero_edital);
-  $rsEdital = $clliclancedital->sql_record($sqlEdital);
-  $sequencial = db_utils::fieldsMemory($rsEdital, 0)->l47_sequencial;
-
-    $data_formatada = explode('/', $data_referencia);
-    $data_envio = join('-', array_reverse($data_formatada));
-    $clliclancedital->l47_linkpub = $links;
-    $clliclancedital->l47_origemrecurso = intval($origem_recurso);
-    $clliclancedital->l47_descrecurso = $descricao_recurso;
-    $clliclancedital->l47_dataenvio = $data_envio;
-    $clliclancedital->l47_liclicita = $codigolicitacao;
-    $clliclancedital->alterar($sequencial);
-
-    if ($clliclancedital->erro_status) {
-      $erro_msg = $clliclancedital->erro_sql;
-    }else{
-      $erro_msg = $clliclancedital->erro_sql;
-      $sqlerro = true;
     }
 
 }
@@ -166,19 +150,22 @@ if(isset($alterar)){
 </html>
 <?
 
-if(isset($incluir) || isset($alterar)) {
+if(isset($incluir)) {
   echo "<script>";
   echo "alert('" . $erro_msg . "');";
   echo "</script>";
 
   if(!$sqlerro){
     echo "<script>";
+    echo "parent.iframe_editais.location.href='lic4_editalalteracao.php?numero_edital=$numero_edital';\n";
     echo "parent.document.formaba.documentos.disabled=false;";
     echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$codigolicitacao&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
     echo "</script>";
   }
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
-}else{
+}
+
+if(!isset($numero_edital)){
   echo "<script>";
   echo "parent.iframe_editais.js_pesquisa();";
   echo "</script>";

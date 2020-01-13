@@ -239,8 +239,8 @@ class cl_liclancedital
         return false;
     }
 
-    if (trim($this->l47_origemrecurso != "") && $this->l47_origemrecurso == 9) {
-       if (trim($this->l47_descrecurso) == null) {
+    if (trim($this->l47_origemrecurso != "")) {
+       if (trim($this->l47_descrecurso) == null && $this->l47_origemrecurso == 9) {
           $this->erro_sql = " Campo Descrição da Origem do Recurso não Informado.";
           $this->erro_campo = "l47_descrecurso";
           $this->erro_banco = "";
@@ -250,12 +250,8 @@ class cl_liclancedital
           return false;
       }else{
         $sql .= $virgula . " l47_descrecurso = '$this->l47_descrecurso' ";
-        $virgula = ",";
       }
     }
-
-
-    $virgula = "";
 
     $sql .= " where ";
 
@@ -287,7 +283,7 @@ class cl_liclancedital
       } else {
         $this->erro_banco = "";
         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : " . $this->l47_sequencial;
+//        $this->erro_sql .= "Valores : " . $this->l47_sequencial;
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
