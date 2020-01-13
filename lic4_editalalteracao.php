@@ -60,6 +60,7 @@ if(!isset($alterar)){
   $descricao_recurso = $oDados->l47_descrecurso;
   $links = $oDados->l47_linkpub;
   $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
+  $natureza_objeto = $oDados->l20_naturezaobjeto;
 }
 
 if(isset($alterar)){

@@ -87,7 +87,7 @@ if(isset($incluir)){
       }
 
       $sequencial = $clliclancedital->l47_sequencial;
-      
+
       if($clliclancedital->numrows_incluir){
         $db_opcao = 2;
       }

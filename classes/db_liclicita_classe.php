@@ -1154,9 +1154,9 @@ class cl_liclicita
                     $this->l20_tipliticacao = 0;
                 }
 
-                if (empty($this->l20_naturezaobjeto)) {
-                    $this->l20_naturezaobjeto = 0;
-                }
+//    if (!empty($this->l20_naturezaobjeto)) {
+//      $this->l20_naturezaobjeto = 0;
+//    }
 
                 $this->atualizacampos();
                 $convite = trim(strtoupper($convite));
@@ -1200,13 +1200,10 @@ class cl_liclicita
                     $virgula = ",";
                 }
 
-                if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
-                    $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
-                    $virgula = ",";
-                } else {
-                    $sql .= $virgula . " l20_naturezaobjeto = 0";
-                    $virgula = ",";
-                }
+    if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
+      $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
+      $virgula = ",";
+    }
 
                 if (trim($this->l20_validadeproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]))) {
                     $sql .= $virgula . " l20_validadeproposta = '$this->l20_validadeproposta' ";
@@ -1328,6 +1325,16 @@ class cl_liclicita
     if (trim($this->l20_justificativa != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativa"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_justificativa = '$this->l20_justificativa' ";
       $virgula = ",";
+
+      if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
+        $this->erro_sql = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
+        $this->erro_campo = "l20_justificativa";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
     } else {
       $sql .= $virgula . " l20_justificativa = ''";
       $virgula = ",";
@@ -1336,6 +1343,26 @@ class cl_liclicita
     if (trim($this->l20_razao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_razao = '$this->l20_razao' ";
       $virgula = ",";
+
+      if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
+        $this->erro_sql = "O campo Razão deve ter no mínimo 10 caracteres e no máximo 250";
+        $this->erro_campo = "l20_razao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+
+      if (trim($this->l20_razao) == null) {
+        $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Razão";
+        $this->erro_campo = "l20_razao";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
     } else {
       $sql .= $virgula . " l20_razao = ''";
       $virgula = ",";
@@ -3187,7 +3214,7 @@ class cl_liclicita
 
                 $sCampo = "";
 
-                if ($sSituacao != '') {
+    if ($sSituacao != '') {
 
                     $sSituacao = "and l11_licsituacao = {$sSituacao}";
                     $sCampo = ",liclicitasituacao.l11_obs";
