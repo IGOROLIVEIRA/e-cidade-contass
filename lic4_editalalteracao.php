@@ -130,17 +130,22 @@ if(isset($alterar)){
 </html>
 <?
 
+echo "<script>";
+echo "parent.document.formaba.documentos.disabled=false;";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDadosEdital->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$oDadosEdital->l47_sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
+echo "</script>";
+
 if(isset($alterar)) {
   echo "<script>";
   echo "alert('" . $erro_msg . "');";
   echo "</script>";
 
-  if(!$sqlerro){
-    echo "<script>";
-    echo "parent.document.formaba.documentos.disabled=false;";
-    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDadosEdital->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$oDadosEdital->l47_sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
-    echo "</script>";
-  }
+//  if(!$sqlerro){
+//    echo "<script>";
+//    echo "parent.document.formaba.documentos.disabled=false;";
+//    echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDadosEdital->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$oDadosEdital->l47_sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
+//    echo "</script>";
+//  }
 }
   echo "<script>document.form1.data_referencia.value = '".$data_referencia."';</script>";
 ?>
