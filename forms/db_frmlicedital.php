@@ -137,7 +137,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                  <tr id="td_obras" style="display: none;">
+                  <tr id="td_obras" style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
                     <td colspan="3">
                       <fieldset>
                         <legend>Obras e Serviços</legend>
