@@ -227,12 +227,11 @@ $db_botao = true;
           $('db_opcao').value = 'Alterar';
           <?=$db_opcao = 2;?>
         }
-
             let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
             $('numero_edital').value = dadoslicitacao.l20_nroedital;
             $('codigolicitacao').value = dadoslicitacao.l20_codigo;
             $('edital').value = dadoslicitacao.l20_edital;
-            $('data_referencia').value = js_formatar(dadoslicitacao.l47_dataenvio, 'd');
+            $('data_referencia').value = dataFormatada;
             $('objeto').value = dadoslicitacao.l20_objeto;
             $('tipo_tribunal').value = dadoslicitacao.pc50_pctipocompratribunal;
             $('descr_tribunal').value = dadoslicitacao.pc50_descr;
@@ -241,11 +240,11 @@ $db_botao = true;
             $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
             $('naturezaobjeto').value = dadoslicitacao.l20_naturezaobjeto;
 
-            if(dadoslicitacao.l20_naturezaobjeto == 1){
+            // if(dadoslicitacao.l20_naturezaobjeto == 1){
                 document.getElementById('td_obras').style.display = '';
-            }else{
-                document.getElementById('td_obras').style.display = 'none';
-            }
+            // }else{
+            //     document.getElementById('td_obras').style.display = 'none';
+            // }
 
     }
 
@@ -413,6 +412,7 @@ $db_botao = true;
     function js_retornoExclusao(oAjax){
         let codigoRequisitado = JSON.parse(oAjax.request.parameters.json);
         let resposta = eval("("+oAjax.responseText+")");
+        console.log(resposta.message);
         alert(resposta.message);
 
         for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
