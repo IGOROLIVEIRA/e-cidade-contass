@@ -432,8 +432,13 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         var oRetornoitens = JSON.parse(res.responseText);
         let qtditens = oRetornoitens.itens.length;
 
-        if(qtditens > 0){
-            document.getElementById('Julgar').disabled = false;
-        }
+      if(qtditens > 0){
+        document.getElementById('Julgar').disabled = false;
+        oRetornoitens.itens.forEach(function (itens, x){
+          if(itens.l20_licsituacao === '1' || itens.l20_licsituacao === '10'){
+            document.getElementById('Julgar').disabled = true;
+          }
+        });
+      }
     }
 </script>

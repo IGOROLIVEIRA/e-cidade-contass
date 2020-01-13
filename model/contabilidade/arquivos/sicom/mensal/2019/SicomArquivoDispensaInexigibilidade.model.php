@@ -309,17 +309,17 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
         liclicita.l20_dtpubratificacao as dtPublicacaoTermoRatificacao,
         l20_codigo as codlicitacao,
         liclicita.l20_veicdivulgacao as veiculoPublicacao,
-        (CASE liclicita.l20_tipojulg WHEN 3 THEN 1		
+        (CASE liclicita.l20_tipojulg WHEN 3 THEN 1
             ELSE 2
         END) as processoPorLote
-        FROM liclicita 
+        FROM liclicita
         INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
-        
+
         INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
         INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
         LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
         INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo and liclicitasituacao.l11_licsituacao in (1,10)
-        WHERE db_config.codigo= " . db_getsession("DB_instit") . " 
+        WHERE db_config.codigo= " . db_getsession("DB_instit") . "
         AND pctipocompratribunal.l44_sequencial in (100,101,102,103) AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
         AND DATE_PART('YEAR',l20_dtpubratificacao)=" . db_getsession("DB_anousu") . "
         AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -444,7 +444,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 
                 $sSql = "SELECT DISTINCT '12' AS tipoRegistro,
                             infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
-            
+
                 (SELECT CASE
                             WHEN o41_subunidade != 0
                                  OR NOT NULL THEN lpad((CASE
@@ -667,7 +667,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 FROM liclicitem
                 INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
                 INNER JOIN liclicita on (liclicitem.l21_codliclicita=liclicita.l20_codigo)
-                INNER JOIN dispensa112019 on (liclicitemlote.l04_descricao = dispensa112019.si75_dsclote 
+                INNER JOIN dispensa112019 on (liclicitemlote.l04_descricao = dispensa112019.si75_dsclote
                 and dispensa112019.si75_nroprocesso = liclicita.l20_edital::varchar)
                 INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
                 INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -680,7 +680,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
                 LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-                WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 
+                WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1
                 OR liclicita.l20_licsituacao = 10)
                 AND liclicita.l20_tipojulg = 3
                 AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
@@ -743,8 +743,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		(CASE parecerlicitacao.l200_tipoparecer WHEN 2 THEN 6
 			ELSE 7
 		END) as tipoResp,
-		cgm.z01_cgccpf as nroCPFResp		
-		FROM liclicita 
+		cgm.z01_cgccpf as nroCPFResp
+		FROM liclicita
 		INNER JOIN parecerlicitacao on (liclicita.l20_codigo=parecerlicitacao.l200_licitacao)
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -778,13 +778,13 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		(CASE liccomissaocgm.l31_tipo WHEN '1' THEN 1
 		WHEN '2' THEN 4 WHEN '3' THEN 2 WHEN '4' THEN 3 WHEN '8' THEN 5 END) as tipoResp,
-		cgm.z01_cgccpf as nroCPFResp		
-		FROM liclicita 
+		cgm.z01_cgccpf as nroCPFResp
+		FROM liclicita
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
-		INNER JOIN cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm) 
+		INNER JOIN cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm)
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
@@ -863,7 +863,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN pcorcamitem on (pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem)
 		INNER JOIN pcorcamval on (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem)
 		INNER JOIN precoreferencia on (pcproc.pc80_codproc = precoreferencia.si01_processocompra)
-		INNER JOIN itemprecoreferencia on (precoreferencia.si01_sequencial = itemprecoreferencia.si02_precoreferencia and pcorcamval.pc23_orcamitem = itemprecoreferencia.si02_itemproccompra)	
+		INNER JOIN itemprecoreferencia on (precoreferencia.si01_sequencial = itemprecoreferencia.si02_precoreferencia and pcorcamval.pc23_orcamitem = itemprecoreferencia.si02_itemproccompra)
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
         LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
@@ -958,12 +958,12 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
            JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
            WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
                 liclicita.l20_anousu as exercicioLicitacao,
-                liclicita.l20_edital as nroProcessoLicitatorio,	
+                liclicita.l20_edital as nroProcessoLicitatorio,
                 infocomplementaresinstit.si09_codorgaotce as codorgaotce,
                 CASE WHEN o41_subunidade != 0
                 OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
                 OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0) 
+                OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
                 ELSE lpad((CASE WHEN o40_codtri = '0'
                 OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
                 OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) END AS codunidadesub,
@@ -976,8 +976,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 o55_origemacao as idSubAcao,
                 substr(orcelemento.o56_elemento,2,6) as naturezaDespesa,
                 orctiporec.o15_codtri as codFontRecursos,
-                orcdotacao.o58_valor as vlRecurso			
-                FROM liclicita 
+                orcdotacao.o58_valor as vlRecurso
+                FROM liclicita
                 INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
                 INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
                 INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -988,13 +988,13 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                 INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
                 INNER JOIN orctiporec on (orcdotacao.o58_codigo=orctiporec.o15_codigo)
-                INNER JOIN orcelemento on (orcdotacao.o58_anousu=orcelemento.o56_anousu 
+                INNER JOIN orcelemento on (orcdotacao.o58_anousu=orcelemento.o56_anousu
                 and orcdotacao.o58_codele=orcelemento.o56_codele)
                 INNER JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                 LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-                WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 
-                OR liclicita.l20_licsituacao = 10) 
+                WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1
+                OR liclicita.l20_licsituacao = 10)
                 AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
 
             $rsResult16 = db_query($sSql);
@@ -1082,21 +1082,21 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 dispensa112019.si75_nrolote as nroLote,
                 (solicitempcmater.pc16_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
                 pcorcamval.pc23_vlrun as vlUnitario,
-                pcorcamval.pc23_quant as quantidade 	
-                FROM liclicita 
+                pcorcamval.pc23_quant as quantidade
+                FROM liclicita
                 INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
                 INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
                 INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
                 INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
                 INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
-                INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )      
-                INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)      
+                INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
+                INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
                 INNER JOIN pcorcamjulg ON (pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem )
                 INNER JOIN pcorcamforne ON (pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne)
                 INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
                 INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-                INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)    
+                INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
                 INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
                 LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem AND liclicita.l20_tipojulg = 3)
                 LEFT  JOIN dispensa112019 on (liclicitemlote.l04_descricao = dispensa112019.si75_dsclote and dispensa112019.si75_nroprocesso = liclicita.l20_edital::varchar)
@@ -1207,89 +1207,69 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
          * REGISTRO 18
          */
 
-            $sSql = "SELECT DISTINCT '18' AS tipoRegistro,
-                        infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
-        
-            (SELECT CASE
-                        WHEN o41_subunidade != 0
-                             OR NOT NULL THEN lpad((CASE
-                                                        WHEN o40_codtri = '0'
-                                                             OR NULL THEN o40_orgao::varchar
-                                                        ELSE o40_codtri
-                                                    END),2,0)||lpad((CASE
-                                                                         WHEN o41_codtri = '0'
-                                                                              OR NULL THEN o41_unidade::varchar
-                                                                         ELSE o41_codtri
-                                                                     END),3,0)||lpad(o41_subunidade::integer,3,0)
-                        ELSE lpad((CASE
-                                       WHEN o40_codtri = '0'
-                                            OR NULL THEN o40_orgao::varchar
-                                       ELSE o40_codtri
-                                   END),2,0)||lpad((CASE
-                                                        WHEN o41_codtri = '0'
-                                                             OR NULL THEN o41_unidade::varchar
-                                                        ELSE o41_codtri
-                                                    END),3,0)
-                    END AS codunidadesub
-             FROM db_departorg
-             JOIN infocomplementares ON si08_anousu = db01_anousu
-             AND si08_instit = 1
-             JOIN orcunidade ON db01_orgao=o41_orgao
-             AND db01_unidade=o41_unidade
-             AND db01_anousu = o41_anousu
-             JOIN orcorgao ON o40_orgao = o41_orgao
-             AND o40_anousu = o41_anousu
-             WHERE db01_coddepto=l20_codepartamento
-                 AND db01_anousu= 2019
-             LIMIT 1) AS codUnidadeSubResp,
-                        liclicita.l20_anousu AS exercicioLicitacao,
-                        liclicita.l20_edital AS nroProcessoLicitatorio,
-                        cflicita.l03_pctipocompratribunal AS tipoprocesso,
-                        (CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
-                    ELSE 2
-                END) as tipoDocumento,
-                cgm.z01_cgccpf as nrodocumento,
-                        (pcmater.pc01_codmater::varchar || (CASE
-                                                                WHEN matunid.m61_codmatunid IS NULL THEN 1
-                                                                ELSE matunid.m61_codmatunid
-                                                            END)::varchar) AS codItem,
-                        (pcmater.pc01_codmater::varchar || (CASE
-                                                                WHEN matunid.m61_codmatunid IS NULL THEN 1
-                                                                ELSE matunid.m61_codmatunid
-                                                            END)::varchar) AS nroItem,
-                        DATE_PART('MONTH',l205_datacreditem) AS mescredenciamentoitem,
-                        habilitacaoforn.l206_numcertidaoinss AS nroCertidaoRegularidadeINSS,
-                        habilitacaoforn.l206_dataemissaoinss AS dataEmissaoCertidaoRegularidadeINSS,
-                        habilitacaoforn.l206_datavalidadeinss AS dataValidadeCertidaoRegularidadeINSS,
-                        habilitacaoforn.l206_numcertidaofgts AS nroCertidaoRegularidadeFGTS,
-                        habilitacaoforn.l206_dataemissaofgts AS dataEmissaoCertidaoRegularidadeFGTS,
-                        habilitacaoforn.l206_datavalidadefgts AS dataValidadeCertidaoRegularidadeFGTS,
-                        habilitacaoforn.l206_numcertidaocndt AS nroCNDT,
-                        habilitacaoforn.l206_dataemissaocndt AS dtEmissaoCNDT,
-                        habilitacaoforn.l206_datavalidadecndt AS dtValidadeCNDT,
-                        l205_datacred as datacredenciamento
-        FROM credenciamento
-        INNER JOIN liclicita ON (credenciamento.l205_licitacao=liclicita.l20_codigo)
-        INNER JOIN habilitacaoforn ON (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
-        INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor = pcforne.pc60_numcgm)
-        INNER JOIN cgm on (pcforne.pc60_numcgm = cgm.z01_numcgm)
-        INNER JOIN liclicitem ON (liclicita.l20_codigo = liclicitem.l21_codliclicita)
-        INNER JOIN cflicita ON (liclicita.l20_codtipocom = cflicita.l03_codigo)
-        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-        INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
-        INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
-        INNER JOIN solicitempcmater ON (solicitem.pc11_codigo = solicitempcmater.pc16_solicitem)
-        INNER JOIN pcmater ON (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
-        INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
-        LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
-        LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
-        LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-        INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-        WHERE  credenciamento.l205_item = liclicitem.l21_codpcprocitem
-            AND (liclicita.l20_licsituacao = 1
-                 OR liclicita.l20_licsituacao = 10)
-            AND DATE_PART('YEAR',l205_datacred)= " . db_getsession("DB_anousu") . "
-            AND DATE_PART('MONTH',l205_datacred)= ".$this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $sSql = "select DISTINCT '18' as tipoRegistro,
+	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = " . db_getsession("DB_instit") . "
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
+	liclicita.l20_anousu as exercicioLicitacao,
+	liclicita.l20_edital as nroProcessoLicitatorio,
+	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
+		ELSE 2
+	END) as tipoDocumento,
+	cgm.z01_cgccpf as nroDocumento,
+	credenciamento.l205_datacred as dataCredenciamento,
+	dispensa112020.si75_nrolote as nroLote,
+	(solicitempcmater.pc16_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
+	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
+	pcforne.pc60_uf as ufInscricaoEstadual,
+	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
+	habilitacaoforn.l206_dataemissaoinss as dataEmissaoCertidaoRegularidadeINSS,
+	habilitacaoforn.l206_datavalidadeinss as dataValidadeCertidaoRegularidadeINSS,
+	habilitacaoforn.l206_numcertidaofgts as nroCertidaoRegularidadeFGTS,
+	habilitacaoforn.l206_dataemissaofgts as dataEmissaoCertidaoRegularidadeFGTS,
+	habilitacaoforn.l206_datavalidadefgts as dataValidadeCertidaoRegularidadeFGTS,
+	habilitacaoforn.l206_numcertidaocndt as nroCNDT,
+	habilitacaoforn.l206_dataemissaocndt as dtEmissaoCNDT,
+	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT
+	FROM liclicita
+	INNER JOIN habilitacaoforn on (liclicita.l20_codigo=habilitacaoforn.l206_licitacao)
+	INNER JOIN credenciamento on (liclicita.l20_codigo=credenciamento.l205_licitacao) and l205_fornecedor = l206_fornecedor
+	INNER JOIN pcforne on (habilitacaoforn.l206_fornecedor=pcforne.pc60_numcgm)
+	INNER JOIN cgm on (pcforne.pc60_numcgm=cgm.z01_numcgm)
+	INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
+	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
+	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
+	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
+	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+	INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+	LEFT JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
+	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
+	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
+  LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
+	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
+	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
+	WHERE db_config.codigo= " . db_getsession("DB_instit") . "
+	AND DATE_PART('YEAR',credenciamento.l205_datacred)= ". db_getsession("DB_anousu")."
+  AND DATE_PART('MONTH',credenciamento.l205_datacred)=".$this->sDataFinal['5'] . $this->sDataFinal['6'];
 
             $rsResult18 = db_query($sSql);//echo $sSql; db_criatabela($rsResult18);die($sSql);
 
