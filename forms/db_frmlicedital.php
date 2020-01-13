@@ -189,14 +189,14 @@ $db_botao = true;
 
 <script>
     let iSequencial = '';
-    let codigoLicitacao = '';
+    // let codigoLicitacao = '';
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
     }
     function js_preenchepesquisa(nroedital, codigo){
         js_buscaDadosLicitacao(nroedital);
         js_buscaDadosComplementares(codigo);
-        codigoLicitacao = codigo;
+        // codigoLicitacao = codigo;
         db_iframe_liclicita.hide();
     }
 
@@ -217,7 +217,7 @@ $db_botao = true;
     function js_retornoDadosLicitacao(oAjax){
         var oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
-        console.log('Tipo: ',dadoslicitacao);
+
         if(dadoslicitacao.l20_cadinicial == '1'){
             document.location.href="lic4_editalinclusao.php?numero_edital="+dadoslicitacao.l20_nroedital;
             return;
@@ -231,18 +231,18 @@ $db_botao = true;
           //$('db_opcao').value = 'Alterar';
 
         }
-            let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
-            $('numero_edital').value = dadoslicitacao.l20_nroedital;
-            $('codigolicitacao').value = dadoslicitacao.l20_codigo;
-            $('edital').value = dadoslicitacao.l20_edital;
-            $('data_referencia').value = dataFormatada;
-            $('objeto').value = dadoslicitacao.l20_objeto;
-            $('tipo_tribunal').value = dadoslicitacao.pc50_pctipocompratribunal;
-            $('descr_tribunal').value = dadoslicitacao.pc50_descr;
-            $('links').value = dadoslicitacao.l47_linkpub;
-            $('origem_recurso').selectedIndex = dadoslicitacao.l47_origemrecurso != '' ? dadoslicitacao.l47_origemrecurso : 0;
-            $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
-            $('naturezaobjeto').value = dadoslicitacao.l20_naturezaobjeto;
+            // let dataFormatada = js_formatar(dadoslicitacao.data_referencia, 'd');
+            // $('numero_edital').value = dadoslicitacao.l20_nroedital;
+            // $('codigolicitacao').value = dadoslicitacao.l20_codigo;
+            // $('edital').value = dadoslicitacao.l20_edital;
+            // $('data_referencia').value = dataFormatada;
+            // $('objeto').value = dadoslicitacao.l20_objeto;
+            // $('tipo_tribunal').value = dadoslicitacao.pc50_pctipocompratribunal;
+            // $('descr_tribunal').value = dadoslicitacao.pc50_descr;
+            // $('links').value = dadoslicitacao.l47_linkpub;
+            // $('origem_recurso').selectedIndex = dadoslicitacao.l47_origemrecurso != '' ? dadoslicitacao.l47_origemrecurso : 0;
+            // $('descricao_recurso').value = dadoslicitacao.l47_descrecurso;
+            // $('naturezaobjeto').value = dadoslicitacao.l20_naturezaobjeto;
 
             if(dadoslicitacao.l20_naturezaobjeto == 1){
                 document.getElementById('td_obras').style.display = '';
@@ -261,7 +261,7 @@ $db_botao = true;
     function js_exibeDadosCompl(idObra = null){
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '');
         oDadosComplementares.setObjetoRetorno($('idObra'));
-        oDadosComplementares.setLicitacao(codigoLicitacao);
+        oDadosComplementares.setLicitacao($('codigolicitacao').value);
         if(idObra){
             oDadosComplementares.preencheCampos(idObra);
         }else{

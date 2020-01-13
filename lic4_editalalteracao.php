@@ -61,6 +61,8 @@ if(!isset($alterar)){
   $links = $oDados->l47_linkpub;
   $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
   $natureza_objeto = $oDados->l20_naturezaobjeto;
+  $sequencial = $oDados->l47_sequencial;
+  $codigolicitacao = $oDados->l20_codigo;
 }
 
 if(isset($alterar)){
@@ -132,7 +134,7 @@ if(isset($alterar)){
 
 echo "<script>";
 echo "parent.document.formaba.documentos.disabled=false;";
-echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDadosEdital->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$oDadosEdital->l47_sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDados->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "</script>";
 
 if(isset($alterar)) {
