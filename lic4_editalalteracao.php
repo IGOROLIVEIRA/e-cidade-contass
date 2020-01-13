@@ -68,9 +68,10 @@ if(!isset($alterar)){
 
 if(isset($alterar)){
 
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial', '', 'l20_nroedital = '.$numero_edital);
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto', '', 'l20_nroedital = '.$numero_edital);
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
+  $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
 
   if(isset($oDadosEdital->l47_sequencial)){
     $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
