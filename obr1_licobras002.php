@@ -19,6 +19,7 @@ if(isset($alterar)){
   $dtHomologacaolic = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
 
   try {
+
     if($dtHomologacaolic != null){
       if($obr01_dtinicioatividades > $dtHomologacaolic){
         throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
@@ -26,9 +27,21 @@ if(isset($alterar)){
 
     }
 
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra",null,"obr01_numeroobra = $obr01_numeroobra"));
+    if(pg_num_rows($resultobras) > 0){
+      throw new Exception("Usuário: Numero da Obra ja utilizado !");
+    }
+
+
     db_inicio_transacao();
     $db_opcao = 2;
     $cllicobras->alterar($oid);
+
+    if($cllicobras->erro_status == 0){
+      $erro = $cllicobras->erro_msg;
+      db_msgbox($erro);
+      $sqlerro = true;
+    }
     db_fim_transacao();
 
   }catch (Exception $eErro){

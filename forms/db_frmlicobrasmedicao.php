@@ -292,7 +292,7 @@ $cllicobrasmedicao->rotulo->label();
   }
 
   function js_retornoGetAnexo(oAjax) {
-
+    js_removeObj("msgbox");
     var oRetorno = eval('('+oAjax.responseText+")");
     oGridDocumento.clearAll(true);
 
@@ -306,7 +306,6 @@ $cllicobrasmedicao->rotulo->label();
       aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')">';
       oGridDocumento.addRow(aLinha);
     });
-    js_removeObj("msgbox");
     oGridDocumento.renderRows();
   }
 

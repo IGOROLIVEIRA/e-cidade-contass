@@ -22,11 +22,17 @@ if(isset($alterar)){
   try {
 
     if($dtLancamentoObras != null){
-      if($obr02_dtlancamento >= $dtLancamentoObras){
+      if($obr02_dtlancamento < $dtLancamentoObras){
         throw new Exception ("Usuário: Data de Lançamento deve ser maior ou igual a data de lançamento da Obra.");
       }
     }
-    $cllicobrasituacao->alterar($oid);
+    $cllicobrasituacao->alterar($obr02_sequencial);
+
+    if($cllicobrasituacao->erro_status == 0){
+      $erro = $cllicobrasituacao->erro_msg;
+      db_msgbox($erro);
+      $sqlerro = true;
+    }
     db_fim_transacao();
 
   }catch (Exception $eErro){

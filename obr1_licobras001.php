@@ -27,6 +27,11 @@ if(isset($incluir)){
 
     }
 
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra",null,"obr01_numeroobra = $obr01_numeroobra"));
+    if(pg_num_rows($resultobras) > 0){
+      throw new Exception("Usuário: Numero da Obra ja utilizado !");
+    }
+
     db_inicio_transacao();
     $cllicobras->obr01_licitacao           = $obr01_licitacao;
     $cllicobras->obr01_dtlancamento        = $obr01_dtlancamento;
@@ -42,8 +47,13 @@ if(isset($incluir)){
     $cllicobras->obr01_instit              = db_getsession('DB_instit');
     $cllicobras->incluir();
 
-    db_fim_transacao();
+    if($cllicobras->erro_status == 0){
+      $erro = $cllicobras->erro_msg;
+      db_msgbox($erro);
+      $sqlerro = true;
+    }
 
+    db_fim_transacao();
 
   }catch (Exception $eErro){
     db_msgbox($eErro->getMessage());
