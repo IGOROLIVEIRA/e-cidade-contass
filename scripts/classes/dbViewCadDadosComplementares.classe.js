@@ -1021,11 +1021,34 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.changeClasseObjeto = (e) => {
     let valor = e.target.value;
     me.setClassesObjeto(valor);
-    if(valor != 1){
-      $('cboAtividadeObra'+sId).disabled = true;
-    }else{
-      $('cboAtividadeObra'+sId).disabled = '';
+    switch(valor){
+      case '1':
+        $('cboAtividadeObra'+sId).disabled = false;
+        $('cboAtividadeServico'+sId).disabled = true;
+        $('cboAtividadeServicoEsp'+sId).disabled = true;
+        break;
+      case '2':
+        $('cboAtividadeObra'+sId).disabled = true;
+        $('cboAtividadeServico'+sId).disabled = false;
+        $('cboAtividadeServicoEsp'+sId).disabled = true;
+        break;
+      case '3':
+        $('cboAtividadeObra'+sId).disabled = true;
+        $('cboAtividadeServico'+sId).disabled = true;
+        $('cboAtividadeServicoEsp'+sId).disabled = false;
+        break;
+      default:
+        $('cboAtividadeObra'+sId).disabled = true;
+        $('cboAtividadeServico'+sId).disabled = true;
+        $('cboAtividadeServicoEsp'+sId).disabled = true;
+        break;
     }
+
+    // if(valor == 1){
+    //   // $('cboAtividadeObra'+sId).disabled = true;
+    //   $('cboAtividadeObra'+sId).disabled = '';
+    // }else{
+    // }
   }
 
   me.oCboClasseObjeto = new DBComboBox('cboClasseObjeto'+sId, 'cboClasseObjeto'+sId);
@@ -1034,7 +1057,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboClasseObjeto.addItem(0, 'Selecione');
   me.oCboClasseObjeto.addItem(1, 'Obras');
   me.oCboClasseObjeto.addItem(2, 'Serviços');
-  me.oCboClasseObjeto.addItem(2, 'Serviços técnicos especializados');
+  me.oCboClasseObjeto.addItem(3, 'Serviços técnicos especializados');
   $('ctnClassesObjeto'+sId).observe('change', me.changeClasseObjeto);
 
 
@@ -1130,6 +1153,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboAtividadeServico.addItem(10, 'Transporte');
   me.oCboAtividadeServico.addItem(99, 'Outros');
   $('ctnAtividadeServico'+sId).observe('change', me.changeAtividadeServico);
+  $('cboAtividadeServico'+sId).disabled = true;
 
   /*-------------------------------------Fim da Manipulação do Atividade do Serviço ---------------------------------------------*/
   /*-------------------------------------Início da Manipulação do Atividade do Serviço Especializado ---------------------------------------------*/
@@ -1180,6 +1204,7 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   me.oCboAtividadeServicoEsp.addItem(11, 'Gerenciamento');
   me.oCboAtividadeServicoEsp.addItem(99, 'Outros');
   $('ctnAtividadeServEsp'+sId).observe('change', me.changeAtividadeServicoEspec);
+  $('cboAtividadeServicoEsp'+sId).disabled = true;
   /*-------------------------------------Fim da Manipulação do Atividade do Serviço Especializado ---------------------------------------------*/
   /*-------------------------------------Início da Manipulação do Grupo Bem Público-------------- ---------------------------------------------*/
   /**

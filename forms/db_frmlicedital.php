@@ -296,6 +296,7 @@ $db_botao = true;
             let sEndereco = "";
             sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
             sEndereco += ", Distrito: "+aDados[iInd].distrito.urlDecode();
+            sEndereco += ", Bairro: "+aDados[iInd].bairro.urlDecode();
 
             $('dados_complementares').value = sEndereco;
         }
@@ -359,7 +360,7 @@ $db_botao = true;
         var oRetorno    = eval("("+oAjax.responseText+")");
         oRetorno.dadoscomplementares.forEach((dado) => {
             let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra}, Distrito: ${dado.distrito}`;
+            let descricaoLinha = `Obra: ${dado.codigoobra}, Distrito: ${dado.distrito}, Bairro: ${dado.bairro}`;
             let aLinha = new Array();
             aLinha[0] = linhas+1;
             aLinha[1] = descricaoLinha;
