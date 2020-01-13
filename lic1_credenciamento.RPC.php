@@ -421,7 +421,7 @@ try{
         case 'getCredenciamento':
             $aItensCred = array();
 
-            $result = $clcredenciamento->sql_record($clcredenciamento->sql_query_file(null,"*",null,"l205_licitacao = {$oParam->licitacao}"));
+            $result = $clcredenciamento->sql_record($clcredenciamento->sql_query_file(null,"l205_sequencial,l20_licsituacao",null,"l205_licitacao = {$oParam->licitacao} limit 1"));
 
             for ($iContItens = 0; $iContItens < pg_num_rows($result); $iContItens++) {
                 $oItens = db_utils::fieldsMemory($result, $iContItens);

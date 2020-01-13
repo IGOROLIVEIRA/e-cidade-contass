@@ -28,13 +28,13 @@ class cl_credenciamento {
     var $l205_datacreditem = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l205_sequencial = int4 = Sequencial 
-                 l205_fornecedor = int4 = Fornecedor 
-                 l205_datacred = date = Data Credenciamento 
-                 l205_inscriestadual = varchar(10) = Inscrição Estadual 
-                 l205_item = int8 = Item 
+                 l205_sequencial = int4 = Sequencial
+                 l205_fornecedor = int4 = Fornecedor
+                 l205_datacred = date = Data Credenciamento
+                 l205_inscriestadual = varchar(10) = Inscrição Estadual
+                 l205_item = int8 = Item
                  l205_licitacao = int4 = Licitação
-                 l205_datacreditem = date = Data Credenciamento do item 
+                 l205_datacreditem = date = Data Credenciamento do item
                  ";
     //funcao construtor da classe
     function cl_credenciamento() {
@@ -161,22 +161,22 @@ class cl_credenciamento {
             return false;
         }
         $sql = "insert into credenciamento(
-                                       l205_sequencial 
-                                      ,l205_fornecedor 
-                                      ,l205_datacred 
-                                      ,l205_inscriestadual 
-                                      ,l205_item 
+                                       l205_sequencial
+                                      ,l205_fornecedor
+                                      ,l205_datacred
+                                      ,l205_inscriestadual
+                                      ,l205_item
                                       ,l205_licitacao
-                                      ,l205_datacreditem 
+                                      ,l205_datacreditem
                        )
                 values (
-                                $this->l205_sequencial 
-                               ,$this->l205_fornecedor 
-                               ,".($this->l205_datacred == "null" || $this->l205_datacred == ""?"null":"'".$this->l205_datacred."'")." 
-                               ,'$this->l205_inscriestadual' 
-                               ,$this->l205_item 
+                                $this->l205_sequencial
+                               ,$this->l205_fornecedor
+                               ,".($this->l205_datacred == "null" || $this->l205_datacred == ""?"null":"'".$this->l205_datacred."'")."
+                               ,'$this->l205_inscriestadual'
+                               ,$this->l205_item
                                ,$this->l205_licitacao
-                               ,'$this->l205_datacreditem' 
+                               ,'$this->l205_datacreditem'
                       )";
 
         $result = db_query($sql);
@@ -524,6 +524,7 @@ class cl_credenciamento {
             $sql .= $campos;
         }
         $sql .= " from credenciamento ";
+        $sql .= " inner join liclicita on l20_codigo = l205_licitacao ";
         $sql2 = "";
         if($dbwhere==""){
             if($l205_sequencial!=null ){

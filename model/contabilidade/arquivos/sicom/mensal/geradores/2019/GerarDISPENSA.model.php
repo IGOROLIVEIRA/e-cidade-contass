@@ -50,7 +50,7 @@ class GerarDISPENSA extends GerarAM
     $sSql9 = "select * from dispensa182019 where si82_mes = " . $this->iMes . " and si82_instit=" . db_getsession("DB_instit");
     $rsDISPENSA18 = db_query($sSql9);
 
-    if (pg_num_rows($rsDISPENSA10) == 0) {
+    if (pg_num_rows($rsDISPENSA10) == 0 && pg_num_rows($rsDISPENSA18) == 0) {
 
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
