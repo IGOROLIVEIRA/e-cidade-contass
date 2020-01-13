@@ -469,10 +469,16 @@ switch ($oParam->exec) {
   break;
 
   case 'findDadosObraEdital' :
-    if($oParam->iLicitacao){
-      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->iLicitacao);
+    try{
+      if($oParam->codLicitacao){
+        $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->codLicitacao);
+      }
+      $oRetorno->status = 1;
+    }catch (Exception $error){
+      $oRetorno->message = $error;
+      $oRetorno->status = 2;
     }
-    $oRetorno->status = 1;
+
     echo $oJson->encode($oRetorno);
     break;
 
