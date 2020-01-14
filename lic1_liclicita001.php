@@ -114,7 +114,7 @@ if(isset($incluir)){
   	}
 	//verifica se as duas modalidades esto configuradas.
 	$result_modalidade=$clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null,"*",null,"l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
-	if ($clpccflicitapar->numrows == 0){
+  if ($clpccflicitapar->numrows == 0){
 	  $erro_msg="Verifique se esta configurado a numeração de licitação por modalidade.";
     $sqlerro = true;
 	}
@@ -249,6 +249,7 @@ if(isset($incluir)){
 		if ($sqlerro == false){
 			$clliclicita->l20_numero      	  =  $l20_numero;
 			$clliclicita->l20_edital      	  =  $l20_edital;
+			$clliclicita->l20_nroedital      	=  $l20_nroedital;
 			$clliclicita->l20_anousu      	  =  $anousu;
 			$clliclicita->l20_exercicioedital =  $anousu;
 			$clliclicita->l20_licsituacao = '0';
