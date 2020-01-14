@@ -770,7 +770,7 @@ class EncerramentoExercicio {
 
           $oLancamento = new LancamentoAuxiliarEncerramentoExercicio();
           $oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
-          $oLancamento->setObservacaoHistorico("Transferencia de Creditos Empenhados Resta a Pagar no valor " . trim(db_formatar($nValorFinal, "f")));
+          $oLancamento->setObservacaoHistorico("Transferencia de Creditos Empenhados Resta a Pagar do empenho " . $oContaCorrenteDetalhe->getEmpenho()->getCodigo() . " no valor " . trim(db_formatar($nValorFinal, "f")));
           $oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
           $oLancamento->setContaReferencia($iContaReferencia);
           $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
