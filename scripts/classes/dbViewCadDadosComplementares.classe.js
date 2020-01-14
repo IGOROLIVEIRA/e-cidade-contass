@@ -1020,6 +1020,15 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
 
   this.changeClasseObjeto = (e) => {
     let valor = e.target.value;
+    $('cboAtividadeObra'+sId).value = 0;
+    $('cboAtividadeServico'+sId).value = 0;
+    $('cboAtividadeServicoEsp'+sId).value = 0;
+
+    $('trAtividadeServico'+sId).style.display = 'none';
+    $('txtDescrAtividadeServico'+sId).value = '';
+    $('trAtividadeServicoEsp'+sId).style.display = 'none';
+    $('txtDescrAtividadeServicoEsp'+sId).value = '';
+
     me.setClassesObjeto(valor);
     switch(valor){
       case '1':
@@ -3461,10 +3470,13 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
         $('cboClasseObjeto'+sId).value = 0;
         me.setClassesObjeto('');
         $('cboAtividadeObra'+sId).value = 0;
+        $('cboAtividadeObra'+sId).disabled = true;
         me.setAtividadeObra('');
         $('cboAtividadeServico'+sId).value = 0;
+        $('cboAtividadeServico'+sId).disabled = true;
         me.setAtividadeServico('');
         $('cboAtividadeServicoEsp'+sId).value = 0;
+        $('cboAtividadeServicoEsp'+sId).disabled = true;
         me.setAtividadeServicoEspecializado('');
         $('cboGrupoBemPub'+sId).value = 0;
         me.setGrupoBemPublico('');
