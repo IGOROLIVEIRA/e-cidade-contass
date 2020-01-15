@@ -794,7 +794,7 @@ class cl_empagetipo {
     }
     /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
     /* Acrescentado fonte 159 e 259 para atender alterações do TCE/MG a partir de 2020 */
-    $aFontes = array('148','149','150','151','152','153','154', '159', '248','249','250','251','252','253','254', '259');
+    $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259');
     $sqlFonteEmp = "select o15_codtri from empempenho inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu=o58_anousu ";
     $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
     $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";  
@@ -802,7 +802,7 @@ class cl_empagetipo {
     $rsResultFonteEmp = db_query($sqlFonteEmp);
     $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152','153','154', '159', '248','249','250','251','252','253','254', '259')) and";
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
       $whereFonte2 = " ";
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
