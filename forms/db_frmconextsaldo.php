@@ -5,29 +5,31 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clconextsaldo->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("c60_codcon");
+
 ?>
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
 
 <?
-db_input('ces01_sequencial',10,$Ices01_sequencial,true,'hidden',$db_opcao,"")
+  db_input('ces01_sequencial',10,$Ices01_sequencial,true,'hidden',$db_opcao,"")
 ?>
 
   <tr>
     <td nowrap title="<?=@$Tces01_reduz?>">
-       <?
-       db_ancora('Reduzido do PCASP',"js_pesquisaces01_reduz(true);",$db_opcao);
-       ?>
+      <?
+        db_ancora('Reduzido do PCASP',"js_pesquisaces01_reduz(true);",$db_opcao);
+      ?>
     </td>
     <td>
-<?
-db_input('ces01_reduz',10,$Ices01_reduz,true,'text',$db_opcao," onchange='js_pesquisaces01_reduz(false);'")
-?>
-       <?
-db_input('descricao',50,'',true,'text',3,'')
-       ?>
-       <input name="processar" type="submit" id="db_opcao" value="Processar">
+      <?
+        db_input('ces01_reduz',10,$Ices01_reduz,true,'text',$db_opcao," onchange='js_pesquisaces01_reduz(false);'");
+        db_input('ces01_codcon',10,$Ices01_codcon,true,'hidden',$db_opcao,"");
+      ?>
+      <?
+        db_input('descricao',50,'',true,'text',3,'')
+      ?>
+      <input name="processar" type="submit" id="db_opcao" value="Processar">
     </td>
   </tr>
     <?
@@ -89,7 +91,7 @@ if($ces01_reduz) {
 
             $sql = $clconextsaldo->sql_query_file('', '*', '',
                 "ces01_anousu = " . db_getsession('DB_anousu') ." and ces01_inst = ". db_getsession('DB_instit') .
-                "$ and ces01_reduz = " . $ces01_reduz
+                " and ces01_reduz = " . $ces01_reduz
                 );
 
             $chavepri= array("ces01_sequencial"=>@$ces01_sequencial);
@@ -109,7 +111,7 @@ if($ces01_reduz) {
 <script>
 function js_pesquisaces01_reduz(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c61_reduz|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c61_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.ces01_reduz.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.ces01_reduz.value+'&reduz=true&funcao_js=parent.js_mostraconplano','Pesquisa',false);
@@ -125,10 +127,11 @@ function js_mostraconplano(chave,erro){
     document.form1.ces01_reduz.value = '';
   }
 }
-function js_mostraconplano1(chave1,chave2){
-  document.form1.ces01_reduz.value = chave1;
-  document.form1.descricao.value = chave2;
-  db_iframe_conplano.hide();
+function js_mostraconplano1(chave1,chave2,chave3){
+  document.form1.ces01_codcon.value = chave1;
+  document.form1.ces01_reduz.value = chave2;
+  document.form1.descricao.value = chave3;
+    db_iframe_conplano.hide();
 }
 
 function js_pesquisa(){
