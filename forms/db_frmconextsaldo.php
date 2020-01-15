@@ -83,6 +83,7 @@ $clrotulo->label("c60_codcon");
 if($ces01_reduz) {
 ?>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="limpa" type="button" onclick='js_limpa();'  value="Limpar">
 <? } ?>
     <center>
     <table>
@@ -168,5 +169,8 @@ function js_mostraorctiporec1(chave1,chave2){
     document.form1.ces01_fonte.value = chave1;
     document.form1.o15_descr.value = chave2;
     db_iframe_orctiporec.hide();
+}
+function js_limpa(){
+    location.href='con1_conextsaldo001.php';
 }
 </script>
