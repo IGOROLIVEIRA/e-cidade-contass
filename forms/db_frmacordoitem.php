@@ -49,56 +49,77 @@ if ($oDaoAcordo->numrows > 0) {
 }
 ?>
 <style>
-.fracionado input[type='checkbox'] {
-  display: none;
-  height: 15px
-}
+  .fracionado input[type='checkbox'] {
+    display: none;
+    height: 15px
+  }
 
-.fracionado input[type='button'] {
-  height: 15px;
-}
+  .fracionado input[type='button'] {
+    height: 15px;
+  }
 
-.fracionado {
-  background-color: #FFFFFF
-}
+  .fracionado {
+    background-color: #FFFFFF
+  }
 
-.fracionado td {
-  empty-cells: show;
-}
+  .fracionado td {
+    empty-cells: show;
+  }
 
-.fracionadoinvalido {
-  background-color: #FF4649
-}
+  .fracionadoinvalido {
+    background-color: #FF4649
+  }
 
-.fieldsetinterno {
-  border: 0px;
-  border-top: 2px groove white;
-  border-bottom: 2px groove white;
-}
+  .fieldsetinterno {
+    border: 0px;
+    border-top: 2px groove white;
+    border-bottom: 2px groove white;
+  }
 
-fieldset.fieldsetinterno table {
+  fieldset.fieldsetinterno table {
 
-  width: 100%;
-  table-layout: auto;
-}
+    width: 100%;
+    table-layout: auto;
+  }
 
-fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
+  fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
 
-  width: 80px;
-  white-space: nowrap;
-}
+    width: 80px;
+    white-space: nowrap;
+  }
 
-select {
-  width: 100%;
-}
+  select {
+    width: 100%;
+  }
 
-fieldset.fieldsetinterno table tr TD {
-  white-space: nowrap;
-}
+  fieldset.fieldsetinterno table tr TD {
+    white-space: nowrap;
+  }
 
-legend {
-  font-weight: bold;
-}
+  legend {
+    font-weight: bold;
+  }
+
+  #QtdDisponivel{
+    width: 100px;
+  }
+  #gridItensOrigemrow0cell10{
+    width: 24%;
+  }
+  #gridItensOrigemrow0cell3{
+    width: 41%;
+  }
+  #gridItensOrigemrow0cell4{
+    text-align: center;
+  }
+  #gridItensOrigemrow0cell5{
+    text-align: center;
+  }
+  #gridItensOrigemrow0cell9{
+    width: 20%;
+  }
+
+
 </style>
 
 <script type="text/javascript" src="scripts/classes/DBViewAcordoPrevisao.classe.js"></script>
@@ -275,7 +296,7 @@ db_app::load("estilos.css, grid.style.css");
         <td colspan="2" align="center">
           <input name="incluir" type="button" id="db_opcao" value="Incluir">
           <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_limparFormulario();"
-          style='display:none'>
+                 style='display:none'>
 
 
         </td>
@@ -291,10 +312,10 @@ db_app::load("estilos.css, grid.style.css");
     db_input('ac20_tipocontrole', 10, 0, 0, 'hidden');
     ?>
     <input name="verificaritens" type="button" id="verificarItens" value="Verificar Itens"
-    onclick='js_getItensOrigem()'>
+           onclick='js_getItensOrigem()'>
 
     <input type='button' onclick='js_verificaTipoAcordo();' value='Itens do Empenho' id='itensEmpenho'
-    style='display:none;'/>
+           style='display:none;'/>
 
 
   </center>
@@ -336,11 +357,13 @@ db_app::load("estilos.css, grid.style.css");
       document.form1.ac20_acordo.value = '';
     }
   }
+
   function js_mostraacordo1(chave1, chave2) {
     document.form1.ac20_acordo.value = chave1;
     document.form1.ac16_sequencial.value = chave2;
     db_iframe_acordo.hide();
   }
+
   function js_pesquisaac20_pcmater(mostra) {
 
     if (mostra) {
@@ -349,7 +372,7 @@ db_app::load("estilos.css, grid.style.css");
         'func_pcmatercontratos.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc01_servico',
         'Pesquisar Materiais',
         true, '0'
-        );
+      );
     } else {
       if (document.form1.ac20_pcmater.value != '') {
         js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
@@ -392,7 +415,7 @@ db_app::load("estilos.css, grid.style.css");
         }
       }
       else {
-          alert(oRetorno.message.urlDecode());
+        alert(oRetorno.message.urlDecode());
         return false;
       }
     });
@@ -452,7 +475,7 @@ db_app::load("estilos.css, grid.style.css");
         'func_pcmater.php?funcao_js=parent.js_mostraMaterial|pc01_codmater|pc01_descrmater|pc01_servico',
         'Pesquisar Materiais',
         true, '0'
-        );
+      );
     } else {
 
       if (document.form1.ac20_pcmater.value != '') {
@@ -467,6 +490,7 @@ db_app::load("estilos.css, grid.style.css");
       }
     }
   }
+
   function js_mostrapcmater(chave, erro, chave2) {
     document.form1.pc01_descrmater.value = chave;
     if (erro == true) {
@@ -509,9 +533,10 @@ db_app::load("estilos.css, grid.style.css");
         '&funcao_js=parent.js_mostraorcdotacao',
         'Pesquisar Dotações',
         false
-        );
+      );
     }
   }
+
   function js_mostraorcdotacao(chave, erro) {
     if (erro == true) {
       document.form1.o47_coddot.focus();
@@ -535,10 +560,7 @@ db_app::load("estilos.css, grid.style.css");
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right', "left", "center", "center", "center"));
     oGridItens.setCellWidth(new Array("5%", "5%", "20%", '6%', '5%', '5%', "30%", "5%", "6%", "10%"));
-    oGridItens.setHeader(new Array("Ordem", "Código", "Material", "Quantidade",
-      "Vlr Un", "Total", "Elemento", "Períodos", "Dotações", "Ação"
-      )
-    );
+    oGridItens.setHeader(new Array("Ordem", "Código", "Material", "Quantidade","Vlr Un", "Total", "Elemento", "Períodos", "Dotações", "Ação"));
     oGridItens.hasTotalizador = true;
     oGridItens.show($('cntgriditens'));
 
@@ -547,7 +569,6 @@ db_app::load("estilos.css, grid.style.css");
     $(oGridItens.sName+"body").style.width           = width;
     $("table"+oGridItens.sName+"footer").style.width = width;
   }
-
 
   function js_init() {
 
@@ -558,11 +579,10 @@ db_app::load("estilos.css, grid.style.css");
     js_getItens();
   }
 
-
   function js_getItens() {
 
     var oParam = new Object();
-    oParam.iAcordo = $F('ac20_acordo');
+    oParam.iAcordo     = $F('ac20_acordo');
     oParam.exec = "getItensAcordo";
     js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
     var oAjax = new Ajax.Request(
@@ -572,154 +592,150 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoGetItens
       }
-      );
+    );
   }
 
   function js_retornoGetItens(oAjax) {
 
-        js_removeObj('msgBox');
-        oGridItens.clearAll(true);
-        var oRetorno = eval("(" + oAjax.responseText + ")");
-        iTipoContrato = oRetorno.iTipoContrato;
-        var iTipocompra = oRetorno.tipocompra;
+    js_removeObj('msgBox');
+    oGridItens.clearAll(true);
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    iTipoContrato = oRetorno.iTipoContrato;
+    var iTipocompra = oRetorno.tipocompra;
 
-        if(iTipocompra === '103' || iTipocompra === '102'){
-            if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
+    if(iTipocompra === '103' || iTipocompra === '102'){
+      if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
 
-      $('FormularioManual').style.display = '';
-      $('db_opcao').style.display = 'none';
-      if (oRetorno.itens.length == 0) {
-        js_getItensOrigem();
-      }
-
-            } else {
-                $('FormularioManual').style.display = '';
-            }
-
-            if (oRetorno.status == 1) {
-
-                var nTotal = 0;
-                oRetorno.itens.each(function (oLinha, id) {
-                    with (oLinha) {
-                        var sCor = '';
-                        if (valortotal == totaldotacoes) {
-                            var sCor = '';
-                            if (aPeriodosItem.length == 0) {
-                                var sCor = 'background-color: #fcd032;';
-                            }
-
-                        } else {
-                            var sCor = 'background-color: red;';
-                        }
-
-                        var aLinha = new Array();
-                        aLinha[0] = ordem;
-                        aLinha[1] = codigo;
-                        aLinha[2] = material.urlDecode();
-                        aLinha[3] = quantidade;
-                        var iCasas = js_getNumeroCasasDecimais(valorunitario);
-                        if (iCasas < 2) {
-                            iCasas = 2;
-                        }
-                        aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
-                        aLinha[5] = js_formatar(valortotal, 'f');
-                        aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
-                        aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
-                        aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
-                        aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
-                        if (oRetorno.iTipoContrato != 6) {
-                            aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
-                        }
-
-                        nTotal = nTotal + parseFloat(totaldotacoes);
-                        oGridItens.addRow(aLinha);
-                        oGridItens.aRows[id].sStyle += ';padding:1px;' + sCor;
-                    }
-                });
-
-                oGridItens.renderRows();
-                $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
-            }
-        }else{
-
-            if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
-
-                $('FormularioManual').style.display = '';
-                $('db_opcao').style.display = 'none';
-                if (oRetorno.itens.length == 0) {
-                    js_getItensOrigem();
-                }
-
-            } else {
-                $('FormularioManual').style.display = '';
-            }
-            if (oRetorno.status == 1) {
-
-                if (oRetorno.itens.length > 0) {
-
-        with (top.corpo.iframe_acordo) {
-
-          $('ac16_origem').disabled = true;
-          $('ac16_contratado').readOnly = true;
-          $('ac16_contratado').style.backgroundColor = 'rgb(222, 184, 135)';
+        $('FormularioManual').style.display = '';
+        $('db_opcao').style.display = 'none';
+        if (oRetorno.itens.length == 0) {
+          js_getItensOrigem();
         }
 
       } else {
-
-        with (top.corpo.iframe_acordo) {
-
-          $('ac16_origem').disabled = true;
-          $('ac16_contratado').readOnly = false;
-          $('ac16_contratado').className = "";
-        }
+        $('FormularioManual').style.display = '';
       }
 
-      var nTotal = 0;
-      oRetorno.itens.each(function (oLinha, id) {
+      if (oRetorno.status == 1) {
 
-
-        with (oLinha) {
-          var sCor = '';
-          if (valortotal == totaldotacoes) {
+        var nTotal = 0;
+        oRetorno.itens.each(function (oLinha, id) {
+          with (oLinha) {
+            var sCor = '';
+            if (valortotal == totaldotacoes) {
               var sCor = '';
-              if(aPeriodosItem.length == 0){
+              if (aPeriodosItem.length == 0) {
                 var sCor = 'background-color: #fcd032;';
+              }
+
+            } else {
+              var sCor = 'background-color: red;';
             }
 
-          }
-          else{
-            var sCor = 'background-color: red;';
-          }
+            var aLinha = new Array();
+            aLinha[0] = ordem;
+            aLinha[1] = codigo;
+            aLinha[2] = material.urlDecode();
+            aLinha[3] = quantidade;
+            var iCasas = js_getNumeroCasasDecimais(valorunitario);
+            if (iCasas < 2) {
+              iCasas = 2;
+            }
+            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            aLinha[5] = js_formatar(valortotal, 'f');
+            aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
+            aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
+            aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
+            aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
+            if (oRetorno.iTipoContrato != 6) {
+              aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
+            }
 
-          var aLinha = new Array();
-          aLinha[0] = ordem;
-          aLinha[1] = codigo;
-          aLinha[2] = material.urlDecode();
-          aLinha[3] = quantidade;
-          var iCasas = js_getNumeroCasasDecimais(valorunitario);
-          if (iCasas < 2) {
-            iCasas = 2;
+            nTotal = nTotal + parseFloat(totaldotacoes);
+            oGridItens.addRow(aLinha);
+            oGridItens.aRows[id].sStyle += ';padding:1px;' + sCor;
           }
-          aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
-          aLinha[5] = js_formatar(valortotal, 'f');
-          aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
-          aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
-          aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
-          aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
-          if (oRetorno.iTipoContrato != 6) {
-            aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
-          }
+        });
 
-          nTotal = nTotal + parseFloat(totaldotacoes);
-          console.log(nTotal);
-          oGridItens.addRow(aLinha);
-          oGridItens.aRows[id].sStyle += ';padding:1px;'+sCor;
+        oGridItens.renderRows();
+        $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
+      }
+    }else{
+
+      if (oRetorno.iTipoContrato == 2 || oRetorno.iTipoContrato == 1) {
+
+        $('FormularioManual').style.display = '';
+        $('db_opcao').style.display = 'none';
+        if (oRetorno.itens.length == 0) {
+          js_getItensOrigem();
         }
-      });
 
-      oGridItens.renderRows();
-      $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
+      } else {
+        $('FormularioManual').style.display = '';
+      }
+      if (oRetorno.status == 1) {
 
+        if (oRetorno.itens.length > 0) {
+
+          with (top.corpo.iframe_acordo) {
+
+            $('ac16_origem').disabled = true;
+            $('ac16_contratado').readOnly = true;
+            $('ac16_contratado').style.backgroundColor = 'rgb(222, 184, 135)';
+          }
+
+        } else {
+
+          with (top.corpo.iframe_acordo) {
+
+            $('ac16_origem').disabled = true;
+            $('ac16_contratado').readOnly = false;
+            $('ac16_contratado').className = "";
+          }
+        }
+
+        var nTotal = 0;
+        oRetorno.itens.each(function (oLinha, id) {
+          with (oLinha) {
+            var sCor = '';
+            if (valortotal == totaldotacoes) {
+              var sCor = '';
+              if (aPeriodosItem.length == 0) {
+                var sCor = 'background-color: #fcd032;';
+              }
+
+            } else {
+              var sCor = 'background-color: red;';
+            }
+
+            var aLinha = new Array();
+            aLinha[0] = ordem;
+            aLinha[1] = codigo;
+            aLinha[2] = material.urlDecode();
+            aLinha[3] = quantidade;
+            var iCasas = js_getNumeroCasasDecimais(valorunitario);
+            if (iCasas < 2) {
+              iCasas = 2;
+            }
+            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            aLinha[5] = js_formatar(valortotal, 'f');
+            aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
+            aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
+            aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
+            aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";
+            if (oRetorno.iTipoContrato != 6) {
+              aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
+            }
+
+            nTotal = nTotal + parseFloat(totaldotacoes);
+            oGridItens.addRow(aLinha);
+            oGridItens.aRows[id].sStyle += ';padding:1px;' + sCor;
+          }
+        });
+
+        oGridItens.renderRows();
+        $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
+      }
     }
   }
 
@@ -809,7 +825,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoSaveItem
       }
-      );
+    );
   }
 
   function js_retornoSaveItem(oAjax) {
@@ -821,21 +837,21 @@ db_app::load("estilos.css, grid.style.css");
 
       if (iCodigoItem != "") {
 
-     //
-     if (oRetorno.lAlterarDotacao) {
+        //
+        if (oRetorno.lAlterarDotacao) {
 
           //sFunction = $('openDotacoes' + iCodigoItem).onclick;
           //sFunction();
-     //alert(1);
-   }
- }
- iCodigoItem = '';
- js_limparFormulario();
- js_getItens();
- js_desabilitaItemSelecionar();
-} else {
-  alert(oRetorno.message.urlDecode());
-}
+          //alert(1);
+        }
+      }
+      iCodigoItem = '';
+      js_limparFormulario();
+      js_getItens();
+      js_desabilitaItemSelecionar();
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }
     //oGridPeriodos.clearAll(true);
   }
 
@@ -857,7 +873,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoExcluirItem
       }
-      );
+    );
   }
 
   function js_retornoExcluirItem(oAjax) {
@@ -891,7 +907,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoGetElementosMaterias
       }
-      );
+    );
 
   }
 
@@ -937,7 +953,6 @@ db_app::load("estilos.css, grid.style.css");
 
     js_desabilitaItemSelecionar();
   }
-
 
   function js_bloqueiaCampos(iTipoContrato) {
 
@@ -1008,7 +1023,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoEditar
       }
-      );
+    );
 
   }
 
@@ -1052,7 +1067,7 @@ db_app::load("estilos.css, grid.style.css");
       'Dotações Item ',
       iWidth,
       iHeight
-      );
+    );
     var sContent = "<div id='addDotacao'>";
     sContent += "<fieldset><legend><b>Adicionar Dotação</b>";
     sContent += "  <table>";
@@ -1091,25 +1106,14 @@ db_app::load("estilos.css, grid.style.css");
     sContent += "</div>";
     windowDotacaoItem.setContent(sContent);
     windowDotacaoItem.setShutDownFunction(function () {
-          /*var nTemp1 = js_strToFloat(oDadosItem.aCells[4].getValue());
-          var nTemp2 = oGridDotacoes.sum(2, false);
-
-          if ($('dotacoes' + oDadosItem.aCells[0].getValue())) {
-              if (nTemp1 == nTemp2) {
-                  $('dotacoes' + oDadosItem.aCells[0].getValue()).style.color = 'green';
-              } else {
-                  $('dotacoes' + oDadosItem.aCells[0].getValue()).style.color = 'red';
-              }
-            }*/
-            windowDotacaoItem.destroy();
-
-          });
+      windowDotacaoItem.destroy();
+    });
     windowDotacaoItem.show(25,420);
     oMessageBoard = new DBMessageBoard('msgboard1',
       'Adicionar Dotacoes',
       'Dotações Item ' + oDadosItem.aCells[1].getValue(),
       windowDotacaoItem.getContentContainer()
-      );
+    );
 
     oMessageBoard.show();
 
@@ -1159,7 +1163,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoGetSaldotacao
       }
-      );
+    );
 
   }
 
@@ -1186,7 +1190,7 @@ db_app::load("estilos.css, grid.style.css");
           js_retornoGetDotacoes(ret, iItem);
         } )
       }
-      );
+    );
 
   }
 
@@ -1213,7 +1217,7 @@ db_app::load("estilos.css, grid.style.css");
 
     oGridDotacoes.clearAll(true);
     oDados.each(function (oRow, iSeq) {
-      console.log(oRow);
+
       var aLinha = new Array();
       aLinha[0] = oRow.dotacao;
       aLinha[1] = oRow.quantidade;
@@ -1284,7 +1288,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoSaveDotacoes
       }
-      );
+    );
   }
 
   function js_retornoSaveDotacoes(oAjax) {
@@ -1323,8 +1327,9 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_excluirSaveDotacoes
       }
-      );
+    );
   }
+
   function js_excluirSaveDotacoes(oAjax) {
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
@@ -1336,87 +1341,88 @@ db_app::load("estilos.css, grid.style.css");
     }
   }
 
-    function js_montaGridItensOrigens(itipocompra) {
+  function js_montaGridItensOrigens(itipocompra) {
 
-        oGridItensOrigem = new DBGrid('gridItensOrigem');
-        oGridItensOrigem.nameInstance = 'oGridItensOrigem';
-        oGridItensOrigem.setCheckbox(0);
-        if(itipocompra === '103' || itipocompra === '102'){
-            oGridItensOrigem.setCellAlign(new Array("right","right","right","left",'right','right','right',"left","center","center","center","center","center","center","center"));
+    oGridItensOrigem = new DBGrid('gridItensOrigem');
+    oGridItensOrigem.nameInstance = 'oGridItensOrigem';
+    oGridItensOrigem.setCheckbox(0);
+    if(itipocompra === '103' || itipocompra === '102'){
+      oGridItensOrigem.setCellAlign(new Array("right","right","right","left",'right','right','right',"left","center","center","center","center","center","center","center"));
 
-            oGridItensOrigem.setCellWidth(new Array("10%",'1%',"10%","40%",'10%','10%','10%',"10%","1%","20%","20%","15%","15%","15%","15%"));
+      oGridItensOrigem.setCellWidth(new Array("10%",'1%',"10%","40%",'10%','10%','10%',"10%","1%","20%","20%","15%","15%","15%","15%"));
 
-            oGridItensOrigem.setHeader(new Array("Código",'',"Cod.Mater","Material","Quantidade","Vlr Un","Total","Tipo","","Qtd. Disponivel","Qtd. Contratada","Previsão Inicial","Previsão Final","Serviço","Elemento"));
+      oGridItensOrigem.setHeader(new Array("Código",'',"Cod.Mater","Material","Quantidade","Vlr Un","Total","Tipo","","Qtd. Disponivel","Qtd. Contratada","Previsão Inicial","Previsão Final","Serviço","Elemento"));
 
-            oGridItensOrigem.aHeaders[1].lDisplayed = false;
-            oGridItensOrigem.aHeaders[2].lDisplayed = false;
-            oGridItensOrigem.aHeaders[7].lDisplayed = false;
-            oGridItensOrigem.aHeaders[8].lDisplayed = false;
-            oGridItensOrigem.aHeaders[9].lDisplayed = false;
-            oGridItensOrigem.aHeaders[12].lDisplayed = false;
-            oGridItensOrigem.aHeaders[13].lDisplayed = false;
-            oGridItensOrigem.aHeaders[14].lDisplayed = false;
-            oGridItensOrigem.aHeaders[15].lDisplayed = false;
-            oGridItensOrigem.show($('ctngridItensOrigem'));
-        }else{
+      oGridItensOrigem.aHeaders[1].lDisplayed = false;
+      oGridItensOrigem.aHeaders[2].lDisplayed = false;
+      oGridItensOrigem.aHeaders[7].lDisplayed = false;
+      oGridItensOrigem.aHeaders[8].lDisplayed = false;
+      oGridItensOrigem.aHeaders[9].lDisplayed = false;
+      oGridItensOrigem.aHeaders[12].lDisplayed = false;
+      oGridItensOrigem.aHeaders[13].lDisplayed = false;
+      oGridItensOrigem.aHeaders[14].lDisplayed = false;
+      oGridItensOrigem.aHeaders[15].lDisplayed = false;
+      oGridItensOrigem.show($('ctngridItensOrigem'));
+    }else{
 
-    oGridItensOrigem.setCellAlign(new Array("right",
-      "right",
-      "right",
-      "left",
-      'right',
-      'right',
-      'right',
-      "left",
-      "center",
-      "center",
-      "center",
-      "center"
+      oGridItensOrigem.setCellAlign(new Array("right",
+        "right",
+        "right",
+        "left",
+        'right',
+        'right',
+        'right',
+        "left",
+        "center",
+        "center",
+        "center",
+        "center"
       ));
 
-    oGridItensOrigem.setCellWidth(new Array("10%",
-      '1%',
-      "10%",
-      "40%",
-      '10%',
-      '10%',
-      '10%',
-      "10%",
-      "1%",
-      "20%",
-      "20%",
-      "15%",
-      "15%"
+      oGridItensOrigem.setCellWidth(new Array("10%",
+        '1%',
+        "10%",
+        "40%",
+        '10%',
+        '10%',
+        '10%',
+        "10%",
+        "1%",
+        "20%",
+        "20%",
+        "15%",
+        "15%"
       ));
 
-    oGridItensOrigem.setHeader(new Array("Código",
-      '',
-      "Cod.Mater",
-      "Material",
-      "Quantidade",
-      "Vlr Un",
-      "Total",
-      "Tipo",
-      "",
-      "Previsão Inicial",
-      "Previsão Final",
-      "Serviço",
-      "Elemento"
+      oGridItensOrigem.setHeader(new Array("Código",
+        '',
+        "Cod.Mater",
+        "Material",
+        "Quantidade",
+        "Vlr Un",
+        "Total",
+        "Tipo",
+        "",
+        "Previsão Inicial",
+        "Previsão Final",
+        "Serviço",
+        "Elemento"
       ));
 
-    oGridItensOrigem.aHeaders[1].lDisplayed = false;
-    oGridItensOrigem.aHeaders[2].lDisplayed = false;
-    oGridItensOrigem.aHeaders[7].lDisplayed = false;
-    oGridItensOrigem.aHeaders[9].lDisplayed = false;
-    oGridItensOrigem.aHeaders[12].lDisplayed = false;
-    oGridItensOrigem.aHeaders[13].lDisplayed = false;
-    oGridItensOrigem.show($('ctngridItensOrigem'));
+      oGridItensOrigem.aHeaders[1].lDisplayed = false;
+      oGridItensOrigem.aHeaders[2].lDisplayed = false;
+      oGridItensOrigem.aHeaders[7].lDisplayed = false;
+      oGridItensOrigem.aHeaders[9].lDisplayed = false;
+      oGridItensOrigem.aHeaders[12].lDisplayed = false;
+      oGridItensOrigem.aHeaders[13].lDisplayed = false;
+      oGridItensOrigem.show($('ctngridItensOrigem'));
+    }
 
     /**
      * Verifica o 'click' do botao Replicar. Percorre as linhas da Grid, verificando quais estao selecionadas e quais
      * campos devem ser replicados para estas linhas selecionadas, substituindo os valores
      */
-     $('btnReplicar').observe("click", function () {
+    $('btnReplicar').observe("click", function () {
 
       var iLinhasSelecionadas = 0;
       oGridItensOrigem.aRows.each(function (oLinha, iSeq) {
@@ -1455,10 +1461,9 @@ db_app::load("estilos.css, grid.style.css");
         return false;
       }
     });
-   }
+  }
 
-
-   function js_montaWindowItensOrigens() {
+  function js_montaWindowItensOrigens() {
 
     var iHeight = js_round((window.innerHeight / 1.3), 0);
     var iWidth = document.width - 60;
@@ -1472,7 +1477,7 @@ db_app::load("estilos.css, grid.style.css");
       'Selecionar Itens para Contrato',
       900,
       iHeight
-      );
+    );
 
     var sContent = "<div>";
     sContent += "<fieldset><legend><b>Replicar Informações</b></legend>";
@@ -1510,7 +1515,7 @@ db_app::load("estilos.css, grid.style.css");
       'Escolha os Itens que farão parte do contrato',
       sAjuda,
       $('windowwndItensOrigem_content')
-      );
+    );
 
     windowItensOrigem.setShutDownFunction(function () {
       windowItensOrigem.destroy();
@@ -1525,12 +1530,10 @@ db_app::load("estilos.css, grid.style.css");
     oTxtPrevisaoFinal.show($('ctnPrevisaoFinal'));
 
     windowItensOrigem.show();
-    js_montaGridItensOrigens();
+    js_montaGridItensOrigens(iTipoCompra);
   }
 
   function js_getItensOrigem() {
-
-    js_montaWindowItensOrigens();
 
     var oParam = new Object();
     oParam.exec = "getItensOrigem";
@@ -1542,7 +1545,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_getRetornoGetItens
       }
-      );
+    );
   }
 
   function js_getRetornoGetItens(oAjax) {
@@ -1561,91 +1564,95 @@ db_app::load("estilos.css, grid.style.css");
 
   function js_preencheItensOrigem(oRetorno) {
 
+    iTipoCompra = oRetorno.tipocompra;
+    js_montaWindowItensOrigens();
+
     oGridItensOrigem.clearAll(true);
     var iTotalLinhas = 0;
+
     $('btnVincularItens').disabled = false;
 
-        var aCodigos = new Array();
-        oRetorno.itens.each(function (oRow, iSeq) {
-            if(iTipoCompra === '103' || iTipoCompra === '102') {
-                var aLinha = new Array();
-                var QtdDisponivel =  Number(oRow.quantidade) -  Number(oRow.l213_qtdcontratada);
+    var aCodigos = new Array();
+    oRetorno.itens.each(function (oRow, iSeq) {
+      if(iTipoCompra === '103' || iTipoCompra === '102') {
+        var aLinha = new Array();
+        var QtdDisponivel =  Number(oRow.quantidade) -  Number(oRow.l213_qtdcontratada);
 
-                aCodigos.push(oRow.codigo);
-                oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
-                oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
+        aCodigos.push(oRow.codigo);
+        oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
+        oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
-                oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
-                oTxtQtdContratada.addEvent("onBlur", "js_ValidaCamposText(this,1)");
+        oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
+        oTxtQtdContratada.addEvent("onBlur", "js_ValidaCamposText(this,1)");
 
-                aLinha[0] = oRow.codigo;
-                aLinha[1] = iTotalLinhas;
-                aLinha[2] = oRow.codigomaterial;
-                aLinha[3] = oRow.material.urlDecode();
-                aLinha[4] = oRow.quantidade;
-                aLinha[5] = js_formatar(oRow.valorunitario, 'f');
-                aLinha[6] = js_formatar(oRow.valortotal, 'f');
-                aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
-                aLinha[8] = "";
-                if(QtdDisponivel == 0){
-                    aLinha[9]  = '0';
-                }else{
-                    aLinha[9]  = QtdDisponivel;
-                }
-                aLinha[10] = oTxtQtdContratada.toInnerHtml();
-                aLinha[11] = oTxtDataEmissaoInicial.toInnerHtml();
-                aLinha[12] = oTxtDataEmissaoFinal.toInnerHtml();
-                aLinha[13] = oRow.servico;
-                aLinha[14] = oRow.elemento;
+        aLinha[0] = oRow.codigo;
+        aLinha[1] = iTotalLinhas;
+        aLinha[2] = oRow.codigomaterial;
+        aLinha[3] = oRow.material.urlDecode();
+        aLinha[4] = oRow.quantidade;
+        aLinha[5] = js_formatar(oRow.valorunitario, 'f');
+        aLinha[6] = js_formatar(oRow.valortotal, 'f');
+        aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
+        aLinha[8] = "";
+        if(QtdDisponivel == 0){
+          aLinha[9]  = '0';
+        }else{
+          aLinha[9]  = QtdDisponivel;
+        }
+        aLinha[10] = oTxtQtdContratada.toInnerHtml();
+        aLinha[11] = oTxtDataEmissaoInicial.toInnerHtml();
+        aLinha[12] = oTxtDataEmissaoFinal.toInnerHtml();
+        aLinha[13] = oRow.servico;
+        aLinha[14] = oRow.elemento;
 
-                var lMarcado = false;
-                var lDisabled = false;
-                var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
-                var nValorTotalFracionado = 0;
+        var lMarcado = false;
+        var lDisabled = false;
+        var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
+        var nValorTotalFracionado = 0;
 
-                oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
+        oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
 
-                iLinhaAtual = iTotalLinhas;
-                iTotalLinhas++;
-            }else{
+        iLinhaAtual = iTotalLinhas;
+        iTotalLinhas++;
+      }else{
 
-      var aLinha = new Array();
+        var aLinha = new Array();
 
-      aCodigos.push(oRow.codigo);
-      oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
-      oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
+        aCodigos.push(oRow.codigo);
+        oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
+        oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
-      aLinha[0] = oRow.codigo;
-      aLinha[1] = iTotalLinhas;
-      aLinha[2] = oRow.codigomaterial;
-      aLinha[3] = oRow.material.urlDecode();
-      aLinha[4] = oRow.quantidade;
-      aLinha[5] = js_formatar(oRow.valorunitario, 'f');
-      aLinha[6] = js_formatar(oRow.valortotal, 'f');
-      aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
-      aLinha[8] = "";
-      aLinha[9] = oTxtDataEmissaoInicial.toInnerHtml();
-      aLinha[10] = oTxtDataEmissaoFinal.toInnerHtml();
-      aLinha[11] = oRow.servico;
-      aLinha[12] = oRow.elemento;
+        aLinha[0] = oRow.codigo;
+        aLinha[1] = iTotalLinhas;
+        aLinha[2] = oRow.codigomaterial;
+        aLinha[3] = oRow.material.urlDecode();
+        aLinha[4] = oRow.quantidade;
+        aLinha[5] = js_formatar(oRow.valorunitario, 'f');
+        aLinha[6] = js_formatar(oRow.valortotal, 'f');
+        aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
+        aLinha[8] = "";
+        aLinha[9] = oTxtDataEmissaoInicial.toInnerHtml();
+        aLinha[10] = oTxtDataEmissaoFinal.toInnerHtml();
+        aLinha[11] = oRow.servico;
+        aLinha[12] = oRow.elemento;
 
-      var lMarcado = false;
-      var lDisabled = false;
-      var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
-      var nValorTotalFracionado = 0;
+        var lMarcado = false;
+        var lDisabled = false;
+        var nValorTotalItem = new Number(oRow.quantidade) * new Number(oRow.valorunitario);
+        var nValorTotalFracionado = 0;
 
-      oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
+        oGridItensOrigem.addRow(aLinha, false, lDisabled, lMarcado);
 
-      iLinhaAtual = iTotalLinhas;
-      iTotalLinhas++;
-
+        iLinhaAtual = iTotalLinhas;
+        iTotalLinhas++;
+      }
     });
     oGridItensOrigem.renderRows();
 
     /**
      * Percorremos o array com os codigos para criar um className padrão para todos inputs existentes na Grid
      */
-     aCodigos.each(function (oLinha, iSeq) {
+    aCodigos.each(function (oLinha, iSeq) {
 
       $('oTxtDataEmissaoInicial' + oLinha).setValue(oRetorno.dtInicialAcordo);
       $('oTxtDataEmissaoInicial' + oLinha).className = 'classDataEmissaoInicial';
@@ -1653,107 +1660,109 @@ db_app::load("estilos.css, grid.style.css");
       $('oTxtDataEmissaoFinal' + oLinha).setValue(oRetorno.dtFinalAcordo);
       $('oTxtDataEmissaoFinal' + oLinha).className = 'classDataEmissaoFinal';
     });
-   }
+  }
 
-   function js_vincularItens() {
+  function js_vincularItens() {
 
     var aItens = oGridItensOrigem.getSelection("object");
+
     if (aItens.length == 0) {
 
       alert('Selecione um Item!');
       return false;
     }
 
-        var aListaCheckbox = oGridItensOrigem.getSelection();
-        var aListaItens = new Array();
-        var oDadosItens;
-        var lErro = false;
-        if (iTipoCompra === '103' || iTipoCompra === '102'){
-            console.log(aListaCheckbox);
-            aListaCheckbox.each(function (aRow) {
-                var VlrTotal = 0
+    var aListaCheckbox = oGridItensOrigem.getSelection();
+    var aListaItens = new Array();
+    var oDadosItens;
+    var lErro = false;
+    if (iTipoCompra === '103' || iTipoCompra === '102'){
+      console.log(aListaCheckbox);
+      aListaCheckbox.each(function (aRow) {
+        var VlrTotal = 0
 
-                VlrTotal = Number(aRow[6]) * Number(oRow[11]);
+        VlrTotal = Number(aRow[6]) * Number(oRow[11]);
 
-                oDadosItens = new Object();
-                oDadosItens.codigo = aRow[0];
-                oDadosItens.codigomaterial = aRow[3];
-                oDadosItens.quantidade = aRow[11];
-                oDadosItens.valorunitario = aRow[6];
-                oDadosItens.valortotal = VlrTotal;
-                oDadosItens.iFormaControle = 1;
-                oDadosItens.dtInicial = aRow[12];
-                oDadosItens.dtFinal = aRow[13];
-                oDadosItens.servico = aRow[14];
-                oDadosItens.elemento = aRow[15];
-                oDadosItens.qtdDisponivel = aRow[10];
+        oDadosItens = new Object();
+        oDadosItens.codigo = aRow[0];
+        oDadosItens.codigomaterial = aRow[3];
+        oDadosItens.quantidade = aRow[11];
+        oDadosItens.valorunitario = aRow[6];
+        oDadosItens.valortotal = VlrTotal;
+        oDadosItens.iFormaControle = 1;
+        oDadosItens.dtInicial = aRow[12];
+        oDadosItens.dtFinal = aRow[13];
+        oDadosItens.servico = aRow[14];
+        oDadosItens.elemento = aRow[15];
+        oDadosItens.qtdDisponivel = aRow[10];
 
-                if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
+        if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
 
-                    alert('Preencha as datas iniciais do período de execução.');
-                    lErro = true;
-                    throw $break;
-                }
+          alert('Preencha as datas iniciais do período de execução.');
+          lErro = true;
+          throw $break;
+        }
 
-                if (oDadosItens.dtFinal == null || oDadosItens.dtFinal == '') {
+        if (oDadosItens.dtFinal == null || oDadosItens.dtFinal == '') {
 
-                    alert('Preencha as datas finais do período de execução.');
-                    lErro = true;
-                    throw $break;
-                }
+          alert('Preencha as datas finais do período de execução.');
+          lErro = true;
+          throw $break;
+        }
 
-                if(Number(oDadosItens.quantidade) > Number(oDadosItens.qtdDisponivel)){
-                    alert('A quantidade disponível para o item '+oDadosItens.codigomaterial+' é '+oDadosItens.qtdDisponivel);
-                    lErro = true;
-                    throw $break;
-                }
+        if(Number(oDadosItens.quantidade) > Number(oDadosItens.qtdDisponivel)){
+          alert('A quantidade disponível para o item '+oDadosItens.codigomaterial+' é '+oDadosItens.qtdDisponivel);
+          lErro = true;
+          throw $break;
+        }
 
-                if(Number(oDadosItens.qtdDisponivel) == 0){
-                    alert('Não e possivel salvar itens com quantidade 0. Item codigo:'+oDadosItens.codigomaterial);
-                    lErro = true;
-                    throw $break;
-                }
+        if(Number(oDadosItens.qtdDisponivel) == 0){
+          alert('Não e possivel salvar itens com quantidade 0. Item codigo:'+oDadosItens.codigomaterial);
+          lErro = true;
+          throw $break;
+        }
 
-                aListaItens.push(oDadosItens);
-            });
+        aListaItens.push(oDadosItens);
+      });
 
-            if (lErro) {
-                return false;
-            }
-        }else{
-            aListaCheckbox.each(function (aRow) {
-
-      oDadosItens = new Object();
-      oDadosItens.codigo = aRow[0];
-      oDadosItens.codigomaterial = aRow[3];
-      oDadosItens.quantidade = aRow[5];
-      oDadosItens.valorunitario = aRow[6];
-      oDadosItens.valortotal = aRow[7];
-      oDadosItens.iFormaControle = 1;
-      oDadosItens.dtInicial = aRow[10];
-      oDadosItens.dtFinal = aRow[11];
-      oDadosItens.servico = aRow[12];
-      oDadosItens.elemento = aRow[13];
-
-      if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
-
-        alert('Preencha as datas iniciais do período de execução.');
-        lErro = true;
-        throw $break;
+      if (lErro) {
+        return false;
       }
+    }else{
+      aListaCheckbox.each(function (aRow) {
 
-      if (oDadosItens.dtFinal == null || oDadosItens.dtFinal == '') {
+        oDadosItens = new Object();
+        oDadosItens.codigo = aRow[0];
+        oDadosItens.codigomaterial = aRow[3];
+        oDadosItens.quantidade = aRow[5];
+        oDadosItens.valorunitario = aRow[6];
+        oDadosItens.valortotal = aRow[7];
+        oDadosItens.iFormaControle = 1;
+        oDadosItens.dtInicial = aRow[10];
+        oDadosItens.dtFinal = aRow[11];
+        oDadosItens.servico = aRow[12];
+        oDadosItens.elemento = aRow[13];
 
-        alert('Preencha as datas finais do período de execução.');
-        lErro = true;
-        throw $break;
+        if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
+
+          alert('Preencha as datas iniciais do período de execução.');
+          lErro = true;
+          throw $break;
+        }
+
+        if (oDadosItens.dtFinal == null || oDadosItens.dtFinal == '') {
+
+          alert('Preencha as datas finais do período de execução.');
+          lErro = true;
+          throw $break;
+        }
+
+        aListaItens.push(oDadosItens);
+      });
+
+      if (lErro) {
+        return false;
       }
-
-      aListaItens.push(oDadosItens);
-    });
-
-    if (lErro) {
-      return false;
     }
 
     var oParam = new Object();
@@ -1773,7 +1782,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_getRetornoVincularItens
       }
-      );
+    );
   }
 
   function js_getRetornoVincularItens(oAjax) {
@@ -1798,7 +1807,7 @@ db_app::load("estilos.css, grid.style.css");
       'Fracionar Itens',
       iWidth,
       iHeight
-      );
+    );
     var sContent = "<center><table><tr><td>";
     sContent += "<fieldset><legend><b>Fracionar Item</b></legend>";
     sContent += "<table>";
@@ -1899,7 +1908,7 @@ db_app::load("estilos.css, grid.style.css");
       'Informe os dados do Item',
       'Informe o Material, e as novas quantidades para o item ' + oRow.aCells[4].getValue(),
       $('windowwindowItensFraciona_content')
-      );
+    );
     windowItensFraciona.show();
     oAutoComplete = new dbAutoComplete($('oTxtDescrMaterial'), 'com4_pesquisamateriais.RPC.php');
     oAutoComplete.setTxtFieldId(document.getElementById('oTxtMaterial'));
@@ -1953,7 +1962,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoFracionarItens
       }
-      );
+    );
   }
 
   function js_retornoFracionarItens(oAjax) {
@@ -1972,6 +1981,7 @@ db_app::load("estilos.css, grid.style.css");
       alert(oRetorno.message.urlDecode());
     }
   }
+
   function js_validaValor(Obj, valorMaximo) {
 
     if (Obj.value == "" || Obj.value < 0) {
@@ -2012,7 +2022,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoFracionarItens
       }
-      );
+    );
   }
 
   function js_getNumeroCasasDecimais(nValor) {
@@ -2043,20 +2053,21 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Cria uma grid dos Periodos do Item
    */
-   oGridPeriodos = new DBGrid('gridPeriodos');
-   oGridPeriodos.nameInstance = 'oGridPeriodos';
-   oGridPeriodos.setCellAlign(new Array("center", "center", "center"));
-   oGridPeriodos.setCellWidth(new Array("35%", "35%", "30%"));
-   oGridPeriodos.setHeader(new Array("Data Inicial", "Data Final", "Ação"));
-   oGridPeriodos.setHeight(70);
-   oGridPeriodos.show($('gridPeriodos'));
 
-   var aPeriodoItem = new Array();
+  oGridPeriodos = new DBGrid('gridPeriodos');
+  oGridPeriodos.nameInstance = 'oGridPeriodos';
+  oGridPeriodos.setCellAlign(new Array("center", "center", "center"));
+  oGridPeriodos.setCellWidth(new Array("35%", "35%", "30%"));
+  oGridPeriodos.setHeader(new Array("Data Inicial", "Data Final", "Ação"));
+  oGridPeriodos.setHeight(70);
+  oGridPeriodos.show($('gridPeriodos'));
+
+  var aPeriodoItem = new Array();
 
   /**
    * Renderiza os Periodos
    */
-   function showPeriodos() {
+  function showPeriodos() {
 
     oGridPeriodos.clearAll(true);
 
@@ -2068,7 +2079,7 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Itera sobre o array de periodos e add as linhas na grid
    */
-   function getPeriodos() {
+  function getPeriodos() {
 
     oGridPeriodos.clearAll(true);
     aPeriodoItem.each(function (oPeriodos, iLinha) {
@@ -2085,7 +2096,7 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Adiciona um objeto de periodo no array de periodos
    */
-   function addPeriodo() {
+  function addPeriodo() {
 
     var oPeriodo = new Object();
     var oDtInicial = $("ac41_datainicial");
@@ -2100,32 +2111,32 @@ db_app::load("estilos.css, grid.style.css");
     /**
      * Valida se as datas informadas não conflitam com a data de vigência do contrato
      */
-     var dtContratoInicio = parent.iframe_acordo.document.form1.ac16_datainicio.value;
-     var dtContratoFim = parent.iframe_acordo.document.form1.ac16_datafim.value;
+    var dtContratoInicio = parent.iframe_acordo.document.form1.ac16_datainicio.value;
+    var dtContratoFim = parent.iframe_acordo.document.form1.ac16_datafim.value;
 
-     if (js_comparadata(oDtInicial.value, dtContratoInicio, "<") || js_comparadata(oDtFinal.value, dtContratoFim, ">") ||
+    if (js_comparadata(oDtInicial.value, dtContratoInicio, "<") || js_comparadata(oDtFinal.value, dtContratoFim, ">") ||
       js_comparadata(oDtInicial.value, dtContratoFim, ">") || js_comparadata(oDtFinal.value, dtContratoInicio, "<")) {
       alert("Há conflito entre as datas do item e a data de vigência do contrato.");
-    return false;
+      return false;
+    }
+
+    if (!js_validaData(oDtInicial.value, oDtFinal.value)) {
+      return false;
+    }
+    oPeriodo.dtDataInicial = oDtInicial.value;
+    oPeriodo.dtDataFinal = oDtFinal.value;
+    aPeriodoItem.push(oPeriodo);
+
+    oDtInicial.value = "";
+    oDtFinal.value = "";
+
+    showPeriodos();
   }
-
-  if (!js_validaData(oDtInicial.value, oDtFinal.value)) {
-    return false;
-  }
-  oPeriodo.dtDataInicial = oDtInicial.value;
-  oPeriodo.dtDataFinal = oDtFinal.value;
-  aPeriodoItem.push(oPeriodo);
-
-  oDtInicial.value = "";
-  oDtFinal.value = "";
-
-  showPeriodos();
-}
 
   /**
    * Valida conflitos nos periodos digitados
    */
-   function js_validaData(sDtInicial, sDtFinal) {
+  function js_validaData(sDtInicial, sDtFinal) {
 
     var lErro = false;
     if (js_comparadata(sDtInicial, sDtFinal, ">")) {
@@ -2159,7 +2170,7 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Exclui do array de periodos um periodo especifico
    */
-   function js_excluiPeriodo(iLinha) {
+  function js_excluiPeriodo(iLinha) {
 
     aPeriodoItem.splice(iLinha, 1);
     getPeriodos();
@@ -2178,7 +2189,7 @@ db_app::load("estilos.css, grid.style.css");
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: js_retornoPeriodoItem
       }
-      );
+    );
   }
 
   function js_retornoPeriodoItem(oAjax) {
@@ -2189,49 +2200,49 @@ db_app::load("estilos.css, grid.style.css");
     /**
      * Construir Windown AUX
      */
-     var windowPeriodos = new windowAux('janelaPeriodo', 'Período do Item ', 500, 350);
-     windowPeriodos.setContent("<div id='periodosItem'></div>");
-     windowPeriodos.setShutDownFunction(function () {
+    var windowPeriodos = new windowAux('janelaPeriodo', 'Período do Item ', 500, 350);
+    windowPeriodos.setContent("<div id='periodosItem'></div>");
+    windowPeriodos.setShutDownFunction(function () {
       windowPeriodos.destroy();
     });
-     windowPeriodos.show();
+    windowPeriodos.show();
 
-     var oMessageBoard = new DBMessageBoard('msgboard1',
+    var oMessageBoard = new DBMessageBoard('msgboard1',
       'Períodos do Item ' + oRetorno.nomeItem.urlDecode(),
       'Periodos cadastrados para o item.',
       windowPeriodos.getContentContainer());
-     oMessageBoard.show();
+    oMessageBoard.show();
 
     /**
      * View da
      */
-     oGridViewPeriodos = new DBGrid('gridViewPeriodos');
-     oGridViewPeriodos.nameInstance = 'oGridViewPeriodos';
-     oGridViewPeriodos.setCellAlign(new Array("center", "center"));
-     oGridViewPeriodos.setCellWidth(new Array("45%", "45%"));
-     oGridViewPeriodos.setHeader(new Array("Data Inicial", "Data Final"));
-     oGridViewPeriodos.show($('periodosItem'));
+    oGridViewPeriodos = new DBGrid('gridViewPeriodos');
+    oGridViewPeriodos.nameInstance = 'oGridViewPeriodos';
+    oGridViewPeriodos.setCellAlign(new Array("center", "center"));
+    oGridViewPeriodos.setCellWidth(new Array("45%", "45%"));
+    oGridViewPeriodos.setHeader(new Array("Data Inicial", "Data Final"));
+    oGridViewPeriodos.show($('periodosItem'));
 
-     oGridPeriodos.clearAll(true);
+    oGridPeriodos.clearAll(true);
 
-     oRetorno.periodos.each(function (oPeriodos, iLinha) {
+    oRetorno.periodos.each(function (oPeriodos, iLinha) {
 
       /**
        * Split para configurar as datas no padrão brasileiro
        */
-       var aPeriodoInicial = oPeriodos.dtDataInicial.split("-");
-       var aPeriodoFinal = oPeriodos.dtDataFinal.split("-");
+      var aPeriodoInicial = oPeriodos.dtDataInicial.split("-");
+      var aPeriodoFinal = oPeriodos.dtDataFinal.split("-");
 
-       var aRow = new Array();
-       aRow[0] = aPeriodoInicial[2] + "/" + aPeriodoInicial[1] + "/" + aPeriodoInicial[0];
-       aRow[1] = aPeriodoFinal[2] + "/" + aPeriodoFinal[1] + "/" + aPeriodoFinal[0];
-       oGridViewPeriodos.addRow(aRow);
-     });
-     oGridViewPeriodos.renderRows();
+      var aRow = new Array();
+      aRow[0] = aPeriodoInicial[2] + "/" + aPeriodoInicial[1] + "/" + aPeriodoInicial[0];
+      aRow[1] = aPeriodoFinal[2] + "/" + aPeriodoFinal[1] + "/" + aPeriodoFinal[0];
+      oGridViewPeriodos.addRow(aRow);
+    });
+    oGridViewPeriodos.renderRows();
 
-   }
+  }
 
-   function js_windowItensEmpenho() {
+  function js_windowItensEmpenho() {
 
     var sTituloWindowAux = "Configuração de Itens do Empenho";
     oWindowAuxEmpenho = new windowAux("oWindowAuxEmpenho", sTituloWindowAux, 950, 500);
@@ -2274,7 +2285,7 @@ db_app::load("estilos.css, grid.style.css");
       sTituloMsgBoard,
       sHelpMsgBoard,
       oWindowAuxEmpenho.getContentContainer()
-      );
+    );
     oMsgBoardEmpenho.show();
     oGridItensEmpenhos = new DBGrid('ctnGridItensEmpenho');
     oGridItensEmpenhos.nameInstance = 'oGridItensEmpenhos';
@@ -2313,7 +2324,7 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Função que executa o ajax e preenche a grid na windowAux com os lançamentos encontrados
    */
-   function js_carregaItensEmpenho() {
+  function js_carregaItensEmpenho() {
 
     var oParam = new Object();
     oParam.exec = "getItensEmpenhosAindaNaoVinculados";
@@ -2322,11 +2333,11 @@ db_app::load("estilos.css, grid.style.css");
 
     js_divCarregando("Aguarde, buscando itens dos empenhos...", "msgBox");
     var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php",
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_preencheGridItensEmpenhos
-    });
+      {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: js_preencheGridItensEmpenhos
+      });
   }
 
   //Cria as funções em escopo global, para serem referenciadas em qualquer escopo
@@ -2335,7 +2346,7 @@ db_app::load("estilos.css, grid.style.css");
   /**
    * Função que preenche a grid com itens de empenhos
    */
-   function js_preencheGridItensEmpenhos(oAjax) {
+  function js_preencheGridItensEmpenhos(oAjax) {
 
 
     js_removeObj("msgBox");
@@ -2351,7 +2362,7 @@ db_app::load("estilos.css, grid.style.css");
      * Caso não exista item a ser inserido no contrato, esconde window
      * Caso exista itens a serem incluidos, mostra window e gera grid
      */
-     if (oRetorno.aItensEmpenhos == null) {
+    if (oRetorno.aItensEmpenhos == null) {
 
       oWindowAuxEmpenho.hide();
       js_mostrarTelaModificacaoItens();
@@ -2390,7 +2401,7 @@ db_app::load("estilos.css, grid.style.css");
    *  Verifica inicialmente o tipo de acordo com a finalidade de, em caso de empenho,
    *  com a finalidade de definir a necessidade de pesquisar itens de empenho ainda não vinculados
    */
-   function js_verificaTipoAcordo() {
+  function js_verificaTipoAcordo() {
 
     var oGet = js_urlToObject();
     var oParam = new Object();
@@ -2399,11 +2410,11 @@ db_app::load("estilos.css, grid.style.css");
 
     js_divCarregando("Aguarde, verificando Tipo de Acordo...", "msgBox");
     var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php",
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_finalizaVerificacaoTipoAcordo
-    });
+      {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: js_finalizaVerificacaoTipoAcordo
+      });
   }
 
   function js_finalizaVerificacaoTipoAcordo(oAjax) {
@@ -2419,7 +2430,7 @@ db_app::load("estilos.css, grid.style.css");
     /**
      * Se for Origem Licitacao, os botoes excluir e salvar da Dotacao devem estar desabilitados
      */
-     if (oRetorno.iTipoAcordo == 2) {
+    if (oRetorno.iTipoAcordo == 2) {
       desabilitaDotacao = true;
     }
     //Caso Tipo Empenho, verificar os itens ainda não vinculados ao contrato
@@ -2466,11 +2477,11 @@ db_app::load("estilos.css, grid.style.css");
 
     js_divCarregando("Aguarde, salvando vinculos com os itens configurados...", "msgBox");
     var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php",
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_finalizaVinculoItensEmpenho
-    });
+      {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: js_finalizaVinculoItensEmpenho
+      });
 
   }
   function js_finalizaVinculoItensEmpenho(oAjax) {
