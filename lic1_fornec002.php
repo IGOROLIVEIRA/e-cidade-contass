@@ -474,7 +474,8 @@ if (isset ($incluir) ) {
     $db_botao = true;
     $op = 1;
 }
-if ($l03_pctipocompratribunal == 102 || $l03_pctipocompratribunal ==103) {
+
+if ($l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103") {
     echo "<script>
      parent.document.formaba.db_cred.disabled=false;
     </script>";
