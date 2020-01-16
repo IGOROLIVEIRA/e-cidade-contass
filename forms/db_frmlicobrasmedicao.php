@@ -57,7 +57,12 @@ $cllicobrasmedicao->rotulo->label();
         </td>
         <td colspan="">
           <?
-          db_inputdata('obr03_dtlancamento',@$obr03_dtlancamento_dia,@$obr03_dtlancamento_mes,@$obr03_dtlancamento_ano,true,'text',$db_opcao,"")
+          if(!isset($obr03_dtlancamento)) {
+            $obr03_dtlancamento_dia=date('d',db_getsession("DB_datausu"));
+            $obr03_dtlancamento_mes=date('m',db_getsession("DB_datausu"));
+            $obr03_dtlancamento_ano=date('Y',db_getsession("DB_datausu"));
+          }
+          db_inputdata('obr03_dtlancamento',@$obr03_dtlancamento_dia,@$obr03_dtlancamento_mes,@$obr03_dtlancamento_ano,true,'text',$db_opcao);
           ?>
         </td>
         <td nowrap title="<?=@$Tobr03_nummedicao?>">
