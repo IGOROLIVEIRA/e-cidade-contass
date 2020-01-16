@@ -53,33 +53,21 @@ class Oc11331 extends AbstractMigration
 
                           -- INSERE db_syscampo
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_sequencial'	 		,'int8' ,'Cód. Sequencial'			,'', 'Cód. Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Cód. Sequencial');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_processo'	 		,'int8' ,'Processo Licitatório' ,'', 'Processo Licitatório'	 ,11	,false, false, false, 1, 'int8', 'Processo Licitatório');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_licitacao'	 		,'int8' ,'Processo Licitatório' ,'', 'Processo Licitatório'	 ,11	,false, false, false, 1, 'int8', 'Processo Licitatório');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_dtlancamento'		,'date' ,'Data Lançamento'		,'', 'Data Lançamento'		 ,16	,false, false, false, 0, 'date', 'Data Lançamento');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_numeroobra'  		,'int8' ,'Nº Obra'				,'', 'Nº Obra'				 ,16	,false, false, false, 1, 'int8', 'Nº Obra');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_linkobra'    		,'text' ,'Link da Obra'			,'', 'Link da Obra'			 ,200	,false, false, false, 0, 'text', 'Link da Obra');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_tiporesponsavel'	,'int8' ,'Tipo Responsável'		,'', 'Tipo Responsável'		 ,16	,false, false, false, 1, 'int8', 'Tipo Responsável');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_responsavel'		,'int8' ,'Responsável'			,'', 'Responsável'			 ,16	,false, false, false, 1, 'int8', 'Responsável');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_tiporegistro'		,'int8' ,'Tipo Registro'		,'', 'Tipo Registro'		 ,16	,false, false, false, 1, 'int8', 'Tipo Registro');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_numregistro'		,'text' ,'Numero Registro'		,'', 'Numero Registro'		 ,10	,false, false, false, 0, 'int8', 'Numero Registro');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_numartourrt'		,'int8' ,'Número da anotação de responsabilidade técnica ou registro de responsabilidade técnica.' ,'', 'Numero da ART ou RRT'	 ,16	,false, false, false, 1, 'int8', 'Numero da ART ou RRT');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_dtinicioatividades'	,'date' ,'Data Inicio das Ativ. do Eng na Obra'		,'', 'Data Inicio das Ativ. do Eng na Obra'		 ,16	,false, false, false, 0, 'date', 'Data Inicio das Ativ. do Eng na Obra');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_vinculoprofissional','int8' ,'Vinculo do Prof. com a Adm. Pública'	,'', 'Vinculo do Prof. com a Adm. Pública'		 ,16	,false, false, false, 1, 'int8', 'Vinculo do Prof. com a Adm. Pública');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_instit'				,'int8' ,'Instituição'	,'', 'Instituição'		 ,16	,false, false, false, 1, 'int8', 'Instituição');
 
                           -- INSERE db_sysarqcamp
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_sequencial')		 	, 1, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_processo')			 	, 2, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_modalidade')		 	, 3, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_dtlancamento')		 	, 4, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_numeroobra')		 	, 5, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_linkobra')			 	, 6, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_tiporesponsavel')	 	, 7, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_responsavel')		 	, 8, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_tiporegistro')		 	, 9, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_numregistro')		 	, 10, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_numartourrt')		 	, 11, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_dtinicioatividades')	, 12, 0);
-                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_vinculoprofissional')	, 13, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_sequencial')		 	    , 1, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_licitacao')			 	  , 2, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_dtlancamento')		 	  , 3, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_numeroobra')		 	    , 4, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_linkobra')		 	      , 5, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_dtinicioatividades')	, 6, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr01_instit')	 	          , 7, 0);
 
                           --DROP TABLE:
                           DROP TABLE IF EXISTS licobras CASCADE;
@@ -95,13 +83,7 @@ class Oc11331 extends AbstractMigration
                           obr01_dtlancamento		 date NOT NULL default null,
                           obr01_numeroobra		 int8 NOT NULL default 0,
                           obr01_linkobra			 text NOT NULL ,
-                          obr01_tiporesponsavel	 int8 NOT NULL default 0,
-                          obr01_responsavel		 int8 NOT NULL default 0,
-                          obr01_tiporegistro		 int8 NOT NULL default 0,
-                          obr01_numregistro		 text NOT NULL ,
-                          obr01_numartourrt		 int8 NOT NULL default 0,
                           obr01_dtinicioatividades date NOT NULL default null,
-                          obr01_vinculoprofissional int8 NOT NULL default 0,
                           obr01_instit			  int8 NOT NULL default 0);
 
 
@@ -119,6 +101,72 @@ class Oc11331 extends AbstractMigration
                           ALTER TABLE licobras ADD CONSTRAINT licobras_liclicita_fk
                           FOREIGN KEY (obr01_licitacao) REFERENCES liclicita (l20_codigo);
 
+                          --TABELAS E ESTRUTURA licobrasresponsaveis
+
+                          -- INSERE db_sysarquivo
+                          INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licobrasresponsaveis','cadastro de responsaveis pela obras','obr05','2019-12-21','cadastro de responsaveis pela obras',0,'f','f','f','f');
+
+                          -- INSERE db_sysarqmod
+                          INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((select codmod from db_sysmodulo where nomemod like '%Obras%'), (select max(codarq) from db_sysarquivo));
+
+                          -- INSERE db_syscampo
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_sequencial'	 		,'int8' ,'Cód. Sequencial'		,'', 'Cód. Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Cód. Sequencial');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_seqobra'	 		  ,'int8' ,'Nº Obra' 					  ,'', 'Nº Obra'	 			 	,11	,false, false, false, 1, 'int8', 'Nº Obra');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_responsavel'		,'int8' ,'Responsável'			  ,'', 'Responsável'			 ,16	,false, false, false, 1, 'int8', 'Responsável');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_tiporesponsavel','int8' ,'Tipo Responsável'		,'', 'Tipo Responsável'		 ,16	,false, false, false, 1, 'int8', 'Tipo Responsável');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_tiporegistro'		,'int8' ,'Tipo Registro'		,'', 'Tipo Registro'		 ,16	,false, false, false, 1, 'int8', 'Tipo Registro');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_numregistro'		,'text' ,'Numero Registro'		,'', 'Numero Registro'		 ,10	,false, false, false, 0, 'int8', 'Numero Registro');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_numartourrt'		,'int8' ,'Número da anotação de responsabilidade técnica ou registro de responsabilidade técnica.' ,'', 'Numero da ART ou RRT'	 ,16	,false, false, false, 1, 'int8', 'Numero da ART ou RRT');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_vinculoprofissional','int8' ,'Vinculo do Prof. com a Adm. Pública'	,'', 'Vinculo do Prof. com a Adm. Pública'		 ,16	,false, false, false, 1, 'int8', 'Vinculo do Prof. com a Adm. Pública');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_instit'		 		    ,'int8' ,'Instituição'				,'', 'Instituição'			 	,11	,false, false, false, 1, 'int8', 'Instituição');
+
+                          -- INSERE db_sysarqcamp
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_sequencial')		 	    , 1, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_seqobra')			 	    , 2, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_responsavel')		 	  , 3, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_tiporesponsavel')		, 4, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_tiporegistro')		 	  , 5, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_numregistro')			 	, 6, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_numartourrt')	 	    , 7, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_vinculoprofissional'), 8, 0);
+                          INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr05_instit')		 	        , 9, 0);
+
+                          --DROP TABLE:
+                          DROP TABLE IF EXISTS licobrasresponsaveis CASCADE;
+                          --Criando drop sequences
+
+
+                          -- TABELAS E ESTRUTURA
+
+                          -- Módulo: Obras
+                          CREATE TABLE licobrasresponsaveis(
+                          obr05_sequencial		      int8 NOT NULL default 0,
+                          obr05_seqobra 			      int8 NOT NULL default 0,
+                          obr05_responsavel		      int8 NOT NULL default 0,
+                          obr05_tiporesponsavel	    int8 NOT NULL default 0,
+                          obr05_tiporegistro		    int8 NOT NULL default 0,
+                          obr05_numregistro		      text NOT NULL ,
+                          obr05_numartourrt		      int8 NOT NULL default 0,
+                          obr05_vinculoprofissional int8 NOT NULL default 0,
+                          obr05_instit			        int8 NOT NULL default 0);
+
+
+                          -- Criando  sequences
+                          CREATE SEQUENCE licobrasresponsaveis_obr05_sequencial_seq
+                          INCREMENT 1
+                          MINVALUE 1
+                          MAXVALUE 9223372036854775807
+                          START 1
+                          CACHE 1;
+
+                          -- CHAVE ESTRANGEIRA
+                          ALTER TABLE licobrasresponsaveis ADD PRIMARY KEY (obr05_sequencial);
+
+                          ALTER TABLE licobrasresponsaveis ADD CONSTRAINT licobrasresponsaveis_licobras_fk
+                          FOREIGN KEY (obr05_seqobra) REFERENCES licobras (obr01_sequencial);
+
+                          ALTER TABLE licobrasresponsaveis ADD CONSTRAINT licobrasresponsaveis_cgm_fk
+                          FOREIGN KEY (obr05_responsavel) REFERENCES cgm (z01_numcgm);
                           -- MENUS
 
                           --inserindo menu procedimentos
