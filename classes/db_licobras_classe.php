@@ -329,7 +329,8 @@ class cl_licobras {
       }
     }
     $sql .= " where ";
-    $sql .= "obr01_sequencial = '$obr01_sequencial'";     $result = db_query($sql);
+    $sql .= "obr01_sequencial = $obr01_sequencial";
+    $result = db_query($sql);//die($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
       $this->erro_sql   = "licobras nao Alterado. Alteracao Abortada.\\n";

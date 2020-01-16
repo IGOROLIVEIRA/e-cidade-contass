@@ -66,7 +66,7 @@ if(isset($uploadfile)) {
   $cllicobrasanexo = new cl_licobrasanexo();
   $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
   $cllicobrasanexo->obr04_codimagem       = $novo_nome;
-  $cllicobrasanexo->obr04_legenda         = "obr04_legenda";
+  $cllicobrasanexo->obr04_legenda         = "foto sem legenda";
   $cllicobrasanexo->incluir();
 
   // Faz um upload do arquivo para o local especificado

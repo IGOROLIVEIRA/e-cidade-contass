@@ -27,7 +27,7 @@ if(isset($alterar)){
 
     }
 
-    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra",null,"obr01_numeroobra = $obr01_numeroobra"));
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra",null,"obr01_numeroobra = $obr01_numeroobra and obr01_sequencial != $obr01_sequencial"));
     if(pg_num_rows($resultobras) > 0){
       throw new Exception("Usuário: Numero da Obra ja utilizado !");
     }
@@ -35,7 +35,7 @@ if(isset($alterar)){
 
     db_inicio_transacao();
     $db_opcao = 2;
-    $cllicobras->alterar($oid);
+    $cllicobras->alterar($obr01_sequencial);
 
     if($cllicobras->erro_status == 0){
       $erro = $cllicobras->erro_msg;

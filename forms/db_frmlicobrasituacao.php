@@ -58,7 +58,12 @@ $cllicobrasituacao->rotulo->label();
           </td>
           <td>
             <?
-            db_inputdata('obr02_dtlancamento',@$obr02_dtlancamento_dia,@$obr02_dtlancamento_mes,@$obr02_dtlancamento_ano,true,'text',$db_opcao,"")
+            if(!isset($obr02_dtlancamento)) {
+              $obr02_dtlancamento_dia=date('d',db_getsession("DB_datausu"));
+              $obr02_dtlancamento_mes=date('m',db_getsession("DB_datausu"));
+              $obr02_dtlancamento_ano=date('Y',db_getsession("DB_datausu"));
+            }
+            db_inputdata('obr02_dtlancamento',@$obr02_dtlancamento_dia,@$obr02_dtlancamento_mes,@$obr02_dtlancamento_ano,true,'text',$db_opcao);
             ?>
           </td>
         </tr>
