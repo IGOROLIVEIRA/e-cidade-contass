@@ -37,13 +37,7 @@ if(isset($incluir)){
     $cllicobras->obr01_dtlancamento        = $obr01_dtlancamento;
     $cllicobras->obr01_numeroobra          = $obr01_numeroobra;
     $cllicobras->obr01_linkobra            = $obr01_linkobra;
-    $cllicobras->obr01_tiporesponsavel     = $obr01_tiporesponsavel;
-    $cllicobras->obr01_responsavel         = $obr01_responsavel;
-    $cllicobras->obr01_tiporegistro        = $obr01_tiporegistro;
-    $cllicobras->obr01_numregistro         = $obr01_numregistro;
-    $cllicobras->obr01_numartourrt         = $obr01_numartourrt;
     $cllicobras->obr01_dtinicioatividades  = $obr01_dtinicioatividades;
-    $cllicobras->obr01_vinculoprofissional = $obr01_vinculoprofissional;
     $cllicobras->obr01_instit              = db_getsession('DB_instit');
     $cllicobras->incluir();
 
@@ -54,6 +48,7 @@ if(isset($incluir)){
     }
 
     db_fim_transacao();
+    db_redireciona("obr1_licobras002.php?&chavepesquisa=$obr01_licitacao");
 
   }catch (Exception $eErro){
     db_msgbox($eErro->getMessage());
@@ -68,6 +63,12 @@ if(isset($incluir)){
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <script type="text/javascript" src="wz_tooltip.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
+  <?php
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
+  ?>
 </head>
 <style>
   #l20_objeto{
@@ -83,6 +84,15 @@ if(isset($incluir)){
   }
   #obr01_tiporegistro{
     width: 40%;
+  }
+  #col1{
+    width: 24%;
+  }
+  #col2{
+    width: 96%;
+  }
+  #col3{
+    width: 15%
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

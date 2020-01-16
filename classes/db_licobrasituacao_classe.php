@@ -466,6 +466,34 @@ class cl_licobrasituacao {
           }
         }
       }
+
+      if (trim($this->obr02_dtretomada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"] !="") ) {
+        $sql  .= $virgula." obr02_dtretomada = '$this->obr02_dtretomada' ";
+        $virgula = ",";
+        if (trim($this->obr02_dtretomada) == null ) {
+          $this->erro_sql = " Campo Data Retomada não informado.";
+          $this->erro_campo = "obr02_dtretomada_dia";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+      }     else{
+        if (isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"])) {
+          $sql  .= $virgula." obr02_dtretomada = null ";
+          $virgula = ",";
+          if (trim($this->obr02_dtretomada) == null ) {
+            $this->erro_sql = " Campo Data Retomada não informado.";
+            $this->erro_campo = "obr02_dtretomada_dia";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }
+      }
     }
     if (trim($this->obr02_dtsituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtsituacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtsituacao_dia"] !="") ) {
       $sql  .= $virgula." obr02_dtsituacao = '$this->obr02_dtsituacao' ";
@@ -550,33 +578,6 @@ class cl_licobrasituacao {
       }
     }
 
-    if (trim($this->obr02_dtretomada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"] !="") ) {
-      $sql  .= $virgula." obr02_dtretomada = '$this->obr02_dtretomada' ";
-      $virgula = ",";
-      if (trim($this->obr02_dtretomada) == null ) {
-        $this->erro_sql = " Campo Data Retomada não informado.";
-        $this->erro_campo = "obr02_dtretomada_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }     else{
-      if (isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtretomada_dia"])) {
-        $sql  .= $virgula." obr02_dtretomada = null ";
-        $virgula = ",";
-        if (trim($this->obr02_dtretomada) == null ) {
-          $this->erro_sql = " Campo Data Retomada não informado.";
-          $this->erro_campo = "obr02_dtretomada_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-      }
-    }
     if (trim($this->obr02_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_instit"])) {
       $sql  .= $virgula." obr02_instit = $this->obr02_instit ";
       $virgula = ",";

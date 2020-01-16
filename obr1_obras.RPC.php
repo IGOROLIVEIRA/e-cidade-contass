@@ -11,6 +11,7 @@ require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_licobrasmedicao_classe.php");
 require_once("classes/db_licobrasanexo_classe.php");
+require_once("classes/db_licobrasresponsaveis_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -22,7 +23,6 @@ $oErro             = new stdClass();
 
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
-$oRetorno->message = 1;
 
 switch($oParam->exec) {
 
@@ -73,6 +73,100 @@ switch($oParam->exec) {
     db_fieldsmemory($ultimoregistro,0);
     $cllicobrasanexos->obr04_legenda = $oParam->legenda;
     $cllicobrasanexos->alterar($obr04_sequencial);
+
+    break;
+
+  case 'SalvarResp':
+
+    $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
+//echo "<pre>";
+//print_r($oParam);
+//exit;
+    $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query($oParam->iCodigo));
+//db_criatabela($result);exit;
+    if(pg_num_rows($result) > 0 ){
+      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+      $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+      $cllicobrasresponsaveis->alterar($oParam->iCodigo);
+
+      if ($cllicobrasresponsaveis->erro_status == 0) {
+        $erro = $cllicobrasresponsaveis->erro_msg;
+        $oRetorno->message = urlencode($erro);
+      } else {
+        $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
+      }
+
+    }else {
+
+      $cllicobrasresponsaveis->obr05_seqobra = $oParam->obr05_seqobra;
+      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+      $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+      $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
+      $cllicobrasresponsaveis->incluir();
+
+      if ($cllicobrasresponsaveis->erro_status == 0) {
+        $erro = $cllicobrasresponsaveis->erro_msg;
+        $oRetorno->message = urlencode($erro);
+      } else {
+        $oRetorno->message = urlencode("Responsável salvo com sucesso.");
+      }
+    }
+    break;
+
+  case 'getResponsaveis':
+    $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
+
+    $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"obr05_sequencial,obr05_tiporesponsavel,z01_nome",null,"obr05_seqobra = $oParam->obr05_seqobra"));
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsResponsaveis); $iCont++) {
+      $oDadosResponsavel = db_utils::fieldsMemory($rsResponsaveis, $iCont);
+
+      $oResponsaveis                        = new stdClass();
+      $oResponsaveis->iCodigo               = $oDadosResponsavel->obr05_sequencial;
+
+      if($oDadosResponsavel->obr05_tiporesponsavel == "1"){
+        $oResponsaveis->iTiporesponsavel = urlencode("Fiscalização");
+      }elseif ($oDadosResponsavel->obr05_tiporesponsavel == "2"){
+        $oResponsaveis->iTiporesponsavel = urlencode("Execução");
+      }elseif ($oDadosResponsavel->obr05_tiporesponsavel == "3"){
+        $oResponsaveis->iTiporesponsavel = urlencode("Projetista");
+      }else{
+        $oResponsaveis->iTiporesponsavel = urlencode("Selecione");
+      }
+      $oResponsaveis->sNome                 = urlencode($oDadosResponsavel->z01_nome);
+      $oRetorno->dados[] = $oResponsaveis;
+    }
+    break;
+
+  case 'excluirResp':
+    $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
+    $cllicobrasresponsaveis->excluir($oParam->iCodigo);
+
+    if($cllicobrasresponsaveis->erro_status == 0){
+      $erro = $cllicobrasresponsaveis->erro_msg;
+      $oRetorno->message = urlencode($erro);
+    }else{
+      $oRetorno->message = urlencode("Responsável Excluido com sucesso.");
+    }
+    break;
+
+  case 'getDadosResponsavel':
+    $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
+    $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,"obr05_sequencial = $oParam->iCodigo"));
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsResponsaveis); $iCont++) {
+      $oDadosResponsavel = db_utils::fieldsMemory($rsResponsaveis, $iCont);
+
+      $oRetorno->dados[] = $oDadosResponsavel;
+    }
 
     break;
 }

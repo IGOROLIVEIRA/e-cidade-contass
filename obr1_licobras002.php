@@ -61,6 +61,12 @@ if(isset($alterar)){
   <meta http-equiv="Expires" CONTENT="0">
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
+  <?php
+  db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js");
+  db_app::load("widgets/dbtextField.widget.js, dbViewCadEndereco.classe.js");
+  db_app::load("dbmessageBoard.widget.js, dbautocomplete.widget.js,dbcomboBox.widget.js, datagrid.widget.js");
+  db_app::load("estilos.css,grid.style.css");
+  ?>
 </head>
 <style>
   #l20_objeto{
@@ -76,6 +82,15 @@ if(isset($alterar)){
   }
   #obr01_tiporegistro{
     width: 40%;
+  }
+  #col1{
+    width: 24%;
+  }
+  #col2{
+    width: 96%;
+  }
+  #col3{
+    width: 15%
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

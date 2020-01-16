@@ -49,8 +49,7 @@ $cllicobras->rotulo->label();
           </td>
         </tr>
       </table>
-      <hr/>
-      <table>
+      <table style="border-top: 1px solid #808080; margin-top: 5px;">
         <tr>
           <td>
             <strong>Data Lançamento:</strong>
@@ -82,52 +81,6 @@ $cllicobras->rotulo->label();
           </td>
         </tr>
         <tr>
-          <td>
-            <strong>Tipo Responsável: </strong>
-          </td>
-          <td>
-            <?
-            $aValores = array(0 => 'Selecione',
-              1 => 'Fiscalização',
-              2 => 'Execução',
-              3 => 'Projetista');
-            db_select('obr01_tiporesponsavel', $aValores, true, $db_opcao," onchange=''");
-
-            db_ancora('Responsável:',"js_pesquisa_responsavel(true)",$db_opcao);
-            ?>
-          </td>
-          <td>
-            <?
-            db_input('obr01_responsavel',10,$Iobr01_responsavel,true,'text',$db_opcao,"onchange='js_pesquisa_responsavel(false)'");
-            db_input('z01_nome',40,'',true,'text',3,"")
-            ?>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <strong>Tipo Registro:</strong>
-          </td>
-          <td>
-            <?
-            $aValoresreg = array(0 => 'Selecione',
-              1 => 'CREA',
-              2 => 'CAU');
-            db_select('obr01_tiporegistro', $aValoresreg, true, $db_opcao," onchange=''");
-            ?>
-            <strong>Nº Registro:</strong>
-          </td>
-          <td>
-            <?
-            db_input('obr01_numregistro',10,$Iobr01_numregistro,true,'text',$db_opcao,"");
-            ?>
-
-            <strong>Numero da ART ou RRT:</strong>
-            <?
-            db_input('obr01_numartourrt',10,$Iobr01_numartourrt,true,'text',$db_opcao,"onmouseover='myfuncionmsg()'");
-            ?>
-          </td>
-        </tr>
-        <tr>
           <td nowrap title="<?=@$Tobr01_dtinicioatividades?>">
             <?=@$Lobr01_dtinicioatividades?>
           </td>
@@ -137,25 +90,89 @@ $cllicobras->rotulo->label();
             ?>
           </td>
         </tr>
-        <tr>
-          <td nowrap title="<?=@$Tobr01_vinculoprofissional?>">
-            <?=@$Lobr01_vinculoprofissional?>
-          </td>
-          <td>
-            <?
-            $aValoresvinculo = array(0 => 'Selecione',
-              1 => 'Profissional da empresa executora',
-              2 => 'Servidor(a) Efetivo(a)',
-              3 => 'Contratado(a) da administração');
-            db_select('obr01_vinculoprofissional', $aValoresvinculo, true, $db_opcao," onchange=''");
-            ?>
-          </td>
-        </tr>
       </table>
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+      <fieldset style="margin-top: 10px; margin-bottom: 10px;">
+        <legend>Responsáveis</legend>
+        <table style="margin-bottom: 10px;">
+          <tr style="display: none">
+            <?
+            db_input('obr05_sequencial',10,$Iobr05_sequencial,true,'text',3,"");
+            ?>
+          </tr>
+          <tr>
+            <td>
+              <strong>Tipo Responsável: </strong>
+            </td>
+            <td>
+              <?
+              $aValores = array(0 => 'Selecione',
+                1 => 'Fiscalização',
+                2 => 'Execução',
+                3 => 'Projetista');
+              db_select('obr05_tiporesponsavel', $aValores, true, $db_opcao," onchange=''");
+              ?>
+              <strong>Tipo Registro:</strong>
+              <?
+              $aValoresreg = array(0 => 'Selecione',
+                1 => 'CREA',
+                2 => 'CAU');
+              db_select('obr05_tiporegistro', $aValoresreg, true, $db_opcao," onchange=''");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <?
+              db_ancora('Responsável:',"js_pesquisa_responsavel(true)",$db_opcao);
+              ?>
+            </td>
+            <td>
+              <?
+              db_input('obr05_responsavel',10,$Iobr05_responsavel,true,'text',$db_opcao,"onchange='js_pesquisa_responsavel(false)'");
+              db_input('z01_nome',40,'',true,'text',3,"")
+              ?>
+            </td>
+          </tr>
+          <tr>
+
+            <td>
+
+              <strong>Nº Registro:</strong>
+            </td>
+            <td>
+              <?
+              db_input('obr05_numregistro',10,$Iobr05_numregistro,true,'text',$db_opcao,"");
+              ?>
+
+              <strong>Numero da ART ou RRT:</strong>
+              <?
+              db_input('obr05_numartourrt',10,$Iobr05_numartourrt,true,'text',$db_opcao,"onmouseover='myfuncionmsg()'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td nowrap title="<?=@$Tobr05_vinculoprofissional?>">
+              <strong>Vinculo do Profissional com a administração Pública:</strong>
+            </td>
+            <td>
+              <?
+              $aValoresvinculo = array(0 => 'Selecione',
+                1 => 'Profissional da empresa executora',
+                2 => 'Servidor(a) Efetivo(a)',
+                3 => 'Contratado(a) da administração');
+                db_select('obr05_vinculoprofissional', $aValoresvinculo, true, $db_opcao," onchange=''");
+              ?>
+            </td>
+          </tr>
+        </table>
+        <input name="inserir" type="button" id="Inserir Responsável" value="Inserir Responsável" onclick="js_salvarResponsaveis()">
+        <div id='ctnDbGridResponsaveis' style="margin-top: 10px;">
+        </div>
+      </fieldset>
     </fieldset>
   </center>
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
 
@@ -171,7 +188,16 @@ $cllicobras->rotulo->label();
     ?>
   }
 
+  oGridResponsaveis     = new DBGrid('gridResponsavel');
+  oGridResponsaveis.nameInstance = "oGridResponsaveis";
+  oGridResponsaveis.setHeight(200);
+  oGridResponsaveis.setCellAlign(new Array("center","left","center"));
+  oGridResponsaveis.setHeader(new Array("Tipo de Responsável","Nome", "Ação"));
+  oGridResponsaveis.show($('ctnDbGridResponsaveis'));
+
+
   js_carregarlic();
+  js_CarregaResponsaveis();
 
   /**
    * funcao para retornar licitacao
@@ -232,15 +258,15 @@ $cllicobras->rotulo->label();
         'Pesquisa Responsáveis',true);
     }else{
 
-      if(document.form1.obr01_responsavel.value != ''){
+      if(document.form1.obr05_responsavel.value != ''){
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_cgm',
           'func_nome.php?pesquisa_chave='+
-          document.form1.obr01_responsavel.value+'&funcao_js=parent.js_preencheResponsavel2&filtro=1',
+          document.form1.obr05_responsavel.value+'&funcao_js=parent.js_preencheResponsavel2&filtro=1',
           'Pesquisa',false);
       }else{
-        document.form1.obr01_responsavel.value = '';
+        document.form1.obr05_responsavel.value = '';
       }
     }
   }
@@ -249,7 +275,7 @@ $cllicobras->rotulo->label();
    */
   function js_preencheResponsavel(codigo,nome)
   {
-    document.form1.obr01_responsavel.value = codigo;
+    document.form1.obr05_responsavel.value = codigo;
     document.form1.z01_nome.value = nome;
     db_iframe_cgm.hide();
   }
@@ -269,4 +295,141 @@ $cllicobras->rotulo->label();
       js_pesquisa_responsavel(false);
     }
   }
+
+  function js_salvarResponsaveis(){
+    var oParam                        = new Object();
+    oParam.exec                       = 'SalvarResp';
+    oParam.iCodigo                    = $F('obr05_sequencial');
+    oParam.obr05_seqobra              = $F('obr01_sequencial');
+    oParam.obr05_responsavel          = $F('obr05_responsavel');
+    oParam.obr05_tiporesponsavel      = $F('obr05_tiporesponsavel');
+    oParam.obr05_tiporegistro         = $F('obr05_tiporegistro');
+    oParam.obr05_numregistro          = $F('obr05_numregistro');
+    oParam.obr05_numartourrt          = $F('obr05_numartourrt');
+    oParam.obr05_vinculoprofissional  = $F('obr05_vinculoprofissional');
+    js_divCarregando('Aguarde... Salvando Responsável','msgbox');
+    var oAjax         = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        asynchronous:false,
+        method: 'post',
+        onComplete : js_oRetornoResponsaveis
+      });
+  }
+
+  function js_oRetornoResponsaveis(oAjax) {
+
+    var oRetorno = eval('('+oAjax.responseText+")");
+    if(oRetorno.status == 1){
+      alert(oRetorno.message.urlDecode());
+    }else{
+      alert(oRetorno.message.urlDecode());
+    }
+    js_removeObj("msgbox");
+
+    document.form1.obr05_sequencial.value = '';
+    document.form1.obr05_responsavel.value = '';
+    document.form1.obr05_tiporesponsavel.value = 0;
+    document.form1.z01_nome.value = '';
+    document.form1.obr05_tiporegistro.value = 0;
+    document.form1.obr05_numregistro.value = '';
+    document.form1.obr05_numartourrt.value = '';
+    document.form1.obr05_vinculoprofissional.value = 0;
+
+    js_CarregaResponsaveis();
+  }
+
+  function js_CarregaResponsaveis(){
+    var oParam        = new Object();
+    oParam.exec       = 'getResponsaveis';
+    oParam.obr05_seqobra = $F('obr01_sequencial');
+    js_divCarregando('Aguarde... Carregando Responsável','msgbox');
+    var oAjax         = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        asynchronous:false,
+        method: 'post',
+        onComplete : js_oResponsaveis
+      });
+  }
+
+  function js_oResponsaveis(oAjax) {
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+    oGridResponsaveis.clearAll(true);
+
+    if (oRetorno.dados.length == 0) {
+      return false;
+    }
+    oRetorno.dados.each(function (oResponsavel, iSeq) {
+      var aLinha = new Array();
+      aLinha[0]  = oResponsavel.iTiporesponsavel.urlDecode();
+      aLinha[1]  = oResponsavel.sNome.urlDecode();
+      aLinha[2]  = '<input type="button" value="A" onclick="js_alterar('+oResponsavel.iCodigo+')">    <input type="button" value="E" onclick="js_excluir('+oResponsavel.iCodigo+')">';
+      oGridResponsaveis.addRow(aLinha);
+    });
+    oGridResponsaveis.renderRows();
+  }
+
+  function js_alterar(iCodigoResp) {
+    var oParam        = new Object();
+    oParam.exec       = 'getDadosResponsavel';
+    oParam.iCodigo    = iCodigoResp;
+    js_divCarregando('Aguarde... Carregando Responsável','msgbox');
+    var oAjax         = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        asynchronous:false,
+        method: 'post',
+        onComplete : carregarDadosResp
+      });
+  }
+
+  function carregarDadosResp(oAjax) {
+    var oRetorno = eval('('+oAjax.responseText+")");
+
+    js_removeObj("msgbox");
+    document.form1.obr05_sequencial.value = oRetorno.dados[0].obr05_sequencial;
+    document.form1.obr05_responsavel.value = oRetorno.dados[0].obr05_responsavel;
+    document.form1.obr05_tiporesponsavel.value = oRetorno.dados[0].obr05_tiporesponsavel;
+    document.form1.z01_nome.value = oRetorno.dados[0].z01_nome;
+    document.form1.obr05_tiporegistro.value = oRetorno.dados[0].obr05_tiporegistro;
+    document.form1.obr05_numregistro.value = oRetorno.dados[0].obr05_numregistro;
+    document.form1.obr05_numartourrt.value = oRetorno.dados[0].obr05_numartourrt;
+    document.form1.obr05_vinculoprofissional.value = oRetorno.dados[0].obr05_vinculoprofissional;
+
+  }
+
+  function js_excluir(iCodigoResp) {
+
+    if (!confirm('Deseja excluir esse Responsável?')) {
+      return false;
+    }
+
+    var oParam        = new Object();
+    oParam.exec       = 'excluirResp';
+    oParam.iCodigo = iCodigoResp;
+    js_divCarregando('Aguarde... Excluindo Responsável','msgbox');
+    var oAjax         = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { parameters: 'json='+Object.toJSON(oParam),
+        asynchronous:false,
+        method: 'post',
+        onComplete : js_respospostaExclusao
+      });
+  }
+
+  function js_respospostaExclusao(oAjax) {
+    var oRetorno = eval('('+oAjax.responseText+")");
+
+    if(oRetorno.status == 1){
+      alert(oRetorno.message.urlDecode());
+    }else{
+      alert(oRetorno.message.urlDecode());
+    }
+    js_removeObj("msgbox");
+
+    js_CarregaResponsaveis()
+  }
+
 </script>
