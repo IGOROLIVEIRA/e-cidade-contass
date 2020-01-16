@@ -141,9 +141,13 @@ $clrotulo->label("c61_reduz");
 
            $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
            $sql     = $clconplano->sql_query_reduz("",$campos,null, "c61_reduz as db_c61_reduz,c60_estrut as db_c60_estrut","c60_estrut", $sWhere);
-        }else{
-
-           $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
+        }
+        else if ($filtroCodsis != null && $filtroCodsis != ""){
+          $sWhere .= " and c60_codsis = $filtroCodsis and c60_anousu=".db_getsession("DB_anousu");
+          $sql     = $clconplano->sql_query("",null,$campos,"c60_estrut", $sWhere);
+        }
+        else{
+          $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
            $sql     = $clconplano->sql_query("",null,$campos,"c60_estrut", $sWhere);
         }
         db_lovrot($sql,15,"()","",$funcao_js);

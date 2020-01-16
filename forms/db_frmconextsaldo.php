@@ -112,7 +112,7 @@ if($ces01_reduz) {
 <script>
 function js_pesquisaces01_reduz(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c61_reduz|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?filtroCodsis=7&funcao_js=parent.js_mostraconplano1|c60_codcon|c61_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.ces01_reduz.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.ces01_reduz.value+'&reduz=true&funcao_js=parent.js_mostraconplano','Pesquisa',false);
