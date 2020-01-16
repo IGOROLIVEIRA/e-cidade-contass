@@ -1,10 +1,9 @@
 <?php
 /**
  *
- * @author I
- * @revision $Author: dbrobson $
- * @version $Revision: 1.10 $
+ * @author Victor Felipe
  */
+
 require("libs/db_stdlib.php");
 require("libs/db_utils.php");
 require("libs/db_conecta.php");
@@ -104,11 +103,7 @@ $clrotulo->label("o15_codigo");
 </html>
 <? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 <script type="text/javascript">
-    function isEncerramento(){
-        $("Balancete").value = 'Balancete';
-        if($("MesReferencia").value == 13)
-            $("Balancete").value = 'BalanceteEncerramento';
-    }
+
 function js_processar() {
 
   var aArquivosSelecionados = new Array();
@@ -166,16 +161,16 @@ function js_retornoProcessamento(oAjax) {
 	      }
 	    }
 
-	    $('retorno').innerHTML = sRetorno;
-        var sCalculos = "<hr>";
-        for (var i = 0; i < oRetorno.calculos.length; i++) {
-
-            with(oRetorno.calculos[i]){
-                sCalculos += "<h3>Resultado dos cálculos do encerramento</h3><br>"+i+1+". "+mensagem+"<br> <strong>Detalhes:</strong> "+calculo+"<br><h3>Regras:</h3><br>"+regras+"<br>";
-            }
-
-        }
-        $('debug').innerHTML = sCalculos;
+	    // $('retorno').innerHTML = sRetorno;
+      //   var sCalculos = "<hr>";
+      //   for (var i = 0; i < oRetorno.calculos.length; i++) {
+      //
+      //       with(oRetorno.calculos[i]){
+      //           sCalculos += "<h3>Resultado dos cálculos do encerramento</h3><br>"+i+1+". "+mensagem+"<br> <strong>Detalhes:</strong> "+calculo+"<br><h3>Regras:</h3><br>"+regras+"<br>";
+      //       }
+      //
+      //   }
+      //   $('debug').innerHTML = sCalculos;
 	  } else {
 
 	    $('retorno').innerHTML = '';

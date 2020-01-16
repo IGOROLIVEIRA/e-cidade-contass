@@ -845,6 +845,8 @@ case "processarBalancete" :
       WHERE codigo = ".db_getsession("DB_instit");
 
       $rsOrgao = db_query($sSql);
+
+
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
 
       /*
@@ -863,6 +865,10 @@ case "processarBalancete" :
        */
       $aArrayArquivos = array();
       $sDataFinal = $oParam->diaReferencia;
+
+//      Anexar arquivos...
+//      $sSql  = "SELECT * FROM editaldocumentos";
+//      $rsAnexos = db_query($sSql);
 
       foreach ($oParam->arquivos as $sArquivo) {
 
@@ -906,9 +912,7 @@ case "processarBalancete" :
       $aArrayArquivos[] = $oArquivoZip;
 
       $oRetorno->itens  = $aArrayArquivos;
-//      if($bEncerramento)
-//        $oRetorno->calculos = getCalculoEncerramento();
-      // var_dump($oRetorno);
+
     }
 
 
