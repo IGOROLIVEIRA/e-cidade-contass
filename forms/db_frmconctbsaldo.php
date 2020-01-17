@@ -120,7 +120,7 @@ function js_pesquisaces02_reduz(mostra){
   }
 }
 function js_mostraconplano(chave,erro){
-  document.form1.c61_reduz.value = chave;
+  document.form1.descricao.value = chave;
   if(erro==true){
     document.form1.ces02_reduz.focus();
     document.form1.ces02_reduz.value = '';
