@@ -843,7 +843,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             // document.getElementById("l20_dtpubratificacao").disabled=false;
             document.getElementById("l20_justificativa").disabled=false;
             document.getElementById("l20_razao").disabled=false;
-            // document.getElementById("l20_tipoprocesso").disabled=false;
+            document.getElementById("l20_tipoprocesso").disabled=false;
             //document.getElementById("l20_dtpubratificacao").value='';
 
             /*Demandas sicom 2016*/
@@ -890,7 +890,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             // document.getElementById("l20_dtpubratificacao").disabled=true;
             document.getElementById("l20_justificativa").disabled=true;
             document.getElementById("l20_razao").disabled=true;
-            // document.getElementById("l20_tipoprocesso").disabled=true;
+            document.getElementById("l20_tipoprocesso").disabled=true;
             //document.getElementById("l20_dtpubratificacao").value='';
 
             /*document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';)*/
@@ -952,7 +952,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     // document.getElementById("l20_dtpubratificacao").disabled=true;
     document.getElementById("l20_justificativa").disabled=true;
     document.getElementById("l20_razao").disabled=true;
-    // document.getElementById("l20_tipoprocesso").disabled=true;
+    document.getElementById("l20_tipoprocesso").disabled=true;
     //document.getElementById("l20_dtpubratificacao").value='';
 
     /*para habiliatar o campo caso seja inex*/
@@ -964,7 +964,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     //     document.getElementById("l20_dtpubratificacao").disabled=false;
         document.getElementById("l20_justificativa").disabled=false;
         document.getElementById("l20_razao").disabled=false;
-    //     document.getElementById("l20_tipoprocesso").disabled=false;
+        document.getElementById("l20_tipoprocesso").disabled=false;
     //     document.getElementById("l20_dtpubratificacao").value='';
     //
     //     document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';

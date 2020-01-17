@@ -42,7 +42,7 @@ class Oc8339tbsaldocred extends AbstractMigration
               CONSTRAINT credenciamentosaldo_lic_pk FOREIGN KEY (l213_licitacao)
                   REFERENCES licitacao.liclicita (l20_codigo)
             );
-            
+
             CREATE SEQUENCE credenciamentosaldo_l213_sequencial_seq
             INCREMENT 1
             MINVALUE 1
@@ -50,6 +50,7 @@ class Oc8339tbsaldocred extends AbstractMigration
             START 1
             CACHE 1;
         ";
+        $this->execute($sqltable);
     }
 
 }

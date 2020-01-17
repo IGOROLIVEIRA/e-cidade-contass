@@ -474,6 +474,11 @@ if (isset ($incluir) ) {
     $db_botao = true;
     $op = 1;
 }
+$l20_codigo = $chavepesquisa;
+$result = $clliclicita->sql_record($clliclicita->sql_query_pco($chavepesquisa));
+if ($result != false && $clliclicita->numrows > 0) {
+  db_fieldsmemory($result, 0);
+}
 
 if ($l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103") {
     echo "<script>

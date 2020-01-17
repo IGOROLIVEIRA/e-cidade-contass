@@ -1717,6 +1717,12 @@ db_app::load("estilos.css, grid.style.css");
         }
 
         if(Number(oDadosItens.qtdDisponivel) == 0){
+          alert('Não e possivel salvar itens com Quantidade Disponivel 0. Item codigo:'+oDadosItens.codigomaterial);
+          lErro = true;
+          throw $break;
+        }
+
+        if(Number(oDadosItens.quantidade) == 0){
           alert('Não e possivel salvar itens com quantidade 0. Item codigo:'+oDadosItens.codigomaterial);
           lErro = true;
           throw $break;
