@@ -275,7 +275,9 @@ $cliframe_seleciona = new cl_iframe_seleciona;
             alert('Credenciamento salvo com sucesso !');
             document.getElementById("l205_fornecedor").selectedIndex = response.sequecialforne + 1;
             document.getElementById("l205_fornecedordescr").selectedIndex = response.sequecialforne + 1;
-            document.reload();
+
+            BuscarCredenciamento(document.getElementById("l205_fornecedor").value);
+            getCredenciamento()
         }
     }
 
