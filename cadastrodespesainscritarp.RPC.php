@@ -56,20 +56,20 @@ try{
 
         case "getSicom":
 
-            $resultctb20 = $clctb->sql_record($clctb->sql_query(null,"si96_vlsaldoinicialfonte,si96_codfontrecursos",null,"si96_mes = 12 and si96_vlsaldoinicialfonte != 0 and si96_instit = {$instit}"));
+            $resultctb20 = $clctb->sql_record($clctb->sql_query(null,"si96_vlsaldofinalfonte,si96_codfontrecursos",null,"si96_mes = 12 and si96_vlsaldofinalfonte != 0 and si96_instit = {$instit}"));
             $vlrdiscaixabruta = array();
             for($i = 0; $i < pg_num_rows($resultctb20); $i++){
                 $octb20 = db_utils::fieldsMemory($resultctb20,$i);
 
                 $Hash = $octb20->si96_codfontrecursos;
-                $vlsaldoinicialfonte = new stdClass();
+                $vlsaldofinalfonte = new stdClass();
 
                 if(!$vlrdiscaixabruta[$Hash]){
-                    $vlsaldoinicialfonte->valor += $octb20->si96_vlsaldoinicialfonte;
-                    $vlrdiscaixabruta[$Hash] = $vlsaldoinicialfonte;
+                    $vlsaldofinalfonte->valor += $octb20->si96_vlsaldofinalfonte;
+                    $vlrdiscaixabruta[$Hash] = $vlsaldofinalfonte;
                 }else{
-                    $vlsaldoinicialfonte = $vlrdiscaixabruta[$Hash];
-                    $vlsaldoinicialfonte->valor += $octb20->si96_vlsaldoinicialfonte;
+                    $vlsaldofinalfonte = $vlrdiscaixabruta[$Hash];
+                    $vlsaldofinalfonte->valor += $octb20->si96_vlsaldofinalfonte;
                 }
             }
 
@@ -85,11 +85,11 @@ try{
                 $Hash = $ocaixa11->si166_codfontecaixa;
 
                 if(!$vlrdiscaixabruta[$Hash]){
-                    $vlsaldoinicialfonte->valor += $ocaixa11->si166_vlsaldofinalfonte;
-                    $vlrdiscaixabruta[$Hash] = $vlsaldoinicialfonte;
+                    $vlsaldofinalfonte->valor += $ocaixa11->si166_vlsaldofinalfonte;
+                    $vlrdiscaixabruta[$Hash] = $vlsaldofinalfonte;
                 }else{
-                    $vlsaldoinicialfonte = $vlrdiscaixabruta[$Hash];
-                    $vlsaldoinicialfonte->valor += $ocaixa11->si166_vlsaldofinalfonte;
+                    $vlsaldofinalfonte = $vlrdiscaixabruta[$Hash];
+                    $vlsaldofinalfonte->valor += $ocaixa11->si166_vlsaldofinalfonte;
                 }
             }
 
@@ -217,18 +217,20 @@ try{
 //                  echo "TotLiq: ".$totLiq;echo"<br>";
 //                  exit;
             /***
-             * busco informações do registro 20 ext com tipo de lançamento 01,02 e 99
+             * busco informaÃ§Ãµes do registro 20 ext com tipo de lanÃ§amento 01,02 e 99
              */
             $sSqlext20 = "SELECT si165_codfontrecursos,
-                                   round(sum(si165_vlsaldoatualfonte),2) AS si165_vlsaldoatualfonte,
+                                   round(sum(case when si165_natsaldoatualfonte = 'D' then si165_vlsaldoatualfonte*-1 else si165_vlsaldoatualfonte end),2) AS si165_vlsaldoatualfonte,
                                    si165_natsaldoatualfonte,
-                                   si124_tipolancamento
-                            FROM ext202018
-                            JOIN ext102018 ON (si165_codext, si165_instit) = (si124_codext,  si124_instit)
+                                   c60_tipolancamento
+                            FROM ext20".db_getsession("DB_anousu")."
+                            JOIN conplanoreduz ON c61_anousu = ".db_getsession("DB_anousu")." AND (c61_reduz = si165_codext OR c61_codtce = si165_codext)
+                            JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
                             WHERE (si165_instit, si165_mes) = ($instit, 12)
-                             AND si124_tipolancamento IN ('01', '02', '99')
-                            GROUP BY si165_codfontrecursos, si165_instit, si165_natsaldoatualfonte, si124_tipolancamento
+                             AND c60_tipolancamento IN (1, 2, 9999)
+                            GROUP BY si165_codfontrecursos, si165_instit, si165_natsaldoatualfonte, c60_tipolancamento
                             ORDER BY si165_codfontrecursos";
+                        
             $resultext20 = db_query($sSqlext20);
             $vlrrestorecolherfonte = array();
 
@@ -248,7 +250,7 @@ try{
             }
 //    echo "<pre>"; print_r($vlrrestorecolherfonte);exit;
             /***
-             * busco informações do registro 20 ext com tipo de lançamento 03
+             * busco informaÃ§Ãµes do registro 20 ext com tipo de lanÃ§amento 03
              */
             $sSqlext20 = "SELECT si165_codfontrecursos,
                                    round(sum(si165_vlsaldoatualfonte),2) AS si165_vlsaldoatualfonte,

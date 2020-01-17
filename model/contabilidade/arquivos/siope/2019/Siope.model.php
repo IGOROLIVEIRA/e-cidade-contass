@@ -280,9 +280,9 @@ class Siope {
                             $aArrayDesdTemp['cod_planilha']     = $iCodPlan = $this->getCodPlanilha($oDespesa);
 
                             if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
-                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 't');
                             } else {
-                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 'f');
                             }
 
                             $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
@@ -303,9 +303,9 @@ class Siope {
                             $aArrayDesdTemp['cod_planilha']     = $iCodPlan = $this->getCodPlanilha($oDespesa);
 
                             if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
-                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 't');
                             } else {
-                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                                $oNaturdessiopeDesd = $this->getNaturDesSiope($oDadosMes->o56_elemento, 'f');
                             }
 
                             $aArrayDesdTemp['elemento_siope']   = $oNaturdessiopeDesd->c223_eledespecidade;
@@ -355,9 +355,9 @@ class Siope {
                             $aArrayTemp['cod_planilha'] = $iCodPlan = $this->getCodPlanilha($oDespesaAnoSeg);
 
                             if ($iCodPlan == 238 || $iCodPlan == 239 || $iCodPlan == 240 || $iCodPlan == 173) {
-                                $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 't');
+                                $oNaturdessiope = $this->getNaturDesSiope($oDespesaAnoSeg->o58_elemento, 't');
                             } else {
-                                $oNaturdessiope = $this->getNaturDesSiope($oDespesa->o58_elemento, 'f');
+                                $oNaturdessiope = $this->getNaturDesSiope($oDespesaAnoSeg->o58_elemento, 'f');
                             }
 
                             $aArrayTemp['elemento_siope']   = $oNaturdessiope->c223_eledespecidade;
