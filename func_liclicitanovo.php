@@ -157,7 +157,7 @@ $sWhereContratos = " and 1 = 1 ";
         <td align="center" valign="top">
             <?
             $and            = "and ";
-            $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and";
+            $dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
 
             if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
                 $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102,103) and l20_licsituacao in ($situacao,10,11)) and ";
@@ -230,6 +230,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }
 
                 $aRepassa = array();
+
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
             } else {
