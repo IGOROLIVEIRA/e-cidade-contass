@@ -274,14 +274,18 @@ $temporizador = date("His", mktime(date("H"), date("i"), date("s"), 0, 0, 0));
   $sSqlValorM2 .= '          then j36_testad                                      ';
   $sSqlValorM2 .= '          else j36_testle                                      ';
   $sSqlValorM2 .= '        end as j36_testle,                                     ';
-  $sSqlValorM2 .= '        j81_valorconstr as j37_vlcons                          ';
-  $sSqlValorM2 .= '   from iptuconstr                                             ';
+  $sSqlValorM2 .= '        case when (j81_valorconstr is null or j81_valorconstr = 0)
+       then
+       (select sum(j22_vm2) as j22_vm2 from iptucale where j22_matric = $3 and j22_anousu = $2)
+       else j81_valorconstr end  as j37_vlcons                                    ';
+  $sSqlValorM2 .= '   from iptubase                                               ';
+  $sSqlValorM2 .= '        inner join iptuconstr  on j01_matric = j39_matric      ';
+  $sSqlValorM2 .= '        inner join testpri   on j49_idbql  = $1                ';
   $sSqlValorM2 .= '        inner join testada   on j36_face   = j39_codigo        ';
-  $sSqlValorM2 .= '                            and j36_idbql  = $1                ';
+  $sSqlValorM2 .= '                            and j36_idbql  = j49_idbql         ';
   $sSqlValorM2 .= '        inner join face      on j37_face   = j36_face          ';
   $sSqlValorM2 .= '        left  join facevalor on j81_face   = j37_face          ';
   $sSqlValorM2 .= '                            and j81_anousu = $2                ';
-  $sSqlValorM2 .= '        inner join iptubase  on j01_matric = j39_matric        ';
   $sSqlValorM2 .= '  where j39_matric = $3                                        ';
   $sSqlValorM2 .= '    and j39_dtdemo is null                                     ';
   $sSqlValorM2 .= '    and j01_baixa  is null                                     ';
@@ -743,6 +747,8 @@ $sqlprinc .= "       j40_refant,";
 $sqlprinc .= "       j34_setor,";
 $sqlprinc .= "       j34_quadra,";
 $sqlprinc .= "       j34_lote,";
+$sqlprinc .= "       j04_quadraregimo,";
+$sqlprinc .= "       j04_loteregimo,";
 $sqlprinc .= "       substr(fc_iptuender,001,40) as j23_ender, ";
 $sqlprinc .= "       substr(fc_iptuender,042,10) as j23_numero, ";
 $sqlprinc .= "       substr(fc_iptuender,053,20) as j23_compl, ";
@@ -766,6 +772,8 @@ $sqlprinc .= "              j40_refant,";
 $sqlprinc .= "              j34_setor,";
 $sqlprinc .= "              j34_quadra,";
 $sqlprinc .= "              j34_lote,";
+$sqlprinc .= "              j04_quadraregimo,";
+$sqlprinc .= "              j04_loteregimo,";
 $sqlprinc .= "              fc_iptuender(j23_matric) ";
 $sqlprinc .= "         from iptucalc  ";
 $sqlprinc .= "              inner join iptubase       on iptubase.j01_matric = iptucalc.j23_matric ";
@@ -776,6 +784,7 @@ $sqlprinc .= "              left  join iptumatzonaentrega on iptumatzonaentrega.
 $sqlprinc .= "              left  join imobil             on imobil.j44_matric = iptubase.j01_matric ";
 $sqlprinc .= "              left  join loteloteam         on loteloteam.j34_idbql = lote.j34_idbql ";
 $sqlprinc .= "              left  join iptuant            on iptuant.j40_matric   = iptubase.j01_matric ";
+$sqlprinc .= "              left  join iptubaseregimovel  on iptubaseregimovel.j04_matric   = iptubase.j01_matric ";
 $sqlprinc .= "        where iptucalc.j23_anousu = $anousu ";
 $sqlprinc .= "        {$whereimobil} {$wherelistamatrics} {$whereloteam}" . ($quantidade != ""?" limit {$quantidade}":"") . " {$sWhereCgm}) as x ";
 
@@ -1377,8 +1386,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad($j23_cxpostal, 10));
               fputs($clabre_arquivo->arquivo, str_pad($j23_dest, 40));
 
-              fputs($clabre_arquivo->arquivo, str_repeat(" ", 3));
-              fputs($clabre_arquivo->arquivo, str_repeat(" ", 5));
+              fputs($clabre_arquivo->arquivo, str_pad($j04_quadraregimo, 8));
+              fputs($clabre_arquivo->arquivo, str_pad($j04_loteregimo, 8));
               if ($j45_descr == "") {
                 fputs($clabre_arquivo->arquivo, str_repeat(" ", 40));
                 fputs($clabre_arquivo->arquivo, str_repeat(" ", 10));
@@ -1512,8 +1521,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, db_contador("CXPENDENT","CAIXA POSTAL DO ENDERECO DE ENTREGA", $contador, 10));
               fputs($clabre_arquivo->arquivo, db_contador("DESTENDENT","DESTINATARIO DO ENDERECO DE ENTREGA", $contador, 40));
 
-              fputs($clabre_arquivo->arquivo, db_contador("BRANCOS","BRANCOS",$contador,3));
-              fputs($clabre_arquivo->arquivo, db_contador("BRANCOS","BRANCOS",$contador,5));
+              fputs($clabre_arquivo->arquivo, db_contador("QUADRAREGIMO","QUADRAREGIMO",$contador,8));
+              fputs($clabre_arquivo->arquivo, db_contador("LOTEREGIMO","LOTEREGIMO",$contador,8));
               fputs($clabre_arquivo->arquivo, db_contador("DESCRISEN","DESCRICAO DO TIPO DE ISENCAO",$contador,40));
               fputs($clabre_arquivo->arquivo, db_contador("LANCISEN","DATA DE LANCAMENTO DA ISENCAO",$contador,10));
 
@@ -1624,7 +1633,10 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $sqlvalorm2 = " select  j49_face as j37_face,
               j81_valorterreno as j37_valor, j37_outros,
                                case when j36_testle = 0 then j36_testad else j36_testle end as j36_testle,
-                               j81_valorconstr as j37_vlcons
+                               case when (j81_valorconstr is null or j81_valorconstr = 0)
+                               then
+                               (select sum(j22_vm2) as j22_vm2 from iptucale where j22_matric = $j01_idbql and j22_anousu = $anousu)
+                               else j81_valorconstr end  as j37_vlcons
                                  from testpri
                                  inner join face on j49_face = j37_face
                                  left  join facevalor on j81_face = j37_face and j81_anousu = $anousu

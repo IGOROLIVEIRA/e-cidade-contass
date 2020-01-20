@@ -733,7 +733,8 @@ if($x->consultarDataDoSistema == true){
             var vTotalAut = oItem.valorunitario * nQtdeAut;
 
             //var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
-            var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
+            // var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
+            var nValorAut = js_formatar(vTotalAut.toFixed(2), "f",2);
 
             aLinha    = new Array();
             aLinha[0] = oItem.codigomaterial;
@@ -748,7 +749,8 @@ if($x->consultarDataDoSistema == true){
 
             // Valor total
             //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
-            aLinha[4] = js_roundDecimal(vTotal,2);
+            // aLinha[4] = js_roundDecimal(vTotal,2);
+            aLinha[4] = vTotal.toFixed(2);
 
             /**
              * Caso for serviço e o mesmo não for controlado por quantidade, setamos a sua quantidade para 1
@@ -941,7 +943,8 @@ if($x->consultarDataDoSistema == true){
             return;
         }
 
-        $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        $("valoritem"+iSeq).value = js_formatar(value.toFixed(2),'f',2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
     }
 
@@ -971,9 +974,9 @@ if($x->consultarDataDoSistema == true){
 
             var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
 
-            aLinha.aCells[7].content.setValue(js_formatar(js_roundDecimal(nValorTotal,2), "f",2));
+            aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f",2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
-            $("valoritem" + iLinha).value = js_formatar(js_roundDecimal(nValorTotal,2), "f",2);
+            $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
         }
         //js_salvarInfoDotacoes(iLinha, lVerificaDot);
     }
@@ -1072,7 +1075,8 @@ if($x->consultarDataDoSistema == true){
 
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
-            nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
+            // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1168,7 +1172,7 @@ if($x->consultarDataDoSistema == true){
 
     function js_ajustaValorDot(Obj, iDot, tipo) {
 
-        var nValor         = new Number(Obj.value);
+        var nValor         = new js_strToFloat(Obj.value);
         var nTotalDotacoes = oGridDotacoes.sum(3, false);
         var nValorAut      = js_strToFloat(oDadosItem.aCells[7].getValue());
 
@@ -1199,9 +1203,8 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
-            // $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
-            $("valordot"+iDot).value = js_formatar(js_roundDecimal(oGridDotacoes.aRows[iDot].aCells[3].getValue(), 2), "f",2);
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
+            $("valordot"+iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
     /**

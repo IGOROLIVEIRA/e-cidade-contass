@@ -104,7 +104,7 @@ db_app::load("estilos.css");
 
   </div>
   <input type='button' value='Pagar Selecionados' onclick='js_pagarEmpenhos()'>
-  <input type="checkbox" id='autenticar' checked><label for="autenticar">Autenticar no documento</label>
+  <input type="checkbox" id='autenticar' unchecked><label for="autenticar">Autenticar no documento</label>
   <input type="checkbox" id='emiterelatorio'><label for="emiterelatorio">Emite Relatório de Pagamento</label>
   <input type="checkbox" id='emiterecibo'><label for="emiterecibo">Emite Reciboderetencoes</label>
 </body>

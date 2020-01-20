@@ -313,7 +313,7 @@ $db_opcao = 1;
     if (obj.checked) {
 
       $('showautenticar').style.visibility = 'visible';
-      $('autenticar').checked               = true;
+      $('autenticar').checked               = false;
 
     } else {
 

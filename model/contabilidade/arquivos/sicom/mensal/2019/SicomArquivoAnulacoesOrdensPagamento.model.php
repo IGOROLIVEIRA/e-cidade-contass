@@ -237,17 +237,14 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             /**
              * pegar quantidade de extornos
              */
-            $sSqlExtornos  = " SELECT sum(CASE ";
-            $sSqlExtornos .= "                WHEN c53_tipo = 21 THEN -1 * c70_valor ";
-            $sSqlExtornos .= "                ELSE c70_valor ";
-            $sSqlExtornos .= "            END) AS valor ";
+            $sSqlExtornos  = " SELECT sum(c70_valor) AS valor ";
             $sSqlExtornos .= " FROM conlancamdoc ";
             $sSqlExtornos .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc ";
             $sSqlExtornos .= " JOIN conlancamord ON c71_codlan = c80_codlan ";
             $sSqlExtornos .= " JOIN conlancam ON c70_codlan = c71_codlan ";
             $sSqlExtornos .= " WHERE c53_tipo IN (31, 30) ";
-            $sSqlExtornos .= "     AND c80_codord = {$oAnulacoes->e50_codord} ";
-            $sSqlExtornos .= "     AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "' ";
+            $sSqlExtornos .= "   AND c80_codord = {$oAnulacoes->e50_codord} ";
+            $sSqlExtornos .= "   AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "' ";
 
             $rsQuantExtornos = db_query($sSqlExtornos);
 
@@ -283,7 +280,6 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 $DataOpExorno = db_utils::fieldsMemory($rsResultOP)->dtpagamento;
 
 
-                $rsQuantExtornos = db_query($sSqlExtornos);
                 /**
                  * Registro 10
                  **/

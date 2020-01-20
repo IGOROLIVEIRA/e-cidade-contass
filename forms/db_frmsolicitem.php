@@ -448,7 +448,17 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                 if ( ($pc11_vlrun==0 || $pc11_vlrun == "") && $hidval != "hidden"){
                 	$pc11_vlrun=1;
                 }
-                db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, $db_opcaovunit);
+                $valor_tratado = explode('.', $pc11_vlrun);
+                if(strlen($valor_tratado[1]) < 4){
+                  $decimais = $valor_tratado[1];
+                  while(strlen($decimais) < 4){
+                    $decimais .= '0';
+                  }
+                }
+                $valor_montado = $valor_tratado[0].'.'.$decimais;
+
+                // Função pega no arquivo limitaCaracteres.js
+                db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, $db_opcaovunit, "onblur='passaValoresOnBlur(this.value,pc11_vlrun.id)'; onkeyup='passaValores(this.value,pc11_vlrun.id)';");
                 if ($pc30_digval == 't'){
                     echo "</td>";
                 }
@@ -984,7 +994,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     if(document.form1.pc11_vlrun.value!=""){
       x = document.form1.pc11_vlrun.value;
       if(x.indexOf(".")==-1 && x.indexOf(",")==-1){
-        document.form1.pc11_vlrun.value += ".00";
+        document.form1.pc11_vlrun.value += ".0000";
       }
     }
     function js_ver(verific){
@@ -1272,6 +1282,22 @@ function js_validarValorUnitario() {
 }
 
 js_verificaServico();
+
+function passaValores(valor, campo){
+    let [erro, valorRecebido] = validaCaracteres(valor, false);
+    if(erro){
+        alert(erro);
+    }
+    document.getElementById(campo).value = valorRecebido;
+}
+
+function passaValoresOnBlur(valor, campo){
+    let [erro, valorRecebido] = validaCaracteres(valor, true);
+    if(erro){
+        alert(erro);
+    }
+    document.getElementById(campo).value = valorRecebido;
+}
 </script>
 
 <?php

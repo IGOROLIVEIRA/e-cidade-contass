@@ -64,6 +64,8 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     $clconv10 = new cl_conv102019();
     $clconv11 = new cl_conv112019();
     $clconv20 = new cl_conv202019();
+    $clconv30 = new cl_conv302019();
+    $clconv31 = new cl_conv312019();
 
     db_inicio_transacao();
 
@@ -102,6 +104,35 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
       if ($clconv20->erro_status == 0) {
         throw new Exception($clconv20->erro_msg);
       }
+    }
+
+    /*
+     * excluir informacoes do mes selecionado registro 30
+     */
+    if ($this->sDataInicial[5].$this->sDataInicial[6] == 12) {
+        $result = $clconv30->sql_record($clconv30->sql_query(null, "*", null, "si203_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si203_instit = " . db_getsession("DB_instit")));
+
+        if (pg_num_rows($result) > 0) {
+            $clconv30->excluir(null, "si203_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si203_instit = " . db_getsession("DB_instit"));
+            if ($clconv30->erro_status == 0) {
+                throw new Exception($clconv30->erro_msg);
+            }
+        }
+    }
+
+    /*
+     * excluir informacoes do mes selecionado registro 31
+     */
+
+    if ($this->sDataInicial[5].$this->sDataInicial[6] == 12) {
+        $result = $clconv31->sql_record($clconv31->sql_query(null, "*", null, "si204_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si204_instit = " . db_getsession("DB_instit")));
+
+        if (pg_num_rows($result) > 0) {
+            $clconv31->excluir(null, "si204_mes = {$this->sDataFinal['5']}{$this->sDataFinal['6']} and si204_instit = " . db_getsession("DB_instit"));
+            if ($clconv31->erro_status == 0) {
+                throw new Exception($clconv31->erro_msg);
+            }
+        }
     }
 
     $sSql = "SELECT si09_codorgaotce AS codorgao
@@ -209,6 +240,106 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         $clconv20->incluir(null);
         if ($clconv20->erro_status == 0) {
           throw new Exception($clconv20->erro_msg);
+        }
+
+      }
+
+      /*
+       * selecionar informacoes registro 30 e 31
+       */
+      if ($this->sDataInicial[5].$this->sDataInicial[6] == 12) {
+
+        $sSql = "select o57_fonte, o57_finali, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto, case when (COALESCE(SUM(c229_vlprevisto),0) > 0) then (o70_valor - COALESCE(SUM(c229_vlprevisto),0)) else 0 end as c229_semassinatura
+                    from orcfontes 
+                        left join orcreceita on o57_codfon = o70_codfon and o57_anousu = o70_anousu 
+                        left join prevconvenioreceita on c229_anousu = o70_anousu and c229_fonte = o70_codrec 
+                    where substr(o57_fonte,1,7) in ('41321001', '41321005',' 4171808','4171810','4172810','4173810','4174801','4174810','4176801','4176810','4241808','4241810','4242810','4243810','4244801', '4244810') 
+                      and o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession("DB_anousu")." and o70_instit = ".db_getsession("DB_instit")." group by 1, 2, 3, 4, 5 ";
+
+        $rsResult30 = db_query($sSql);
+
+        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
+
+            $clconv30 = new cl_conv302019();
+            $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+
+            $clconv30->si203_tiporegistro = 30;
+            $clconv30->si203_codreceita = $oDados30->o70_codrec;
+            $clconv30->si203_codorgao = $sCodorgao;
+            $clconv30->si203_naturezareceita = $oDados30->o57_fonte;
+            $clconv30->si203_codfontrecursos = $oDados30->o70_codigo;
+            $clconv30->si203_vlprevisao = $oDados30->o70_valor;
+            $clconv30->si203_mes = 12;
+            $clconv30->si203_instit = db_getsession("DB_instit");
+
+            $clconv30->incluir(null);
+            if ($clconv30->erro_status == 0) {
+                throw new Exception($clconv30->erro_msg);
+            }
+
+            $sSql31 = "select * from prevconvenioreceita left join orcreceita on (o70_anousu, o70_codrec) = (c229_anousu, c229_fonte) left join convconvenios on c229_convenio = c206_sequencial where (o70_anousu, o70_codrec) = (".db_getsession('DB_anousu').", {$oDados30->o70_codrec})";
+
+            $rsResult31 = db_query($sSql31);
+
+            if (pg_num_rows($rsResult31) > 0) {
+
+                for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
+
+                    $clconv31 = new cl_conv312019();
+                    $oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
+
+                    $clconv31->si204_tiporegistro = 31;
+                    $clconv31->si204_codreceita = $oDados31->o70_codrec;
+                    $clconv31->si204_prevorcamentoassin = 1;
+                    $clconv31->si204_nroconvenio = "'{$oDados31->c206_nroconvenio}'";
+                    $clconv31->si204_dataassinatura = "'{$oDados31->c206_dataassinatura}'";
+                    $clconv31->si204_vlprevisaoconvenio = $oDados31->c229_vlprevisto;
+                    $clconv31->si204_mes = 12;
+                    $clconv31->si204_instit = db_getsession("DB_instit");
+
+                    $clconv31->incluir(null);
+                    if ($clconv31->erro_status == 0) {
+                        throw new Exception($clconv31->erro_msg);
+                    }
+
+                }
+
+            } else {
+
+                $clconv31 = new cl_conv312019();
+
+                $clconv31->si204_tiporegistro = 31;
+                $clconv31->si204_codreceita = $oDados30->o70_codrec;
+                $clconv31->si204_prevorcamentoassin = 2;
+                $clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor - $oDados31->c229_vlprevisto;
+                $clconv31->si204_mes = 12;
+                $clconv31->si204_instit = db_getsession("DB_instit");
+
+                $clconv31->incluir(null);
+                if ($clconv31->erro_status == 0) {
+                    throw new Exception($clconv31->erro_msg);
+                }
+
+            }
+
+            if ($oDados30->c229_semassinatura > 0) {
+
+                $clconv31 = new cl_conv312019();
+
+                $clconv31->si204_tiporegistro = 31;
+                $clconv31->si204_codreceita = $oDados30->o70_codrec;
+                $clconv31->si204_prevorcamentoassin = 2;
+                $clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
+                $clconv31->si204_mes = 12;
+                $clconv31->si204_instit = db_getsession("DB_instit");
+
+                $clconv31->incluir(null);
+                if ($clconv31->erro_status == 0) {
+                    throw new Exception($clconv31->erro_msg);
+                }
+
+            }
+
         }
 
       }

@@ -1261,11 +1261,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
                       me.oTxtDescricaoInstituicaoOrigem.setValue(oRetorno.sInstituicaoOrigem.urlDecode());
                       me.oTxtInstituicaoOrigemCodigo.setValue(oRetorno.iCodigoInstituicaoOrigem);
 
-                      if (me.iTipoTransferencia == 1) {
-                        me.oTxtFavorecidoInputCodigo.setValue(oRetorno.iCodigoCgm);
-                        me.oTxtFavorecidoInputDescricao.setValue(oRetorno.sCNPJ.urlDecode()+" - "+oRetorno.sNomeCgm.urlDecode());
-                        me.oTxtFavorecidoInputCodigo.setReadOnly(true);
-                      }
                     }
                     });
   };

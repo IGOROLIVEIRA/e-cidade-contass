@@ -252,11 +252,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                              AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
                                        WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
                              INNER JOIN conlancam ON c74_codlan = c70_codlan
-                             JOIN conlancamcompl ON c72_codlan = c70_codlan
-                             LEFT JOIN empempenho ON
-                                 (SELECT btrim(split_part(REGEXP_REPLACE(c72_complem, '^([^-]*)empenho(.*?)', E'".$var.$var."2|".$var.$var."1'), 'no valor', 1)) empenho FROM conlancamcompl t1
-                                  WHERE t1.c72_codlan = conlancamcompl.c72_codlan) = e60_codemp||'/'||e60_anousu
-                             LEFT JOIN cgm ON e60_numcgm = z01_numcgm
+                             INNER JOIN conlancamcompl ON c72_codlan = c70_codlan
+                             LEFT JOIN conlancamcgm ON c72_codlan = c76_codlan
+                             LEFT JOIN cgm ON c76_numcgm = z01_numcgm
                              LEFT JOIN cgm t2 ON k81_numcgm = t2.z01_numcgm
                              INNER JOIN conlancamdoc ON c71_codlan = c74_codlan
                              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
@@ -270,7 +268,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
-                             ORDER BY 1, 4, 3";
+                             ORDER BY 1, 4, 2";
 
                     $result = db_query($sSql);
 
@@ -297,14 +295,30 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
                             $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
                             $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
-                            $oDados11->si26_vlarrecadadofonte = 0;
                             $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                             $aDadosCgm11[$sHashCgm] = $oDados11;
                         }
                         $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                     }
+
                     $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
+
+                    if(empty($aDadosCgm11)){
+
+                        $aDados = new stdClass();
+                        $aDados->si26_tiporegistro = 11;
+                        $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                        $aDados->si26_codfontrecursos = $sHash11;
+                        $aDados->si26_tipodocumento = "";
+                        $aDados->si26_cnpjorgaocontribuinte = "";
+                        $aDados->si26_nroconvenio = "";
+                        $aDados->si26_dataassinatura = "";
+                        $aDados->si26_vlarrecadadofonte = $oDadosRec->saldo_arrecadado;
+                        $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+                        $aDadosAgrupados[$sHash10]->Reg11[$sHash11][''] = $aDados;
+                    }
                 }
             }
          }
@@ -338,39 +352,22 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             foreach ($oDados10->Reg11 as $aDados11) {
                 foreach ($aDados11 as $oDados11) {
                     if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
-                        ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '') &&
-                        ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
+                        ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '')
                     ) {
 
                         $clrec11 = new cl_rec112019();
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
-                        $clrec11->si26_codfontrecursos = '100';
+                        $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;//'100';
                         $clrec11->si26_tipodocumento = $oDados11->si26_tipodocumento;
                         $clrec11->si26_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clrec11->si26_nroconvenio = $oDados11->si26_nroconvenio;
                         $clrec11->si26_dataassinatura = $oDados11->si26_dataassinatura;
-                        $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
+                        $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados11->si26_vlarrecadadofonte), 2, ".", "");
                         $clrec11->si26_mes = $oDados11->si26_mes;
                         $clrec11->si26_instit = db_getsession("DB_instit");
 
-                        $clrec11->incluir(null);
-                        if ($clrec11->erro_status == 0) {
-                            throw new Exception($clrec11->erro_msg);
-                        }
-
-                        $clrec11->si26_sequencial = null;
-                        $clrec11->si26_codfontrecursos = '101';
-                        $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", "");
-                        $clrec11->incluir(null);
-                        if ($clrec11->erro_status == 0) {
-                            throw new Exception($clrec11->erro_msg);
-                        }
-
-                        $clrec11->si26_sequencial = null;
-                        $clrec11->si26_codfontrecursos = '102';
-                        $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado), 2, ".", "") - (number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "") + number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", ""));
                         $clrec11->incluir(null);
                         if ($clrec11->erro_status == 0) {
                             throw new Exception($clrec11->erro_msg);

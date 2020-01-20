@@ -896,6 +896,47 @@ class cl_pcorcam {
      return $sql;
   }
 
+  function sql_query_proc_referencia ( $pc20_codorc=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from pcorcam 																					   ";
+    $sql .= "      left  join pcorcamitem     on pcorcamitem.pc22_codorc 		 = pcorcam.pc20_codorc			   ";
+    $sql .= "      left  join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem	   ";
+    $sql .= "      left  join pcprocitem      on pcprocitem.pc81_codprocitem 	 = pcorcamitemproc.pc31_pcprocitem ";
+    $sql .= "      left  join pcproc          on pcproc.pc80_codproc			 = pcprocitem.pc81_codproc     	   ";
+    $sql .= "      left  join solicitem       on solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+    $sql .= "      left  join solicita        on solicita.pc10_numero = solicitem.pc11_numero";
+    $sql .= "      inner  join precoreferencia on precoreferencia.si01_processocompra = pcproc.pc80_codproc";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($pc20_codorc!=null ){
+        $sql2 .= " where pcorcam.pc20_codorc = $pc20_codorc ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
   function sql_query_valitemjulglic($pc20_codorc=null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if($campos != "*" ){

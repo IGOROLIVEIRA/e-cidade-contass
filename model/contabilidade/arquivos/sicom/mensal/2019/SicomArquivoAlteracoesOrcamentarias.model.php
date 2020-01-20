@@ -514,36 +514,38 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                             }
                         }
                     }else{
-                        $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
+                      $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
+                      if (!empty($oDadosSql14Vlr->tipodecretoalteracao)){
 
-                        $sHash  = $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao . $oDadosSql14->codsubfuncao;
-                        $sHash .= $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
+                        $sHash  = $oDadosSql14Vlr->codorgao . $oDadosSql14Vlr->codunidadesub . $oDadosSql14Vlr->codfuncao . $oDadosSql14Vlr->codsubfuncao;
+                        $sHash .= $oDadosSql14Vlr->codprograma . $oDadosSql14Vlr->idacao . $oDadosSql14Vlr->naturezadespesa . $oDadosSql14Vlr->codfontrecursos;
 
                         if (!isset($aDadosAgrupados14[$sHash])){
 
-                            $oDados14 = new stdClass();
-                            $oDados14->si42_tiporegistro = 14;
-                            $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
-                            $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
-                            $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
-                            $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
-                            $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
-                            $oDados14->si42_codfuncao = $oDadosSql14Vlr->codfuncao;
-                            $oDados14->si42_codsubfuncao = $oDadosSql14Vlr->codsubfuncao;
-                            $oDados14->si42_codprograma = $oDadosSql14Vlr->codprograma;
-                            $oDados14->si42_idacao = $oDadosSql14Vlr->idacao;
-                            $oDados14->si42_idsubacao = $oDadosSql14Vlr->idsubacao;
-                            $oDados14->si42_naturezadespesa = $oDadosSql14Vlr->naturezadespesa;
-                            $oDados14->si42_codfontrecursos = $oDadosSql14Vlr->codfontrecursos;
-                            $oDados14->si42_vlacrescimo = $oDadosSql14Vlr->vlacrescimoreducao;
-                            $oDados14->si42_codsup = $oDadosSql14Vlr->o47_codsup;
-                            $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                            $oDados14->si42_reg10 = $claoc10->si38_sequencial;
-                            $oDados14->si42_instit = db_getsession("DB_instit");
-                            $aDadosAgrupados14[$sHash] = $oDados14;
+                          $oDados14 = new stdClass();
+                          $oDados14->si42_tiporegistro = 14;
+                          $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
+                          $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
+                          $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
+                          $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
+                          $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
+                          $oDados14->si42_codfuncao = $oDadosSql14Vlr->codfuncao;
+                          $oDados14->si42_codsubfuncao = $oDadosSql14Vlr->codsubfuncao;
+                          $oDados14->si42_codprograma = $oDadosSql14Vlr->codprograma;
+                          $oDados14->si42_idacao = $oDadosSql14Vlr->idacao;
+                          $oDados14->si42_idsubacao = $oDadosSql14Vlr->idsubacao;
+                          $oDados14->si42_naturezadespesa = $oDadosSql14Vlr->naturezadespesa;
+                          $oDados14->si42_codfontrecursos = $oDadosSql14Vlr->codfontrecursos;
+                          $oDados14->si42_vlacrescimo = $oDadosSql14Vlr->vlacrescimoreducao;
+                          $oDados14->si42_codsup = $oDadosSql14Vlr->o47_codsup;
+                          $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                          $oDados14->si42_reg10 = $claoc10->si38_sequencial;
+                          $oDados14->si42_instit = db_getsession("DB_instit");
+                          $aDadosAgrupados14[$sHash] = $oDados14;
                         }else{
-                            $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
+                          $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
                         }
+                      }
                     }
                 }
 

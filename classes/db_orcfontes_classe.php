@@ -715,4 +715,23 @@ class cl_orcfontes {
     return $sSql;
   }
 
+  public function sql_query_fonte_previsao_receita($sCampos = '*', $sOrdem = null, $sWhere = null) {
+
+       $sSql  = "select {$sCampos} ";
+       $sSql .= "   from orcfontes ";
+       $sSql .= "       left join orcreceita on o57_codfon = o70_codfon and o57_anousu = o70_anousu ";
+       $sSql .= "       left join prevconvenioreceita on c229_anousu = o70_anousu and c229_fonte = o70_codrec ";
+
+       if(!empty($sWhere)) {
+           $sSql .= "   where {$sWhere} ";
+       }
+
+      if (!empty($sOrdem)) {
+          $sSql .= " order by {$sOrdem} ";
+      }
+
+      return $sSql;
+
+  }
+
 }

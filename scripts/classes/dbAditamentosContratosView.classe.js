@@ -862,6 +862,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return alert("Obrigatório informar a data de Publicacao do aditivo.");
         }
 
+        var dataAssinatura = me.oTxtDataAssinatura.getValue().split("/");
+        var dtAssinatura   =  dataAssinatura[2] + "-" + dataAssinatura[1] + "-" + dataAssinatura[0];
+        var dataPublicacao = me.oTxtDataPublicacao.getValue().split("/");
+        var dtPublicacao   = dataPublicacao[2] + "-" + dataPublicacao[1] + "-" + dataPublicacao[0];
+
+        if(dtAssinatura > dtPublicacao ){
+          return alert("Data de Assinatura deve ser menor ou igual a data de Publicação.")
+        }
+
         me.oGridItens.getRows().forEach(function (oRow) {
             if (oRow.isSelected) {
                 oSelecionados[oRow.aCells[11].getValue()] = oRow;
@@ -1281,7 +1290,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oTxtVlrUnitario.setValue("0,000");
         oTxtVlrUnitario.setClassName("text-right");
         oTxtVlrUnitario.show($('ctntxtVlrUnitario'));
-        
+
 
         oCboDesdobramento = new DBComboBox('oCboDesdobramento', 'oCboDesdobramento', new Array("Selecione"));
         oCboDesdobramento.show($('ctnCboDesdobramento'));
@@ -1529,9 +1538,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (iTipoAditamento != 6) {
 
 
-                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueivalorunt(" + iSeq +","+$('oCboTipoAditivo').value + ")");
-                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
-                oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+              oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
+              oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
+              oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
             aLinha[4] = oInputQuantidade.toInnerHtml();
@@ -1542,9 +1551,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueiquantidade("+ iSeq +","+$('oCboTipoAditivo').value +")");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
-                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+              oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
+              oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
+              oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
             aLinha[5] = oInputUnitario.toInnerHtml();
@@ -1809,22 +1818,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.salvarInfoDotacoes(iLinha);
     }
 
-    this.js_bloqueivalorunt = function (iLinha,iTipo) {
-
-        if(iTipo == 14){
-            document.getElementById('valorunitario'+iLinha).disabled = true;
-            document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
-        }
-
-    };
-
-    this.js_bloqueiquantidade = function (iLinha,iTipo) {
-
-        if(iTipo == 14) {
-            document.getElementById('quantidade' + iLinha).disabled = true;
-            document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
-        }
-    };
+    // this.js_bloqueivalorunt = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14){
+    //         document.getElementById('valorunitario'+iLinha).disabled = true;
+    //         document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    //
+    // };
+    //
+    // this.js_bloqueiquantidade = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14) {
+    //         document.getElementById('quantidade' + iLinha).disabled = true;
+    //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    // };
 
     this.pesquisaMaterial = function (mostra) {
 
@@ -1880,7 +1889,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('servico-quantidade').style.display = mostra;
 
       let controlaQuantidade = document.getElementById('oCboServicoQuantidade').value;
-      
+
       if(!Number(controlaQuantidade) && servico == 't'){
         oTxtQuantidade.setValue("1,000");
         oTxtQuantidade.setReadOnly(true);

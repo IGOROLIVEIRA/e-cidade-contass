@@ -53,6 +53,17 @@ if(isset($excluir)  || isset($retornoexcluival)){
   $sqlerro = false;
   db_inicio_transacao();
   $excluival = true;
+  $campo = isset($pc20_codorc) ? $pc20_codorc : $retornoexcluival;
+  $sSql = $clpcorcam->sql_query_proc_referencia($campo, 'precoreferencia.*', null);
+  $rSql = $clpcorcam->sql_record($sSql);
+
+  if($clpcorcam->numrows > 0){
+    $sqlerro = true;
+    $erro_msg = 'Existe Preço de Referência vinculado a esse orçamento';
+  }else{
+    $sqlerro = false;
+  }
+
   if(!isset($retornoexcluival)){
     $result_item = $clpcorcam->sql_record($clpcorcam->sql_query_vallancados($pc20_codorc,"count(*) as valoreslancados"));
     db_fieldsmemory($result_item,0);
@@ -62,6 +73,7 @@ if(isset($excluir)  || isset($retornoexcluival)){
   }else{
     $pc20_codorc=$retornoexcluival;
   }
+
   if(isset($excluival) && $excluival==true){
     if($sqlerro==false && isset($retornoexcluival)){
       $clpcorcamtroca->excluir(null,"pc25_orcamitem in (select distinct pc22_orcamitem from pcorcamitem where pc22_codorc=".$pc20_codorc.")");
@@ -87,28 +99,28 @@ if(isset($excluir)  || isset($retornoexcluival)){
     if($sqlerro==false){
       $clpcorcamforne->excluir(null,"pc21_codorc=".$pc20_codorc);
       if($clpcorcamforne->erro_status==0){
-	$sqlerro=true;
-	$erro_msg = $clpcorcamforne->erro_msg;
+        $sqlerro=true;
+        $erro_msg = $clpcorcamforne->erro_msg;
       }
     }
     if($sqlerro==false){
       $clpcorcamitemproc->excluir(null,null,"pc31_orcamitem in(".$clpcorcamitem->sql_query_file(null,"pc22_orcamitem","","pc22_codorc=".$pc20_codorc).")");
       if($clpcorcamitemproc->erro_status==0){
-	$sqlerro=true;
-	$erro_msg = $clpcorcamitemproc->erro_msg;
+        $sqlerro=true;
+        $erro_msg = $clpcorcamitemproc->erro_msg;
       }
     }
     if($sqlerro==false){
       $clpcorcamitem->excluir(null,"pc22_codorc=".$pc20_codorc);
       if($clpcorcamitem->erro_status==0){
-	$sqlerro=true;
-	$erro_msg = $clpcorcamitem->erro_msg;
+        $sqlerro=true;
+        $erro_msg = $clpcorcamitem->erro_msg;
       }
     }
     if($sqlerro==false){
       $clpcorcam->excluir(null,"pc20_codorc=".$pc20_codorc);
       if($clpcorcam->erro_status==0){
-	$sqlerro=true;
+	      $sqlerro=true;
       }
       $erro_msg = $clpcorcam->erro_msg;
     }

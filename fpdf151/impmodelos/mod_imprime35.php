@@ -307,7 +307,7 @@ $cldb_config = new cl_db_config;
 
     $this->objpdf->ln(5);
     $this->objpdf->SetFont('Arial','B',13);
-    $this->objpdf->cell(0,8,ucwords(strtolower($this->municpref . ", ".date('d')." de ".db_mes( date('m'))))." de ".date('Y') . ".",0,1,"R",0); // data
+    $this->objpdf->cell(0,8,ucwords(strtolower($this->municpref . ", ".date('d', db_getsession('DB_datausu'))." de ".db_mes( date('m', db_getsession('DB_datausu')))))." de ".date('Y',db_getsession('DB_datausu')) . ".",0,1,"R",0); // data
 
 //  global $db02_texto;
 	  $this->objpdf->setfont('arial','',9);
