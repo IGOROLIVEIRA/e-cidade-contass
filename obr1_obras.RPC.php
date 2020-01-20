@@ -79,12 +79,16 @@ switch($oParam->exec) {
   case 'SalvarResp':
 
     $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
-//echo "<pre>";
-//print_r($oParam);
-//exit;
-    $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query($oParam->iCodigo));
-//db_criatabela($result);exit;
-    if(pg_num_rows($result) > 0 ){
+
+    if($oParam->iCodigo == null || $oParam->iCodigo == ""){
+      $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
+      $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
+      $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+    }else{
+      $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,"obr05_sequencial = $oParam->iCodigo"));
+    }
+
+    if(pg_num_rows($result) > 0){
       $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
       $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
       $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;

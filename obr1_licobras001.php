@@ -48,7 +48,7 @@ if(isset($incluir)){
     }
 
     db_fim_transacao();
-    db_redireciona("obr1_licobras002.php?&chavepesquisa=$obr01_licitacao");
+    db_redireciona("obr1_licobras002.php?&chavepesquisa=$cllicobras->obr01_sequencial");
 
   }catch (Exception $eErro){
     db_msgbox($eErro->getMessage());

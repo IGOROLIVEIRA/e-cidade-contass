@@ -116,7 +116,7 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_tiporesponsavel','int8' ,'Tipo Responsável'		,'', 'Tipo Responsável'		 ,16	,false, false, false, 1, 'int8', 'Tipo Responsável');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_tiporegistro'		,'int8' ,'Tipo Registro'		,'', 'Tipo Registro'		 ,16	,false, false, false, 1, 'int8', 'Tipo Registro');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_numregistro'		,'text' ,'Numero Registro'		,'', 'Numero Registro'		 ,10	,false, false, false, 0, 'int8', 'Numero Registro');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_numartourrt'		,'int8' ,'Número da anotação de responsabilidade técnica ou registro de responsabilidade técnica.' ,'', 'Numero da ART ou RRT'	 ,16	,false, false, false, 1, 'int8', 'Numero da ART ou RRT');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_numartourrt'		,'int8' ,'Número da anotação de responsabilidade técnica ou registro de responsabilidade técnica.' ,'', 'Numero da ART ou RRT'	 ,13	,false, false, false, 1, 'int8', 'Numero da ART ou RRT');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_vinculoprofissional','int8' ,'Vinculo do Prof. com a Adm. Pública'	,'', 'Vinculo do Prof. com a Adm. Pública'		 ,16	,false, false, false, 1, 'int8', 'Vinculo do Prof. com a Adm. Pública');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr05_instit'		 		    ,'int8' ,'Instituição'				,'', 'Instituição'			 	,11	,false, false, false, 1, 'int8', 'Instituição');
 
@@ -145,7 +145,7 @@ class Oc11331 extends AbstractMigration
                           obr05_responsavel		      int8 NOT NULL default 0,
                           obr05_tiporesponsavel	    int8 NOT NULL default 0,
                           obr05_tiporegistro		    int8 NOT NULL default 0,
-                          obr05_numregistro		      text NOT NULL ,
+                          obr05_numregistro		      varchar(10) NOT NULL ,
                           obr05_numartourrt		      int8 NOT NULL default 0,
                           obr05_vinculoprofissional int8 NOT NULL default 0,
                           obr05_instit			        int8 NOT NULL default 0);
