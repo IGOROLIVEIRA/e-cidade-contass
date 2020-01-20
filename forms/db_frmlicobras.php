@@ -1,5 +1,8 @@
 <?
 //MODULO: Obras
+$clrotulo = new rotulocampo;
+$clrotulo->label("obr05_numregistro");
+$clrotulo->label("obr05_numartourrt");
 $cllicobras->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
@@ -97,9 +100,11 @@ $cllicobras->rotulo->label();
         <legend>Responsáveis</legend>
         <table style="margin-bottom: 10px;">
           <tr style="display: none">
-            <?
-            db_input('obr05_sequencial',10,$Iobr05_sequencial,true,'text',3,"");
-            ?>
+            <td>
+              <?
+              db_input('obr05_sequencial',10,$Iobr05_sequencial,true,'text',3,"");
+              ?>
+            </td>
           </tr>
           <tr>
             <td>
@@ -297,6 +302,22 @@ $cllicobras->rotulo->label();
   }
 
   function js_salvarResponsaveis(){
+
+    if($F('obr05_tiporesponsavel') == 0){
+      alert("Selecione o Tipo de Responsavel");
+      return false;
+    }
+
+    if($F('obr05_tiporegistro') == 0){
+      alert("Selecione o Tipo de Registro");
+      return false;
+    }
+
+    if($F('obr05_vinculoprofissional') == 0){
+      alert("Selecione o Vinculo do Profissional com a administração Pública");
+      return false;
+    }
+
     var oParam                        = new Object();
     oParam.exec                       = 'SalvarResp';
     oParam.iCodigo                    = $F('obr05_sequencial');
@@ -369,6 +390,15 @@ $cllicobras->rotulo->label();
       oGridResponsaveis.addRow(aLinha);
     });
     oGridResponsaveis.renderRows();
+
+    document.form1.obr05_sequencial.value = '';
+    document.form1.obr05_responsavel.value = '';
+    document.form1.obr05_tiporesponsavel.value = 0;
+    document.form1.z01_nome.value = '';
+    document.form1.obr05_tiporegistro.value = 0;
+    document.form1.obr05_numregistro.value = '';
+    document.form1.obr05_numartourrt.value = '';
+    document.form1.obr05_vinculoprofissional.value = 0;
   }
 
   function js_alterar(iCodigoResp) {
