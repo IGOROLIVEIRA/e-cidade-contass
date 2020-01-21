@@ -26,7 +26,6 @@ class GerarRALIC extends GerarAM
         $sSql = "select * from ralic102020 where si180_mes = " . $this->iMes . " and si180_instit=" . db_getsession("DB_instit");
         $rsRALIC10 = db_query($sSql);
 
-
         $sSql2 = "select * from ralic112020 where si181_mes = " . $this->iMes . " and si181_instit=" . db_getsession("DB_instit");;
         $rsRALIC11 = db_query($sSql2);
 
@@ -54,6 +53,7 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_codunidadesubresp']          = $this->padLeftZero($aRALIC10['si180_codunidadesubresp'], 5);
                 $aCSVRALIC10['si180_codunidadesubrespestadual']  = $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 5);
                 $aCSVRALIC10['si180_exerciciolicitacao']         = $this->padLeftZero($aRALIC10['si180_exerciciolicitacao'], 4);
+                $aCSVRALIC10['si180_nroprocessolicitatorio']     = $this->padLeftZero($aRALIC10['si180_nroprocessolicitatorio'], 4);
                 $aCSVRALIC10['si180_tipocadastradolicitacao']    = substr($aRALIC10['si180_tipocadastradolicitacao'], 0, 12);
                 $aCSVRALIC10['si180_dsccadastrolicitatorio']     = substr($aRALIC10['si180_dsccadastrolicitatorio'], 0, 12);
                 $aCSVRALIC10['si180_codmodalidadelicitacao']     = $this->padLeftZero($aRALIC10['si180_codmodalidadelicitacao'], 1);
@@ -66,7 +66,7 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : substr($aRALIC10['si180_naturezaobjeto'], 0, 1);
                 $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
                 $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? ' ' : substr($aRALIC10['si180_regimeexecucaoobras'], 0, 1);
-                $aCSVRALIC10['si180_vlcontratacao']              = $aRALIC10['si180_vlcontratacao'];
+                $aCSVRALIC10['si180_vlcontratacao']              = $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
                 $aCSVRALIC10['si180_bdi']                        = $aRALIC10['si180_bdi'];
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $aRALIC10['si180_mesexercicioreforc'];
                 $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
@@ -97,9 +97,6 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC11['si181_codfuncao']                       = substr($aRALIC11['si181_codfuncao'], 0, 12);
                         $aCSVRALIC11['si181_codsubfuncao']                    = substr($aRALIC11['si181_codsubfuncao'], 0, 12);
                         $aCSVRALIC11['si181_codbempublico']                   = substr($aRALIC11['si181_codbempublico'], 0, 12);
-                        $aCSVRALIC11['si181_mes']                             = substr($aRALIC11['si181_mes'], 0, 12);
-                        $aCSVRALIC11['si181_instit']                          = substr($aRALIC11['si181_instit'], 0, 12);
-
 
                         $this->sLinha = $aCSVRALIC11;
                         $this->adicionaLinha();
@@ -132,9 +129,6 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
                         $aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
                         $aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
-                        $aCSVRALIC12['si182_mes']                         = $aRALIC12['si182_mes'];
-                        $aCSVRALIC12['si182_instit']                      = $aRALIC12['si182_instit'];
-
 
                         $this->sLinha = $aCSVRALIC12;
                         $this->adicionaLinha();
