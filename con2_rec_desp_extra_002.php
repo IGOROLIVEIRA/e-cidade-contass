@@ -150,8 +150,10 @@ for($i=0;$i<pg_numrows($result);$i++){
 
 $pdf->setfont('arial','b',8);
 $pdf->cell(140,$alt,"TOTAL","RTB",0,"L",0);
+$geral_ativo_anterior = $geral_ativo_anterior < 0 ? $geral_ativo_anterior * -1 : $geral_ativo_anterior;
 $sSinalIncial = ($geral_ativo_anterior - $geral_passivo_anterior) > 0 ? "D" : "C";
 $saldoIncial = $geral_ativo_anterior - $geral_passivo_anterior;
+$geral_ativo_saldo = $geral_ativo_saldo < 0 ? $geral_ativo_saldo * -1 : $geral_ativo_saldo;
 $saldoFinal = $geral_ativo_saldo - $geral_passivo_saldo;
 $sSinalFinal = ($geral_ativo_saldo - $geral_passivo_saldo) > 0 ? "D" : "C";
 $pdf->cell(35,$alt,db_formatar(abs($saldoIncial),'f')." ".$sSinalIncial,"TBR",0,"R",0);
