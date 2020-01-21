@@ -16,7 +16,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
-  protected $iCodigoLayout = 147;
+  protected $iCodigoLayout = 0;
 
   /**
    *
@@ -72,10 +72,10 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
      */
     $clideedital = new cl_ideedital2020();
 
-    $sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
-                case when si09_tipoinstit::varchar = '2' then cgc::varchar else si09_cnpjprefeitura::varchar end AS cnpjmunicipio,
-                si09_tipoinstit AS tipoorgao,
+    $sSql  = "SELECT db21_codigomunicipoestado AS codIdentificador,
+                case when si09_tipoinstit::varchar = '2' then cgc::varchar else si09_cnpjprefeitura::varchar end AS cnpj,
                 si09_codorgaotce AS codorgao,
+                si09_tipoinstit AS tipoorgao,
                 prefeitura
               FROM db_config
               LEFT JOIN infocomplementaresinstit ON si09_instit = ".db_getsession("DB_instit")."
@@ -100,20 +100,20 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
       $clideedital = new cl_ideedital2020();
       $oDadosIde = db_utils::fieldsMemory($rsResult, $iCont);
 
-      $clideedital->si186_codmunicipio         = $oDadosIde->codmunicipio;
-      $clideedital->si186_cnpj        = $oDadosIde->cnpj;
-      $clideedital->si186_codorgao							= $oDadosIde->codorgao;
+      $clideedital->si186_codidentificador     = $oDadosIde->codidentificador;
+      $clideedital->si186_cnpj                 = $oDadosIde->cnpj;
+      $clideedital->si186_codorgao						 = $oDadosIde->codorgao;
       $clideedital->si186_tipoorgao            = $oDadosIde->tipoorgao;
       $clideedital->si186_exercicioreferencia  = db_getsession("DB_anousu");
       $clideedital->si186_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clideedital->si186_datageracao          = date("d-m-Y");
       $clideedital->si186_codcontroleremessa   = " ";
-      $clideedital->si186_codseqremessames     =  '';
+      $clideedital->si186_codseqremessames     = $iCont+1;
       $clideedital->si186_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clideedital->si186_instit               = db_getsession("DB_instit");
 
-
       $clideedital->incluir(null);
+
       if ($clideedital->erro_status == 0) {
         throw new Exception($clideedital->erro_msg);
       }

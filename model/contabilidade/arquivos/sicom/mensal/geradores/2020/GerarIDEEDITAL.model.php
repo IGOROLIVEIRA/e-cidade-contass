@@ -20,7 +20,7 @@ class GerarIDEEDITAL extends GerarAM
   public function gerarDados()
   {
 
-    $this->sArquivo = "IDEEDITAL";
+    $this->sArquivo = "IDE";
     $this->abreArquivo();
 
     $sSql = "select * from ideedital2020 where si186_mes = {$this->iMes} and si186_instit = " . db_getsession("DB_instit");
