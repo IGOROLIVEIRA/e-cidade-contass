@@ -100,7 +100,10 @@ switch($oParam->exec) {
       if ($cllicobrasresponsaveis->erro_status == 0) {
         $erro = $cllicobrasresponsaveis->erro_msg;
         $oRetorno->message = urlencode($erro);
+        $oRetorno->status = 2;
+
       } else {
+        $oRetorno->status = 1;
         $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
       }
 
@@ -111,7 +114,11 @@ switch($oParam->exec) {
       $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
       $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
       $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
-      $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+      if($oParam->obr05_numartourrt == ""){
+        $cllicobrasresponsaveis->obr05_numartourrt =  NULL;
+      }else{
+        $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+      }
       $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
       $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
       $cllicobrasresponsaveis->incluir();
@@ -119,7 +126,9 @@ switch($oParam->exec) {
       if ($cllicobrasresponsaveis->erro_status == 0) {
         $erro = $cllicobrasresponsaveis->erro_msg;
         $oRetorno->message = urlencode($erro);
+        $oRetorno->status = 2;
       } else {
+        $oRetorno->status = 1;
         $oRetorno->message = urlencode("Responsável salvo com sucesso.");
       }
     }

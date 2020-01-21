@@ -5,16 +5,30 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_licobrasmedicao_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_licobrasanexo_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobrasmedicao = new cl_licobrasmedicao;
+$cllicobrasanexo = new cl_licobrasanexo;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
-  db_inicio_transacao();
-  $db_opcao = 3;
-  $cllicobrasmedicao->excluir($oid);
-  db_fim_transacao();
+  try{
+    $result = $cllicobrasanexo->sql_record($cllicobrasanexo->sql_query(null,"*",null,"obr04_licobrasmedicao = $obr03_sequencial"));
+
+    if(pg_num_rows($result) > 0){
+      throw new Exception ("Usuário: Exclusão Abortada! Existem fotos anexadas.");
+    }else{
+      db_inicio_transacao();
+      $db_opcao = 3;
+      $cllicobrasmedicao->excluir($oid);
+      db_fim_transacao();
+    }
+
+  }catch (Exception $eErro){
+    db_msgbox($eErro->getMessage());
+  }
+
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $result = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query($chavepesquisa));
