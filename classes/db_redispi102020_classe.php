@@ -192,11 +192,15 @@ class cl_redispi102020
       $this->erro_status = "0";
       return false;
     }
-    if($this->si183_tipocadastrodispensainexigibilidade == null){
-      $this->si183_tipocadastrodispensainexigibilidade = 0;
+    if($this->si183_tipocadastradodispensainexigibilidade == null){
+      $this->si183_tipocadastradodispensainexigibilidade = 0;
     }
     if($this->si183_bdi == null){
       $this->si183_bdi = 0;
+    }
+
+    if($this->si183_vlrecurso == null){
+      $this->si183_vlrecurso = 0;
     }
 
     $sql = "insert into redispi102020(

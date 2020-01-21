@@ -25,6 +25,7 @@ class cl_ralic102020
   var $si180_exerciciolicitacao = 0;
   var $si180_nroprocessolicitatorio = null;
   var $si180_tipocadastradolicitacao = null;
+  var $si180_dsccadastrolicitatorio = '';
   var $si180_codmodalidadelicitacao = 0;
   var $si180_naturezaprocedimento = 0;
   var $si180_nroedital = 0;
@@ -54,7 +55,7 @@ class cl_ralic102020
                  si180_exerciciolicitacao = int8 = Exercício da licitação
                  si180_nroprocessolicitatorio = varchar(12) = Número sequencial do processo
                  si180_tipocadastradolicitacao = int(8) = Tipo de cadastro da licitação
-                 si180_dsccadastrolicitatorio = int(8) = Motivo da anulação ou revogação
+                 si180_dsccadastrolicitatorio = varchar(150) = Motivo da anulação ou revogação
                  si180_codmodalidadelicitacao = int8 = Modalidade da Licitação
                  si180_naturezaprocedimento = int8 = Natureza do Procedimento
                  si180_nroedital = int8 = Número do edital
@@ -431,6 +432,7 @@ class cl_ralic102020
       $sql .= $virgula . " si180_naturezaobjeto = $this->si180_naturezaobjeto ";
       $virgula = ",";
     }
+    echo 'Valor da contratacao: '.$this->si180_objeto;
     if (trim($this->si180_objeto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_objeto"])) {
       $sql .= $virgula . " si180_objeto = '$this->si180_objeto' ";
       $virgula = ",";
