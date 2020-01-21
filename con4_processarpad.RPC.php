@@ -866,10 +866,6 @@ case "processarBalancete" :
       $aArrayArquivos = array();
       $sDataFinal = $oParam->diaReferencia;
 
-//      Anexar arquivos...
-//      $sSql  = "SELECT * FROM editaldocumentos";
-//      $rsAnexos = db_query($sSql);
-
       foreach ($oParam->arquivos as $sArquivo) {
 
         if (file_exists("model/contabilidade/arquivos/sicom/mensal/edital/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
@@ -898,23 +894,135 @@ case "processarBalancete" :
         }
       }
 
+//    Arquivos anexos...
+      $sSql  = "
+        SELECT editaldocumentos.*, pctipocompratribunal.*
+          FROM liclicita
+          INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+          INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
+          INNER JOIN editaldocumentos on editaldocumentos.l48_edital = liclicita.l20_nroedital
+      ";
+
+      $rsAnexos = db_query($sSql);
+
+      $aEdital = array();
+      $aDispensa = array();
+      $aEditalMinutaContrato = array();
+      $aEditalPlanilhaOrcamentaria = array();
+      $aEditalCronograma = array();
+      $aEditalComposicaoBdi = array();
+      $aEditalFotoLocal = array();
+      $aDispensaMinutaContrato = array();
+      $aDispensaPlanilhaOrcamentaria = array();
+      $aDispensaCronograma = array();
+      $aDispensaComposicaoBdi = array();
+      $aDispensaFotoLocal = array();
+
+      for($cont=0; $cont < pg_num_rows($rsAnexos); $cont++){
+        $oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
+
+        if(!in_array($oAnexo->l44_sequencial, array(100, 101, 102, 103))){
+          switch ($oAnexo->l48_tipo){
+            case 'mc':
+              $aDispensaMinutaContrato[] = $oAnexo;
+              break;
+            case 'po':
+              $aDispensaPlanilhaOrcamentaria[] = $oAnexo;
+              break;
+            case 'cr':
+              $aDispensaCronograma[] = $oAnexo;
+              break;
+            case 'cb':
+              $aDispensaComposicaoBdi[] = $oAnexo;
+              break;
+            case 'fl':
+              $aDispensaFotoLocal[] = $oAnexo;
+              break;
+            default:
+              $aDispensa[] = $oAnexo;
+              break;
+          }
+        }else{
+            switch ($oAnexo->l48_tipo){
+                case 'mc':
+                    $aEditalMinutaContrato[] = $oAnexo;
+                    break;
+                case 'po':
+                    $aEditalPlanilhaOrcamentaria[] = $oAnexo;
+                    break;
+                case 'cr':
+                    $aEditalCronograma[] = $oAnexo;
+                    break;
+                case 'cb':
+                    $aEditalComposicaoBdi[] = $oAnexo;
+                    break;
+                case 'fl':
+                    $aEditalFotoLocal[] = $oAnexo;
+                    break;
+                default:
+                    $aEdital[] = $oAnexo;
+                    break;
+            }
+        }
+
+      }
+
+      if(count($aEdital)){
+//        echo 'Entrou no Edital';
+      };
+      if(count($aDispensa)){
+//        echo 'Entrou no Dispensa';
+      };
+      if(count($aEditalMinutaContrato)){
+//        echo 'Entrou no EMC';
+      };
+      if(count($aEditalPlanilhaOrcamentaria)){
+//        echo 'Entrou no EPO';
+      };
+      if(count($aEditalCronograma)){
+//        echo 'Entrou no EC';
+      };
+      if(count($aEditalComposicaoBdi)){
+//        echo 'Entrou no ECB';
+      };
+      if(count($aEditalFotoLocal)){
+//        echo 'Entrou no EFL';
+      };
+      if(count($aDispensaMinutaContrato)){
+//        echo 'Entrou no DMC';
+      };
+      if(count($aDispensaPlanilhaOrcamentaria)){
+//        echo 'Entrou no DPO';
+      };
+      if(count($aDispensaCronograma)){
+//        echo 'Entrou no DC';
+      };
+      if(count($aDispensaComposicaoBdi)){
+//        echo 'Entrou no DCB';
+      };
+      if(count($aDispensaFotoLocal)){
+//        echo 'Entrou no DFL';
+      };
+
       $aListaArquivos = " ";
       foreach ($aArrayArquivos as $oArquivo){
-        $aListaArquivos .= " ".$oArquivo->caminho;
+          $aListaArquivos .= " ".$oArquivo->caminho;
       }
-      //print_r($aListaArquivos);
-      system("rm -f EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      system("bin/zip -q EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+
+      $ano = explode('/', $oParam->diaReferencia);
+      $mesReferencia = $ano[1];
+      system("rm -f EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip");
+      system("bin/zip -q EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
 
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+
       $aArrayArquivos[] = $oArquivoZip;
 
       $oRetorno->itens  = $aArrayArquivos;
 
     }
-
 
     break;
 
