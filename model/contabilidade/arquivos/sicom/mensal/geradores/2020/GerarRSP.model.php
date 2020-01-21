@@ -217,7 +217,7 @@ class GerarRSP extends GerarAM
             $aCSVRSP22['si117_tiporegistro']    = $this->padLeftZero($aRSP22['si117_tiporegistro'], 2);
             $aCSVRSP22['si117_codreduzidomov']  = substr($aRSP22['si117_codreduzidomov'], 0, 15);
             $aCSVRSP22['si117_tipodocumento']   = $this->padLeftZero($aRSP22['si117_tipodocumento'], 1);
-            $aCSVRSP22['si117_nrodocumento']    = substr($aRSP22['si117_codreduzidomov'], 0, 14);
+            $aCSVRSP22['si117_nrodocumento']    = substr($aRSP22['si117_nrodocumento'], 0, 14);
 
             $this->sLinha = $aCSVRSP22;
             $this->adicionaLinha();

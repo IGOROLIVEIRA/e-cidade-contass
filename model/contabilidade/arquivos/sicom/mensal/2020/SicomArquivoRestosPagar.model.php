@@ -34,6 +34,11 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
   const JUSTIFICATIVA_CANCELAMENTO = 'Cancelamento de resto a pagar para restabelecimento na fonte correta conforme orientacao TCE';
 
   const JUSTIFICATIVA_RESTABELECIMENTO = 'Restabelecimento de resto a pagar na fonte correta conforme orientacao TCE';
+
+  /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
   
   /* 
    * Contrutor da classe
@@ -305,6 +310,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp11->si113_codreduzidorsp = $oDados10->codreduzidorsp;
 
         $clrsp11->si113_codfontrecursos = $iFonteAlterada != '0' && $iFonteAlterada != '' ? $iFonteAlterada : $oDados10->codfontrecursos;
+        if (db_getsession("DB_anousu") > 2020 && in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
+            $clrsp11->si113_codfontrecursos = substr($clrsp11->si113_codfontrecursos, 0, 1).'59';
+        }
         $clrsp11->si113_vloriginalfonte = $oDados10->vloriginal;
         $clrsp11->si113_vlsaldoantprocefonte = $oDados10->vlsaldoantproce;
         $clrsp11->si113_vlsaldoantnaoprocfonte = $oDados10->vlsaldoantnaoproc;
@@ -341,9 +349,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         */
         if (db_getsession("DB_anousu") == 2020) {
 
-            $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
-
-            if(in_array($oDados10->codfontrecursos, $aFontesEncerradas)) {
+            if(in_array($oDados10->codfontrecursos, $this->aFontesEncerradas)) {
 
                 if ($oDados10->vlsaldoantproce > 0) {
 
@@ -540,7 +546,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
       $clrsp20 = new cl_rsp202020();
       $clrsp20->si115_tiporegistro = 20;
-      $clrsp20->si115_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . '9' : $oDados10->codreduzidorsp . '159' . $iTipoMovimento;
+      $clrsp20->si115_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTipoMovimento;
       $clrsp20->si115_codorgao = $oDados10->codorgao;
       $clrsp20->si115_codunidadesub = $clrsp10->si112_codunidadesub;
       $clrsp20->si115_codunidadesuborig = $clrsp10->si112_codunidadesuborig;
@@ -569,7 +575,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
       $clrsp21->si116_tiporegistro = 21;
       $clrsp21->si116_reg20 = $clrsp20->si115_sequencial;
-      $clrsp21->si116_codreduzidomov = $oDados10->codreduzidorsp . $oDados10->e60_anousu;
+      $clrsp21->si116_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTipoMovimento;
       $clrsp21->si116_codfontrecursos = $iTipoMovimento == 1 ? $oDados10->codfontrecursos : substr($oDados10->codfontrecursos, 0, 1).'59';
       $clrsp21->si116_vlmovimentacaofonte = $vlSaldoproce;
       $clrsp21->si116_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -585,7 +591,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
           $clrsp22 = new cl_rsp222020();
 
           $clrsp22->si117_tiporegistro = 22;
-          $clrsp22->si117_codreduzidomov = $oDados10->codreduzidorsp . $oDados10->e60_anousu;
+          $clrsp22->si117_codreduzidomov = $iTipoMovimento == 1 ? $oDados10->codreduzidorsp . $oDados10->codfontrecursos . $iTiporestospagar : $oDados10->codreduzidorsp . '159' . $iTipoMovimento;
           $clrsp22->si117_tipodocumento = strlen($oDados10->documentocreddor) == 11 ? 1 : 2;
           $clrsp22->si117_nrodocumento = $oDados10->documentocreddor;
           $clrsp22->si117_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
