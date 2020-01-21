@@ -140,15 +140,15 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobrasresponsaveis(
-                          obr05_sequencial		      int8 NOT NULL default 0,
-                          obr05_seqobra 			      int8 NOT NULL default 0,
-                          obr05_responsavel		      int8 NOT NULL default 0,
-                          obr05_tiporesponsavel	    int8 NOT NULL default 0,
-                          obr05_tiporegistro		    int8 NOT NULL default 0,
+                          obr05_sequencial		      int8 NOT NULL,
+                          obr05_seqobra 			      int8 NOT NULL,
+                          obr05_responsavel		      int8 NOT NULL,
+                          obr05_tiporesponsavel	    int8 NOT NULL,
+                          obr05_tiporegistro		    int8 NOT NULL,
                           obr05_numregistro		      varchar(10) NOT NULL ,
-                          obr05_numartourrt		      int8 NOT NULL default 0,
-                          obr05_vinculoprofissional int8 NOT NULL default 0,
-                          obr05_instit			        int8 NOT NULL default 0);
+                          obr05_numartourrt		      int8 ,
+                          obr05_vinculoprofissional int8 NOT NULL,
+                          obr05_instit			        int8 NOT NULL);
 
 
                           -- Criando  sequences

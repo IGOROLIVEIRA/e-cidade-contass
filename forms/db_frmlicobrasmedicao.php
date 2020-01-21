@@ -144,7 +144,7 @@ $cllicobrasmedicao->rotulo->label();
       </tr>
     </table>
     <div id="incluirmedicao">
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
     </div>
     <hr>
@@ -259,6 +259,10 @@ $cllicobrasmedicao->rotulo->label();
 
     if(erro==true){
       document.form1.obr03_seqobra.focus();
+      alert('Nenhuma obra encontrada.');
+      document.form1.tipocompra.value = "";
+      document.form1.l20_numero.value = "";
+      document.form1.l20_edital.value = "";
     }
   }
 

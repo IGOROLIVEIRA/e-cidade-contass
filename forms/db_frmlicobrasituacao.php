@@ -244,7 +244,11 @@ $cllicobrasituacao->rotulo->label();
     document.form1.l20_edital.value = edital;
 
     if(erro==true){
+      alert('Nenhuma obra encontrada.');
       document.form1.obr02_seqobra.focus();
+      document.form1.tipocompra.value = "";
+      document.form1.l20_numero.value = "";
+      document.form1.l20_edital.value = "";
     }
   }
 

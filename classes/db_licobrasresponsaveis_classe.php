@@ -133,13 +133,7 @@ class cl_licobrasresponsaveis {
        return false;
      }
      if ($this->obr05_numartourrt == null ) {
-       $this->erro_sql = " Campo Numero da ART ou RRT não informado.";
-       $this->erro_campo = "obr05_numartourrt";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+       $this->obr05_numartourrt = 'NULL';
      }
      if ($this->obr05_vinculoprofissional == null ) {
        $this->erro_sql = " Campo Vinculo do Prof. com a Adm. Pública não informado.";

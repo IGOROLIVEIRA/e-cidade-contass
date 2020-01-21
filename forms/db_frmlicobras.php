@@ -94,7 +94,7 @@ $cllicobras->rotulo->label();
           </td>
         </tr>
       </table>
-      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+      <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
       <fieldset style="margin-top: 10px; margin-bottom: 10px;">
         <legend>Responsáveis</legend>
@@ -246,7 +246,11 @@ $cllicobras->rotulo->label();
     document.form1.l20_objeto.value = objeto;
 
     if(erro==true){
+      alert("Nenhuma licitação encontrada.");
       document.form1.z01_nome.focus();
+      document.form1.tipocompra.value = "";
+      document.form1.l20_numero.value = "";
+      document.form1.l20_objeto.value = "";
     }
   }
 
@@ -341,23 +345,23 @@ $cllicobras->rotulo->label();
   function js_oRetornoResponsaveis(oAjax) {
 
     var oRetorno = eval('('+oAjax.responseText+")");
-    if(oRetorno.status == 1){
+
+    if(oRetorno.status == '1'){
       alert(oRetorno.message.urlDecode());
+      document.form1.obr05_sequencial.value = '';
+      document.form1.obr05_responsavel.value = '';
+      document.form1.obr05_tiporesponsavel.value = 0;
+      document.form1.z01_nome.value = '';
+      document.form1.obr05_tiporegistro.value = 0;
+      document.form1.obr05_numregistro.value = '';
+      document.form1.obr05_numartourrt.value = '';
+      document.form1.obr05_vinculoprofissional.value = 0;
+
     }else{
       alert(oRetorno.message.urlDecode());
     }
-    js_removeObj("msgbox");
-
-    document.form1.obr05_sequencial.value = '';
-    document.form1.obr05_responsavel.value = '';
-    document.form1.obr05_tiporesponsavel.value = 0;
-    document.form1.z01_nome.value = '';
-    document.form1.obr05_tiporegistro.value = 0;
-    document.form1.obr05_numregistro.value = '';
-    document.form1.obr05_numartourrt.value = '';
-    document.form1.obr05_vinculoprofissional.value = 0;
-
     js_CarregaResponsaveis();
+    js_removeObj("msgbox");
   }
 
   function js_CarregaResponsaveis(){
@@ -390,15 +394,6 @@ $cllicobras->rotulo->label();
       oGridResponsaveis.addRow(aLinha);
     });
     oGridResponsaveis.renderRows();
-
-    document.form1.obr05_sequencial.value = '';
-    document.form1.obr05_responsavel.value = '';
-    document.form1.obr05_tiporesponsavel.value = 0;
-    document.form1.z01_nome.value = '';
-    document.form1.obr05_tiporegistro.value = 0;
-    document.form1.obr05_numregistro.value = '';
-    document.form1.obr05_numartourrt.value = '';
-    document.form1.obr05_vinculoprofissional.value = 0;
   }
 
   function js_alterar(iCodigoResp) {

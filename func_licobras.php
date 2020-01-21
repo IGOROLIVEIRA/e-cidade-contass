@@ -118,7 +118,7 @@ $cllicobras = new cl_licobras;
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$l20_edital','$l03_descr','$l20_numero',false);</script>";
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
         }else{
 	       echo "<script>".$funcao_js."('',false);</script>";
