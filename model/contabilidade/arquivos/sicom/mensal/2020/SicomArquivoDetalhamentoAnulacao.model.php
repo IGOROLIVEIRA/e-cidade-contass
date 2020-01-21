@@ -29,6 +29,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
   protected $sNomeArquivo = 'ALQ';
 
   /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+  /**
    *
    * Construtor da classe
    */
@@ -317,6 +322,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
+      if (in_array($oDados11->si122_codfontrecursos, $this->aFontesEncerradas)) {
+          $oDados11->si122_codfontrecursos = substr($oDados11->si122_codfontrecursos, 0, 1).'59';
+      }
       $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
       $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
       $oDados11->si122_reg10 = $oDados10->si121_sequencial;

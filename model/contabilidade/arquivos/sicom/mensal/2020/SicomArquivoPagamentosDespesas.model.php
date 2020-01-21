@@ -32,6 +32,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
   protected $sNomeArquivo = 'OPS';
 
   /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+  /**
    *
    * Construtor da classe
    */
@@ -325,6 +330,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
             }
             $clops11->si133_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
+            if (in_array($clops11->si133_codfontrecursos, $this->aFontesEncerradas)) {
+                $clops11->si133_codfontrecursos = substr($clops11->si133_codfontrecursos, 0, 1).'59';
+            }
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
             $clops11->si133_nrodocumento = $reg11->nrodocumento;
@@ -515,6 +523,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_nrodocumento = $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
+            if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
+                $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
+            }
             $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
