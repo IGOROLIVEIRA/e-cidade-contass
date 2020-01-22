@@ -41,6 +41,16 @@ $oGet = db_utils::postmemory($_GET);
 $anofolha = db_anofolha();
 $mesfolha = db_mesfolha();
 $aRegistros = $oGet->registros;
+$vinculo      = $oGet->vinculo;
+$tipoReajuste = $oGet->tipoReajuste;
+$tipoResumo = $oGet->tipoResumo;
+$tipoLancamento = $oGet->tipoLancamento;
+$para = $oGet->para;
+$percentual = $oGet->percentual;
+if (isset($oGet->intervaloInicial) && isset($oGet->intervaloFinal)) {
+  $intervaloInicial = $oGet->intervaloInicial;
+  $intervaloFinal   = $oGet->intervaloFinal;
+}
 
 $oReajusteSalarial = unserialize(base64_decode(db_getsession('DBReajusteSalarial')));
 $aServidores = $oReajusteSalarial->getServidores();

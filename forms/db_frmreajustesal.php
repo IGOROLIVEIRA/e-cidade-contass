@@ -378,11 +378,15 @@ function js_retornoReajuste(sRetorno) {
   var oRetorno = eval("("+sRetorno.responseText+")");
 
   if ( oRetorno.redireciona ) {
+    var intervalo = '';
+    if ($F('oCboTipoFiltro') == 1) {
+      intervalo = '&intervaloInicial='+$F('InputIntervaloInicial')+'&intervaloFinal='+$F('InputIntervaloFinal');
+    }
 
     js_OpenJanelaIframe(
       '',
       'janelaReajuste',
-      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&registros='+params.aRegistros,
+      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&vinculo='+$F('Vinculo')+'&tipoReajuste='+$F('tipoReajuste')+'&tipoResumo='+$F('oCboTipoRelatorio')+'&tipoLancamento='+$F('tipoLancamento')+'&para='+$F('para')+intervalo+'&registros='+params.aRegistros,
       'Processar reajuste salarial dos servidores.',
       true
     );

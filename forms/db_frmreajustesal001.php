@@ -76,17 +76,59 @@ $clrotulo->label("rh02_salari");
             $dbwhere .= " and ".$oDaoSelecao->getCondicaoSelecao($selecao);
           }
 
-    if(!empty($aRegistros) && $aRegistros != undefined){
-      if(!empty($dbwhere)){
-        $dbwhere .= ' and ';
-        $dbwhere .= ' rhpessoalmov.rh02_funcao in ('.$aRegistros.')';
-      }
-    }
-
     if(!empty($dbwhere)){
       $dbwhere .= " and ";
     }
     $dbwhere .= ' rh05_recis IS NULL ';
+    if(!empty($vinculo)){
+      switch ( $vinculo ) {
+          case 'a': //Ativos
+          $dbwhere .= " and rh30_vinculo = 'A' ";
+          break;
+          case 'i': //Inativos
+          $dbwhere .= " and rh30_vinculo = 'I' ";
+          break;
+          case 'p': //Pensionista
+          $dbwhere .= " and rh30_vinculo = 'P' ";
+          break;
+          case 'ip': //Inativos Pensionistas
+          $dbwhere .= " and rh30_vinculo in ('I','P') ";
+          break;
+      }
+    }
+    if (!empty($tipoReajuste) || $tipoReajuste == 0) {
+      $dbwhere .= " and rh01_reajusteparidade = '{$tipoReajuste}'";
+    }
+
+    if ($tipoResumo != 0) {
+
+      $aTiposResumo = array( 2 => "r70_codigo", 
+       3 => "rh01_regist", 
+       5 => "rh02_funcao");
+
+      $sCampo = $aTiposResumo[$tipoResumo];
+
+      if (isset($intervaloInicial) || isset($intervaloFinal)) {
+
+        if (isset($intervaloInicial) && isset($intervaloFinal)) {
+          $dbwhere .= " and {$sCampo} between {$intervaloInicial} and {$intervaloFinal}";
+        } else if (isset($intervaloInicial)) {
+          $dbwhere .= " and {$sCampo} >= $intervaloInicial";
+        } else if (isset($intervaloFinal)) {
+          $dbwhere .= " and {$sCampo} <= $intervaloFinal";
+        }
+      }
+
+      if (isset($aRegistros)) {
+
+        $sRegistros = implode(',', $aRegistros);
+        $dbwhere .= " and {$sCampo} in ({$sRegistros})";
+      }
+    }
+
+    if (($tipoLancamento == 'm' && $para == 's') || $tipoLancamento == 'a'){
+      $dbwhere .= " and rh02_salari > 0";
+    }
 
     $result_rhpessoal = $clrhpessoal->sql_record($clrhpessoal->sql_query_cgmmov(null,"rh01_regist,rh02_seqpes,rh01_numcgm,z01_nome,rh02_salari,r70_codigo,r70_estrut,r70_descr","",$dbwhere));
 
