@@ -282,8 +282,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
         INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
         INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
         LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-        INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-        INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
+        INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
+        LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
         WHERE db_config.codigo= ".db_getsession('DB_instit')."
             AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                             '101',
@@ -292,7 +292,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 //  AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= ". db_getsession("DB_anousu"). "
 //  AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
 //    AND liclancedital.l47_dataenvio = $param
-//    die($sSql);
     $rsResult10 = db_query($sSql);
 
     /**
@@ -329,7 +328,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso;
       $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clralic10->si180_instit = db_getsession("DB_instit");
-
 
       $clralic10->incluir(null);
       if ($clralic10->erro_status == 0) {
@@ -489,15 +487,13 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                        obrasdadoscomplementares.db150_codobra as codObraLocal,
                        obrasdadoscomplementares.db150_logradouro as logradouro,
                        obrasdadoscomplementares.db150_numero as numero,
-                       obrasdadoscomplementares.db150_bairro as bairro, -- \d obrasdadoscomplementares  \d ralic112020
+                       obrasdadoscomplementares.db150_bairro as bairro,
                        obrasdadoscomplementares.db150_distrito as distrito,
                        obrasdadoscomplementares.db150_municipio as municipio,
                        obrasdadoscomplementares.db150_cep as cep,
-                       
                        obrasdadoscomplementares.db150_grauslatitude as graulatitude,
                        obrasdadoscomplementares.db150_minutolatitude as minutolatitude,
                        obrasdadoscomplementares.db150_segundolatitude as segundolatitude,
-                       
                        obrasdadoscomplementares.db150_grauslongitude as graulongitude,
                        obrasdadoscomplementares.db150_minutolongitude as minutolongitude,
                        obrasdadoscomplementares.db150_segundolongitude as segundolongitude
