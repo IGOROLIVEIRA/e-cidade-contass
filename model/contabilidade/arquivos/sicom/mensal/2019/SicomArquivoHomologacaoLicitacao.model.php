@@ -314,7 +314,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     solicitem.pc11_quant AS quantidade,
     liclicita.l20_codigo AS codlicitacao,
     (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-    pcorcamval.pc23_percentualdesconto as percDesconto,
+    pcorcamval.pc23_perctaxadesctabela as percDesconto,
     CASE
                WHEN liclicita.l20_criterioadjudicacao is null THEN 3
                WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
