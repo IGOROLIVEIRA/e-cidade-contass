@@ -167,7 +167,7 @@ function js_detectaarquivo(arquivo,pdf){
           </td>
           <td>
             <?php
-             $arr_acima = array("S"=>"Sim","N"=>"Não");
+             $arr_acima = array("N"=>"Não","S"=>"Sim");
              db_select('acima6000',$arr_acima,true,4,"");
 	          ?>
           </td>
