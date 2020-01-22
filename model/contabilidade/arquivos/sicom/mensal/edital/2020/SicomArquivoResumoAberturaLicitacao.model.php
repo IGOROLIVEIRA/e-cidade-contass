@@ -246,7 +246,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                     END AS codunidadesubresp
              FROM db_departorg
              JOIN infocomplementares ON si08_anousu = db01_anousu
-             AND si08_instit = 1
+             AND si08_instit = ".db_getsession('DB_instit')."
              JOIN orcunidade ON db01_orgao=o41_orgao
              AND db01_unidade=o41_unidade
              AND db01_anousu = o41_anousu
@@ -275,7 +275,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                obrasdadoscomplementares.db150_bdi as bdi,
                0 AS mesExercicioRefOrc,
                1 AS origemRecurso,
-               'Desc origem..' AS dscOrigemRecurso
+               '' AS dscOrigemRecurso
         FROM liclicita
         INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
         INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
@@ -294,7 +294,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 //    AND liclancedital.l47_dataenvio = $param
 //    die($sSql);
     $rsResult10 = db_query($sSql);
-    
+
     /**
      * registro 10
      */
