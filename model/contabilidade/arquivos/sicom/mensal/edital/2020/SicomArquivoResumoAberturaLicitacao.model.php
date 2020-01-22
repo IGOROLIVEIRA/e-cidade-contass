@@ -177,7 +177,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
     }
 
 
-    $sSql = "SELECT '10' AS tipoRegistro,
+    $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
             infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
         
             (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
@@ -272,7 +272,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                    ELSE 0
                END AS regimeExecucaoObras,
                0 AS vlContratacao,
-               obrasdadoscomplementares.db150_bdi,
+               obrasdadoscomplementares.db150_bdi as bdi,
                0 AS mesExercicioRefOrc,
                1 AS origemRecurso,
                'Desc origem..' AS dscOrigemRecurso
@@ -294,7 +294,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 //    AND liclancedital.l47_dataenvio = $param
 //    die($sSql);
     $rsResult10 = db_query($sSql);
-
+    
     /**
      * registro 10
      */
