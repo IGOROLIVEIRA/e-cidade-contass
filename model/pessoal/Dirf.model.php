@@ -293,7 +293,7 @@ class Dirf {
     /**
      * carrega dos dados da configuracao do modulo pessoal.
      */
-    global $sel_B904, $cfpess, $sel_B905,$sel_B906,$sel_B907,$sel_B908,$sel_B909,$sel_B910,$sel_B911, $sel_B912, $sel_B915, $basesr, $subpes, $sel_B913;
+    global $sel_B904, $cfpess, $sel_B905,$sel_B906,$sel_B907,$sel_B908,$sel_B909,$sel_B910,$sel_B911, $sel_B912, $sel_B915, $basesr, $subpes, $sel_B913, $sel_B900;
 
     $mes_atual = db_mesfolha();
     $ano_atual = db_anofolha();
@@ -487,6 +487,18 @@ class Dirf {
     }
     $this->sel_B913 = $sel_B913;
 
+    $condicaoaux  = " and r09_base = ".db_sqlformat( "B900" );
+    $sel_B900 = "0";
+    if (db_selectmax( "basesr", "select distinct r09_rubric from basesr {$sWhereBases} {$condicaoaux}")) {
+      for($Ibasesr=0;$Ibasesr<count($basesr);$Ibasesr++){
+         if($Ibasesr > 0){
+            $sel_B900 .= ",";
+         }
+         $sel_B900 .= $basesr[$Ibasesr]["r09_rubric"];
+      }
+    }
+    $this->sel_B900 = $sel_B900;
+
     $condicaoaux  = " and extract(year from rh01_admiss) <= ".db_sqlformat($ano_base);
     $condicaoaux .= " and ( rh05_recis is null ";
     $condicaoaux .= "      or  ( rh05_recis is not null and exists(select 1 from gerfres where r20_regist = rh01_regist ";
@@ -572,7 +584,7 @@ class Dirf {
 
         $atual += 1;
         $condicaoaux  = " and extract(year from rh01_admiss) <= ".db_sqlformat($ano_base);
-        $condicaoaux .= " and ( rh05_recis is null ";
+        $condicaoaux .= " and ( rh05_recis is null OR (DATE_PART('YEAR',rh05_recis) >= {$this->iAno} AND DATE_PART('MONTH',rh05_recis) >= {$ind})";
         $condicaoaux .= "      or  ( rh05_recis is not null and exists(select 1 from gerfres where r20_regist = rh01_regist ";
         $condicaoaux .= "            and r20_anousu = {$ano_base})))";
         $condicaoaux .= " and rh01_numcgm = {$oPessoa->rh01_numcgm}";
@@ -726,10 +738,9 @@ class Dirf {
             $sWhereVerificabaseinativo .= "   and r14_mesusu = {$ind} and r14_anousu = {$this->iAno} and r14_rubric = 'R997'";
 
             $rsVerificabaseinativo = db_query("select * from gerfsal ".$sWhereVerificabaseinativo);
-            //echo "select * from gerfsal ".$sWhereVerificabaseinativo;
+            $folhaSalarioBaseInativo = new stdClass();
             if ($rsVerificabaseinativo && pg_num_rows($rsVerificabaseinativo) > 0) {
-              $folhaSalarioBaseInativo = db_utils::fieldsMemory(db_query("select * from gerfsal ".$sWhereVerificabaseinativo), 0);
-              $folhaSalarioBaseInativo->r14_valor;
+              $folhaSalarioBaseInativo = db_utils::fieldsMemory($rsVerificabaseinativo, 0);
             }
 
             if ( isset($oPessoa->aValorGrupo[1]) && $oPessoa->aValorGrupo[1] >= $D902) {
@@ -768,10 +779,13 @@ class Dirf {
               $ina      += $oPessoa->aValorGrupo[1];
               $tributo  = 0;
             }
-            if ( isset($oPessoa->aValorGrupo13[1]) && $oPessoa->aValorGrupo13[1] >= $D902) {
+            if ( isset($oPessoa->aValorGrupo13[1]) ) {
 
               $ina      += $D902;
-              //$oPessoa->aValorGrupo[13] -= $D902;
+              $oPessoa->aValorGrupo13[1] -= $D902;
+              if ($oPessoa->aValorGrupo13[1] <= 0) {
+                unset($oPessoa->aValorGrupo13[1]);
+              }
 
             } else if ( isset($oPessoa->aValorGrupo13[1]) && $oPessoa->aValorGrupo13[1] > 0) {
 
@@ -863,7 +877,7 @@ class Dirf {
            $vdep13, $rets13,$prev13,$vdeducao65,
            $pensao13,$vdeducao65_13, $vdeducao65_13, $mtributo,$mtribs13,$basesr;
 
-    global $sel_B904,$sel_B905,$sel_B906,$sel_B907,$sel_B908,$sel_B909,$sel_B910,$sel_B911, $sel_B912, $sel_B915,$sel_B903, $basesr, $sel_B913;
+    global $sel_B904,$sel_B905,$sel_B906,$sel_B907,$sel_B908,$sel_B909,$sel_B910,$sel_B911, $sel_B912, $sel_B915,$sel_B903, $basesr, $sel_B913, $sel_B900;
 
 
     // situacao de ferias novas e nova forma de ver as bases da complementar;
@@ -886,6 +900,19 @@ class Dirf {
           }
        } else {
 
+          if(in_array($arq[$Iarq][$sigla."rubric"],explode(",",$this->sel_B900))) {
+            if ($sigla == 'r14_') {
+              if (!isset($oPessoa->aValorGrupo[1])) {
+                  $oPessoa->aValorGrupo[12] = 0;
+              }
+              $oPessoa->aValorGrupo[12] += $arq[$Iarq][$sigla."valor"];
+            } else if ($sigla == 'r35_') {
+              if (!isset($oPessoa->aValorGrupo13[1])) {
+                  $oPessoa->aValorGrupo13[12] = 0;
+              }
+              $oPessoa->aValorGrupo13[12] += $arq[$Iarq][$sigla."valor"];
+            }
+          }
 
           // 13o salario (base bruta p/ irf);
           if ($arq[$Iarq][$sigla."rubric"] == "R982") {
@@ -1209,8 +1236,7 @@ class Dirf {
            * 
            * O problema ocorre pelo fato das rubricas que estão na B913 serem utilizadas tanto para rescisão quanto para férias.
            */
-          if ($oCodigoCliente->db21_codcli == '20') {
-            
+
             if (db_at($mrubr, $this->sel_B913) > 0 && $sigla == 'r20_') {
 
               if (!isset($oPessoa->aValorGrupo[9])) {
@@ -1222,21 +1248,6 @@ class Dirf {
                 $oPessoa->aValorGrupo[9] -= $arq[$Iarq][$sigla."valor"];
               }
             }
-
-          } else {
-
-            if (db_at($mrubr, $this->sel_B913) > 0) {
-
-              if (!isset($oPessoa->aValorGrupo[9])) {
-                $oPessoa->aValorGrupo[9] = 0;
-              }
-              if ($arq[$Iarq][$sigla."pd"] == 1){
-                $oPessoa->aValorGrupo[9] += $arq[$Iarq][$sigla."valor"];
-              } elseif ($arq[$Iarq][$sigla."pd"] == 2) {
-                $oPessoa->aValorGrupo[9] -= $arq[$Iarq][$sigla."valor"];
-              }
-            }
-          }
 
         }
       }
