@@ -402,7 +402,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           cgm.z01_cgccpf as nroDocumento,
           aberlic112019.si47_nrolote as nroLote,
           (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-          pcorcamval.pc23_perctaxadesctabela as perctaxaadm,
+          pcorcamval.pc23_percentualdesconto as perctaxaadm,
           CASE
                WHEN liclicita.l20_criterioadjudicacao is null THEN 3
                WHEN liclicita.l20_criterioadjudicacao = 0 THEN 3
@@ -441,7 +441,6 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
           $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
           if($oDados30->criterioadjudicacao == 2){
-
             $sHash10 = $oDados30->exerciciolicitacao . $oDados30->nroprocessolicitatorio . $oDados30->nrodocumento . $oDados30->nrolote . $oDados30->coditem;
             $sHash30 = '30'.$sHash10;
 
@@ -585,7 +584,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
     $clhomolic30->si65_nrodocumento = $oDadosAgrupados->si65_nrodocumento;
     $clhomolic30->si65_nrolote = $oDadosAgrupados->si65_nrolote;
     $clhomolic30->si65_coditem = $oDadosAgrupados->si65_coditem;
-    $clhomolic30->si65_percdesconto = $oDadosAgrupados->si65_percdesconto;
+    $clhomolic30->si65_perctaxaadm = $oDadosAgrupados->si65_perctaxaadm;
     $clhomolic30->si65_mes = $oDadosAgrupados->si65_mes;
     $clhomolic30->si65_instit = $oDadosAgrupados->si65_instit;
 
