@@ -73,7 +73,7 @@ $db_botao = true;
 
               <table border="0">
                 <tr>
-                  <td>
+                  <td title="Edital">
                     <b>Edital:</b>
                   </td>
                   <td>
@@ -85,7 +85,7 @@ $db_botao = true;
                   </td>
                 </tr>
                 <tr>
-                  <td nowrap>
+                  <td nowrap title="Processo">
                     <b>Processo:</b>
                   </td>
                   <td>
@@ -96,7 +96,7 @@ $db_botao = true;
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td title="Modalidade">
                     <b>Modalidade:</b>
                   </td>
                   <td>
@@ -117,7 +117,7 @@ $db_botao = true;
                   </td>
                 </tr>
                 <tr>
-                  <td nowrap title="Links da publicação">
+                  <td nowrap title="Origem do recurso">
                     <b>Origem do recurso:</b>
                   </td>
                   <td>
