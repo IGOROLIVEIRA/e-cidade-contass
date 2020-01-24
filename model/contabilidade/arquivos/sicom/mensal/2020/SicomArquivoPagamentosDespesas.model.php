@@ -171,7 +171,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             WHERE c80_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
               AND c71_coddoc IN (5, 35, 37)
               AND e60_instit = " . db_getsession("DB_instit") . "
-            ORDER BY e50_codord, c70_valor DESC";
+            ORDER BY e50_codord, c70_valor";
 
     $rsEmpenhosPagosGeral = db_query($sSql);
 
@@ -189,9 +189,16 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
       /**
        * pegar quantidade de extornos
        */
-      $sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc
-            join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
-            and c70_data <= '" . $this->sDataFinal . "' and c80_codord = {$oEmpPago->ordem}";
+
+
+      $sSqlExtornos = "SELECT sum(c70_valor) AS valor
+                        FROM conlancamdoc
+                        JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                        JOIN conlancamord ON c71_codlan = c80_codlan
+                        JOIN conlancam ON c70_codlan = c71_codlan
+                        WHERE c53_tipo IN (31, 30)
+        AND c80_codord = {$oEmpPago->ordem}
+                          AND c70_data BETWEEN  '{$this->sDataInicial}'  AND '{$this->sDataFinal}'";
       $rsQuantExtornos = db_query($sSqlExtornos);
 
       if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
@@ -625,6 +632,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_nrodocumento = 0;
             $clops12->si134_codctb = $ContaPag2;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
+            if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
+                $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
+            }
             $clops12->si134_desctipodocumentoop = "TED";
             $clops12->si134_dtemissao = $oEmpPago->dtpagamento;
             $clops12->si134_vldocumento = $nVolorOp;
@@ -1001,6 +1011,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_nrodocumento = $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
+            if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
+                $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
+            }
             $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
@@ -1096,6 +1109,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_nrodocumento = 0;
             $clops12->si134_codctb = $ContaPag2;
             $clops12->si134_codfontectb = $reg11->codfontrecursos;
+            if (in_array($clops12->si134_codfontectb, $this->aFontesEncerradas)) {
+                $clops12->si134_codfontectb = substr($clops12->si134_codfontectb, 0, 1).'59';
+            }
             $clops12->si134_desctipodocumentoop = "TED";
             $clops12->si134_dtemissao = $oEmpPago->dtpagamento;
             $clops12->si134_vldocumento = $nVolorOp;
