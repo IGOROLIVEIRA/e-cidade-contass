@@ -126,8 +126,7 @@ if(isset($incluir)){
 	}
 
 	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"max(l47_numero) as l47_numero",null,"l47_instit=$instit and l47_anousu=$anousu"));
-
-	if ($clpccfeditalnum->numrows==0){
+  if ($clpccfeditalnum->numrows==0){
 	 $erro_msg="Verifique se esta configurado a numeração do edital por licitação.";
 	 $sqlerro = true;
 	}
@@ -160,14 +159,14 @@ if(isset($incluir)){
 	  }
 
 	  if ($clpccfeditalnum->numrows>0){
-	    db_fieldsmemory($result_numedital,0);
-	    $aModalidades = array(48, 49, 50, 52, 54);
-	    if(in_array($modalidade_tribunal, $aModalidades)){
-	    	$l20_nroedital=$l47_numero+1;
-	    }
-	  } else {
-		$erro_msg="Configure a numeração do edital.";
-		$sqlerro = true;
+	      db_fieldsmemory($result_numedital,0);
+	      $aModalidades = array(48, 49, 50, 52, 53, 54);
+        if(in_array($modalidade_tribunal, $aModalidades)){
+            $l20_nroedital=$l47_numero+1;
+        }
+    } else {
+        $erro_msg="Configure a numeração do edital.";
+        $sqlerro = true;
 	  }
 
 	  // if ($sqlerro == false){
@@ -198,12 +197,14 @@ if(isset($incluir)){
 
 		//verifica se existe numero do edital
 
-		$result_verif_editalnum=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l47_anousu=$anousu and l20_nroedital= $l20_nroedital and l20_anousu=$anousu"));
+		if($l20_nroedital){
+        $result_verif_editalnum=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l47_anousu=$anousu and l20_nroedital= $l20_nroedital and l20_anousu=$anousu"));
+        if ($clpccfeditalnum->numrows>0){
+            $erro_msg="Ja existe edital da licitação com numero $l47_edital.Verificar numeração por edital.";
+            $sqlerro = true;
+        }
+    }
 
-		if ($clpccfeditalnum->numrows>0){
-		  $erro_msg="Ja existe edital da licitação com numero $l47_edital.Verificar numeração por edital.";
-		  $sqlerro = true;
-		}
 
 //    /**
 //     * Verificar Encerramento Periodo Contabil
@@ -256,8 +257,8 @@ if(isset($incluir)){
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
       		$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+          $clliclicita->incluir(null);
 
-      		$clliclicita->incluir(null);
 		  	if ($clliclicita->erro_status=="0"){
 		  		$erro_msg = $clliclicita->erro_msg;
 		  		$sqlerro=true;
