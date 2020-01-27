@@ -567,8 +567,8 @@ class cl_obrasdadoscomplementares {
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-         $this->erro_sql .= "Valores : ".$db150_sequencial;
+         $this->erro_sql = "Exclusão efetuada com Sucesso\n";
+//         $this->erro_sql .= "Valores : ".$db150_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
@@ -648,6 +648,7 @@ class cl_obrasdadoscomplementares {
     }
     $sql .= " from obrasdadoscomplementares ";
     $sql .= " JOIN liclicita on l20_codigo = db150_liclicita ";
+    $sql .= " INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio ";
     $sql2 = "";
     if($dbwhere==""){
       if($db150_sequencial!=null ){

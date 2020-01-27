@@ -3795,13 +3795,13 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
     var sExpReg  = new RegExp('\\\\n','g');
 
     if (oRetorno.status == 1) {
-      me.setCodigoEndereco(oRetorno.icodigoEndereco);
-      $('cboCodigoMunicipio'+sId).value = oRetorno.icodigoMunicipio;
-      me.setMunicipio(oRetorno.icodigoMunicipio);
-      $('txtCodigoBairro'+sId).value    = oRetorno.icodigoBairro;
-      me.setBairro(oRetorno.icodigoBairro);
-      $('txtCodigoRua'+sId).value       = oRetorno.icodigoRua;
-      me.setRua(oRetorno.icodigoRua);
+      // me.setCodigoEndereco(oRetorno.icodigoEndereco);
+      // $('cboCodigoMunicipio'+sId).value = oRetorno.icodigoMunicipio;
+      // me.setMunicipio(oRetorno.icodigoMunicipio);
+      // $('txtCodigoBairro'+sId).value    = oRetorno.icodigoBairro;
+      // me.setBairro(oRetorno.icodigoBairro);
+      // $('txtCodigoRua'+sId).value       = oRetorno.icodigoRua;
+      // me.setRua(oRetorno.icodigoRua);
 //Fecha a janela e preenche o campo com o endereco informado
       me.close();
       me.callBackFunction();
@@ -3948,8 +3948,8 @@ DBViewCadDadosComplementares = function(sId, sNameInstance, iCodigoEndereco) {
   this.retornoCampos = function(oAjax){
     js_removeObj('msgBox');
     var oRetorno = eval('('+oAjax.responseText+')');
-
     let dadoscomplementares = oRetorno.dadoscomplementares[0];
+    $('cboCodigoMunicipio'+sId).value = dadoscomplementares.municipio;
     $('txtLogradouro'+sId).value = dadoscomplementares.logradouro.replace('+', ' ');
     me.setLogradouro(dadoscomplementares.logradouro);
     $('txtDistrito'+sId).value = dadoscomplementares.distrito.replace('+', ' ');
