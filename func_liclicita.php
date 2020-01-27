@@ -318,7 +318,6 @@ $sWhereContratos = " and 1 = 1 ";
                             liclicita.l20_numero,
                             pctipocompra.pc50_pctipocompratribunal,
                             liclicita.l20_objeto,
-                            l47_origemrecurso as dl_Origem,
                             liclicita.l20_naturezaobjeto dl_Natureza_objeto,
                             (CASE 
                             WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
