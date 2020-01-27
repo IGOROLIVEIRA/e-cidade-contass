@@ -295,8 +295,8 @@ $db_botao = true;
         for (var iInd=0; iInd < iNumDados; iInd++) {
             let sEndereco = "";
             sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
-            sEndereco += ", Distrito: "+aDados[iInd].distrito.urlDecode();
-            sEndereco += ", Bairro: "+aDados[iInd].bairro.urlDecode();
+            sEndereco += ", "+aDados[iInd].descrmunicipio.urlDecode();
+            sEndereco += ", "+aDados[iInd].bairro.urlDecode();
 
             $('dados_complementares').value = sEndereco;
         }
@@ -359,8 +359,9 @@ $db_botao = true;
     function js_retornoDados(oAjax){
         var oRetorno    = eval("("+oAjax.responseText+")");
         oRetorno.dadoscomplementares.forEach((dado) => {
+            let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra}, Distrito: ${dado.distrito}, Bairro: ${dado.bairro}`;
+            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}, ${dado.bairro}`;
             let aLinha = new Array();
             aLinha[0] = linhas+1;
             aLinha[1] = descricaoLinha;
@@ -402,7 +403,7 @@ $db_botao = true;
         let codigoRequisitado = JSON.parse(oAjax.request.parameters.json);
         let resposta = eval("("+oAjax.responseText+")");
 
-        alert(resposta.message);
+        alert(resposta.message.urlDecode());
 
         for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
             let conteudo = oDBGrid.aRows[cont].aCells[1].content.split(',');
