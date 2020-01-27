@@ -143,7 +143,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
         $clparpps20->si155_tiporegistro = 20;
         $clparpps20->si155_codorgao = $sCodorgao;
-        $clparpps20->si155_tipoplano = $oDados20->si169_tipoplano;
+        $clparpps20->si155_tipoplano = $oDados10->si168_tipoplano;
         $clparpps20->si155_exercicio = $oDados20->si169_exercicio;
         $clparpps20->si155_vlreceitaprevidenciaria = $oDados20->si169_vlreceitaprevidenciaria;
         $clparpps20->si155_vldespesaprevidenciaria = $oDados20->si169_vldespesaprevidenciaria;
