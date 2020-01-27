@@ -119,9 +119,7 @@ $clrotulo->label("rh02_salari");
         }
       }
 
-      if (isset($aRegistros)) {
-
-        $sRegistros = implode(',', $aRegistros);
+      if (!empty($sRegistros)) {
         $dbwhere .= " and {$sCampo} in ({$sRegistros})";
       }
     }
