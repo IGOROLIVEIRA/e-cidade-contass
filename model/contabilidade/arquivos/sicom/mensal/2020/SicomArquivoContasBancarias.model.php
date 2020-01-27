@@ -488,21 +488,16 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
           $bFonteEncerrada  = in_array($iFonte, $this->aFontesEncerradas);
           $bCorrecaoFonte   = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2020);
 
-//          $iFonte2 = $bFonteEncerrada ? substr($iFonte, 0, 1).'59' : $iFonte;ok
-          $iFonte2 = ($bFonteEncerrada && $bCorrecaoFonte) ? substr($iFonte, 0, 1).'59' : $iFonte;
+          $iFonte2 = $bFonteEncerrada ? substr($iFonte, 0, 1).'59' : $iFonte;
 
-//          $sHash20 = $oContaAgrupada->si95_codctb . $iFonte2;//fevereiro
-//          $sHash20 = $oContaAgrupada->si95_codctb . $iFonte;//janeiro
-          $sHash20 = $oContaAgrupada->si95_codctb . $iFonte2;
+          $sHash20 = $bCorrecaoFonte ? $oContaAgrupada->si95_codctb . $iFonte : $oContaAgrupada->si95_codctb . $iFonte2;
           if (!$aCtb20Agrupado[$sHash20]) {
 
             $oCtb20 = new stdClass();
             $oCtb20->si96_tiporegistro = '20';
             $oCtb20->si96_codorgao = $oContaAgrupada->si95_codorgao;
             $oCtb20->si96_codctb = $oContaAgrupada->si95_codctb;
-//            $oCtb20->si96_codfontrecursos = $iFonte2;//fevereiro
-//            $oCtb20->si96_codfontrecursos = $iFonte;//janeiro
-            $oCtb20->si96_codfontrecursos = $iFonte2;
+            $oCtb20->si96_codfontrecursos = ($bCorrecaoFonte || $bFonteEncerrada) ? $iFonte2 : $iFonte;//Modificação para de/para das fontes encerradas tratadas na OC11537
             $oCtb20->si96_vlsaldoinicialfonte = $oTotalMov->sinalanterior == 'C' ? $oTotalMov->saldo_anterior * -1 : $oTotalMov->saldo_anterior;
             $oCtb20->si96_vlsaldofinalfonte = ($bFonteEncerrada && $bCorrecaoFonte) ? 0 : ($oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final);
             $oCtb20->si96_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -516,6 +511,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
             $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
           }
 
+          //Cria registros 20 e 21 de para OC11537
           if($bFonteEncerrada && $bCorrecaoFonte) {
 
               $sHash20  = $oContaAgrupada->si95_codctb . $iFonte2;
