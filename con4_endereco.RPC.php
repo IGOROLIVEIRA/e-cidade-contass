@@ -418,7 +418,6 @@ switch ($oParam->exec) {
     try {
 
         $oEndereco = new obrasDadosComplementares(null);
-        $oRetorno->dadoscomplementares = new stdClass();
         $oEndereco->setEstado($oParam->endereco->codigoEstado);
         $oEndereco->setPais($oParam->endereco->codigoPais);
         $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
@@ -445,11 +444,8 @@ switch ($oParam->exec) {
         $oEndereco->setBdi($oParam->endereco->bdi);
         $oEndereco->setLicita($oParam->endereco->licitacao);
 
-
         $oEndereco->salvaDadosComplementares();
         db_fim_transacao(false);
-
-      $oRetorno->dadoscomplementares = $oParam->endereco;
 
     }catch (Exception $erro){
       db_fim_transacao(true);
@@ -479,7 +475,7 @@ switch ($oParam->exec) {
       $oRetorno->status = 2;
     }
 
-    echo $oJson->encode($oRetorno);
+    echo json_encode($oRetorno);
     break;
 
   case 'excluiDadosObra':
