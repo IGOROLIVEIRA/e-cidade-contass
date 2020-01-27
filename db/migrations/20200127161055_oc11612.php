@@ -35,6 +35,8 @@ class Oc11612 extends AbstractMigration
         alter table projecaoatuarial10 alter column si168_vlreceitaprevidenciaria type float4;
         alter table projecaoatuarial10 alter column si168_vldespesaprevidenciaria type float4;
         
+        COMMIT;
+        
 SQL;
         $this->execute($sql);
     }
