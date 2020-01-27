@@ -40,7 +40,7 @@ $oGet = db_utils::postmemory($_GET);
 
 $anofolha = db_anofolha();
 $mesfolha = db_mesfolha();
-$aRegistros = $oGet->registros;
+$sRegistros = $oGet->registros;
 $vinculo      = $oGet->vinculo;
 $tipoReajuste = $oGet->tipoReajuste;
 $tipoResumo = $oGet->tipoResumo;

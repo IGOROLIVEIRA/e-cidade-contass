@@ -386,7 +386,7 @@ function js_retornoReajuste(sRetorno) {
     js_OpenJanelaIframe(
       '',
       'janelaReajuste',
-      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&vinculo='+$F('Vinculo')+'&tipoReajuste='+$F('tipoReajuste')+'&tipoResumo='+$F('oCboTipoRelatorio')+'&tipoLancamento='+$F('tipoLancamento')+'&para='+$F('para')+intervalo+'&registros='+params.aRegistros,
+      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&vinculo='+$F('Vinculo')+'&tipoReajuste='+$F('tipoReajuste')+'&tipoResumo='+$F('oCboTipoRelatorio')+'&tipoLancamento='+$F('tipoLancamento')+'&para='+$F('para')+intervalo+'&registros='+params.aRegistros.join(','),
       'Processar reajuste salarial dos servidores.',
       true
     );
