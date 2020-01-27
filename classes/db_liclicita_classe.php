@@ -131,8 +131,8 @@ class cl_liclicita
   var $l20_cadinicial = 1;
 
 
-  // cria propriedade com as variaveis do arquivo
-  var $campos = "
+    // cria propriedade com as variaveis do arquivo
+    var $campos = "
                  l20_codigo = int8 = Sequencial
                  l20_codtipocom = int4 = Código do tipo de compra
                  l20_numero = int8 = Numeração
@@ -887,21 +887,21 @@ class cl_liclicita
         }
 
         if ($this->l20_cadinicial == null) {
-            $this->erro_sql = " Campo Tipo de Cadastro da licitação não foi informado.";
-            $this->erro_campo = "l20_cadinicial";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
+          $this->erro_sql = " Campo Tipo de Cadastro da licitação não foi informado.";
+          $this->erro_campo = "l20_cadinicial";
+          $this->erro_banco = "";
+          $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
         }
 
         if ($this->l20_exercicioedital == null) {
-            $this->erro_sql = " Campo Exercício do edital não foi informado.";
-            $this->erro_campo = "l20_exercicioedital";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
+          $this->erro_sql = " Campo Exercício do edital não foi informado.";
+          $this->erro_campo = "l20_exercicioedital";
+          $this->erro_banco = "";
+          $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
         }
 
         if ($l20_codigo == "" || $l20_codigo == null) {
@@ -1202,10 +1202,10 @@ class cl_liclicita
                     $virgula = ",";
                 }
 
-    if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
-      $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
-      $virgula = ",";
-    }
+                if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
+                    $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
+                    $virgula = ",";
+                }
 
                 if (trim($this->l20_validadeproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]))) {
                     $sql .= $virgula . " l20_validadeproposta = '$this->l20_validadeproposta' ";
