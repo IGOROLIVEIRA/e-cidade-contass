@@ -74,21 +74,16 @@ if ($oGet->edital){
 <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-     <?
+        <?
 
-         $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
-         $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
-         $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-//         if($oGet->edital){
-            $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
-            $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
-//         }else{
-//           $clcriaabas->src = array("editais" => "lic4_editalalteracao.php", "documentos" => "lic4_editaldocumentos.php");
-//           $clcriaabas->disabled = array("editais" => "false", "documentos" => "false");
-//         }
-         $clcriaabas->cria_abas();
+        $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
+        $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
+        $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
+        $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?numero_edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
+        $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
+        $clcriaabas->cria_abas();
 
-	 ?>
+        ?>
 	 </td>
       </tr>
     </table>

@@ -48,7 +48,7 @@ $db_opcao = 1;
 //  Realizar busca pelos campos
 
 if($numero_edital){
-  $sqlLicita = $clliclicita->sql_query_edital('', 'l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+  $sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
        UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
        l47_dataenvio', '', 'l20_nroedital = '.$numero_edital.' and EXTRACT(YEAR from l20_datacria) >= 2020 ', '', 1);
   $rsLicita = $clliclicita->sql_record($sqlLicita);

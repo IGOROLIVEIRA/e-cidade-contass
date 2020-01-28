@@ -365,7 +365,7 @@ if(isset($incluir)){
 			}
 			echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
-		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo';\n
+		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo&redireciona_edital=true';\n
 		           parent.document.formaba.resplicita.disabled=false;
 		           parent.mo_camada('resplicita');
 	           </script> ";
