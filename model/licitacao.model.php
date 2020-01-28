@@ -762,6 +762,65 @@ class licitacao {
     }
 
     /**
+     * @param $iFornecedor
+     * @param bool $lValidaAutorizadas
+     * @param bool $lValidaHomologacao
+     * @return stdClass[]
+     * OC8339
+     */
+    public function getLicByFornecedorCredenciamento($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false){
+
+        $oDaoLicilicitem = db_utils::getDao("liclicitem");
+        $sWhere          = '';
+        if ($lValidaAutorizadas) {
+
+            $sWhere .= " and not exists (";
+            $sWhere .= "                 select 1 ";
+            $sWhere .= "                   from empautoriza  ";
+            $sWhere .= "                        inner join empautitem           on e55_autori                      = e54_autori";
+            $sWhere .= "                        inner join empautitempcprocitem on empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
+            $sWhere .= "                                                       and empautitempcprocitem.e73_autori = empautitem.e55_autori";
+            $sWhere .= "                        inner join pcprocitem           on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem";
+            $sWhere .= "                        inner join liclicitem           on pc81_codprocitem                = l21_codpcprocitem";
+            $sWhere .= "                  where l21_codliclicita = l20_codigo";
+            $sWhere .= "                    and e54_anulad is null";
+            $sWhere .= " )";
+        }
+
+        if($lValidaHomologacao){
+            $sWhere .= "and exists( select 1 from homologacaoadjudica where l20_codigo = l202_licitacao)";
+        }
+
+        $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";
+        $sCampos        .= ", l20_numero as numero_exercicio, l20_datacria as data";
+        $sCampos        .= ", l20_edital as edital";// campo adicionado para atender novas demandas do sicom 2014
+        $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulgCredenciamento(
+            null,
+            $sCampos,
+            "l20_codigo",
+            "l205_fornecedor = {$iFornecedor} {$sWhere}"
+        );
+        $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
+        return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
+    }
+    //FIM OC8339
+
+    static function getItensPorFornecedorCredenciamento($iFornecedor,$iLicitacao,$anousu){
+
+        $oDaoLiclicitem  = db_utils::getDao("liclicitem");
+
+        $sCampos = "l21_codigo AS codigo,pc01_codmater AS codigomaterial,pc01_descrmater AS material,
+        (select si02_vlprecoreferencia from itemprecoreferencia where si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS valorunitario,pc01_servico AS servico,1 AS origem,pc18_codele AS elemento,pc23_quant AS quantidade,
+        pc23_valor AS valortotal,l20_numero AS numero,sum(l213_qtdcontratada) as l213_qtdcontratada";
+
+        $sWhere  = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1";
+        $sWhere .="GROUP BY l21_codigo,pc01_codmater,pc23_vlrun,pc18_codele,pc23_quant,pc23_valor,l20_numero,pcorcamitemproc.pc31_orcamitem";
+        $sSqlItensCred = $oDaoLiclicitem->sql_query_soljulgCredenciamento(null,$sCampos,null,$sWhere);
+        $rsItenscred = db_query($sSqlItensCred);
+        return db_utils::getCollectionByRecord($rsItenscred, false, false, true);
+    }
+
+    /**
      * Retorna o valor total parcial da licitacao
      *
      * @param integer_type $iCodigoItemProcesso

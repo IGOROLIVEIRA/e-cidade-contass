@@ -58,9 +58,17 @@ $clcriaabas     = new cl_criaabas;
      if (isset($_GET['chavepesquisa']) && $_GET['chavepesquisa'] != '') {
 	     $chavepesquisa = "?chavepesquisa=".$_GET['chavepesquisa'];
      }
-	 $clcriaabas->identifica = array("db_forn"=>"Fornecedor","db_cred"=>"Credenciamento","db_habi"=>"Habilitação");
-	 $clcriaabas->src = array("db_forn"=>"lic1_fornec002.php{$chavepesquisa}","db_cred"=>"lic1_credenciamento001.php","db_habi"=>"lic1_habilitacaoforn001.php");
-	 $clcriaabas->sizecampo = array("db_forn"=>"14","db_cred"=>"14","db_habi"=>"14");
+	 $clcriaabas->identifica = array("db_forn"=>"Fornecedor",
+                                     "db_habi"=>"Habilitação",
+                                     "db_cred"=>"Credenciamento");
+
+	 $clcriaabas->src = array("db_forn"=>"lic1_fornec002.php{$chavepesquisa}",
+                              "db_habi"=>"lic1_habilitacaoforn001.php",
+                              "db_cred"=>"lic1_credenciamento001.php");
+
+	 $clcriaabas->sizecampo = array("db_forn"=>"14",
+                                    "db_habi"=>"14",
+                                    "db_cred"=>"14");
 	 $clcriaabas->cria_abas();
        ?>
        </td>

@@ -42,7 +42,7 @@ $clrotulo->label("l20_codigo");
       return false;
     }
   }
-  
+
 </script>
 <form name="form1" method="post" action="">
 <center>
@@ -51,7 +51,7 @@ $clrotulo->label("l20_codigo");
     <td nowrap title="<?=@$Tl202_sequencial?>">
        <?=@$Ll202_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l202_sequencial',10,$Il202_sequencial,true,'text',3,"")
 ?>
@@ -63,7 +63,7 @@ db_input('l202_sequencial',10,$Il202_sequencial,true,'text',3,"")
        db_ancora(@$Ll202_licitacao,"js_pesquisal202_licitacao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l202_licitacao',10,$Il202_licitacao,true,'text',$db_opcao," onchange='js_pesquisal202_licitacao(false);'")
 ?>
@@ -78,7 +78,7 @@ db_input('pc50_descr',40,$Ipc50_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tl202_datahomologacao?>">
        <?=@$Ll202_datahomologacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l202_datahomologacao',@$l202_datahomologacao_dia,@$l202_datahomologacao_mes,@$l202_datahomologacao_ano,true,'text',$db_opcao,"")
 ?>
@@ -94,7 +94,7 @@ $l20_usaregistropreco = db_utils::fieldsMemory($result, 0)->l20_usaregistropreco
     <td nowrap title="<?=@$Tl202_dataadjudicacao?>">
        <?=@$Ll202_dataadjudicacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudicacao_mes,@$l202_dataadjudicacao_ano,true,'text',$db_opcao,"")
 ?>
@@ -104,17 +104,17 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
     <input name="l203_itens[]" type="hidden" id="l203_itens" value="">
     <input name="l20_usaregistropreco" type="hidden" id="l20_usaregistropreco" value="<?php echo $l20_usaregistropreco ?>">
     </td>
-  </tr> 
-<? } ?> 
+  </tr>
+<? } ?>
   </table>
   </center>
 <? if(!empty($l202_licitacao)){ ?>
 
-    <? if($db_opcao == 1){ ?>  
+    <? if($db_opcao == 1){ ?>
       <input id="db_opcao" type="submit" value="Homologar" onclick="js_submit()" name="incluir" tabindex="4">
-    <? }else{ ?>  
+    <? }else{ ?>
        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" onclick="js_submit()" id="db_opcao" value="<?=($db_opcao==1?"Homologar":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-    <? } ?>      
+    <? } ?>
 <? }else{ ?>
 <input name="processar" type="button" id="processar" value="Processar" onclick="js_processa()">
 <? } ?>
@@ -133,7 +133,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
             if(!empty($l202_licitacao)){
 
                 $result=$clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"*",null,"l202_licitacao=$l202_licitacao"));
-                
+
                 if ($clhomologacaoadjudica->numrows>0){
 
                   $sql = $clhomologacaoadjudica->sql_query_itens(null,
@@ -149,9 +149,9 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                                                        pc11_resum",
                                                       "pc11_seq",$sWhere
                                                       );
-                  if($db_opcao == 1) { 
+                  if($db_opcao == 1) {
 
-                    echo 
+                    echo
                     "<script> 
                     document.getElementById('db_opcao').disabled       = true;
                     document.getElementById('l202_licitacao').style.backgroundColor = '#DEB887';
@@ -205,7 +205,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
 
                    if($db_opcao == 1) {
 
-                      echo 
+                      echo
                       "<script> 
                       document.getElementById('l202_licitacao').style.backgroundColor = '#DEB887';
                       document.getElementById('l202_licitacao').readOnly = true;
@@ -252,11 +252,11 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
            }
            if($db_opcao == 1 || $db_opcao == 3 || $db_opcao == 33){
              $cliframe_seleciona->sql_disabled=@$sql_disabled;
-           } 
-           $cliframe_seleciona->iframe_nome ="itens_teste"; 
+           }
+           $cliframe_seleciona->iframe_nome ="itens_teste";
            $cliframe_seleciona->chaves = "pc81_codprocitem";
            $cliframe_seleciona->iframe_seleciona(1);
-           
+
            ?>
     </table>
   </center>
@@ -273,18 +273,18 @@ function js_pesquisal202_licitacao(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
   }else{
-     if(document.form1.l202_licitacao.value != ''){ 
+     if(document.form1.l202_licitacao.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  document.form1.pc50_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.l202_licitacao.focus(); 
-    document.form1.l202_licitacao.value = ''; 
+  document.form1.pc50_descr.value = chave;
+  if(erro==true){
+    document.form1.l202_licitacao.focus();
+    document.form1.l202_licitacao.value = '';
   }
 }
 /**
@@ -298,7 +298,7 @@ function js_mostraliclicita1(chave1,chave2,chave3){
   db_iframe_liclicita.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_homologacaoadjudica.hide();

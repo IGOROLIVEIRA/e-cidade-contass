@@ -186,7 +186,19 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
             }
 
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
+            if($listacred == "false"){
+                $sWhereCredenciamento = " and l03_pctipocompratribunal not in (103,102)";
+            }
+
+            if($credenciamento == 'true'){
+                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao = 1 AND l20_dtpubratificacao IS NULL";
+            }
+
+            if($credenciamento == 'false'){
+                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao IN (10) AND l20_dtpubratificacao IS NOT NULL";
+            }
+
+            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}"."$sWherePublicCredenciamento";
             if (isset($lContratos) && $lContratos == 1 ) {
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
@@ -392,7 +404,11 @@ $sWhereContratos = " and 1 = 1 ";
 
                         if($clliclicita->numrows != 0){
                             db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                            if($tipoproc == "true"){
+                                echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                            }else{
+                                echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                            }
                         } else {
                             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
                         }
