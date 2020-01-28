@@ -1039,7 +1039,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	cgm.z01_cgccpf as nroDocumento,
 	credenciamento.l205_datacred as dataCredenciamento,
 	dispensa112020.si75_nrolote as nroLote,
-	(solicitempcmater.pc16_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
+	(credenciamento.l205_item::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
 	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
