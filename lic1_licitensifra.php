@@ -312,8 +312,8 @@ if (!empty($chaves) && isset($chaves)){
       $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
       $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
 
-      if($natureza_objeto == 1 && $nroedital){
-        echo"<script> parent.parent.window.location.href='lic4_editalabas.php?edital=$edital';</script>";
+      if($natureza_objeto == 1 && $nroedital && $redireciona){
+        echo"<script> parent.parent.window.location.href='lic4_editalabas.php?edital=$nroedital';</script>";
       }
     }else{
       //db_msgbox(@$erro_msg);

@@ -60,7 +60,7 @@ $clrotulo->label("nome");
       }
     }
      ?>
-    <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&edital=<?=$l20_nroedital?>" width="1000" height="230" marginwidth="0" marginheight="0" frameborder="0">
+    <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&redireciona=<?=$redireciona_edital?>" width="1000" height="230" marginwidth="0" marginheight="0" frameborder="0">
 	</iframe>
     </td>
   </tr>
