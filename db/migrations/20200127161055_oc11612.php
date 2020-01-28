@@ -32,8 +32,8 @@ class Oc11612 extends AbstractMigration
         BEGIN;
         SELECT fc_startsession();
         
-        alter table projecaoatuarial10 alter column si168_vlreceitaprevidenciaria type float4;
-        alter table projecaoatuarial10 alter column si168_vldespesaprevidenciaria type float4;
+        alter table projecaoatuarial10 alter column si168_vlreceitaprevidenciaria type DOUBLE PRECISION;
+        alter table projecaoatuarial10 alter column si168_vldespesaprevidenciaria type DOUBLE PRECISION;
         
         COMMIT;
         
