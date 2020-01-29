@@ -1106,8 +1106,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         ";
               $rsMatServicoR21  = db_query($sqlServico);
               $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
-
-              $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+              if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f"){
+                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+              }else{
+                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
+              }
               if($oAcordoItem->getQuantiAditada() == 0){
                 $clcontratos21->si88_quantacrescdecresc = 1;
               }else{
