@@ -45,8 +45,18 @@
   <td><strong>Elemento da Despesa:</strong></td>
   <td ><input type="text" name="elementoEcidade" id="elementoEcidade" maxlength="8" 
   onkeyup="js_ValidaCampos(this,1,'O Código','f','f',event);" size="8"></td>
-  <td><input type="text" name="elementoSicom" id="elementoSicom" maxlength="8" 
+  <td><input type="text" name="elementoSicom" id="elementoSicom" maxlength="8"
   onkeyup="js_ValidaCampos(this,1,'O Código','f','f',event);" size="8"></td>
+  </tr>
+
+  <tr>
+      <td><strong>De/Para Desdobramento</strong></td>
+      <td>
+          <select name="deParaDesdobramento" id="deParaDesdobramento" onchange="js_changeDePara(this.value);">
+              <option value="2">Não</option>
+              <option value="1">Sim</option>
+          </select>
+      </td>
   </tr>
   
   <tr>
@@ -184,6 +194,7 @@ function fechar(){
 function cria_tabela(json){
 
 	var jsonObj = eval("("+json.responseText+")");
+	console.log(jsonObj);
 	var tabela;
 	var color = "#e796a4";
 	tabela  = "<table id=\"TabDbLov\" cellspacing=\"1\" cellpadding=\"2\" border=\"1\">";
@@ -205,7 +216,10 @@ function cria_tabela(json){
 	tabela += "Elemento SICOM";
 	tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
 	tabela += "Instituição";
-	tabela += "</td></tr>";
+	tabela += "</td>";
+    tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
+    tabela += "De/Para Desdobramento";
+    tabela += "</td></tr>";
 
 	try {
 	
@@ -232,6 +246,10 @@ function cria_tabela(json){
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
 			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].instituicao+"</a>";
+
+            tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
+            tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
+            +jsonObj[i].elementoSicom+"')\">"+jsonObj[i].deParaDesdobramento+"</a>";
 			
 			tabela += "</td></tr>";
 			
@@ -244,5 +262,15 @@ function cria_tabela(json){
 	conteudo.innerHTML += tabela;
   conteudo.style.visibility = "visible";
 	
+}
+
+function js_changeDePara(value) {
+    if (value == 1) {
+        document.getElementById("elementoEcidade").maxLength = 13;
+        document.getElementById("elementoEcidade").size = 13;
+    } else {
+        document.getElementById("elementoEcidade").maxLength = 8;
+        document.getElementById("elementoEcidade").size = 8;
+    }
 }
 </script>

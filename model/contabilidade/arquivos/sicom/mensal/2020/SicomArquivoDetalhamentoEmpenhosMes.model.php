@@ -169,7 +169,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         o58_programa AS codprograma,
         o58_projativ AS idacao,
         o55_origemacao AS idsubacao,
-        substr(o56_elemento,2,8) AS naturezadadespesa,
+        o56_elemento AS naturezadadespesa,
         substr(o56_elemento,7,2) AS subelemento,
         e60_codemp AS nroempenho,
         e60_emiss AS dtempenho,
@@ -409,26 +409,31 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 $sCodUnidade = $oEmpenho10->codunidadesub;
             }
 
-            $sElemento = substr($oEmpenho10->naturezadadespesa, 0, 8);
+            $sElemento = substr($oEmpenho10->naturezadadespesa, 1, 8);
             /**
              * percorrer xml elemento despesa
              */
             foreach ($oElementos as $oElemento) {
 
-                if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")
-                    && $oElemento->getAttribute('elementoEcidade') == $sElemento
-                ) {
+                if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")) {
 
-                    $sElemento = $oElemento->getAttribute('elementoSicom');
-                break;
+                    if ($oElemento->getAttribute('deParaDesdobramento') != '' && $oElemento->getAttribute('deParaDesdobramento') == 1) {
+                        if($oElemento->getAttribute('elementoEcidade') == $oEmpenho10->naturezadadespesa) {
+                            $sElemento = $oElemento->getAttribute('elementoSicom');
+                            break;
+                        }
+                    } elseif ($oElemento->getAttribute('elementoEcidade') == $sElemento) {
+                        $sElemento = $oElemento->getAttribute('elementoSicom');
+                        break;
+                    }
+
+                }
 
             }
 
-        }
+            db_inicio_transacao();
 
-        db_inicio_transacao();
-
-        $oDadosEmpenho10 = new cl_emp102020();
+            $oDadosEmpenho10 = new cl_emp102019();
 
             $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
             $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
