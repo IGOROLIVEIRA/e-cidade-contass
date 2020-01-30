@@ -27,7 +27,7 @@ class GerarPARPPS extends GerarAM
         $sSql = "select * from parpps102019 where si156_mes = " . $this->iMes . " and si156_instit = " . db_getsession("DB_instit");
         $rsPARPPS10 = db_query($sSql);
 
-        $sSql20 = "select * from parpps202019 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit");
+        $sSql20 = "select * from parpps202019 where si155_mes = " . $this->iMes . " and si155_instit = " . db_getsession("DB_instit") . " order by si155_exercicio asc";
         $rsPARPPS20 = db_query($sSql20);
 
 
@@ -47,7 +47,6 @@ class GerarPARPPS extends GerarAM
 
                 $aPARPPS10 = pg_fetch_array($rsPARPPS10, $iCont);
 
-                ini_set("display_errors", "on");
                 $aCSVPARPPS10['si156_tiporegistro']                       = $this->padLeftZero($aPARPPS10['si156_tiporegistro'], 2);
                 $aCSVPARPPS10['si156_codorgao']                           = $this->padLeftZero($aPARPPS10['si156_codorgao'], 2);
                 $aCSVPARPPS10['si156_tipoplano']                          = $aPARPPS10['si156_tipoplano'];
