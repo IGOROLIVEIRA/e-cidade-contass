@@ -109,7 +109,7 @@ class cl_julglic202019
       $this->si61_tipodocumento = "0";
     }
     if ($this->si61_nrolote == null) {
-      $this->si61_nrolote = "0";
+        $this->si61_nrolote = "null";
     }
     if ($this->si61_percdesconto == null) {
       $this->si61_percdesconto = "0";

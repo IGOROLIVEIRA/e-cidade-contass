@@ -109,7 +109,7 @@ class cl_homolic202019
       $this->si64_tipodocumento = "0";
     }
     if ($this->si64_nrolote == null) {
-      $this->si64_nrolote = "0";
+        $this->si64_nrolote = "null";
     }
     if ($this->si64_percdesconto == null) {
       $this->si64_percdesconto = "0";

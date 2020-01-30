@@ -271,13 +271,13 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-     if($quant_casas){
+    if($quant_casas){
         $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-     }
-     // if($quant_casas == 2){
-     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-     // }
-     // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
+    }
+    // if($quant_casas == 2){
+    //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+    // }
+    // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
 
     $nTotalItens += $lTotal;
     $oDadosDaLinha = new stdClass();
@@ -355,18 +355,18 @@ HTML;
         <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
     </div>
 </div>
-    <?php if ($oGet->impjust == 's') : ?>
+<?php if ($oGet->impjust == 's') : ?>
     <div class="tr bg_eb">
-      <div class="th col-valor_total-text align-left">
-        Justificativa
-      </div>
+        <div class="th col-valor_total-text align-left">
+            Justificativa
+        </div>
     </div>
     <div class="tr">
-      <div class="td">
-        <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
-      </div>
+        <div class="td">
+            <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
+        </div>
     </div>
-    <?php endif; ?>
+<?php endif; ?>
 
 </table>
 </div>
