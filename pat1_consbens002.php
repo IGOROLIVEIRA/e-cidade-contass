@@ -197,7 +197,7 @@ if ($oBem->getCedente() != null) {
             $principal = $oBem->getFotoPrincipal();
             if($principal):
                 $mostrarimagem = "func_mostrarimagem.php?oid=".$principal;
-                $href = "<img src='".$mostrarimagem."' id='fotobem' ondblclick='exibeImagem(".$oBem->getCodigoBem().");'>";
+                $href = "<img src='".$mostrarimagem."' id='fotobem' onclick='exibeImagem(".$oBem->getCodigoBem().");'>";
                 echo $href;
             else: ?>
                 <img src="imagens/moveis.png" id='preview'>
