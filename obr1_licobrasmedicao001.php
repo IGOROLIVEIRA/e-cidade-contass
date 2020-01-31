@@ -10,21 +10,42 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  db_inicio_transacao();
-  $cllicobrasmedicao->obr03_seqobra            = $obr03_seqobra;
-  $cllicobrasmedicao->obr03_dtlancamento       = $obr03_dtlancamento;
-  $cllicobrasmedicao->obr03_nummedicao         = $obr03_nummedicao;
-  $cllicobrasmedicao->obr03_tipomedicao        = $obr03_tipomedicao;
-  $cllicobrasmedicao->obr03_dtiniciomedicao    = $obr03_dtiniciomedicao;
-  $cllicobrasmedicao->obr03_outrostiposmedicao = $obr03_outrostiposmedicao;
-  $cllicobrasmedicao->obr03_descmedicao        = $obr03_descmedicao;
-  $cllicobrasmedicao->obr03_dtfimmedicao       = $obr03_dtfimmedicao;
-  $cllicobrasmedicao->obr03_dtentregamedicao   = $obr03_dtentregamedicao;
-  $cllicobrasmedicao->obr03_vlrmedicao         = $obr03_vlrmedicao;
-  $cllicobrasmedicao->obr03_instit             = db_getsession('DB_instit');
-  $cllicobrasmedicao->incluir();
-  db_fim_transacao();
-  db_redireciona("obr1_licobrasmedicao002.php?&chavepesquisa=$obr03_sequencial");
+
+
+  try{
+    $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao"));
+
+    if(pg_num_rows($resultMedicao) > 0){
+      throw new Exception("Usuário: Numero da Medição ja utilizado !");
+    }
+
+    db_inicio_transacao();
+    $cllicobrasmedicao->obr03_seqobra            = $obr03_seqobra;
+    $cllicobrasmedicao->obr03_dtlancamento       = $obr03_dtlancamento;
+    $cllicobrasmedicao->obr03_nummedicao         = $obr03_nummedicao;
+    $cllicobrasmedicao->obr03_tipomedicao        = $obr03_tipomedicao;
+    $cllicobrasmedicao->obr03_dtiniciomedicao    = $obr03_dtiniciomedicao;
+    $cllicobrasmedicao->obr03_outrostiposmedicao = $obr03_outrostiposmedicao;
+    $cllicobrasmedicao->obr03_descmedicao        = $obr03_descmedicao;
+    $cllicobrasmedicao->obr03_dtfimmedicao       = $obr03_dtfimmedicao;
+    $cllicobrasmedicao->obr03_dtentregamedicao   = $obr03_dtentregamedicao;
+    $cllicobrasmedicao->obr03_vlrmedicao         = $obr03_vlrmedicao;
+    $cllicobrasmedicao->obr03_instit             = db_getsession('DB_instit');
+    $cllicobrasmedicao->incluir();
+    db_fim_transacao();
+
+    if($cllicobrasmedicao->erro_status == 0){
+      $erro = $cllicobrasmedicao->erro_msg;
+      $sqlerro = true;
+    }
+    db_fim_transacao();
+    if($sqlerro == false){
+      db_redireciona("obr1_licobrasmedicao002.php?&chavepesquisa=$cllicobrasmedicao->obr03_sequencial");
+    }
+
+  }catch (Exception $eErro){
+    db_msgbox($eErro->getMessage());
+  }
 }
 ?>
 <html>
@@ -55,6 +76,9 @@ if(isset($incluir)){
     margin-top: 14px;
     margin-left: -58px;
     margin-bottom: 20px;
+  }
+  #tipocompra{
+    width: 263px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

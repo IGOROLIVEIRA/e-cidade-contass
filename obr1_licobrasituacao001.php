@@ -16,12 +16,15 @@ if(isset($incluir)){
 
   $resultObras = $cllicobras->sql_record($cllicobras->sql_query($obr02_seqobra,"obr01_dtlancamento",null,null));
   db_fieldsmemory($resultObras,0);
-  $dtLancamentoObras = (implode("/",(array_reverse(explode("-",$obr01_dtlancamento)))));
+  $dataobra = (implode("/",(array_reverse(explode("-",$obr01_dtlancamento)))));
+
+  $datalancamentobra = DateTime::createFromFormat('d/m/Y', $dataobra);
+  $dtalancamento = DateTime::createFromFormat('d/m/Y', $obr02_dtlancamento);
 
   try {
 
-    if($dtLancamentoObras != null){
-      if($obr02_dtlancamento < $dtLancamentoObras){
+    if($datalancamentobra != null){
+      if( $dtalancamento < $datalancamentobra){
         throw new Exception ("Usuário: Data de Lançamento deve ser maior ou igual a data de lançamento da Obra.");
       }
     }
@@ -42,7 +45,6 @@ if(isset($incluir)){
 
     if($cllicobrasituacao->erro_status == 0){
       $erro = $cllicobrasituacao->erro_msg;
-      db_msgbox($erro);
       $sqlerro = true;
     }
 
@@ -70,12 +72,14 @@ if(isset($incluir)){
     width: 739px;
     height: 20px;
   }
-
+  #tipocompra{
+  width: 263px;
+  }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-left: 16%; margin-top: 2%;">
   <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+    <td height="500" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
         <?
         include("forms/db_frmlicobrasituacao.php");

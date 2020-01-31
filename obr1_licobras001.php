@@ -16,18 +16,18 @@ if(isset($incluir)){
 
   $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $obr01_licitacao"));
   db_fieldsmemory($resulthomologacao,0);
-  $dtHomologacaolic = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
+  $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
 
+  $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+  $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
 
   try {
-    if($dtHomologacaolic != null){
-      if($obr01_dtinicioatividades > $dtHomologacaolic){
+    if($datahomologacao != null){
+      if($datainicioatividades < $datahomologacao){
         throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
       }
-
     }
-
-    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra",null,"obr01_numeroobra = $obr01_numeroobra"));
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","l202_sequencial desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
     if(pg_num_rows($resultobras) > 0){
       throw new Exception("Usuário: Numero da Obra ja utilizado !");
     }
@@ -43,12 +43,12 @@ if(isset($incluir)){
 
     if($cllicobras->erro_status == 0){
       $erro = $cllicobras->erro_msg;
-      db_msgbox($erro);
       $sqlerro = true;
     }
-
     db_fim_transacao();
-    db_redireciona("obr1_licobras002.php?&chavepesquisa=$cllicobras->obr01_sequencial");
+    if($sqlerro == false){
+      db_redireciona("obr1_licobras002.php?&chavepesquisa=$cllicobras->obr01_sequencial");
+    }
 
   }catch (Exception $eErro){
     db_msgbox($eErro->getMessage());
@@ -93,6 +93,9 @@ if(isset($incluir)){
   }
   #col3{
     width: 15%
+  }
+  #tipocompra{
+    width: 263px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

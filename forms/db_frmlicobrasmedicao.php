@@ -5,8 +5,8 @@ $cllicobrasmedicao->rotulo->label();
 <fieldset>
   <legend>Medição da Obra</legend>
   <form name="form1" method="post" action="">
-    <table border="0" style="margin-left: -14%;">
-      <tr>
+    <table border="0" style="margin-left: -4%;">
+      <tr style="display: none">
         <td nowrap title="<?=@$Tobr03_sequencial?>">
           <input name="oid" type="hidden" value="<?=@$oid?>">
           <?=@$Lobr03_sequencial?>
@@ -19,8 +19,20 @@ $cllicobrasmedicao->rotulo->label();
       </tr>
       <tr>
         <td>
+          <strong>
+            Número da Obra:
+          </strong>
+        </td>
+        <td>
           <?
-          db_ancora('Nº Obra: ',"js_pesquisa_obra(true)",$db_opcao);
+          db_input('obr01_numeroobra',11,$Iobr01_numeroobra,true,'text',3,"");
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <?
+          db_ancora('Sequencial da Obra: ',"js_pesquisa_obra(true)",$db_opcao);
           ?>
         </td>
         <td>
@@ -223,7 +235,7 @@ $cllicobrasmedicao->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobrasituacao',
-        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr',
+        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
     }else{
 
@@ -243,19 +255,21 @@ $cllicobrasmedicao->rotulo->label();
   /**
    * funcao para preencher licitacao  da ancora
    */
-  function js_preencheObra(codigo,edital,numero,descrcompra)
+  function js_preencheObra(codigo,edital,numero,descrcompra,numeroobra)
   {
     document.form1.obr03_seqobra.value = codigo;
     document.form1.tipocompra.value = descrcompra;
     document.form1.l20_edital.value = edital;
     document.form1.l20_numero.value = numero;
+    document.form1.obr01_numeroobra.value = numeroobra;
     db_iframe_licobrasituacao.hide();
   }
 
-  function js_preencheObra2(edital,descrcompra,numero,erro) {
+  function js_preencheObra2(edital,descrcompra,numero,numeroobra,erro) {
     document.form1.tipocompra.value = descrcompra;
     document.form1.l20_numero.value = numero;
     document.form1.l20_edital.value = edital;
+    document.form1.obr01_numeroobra.value = numeroobra;
 
     if(erro==true){
       document.form1.obr03_seqobra.focus();
