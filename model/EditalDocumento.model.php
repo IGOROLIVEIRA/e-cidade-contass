@@ -29,251 +29,251 @@
  * controle de Documentos de um Edital
  * @package Contratos
  */
-class EditalDocumento {
+class EditalDocumento
+{
 
-  protected $iCodigo;
-  protected $iCodigoEdital;
-  protected $iTipo;
-  protected $sArquivo;
-  protected $sNomeArquivo;
-  protected $iLicEdital;
-
-
-  /**
-   *
-   * Construtor, se passado parâmetro seta todas variáveis
-   * @param integer $iCodigo
-   */
-  public function __construct($iCodigo = null, $iSequencial = null) {
-    $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-    if (!empty($iCodigo)) {
-      $sSQL                = $oDaoEditalDocumento->sql_query_file(null, '*', null, 'l47_liclicita='.$iCodigo);
-    }else{
-      $sSQL                = $oDaoEditalDocumento->sql_query_file($iSequencial);
-    }
-    $rsEditalDocumento   = $oDaoEditalDocumento->sql_record($sSQL);
-
-    if ($oDaoEditalDocumento->numrows > 0) {
-
-      $oEditalDocumento = db_utils::fieldsMemory($rsEditalDocumento, 0);
-
-      $this->setCodigo($oEditalDocumento->l48_sequencial);
-      $this->setArquivo($oEditalDocumento->l48_arquivo);
-      $this->setNomeArquivo($oEditalDocumento->l48_nomearquivo);
-      $this->setTipo($oEditalDocumento->l48_tipo);
-      $this->setCodigoEdital($oEditalDocumento->l48_edital);
-      $this->setLicEdital($iCodigo);
-      unset($oEditalDocumento);
-    }
-  }
-
-  /**
-   * Chama persistirDados() se estiver setado o c?digo do documento
-   */
-  public function salvar() {
-
-    if (empty($this->iCodigo)) {
-      //Salva dados Novos
-      $this->persistirDados();
-    }
-  }
-
-  /**
-   *
-   * Pega os dados setados e persiste no BD
-   * Salva o binario do Arquivo passado
-   * @throws Exception
-   */
-  private function persistirDados() {
-
-    global $conn;
-    if (!file_exists($this->getArquivo())) {
-      throw new Exception("Arquivo do Documento não Encontrado.");
-    }
-
-    db_inicio_transacao();
-    try {
-
-      /**
-       * Abre um arquivo em formato binario somente leitura
-       */
-      $rDocumento      = fopen($this->getArquivo(), "rb");
-      /**
-       * Pega todo o conte?do do arquivo e coloca no resource
-       */
-      $rDadosDocumento = fread($rDocumento, filesize($this->getArquivo()));
-      $oOidBanco       = pg_lo_create();
-      fclose($rDocumento);
-      $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-
-      $oDaoEditalDocumento->l48_arquivo     = $oOidBanco;
-      $oDaoEditalDocumento->l48_tipo   = $this->getTipo();
-      $oDaoEditalDocumento->l48_edital      = $this->getCodigoEdital();
-      $oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
-      $oDaoEditalDocumento->l48_liclancedital = $this->getLicEdital();
-      $this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
-      $oDaoEditalDocumento->incluir(null);
+	protected $iCodigo;
+	protected $iCodigoEdital;
+	protected $iTipo;
+	protected $sArquivo;
+	protected $sNomeArquivo;
+	protected $sCaminho;
+	protected $iLicEdital;
 
 
-      if ($oDaoEditalDocumento->erro_status == '0') {
-        throw new Exception($oDaoEditalDocumento->erro_msg);
-      }
+	/**
+	 *
+	 * Construtor, se passado parâmetro seta todas variáveis
+	 * @param integer $iCodigo
+	 */
+	public function __construct($iCodigo = null)
+	{
+		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
+		if(isset($iCodigo)) {
+			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo);
+			$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSQL);
 
-      $oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
-      pg_lo_write($oObjetoBanco, $rDadosDocumento);
-      pg_lo_close($oObjetoBanco);
-      db_fim_transacao();
+			if ($oDaoEditalDocumento->numrows > 0) {
 
-    } catch (Exception $oErro) {
+				$oEditalDocumento = db_utils::fieldsMemory($rsEditalDocumento, 0);
 
-      db_fim_transacao(true);
-    }
-  }
+				$this->setCodigo($oEditalDocumento->l48_sequencial);
+				$this->setNomeArquivo($oEditalDocumento->l48_nomearquivo);
+				$this->setTipo($oEditalDocumento->l48_tipo);
+				$this->setCodigoEdital($oEditalDocumento->l48_edital);
+				$this->setLicEdital($iCodigo);
+				$this->setCaminho($oEditalDocumento->l48_caminho);
+				unset($oEditalDocumento);
+			}
+		}
+	}
 
-  /**
-   *
-   * Busca todos documentos de um Edital
-   * @param integer
-   * @return array
-   */
-  public function getDocumentos()
-  {
-    $sCampos = "l48_sequencial, l48_edital, l48_arquivo, l48_tipo ";
+	/**
+	 * Chama persistirDados() se estiver setado o c?digo do documento
+	 */
+	public function salvar()
+	{
 
-    $sWhere  = " l48_edital = {$this->getCodigoEdital()}";
-    $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-    $sSqlDocumentos      = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
+		if (empty($this->iCodigo)) {
+			//Salva dados Novos
+			$this->persistirDados();
+		}
+	}
+
+	/**
+	 *
+	 * Pega os dados setados e persiste no BD
+	 * Salva o binario do Arquivo passado
+	 * @throws Exception
+	 */
+	private function persistirDados()
+	{
+
+		global $conn;
+		if (!file_exists($this->getCaminho())) {
+			throw new Exception("Arquivo do Documento não Encontrado.");
+		}
+
+		db_inicio_transacao();
+		try {
+
+			$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
+
+			$oDaoEditalDocumento->l48_tipo = $this->getTipo();
+			$oDaoEditalDocumento->l48_edital = $this->getCodigoEdital();
+			$oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
+			$oDaoEditalDocumento->l48_liclancedital = $this->getLicEdital();
+			$oDaoEditalDocumento->l48_caminho = $this->getCaminho();
+
+			$this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
+			$oDaoEditalDocumento->incluir(null);
+
+			if ($oDaoEditalDocumento->erro_status == '0') {
+				throw new Exception($oDaoEditalDocumento->erro_msg);
+			}
+
+			db_fim_transacao();
+
+		} catch (Exception $oErro) {
+			db_fim_transacao(true);
+		}
+	}
+
+	/**
+	 *
+	 * Busca todos documentos de um Edital
+	 * @param integer
+	 * @return array
+	 */
+	public function getDocumentos($edital)
+	{
+		$sCampos = "l48_sequencial, l48_edital, l48_tipo ";
+
+		$sWhere = " l48_edital = $edital";
+		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
+		$sSqlDocumentos = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
+
+		$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSqlDocumentos);
+
+		if ($oDaoEditalDocumento->numrows > 0) {
+
+			for ($i = 0; $i < $oDaoEditalDocumento->numrows; $i++) {
+				$this->aDocumento[] = new EditalDocumento(db_utils::fieldsMemory($rsEditalDocumento, $i)->l48_sequencial);
+			}
+		}
+
+		return $this->aDocumento;
+
+	}
 
 
-    $rsEditalDocumento   = $oDaoEditalDocumento->sql_record($sSqlDocumentos);
+	/**
+	 *
+	 * Remove do Banco de Dados um documento de um determinado Edital
+	 * @throws Exception
+	 */
+	public function remover()
+	{
 
-    if ($oDaoEditalDocumento->numrows > 0) {
+		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
+		$oDaoEditalDocumento->excluir($this->getCodigo());
 
-      for ($i = 0; $i < $oDaoEditalDocumento->numrows; $i++) {
+		if ($oDaoEditalDocumento->erro_status == "0") {
+			throw new Exception($oDaoEditalDocumento->erro_msg);
+		}
+	}
 
-        $this->aDocumento[] = new EditalDocumento(null, db_utils::fieldsMemory($rsEditalDocumento, $i)->l48_sequencial);
-      }
-    }
+	/**
+	 *
+	 * Retorna o código do documento
+	 * @return integer
+	 */
+	public function getCodigo()
+	{
+		return $this->iCodigo;
+	}
 
-    return $this->aDocumento;
+	/**
+	 *
+	 * Seta o cdigo do documento
+	 */
+	public function setCodigo($iCodigo)
+	{
+		$this->iCodigo = $iCodigo;
+	}
 
-  }
+	/**
+	 *
+	 * Retorna o código do edital
+	 * @return integer
+	 */
+	public function getCodigoEdital()
+	{
+		return $this->iCodigoEdital;
+	}
 
+	/**
+	 *
+	 * Seta o código do edital
+	 */
+	public function setCodigoEdital($iCodigoEdital)
+	{
+		$this->iCodigoEdital = $iCodigoEdital;
+	}
 
-  /**
-   *
-   * Remove do Banco de Dados um documento de um determinado Edital
-   * @throws Exception
-   */
-  public function remover() {
+	/**
+	 *
+	 * Retorna a descricao do documento
+	 * @return string
+	 */
+	public function getTipo()
+	{
+		return $this->iTipo;
+	}
 
-    $oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-    $oDaoEditalDocumento->excluir($this->getCodigo());
+	/**
+	 *
+	 * Seta a descricao do documento
+	 */
+	public function setTipo($iTipo)
+	{
+		$this->iTipo = $iTipo;
+	}
 
-    if ($oDaoEditalDocumento->erro_status == "0") {
-      throw new Exception($oDaoEditalDocumento->erro_msg);
-    }
-  }
+	/**
+	 *
+	 * Retorna o sequencial do liclancedital
+	 * @return string
+	 */
+	public function getLicEdital()
+	{
+		return $this->iLicEdital;
+	}
 
-  /**
-   *
-   * Retorna o c?digo do documento
-   * @return integer
-   */
-  public function getCodigo() {
-    return $this->iCodigo;
-  }
+	/**
+	 *
+	 * Seta a descricao do documento
+	 */
+	public function setLicEdital($iLicEdital)
+	{
+		$this->iLicEdital = $iLicEdital;
+	}
 
-  /**
-   *
-   * Seta o cdigo do documento
-   */
-  public function setCodigo($iCodigo) {
-    $this->iCodigo = $iCodigo;
-  }
+	/**
+	 *
+	 * Retorna o caminho do arquivo salvo
+	 * @return String
+	 */
+	public function getCaminho()
+	{
+		return $this->sCaminho;
+	}
 
-  /**
-   *
-   * Retorna o código do edital
-   * @return integer
-   */
-  public function getCodigoEdital() {
-    return $this->iCodigoEdital;
-  }
+	/**
+	 *
+	 * Seta uma String com caminho/nome do arquivo
+	 */
+	public function setCaminho($sCaminho)
+	{
+		$this->sCaminho = $sCaminho;
+	}
 
-  /**
-   *
-   * Seta o código do edital
-   */
-  public function setCodigoEdital($iCodigoEdital) {
-    $this->iCodigoEdital = $iCodigoEdital;
-  }
+	/**
+	 *
+	 * Seta o Nome do arquivo com sua extensão
+	 */
+	public function setNomeArquivo($sNomeArquivo)
+	{
+		$this->sNomeArquivo = $sNomeArquivo;
+	}
 
-  /**
-   *
-   * Retorna a descricao do documento
-   * @return string
-   */
-  public function getTipo() {
-    return $this->iTipo;
-  }
-
-  /**
-   *
-   * Seta a descricao do documento
-   */
-  public function setTipo($iTipo) {
-    $this->iTipo = $iTipo;
-  }
-
-  /**
-   *
-   * Retorna o sequencial do liclancedital
-   * @return string
-   */
-  public function getLicEdital() {
-    return $this->iLicEdital;
-  }
-
-  /**
-   *
-   * Seta a descricao do documento
-   */
-  public function setLicEdital($iLicEdital) {
-    $this->iLicEdital = $iLicEdital;
-  }
-
-  /**
-   *
-   * Retorna o Oid do arquivo salvo
-   * @return Oid
-   */
-  public function getArquivo() {
-    return $this->sArquivo;
-  }
-
-  /**
-   *
-   * Seta uma String com caminho/nome do arquivo
-   */
-  public function setArquivo($sArquivo) {
-    $this->sArquivo = $sArquivo;
-  }
-
-  /**
-   *
-   * Seta o Nome do arquivo com sua extens?o
-   */
-  public function setNomeArquivo($sNomeArquivo) {
-    $this->sNomeArquivo = $sNomeArquivo;
-  }
-
-  /**
-   *
-   * Retorna o Nome do arquivo com sua extens?o
-   * @return String
-   */
-  public function getNomeArquivo() {
-    return $this->sNomeArquivo;
-  }
+	/**
+	 *
+	 * Retorna o Nome do arquivo com sua extensão
+	 * @return String
+	 */
+	public function getNomeArquivo()
+	{
+		return $this->sNomeArquivo;
+	}
 }

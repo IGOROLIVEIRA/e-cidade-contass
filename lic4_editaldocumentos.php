@@ -206,12 +206,6 @@ $db_opcao = 1;
             return false;
         }
 
-        if ($F('caddocumento') == '' || $F('caddocumento') == null) {
-
-            alert('Informe um tipo para o documento!');
-            return false;
-        }
-
         var oParam       = new Object();
         oParam.exec      = 'adicionarDocumento';
         oParam.edital    = iEdital;
@@ -232,15 +226,16 @@ $db_opcao = 1;
 
         js_removeObj("msgbox");
         var oRetorno = eval('('+oAjax.responseText+")");
-        if (oRetorno.status == 1) {
 
-            $('uploadfile').value     = '';
-            $("caddocumento").value = "";
-            js_getDocumento();
-        } else {
-            alert(oRetorno.message.urlDecode());
-        }
+        alert(oRetorno.message.urlDecode());
+        $('uploadfile').value     = '';
+        $("caddocumento").value = "";
         $('namefile').value = '';
+
+        if (oRetorno.status == 1) {
+            js_getDocumento();
+        }
+
         if($('caddocumento').length == 2)
             $('caddocumento').selectedIndex = 1;
 
@@ -250,7 +245,7 @@ $db_opcao = 1;
 
         var oParam       = new Object();
         oParam.exec      = 'getDocumento';
-        oParam.licitacao   = iLicitacao;
+        oParam.edital   = iEdital;
         var oAjax        = new Ajax.Request(
             sUrlRpc,
             { parameters: 'json='+Object.toJSON(oParam),
@@ -297,10 +292,10 @@ $db_opcao = 1;
             return false;
         }
 
-        oRetorno.dados.each(function (oDocumento, iSeq) {
+        oRetorno.dados.each( (oDocumento, iSeq) => {
 
             var aLinha = new Array();
-            aLinha[0]  = oDocumento.iCodigo;
+            aLinha[0]  = iSeq + 1;
             aLinha[1]  = oDocumento.iEdital;
             aLinha[2]  = js_descricaoTipo(oDocumento.iTipo);
             aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDocumento.iCodigo+')">';
@@ -315,13 +310,11 @@ $db_opcao = 1;
     js_getDocumento();
 
     function js_excluirDocumento(iCodigoDocumento) {
-
         if (!confirm('Confirma a Exclusão do Documento?')) {
             return false;
         }
         var oParam             = new Object();
         oParam.exec            = 'excluirDocumento';
-        oParam.edital          = iLicitacao;
         oParam.codigoDocumento = iCodigoDocumento;
         js_divCarregando('Aguarde... excluindo documento','msgbox');
         var oAjax        = new Ajax.Request(
@@ -339,12 +332,11 @@ $db_opcao = 1;
         js_removeObj("msgbox");
         var oRetorno = eval('('+oAjax.responseText+")");
         if (oRetorno.status == 2) {
-
             alert("Não foi possivel excluir o documento:\n "+ oRetorno.message);
         }
 
         js_getDocumento();
-
+        alert(oRetorno.message.urlDecode());
     }
 
     function js_documentoDownload(iCodigoDocumento) {

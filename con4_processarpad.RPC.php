@@ -828,201 +828,192 @@ case "processarBalancete" :
     }
     break;
 
-  case "processarEditais" :
+  	case "processarEditais" :
 
-    if (count($oParam->arquivos) > 0) {
+    	if (count($oParam->arquivos) > 0) {
 
-      $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+      		$sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
 
-      $rsInst = db_query($sSql);
-      $iMunicipio  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+			$rsInst = db_query($sSql);
+			$iMunicipio  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
 
-      $iAnoReferencia = db_getsession('DB_anousu');
+			$iAnoReferencia = db_getsession('DB_anousu');
 
-      $sSql  = "SELECT si09_codorgaotce AS codorgao
-      FROM db_config
-      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-      WHERE codigo = ".db_getsession("DB_instit");
+			$sSql  = "SELECT si09_codorgaotce AS codorgao
+			FROM db_config
+			LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+			WHERE codigo = ".db_getsession("DB_instit");
 
-      $rsOrgao = db_query($sSql);
+			$rsOrgao = db_query($sSql);
 
+			$sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
 
-      $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
+			/*
+			* array para adicionar os arquivos de inslusao de programas
+			*/
+			$aArquivoProgramas =  array();
 
-      /*
-       * array para adicionar os arquivos de inslusao de programas
-       */
-      $aArquivoProgramas =  array();
+			/*
+			* gerar arquivos correspondentes a todas as opcoes selecionadas
+			*/
+			$oEscritorCSV          = new padArquivoEscritorCSV();
+			$oEscritorProgramasCSV = new padArquivoEscritorCSV();
 
-      /*
-       * gerar arquivos correspondentes a todas as opcoes selecionadas
-       */
-      $oEscritorCSV          = new padArquivoEscritorCSV();
-      $oEscritorProgramasCSV = new padArquivoEscritorCSV();
+			/*
+			* instanciar cada arqivo selecionado e gerar o CSV correspondente
+			*/
+			$aArrayArquivos = array();
+			$sDataFinal = $oParam->diaReferencia;
 
-      /*
-       * instanciar cada arqivo selecionado e gerar o CSV correspondente
-       */
-      $aArrayArquivos = array();
-      $sDataFinal = $oParam->diaReferencia;
+			foreach ($oParam->arquivos as $sArquivo) {
 
-      foreach ($oParam->arquivos as $sArquivo) {
+				if (file_exists("model/contabilidade/arquivos/sicom/mensal/edital/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
 
-        if (file_exists("model/contabilidade/arquivos/sicom/mensal/edital/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
+					require_once("model/contabilidade/arquivos/sicom/mensal/edital/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
+					$sNomeClasse = "SicomArquivo{$sArquivo}";
 
-          require_once("model/contabilidade/arquivos/sicom/mensal/edital/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
-          $sNomeClasse = "SicomArquivo{$sArquivo}";
+					$oArquivo    = new $sNomeClasse;
+					$oArquivo->setDataFinal($sDataFinal);
 
-          $oArquivo    = new $sNomeClasse;
-          $oArquivo->setDataFinal($sDataFinal);
+					$oArquivoCsv = new stdClass();
 
-          $oArquivoCsv = new stdClass();
-          try {
+					try {
 
-            $oArquivo->gerarDados();
-            $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
-            $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
-            $aArrayArquivos[] = $oArquivoCsv;
+						$oArquivo->gerarDados();
+						$oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
+						$oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
+						$aArrayArquivos[] = $oArquivoCsv;
 
-          } catch (Exception $eErro) {
+					} catch (Exception $eErro) {
 
-            $oRetorno->status  = 2;
-            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+						$oRetorno->status  = 2;
+						$sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+						$oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+					}
+				}
+			}
+			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
+				/*    Consulta os arquivos anexos */
+				$sSql = "
+					SELECT l47_dataenvio AS dataenvio,
+						   editaldocumentos.l48_caminho AS caminho,
+						   editaldocumentos.l48_tipo as tipo,
+						   editaldocumentos.l48_sequencial as sequencial,
+						   liclicita.l20_edital AS nroprocesso,
+						   (CASE
+								WHEN liclicita.l20_exercicioedital IS NULL 
+									THEN EXTRACT(YEAR FROM l20_datacria)
+									ELSE l20_exercicioedital
+							END )AS exercicio,
+						   pctipocompratribunal.l44_sequencial AS tipo_tribunal,
+						   (SELECT CASE
+								WHEN o41_subunidade != 0
+									 OR NOT NULL THEN lpad((CASE
+																WHEN o40_codtri = '0'
+																	 OR NULL THEN o40_orgao::varchar
+																ELSE o40_codtri
+															END),2,0)||lpad((CASE
+																				 WHEN o41_codtri = '0'
+																					  OR NULL THEN o41_unidade::varchar
+																				 ELSE o41_codtri
+																			 END),3,0)||lpad(o41_subunidade::integer,3,0)
+								ELSE lpad((CASE
+											   WHEN o40_codtri = '0'
+													OR NULL THEN o40_orgao::varchar
+											   ELSE o40_codtri
+										   END),2,0)||lpad((CASE
+																WHEN o41_codtri = '0'
+																	 OR NULL THEN o41_unidade::varchar
+																ELSE o41_codtri
+															END),3,0)
+							END AS codunidadesubresp
+						 FROM db_departorg
+						 JOIN infocomplementares ON si08_anousu = db01_anousu
+						 AND si08_instit = ".db_getsession('DB_instit')."
+						 JOIN orcunidade ON db01_orgao=o41_orgao
+						 AND db01_unidade=o41_unidade
+						 AND db01_anousu = o41_anousu
+						 JOIN orcorgao ON o40_orgao = o41_orgao
+						 AND o40_anousu = o41_anousu
+						 WHERE db01_anousu = " . db_getsession('DB_anousu') . " and l20_codepartamento = " . db_getsession('DB_coddepto') . " 
+						 LIMIT 1) AS unidade
+					FROM liclancedital
+					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclancedital = liclancedital.l47_sequencial
+					INNER JOIN liclicita ON liclicita.l20_codigo = l47_liclicita
+					INNER JOIN cflicita ON l03_codigo = liclicita.l20_codtipocom
+					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
+					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia' 
+				";
 
-          }
-        }
-      }
+				$rsAnexos = db_query($sSql);
+				$aListaAnexos = " ";
 
-//    Arquivos anexos...
-      $sSql  = "
-        SELECT editaldocumentos.*, pctipocompratribunal.*
-          FROM liclicita
-          INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-          INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-          INNER JOIN editaldocumentos on editaldocumentos.l48_edital = liclicita.l20_nroedital
-      ";
+				for ($cont = 0; $cont < pg_num_rows($rsAnexos); $cont++) {
+					$oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
+					$novoNome = in_array($oAnexo->tipo_tribunal, array(100, 101, 102, 103)) ? 'DISPENSA_' : 'EDITAL_';
+					switch ($oAnexo->tipo) {
+						case 'mc':
+							$novoNome .= 'MINUTA_CONTRATO_';
+							break;
+						case 'po':
+							$novoNome .= 'PLANILHA_ORCAMENTARIA_';
+							break;
+						case 'cr':
+							$novoNome .= 'CRONOGRAMA_';
+							break;
+						case 'cb':
+							$novoNome .= 'COMPOSICAO_BDI_';
+							break;
+						case 'fl':
+							$novoNome .= 'FOTO_LOCAL_';
+							break;
+					}
+					$valores = explode('/', $oAnexo->caminho);
+					$extensao = explode('.', $valores[4]);
+					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
+					$aListaAnexos .= $novoNome . ' ';
+					system("cp {$oAnexo->caminho} ./{$novoNome}");
+				}
 
-      $rsAnexos = db_query($sSql);
+				$ano = explode('/', $oParam->diaReferencia);
+				$mesReferencia = $ano[1];
 
-      $aEdital = array();
-      $aDispensa = array();
-      $aEditalMinutaContrato = array();
-      $aEditalPlanilhaOrcamentaria = array();
-      $aEditalCronograma = array();
-      $aEditalComposicaoBdi = array();
-      $aEditalFotoLocal = array();
-      $aDispensaMinutaContrato = array();
-      $aDispensaPlanilhaOrcamentaria = array();
-      $aDispensaCronograma = array();
-      $aDispensaComposicaoBdi = array();
-      $aDispensaFotoLocal = array();
+				if(trim($aListaAnexos)){
+					system("rm -f EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip");
+					system("bin/zip -q EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaAnexos");
 
-      for($cont=0; $cont < pg_num_rows($rsAnexos); $cont++){
-        $oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
+					$aAnexos = explode(' ', $aListaAnexos);
 
-        if(!in_array($oAnexo->l44_sequencial, array(100, 101, 102, 103))){
-          switch ($oAnexo->l48_tipo){
-            case 'mc':
-              $aDispensaMinutaContrato[] = $oAnexo;
-              break;
-            case 'po':
-              $aDispensaPlanilhaOrcamentaria[] = $oAnexo;
-              break;
-            case 'cr':
-              $aDispensaCronograma[] = $oAnexo;
-              break;
-            case 'cb':
-              $aDispensaComposicaoBdi[] = $oAnexo;
-              break;
-            case 'fl':
-              $aDispensaFotoLocal[] = $oAnexo;
-              break;
-            default:
-              $aDispensa[] = $oAnexo;
-              break;
-          }
-        }else{
-            switch ($oAnexo->l48_tipo){
-                case 'mc':
-                    $aEditalMinutaContrato[] = $oAnexo;
-                    break;
-                case 'po':
-                    $aEditalPlanilhaOrcamentaria[] = $oAnexo;
-                    break;
-                case 'cr':
-                    $aEditalCronograma[] = $oAnexo;
-                    break;
-                case 'cb':
-                    $aEditalComposicaoBdi[] = $oAnexo;
-                    break;
-                case 'fl':
-                    $aEditalFotoLocal[] = $oAnexo;
-                    break;
-                default:
-                    $aEdital[] = $oAnexo;
-                    break;
-            }
-        }
+					foreach ($aAnexos as $arquivo) {
+						unlink($arquivo);
+					}
 
-      }
+					$oArquivoZipAnexo = new stdClass();
+					$oArquivoZipAnexo->nome = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+					$oArquivoZipAnexo->caminho = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+					$aArrayArquivosZip[] = $oArquivoZipAnexo;
+				}
+			}
+			$aListaArquivos = " ";
+			foreach ($aArrayArquivos as $oArquivo){
+				$aListaArquivos .= " ".$oArquivo->caminho;
+			}
 
-      if(count($aEdital)){
-//        echo 'Entrou no Edital';
-      };
-      if(count($aDispensa)){
-//        echo 'Entrou no Dispensa';
-      };
-      if(count($aEditalMinutaContrato)){
-//        echo 'Entrou no EMC';
-      };
-      if(count($aEditalPlanilhaOrcamentaria)){
-//        echo 'Entrou no EPO';
-      };
-      if(count($aEditalCronograma)){
-//        echo 'Entrou no EC';
-      };
-      if(count($aEditalComposicaoBdi)){
-//        echo 'Entrou no ECB';
-      };
-      if(count($aEditalFotoLocal)){
-//        echo 'Entrou no EFL';
-      };
-      if(count($aDispensaMinutaContrato)){
-//        echo 'Entrou no DMC';
-      };
-      if(count($aDispensaPlanilhaOrcamentaria)){
-//        echo 'Entrou no DPO';
-      };
-      if(count($aDispensaCronograma)){
-//        echo 'Entrou no DC';
-      };
-      if(count($aDispensaComposicaoBdi)){
-//        echo 'Entrou no DCB';
-      };
-      if(count($aDispensaFotoLocal)){
-//        echo 'Entrou no DFL';
-      };
+			system("rm -f EDITAL_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip");
+			system("bin/zip -q EDITAL_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
 
-      $aListaArquivos = " ";
-      foreach ($aArrayArquivos as $oArquivo){
-          $aListaArquivos .= " ".$oArquivo->caminho;
-      }
+			$oArquivoZip = new stdClass();
+			$oArquivoZip->nome    = "EDITAL_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+			$oArquivoZip->caminho = "EDITAL_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
 
-      $ano = explode('/', $oParam->diaReferencia);
-      $mesReferencia = $ano[1];
-      system("rm -f EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip");
-      system("bin/zip -q EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+			$aArrayArquivosZip[] = $oArquivoZip;
 
-      $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip";
+			$oRetorno->itens  = $aArrayArquivosZip;
 
-      $aArrayArquivos[] = $oArquivoZip;
-
-      $oRetorno->itens  = $aArrayArquivos;
-
-    }
+		}
 
     break;
 
