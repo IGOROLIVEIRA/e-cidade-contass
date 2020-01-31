@@ -548,7 +548,7 @@ $sql .= "obr03_sequencial = '$obr03_sequencial'";     $result = db_query($sql);
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "obr03_sequencial = '$obr03_sequencial'";
+       $sql2 = "obr03_sequencial = $obr03_sequencial";
      } else {
        $sql2 = $dbwhere;
      }
