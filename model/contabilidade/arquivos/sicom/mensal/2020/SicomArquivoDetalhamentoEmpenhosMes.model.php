@@ -433,7 +433,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
             db_inicio_transacao();
 
-            $oDadosEmpenho10 = new cl_emp102019();
+            $oDadosEmpenho10 = new cl_emp102020();
 
             $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
             $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
