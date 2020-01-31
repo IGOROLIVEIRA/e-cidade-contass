@@ -6,13 +6,14 @@ include("libs/db_usuariosonline.php");
 include("classes/db_licobras_classe.php");
 include("classes/db_licobrasresponsaveis_classe.php");
 include("classes/db_licobrasituacao_classe.php");
+include("classes/db_licobrasmedicao_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
 $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
 $cllicobrasituacao = new cl_licobrasituacao();
-
+$cllicobrasmedicao = new cl_licobrasmedicao();
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
@@ -20,7 +21,7 @@ if(isset($excluir)){
 
     $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*", null, "obr05_seqobra = $obr01_sequencial"));
     $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr01_sequencial"));
-
+    $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query(null,"*",null,"obr03_seqobra = $obr01_sequencial"));
     db_inicio_transacao();
     $db_opcao = 3;
     $valida = false;
@@ -32,6 +33,11 @@ if(isset($excluir)){
 
     if (pg_num_rows($resultSituacao) > 0){
       throw new Exception ("Usuário: Exclusão Abortada! Existe situações lançadas para esta obra.");
+      $valida = true;
+    }
+
+    if (pg_num_rows($resultMedicao) > 0){
+      throw new Exception ("Usuário: Exclusão Abortada! Existe Medições lançadas para esta obra.");
       $valida = true;
     }
 

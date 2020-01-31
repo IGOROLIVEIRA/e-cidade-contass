@@ -294,7 +294,7 @@ class cl_licobrasmedicao {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) {
+  function alterar ( $obr03_sequencial=null ) {
       $this->atualizacampos();
      $sql = " update licobrasmedicao set ";
      $virgula = "";
@@ -511,7 +511,7 @@ class cl_licobrasmedicao {
        }
      }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+$sql .= "obr03_sequencial = '$obr03_sequencial'";     $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "cadastro medicao de obras nao Alterado. Alteracao Abortada.\\n";
@@ -542,13 +542,13 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao
-  function excluir ( $oid=null ,$dbwhere=null) {
+  function excluir ( $obr03_sequencial=null ,$dbwhere=null) {
 
      $sql = " delete from licobrasmedicao
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
+       $sql2 = "obr03_sequencial = '$obr03_sequencial'";
      } else {
        $sql2 = $dbwhere;
      }
@@ -607,7 +607,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="licobrasmedicao.oid,*",$ordem=null,$dbwhere="") {
+  function sql_query ( $obr03_sequencial = null,$campos="licobrasmedicao.obr03_sequencial,*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -622,8 +622,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      $sql .= " from licobrasmedicao ";
      $sql2 = "";
      if ($dbwhere=="") {
-       if ( $oid != "" && $oid != null) {
-          $sql2 = " where licobrasmedicao.oid = '$oid'";
+       if ( $obr03_sequencial != "" && $obr03_sequencial != null) {
+          $sql2 = " where licobrasmedicao.obr03_sequencial = '$obr03_sequencial'";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -642,7 +642,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query_file ( $obr03_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

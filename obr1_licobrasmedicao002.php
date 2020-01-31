@@ -15,10 +15,18 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $cllicobrasmedicao->alterar($oid);
-  db_fim_transacao();
+  try{
+    $resulMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query(null,"obr03_nummedicao",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial"));
+    if(pg_num_rows($resulMedicao) > 0){
+      throw new Exception("Usuário: Numero da Medicao ja utilizado !");
+    }
+    db_inicio_transacao();
+    $db_opcao = 2;
+    $cllicobrasmedicao->alterar($oid);
+    db_fim_transacao();
+  }catch (Exception $eErro){
+    db_msgbox($eErro->getMessage());
+  }
 }else if(isset($chavepesquisa)){
   $db_opcao = 2;
   $result = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query($chavepesquisa));
@@ -54,6 +62,9 @@ if(isset($alterar)){
     margin-top: 14px;
     margin-left: -58px;
     margin-bottom: 20px;
+  }
+  #tipocompra{
+    width: 263px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

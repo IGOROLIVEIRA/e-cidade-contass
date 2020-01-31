@@ -307,6 +307,11 @@ $cllicobras->rotulo->label();
 
   function js_salvarResponsaveis(){
 
+    if($F('obr01_sequencial') == ""){
+      alert("Para adicionar um responsável é preciso inserir uma obra, ou ter uma selecionada");
+      return false;
+    }
+
     if($F('obr05_tiporesponsavel') == 0){
       alert("Selecione o Tipo de Responsavel");
       return false;
