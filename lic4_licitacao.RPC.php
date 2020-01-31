@@ -584,80 +584,117 @@ switch ($oParam->exec) {
 
     break;
 
-  case "adicionarDocumento":
+    case "adicionarDocumento":
 
-    $oEdital = new EditalDocumento;
-    try {
-//        $oEdital->adicionarDocumento($oParam->tipo, $oParam->arquivo);
-      $oEdital->setCodigo('');
-      $oEdital->setArquivo($oParam->arquivo);
-      $oEdital->setTipo($oParam->tipo);
-      $oEdital->setCodigoEdital($oParam->edital);
-      $oEdital->setLicEdital($oParam->sequencial);
+    	try{
 
-      $aNomeArquivo = explode("/", $oParam->arquivo);
-      $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
-      $oEdital->setNomeArquivo($sNomeArquivo);
+    		$anexo = db_utils::getDao('editaldocumento');
+    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo'");
+			$rsSql = $anexo->sql_record($sSql);
 
-      $oEdital->salvar();
+			if($anexo->numrows > 0){
+				$oRetorno->message = 'Ja existe um documento anexado para esse tipo';
+				$oRetorno->status = 2;
+				break;
+			}
 
-    } catch (Exception $oErro) {
+    		$erro = false;
 
-      $oRetorno->message = $oErro->getMessage();
-      $oRetorno->status  = 2;
-    }
+			$target_dir = "anexos/";
+			$nometmp = $oParam->arquivo;
+
+			// Nome do arquivo temporário gerado no /tmp
+			$path = pathinfo($oParam->arquivo);
+			$filename = md5(time());
+			$ext = $path['extension'];
+
+			/* Verifica se já existe diretório para a instituição corrente */
+			if(!is_dir($target_dir.'instit_'.db_getsession('DB_instit'))){
+				mkdir($target_dir.'instit_'.db_getsession('DB_instit'), 0775);
+			}
+			$target_dir .= 'instit_'.db_getsession('DB_instit').'/';
+
+			/* Verifica se já existe diretório para o ano corrente */
+			if(!is_dir($target_dir.'/'.db_getsession('DB_anousu'))){
+				mkdir($target_dir.'/'.db_getsession('DB_anousu'), 0775);
+			}
+			$target_dir .= db_getsession('DB_anousu').'/';
+
+			/* Verifica se já existe diretório para o edital corrente */
+			if(!is_dir($target_dir.'/'.$oParam->edital)){
+				mkdir($target_dir.'/'.$oParam->edital, 0775);
+			}
+			$target_dir .= $oParam->edital.'/';
+
+			// Seta o nome do arquivo destino do upload
+			$arquivoDocument = $target_dir.$filename.".".$ext;
+
+			// Move o arquivo da tmp para o local especificado
+			if(!copy($nometmp, $arquivoDocument)){
+				$erro = true;
+			}
+			unlink($nometmp);
+
+			if(!$erro){
+				$oEdital = new EditalDocumento;
+				$oEdital->setCodigo('');
+				$oEdital->setTipo($oParam->tipo);
+				$oEdital->setCodigoEdital($oParam->edital);
+				$oEdital->setLicEdital($oParam->sequencial);
+				$nome = explode('/', $nometmp);
+				$oEdital->setNomeArquivo($nome[1]);
+				$oEdital->setCaminho($arquivoDocument);
+				$oEdital->salvar();
+				$oRetorno->message = 'Anexo cadastrado com sucesso!';
+			}
+
+		}catch (Exception $erro){
+			$oRetorno->message = $oErro->getMessage();
+			$oRetorno->status  = 2;
+    	}
     break;
 
-  case "getDocumento":
+  	case "getDocumento":
 
-    $oEdital          = new EditalDocumento($oParam->licitacao);
+    	$oEdital          = new EditalDocumento();
 
-    if (isset($oParam->edital)) {
-      $iCodigoEdital = $oParam->edital;
-    } else if (isset($oParam->ac16_sequencial)) {
-      $iCodigoEdital = $oParam->l20_codigo;
-    }
+		$aEditalDocumento = $oEdital->getDocumentos($oParam->edital);
 
-    $oEdital          = new EditalDocumento(27);
-    $aEditalDocumento = $oEdital->getDocumentos();
+		$oRetorno->dados  = array();
 
-    $oRetorno->dados  = array();
+		for($i = 0; $i < count($aEditalDocumento); $i++) {
 
-    for($i = 0; $i < count($aEditalDocumento); $i++) {
+			$oDocumentos      = new stdClass();
+			$oDocumentos->iCodigo    = $aEditalDocumento[$i]->getCodigo();
+			$oDocumentos->iEdital    = $aEditalDocumento[$i]->getCodigoEdital();
+			$oDocumentos->iTipo = $aEditalDocumento[$i]->getTipo();
+			$oRetorno->dados[] = $oDocumentos;
+		}
 
-      $oDocumentos      = new stdClass();
-      $oDocumentos->iCodigo    = $aEditalDocumento[$i]->getCodigo();
-      $oDocumentos->iEdital    = $aEditalDocumento[$i]->getCodigoEdital();
-      $oDocumentos->iTipo = $aEditalDocumento[$i]->getTipo();
-      $oRetorno->dados[] = $oDocumentos;
-    }
 
-    $oRetorno->detalhe    = "documentos";
-    break;
-  case "excluirDocumento":
+		$oRetorno->detalhe    = "documentos";
+		break;
 
-    $oEdital          = new EditalDocumento($oParam->edital);
-    try {
-      $oEdital->setCodigo($oParam->codigoDocumento);
-      $oEdital->remover();
-    } catch (Exception $oErro) {
+	case "excluirDocumento":
+		try {
+			$oEdital          = new EditalDocumento($oParam->codigoDocumento);
+			unlink($oEdital->getCaminho());
+       		$oEdital->remover();
+       		$oRetorno->message = 'Documento removido com sucesso!';
 
-      $oRetorno->message = $oErro->getMessage();
-      $oRetorno->status  = 2;
-    }
+    	} catch (Exception $oErro) {
+	  		$oRetorno->message = $oErro->getMessage();
+      		$oRetorno->status  = 2;
+    	}
 
     break;
-  case "downloadDocumento":
 
-    $oDocumento = new EditalDocumento(null, $oParam->iCodigoDocumento);
-    db_inicio_transacao();
-
-    // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
-    $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
-    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
-    db_fim_transacao(true);
-    $oRetorno->nomearquivo = $sNomeArquivo;
-    // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
+	case "downloadDocumento":
+		$oDocumento = new EditalDocumento($oParam->iCodigoDocumento);
+	    $sNomeArquivo = $oDocumento->getNomeArquivo();
+		file_put_contents( $sNomeArquivo, file_get_contents($oDocumento->getCaminho()));
+		ini_set('display_errors', 1);
+		$oRetorno->nomearquivo = $sNomeArquivo;
     break;
 
   case "buscaPeriodosItem":
