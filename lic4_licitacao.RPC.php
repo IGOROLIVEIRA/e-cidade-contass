@@ -601,6 +601,10 @@ switch ($oParam->exec) {
     		$erro = false;
 
 			$target_dir = "anexos/";
+			if(!is_dir($target_dir)){
+				mkdir($target_dir, 0775);
+			}
+
 			$nometmp = $oParam->arquivo;
 
 			// Nome do arquivo temporário gerado no /tmp
