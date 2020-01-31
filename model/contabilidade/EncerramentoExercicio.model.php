@@ -265,9 +265,8 @@ class EncerramentoExercicio {
    */
   public function getTransferenciasRealizadas() {
 
-    $oDaoConlancaDoc  = new cl_conlancamdoc();
-    $sWhere           = "c71_coddoc in (1012, 1013, 1014) and date_part('year', c71_data) = {$this->iAno}";
-    $sSql             = $oDaoConlancaDoc->sql_query_file("", "c71_codlan", null, $sWhere);
+    $oDaoConlancaDoc = new cl_conlancamdoc();
+    $sSql = "SELECT c71_codlan FROM conlancamdoc INNER JOIN conlancaminstit ON c71_codlan = c02_codlan WHERE c71_coddoc IN (1012, 1013, 1014) AND date_part('year', c71_data) = {$this->iAno} AND c02_instit = {$this->oInstituicao->getCodigo()}";
     $rsTransferenciasRealizadas = $oDaoConlancaDoc->sql_record($sSql);
 
     return $rsTransferenciasRealizadas;
@@ -794,6 +793,10 @@ class EncerramentoExercicio {
     $sWhereTrans  = "c45_coddoc = {$iSeqTransacao} AND c45_anousu = {$this->iAno} AND c45_instit = {$this->oInstituicao->getCodigo()}";
     $sSqlTrans    = $oDaoTrans->sql_query_evento_contabil(null, "*", null, $sWhereTrans);
     $rsTrans      = $oDaoTrans->sql_record($sSqlTrans);
+
+    if (pg_num_rows($rsTrans) == 0) {
+        throw new BusinessException("Conta referência não encontrada para o documento {$iSeqTransacao}");
+    }
 
     if($iTipo == 1) {
       return db_utils::fieldsMemory($rsTrans, 0)->c47_debito;
