@@ -21,7 +21,7 @@ if(isset($excluir)){
     }else{
       db_inicio_transacao();
       $db_opcao = 3;
-      $cllicobrasmedicao->excluir($oid);
+      $cllicobrasmedicao->excluir($obr03_sequencial);
       db_fim_transacao();
     }
 
