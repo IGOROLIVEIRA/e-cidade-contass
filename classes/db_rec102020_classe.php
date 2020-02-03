@@ -24,6 +24,9 @@ class cl_rec102020
   var $si25_ededucaodereceita = 0;
   var $si25_identificadordeducao = 0;
   var $si25_naturezareceita = 0;
+  var $si25_regularizacaorepasse = 0;
+  var $si25_exercicio = null;
+  var $si25_emendaparlamentar = 0;
   var $si25_vlarrecadado = 0;
   var $si25_mes = 0;
   var $si25_instit = 0;
@@ -36,6 +39,9 @@ class cl_rec102020
                  si25_ededucaodereceita = int8 = Identifica 
                  si25_identificadordeducao = int8 = Identificador da  dedução 
                  si25_naturezareceita = int8 = Natureza da receita
+                 si25_regularizacaorepasse = int8 = Regularização de Repasse
+                 si25_exercicio = int8 = Exercicio
+                 si25_emendaparlamentar = int8 = Emenda Parlamentar
                  si25_vlarrecadado = float8 = Valor arrecadado 
                  si25_mes = int8 = Mês 
                  si25_instit = int8 = Instituição 
@@ -71,6 +77,9 @@ class cl_rec102020
       $this->si25_ededucaodereceita = ($this->si25_ededucaodereceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_ededucaodereceita"] : $this->si25_ededucaodereceita);
       $this->si25_identificadordeducao = ($this->si25_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_identificadordeducao"] : $this->si25_identificadordeducao);
       $this->si25_naturezareceita = ($this->si25_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_naturezareceita"] : $this->si25_naturezareceita);
+      $this->si25_regularizacaorepasse = ($this->si25_regularizacaorepasse == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"] : $this->si25_regularizacaorepasse);
+      $this->si25_exercicio = ($this->si25_exercicio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_exercicio"] : $this->si25_exercicio);
+      $this->si25_emendaparlamentar = ($this->si25_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"] : $this->si25_emendaparlamentar);
       $this->si25_vlarrecadado = ($this->si25_vlarrecadado == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"] : $this->si25_vlarrecadado);
       $this->si25_mes = ($this->si25_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_mes"] : $this->si25_mes);
       $this->si25_instit = ($this->si25_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_instit"] : $this->si25_instit);
@@ -104,6 +113,15 @@ class cl_rec102020
     }
     if ($this->si25_naturezareceita == null) {
       $this->si25_naturezareceita = "0";
+    }
+    if ($this->si25_regularizacaorepasse == null) {
+      $this->si25_regularizacaorepasse = "0";
+    }
+    if ($this->si25_exercicio == null) {
+      $this->si25_exercicio = "0";
+    }
+    if ($this->si25_emendaparlamentar == null) {
+      $this->si25_emendaparlamentar = "0";
     }
     if ($this->si25_vlarrecadado == null) {
       $this->si25_vlarrecadado = "0";
@@ -172,6 +190,9 @@ class cl_rec102020
                                       ,si25_ededucaodereceita 
                                       ,si25_identificadordeducao 
                                       ,si25_naturezareceita
+                                      ,si25_regularizacaorepasse
+                                      ,si25_exercicio
+                                      ,si25_emendaparlamentar
                                       ,si25_vlarrecadado 
                                       ,si25_mes 
                                       ,si25_instit 
@@ -184,6 +205,9 @@ class cl_rec102020
                                ,$this->si25_ededucaodereceita 
                                ,$this->si25_identificadordeducao 
                                ,$this->si25_naturezareceita
+                               ,$this->si25_regularizacaorepasse
+                               ,$this->si25_exercicio
+                               ,$this->si25_emendaparlamentar
                                ,$this->si25_vlarrecadado 
                                ,$this->si25_mes 
                                ,$this->si25_instit 
@@ -214,23 +238,23 @@ class cl_rec102020
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $resaco = $this->sql_record($this->sql_query_file($this->si25_sequencial));
-    if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2009673,'$this->si25_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009673,'','" . AddSlashes(pg_result($resaco, 0, 'si25_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009674,'','" . AddSlashes(pg_result($resaco, 0, 'si25_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009675,'','" . AddSlashes(pg_result($resaco, 0, 'si25_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009676,'','" . AddSlashes(pg_result($resaco, 0, 'si25_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009677,'','" . AddSlashes(pg_result($resaco, 0, 'si25_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009678,'','" . AddSlashes(pg_result($resaco, 0, 'si25_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009679,'','" . AddSlashes(pg_result($resaco, 0, 'si25_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009681,'','" . AddSlashes(pg_result($resaco, 0, 'si25_vlarrecadado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2009743,'','" . AddSlashes(pg_result($resaco, 0, 'si25_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010253,2011541,'','" . AddSlashes(pg_result($resaco, 0, 'si25_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+//    $resaco = $this->sql_record($this->sql_query_file($this->si25_sequencial));
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//      $acount = pg_result($resac, 0, 0);
+//      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//      $resac = db_query("insert into db_acountkey values($acount,2009673,'$this->si25_sequencial','I')");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009673,'','" . AddSlashes(pg_result($resaco, 0, 'si25_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009674,'','" . AddSlashes(pg_result($resaco, 0, 'si25_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009675,'','" . AddSlashes(pg_result($resaco, 0, 'si25_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009676,'','" . AddSlashes(pg_result($resaco, 0, 'si25_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009677,'','" . AddSlashes(pg_result($resaco, 0, 'si25_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009678,'','" . AddSlashes(pg_result($resaco, 0, 'si25_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009679,'','" . AddSlashes(pg_result($resaco, 0, 'si25_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009681,'','" . AddSlashes(pg_result($resaco, 0, 'si25_vlarrecadado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2009743,'','" . AddSlashes(pg_result($resaco, 0, 'si25_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010253,2011541,'','" . AddSlashes(pg_result($resaco, 0, 'si25_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//    }
 
     return true;
   }
@@ -294,6 +318,27 @@ class cl_rec102020
       $sql .= $virgula . " si25_naturezareceita = $this->si25_naturezareceita ";
       $virgula = ",";
     }
+    if (trim($this->si25_regularizacaorepasse) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"])) {
+      if (trim($this->si25_regularizacaorepasse) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"])) {
+        $this->si25_regularizacaorepasse = "0";
+      }
+      $sql .= $virgula . " si25_regularizacaorepasse = $this->si25_regularizacaorepasse ";
+      $virgula = ",";
+    }
+    if (trim($this->si25_exercicio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_exercicio"])) {
+      if (trim($this->si25_exercicio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_exercicio"])) {
+        $this->si25_exercicio = "0";
+      }
+      $sql .= $virgula . " si25_exercicio = $this->si25_exercicio ";
+      $virgula = ",";
+    }
+    if (trim($this->si25_emendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"])) {
+      if (trim($this->si25_emendaparlamentar) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"])) {
+        $this->si25_emendaparlamentar = "0";
+      }
+      $sql .= $virgula . " si25_emendaparlamentar = $this->si25_emendaparlamentar ";
+      $virgula = ",";
+    }
     if (trim($this->si25_vlarrecadado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"])) {
       if (trim($this->si25_vlarrecadado) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"])) {
         $this->si25_vlarrecadado = "0";
@@ -333,35 +378,35 @@ class cl_rec102020
     if ($si25_sequencial != null) {
       $sql .= " si25_sequencial = $this->si25_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si25_sequencial));
-    if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009673,'$this->si25_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_sequencial"]) || $this->si25_sequencial != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009673,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_sequencial')) . "','$this->si25_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_tiporegistro"]) || $this->si25_tiporegistro != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009674,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_tiporegistro')) . "','$this->si25_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_codreceita"]) || $this->si25_codreceita != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009675,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_codreceita')) . "','$this->si25_codreceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_codorgao"]) || $this->si25_codorgao != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009676,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_codorgao')) . "','$this->si25_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_ededucaodereceita"]) || $this->si25_ededucaodereceita != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009677,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_ededucaodereceita')) . "','$this->si25_ededucaodereceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_identificadordeducao"]) || $this->si25_identificadordeducao != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009678,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_identificadordeducao')) . "','$this->si25_identificadordeducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_naturezareceita"]) || $this->si25_naturezareceita != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009679,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_naturezareceita')) . "','$this->si25_naturezareceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"]) || $this->si25_vlarrecadado != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009681,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_vlarrecadado')) . "','$this->si25_vlarrecadado'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_mes"]) || $this->si25_mes != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2009743,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_mes')) . "','$this->si25_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_instit"]) || $this->si25_instit != "")
-          $resac = db_query("insert into db_acount values($acount,2010253,2011541,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_instit')) . "','$this->si25_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    $resaco = $this->sql_record($this->sql_query_file($this->si25_sequencial));
+//    if ($this->numrows > 0) {
+//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009673,'$this->si25_sequencial','A')");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_sequencial"]) || $this->si25_sequencial != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009673,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_sequencial')) . "','$this->si25_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_tiporegistro"]) || $this->si25_tiporegistro != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009674,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_tiporegistro')) . "','$this->si25_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_codreceita"]) || $this->si25_codreceita != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009675,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_codreceita')) . "','$this->si25_codreceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_codorgao"]) || $this->si25_codorgao != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009676,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_codorgao')) . "','$this->si25_codorgao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_ededucaodereceita"]) || $this->si25_ededucaodereceita != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009677,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_ededucaodereceita')) . "','$this->si25_ededucaodereceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_identificadordeducao"]) || $this->si25_identificadordeducao != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009678,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_identificadordeducao')) . "','$this->si25_identificadordeducao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_naturezareceita"]) || $this->si25_naturezareceita != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009679,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_naturezareceita')) . "','$this->si25_naturezareceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"]) || $this->si25_vlarrecadado != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009681,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_vlarrecadado')) . "','$this->si25_vlarrecadado'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_mes"]) || $this->si25_mes != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2009743,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_mes')) . "','$this->si25_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        if (isset($GLOBALS["HTTP_POST_VARS"]["si25_instit"]) || $this->si25_instit != "")
+//          $resac = db_query("insert into db_acount values($acount,2010253,2011541,'" . AddSlashes(pg_result($resaco, $conresaco, 'si25_instit')) . "','$this->si25_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -402,29 +447,29 @@ class cl_rec102020
   // funcao para exclusao
   function excluir($si25_sequencial = null, $dbwhere = null)
   {
-    if ($dbwhere == null || $dbwhere == "") {
-      $resaco = $this->sql_record($this->sql_query_file($si25_sequencial));
-    } else {
-      $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-    }
-    if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2009673,'$si25_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009673,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009674,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009675,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009676,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009677,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009678,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009679,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009681,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_vlarrecadado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2009743,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010253,2011541,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
-    }
+//    if ($dbwhere == null || $dbwhere == "") {
+//      $resaco = $this->sql_record($this->sql_query_file($si25_sequencial));
+//    } else {
+//      $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
+//    }
+//    if (($resaco != false) || ($this->numrows != 0)) {
+//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2009673,'$si25_sequencial','E')");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009673,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009674,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009675,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_codreceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009676,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_codorgao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009677,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_ededucaodereceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009678,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009679,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009681,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_vlarrecadado')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2009743,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010253,2011541,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si25_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
+//    }
     $sql = " delete from rec102020
                     where ";
     $sql2 = "";

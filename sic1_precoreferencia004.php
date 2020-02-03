@@ -89,7 +89,8 @@ ORDER BY pc11_seq) as x GROUP BY
                 si01_datacotacao,
                 pc80_criterioadjudicacao,
                 pc01_tabela,
-                pc01_taxa
+                pc01_taxa,
+                si01_justificativa
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
@@ -102,7 +103,7 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa 
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa 
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
 // die($sSql);
 $rsResult = db_query($sSql) or die(pg_last_error());
@@ -270,13 +271,13 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-     if($quant_casas){
+    if($quant_casas){
         $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-     }
-     // if($quant_casas == 2){
-     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
-     // }
-     // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
+    }
+    // if($quant_casas == 2){
+    //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+    // }
+    // else $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 3);
 
     $nTotalItens += $lTotal;
     $oDadosDaLinha = new stdClass();
@@ -354,6 +355,18 @@ HTML;
         <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
     </div>
 </div>
+<?php if ($oGet->impjust == 's') : ?>
+    <div class="tr bg_eb">
+        <div class="th col-valor_total-text align-left">
+            Justificativa
+        </div>
+    </div>
+    <div class="tr">
+        <div class="td">
+            <?= db_utils::fieldsMemory($rsResult, 0)->si01_justificativa; ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 </table>
 </div>

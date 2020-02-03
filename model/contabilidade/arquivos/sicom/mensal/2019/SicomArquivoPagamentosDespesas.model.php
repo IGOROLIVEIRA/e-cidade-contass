@@ -166,7 +166,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             WHERE c80_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
               AND c71_coddoc IN (5, 35, 37)
               AND e60_instit = " . db_getsession("DB_instit") . "
-            ORDER BY e50_codord, c70_valor DESC";
+            ORDER BY e50_codord, c70_valor";
 
     $rsEmpenhosPagosGeral = db_query($sSql);
 
@@ -184,9 +184,15 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
       /**
        * pegar quantidade de extornos
        */
-      $sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc
-            join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
-            and c70_data <= '" . $this->sDataFinal . "' and c80_codord = {$oEmpPago->ordem}";
+      $sSqlExtornos = " SELECT sum(c70_valor) AS valor
+                        FROM conlancamdoc
+                        JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                        JOIN conlancamord ON c71_codlan = c80_codlan
+                        JOIN conlancam ON c70_codlan = c71_codlan
+                        WHERE c53_tipo IN (31, 30)
+                          AND c80_codord = {$oEmpPago->ordem}
+                          AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "' ";
+
       $rsQuantExtornos = db_query($sSqlExtornos);
 
       if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {

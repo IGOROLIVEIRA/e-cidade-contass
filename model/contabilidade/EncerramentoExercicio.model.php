@@ -43,6 +43,11 @@ class EncerramentoExercicio {
    */
   const ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE = 7;
 
+  /**
+   * Transferencias dos creditos empenhados para RP
+   */
+  const TRANSFERENCIA_CREDITOS_EMPENHADOS_RP = 8;
+
 
   /**
    * Encerramento: Implantação de Saldos
@@ -174,6 +179,11 @@ class EncerramentoExercicio {
     $this->desabiliarContaCorrente();
     switch ($iTipoEncerramento) {
 
+      case EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP:
+
+        $this->transferirCreditosEmpenhadosRP();
+        break;
+
       case EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR:
 
         $this->encerrarRestosAPagar();
@@ -235,6 +245,32 @@ class EncerramentoExercicio {
 
     $this->excluirDadosEncerramento($iTipoEncerramento);
     return true;
+  }
+
+  public function cancelarTransferencia() {
+
+    $rsConlancadamDoc = $this->getTransferenciasRealizadas();
+
+    for($i=0; $i<pg_num_rows($rsConlancadamDoc); $i++) {
+      lancamentoContabil::excluirLancamento(db_utils::fieldsMemory($rsConlancadamDoc, $i)->c71_codlan);
+    }
+
+    return true;
+
+  }
+
+  /**
+   * Retorna todos os encerramentos realizados para instituicao
+   * @return array
+   */
+  public function getTransferenciasRealizadas() {
+
+    $oDaoConlancaDoc = new cl_conlancamdoc();
+    $sSql = "SELECT c71_codlan FROM conlancamdoc INNER JOIN conlancaminstit ON c71_codlan = c02_codlan WHERE c71_coddoc IN (1012, 1013, 1014) AND date_part('year', c71_data) = {$this->iAno} AND c02_instit = {$this->oInstituicao->getCodigo()}";
+    $rsTransferenciasRealizadas = $oDaoConlancaDoc->sql_record($sSql);
+
+    return $rsTransferenciasRealizadas;
+
   }
 
   public function cancelarImplantacaoSaldos() {
@@ -506,6 +542,23 @@ class EncerramentoExercicio {
   }
 
   /**
+   * Realizado o Lancamento Contabil
+   * @param LancamentoAuxiliarEncerramentoExercicio $oLancamento
+   * @param                                         $iDocumento
+   * @param                                         $iTipo
+   * @throws BusinessException
+   *
+   * OC11342 Funcao criada separadamente da executarLancamento
+   * Pois para transferir os creditos nao sera necessario vincularLancamento (gravar na tabela de encerramento)
+   */
+  private function executarLancamentoTransferenciaCreditosEmpRP(LancamentoAuxiliarEncerramentoExercicio $oLancamento, $iDocumento, $iTipo) {
+
+    $oEvento           = new EventoContabil($iDocumento, $this->iAno);
+    $iCodigoLancamento = $oEvento->executaLancamento($oLancamento, $this->oDataLancamento->getDate());
+
+  }
+
+  /**
    * Retorna as regras da natureza orçamnetária
    * @throws Exception
    * @return array
@@ -656,6 +709,101 @@ class EncerramentoExercicio {
         }
       }
     }
+  }
+
+  /**
+   * Realiza transferencia de creditos empenhados para RP
+   * @throws BusinessException
+   *
+   */
+  private function transferirCreditosEmpenhadosRP() {
+
+    /**
+     * Cria array com as transações 1012,1013,1014
+     */
+
+    $aDocumentos = array(1012, 1013, 1014);
+
+    foreach($aDocumentos as $iDocumento) {
+
+      $iContaReferencia = $this->getReduzidoByDocumento($iDocumento, 1);
+
+      /**
+       *
+       * 1. Buscar o cc do reduzido.
+       * 2. Apurar o saldo do contacorrente atravez do reduzido na conlancamval
+       * 3. Gravar na contacorrentedetalhe
+       *
+       */
+
+      $iContaCorrente = $this->getContaCorrenteByReduz($iContaReferencia);
+
+      if ($iContaCorrente != "") {
+
+        $this->habilitarContasCorrentes();
+
+        foreach ($this->getContaCorrenteDetalheByReduz($iContaReferencia,$iContaCorrente) as $oContaCorrente) {
+
+          $oContaCorrenteDetalhe = new ContaCorrenteDetalhe($oContaCorrente->c19_sequencial);
+
+          $aSaldo = $this->getSaldoContaCorrente($oContaCorrente->c19_sequencial, $iContaCorrente);
+
+          $nSaldoAnt = ($aSaldo[0]->saldoanterior == "" ? 0 : $aSaldo[0]->saldoanterior);
+          $nDebitos  = ($aSaldo[0]->debitos == "" ? 0 : $aSaldo[0]->debitos);
+          $nCreditos = ($aSaldo[0]->creditos == "" ? 0 : $aSaldo[0]->creditos);
+          $nValorFinal = number_format(($nSaldoAnt + $nDebitos - $nCreditos),2,".","");
+
+          /**
+           * Inverção do saldo da conta referência para o lançamento correto na conta credora.
+           */
+          $sSinalFinal = ($nValorFinal >= 0 ? 'C' : 'D');
+
+          if($nValorFinal == 0){
+            continue;
+          }
+
+          $oMovimentacaoContabil = new MovimentacaoContabil();
+          $oMovimentacaoContabil->setConta($oConta->c61_reduz);
+          $oMovimentacaoContabil->setSaldoFinal(abs($nValorFinal));
+          $oMovimentacaoContabil->setTipoSaldo($sSinalFinal);
+
+          $oLancamento = new LancamentoAuxiliarEncerramentoExercicio();
+          $oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
+          $oLancamento->setObservacaoHistorico("Transferencia de Creditos Empenhados Resta a Pagar do empenho " . $oContaCorrenteDetalhe->getEmpenho()->getCodigo() . " no valor " . trim(db_formatar($nValorFinal, "f")));
+          $oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
+          $oLancamento->setContaReferencia($iContaReferencia);
+          $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+          $this->executarLancamentoTransferenciaCreditosEmpRP($oLancamento, $iDocumento, EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP);
+          unset($oMovimentacaoContabil);
+          unset($oLancamento);
+
+        }
+
+        $this->desabiliarContaCorrente();
+
+      }
+
+    }
+
+  }
+
+  private function getReduzidoByDocumento($iSeqTransacao, $iTipo) {
+
+    $oDaoTrans    = db_utils::getDao("contrans");
+    $sWhereTrans  = "c45_coddoc = {$iSeqTransacao} AND c45_anousu = {$this->iAno} AND c45_instit = {$this->oInstituicao->getCodigo()}";
+    $sSqlTrans    = $oDaoTrans->sql_query_evento_contabil(null, "*", null, $sWhereTrans);
+    $rsTrans      = $oDaoTrans->sql_record($sSqlTrans);
+
+    if (pg_num_rows($rsTrans) == 0) {
+        throw new BusinessException("Conta referência não encontrada para o documento {$iSeqTransacao}");
+    }
+
+    if($iTipo == 1) {
+      return db_utils::fieldsMemory($rsTrans, 0)->c47_debito;
+    } elseif($iTipo == 2) {
+      return db_utils::fieldsMemory($rsTrans, 0)->c47_credito;
+    }
+
   }
 
   /**

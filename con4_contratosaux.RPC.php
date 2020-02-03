@@ -550,6 +550,13 @@ switch($oParam->exec) {
                 $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
             }
 
+            if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2){
+              if($oParam->contrato->iLicitacao == ""){
+                $lAcordoValido = false;
+                $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+              }
+            }
+
             if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
                 $lAcordoValido = false;
                 $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";

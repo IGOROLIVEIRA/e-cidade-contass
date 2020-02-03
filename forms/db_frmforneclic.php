@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrim
@@ -47,17 +47,17 @@ if(isset($db_opcaoal)){
     $op=1;
     $rsCgm = $clpcorcamfornelic->sql_record($clpcorcamfornelic->sql_query($pc21_orcamforne));
     if ($clpcorcamfornelic->numrows > 0){
-      
+
       db_fieldsmemory($rsCgm, 0);
     }
-}else{  
+}else{
     $db_opcao = 1;
     if(isset($novo) || isset($verificado) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $pc21_orcamforne = "";
      $pc21_numcgm = "";
      $z01_nome = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -68,7 +68,7 @@ if(isset($db_opcaoal)){
        <b>Licitação :
              </b>
     </td>
-    <td> 
+    <td>
 <?
 db_input('solic',40,"",true,'hidden',3);
 db_input('l20_codigo',8,$Il20_codigo,true,'text',3)
@@ -79,7 +79,7 @@ db_input('l20_codigo',8,$Il20_codigo,true,'text',3)
     <td  align="right" nowrap title="<?=@$Tpc21_orcamforne?>">
        <?=@$Lpc21_orcamforne?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc21_orcamforne',8,$Ipc21_orcamforne,true,'text',3)
 ?>
@@ -89,7 +89,7 @@ db_input('pc21_orcamforne',8,$Ipc21_orcamforne,true,'text',3)
     <td align="right" nowrap title="<?=@$Tpc21_codorc?>">
        <?=@$Lpc21_codorc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc20_codorc',8,$Ipc21_codorc,true,'text',3)
 ?>
@@ -101,7 +101,7 @@ db_input('pc20_codorc',8,$Ipc21_codorc,true,'text',3)
        db_ancora(@$Lpc21_numcgm,"js_pesquisapc21_numcgm(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc21_numcgm',8,$Ipc21_numcgm,true,'text',$db_opcao," onchange='js_pesquisapc21_numcgm(false);'")
 ?>
@@ -128,13 +128,13 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3);
     <td align="right" nowrap title="<?=@$Tl22_dtretira?>">
        <?=@$Lpc31_dtretira?>
     </td>
-    <td> 
+    <td>
 <?
 $pc31_dtretira_dia=date('d',db_getsession("DB_datausu"));
 $pc31_dtretira_mes=date('m',db_getsession("DB_datausu"));
 $pc31_dtretira_ano=date('Y',db_getsession("DB_datausu"));
 db_inputdata("pc31_dtretira",@$pc31_dtretira_dia,@$pc31_dtretira_mes,@$pc31_dtretira_ano,true,'text',$db_opcao);
-?> 
+?>
 <?=@$Lpc31_horaretira?>
      <?
      $pc31_horaretira=db_hora();
@@ -143,7 +143,7 @@ db_inputdata("pc31_dtretira",@$pc31_dtretira_dia,@$pc31_dtretira_mes,@$pc31_dtre
   </tr>
   <tr>
 	  <td align="right" nowrap title="<?=@$Tpc31_nomeretira?>">
-	     <?=@$Lpc31_nomeretira?> 
+	     <?=@$Lpc31_nomeretira?>
 	  </td>
 	  <td nowrap title="<?=@$Tpc31_nomeretira?>">
          <?
@@ -151,16 +151,16 @@ db_inputdata("pc31_dtretira",@$pc31_dtretira_dia,@$pc31_dtretira_mes,@$pc31_dtre
            db_input('pc31_nomeretira',50,"",true,'text',$db_opcao,"");
 	     ?>
 	  </td>
-	  
+
 	  </tr>
-  
+
   <tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tpc31_regata?>">
        <?=@$Lpc31_regata?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("1"=>"Sim","2"=>"Nao");
 db_select("pc31_regata",$x,true,$db_opcao);
@@ -171,33 +171,39 @@ db_select("pc31_regata",$x,true,$db_opcao);
     <td nowrap title="<?=@$Tpc31_renunrecurso?>">
        <?=@$Lpc31_renunrecurso?>
     </td>
-    <td> 
+    <td>
 <?
 db_select("pc31_renunrecurso",$x,true,$db_opcao);
 ?>
     </td>
   </tr>
-  
+
     <td colspan="2" align="center">
      <?
-      
+
       $sWhere = "1!=1";
       if (isset($pc20_codorc) && !empty($pc20_codorc)) {
         $sWhere = "pc22_codorc=".@$pc20_codorc;
       }
       $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_file(null,"pc22_codorc","",$sWhere));
-      
+
       if($clpcorcamitem->numrows>0){
-        
+
         if(!empty($pc20_codorc)) {
 
           $result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null,"pc21_codorc","","pc21_codorc=".@$pc20_codorc));
-        
+
+          $resultTipocom = $clliclicita->sql_record($clliclicita->getTipocomTribunal($l20_codigo));
+          db_fieldsmemory($resultTipocom,0)->l03_pctipocompratribunal;
           if($clpcorcamforne->numrows>0){
-            echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel();' ".($db_botao==false?"disabled":"").">&nbsp;";        	
-            echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";   
+          $tiposcompra = array(102,103);
+              echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel();' ".($db_botao==false?"disabled":"").">&nbsp;";
+            if(!in_array($l03_pctipocompratribunal, $tiposcompra)){
+                echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' ".($db_botao==false?"disabled":"").">";
+            }
+
           }
-        }	
+        }
      // $result_sugersol = $clpcsugforn->sql_record($clpcsugforn->sql_query_solsugforne(null," z01_numcgm "));
       }
       if ($db_opcao == 1) {
@@ -212,17 +218,17 @@ db_select("pc31_renunrecurso",$x,true,$db_opcao);
 </table>
 <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
      <?
 	 $chavepri= array("pc21_orcamforne"=>@$pc21_orcamforne,"pc21_codorc"=>@$pc21_codorc);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
-	 
+
 	 //$sWhere     = "1=1";
 	 if (isset($pc20_codorc) && !empty($pc20_codorc)) {
     $sWhere = " pc21_codorc=".@$pc20_codorc;
 	 }
-	 
-	 $cliframe_alterar_excluir->sql     = $clpcorcamforne->sql_query(null,"pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome","",$sWhere);  
+
+	 $cliframe_alterar_excluir->sql     = $clpcorcamforne->sql_query(null,"pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome","",$sWhere);
 	 $cliframe_alterar_excluir->campos  ="pc21_orcamforne,pc21_numcgm,z01_nome";
 	 $cliframe_alterar_excluir->legenda="FORNECEDORES LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
@@ -243,12 +249,12 @@ function js_gerarel(){
   <?}?>
   pc20_codorc = document.form1.pc20_codorc.value;
   if(solic==true){
-    jan = window.open('com2_solorc002.php?pc20_codorc='+pc20_codorc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');  
+    jan = window.open('com2_solorc002.php?pc20_codorc='+pc20_codorc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   }else{
-    jan = window.open('com2_procorc002.php?pc20_codorc='+pc20_codorc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');  
+    jan = window.open('com2_procorc002.php?pc20_codorc='+pc20_codorc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   }
   jan.moveTo(0,0);
-	
+
 }
 function js_cancelar(){
   var opcao = document.createElement("input");

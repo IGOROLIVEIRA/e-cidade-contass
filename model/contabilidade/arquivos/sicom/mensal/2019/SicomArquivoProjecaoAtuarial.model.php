@@ -133,7 +133,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
        * selecionar informacoes registro 20
        */
       $sSql = "select * from projecaoatuarial20 where si169_exercicio >= " . (db_getsession("DB_anousu") - 1) . "
-	                   and si169_instit = " . db_getsession("DB_instit") . " limit 75";
+	                   and si169_tipoplano = $oDados10->si168_tipoplano and si169_instit = " . db_getsession("DB_instit") . " limit 75";
       $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -143,7 +143,7 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
 
         $clparpps20->si155_tiporegistro = 20;
         $clparpps20->si155_codorgao = $sCodorgao;
-        $clparpps20->si155_tipoplano = $oDados20->si169_tipoplano;
+        $clparpps20->si155_tipoplano = $oDados10->si168_tipoplano;
         $clparpps20->si155_exercicio = $oDados20->si169_exercicio;
         $clparpps20->si155_vlreceitaprevidenciaria = $oDados20->si169_vlreceitaprevidenciaria;
         $clparpps20->si155_vldespesaprevidenciaria = $oDados20->si169_vldespesaprevidenciaria;

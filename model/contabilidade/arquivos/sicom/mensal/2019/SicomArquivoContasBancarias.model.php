@@ -543,7 +543,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                                        AND c70_data <= '" . $this->sDataFinal . "'
                                                        AND c80_codord = (SELECT c80_codord FROM conlancamord
                                                                          WHERE c80_codlan=c69_codlan
-                                                                         LIMIT 1)) > 0 THEN 8
+                                                                         LIMIT 1)) >= 0 THEN 8
                                          WHEN c71_coddoc IN (151, 161)
                                               AND (SELECT k17_situacao FROM slip
                                                    JOIN conlancamslip ON k17_codigo = c84_slip

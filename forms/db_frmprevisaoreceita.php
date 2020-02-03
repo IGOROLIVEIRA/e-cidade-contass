@@ -3,8 +3,8 @@
 
     $clorcfontes = new cl_orcfontes();
 
-    $sCampos = 'o57_fonte, o57_finali, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto';
-    $sWhere = "substr(o57_fonte,1,7) in ('41321001', '41321005',' 4171808','4171810','4172810','4173810','4174801','4174810','4176801','4176810','4241808','4241810','4242810','4243810','4244801', '4244810') and o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession('DB_anousu')." and o70_instit = ".db_getsession("DB_instit")." group by 1, 2, 3, 4, 5";
+    $sCampos = 'o57_fonte, o57_descr, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto';
+    $sWhere = "o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession('DB_anousu')." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
     $sSql = $clorcfontes->sql_query_fonte_previsao_receita($sCampos, null, $sWhere);
 
     $result = db_query($sSql);
@@ -59,8 +59,8 @@
 
                     <td class="linhagrid" style="width: 750px; text-align: left;">
                         <?php
-                        $sSubEstrut = substr($oRec->o57_fonte, 0, 10);
-                        $sRec = $sSubEstrut. ' - '.$oRec->o57_finali. ' - Fonte - '.$oRec->o70_codigo;
+                        $sSubEstrut = substr($oRec->o57_fonte, 0, 14);
+                        $sRec = $sSubEstrut. ' - '.$oRec->o57_descr. ' - Fonte - '.$oRec->o70_codigo;
                         db_ancora("<b>{$sRec}</b>", "js_associacaoConvenioPrevisaoReceita({$oRec->o70_codrec}, '{$sRec}', {$oRec->o70_valor}, {$index}, {$oRec->o70_codigo});", 1);
                         ?>
                     </td>

@@ -24,11 +24,10 @@ class GerarREC extends GerarAM {
 
         $sSql = "select * from rec102020 where si25_mes = ". $this->iMes." and si25_instit = ".db_getsession("DB_instit");
         $rsREC10    = db_query($sSql);
-//    echo $sSql;db_criatabela($rsREC10);echo "<br>";
 
         $sSql2 = "select * from rec112020 where si26_mes = ". $this->iMes." and si26_instit = ".db_getsession("DB_instit");
         $rsREC11    = db_query($sSql2);
-//    echo $sSql2;db_criatabela($rsREC11);
+
         if (pg_num_rows($rsREC10) == 0) {
 
             $aCSV['tiporegistro'] = '99';
@@ -47,6 +46,9 @@ class GerarREC extends GerarAM {
                 $aCSVREC10['si25_ededucaodereceita']    = $this->padLeftZero($aREC10['si25_ededucaodereceita'], 1);
                 $aCSVREC10['si25_identificadordeducao'] = $aREC10['si25_identificadordeducao'] == '' || $aREC10['si25_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aREC10['si25_identificadordeducao'], 2);
                 $aCSVREC10['si25_naturezareceita']      = $this->padLeftZero($aREC10['si25_naturezareceita'], 8);
+                $aCSVREC10['si25_regularizacaorepasse'] = $aREC10['si25_regularizacaorepasse'] == '' || $aREC10['si25_regularizacaorepasse'] == '0' ? '2' : $aREC10['si25_regularizacaorepasse'];
+                $aCSVREC10['si25_exercicio']            = $aREC10['si25_exercicio'] == '' || $aREC10['si25_exercicio'] == '0' ? ' ' : $aREC10['si25_exercicio'];
+                $aCSVREC10['si25_emendaparlamentar']    = $aREC10['si25_emendaparlamentar'] == '' || $aREC10['si25_emendaparlamentar'] == '0' ? '3' : $aREC10['si25_emendaparlamentar'];
                 $aCSVREC10['si25_vlarrecadado']         = $this->sicomNumberReal(abs($aREC10['si25_vlarrecadado']), 2);
 
                 $this->sLinha = $aCSVREC10;
@@ -55,7 +57,7 @@ class GerarREC extends GerarAM {
                 for ($iCont2 = 0;$iCont2 < pg_num_rows($rsREC11); $iCont2++) {
 
                     $aREC11  = pg_fetch_array($rsREC11,$iCont2);
-//                    echo "<pre>"; print_r($aREC11);
+
                     if ($aREC10['si25_sequencial'] == $aREC11['si26_reg10']) {
 
                         $aCSVREC11['si26_tiporegistro']         = $this->padLeftZero($aREC11['si26_tiporegistro'], 2);
@@ -74,7 +76,7 @@ class GerarREC extends GerarAM {
 
                 }
             }
-//exit();
+
             $this->fechaArquivo();
 
         }

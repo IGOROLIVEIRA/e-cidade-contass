@@ -44,7 +44,8 @@ $aTiposEncerramento = array(
     'rp' => EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR,
     'vp' => EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS,
     'no' => EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE,
-    'is' => EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS
+    'is' => EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS,
+    'tx' => EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP
 );
 
 try {
@@ -65,7 +66,8 @@ try {
           $aTiposEncerramentoValor[EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR] => in_array(EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR, $aEncerramentos),
           $aTiposEncerramentoValor[EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS] => in_array(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS, $aEncerramentos),
           $aTiposEncerramentoValor[EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE] => in_array(EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE, $aEncerramentos),
-          $aTiposEncerramentoValor[EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS] => in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos)
+          $aTiposEncerramentoValor[EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS] => in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos),
+          $aTiposEncerramentoValor[EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP] => pg_num_rows($oEncerramentoExercicio->getTransferenciasRealizadas()) > 0 ? true : false
       );
 
       break;
@@ -101,50 +103,62 @@ try {
       $lEncerramentoVariacoesPatrimoniais = in_array(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS, $aEncerramentos);
       $lEncerramentoImplantacaoSaldos     = in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos);
 
-      if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE) {
+      if ($iTipoEncerramento == EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP) {
 
         /**
          * Processamento já foi realizado
          */
-        if ($lEncerramentoSistemaOrcamentario && $lEncerramentoRestosPagar) {
-          throw new BusinessException('Restos a Pagar / Natureza Orçamentária e Controle já processado para o exercício.');
+        if (pg_num_rows($oEncerramentoExercicio->getTransferenciasRealizadas()) > 0) {
+          throw new BusinessException('Transferência dos créditos empenhados para RP já processado para o exercício.');
         }
 
-        /**
-         * Tentativa de processar fora de ordem
-         */
-        if (!$lEncerramentoVariacoesPatrimoniais) {
-          throw new BusinessException('O Encerramento das Variações Patrimoniais deve ser processado primeiro.');
+        $oEncerramentoExercicio->encerrar(EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP);
+
+      } else {
+        if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE) {
+
+          /**
+           * Processamento já foi realizado
+           */
+          if ($lEncerramentoSistemaOrcamentario && $lEncerramentoRestosPagar) {
+            throw new BusinessException('Restos a Pagar / Natureza Orçamentária e Controle já processado para o exercício.');
+          }
+
+          /**
+           * Tentativa de processar fora de ordem
+           */
+          if (!$lEncerramentoVariacoesPatrimoniais) {
+            throw new BusinessException('O Encerramento das Variações Patrimoniais deve ser processado primeiro.');
+          }
+
+          $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE);
+          $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR);
+        } else if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS) {
+
+          /**
+           * Processamento já foi realizado
+           */
+          if ($lEncerramentoVariacoesPatrimoniais) {
+            throw new BusinessException('Encerramento das Variações Patrimoniais já processado para o exercício.');
+          }
+
+          $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS);
+        } else if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS) {
+
+          //Validando se ja foi processado.
+          if ($lEncerramentoImplantacaoSaldos) {
+            throw new BusinessException("Implantação de Saldos já processado para o exercício.");
+          }
+
+          //Validando ordem do processamento.
+          if (!$lEncerramentoVariacoesPatrimoniais || !$lEncerramentoRestosPagar || !$lEncerramentoSistemaOrcamentario) {
+
+            $sErro  = "A Implantação de Saldos deve ser processada após os processamentos do Encerramento das Variações ";
+            $sErro .= "Patrimoniais e Restos a Pagar / Natureza Orçamentária e Controle.";
+            throw new BusinessException($sErro);
+          }
+          $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS);
         }
-
-        $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE);
-        $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR);
-      } else if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS) {
-
-        /**
-         * Processamento já foi realizado
-         */
-        if ($lEncerramentoVariacoesPatrimoniais) {
-          throw new BusinessException('Encerramento das Variações Patrimoniais já processado para o exercício.');
-        }
-
-        $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS);
-      } else if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS) {
-
-        //Validando se ja foi processado.
-        if ($lEncerramentoImplantacaoSaldos) {
-          throw new BusinessException("Implantação de Saldos já processado para o exercício.");
-        }
-
-        //Validando ordem do processamento.
-        if (!$lEncerramentoVariacoesPatrimoniais || !$lEncerramentoRestosPagar || !$lEncerramentoSistemaOrcamentario) {
-
-          $sErro  = "A Implantação de Saldos deve ser processada após os processamentos do Encerramento das Variações ";
-          $sErro .= "Patrimoniais e Restos a Pagar / Natureza Orçamentária e Controle.";
-          throw new BusinessException($sErro);
-        }
-        $oEncerramentoExercicio->encerrar(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS);
-      }
 
         /*Encerramento Patrimonial OC 8874*/
         $c99_anousu = db_getsession("DB_anousu");
@@ -164,11 +178,12 @@ try {
 
         //  Se não houver um registro criado
         if($rsConDataConf == false || $clcondataconf->numrows == 0) {
-            $clcondataconf->incluir($c99_anousu,$c99_instit);
+          $clcondataconf->incluir($c99_anousu,$c99_instit);
         }else{
-            $clcondataconf->alterar($c99_anousu,$c99_instit);
+          $clcondataconf->alterar($c99_anousu,$c99_instit);
         }
         /*fim OC 8874*/
+      }
 
       break;
 
@@ -193,7 +208,15 @@ try {
       $lEncerramentoVariacoesPatrimoniais = in_array(EncerramentoExercicio::ENCERRAR_VARIACOES_PATRIMONIAIS, $aEncerramentos);
       $lEncerramentoImplantacaoSaldos     = in_array(EncerramentoExercicio::ENCERRAR_IMPLANTACAO_SALDOS, $aEncerramentos);
 
-      if ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE) {
+      if ($iTipoEncerramento == EncerramentoExercicio::TRANSFERENCIA_CREDITOS_EMPENHADOS_RP) {
+
+        if (pg_num_rows($oEncerramentoExercicio->getTransferenciasRealizadas()) == 0) {
+          throw new BusinessException('Transferência dos créditos empenhados para RP não processado ou já cancelado para o exercício.');
+        }
+
+        $oEncerramentoExercicio->cancelarTransferencia();
+
+      } elseif ($iTipoEncerramento == EncerramentoExercicio::ENCERRAR_SISTEMA_ORCAMENTARIO_CONTROLE) {
 
         /**
          * Cancelamento já foi realizado ou o processamento não foi realizado

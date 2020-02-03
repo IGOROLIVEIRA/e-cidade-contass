@@ -21,89 +21,145 @@ $oRetorno->message = 1;
 $oRetorno->itens   = array();
 switch($oParam->exec) {
 
+  case "excluirArquivosIP":
+
+  try {
+      $iAnoReferencia = db_getsession('DB_anousu');
+      $ano = substr($iAnoReferencia, -2);
+
+      if (file_exists("PPA{$ano}.pdf")){
+        array_map( "unlink", glob( "PPA{$ano}.pdf" ) );
+      } 
+      if(file_exists("LDO{$ano}.pdf")){
+        array_map( "unlink", glob( "LDO{$ano}.pdf" ) );
+      }
+      if(file_exists("LOA{$ano}.pdf")){
+        array_map( "unlink", glob( "LOA{$ano}.pdf" ) );
+      } 
+      if(file_exists("ANEXOS_LOA.pdf")){
+        array_map( "unlink", glob( "ANEXOS_LOA.pdf" ) );
+      }
+      if(file_exists("OPCAOSEMESTRALIDADE.pdf")){
+        array_map( "unlink", glob( "OPCAOSEMESTRALIDADE.pdf" ) );
+      }
+      if(file_exists("DESOPCAOSEMESTRALIDADE.pdf")){
+        array_map( "unlink", glob( "DESOPCAOSEMESTRALIDADE.pdf" ) );
+      }
+  }catch (Exception $eErro) {
+          $oRetorno->status  = 2;
+          $sGetMessage       = "retornou com erro: \\n \\n {$eErro->getMessage()}";
+          $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+  }
+
+
+
+  break;
+
   case "processarSigap":
 
-    $sDataInicial = db_getsession("DB_anousu").'-01-01';
-    $iUltimoDia   = cal_days_in_month(CAL_GREGORIAN, $oParam->iPeriodo, db_getsession("DB_anousu"));
-    $sDataFinal   = db_getsession("DB_anousu")."-".str_pad($oParam->iPeriodo, 2, "0",STR_PAD_LEFT)."-{$iUltimoDia}";
-    if (count($oParam->aArquivos) > 0) {
+  $sDataInicial = db_getsession("DB_anousu").'-01-01';
+  $iUltimoDia   = cal_days_in_month(CAL_GREGORIAN, $oParam->iPeriodo, db_getsession("DB_anousu"));
+  $sDataFinal   = db_getsession("DB_anousu")."-".str_pad($oParam->iPeriodo, 2, "0",STR_PAD_LEFT)."-{$iUltimoDia}";
+  if (count($oParam->aArquivos) > 0) {
 
-      $oEscritorXML = new padArquivoEscritorXML();
-      $otxtLogger   = fopen("tmp/SIGAP.log", "w");
-      foreach ($oParam->aArquivos as $sArquivo) {
+    $oEscritorXML = new padArquivoEscritorXML();
+    $otxtLogger   = fopen("tmp/SIGAP.log", "w");
+    foreach ($oParam->aArquivos as $sArquivo) {
 
-        if (file_exists("model/PadArquivoSigap{$sArquivo}.model.php")) {
+      if (file_exists("model/PadArquivoSigap{$sArquivo}.model.php")) {
 
-          require_once("model/PadArquivoSigap{$sArquivo}.model.php");
-          $sNomeClasse = "PadArquivoSigap{$sArquivo}";
+        require_once("model/PadArquivoSigap{$sArquivo}.model.php");
+        $sNomeClasse = "PadArquivoSigap{$sArquivo}";
 
-          $oArquivo    = new $sNomeClasse;
-          $oArquivo->setDataInicial($sDataInicial);
-          $oArquivo->setDataFinal($sDataFinal);
-          $oArquivo->setCodigoTCE($oParam->iCodigoTCE);
-          $oArquivo->setTXTLogger($otxtLogger);
-          if ($sArquivo == 'Ppa') {
-            $oArquivo->setCodigoVersao($oParam->iPerspectivaPPa);
-          }
+        $oArquivo    = new $sNomeClasse;
+        $oArquivo->setDataInicial($sDataInicial);
+        $oArquivo->setDataFinal($sDataFinal);
+        $oArquivo->setCodigoTCE($oParam->iCodigoTCE);
+        $oArquivo->setTXTLogger($otxtLogger);
+        if ($sArquivo == 'Ppa') {
+          $oArquivo->setCodigoVersao($oParam->iPerspectivaPPa);
+        }
         if ($sArquivo == 'LoaDespesa' || $sArquivo == 'LoaReceita') {
-            $oArquivo->setCodigoVersao($oParam->iPerspectivaCronograma);
-          }
-          try {
+          $oArquivo->setCodigoVersao($oParam->iPerspectivaCronograma);
+        }
+        try {
 
-            $oArquivo->gerarDados();
-            $oEscritorXML->adicionarArquivo($oEscritorXML->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-          } catch (Exception $eErro) {
+          $oArquivo->gerarDados();
+          $oEscritorXML->adicionarArquivo($oEscritorXML->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
+        } catch (Exception $eErro) {
 
-            $oRetorno->status  = 2;
-            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
-          }
+          $oRetorno->status  = 2;
+          $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+          $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
         }
       }
-
-      $oEscritorXML->zip("SIGAP");
-      $oEscritorXML->adicionarArquivo("tmp/SIGAP.log", "SIGAP.log");
-      $oEscritorXML->adicionarArquivo("tmp/SIGAP.zip", "SIGAP.zip");
-      $oRetorno->itens  = $oEscritorXML->getListaArquivos();
-      fclose($otxtLogger);
     }
-    break;
+
+    $oEscritorXML->zip("SIGAP");
+    $oEscritorXML->adicionarArquivo("tmp/SIGAP.log", "SIGAP.log");
+    $oEscritorXML->adicionarArquivo("tmp/SIGAP.zip", "SIGAP.zip");
+    $oRetorno->itens  = $oEscritorXML->getListaArquivos();
+    fclose($otxtLogger);
+  }
+  break;
 
   case "processarSicomAnual" :
-
     /**
      * sempre usar essa funcao para pegar o ano
      */
     $sDataInicial = db_getsession("DB_anousu").'-01-01';
     $sDataFinal   = db_getsession("DB_anousu")."-12-31";
-    if (count($oParam->arquivos) > 0) {
+    
 
-    	$sSql  = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = ".db_getsession('DB_instit');
+    $sSql  = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = ".db_getsession('DB_instit');
 
-    	$rsInst = db_query($sSql);
-    	$sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+    $rsInst = db_query($sSql);
+    $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
 
-      $iAnoReferencia = db_getsession('DB_anousu');
-      $ano = substr($iAnoReferencia, -2);
+    $iAnoReferencia = db_getsession('DB_anousu');
+    $ano = substr($iAnoReferencia, -2);
 
-      $oEscritorCSV = new padArquivoEscritorCSV();
+    $oEscritorCSV = new padArquivoEscritorCSV();
       /**
        * Verificar se existe pelo menos um pdf de leis antes de tentar processar
        */
-      if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
-            && !file_exists("LOA{$ano}.pdf") && !file_exists("ANEXOS_LOA.pdf")) {
-      	$oRetorno->status  = 2;
-        $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
-        $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
-        break;
-    	}
-      	$oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
-      	$oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
-    	$oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
-    	$oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
-    	$oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
+     //  if (!file_exists("PPA{$ano}.pdf") && !file_exists("LDO{$ano}.pdf")
+     //          && !file_exists("LOA{$ano}.pdf") && !file_exists("ANEXOS_LOA.pdf")) {
+     //    	$oRetorno->status  = 2;
+     //      $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
+     //      $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+     //      break;
+    	// }
 
-    	$oEscritorCSV = new padArquivoEscritorCSV();
+      $iVerifica=0;
+      if (file_exists("PPA{$ano}.pdf")){
+        $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
+        $iVerifica=1;
+      } 
+      if(file_exists("LDO{$ano}.pdf")){
+        $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
+        $iVerifica=1;
+      }
+      if(file_exists("LOA{$ano}.pdf")){
+        $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
+        $iVerifica=1;
+      } 
+      if(file_exists("ANEXOS_LOA.pdf")){
+        $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
+        $iVerifica=1;
+      }
+      if(file_exists("OPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("OPCAOSEMESTRALIDADE.pdf", "OPCAOSEMESTRALIDADE.pdf");
+        $iVerifica=1;
+      }
+      if(file_exists("DESOPCAOSEMESTRALIDADE.pdf")){
+        $oEscritorCSV->adicionarArquivo("DESOPCAOSEMESTRALIDADE.pdf", "DESOPCAOSEMESTRALIDADE.pdf");
+        $iVerifica=1;
+      }
+      if($iVerifica==1){
+        $oEscritorCSV->zip("DOC_IP_{$sInst}_{$iAnoReferencia}");
+        $oEscritorCSV = new padArquivoEscritorCSV();
+      }
 
     	/*
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
@@ -111,7 +167,7 @@ switch($oParam->exec) {
       foreach ($oParam->arquivos as $sArquivo) {
 
         $sArquivoPath = "model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php";
-
+        
         if (file_exists($sArquivoPath)) {
 
           require_once($sArquivoPath);
@@ -137,18 +193,24 @@ switch($oParam->exec) {
         }
       }
 
-      $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
-      $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
-      $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
+      if (count($oParam->arquivos) > 0) {
+        $oEscritorCSV->zip("IP_{$sInst}_{$iAnoReferencia}");
+        $oEscritorCSV->adicionarArquivo("tmp/IP_{$sInst}_{$iAnoReferencia}.zip", "IP_{$sInst}_{$iAnoReferencia}.zip");
+      }
+
+      if($iVerifica==1){
+        $oEscritorCSV->adicionarArquivo("tmp/DOC_IP_{$sInst}_{$iAnoReferencia}.zip", "DOC_IP_{$sInst}_{$iAnoReferencia}.zip");
+      }
+
       $oRetorno->itens = $oEscritorCSV->getListaArquivos();
-    }
-    break;
+
+      break;
 
 
-    case "processarSicomMensal" :
+      case "processarSicomMensal" :
 
 
-    if (db_getsession("DB_anousu") >= 2014) {
+      if (db_getsession("DB_anousu") >= 2014) {
     /*
      * Definindo o periodo em que serao selecionado os dados
      */
@@ -168,9 +230,9 @@ switch($oParam->exec) {
       $iAnoReferencia = db_getsession('DB_anousu');
 
       $sSql  = "SELECT si09_codorgaotce AS codorgao
-              FROM db_config
-              LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-              WHERE codigo = ".db_getsession("DB_instit");
+      FROM db_config
+      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+      WHERE codigo = ".db_getsession("DB_instit");
 
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
@@ -201,33 +263,33 @@ switch($oParam->exec) {
         if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SuperavitFinanceiro") {
           continue;
         }
-         if ( ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte))
-             || ($sArquivo == 'DetalhamentoExtraOrcamentarias' && $nEXTFonte > 0)  ){
-            $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
-         }
-         if (($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte))
-             || ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && $nEXTFonte > 0) ){
-            $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
-         }
+        if ( ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte))
+         || ($sArquivo == 'DetalhamentoExtraOrcamentarias' && $nEXTFonte > 0)  ){
+          $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
+      }
+      if (($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte))
+       || ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && $nEXTFonte > 0) ){
+        $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
+    }
 
-	      if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
+    if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
 
-	        require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
-	        $sNomeClasse = "SicomArquivo{$sArquivo}";
+     require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
+     $sNomeClasse = "SicomArquivo{$sArquivo}";
 
-	        $oArquivo    = new $sNomeClasse;
-	        $oArquivo->setDataInicial($sDataInicial);
-	        $oArquivo->setDataFinal($sDataFinal);
-          if ($sArquivo == "MetasFisicasRealizadas"){
-            $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
-          }
-	        $oArquivoCsv = new stdClass();
-	        try {
+     $oArquivo    = new $sNomeClasse;
+     $oArquivo->setDataInicial($sDataInicial);
+     $oArquivo->setDataFinal($sDataFinal);
+     if ($sArquivo == "MetasFisicasRealizadas"){
+      $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+    }
+    $oArquivoCsv = new stdClass();
+    try {
 
-	          $oArquivo->gerarDados();
-	          $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
-	          $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
-	          $aArrayArquivos[] = $oArquivoCsv;
+     $oArquivo->gerarDados();
+     $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
+     $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
+     $aArrayArquivos[] = $oArquivoCsv;
 	          /*if ($sArquivo == "IdentificacaoRemessa" || $sArquivo == "ProgramasAnuais" || $sArquivo == "AcoesMetasAnuais") {
 
       	      $oEscritorProgramasCSV->adicionarArquivo($oEscritorProgramasCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
@@ -237,17 +299,17 @@ switch($oParam->exec) {
 
       	    }else{
 	              $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-      	    }*/
+             }*/
 
-	        } catch (Exception $eErro) {
+           } catch (Exception $eErro) {
 
-	          $oRetorno->status  = 2;
-	          $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-	          $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+             $oRetorno->status  = 2;
+             $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+             $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
 
-	        }
-	      }
-      }
+           }
+         }
+       }
 
       /*$oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
       $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
@@ -264,13 +326,13 @@ switch($oParam->exec) {
 
       $oArquivoZip = new stdClass();
       $oArquivoZip->nome    = "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-	    $oArquivoZip->caminho = "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-	    $aArrayArquivos[] = $oArquivoZip;
+      $oArquivoZip->caminho = "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $aArrayArquivos[] = $oArquivoZip;
 
       $oRetorno->itens  = $aArrayArquivos;
     }
 
-    } else {
+  } else {
 
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
@@ -286,16 +348,16 @@ switch($oParam->exec) {
       $iAnoReferencia = db_getsession('DB_anousu');
 
       $sSql  = "SELECT * FROM db_config ";
-			$sSql .= "	WHERE prefeitura = 't'";
+      $sSql .= "	WHERE prefeitura = 't'";
 
       $rsInst = db_query($sSql);
       $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
       $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
-    	if (!file_exists($sArquivo)) {
+      if (!file_exists($sArquivo)) {
       	throw new Exception("Arquivo de configuracao dos orgaos do sicom inexistente!");
-    	}
-   	  $sTextoXml    = file_get_contents($sArquivo);
+      }
+      $sTextoXml    = file_get_contents($sArquivo);
       $oDOMDocument = new DOMDocument();
       $oDOMDocument->loadXML($sTextoXml);
       $oOrgaos      = $oDOMDocument->getElementsByTagName('orgao');
@@ -307,13 +369,13 @@ switch($oParam->exec) {
       foreach ($oOrgaos as $oOrgao) {
 
       	if ($oOrgao->getAttribute('instituicao') == db_getsession('DB_instit')) {
-      	  $sOrgao = str_pad($oOrgao->getAttribute('codOrgao'), 2, "0", STR_PAD_LEFT);
-      	}
+         $sOrgao = str_pad($oOrgao->getAttribute('codOrgao'), 2, "0", STR_PAD_LEFT);
+       }
 
-      }
-      if (!isset($oOrgao)) {
-        throw new Exception("Arquivo sem configuracao de Orgaos.");
-      }
+     }
+     if (!isset($oOrgao)) {
+      throw new Exception("Arquivo sem configuracao de Orgaos.");
+    }
 
       /*
        * array para adicionar os arquivos de inslusao de programas
@@ -331,50 +393,50 @@ switch($oParam->exec) {
        */
       foreach ($oParam->arquivos as $sArquivo) {
 
-	      if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
+       if (file_exists("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
 
-	        require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
-	        $sNomeClasse = "SicomArquivo{$sArquivo}";
+         require_once("model/contabilidade/arquivos/sicom/mensal/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
+         $sNomeClasse = "SicomArquivo{$sArquivo}";
 
-	        $oArquivo    = new $sNomeClasse;
-	        $oArquivo->setDataInicial($sDataInicial);
-	        $oArquivo->setDataFinal($sDataFinal);
-	        try {
+         $oArquivo    = new $sNomeClasse;
+         $oArquivo->setDataInicial($sDataInicial);
+         $oArquivo->setDataFinal($sDataFinal);
+         try {
 
-	          $oArquivo->gerarDados();
-	          if ($sArquivo == "IdentificacaoRemessa" || $sArquivo == "ProgramasAnuais" || $sArquivo == "AcoesMetasAnuais") {
+           $oArquivo->gerarDados();
+           if ($sArquivo == "IdentificacaoRemessa" || $sArquivo == "ProgramasAnuais" || $sArquivo == "AcoesMetasAnuais") {
 
-      	      $oEscritorProgramasCSV->adicionarArquivo($oEscritorProgramasCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-      	      if ($sArquivo == "IdentificacaoRemessa") {
-      	      	$oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-      	      }
+             $oEscritorProgramasCSV->adicionarArquivo($oEscritorProgramasCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
+             if ($sArquivo == "IdentificacaoRemessa") {
+              $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
+            }
 
-      	    }else{
-	              $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-      	    }
+          }else{
+           $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
+         }
 
-	        } catch (Exception $eErro) {
+       } catch (Exception $eErro) {
 
-	          $oRetorno->status  = 2;
-	          $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-	          $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+         $oRetorno->status  = 2;
+         $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+         $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
 
-	        }
-	      }
-      }
+       }
+     }
+   }
 
-      $oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
-      $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
-      $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");
-      $oRetorno->itens  = array_merge($oEscritorCSV->getListaArquivos(), $oEscritorProgramasCSV->getListaArquivos());
-    }
+   $oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+   $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+   $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
+   $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");
+   $oRetorno->itens  = array_merge($oEscritorCSV->getListaArquivos(), $oEscritorProgramasCSV->getListaArquivos());
+ }
 
-    }
+}
 
-    break;
+break;
 
-    case "processarBalancete" :
+case "processarBalancete" :
 
     /*
      * Definindo o periodo em que serao selecionado os dados
@@ -403,9 +465,9 @@ switch($oParam->exec) {
       $iAnoReferencia = db_getsession('DB_anousu');
 
       $sSql  = "SELECT si09_codorgaotce AS codorgao
-              FROM db_config
-              LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-              WHERE codigo = ".db_getsession("DB_instit");
+      FROM db_config
+      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+      WHERE codigo = ".db_getsession("DB_instit");
 
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
@@ -484,11 +546,11 @@ switch($oParam->exec) {
 
     case "processarPCA" :
 
-      $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
-      $rsInst = db_query($sSql);
-      $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+    $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+    $rsInst = db_query($sSql);
+    $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
 
-      $iAnoReferencia = db_getsession('DB_anousu');
+    $iAnoReferencia = db_getsession('DB_anousu');
 
       /*
        * gerar arquivos correspondentes a todas as opcoes selecionadas
@@ -532,23 +594,23 @@ switch($oParam->exec) {
 
       $oRetorno->itens  = $aArrayArquivos;
 
-    break;
+      break;
 
 
-  case "processarLCF" :
+      case "processarLCF" :
 
-    $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
-    $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
-    $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+      $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
+      $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
+      $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
 
-    $sSql = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = " . db_getsession('DB_instit');
+      $sSql = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = " . db_getsession('DB_instit');
 
-    $rsInst = db_query($sSql);
-    $sInst = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+      $rsInst = db_query($sSql);
+      $sInst = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
 
-    $iAnoReferencia = db_getsession('DB_anousu');
+      $iAnoReferencia = db_getsession('DB_anousu');
 
-    $oEscritorCSV = new padArquivoEscritorCSV();
+      $oEscritorCSV = new padArquivoEscritorCSV();
     /**
      * Só vai gerar esses arquivos se os mesmos existirem
      */
@@ -564,18 +626,18 @@ switch($oParam->exec) {
        * Sql que busca os decretos do mes
        */
       $sSqlDecretosMes = "select  distinct o39_codproj as codigovinc,
-       '10' as tiporegistro,
-	     si09_codorgaotce as codorgao,
-	     o39_numero as nroDecreto,
-	     o39_data as dataDecreto,o39_tipoproj as tipodecreto
-       from
-       orcsuplem
-       join orcsuplemval  on o47_codsup = o46_codsup
-       join orcprojeto    on o46_codlei = o39_codproj
-       join db_config on prefeitura  = 't'
-       join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
-       left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
-     where o39_data between  '$sDataInicial' and '$sDataFinal'";
+      '10' as tiporegistro,
+      si09_codorgaotce as codorgao,
+      o39_numero as nroDecreto,
+      o39_data as dataDecreto,o39_tipoproj as tipodecreto
+      from
+      orcsuplem
+      join orcsuplemval  on o47_codsup = o46_codsup
+      join orcprojeto    on o46_codlei = o39_codproj
+      join db_config on prefeitura  = 't'
+      join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
+      left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
+      where o39_data between  '$sDataInicial' and '$sDataFinal'";
       $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
 
       require_once("model/contabilidade/arquivos/sicom/mensal/" . db_getsession("DB_anousu") . "/SicomArquivoLegislacaoCaraterFinanceiro.model.php");
@@ -604,7 +666,7 @@ switch($oParam->exec) {
 
     break;
 
-  case "processarFlpgo" :
+    case "processarFlpgo" :
 
     /*
      * Definindo o periodo em que serao selecionado os dados
@@ -624,9 +686,9 @@ switch($oParam->exec) {
       $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
       $iAnoReferencia = db_getsession('DB_anousu');
       $sSql  = "SELECT si09_codorgaotce AS codorgao
-            FROM db_config
-            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-            WHERE codigo = ".db_getsession("DB_instit");
+      FROM db_config
+      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+      WHERE codigo = ".db_getsession("DB_instit");
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();
@@ -665,14 +727,14 @@ switch($oParam->exec) {
               }
             }else{
                 $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-            }*/
-          } catch (Exception $eErro) {
-            $oRetorno->status  = 2;
-            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+              }*/
+            } catch (Exception $eErro) {
+              $oRetorno->status  = 2;
+              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+              $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+            }
           }
         }
-      }
       /*$oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
       $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
@@ -692,7 +754,7 @@ switch($oParam->exec) {
     }
     break;
 
-  case "processarDCASP" :
+    case "processarDCASP" :
     /*
      * Definindo o periodo em que serao selecionado os dados
      * Sempre em dezembro
@@ -708,9 +770,9 @@ switch($oParam->exec) {
       $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
       $iAnoReferencia = db_getsession('DB_anousu');
       $sSql  = "SELECT si09_codorgaotce AS codorgao
-            FROM db_config
-            LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-            WHERE codigo = ".db_getsession("DB_instit");
+      FROM db_config
+      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+      WHERE codigo = ".db_getsession("DB_instit");
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();
@@ -766,9 +828,9 @@ switch($oParam->exec) {
     }
     break;
 
-}
+  }
 
-echo $oJson->encode($oRetorno);
+  echo $oJson->encode($oRetorno);
 
 /**
  * Calculos do Encerramento do Balancete
@@ -777,12 +839,12 @@ echo $oJson->encode($oRetorno);
 function getCalculoEncerramento(){
 
   $sSqlEncerramento = "SELECT si177_contacontaabil,
-                                   si177_totaldebitos,
-                                   si177_totalcreditos,
-                                   si177_saldofinal,
-                                   si177_naturezasaldofinal
-                            FROM balancete10".db_getsession('DB_anousu')."
-                            WHERE si177_mes = 13";
+  si177_totaldebitos,
+  si177_totalcreditos,
+  si177_saldofinal,
+  si177_naturezasaldofinal
+  FROM balancete10".db_getsession('DB_anousu')."
+  WHERE si177_mes = 13";
 
   // print_r($sSqlEncerramento);
   $rsSqlEncerramento = db_query($sSqlEncerramento) or die(pg_last_error());
@@ -980,247 +1042,247 @@ function getCalculoEncerramento(){
 
   if($nTotalAtivo != $nTotalPassivo){
     array_push($aRetorno,array("mensagem" => "ME714_CLS_1_2_SLD_FINAL_INCONSIST", "calculo" => "Total Ativo: {$nTotalAtivo} - Total Passivo: {$nTotalPassivo} = ".$nTotalAtivo-$nTotalPassivo,
-        "regras" => "<p>1. Saldo final do Ativo igual ao saldo final do Passivo após o encerramento do balancete.<br>
-                        1.1. Validação: Verificar se o somatório do saldo final das contas do Ativo (primeiro dígito igual a 1) é igual ao somatório do saldo final das contas do Passivo (primeiro dígito igual a 2), seguindo os passos:<br><br>
-                        Registro a ser utilizado: '10 - Balancete Contábil'.<br><br>
-                        Etapa 1 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 1.<br>
-                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
-                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br><br>
-                        Obter o 'Total Ativo' por meio da seguinte operação: 'Total Devedor' (-) 'Total Credor'.<br>
-                        Etapa 2 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 2.<br>
-                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br>
-                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
-                        Obter o 'Total Passivo' por meio da seguinte operação: 'Total Credor' (-) 'Total Devedor'.<br>
-                        Comparar 'Total Ativo' com 'Total Passivo'.<br>
-                        1.2. Mensagem: ME714_CLS_1_2_SLD_FINAL_INCONSIST.</p>"));
+      "regras" => "<p>1. Saldo final do Ativo igual ao saldo final do Passivo após o encerramento do balancete.<br>
+      1.1. Validação: Verificar se o somatório do saldo final das contas do Ativo (primeiro dígito igual a 1) é igual ao somatório do saldo final das contas do Passivo (primeiro dígito igual a 2), seguindo os passos:<br><br>
+      Registro a ser utilizado: '10 - Balancete Contábil'.<br><br>
+      Etapa 1 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 1.<br>
+      Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
+      Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br><br>
+      Obter o 'Total Ativo' por meio da seguinte operação: 'Total Devedor' (-) 'Total Credor'.<br>
+      Etapa 2 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 2.<br>
+      Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br>
+      Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
+      Obter o 'Total Passivo' por meio da seguinte operação: 'Total Credor' (-) 'Total Devedor'.<br>
+      Comparar 'Total Ativo' com 'Total Passivo'.<br>
+      1.2. Mensagem: ME714_CLS_1_2_SLD_FINAL_INCONSIST.</p>"));
   }
 
   if($nTotalDebitosVP != $nTotalCreditosResultado){
     array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE", "calculo" => "Total Debitos VP: {$nTotalDebitosVP} Total Creditos Resultado: {$nTotalCreditosResultado}",
-        "regras"=>"<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
-                      1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1 o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
+      "regras"=>"<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
+      1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1 o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
 
-                      Registro a ser utilizado: '10 - Balancete Contábil'.<br>
-                      Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
-                      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+      Registro a ser utilizado: '10 - Balancete Contábil'.<br>
+      Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                      Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
-                      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado '.<br>
-                      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+      Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
+      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado '.<br>
+      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                      Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                      1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+      Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+      1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                      O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                      1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.</p>"));
+      O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+      1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.</p>"));
   }
 
   if($nTotalCreditosVP != $nTotalDebitosResultado){
     array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE","calculo" => "Total Creditos VP: {$nTotalCreditosVP} Total Debitos Resultado: {$nTotalDebitosResultado}",
-        "regras"=>utf8_encode("<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
-                    1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total
-                    de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
+      "regras"=>utf8_encode("<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
+        1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total
+        de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 - Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 - Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalDebitosVP2 != $nTotalCreditosResultado2){
     array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE2", "calculo" => "Total Debitos VP2: {$nTotalDebitosVP2} Total Creditos Resultado2: {$nTotalCreditosResultado2}",
-        "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
-                    2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
+      "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
+        2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalCreditosVP2 != $nTotalDebitosResultado2){
     array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE2","calculo" => "Total Creditos VP2: {$nTotalCreditosVP2} Total Debitos Resultado2: {$nTotalDebitosResultado2}",
-        "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
-                    2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
+      "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
+        2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.")));
   }
 
   if($nTotalDebitosVP3 != $nTotalCreditosResultado3){
     array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE3", "calculo" => "Total Debitos VP3: {$nTotalDebitosVP3} Total Creditos Resultado3: {$nTotalCreditosResultado3}",
-        "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
-                   3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
-                   o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
-                   e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
+      "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
+       3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
+       o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
+       e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+       Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+       Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
+       Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+       Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+       Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
+       Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+       Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+       Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+       1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+       O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+       1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalCreditosVP3 != $nTotalDebitosResultado3){
     array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE3","calculo" => "Total Creditos VP3: {$nTotalDebitosVP3} Total Debitos Resultado3: {$nTotalCreditosResultado3}",
-        "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
-                   3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
-                   o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
-                   e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
+      "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
+       3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
+       o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
+       e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+       Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+       Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
+       Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+       Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+       Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
+       Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+       Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+       Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+       1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+       O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+       1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalDebitosVP4 != $nTotalCreditosResultado4){
     array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE4", "calculo" => "Total Debitos VP4: {$nTotalDebitosVP4} Total Creditos Resultado4: {$nTotalCreditosResultado4}",
-        "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
-                    4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
+      "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
+        4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalCreditosVP4 != $nTotalDebitosResultado4){
     array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE4","calculo" => "Total Creditos VP4: {$nTotalCreditosVP4} Total Debitos Resultado4: {$nTotalDebitosResultado4}",
-        "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
-                    4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
+      "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
+        4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalDebitosVP5 != $nTotalCreditosResultado5){
     array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE5", "calculo" => "Total Debitos VP5: {$nTotalDebitosVP5} Total Creditos Resultado5: {$nTotalCreditosResultado5}",
-        "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
-                    5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
+      "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
+        5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   if($nTotalCreditosVP5 != $nTotalDebitosResultado5){
     array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE5","calculo" => "Total Creditos VP5: {$nTotalCreditosVP5} Total Debitos Resultado5: {$nTotalDebitosResultado5}",
-        "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
-                    5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
-                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
-                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
+      "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
+        5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
+        o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
+        e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
 
-                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
-                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+        Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+        Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
 
-                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
-                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
-                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+        Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
+        Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+        Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
 
-                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
-                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+        Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+        1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
 
-                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
-                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+        O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+        1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
   }
 
   return $aRetorno;

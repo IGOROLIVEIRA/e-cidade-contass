@@ -173,12 +173,7 @@ class GerarABERLIC extends GerarAM
                         $aCSVABERLIC14['si50_coditem']                = substr($aABERLIC14['si50_coditem'], 0, 15);
                         $aCSVABERLIC14['si50_dtcotacao']              = $this->sicomDate($aABERLIC14['si50_dtcotacao']);
                         $aCSVABERLIC14['si50_vlrefpercentual']        = $this->sicomNumberReal($aABERLIC14['si50_vlrefpercentual'], 2);
-
-                        if($aABERLIC10['si46_criterioadjudicacao'] == 2){
-                            $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal(0,4);
-                        }else{
-                            $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal($aABERLIC14['si50_vlcotprecosunitario'], 4);
-                        }
+                        $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal($aABERLIC14['si50_vlcotprecosunitario'], 4);
                         $aCSVABERLIC14['si50_quantidade']             = $this->sicomNumberReal($aABERLIC14['si50_quantidade'], 4);
                         $aCSVABERLIC14['si50_vlminalienbens']         = $this->sicomNumberReal($aABERLIC14['si50_vlminalienbens'], 2);
 

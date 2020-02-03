@@ -136,28 +136,31 @@ class GerarCONV extends GerarAM
             $this->sLinha = $aCSVCONV30;
             $this->adicionaLinha();
 
+            /**
+             *
+             * Registros 31
+             */
+            for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
+
+                $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
+
+                if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']) {
+
+                    $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
+                    $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
+                    $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
+                    $aCSVCONV31['si204_nroconvenio'] = $aCONV31['si204_nroconvenio'];
+                    $aCSVCONV31['si204_dataassinatura'] = $this->sicomDate($aCONV31['si204_dataassinatura']);
+                    $aCSVCONV31['si204_vlprevisaoconvenio'] = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
+
+                    $this->sLinha = $aCSVCONV31;
+                    $this->adicionaLinha();
+
+                }
+
+            }
+
         }
-
-        /**
-         *
-         * Registros 31
-         */
-        for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
-
-            $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
-
-            $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
-            $aCSVCONV31['si204_codreceita']                   = $aCONV31['si204_codreceita'];
-            $aCSVCONV31['si204_prevorcamentoassin']           = $aCONV31['si204_prevorcamentoassin'];
-            $aCSVCONV31['si204_nroconvenio']                  = $aCONV31['si204_nroconvenio'];
-            $aCSVCONV31['si204_dataassinatura']               = $this->sicomDate($aCONV31['si204_dataassinatura']);
-            $aCSVCONV31['si204_vlprevisaoconvenio']           = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
-
-            $this->sLinha = $aCSVCONV31;
-            $this->adicionaLinha();
-
-        }
-
 
       $this->fechaArquivo();
 

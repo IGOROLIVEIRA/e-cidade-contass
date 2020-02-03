@@ -271,7 +271,7 @@ class cl_homologacaoadjudica {
         }
         $sql .= " where ";
         if($l202_sequencial!=null){
-            $sql .= " l202_sequencial = $this->l202_sequencial";
+            $sql .= " l202_sequencial = $l202_sequencial";
         }
         $resaco = $this->sql_record($this->sql_query_file($this->l202_sequencial));
         if($this->numrows>0){
@@ -431,6 +431,7 @@ class cl_homologacaoadjudica {
         $sql .= "      inner join liccomissao  on  liccomissao.l30_codigo = liclicita.l20_liccomissao";
         $sql .= "      inner join licsituacao  on  licsituacao.l08_sequencial = liclicita.l20_licsituacao";
         $sql .= "      inner join pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom";
+        $sql .= "      left join itenshomologacao on homologacaoadjudica.l202_sequencial = itenshomologacao.l203_homologaadjudicacao";
         $sql2 = "";
         if($dbwhere==""){
             if($l202_sequencial!=null ){

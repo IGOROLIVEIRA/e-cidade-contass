@@ -70,6 +70,13 @@ require_once ("dbforms/db_funcoes.php");
       </table>
 
       <fieldset class="separator item-encerramento">
+          <legend>Transferência dos créditos empenhados para RP</legend>
+          <div class="text-left">
+              <input name="processar_transferencias" type="button" id="processar_transferencias" value="Processar"/>
+              <input name="desprocessar_transferencias" type="button" id="desprocessar_transferencias" value="Cancelar"/>
+          </div>
+      </fieldset>
+      <fieldset class="separator item-encerramento">
         <legend>Encerramento das Variações Patrimoniais</legend>
 
         <div class="text-left">
@@ -177,6 +184,10 @@ require_once ("dbforms/db_funcoes.php");
     const MENSAGEM = "financeiro.contabilidade.con4_processaencerramentopcasp.";
 
     var oButtons = {
+          Transferencias : {
+            processar : $('processar_transferencias'),
+            desprocessar : $('desprocessar_transferencias')
+          },
           Variacoes : {
             processar : $('processar_variacoes'),
             desprocessar : $('desprocessar_variacoes')
@@ -200,6 +211,7 @@ require_once ("dbforms/db_funcoes.php");
         },
         oData = $('data'),
         oEncerramentos = {
+          'tx' : "transferência dos créditos empenhados para RP",
           'vp' : "encerramento das Variações Patrimoniais",
           'no' : "lançamentos de inscrição dos Restos a Pagar e encerramento das contas de Natureza Orçamentária e Controle",
           'is' : "Implantação de Saldos"
@@ -222,6 +234,9 @@ require_once ("dbforms/db_funcoes.php");
       /**
        * Bloqueia todos os encerramentos
        */
+      oButtons.Transferencias.processar.disabled = true;
+      oButtons.Transferencias.desprocessar.disabled = true;
+
       oButtons.Variacoes.processar.disabled = true;
       oButtons.Variacoes.desprocessar.disabled = true;
 
@@ -239,6 +254,12 @@ require_once ("dbforms/db_funcoes.php");
         if (lErro) {
           alert(oRetorno.sMessage.urlDecode());
           return false;
+        }
+
+        if(oRetorno.aEncerramentos.tx) {
+            oButtons.Transferencias.desprocessar.disabled = false;
+        } else {
+            oButtons.Transferencias.processar.disabled = false;
         }
 
         if (oRetorno.aEncerramentos.vp) {
@@ -330,6 +351,14 @@ require_once ("dbforms/db_funcoes.php");
     /**
      * Seta os Eventos
      */
+    oButtons.Transferencias.processar.observe('click', function() {
+        processar("tx");
+    });
+
+    oButtons.Transferencias.desprocessar.observe('click', function() {
+        cancelarProcessamento("tx");
+    });
+
     oButtons.Variacoes.processar.observe('click', function() {
       processar("vp");
     });
