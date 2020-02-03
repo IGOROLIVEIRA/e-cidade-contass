@@ -865,7 +865,7 @@ ob_start();
             <td class="s3 bdleft" colspan="2"><b>RECEITA CORRENTE LÍQUIDA</b></td>
             <td class="s5">
                 <?php
-                $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
+                $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSACRPPS) - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
                 echo db_formatar($fRecCorrLiq, "f");
                 ?>
             </td>
