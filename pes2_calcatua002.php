@@ -1259,7 +1259,7 @@ function calcatua_sprev($anofolha,$mesfolha,$where){
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
                   FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh31_dtnasc DESC) AS dependentes)::varchar,' ')
@@ -1385,7 +1385,7 @@ WHERE rh30_vinculo = 'A'
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
                   FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)::varchar,' ')
