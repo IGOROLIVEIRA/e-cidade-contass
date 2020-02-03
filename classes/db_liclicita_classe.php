@@ -1261,25 +1261,15 @@ class cl_liclicita
 
       $sql .= $virgula . " l20_veicdivulgacao = '$this->l20_veicdivulgacao'";
       $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_veicdivulgacao = ''";
-      $virgula = ",";
     }
-
 
     if (trim($this->l20_justificativa != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativa"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_justificativa = '$this->l20_justificativa' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_justificativa = ''";
       $virgula = ",";
     }
 
     if (trim($this->l20_razao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_razao = '$this->l20_razao' ";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_razao = ''";
       $virgula = ",";
     }
 
@@ -3286,7 +3276,7 @@ class cl_liclicita
   }
 
   function excluirpublicacaocredenciamento ($l20_codigo){
-    $sql = "Update liclicita set l20_dtpubratificacao = null,l20_dtlimitecredenciamento = null, l20_veicdivulgacao= '' , l20_justificativa = '', l20_razao= ''
+    $sql = "Update liclicita set l20_dtpubratificacao = null,l20_dtlimitecredenciamento = null
         where l20_codigo = $l20_codigo";
     $result = db_query($sql);
 
