@@ -1163,9 +1163,6 @@ class cl_liclicita
     if (trim($this->l20_naturezaobjeto != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_naturezaobjeto"]))) {
       $sql .= $virgula . " l20_naturezaobjeto = '$this->l20_naturezaobjeto' ";
       $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_naturezaobjeto = 0";
-      $virgula = ",";
     }
 
     if (trim($this->l20_validadeproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]))) {
