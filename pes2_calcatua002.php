@@ -1381,14 +1381,14 @@ WHERE rh30_vinculo = 'A'
                 (SELECT count(*)
                  FROM rhdepend
                  WHERE rh31_regist = rh01_regist) ||'# '||
-                 (SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
+                 COALESCE((SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
                   WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
-                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)
+                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)::varchar,' ')
                 AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
