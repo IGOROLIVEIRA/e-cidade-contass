@@ -173,11 +173,21 @@ function proximo(){
 /**
  * passar valores para os campos
  */
-function pegar_valor(param1, param2, param3) {
+function pegar_valor(param1, param2, param3, param4) {
 	 
 	$('codigo').value = param1;
 	$('elementoEcidade').value = param2;
 	$('elementoSicom').value = param3;
+
+	if(param4 && param4 == 'Sim'){
+        document.getElementById("elementoEcidade").maxLength = 12;
+        document.getElementById("elementoEcidade").size = 12;
+        document.getElementById("deParaDesdobramento").options[1].selected = true;
+    } else {
+        document.getElementById("elementoEcidade").maxLength = 8;
+        document.getElementById("elementoEcidade").size = 8;
+        document.getElementById("deParaDesdobramento").options[0].selected = true;
+    }
 	fechar();
 	
 }
@@ -233,23 +243,23 @@ function cria_tabela(json){
 	
 			tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].codigo+"</a>";	
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].codigo+"</a>";
 			
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].elementoEcidade+"</a>";	
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].elementoEcidade+"</a>";
 			
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].elementoSicom+"</a>";
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].elementoSicom+"</a>";
 
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].instituicao+"</a>";
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].instituicao+"</a>";
 
             tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
             tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-            +jsonObj[i].elementoSicom+"')\">"+jsonObj[i].deParaDesdobramento+"</a>";
+            +jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+ jsonObj[i].deParaDesdobramento === '' ? '' : jsonObj[i].deParaDesdobramento +"</a>";
 			
 			tabela += "</td></tr>";
 			
@@ -266,9 +276,10 @@ function cria_tabela(json){
 
 function js_changeDePara(value) {
     if (value == 1) {
-        document.getElementById("elementoEcidade").maxLength = 13;
-        document.getElementById("elementoEcidade").size = 13;
+        document.getElementById("elementoEcidade").maxLength = 12;
+        document.getElementById("elementoEcidade").size = 12;
     } else {
+        document.getElementById("elementoEcidade").value = document.getElementById("elementoEcidade").value.substr(0, 8)
         document.getElementById("elementoEcidade").maxLength = 8;
         document.getElementById("elementoEcidade").size = 8;
     }

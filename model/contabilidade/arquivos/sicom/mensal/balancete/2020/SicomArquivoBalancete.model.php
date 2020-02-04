@@ -527,7 +527,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o58_programa as codprograma,
 					                o58_projativ as idacao,
 					                o55_origemacao as idsubacao,
-					                o56_elemento as naturezadadespesa,
+					                substr(o56_elemento,2,12) as naturezadadespesa,
 					                substr(o56_elemento,8,2) as subelemento,
 								    o15_codtri as codfontrecursos,
 								    e60_numemp
@@ -561,7 +561,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o58_programa as codprograma,
 					                o58_projativ as idacao,
 					                o55_origemacao as idsubacao,
-					                o56_elemento as naturezadadespesa,
+					                substr(o56_elemento,2,12) as naturezadadespesa,
 					                substr(o56_elemento,8,2) as subelemento,
 								    o15_codtri as codfontrecursos,
 					                e60_numemp
@@ -691,7 +691,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         if (!(($oReg11Saldo->saldoanterior == "" || $oReg11Saldo->saldoanterior == 0) && $oReg11Saldo->debitos == "" && $oReg11Saldo->creditos == "")) {
 
-                            $sElemento = substr($oReg11->naturezadadespesa, 1, 6);
+                            $sElemento = substr($oReg11->naturezadadespesa, 0, 6);
                             $sSubElemento = $oReg11->subelemento;
                             /**
                              * percorrer xml elemento despesa

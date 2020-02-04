@@ -169,7 +169,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         o58_programa AS codprograma,
         o58_projativ AS idacao,
         o55_origemacao AS idsubacao,
-        o56_elemento AS naturezadadespesa,
+        substr(o56_elemento,2,12) AS naturezadadespesa,
         substr(o56_elemento,7,2) AS subelemento,
         e60_codemp AS nroempenho,
         e60_emiss AS dtempenho,
@@ -409,7 +409,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 $sCodUnidade = $oEmpenho10->codunidadesub;
             }
 
-            $sElemento = substr($oEmpenho10->naturezadadespesa, 1, 8);
+            $sElemento = substr($oEmpenho10->naturezadadespesa, 0, 8);
             /**
              * percorrer xml elemento despesa
              */
