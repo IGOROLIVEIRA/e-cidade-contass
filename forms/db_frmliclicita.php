@@ -738,28 +738,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
 
                                 <tr>
-                                    <td nowrap title="<?=@$Tl20_dtpubratificacao?>">
-                                        <b>Data Publicação Termo Ratificação:</b>
-                                    </td>
-                                    <td>
-                                        <?//echo $l20_dtpubratificacao;exit;
-                                        db_inputdata('l20_dtpubratificacao',@$l20_dtpubratificacao_dia,@$l20_dtpubratificacao_mes,@$l20_dtpubratificacao_ano,true,'text',55,"");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td nowrap title="<?=@$Tl20_veicdivulgacao?>">
-                                        <b>Veiculo de Divulgação:</b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
-                                        ?>
-                                    </td>
-                                </tr>
-
-                                <tr>
                                     <td nowrap title="<?=@$Tl20_justificativa?>">
                                         <?=@$Ll20_justificativa?>
                                     </td>
@@ -877,14 +855,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
 
-            document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-            document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
-            document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
+            // document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
+            // document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
+            // document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
             document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
             document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
 
-            document.getElementById("l20_veicdivulgacao").disabled=false;
-            document.getElementById("l20_dtpubratificacao").disabled=false;
+            // document.getElementById("l20_veicdivulgacao").disabled=false;
+            // document.getElementById("l20_dtpubratificacao").disabled=false;
             document.getElementById("l20_justificativa").disabled=false;
             document.getElementById("l20_razao").disabled=false;
             document.getElementById("l20_tipoprocesso").disabled=false;
@@ -930,8 +908,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         }else{
 
-            document.getElementById("l20_veicdivulgacao").disabled=true;
-            document.getElementById("l20_dtpubratificacao").disabled=true;
+            // document.getElementById("l20_veicdivulgacao").disabled=true;
+            // document.getElementById("l20_dtpubratificacao").disabled=true;
             document.getElementById("l20_justificativa").disabled=true;
             document.getElementById("l20_razao").disabled=true;
             document.getElementById("l20_tipoprocesso").disabled=true;
@@ -1020,8 +998,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     }
     /*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
-    document.getElementById("l20_veicdivulgacao").disabled=true;
-    document.getElementById("l20_dtpubratificacao").disabled=true;
+    // document.getElementById("l20_veicdivulgacao").disabled=true;
+    // document.getElementById("l20_dtpubratificacao").disabled=true;
     document.getElementById("l20_justificativa").disabled=true;
     document.getElementById("l20_razao").disabled=true;
     document.getElementById("l20_tipoprocesso").disabled=true;
@@ -1032,16 +1010,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
     campo=campo.replace(" ", "");
     if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
-        document.getElementById("l20_veicdivulgacao").disabled=false;
-        document.getElementById("l20_dtpubratificacao").disabled=false;
+    //     document.getElementById("l20_veicdivulgacao").disabled=false;
+    //     document.getElementById("l20_dtpubratificacao").disabled=false;
         document.getElementById("l20_justificativa").disabled=false;
         document.getElementById("l20_razao").disabled=false;
         document.getElementById("l20_tipoprocesso").disabled=false;
-        document.getElementById("l20_dtpubratificacao").value='';
-
-        document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-        document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
-        document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
+    //     document.getElementById("l20_dtpubratificacao").value='';
+    //
+    //     document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
+    //     document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
+    //     document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
         document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
         document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
 
@@ -1408,53 +1386,53 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function novoAjax(params, onComplete) {
 
-      var request = new Ajax.Request('lic4_licitacao.RPC.php', {
-        method:'post',
-        parameters:'json='+Object.toJSON(params),
-        onComplete: onComplete
-      });
+        var request = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method:'post',
+            parameters:'json='+Object.toJSON(params),
+            onComplete: onComplete
+        });
 
     }
 
     function verificaMembrosModalidade(modalidade) {
-      var params = {
-        exec: 'VerificaMembrosModalidade',
-        equipepregao: $F('l20_equipepregao'),
-        modalidade: modalidade
-      };
+        var params = {
+            exec: 'VerificaMembrosModalidade',
+            equipepregao: $F('l20_equipepregao'),
+            modalidade: modalidade
+        };
 
-      novoAjax(params, function(e) {
-      var oRetorno = JSON.parse(e.responseText);
-        if (oRetorno.validaMod == 0) {
-          if (modalidade == 'pregao') {
-            alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio");
-            document.form1.l20_equipepregao.value = "";
-            document.form1.l20_equipepregao.focus();
-            return false;
-          }
-          else if (modalidade == 'outros') {
-            alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio");
-            document.form1.l20_equipepregao.value = "";
-            document.form1.l20_equipepregao.focus();
-            return false;
-          }
-        }
-      });
+        novoAjax(params, function(e) {
+            var oRetorno = JSON.parse(e.responseText);
+            if (oRetorno.validaMod == 0) {
+                if (modalidade == 'pregao') {
+                    alert("Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio");
+                    document.form1.l20_equipepregao.value = "";
+                    document.form1.l20_equipepregao.focus();
+                    return false;
+                }
+                else if (modalidade == 'outros') {
+                    alert("Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio");
+                    document.form1.l20_equipepregao.value = "";
+                    document.form1.l20_equipepregao.focus();
+                    return false;
+                }
+            }
+        });
     }
 
     function js_pregao(iCodigoProcesso, sNome, lErro) {
 
-      document.form1.l20_equipepregao.value = iCodigoProcesso;
-      db_iframe_proc.hide();
+        document.form1.l20_equipepregao.value = iCodigoProcesso;
+        db_iframe_proc.hide();
 
-      let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
+        let modalidade = document.form1.modalidade_tribunal.value;//document.form1.l20_codtipocomdescr.value;
 
-      if (modalidade == 52 || modalidade == 53) {
-        verificaMembrosModalidade("pregao");
-      }
-      else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
-        verificaMembrosModalidade("outros");
-      }
+        if (modalidade == 52 || modalidade == 53) {
+            verificaMembrosModalidade("pregao");
+        }
+        else if (modalidade == 48 || modalidade == 49 || modalidade == 50) {
+            verificaMembrosModalidade("outros");
+        }
 
     }
 
@@ -1483,8 +1461,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_verificaCritAdj(valor) {
-      var codtipocom = $F('l20_codtipocom');
-      return valor == codtipocom;
+        var codtipocom = $F('l20_codtipocom');
+        return valor == codtipocom;
     }
 
     function js_confirmadatas() {
@@ -1497,21 +1475,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var verifica       = matriz.find(js_verificaCritAdj);
 
         if (verifica) {
-          if (!critadjudicac) {
-            alert("Informe Critério de Adjudicação");
-            return false;
-          }
+            if (!critadjudicac) {
+                alert("Informe Critério de Adjudicação");
+                return false;
+            }
         }
 
         if( js_CompararDatas(dataCriacao, dataPublicacao, '<=') ) {
             if( js_CompararDatas(dataPublicacao, dataAbertura, '<=') ) {
-                <?
-                  if($db_opcao==2 || $db_opcao==22) {
-                      echo 'return js_confirmar();';
-                  } else {
-                      echo 'return true;';
-                  }
-                ?>
+              <?
+              if($db_opcao==2 || $db_opcao==22) {
+                echo 'return js_confirmar();';
+              } else {
+                echo 'return true;';
+              }
+              ?>
             } else {
 
                 /*alert("A Data Edital/Convite deve ser maior ou igual a Data de Publicação.");
@@ -1564,8 +1542,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     //$('l20_descontotab').value='2';
 
 
-    document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';
-    document.form1.l20_veicdivulgacao.style.backgroundColor='#E6E4F1';
+    // document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';
+    // document.form1.l20_veicdivulgacao.style.backgroundColor='#E6E4F1';
     document.form1.l20_justificativa.style.backgroundColor='#E6E4F1';
     document.form1.l20_razao.style.backgroundColor='#E6E4F1';
     document.getElementById("l20_numeroconvidado").readOnly=true;
@@ -1623,11 +1601,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     <?
     if($db_opcao == 1) {
-        echo "js_mudaProc('{$lprocsis}');";
+      echo "js_mudaProc('{$lprocsis}');";
     } else {
-        if ( (isset($l34_protprocesso) && trim($l34_protprocesso) != '') ) {
-            echo "js_mudaProc('s');";
-        }
+      if ( (isset($l34_protprocesso) && trim($l34_protprocesso) != '') ) {
+        echo "js_mudaProc('s');";
+      }
     }
     ?>
 
