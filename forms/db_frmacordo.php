@@ -203,6 +203,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
+                                          <?if($db_opcao == 1):?>
                                           <tr id="credenciamento" style="display: none">
                                             <td>
                                               <strong>Credenciamento/Chamada Pública:</strong>
@@ -218,6 +219,7 @@ db_app::load("dbtextFieldData.widget.js");
                                               ?>
                                             </td>
                                           </tr>
+                                          <?endif; ?>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
                                                 <td nowrap title="<?@$Tac16_licoutroorgao?>">
                                                     <?=
