@@ -557,7 +557,7 @@ switch ($oParam->exec){
                         $oBem = new Bem($codigoBem);
                         db_inicio_transacao();
                         $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
-//                        unlink($oParam->arquivo);
+                        unlink($oParam->arquivo);
                         db_fim_transacao(false);
                     }
                   $oRetorno->status = 1;
@@ -568,7 +568,7 @@ switch ($oParam->exec){
                 db_inicio_transacao();
                 $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
                 $oRetorno->status = 1;
-//                unlink($oParam->arquivo);
+                unlink($oParam->arquivo);
                 db_fim_transacao(false);
             }
         }catch (Exception $eErro){
