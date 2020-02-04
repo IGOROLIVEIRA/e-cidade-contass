@@ -1,3 +1,3 @@
 <?
-$campos = "licobrasituacao.obr02_sequencial,licobrasituacao.obr02_seqobra,licobrasituacao.obr02_dtlancamento,licobrasituacao.obr02_situacao,licobrasituacao.obr02_dtsituacao,licobrasituacao.obr02_veiculopublicacao,licobrasituacao.obr02_descrisituacao,licobrasituacao.obr02_motivoparalisacao,licobrasituacao.obr02_dtparalizacao,licobrasituacao.obr02_outrosmotivos,licobrasituacao.obr02_dtretomada,licobrasituacao.obr02_instit";
+$campos = "obr02_sequencial,obr01_numeroobra,l20_edital,l03_descr, l20_objeto, l20_numero";
 ?>

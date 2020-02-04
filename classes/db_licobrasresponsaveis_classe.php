@@ -330,7 +330,7 @@ class cl_licobrasresponsaveis {
      }
      $sql .= " where ";
      $sql .= "obr05_sequencial = $obr05_sequencial";
-     $result = db_query($sql);
+     $result = db_query($sql);die($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "cadastro de responsaveis pela obras nao Alterado. Alteracao Abortada.\\n";

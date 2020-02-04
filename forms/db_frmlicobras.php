@@ -96,6 +96,7 @@ $cllicobras->rotulo->label();
       </table>
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+      <input name="Nova Obra" type="button" id="Nova Obra" value="Nova Obra" onclick="js_novaobra();" >
       <fieldset style="margin-top: 10px; margin-bottom: 10px;">
         <legend>Responsáveis</legend>
         <table style="margin-bottom: 10px;">
@@ -203,6 +204,10 @@ $cllicobras->rotulo->label();
 
   js_carregarlic();
   js_CarregaResponsaveis();
+
+  function js_novaobra() {
+    document.location.href = 'obr1_licobras001.php'
+  }
 
   /**
    * funcao para retornar licitacao
