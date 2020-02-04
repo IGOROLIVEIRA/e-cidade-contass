@@ -164,7 +164,10 @@ try{
             $l20_dtpubratificacao = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtpubratificacao)))));
             $l20_dtlimitecredenciamento = strtotime(implode("/",(array_reverse(explode("-",$oParam->l20_dtlimitecredenciamento)))));
 
-            if($oParam->l20_dtpubratificacao < $l20_datacria){
+          $datapublicacao = DateTime::createFromFormat('d/m/Y', $oParam->l20_dtpubratificacao);
+          $datacriacao = DateTime::createFromFormat('d/m/Y', $l20_datacria);
+
+            if($datapublicacao < $datacriacao){
               throw new Exception ("Usuário: Campo Data Publicação Termo Ratificação menor que data de criação.");
             }
 

@@ -798,8 +798,10 @@ class licitacao {
             null,
             $sCampos,
             "l20_codigo",
-            "l205_fornecedor = {$iFornecedor} {$sWhere}"
+            "l205_fornecedor = {$iFornecedor} AND cflicita.l03_pctipocompratribunal IN (102,103)
+            {$sWhere}"
         );
+
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
     }
