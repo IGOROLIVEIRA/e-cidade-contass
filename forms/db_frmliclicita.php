@@ -1649,29 +1649,30 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         let anousuario = "<?php echo db_getsession('DB_anousu');?>";
 
         if(anousuario >= 2019){
-          let opcoes = document.getElementById('l20_regimexecucao').options;
+            let opcoes = document.getElementById('l20_regimexecucao').options;
 
-          if (document.getElementById('modalidade_tribunal').value){
-            console.log('Opcoes: ', opcoes);
-            if(valor != 7){
-              if(opcoes.item(7)){
-                opcoes.remove(7);
-              }
-              if(opcoes.item(6)){
-                opcoes.remove(6);
-              }
-              if(opcoes.item(5)){
-                opcoes.remove(5);
-              }
+            if (document.getElementById('modalidade_tribunal').value){
+                console.log('Opcoes: ', opcoes);
+                if(valor != 7){
+                    if(opcoes.item(7)){
+                        opcoes.remove(7);
+                    }
+                    if(opcoes.item(6)){
+                        opcoes.remove(6);
+                    }
+                    if(opcoes.item(5)){
+                        opcoes.remove(5);
+                    }
+                }
+
+                if(valor == 7){
+                    opcoes.add(new Option('5- Execução Direta', 5));
+                    opcoes.add(new Option('6- Contratação Integrada'), 6);
+                    opcoes.add(new Option('7- Contratação Semi Integrada', 7));
+                }
             }
 
-        if(valor == 7){
-          opcoes.add(new Option('5- Execução Direta', 5));
-          opcoes.add(new Option('6- Contratação Integrada'), 6);
-          opcoes.add(new Option('7- Contratação Semi Integrada', 7));
         }
-      }
-
     }
 
 
