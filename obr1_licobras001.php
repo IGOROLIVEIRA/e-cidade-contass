@@ -22,12 +22,23 @@ if(isset($incluir)){
   $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
 
   try {
+
+    if($datahomologacao == null){
+      throw new Exception ("Usuário: Licitação não homologada! Inclusão Abortada!");
+    }
+
     if($datahomologacao != null){
       if($datainicioatividades < $datahomologacao){
         throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
       }
     }
-    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","l202_sequencial desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
+
+    if($obr01_numeroobra == null || $obr01_numeroobra == "0"){
+      throw new Exception ("Usuário: Campo número da obra invalido");
+    }
+
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","obr01_numeroobra desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
+
     if(pg_num_rows($resultobras) > 0){
       throw new Exception("Usuário: Numero da Obra ja utilizado !");
     }

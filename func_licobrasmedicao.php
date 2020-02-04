@@ -15,11 +15,66 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
   <link href='estilos.css' rel='stylesheet' type='text/css'>
   <script language='JavaScript' type='text/javascript' src='scripts/scripts.js'></script>
 </head>
+<style>
+  #chave_l20_objeto{
+    width: 350px;
+  }
+</style>
 <body>
   <form name="form2" method="post" action="" class="container">
     <fieldset>
       <legend>Dados para Pesquisa</legend>
-      <table width="35%" border="0" align="center" cellspacing="3" class="form-container">
+      <table>
+        <tr>
+          <td>
+            <strong>Cod. Sequencial:</strong>
+          </td>
+          <td>
+            <?
+            db_input('obr03_sequencial',10,$Iobr03_sequencial,true,'text',1,"","chave_obr03_sequencial");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Nº da Medição:</strong>
+          </td>
+          <td>
+            <?
+            db_input('obr03_nummedicao',10,$Iobr03_nummedicao,true,'text',1,"","chave_obr03_nummedicao");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Processo:</strong>
+          </td>
+          <td>
+            <?
+            db_input('l20_edital',10,$Il20_edital,true,'text',1,"","chave_l20_edital");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Objeto:</strong>
+          </td>
+          <td>
+            <?
+            db_input('l20_objeto',10,$Il20_objeto,true,'text',1,"","chave_l20_objeto");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Ano:</strong>
+          </td>
+          <td>
+            <?
+            db_input('l20_anousu',10,$Il20_anousu,true,'text',1,"","chave_l20_anousu");
+            ?>
+          </td>
+        </tr>
       </table>
     </fieldset>
     <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
@@ -35,7 +90,21 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
            $campos = "licobrasmedicao.oid,licobrasmedicao.*";
            }
         }
-	         $sql = $cllicobrasmedicao->sql_query();
+
+        if(isset($chave_obr03_sequencial) && (trim($chave_obr03_sequencial)!="") ){
+          $sql = $cllicobrasmedicao->sql_query($chave_obr03_sequencial,$campos,null,null);
+        }else if(isset($chave_obr03_nummedicao) && (trim($chave_obr03_nummedicao)!="")){
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,"obr03_nummedicao = chave_obr03_nummedicao");
+        }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,"l20_edital = $chave_l20_edital");
+        }else if(isset($chave_l20_objeto) && (trim($chave_l20_objeto)!="")){
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%'");
+        }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
+        }else{
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,null);
+        }
+
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';

@@ -158,6 +158,7 @@ $cllicobrasmedicao->rotulo->label();
     <div id="incluirmedicao">
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+      <input name="Nova Medicao" type="button" id="Nova Medicao" value="Nova Medicao" onclick="js_novamedicao();" >
     </div>
     <hr>
   </form>
@@ -209,6 +210,10 @@ $cllicobrasmedicao->rotulo->label();
 
   function startLoading() {
     js_divCarregando('Aguarde... Carregando Documento','msgbox');
+  }
+
+  function js_novamedicao() {
+    document.location.href = 'obr1_licobrasmedicao001.php'
   }
 
   function endLoading() {

@@ -702,6 +702,9 @@ class cl_licobrasituacao {
       $sql .= $campos;
     }
     $sql .= " from licobrasituacao ";
+    $sql .= " inner join licobras on licobras.obr01_sequencial = licobrasituacao.obr02_seqobra ";
+    $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+    $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
     $sql2 = "";
     if ($dbwhere=="") {
       if ( $obr02_sequencial != "" && $obr02_sequencial != null) {

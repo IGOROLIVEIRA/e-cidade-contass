@@ -1,3 +1,3 @@
 <?
-$campos = "licobrasmedicao.obr03_sequencial,licobrasmedicao.obr03_seqobra,licobrasmedicao.obr03_dtlancamento,licobrasmedicao.obr03_nummedicao,licobrasmedicao.obr03_tipomedicao,licobrasmedicao.obr03_dtiniciomedicao,licobrasmedicao.obr03_outrostiposmedicao,licobrasmedicao.obr03_descmedicao,licobrasmedicao.obr03_dtfimmedicao,licobrasmedicao.obr03_dtentregamedicao,licobrasmedicao.obr03_vlrmedicao,licobrasmedicao.obr03_instit";
+$campos = "obr03_sequencial,obr01_numeroobra,l20_edital,l03_descr, l20_objeto, l20_numero";
 ?>

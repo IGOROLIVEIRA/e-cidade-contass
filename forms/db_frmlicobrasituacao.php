@@ -201,6 +201,7 @@ $cllicobrasituacao->rotulo->label();
   </center>
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+  <input name="Nova Situação" type="button" id="Nova Situação" value="Nova Situação" onclick="js_novasituacao();" >
 </form>
 <script>
   function js_pesquisa(){
@@ -216,7 +217,9 @@ $cllicobrasituacao->rotulo->label();
   }
 
   js_carregar();
-
+  function js_novasituacao() {
+    document.location.href = 'obr1_licobrasituacao001.php'
+  }
   /**
    * funcao para retornar obras
    */
