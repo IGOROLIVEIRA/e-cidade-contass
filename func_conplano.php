@@ -157,8 +157,12 @@ $clrotulo->label("c61_reduz");
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
           $campo = "c60_codcon";
           if($reduz==true){
-            $campo="c61_reduz";
-          }
+            if ($filtroCodsis != null && $filtroCodsis != ""){
+                $campo="c60_codsis = $filtroCodsis and c61_reduz ";
+            } else {
+                $campo="c61_reduz";
+            }
+        }
 
           $sWhere .= " and $campo = $pesquisa_chave and c60_anousu = ".db_getsession("DB_anousu");
           $result  = $clconplano->sql_record($clconplano->sql_query2(null, null, "*", null, $sWhere));
@@ -175,7 +179,7 @@ $clrotulo->label("c61_reduz");
 
           } else {
 
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Reduzido(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
 
         } else {
