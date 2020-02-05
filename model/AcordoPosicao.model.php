@@ -691,7 +691,105 @@ class AcordoPosicao {
     }
   }
 
- /**
+    /**
+     * adiciona um item atravez de um item de credenciamento
+     *
+     * @param integer $iLicitem codigo do item da licitacao
+     * @return AcordoItem
+     */
+    public function adicionarItemDeCredenciamento($iLicitacao,$iFornecedor,$iLicitem, $oItemAcordo = null,$iContrato,$iTipocompraTribunal) {
+
+        $oDaoLiclicitem = db_utils::getDao("liclicitem");
+        $sWhere = "l20_codigo = {$iLicitacao} AND l205_fornecedor = {$iFornecedor} and pc24_pontuacao = 1 AND l21_codigo = {$iLicitem} limit 1";
+        $sSqlDadosItem  = $oDaoLiclicitem->sql_query_soljulgCredenciamento(null,"*",null,$sWhere);
+        $rsDadosItem    = $oDaoLiclicitem->sql_record($sSqlDadosItem);
+
+        if ($oDaoLiclicitem->numrows == 1) {
+            $oItemLicitacao = db_utils::fieldsMemory($rsDadosItem, 0);
+            $oItem = new AcordoItem();
+            $oItem->setCodigoPosicao($this->getCodigo());
+            $oItem->setMaterial(new MaterialCompras($oItemLicitacao->pc01_codmater));
+            $oItem->setElemento($oItemLicitacao->pc18_codele);
+            $oItem->setQuantidade($oItemAcordo->quantidade);
+            $oItem->setUnidade($oItemLicitacao->pc17_unid);
+            if ($oItemLicitacao->pc17_unid == '') {
+                $oItem->setUnidade(1);
+            }
+            $oItem->setValorUnitario($oItemAcordo->valorunitario);
+            $oItem->setOrigem($oItemLicitacao->l21_codigo, 2);
+            $oItem->setValorTotal($oItemAcordo->quantidade*$oItemAcordo->valorunitario);
+            $oItem->setResumo($oItemLicitacao->pc11_resum);
+            $oItem->setServicoQuantidade($oItemLicitacao->pc11_servicoquantidade);
+            $oItem->setIContrato($iContrato);
+            $oItem->setILicitacao($iLicitacao);
+            $oItem->setIContratado($iFornecedor);
+            $oItem->setIQtdcontratada($oItemAcordo->quantidade);
+            $oItem->setILicitem($iLicitem);
+            $oItem->setITipocompratribunal($iTipocompraTribunal);
+
+            /**
+             * pesquisamos as dotacoes do item
+             */
+
+            $oDaoDotacoesItem = db_utils::getDao("pcdotac");
+            $sSqlDotacoes     = $oDaoDotacoesItem->sql_query_dotreserva($oItemLicitacao->pc11_codigo);
+            $rsDotacoes       = db_query($sSqlDotacoes);
+            $aDotacoes        = db_utils::getCollectionByRecord($rsDotacoes);
+            $iTotaldeDotacoes = pg_num_rows($rsDotacoes);
+
+            $iQtdporDotacao   = $oItemAcordo->quantidade / $iTotaldeDotacoes;
+            $iValorUnt        = (float)(str_replace(",",".",$oItemAcordo->valorunitario));
+            $iValor           = $iValorUnt * round($iQtdporDotacao,2);
+
+            foreach ($aDotacoes as $oDotacaoItem) {
+
+                $oDotacao    = new stdClass();
+
+                $oDotacao->valor      = $iValor;
+                $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
+                $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
+                $oDotacao->quantidade = round($iQtdporDotacao,2);
+                $oItem->adicionarDotacoes($oDotacao);
+
+                /**
+                 * Deletamos as reservas da solicitacao
+                 */
+
+                if ($oDotacaoItem->o80_codres != '') {
+                    $oDaoOrcReservaSol = db_utils::getDao("orcreservasol");
+                    $oDaoOrcReservaSol->excluir(null,"o82_codres = {$oDotacaoItem->o80_codres}");
+
+                    $oDaoOrcReserva = db_utils::getDao("orcreserva");
+                    $oDaoOrcReserva->excluir($oDotacaoItem->o80_codres);
+                }
+            }
+            $oItem->setCodigoPosicao($this->getCodigo());
+
+            $oItem->setTipoControle($oItemAcordo->iFormaControle);
+
+            $aPeriodos = array();
+            $oPeriodos = new stdClass();
+            $oPeriodos->dtDataInicial   = $oItemAcordo->dtInicial;
+            $oPeriodos->dtDataFinal     = $oItemAcordo->dtFinal;
+            $oPeriodos->ac41_sequencial = '';
+            $aPeriodos[] = $oPeriodos;
+
+            $oItem->setPeriodos($aPeriodos);
+
+            $oAcordo = new Acordo($this->iAcordo);
+
+            $lPeriodoComercial = false;
+            if ($oAcordo->getPeriodoComercial()) {
+                $lPeriodoComercial = true;
+            }
+            unset($oAcordo);
+            $oItem->setPeriodosExecucao($this->iAcordo, $lPeriodoComercial);
+            $oItem->save();
+            $this->adicionarItens($oItem);
+        }
+    }
+
+    /**
    * adiciona um item atravez de um item do processo de compras
    *
    * @param integer $iCodprocItem codigo do item do Processo

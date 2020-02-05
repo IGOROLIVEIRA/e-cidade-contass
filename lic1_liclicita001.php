@@ -106,7 +106,7 @@ if(isset($incluir)){
   	if(in_array(db_utils::fieldsMemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocomdescr,"distinct l03_pctipocompratribunal")),0)->l03_pctipocompratribunal,array("52","53"))){
   		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('','*'));
   		if($cldecretopregao->numrows == 0){
-  			$erro_msg="No h decreto prego";
+  			$erro_msg="Não há decreto de pregão cadastrado.";
     		$sqlerro = true;
   		}
   	}

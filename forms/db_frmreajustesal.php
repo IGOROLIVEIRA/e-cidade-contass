@@ -371,18 +371,30 @@ function enviaDados(){
 }
 
 function js_retornoReajuste(sRetorno) {
-  let params = JSON.parse(sRetorno.request.parameters.json);
 
   js_removeObj("msgBox");
 
   var oRetorno = eval("("+sRetorno.responseText+")");
+  var sRegistros = '';
+  if ($F('oCboTipoFiltro') == 2 ) {
+    var aSelecionados = [];
+    var oTipoFiltros = oTiposFiltrosFolha.getLancadorAtivo().getRegistros();
+    oTipoFiltros.each (function(oFiltro, iIndice) {
+      aSelecionados[iIndice] = oFiltro.sCodigo;
+    });
+    sRegistros = aSelecionados.join(',');
+  }
 
   if ( oRetorno.redireciona ) {
+    var intervalo = '';
+    if ($F('oCboTipoFiltro') == 1) {
+      intervalo = '&intervaloInicial='+$F('InputIntervaloInicial')+'&intervaloFinal='+$F('InputIntervaloFinal');
+    }
 
     js_OpenJanelaIframe(
       '',
       'janelaReajuste',
-      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&registros='+params.aRegistros,
+      'pes1_reajustesal002.php?selecao='+$F('r44_selec')+'&vinculo='+$F('Vinculo')+'&tipoReajuste='+$F('tipoReajuste')+'&tipoResumo='+$F('oCboTipoRelatorio')+'&tipoLancamento='+$F('tipoLancamento')+'&para='+$F('para')+intervalo+'&registros='+sRegistros,
       'Processar reajuste salarial dos servidores.',
       true
     );

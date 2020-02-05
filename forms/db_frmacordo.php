@@ -203,6 +203,23 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
+                                          <?if($db_opcao == 1):?>
+                                          <tr id="credenciamento" style="display: none">
+                                            <td>
+                                              <strong>Credenciamento/Chamada Pública:</strong>
+                                            </td>
+                                            <td>
+                                              <?
+                                              $aValores = array(
+                                                0 => 'Selecione',
+                                                1 => '1 - Sim',
+                                                2 => '2 - Não'
+                                              );
+                                              db_select('tipodispenca', $aValores, true, $db_opcao,"","");
+                                              ?>
+                                            </td>
+                                          </tr>
+                                          <?endif; ?>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
                                                 <td nowrap title="<?@$Tac16_licoutroorgao?>">
                                                     <?=
@@ -509,7 +526,7 @@ db_app::load("dbtextFieldData.widget.js");
             </tr>
         </table>
 
-        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
+        <input name="<?= ($db_opcao == 1 ? "aco1_acordo004" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
                type="button"
                id="db_opcao"
                value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
@@ -1481,6 +1498,12 @@ db_app::load("dbtextFieldData.widget.js");
         if(iTipoOrigem != 5 || iTipoOrigem != 6) {
             document.form1.ac16_licoutroorgao.value = "";
             document.form1.z01_nome.value = "";
+        }
+
+        if(iTipoOrigem == 3){
+          document.getElementById('credenciamento').style.display = "";
+        }else{
+          document.getElementById('credenciamento').style.display = "none";
         }
 
     }

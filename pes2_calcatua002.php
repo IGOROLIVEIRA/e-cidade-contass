@@ -1255,14 +1255,14 @@ function calcatua_sprev($anofolha,$mesfolha,$where){
                 (SELECT count(*)
                  FROM rhdepend
                  WHERE rh31_regist = rh01_regist) ||'# '||
-                 (SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
+                 COALESCE((SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
-                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh31_dtnasc DESC) AS dependentes)
+                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh31_dtnasc DESC) AS dependentes)::varchar,' ')
                 AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
@@ -1299,6 +1299,7 @@ JOIN cgm servidor ON servidor.z01_numcgm = rh01_numcgm
 LEFT JOIN afasta ON r45_regist = rh01_regist
 AND r45_anousu = $anofolha
 AND r45_mesusu = $mesfolha
+AND r45_dtreto >= '$anofolha-$mesfolha-01'
 WHERE rh30_vinculo = 'A'
     AND rh30_regime = 1
     AND NOT EXISTS
@@ -1380,14 +1381,14 @@ WHERE rh30_vinculo = 'A'
                 (SELECT count(*)
                  FROM rhdepend
                  WHERE rh31_regist = rh01_regist) ||'# '||
-                 (SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
+                 COALESCE((SELECT string_agg(depend,'# ') FROM (SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
-                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)
+                  FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)::varchar,' ')
                 AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist

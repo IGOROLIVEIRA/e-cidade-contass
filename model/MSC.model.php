@@ -793,7 +793,7 @@ class MSC {
           ELSE o15_codstn
         END AS fr,
         CASE 
-          WHEN substr(c60_estrut, 1, 3) = '522' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+          WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
           WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
           ELSE natdespesa
         END AS nd,
@@ -875,7 +875,7 @@ class MSC {
           ELSE o15_codstn
         END AS fr,
         CASE 
-          WHEN substr(c60_estrut, 1, 3) = '522' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
+          WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
           WHEN substr(c60_estrut, 1, 3) = '622' THEN natdespesa
           ELSE natdespesa
         END AS nd,

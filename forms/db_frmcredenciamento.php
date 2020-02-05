@@ -1,196 +1,446 @@
-<?
+<?php
 //MODULO: licitacao
 include("dbforms/db_classesgenericas.php");
 $clcredenciamento->rotulo->label();
 $cliframe_seleciona = new cl_iframe_seleciona;
-
 ?>
 
-<script>
-function js_submit() {
+<form name="form1" method="post" action="" style="margin-top: 2%;margin-left: 15%;" onsubmit="return js_ICredenciamento(this);">
+    <fieldset style="width: 809px; margin-bottom: 5px;">
+        <legend>
+            <strong>Dados</strong>
+        </legend>
+        <table>
+            <tr>
+                <td nowrap title="<?=@$Tl205_fornecedor?>">
+                    <?=@$Ll205_fornecedor?>
+                </td>
+                <td>
+                    <?
+                    $sWhere  = "l206_licitacao=".@$l20_codigo;
+                    $result_forn = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query(null,"l206_fornecedor,z01_nome","",$sWhere));
+                    db_selectrecord("l205_fornecedor",$result_forn,true,$db_opcao,"","","","","BuscarCredenciamento(this.value)");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap title="<?=@$Tl205_datacred?>">
+                    <?=@$Ll205_datacred?>
+                </td>
+                <td>
+                    <?
+                    db_inputdata('l205_datacred',@$l205_datacred_dia,@$l205_datacred_mes,@$l205_datacred_ano,true,'text',1,"")
+                    ?>
 
-      var dados="";
-      var itens = new Array();
-      var iframe = document.getElementById('ativ');
-      var campos = iframe.contentWindow.document.getElementsByTagName('input');
-      var j = 0;  
-      for (i=0;i<campos.length;i++) {
-        campo = campos[i];
-        if (campo.type == 'checkbox'){
+                    <input name="Aplicar" type="button" id="Aplicar" value="Aplicar" onclick="aplicarDataCred();" >
+                </td>
+            </tr>
 
-          if (campo.checked) {
-            itens[j] = campo.value;
-            j++;
-          }
+            <tr>
+                <td>
+                    <input name="l205_itens[]" type="hidden" id="l205_itens" value="">
+                    <input name="pc20_codorc" type="hidden" id="pc20_codorc" value="<? echo $pc20_codorc ?>">
+                    <input name="l205_licitacao" type="hidden" id="l205_licitacao" value="<? echo $l20_codigo ?>">
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <?php
+
+    if(!empty($l20_codigo)) {
+
+        $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, si02_vlprecoreferencia, ";
+        $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, pc11_resum, pc23_obs";
+        $sOrdem   = "l21_ordem";
+        $sWhere   = "l21_codliclicita = {$l20_codigo} ";
+        $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
+        $sResultitens = $clliclicitem->sql_record($sSqlItemLicitacao);
+        $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
+        $numrows = $clliclicitem->numrows;
+        if ($numrows > 0) {
+            $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
+            $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
+            $result  = $clcredenciamento->sql_record($sql);
+            $numrows = $clcredenciamento->numrows;
         }
-      }
-      document.getElementById('l205_itens').value = itens;
-      document.form1.submit();
     }
-</script>
-<form name="form1" method="post" action="">
-<center>
-<table border="0">
-  <tr>
-    <td nowrap title="<?=@$Tl205_sequencial?>">
-       <?=@$Ll205_sequencial?>
-    </td>
-    <td> 
-<?
-db_input('l205_sequencial',10,$Il205_sequencial,true,'text',3,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tl205_fornecedor?>">
-       <?=@$Ll205_fornecedor?>
-    </td>
-    <td> 
-       <?
-       db_selectrecord("l205_fornecedor",$result_forn,true,$db_opcao);
-       ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tl205_datacred?>"> 
-       <?=@$Ll205_datacred?>
-    </td>
-    <td> 
-<?
-db_inputdata('l205_datacred',@$l205_datacred_dia,@$l205_datacred_mes,@$l205_datacred_ano,true,'text',1,"")
-?>
-    </td>
-  </tr>
-     <tr>
-    <td align="right"  nowrap title="<?=@$Tl205_inscriestadual?>">
-       <?=@$Ll205_inscriestadual?>
-    </td>
-    <td> 
-    <?
-    db_input('l205_inscriestadual',14,$Il205_inscriestadual,true,'text',3)
-    //$l205_licitacao = $l20_codigo;
-    
     ?>
-    </td>
-  </tr>
 
-  <tr>
-    <td> 
-    <input name="l205_itens[]" type="hidden" id="l205_itens" value="">
-    <input name="pc20_codorc" type="hidden" id="pc20_codorc" value="<? echo $pc20_codorc ?>">
-    <input name="l205_licitacao" type="hidden" id="l205_licitacao" value="<? echo $l20_codigo ?>">
-    </td>
-  </tr>
-  </table>
-  </center>
-
-<?
- if(!empty($l20_codigo)) {
-                
-                $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, ";
-                $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, pc11_resum, pc23_obs";
-                $sOrdem   = "l21_ordem";
-                $sWhere   = "l21_codliclicita = {$l20_codigo} ";
-                // die($clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere));
-                $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
-                $result=$clliclicitem->sql_record($sSqlItemLicitacao);
-                $numrows = $clliclicitem->numrows;
-                if ($numrows > 0) {
-                  $sWhere   = "l21_codliclicita = {$l20_codigo} and l205_fornecedor = {$l205_fornecedor} and l205_licitacao = {$l20_codigo}";
-                  $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
-                  $result  = $clcredenciamento->sql_record($sql);
-                  $numrows = $clcredenciamento->numrows;
-                  if ($numrows > 0) {
-                    $db_opcao     = 1;
-                    //$sql_marca    = $sql;
-                    $sql_disabled = $sql;
-                     echo 
-                    "<script> 
-                    document.getElementById('l205_inscriestadual').style.backgroundColor = '#DEB887';
-                    document.getElementById('l205_inscriestadual').readOnly = true;
-                    </script>";
-                  }else{
-                    $db_opcao     = 1;
-                    "<script> 
-                    document.getElementById('l205_datacred').style.backgroundColor = '#FFF';
-                    document.getElementById('l205_datacred').readOnly = false;
-                    document.getElementById('l205_inscriestadual').style.backgroundColor = '#FFF';
-                    document.getElementById('l205_inscriestadual').readOnly = false;
-                    </script>";
-                  }
-
-                }
-  }
-?>
-
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" <? if($db_opcao == 1){ ?> onclick="js_submit()" <? } ?> type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input id="db_opcao" type="submit" value="Excluir" name="excluir" tabindex="3">
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
- <center>
     <table>
-          <?
-           $cliframe_seleciona->sql=@$sSqlItemLicitacao;
-           $cliframe_seleciona->campos  = $sCampos;
-           $cliframe_seleciona->legenda="Itens";
-           $cliframe_seleciona->iframe_width = '100%';
-           //$cliframe_seleciona->desabilitados
-
-           if($db_opcao == 2) {
-             $cliframe_seleciona->sql_marca=@$sql_marca;
-           }
-           if ($db_opcao == 1 || $db_opcao == 3 || $db_opcao == 33) {
-             $cliframe_seleciona->sql_disabled=@$sql_disabled;
-           }
-           $cliframe_seleciona->iframe_nome ="itens_teste"; 
-           $cliframe_seleciona->chaves = "pc81_codprocitem";
-           $cliframe_seleciona->iframe_seleciona(1);
-           
-           ?>
+        <tr class="DBgrid">
+            <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
+            <td class="table_header" style="width: 44px">Ordem</td>
+            <td class="table_header" style="width: 52px">Item</td>
+            <td class="table_header" style="width: 259px">Descrição Item</td>
+            <td class="table_header" style="width: 55px">Unidade</td>
+            <td class="table_header" style="width: 80px">Valor Unitário</td>
+            <td class="table_header" style="width: 120px">Quantidade Licitação</td>
+            <td class="table_header" style="width: 142px">Data do Credenciamento</td>
+        </tr>
     </table>
-  </center>
 
+    <div style="overflow:scroll;height:60%;width:75%;overflow:auto">
+        <table>
+            <th class="table_header">
+                <?php foreach ($aItensLicitacao as $key => $aItem):
+                    $iItem = $aItem->pc81_codprocitem;
+
+                    ?>
+                    <table class="DBgrid">
+                        <th class="table_header" style="width: 33px">
+                            <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
+                        </th>
+
+                        <td class="linhagrid" style="width: 44px">
+                            <?= $aItem->pc11_seq ?>
+                            <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <td class="linhagrid" style="width: 52px">
+                            <?= $aItem->pc81_codprocitem ?>
+                            <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <td class="linhagrid" style="width: 260px">
+                            <?= $aItem->pc01_descrmater ?>
+                            <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <td class="linhagrid" style="width: 55px">
+                            <?= $aItem->m61_descr ?>
+                            <input type="hidden" name="" value="<?= $aItem->m61_descr ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <td class="linhagrid" style="width: 80px">
+                            <?= $aItem->si02_vlprecoreferencia ?>
+                            <input type="hidden" name="" value="<?= $aItem->si02_vlprecoreferencia ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <td class="linhagrid" style="width: 120px">
+                            <?= $aItem->pc11_quant ?>
+                            <input type="hidden" name="" value="<?= $aItem->pc11_quant ?>" id="<?= $iItem?>">
+                        </td>
+
+                        <th class="linhagrid" style="width: 134px">
+                            <?php
+                            db_inputdata('l205_datacreditem'.$iItem ,null,null,null,true,'text',1,"") ?>
+                        </th>
+                    </table>
+                <?php
+                endforeach;
+                ?>
+            </th>
+
+        </table>
+    </div>
+    <div style="width: 46%; padding-left: 28%; padding-top: 5px;">
+        <input id="Salvar" type="submit" value="Salvar" name="Salvar" onclick="">
+        <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="excluirCred()">
+        <input id="Julgar" type="button" name="Julgar" value="Julgar" onclick="julgarLic()" disabled>
+    </div>
 </form>
 <script>
 
-function js_pesquisa(){
-  js_OpenJanelaIframe('','db_iframe_credenciamento','func_credenciamento.php?funcao_js=parent.js_preenchepesquisa|l205_fornecedor','Pesquisa',true);
-}
-function js_preenchepesquisa(chave){
-  db_iframe_credenciamento.hide();
-  <?
-  echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-  ?>
-}
+    BuscarCredenciamento(document.getElementById('l205_fornecedor').value);
+    getCredenciamento();
+    /**
+     * Retorna todos os itens
+     */
 
-function js_forn(){
-  
-   var param1 = document.form1.pc20_codorc.value;
-   var param2 = document.form1.l205_licitacao.value;
-   var param3 = document.form1.l205_fornecedor.value;
-   
-   top.corpo.iframe_db_cred.location.href='lic1_credenciamento001?pc20_codorc='+param1+'&l20_codigo='+param2+'&l205_fornecedor='+param3;   
-}
+    function aItens() {
+        var itensNum = document.getElementsByName("aItonsMarcados");
 
-function js_mostracgm(erro,chave){
-  document.form1.l205_inscriestadual.value = chave;
-  if(erro==true){
-    document.form1.pc21_numcgm.focus();
-    document.form1.pc21_numcgm.value = '';
-  }
-}
-function js_mostracgm1(chave1){
-  document.form1.l205_inscriestadual.value = chave1;
-  func_nome.hide();
-}
+        return Array.prototype.map.call(itensNum, function (item) {
+            return item;
+        });
+    }
 
-function js_ProcCod_l205_fornecedor(proc,res) {
-	var sel1 = document.forms[0].elements[proc];
-	var sel2 = document.forms[0].elements[res];
-	for(var i = 0;i < sel1.options.length;i++) {
-	if(sel1.options[sel1.selectedIndex].value == sel2.options[i].value)
-	sel2.options[i].selected = true;
-	}
-	js_forn();
-}
+    /**
+     * Marca todos os itens
+     */
+    function marcarTodos() {
 
+        aItens().forEach(function (item) {
+
+            var check = item.classList.contains('marcado');
+
+            if (check) {
+                item.classList.remove('marcado');
+            } else {
+                item.classList.add('marcado');
+            }
+            item.checked = !check;
+
+        });
+    }
+
+    /**
+     * Botão Aplicar
+     */
+
+    function aplicarDataCred() {
+        aItens().forEach(function (item) {
+            if(item.checked === true){
+
+                let dtCredenciamento = document.getElementById('l205_datacred').value;
+                let dtCreditem = document.getElementById('l205_datacreditem'+item.id).value;
+
+                if(dtCreditem === ''){
+                    document.getElementById('l205_datacreditem'+item.id).value = dtCredenciamento;
+                }
+
+            }
+        })
+    }
+
+    function FormataStringData(data) {
+        //js_FormatarStringData
+        //Funcao para retornar data no formato dd/mm/yyyy
+        //para deve ser do tipo yyyy-mm-dd
+
+        var ano  = data.split("-")[0];
+        var mes  = data.split("-")[1];
+        var dia  = data.split("-")[2];
+
+        return ("0"+dia).slice(-2) + '/' + ("0"+mes).slice(-2) + '/' + ano;
+        // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
+    }
+
+    /**
+     * Retorna itens marcados
+     */
+
+    function getItensMarcados() {
+        return aItens().filter(function (item) {
+            return item.checked;
+        });
+    }
+
+    /*inclur credenciamento*/
+
+    function js_ICredenciamento(fORM) {
+        let itens = getItensMarcados();
+
+        if (itens.length < 1) {
+            alert('Selecione pelo menos um item da lista.');
+            return false;
+        }
+
+        var itensEnviar = [];
+
+        try {
+            itens.forEach(function (item) {
+                let coditem = item.id;
+                let sequencial = document.getElementById("l205_fornecedor").selectedIndex;
+
+                var novoItem = {
+                    sequenciaforne:        sequencial,
+                    l205_fornecedor:       document.getElementById('l205_fornecedor').value,
+                    l205_datacred:         document.getElementById('l205_datacred').value,
+                    l205_item:             coditem,
+                    l205_licitacao:        <? echo $l20_codigo?>,
+                    l205_datacreditem:     document.getElementById('l205_datacreditem'+coditem).value
+                };
+                itensEnviar.push(novoItem);
+            });
+            salvarCredAjax({
+                exec: 'SalvarCred',
+                itens: itensEnviar,
+                licitacao:<?= $l20_codigo?>
+            }, retornoAjax);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function salvarCredAjax(params, onComplete) {
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
+
+    function retornoAjax(res) {
+        var response = JSON.parse(res.responseText);
+        console.log(response);
+        if (response.status != 1) {
+            alert(response.message.urlDecode());
+        } else if (response.erro == false) {
+            alert('Credenciamento salvo com sucesso !');
+            document.getElementById("l205_fornecedor").selectedIndex = response.sequecialforne + 1;
+            document.getElementById("l205_fornecedordescr").selectedIndex = response.sequecialforne + 1;
+
+            BuscarCredenciamento(document.getElementById("l205_fornecedor").value);
+            getCredenciamento()
+        }
+    }
+
+    /*buscar credenciamento*/
+
+    function BuscarCredenciamento(fornecedor) {
+
+        try {
+            BuscarCredAjax({
+                exec: 'getCredforne',
+                forne: fornecedor,
+                licitacao: <?= $l20_codigo?>
+            }, preenchercampos);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function BuscarCredAjax(params, onComplete) {
+        js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(oRetornoitems) {
+                js_removeObj('div_aguarde');
+                onComplete(oRetornoitems);
+            }
+        });
+    }
+
+    function preenchercampos(oRetornoitems) {
+        var oRetornoitens = JSON.parse(oRetornoitems.responseText);
+        let fornecedor = document.getElementById('l205_fornecedor').value;
+        let itens = getItensMarcados();
+        document.getElementById('l205_datacred').value = "";
+        itens.forEach(function (item, x) {
+            document.getElementById(item.id).checked = false;
+            document.getElementById('l205_datacreditem'+item.id).value = "";
+        });
+
+        oRetornoitens.itens.forEach(function (item, x) {
+            let datecred = new Date();
+            document.getElementById('l205_datacred').value = FormataStringData(item.l205_datacred);
+            document.getElementById(item.l205_item).checked = true;
+            document.getElementById('l205_datacreditem'+item.l205_item).value = FormataStringData(item.l205_datacreditem);
+        });
+    }
+
+    /*excluir credenciamento*/
+
+    function excluirCred() {
+        let fornecedor = document.getElementById('l205_fornecedor').value;
+        try {
+            excluirCredAjax({
+                exec: 'excluirCred',
+                forne: fornecedor,
+                licitacao: <?= $l20_codigo?>
+            }, retornoexcluirAjax);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function excluirCredAjax(params, onComplete) {
+        js_divCarregando('Aguarde excluindo credenciamento', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(oRetornoitems) {
+                js_removeObj('div_aguarde');
+                onComplete(oRetornoitems);
+            }
+        });
+    }
+
+    function retornoexcluirAjax(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status != 1) {
+            alert(response.erro);
+        } else if (response.erro == false) {
+            alert('Credenciamento excluido com sucesso !');
+            location.reload();
+        }
+    }
+
+    /*julgar licitacao*/
+
+    function julgarLic() {
+        let fornecedor = document.getElementById('l205_fornecedor').value;
+        try {
+            julgarLicAjax({
+                exec: 'julgarLic',
+                licitacao: <?php echo $l20_codigo?>,
+            }, oRetJulgamento);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function julgarLicAjax(params, onComplete) {
+        js_divCarregando('Aguarde julgando Licitação', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(oRetornoitems) {
+                js_removeObj('div_aguarde');
+                onComplete(oRetornoitems);
+            }
+        });
+    }
+
+    function oRetJulgamento(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status != 1) {
+            alert(response.erro);
+        } else if (response.erro == false) {
+            alert('Licitação julgada com sucesso !');
+            location.reload();
+        }
+    }
+
+    /**
+     * faço uma consulta para verificar se existe intens credenciados em caso possitivo bloqueio
+     * @returns {boolean}
+     */
+    function getCredenciamento() {
+        try {
+            verificaCred({
+                exec: 'getCredenciamento',
+                licitacao: <?php echo $l20_codigo?>,
+            }, oValidabtnJulgar);
+        } catch(e) {
+            alert(e.toString());
+        }
+        return false;
+    }
+
+    function verificaCred(params, onComplete) {
+        // js_divCarregando('Aguarde julgando Licitação', 'div_aguarde');
+        var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
+            method:'post',
+            parameters:'json=' + JSON.stringify(params),
+            onComplete: function(oRetornoitems) {
+                // js_removeObj('div_aguarde');
+                onComplete(oRetornoitems);
+            }
+        });
+    }
+
+    function oValidabtnJulgar(res) {
+        var oRetornoitens = JSON.parse(res.responseText);
+        let qtditens = oRetornoitens.itens.length;
+
+      if(qtditens > 0){
+        document.getElementById('Julgar').disabled = false;
+        oRetornoitens.itens.forEach(function (itens, x){
+          if(itens.l20_licsituacao === '1' || itens.l20_licsituacao === '10'){
+            document.getElementById('Julgar').disabled = true;
+          }
+        });
+      }
+    }
 </script>

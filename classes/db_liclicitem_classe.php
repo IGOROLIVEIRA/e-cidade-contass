@@ -520,7 +520,9 @@ class cl_liclicitem {
      }
      $sql .= " from liclicitem ";
      $sql .= "      inner join pcprocitem           on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+     $sql .= "      inner join pcorcamitemproc      on pc31_pcprocitem                     = pc81_codprocitem";
      $sql .= "      inner join pcproc               on pcproc.pc80_codproc                 = pcprocitem.pc81_codproc";
+     $sql .= "      left  join itemprecoreferencia  on si02_itemproccompra                 = pcorcamitemproc.pc31_orcamitem";
      $sql .= "      inner join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
      $sql .= "      inner join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
      $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
@@ -758,6 +760,60 @@ function sql_query_soljulg ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere="
      }
      return $sql;
   }
+    /*
+     * Função criada para retornar itens da licitações de credenciamento
+     * OC OC8339
+     */
+    function sql_query_soljulgCredenciamento ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " FROM credenciamento ";
+        $sql .= " INNER JOIN liclicita ON l20_codigo = l205_licitacao";
+        $sql .= " INNER JOIN liclicitem ON (l21_codliclicita,l21_codpcprocitem) = (l20_codigo,l205_item)";
+        $sql .= " INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= " INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem";
+        $sql .= " INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc";
+        $sql .= " INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
+        $sql .= " INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo";
+        $sql .= " INNER JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
+        $sql .= " INNER JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater";
+        $sql .= " INNER JOIN pcorcamitemproc ON pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem";
+        $sql .= " INNER JOIN pcorcamitem ON pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem";
+        $sql .= " INNER JOIN pcorcam on pcorcam.pc20_codorc = pcorcamitem.pc22_codorc";
+        $sql .= " INNER JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc";
+        $sql .= " INNER JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne";
+        $sql .= " INNER JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne";
+        $sql .= " LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo";
+        $sql .= " LEFT JOIN credenciamentosaldo on credenciamentosaldo.l213_licitacao = liclicita.l20_codigo AND l21_codigo = l213_itemlicitacao";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($l21_codigo!=null ){
+                $sql2 .= " where liclicitem.l21_codigo = $l21_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 
  function sql_query_dotacao_reserva ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
@@ -889,4 +945,14 @@ function sql_query_soljulg ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere="
     }
     return $sql;
   }
+
+    public function sql_tipocompratribunal ( $l21_codigo=null){
+
+        $sql  = " SELECT l03_pctipocompratribunal ";
+        $sql .= " FROM liclicita ";
+        $sql .= " INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= " where liclicita.l20_codigo = $l21_codigo ";
+
+        return $sql;
+    }
 }

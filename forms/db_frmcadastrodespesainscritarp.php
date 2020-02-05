@@ -161,12 +161,8 @@
                     document.form1['aFonte[' + fonte + '][vlr_restRegAtivoFinan]'].value = dadosfonte[fonte].vlrAtivoFian;
                 }
 
-                if(dadosfonte[fonte].vlrDisponibilidade < 0){
-                    document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = 0;
-                }else{
                     document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = dadosfonte[fonte].vlrDisponibilidade;
-                }
-
+                                                                
             });
         });
     }
@@ -196,12 +192,8 @@
         let vlrRegAtivoFian        = document.form1['aFonte[' + fonte + '][vlr_restRegAtivoFinan]'].value;
         let ResultVlrDisponibilidade = Number(vlrDisCaixaBruta) - Number(vlrRpExercicioanterior) - Number(vlrRestoRecolher) + Number(vlrRegAtivoFian);
 
-        if(ResultVlrDisponibilidade < 0){
-            document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = 0
-        }else{
-            document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = ResultVlrDisponibilidade
-        }
-
+        document.form1['aFonte[' + fonte + '][vlr_DispCaixa]'].value = ResultVlrDisponibilidade
+        
     }
 
 </script>

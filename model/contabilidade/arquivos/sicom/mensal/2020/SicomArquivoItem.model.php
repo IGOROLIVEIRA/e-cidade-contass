@@ -176,6 +176,30 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
       where ap1.ac26_sequencial in (select max(ap2.ac26_sequencial) from acordoposicao ap2 where ap2.ac26_acordo = ap1.ac26_acordo)
       and ac16_instit = " . db_getsession("DB_instit") ."
       UNION
+
+      SELECT DISTINCT ON (l205_item) '10' AS tipoRegistro,
+                         (l205_item::varchar || (CASE
+                                                     WHEN COALESCE(m61_codmatunid,0) = 0 THEN 1
+                                                     ELSE m61_codmatunid
+                                                 END)::varchar) AS coditem,
+                         (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
+                         (CASE
+                              WHEN m61_abrev IS NULL THEN 'UNIDAD'
+                              ELSE m61_abrev
+                          END) AS unidadeMedida,
+                         '1' AS tipoCadastro,
+                         '' AS justificativaAlteracao
+      FROM credenciamento
+      INNER JOIN liclicitem ON l21_codliclicita = l205_licitacao
+      INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+      INNER JOIN solicitem ON pc11_codigo = pc81_solicitem
+      INNER JOIN solicitempcmater ON pc16_solicitem = pc11_codigo
+      INNER JOIN solicitemunid ON pc17_codigo = pc11_codigo
+      INNER JOIN matunid ON m61_codmatunid = pc17_unid
+      INNER JOIN pcmater ON pc01_codmater = pc16_codmater
+      WHERE DATE_PART ('YEAR', l205_datacred) = ".db_getsession("DB_anousu")."
+      AND DATE_PART ('MONTH', l205_datacred) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+      UNION
   SELECT
 '10' AS tipoRegistro,
                 (pcmater.pc01_codmater::varchar || (CASE
@@ -202,7 +226,7 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
   AND date_part('YEAR',si06_dataadesao) = ".db_getsession("DB_anousu")."
   AND si06_instit=" . db_getsession("DB_instit");
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);die($sSql);
     //$aCaracteres = array("/","\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');

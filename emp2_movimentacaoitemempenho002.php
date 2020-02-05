@@ -38,12 +38,12 @@ try {
     }
   }
 
-  if (isset($aFiltros['o58_coddot']) && !empty($aFiltros['o58_coddot'])) {
-    $o58_coddot = $aFiltros['o58_coddot'];
+  if (isset($aFiltros['e60_coddot']) && !empty($aFiltros['e60_coddot'])) {
+    $e60_coddot = $aFiltros['e60_coddot'];
     if ($condicoes != "") {
-      $condicoes .= " AND o58_coddot = {$o58_coddot} ";
+      $condicoes .= " AND e60_coddot = {$e60_coddot} ";
     } else {
-      $condicoes .= " o58_coddot = {$o58_coddot} ";
+      $condicoes .= " e60_coddot = {$e60_coddot} ";
     }
   }
 
@@ -56,12 +56,12 @@ try {
     }
   }
 
-  if (isset($aFiltros['e53_codord']) && !empty($aFiltros['e53_codord'])) {
-    $e53_codord = $aFiltros['e53_codord'];
+  if (isset($aFiltros['e50_codord']) && !empty($aFiltros['e50_codord'])) {
+    $e50_codord = $aFiltros['e50_codord'];
     if ($condicoes != "") {
-      $condicoes .= " AND e53_codord = {$e53_codord} ";
+      $condicoes .= " AND e50_codord = {$e50_codord} ";
     } else {
-      $condicoes .= " e53_codord = {$e53_codord} ";
+      $condicoes .= " e50_codord = {$e50_codord} ";
     }
   }
 
@@ -89,49 +89,89 @@ try {
   }
 
   $sSQL = "
-  SELECT DISTINCT ON (e62_numemp, e62_item)
-  e62_quant,
-  e62_vlrun,
-  e62_vltot,
-  e60_codemp||'/'||e60_anousu AS e60_numemp,
-  z01_numcgm,
-  substr(z01_nome,1,35) AS z01_nome,
-  pc01_codmater,
-  substr(pc01_descrmater,1,35) AS pc01_descrmater,
-  (SELECT rnvaloranul FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-   GROUP BY e62_numemp, e62_sequencial, rnvaloranul) AS vlr_anl,
-  (SELECT sum(rnquantini - rnsaldoitem) AS total FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-   GROUP BY e62_numemp, e62_sequencial) AS qtd_lqd,
-  (SELECT rnvalorliq FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-   GROUP BY e62_numemp, e62_sequencial, rnvalorliq) AS vlr_lqd,
-  CASE
-      WHEN pc01_servico = 't' AND e62_servicoquantidade = 'f' AND sum(e62_vltot - (SELECT rnvalorliq FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-                                                                                   GROUP BY e62_numemp, e62_sequencial, rnvalorliq)) > 0 THEN 1
-      WHEN pc01_servico = 't' AND e62_servicoquantidade = 'f' AND sum(e62_vltot - (SELECT rnvalorliq FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-                                                                                   GROUP BY e62_numemp, e62_sequencial, rnvalorliq)) = 0 THEN 0
-      ELSE (SELECT rnsaldoitem FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)
-            GROUP BY e62_numemp, e62_sequencial, rnsaldoitem)
-  END AS saldo_item,
-  CASE
-      WHEN e37_qtd > 0 THEN e37_qtd
-      ELSE 0
-  END AS qtd_alq
-FROM empempenho
-LEFT JOIN empnota ON e69_numemp = e60_numemp
-LEFT JOIN empnotaele ON e70_codnota = e69_codnota
-LEFT JOIN pagordemele ON e53_codele = e70_codele
-LEFT JOIN empnotaitem ON e69_codnota = e72_codnota
-LEFT JOIN empempitem ON e62_numemp = e60_numemp
-LEFT JOIN pcmater ON e62_item = pc01_codmater
-LEFT JOIN empanulado ON e94_numemp = e69_numemp
-LEFT JOIN cgm ON z01_numcgm = e60_numcgm
-LEFT JOIN empanuladoitem ON e37_empanulado = e94_codanu
-WHERE {$condicoes}
-GROUP BY e72_empempitem, e37_empempitem, e72_vlranu, e37_vlranu, e70_codnota, e70_codele, e72_sequencial, e37_sequencial, e62_numemp, e62_sequen, e70_codele,
-    e62_quant, e62_vlrun, e62_vltot, e53_vlrpag, e62_item, e62_sequencial, pc01_servico, e60_codemp, e60_anousu, z01_numcgm, pc01_codmater;
-  ";
-  //die($sSQL);
+  SELECT e62_vltot,
+         e60_numemp,
+         z01_numcgm,
+         z01_nome,
+         pc01_codmater,
+         pc01_descrmater,
+         qtd_alq,
+         substr(saldoitens,1,10) e62_quant,
+         e62_vlrun1,
+
+         CASE
+             WHEN desp_invest
+                  AND sum(round(substr(saldoitens,36,14)::float8,2) + round(substr(saldoitens,51,14)::float8,2)) = round(e62_vltot,2) 
+                    THEN 0
+             WHEN desp_invest
+                  AND sum(round(substr(saldoitens,36,14)::float8,2) + round(substr(saldoitens,51,14)::float8,2)) < round(e62_vltot,2) 
+                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))
+             WHEN (pc01_servico, e62_servicoquantidade,desp_invest) = ('t', 'f', 'f')
+                  AND sum(e62_vltot - round(substr(saldoitens,51,14)::float8,2)) > 0 
+                    THEN sum((round(e62_vltot,2) - round(substr(saldoitens,36,14)::float8,2) - round(substr(saldoitens,51,14)::float8,2)) / round(substr(saldoitens,21,14)::float8,2))
+             WHEN (pc01_servico, e62_servicoquantidade) = ('t', 'f')
+                  AND sum(e62_vltot - round(substr(saldoitens,51,14)::float8,2)) = 0 THEN 0
+             ELSE substr(saldoitens,11,10)::float8
+         END saldo_item,
+    
+         CASE
+             WHEN (pc01_servico, e62_servicoquantidade,desp_invest) = ('t', 'f', 'f')
+                  AND round(substr(saldoitens,51,14)::float8,2) > 0 THEN 1::float8
+             WHEN (pc01_servico, e62_servicoquantidade) = ('t', 'f')
+                  AND round(substr(saldoitens,51,14)::float8,2) = 0 THEN 0::float8
+             ELSE sum(round(substr(saldoitens,51,14)::float8,2) / e62_vlrun1)
+         END qtd_lqd,
+
+         round(substr(saldoitens,21,14)::float8,2) e62_vlrun,
+         round(substr(saldoitens,36,14)::float8,2) vlr_anl,
+         round(substr(saldoitens,51,14)::float8,2) vlr_lqd
+  FROM
+  (SELECT DISTINCT ON (e62_numemp, e62_item)
+         e62_sequencial,
+         round(e62_vlrun,2) e62_vlrun1,
+         e62_vlrun,
+         e62_vltot,
+         e60_codemp||'/'||e60_anousu AS e60_numemp,
+         z01_numcgm,
+         substr(z01_nome,1,35) AS z01_nome,
+         pc01_codmater,
+         substr(pc01_descrmater,1,40) AS pc01_descrmater,
+         pc01_servico,
+         e62_servicoquantidade,
+         e72_qtd,
+         
+         CASE
+             WHEN substr(o56_elemento,1,3) = '344' THEN TRUE
+             ELSE FALSE
+         END AS desp_invest,
+
+         CASE
+             WHEN e37_qtd > 0 THEN e37_qtd
+             ELSE 0
+         END AS qtd_alq,
+         (SELECT TO_CHAR(ABS(rnquantini),'999999999')
+               ||TO_CHAR(ABS(rnsaldoitem),'999999999')
+               ||TO_CHAR(ABS(rnvaloruni),'9999999999.99')
+               ||TO_CHAR(ABS(rnvaloranul),'9999999999.99')
+               ||TO_CHAR(ABS(rnvalorliq),'9999999999.99') saldoitensempenho 
+       FROM fc_saldoitensempenho(e62_numemp, e62_sequencial)) saldoitens
+  FROM empempenho
+  LEFT JOIN pagordem ON e50_numemp = e60_numemp
+  LEFT JOIN empempitem ON e62_numemp = e60_numemp
+  LEFT JOIN empnotaitem ON e72_empempitem = e62_sequencial
+  LEFT JOIN pcmater ON e62_item = pc01_codmater
+  LEFT JOIN empanulado ON e94_numemp = e60_numemp
+  LEFT JOIN cgm ON z01_numcgm = e60_numcgm
+  LEFT JOIN empanuladoitem ON e37_empanulado = e94_codanu
+  INNER JOIN empelemento ON e64_numemp = e60_numemp
+  INNER JOIN orcelemento ON (o56_codele, o56_anousu) = (e64_codele,e60_anousu)
+  WHERE {$condicoes}
+  GROUP BY e72_empempitem, e37_empempitem, e72_vlranu, e37_vlranu, e72_sequencial, e37_sequencial, e62_numemp, e62_sequen,
+           e62_quant, e62_vlrun, e62_vltot, e62_item, e62_sequencial, pc01_servico, e60_codemp, e60_anousu, z01_numcgm, pc01_codmater,o56_elemento) x
+  GROUP BY e62_quant, e62_vlrun, e62_vltot, e60_numemp, z01_numcgm, z01_nome, pc01_codmater, pc01_descrmater, qtd_alq, saldoitens, e72_qtd, pc01_servico, e62_servicoquantidade, e62_vlrun1,desp_invest";
+  // die($sSQL);
   $rsConsulta = db_query($sSQL);
+  // db_criatabela($rsConsulta);
   $aConsulta = pg_fetch_all($rsConsulta);
 
   if ($aConsulta === false) {
@@ -279,9 +319,6 @@ tbody {
             <td class="s1" style="border:none;"></td>
             <td class="s1" style="border:none;"></td>
             <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
-            <td class="s1" style="border:none;"></td>
           </tr>
           <?php foreach($empenhos->itens as $itens) : ?>
           <tr>
@@ -290,8 +327,6 @@ tbody {
             </td>
             <td class="s3" style="border-bottom:1px SOLID #000000; border-right: none;"></td>
             <td class="s3" style="border-bottom:1px SOLID #000000; border-right: none;"></td>
-            <td class="s1" style="border-right: none;"></td>
-            <td class="s1" style="border-right: none;"></td>
             <td class="s1" style="border-right: none;"></td>
             <td></td>
           </tr>
