@@ -541,9 +541,11 @@ switch($oParam->exec) {
       $lAcordoValido            = true;
       $sMessagemInvalido        = '';
 
-      if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
-        $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
-        $oParam->contrato->iLicitacao = $oLicitacao;
+      if($oParam->contrato->iOrigem != "1"){
+        if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
+          $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
+          $oParam->contrato->iLicitacao = $oLicitacao;
+        }
       }
 
       if ($oParam->contrato->iOrigem == 1 || $oParam->contrato->iOrigem == 2) {
