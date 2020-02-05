@@ -589,8 +589,8 @@ switch ($oParam->exec) {
     	try{
 
     		$anexo = db_utils::getDao('editaldocumento');
-    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo'");
-			$rsSql = $anexo->sql_record($sSql);
+    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l48_edital = $oParam->edital");
+    		$rsSql = $anexo->sql_record($sSql);
 
 			if($anexo->numrows > 0){
 				$oRetorno->message = 'Ja existe um documento anexado para esse tipo';

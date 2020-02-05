@@ -257,7 +257,7 @@ if(isset($incluir)){
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
       		$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
-          $clliclicita->incluir(null);
+            $clliclicita->incluir(null);
 
 		  	if ($clliclicita->erro_status=="0"){
 		  		$erro_msg = $clliclicita->erro_msg;
@@ -365,7 +365,7 @@ if(isset($incluir)){
 			}
 			echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
-		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo&redireciona_edital=true';\n
+		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo';\n
 		           parent.document.formaba.resplicita.disabled=false;
 		           parent.mo_camada('resplicita');
 	           </script> ";

@@ -228,12 +228,12 @@ $db_opcao = 1;
         var oRetorno = eval('('+oAjax.responseText+")");
 
         alert(oRetorno.message.urlDecode());
-        $('uploadfile').value     = '';
-        $("caddocumento").value = "";
-        $('namefile').value = '';
 
         if (oRetorno.status == 1) {
             js_getDocumento();
+            $('uploadfile').value     = '';
+            $("caddocumento").value = "";
+            $('namefile').value = '';
         }
 
         if($('caddocumento').length == 2)

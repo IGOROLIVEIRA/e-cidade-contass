@@ -307,12 +307,15 @@ if (!empty($chaves) && isset($chaves)){
                  </script>";
       }
 
-      $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital', '', 'l20_codigo = '.$licitacao);
+      $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = '.$licitacao);
+      print_r($sSql);
       $rsSql = $clliclancedital->sql_record($sSql);
+
       $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
       $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
+      $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
 
-      if($natureza_objeto == 1 && $nroedital && $redireciona){
+      if(intval($natureza_objeto) == 1 && $nroedital && !$sequencial){
         echo"<script> parent.parent.window.location.href='lic4_editalabas.php?edital=$nroedital';</script>";
       }
     }else{
