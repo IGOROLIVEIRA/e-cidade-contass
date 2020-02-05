@@ -156,13 +156,11 @@ $clrotulo->label("c61_reduz");
 
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
           $campo = "c60_codcon";
-          if($reduz==true){
-            if ($filtroCodsis != null && $filtroCodsis != ""){
-                $campo="c60_codsis = $filtroCodsis and c61_reduz ";
-            } else {
-                $campo="c61_reduz";
-            }
-        }
+          if (($reduz == true) && ($filtroCodsis != null && $filtroCodsis != "")) {
+            $campo = "c60_codsis = $filtroCodsis and c61_reduz ";
+          } else {
+            $campo = "c61_reduz";
+          }
 
           $sWhere .= " and $campo = $pesquisa_chave and c60_anousu = ".db_getsession("DB_anousu");
           $result  = $clconplano->sql_record($clconplano->sql_query2(null, null, "*", null, $sWhere));
