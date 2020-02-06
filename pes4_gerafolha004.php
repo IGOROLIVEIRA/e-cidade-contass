@@ -11430,11 +11430,27 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
   global $perc_inss,$r14_quant,$r20_quant,$r22_quant,$inssirf,$Iinssirf;
 
   $calculo = 0;
+  $novoDesconto = 0;
   $condicaoaux = " and r33_codtab = ".db_sqlformat( $codigo )." order by r33_inic";
   global $inssirf;
   if( db_selectmax( "inssirf", "select * from inssirf ".bb_condicaosubpes( "r33_" ).$condicaoaux )){
      for($Iinssirf=0;$Iinssirf<count($inssirf);$Iinssirf++){
+      
+      if ($inssirf[$Iinssirf]["r33_novocalculo"] == 't') {
+        if( $base_inss >= $inssirf[$Iinssirf]["r33_inic"]) {
+          if( $base_inss > $inssirf[$Iinssirf]["r33_fim"]) {
+            $vrlIni = $inssirf[$Iinssirf]["r33_inic"];
+            if ($Iinssirf == 0) {
+              $vrlIni = 0;
+            }
+            $novoDesconto += (($inssirf[$Iinssirf]["r33_fim"]-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"];
+          } else {
+            $novoDesconto += (($base_inss-$inssirf[$Iinssirf]["r33_inic"])/100)*$inssirf[$Iinssirf]["r33_perc"];
+          }
+       }
+     } else {
        if( $base_inss >= $inssirf[$Iinssirf]["r33_inic"] && $base_inss <= $inssirf[$Iinssirf]["r33_fim"]){
+     
     $r14_quant = $inssirf[$Iinssirf]["r33_perc"];
     $r20_quant = $inssirf[$Iinssirf]["r33_perc"];
     $r22_quant = $inssirf[$Iinssirf]["r33_perc"];
@@ -11446,9 +11462,19 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
     return $calculo;
        }
 
+      }
      }
 //echo "<BR> 1 Iinssirf --> $Iinssirf";
        $Iinssirf -= 1;
+       if ($inssirf[$Iinssirf]["r33_novocalculo"] == 't') {
+         $novoPercentual = ($novoDesconto*100)/$base_inss;
+         $r14_quant = $novoPercentual;
+         $r20_quant = $novoPercentual;
+         $r22_quant = $novoPercentual;
+         $perc_inss = $novoPercentual;
+         $calculo = $novoDesconto;
+         return $calculo;
+       }
      if( $base_inss > $inssirf[$Iinssirf]["r33_fim"] && $inssirf[$Iinssirf]["r33_codtab"] == $codigo){
 //echo "<BR> 4 Iinssirf --> $Iinssirf";
         $r14_quant = $inssirf[$Iinssirf]["r33_perc"];
