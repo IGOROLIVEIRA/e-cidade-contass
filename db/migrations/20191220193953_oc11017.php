@@ -8,7 +8,7 @@ class Oc11017 extends PostgresMigration
     public function up()
     {
         $table  = $this->table('inssirf', array('schema' => 'pessoal'));
-        $table->addColumn('rh31_novocalculo', 'boolean', array('default' => 'f'))
+        $table->addColumn('r33_novocalculo', 'boolean', array('default' => 'f'))
               ->save();
         $this->inserirDicionarioDados();
 
@@ -17,9 +17,9 @@ class Oc11017 extends PostgresMigration
     public function down()
     {
         $table  = $this->table('inssirf', array('schema' => 'pessoal'));
-        $table->removeColumn('rh31_novocalculo')
+        $table->removeColumn('r33_novocalculo')
               ->save();
-        $codCam = $this->fetchRow("SELECT codcam FROM db_syscampo WHERE nomecam = 'rh31_novocalculo'")['codcam'];
+        $codCam = $this->fetchRow("SELECT codcam FROM db_syscampo WHERE nomecam = 'r33_novocalculo'")['codcam'];
         $sql = "DELETE FROM db_sysarqcamp WHERE codcam = {$codCam}";
         $this->execute($sql);
         $sql = "DELETE FROM db_syscampo WHERE codcam = {$codCam}";
@@ -44,7 +44,7 @@ class Oc11017 extends PostgresMigration
                       );
             $codCam = $this->fetchRow("SELECT MAX(codcam)+1 AS codcam FROM db_syscampo");
             $aValues[0] = array($codCam['codcam'],
-                          'rh31_novocalculo',
+                          'r33_novocalculo',
                           'bool',
                           'Alíquota Progressiva',
                           'f',

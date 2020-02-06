@@ -61,6 +61,7 @@ class cl_inssirf {
    var $r33_basfet = null; 
    var $r33_tinati = 0; 
    var $r33_codele = 0; 
+   var $r33_novocalculo = false; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  r33_instit = int4 = Cod. Instituição 
@@ -82,6 +83,7 @@ class cl_inssirf {
                  r33_basfet = varchar(4) = Base Previdência Férias (Total) 
                  r33_tinati = float8 = Teto para Inativos 
                  r33_codele = int4 = Código do Desdobramento 
+                 r33_novocalculo = Boolean = Alíquota Progressiva 
                  ";
    //funcao construtor da classe 
    function cl_inssirf() { 
@@ -120,6 +122,7 @@ class cl_inssirf {
        $this->r33_basfet = ($this->r33_basfet == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_basfet"]:$this->r33_basfet);
        $this->r33_tinati = ($this->r33_tinati == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_tinati"]:$this->r33_tinati);
        $this->r33_codele = ($this->r33_codele == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_codele"]:$this->r33_codele);
+       $this->r33_novocalculo = ($this->r33_novocalculo == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_novocalculo"]:$this->r33_novocalculo);
      }else{
        $this->r33_instit = ($this->r33_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_instit"]:$this->r33_instit);
        $this->r33_codigo = ($this->r33_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["r33_codigo"]:$this->r33_codigo);
@@ -200,6 +203,9 @@ class cl_inssirf {
      if($this->r33_codele == null ){
      	$this->r33_codele = "null";
      }
+     if($this->r33_novocalculo == null ){
+      $this->r33_novocalculo = "f";
+     }
      if($r33_codigo == "" || $r33_codigo == null ){
        $result = db_query("select nextval('inssirf_r33_codigo_seq')"); 
        if($result==false){
@@ -260,6 +266,7 @@ class cl_inssirf {
                                       ,r33_basfet 
                                       ,r33_tinati 
                                       ,r33_codele 
+                                      ,r33_novocalculo
                        )
                 values (
                                 $this->r33_instit 
@@ -281,6 +288,7 @@ class cl_inssirf {
                                ,'$this->r33_basfet' 
                                ,$this->r33_tinati 
                                ,$this->r33_codele 
+                               ,'$this->r33_novocalculo'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -504,6 +512,13 @@ class cl_inssirf {
            $this->r33_codele = "null" ; 
         } 
        $sql  .= $virgula." r33_codele = $this->r33_codele ";
+       $virgula = ",";
+     }
+     if(trim($this->r33_novocalculo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r33_novocalculo"])){ 
+        if(trim($this->r33_novocalculo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["r33_novocalculo"])){ 
+           $this->r33_novocalculo = "null" ; 
+        } 
+       $sql  .= $virgula." r33_novocalculo = '$this->r33_novocalculo' ";
        $virgula = ",";
      }
      $sql .= " where ";
