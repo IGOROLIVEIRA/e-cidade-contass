@@ -260,7 +260,6 @@ if(isset($alterar)){
     $clliclicita->l20_nroedital = $l20_nroedital;
     $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
     $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
-    $clliclicita->l20_cadinicial = 1;
     $clliclicita->alterar($l20_codigo,$descricao);
 
     if ($clliclicita->erro_status == "0") {
