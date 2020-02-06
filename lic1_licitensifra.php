@@ -308,7 +308,6 @@ if (!empty($chaves) && isset($chaves)){
       }
 
       $sSql = $clliclancedital->sql_query('', 'l20_naturezaobjeto, l20_nroedital, l47_sequencial', '', 'l20_codigo = '.$licitacao);
-      print_r($sSql);
       $rsSql = $clliclancedital->sql_record($sSql);
 
       $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;

@@ -277,7 +277,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                1 AS origemRecurso,
                '' AS dscOrigemRecurso
         FROM liclicita
-        INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
         INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
         INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
         INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -292,7 +291,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 //  AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= ". db_getsession("DB_anousu"). "
 //  AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
 //    AND liclancedital.l47_dataenvio = $param
-    $rsResult10 = db_query($sSql);
+	  $rsResult10 = db_query($sSql);
+//	  db_criatabela($rsResult10);
 
     /**
      * registro 10
@@ -314,7 +314,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
       $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento;
       $clralic10->si180_nroedital = $oDados10->nroedital;
-      $clralic10->si180_exercicioedital = $oDados10->exercicioedital == '' ?  $clralic10->si180_exerciciolicitacao : 0;
+//      $clralic10->si180_exercicioedital = $oDados10->exercicioedital == '' || $oDados10->exercicioedital == null ?  $oDados10->exerciciolicitacao : 0;
+      $clralic10->si180_exercicioedital = 2020;
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
       $clralic10->si180_link = $oDados10->link;
       $clralic10->si180_tipolicitacao = $oDados10->tipolicitacao;
@@ -330,6 +331,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_instit = db_getsession("DB_instit");
 
       $clralic10->incluir(null);
+
       if ($clralic10->erro_status == 0) {
         throw new Exception($clralic10->erro_msg);
       }
@@ -386,7 +388,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                        '2' as codSubFuncao,
                        '3' as codBemPublico
                 FROM liclicita
-                INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -498,7 +499,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                        obrasdadoscomplementares.db150_minutolongitude as minutolongitude,
                        obrasdadoscomplementares.db150_segundolongitude as segundolongitude
                 FROM liclicita
-                INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
