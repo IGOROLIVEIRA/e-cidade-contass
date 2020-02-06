@@ -411,8 +411,7 @@ function js_pesquisapc13_coddot(mostra){
             }
 
 	    if($pc30_digval=="t"){
-	      echo "let [erro, valorRecebido] = validaCaracteres(valor, true);";
-	      echo "parent.document.form1.pc11_vlrun.value = valorRecebido;";
+	      echo "parent.document.form1.pc11_vlrun.value = valor.toFixed(dec);";
 	    }else{
 	      //echo "parent.document.form1.pc11_vlrun.value = 0;";
 	    }

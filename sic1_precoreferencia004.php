@@ -302,7 +302,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+        $oDadosDaLinha->total = number_format($lTotal, $quant_casas, ",", ".");
     }
 
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365

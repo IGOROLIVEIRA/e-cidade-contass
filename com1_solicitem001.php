@@ -1762,7 +1762,7 @@ if (isset($pc11_numero)) {
 <meta http-equiv="Expires" CONTENT="0">
 <?
 
-db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js, limitaCaracteres.js");
+db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js");
 db_app::load("classes/ultimosOrcamentos.classe.js");
 db_app::load("estilos.css, grid.style.css");
 ?>
