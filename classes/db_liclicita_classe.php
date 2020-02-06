@@ -600,9 +600,6 @@ class cl_liclicita
                     $this->erro_status = "0";
                     return false;
                 }
-                if ($this->l20_dtpublic == null) {
-                    $this->l20_dtpublic = 'null';
-                }
 
                 if ($this->l20_objeto == null) {
                     $this->erro_sql = " Campo Objeto não Informado.";

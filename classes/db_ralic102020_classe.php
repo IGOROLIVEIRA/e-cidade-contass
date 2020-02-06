@@ -260,6 +260,10 @@ class cl_ralic102020
       $this->si180_bdi = 0;
     }
 
+    if($this->si180_vlcontratacao == null){
+      $this->si180_vlcontratacao = 0;
+    }
+
     $sql = "insert into ralic102020(
                                        si180_sequencial
                                       ,si180_tiporegistro
