@@ -217,7 +217,7 @@ $cllicobras->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobras',
-        'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto|l20_numero|pc50_descr',
+        'func_liclicita.php?situacao=10&obras=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto|l20_numero|pc50_descr',
         'Pesquisa Licitações',true);
     }else{
 

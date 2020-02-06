@@ -280,6 +280,7 @@ $cllicobrasmedicao->rotulo->label();
       document.form1.obr03_seqobra.focus();
       alert('Nenhuma obra encontrada.');
       document.form1.tipocompra.value = "";
+      document.form1.obr01_numeroobra.value = "";
       document.form1.l20_numero.value = "";
       document.form1.l20_edital.value = "";
     }
@@ -331,7 +332,7 @@ $cllicobrasmedicao->rotulo->label();
       var aLinha = new Array();
       aLinha[0]  = oDocumento.iCodigo;
       aLinha[1]  = decodeURIComponent(oDocumento.sLegenda.replace(/\+/g,  " "));
-      aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')">';
+      aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')"><input type="button" value="Download" onclick="js_DownloadAnexo('+oDocumento.iCodigo+')">';
       oGridDocumento.addRow(aLinha);
     });
     oGridDocumento.renderRows();
@@ -411,6 +412,33 @@ $cllicobrasmedicao->rotulo->label();
       alert("Anexo excluido com Sucesso !");
       js_getAnexo();
     }
+  }
+
+  function js_DownloadAnexo(iCodigo) {
+    if (!confirm('Deseja realizar o Download do Documento?')) {
+      return false;
+    }
+    var oParam             = new Object();
+    oParam.exec            = 'downloadDocumento';
+    oParam.iCodigoDocumento = iCodigo;
+    js_divCarregando('Aguarde... realizando Download do documento','msgbox');
+    var oAjax        = new Ajax.Request(
+      'obr1_obras.RPC.php',
+      { asynchronous:false,
+        parameters: 'json='+Object.toJSON(oParam),
+        method: 'post',
+        onComplete : js_downloadDocumento
+      });
+  }
+
+  function js_downloadDocumento(oAjax) {
+
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+    if (oRetorno.status == 2) {
+      alert("Não foi possivel carregar o documento:\n "+ oRetorno.message);
+    }
+    window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
   }
 
   function js_carregar() {

@@ -143,7 +143,7 @@ class cl_licobrasanexo {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) {
+  function alterar ( $obr04_sequencial=null ) {
     $this->atualizacampos();
     $sql = " update licobrasanexo set ";
     $virgula = "";
@@ -200,7 +200,7 @@ class cl_licobrasanexo {
       }
     }
     $sql .= " where ";
-    $sql .= "obr04_sequencial = $oid";
+    $sql .= "obr04_sequencial = $obr04_sequencial";
     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -232,13 +232,13 @@ class cl_licobrasanexo {
   }
 
   // funcao para exclusao
-  function excluir ( $oid=null ,$dbwhere=null) {
+  function excluir ( $obr04_sequencial=null ,$dbwhere=null) {
 
     $sql = " delete from licobrasanexo
                     where ";
     $sql2 = "";
     if ($dbwhere==null || $dbwhere =="") {
-      $sql2 = "obr04_sequencial = $oid";
+      $sql2 = "obr04_sequencial = $obr04_sequencial";
     } else {
       $sql2 = $dbwhere;
     }
@@ -297,7 +297,7 @@ class cl_licobrasanexo {
   }
 
   // funcao do sql
-  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query ( $obr04_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);
@@ -312,8 +312,8 @@ class cl_licobrasanexo {
     $sql .= " from licobrasanexo ";
     $sql2 = "";
     if ($dbwhere=="") {
-      if ( $oid != "" && $oid != null) {
-        $sql2 = " where obr04_sequencial = $oid";
+      if ( $obr04_sequencial != "" && $obr04_sequencial != null) {
+        $sql2 = " where obr04_sequencial = $obr04_sequencial";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -332,7 +332,7 @@ class cl_licobrasanexo {
   }
 
   // funcao do sql
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query_file ( $obr04_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);

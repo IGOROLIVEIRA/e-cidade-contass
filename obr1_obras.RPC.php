@@ -182,6 +182,22 @@ switch($oParam->exec) {
       $oRetorno->dados[] = $oDadosResponsavel;
     }
 
+  case 'downloadDocumento':
+
+    $cllicobrasanexos = new cl_licobrasanexo();
+
+    $result = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*", null, "obr04_sequencial = $oParam->iCodigoDocumento"));
+    db_fieldsmemory($result,0);
+
+    db_inicio_transacao();
+
+    // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
+    $sNomeArquivo = "imagens/obras/$obr04_codimagem";
+//    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
+    db_fim_transacao(true);
+    $oRetorno->nomearquivo = $sNomeArquivo;
+    // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
+
     break;
 }
 echo json_encode($oRetorno);

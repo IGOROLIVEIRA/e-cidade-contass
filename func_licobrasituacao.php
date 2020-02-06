@@ -90,6 +90,7 @@ $cllicobrasituacao = new cl_licobrasituacao;
            $campos = "licobrasituacao.oid,licobrasituacao.*";
            }
         }
+        $ordem = "obr02_sequencial desc";
         if(isset($chave_obr02_sequencial) && (trim($chave_obr02_sequencial)!="") ){
           $sql = $cllicobrasituacao->sql_query($chave_obr02_sequencial,$campos,null,null);
         }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
@@ -101,7 +102,7 @@ $cllicobrasituacao = new cl_licobrasituacao;
         }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
           $sql = $cllicobrasituacao->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
         }else{
-          $sql = $cllicobrasituacao->sql_query(null,$campos,null,null);
+          $sql = $cllicobrasituacao->sql_query(null,$campos,$ordem,null);
         }
 
         $repassa = array();
