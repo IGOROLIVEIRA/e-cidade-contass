@@ -883,6 +883,7 @@ case "processarBalancete" :
 						$oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
 						$oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
 						$aArrayArquivos[] = $oArquivoCsv;
+						$aArrayArquivosZip[] = $oArquivoCsv;
 
 					} catch (Exception $eErro) {
 
