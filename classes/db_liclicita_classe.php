@@ -128,7 +128,7 @@ class cl_liclicita
   var $l20_nroedital = null;
   var $l20_exercicioedital = null;
   /* Valor 1 para cadastro inicial da Licitação - demanda para atender o SICOM 2020 */
-  var $l20_cadinicial = 1;
+  var $l20_cadinicial = null;
 
 
     // cria propriedade com as variaveis do arquivo
@@ -1151,9 +1151,6 @@ class cl_liclicita
             function alterar($l20_codigo = null, $convite, $ibuscartribunal = null)
             {
 
-                if (empty($this->l20_tipliticacao)) {
-                    $this->l20_tipliticacao = 0;
-                }
 
                 if (empty($this->l20_naturezaobjeto)) {
                     $this->l20_naturezaobjeto = 0;
@@ -1273,13 +1270,13 @@ class cl_liclicita
                     $virgula = ",";
                 }
 
-    if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
-      $sql .= $virgula . " l20_dtlimitecredenciamento = '$this->l20_dtlimitecredenciamento '";
-      $virgula = ",";
-    } else {
-      $sql .= $virgula . " l20_dtlimitecredenciamento = null";
-      $virgula = ",";
-    }
+                if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
+                    $sql .= $virgula . " l20_dtlimitecredenciamento = '$this->l20_dtlimitecredenciamento '";
+                    $virgula = ",";
+                } else {
+                    $sql .= $virgula . " l20_dtlimitecredenciamento = null";
+                    $virgula = ",";
+                }
 
     if (trim($this->l20_tipoprocesso == 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
       $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
