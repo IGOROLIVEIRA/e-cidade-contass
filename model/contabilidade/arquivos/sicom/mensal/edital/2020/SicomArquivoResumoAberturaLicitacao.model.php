@@ -292,7 +292,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 //  AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
 //    AND liclancedital.l47_dataenvio = $param
 	  $rsResult10 = db_query($sSql);
-//	  db_criatabela($rsResult10);
 
     /**
      * registro 10
@@ -314,8 +313,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
       $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento;
       $clralic10->si180_nroedital = $oDados10->nroedital;
-//      $clralic10->si180_exercicioedital = $oDados10->exercicioedital == '' || $oDados10->exercicioedital == null ?  $oDados10->exerciciolicitacao : 0;
-      $clralic10->si180_exercicioedital = 2020;
+      $clralic10->si180_exercicioedital = 2020;//$oDados10->exercicioedital == '' || $oDados10->exercicioedital == null ?  $oDados10->exerciciolicitacao : 0;
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
       $clralic10->si180_link = $oDados10->link;
       $clralic10->si180_tipolicitacao = $oDados10->tipolicitacao;
@@ -337,7 +335,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       }
 
       // Consertar validação para só entrar na condicional quando a natureza do objeto for igual a 1,
-      if($oDados10->natureza_objeto == 1 && $oDados10->naturezaprocedimento != 2){
+
+      if($oDados10->naturezaobjeto == 1 && $oDados10->naturezaprocedimento != 2){
            /**
            * Selecionar informações do registro 11
            */
@@ -397,7 +396,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102')";
+                                                                    '102') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio";
 
           $rsResult11 = db_query($sSql);
 
@@ -508,10 +507,11 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102')
+                                                                    '102') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
     ";
 
-            $rsResult12 = db_query($sSql);
+//            print_r($sSql);
+        	$rsResult12 = db_query($sSql);
 
             $aDadosAgrupados12 = array();
             for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {

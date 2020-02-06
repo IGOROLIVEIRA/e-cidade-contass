@@ -134,7 +134,7 @@ class Oc11397 extends AbstractMigration
             si182_bairro varchar(100),
             si182_distrito varchar(100),
             si182_municipio varchar(50) NOT NULL,
-            si182_cep smallint NOT NULL,
+            si182_cep bigint NOT NULL,
             si182_graulatitude smallint NOT NULL,
             si182_minutolatitude smallint NOT NULL,
             si182_segundolatitude real NOT NULL,
