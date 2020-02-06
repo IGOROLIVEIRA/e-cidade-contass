@@ -90,7 +90,7 @@ $cllicobras = new cl_licobras;
            $campos = "licobras.oid,licobras.*";
            }
         }
-
+      $ordem = "obr01_sequencial desc";
       if(isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial)!="") ){
         $sql = $cllicobras->sql_query($chave_obr01_sequencial,$campos,null,null);
       }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
@@ -102,7 +102,7 @@ $cllicobras = new cl_licobras;
       }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
         $sql = $cllicobras->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
       }else{
-        $sql = $cllicobras->sql_query(null,$campos,null,null);
+        $sql = $cllicobras->sql_query(null,$campos,$ordem,null);
       }
         $repassa = array();
         echo '<div class="container">';
@@ -118,7 +118,7 @@ $cllicobras = new cl_licobras;
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$l20_edital','$l03_descr','$l20_numero','$obr01_numeroobra',false);</script>";
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
         }else{
 	       echo "<script>".$funcao_js."('',false);</script>";

@@ -200,6 +200,9 @@ $sWhereContratos = " and 1 = 1 ";
 
             }
 
+            if($obras == "true"){
+              $dbwhere .= " l20_naturezaobjeto = 1 and";
+            }
 
             if(!isset($pesquisa_chave)){
 

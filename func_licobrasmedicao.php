@@ -90,7 +90,7 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
            $campos = "licobrasmedicao.oid,licobrasmedicao.*";
            }
         }
-
+        $ordem = "obr03_sequencial desc";
         if(isset($chave_obr03_sequencial) && (trim($chave_obr03_sequencial)!="") ){
           $sql = $cllicobrasmedicao->sql_query($chave_obr03_sequencial,$campos,null,null);
         }else if(isset($chave_obr03_nummedicao) && (trim($chave_obr03_nummedicao)!="")){
@@ -102,7 +102,7 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
         }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
           $sql = $cllicobrasmedicao->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
         }else{
-          $sql = $cllicobrasmedicao->sql_query(null,$campos,null,null);
+          $sql = $cllicobrasmedicao->sql_query(null,$campos,$ordem,null);
         }
 
         $repassa = array();
