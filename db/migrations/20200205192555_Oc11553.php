@@ -27,7 +27,7 @@ class Oc11553 extends AbstractMigration
      */
     public function up()
     {
-      $sql = <<<SQL
+      $sql = <<<STRING
 
         BEGIN;
         SELECT fc_startsession();
@@ -193,7 +193,7 @@ class Oc11553 extends AbstractMigration
           ;
         COMMIT;
         
-SQL;
+STRING;
 
       $this->execute($sql);
 
