@@ -1460,13 +1460,12 @@ WHERE rh30_vinculo = 'I'
                 db21_tipopoder ||'# '||
                 '1' ||'# '||
                 '1' ||'# '||
-                rhpessoalmov.rh02_cgminstituidor ||'# '||
-                (SELECT z01_cgccpf||'# '||
-                 coalesce(z01_pis,' ') ||'# '||
-                 to_char(z01_nasc, 'DD/MM/YYYY') FROM cgm 
-                 WHERE z01_numcgm = rhpessoalmov.rh02_cgminstituidor 
-                 LIMIT 1) ||'# '||
-                rhpessoalmov.rh02_dtobitoinstituidor ||'# '||
+                COALESCE(rhpessoalmov.rh02_cgminstituidor::varchar,' ') ||'# '||
+                COALESCE((SELECT z01_cgccpf||'# '|| coalesce(z01_pis,' ') ||'# '|| to_char(z01_nasc, 'DD/MM/YYYY')
+                FROM cgm
+                WHERE z01_numcgm = rhpessoalmov.rh02_cgminstituidor
+                LIMIT 1),' #  #  ') ||'# '||
+                COALESCE(rhpessoalmov.rh02_dtobitoinstituidor::varchar,' ') ||'# '||
                 servidor.z01_cgccpf ||'# '||
                 rh01_regist ||'# '||
                 CASE
@@ -1521,7 +1520,6 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm
-     join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
 where rh30_vinculo = 'P'
   $where ";
 
