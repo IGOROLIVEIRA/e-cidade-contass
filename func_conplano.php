@@ -158,7 +158,7 @@ $clrotulo->label("c61_reduz");
           $campo = "c60_codcon";
           if (($reduz == true) && ($filtroCodsis != null && $filtroCodsis != "")) {
             $campo = "c60_codsis = $filtroCodsis and c61_reduz ";
-          } else {
+          } elseif($reduz == true) {
             $campo = "c61_reduz";
           }
 
