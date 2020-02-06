@@ -27,15 +27,14 @@ class Oc11553 extends AbstractMigration
      */
     public function up()
     {
-      $sql = <<<STRING
-
+      $sql = "
         BEGIN;
         SELECT fc_startsession();
         
         CREATE OR REPLACE FUNCTION public.fc_saldocontacorrente(integer, integer, integer, integer, integer)
          RETURNS character varying
          LANGUAGE plpgsql
-        AS $function$
+        AS ".'$function$'."
         DECLARE
         
             iAnousu              alias for $1;
@@ -189,11 +188,10 @@ class Oc11553 extends AbstractMigration
                ||';'||sinal_ant
                ||';'||'-'||';'||sinal_final;
            end;
-          $function$
+          ".'$function$'."
           ;
         COMMIT;
-        
-STRING;
+        ";
 
       $this->execute($sql);
 
