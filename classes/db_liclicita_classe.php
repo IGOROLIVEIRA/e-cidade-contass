@@ -363,17 +363,17 @@ class cl_liclicita
             return false;
         }
 
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if ($this->l20_dtpubratificacao == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
-                $this->erro_campo = "l20_dtpubratificacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+//            if ($this->l20_dtpubratificacao == null) {
+//                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo é  \\n\\n obrigatorio preencher a  Data Publicação Termo Ratificação";
+//                $this->erro_campo = "l20_dtpubratificacao";
+//                $this->erro_banco = "";
+//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+//                $this->erro_status = "0";
+//                return false;
+//            }
+//        }
 
 
         if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
@@ -399,17 +399,17 @@ class cl_liclicita
             }
         }
 
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-                $this->erro_campo = "l20_dtpubratificacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+//            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
+//                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+//                $this->erro_campo = "l20_dtpubratificacao";
+//                $this->erro_banco = "";
+//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+//                $this->erro_status = "0";
+//                return false;
+//            }
+//        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
             if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
@@ -425,17 +425,17 @@ class cl_liclicita
           $this->l20_tipoprocesso = 0;
         }
 
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
-                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
-                $this->erro_campo = "l20_veicdivulgacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+//        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+//            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
+//                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
+//                $this->erro_campo = "l20_veicdivulgacao";
+//                $this->erro_banco = "";
+//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+//                $this->erro_status = "0";
+//                return false;
+//            }
+//        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
@@ -735,7 +735,7 @@ class cl_liclicita
         } else {
             $this->l20_datapublicacao2 = "'$this->l20_datapublicacao2'";
         }
-        if ($this->l20_dtpublic == null) {
+        if ($this->l20_dtpublic == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = " Campo Data de Publicação em Diário Oficial não Informado.";
             $this->erro_campo = "l20_dtpublic";
             $this->erro_banco = "";
@@ -953,6 +953,10 @@ class cl_liclicita
             }
         }
 
+        if($this->l20_cadinicial == null){
+            $this->l20_cadinicial = 1;
+        };
+
         $sql = "insert into liclicita(
                                  l20_codigo
                 ,l20_edital
@@ -1067,7 +1071,6 @@ class cl_liclicita
                 ,$this->l20_cadinicial
                 ,$this->l20_exercicioedital
                       )";
-
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
