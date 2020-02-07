@@ -45,7 +45,7 @@ class GerarIDEEDITAL extends GerarAM
 
         $aIDEEDITAL['si186_codidentificador']    = $this->padLeftZero($aIDEEDITAL['si186_codidentificador'], 5);
         $aIDEEDITAL['si186_cnpj']                = $this->padLeftZero($aIDEEDITAL['si186_cnpj'], 14);
-        $aIDEEDITAL['si186_codorgao']            = $this->padLeftZero($aIDEEDITAL['si186_codorgao'], 2);
+        $aIDEEDITAL['si186_codorgao']            = $this->padLeftZero($aIDEEDITAL['si186_codorgao'], 3);
         $aIDEEDITAL['si186_tipoorgao']           = $this->padLeftZero($aIDEEDITAL['si186_tipoorgao'], 2);
         $aIDEEDITAL['si186_exercicioreferencia'] = $this->padLeftZero($aIDEEDITAL['si186_exercicioreferencia'], 4);
         $aIDEEDITAL['si186_mesreferencia']       = $this->padLeftZero($aIDEEDITAL['si186_mesreferencia'], 2);
