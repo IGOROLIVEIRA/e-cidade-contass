@@ -11,7 +11,7 @@ $clnatdespmsc = new cl_natdespmsc;
 
 if(isset($incluir)){
   db_inicio_transacao();
-  $clnatdespmsc->incluir($c212_natdespestrut,$c212_mscestrut);
+  $clnatdespmsc->incluir($c212_natdespestrut,$c212_mscestrut,$c212_anousu);
   db_fim_transacao();
 }
 

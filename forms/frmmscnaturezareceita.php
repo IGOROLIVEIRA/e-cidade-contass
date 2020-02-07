@@ -28,6 +28,7 @@ $clnatdespmsc->rotulo->label();
     </td>
   </tr>
 </table>
+<input name="c212_anousu" value="<?= db_getsession("DB_anousu") ?>" type="hidden" >
 <input style="display:none" name="novo" type="submit" id="novo" value="Novo" onclick="novoEst();">
 <input name="incluir" type="submit" id="incluir" value="Incluir">
 <input style="display:none" name="excluir" type="submit" id="excluir" value="Excluir">

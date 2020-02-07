@@ -18,10 +18,12 @@ class cl_elemdespmsc {
   // cria variaveis do arquivo
   public $c211_elemdespestrut = null;
   public $c211_mscestrut = null;
+  public $c211_anousu = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  c211_elemdespestrut = varchar(9) = Estrutural E-Cidade
                  c211_mscestrut = varchar(9) = Estrutural MSC
+                 c211_anousu = int4 = Ano
                  ";
 
   //funcao construtor da classe
@@ -46,14 +48,16 @@ class cl_elemdespmsc {
     if ($exclusao==false) {
        $this->c211_elemdespestrut = ($this->c211_elemdespestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_elemdespestrut"]:$this->c211_elemdespestrut);
        $this->c211_mscestrut = ($this->c211_mscestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_mscestrut"]:$this->c211_mscestrut);
+        $this->c211_anousu = ($this->c211_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_anousu"]:$this->c211_anousu);
      } else {
        $this->c211_elemdespestrut = ($this->c211_elemdespestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_elemdespestrut"]:$this->c211_elemdespestrut);
        $this->c211_mscestrut = ($this->c211_mscestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_mscestrut"]:$this->c211_mscestrut);
+        $this->c211_anousu = ($this->c211_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c211_anousu"]:$this->c211_anousu);
      }
    }
 
   // funcao para inclusao
-  function incluir ($c211_elemdespestrut,$c211_mscestrut) {
+  function incluir ($c211_elemdespestrut,$c211_mscestrut,$c211_anousu) {
     $this->atualizacampos();
     $this->c211_elemdespestrut = $c211_elemdespestrut;
     $this->c211_mscestrut = $c211_mscestrut;
@@ -76,10 +80,12 @@ class cl_elemdespmsc {
      $sql = "insert into elemdespmsc(
                                        c211_elemdespestrut
                                       ,c211_mscestrut
+                                      ,c211_anousu
                        )
                 values (
                                 '$this->c211_elemdespestrut'
                                ,'$this->c211_mscestrut'
+                               ,'$this->c211_anousu'
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -155,6 +161,7 @@ class cl_elemdespmsc {
          return false;
        }
      }
+     $sql .= " , c211_anousu = ".$this->c211_anousu." ";
      $sql .= " where ";
      if ($c211_elemdespestrut!=null) {
        $sql .= " c211_elemdespestrut = '$this->c211_elemdespestrut'";

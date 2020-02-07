@@ -11,7 +11,7 @@ $clelemdespmsc = new cl_elemdespmsc;
 
 if(isset($incluir)){
   db_inicio_transacao();
-  $clelemdespmsc->incluir($c211_elemdespestrut,$c211_mscestrut);
+  $clelemdespmsc->incluir($c211_elemdespestrut,$c211_mscestrut,$c211_anousu);
   db_fim_transacao();
 }
 

@@ -18,11 +18,13 @@ class cl_vinculopcaspmsc {
   // cria variaveis do arquivo
   public $c210_pcaspestrut = null;
   public $c210_mscestrut = null;
+  public $c210_anousu = null;
 
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  c210_pcaspestrut = varchar(9) = Estrutural Pcasp MSC
                  c210_mscestrut = varchar(9) = Estrutural MSC
+                 c210_anousu = int4 = Ano
                  ";
 
   //funcao construtor da classe
@@ -47,14 +49,16 @@ class cl_vinculopcaspmsc {
     if ($exclusao==false) {
        $this->c210_pcaspestrut = ($this->c210_pcaspestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_pcaspestrut"]:$this->c210_pcaspestrut);
        $this->c210_mscestrut = ($this->c210_mscestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_mscestrut"]:$this->c210_mscestrut);
+        $this->c210_anousu = ($this->c210_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_anousu"]:$this->c210_anousu);
      } else {
        $this->c210_pcaspestrut = ($this->c210_pcaspestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_pcaspestrut"]:$this->c210_pcaspestrut);
        $this->c210_mscestrut = ($this->c210_mscestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_mscestrut"]:$this->c210_mscestrut);
+        $this->c210_anousu = ($this->c210_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c210_anousu"]:$this->c210_anousu);
      }
    }
 
   // funcao para inclusao
-  function incluir ($c210_pcaspestrut,$c210_mscestrut) {
+  function incluir ($c210_pcaspestrut,$c210_mscestrut,$c210_anousu) {
       $this->atualizacampos();
        $this->c210_pcaspestrut = $c210_pcaspestrut;
        $this->c210_mscestrut = $c210_mscestrut;
@@ -77,10 +81,12 @@ class cl_vinculopcaspmsc {
      $sql = "insert into vinculopcaspmsc(
                                        c210_pcaspestrut
                                       ,c210_mscestrut
+                                      ,c210_anousu
                        )
                 values (
                                 '$this->c210_pcaspestrut'
                                ,'$this->c210_mscestrut'
+                               ,'$this->c210_anousu'
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -224,7 +230,7 @@ class cl_vinculopcaspmsc {
   }
 
   // funcao para exclusao
-  function excluir ($c210_pcaspestrut=null,$c210_mscestrut=null,$dbwhere=null) {
+  function excluir ($c210_pcaspestrut=null,$c210_mscestrut=null,$c210_anousu=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -266,6 +272,12 @@ class cl_vinculopcaspmsc {
           }
           $sql2 .= " c210_mscestrut = '$c210_mscestrut' ";
         }
+        if ($c210_anousu != "") {
+            if ($sql2!="") {
+                $sql2 .= " and ";
+            }
+            $sql2 .= " c210_anousu = '$c210_anousu' ";
+        }
      } else {
        $sql2 = $dbwhere;
      }
@@ -273,7 +285,7 @@ class cl_vinculopcaspmsc {
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Vínculo Pcasp MSC nao Excluído. Exclusão Abortada.\\n";
-       $this->erro_sql .= "Valores : ".$c210_pcaspestrut."-".$c210_mscestrut;
+       $this->erro_sql .= "Valores : ".$c210_pcaspestrut."-".$c210_mscestrut."-".$c210_anousu;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";

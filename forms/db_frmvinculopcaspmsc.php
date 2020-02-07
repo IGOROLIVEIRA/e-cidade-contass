@@ -32,6 +32,7 @@ $clvinculopcaspmsc->rotulo->label();
   </table>
 </fieldset>
 <center>
+<input name="c210_anousu" value="<?= isset($c210_anousu) ? $c210_anousu : db_getsession("DB_anousu") ?>" type="hidden" >
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
