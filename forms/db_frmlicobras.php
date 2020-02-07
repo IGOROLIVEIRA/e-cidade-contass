@@ -24,7 +24,7 @@ $cllicobras->rotulo->label();
         <tr>
           <td nowrap title="<?=@$Tobr01_licitacao?>">
             <?
-            db_ancora('Processo Licitacao:',"js_pesquisa_liclicita(true)",$db_opcao);
+            db_ancora('Licitação:',"js_pesquisa_liclicita(true)",$db_opcao);
             ?>
           </td>
           <td>
