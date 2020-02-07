@@ -3912,7 +3912,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco) {
         js_removeObj('msgBox');
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
-        console.log('Retorno dos dados complementares: ', dadoscomplementares);
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
         $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace('+', ' ');
         me.setLogradouro(dadoscomplementares.logradouro);

@@ -589,7 +589,7 @@ switch ($oParam->exec) {
     	try{
 
     		$anexo = db_utils::getDao('editaldocumento');
-    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l48_edital = $oParam->edital");
+    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l47_liclicita = $oParam->licitacao");
     		$rsSql = $anexo->sql_record($sSql);
 
 			if($anexo->numrows > 0){
@@ -624,12 +624,11 @@ switch ($oParam->exec) {
 			}
 			$target_dir .= db_getsession('DB_anousu').'/';
 
-			/* Verifica se já existe diretório para o edital corrente */
-			if(!is_dir($target_dir.'/'.$oParam->edital)){
-				mkdir($target_dir.'/'.$oParam->edital, 0775);
+			/* Verifica se já existe diretório para a licitação corrente */
+			if(!is_dir($target_dir.'/'.$oParam->licitacao)){
+				mkdir($target_dir.'/'.$oParam->licitacao, 0775);
 			}
-			$target_dir .= $oParam->edital.'/';
-
+			$target_dir .= $oParam->licitacao.'/';
 			// Seta o nome do arquivo destino do upload
 			$arquivoDocument = $target_dir.$filename.".".$ext;
 
@@ -651,7 +650,6 @@ switch ($oParam->exec) {
 				$oEdital->salvar();
 				$oRetorno->message = 'Anexo cadastrado com sucesso!';
 			}
-
 		}catch (Exception $erro){
 			$oRetorno->message = $oErro->getMessage();
 			$oRetorno->status  = 2;
@@ -662,7 +660,7 @@ switch ($oParam->exec) {
 
     	$oEdital          = new EditalDocumento();
 
-		$aEditalDocumento = $oEdital->getDocumentos($oParam->edital);
+		$aEditalDocumento = $oEdital->getDocumentos($oParam->licitacao);
 
 		$oRetorno->dados  = array();
 
@@ -747,7 +745,7 @@ switch ($oParam->exec) {
                  END) AS data_Referencia
     ";
 
-    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_nroedital = '.$oParam->iCodigoEdital. ' and EXTRACT(YEAR FROM l20_datacria) >= 2020 ');
+    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_codigo = '.$oParam->iCodigoLicitacao. ' and EXTRACT(YEAR FROM l20_datacria) >= 2020');
     $rsLicEdital = $oDaoLicEdital->sql_record($sSqlLicEdital);
     $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
     $oRetorno->dadosLicitacao = $oDados;

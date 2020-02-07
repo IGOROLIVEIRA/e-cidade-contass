@@ -98,15 +98,14 @@ class EditalDocumento
 		try {
 
 			$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-
 			$oDaoEditalDocumento->l48_tipo = $this->getTipo();
 			$oDaoEditalDocumento->l48_edital = $this->getCodigoEdital();
 			$oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
 			$oDaoEditalDocumento->l48_liclancedital = $this->getLicEdital();
 			$oDaoEditalDocumento->l48_caminho = $this->getCaminho();
-
-			$this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
 			$oDaoEditalDocumento->incluir(null);
+
+//			$this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
 
 			if ($oDaoEditalDocumento->erro_status == '0') {
 				throw new Exception($oDaoEditalDocumento->erro_msg);
@@ -121,18 +120,17 @@ class EditalDocumento
 
 	/**
 	 *
-	 * Busca todos documentos de um Edital
+	 * Busca todos documentos de uma licitação
 	 * @param integer
 	 * @return array
 	 */
-	public function getDocumentos($edital)
+	public function getDocumentos($licitacao)
 	{
 		$sCampos = "l48_sequencial, l48_edital, l48_tipo ";
 
-		$sWhere = " l48_edital = $edital";
+		$sWhere = " l47_liclicita = $licitacao";
 		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
 		$sSqlDocumentos = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
-
 		$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSqlDocumentos);
 
 		if ($oDaoEditalDocumento->numrows > 0) {

@@ -208,7 +208,7 @@ $db_opcao = 1;
 
         var oParam       = new Object();
         oParam.exec      = 'adicionarDocumento';
-        oParam.edital    = iEdital;
+        oParam.licitacao    = iLicitacao;
         oParam.sequencial    = iSequencial;
         oParam.tipo      = $F('caddocumento');
         oParam.arquivo   = $F('namefile');
@@ -245,7 +245,7 @@ $db_opcao = 1;
 
         var oParam       = new Object();
         oParam.exec      = 'getDocumento';
-        oParam.edital   = iEdital;
+        oParam.licitacao   = iLicitacao;
         var oAjax        = new Ajax.Request(
             sUrlRpc,
             { parameters: 'json='+Object.toJSON(oParam),

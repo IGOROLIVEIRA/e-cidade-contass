@@ -47,12 +47,11 @@ $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
 
-if ($numero_edital) {
-	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
+if ($licitacao) {
+	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
-        l47_dataenvio', '', 'l20_nroedital = ' . $numero_edital . ' and EXTRACT(YEAR from l20_datacria) >= 2020 ', '', 1);
+        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . ' and EXTRACT(YEAR from l20_datacria) >= 2020 ', '', 1);
 	$rsLicita = $clliclicita->sql_record($sqlLicita);
-
 	$oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
 	$natureza_objeto = $oDadosLicitacao->natureza_objeto;
 	$objeto = $oDadosLicitacao->l20_objeto;
@@ -60,11 +59,12 @@ if ($numero_edital) {
 	$descr_tribunal = $oDadosLicitacao->descr_tribunal;
 	$edital = $oDadosLicitacao->l20_edital;
 	$codigolicitacao = $oDadosLicitacao->l20_codigo;
+	$numero_edital = $oDadosLicitacao->l20_nroedital;
 
 //  $licitacao = db_utils::fieldsMemory($rsLicita, 0);
 }
 
-if (isset($incluir) && isset($numero_edital)) {
+if (isset($incluir) && isset($licitacao)) {
 	$sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '',
 		'l47_liclicita = ' . $codigolicitacao . ' and EXTRACT(YEAR from l20_datacria) >= 2020 ');
 	$rsEdital = $clliclancedital->sql_record($sSqlEdital);
@@ -92,15 +92,18 @@ if (isset($incluir) && isset($numero_edital)) {
 		}
 
 		// Alterar o status da licitação para Aguardando Envio;
-		$clliclicita = new cl_liclicita;
-		$clliclicita->l20_cadinicial = 2;
-		$clliclicita->l20_codigo = $codigolicitacao;
+        if(!$sqlerro){
+            $clliclicita = new cl_liclicita;
+            $clliclicita->l20_cadinicial = 2;
+            $clliclicita->l20_codigo = $codigolicitacao;
 
-		$clliclicita->alterar($codigolicitacao);
+            $clliclicita->alterar($codigolicitacao);
 
-		if ($clliclicita->erro_status == "0") {
-			$erro_msg = $clliclicita->erro_msg;
-		}
+            if ($clliclicita->erro_status == "0") {
+                $erro_msg = $clliclicita->erro_msg;
+            }
+
+        }
 	}
 
 }
@@ -163,9 +166,13 @@ if (isset($incluir)) {
 		echo "</script>";
 	}
 	echo "<script>document.form1.data_referencia.value = '" . $data_referencia . "';</script>";
+}else{
+    echo "<script>";
+	echo "parent.document.formaba.documentos.disabled=true;";
+	echo "</script>";
 }
 
-if (!trim($numero_edital)) {
+if (!trim($licitacao)) {
 	echo "<script>";
 	echo "parent.iframe_editais.js_pesquisa();";
 	echo "</script>";
