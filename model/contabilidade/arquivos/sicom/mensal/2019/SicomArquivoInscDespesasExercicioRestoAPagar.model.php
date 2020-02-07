@@ -456,13 +456,17 @@ AND e60_codemp = '$codemp'";
         FROM disponibilidadecaixa
         WHERE c224_anousu = ". db_getsession('DB_anousu')."
         AND c224_instit = ". db_getsession('DB_instit')."
-        AND c224_fonte IN (SELECT DISTINCT o15_codtri::integer
+        AND (c224_vlrcaixabruta != 0
+        OR c224_rpexercicioanterior != 0
+        OR c224_vlrrestoarecolher != 0
+        OR c224_vlrdisponibilidadecaixa != 0)
+        /*AND c224_fonte IN (SELECT DISTINCT o15_codtri::integer
         FROM conplanoreduz
         INNER JOIN orctiporec ON o15_codigo=c61_codigo
-        WHERE (c61_anousu,c61_instit) = (". db_getsession('DB_anousu').",". db_getsession('DB_instit')."))";
+        WHERE (c61_anousu,c61_instit) = (". db_getsession('DB_anousu').",". db_getsession('DB_instit')."))*/";
         $rsResult20 = db_query($sSql20);
-// echo pg_last_error();
-// db_criatabela($rsResult20);exit;
+//echo pg_last_error();
+//db_criatabela($rsResult20);exit;
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
             $oDados20[] = db_utils::fieldsMemory($rsResult20, $iCont20);
