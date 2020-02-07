@@ -79,7 +79,7 @@ if ($oGet->edital){
         $clcriaabas->identifica = array("editais" => "Editais", "documentos" => "Documentos");
         $clcriaabas->sizecampo = array("editais" => "20", "documentos" => "20");
         $clcriaabas->title = array("editais" => "Editais", "documentos" => "Documentos");
-        $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?numero_edital=$oGet->edital", "documentos" => "lic4_editaldocumentos.php");
+        $clcriaabas->src = array("editais" => "lic4_editalinclusao.php?licitacao=$oGet->licitacao", "documentos" => "lic4_editaldocumentos.php");
         $clcriaabas->disabled = array("editais" => "false", "documentos" => "true");
         $clcriaabas->cria_abas();
 

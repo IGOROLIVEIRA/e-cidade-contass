@@ -47,7 +47,7 @@ $sqlerro = false;
 $db_opcao = 2;
 
 if(!isset($alterar)){
-  $sqlEdital = $clliclicita->sql_query_edital('', '*', '', 'l20_nroedital = '.$numero_edital. ' and extract(year from l20_datacria) >= 2020 ');
+  $sqlEdital = $clliclicita->sql_query_edital('', '*', '', 'l20_codigo = '.$licitacao. ' and extract(year from l20_datacria) >= 2020 ');
   $rsEdital = $clliclicita->sql_record($sqlEdital);
   $oDados = db_utils::fieldsMemory($rsEdital, 0);
 
@@ -63,15 +63,15 @@ if(!isset($alterar)){
   $natureza_objeto = $oDados->l20_naturezaobjeto;
   $sequencial = $oDados->l47_sequencial;
   $codigolicitacao = $oDados->l20_codigo;
-
 }
 
 if(isset($alterar)){
 
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto', '', 'l20_nroedital = '.$numero_edital);
+  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto', '', 'l20_codigo = '.$licitacao);
   $rsEdital = $clliclancedital->sql_record($sqlEdital);
   $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
   $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
+  $codigolicitacao = $oDadosEdital->l20_codigo;
 
   if(isset($oDadosEdital->l47_sequencial)){
     $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
@@ -133,11 +133,10 @@ if(isset($alterar)){
 </body>
 </html>
 <?
-
 echo "<script>";
-echo "parent.iframe_editais.js_buscaDadosComplementares();";
 echo "parent.document.formaba.documentos.disabled=false;";
-echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$oDados->l20_codigo&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
+echo "parent.iframe_editais.js_buscaDadosComplementares();";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$codigolicitacao&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "</script>";
 
 if(isset($alterar)) {

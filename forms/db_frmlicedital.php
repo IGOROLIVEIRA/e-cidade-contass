@@ -72,6 +72,7 @@ $db_botao = true;
             <fieldset style="border:0px;">
 
               <table border="0">
+                  <? if(!in_array($tipo_tribunal, array(100, 101, 102, 103))): ?>
                 <tr>
                   <td title="Edital">
                     <b>Edital:</b>
@@ -79,11 +80,12 @@ $db_botao = true;
                   <td>
                     <?
                     db_input('numero_edital',10,'',true,'text',3,"");
-                    db_input('codigolicitacao',10,'',true,'hidden',3);
+                    db_input('codigolicitacao',10,'',true,'text',3);
                     db_input('naturezaobjeto',10,'',true,'hidden',3);
                     ?>
                   </td>
                 </tr>
+                  <?endif;?>
                 <tr>
                   <td nowrap title="Processo">
                     <b>Processo:</b>
@@ -188,20 +190,21 @@ $db_botao = true;
 </form>
 
 <script>
-    let iSequencial = '';
+    let iSequencial = '<?= $sequencial; ?>';
+    let codigoLicitacao = "<?= $codigolicitacao;?>";
 
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
     }
     function js_preenchepesquisa(nroedital, codigo){
-        js_buscaDadosLicitacao(nroedital);
+        js_buscaDadosLicitacao(codigo);
         db_iframe_liclicita.hide();
     }
 
     function js_buscaDadosLicitacao(valor){
         var oParam = new Object();
         oParam.exec = 'findDadosLicitacao';
-        oParam.iCodigoEdital = valor;
+        oParam.iCodigoLicitacao = valor;
         var oAjax = new Ajax.Request(
             'lic4_licitacao.RPC.php',
             { parameters: 'json='+Object.toJSON(oParam),
@@ -217,10 +220,10 @@ $db_botao = true;
         let dadoslicitacao = oRetorno.dadosLicitacao;
 
         if(dadoslicitacao.l20_cadinicial == '1'){
-            document.location.href="lic4_editalinclusao.php?numero_edital="+dadoslicitacao.l20_nroedital;
+            document.location.href="lic4_editalinclusao.php?licitacao="+dadoslicitacao.l20_codigo;
             return;
         }else{
-            document.location.href="lic4_editalalteracao.php?numero_edital="+dadoslicitacao.l20_nroedital;
+            document.location.href="lic4_editalalteracao.php?licitacao="+dadoslicitacao.l20_codigo;
             return;
         }
 
@@ -240,7 +243,7 @@ $db_botao = true;
     function js_exibeDadosCompl(idObra = null){
         oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '');
         oDadosComplementares.setObjetoRetorno($('idObra'));
-        oDadosComplementares.setLicitacao($('codigolicitacao').value);
+        oDadosComplementares.setLicitacao(codigoLicitacao);
         if(idObra){
             oDadosComplementares.preencheCampos(idObra);
         }else{
@@ -344,7 +347,7 @@ $db_botao = true;
         var sUrlRpc = "con4_endereco.RPC.php";
         let oParam = new Object();
         oParam.exec = 'findDadosObraEdital';
-        oParam.codLicitacao = $('codigolicitacao').value;
+        oParam.codLicitacao = codigoLicitacao;
 
         var oAjax = new Ajax.Request(
             sUrlRpc,

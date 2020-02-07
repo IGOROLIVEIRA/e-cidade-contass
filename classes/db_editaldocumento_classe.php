@@ -97,15 +97,10 @@ class cl_editaldocumento
 	// funcao para inclusao
 	function incluir($l48_sequencial)
 	{
+
 		$this->atualizacampos();
 		if ($this->l48_edital == null) {
-			$this->erro_sql = " Campo Acordo nao Informado.";
-			$this->erro_campo = "l48_edital";
-			$this->erro_banco = "";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
+			$this->l48_edital = 'null';
 		}
 		if ($this->l48_tipo == null) {
 			$this->erro_sql = " Campo Tipo nao Informado.";
@@ -183,7 +178,6 @@ class cl_editaldocumento
                                ,'$this->l48_caminho' 
                                ,$this->l48_liclancedital 
                       )";
-
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
