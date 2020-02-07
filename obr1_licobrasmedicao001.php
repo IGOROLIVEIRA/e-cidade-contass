@@ -16,7 +16,15 @@ if(isset($incluir)){
     $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao"));
 
     if(pg_num_rows($resultMedicao) > 0){
-      throw new Exception("Usuário: Numero da Medição ja utilizado !");
+      throw new Exception("Usuário: Numero da Medição ja utilizado.");
+    }
+
+    if($obr03_tipomedicao == "6" && ($obr03_outrostiposmedicao == null || $obr03_outrostiposmedicao == "")){
+      throw new Exception("Usuário: Outros tipos de Medição não informado.");
+    }
+
+    if ($obr03_vlrmedicao == null || $obr03_vlrmedicao == "0"){
+      throw new Exception("Usuário: Valor Medição nao informado.");
     }
 
     db_inicio_transacao();
