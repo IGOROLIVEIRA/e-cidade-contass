@@ -286,7 +286,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
         WHERE db_config.codigo= ".db_getsession('DB_instit')."
             AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                             '101',
-                                                            '102')
+                                                            '102', '103')
                   ";
 //  AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= ". db_getsession("DB_anousu"). "
 //  AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
@@ -313,7 +313,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
       $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento;
       $clralic10->si180_nroedital = $oDados10->nroedital;
-      $clralic10->si180_exercicioedital = 2020;//$oDados10->exercicioedital == '' || $oDados10->exercicioedital == null ?  $oDados10->exerciciolicitacao : 0;
+      $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital: intval($oDados10->exerciciolicitacao);
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
       $clralic10->si180_link = $oDados10->link;
       $clralic10->si180_tipolicitacao = $oDados10->tipolicitacao;
@@ -396,7 +396,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio";
+                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio";
 
           $rsResult11 = db_query($sSql);
 
@@ -489,7 +489,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                        obrasdadoscomplementares.db150_numero as numero,
                        obrasdadoscomplementares.db150_bairro as bairro,
                        obrasdadoscomplementares.db150_distrito as distrito,
-                       obrasdadoscomplementares.db150_municipio as municipio,
+                       db72_descricao AS municipio,
                        obrasdadoscomplementares.db150_cep as cep,
                        obrasdadoscomplementares.db150_grauslatitude as graulatitude,
                        obrasdadoscomplementares.db150_minutolatitude as minutolatitude,
@@ -504,14 +504,14 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
+                INNER JOIN cadendermunicipio on db72_sequencial = db150_municipio
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
+                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
     ";
 
-//            print_r($sSql);
-        	$rsResult12 = db_query($sSql);
+            $rsResult12 = db_query($sSql);
 
             $aDadosAgrupados12 = array();
             for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
