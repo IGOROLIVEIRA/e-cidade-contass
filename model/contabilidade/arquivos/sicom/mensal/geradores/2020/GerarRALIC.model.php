@@ -89,7 +89,7 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC11['si181_nroprocessolicitatorio']          = $aRALIC11['si181_nroprocessolicitatorio'];
                         $aCSVRALIC11['si181_codobralocal']                    = $aRALIC11['si181_codobralocal'];
                         $aCSVRALIC11['si181_classeobjeto']                    = $aRALIC11['si181_classeobjeto'];
-                        $aCSVRALIC11['si181_tipoatividadeobra']               = $aRALIC11['si181_tipoatividadeobra'];
+                        $aCSVRALIC11['si181_tipoatividadeobra']               = $this->padLeftZero($aRALIC11['si181_tipoatividadeobra'], 2);
                         $aCSVRALIC11['si181_tipoatividadeservico']            = $aRALIC11['si181_tipoatividadeservico'];
                         $aCSVRALIC11['si181_dscatividadeservico']             = $aRALIC11['si181_dscatividadeservico'];
                         $aCSVRALIC11['si181_tipoatividadeservespecializado']  = $aRALIC11['si181_tipoatividadeservespecializado'];

@@ -266,7 +266,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-                AND liclicitasituacao.l11_licsituacao IN (1, 10)
                 LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                 WHERE db_config.codigo = ".db_getsession('DB_instit')."
@@ -310,7 +309,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
         }
 
         // Consertar validação para só entrar na condicional quando a natureza do objeto for igual a 1,
-        if($oDados10->natureza_objeto == 1){
+        if($oDados10->naturezaobjeto == 1){
             /**
             * Selecionar informações do registro 11
             */
@@ -361,7 +360,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                        '2' as codSubFuncao,
                        '3' as codBemPublico
                 FROM liclicita
-                INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -369,9 +367,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 WHERE db_config.codigo= 1
-                    AND pctipocompratribunal.l44_sequencial NOT IN ('100',
-                                                                    '101',
-                                                                    '102')";
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103)";
             $rsResult11 = db_query($sSql);
 
             $aDadosAgrupados11 = array();
@@ -472,7 +468,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                        obrasdadoscomplementares.db150_minutolongitude AS minutolongitude,
                        obrasdadoscomplementares.db150_segundolongitude AS segundolongitude
                 FROM liclicita
-                INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -481,9 +476,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial NOT IN ('100',
-                                                                    '101',
-                                                                    '102');
+                    AND pctipocompratribunal.l44_sequencial NOT IN (100, 101, 102, 103);
     ";
             $rsResult12 = db_query($sSql);
 
