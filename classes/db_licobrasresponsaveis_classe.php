@@ -124,11 +124,10 @@ class cl_licobrasresponsaveis {
        return false;
      }
      if ($this->obr05_numregistro == null ) {
-       $this->erro_sql = " Campo Numero Registro não informado.";
+       $this->erro_sql = " Usuário: Campo Número Registro não informado!";
        $this->erro_campo = "obr05_numregistro";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_msg   = "Usuário: ".$this->erro_sql."";
        $this->erro_status = "0";
        return false;
      }

@@ -23,6 +23,14 @@ if(isset($incluir)){
 
   try {
 
+    if($obr01_dtinicioatividades == null || $obr01_dtinicioatividades == ""){
+      throw new Exception ("Usuário: Campo Data Inicio das Ativ. do Eng na Obra, não informado!");
+    }
+
+    if($obr01_licitacao == null || $obr01_licitacao == ""){
+      throw new Exception ("Nenhuma licitação informada!");
+    }
+
     if($datahomologacao == null){
       throw new Exception ("Usuário: Licitação não homologada! Inclusão Abortada!");
     }
@@ -34,7 +42,7 @@ if(isset($incluir)){
     }
 
     if($obr01_numeroobra == null || $obr01_numeroobra == "0"){
-      throw new Exception ("Usuário: Campo número da obra invalido");
+      throw new Exception ("Nº Obra não informado!");
     }
 
     $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","obr01_numeroobra desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
