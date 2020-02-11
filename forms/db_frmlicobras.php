@@ -79,7 +79,7 @@ $cllicobras->rotulo->label();
           </td>
           <td colspan="2">
             <?
-            db_textarea('obr01_linkobra',0,0,$Iobr01_linkobra,true,'text',$db_opcao,"")
+            db_textarea('obr01_linkobra',0,0,$Iobr01_linkobra,true,'text',$db_opcao,"","","",'200')
             ?>
           </td>
         </tr>

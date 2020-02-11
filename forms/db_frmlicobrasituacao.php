@@ -89,14 +89,14 @@ $cllicobrasituacao->rotulo->label();
           <td>
             <?
             $aValores = array(0 => 'Selecione',
-              1 => 'Não Iniciada',
-              2 => 'Iniciada',
-              3 => 'Paralisada por rescisão contratual',
-              4 => 'Paralisada',
-              5 => 'Concluída e não recebida',
-              6 => 'Concluída e recebida provisoriamente',
-              7 => 'Concluída e recebida definitivamente',
-              8 => 'Reiniciada');
+              1 => '1 - Não Iniciada',
+              2 => '2 - Iniciada',
+              3 => '3 - Paralisada por rescisão contratual',
+              4 => '4 - Paralisada',
+              5 => '5 - Concluída e não recebida',
+              6 => '6 - Concluída e recebida provisoriamente',
+              7 => '7 - Concluída e recebida definitivamente',
+              8 => '8 - Reiniciada');
             db_select('obr02_situacao', $aValores, true, $db_opcao," onchange='js_verificasituacao(this.value)'");
             ?>
           </td>
@@ -133,7 +133,7 @@ $cllicobrasituacao->rotulo->label();
           </td>
           <td colspan="3">
             <?
-            db_textarea('obr02_descrisituacao',0,0,$Iobr02_descrisituacao,true,'text',$db_opcao,"")
+            db_textarea('obr02_descrisituacao',0,0,$Iobr02_descrisituacao,true,'text',$db_opcao,"","","",'500')
             ?>
           </td>
         </tr>
@@ -149,22 +149,22 @@ $cllicobrasituacao->rotulo->label();
               <?
               $aValoresmotivo = array(
                 0 => 'Selecione',
-                1 => 'Atrasos do repasse de convênios',
-                2 => 'Suspensão do repasse de convênios',
-                3 => 'Bloqueio do repasse de convênios',
-                4 => 'Repasses de convênios em valor inferior ao programado',
-                5 => 'Contingenciamento de recursos próprios',
-                6 => 'Inadequação ao plano de trabalho da nova gestão',
-                7 => 'Irregularidades/problemas afetos ao meio ambiente',
-                8 => 'Pendências com desapropriações',
-                9 => 'Questões técnicas que vieram a ser conhecidas somente após a licitação',
-                10 => 'Riscos decorrentes de erros e vícios construtivos',
-                11 => 'Descumprimento de especificações técnicas e prazos',
-                12 => 'Irregularidades nos preços e serviços contratados',
-                13 => 'Problemas relacionados à contratada (exemplos: recuperação judicial, dissolução, etc.)',
-                14 => 'Caso Fortuito ou Força Maior',
-                15 => 'Ordem Judicial',
-                99 => 'Outros tipos de paralisação');
+                1 => '1 - Atrasos do repasse de convênios',
+                2 => '2 - Suspensão do repasse de convênios',
+                3 => '3 - Bloqueio do repasse de convênios',
+                4 => '4 - Repasses de convênios em valor inferior ao programado',
+                5 => '5 - Contingenciamento de recursos próprios',
+                6 => '6 - Inadequação ao plano de trabalho da nova gestão',
+                7 => '7 - Irregularidades/problemas afetos ao meio ambiente',
+                8 => '8 - Pendências com desapropriações',
+                9 => '9 - Questões técnicas que vieram a ser conhecidas somente após a licitação',
+                10 => '10 - Riscos decorrentes de erros e vícios construtivos',
+                11 => '11 - Descumprimento de especificações técnicas e prazos',
+                12 => '12 - Irregularidades nos preços e serviços contratados',
+                13 => '13 - Problemas relacionados à contratada (exemplos: recuperação judicial, dissolução, etc.)',
+                14 => '14 - Caso Fortuito ou Força Maior',
+                15 => '15 - Ordem Judicial',
+                99 => '99 - Outros tipos de paralisação');
               db_select('obr02_motivoparalisacao', $aValoresmotivo, true, $db_opcao," onchange=''");
               ?>
             </td>

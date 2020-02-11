@@ -180,14 +180,16 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_outrostiposmedicao == null ) {
-       $this->erro_sql = " Campo Outros tipos de Medição não informado.";
-       $this->erro_campo = "obr03_outrostiposmedicao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->obr03_tipomedicao == "9"){
+       if ($this->obr03_outrostiposmedicao == null ) {
+         $this->erro_sql = " Campo Outros tipos de Medição não informado.";
+         $this->erro_campo = "obr03_outrostiposmedicao";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
      }
      if ($this->obr03_descmedicao == null ) {
        $this->erro_sql = " Campo Desc. Medição não informado.";

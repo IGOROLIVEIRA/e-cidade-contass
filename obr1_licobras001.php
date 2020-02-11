@@ -37,7 +37,7 @@ if(isset($incluir)){
 
     if($datahomologacao != null){
       if($datainicioatividades < $datahomologacao){
-        throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
+        throw new Exception ("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Homologação da Licitação.");
       }
     }
 
