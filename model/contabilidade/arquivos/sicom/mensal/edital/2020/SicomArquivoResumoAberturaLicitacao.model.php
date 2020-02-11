@@ -178,119 +178,148 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
 
 
     $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
-            infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
-        
-            (SELECT SUM(si02_vlprecoreferencia * pc11_quant)
-             FROM
-                 (SELECT DISTINCT pc11_seq,
-                                  (sum(pc23_vlrun)/count(pc23_orcamforne)) AS si02_vlprecoreferencia,
-                                  CASE
-                                      WHEN pc80_criterioadjudicacao = 1 THEN round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
-                                      WHEN pc80_criterioadjudicacao = 2 THEN round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
-                                  END AS mediapercentual,
-                                  pc11_quant,
-                                  pc01_codmater
-                  FROM pcproc
-                  JOIN pcprocitem ON pc80_codproc = pc81_codproc
-                  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-                  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-                  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-                  JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-                  JOIN solicitem ON pc81_solicitem = pc11_codigo
-                  JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-                  JOIN pcmater ON pc16_codmater = pc01_codmater
-                  JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-                  JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-                  WHERE pc80_codproc IN
-                          (SELECT DISTINCT pc80_codproc
-                           FROM liclicitem
-                           INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-                           INNER JOIN liclicita lic2 ON lic2.l20_codigo = liclicitem.l21_codliclicita
-                           INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-                           INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-                           INNER JOIN db_usuarios ON db_usuarios.id_usuario = lic2.l20_id_usucria
-                           INNER JOIN cflicita ON cflicita.l03_codigo = lic2.l20_codtipocom
-                           INNER JOIN liclocal ON liclocal.l26_codigo = lic2.l20_liclocal
-                           INNER JOIN liccomissao ON liccomissao.l30_codigo = lic2.l20_liccomissao
-                           LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
-                           LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
-                           WHERE lic2.l20_nroedital = liclicita.l20_nroedital)
-                      AND pc23_valor <> 0
-                      AND pc23_vlrun <> 0
-                  GROUP BY pc11_seq,
-                           pc01_codmater,
-                           pc80_criterioadjudicacao,
-                           pc01_tabela,
-                           pc11_quant
-                  ORDER BY pc11_seq) AS valor_global) AS vlContratacao,
-            (SELECT CASE
-                        WHEN o41_subunidade != 0 OR NOT NULL 
-                            THEN lpad((CASE
-                                        WHEN o40_codtri = '0' OR NULL 
-                                            THEN o40_orgao::varchar
-                                            ELSE o40_codtri
-                                       END),2,0)||lpad((CASE
-                                                            WHEN o41_codtri = '0' OR NULL
-                                                              THEN o41_unidade::varchar
-                                                              ELSE o41_codtri
-                                                        END),3,0)||lpad(o41_subunidade::integer,3,0)
-                            ELSE lpad((CASE
-                                        WHEN o40_codtri = '0' OR NULL 
-                                            THEN o40_orgao::varchar
-                                            ELSE o40_codtri
-                                       END),2,0)||lpad((CASE
-                                                            WHEN o41_codtri = '0' OR NULL
-                                                                THEN o41_unidade::varchar
-                                                                ELSE o41_codtri
-                                                        END),3,0)
-                    END AS codunidadesubresp
-             FROM db_departorg
-             JOIN infocomplementares ON si08_anousu = db01_anousu
-             AND si08_instit = ".db_getsession('DB_instit')."
-             JOIN orcunidade ON db01_orgao=o41_orgao
-             AND db01_unidade=o41_unidade
-             AND db01_anousu = o41_anousu
-             JOIN orcorgao ON o40_orgao = o41_orgao
-             AND o40_anousu = o41_anousu
-             WHERE db01_coddepto=l20_codepartamento AND db01_anousu = ".db_getsession('DB_anousu')."
-             LIMIT 1) AS codUnidadeSubResp,
-               liclicita.l20_anousu AS exercicioLicitacao,
-               liclicita.l20_edital AS nroProcessoLicitatorio,
-               '1' AS tipoCadastradoLicitacao,
-               '' AS dscCadastroLicitatorio,
-               pctipocompratribunal.l44_codigotribunal AS codModalidadeLicitacao,
-               liclicita.l20_tipnaturezaproced AS naturezaProcedimento,
-               liclicita.l20_nroedital AS nroEdital,
-               liclicita.l20_exercicioedital AS exercicioEdital,
-               liclicita.l20_dtpublic AS dtPublicacaoEditalDO,
-               liclancedital.l47_linkpub AS LINK,
-               liclicita.l20_tipliticacao AS tipoLicitacao,
-               liclicita.l20_naturezaobjeto AS naturezaObjeto,
-               liclicita.l20_objeto AS Objeto,
-               CASE
-                   WHEN liclicita.l20_naturezaobjeto = '1' THEN liclicita.l20_regimexecucao
-                   ELSE 0
-               END AS regimeExecucaoObras,
-               0 AS vlContratacao,
-               obrasdadoscomplementares.db150_bdi as bdi,
-               0 AS mesExercicioRefOrc,
-               1 AS origemRecurso,
-               '' AS dscOrigemRecurso
-        FROM liclicita
-        INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
-        INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
-        INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
-        LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-        INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
-        LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
-        WHERE db_config.codigo= ".db_getsession('DB_instit')."
-            AND pctipocompratribunal.l44_sequencial NOT IN ('100',
-                                                            '101',
-                                                            '102', '103')
+                substr(si01_datacotacao, 6, 2)||substr(si01_datacotacao, 1, 4) as dataCotacao,
+                codorgaoresp,
+                codunidadesubresp,
+                mediapercentual,
+                exerciciolicitacao,
+                nroProcessoLicitatorio,
+                tipoCadastradoLicitacao,
+                dscCadastroLicitatorio,
+                codmodalidadelicitacao,
+                naturezaprocedimento,
+                nroedital,
+                exercicioedital,
+                dtpublicacaoeditaldo,
+                link,
+                tipolicitacao,
+                naturezaobjeto,
+                objeto,
+                regimeexecucaoobras,
+                bdi,
+                origemrecurso,
+                dscorigemrecurso,
+                sum(vlcontratacao) as vlContratacao
+FROM
+    (SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+                     (CASE
+                          WHEN pc80_criterioadjudicacao = 1 THEN round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
+                          WHEN pc80_criterioadjudicacao = 2 THEN round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
+                      END) AS mediapercentual,
+                     (sum(pc23_vlrun)/count(pc23_orcamforne)) AS vlContratacao,
+                     si01_datacotacao,
+
+         (SELECT CASE
+                     WHEN o41_subunidade != 0
+                          OR NOT NULL THEN lpad((CASE
+                                                     WHEN o40_codtri = '0'
+                                                          OR NULL THEN o40_orgao::varchar
+                                                     ELSE o40_codtri
+                                                 END),2,0)||lpad((CASE
+                                                                      WHEN o41_codtri = '0'
+                                                                           OR NULL THEN o41_unidade::varchar
+                                                                      ELSE o41_codtri
+                                                                  END),3,0)||lpad(o41_subunidade::integer,3,0)
+                     ELSE lpad((CASE
+                                    WHEN o40_codtri = '0'
+                                         OR NULL THEN o40_orgao::varchar
+                                    ELSE o40_codtri
+                                END),2,0)||lpad((CASE
+                                                     WHEN o41_codtri = '0'
+                                                          OR NULL THEN o41_unidade::varchar
+                                                     ELSE o41_codtri
+                                                 END),3,0)
+                 END AS codunidadesubresp
+          FROM db_departorg
+          JOIN infocomplementares ON si08_anousu = db01_anousu
+          AND si08_instit = ".db_getsession('DB_instit')."
+          JOIN orcunidade ON db01_orgao=o41_orgao
+          AND db01_unidade=o41_unidade
+          AND db01_anousu = o41_anousu
+          JOIN orcorgao ON o40_orgao = o41_orgao
+          AND o40_anousu = o41_anousu
+          WHERE db01_coddepto=l20_codepartamento
+              AND db01_anousu = ".db_getsession('DB_anousu')."
+          LIMIT 1) AS codUnidadeSubResp,
+                     liclicita.l20_anousu AS exercicioLicitacao,
+                     liclicita.l20_edital AS nroProcessoLicitatorio,
+                     '1' AS tipoCadastradoLicitacao,
+                     '' AS dscCadastroLicitatorio,
+                     pctipocompratribunal.l44_codigotribunal AS codModalidadeLicitacao,
+                     liclicita.l20_tipnaturezaproced AS naturezaProcedimento,
+                     liclicita.l20_nroedital AS nroEdital,
+                     liclicita.l20_exercicioedital AS exercicioEdital,
+                     liclicita.l20_dtpublic AS dtPublicacaoEditalDO,
+                     liclancedital.l47_linkpub AS LINK,
+                     liclicita.l20_tipliticacao AS tipoLicitacao,
+                     liclicita.l20_naturezaobjeto AS naturezaObjeto,
+                     liclicita.l20_objeto AS Objeto,
+                     CASE
+                         WHEN liclicita.l20_naturezaobjeto = '1' THEN liclicita.l20_regimexecucao
+                         ELSE 0
+                     END AS regimeExecucaoObras,
+                     obrasdadoscomplementares.db150_bdi AS bdi,
+                     liclancedital.l47_origemrecurso AS origemRecurso,
+                     '' AS dscOrigemRecurso
+     FROM liclicita
+     INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
+     INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
+     INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
+     LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+     INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+     AND liclancedital.l47_dataenvio = '2020-02-07'
+     LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
+     JOIN liclicitem ON l21_codliclicita = l20_codigo
+     JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+     JOIN pcproc ON pc80_codproc = pc81_codproc
+     JOIN solicitem ON pc81_solicitem = pc11_codigo
+     JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
+     JOIN pcmater ON pc16_codmater = pc01_codmater
+     JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+     JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+     JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+     JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+     JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+     JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+     WHERE db_config.codigo= ".db_getsession('DB_instit')."
+         AND pctipocompratribunal.l44_sequencial NOT IN ('100', '101', '102', '103')
+         AND pc81_codproc IN (SELECT DISTINCT pc80_codproc
+								 FROM liclicitem
+								   INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+								   INNER JOIN liclicita lic2 ON lic2.l20_codigo = liclicitem.l21_codliclicita
+								   INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+								   INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+								   INNER JOIN db_usuarios ON db_usuarios.id_usuario = lic2.l20_id_usucria
+								   INNER JOIN cflicita ON cflicita.l03_codigo = lic2.l20_codtipocom
+								   INNER JOIN liclocal ON liclocal.l26_codigo = lic2.l20_liclocal
+								   INNER JOIN liccomissao ON liccomissao.l30_codigo = lic2.l20_liccomissao
+								   LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
+								   LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
+								   WHERE lic2.l20_nroedital = liclicita.l20_nroedital)
+     GROUP BY si09_codorgaotce,
+              pc80_criterioadjudicacao,
+              l20_codepartamento,
+              l20_anousu,
+              l20_edital,
+              l44_codigotribunal,
+              l20_tipnaturezaproced,
+              l20_nroedital,
+              l20_exercicioedital,
+              l20_dtpublic,
+              l47_linkpub,
+              l20_tipliticacao,
+              l20_naturezaobjeto,
+              l20_objeto,
+              l20_regimexecucao,
+              db150_bdi,
+              pc01_codmater,
+              l47_origemrecurso,
+              si01_datacotacao) AS query
+GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
+         tipoCadastradoLicitacao, dscCadastroLicitatorio, codmodalidadelicitacao, naturezaprocedimento, nroedital,
+         exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, regimeexecucaoobras,
+         bdi, origemrecurso, dscorigemrecurso
                   ";
-//  AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao)= ". db_getsession("DB_anousu"). "
-//  AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
-//    AND liclancedital.l47_dataenvio = $param
 	  $rsResult10 = db_query($sSql);
 
     /**
@@ -322,7 +351,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
       $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
       $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao;
       $clralic10->si180_bdi = $oDados10->bdi;
-      $clralic10->si180_mesexercicioreforc = $oDados10->mesexercicioreforc;
+      $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao;
       $clralic10->si180_origemrecurso = $oDados10->origemrecurso;
       $clralic10->si180_dscorigemrecurso = $oDados10->dscorigemrecurso;
       $clralic10->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
