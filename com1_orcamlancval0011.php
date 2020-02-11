@@ -578,12 +578,12 @@ else {
     /*FIM - OC3770*/
         echo "
     <td align='center'  class='bordas_corp'>";
-      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();' onkeyup='validaCaracteres(this.value,$pc22_orcamitem);'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();' onkeyup='validaCaracteres(this.value,$pc22_orcamitem);'");
-      echo "
+          db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();'");
+          echo "
     </td>
     <td align='center'  class='bordas_corp' width='15%'>";
-    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text', 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
-echo"
+          db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+          echo"
       </td>
         </tr>";
 

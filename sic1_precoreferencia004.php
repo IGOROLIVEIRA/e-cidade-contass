@@ -272,7 +272,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
     if($quant_casas){
-        $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
+        $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
     }
     // if($quant_casas == 2){
     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
@@ -302,7 +302,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-        $oDadosDaLinha->total = number_format($lTotal, $quant_casas, ",", ".");
+        $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }
 
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
