@@ -179,7 +179,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao 
-  function excluir ($c212_natdespestrut=null,$c212_mscestrut=null,$dbwhere=null) { 
+  function excluir ($c212_natdespestrut=null,$c212_mscestrut=null,$c212_anousu=null,$dbwhere=null) {
 
     $sql = " delete from natdespmsc
                    where ";
@@ -196,6 +196,12 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
            $sql2 .= " and ";
          }
          $sql2 .= " c212_mscestrut = '$c212_mscestrut' ";
+       }
+       if ($c212_anousu != "") {
+           if ($sql2 != "") {
+               $sql2 .= " and ";
+           }
+           $sql2 .= " c212_anousu = '$c212_anousu' ";
        }
     } else {
       $sql2 = $dbwhere;

@@ -224,7 +224,7 @@ class cl_elemdespmsc {
   }
 
   // funcao para exclusao
-  function excluir ($c211_elemdespestrut=null,$c211_mscestrut=null,$dbwhere=null) {
+  function excluir ($c211_elemdespestrut=null,$c211_mscestrut=null,$c211_anousu,$dbwhere=null) {
 
      $sql = " delete from elemdespmsc
                     where ";
@@ -242,6 +242,12 @@ class cl_elemdespmsc {
           }
           $sql2 .= " c211_mscestrut = '$c211_mscestrut' ";
         }
+        if ($c211_anousu != "") {
+            if ($sql2!="") {
+                $sql2 .= " and ";
+            }
+            $sql2 .= " c211_anousu = '$c211_anousu' ";
+        }
      } else {
        $sql2 = $dbwhere;
      }
@@ -249,7 +255,7 @@ class cl_elemdespmsc {
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Elemento da despesa MSC nao Excluído. Exclusão Abortada.\\n";
-       $this->erro_sql .= "Valores : ".$c211_elemdespestrut."-".$c211_mscestrut;
+       $this->erro_sql .= "Valores : ".$c211_elemdespestrut."-".$c211_mscestrut."-".$c211_anousu;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";

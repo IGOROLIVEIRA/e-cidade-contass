@@ -27,10 +27,34 @@ class Oc11237 extends PostgresMigration
 
         -- ALTERA ESTRUTURA DAS TABELAS
         ALTER TABLE vinculopcaspmsc ADD COLUMN c210_anousu integer NOT NULL DEFAULT 0;
+
+        ALTER TABLE vinculopcaspmsc 
+            DROP CONSTRAINT vinculopcaspmsc_c210_pcaspestrut_c210_mscestrut,
+            ADD CONSTRAINT vinculopcaspmsc_c210_pcaspestrut_c210_mscestrut_c210_anousu PRIMARY KEY (c210_pcaspestrut, c210_mscestrut, c210_anousu);
+
+        DROP INDEX vinculopcaspmsc_index;
+    
+        CREATE UNIQUE INDEX vinculopcaspmsc_index ON vinculopcaspmsc(c210_pcaspestrut, c210_mscestrut, c210_anousu);
         
         ALTER TABLE elemdespmsc ADD COLUMN c211_anousu integer NOT NULL DEFAULT 0;
+
+        ALTER TABLE elemdespmsc 
+            DROP CONSTRAINT elemdespmsc_c211_elemdespestrut_c211_mscestrut,
+            ADD CONSTRAINT elemdespmsc_c211_elemdespestrut_c211_mscestrut_c211_anousu PRIMARY KEY (c211_elemdespestrut, c211_mscestrut, c211_anousu);
+
+        DROP INDEX elemdespmsc_index;
+    
+        CREATE UNIQUE INDEX elemdespmsc_index ON elemdespmsc(c211_elemdespestrut,c211_mscestrut,c211_anousu);
         
         ALTER TABLE natdespmsc ADD COLUMN c212_anousu integer NOT NULL DEFAULT 0;
+        
+        ALTER TABLE natdespmsc 
+            DROP CONSTRAINT natdespmsc_c212_natdespestrut_c212_mscestrut,
+            ADD CONSTRAINT natdespmsc_c212_natdespestrut_c212_mscestrut_c212_anousu PRIMARY KEY (c212_natdespestrut, c212_mscestrut, c212_anousu);
+
+        DROP INDEX natdespmsc_index;
+    
+        CREATE UNIQUE INDEX natdespmsc_index ON natdespmsc(c212_natdespestrut, c212_mscestrut, c212_anousu);
         
         -- ATUALIZA VALORES
         UPDATE vinculopcaspmsc SET c210_anousu = '2019';

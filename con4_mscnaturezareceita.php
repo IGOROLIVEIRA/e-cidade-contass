@@ -17,7 +17,7 @@ if(isset($incluir)){
 
 if(isset($excluir)){
   db_inicio_transacao();
-  $clnatdespmsc->excluir($c212_natdespestrut,$c212_mscestrut);
+  $clnatdespmsc->excluir($c212_natdespestrut,$c212_mscestrut,$c212_anousu);
   db_fim_transacao();
 } else if(isset($chavepesquisa)){
    $result = $clnatdespmsc->sql_record($clnatdespmsc->sql_query($chavepesquisa));

@@ -1,6 +1,7 @@
 <?
 //MODULO: contabilidade
 $clvinculopcaspmsc->rotulo->label();
+$c210_anousu = isset($chavepesquisa2) ? $chavepesquisa2 : $c210_anousu;
 ?>
 <form name="form1" method="post" action="">
   <input type="hidden" name="c210_pcaspestrutant" value="<?=@$c210_pcaspestrut?>">
@@ -38,13 +39,13 @@ $clvinculopcaspmsc->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_vinculopcaspmsc','func_vinculopcaspmsc.php?funcao_js=parent.js_preenchepesquisa|c210_pcaspestrut|c210_mscestrut','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo','db_iframe_vinculopcaspmsc','func_vinculopcaspmsc.php?funcao_js=parent.js_preenchepesquisa|c210_pcaspestrut|c210_mscestrut|c210_anousu','Pesquisa',true);
 }
-function js_preenchepesquisa(chave,chave1){
+function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_vinculopcaspmsc.hide();
   <?
   if($db_opcao!=1){
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
+    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1+'&chavepesquisa2='+chave2";
   }
   ?>
 }

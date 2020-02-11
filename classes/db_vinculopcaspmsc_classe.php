@@ -132,7 +132,7 @@ class cl_vinculopcaspmsc {
   }
 
   // funcao para alteracao
-  function alterar ($c210_pcaspestrut=null,$c210_mscestrut=null,$c210_pcaspestrutant=null,$c210_mscestrutant=null) {
+  function alterar ($c210_pcaspestrut=null,$c210_mscestrut=null,$c210_pcaspestrutant=null,$c210_mscestrutant=null,$c210_anousu=null) {
       $this->atualizacampos();
      $sql = " update vinculopcaspmsc set ";
      $virgula = "";
@@ -175,7 +175,10 @@ class cl_vinculopcaspmsc {
      if ($c210_mscestrut!=null) {
        $sql .= " and  c210_mscestrut = '$c210_mscestrutant'";
      }
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     if ($c210_anousu!=null) {
+         $sql .= " and  c210_anousu = '$c210_anousu'";
+     }
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -195,7 +198,7 @@ class cl_vinculopcaspmsc {
              $resac = db_query("insert into db_acount values($acount,1010192,1009245,'".AddSlashes(pg_result($resaco,$conresaco,'c210_mscestrut'))."','$this->c210_mscestrut',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -232,7 +235,7 @@ class cl_vinculopcaspmsc {
   // funcao para exclusao
   function excluir ($c210_pcaspestrut=null,$c210_mscestrut=null,$c210_anousu=null,$dbwhere=null) {
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -255,7 +258,7 @@ class cl_vinculopcaspmsc {
            $resac  = db_query("insert into db_acount values($acount,1010192,1009245,'','".AddSlashes(pg_result($resaco,$iresaco,'c210_mscestrut'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $sql = " delete from vinculopcaspmsc
                     where ";
      $sql2 = "";
