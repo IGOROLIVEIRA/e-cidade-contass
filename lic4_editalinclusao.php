@@ -160,7 +160,7 @@ if (isset($incluir)) {
 
 	if (!$sqlerro) {
 		echo "<script>";
-		echo "parent.iframe_editais.location.href='lic4_editalalteracao.php?numero_edital=$numero_edital';\n";
+		echo "parent.iframe_editais.location.href='lic4_editalalteracao.php?licitacao=$licitacao';\n";
 		echo "parent.document.formaba.documentos.disabled=false;";
 		echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$codigolicitacao&l20_nroedital=$numero_edital&l47_sequencial=$sequencial&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 		echo "</script>";
