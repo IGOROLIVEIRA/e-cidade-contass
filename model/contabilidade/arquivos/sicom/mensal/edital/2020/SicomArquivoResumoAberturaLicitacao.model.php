@@ -267,7 +267,6 @@ FROM
      INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
      LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
      INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
-     AND liclancedital.l47_dataenvio = '2020-02-07'
      LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
      JOIN liclicitem ON l21_codliclicita = l20_codigo
      JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
@@ -282,7 +281,7 @@ FROM
      JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
      JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
      WHERE db_config.codigo= ".db_getsession('DB_instit')."
-         AND pctipocompratribunal.l44_sequencial NOT IN ('100', '101', '102', '103')
+         AND pctipocompratribunal.l44_sequencial NOT IN ('100', '101', '102', '103') and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
          AND pc81_codproc IN (SELECT DISTINCT pc80_codproc
 								 FROM liclicitem
 								   INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
