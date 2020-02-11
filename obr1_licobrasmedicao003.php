@@ -15,12 +15,12 @@ $db_opcao = 33;
 if(isset($excluir)){
   try{
     $result = $cllicobrasanexo->sql_record($cllicobrasanexo->sql_query(null,"*",null,"obr04_licobrasmedicao = $obr03_sequencial"));
+    $db_opcao = 3;
 
     if(pg_num_rows($result) > 0){
       throw new Exception ("Usuário: Exclusão Abortada! Existem fotos anexadas.");
     }else{
       db_inicio_transacao();
-      $db_opcao = 3;
       $cllicobrasmedicao->excluir($obr03_sequencial);
       db_fim_transacao();
     }

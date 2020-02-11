@@ -63,6 +63,13 @@ if(isset($uploadfile)) {
   // Seta o nome do arquivo destino do upload
   $arquivoDocument = "$diretorio"."$novo_nome";
 
+  if($extensao != ".png" && $extensao != "jpeg"){
+    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo JPEG ou PNG");
+    unlink($nometmp);
+    $lFail = true;
+    return false;
+  }
+
   $cllicobrasanexo = new cl_licobrasanexo();
   $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
   $cllicobrasanexo->obr04_codimagem       = $novo_nome;

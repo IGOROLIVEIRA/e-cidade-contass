@@ -93,9 +93,7 @@ $cllicobrasmedicao->rotulo->label();
             3 => 'Medição complementar',
             4 => 'Medição final',
             5 => 'Medição de termo aditivo',
-            6 => 'Outro documento de medição.',
-            7 => 'Concluída e recebida definitivamente',
-            8 => 'Reiniciada');
+            9 => 'Outro documento de medição.');
           db_select('obr03_tipomedicao', $aValores, true, $db_opcao," onchange=''");
           ?>
         </td>
@@ -116,7 +114,7 @@ $cllicobrasmedicao->rotulo->label();
         </td>
         <td colspan="3">
           <?
-          db_textarea('obr03_outrostiposmedicao',0,0,$Iobr03_outrostiposmedicao,true,'text',$db_opcao,"")
+          db_textarea('obr03_outrostiposmedicao',0,0,$Iobr03_outrostiposmedicao,true,'text',$db_opcao,"","","",'500')
           ?>
         </td>
       </tr>
@@ -158,7 +156,7 @@ $cllicobrasmedicao->rotulo->label();
     <div id="incluirmedicao">
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
-      <input name="Nova Medicao" type="button" id="Nova Medicao" value="Nova Medicao" onclick="js_novamedicao();" >
+      <input name="Nova Medição" type="button" id="Nova Medição" value="Nova Medição" onclick="js_novamedicao();" >
     </div>
     <hr>
   </form>
