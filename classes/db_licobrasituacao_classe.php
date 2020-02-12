@@ -427,7 +427,7 @@ class cl_licobrasituacao {
         $sql  .= $virgula." obr02_dtparalisacao = '$this->obr02_dtparalisacao' ";
         $virgula = ",";
         if (trim($this->obr02_dtparalisacao) == null ) {
-          $this->erro_sql = " Campo Data Paralização não informado.";
+          $this->erro_sql = " Campo Data Paralisação não informado.";
           $this->erro_campo = "obr02_dtparalisacao_dia";
           $this->erro_banco = "";
           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -440,7 +440,7 @@ class cl_licobrasituacao {
           $sql  .= $virgula." obr02_dtparalisacao = null ";
           $virgula = ",";
           if (trim($this->obr02_dtparalisacao) == null ) {
-            $this->erro_sql = " Campo Data Paralização não informado.";
+            $this->erro_sql = " Campo Data Paralisação não informado.";
             $this->erro_campo = "obr02_dtparalisacao_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
