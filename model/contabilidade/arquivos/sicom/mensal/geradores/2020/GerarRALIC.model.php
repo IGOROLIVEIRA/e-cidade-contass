@@ -92,8 +92,8 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC11['si181_dscatividadeservico']             = $aRALIC11['si181_dscatividadeservico'];
                         $aCSVRALIC11['si181_tipoatividadeservespecializado']  = $aRALIC11['si181_tipoatividadeservespecializado'] == null ? '' : $this->padLeftZero(intval($aRALIC11['si181_tipoatividadeservespecializado']), 2);
                         $aCSVRALIC11['si181_dscatividadeservespecializado']   = $aRALIC11['si181_dscatividadeservespecializado'];
-                        $aCSVRALIC11['si181_codfuncao']                       = $this->padLeftZero($aRALIC11['si181_codfuncao'], 2);
-                        $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero($aRALIC11['si181_codsubfuncao'], 3);
+                        $aCSVRALIC11['si181_codfuncao']                       = $this->padLeftZero(intval($aRALIC11['si181_codfuncao']), 2);
+                        $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero(intval($aRALIC11['si181_codsubfuncao']), 3);
                         $aCSVRALIC11['si181_codbempublico']                   = $this->padLeftZero($aRALIC11['si181_codbempublico'], 4);
 
                         $this->sLinha = $aCSVRALIC11;
