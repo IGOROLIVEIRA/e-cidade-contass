@@ -1,9 +1,5 @@
 <?php
 
-
-require_once("model/MSCXbrl.model.php");
-require_once("model/MSCCsv.model.php");
-
 class MSC {
 
   //@var integer
@@ -264,26 +260,42 @@ class MSC {
 
       case 'xbrl' :
 
-          $xbrl = new MSCXbrl;
-          $xbrl->setIdentifier($this->getIdentifier());
-          $xbrl->setEntriesType($this->getEntriesType());
-          $xbrl->setPeriodIdentifier($this->getPeriodIdentifier());
-          $xbrl->setPeriodDescription($this->getPeriodDescription());
-          $xbrl->setPeriodStart($this->getPeriodStart());
-          $xbrl->setPeriodEnd($this->getPeriodEnd());
-          $xbrl->setInstant($this->getInstant());
-          $xbrl->setNomeArq($this->getNomeArq());
-          $xbrl->gerarArquivoXBRL($this->aRegistros);
+          if (file_exists("model/contabilidade/arquivos/msc/" . $ano . "/MSCXbrl.model.php")) {
+
+              require_once("model/contabilidade/arquivos/msc/" . $ano . "/MSCXbrl.model.php");
+
+              $xbrl = new MSCXbrl;
+              $xbrl->setIdentifier($this->getIdentifier());
+              $xbrl->setEntriesType($this->getEntriesType());
+              $xbrl->setPeriodIdentifier($this->getPeriodIdentifier());
+              $xbrl->setPeriodDescription($this->getPeriodDescription());
+              $xbrl->setPeriodStart($this->getPeriodStart());
+              $xbrl->setPeriodEnd($this->getPeriodEnd());
+              $xbrl->setInstant($this->getInstant());
+              $xbrl->setNomeArq($this->getNomeArq());
+              $xbrl->gerarArquivoXBRL($this->aRegistros);
+
+          } else {
+              throw new Exception ("Arquivo MSCXbrl para o ano {$ano} não existe. ");
+          }
 
       break;
 
       case 'csv' :
 
-          $csv = new MSCCsv;
-          $csv->setNomeArq($this->getNomeArq());
-          $csv->setIdentifier($this->getIdentifier());
-          $csv->setPeriodIdentifier($this->getPeriodIdentifier());
-          $csv->gerarArquivoCSV($this->aRegistros);
+          if (file_exists("model/contabilidade/arquivos/msc/" . $ano . "/MSCCsv.model.php")) {
+
+              require_once("model/contabilidade/arquivos/msc/" . $ano . "/MSCCsv.model.php");
+
+              $csv = new MSCCsv;
+              $csv->setNomeArq($this->getNomeArq());
+              $csv->setIdentifier($this->getIdentifier());
+              $csv->setPeriodIdentifier($this->getPeriodIdentifier());
+              $csv->gerarArquivoCSV($this->aRegistros);
+
+          } else {
+              throw new Exception ("Arquivo MSCCsv para o ano {$ano} não existe. ");
+          }
 
       break;
 
