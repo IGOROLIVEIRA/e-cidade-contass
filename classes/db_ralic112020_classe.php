@@ -26,7 +26,7 @@ class cl_ralic112020
   var $si181_codobralocal = 0;
   var $si181_classeobjeto = 0;
   var $si181_tipoatividadeobra = 0;
-  var $si181_tipoatividadeservico = 0;
+  var $si181_tipoatividadeservico = null;
   var $si181_dsctividadeservico = '';
   var $si181_tipoatividadeservespecializado = 0;
   var $si181_dscatividadeservespecializado = '';
@@ -178,6 +178,15 @@ class cl_ralic112020
       return false;
     }
 
+    if(!$this->si181_tipoatividadeservico){
+      $this->si181_tipoatividadeservico = 'null';
+    }
+
+    if(!$this->si181_tipoatividadeservespecializado){
+      $this->si181_tipoatividadeservespecializado = 'null';
+    }
+
+
     $sql = "insert into ralic112020(
                                        si181_sequencial
                                       ,si181_tiporegistro
@@ -211,7 +220,7 @@ class cl_ralic112020
                                ,$this->si181_codobralocal
                                ,$this->si181_classeobjeto
                                ,$this->si181_tipoatividadeobra
-                               ,$this->si181_tipoatividadeservico
+                               ,$this->si181_tipoatividadeservico 
                                ,'$this->si181_dsctividadeservico'
                                ,$this->si181_tipoatividadeservespecializado
                                ,'$this->si181_dscatividadeservespecializado'

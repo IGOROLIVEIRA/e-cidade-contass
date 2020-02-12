@@ -260,7 +260,7 @@ FROM
                      END AS regimeExecucaoObras,
                      obrasdadoscomplementares.db150_bdi AS bdi,
                      liclancedital.l47_origemrecurso AS origemRecurso,
-                     '' AS dscOrigemRecurso
+                     liclancedital.l47_descrecurso AS dscOrigemRecurso
      FROM liclicita
      INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
      INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
@@ -313,13 +313,15 @@ FROM
               db150_bdi,
               pc01_codmater,
               l47_origemrecurso,
+              l47_descrecurso,
               si01_datacotacao) AS query
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, dscCadastroLicitatorio, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, regimeexecucaoobras,
-         bdi, origemrecurso, dscorigemrecurso
+         bdi, origemrecurso, dscorigemrecurso ORDER BY nroprocessolicitatorio
                   ";
 	  $rsResult10 = db_query($sSql);
+//		print_r($sSql);die();
 
     /**
      * registro 10
@@ -344,7 +346,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
       $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital: intval($oDados10->exerciciolicitacao);
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
       $clralic10->si180_link = $oDados10->link;
-      $clralic10->si180_tipolicitacao = $oDados10->tipolicitacao;
+      $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao;
       $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto;
       $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
       $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
@@ -411,10 +413,14 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
                        obrasdadoscomplementares.db150_descratividadeservico as dscAtividadeServico,
                        obrasdadoscomplementares.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
                        obrasdadoscomplementares.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
-                       '1' as codFuncao,
-                       '2' as codSubFuncao,
-                       '3' as codBemPublico
+                       orcdotacao.o58_funcao AS codFuncao,
+       				   orcdotacao.o58_subfuncao AS codSubFuncao,
+                       obrasdadoscomplementares.db150_subgrupobempublico as codBemPublico
                 FROM liclicita
+                INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+				INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
+				INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+				INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
@@ -449,7 +455,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
               $clralic11->si181_codobralocal = $oResult11->codobralocal;
               $clralic11->si181_classeobjeto = $oResult11->classeobjeto;
               $clralic11->si181_tipoatividadeobra = $oResult11->tipoatividadeobra;
-              $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico;
+              $clralic11->si181_tipoatividadeservico = $oResult11->tipoatividadeservico == 0 ? '' : $oResult11->tipoatividadeservico;
               $clralic11->si181_dscatividadeservico = $oResult11->dscatividadeservico;
               $clralic11->si181_tipoatividadeservespecializado = $oResult11->tipoatividadeservespecializado;
               $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
@@ -555,7 +561,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
                     $clralic12->si182_tiporegistro = 12;
                     $clralic12->si182_codorgaoresp = $oResult12->codorgaoresp;
                     $clralic12->si182_codunidadesubresp = $oResult12->codunidadesubresp;
-                    $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual;
+                    $clralic12->si182_codunidadesubrespestadual = $oResult12->codunidadesubrespestadual != '' ? $oResult12->codunidadesubrespestadual : '0';
                     $clralic12->si182_exercicioprocesso = $oResult12->exercicioprocesso;
                     $clralic12->si182_nroprocessolicitatorio = $oResult12->nroprocessolicitatorio;
                     $clralic12->si182_codobralocal = $oResult12->codobralocal;
