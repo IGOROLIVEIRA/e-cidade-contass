@@ -34,10 +34,10 @@ class cl_licobrasituacao {
   public $obr02_dtpublicacao = null;
   public $obr02_descrisituacao = null;
   public $obr02_motivoparalisacao = 0;
-  public $obr02_dtparalizacao_dia = null;
-  public $obr02_dtparalizacao_mes = null;
-  public $obr02_dtparalizacao_ano = null;
-  public $obr02_dtparalizacao = null;
+  public $obr02_dtparalisacao_dia = null;
+  public $obr02_dtparalisacao_mes = null;
+  public $obr02_dtparalisacao_ano = null;
+  public $obr02_dtparalisacao = null;
   public $obr02_outrosmotivos = null;
   public $obr02_dtretomada_dia = null;
   public $obr02_dtretomada_mes = null;
@@ -55,7 +55,7 @@ class cl_licobrasituacao {
                  obr02_dtpublicacao = date = data de publicação
                  obr02_descrisituacao = text = Desc. Situação da Obra
                  obr02_motivoparalisacao = int4 = Motivo Paralização
-                 obr02_dtparalizacao = date = Data Paralização
+                 obr02_dtparalisacao = date = Data Paralização
                  obr02_outrosmotivos = text = Outros Motivos
                  obr02_dtretomada = date = Data Retomada
                  obr02_instit = int4 = Instituição
@@ -113,12 +113,12 @@ class cl_licobrasituacao {
 
       $this->obr02_descrisituacao = ($this->obr02_descrisituacao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_descrisituacao"]:$this->obr02_descrisituacao);
       $this->obr02_motivoparalisacao = ($this->obr02_motivoparalisacao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_motivoparalisacao"]:$this->obr02_motivoparalisacao);
-      if ($this->obr02_dtparalizacao == "") {
-        $this->obr02_dtparalizacao_dia = ($this->obr02_dtparalizacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_dia"]:$this->obr02_dtparalizacao_dia);
-        $this->obr02_dtparalizacao_mes = ($this->obr02_dtparalizacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_mes"]:$this->obr02_dtparalizacao_mes);
-        $this->obr02_dtparalizacao_ano = ($this->obr02_dtparalizacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_ano"]:$this->obr02_dtparalizacao_ano);
-        if ($this->obr02_dtparalizacao_dia != "") {
-          $this->obr02_dtparalizacao = $this->obr02_dtparalizacao_ano."-".$this->obr02_dtparalizacao_mes."-".$this->obr02_dtparalizacao_dia;
+      if ($this->obr02_dtparalisacao == "") {
+        $this->obr02_dtparalisacao_dia = ($this->obr02_dtparalisacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_dia"]:$this->obr02_dtparalisacao_dia);
+        $this->obr02_dtparalisacao_mes = ($this->obr02_dtparalisacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_mes"]:$this->obr02_dtparalisacao_mes);
+        $this->obr02_dtparalisacao_ano = ($this->obr02_dtparalisacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_ano"]:$this->obr02_dtparalisacao_ano);
+        if ($this->obr02_dtparalisacao_dia != "") {
+          $this->obr02_dtparalisacao = $this->obr02_dtparalisacao_ano."-".$this->obr02_dtparalisacao_mes."-".$this->obr02_dtparalisacao_dia;
         }
       }
       $this->obr02_outrosmotivos = ($this->obr02_outrosmotivos == ""?@$GLOBALS["HTTP_POST_VARS"]["obr02_outrosmotivos"]:$this->obr02_outrosmotivos);
@@ -231,9 +231,9 @@ class cl_licobrasituacao {
         return false;
       }
 
-      if ($this->obr02_dtparalizacao == null || $this->obr02_dtparalizacao == "0") {
+      if ($this->obr02_dtparalisacao == null || $this->obr02_dtparalisacao == "0") {
         $this->erro_sql = " Campo Data Paralização não informado.";
-        $this->erro_campo = "obr02_dtparalizacao_dia";
+        $this->erro_campo = "obr02_dtparalisacao_dia";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -283,7 +283,7 @@ class cl_licobrasituacao {
                                       ,obr02_dtpublicacao
                                       ,obr02_descrisituacao
                                       ,obr02_motivoparalisacao
-                                      ,obr02_dtparalizacao
+                                      ,obr02_dtparalisacao
                                       ,obr02_outrosmotivos
                                       ,obr02_dtretomada
                                       ,obr02_instit
@@ -298,7 +298,7 @@ class cl_licobrasituacao {
                                ,".($this->obr02_dtpublicacao == "null" || $this->obr02_dtpublicacao == ""?"null":"'".$this->obr02_dtpublicacao."'")."
                                ,'$this->obr02_descrisituacao'
                                ,$this->obr02_motivoparalisacao
-                               ,".($this->obr02_dtparalizacao == "null" || $this->obr02_dtparalizacao == ""?"null":"'".$this->obr02_dtparalizacao."'")."
+                               ,".($this->obr02_dtparalisacao == "null" || $this->obr02_dtparalisacao == ""?"null":"'".$this->obr02_dtparalisacao."'")."
                                ,'$this->obr02_outrosmotivos'
                                ,".($this->obr02_dtretomada == "null" || $this->obr02_dtretomada == ""?"null":"'".$this->obr02_dtretomada."'")."
                                ,$this->obr02_instit
@@ -423,12 +423,12 @@ class cl_licobrasituacao {
         }
       }
 
-      if (trim($this->obr02_dtparalizacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_dia"] !="") ) {
-        $sql  .= $virgula." obr02_dtparalizacao = '$this->obr02_dtparalizacao' ";
+      if (trim($this->obr02_dtparalisacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_dia"] !="") ) {
+        $sql  .= $virgula." obr02_dtparalisacao = '$this->obr02_dtparalisacao' ";
         $virgula = ",";
-        if (trim($this->obr02_dtparalizacao) == null ) {
+        if (trim($this->obr02_dtparalisacao) == null ) {
           $this->erro_sql = " Campo Data Paralização não informado.";
-          $this->erro_campo = "obr02_dtparalizacao_dia";
+          $this->erro_campo = "obr02_dtparalisacao_dia";
           $this->erro_banco = "";
           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -436,12 +436,12 @@ class cl_licobrasituacao {
           return false;
         }
       }     else{
-        if (isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalizacao_dia"])) {
-          $sql  .= $virgula." obr02_dtparalizacao = null ";
+        if (isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtparalisacao_dia"])) {
+          $sql  .= $virgula." obr02_dtparalisacao = null ";
           $virgula = ",";
-          if (trim($this->obr02_dtparalizacao) == null ) {
+          if (trim($this->obr02_dtparalisacao) == null ) {
             $this->erro_sql = " Campo Data Paralização não informado.";
-            $this->erro_campo = "obr02_dtparalizacao_dia";
+            $this->erro_campo = "obr02_dtparalisacao_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

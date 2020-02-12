@@ -10,9 +10,19 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-
+  $dtfimmedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtfimmedicao);
+  $dtiniciomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtiniciomedicao);
+  $dtentregamedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtentregamedicao);
 
   try{
+    if($dtfimmedicao < $dtiniciomedicao){
+      throw new Exception("Usuário: Data Fim da Medição deve ser igual ou maior que Data Inicio da Medição.");
+    }
+
+    if($dtentregamedicao < $dtfimmedicao){
+      throw new Exception("Usuário: Entrega da Medição deve ser igual ou maior que Fim da Medição.");
+    }
+
     if($obr03_nummedicao != null){
       $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao"));
 

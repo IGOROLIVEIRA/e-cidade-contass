@@ -15,6 +15,19 @@ $cllicobrasmedicao = new cl_licobrasmedicao;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
+
+  $dtfimmedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtfimmedicao);
+  $dtiniciomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtiniciomedicao);
+  $dtentregamedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtentregamedicao);
+
+  if($dtfimmedicao < $dtiniciomedicao){
+    throw new Exception("Usuário: Data Fim da Medição deve ser igual ou maior que Data Inicio da Medição.");
+  }
+
+  if($dtentregamedicao < $dtfimmedicao){
+    throw new Exception("Usuário: Entrega da Medição deve ser igual ou maior que Fim da Medição.");
+  }
+
   try{
     $resulMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query(null,"obr03_nummedicao",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial"));
     if(pg_num_rows($resulMedicao) > 0){

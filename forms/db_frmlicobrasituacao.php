@@ -138,8 +138,8 @@ $cllicobrasituacao->rotulo->label();
           </td>
         </tr>
       </table>
-      <fieldset id="paralizaobra" style="display: none">
-        <legend>Paralização da Obra</legend>
+      <fieldset id="paralisaobra" style="display: none">
+        <legend>Paralisação da Obra</legend>
         <table>
           <tr>
             <td nowrap title="<?=@$Tobr02_motivoparalisacao?>">
@@ -169,9 +169,9 @@ $cllicobrasituacao->rotulo->label();
               ?>
             </td>
             <td>
-              <?=@$Lobr02_dtparalizacao?>
+              <?=@$Lobr02_dtparalisacao?>
               <?
-              db_inputdata('obr02_dtparalizacao',@$obr02_dtparalizacao_dia,@$obr02_dtparalizacao_mes,@$obr02_dtparalizacao_ano,true,'text',$db_opcao,"")
+              db_inputdata('obr02_dtparalisacao',@$obr02_dtparalisacao_dia,@$obr02_dtparalisacao_mes,@$obr02_dtparalisacao_ano,true,'text',$db_opcao,"")
               ?>
             </td>
           </tr>
@@ -276,11 +276,11 @@ $cllicobrasituacao->rotulo->label();
 
   function js_verificasituacao(value) {
     if(value == '3'){
-      document.getElementById('paralizaobra').style.display = '';
+      document.getElementById('paralisaobra').style.display = '';
     }else if (value == '4'){
-      document.getElementById('paralizaobra').style.display = '';
+      document.getElementById('paralisaobra').style.display = '';
     }else{
-      document.getElementById('paralizaobra').style.display = 'none';
+      document.getElementById('paralisaobra').style.display = 'none';
     }
   }
 
@@ -291,9 +291,9 @@ $cllicobrasituacao->rotulo->label();
       js_pesquisa_obra(false);
     }
     if(situacao == '3' || situacao == '4'){
-      document.getElementById('paralizaobra').style.display = '';
+      document.getElementById('paralisaobra').style.display = '';
     }else{
-      document.getElementById('paralizaobra').style.display = 'none';
+      document.getElementById('paralisaobra').style.display = 'none';
     }
   }
 

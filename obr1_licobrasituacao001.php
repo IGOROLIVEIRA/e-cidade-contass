@@ -20,6 +20,8 @@ if(isset($incluir)){
 
   $datalancamentobra = DateTime::createFromFormat('d/m/Y', $dataobra);
   $dtalancamento = DateTime::createFromFormat('d/m/Y', $obr02_dtlancamento);
+  $dtpublicacao = DateTime::createFromFormat('d/m/Y', $obr02_dtpublicacao);
+  $dtsituacao = DateTime::createFromFormat('d/m/Y', $obr02_dtsituacao);
 
   try {
 
@@ -28,6 +30,11 @@ if(isset($incluir)){
         throw new Exception ("Usuário: Data de Lançamento deve ser maior ou igual a data de lançamento da Obra.");
       }
     }
+
+    if($dtpublicacao < $dtsituacao){
+      throw new Exception ("Usuário: Data de Publicação deve ser maior ou igual a data de Situação da Obra.");
+    }
+
     db_inicio_transacao();
     $cllicobrasituacao->obr02_seqobra                  = $obr02_seqobra;
     $cllicobrasituacao->obr02_dtlancamento             = $obr02_dtlancamento;
@@ -37,7 +44,7 @@ if(isset($incluir)){
     $cllicobrasituacao->obr02_dtpublicacao             = $obr02_dtpublicacao;
     $cllicobrasituacao->obr02_descrisituacao           = $obr02_descrisituacao;
     $cllicobrasituacao->obr02_motivoparalisacao        = $obr02_motivoparalisacao;
-    $cllicobrasituacao->obr02_dtparalizacao            = $obr02_dtparalizacao;
+    $cllicobrasituacao->obr02_dtparalisacao            = $obr02_dtparalisacao;
     $cllicobrasituacao->obr02_outrosmotivos            = $obr02_outrosmotivos;
     $cllicobrasituacao->obr02_dtretomada               = $obr02_dtretomada;
     $cllicobrasituacao->obr02_instit                   = db_getsession('DB_instit');
@@ -69,8 +76,8 @@ if(isset($incluir)){
     height: 43px;
   }
   #obr02_outrosmotivos{
-    width: 739px;
-    height: 20px;
+    width: 756px;
+    height: 34px;
   }
   #tipocompra{
   width: 263px;
