@@ -47,11 +47,10 @@ class GerarRALIC extends GerarAM
             for ($iCont = 0; $iCont < pg_num_rows($rsRALIC10); $iCont++) {
 
                 $aRALIC10 = pg_fetch_array($rsRALIC10, $iCont);
-
                 $aCSVRALIC10['si180_tiporegistro']               = $this->padLeftZero($aRALIC10['si180_tiporegistro'], 2);
-                $aCSVRALIC10['si180_codorgaoresp']               = substr($aRALIC10['si180_codorgaoresp'], 0, 3);
+                $aCSVRALIC10['si180_codorgaoresp']               = $this->padLeftZero($aRALIC10['si180_codorgaoresp'], 3);
                 $aCSVRALIC10['si180_codunidadesubresp']          = $this->padLeftZero($aRALIC10['si180_codunidadesubresp'], 5);
-                $aCSVRALIC10['si180_codunidadesubrespestadual']  = substr($aRALIC10['si180_codunidadesubrespestadual'], 4);
+                $aCSVRALIC10['si180_codunidadesubrespestadual']  = $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 4);
                 $aCSVRALIC10['si180_exerciciolicitacao']         = $this->padLeftZero($aRALIC10['si180_exerciciolicitacao'], 4);
                 $aCSVRALIC10['si180_nroprocessolicitatorio']     =  substr($aRALIC10['si180_nroprocessolicitatorio'], 0, 12);
                 $aCSVRALIC10['si180_tipocadastradolicitacao']    = $this->padLeftZero($aRALIC10['si180_tipocadastradolicitacao'], 1);
@@ -61,13 +60,13 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_nroedital']                  = $aRALIC10['si180_nroedital'];
                 $aCSVRALIC10['si180_exercicioedital']            = $aRALIC10['si180_exercicioedital'];
                 $aCSVRALIC10['si180_dtpublicacaoeditaldo']       = $this->sicomDate($aRALIC10['si180_dtpublicacaoeditaldo']);
-                $aCSVRALIC10['si180_link']                       = substr($aRALIC10['si180_link'], 0, 150);;
-                $aCSVRALIC10['si180_tipolicitacao']              = $aRALIC10['si180_tipolicitacao'] == 0 ? ' ' : $aRALIC10['si180_tipolicitacao'];
+                $aCSVRALIC10['si180_link']                       = substr($aRALIC10['si180_link'], 0, 150);
+                $aCSVRALIC10['si180_tipolicitacao']              = $this->padLeftZero($aRALIC10['si180_tipolicitacao'], 1);
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
                 $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
                 $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? ' ' : $aRALIC10['si180_regimeexecucaoobras'];
                 $aCSVRALIC10['si180_vlcontratacao']              = $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 4);
-                $aCSVRALIC10['si180_bdi']                        = $aRALIC10['si180_bdi'];
+                $aCSVRALIC10['si180_bdi']                        = $this->sicomNumberReal($aRALIC10['si180_bdi'], 4);
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
                 $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
                 $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
@@ -80,23 +79,22 @@ class GerarRALIC extends GerarAM
                     $aRALIC11 = pg_fetch_array($rsRALIC11, $iCont2);
 
                     if ($aRALIC10['si180_sequencial'] == $aRALIC11['si181_reg10']) {
-
-                        $aCSVRALIC11['si181_tiporegistro']                    = $this->padLeftZero($aRALIC11['si181_tiporegistro'], 2);
-                        $aCSVRALIC11['si181_codorgaoresp']                    = substr($aRALIC11['si181_codorgaoresp'], 0, 3);
-                        $aCSVRALIC11['si181_codunidadesubresp']               = substr($aRALIC10['si181_codunidadesubres0p'], 0, 5);
-                        $aCSVRALIC11['si181_codunidadesubrespestadual']       = substr($aRALIC11['si181_codunidadesubrespestadual'], 0, 4);
+						$aCSVRALIC11['si181_tiporegistro']                    = $this->padLeftZero($aRALIC11['si181_tiporegistro'], 2);
+                        $aCSVRALIC11['si181_codorgaoresp']                    = $this->padLeftZero(intval($aRALIC11['si181_codorgaoresp']), 3);
+                        $aCSVRALIC11['si181_codunidadesubresp']               = $this->padLeftZero($aRALIC11['si181_codunidadesubresp'], 5);
+                        $aCSVRALIC11['si181_codunidadesubrespestadual']       = $this->padLeftZero(intval($aRALIC11['si181_codunidadesubrespestadual']), 4);
                         $aCSVRALIC11['si181_exerciciolicitacao']              = $this->padLeftZero($aRALIC11['si181_exerciciolicitacao'], 4);
                         $aCSVRALIC11['si181_nroprocessolicitatorio']          = $aRALIC11['si181_nroprocessolicitatorio'];
                         $aCSVRALIC11['si181_codobralocal']                    = $aRALIC11['si181_codobralocal'];
                         $aCSVRALIC11['si181_classeobjeto']                    = $aRALIC11['si181_classeobjeto'];
                         $aCSVRALIC11['si181_tipoatividadeobra']               = $this->padLeftZero($aRALIC11['si181_tipoatividadeobra'], 2);
-                        $aCSVRALIC11['si181_tipoatividadeservico']            = $aRALIC11['si181_tipoatividadeservico'];
+                        $aCSVRALIC11['si181_tipoatividadeservico']            = $aRALIC11['si181_tipoatividadeservico'];// != '' ? $this->padLeftZero($aRALIC11['si181_tipoatividadeservico'], 2) : ' ';
                         $aCSVRALIC11['si181_dscatividadeservico']             = $aRALIC11['si181_dscatividadeservico'];
-                        $aCSVRALIC11['si181_tipoatividadeservespecializado']  = $aRALIC11['si181_tipoatividadeservespecializado'];
+                        $aCSVRALIC11['si181_tipoatividadeservespecializado']  = $aRALIC11['si181_tipoatividadeservespecializado'] == null ? '' : $this->padLeftZero(intval($aRALIC11['si181_tipoatividadeservespecializado']), 2);
                         $aCSVRALIC11['si181_dscatividadeservespecializado']   = $aRALIC11['si181_dscatividadeservespecializado'];
-                        $aCSVRALIC11['si181_codfuncao']                       = $aRALIC11['si181_codfuncao'];
-                        $aCSVRALIC11['si181_codsubfuncao']                    = $aRALIC11['si181_codsubfuncao'];
-                        $aCSVRALIC11['si181_codbempublico']                   = $aRALIC11['si181_codbempublico'];
+                        $aCSVRALIC11['si181_codfuncao']                       = $this->padLeftZero($aRALIC11['si181_codfuncao'], 2);
+                        $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero($aRALIC11['si181_codsubfuncao'], 3);
+                        $aCSVRALIC11['si181_codbempublico']                   = $this->padLeftZero($aRALIC11['si181_codbempublico'], 4);
 
                         $this->sLinha = $aCSVRALIC11;
                         $this->adicionaLinha();
@@ -109,11 +107,10 @@ class GerarRALIC extends GerarAM
                     $aRALIC12 = pg_fetch_array($rsRALIC12, $iCont3);
 
                     if ($aRALIC10['si180_sequencial'] == $aRALIC12['si182_reg10']) {
-
-                        $aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
-                        $aCSVRALIC12['si182_codorgaoresp']                = substr($aRALIC12['si182_codorgaoresp'], 0, 3);
-                        $aCSVRALIC12['si182_codunidadesubresp']           = substr($aRALIC12['si182_codunidadesubresp'], 0, 5);
-                        $aCSVRALIC12['si182_codunidadesubrespestadual']   = substr($aRALIC12['si182_codunidadesubrespestadual'], 0, 4);
+                    	$aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
+                        $aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
+                        $aCSVRALIC12['si182_codunidadesubresp']           = $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
+                        $aCSVRALIC12['si182_codunidadesubrespestadual']   = $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
                         $aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
                         $aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
                         $aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];

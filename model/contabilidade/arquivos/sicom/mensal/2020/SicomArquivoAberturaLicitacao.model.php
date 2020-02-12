@@ -597,7 +597,7 @@ SELECT DISTINCT '14' AS tipoRegistro,
      JOIN orcorgao ON o40_orgao = o41_orgao
      AND o40_anousu = o41_anousu
      WHERE db01_coddepto=l20_codepartamento
-         AND db01_anousu=2020
+         AND db01_anousu=".db_getsession('DB_anousu')."
      LIMIT 1) AS codUnidadeSubResp,
                 liclicita.l20_anousu AS exercicioLicitacao,
                 liclicita.l20_edital AS nroProcessoLicitatorio,
