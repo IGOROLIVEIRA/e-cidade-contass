@@ -60,8 +60,8 @@ if(isset($alterar)){
     height: 43px;
   }
   #obr02_outrosmotivos{
-    width: 739px;
-    height: 20px;
+    width: 756px;
+    height: 34px;
   }
 
 </style>

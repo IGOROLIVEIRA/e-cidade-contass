@@ -124,7 +124,7 @@ $cllicobrasmedicao->rotulo->label();
         </td>
         <td colspan="3">
           <?
-          db_textarea('obr03_descmedicao',0,0,$Iobr03_descmedicao,true,'text',$db_opcao,"")
+          db_textarea('obr03_descmedicao',0,0,$Iobr03_descmedicao,true,'text',$db_opcao,"","","",'500')
           ?>
         </td>
       </tr>
