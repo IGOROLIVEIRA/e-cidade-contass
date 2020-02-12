@@ -78,13 +78,13 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobras(
-                          obr01_sequencial		 int8 NOT NULL default 0,
-                          obr01_licitacao			 int8 NOT NULL default 0,
-                          obr01_dtlancamento		 date NOT NULL default null,
-                          obr01_numeroobra		 int8 NOT NULL default 0,
-                          obr01_linkobra			 text NOT NULL ,
-                          obr01_dtinicioatividades date NOT NULL default null,
-                          obr01_instit			  int8 NOT NULL default 0);
+                          obr01_sequencial		 int8  default 0,
+                          obr01_licitacao			 int8  default 0,
+                          obr01_dtlancamento		 date  default null,
+                          obr01_numeroobra		 int8  default 0,
+                          obr01_linkobra			 text  ,
+                          obr01_dtinicioatividades date  default null,
+                          obr01_instit			  int8  default 0);
 
 
                           -- Criando  sequences
@@ -140,15 +140,15 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobrasresponsaveis(
-                          obr05_sequencial		      int8 NOT NULL,
-                          obr05_seqobra 			      int8 NOT NULL,
-                          obr05_responsavel		      int8 NOT NULL,
-                          obr05_tiporesponsavel	    int8 NOT NULL,
-                          obr05_tiporegistro		    int8 NOT NULL,
-                          obr05_numregistro		      varchar(10) NOT NULL ,
+                          obr05_sequencial		      int8 ,
+                          obr05_seqobra 			      int8 ,
+                          obr05_responsavel		      int8 ,
+                          obr05_tiporesponsavel	    int8 ,
+                          obr05_tiporegistro		    int8 ,
+                          obr05_numregistro		      varchar(10)  ,
                           obr05_numartourrt		      int8 ,
-                          obr05_vinculoprofissional int8 NOT NULL,
-                          obr05_instit			        int8 NOT NULL);
+                          obr05_vinculoprofissional int8 ,
+                          obr05_instit			        int8 );
 
 
                           -- Criando  sequences
@@ -230,19 +230,19 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobrasituacao(
-                          obr02_sequencial                int8 NOT NULL ,
-                          obr02_seqobra           		    int8 NOT NULL ,
-                          obr02_dtlancamento              date NOT NULL ,
-                          obr02_situacao          		    int8 NOT NULL ,
-                          obr02_dtsituacao                date NOT NULL ,
-                          obr02_veiculopublicacao         text NOT NULL ,
-                          obr02_dtpublicacao              date NOT NULL ,
-                          obr02_descrisituacao            text NOT NULL ,
-                          obr02_motivoparalisacao         int8 NOT NULL ,
-                          obr02_dtparalisacao             date NOT NULL ,
-                          obr02_outrosmotivos             text NOT NULL ,
-                          obr02_dtretomada                date NOT NULL ,
-                          obr02_instit            		    int8 NOT NULL );
+                          obr02_sequencial                int8  ,
+                          obr02_seqobra           		    int8  ,
+                          obr02_dtlancamento              date  ,
+                          obr02_situacao          		    int8  ,
+                          obr02_dtsituacao                date  ,
+                          obr02_veiculopublicacao         text  ,
+                          obr02_dtpublicacao              date  ,
+                          obr02_descrisituacao            text  ,
+                          obr02_motivoparalisacao         int8  ,
+                          obr02_dtparalisacao             date  ,
+                          obr02_outrosmotivos             text  ,
+                          obr02_dtretomada                date  ,
+                          obr02_instit            		    int8  );
 
 
 
@@ -320,18 +320,18 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobrasmedicao(
-                          obr03_sequencial                int8 NOT NULL ,
-                          obr03_seqobra           		  int8 NOT NULL ,
-                          obr03_dtlancamento              date NOT NULL ,
-                          obr03_nummedicao          	  int8 NOT NULL ,
-                          obr03_tipomedicao          	  int8 NOT NULL ,
-                          obr03_dtiniciomedicao           date NOT NULL ,
-                          obr03_outrostiposmedicao        text NOT NULL ,
-                          obr03_descmedicao 	          text NOT NULL ,
-                          obr03_dtfimmedicao              date NOT NULL ,
-                          obr03_dtentregamedicao          date NOT NULL ,
-                          obr03_vlrmedicao		          float8 NOT NULL ,
-                          obr03_instit          		  int8 NOT NULL );
+                          obr03_sequencial                int8  ,
+                          obr03_seqobra           		  int8  ,
+                          obr03_dtlancamento              date  ,
+                          obr03_nummedicao          	  int8  ,
+                          obr03_tipomedicao          	  int8  ,
+                          obr03_dtiniciomedicao           date  ,
+                          obr03_outrostiposmedicao        text  ,
+                          obr03_descmedicao 	          text  ,
+                          obr03_dtfimmedicao              date  ,
+                          obr03_dtentregamedicao          date  ,
+                          obr03_vlrmedicao		          float8  ,
+                          obr03_instit          		  int8  );
 
                           -- Criando  sequences
 
@@ -389,10 +389,10 @@ class Oc11331 extends AbstractMigration
 
                           -- Módulo: Obras
                           CREATE TABLE licobrasanexo(
-                          obr04_sequencial                int8 NOT NULL ,
-                          obr04_licobrasmedicao           int8 NOT NULL ,
-                          obr04_codimagem                 varchar(40) NOT NULL ,
-                          obr04_legenda                   varchar(40) NOT NULL);
+                          obr04_sequencial                int8  ,
+                          obr04_licobrasmedicao           int8  ,
+                          obr04_codimagem                 varchar(40)  ,
+                          obr04_legenda                   varchar(40) );
 
 
                           -- Criando  sequences
