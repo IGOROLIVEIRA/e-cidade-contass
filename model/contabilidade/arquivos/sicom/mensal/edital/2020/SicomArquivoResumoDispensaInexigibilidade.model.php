@@ -251,7 +251,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                                                INNER JOIN liccomissao ON liccomissao.l30_codigo = lic2.l20_liccomissao
                                                LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
                                                LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
-                                               WHERE lic2.l20_nroedital = liclicita.l20_nroedital)
+                                               WHERE lic2.l20_codigo = liclicita.l20_codigo)
                                           AND pc23_valor <> 0
                                           AND pc23_vlrun <> 0
                                       GROUP BY pc11_seq,
@@ -273,7 +273,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
     
 ";
     $rsResult10 = db_query($sSql);
-
 
     /**
      * registro 10
@@ -314,7 +313,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             * Selecionar informações do registro 11
             */
 
-            $sSql = "SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+            $sSql = "SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                     (SELECT CASE
                                 WHEN o41_subunidade != 0
                                      OR NOT NULL THEN lpad((CASE
@@ -347,8 +346,9 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                      WHERE db01_coddepto=l20_codepartamento
                          AND db01_anousu = " .db_getsession('DB_anousu'). "
                      LIMIT 1) AS codUnidadeSubResp,
-                       liclicita.l20_anousu AS exercicioLicitacao,
-                       liclicita.l20_edital AS nroProcessoLicitatorio,
+                       pctipocompratribunal.l44_codigotribunal AS tipoProcesso,
+                       liclicita.l20_anousu AS exercicioProcesso,
+                       liclicita.l20_edital AS nroProcesso,
                        obrasdadoscomplementares.db150_codobra as codObraLocal,
                        obrasdadoscomplementares.db150_classeobjeto as classeObjeto,
                        obrasdadoscomplementares.db150_atividadeobra as tipoAtividadeObra,
@@ -356,20 +356,23 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                        obrasdadoscomplementares.db150_descratividadeservico as dscAtividadeServico,
                        obrasdadoscomplementares.db150_atividadeservicoesp as tipoAtividadeServEspecializado,
                        obrasdadoscomplementares.db150_descratividadeservicoesp as dscAtividadeServEspecializado,
-                       '1' as codFuncao,
-                       '2' as codSubFuncao,
-                       '3' as codBemPublico
+                       orcdotacao.o58_funcao AS codFuncao,
+       				   orcdotacao.o58_subfuncao AS codSubFuncao,
+                       obrasdadoscomplementares.db150_subgrupobempublico as codBemPublico
                 FROM liclicita
+                INNER JOIN liclicitem ON (liclicita.l20_codigo=liclicitem.l21_codliclicita)
+				INNER JOIN pcprocitem ON (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
+				INNER JOIN pcdotac ON (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
+				INNER JOIN orcdotacao ON (pcdotac.pc13_anousu=orcdotacao.o58_anousu AND pcdotac.pc13_coddot=orcdotacao.o58_coddot)
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
-                WHERE db_config.codigo= 1
+                WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103)";
             $rsResult11 = db_query($sSql);
-
             $aDadosAgrupados11 = array();
             for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
@@ -390,7 +393,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                     $clredispi11->si184_nroprocesso = $oResult11->nroprocesso;
                     $clredispi11->si184_codobralocal = $oResult11->codobralocal;
                     $clredispi11->si184_tipoprocesso = $oResult11->tipoprocesso;
-                    $clredispi11->si184_classeobjeto = $oResult11->classeobjeto;
+                    $clredispi11->si184_classeobjeto = intval($oResult11->classeobjeto);
                     $clredispi11->si184_tipoatividadeobra = $oResult11->tipoatividadeobra;
                     $clredispi11->si184_tipoatividadeservico = $oResult11->tipoatividadeservico;
                     $clredispi11->si184_dscatividadeservico = $oResult11->dscatividadeservico;
@@ -419,7 +422,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
             * */
 
             $sSql = "
-                SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+                SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                     (SELECT CASE
                                 WHEN o41_subunidade != 0
                                      OR NOT NULL THEN lpad((CASE
@@ -472,11 +475,11 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial NOT IN (100, 101, 102, 103);
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103);
     ";
             $rsResult12 = db_query($sSql);
 
