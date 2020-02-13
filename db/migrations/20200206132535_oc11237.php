@@ -66,6 +66,14 @@ class Oc11237 extends PostgresMigration
         -- ADICIONA ITEM A VIRADA
         INSERT INTO db_viradacaditem VALUES((SELECT MAX(c33_sequencial)+1 FROM db_viradacaditem), 'DE/PARA MSC, SIOPE, SIOPS');
 
+        -- REALIZA VIRADA DOS ITENS 2019 PARA 2020
+        
+        SELECT fc_duplica_exercicio('vinculopcaspmsc', 'c210_anousu', 2019, 2020,null);
+        
+        SELECT fc_duplica_exercicio('elemdespmsc', 'c211_anousu', 2019, 2020,null);
+        
+        SELECT fc_duplica_exercicio('natdespmsc', 'c212_anousu', 2019, 2020,null);
+
         COMMIT;
 
 SQL;
