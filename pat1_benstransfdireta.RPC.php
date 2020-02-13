@@ -18,6 +18,7 @@ include ("classes/db_histbemdiv_classe.php");
 include ("classes/db_bensdiv_classe.php");
 include ("classes/db_histbensocorrencia_classe.php");
 include ("classes/db_benstransf_classe.php");
+include ("classes/db_benstransfdiv_classe.php");
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -35,6 +36,7 @@ $cldepartdiv = new cl_departdiv;
 $clhistbemdiv = new cl_histbemdiv;
 $clbensdiv = new cl_bensdiv;
 $clhistbemocorrencia = new cl_histbensocorrencia;
+$clbenstransfdiv = new cl_benstransfdiv;
 $db_opcao = 1;
 $db_botao = true;
 
@@ -107,11 +109,11 @@ try{
                         }
                         //Inseri na tabela histbensocorrencia
                         if ($sqlerro == false) {
-                            $sQueryOrigemDestino = "select dp1.descrdepto as origem, dp2.descrdepto as destino 
-																	from benstransf as bt1 
+                            $sQueryOrigemDestino = "select dp1.descrdepto as origem, dp2.descrdepto as destino
+																	from benstransf as bt1
 																	inner join db_depart as dp1 on bt1.t93_depart = dp1.coddepto
 																	inner join benstransfdes as btd1 on bt1.t93_codtran = btd1.t94_codtran
-																	inner join db_depart as dp2 on dp2.coddepto = btd1.t94_depart 
+																	inner join db_depart as dp2 on dp2.coddepto = btd1.t94_depart
 																	where bt1.t93_codtran = $oParam->t96_codtran";
                             $rsQueryOrigemDestino = db_query($sQueryOrigemDestino);
                             if (pg_num_rows($rsQueryOrigemDestino) == 1){
@@ -156,11 +158,18 @@ try{
                                 break;
                             }
                         }
-                        $info = "t31_divisao_$t95_codbem";
-                        if ($$info!=""){
-                            if ($sqlerro == false) {
+                      $info = "t31_divisao_$t95_codbem";
+
+                      if ($info!=""){
+
+                        $result_clbenstransfdiv = $clbenstransfdiv->sql_record($clbenstransfdiv->sql_query_file(null,"t31_divisao",null,"t31_bem = $t95_codbem and t31_codtran = $oParam->t96_codtran"));
+                        if($clbenstransfdiv->numrows>0){
+                          db_fieldsmemory($result_clbenstransfdiv,0);
+                        }
+
+                        if ($sqlerro == false) {
                                 $clhistbemdiv->t32_histbem=$t97_histbem;
-                                $clhistbemdiv->t32_divisao=$$info;
+                                $clhistbemdiv->t32_divisao=$t31_divisao;
                                 $clhistbemdiv->incluir(null);
                                 if ($clhistbemdiv->erro_status == 0) {
                                     $sqlerro = true;
@@ -178,7 +187,7 @@ try{
                                     }
                                 }
                                 if ($sqlerro == false) {
-                                    $clbensdiv->t33_divisao=$$info;
+                                    $clbensdiv->t33_divisao=$t31_divisao;
                                     $clbensdiv->incluir($t95_codbem);
                                     if($clbensdiv->erro_status==0){
                                         $sqlerro=true;
