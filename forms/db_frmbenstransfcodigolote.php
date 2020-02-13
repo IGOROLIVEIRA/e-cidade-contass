@@ -77,26 +77,26 @@
 <script>
 
 
-/*
-  Array para recuperar todos os itens marcados quando fizer o uso do filtro da placa e a lista for atualizada.
-*/
-var itens = [];
-
-let ordenacao = '';
-document.getElementById('placa').style.width = '100px';
-document.getElementById('placa').addEventListener("keyup", () => {
-  let valor = document.form1.placa.value;
-  filtraBens(valor);
-});
-
-let headers = document.getElementsByTagName('th');
-
-for(let cont=0; cont < headers.length - 1; cont++){
-  headers[cont].style.textDecoration = "underline";
-  headers[cont].addEventListener('click', () => {
-    extraiItens(headers[cont].innerText);
-  });
-}
+  ///*
+  //  Array para recuperar todos os itens marcados quando fizer o uso do filtro da placa e a lista for atualizada.
+  //*/
+  //var itens = [];
+  //
+  //let ordenacao = '';
+  //document.getElementById('placa').style.width = '100px';
+  //document.getElementById('placa').addEventListener("keyup", () => {
+  //  let valor = document.form1.placa.value;
+  //  filtraBens(valor);
+  //});
+  //
+  //let headers = document.getElementsByTagName('th');
+  //
+  //for(let cont=0; cont < headers.length - 1; cont++){
+  //  headers[cont].style.textDecoration = "underline";
+  //  headers[cont].addEventListener('click', () => {
+  //    extraiItens(headers[cont].innerText);
+  //  });
+  //}
 
 
 function js_pesquisaBens(){
