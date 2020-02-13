@@ -1193,7 +1193,7 @@ class cl_liclicita
                 }
 
                 //alteração do campo l20_tipliticacao e l20_naturezaobjeto
-                echo 'Licitacao: ', $this->l20_tipliticacao;die();
+
                 if (trim($this->l20_tipliticacao != 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipliticacao"]))) {
                     $sql .= $virgula . " l20_tipliticacao = '$this->l20_tipliticacao' ";
                     $virgula = ",";
