@@ -182,7 +182,7 @@ function gerarSQLReceitas($sMes, $sEnte) {
         INNER JOIN conlancam ON c74_codlan=c70_codlan
         INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
         INNER JOIN entesconsorciados ON c216_enteconsorciado=c215_sequencial
-        INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo 
+        INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo
         WHERE date_part('MONTH',c70_data) <={$nMes}
             AND date_part('YEAR',c70_data)={$nAno}
             AND c216_enteconsorciado={$nEnte}
@@ -225,6 +225,7 @@ try {
 
   $rsRelatorio = db_query(gerarSQL($_GET['mes'], $_GET['c215_sequencial']));
 
+
   $oInfoRelatorio = new stdClass();
   $aDadosConsulta = db_utils::getCollectionByRecord($rsRelatorio);
   $oInfoRelatorio->aDados = array();
@@ -254,10 +255,11 @@ try {
   $rsRelatorioFinanceiro = db_query(gerarSQLReceitas($_GET['mes'], $_GET['c215_sequencial']));
 
   $aDadosConsultaFinanc = db_utils::getCollectionByRecord($rsRelatorioFinanceiro);
+
   $oInfoRelatorio->aDadosFinanceiros = array();
   $oEntes = new cl_entesconsorciados();
   foreach ($aDadosConsultaFinanc as $key => $oRow) {
-    
+
     $oRelFinanceiro = new stdClass();
     $oRelFinanceiro->classificacao = $oRow->c216_tiporeceita." - ".$oRow->c218_descricao;
     $rsDesp = $oEntes->sql_record(gerarSQLDespesas($_GET['mes'], $_GET['c215_sequencial'],$oRow->c216_tiporeceita));
@@ -268,7 +270,7 @@ try {
     $oRelFinanceiro->rps = 0;
     $oRelFinanceiro->saldo = $oRelFinanceiro->saldoinicial+$oRelFinanceiro->receitasatemes-$oRelFinanceiro->despesasatemes-$oRelFinanceiro->rps;
     $oInfoRelatorio->aDadosFinanceiros[] = $oRelFinanceiro;
-  
+
   }
 
   switch ($_GET['tipoarquivo']) {

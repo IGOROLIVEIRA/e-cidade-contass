@@ -139,7 +139,45 @@ switch ($oParam->exec){
 
         break; // buscaDotacoes
 
+      case "buscaProjAtiv":
 
+          require_once("classes/db_orcprojativ_classe.php");
+
+          try {
+
+              $oProjAtivs = new cl_orcprojativ();
+
+              $sCampos = implode(', ', array(
+                  'o55_projativ',
+                  'o55_descr',
+              ));
+
+              $sWhere = "o55_anousu = {$nAnoUsu}";
+
+              $sSql = $oProjAtivs->sql_query_projativ_rateio(null, null, $sCampos, 'o55_projativ', $sWhere);
+
+              $rsProjAtivs = $oProjAtivs->sql_record($sSql);
+
+              $aProjAtivs = db_utils::getCollectionByRecord($rsProjAtivs);
+
+              $oRetorno->projetos = array();
+
+              foreach ($aProjAtivs as $oProjAtiv) {
+
+                  $oNovaProjAtiv = new stdClass();
+
+                  $oNovaProjAtiv->codigo   = str_pad($oProjAtiv->o55_projativ, 4, '0', STR_PAD_LEFT);
+                  $oNovaProjAtiv->descricao  = utf8_encode($oProjAtiv->o55_descr);
+
+                  $oRetorno->projetos[] = $oNovaProjAtiv;
+
+              }
+
+          } catch (Exception $e) {
+              $oRetorno->erro = $e->getMessage();
+          }
+
+          break; // buscaProjetos
     case 'processarRateio':
 
         require_once('classes/db_conlancamdoc_classe.php');
@@ -150,9 +188,12 @@ switch ($oParam->exec){
 
         try {
 
-            if (empty($oParam->dotacoes)) {
-                throw new Exception("Selecione pelo menos uma dotação", 1);
-            }
+            // if (empty($oParam->dotacoes)) {
+            //     throw new Exception("Selecione pelo menos uma dotação", 1);
+            // }
+            if (empty($oParam->projetos)) {
+              throw new Exception("Selecione pelo menos um projeto", 1);
+          }
             if (empty($oParam->entes)) {
                 throw new Exception("Erro ao processar os entes: nenhum ente encontrado", 1);
             }
@@ -168,9 +209,9 @@ switch ($oParam->exec){
                 $aEntes[$oEnte->id] = $oEnte->percentual;
             }
 
-            $sDotacoes = implode(', ', $oParam->dotacoes);
+            $sProjetos = implode(', ', $oParam->projetos);
             //if (intval($oParam->mes) < 12) {
-            $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sDotacoes);
+            $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sProjetos);
 
             $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
 

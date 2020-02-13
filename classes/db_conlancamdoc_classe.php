@@ -595,6 +595,7 @@ if($dbwhere==""){
                  END) AS pag,
              0 AS paganulado
       FROM conlancamdoc
+      INNER JOIN conhistdoc on c53_coddoc=c71_coddoc
       INNER JOIN conlancam ON c70_codlan=c71_codlan
       INNER JOIN conlancamele ON c67_codlan=c71_codlan
       INNER JOIN conlancaminstit ON c71_codlan=c02_codlan
@@ -604,12 +605,12 @@ if($dbwhere==""){
       INNER JOIN orcdotacao ON c73_coddot = o58_coddot
       AND c73_anousu=o58_anousu
       INNER JOIN orctiporec ON o15_codigo = o58_codigo
-      WHERE c71_coddoc IN (5,
-                           6)
+      WHERE c53_tipo IN (30,
+                           31)
           AND DATE_PART('YEAR',c71_data) = '{$nAnoUsu}'
           AND DATE_PART('MONTH',c71_data) = '{$nMes}'
           AND c02_instit = '{$nInstit}'
-          AND o58_coddot IN ({$sDotacoes})
+          AND o58_projativ IN ({$sDotacoes})
       GROUP BY o58_funcao,
                o58_subfuncao,
                o15_codtri,
@@ -686,7 +687,7 @@ if($dbwhere==""){
                    o15_codtri,
                    o56_elemento
         ";
-    
+
     $rsConLancamDoc = $this->sql_record($sSql);
     $aConLancamDoc = db_utils::getCollectionByRecord($rsConLancamDoc);
 
