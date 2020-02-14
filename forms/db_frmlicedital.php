@@ -80,7 +80,7 @@ $db_botao = true;
                   <td>
                     <?
                     db_input('numero_edital',10,'',true,'text',3,"");
-                    db_input('codigolicitacao',10,'',true,'text',3);
+                    db_input('codigolicitacao',10,'',true,'hidden',3);
                     db_input('naturezaobjeto',10,'',true,'hidden',3);
                     ?>
                   </td>
@@ -240,8 +240,8 @@ $db_botao = true;
 
     }
 
-    function js_exibeDadosCompl(idObra = null){
-        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '');
+    function js_exibeDadosCompl(idObra = null, incluir = true){
+        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir);
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
         if(idObra){
@@ -342,11 +342,10 @@ $db_botao = true;
 
     js_init();
 
-
     function js_buscaDadosComplementares() {
         var sUrlRpc = "con4_endereco.RPC.php";
         let oParam = new Object();
-        oParam.exec = 'findDadosObraEdital';
+        oParam.exec = 'findDadosObraLicitacao';
         oParam.codLicitacao = codigoLicitacao;
 
         var oAjax = new Ajax.Request(
@@ -380,7 +379,7 @@ $db_botao = true;
 
     function js_lancaDadosAlt(valor){
         $('idObra').value = valor;
-        js_exibeDadosCompl(valor);
+        js_exibeDadosCompl(valor, false);
     }
 
     function js_excluiDados(valor){

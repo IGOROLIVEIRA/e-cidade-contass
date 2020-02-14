@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -45,6 +45,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco) {
     this.iSegundoLongitude = '';
     this.iBdi = '';
     this.iLicitacao = '';
+    this.acao = incluir;
     this.callBackFunction = function () {
 
     }
@@ -3731,17 +3732,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco) {
         oEndereco.bdi = me.getBdi();
         oEndereco.licitacao = me.getLicitacao();
         oEndereco.descrBairro = $('txtDescrBairro' + sId).value;
-        console.log('Dados passados do endereço: ', oEndereco);
 
         oDados = new Object();
         oDados.exec = 'salvarDadosComplementares';
         oDados.endereco = oEndereco;
-        //
+        oDados.acao = me.acao;
+
         var msgDiv = "Salvando Dados Complementares, aguarde...";
         js_divCarregando(msgDiv, 'msgBox');
-        //
-        //   var aParam = Object.toJSON(oDados);
-        //
         var oAjax = new Ajax.Request(
             me.sUrlRpc,
             {
