@@ -50,7 +50,7 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_tiporegistro']               = $this->padLeftZero($aRALIC10['si180_tiporegistro'], 2);
                 $aCSVRALIC10['si180_codorgaoresp']               = $this->padLeftZero($aRALIC10['si180_codorgaoresp'], 3);
                 $aCSVRALIC10['si180_codunidadesubresp']          = $this->padLeftZero($aRALIC10['si180_codunidadesubresp'], 5);
-                $aCSVRALIC10['si180_codunidadesubrespestadual']  = $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 4);
+                $aCSVRALIC10['si180_codunidadesubrespestadual']  = !$aRALIC10['si180_codunidadesubrespestadual'] ? ' ': $this->padLeftZero($aRALIC10['si180_codunidadesubrespestadual'], 4);
                 $aCSVRALIC10['si180_exerciciolicitacao']         = $this->padLeftZero($aRALIC10['si180_exerciciolicitacao'], 4);
                 $aCSVRALIC10['si180_nroprocessolicitatorio']     =  substr($aRALIC10['si180_nroprocessolicitatorio'], 0, 12);
                 $aCSVRALIC10['si180_tipocadastradolicitacao']    = $this->padLeftZero($aRALIC10['si180_tipocadastradolicitacao'], 1);
@@ -82,12 +82,12 @@ class GerarRALIC extends GerarAM
 						$aCSVRALIC11['si181_tiporegistro']                    = $this->padLeftZero($aRALIC11['si181_tiporegistro'], 2);
                         $aCSVRALIC11['si181_codorgaoresp']                    = $this->padLeftZero(intval($aRALIC11['si181_codorgaoresp']), 3);
                         $aCSVRALIC11['si181_codunidadesubresp']               = $this->padLeftZero($aRALIC11['si181_codunidadesubresp'], 5);
-                        $aCSVRALIC11['si181_codunidadesubrespestadual']       = $this->padLeftZero(intval($aRALIC11['si181_codunidadesubrespestadual']), 4);
+                        $aCSVRALIC11['si181_codunidadesubrespestadual']       = !trim($aRALIC11['si181_codunidadesubrespestadual']) ? ' ': $this->padLeftZero(intval($aRALIC11['si181_codunidadesubrespestadual']), 4);
                         $aCSVRALIC11['si181_exerciciolicitacao']              = $this->padLeftZero($aRALIC11['si181_exerciciolicitacao'], 4);
                         $aCSVRALIC11['si181_nroprocessolicitatorio']          = $aRALIC11['si181_nroprocessolicitatorio'];
                         $aCSVRALIC11['si181_codobralocal']                    = $aRALIC11['si181_codobralocal'];
                         $aCSVRALIC11['si181_classeobjeto']                    = $aRALIC11['si181_classeobjeto'];
-                        $aCSVRALIC11['si181_tipoatividadeobra']               = $this->padLeftZero($aRALIC11['si181_tipoatividadeobra'], 2);
+                        $aCSVRALIC11['si181_tipoatividadeobra']               = !trim($aCSVRALIC11['si181_tipoatividadeobra']) ? '' : $this->padLeftZero($aRALIC11['si181_tipoatividadeobra'], 2);
                         $aCSVRALIC11['si181_tipoatividadeservico']            = $aRALIC11['si181_tipoatividadeservico'];// != '' ? $this->padLeftZero($aRALIC11['si181_tipoatividadeservico'], 2) : ' ';
                         $aCSVRALIC11['si181_dscatividadeservico']             = $aRALIC11['si181_dscatividadeservico'];
                         $aCSVRALIC11['si181_tipoatividadeservespecializado']  = $aRALIC11['si181_tipoatividadeservespecializado'] == null ? '' : $this->padLeftZero(intval($aRALIC11['si181_tipoatividadeservespecializado']), 2);
@@ -100,39 +100,70 @@ class GerarRALIC extends GerarAM
                         $this->adicionaLinha();
                     }
 
+					for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {
+
+						$aRALIC12 = pg_fetch_array($rsRALIC12, $iCont3);
+						if ($aRALIC10['si180_sequencial'] == $aRALIC12['si182_reg10'] && $aRALIC11['si181_codobralocal'] == $aRALIC12['si182_codobralocal']) {
+							$aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
+							$aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
+							$aCSVRALIC12['si182_codunidadesubresp']           = $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
+							$aCSVRALIC12['si182_codunidadesubrespestadual']   = !trim($aRALIC12['si182_codunidadesubrespestadual']) ? ' ': $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
+							$aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
+							$aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
+							$aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
+							$aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
+							$aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
+							$aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
+							$aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
+							$aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
+							$aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
+							$aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
+							$aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
+							$aCSVRALIC12['si182_segundolatitude']             = $aRALIC12['si182_segundolatitude'];
+							$aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
+							$aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
+							$aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
+
+							$this->sLinha = $aCSVRALIC12;
+							$this->adicionaLinha();
+
+						}
+
+					}
+
                 }
 
-                for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {
-
-                    $aRALIC12 = pg_fetch_array($rsRALIC12, $iCont3);
-
-                    if ($aRALIC10['si180_sequencial'] == $aRALIC12['si182_reg10']) {
-                    	$aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
-                        $aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
-                        $aCSVRALIC12['si182_codunidadesubresp']           = $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
-                        $aCSVRALIC12['si182_codunidadesubrespestadual']   = $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
-                        $aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
-                        $aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
-                        $aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
-                        $aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
-                        $aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
-                        $aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
-                        $aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
-                        $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
-                        $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
-                        $aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
-                        $aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
-                        $aCSVRALIC12['si182_segundolatitude']             = $aRALIC12['si182_segundolatitude'];
-                        $aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
-                        $aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
-                        $aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
-
-                        $this->sLinha = $aCSVRALIC12;
-                        $this->adicionaLinha();
-
-                    }
-
-                }
+//                for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {
+//
+//                    $aRALIC12 = pg_fetch_array($rsRALIC12, $iCont3);
+//
+//                    if ($aRALIC10['si180_sequencial'] == $aRALIC12['si182_reg10']) {
+//                    	$aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
+//                        $aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
+//                        $aCSVRALIC12['si182_codunidadesubresp']           = $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
+//                        $aCSVRALIC12['si182_codunidadesubrespestadual']   = $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
+//                        $aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
+//                        $aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
+//                        $aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
+//                        $aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
+//                        $aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
+//                        $aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
+//                        $aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
+//                        $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
+//                        $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
+//                        $aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
+//                        $aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
+//                        $aCSVRALIC12['si182_segundolatitude']             = $aRALIC12['si182_segundolatitude'];
+//                        $aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
+//                        $aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
+//                        $aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
+//
+//                        $this->sLinha = $aCSVRALIC12;
+//                        $this->adicionaLinha();
+//
+//                    }
+//
+//                }
 
             }
 

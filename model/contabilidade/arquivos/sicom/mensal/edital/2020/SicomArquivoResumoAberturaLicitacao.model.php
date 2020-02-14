@@ -196,7 +196,7 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 naturezaobjeto,
                 objeto,
                 regimeexecucaoobras,
-                bdi,
+                sum(bdi) as bdi,
                 origemrecurso,
                 dscorigemrecurso,
                 sum(vlcontratacao) as vlContratacao
@@ -318,11 +318,9 @@ FROM
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, dscCadastroLicitatorio, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, regimeexecucaoobras,
-         bdi, origemrecurso, dscorigemrecurso ORDER BY nroprocessolicitatorio
+         origemrecurso, dscorigemrecurso ORDER BY nroprocessolicitatorio
                   ";
 	  $rsResult10 = db_query($sSql);
-//		print_r($sSql);die();
-
     /**
      * registro 10
      */
