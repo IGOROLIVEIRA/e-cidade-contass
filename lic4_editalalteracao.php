@@ -33,12 +33,16 @@ require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclancedital_classe.php");
+require_once("classes/db_editaldocumento_classe.php");
+require_once("classes/db_obrasdadoscomplementares_classe.php");
 require_once("classes/db_cflicita_classe.php");
 include("dbforms/db_classesgenericas.php");
 
 $clliclicita = new cl_liclicita;
 $clliclancedital = new cl_liclancedital;
 $clcflicita  = new cl_cflicita;
+$cleditaldocumento = new cl_editaldocumento;
+$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -67,26 +71,66 @@ if(!isset($alterar)){
 
 if(isset($alterar)){
 
-  $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto', '', 'l20_codigo = '.$licitacao);
-  $rsEdital = $clliclancedital->sql_record($sqlEdital);
-  $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
-  $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
-  $codigolicitacao = $oDadosEdital->l20_codigo;
+    $sqlEdital = $clliclancedital->sql_query_completo('', 'l20_codigo, l47_sequencial, l20_naturezaobjeto, l48_tipo', '', 'l20_codigo = '.$licitacao);
+    $rsEdital = $clliclancedital->sql_record($sqlEdital);
+    $oDadosEdital = db_utils::fieldsMemory($rsEdital, 0);
+    $natureza_objeto = $oDadosEdital->l20_naturezaobjeto;
+    $codigolicitacao = $oDadosEdital->l20_codigo;
 
-  if(isset($oDadosEdital->l47_sequencial)){
-    $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
-    $clliclancedital->l47_linkpub = $links;
-    $clliclancedital->l47_origemrecurso = $origem_recurso;
-    $clliclancedital->l47_descrecurso = $descricao_recurso;
-    $clliclancedital->l47_dataenvio = $data_formatada;
-    $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
+	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
+	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
-    $clliclancedital->alterar($oDadosEdital->l47_sequencial);
-    $erro_msg = $clliclancedital->erro_sql;
-    if ($clliclancedital->erro_status == '0'){
-      $sqlerro=true;
+	if($natureza_objeto == 1){
+		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
+		$aSelecionados = array();
+		foreach ($aTipos as $tipo){
+			$aSelecionados[] = $tipo->l48_tipo;
+		}
+
+		$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
+        if($cleditaldocumento->numrows == 0){
+			$sqlerro = true;
+			$erro_msg = 'Nenhum documento anexo à licitação';
+		}else{
+			if(count($tiposCadastrados) < 4){
+				$sqlerro = true;
+				$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+			}
+		}
+
+		/* Verifica se tem dados complementares vinculados à licitação */
+		if(!$sqlerro){
+			$sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+			$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+			if($clobrasdadoscomplementares->numrows == 0){
+				$sqlerro = true;
+				$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+			}
+		}
+
+	}else{
+		if(!$cleditaldocumento->numrows){
+			$sqlerro = true;
+			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+		}
+	}
+
+	if(!$sqlerro){
+	    if(isset($oDadosEdital->l47_sequencial)){
+	        $data_formatada = str_replace('/', '-',db_formatar($data_referencia, 'd'));
+            $clliclancedital->l47_linkpub = $links;
+            $clliclancedital->l47_origemrecurso = $origem_recurso;
+            $clliclancedital->l47_descrecurso = $descricao_recurso;
+            $clliclancedital->l47_dataenvio = $data_formatada;
+            $clliclancedital->l47_liclicita = $oDadosEdital->l20_codigo;
+
+            $clliclancedital->alterar($oDadosEdital->l47_sequencial);
+            $erro_msg = $clliclancedital->erro_sql;
+            if ($clliclancedital->erro_status == '0'){
+                $sqlerro=true;
+            }
+          }
     }
-  }
 
 }
 
