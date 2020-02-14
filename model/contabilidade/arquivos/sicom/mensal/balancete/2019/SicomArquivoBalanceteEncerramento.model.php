@@ -2791,9 +2791,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg11->si178_saldofinalcd = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
 
-                $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? $obalreg11->si178_naturezasaldoinicialcd : ($obalreg11->si178_saldofinalcd > 0 ? 'D' : 'C');
+                $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? $obalreg11->si178_naturezasaldoinicialcd : ($saldoFinal > 0 ? 'D' : 'C');
                 if ($reg11->si178_contacontaabil == "622130300" || $reg11->si178_contacontaabil == "622130400" || $reg11->si178_contacontaabil == "622110000") {
-                    $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? 'C' : ($obalreg11->si178_saldofinalcd > 0 ? 'D' : 'C');
+                    $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? 'C' : ($saldoFinal > 0 ? 'D' : 'C');
                 }
                 $obalreg11->si178_instit = $reg11->si178_instit;
                 $obalreg11->si178_mes = 13;
@@ -2956,7 +2956,11 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldoinicialsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldoinicialsf > 0 ? 'D' : 'C');
                 $obalreg15->si182_totaldebitossf = number_format(abs($reg15->si182_totaldebitossf), 2, ".", "");
                 $obalreg15->si182_totalcreditossf = number_format(abs($reg15->si182_totalcreditossf), 2, ".", "");
+//                echo 'saldoinicialsf '.$reg15->si182_saldoinicialsf.' ';
+//                echo 'si182_totaldebitossf '.$reg15->si182_totaldebitossf.' ';
+//                echo 'si182_totalcreditossf '.$reg15->si182_totalcreditossf.' ';
                 $saldoFinal = ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf) == '' ? 0 : ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf);
+                //echo 'saldofinal: '.$saldoFinal;
                 $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal), 2, ".", "");
                 if ($this->bEncerramento) {
                     /**
@@ -2968,10 +2972,12 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldofinalsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldofinalsf > 0 ? 'D' : 'C');
                     $obalreg15->si182_totaldebitossf = number_format(abs($reg15->si182_totaldebitosencerramento), 2, ".", "");
                     $obalreg15->si182_totalcreditossf = number_format(abs($reg15->si182_totalcreditosencerramento), 2, ".", "");
+
                     $saldoFinal = ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf) == '' ? 0 : ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf);
+                    //echo 'saldofinal 2: '.$saldoFinal;
                     $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg15->si182_naturezasaldofinalsf = $obalreg15->si182_saldofinalsf == 0 ? $obalreg15->si182_naturezasaldoinicialsf : ($obalreg15->si182_saldofinalsf > 0 ? 'D' : 'C');
+                $obalreg15->si182_naturezasaldofinalsf = $obalreg15->si182_saldofinalsf == 0 ? $obalreg15->si182_naturezasaldoinicialsf : ($saldoFinal > 0 ? 'D' : 'C');
                 $obalreg15->si182_instit = $reg15->si182_instit;
                 $obalreg15->si182_mes = 13;
                 $obalreg15->si182_reg10 = $obalancete10->si177_sequencial;
@@ -3243,8 +3249,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                      */
                     $obalreg24->si191_saldoinicialorgao = $obalreg24->si191_saldofinalorgao == '' ? 0 : $obalreg24->si191_saldofinalorgao;
                     $obalreg24->si191_naturezasaldoinicialorgao = $reg24->si191_saldofinalorgao == 0 ? $oDado10->naturezasaldo : ($reg24->si191_saldofinalorgao > 0 ? 'D' : 'C');
-                    $obalreg24->si191_totaldebitosorgao = number_format(abs(0), 2, ".", "");
-                    $obalreg24->si191_totalcreditosorgao = number_format(abs(0), 2, ".", "");
+                    $obalreg24->si191_totaldebitosorgao = number_format(abs($oDado10->si177_totaldebitosencerramento), 2, ".", "");
+                    $obalreg24->si191_totalcreditosorgao = number_format(abs($oDado10->si177_totalcreditosencerramento), 2, ".", "");
                     $saldoFinal = ($saldoFinal + $obalreg24->si191_totaldebitosorgao - $obalreg24->si191_totalcreditosorgao) == '' ? 0 : ($saldoFinal + $obalreg24->si191_totaldebitosorgao - $obalreg24->si191_totalcreditosorgao);
                     $obalreg24->si191_saldofinalorgao = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
