@@ -939,7 +939,7 @@ case "processarBalancete" :
 						 WHERE db01_anousu = " . db_getsession('DB_anousu') . " and l20_codepartamento = " . db_getsession('DB_coddepto') . " 
 						 LIMIT 1) AS unidade
 					FROM liclancedital
-					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclancedital = liclancedital.l47_sequencial
+					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclicita = liclancedital.l47_liclicita
 					INNER JOIN liclicita ON liclicita.l20_codigo = l47_liclicita
 					INNER JOIN cflicita ON l03_codigo = liclicita.l20_codtipocom
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
