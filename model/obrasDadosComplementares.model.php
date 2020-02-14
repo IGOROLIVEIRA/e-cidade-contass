@@ -506,11 +506,11 @@
 
       return $this->db150_liclicita;
     }
-    /**
+   /**
    * Método para salvar um endereço da obra
    * caso ele não esteja cadastrado
    */
-  public function salvaDadosComplementares() {
+  public function salvaDadosComplementares($incluir) {
 
     if (!db_utils::inTransaction()) {
       throw new Exception('Processamento Cancelado não existe transação ativa.');
@@ -518,6 +518,11 @@
     $oDaoObras = db_utils::getDao('obrasdadoscomplementares');
     $sSqlQuery = $oDaoObras->sql_query('', '*', null, 'db150_codobra ='.$this->getCodigoObra());
     $rsQuery   = $oDaoObras->sql_record($sSqlQuery);
+
+    if($oDaoObras->numrows && $incluir){
+      throw new Exception('Código da Obra já cadastrado.');
+    }
+
     $oDados = db_utils::fieldsMemory($rsQuery, 0);
 
     $oDaoObras->db150_codobra = $this->getCodigoObra();
@@ -588,7 +593,7 @@
       return $aRetorno;
     }
 
-    static function findObrasByEdital($iCodigoLicitacao, $lEncode=true) {
+    static function findObrasByLicitacao($iCodigoLicitacao, $lEncode=true) {
       $aRetorno = false;
 
       if (trim($iCodigoLicitacao) != "") {

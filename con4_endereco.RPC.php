@@ -444,7 +444,7 @@ switch ($oParam->exec) {
         $oEndereco->setBdi($oParam->endereco->bdi);
         $oEndereco->setLicita($oParam->endereco->licitacao);
 
-        $oEndereco->salvaDadosComplementares();
+        $oEndereco->salvaDadosComplementares($oParam->acao);
         db_fim_transacao(false);
 
     }catch (Exception $erro){
@@ -464,10 +464,10 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
   break;
 
-  case 'findDadosObraEdital' :
+  case 'findDadosObraLicitacao' :
     try{
       if($oParam->codLicitacao){
-        $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByEdital($oParam->codLicitacao);
+        $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao);
       }
       $oRetorno->status = 1;
     }catch (Exception $error){

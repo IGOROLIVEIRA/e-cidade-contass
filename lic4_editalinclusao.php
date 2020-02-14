@@ -34,11 +34,15 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclancedital_classe.php");
 require_once("classes/db_cflicita_classe.php");
+require_once("classes/db_editaldocumento_classe.php");
+require_once("classes/db_obrasdadoscomplementares_classe.php");
 include("dbforms/db_classesgenericas.php");
 
 $clliclancedital = new cl_liclancedital;
 $clliclicita = new cl_liclicita;
 $clcflicita = new cl_cflicita;
+$cleditaldocumento = new cl_editaldocumento;
+$clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -60,8 +64,6 @@ if ($licitacao) {
 	$edital = $oDadosLicitacao->l20_edital;
 	$codigolicitacao = $oDadosLicitacao->l20_codigo;
 	$numero_edital = $oDadosLicitacao->l20_nroedital;
-
-//  $licitacao = db_utils::fieldsMemory($rsLicita, 0);
 }
 
 if (isset($incluir) && isset($licitacao)) {
@@ -70,28 +72,58 @@ if (isset($incluir) && isset($licitacao)) {
 	$rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
 	if ($clliclancedital->numrows == 0) {
-		$data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
-		$clliclancedital->l47_linkpub = $links;
-		$clliclancedital->l47_origemrecurso = $origem_recurso;
-		$clliclancedital->l47_descrecurso = $descricao_recurso;
-		$clliclancedital->l47_dataenvio = $data_formatada;
-		$clliclancedital->l47_liclicita = $codigolicitacao;
-		$clliclancedital->incluir(null);
+	    if($natureza_objeto == 1){
+            /* Verifica se tem documentos anexos a licitação */
+            $sSqlDocumentos = $cleditaldocumento->sql_query(null, '*', null, ' l48_liclicita = '.$licitacao);
+            $rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
-		if ($clliclancedital->erro_status) {
-			$erro_msg = $clliclancedital->erro_sql;
-		} else {
-			$erro_msg = $clliclancedital->erro_sql;
-			$sqlerro = true;
-		}
+            if($cleditaldocumento->numrows == 0){
+                $sqlerro = true;
+                $erro_msg = 'Nenhum documento anexo à licitação';
+            }else{
+				if($cleditaldocumento->numrows < 5){
+					$sqlerro = true;
+					$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+				}
+            }
 
-		$sequencial = $clliclancedital->l47_sequencial;
+			/* Verifica se tem dados complementares vinculados à licitação */
+			if(!$sqlerro){
+                $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+                $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+			    if($clobrasdadoscomplementares->numrows == 0){
+					$sqlerro = true;
+					$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+                }
+            }
 
-		if ($clliclancedital->numrows_incluir) {
-			$db_opcao = 2;
-		}
+        }
 
-		// Alterar o status da licitação para Aguardando Envio;
+
+        // Buscar dados complementares pelo numero da licitacao
+        if(!$sqlerro){
+            $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
+            $clliclancedital->l47_linkpub = $links;
+            $clliclancedital->l47_origemrecurso = $origem_recurso;
+            $clliclancedital->l47_descrecurso = $descricao_recurso;
+            $clliclancedital->l47_dataenvio = $data_formatada;
+            $clliclancedital->l47_liclicita = $codigolicitacao;
+            $clliclancedital->incluir(null);
+            if ($clliclancedital->erro_status) {
+                $erro_msg = $clliclancedital->erro_sql;
+            } else {
+                $erro_msg = $clliclancedital->erro_sql;
+                $sqlerro = true;
+            }
+
+            $sequencial = $clliclancedital->l47_sequencial;
+
+            if ($clliclancedital->numrows_incluir) {
+                $db_opcao = 2;
+            }
+        }
+
+        // Alterar o status da licitação para Aguardando Envio;
         if(!$sqlerro){
             $clliclicita = new cl_liclicita;
             $clliclicita->l20_cadinicial = 2;
@@ -166,9 +198,10 @@ if (isset($incluir)) {
 		echo "</script>";
 	}
 	echo "<script>document.form1.data_referencia.value = '" . $data_referencia . "';</script>";
-}else{
+}else {
     echo "<script>";
-	echo "parent.document.formaba.documentos.disabled=true;";
+	echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
+	echo "parent.iframe_documentos.js_getDocumento();";
 	echo "</script>";
 }
 

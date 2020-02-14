@@ -33,12 +33,12 @@ class EditalDocumento
 {
 
 	protected $iCodigo;
-	protected $iCodigoEdital;
 	protected $iTipo;
+	protected $iEdital;
 	protected $sArquivo;
 	protected $sNomeArquivo;
 	protected $sCaminho;
-	protected $iLicEdital;
+	protected $iLicLicita;
 
 
 	/**
@@ -50,7 +50,7 @@ class EditalDocumento
 	{
 		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
 		if(isset($iCodigo)) {
-			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo);
+			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo, 'l48_sequencial, l48_nomearquivo, l48_tipo, l20_nroedital, l48_liclicita, l48_caminho');
 			$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSQL);
 
 			if ($oDaoEditalDocumento->numrows > 0) {
@@ -60,8 +60,8 @@ class EditalDocumento
 				$this->setCodigo($oEditalDocumento->l48_sequencial);
 				$this->setNomeArquivo($oEditalDocumento->l48_nomearquivo);
 				$this->setTipo($oEditalDocumento->l48_tipo);
-				$this->setCodigoEdital($oEditalDocumento->l48_edital);
-				$this->setLicEdital($iCodigo);
+				$this->setEdital($oEditalDocumento->l20_nroedital);
+				$this->setLiclicita($oEditalDocumento->l48_liclicita);
 				$this->setCaminho($oEditalDocumento->l48_caminho);
 				unset($oEditalDocumento);
 			}
@@ -96,16 +96,12 @@ class EditalDocumento
 
 		db_inicio_transacao();
 		try {
-
 			$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
 			$oDaoEditalDocumento->l48_tipo = $this->getTipo();
-			$oDaoEditalDocumento->l48_edital = $this->getCodigoEdital();
 			$oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
-			$oDaoEditalDocumento->l48_liclancedital = $this->getLicEdital();
 			$oDaoEditalDocumento->l48_caminho = $this->getCaminho();
+			$oDaoEditalDocumento->l48_liclicita = $this->getLiclicita();
 			$oDaoEditalDocumento->incluir(null);
-
-//			$this->iCodigo = $oDaoEditalDocumento->l48_sequencial;
 
 			if ($oDaoEditalDocumento->erro_status == '0') {
 				throw new Exception($oDaoEditalDocumento->erro_msg);
@@ -126,9 +122,9 @@ class EditalDocumento
 	 */
 	public function getDocumentos($licitacao)
 	{
-		$sCampos = "l48_sequencial, l48_edital, l48_tipo ";
+		$sCampos = "l48_sequencial";
 
-		$sWhere = " l47_liclicita = $licitacao";
+		$sWhere = " l48_liclicita = $licitacao";
 		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
 		$sSqlDocumentos = $oDaoEditalDocumento->sql_query_file(null, $sCampos, 'l48_sequencial', $sWhere);
 		$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSqlDocumentos);
@@ -220,21 +216,21 @@ class EditalDocumento
 
 	/**
 	 *
-	 * Retorna o sequencial do liclancedital
+	 * Retorna o número do edital da licitação
 	 * @return string
 	 */
-	public function getLicEdital()
+	public function getEdital()
 	{
-		return $this->iLicEdital;
+		return $this->iEdital;
 	}
 
 	/**
 	 *
-	 * Seta a descricao do documento
+	 * Seta o numero do edital da licitação
 	 */
-	public function setLicEdital($iLicEdital)
+	public function setEdital($iEdital)
 	{
-		$this->iLicEdital = $iLicEdital;
+		$this->iEdital = $iEdital;
 	}
 
 	/**
@@ -245,6 +241,24 @@ class EditalDocumento
 	public function getCaminho()
 	{
 		return $this->sCaminho;
+	}
+	/**
+	 *
+	 * Seta o numero da licitação
+	 */
+	public function setLicLicita($iLicLicita)
+	{
+		$this->iLicLicita = $iLicLicita;
+	}
+
+	/**
+	 *
+	 * Retorna o numero da licitação
+	 * @return String
+	 */
+	public function getLicLicita()
+	{
+		return $this->iLicLicita;
 	}
 
 	/**

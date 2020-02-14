@@ -469,7 +469,7 @@ class cl_liclancedital
     }
     $sql .= " from liclancedital ";
     $sql .= " JOIN liclicita ON liclicita.l20_codigo = l47_liclicita ";
-    $sql .= " LEFT JOIN editaldocumentos ON editaldocumentos.l48_edital = liclancedital.l47_sequencial ";
+    $sql .= " LEFT JOIN editaldocumentos ON editaldocumentos.l48_liclicita = liclancedital.l47_liclicita ";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($l47_sequencial != null) {

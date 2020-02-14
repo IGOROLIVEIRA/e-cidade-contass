@@ -209,7 +209,7 @@ $db_opcao = 1;
         var oParam       = new Object();
         oParam.exec      = 'adicionarDocumento';
         oParam.licitacao    = iLicitacao;
-        oParam.sequencial    = iSequencial;
+
         oParam.tipo      = $F('caddocumento');
         oParam.arquivo   = $F('namefile');
         js_divCarregando('Aguarde... Salvando Documento','msgbox');
@@ -242,7 +242,6 @@ $db_opcao = 1;
     }
 
     function js_getDocumento() {
-
         var oParam       = new Object();
         oParam.exec      = 'getDocumento';
         oParam.licitacao   = iLicitacao;
@@ -286,6 +285,7 @@ $db_opcao = 1;
     function js_retornoGetDocumento(oAjax) {
 
         var oRetorno = eval('('+oAjax.responseText+")");
+        console.log('Valor retornado: ', oRetorno);
         oGridDocumento.clearAll(true);
 
         if (oRetorno.dados.length == 0) {
@@ -296,7 +296,7 @@ $db_opcao = 1;
 
             var aLinha = new Array();
             aLinha[0]  = iSeq + 1;
-            aLinha[1]  = oDocumento.iEdital;
+            aLinha[1]  = oDocumento.iEdital != null ? oDocumento.iEdital : ' ';
             aLinha[2]  = js_descricaoTipo(oDocumento.iTipo);
             aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDocumento.iCodigo+')">';
             aLinha[4]  = '<input type="button" value="E" onclick="js_excluirDocumento('+oDocumento.iCodigo+')">';

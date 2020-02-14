@@ -589,7 +589,7 @@ switch ($oParam->exec) {
     	try{
 
     		$anexo = db_utils::getDao('editaldocumento');
-    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l47_liclicita = $oParam->licitacao");
+    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l48_liclicita = $oParam->licitacao");
     		$rsSql = $anexo->sql_record($sSql);
 
 			if($anexo->numrows > 0){
@@ -642,9 +642,8 @@ switch ($oParam->exec) {
 				$oEdital = new EditalDocumento;
 				$oEdital->setCodigo('');
 				$oEdital->setTipo($oParam->tipo);
-				$oEdital->setCodigoEdital($oParam->edital);
-				$oEdital->setLicEdital($oParam->sequencial);
 				$nome = explode('/', $nometmp);
+				$oEdital->setLicLicita($oParam->licitacao);
 				$oEdital->setNomeArquivo($nome[1]);
 				$oEdital->setCaminho($arquivoDocument);
 				$oEdital->salvar();
@@ -668,8 +667,8 @@ switch ($oParam->exec) {
 
 			$oDocumentos      = new stdClass();
 			$oDocumentos->iCodigo    = $aEditalDocumento[$i]->getCodigo();
-			$oDocumentos->iEdital    = $aEditalDocumento[$i]->getCodigoEdital();
 			$oDocumentos->iTipo = $aEditalDocumento[$i]->getTipo();
+			$oDocumentos->iEdital = $aEditalDocumento[$i]->getEdital();
 			$oRetorno->dados[] = $oDocumentos;
 		}
 

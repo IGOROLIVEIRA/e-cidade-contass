@@ -43,11 +43,10 @@ class Oc11271 extends AbstractMigration
         CREATE TABLE editaldocumentos(
           l48_sequencial BIGINT NOT NULL DEFAULT 0,
           l48_nomearquivo varchar(100),
-          l48_liclancedital bigint,
           l48_tipo varchar(2),
-          l48_edital BIGINT,
           l48_caminho VARCHAR(150),
-          FOREIGN KEY(l48_liclancedital) REFERENCES liclancedital(l47_sequencial)
+          l48_liclicita bigint,
+          FOREIGN KEY(l48_liclicita) REFERENCES liclicita(l20_codigo)
         );
         
         CREATE SEQUENCE editaldocumentos_l48_sequencial_seq
