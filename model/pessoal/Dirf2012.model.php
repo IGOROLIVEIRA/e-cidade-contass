@@ -652,7 +652,7 @@ class Dirf2012 extends Dirf {
           $sSqlMolestias .= "       inner join rhpessoalmov on rh01_regist = rh02_regist ";
           $sSqlMolestias .= " where rh02_anousu = ".$this->iAno;
           $sSqlMolestias .= "   and rh02_mesusu = ".$this->iMes;
-          $sSqlMolestias .= "   and rh01_numcgm = {$oTipoReceita->rh96_numcgm}";
+          $sSqlMolestias .= "   and rh01_numcgm = {$oTipoReceita->rh96_numcgm} order by rh01_regist desc";
 
           $rsMolestias   = db_query($sSqlMolestias);
 
