@@ -156,6 +156,26 @@ class cl_liclancedital
       return false;
     }
 
+    if (!$this->l47_origemrecurso || $this->l47_origemrecurso == null) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql = "Verifique a origem do recurso";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->l47_origemrecurso  == 9 ) {
+      if(!$this->l47_descrecurso  == null || trim($this->l47_descrecurso)  == ''){
+          $this->erro_banco = str_replace("\n", "", @pg_last_error());
+          $this->erro_sql = "Verifique a descrição da origem do recurso";
+          $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+      }
+    }
+
     $sql = "insert into liclancedital(
                           l47_sequencial
                          ,l47_linkpub
