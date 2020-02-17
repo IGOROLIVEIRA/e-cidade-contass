@@ -217,6 +217,7 @@ if (isset($incluir)) {
 }else {
     echo "<script>";
 	echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
+	echo "parent.iframe_editais.js_buscaDadosComplementares();";
 	echo "parent.iframe_documentos.js_getDocumento();";
 	echo "</script>";
 }
