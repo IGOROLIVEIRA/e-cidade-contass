@@ -88,13 +88,13 @@ $cllicobrasmedicao->rotulo->label();
           <?
           $aValores = array(
             0 => 'Selecione',
-            1 => 'Medição a preços iniciais',
-            2 => 'Medição de reajuste',
-            3 => 'Medição complementar',
-            4 => 'Medição final',
-            5 => 'Medição de termo aditivo',
-            9 => 'Outro documento de medição.');
-          db_select('obr03_tipomedicao', $aValores, true, $db_opcao," onchange=''");
+            1 => '1 - Medição a preços iniciais',
+            2 => '2 - Medição de reajuste',
+            3 => '3 - Medição complementar',
+            4 => '4 - Medição final',
+            5 => '5 - Medição de termo aditivo',
+            9 => '9 - Outro documento de medição.');
+          db_select('obr03_tipomedicao', $aValores, true, $db_opcao," onchange='js_verificatipomedicao(this.value)'");
           ?>
         </td>
       </tr>
@@ -158,9 +158,8 @@ $cllicobrasmedicao->rotulo->label();
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
       <input name="Nova Medição" type="button" id="Nova Medição" value="Nova Medição" onclick="js_novamedicao();" >
     </div>
-    <hr>
   </form>
-  <fieldset>
+  <fieldset id="anexosdaobra" style="display: none">
     <legend>Fotos da Obra</legend>
     <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
       <table>
@@ -228,6 +227,20 @@ $cllicobrasmedicao->rotulo->label();
       echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
     }
     ?>
+  }
+
+  function js_verificatipomedicao(value) {
+    if(value == '2' || value == '9'){
+      document.getElementById('anexosdaobra').style.display = 'none'
+    }else{
+      document.getElementById('anexosdaobra').style.display = ''
+    }
+
+    if(value == '9'){
+      document.getElementById('obr03_outrostiposmedicao').style.backgroundColor = '#ffffff';
+    }else{
+      document.getElementById('obr03_outrostiposmedicao').style.backgroundColor = '#E6E4F1';
+    }
   }
 
   /**
@@ -440,10 +453,24 @@ $cllicobrasmedicao->rotulo->label();
   }
 
   function js_carregar() {
+    let value = document.getElementById('obr03_tipomedicao').value;
     let db_opcao = <?=$db_opcao?>;
     if(db_opcao != 1){
       js_pesquisa_obra(false);
     }
+
+    if(value == '2' || value == '9'){
+      document.getElementById('anexosdaobra').style.display = 'none'
+    }else{
+      document.getElementById('anexosdaobra').style.display = ''
+    }
+
+    if(value == '9'){
+      document.getElementById('obr03_outrostiposmedicao').style.backgroundColor = '#ffffff';
+    }else{
+      document.getElementById('obr03_outrostiposmedicao').style.backgroundColor = '#E6E4F1';
+    }
+
   }
 
 </script>

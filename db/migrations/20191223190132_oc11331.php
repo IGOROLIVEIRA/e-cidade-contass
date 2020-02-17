@@ -297,7 +297,7 @@ class Oc11331 extends AbstractMigration
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_descmedicao'  		,'text' ,'Desc. Medição'			,'', 'Desc. Medição'			,500,false, false, false, 0, 'text', 'Desc. Medição');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtfimmedicao'	 		,'date' ,'Fim da Medição'			,'', 'Fim da Medição'			,10	,false, false, false, 0, 'date', 'Fim da Medição');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_dtentregamedicao'	 	,'date' ,'Entrega da Medição'		,'', 'Entrega da Medição'		,10	,false, false, false, 0, 'date', 'Entrega da Medição');
-                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_vlrmedicao'	 		,'float8' ,'Valor Medição' 			,'', 'Valor Medição' 			,11	,false, false, false, 1, 'float8', 'Valor Medição');
+                          INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_vlrmedicao'	 		,'float8' ,'Valor Medição' 			,'', 'Valor Medição' 			,11	,false, false, false, 4, 'float8', 'Valor Medição');
                           INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr03_instit'		 		,'int8' ,'Instituição'				,'', 'Instituição'			 	,11	,false, false, false, 1, 'int8', 'Instituição');
 
 						              -- INSERE db_sysarqcamp

@@ -16,12 +16,15 @@ $db_botao = false;
 if(isset($alterar)){
   $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $obr01_licitacao"));
   db_fieldsmemory($resulthomologacao,0);
-  $dtHomologacaolic = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
+  $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
+
+  $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+  $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
 
   try {
 
-    if($dtHomologacaolic != null){
-      if($obr01_dtinicioatividades > $dtHomologacaolic){
+    if($datahomologacao != null){
+      if($datainicioatividades < $datahomologacao){
         throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
       }
 
@@ -91,6 +94,9 @@ if(isset($alterar)){
   }
   #col3{
     width: 15%
+  }
+  #obr05_numartourrt{
+    background-color:#E6E4F1;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

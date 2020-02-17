@@ -6,9 +6,12 @@ include("libs/db_usuariosonline.php");
 include("classes/db_licobras_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_homologacaoadjudica_classe.php");
+include("classes/db_condataconf_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
+$clcondataconf = new cl_condataconf;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -20,8 +23,23 @@ if(isset($incluir)){
 
   $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
   $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
-
+  $dtlancamentoobra = DateTime::createFromFormat('d/m/Y', $obr01_dtlancamento);
   try {
+
+    /**
+     * validação com sicom
+     */
+    if(!empty($dtlancamentoobra)){
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+      $data = db_utils::fieldsMemory($result, 0)->c99_datapat;
+      $c99_datapat = DateTime::createFromFormat('d/m/Y', $data);
+
+      if ($dtlancamentoobra <= $c99_datapat) {
+        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+    }
 
     if($obr01_dtinicioatividades == null || $obr01_dtinicioatividades == ""){
       throw new Exception ("Usuário: Campo Data Inicio das Ativ. do Eng na Obra, não informado!");
@@ -115,6 +133,9 @@ if(isset($incluir)){
   }
   #tipocompra{
     width: 263px;
+  }
+  #obr05_numartourrt{
+    background-color:#E6E4F1;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

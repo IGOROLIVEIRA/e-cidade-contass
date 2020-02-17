@@ -241,15 +241,15 @@ class cl_licobrasituacao {
         return false;
       }
 
-      if ($this->obr02_dtretomada == null ) {
-        $this->erro_sql = " Campo Data Retomada não informado.";
-        $this->erro_campo = "obr02_dtretomada_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+//      if ($this->obr02_dtretomada == null ) {
+//        $this->erro_sql = " Campo Data Retomada não informado.";
+//        $this->erro_campo = "obr02_dtretomada_dia";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
 
       if($this->obr02_motivoparalisacao == "99"){
         if ($this->obr02_outrosmotivos == null ) {

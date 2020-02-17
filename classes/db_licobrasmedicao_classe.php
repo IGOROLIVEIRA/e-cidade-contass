@@ -162,7 +162,7 @@ class cl_licobrasmedicao {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->obr03_tipomedicao == null ) {
+     if ($this->obr03_tipomedicao == "0" ) {
        $this->erro_sql = " Campo Tipo de Medição não informado.";
        $this->erro_campo = "obr03_tipomedicao";
        $this->erro_banco = "";
