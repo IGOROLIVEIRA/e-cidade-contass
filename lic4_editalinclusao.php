@@ -91,9 +91,6 @@ if (isset($incluir) && isset($licitacao)) {
 
             $sequencial = $clliclancedital->l47_sequencial;
 
-//            if ($clliclancedital->numrows_incluir) {
-//                $db_opcao = 2;
-//            }
         }
 
 		/* Verifica se tem documentos anexos a licitação */
@@ -104,14 +101,13 @@ if (isset($incluir) && isset($licitacao)) {
 		    if($natureza_objeto == 1){
 
 				/* Verifica se tem dados complementares vinculados à licitação */
-				if(!$sqlerro){
-					$sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
-					$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
-					if($clobrasdadoscomplementares->numrows == 0){
-						$sqlerro = true;
-						$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
-					}
-				}
+                $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+                $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+                if($clobrasdadoscomplementares->numrows == 0){
+                    $sqlerro = true;
+                    $erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+                }
+
 
                 $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
                 $aSelecionados = array();
@@ -121,13 +117,15 @@ if (isset($incluir) && isset($licitacao)) {
 
                 $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
 
-                if($cleditaldocumento->numrows == 0){
-                    $sqlerro = true;
-                    $erro_msg = 'Nenhum documento anexo à licitação';
-                }else{
-                    if(count($tiposCadastrados) < 4){
+                if(!$sqlerro){
+                    if($cleditaldocumento->numrows == 0){
                         $sqlerro = true;
-                        $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+                        $erro_msg = 'Nenhum documento anexo à licitação';
+                    }else{
+                        if(count($tiposCadastrados) < 4){
+                            $sqlerro = true;
+                            $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+                        }
                     }
                 }
 
