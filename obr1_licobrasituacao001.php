@@ -6,9 +6,12 @@ include("libs/db_usuariosonline.php");
 include("classes/db_licobrasituacao_classe.php");
 include("classes/db_licobras_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
 $cllicobrasituacao = new cl_licobrasituacao;
 $cllicobras = new cl_licobras;
+$clcondataconf = new cl_condataconf;
 $db_opcao = 1;
 $db_botao = true;
 
@@ -24,6 +27,82 @@ if(isset($incluir)){
   $dtsituacao = DateTime::createFromFormat('d/m/Y', $obr02_dtsituacao);
 
   try {
+    /**
+     * validação com sicom
+     */
+    if(!empty($dtalancamento)){
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+      $data = db_utils::fieldsMemory($result, 0)->c99_datapat;
+      $c99_datapat = DateTime::createFromFormat('d/m/Y', $data);
+
+      if ($dtalancamento <= $c99_datapat) {
+        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+    }
+
+    /**
+     * Validações para o tipo de situação da obra
+     * @
+     */
+    if($obr02_situacao == "0"){
+      throw new Exception ("Selecione uma Situação");
+    }
+
+    if($obr02_situacao == "2"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      if(pg_num_rows($resultSituacao) > 0){
+        throw new Exception ("Obra já iniciada!");
+      }
+    }
+
+    if($obr02_situacao == "1"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra"));
+      if(pg_num_rows($resultSituacao) > 0){
+        throw new Exception ("Obra já iniciada!");
+      }
+    }
+
+    if($obr02_situacao == "2"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
+      if(pg_num_rows($resultSituacao) <= 0){
+        throw new Exception ("Obra sem cadastro inicial informado!");
+      }
+    }
+
+    if($obr02_situacao == "3" || $obr02_situacao == "4"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      if(pg_num_rows($resultSituacao) <= 0){
+        throw new Exception ("Para que uma obra seja paralisada deve existir o registro de inicio da obra!");
+      }
+    }
+
+    if($obr02_situacao == "5" || $obr02_situacao == "6" || $obr02_situacao == "7"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      if(pg_num_rows($resultSituacao) <= 0){
+        throw new Exception ("Para que uma obra seja concluída ela deve ter sido iniciada!");
+      }
+    }
+
+    if($obr02_situacao == "8"){
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao in (3,4)"));
+      if(pg_num_rows($resultSituacao) <= 0){
+        throw new Exception ("Para que uma obra seja Reiniciada ela deve ter sido Paralisada!");
+      }
+    }
+
+    if($obr02_situacao == "7"){
+      $resultsituacao7 = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr01_sequencial = $obr02_seqobra and obr02_situacao = 7"));
+      if(pg_num_rows($resultsituacao7) > 0){
+        db_fieldsmemory($resultsituacao7,0);
+        $data = (implode("/",(array_reverse(explode("-",$obr02_dtsituacao)))));
+        $datasituacao7 = DateTime::createFromFormat('d/m/Y', $data);
+        if($dtsituacao > $datasituacao7){
+          throw new Exception ("Obra já concluída definitivamente!");
+        }
+      }
+    }
 
     if($datalancamentobra != null){
       if( $dtalancamento < $datalancamentobra){
@@ -80,7 +159,7 @@ if(isset($incluir)){
     height: 34px;
   }
   #tipocompra{
-  width: 263px;
+    width: 263px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

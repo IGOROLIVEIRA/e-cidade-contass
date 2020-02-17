@@ -35,7 +35,7 @@ if(isset($alterar)){
     }
     db_inicio_transacao();
     $db_opcao = 2;
-    $cllicobrasmedicao->alterar($oid);
+    $cllicobrasmedicao->alterar($obr03_sequencial);
     db_fim_transacao();
   }catch (Exception $eErro){
     db_msgbox($eErro->getMessage());
@@ -65,6 +65,7 @@ if(isset($alterar)){
   #obr03_outrostiposmedicao{
     width: 733px;
     height: 50px;
+    background-color:#E6E4F1;
   }
 
   #obr03_descmedicao{

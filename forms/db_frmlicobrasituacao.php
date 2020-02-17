@@ -181,7 +181,7 @@ $cllicobrasituacao->rotulo->label();
             </td>
             <td colspan="2">
               <?
-              db_textarea('obr02_outrosmotivos',0,0,$Iobr02_outrosmotivos,true,'text',$db_opcao,"");
+              db_textarea('obr02_outrosmotivos',0,0,$Iobr02_outrosmotivos,true,'text',$db_opcao,"","","",'150');
               ?>
             </td>
           </tr>

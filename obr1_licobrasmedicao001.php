@@ -4,17 +4,53 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_licobrasmedicao_classe.php");
+include("classes/db_licobrasituacao_classe.php");
+include("classes/db_condataconf_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cllicobrasmedicao = new cl_licobrasmedicao;
+$cllicobrasituacao = new cl_licobrasituacao;
+$clcondataconf = new cl_condataconf;
+
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   $dtfimmedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtfimmedicao);
   $dtiniciomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtiniciomedicao);
   $dtentregamedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtentregamedicao);
+  $dtlancamentomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtlancamento);
+
+  $resultsituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr03_seqobra and obr02_situacao = 7"));
+  if(pg_num_rows($resultsituacao)> 0){
+    db_fieldsmemory($resultsituacao,0);
+  }
+
+  $data = (implode("/",(array_reverse(explode("-",$obr02_dtsituacao)))));
+  $dtsituacao = DateTime::createFromFormat('d/m/Y', $data);
 
   try{
+
+    /**
+     * validação com sicom
+     */
+    if(!empty($dtlancamentomedicao)){
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+      $data = db_utils::fieldsMemory($result, 0)->c99_datapat;
+      $c99_datapat = DateTime::createFromFormat('d/m/Y', $data);
+
+      if ($dtlancamentomedicao <= $c99_datapat) {
+        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+    }
+
+    if(pg_num_rows($resultsituacao > 0)){
+      if($dtentregamedicao >= $dtsituacao){
+        throw new Exception("Obra Concluída e recebida definitivamente!");
+      }
+    }
+
     if($dtfimmedicao < $dtiniciomedicao){
       throw new Exception("Usuário: Data Fim da Medição deve ser igual ou maior que Data Inicio da Medição.");
     }
@@ -82,6 +118,7 @@ if(isset($incluir)){
   #obr03_outrostiposmedicao{
     width: 733px;
     height: 50px;
+    /*background-color:#E6E4F1;*/
   }
 
   #obr03_descmedicao{
