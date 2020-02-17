@@ -70,7 +70,8 @@ switch ($oParam->exec){
                 $rsEntesPerc = $oEntes->sql_record($sSql2);
                 $percentualrateio = db_utils::fieldsMemory($rsEntesPerc, 0)->percent;
 
-                $oNovoEnte->percentual   = $percentualrateio;
+                //$oNovoEnte->percentual   = $percentualrateio; //alterado para pegar o percentual do cadastro do ente
+                $oNovoEnte->percentual   = $oEnte->c215_percentualrateio;
                 $oNovoEnte->cgm          = $oEnte->c215_cgm;
                 $oNovoEnte->nome         = utf8_encode($oEnte->z01_nome);
 
