@@ -2774,7 +2774,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $obalancete10->si177_saldofinal = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
             }
 
-            $obalancete10->si177_naturezasaldofinal = $oDado10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
+            $obalancete10->si177_naturezasaldofinal = (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
             $obalancete10->si177_mes = 13;
             $obalancete10->si177_instit = db_getsession("DB_instit");
 
