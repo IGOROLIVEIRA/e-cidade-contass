@@ -72,46 +72,6 @@ if (isset($incluir) && isset($licitacao)) {
 	$rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
 	if ($clliclancedital->numrows == 0) {
-        /* Verifica se tem documentos anexos a licitação */
-        $sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
-        $rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
-
-        if($natureza_objeto == 1){
-			$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
-			$aSelecionados = array();
-			foreach ($aTipos as $tipo){
-			    $aSelecionados[] = $tipo->l48_tipo;
-			}
-
-			$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
-
-            if($cleditaldocumento->numrows == 0){
-                $sqlerro = true;
-                $erro_msg = 'Nenhum documento anexo à licitação';
-            }else{
-				if(count($tiposCadastrados) < 4){
-					$sqlerro = true;
-					$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-				}
-            }
-
-			/* Verifica se tem dados complementares vinculados à licitação */
-			if(!$sqlerro){
-                $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
-                $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
-			    if($clobrasdadoscomplementares->numrows == 0){
-					$sqlerro = true;
-					$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
-                }
-            }
-
-        }else{
-            if(!$cleditaldocumento->numrows){
-                $sqlerro = true;
-			    $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
-            }
-        }
-
 
         // Buscar dados complementares pelo numero da licitacao
         if(!$sqlerro){
@@ -131,8 +91,51 @@ if (isset($incluir) && isset($licitacao)) {
 
             $sequencial = $clliclancedital->l47_sequencial;
 
-            if ($clliclancedital->numrows_incluir) {
-                $db_opcao = 2;
+//            if ($clliclancedital->numrows_incluir) {
+//                $db_opcao = 2;
+//            }
+        }
+
+		/* Verifica se tem documentos anexos a licitação */
+		$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
+		$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
+
+		if(!$sqlerro){
+		    if($natureza_objeto == 1){
+
+				/* Verifica se tem dados complementares vinculados à licitação */
+				if(!$sqlerro){
+					$sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+					$rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
+					if($clobrasdadoscomplementares->numrows == 0){
+						$sqlerro = true;
+						$erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
+					}
+				}
+
+                $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
+                $aSelecionados = array();
+                foreach ($aTipos as $tipo){
+                    $aSelecionados[] = $tipo->l48_tipo;
+                }
+
+                $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
+
+                if($cleditaldocumento->numrows == 0){
+                    $sqlerro = true;
+                    $erro_msg = 'Nenhum documento anexo à licitação';
+                }else{
+                    if(count($tiposCadastrados) < 4){
+                        $sqlerro = true;
+                        $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+                    }
+                }
+
+            }else{
+                if(!$cleditaldocumento->numrows){
+                    $sqlerro = true;
+                    $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
+                }
             }
         }
 
@@ -147,6 +150,8 @@ if (isset($incluir) && isset($licitacao)) {
             if ($clliclicita->erro_status == "0") {
                 $erro_msg = $clliclicita->erro_msg;
             }
+
+			$db_opcao = 2;
 
         }
 	}
