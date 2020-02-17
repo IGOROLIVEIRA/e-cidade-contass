@@ -65,7 +65,7 @@ class GerarREDISPI extends GerarAM
                 $aCSVREDISPI10['si183_objeto']                                = substr($aREDISPI10['si183_objeto'], 0, 500);
                 $aCSVREDISPI10['si183_justificativa']                         = substr($aREDISPI10['si183_justificativa'], 0, 250);
                 $aCSVREDISPI10['si183_razao']                                 = substr($aREDISPI10['si183_razao'], 0, 250);
-                $aCSVREDISPI10['si183_vlrecurso']                             = $this->sicomNumberReal($aREDISPI10['si183_vlrecurso'], 4);
+                $aCSVREDISPI10['si183_vlrecurso']                             = $this->sicomNumberReal($aREDISPI10['si183_vlrecurso'], 2);
                 $aCSVREDISPI10['si183_bdi']                                   = $this->sicomNumberReal($aREDISPI10['si183_bdi'], 2);
 
                 $this->sLinha = $aCSVREDISPI10;
