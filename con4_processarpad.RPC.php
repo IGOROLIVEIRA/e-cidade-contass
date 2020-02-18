@@ -791,16 +791,18 @@ case "processarBalancete" :
       $aArrayArquivos = array();
 
       foreach ($oParam->arquivos as $sArquivo) {
+
         if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php")) {
           require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php");
+
           $sNomeClasse = "SicomArquivo{$sArquivo}";
           $oArquivo    = new $sNomeClasse;
+
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
           if($sArquivo != "IDE") {
             $oArquivo->setTipoGeracao($oParam->tipoGeracao);
           }
-
           $oArquivoCsv = new stdClass();
           try {
             $oArquivo->gerarDados();
