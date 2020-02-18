@@ -177,15 +177,13 @@ function gerarSQLReceitas($sMes, $sEnte) {
         FROM entesconsorciadosreceitas
         INNER JOIN orcreceita ON c216_receita=o70_codfon
         AND c216_anousu=o70_anousu
-        INNER JOIN conlancamrec ON c74_anousu=o70_anousu
+        LEFT JOIN conlancamrec ON c74_anousu=o70_anousu
         AND c74_codrec=o70_codrec
-        INNER JOIN conlancam ON c74_codlan=c70_codlan
-        INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
+        LEFT JOIN conlancam ON c74_codlan=c70_codlan and date_part('MONTH',c70_data) <={$nMes} and date_part('YEAR',c70_data)={$nAno}
+        LEFT JOIN conlancamdoc ON c71_codlan=c70_codlan
         INNER JOIN entesconsorciados ON c216_enteconsorciado=c215_sequencial
         INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo
-        WHERE date_part('MONTH',c70_data) <={$nMes}
-            AND date_part('YEAR',c70_data)={$nAno}
-            AND c216_enteconsorciado={$nEnte}
+        WHERE  c216_enteconsorciado={$nEnte} and  c216_anousu={$nAno}
             AND c215_datainicioparticipacao <= '{$nAno}-{$nMes}-01'
         GROUP BY c216_tiporeceita,c218_descricao,c216_saldo3112
         ORDER BY c216_tiporeceita ";
