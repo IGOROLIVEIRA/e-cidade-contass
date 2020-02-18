@@ -1399,8 +1399,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 me.oCboSubGrupoBemPub.addItem(2717, 'Hotel');
                 me.oCboSubGrupoBemPub.addItem(2718, 'Quadra Poliesportiva');
                 break;
+            case '99':
+                $('cboSubGrupoBemPub'+sId).disabled = true;
+                break;
             default:
-                me.oCboSubGrupoBemPub.selectedIndex = 0;
                 break;
         }
     }
