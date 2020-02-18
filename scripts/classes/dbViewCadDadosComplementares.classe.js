@@ -2316,6 +2316,21 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
 //-------------------------------------Início da Manipulação do Distrito----------------------------------------------
 
+    this.js_removeCaracteres = (elemento) => {
+        let contemNumero = /\d/.test(elemento.value);
+        let ultimoValor = '';
+        if(contemNumero){
+            alert('Este campo não aceita números!');
+            for(let count = 0; count < elemento.value.length; count++){
+                if(/\d/.test(elemento.value[count])){
+                    ultimoValor+='';
+                    continue;
+                }
+                ultimoValor += elemento.value[count];
+            }
+        }
+        elemento.value = contemNumero ? ultimoValor : elemento.value;
+    }
      /**
      * Seta a descricao do Distrito do endereco
      * @param {string} sDistrito
@@ -2340,9 +2355,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtDistrito = new DBTextField('txtDistrito' + sId, 'txtDistrito' + sId, '');
     me.oTxtDistrito.addStyle('width', '100%');
     me.oTxtDistrito.setMaxLength(100);
-    me.oTxtDistrito.addEvent('onKeyUp', "js_valida(this,2,\"Campo Distrito\",\"f\",\"t\",event)");
     me.oTxtDistrito.show($('ctnDistrito' + sId));
     $('ctnDistrito' + sId).observe('change', me.changeDistrito);
+    $('ctnDistrito' + sId).observe('keyup', ()=>{
+        me.js_removeCaracteres($('txtDistrito'+sId));
+    });
 
 //-------------------------------------Fim da Manipulação do Distrito-------------------------------------------------
 //-------------------------------------Início da Manipulação do BDI----------------------------------------------
@@ -2396,10 +2413,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     me.oLogradouro = new DBTextField('txtLogradouro' + sId, 'txtLogradouro' + sId, '');
     me.oLogradouro.addStyle('width', '100%');
-    me.oLogradouro.addEvent('onKeyUp', "js_ValidaCampos(this,2,\"Campo Logradouro\",\"f\",\"t\",event)");
     me.oLogradouro.setMaxLength(100);
     me.oLogradouro.show($('ctnDescrLogradouro' + sId));
     $('ctnDescrLogradouro' + sId).observe('change', me.changeLogradouro);
+    $('ctnDescrLogradouro' + sId).observe('keyup', ()=>{
+        me.js_removeCaracteres($('txtLogradouro'+sId));
+    });
 //-------------------------------------Fim da Manipulação do Logradouro-------------------------------------------------
 //-------------------------------------Início da Manipulação do Grau Latitude------------------------------------------
      /**
@@ -2482,12 +2501,23 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.setSegundosLatitude(event.target.value);
     }
 
+    this.js_formataSegundos = (elemento) => {
+       if(!elemento.value.includes('.') && elemento.value.length > 5){
+           novoValor = elemento.value.substr(0, elemento.value.length-1);
+           elemento.value = novoValor;
+           alert('É permitido a inserção de até 5 caracteres!');
+       }
+    }
+
     me.oSegundoLatitude = new DBTextField('txtSegundoLatitude' + sId, 'txtSegundoLatitude' + sId, '');
     me.oSegundoLatitude.addStyle('width', '80px');
     me.oSegundoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Latitude\",\"f\",\"t\",event)");
     me.oSegundoLatitude.setMaxLength(6);
     me.oSegundoLatitude.show($('ctnSegundoLatitude' + sId));
     $('ctnSegundoLatitude' + sId).observe('change', me.changeSegundoLatitude);
+    $('ctnSegundoLatitude' + sId).observe('keyup',() => {
+        me.js_formataSegundos($('txtSegundoLatitude' + sId));
+    });
 
 //-------------------------------------Fim da Manipulação do Segundo Latitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Grau Longitude----------------------------------------------
@@ -2577,6 +2607,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oSegundoLongitude.setMaxLength(6);
     me.oSegundoLongitude.show($('ctnSegundoLongitude' + sId));
     $('ctnSegundoLongitude' + sId).observe('change', me.changeSegundoLongitude);
+    $('ctnSegundoLongitude' + sId).observe('keyup',() => {
+        me.js_formataSegundos($('txtSegundoLongitude' + sId));
+    });
 
 //-------------------------------------Fim da Manipulação do Segundos Longitude-------------------------------------------------
 //-------------------------------------Início da Manipulação do Loteamento----------------------------------------------
