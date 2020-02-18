@@ -25,7 +25,7 @@ class Oc11331 extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
+    public function up()
     {
       $sql = <<<SQL
                     BEGIN;
@@ -174,7 +174,7 @@ class Oc11331 extends AbstractMigration
 
                           --inserindo menu cadastro de obras
                           INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Obras','Cadastro de Obras','',1,1,'Cdastro de Obras','t');
-                          INSERT INTO db_menu VALUES(32,(select max(id_item) from db_itensmenu),1,4001223)
+                          INSERT INTO db_menu VALUES(32,(select max(id_item) from db_itensmenu),1,4001223);
 
                           INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusão','Inclusão','obr1_licobras001.php',1,1,'Inclusão','t');
                           INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Cadastro de Obras%'),(select max(id_item) from db_itensmenu),1,4001223);
@@ -412,6 +412,6 @@ class Oc11331 extends AbstractMigration
 
                     COMMIT;
 SQL;
-
+    $this->execute($sql);
     }
 }
