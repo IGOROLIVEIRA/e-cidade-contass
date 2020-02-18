@@ -23,6 +23,7 @@ class Oc11435 extends AbstractMigration
           si219_vlreceitaindustrial double precision DEFAULT 0 NOT NULL,
           si219_vlreceitaservicos double precision DEFAULT 0 NOT NULL,
           si219_vlremuneracaodisponibilidade double precision DEFAULT 0 NOT NULL,
+          si219_vloutrasreceitas double precision DEFAULT 0 NOT NULL,
           si219_vltransferenciarecebidas double precision DEFAULT 0 NOT NULL,
           
           si219_vltotalingressosativoperacionais double precision DEFAULT 0,
