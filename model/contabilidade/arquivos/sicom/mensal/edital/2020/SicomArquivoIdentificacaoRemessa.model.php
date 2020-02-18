@@ -73,7 +73,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
         $clideedital = new cl_ideedital2020();
 
         $sSql  = "SELECT db21_codigomunicipoestado AS codIdentificador,
-                  case when si09_tipoinstit::varchar = '2' then cgc::varchar else si09_cnpjprefeitura::varchar end AS cnpj,
+                  cgc::varchar cnpj,
                   si09_codorgaotce AS codorgao,
                   si09_tipoinstit AS tipoorgao,
                   prefeitura
