@@ -6,10 +6,13 @@ include("libs/db_usuariosonline.php");
 include("classes/db_licobras_classe.php");
 include("classes/db_homologacaoadjudica_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
+$clcondataconf = new cl_condataconf;
 
 $db_opcao = 22;
 $db_botao = false;
@@ -20,8 +23,25 @@ if(isset($alterar)){
 
   $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
   $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
+  $dtlancamentoobra = DateTime::createFromFormat('d/m/Y', $obr01_dtlancamento);
 
   try {
+
+    /**
+     * validação com sicom
+     */
+    if(!empty($dtlancamentoobra)){
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+      db_fieldsmemory($result);
+      $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+      $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
+
+      if ($dtlancamentoobra <= $dtencerramento) {
+        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+    }
 
     if($datahomologacao != null){
       if($datainicioatividades < $datahomologacao){
