@@ -56,7 +56,7 @@ $db_botao = true;
   select#depart{
     width:90%;
   }
-  #obras{
+  #obras, #origem_recurso{
     width: 100%;
   }
 </style>
@@ -108,6 +108,27 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
+                  <tr>
+                      <td nowrap title="Origem do recurso">
+                          <b>Origem do recurso:</b>
+                      </td>
+                      <td>
+						  <?
+						  $arr_tipo = array("0"=>"Selecione","1"=>"1- Próprio","2"=>"2- Estadual","3"=>"3- Federal","4"=>"4- Próprio e Estadual", "5"=> "5- Próprio e Federal", "9"=> "9- Outros");
+						  db_select("origem_recurso",$arr_tipo,true,1);
+						  ?>
+                      </td>
+                  </tr>
+                  <tr id="tr_desc_recurso">
+                      <td class="label-textarea" nowrap title="Descrição do recurso">
+                          <b>Descrição do Recurso:</b>
+                      </td>
+                      <td>
+						  <?
+						  db_textarea('descricao_recurso',4,56,'',true,'text',1,"", '', '', 150);
+						  ?>
+                      </td>
+                  </tr>
                <tr>
                   <td class="label-textarea" nowrap title="Links da publicação">
                     <b>Links da publicação:</b>
@@ -118,27 +139,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                <tr>
-                  <td nowrap title="Origem do recurso">
-                    <b>Origem do recurso:</b>
-                  </td>
-                  <td>
-                    <?
-                    $arr_tipo = array("0"=>"Selecione","1"=>"1- Próprio","2"=>"2- Estadual","3"=>"3- Federal","4"=>"4- Próprio e Estadual", "5"=> "5- Próprio e Federal", "9"=> "9- Outros");
-                    db_select("origem_recurso",$arr_tipo,true,1);
-                    ?>
-                  </td>
-                </tr>
-                <tr id="tr_desc_recurso">
-                  <td class="label-textarea" nowrap title="Descrição do recurso">
-                    <b>Descrição do Recurso:</b>
-                  </td>
-                  <td>
-                    <?
-                    db_textarea('descricao_recurso',4,56,'',true,'text',1,"", '', '', 150);
-                    ?>
-                  </td>
-                </tr>
+
                   <tr id="td_obras" style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
                     <td colspan="3">
                       <fieldset>
