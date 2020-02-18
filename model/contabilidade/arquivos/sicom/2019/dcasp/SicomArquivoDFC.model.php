@@ -310,7 +310,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
         $cldfcdcasp10->si219_vlreceitaservicos = $aRetornoDFC[41]->$sChave;
         $cldfcdcasp10->si219_vlremuneracaodisponibilidade = $aRetornoDFC[42]->$sChave;
         $cldfcdcasp10->si219_vloutrasreceitas = $aRetornoDFC[43]->$sChave;
-        $cldfcdcasp10->si219_vltransferenciarecebidas = $aRetornoDFC[45]->$sChave;
+        $cldfcdcasp10->si219_vltransferenciarecebidas = $aRetornoDFC[53]->$sChave;
 
 
       $cldfcdcasp10->si219_vltotalingressosativoperacionais = $aRetornoDFC[2]->$sChave;
