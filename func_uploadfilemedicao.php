@@ -63,7 +63,7 @@ if(isset($uploadfile)) {
   // Seta o nome do arquivo destino do upload
   $arquivoDocument = "$diretorio"."$novo_nome";
 
-  if($extensao != ".png" && $extensao != "jpeg"){
+  if($extensao != ".png" && $extensao != "jpeg" && $extensao != "jpg" ){
     db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo JPEG ou PNG");
     unlink($nometmp);
     $lFail = true;

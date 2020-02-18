@@ -21,12 +21,14 @@ if(isset($alterar)){
   db_fieldsmemory($resultObras,0);
   $dtLancamentoObras = (implode("/",(array_reverse(explode("-",$obr01_dtlancamento)))));
   $dtalancamento = DateTime::createFromFormat('d/m/Y', $obr02_dtlancamento);
+  $dtpublicacao = DateTime::createFromFormat('d/m/Y', $obr02_dtpublicacao);
+
 
   try {
     /**
      * validação com sicom
      */
-    if(!empty($dtalancamento)){
+    if(!empty($dtpublicacao)){
       $anousu = db_getsession('DB_anousu');
       $instituicao = db_getsession('DB_instit');
       $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
@@ -34,7 +36,7 @@ if(isset($alterar)){
       $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
       $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-      if ($dtalancamento <= $dtencerramento) {
+      if ($dtpublicacao <= $dtencerramento) {
         throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       }
     }

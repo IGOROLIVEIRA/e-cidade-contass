@@ -30,7 +30,7 @@ if(isset($alterar)){
     /**
      * validação com sicom
      */
-    if(!empty($dtlancamentoobra)){
+    if(!empty($datainicioatividades)){
       $anousu = db_getsession('DB_anousu');
       $instituicao = db_getsession('DB_instit');
       $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
@@ -38,7 +38,7 @@ if(isset($alterar)){
       $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
       $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-      if ($dtlancamentoobra <= $dtencerramento) {
+      if ($datainicioatividades <= $dtencerramento) {
         throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       }
     }
