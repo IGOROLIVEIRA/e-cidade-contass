@@ -129,7 +129,7 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                <tr>
+                <tr id="tr_desc_recurso">
                   <td class="label-textarea" nowrap title="Descrição do recurso">
                     <b>Descrição do Recurso:</b>
                   </td>
@@ -192,6 +192,19 @@ $db_botao = true;
 <script>
     let iSequencial = '<?= $sequencial; ?>';
     let codigoLicitacao = "<?= $codigolicitacao;?>";
+    let origem_rec = "<?= $origem_recurso?>";
+
+    function js_mostraDescricao(valor){
+        if(valor != 9){
+            document.getElementById('tr_desc_recurso').style.display = 'none';
+        }else document.getElementById('tr_desc_recurso').style.display = '';
+    }
+
+    js_mostraDescricao(origem_rec);
+
+    document.getElementById('origem_recurso').addEventListener('change', (e)=> {
+        js_mostraDescricao(e.target.value);
+    });
 
     function js_pesquisa(){
         js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
