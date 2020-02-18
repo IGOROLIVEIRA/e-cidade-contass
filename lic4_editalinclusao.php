@@ -214,13 +214,14 @@ if (isset($incluir)) {
 		echo "</script>";
 	}
 	echo "<script>document.form1.data_referencia.value = '" . $data_referencia . "';</script>";
-}else {
-    echo "<script>";
-	echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
-	echo "parent.iframe_editais.js_buscaDadosComplementares();";
-	echo "parent.iframe_documentos.js_getDocumento();";
-	echo "</script>";
 }
+
+echo "<script>";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
+echo "parent.iframe_editais.js_buscaDadosComplementares();";
+echo "parent.iframe_documentos.js_getDocumento();";
+echo "</script>";
+
 
 if (!trim($licitacao)) {
 	echo "<script>";
