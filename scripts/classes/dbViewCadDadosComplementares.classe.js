@@ -1222,6 +1222,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         me.oCboSubGrupoBemPub.clearItens();
         me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+        $('cboSubGrupoBemPub'+sId).disabled = false;
 
         switch (valor) {
             case '4':
@@ -2339,7 +2340,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtDistrito = new DBTextField('txtDistrito' + sId, 'txtDistrito' + sId, '');
     me.oTxtDistrito.addStyle('width', '100%');
     me.oTxtDistrito.setMaxLength(100);
-    me.oTxtDistrito.addEvent('onKeyUp', "js_ValidaCampos(this,2,\"Campo Distrito\",\"f\",\"t\",event)");
+    me.oTxtDistrito.addEvent('onKeyUp', "js_valida(this,2,\"Campo Distrito\",\"f\",\"t\",event)");
     me.oTxtDistrito.show($('ctnDistrito' + sId));
     $('ctnDistrito' + sId).observe('change', me.changeDistrito);
 
@@ -2483,8 +2484,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     me.oSegundoLatitude = new DBTextField('txtSegundoLatitude' + sId, 'txtSegundoLatitude' + sId, '');
     me.oSegundoLatitude.addStyle('width', '80px');
-    me.oSegundoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Segundo Latitude\",\"f\",\"f\",event)");
-    me.oSegundoLatitude.setMaxLength(5);
+    me.oSegundoLatitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Latitude\",\"f\",\"t\",event)");
+    me.oSegundoLatitude.setMaxLength(6);
     me.oSegundoLatitude.show($('ctnSegundoLatitude' + sId));
     $('ctnSegundoLatitude' + sId).observe('change', me.changeSegundoLatitude);
 
@@ -2572,8 +2573,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
     me.oSegundoLongitude.addStyle('width', '80px');
-    me.oSegundoLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,1,\"Campo Segundo Longitude\",\"f\",\"f\",event)");
-    me.oSegundoLongitude.setMaxLength(5);
+    me.oSegundoLongitude.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo Segundo Longitude\",\"f\",\"t\",event)");
+    me.oSegundoLongitude.setMaxLength(6);
     me.oSegundoLongitude.show($('ctnSegundoLongitude' + sId));
     $('ctnSegundoLongitude' + sId).observe('change', me.changeSegundoLongitude);
 
