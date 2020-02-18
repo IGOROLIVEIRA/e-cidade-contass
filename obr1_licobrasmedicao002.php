@@ -9,9 +9,11 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 include("classes/db_licobrasmedicao_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobrasmedicao = new cl_licobrasmedicao;
+$clcondataconf = new cl_condataconf;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
@@ -19,16 +21,34 @@ if(isset($alterar)){
   $dtfimmedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtfimmedicao);
   $dtiniciomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtiniciomedicao);
   $dtentregamedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtentregamedicao);
-
-  if($dtfimmedicao < $dtiniciomedicao){
-    throw new Exception("Usuário: Data Fim da Medição deve ser igual ou maior que Data Inicio da Medição.");
-  }
-
-  if($dtentregamedicao < $dtfimmedicao){
-    throw new Exception("Usuário: Entrega da Medição deve ser igual ou maior que Fim da Medição.");
-  }
+  $dtlancamentomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtlancamento);
 
   try{
+
+    /**
+     * validação com sicom
+     */
+    if(!empty($dtlancamentomedicao)){
+      $anousu = db_getsession('DB_anousu');
+      $instituicao = db_getsession('DB_instit');
+      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+      db_fieldsmemory($result);
+      $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+      $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
+
+      if ($dtlancamentomedicao <= $dtencerramento) {
+        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+    }
+
+    if($dtfimmedicao < $dtiniciomedicao){
+      throw new Exception("Usuário: Data Fim da Medição deve ser igual ou maior que Data Inicio da Medição.");
+    }
+
+    if($dtentregamedicao < $dtfimmedicao){
+      throw new Exception("Usuário: Entrega da Medição deve ser igual ou maior que Fim da Medição.");
+    }
+
     $resulMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query(null,"obr03_nummedicao",null,"obr03_nummedicao = $obr03_nummedicao and obr03_sequencial != $obr03_sequencial"));
     if(pg_num_rows($resulMedicao) > 0){
       throw new Exception("Usuário: Numero da Medicao ja utilizado !");

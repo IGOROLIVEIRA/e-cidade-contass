@@ -20,11 +20,6 @@ if(isset($incluir)){
   $dtentregamedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtentregamedicao);
   $dtlancamentomedicao = DateTime::createFromFormat('d/m/Y', $obr03_dtlancamento);
 
-  $resultsituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr03_seqobra and obr02_situacao = 7"));
-  if(pg_num_rows($resultsituacao)> 0){
-    db_fieldsmemory($resultsituacao,0);
-  }
-
   $data = (implode("/",(array_reverse(explode("-",$obr02_dtsituacao)))));
   $dtsituacao = DateTime::createFromFormat('d/m/Y', $data);
 
@@ -37,13 +32,16 @@ if(isset($incluir)){
       $anousu = db_getsession('DB_anousu');
       $instituicao = db_getsession('DB_instit');
       $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
-      $data = db_utils::fieldsMemory($result, 0)->c99_datapat;
-      $c99_datapat = DateTime::createFromFormat('d/m/Y', $data);
+      db_fieldsmemory($result);
+      $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+      $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-      if ($dtlancamentomedicao <= $c99_datapat) {
+      if ($dtlancamentomedicao <= $dtencerramento) {
         throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       }
     }
+
+    $resultsituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr03_seqobra and obr02_situacao = 7"));
 
     if(pg_num_rows($resultsituacao > 0)){
       if($dtentregamedicao >= $dtsituacao){
