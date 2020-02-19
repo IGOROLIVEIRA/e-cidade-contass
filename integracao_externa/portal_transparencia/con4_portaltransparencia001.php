@@ -2446,6 +2446,7 @@ try {
     $sSqlServidores .= "       z01_cgccpf  as cpf,                                   ";
     $sSqlServidores .= "       rh37_descr  as cargo,                                 ";
     $sSqlServidores .= "       r70_descr   as lotacao,                               ";
+    $sSqlServidores .= "       rh55_descr  as localtrabalho,                         ";
     $sSqlServidores .= "       rh30_descr  as vinculo,                               ";
     $sSqlServidores .= "       rh01_admiss as admissao,                              ";
     $sSqlServidores .= "       rh05_recis  as rescisao,                              ";
@@ -2462,7 +2463,9 @@ try {
     $sSqlServidores .= "                              and rh02_instit = rh30_instit  ";
     $sSqlServidores .= "       inner join db_config    on codigo      = rh02_instit  ";
     $sSqlServidores .= "       left join rhpesrescisao on rh05_seqpes = rh02_seqpes  ";
-
+    $sSqlServidores .= "       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes";
+    $sSqlServidores .= "       and rh56_princ  = 't'                                 ";
+    $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
     $sSqlServidores .= " AND
 

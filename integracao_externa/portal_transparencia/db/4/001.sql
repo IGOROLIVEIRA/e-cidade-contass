@@ -22,6 +22,7 @@ CREATE TABLE servidor_movimentacoes (
 
   cargo        character varying(255) NOT NULL,
   lotacao      character varying(255) NOT NULL,
+  localtrabalho character varying(255) NOT NULL,
   vinculo      character varying(255) NOT NULL,
   CONSTRAINT servidor_movimentacoes_id_pk         PRIMARY KEY (id), 
   CONSTRAINT servidor_movimentacoes_servidores_fk FOREIGN KEY (servidor_id) REFERENCES servidores(id)
