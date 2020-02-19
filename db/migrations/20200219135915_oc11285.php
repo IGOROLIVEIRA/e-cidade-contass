@@ -10,9 +10,7 @@ class Oc11285 extends AbstractMigration
         
         BEGIN;
         
-        DROP TABLE dfcdcasp102019;
-        
-        alter table dadoscomplementareslrf add column;
+        ALTER TABLE dadoscomplementareslrf ADD column ve81_codigonovo int4;
 
       COMMIT;
 SQL;
