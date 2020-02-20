@@ -65,16 +65,21 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
     }
 
     #conteudo{
-        margin-bottom: 20px;
-        height: 60%;
-        border: 2px solid #b4b4b4;
-        margin: 4px;
+       text-align: -moz-center;
+    }
+
+    #container_image{
+        margin-top: 10%;
+        height: 300px;
+        vertical-align: middle;
+        text-align: center;
+        display: table-cell;
     }
 
     #img_atual{
-        max-width: 166px;
-        max-height: 166px;
-        padding: 5%;
+        max-height: 360px;
+        display: block;
+        margin: 10% auto auto auto;;
     }
 
 </style>
@@ -83,7 +88,9 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
         <p><b>Imagens do Bem</b></p>
     </div>
     <div id="conteudo">
-        <img src="" id="img_atual">
+        <div id="container_image">
+            <img src="" id="img_atual">
+        </div>
     </div>
     <div id="rodape">
         <input type='button' id="inicio" value='Início' onclick="acaoFoto('inicio')">

@@ -41,7 +41,7 @@ $oGet = db_utils::postMemory($_GET);
 $clbem = new cl_bens;
 $clbem->rotulo->label();
 $clbemfoto = new cl_bemfoto;
-
+$db_opcaoal = 1;
 $clbemfoto->rotulo->label();
 
 //testa para saber se é pessoa física ou jurídica
