@@ -65,8 +65,8 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
                 $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
                 $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? ' ' : $aRALIC10['si180_regimeexecucaoobras'];
-                $aCSVRALIC10['si180_vlcontratacao']              = $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 4);
-                $aCSVRALIC10['si180_bdi']                        = $this->sicomNumberReal($aRALIC10['si180_bdi'], 4);
+                $aCSVRALIC10['si180_vlcontratacao']              = $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
+                $aCSVRALIC10['si180_bdi']                        = $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
                 $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
                 $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);
@@ -132,38 +132,6 @@ class GerarRALIC extends GerarAM
 					}
 
                 }
-
-//                for ($iCont3 = 0; $iCont3 < pg_num_rows($rsRALIC12); $iCont3++) {
-//
-//                    $aRALIC12 = pg_fetch_array($rsRALIC12, $iCont3);
-//
-//                    if ($aRALIC10['si180_sequencial'] == $aRALIC12['si182_reg10']) {
-//                    	$aCSVRALIC12['si182_tiporegistro']                = $this->padLeftZero($aRALIC12['si182_tiporegistro'], 2);
-//                        $aCSVRALIC12['si182_codorgaoresp']                = $this->padLeftZero($aRALIC12['si182_codorgaoresp'], 3);
-//                        $aCSVRALIC12['si182_codunidadesubresp']           = $this->padLeftZero($aRALIC12['si182_codunidadesubresp'], 5);
-//                        $aCSVRALIC12['si182_codunidadesubrespestadual']   = $this->padLeftZero(intval($aRALIC12['si182_codunidadesubrespestadual']), 4);
-//                        $aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
-//                        $aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
-//                        $aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
-//                        $aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
-//                        $aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
-//                        $aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
-//                        $aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
-//                        $aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
-//                        $aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
-//                        $aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
-//                        $aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
-//                        $aCSVRALIC12['si182_segundolatitude']             = $aRALIC12['si182_segundolatitude'];
-//                        $aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
-//                        $aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
-//                        $aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
-//
-//                        $this->sLinha = $aCSVRALIC12;
-//                        $this->adicionaLinha();
-//
-//                    }
-//
-//                }
 
             }
 
