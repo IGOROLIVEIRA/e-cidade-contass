@@ -306,7 +306,7 @@ $sWhereContratos = " and 1 = 1 ";
                 if (isset($edital) && $edital == true) {
                     $sWhere = '';
                     if($aguardando_envio){
-                      $sWhere = ' and liclicita.l20_cadinicial = 1';
+                      $sWhere = ' AND liclicita.l20_cadinicial = 1';
                     }
 
                     $sql = "
@@ -350,7 +350,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = ".db_getsession('DB_instit')."
-                           AND EXTRACT (YEAR from l20_datacria) >= 2020 AND l20_usaregistropreco = 'f' $sWhere
+                           AND EXTRACT (YEAR from l20_datacria) >= 2020 $sWhere
                         ORDER BY l20_codigo
           ";
                 }
