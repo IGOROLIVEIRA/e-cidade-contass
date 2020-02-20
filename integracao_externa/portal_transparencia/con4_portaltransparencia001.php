@@ -2446,7 +2446,11 @@ try {
     $sSqlServidores .= "       z01_cgccpf  as cpf,                                   ";
     $sSqlServidores .= "       rh37_descr  as cargo,                                 ";
     $sSqlServidores .= "       r70_descr   as lotacao,                               ";
-    $sSqlServidores .= "       rh55_descr  as localtrabalho,                         ";
+    $sSqlServidores .= "       case 
+                                    when rh55_descr is not null then rh55_descr                         
+                                    else r70_descr
+                                    end as localtrabalho,
+                               ";
     $sSqlServidores .= "       rh30_descr  as vinculo,                               ";
     $sSqlServidores .= "       rh01_admiss as admissao,                              ";
     $sSqlServidores .= "       rh05_recis  as rescisao,                              ";
