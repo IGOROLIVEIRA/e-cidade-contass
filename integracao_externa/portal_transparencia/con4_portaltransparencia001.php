@@ -2497,6 +2497,7 @@ try {
   LIMIT 1))
   )
   ";
+
     $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
 
     db_query($connOrigem, $sSqlServidores);
@@ -2569,10 +2570,11 @@ try {
     $sSqlMovimentacaoServidor .= "        mes,                                                              ";
     $sSqlMovimentacaoServidor .= "        cargo,                                                            ";
     $sSqlMovimentacaoServidor .= "        lotacao,                                                          ";
+    $sSqlMovimentacaoServidor .= "        localtrabalho,                                                    ";
     $sSqlMovimentacaoServidor .= "        vinculo,                                                          ";
     $sSqlMovimentacaoServidor .= "        salario_base                                                      ";
     $sSqlMovimentacaoServidor .= "    from dados_servidor                                                   ";
-    $sSqlMovimentacaoServidor .= "    group by servidor_id, ano, mes, cargo, lotacao, vinculo, salario_base ";
+    $sSqlMovimentacaoServidor .= "    group by servidor_id, ano, mes, cargo, lotacao, localtrabalho, vinculo, salario_base ";
 
     $rsServidoresMovimentacao  = db_query($connOrigem, $sSqlMovimentacaoServidor);
 
