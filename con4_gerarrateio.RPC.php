@@ -192,9 +192,9 @@ switch ($oParam->exec){
             // if (empty($oParam->dotacoes)) {
             //     throw new Exception("Selecione pelo menos uma dotação", 1);
             // }
-            if (empty($oParam->projetos)) {
-              throw new Exception("Selecione pelo menos um projeto", 1);
-          }
+          //   if (empty($oParam->projetos)) {
+          //     throw new Exception("Selecione pelo menos um projeto", 1);
+          // }
             if (empty($oParam->entes)) {
                 throw new Exception("Erro ao processar os entes: nenhum ente encontrado", 1);
             }
@@ -210,9 +210,9 @@ switch ($oParam->exec){
                 $aEntes[$oEnte->id] = $oEnte->percentual;
             }
 
-            $sProjetos = implode(', ', $oParam->projetos);
+            //$sProjetos = implode(', ', $oParam->projetos);
             //if (intval($oParam->mes) < 12) {
-            $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sProjetos);
+            $aClassificacao = $oConLancamDoc->classificacao($oParam->mes);
 
             $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
 

@@ -114,7 +114,7 @@ $aMeses = array(
                 </table>
             </div> -->
 
-            <div>
+            <!-- <div>
                 <table class="table">
                     <thead>
                     <tr>
@@ -137,7 +137,7 @@ $aMeses = array(
                     </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
 
             <input name="processar" type="submit" id="processar" value="Processar">
         </fieldset>
@@ -435,6 +435,6 @@ $aMeses = array(
     // carregaEntesDotacoes('01');
     carregaEntesProjetos('01');
     //carregarDotacoesParaRateio();
-    carregarProjAtivParaRateio();
+    //carregarProjAtivParaRateio();
 
 </script>

@@ -102,7 +102,7 @@ if( isset($calcular) ){
         echo "<pre>Inicio: ".date("d/m/Y H:i:s") . "<br/>";
 
         $xInicio = time();
-        $sql     = "select j01_matric from iptubase where j01_matric in (41433,41434,41432,43696,49217,41435,45982,49215,41430,43921,8011,41431)";
+        $sql     = "select j01_matric from iptubase";
         $result  = db_query( $sql );
         $numrows = pg_numrows($result);
         if($numrows == 0){

@@ -59,6 +59,7 @@ class cl_orcprojativ {
    var $o55_orcproduto = 0;
    var $o55_tipoensino = 0;
    var $o55_tipopasta = 0;
+   var $o55_rateio = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  o55_anousu = int4 = Exercício
@@ -78,6 +79,7 @@ class cl_orcprojativ {
                  o55_orcproduto = int4 = Produto
                  o55_tipoensino = int4 = Tipo de Ensino - Siope
                  o55_tipopasta = int4 = Tipo de Pasta - Siope
+                 o55_rateio = bool = Rateio
                  ";
    //funcao construtor da classe
    function cl_orcprojativ() {
@@ -114,6 +116,7 @@ class cl_orcprojativ {
        $this->o55_orcproduto = ($this->o55_orcproduto == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_orcproduto"]:$this->o55_orcproduto);
        $this->o55_tipoensino = ($this->o55_tipoensino == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_tipoensino"]:$this->o55_tipoensino);
        $this->o55_tipopasta = ($this->o55_tipopasta == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_tipopasta"]:$this->o55_tipopasta);
+       $this->o55_rateio = ($this->o55_rateio == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_rateio"]:$this->o55_rateio);
      }else{
        $this->o55_anousu = ($this->o55_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_anousu"]:$this->o55_anousu);
        $this->o55_projativ = ($this->o55_projativ == ""?@$GLOBALS["HTTP_POST_VARS"]["o55_projativ"]:$this->o55_projativ);
@@ -233,6 +236,7 @@ class cl_orcprojativ {
                                       ,o55_orcproduto
                                       ,o55_tipoensino
                                       ,o55_tipopasta
+                                      ,o55_rateio
                        )
                 values (
                                 $this->o55_anousu
@@ -252,6 +256,7 @@ class cl_orcprojativ {
                                ,$this->o55_orcproduto
                                ,$this->o55_tipoensino
                                ,$this->o55_tipopasta
+                               ,$this->o55_rateio
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -385,6 +390,11 @@ class cl_orcprojativ {
            return false;
        }
     }
+
+       if(trim($this->o55_rateio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o55_rateio"])){
+           $sql  .= $virgula." o55_rateio = '$this->o55_rateio' ";
+           $virgula = ",";
+       }
      if(trim($this->o55_finali)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o55_finali"])){
        $sql  .= $virgula." o55_finali = '$this->o55_finali' ";
        $virgula = ",";

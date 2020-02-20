@@ -248,10 +248,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircucredilongoprazo    = $oRetornoBP[10]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuinvestemplongpraz  = $oRetornoBP[11]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuestoques           = $oRetornoBP[12]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuvpdantecipada      = $oRetornoBP[13]->$sChave;
+      $vlativonaocircurlp = $oRetornoBP[10]->$sChave + $oRetornoBP[11]->$sChave + $oRetornoBP[12]->$sChave + $oRetornoBP[13]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircurlp                = $vlativonaocircurlp;
       $clbpdcasp10->si208_vlativonaocircuinvestimentos      = $oRetornoBP[14]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuimobilizado        = $oRetornoBP[15]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuintagivel          = $oRetornoBP[16]->$sChave;
