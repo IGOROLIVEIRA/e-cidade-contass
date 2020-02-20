@@ -67,6 +67,7 @@ class GerarDISPENSA extends GerarAM
         $aDISPENSA10 = pg_fetch_array($rsDISPENSA10, $iCont);
 
         $aCSVDISPENSA10['si74_tiporegistro'] = $this->padLeftZero($aDISPENSA10['si74_tiporegistro'], 2);
+        $aCSVDISPENSA10['si74_tipocadastro'] = $this->padLeftZero($aDISPENSA10['si74_tipocadastro'], 1);
         $aCSVDISPENSA10['si74_codorgaoresp'] = $this->padLeftZero($aDISPENSA10['si74_codorgaoresp'], 2);
         $aCSVDISPENSA10['si74_codunidadesubresp'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubresp'], 5);
         $aCSVDISPENSA10['si74_exercicioprocesso'] = $this->padLeftZero($aDISPENSA10['si74_exercicioprocesso'], 4);
