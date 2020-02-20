@@ -152,8 +152,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
                JOIN conlancamcorrente ON c86_conlancam = c70_codlan
                JOIN corrente ON (c86_id, c86_data, c86_autent) = (corrente.k12_id, corrente.k12_data, corrente.k12_autent)
-               JOIN corplacaixa ON (corrente.k12_id, corrente.k12_data, corrente.k12_autent) = (k82_id, k82_data, k82_autent)
-               JOIN placaixarec ON k82_seqpla = k81_seqpla    
+               LEFT JOIN corplacaixa ON (corrente.k12_id, corrente.k12_data, corrente.k12_autent) = (k82_id, k82_data, k82_autent)
+               LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla    
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
@@ -205,8 +205,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                         $oCodDoc2 = db_utils::fieldsMemory($rsDocRec, $i);
 
+                        $sRegRepasse    = $oCodDoc2->k81_regrepasse == '' ? '2' : $oCodDoc2->k81_regrepasse;
+                        $sEmParlamentar = $oCodDoc2->k81_emparlamentar == '' ? '3' : $oCodDoc2->k81_emparlamentar;
+
                         $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
-                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $oCodDoc2->k81_regrepasse . $oCodDoc2->k81_exerc . $oCodDoc2->k81_emparlamentar;
+                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
 
                         if (!isset($aDadosAgrupados[$sHash10])) {
 
@@ -217,9 +220,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
                             $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
                             $oDados10->si25_naturezareceita = $sNaturezaReceita;
-                            $oDados10->si25_regularizacaorepasse = $oCodDoc2->k81_regrepasse;
+                            $oDados10->si25_regularizacaorepasse = $sRegRepasse;
                             $oDados10->si25_exercicio = $oCodDoc2->k81_exerc;
-                            $oDados10->si25_emendaparlamentar = $oCodDoc2->k81_emparlamentar;
+                            $oDados10->si25_emendaparlamentar = $sEmParlamentar;
                             $oDados10->si25_vlarrecadado = 0;
                             $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                             $oDados10->Reg11 = array();
@@ -232,7 +235,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $oCodDoc2->k81_regrepasse . $oCodDoc2->k81_exerc . $oCodDoc2->k81_emparlamentar;
+                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
 
                         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
@@ -292,7 +295,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                 $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
                                 if($sHashCgm != ''){
-                                    $sHashCgm = $sHashCgm . $oCodDoc2->k81_regrepasse . $oCodDoc2->k81_exerc . $oCodDoc2->k81_emparlamentar;
+                                    $sHashCgm = $sHashCgm . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
                                     $oDados11->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                                     $aDadosCgm11[$sHashCgm] = $oDados11;
                                 } else {
