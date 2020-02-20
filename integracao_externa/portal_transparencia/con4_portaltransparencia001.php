@@ -200,7 +200,7 @@ try {
   if ( !$rsMaxRequisitantes) {
     throw new Exception("ERRO-0: Erro ao buscar maior data requisitantes_transparencia !".$sSqlMaxRequisitante);
   }
-  
+
   $sSqlRequisitantes = "SELECT * FROM transparencia.requisitantes";
   if(!empty(db_utils::fieldsMemory($rsMaxRequisitantes,0)->maxdata)) {
     $sSqlRequisitantes .= " WHERE data > '".db_utils::fieldsMemory($rsMaxRequisitantes,0)->maxdata."'";
@@ -1661,10 +1661,10 @@ try {
 
     // RECEITAS *******************************************************************************************************//
 
-    $sSqlInstitPref = "SELECT db21_tipoinstit FROM configuracoes.db_config";
+    $sSqlInstitPref = "SELECT db21_tipoinstit FROM configuracoes.db_config WHERE db21_tipoinstit IN (2,12) ";
     $rsInstitPref   = db_query($connOrigem,$sSqlInstitPref);
     $sInstitPref    = pg_result($rsInstitPref,0,0);
-    if ($sInstitPref != 2 && $sInstitPref != 12) {
+    if (!empty($sInstitPref)) {
 
         db_logTitulo(" IMPORTA RECEITAS", $sArquivoLog, $iParamLog);
 
