@@ -2446,6 +2446,11 @@ try {
     $sSqlServidores .= "       z01_cgccpf  as cpf,                                   ";
     $sSqlServidores .= "       rh37_descr  as cargo,                                 ";
     $sSqlServidores .= "       r70_descr   as lotacao,                               ";
+    $sSqlServidores .= "       case 
+                                    when rh55_descr is not null then rh55_descr                         
+                                    else r70_descr
+                                    end as localtrabalho,
+                               ";
     $sSqlServidores .= "       rh30_descr  as vinculo,                               ";
     $sSqlServidores .= "       rh01_admiss as admissao,                              ";
     $sSqlServidores .= "       rh05_recis  as rescisao,                              ";
@@ -2462,7 +2467,9 @@ try {
     $sSqlServidores .= "                              and rh02_instit = rh30_instit  ";
     $sSqlServidores .= "       inner join db_config    on codigo      = rh02_instit  ";
     $sSqlServidores .= "       left join rhpesrescisao on rh05_seqpes = rh02_seqpes  ";
-
+    $sSqlServidores .= "       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes";
+    $sSqlServidores .= "       and rh56_princ  = 't'                                 ";
+    $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
     $sSqlServidores .= " AND
 
@@ -2490,6 +2497,7 @@ try {
   LIMIT 1))
   )
   ";
+
     $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
 
     db_query($connOrigem, $sSqlServidores);
@@ -2562,10 +2570,11 @@ try {
     $sSqlMovimentacaoServidor .= "        mes,                                                              ";
     $sSqlMovimentacaoServidor .= "        cargo,                                                            ";
     $sSqlMovimentacaoServidor .= "        lotacao,                                                          ";
+    $sSqlMovimentacaoServidor .= "        localtrabalho,                                                    ";
     $sSqlMovimentacaoServidor .= "        vinculo,                                                          ";
     $sSqlMovimentacaoServidor .= "        salario_base                                                      ";
     $sSqlMovimentacaoServidor .= "    from dados_servidor                                                   ";
-    $sSqlMovimentacaoServidor .= "    group by servidor_id, ano, mes, cargo, lotacao, vinculo, salario_base ";
+    $sSqlMovimentacaoServidor .= "    group by servidor_id, ano, mes, cargo, lotacao, localtrabalho, vinculo, salario_base ";
 
     $rsServidoresMovimentacao  = db_query($connOrigem, $sSqlMovimentacaoServidor);
 
