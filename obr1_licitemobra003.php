@@ -13,22 +13,22 @@ $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $cllicitemobra->excluir($oid);
+  $cllicitemobra->excluir($obr06_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
-   $db_opcao = 3;
-   $result = $cllicitemobra->sql_record($cllicitemobra->sql_query($chavepesquisa));
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  $db_opcao = 3;
+  $result = $cllicitemobra->sql_record($cllicitemobra->sql_query($chavepesquisa));
+  db_fieldsmemory($result,0);
+  $db_botao = true;
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   #obr06_descricaotabela{
@@ -37,23 +37,13 @@ if(isset($excluir)){
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<table>
   <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmlicitemobra.php");
-	?>
-    </center>
-	</td>
+    <td>
+      <?
+      include("forms/db_frmlicitemobra.php");
+      ?>
+    </td>
   </tr>
 </table>
 <?
@@ -74,5 +64,5 @@ if($db_opcao==33){
 }
 ?>
 <script>
-js_tabulacaoforms("form1","excluir",true,1,"excluir",true);
+  js_tabulacaoforms("form1","excluir",true,1,"excluir",true);
 </script>

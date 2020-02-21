@@ -3,8 +3,7 @@
 $cllicitemobra->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-  <center>
-    <fieldset style="margin-left: 239px;margin-top: 15px">
+    <fieldset style="margin-left: 310px;margin-top: 60px">
       <legend>Item Obra</legend>
       <table border="0">
         <tr>
@@ -37,8 +36,12 @@ $cllicitemobra->rotulo->label();
           </td>
           <td>
             <?
-            $aTab = array("0"=>"Selecione","1" => "1 - Tabela SINAP", "2" => "2 - Tabela SIPRO", "3" => "3 - Outras Tabelas Oficiais");
-            db_select('obr06_tabela',$aTab,true,$db_opecao,"")
+            $aTab = array("0"=>"Selecione",
+                          "1" => "1 - Tabela SINAP",
+                          "2" => "2 - Tabela SIPRO",
+                          "3" => "3 - Outras Tabelas Oficiais",
+                          "4" => "4 - Cadastro Próprio" );
+            db_select('obr06_tabela',$aTab,true,$db_opcao,"")
             ?>
           </td>
         </tr>
@@ -82,11 +85,45 @@ $cllicitemobra->rotulo->label();
             ?>
           </td>
         </tr>
+        <tr>
+          <td nowrap title="<?=@$Tobr06_dtcadastro?>">
+            <?=@$Lobr06_dtcadastro?>
+          </td>
+          <td>
+            <?
+            if(!isset($obr06_dtcadastro)) {
+              $obr06_dtcadastro_dia=date('d',db_getsession("DB_datausu"));
+              $obr06_dtcadastro_mes=date('m',db_getsession("DB_datausu"));
+              $obr06_dtcadastro_ano=date('Y',db_getsession("DB_datausu"));
+            }
+            db_inputdata('obr06_dtcadastro',@$obr06_dtcadastro_dia,@$obr06_dtcadastro_mes,@$obr06_dtcadastro_ano,true,'text',$db_opcao);
+            ?>
+          </td>
+        </tr>
       </table>
     </fieldset>
-  </center>
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+  <table style="margin-left: 59%;margin-top: 10px">
+    <tr>
+      <td>
+        <?php
+        if($db_opcao == 1):
+        ?>
+        <input name="incluir" type="submit" id="db_opcao" value="Incluir" <?=($db_botao==false?"disabled":"")?> >
+        <?php
+        elseif ($db_opcao == 3):
+        ?>
+        <input name="excluir" type="submit" id="db_opcao" value="Excluir" <?=($db_botao==false?"disabled":"")?> >
+        <?php endif;?>
+        <?php
+//        var_dump($db_opcao);exit;
+          if($db_opcao != 1 && $db_opcao != 3):
+        ?>
+        <input name="alterar" type="submit" id="db_opcao" value="Alterar" <?=($db_botao==false?"disabled":"")?> >
+        <?endif;?>
+        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+      </td>
+    </tr>
+  </table>
 </form>
 <script>
   function js_pesquisa(){
@@ -104,7 +141,7 @@ $cllicitemobra->rotulo->label();
 
   function js_pesquisa_codmater(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('','db_iframe_mater','func_pcmater.php?obras=true&funcao_js=parent.js_mostra1|pc01_codmater|pc01_descrmater','Pesquisa',true);
+      js_OpenJanelaIframe('','db_iframe_mater','func_pcmater.php?obras=true&funcao_js=parent.js_mostra1|pc01_codmater|pc01_descrmater|obr06_tabela|obr06_descricaotabela','Pesquisa',true);
     }else{
       if(document.form1.obr06_pcmater.value != ''){
         js_OpenJanelaIframe('','db_iframe_mater','func_pcmater.php?obras=true&pesquisa_chave='+document.form1.obr06_pcmater.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
@@ -122,9 +159,13 @@ $cllicitemobra->rotulo->label();
       document.form1.pc01_descrmater.value=chave;
     }
   }
-  function js_mostra1(chave1,chave2){
+  function js_mostra1(chave1,chave2,chave3,chave4){
+    console.log(chave3);
+    console.log(chave4);
     document.form1.obr06_pcmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
+    document.form1.obr06_tabela.value = chave3;
+    document.form1.obr06_descricaotabela.value = chave4;
     db_iframe_mater.hide();
   }
   function js_carregar() {

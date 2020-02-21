@@ -49,6 +49,7 @@ class Oc11364 extends AbstractMigration
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr06_codigotabela'		,'text' ,'Código da Tabela'			,'', 'Código da Tabela'			,15	,false, false, false, 0, 'text', 'Código da Tabela');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr06_versaotabela'		,'text' ,'Versão da Tabela'			,'', 'Versão da Tabela'			,15	,false, false, false, 0, 'text', 'Versão da Tabela');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr06_dtregistro'			,'date' ,'Data do Registro'			,'', 'Data do Registro'		 	,10	,false, false, false, 0, 'date', 'Data do Registro');
+                INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr06_dtcadastro'     ,'date' ,'Data de Cadastro'     ,'', 'Data de Cadastro'     ,10 ,false, false, false, 0, 'date', 'Data de Cadastro');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr06_instit'				,'int4' ,'Instituição'				,'', 'Instituição'		 		,10	,false, false, false, 0, 'int4', 'Instituição');
 
                 -- INSERE db_sysarqcamp
@@ -60,6 +61,7 @@ class Oc11364 extends AbstractMigration
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr06_versaotabela') 	 , 6, 0);
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr06_dtregistro') 		 , 7, 0);
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr06_instit')	 		 , 8, 0);
+                INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'obr06_dtcadastro')      , 9, 0);
 
                 -- DROP DA TABELA
 
@@ -74,6 +76,7 @@ class Oc11364 extends AbstractMigration
                 obr06_codigotabela              varchar(15)  ,
                 obr06_versaotabela         		varchar(15)  ,
                 obr06_dtregistro              	date  ,
+                obr06_dtcadastro            date,
                 obr06_instit            		int4);
 
                 -- Criando  sequences

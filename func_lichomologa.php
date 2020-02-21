@@ -128,7 +128,7 @@ $sWhereContratos = " and 1 = 1 ";
 
       if ($validafornecedor == "1"){
           $whereHab = " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
-          $whereHab .= "AND l03_pctipocompratribunal NOT IN (100,101,102,103,)";
+          $whereHab .= "AND l03_pctipocompratribunal NOT IN (100,101,102,103)";
       }
 
       if(!isset($pesquisa_chave)){
