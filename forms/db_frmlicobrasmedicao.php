@@ -307,6 +307,11 @@ $cllicobrasmedicao->rotulo->label();
 
   function js_salvarAnexo() {
     var medicao = $F('obr03_sequencial');
+
+    if (medicao == '') {
+      alert('Escolha uma medição!');
+      return false;
+    }
     var iFrame = document.createElement("iframe");
     iFrame.src = 'func_uploadfilemedicao.php?clone=form2&medicao='+$F('obr03_sequencial')+'&descricao='+$F('obr04_legenda');
     iFrame.id  = 'uploadIframe';
