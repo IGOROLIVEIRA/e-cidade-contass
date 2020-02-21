@@ -329,7 +329,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $claberlic10 = new cl_aberlic102020();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
             $claberlic10->si46_tiporegistro = 10;
-            $claberlic10->si46_tipocadastro = isset($oDados10->tipocadastro) ? $oDados10->tipocadastro : 1;
+            $claberlic10->si46_tipocadastro = 1;
             $claberlic10->si46_codorgaoresp = $oDados10->codorgaoresp;
             $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
             $claberlic10->si46_exerciciolicitacao = $oDados10->exerciciolicitacao;
