@@ -676,7 +676,7 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_nroedital == null){
+        if ($this->l20_nroedital == null ){
             if(in_array($tribunal, array(48, 49, 50, 52, 53, 54))) {
                 $this->erro_sql = " Campo Numero Edital não Informado.";
                 $this->erro_campo = "l20_nroedital";
@@ -1678,16 +1678,18 @@ class cl_liclicita
         }
 
         if (trim($this->l20_nroedital != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_nroedital"]))) {
-            $sql .= $virgula . " l20_nroedital = $this->l20_nroedital ";
-            $virgula = ",";
-            if (trim($this->l20_nroedital) == null) {
-              $this->erro_sql = " Campo Número Edital nao Informado.";
-              $this->erro_campo = "l20_nroedital";
-              $this->erro_banco = "";
-              $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-              $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-              $this->erro_status = "0";
-              return false;
+            if(trim($this->l20_nroedital) != null){
+                $sql .= $virgula . " l20_nroedital = $this->l20_nroedital ";
+                $virgula = ",";
+            }
+            else if (trim($this->l20_nroedital) == null && in_array($tribunal, array(48, 49, 50, 52, 53, 54))){
+                $this->erro_sql = " Campo Número Edital nao Informado.";
+                $this->erro_campo = "l20_nroedital";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
             }
         }
 
