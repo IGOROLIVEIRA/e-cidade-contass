@@ -137,25 +137,18 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
             $cldclrf10->si157_vlsaldoatualcontragarantiaexterna = $dados->c218_vlsaldoatualcontragarantiaexterna;
             $cldclrf10->si157_medidascorretivas = $this->removeCaracteres($dados->c218_medidascorretivas);
             $cldclrf10->si157_recalieninvpermanente = $dados->c218_recalieninvpermanente;
-
             $cldclrf10->si157_vldotinicialincentcontrib = $dados->c218_vldotinicialincentivocontrib;
-
             $cldclrf10->si157_vldotatualizadaincentcontrib = $dados->c218_vldotatualizadaincentcontrib;
             $cldclrf10->si157_vlempenhadoicentcontrib = $dados->c218_vlempenhadoicentcontrib;
-
             $cldclrf10->si157_vldotinicialincentinstfinanc = $dados->c218_vldotincentconcedinstfinanc;
-
             $cldclrf10->si157_vldotatualizadaincentinstfinanc = $dados->c218_vldotatualizadaincentinstfinanc;
             $cldclrf10->si157_vlempenhadoincentinstfinanc = $dados->c218_vlempenhadoincentinstfinanc;
             $cldclrf10->si157_vlliqincentcontrib = $dados->c218_vlliqincentcontrib;
             $cldclrf10->si157_vlliqincentinstfinanc = $dados->c218_vlliqincentinstfinanc;
             $cldclrf10->si157_vlirpnpincentcontrib = $dados->c218_vlirpnpincentcontrib;
             $cldclrf10->si157_vlirpnpincentinstfinanc = $dados->c218_vlirpnpincentinstfinanc;
-//            $cldclrf10->si157_vlrecursosnaoaplicados = $dados->c218_vlrecursosnaoaplicados;
             $cldclrf10->si157_vlapropiacaodepositosjudiciais = $dados->c218_vlapropiacaodepositosjudiciais;
-
             $cldclrf10->si157_vlajustesrelativosrpps = $dados->c218_vlajustesrelativosrpps;
-
             $cldclrf10->si157_vloutrosajustes = $dados->c218_vloutrosajustes;
             $cldclrf10->si157_metarrecada = $dados->c218_metarrecada;
             $cldclrf10->si157_dscmedidasadotadas = $this->removeCaracteres($dados->c218_dscmedidasadotadas);//OC8680
