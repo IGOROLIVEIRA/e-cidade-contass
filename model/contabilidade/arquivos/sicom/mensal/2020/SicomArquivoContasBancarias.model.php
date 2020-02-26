@@ -497,7 +497,14 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
             $oCtb20->si96_tiporegistro = '20';
             $oCtb20->si96_codorgao = $oContaAgrupada->si95_codorgao;
             $oCtb20->si96_codctb = $oContaAgrupada->si95_codctb;
-            $oCtb20->si96_codfontrecursos = ($bCorrecaoFonte || $bFonteEncerrada) ? $iFonte2 : $iFonte;//Modificação para de/para das fontes encerradas tratadas na OC11537
+            //Modificação para de/para das fontes encerradas tratadas na OC11537
+            if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2020) {
+                $oCtb20->si96_codfontrecursos = $iFonte2;
+            } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2020) {
+                $oCtb20->si96_codfontrecursos = $iFonte2;
+            } else {
+                $oCtb20->si96_codfontrecursos = $iFonte;
+            }
             $oCtb20->si96_vlsaldoinicialfonte = $oTotalMov->sinalanterior == 'C' ? $oTotalMov->saldo_anterior * -1 : $oTotalMov->saldo_anterior;
             $oCtb20->si96_vlsaldofinalfonte = ($bFonteEncerrada && $bCorrecaoFonte) ? 0 : ($oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final);
             $oCtb20->si96_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -546,7 +553,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tiporegistro = '21';
                       $oDadosMovi21->si97_codctb = $oContaAgrupada->si95_codctb;
                       $oDadosMovi21->si97_codfontrecursos = $iFonte2;
-                      $oDadosMovi21->si97_codreduzidomov = '11111';
+                      $oDadosMovi21->si97_codreduzidomov = $oContaAgrupada->si95_codctb . $iFonte . 1;
                       $oDadosMovi21->si97_tipomovimentacao = 1;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
@@ -571,7 +578,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tiporegistro = '21';
                       $oDadosMovi21->si97_codctb = $oContaAgrupada->si95_codctb;
                       $oDadosMovi21->si97_codfontrecursos = $iFonte;
-                      $oDadosMovi21->si97_codreduzidomov = '11111';
+                      $oDadosMovi21->si97_codreduzidomov = $oContaAgrupada->si95_codctb . $iFonte . 2;
                       $oDadosMovi21->si97_tipomovimentacao = 2;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
@@ -598,7 +605,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tiporegistro = '21';
                       $oDadosMovi21->si97_codctb = $oContaAgrupada->si95_codctb;
                       $oDadosMovi21->si97_codfontrecursos = $iFonte2;
-                      $oDadosMovi21->si97_codreduzidomov = '11111';
+                      $oDadosMovi21->si97_codreduzidomov = $oContaAgrupada->si95_codctb . $iFonte . 2;
                       $oDadosMovi21->si97_tipomovimentacao = 2;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
@@ -623,7 +630,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tiporegistro = '21';
                       $oDadosMovi21->si97_codctb = $oContaAgrupada->si95_codctb;
                       $oDadosMovi21->si97_codfontrecursos = $iFonte;
-                      $oDadosMovi21->si97_codreduzidomov = '11111';
+                      $oDadosMovi21->si97_codreduzidomov = $oContaAgrupada->si95_codctb . $iFonte . 1;
                       $oDadosMovi21->si97_tipomovimentacao = 1;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
