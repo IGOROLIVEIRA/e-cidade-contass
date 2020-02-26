@@ -10,6 +10,7 @@ include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_condataconf_classe.php");
 include("classes/db_liclicitasituacao_classe.php");
+include("classes/db_licitemobra_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
@@ -17,6 +18,7 @@ $clitenshomologacao    = new cl_itenshomologacao;
 $clparecerlicitacao    = new cl_parecerlicitacao;
 $clprecomedio          = new cl_precomedio;
 $clliclicita           = new cl_liclicita;
+$cllicitemobra         = new cl_licitemobra;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -38,7 +40,16 @@ if(isset($incluir)){
         db_redireciona('lic1_homologacaoadjudica001.php');
     }
 
-
+    //Verifica itens obra
+  $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
+  foreach ($aPcmater as $item){
+    $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null,"*",null,"obr06_pcmater = $item->pc16_codmater"));
+    if(pg_num_rows($rsverifica) == 0){
+      echo
+      "<script>alert('Itens obras não cadastrados')</script>";
+      db_redireciona('lic1_homologacaoadjudica001.php');
+    }
+  }
 
 //  /**
 //   * Verificar Encerramento Periodo Contabil
@@ -71,10 +82,10 @@ if(isset($incluir)){
         $oLicitacao           = db_utils::fieldsMemory(db_query($sSql), 0);
 
         if(pg_numrows($rsResult) > 0 && $oLicitacao->l20_licsituacao == 1){
-          
+
           $oLicSituacao       = db_utils::fieldsMemory($rsResult, 0);
 
-          $dtDataJulg         = $oLicSituacao->l11_data;   
+          $dtDataJulg         = $oLicSituacao->l11_data;
           $dtDataJulgShow     = str_replace('-', '/', date('d-m-Y', strtotime($dtDataJulg)));
           $dtDataHomologacao  = date('Y-m-d', strtotime(str_replace('/', '-', $l202_datahomologacao)));
 
@@ -90,9 +101,9 @@ if(isset($incluir)){
 
   $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao ")));
   $precomedio  = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null,'*',null,'l209_licitacao ='.$l202_licitacao)));
-  
+
   if ( $clhomologacaoadjudica->verificaPrecoReferencia($l202_licitacao) >= 1 || $precomedio >= 1 ) {
-    
+
     if ($parecer >= 1) {
 
       $tipoparecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao")));
@@ -174,16 +185,16 @@ if(isset($incluir)){
 
     }else if($parecer < 1 || empty($parecer)){
 
-      echo 
+      echo
         "<script>alert('Falta Cadastro do Parecer')</script>";
 
       db_redireciona('lic1_homologacaoadjudica001.php');
-    
+
     }
 
   }else if($clhomologacaoadjudica->verificaPrecoReferencia($l202_licitacao) < 1){
 
-    echo 
+    echo
         "<script>alert('Falta Preco Referencia')</script>";
 
     db_redireciona('lic1_homologacaoadjudica001.php');

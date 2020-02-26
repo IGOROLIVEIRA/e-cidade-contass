@@ -48,7 +48,6 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
   db_inicio_transacao();
   $db_opcao = 2;
-
   $sSqlUltimoAno = "select max(o55_anousu) as anomaximo from orcprojativ";
   $rsUltimoAno   = $clorcprojativ->sql_record($sSqlUltimoAno);
   $iUltimoAno    = db_utils::fieldsMemory($rsUltimoAno, 0)->anomaximo;
@@ -56,6 +55,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
     $clorcprojativ->o55_anousu   = $iAno;
     $clorcprojativ->o55_projativ = $o55_projativ;
+    $clorcprojativ->o55_rateio   = $o55_rateio;
     $clorcprojativ->alterar($iAno,$o55_projativ);
 
     if ( $clorcprojativ->erro_status == 0 ){
@@ -69,6 +69,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   	$clorcprojativunidaderesp->o13_anousu 	    = $o55_anousu;
   	$clorcprojativunidaderesp->o13_orcprojativ	= $o55_projativ;
   	$clorcprojativunidaderesp->o13_unidaderesp	= $o13_unidaderesp;
+    $clorcprojativ->o55_rateio                  = $o55_rateio;
 
   	if ( trim($o13_sequencial) != "") {
   	  $clorcprojativunidaderesp->alterar($o13_sequencial);
@@ -103,6 +104,12 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
    $result = $clorcprojativ->sql_record($clorcprojativ->sql_query($chavepesquisa,$chavepesquisa1));
    db_fieldsmemory($result,0);
    $db_botao = true;
+
+   if($o55_rateio == 't'){
+       $o55_rateio=1;
+   }else {
+       $o55_rateio = 0;
+   }
 
    $digito = ($o55_projativ{0}*1000);
 

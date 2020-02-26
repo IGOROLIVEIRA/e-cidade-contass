@@ -186,19 +186,7 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
             }
 
-            if($listacred == "false"){
-                $sWhereCredenciamento = " and l03_pctipocompratribunal not in (103,102)";
-            }
-
-            if($credenciamento == 'true'){
-                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao = 1 AND l20_dtpubratificacao IS NULL";
-            }
-
-            if($credenciamento == 'false'){
-                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao IN (10) AND l20_dtpubratificacao IS NOT NULL";
-            }
-
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}"."$sWherePublicCredenciamento";
+            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
             if (isset($lContratos) && $lContratos == 1 ) {
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
@@ -212,6 +200,9 @@ $sWhereContratos = " and 1 = 1 ";
 
             }
 
+            if($obras == "true"){
+              $dbwhere .= " l20_naturezaobjeto = 1 and";
+            }
 
             if(!isset($pesquisa_chave)){
 
@@ -400,17 +391,28 @@ $sWhereContratos = " and 1 = 1 ";
                         }
                     }
                     else {
-                        $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+                        if($obras == "true"){
+                          $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
 
-                        if($clliclicita->numrows != 0){
+                          if($clliclicita->numrows != 0){
+                            db_fieldsmemory($result,0);
+                            echo "<script>".$funcao_js."('$l20_objeto','$l20_numero','$l03_descr',false);</script>";
+                          } else {
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                          }
+                        }else{
+                          $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+
+                          if($clliclicita->numrows != 0){
                             db_fieldsmemory($result,0);
                             if($tipoproc == "true"){
-                                echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                              echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
                             }else{
-                                echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                              echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                             }
-                        } else {
+                          } else {
                             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                          }
                         }
                     }
 

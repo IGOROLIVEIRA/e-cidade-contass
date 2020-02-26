@@ -309,6 +309,10 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	liclicita.l20_dtpubratificacao as dtPublicacaoTermoRatificacao,
 	l20_codigo as codlicitacao,
 	liclicita.l20_veicdivulgacao as veiculoPublicacao,
+	 (CASE 
+        WHEN liclicita.l20_cadInicial is null or liclicita.l20_cadInicial = 0 and liclicita.l20_anousu >= 2020 THEN 1
+     	ELSE liclicita.l20_cadInicial
+     END) as cadInicial,
 	(CASE liclicita.l20_tipojulg WHEN 3 THEN 1
 		ELSE 2
 	END) as processoPorLote
@@ -324,7 +328,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	AND DATE_PART('YEAR',l20_dtpubratificacao)=" . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -345,6 +349,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
       $dispensa10->si74_dtpublicacaotermoratificacao = $oDados10->dtpublicacaotermoratificacao;
       $dispensa10->si74_veiculopublicacao = $this->removeCaracteres($oDados10->veiculopublicacao);
       $dispensa10->si74_processoporlote = $oDados10->processoporlote;
+      $dispensa10->si74_tipocadastro = !$oDados10->cadInicial ? 1 : $oDados10->cadInicial;
       $dispensa10->si74_instit = db_getsession("DB_instit");
       $dispensa10->si74_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 

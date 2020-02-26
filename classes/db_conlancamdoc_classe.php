@@ -568,7 +568,7 @@ if($dbwhere==""){
 
 
 
-  public function classificacao($nMes = null, $sDotacoes = null)
+  public function classificacao($nMes = null)
   {
     $nAnoUsu = db_getsession('DB_anousu');
     $nInstit = db_getsession('DB_instit');
@@ -595,21 +595,22 @@ if($dbwhere==""){
                  END) AS pag,
              0 AS paganulado
       FROM conlancamdoc
+      INNER JOIN conhistdoc on c53_coddoc=c71_coddoc
       INNER JOIN conlancam ON c70_codlan=c71_codlan
       INNER JOIN conlancamele ON c67_codlan=c71_codlan
       INNER JOIN conlancaminstit ON c71_codlan=c02_codlan
-      INNER JOIN conlancamdot ON c73_codlan=c71_codlan
-      INNER JOIN orcelemento ON c67_codele=o56_codele
-      AND c73_anousu=o56_anousu
-      INNER JOIN orcdotacao ON c73_coddot = o58_coddot
-      AND c73_anousu=o58_anousu
+      INNER JOIN conlancamemp ON c75_codlan=c71_codlan
+      INNER JOIN empempenho on c75_numemp=e60_numemp
+      INNER JOIN orcelemento ON c67_codele=o56_codele AND e60_anousu=o56_anousu
+      INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu=o58_anousu
       INNER JOIN orctiporec ON o15_codigo = o58_codigo
-      WHERE c71_coddoc IN (5,
-                           6)
+      INNER JOIN orcprojativ ON o58_projativ = o55_projativ AND o58_anousu=o55_anousu
+      WHERE c53_tipo IN (30,
+                           31)
           AND DATE_PART('YEAR',c71_data) = '{$nAnoUsu}'
           AND DATE_PART('MONTH',c71_data) = '{$nMes}'
           AND c02_instit = '{$nInstit}'
-          AND o58_coddot IN ({$sDotacoes})
+          AND o55_rateio = true
       GROUP BY o58_funcao,
                o58_subfuncao,
                o15_codtri,
@@ -640,7 +641,7 @@ if($dbwhere==""){
   }
 
 
-  public function classificacaoAteDezembro($sDotacoes = null)
+  public function classificacaoAteDezembro()
   {
     $nAnoUsu  = db_getsession('DB_anousu');
     $nInstit  = db_getsession('DB_instit');
@@ -667,26 +668,27 @@ if($dbwhere==""){
                      END) AS pag,
                  0 AS paganulado
           FROM conlancamdoc
+          INNER JOIN conhistdoc on c53_coddoc=c71_coddoc
           INNER JOIN conlancam ON c70_codlan=c71_codlan
           INNER JOIN conlancamele ON c67_codlan=c71_codlan
           INNER JOIN conlancaminstit ON c71_codlan=c02_codlan
-          INNER JOIN conlancamdot ON c73_codlan=c71_codlan
-          INNER JOIN orcelemento ON c67_codele=o56_codele
-          AND c73_anousu=o56_anousu
-          INNER JOIN orcdotacao ON c73_coddot = o58_coddot
-          AND c73_anousu=o58_anousu
+          INNER JOIN conlancamemp ON c75_codlan=c71_codlan
+          INNER JOIN empempenho on c75_numemp=e60_numemp
+          INNER JOIN orcelemento ON c67_codele=o56_codele AND e60_anousu=o56_anousu
+          INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu=o58_anousu
           INNER JOIN orctiporec ON o15_codigo = o58_codigo
-          WHERE c71_coddoc IN (5,
-                               6)
+          INNER JOIN orcprojativ ON o58_projativ = o55_projativ AND o58_anousu=o55_anousu
+          WHERE c53_tipo IN (30,
+                           31)
               AND DATE_PART('YEAR',c71_data) = '{$nAnoUsu}'
               AND c02_instit = '{$nInstit}'
-              AND o58_coddot IN ({$sDotacoes})
+              AND o55_rateio = true
           GROUP BY o58_funcao,
                    o58_subfuncao,
                    o15_codtri,
                    o56_elemento
         ";
-    
+
     $rsConLancamDoc = $this->sql_record($sSql);
     $aConLancamDoc = db_utils::getCollectionByRecord($rsConLancamDoc);
 
