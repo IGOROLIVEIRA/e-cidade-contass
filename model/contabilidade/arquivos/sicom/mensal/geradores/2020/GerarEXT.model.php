@@ -78,20 +78,25 @@ class GerarEXT extends GerarAM
       for ($iCont = 0; $iCont < pg_num_rows($rsEXT20); $iCont++) {
         
         $aEXT20 = pg_fetch_array($rsEXT20, $iCont);
-        
+
+        //OC11537
+        $aFontes  = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252', '159');
+        $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
+        $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2020);
+
         $aCSVEXT20['si165_tiporegistro']          = $this->padLeftZero($aEXT20['si165_tiporegistro'], 2);
         $aCSVEXT20['si165_codorgao']              = $this->padLeftZero($aEXT20['si165_codorgao'], 2);
         $aCSVEXT20['si165_codext']                = substr($aEXT20['si165_codext'], 0, 15);
         $aCSVEXT20['si165_codfontrecursos']       = $this->padLeftZero($aEXT20['si165_codfontrecursos'], 3);
         $aCSVEXT20['si165_vlsaldoanteriorfonte']  = $this->sicomNumberReal(abs($aEXT20['si165_vlsaldoanteriorfonte']), 2);
-        
-        if($aEXT20['si165_vlsaldoanteriorfonte'] == 0){
+
+        if($aEXT20['si165_vlsaldoanteriorfonte'] == 0 && !$bFonteEncerrada && !$bCorrecaoFonte){
           //$aCSVEXT20['si165_natsaldoanteriorfonte'] 
-          
+
           $clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ". $aEXT20['si165_codext'] ." " ));
 
           if($clconplano->numrows > 0) {
-            
+
             $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", "c61_codtce = ".$aEXT20['si165_codext'] ."" ));
 
             // echo 'c61_codtce';
@@ -101,8 +106,8 @@ class GerarEXT extends GerarAM
              $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
 
           }else{
-            
-            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", "c61_reduz = ". $aEXT20['si165_codext'] .""));  
+
+            $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' end as c60_naturezasaldo ", "", "c61_reduz = ". $aEXT20['si165_codext'] .""));
             // echo 'c61_reduz';
             // echo $aEXT20['si165_codext'];
             // echo substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
@@ -114,17 +119,17 @@ class GerarEXT extends GerarAM
           //echo substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
           $aCSVEXT20['si165_natsaldoanteriorfonte'] = substr($aEXT20['si165_natsaldoanteriorfonte'], 0, 1);
         }
-          
+
         $aCSVEXT20['si165_totaldebitos']          = $this->sicomNumberReal(abs($aEXT20['si165_totaldebitos']), 2);
         $aCSVEXT20['si165_totalcreditos']         = $this->sicomNumberReal(abs($aEXT20['si165_totalcreditos']), 2);
         $aCSVEXT20['si165_vlsaldoatualfonte']     = $this->sicomNumberReal(abs($aEXT20['si165_vlsaldoatualfonte']), 2);
 
 
-        if($aEXT20['si165_vlsaldoatualfonte'] == 0){
+        if($aEXT20['si165_vlsaldoatualfonte'] == 0 && !$bFonteEncerrada && !$bCorrecaoFonte){
           //$aCSVEXT20['si165_natsaldoanteriorfonte']  
           
           $clconplano->sql_record($clconplano->sql_query(null, null, "*", "", "c61_codtce = ". $aEXT20['si165_codext'] ." " ));
-          
+
           if($clconplano->numrows > 0) {
 
           $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' when c60_naturezasaldo = 3 then 'N' end as c60_naturezasaldo ", "", " c61_anousu = 2020 and c61_codtce = ".$aEXT20['si165_codext'].""));  

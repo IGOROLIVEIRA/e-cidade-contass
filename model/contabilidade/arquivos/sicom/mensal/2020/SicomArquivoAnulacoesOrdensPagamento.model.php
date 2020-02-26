@@ -28,6 +28,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     protected $sNomeArquivo = 'AOP';
 
     /**
+     * @var array Fontes encerradas em 2020
+     */
+    protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+    /**
      *
      * Construtor da classe
      */
@@ -339,6 +343,9 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                         $oDadosAnulacaoFonte->si138_dtliquidacao = $oAnulacoes->dtliquida;
                     }
                     $oDadosAnulacaoFonte->si138_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
+                    if (in_array($oDadosAnulacaoFonte->si138_codfontrecursos, $this->aFontesEncerradas)) {
+                        $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1).'59';
+                    }
                     $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
                     $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $oDadosAnulacaoFonte->si138_reg10 = 0;
