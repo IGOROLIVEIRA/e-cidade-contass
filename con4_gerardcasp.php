@@ -55,7 +55,7 @@ $clrotulo->label("o15_codigo");
                                     <tr>
                                         <td>Tipo da Geração: </td>
                                         <td>
-                                            <select id="TipoGeracao" class="TipoGeracao">
+                                            <select onchange="tipoGeracao(this)" id="TipoGeracao" class="TipoGeracao">
                                                 <option value="CONSOLIDADO">CONSOLIDADO</option>
                                                 <option value="ISOLADO">ISOLADO</option>
                                             </select>
@@ -87,8 +87,10 @@ $clrotulo->label("o15_codigo");
                             <input type="checkbox" value="RPSD" id="RPSD" />
                             <label for="RPSD">Restos a Pagar (RPSD)</label><br>
                             <? if( db_getsession("DB_anousu") >= 2019 ){ ?>
+                                <div id="divprefundef">
                             <input type="checkbox" value="PREFUNDEF" id="PREFUNDEF" />
                             <label for="PREFUNDEF">Precatórios do FUNDEF (PREFUNDEF)</label><br>
+                                </div>
                             <? } ?>
                         </td>
                         <td style="border: 2px groove white;" valign="top">
@@ -296,6 +298,18 @@ $clrotulo->label("o15_codigo");
         jan.moveTo(0,0);
 
     }
+
+    function tipoGeracao(obj) {
+        console.log(obj.value);
+        console.log($("divprefundef").className);
+        if (obj.value != 'CONSOLIDADO') {
+            $("divprefundef").style = 'display: none';
+        } else {
+            $("divprefundef").style = 'display: on';
+        }
+    }
+
+
 
 </script>
 <div id='debug'>
