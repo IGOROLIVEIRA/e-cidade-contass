@@ -100,7 +100,9 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
 $result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
 
 $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
-
+$sSql = $clliclicita->sql_query('', 'l20_naturezaobjeto', '', "l20_codigo = $l31_licitacao limit 1");
+$rsSql = $clliclicita->sql_record($sSql);
+$natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
 $bDispenca = false;
 if($clliclicita->numrows > 0) {
 
@@ -111,6 +113,9 @@ if($clliclicita->numrows > 0) {
 	', '5' => 'Publicação em órgão oficial
 	', '6' => 'Parecer Jurídico
 	', '7' => 'Parecer (outros)');
+    if($natureza_objeto == 1 || $natureza_objeto == 7){
+        $x['10'] = 'Orçamento da obra ou serviço';
+    }
     db_select('l31_tipo', $x, true, $db_opcao, "");
     $bDispenca = true;
 
@@ -140,6 +145,9 @@ if($clliclicita->numrows > 0) {
 	', '6' => 'Homologação
 	', '7' => 'Adjudicação
 	', '8' => 'Publicação em órgão Oficial');
+		if($natureza_objeto == 1 || $natureza_objeto == 7){
+			$x['10'] = 'Orçamento da obra ou serviço';
+		}
         db_select('l31_tipo', $x, true, $db_opcao, "");
     }
 }
