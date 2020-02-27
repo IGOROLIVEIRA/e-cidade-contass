@@ -352,8 +352,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                             $cExt20->si165_codfontrecursos       = $oExtRecursoTCE;
                             $cExt20->si165_vlsaldoanteriorfonte  = $saldoanterior;
                             $cExt20->si165_vlsaldoatualfonte     = 0;
-                            $cExt20->si165_totaldebitos          = $saldoanterior > 0 ? $saldodebito : 0;
-                            $cExt20->si165_totalcreditos         = $saldoanterior > 0 ? $saldocredito : 0;
+                            $cExt20->si165_totaldebitos          = $saldoanterior < 0 ? $saldoanterior : 0;
+                            $cExt20->si165_totalcreditos         = $saldoanterior > 0 ? $saldoanterior : 0;
 
                             $cExt20->si165_natsaldoanteriorfonte = $cExt20->si165_natsaldoatualfonte = $saldoanterior > 0 ? 'D' : 'C';
 
@@ -365,8 +365,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         }else{
 
                             $aExt20[$Hash20]->si165_vlsaldoanteriorfonte  += $saldoanterior;
-                            $aExt20[$Hash20]->si165_totaldebitos          += $saldoanterior > 0 ? $saldodebito : 0;
-                            $aExt20[$Hash20]->si165_totalcreditos         += $saldoanterior > 0 ? $saldocredito : 0;
+                            $aExt20[$Hash20]->si165_totaldebitos          += $saldoanterior < 0 ? $saldoanterior : 0;
+                            $aExt20[$Hash20]->si165_totalcreditos         += $saldoanterior > 0 ? $saldoanterior : 0;
                         }
 
                     }
