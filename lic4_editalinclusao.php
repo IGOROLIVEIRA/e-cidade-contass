@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -37,7 +36,6 @@ require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_editaldocumento_classe.php");
 require_once("classes/db_obrasdadoscomplementares_classe.php");
 include("dbforms/db_classesgenericas.php");
-
 $clliclancedital = new cl_liclancedital;
 $clliclicita = new cl_liclicita;
 $clcflicita = new cl_cflicita;
@@ -46,11 +44,9 @@ $clobrasdadoscomplementares = new cl_obrasdadoscomplementares;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
-
 $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
-
 if ($licitacao) {
 	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,

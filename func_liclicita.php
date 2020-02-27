@@ -441,28 +441,17 @@ $sWhereContratos = " and 1 = 1 ";
                         }
                     }
                     else {
-                        if($obras == "true"){
-                          $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+                        $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
 
-                          if($clliclicita->numrows != 0){
-                            db_fieldsmemory($result,0);
-                            echo "<script>".$funcao_js."('$l20_objeto','$l20_numero','$l03_descr',false);</script>";
-                          } else {
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                          }
-                        }else{
-                          $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-
-                          if($clliclicita->numrows != 0){
+                        if($clliclicita->numrows != 0){
                             db_fieldsmemory($result,0);
                             if($tipoproc == "true"){
-                              echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                                echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
                             }else{
-                              echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                                echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                             }
-                          } else {
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
-                          }
+                        } else {
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n?o Encontrado',true);</script>";
                         }
                     }
 
