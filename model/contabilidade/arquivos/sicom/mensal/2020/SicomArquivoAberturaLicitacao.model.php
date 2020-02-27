@@ -61,12 +61,14 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
         $aElementos[10] = array(
             "tipoRegistro",
+            "tipoCadastro",
             "codOrgaoResp",
             "codUnidadeSubResp",
             "exercicioLicitacao",
             "nroProcessoLicitatorio",
             "codModalidadeLicitacao",
-            "nroModalidade",
+            "nroEdital",
+            "exercicioEdital",
             "naturezaProcedimento",
             "dtAbertura",
             "dtEditalConvite",
@@ -86,7 +88,12 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             "prazoExecucao",
             "formaPagamento",
             "criterioAceitabilidade",
-            "descontoTabela"
+            "criterioAdjudicacao",
+            "processoPorLote",
+            "criterioDesempate",
+            "destinacaoExclusiva",
+            "subcontratacao",
+            "limiteContratacao"
         );
         $aElementos[11] = array(
             "tipoRegistro",
@@ -261,7 +268,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_anousu AS exercicioLicitacao,
        liclicita.l20_edital AS nroProcessoLicitatorio,
        pctipocompratribunal.l44_codigotribunal AS codModalidadeLicitacao,
-       liclicita.l20_numero AS nroModalidade,
+       liclicita.l20_nroedital AS nroEdital,
+       liclicita.l20_cadinicial AS tipoCadastro,
        liclicita.l20_tipnaturezaproced AS naturezaProcedimento,
        liclicita.l20_datacria AS dtAbertura,
        liclicita.l20_dataaber AS dtEditalConvite,
@@ -312,53 +320,53 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
                                                       '54')";
 
         $rsResult10 = db_query($sSql);
-
         /**
          * registro 10
          */
+        // db_criatabela($rsResult10);die('Fim...');
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
             $claberlic10 = new cl_aberlic102020();
             $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
             $claberlic10->si46_tiporegistro = 10;
-            $claberlic10->si46_clausulaprorrogacao = $oDados10->clausulaprorrogacao;
-            $claberlic10->si46_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
+            $claberlic10->si46_tipocadastro = 1;
             $claberlic10->si46_codorgaoresp = $oDados10->codorgaoresp;
             $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
-            $claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
-            $claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
-            $claberlic10->si46_descontotabela = $oDados10->criterioadjudicacao;
-            $claberlic10->si46_destinacaoexclusiva = $oDados10->destinacaoexclusiva;
+            $claberlic10->si46_exerciciolicitacao = $oDados10->exerciciolicitacao;
+            $claberlic10->si46_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
+            $claberlic10->si46_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
+            $claberlic10->si46_nroedital = $oDados10->nroedital;
+            $claberlic10->si46_exercicioedital = $oDados10->exerciciolicitacao;
+            $claberlic10->si46_naturezaprocedimento = $oDados10->naturezaprocedimento;
             $claberlic10->si46_dtabertura = $oDados10->dtabertura;
             $claberlic10->si46_dteditalconvite = $oDados10->dteditalconvite;
             $claberlic10->si46_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
             $claberlic10->si46_dtpublicacaoeditalveiculo1 = $oDados10->dtpublicacaoeditalveiculo1;
-            $claberlic10->si46_dtpublicacaoeditalveiculo2 = $oDados10->dtpublicacaoeditalveiculo2;
-            $claberlic10->si46_dtrecebimentodoc = $oDados10->dtrecebimentodoc;
-            $claberlic10->si46_exerciciolicitacao = $oDados10->exerciciolicitacao;
-            $claberlic10->si46_formapagamento = substr($this->removeCaracteres($oDados10->formapagamento), 0, 80);
-            $claberlic10->si46_limitecontratacao = $oDados10->limitecontratacao;
-            $claberlic10->si46_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $claberlic10->si46_naturezaobjeto = $oDados10->naturezaobjeto;
-            $claberlic10->si46_naturezaprocedimento = $oDados10->naturezaprocedimento;
-            $claberlic10->si46_nroconvidado = $oDados10->nroconvidado;
-            $claberlic10->si46_nromodalidade = $oDados10->nromodalidade;
-            $claberlic10->si46_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
-            $claberlic10->si46_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
-            $claberlic10->si46_prazoexecucao = $oDados10->prazoexecucao;
-            $claberlic10->si46_processoporlote = $oDados10->processoporlote;
-            $claberlic10->si46_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
-            $claberlic10->si46_subcontratacao = $oDados10->subcontratacao;
-            $claberlic10->si46_tipolicitacao = $oDados10->tipolicitacao;
-            $claberlic10->si46_unidademedidaprazoexecucao = $oDados10->unidademedidaprazoexecucao;
-            $claberlic10->si46_criterioadjudicacao = $oDados10->criterioadjudicacao;
             $claberlic10->si46_veiculo1publicacao = $this->removeCaracteres($oDados10->veiculo1publicacao);
+            $claberlic10->si46_dtpublicacaoeditalveiculo2 = $oDados10->dtpublicacaoeditalveiculo2;
             $claberlic10->si46_veiculo2publicacao = $this->removeCaracteres($oDados10->veiculo2Publicacao);
+            $claberlic10->si46_dtrecebimentodoc = $oDados10->dtrecebimentodoc;
+            $claberlic10->si46_tipolicitacao = $oDados10->tipolicitacao;
+            $claberlic10->si46_naturezaobjeto = $oDados10->naturezaobjeto;
+            $claberlic10->si46_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
+            $claberlic10->si46_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
+            $claberlic10->si46_nroconvidado = $oDados10->nroconvidado;
+            $claberlic10->si46_clausulaprorrogacao = $oDados10->clausulaprorrogacao;
+            $claberlic10->si46_unidademedidaprazoexecucao = $oDados10->unidademedidaprazoexecucao;
+            $claberlic10->si46_prazoexecucao = $oDados10->prazoexecucao;
+            $claberlic10->si46_formapagamento = substr($this->removeCaracteres($oDados10->formapagamento), 0, 80);
+            $claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
+            $claberlic10->si46_criterioadjudicacao = $oDados10->criterioadjudicacao;
+            $claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
+            $claberlic10->si46_destinacaoexclusiva = $oDados10->destinacaoexclusiva;
+            $claberlic10->si46_subcontratacao = $oDados10->subcontratacao;
+            $claberlic10->si46_limitecontratacao = $oDados10->limitecontratacao;
+            $claberlic10->si46_descontotabela = $oDados10->criterioadjudicacao;
+            $claberlic10->si46_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $claberlic10->si46_processoporlote = $oDados10->processoporlote;
             $claberlic10->si46_instit = db_getsession("DB_instit");
-
-
             $claberlic10->incluir(null);
+
             if ($claberlic10->erro_status == 0) {
                 throw new Exception($claberlic10->erro_msg);
             }
@@ -589,7 +597,7 @@ SELECT DISTINCT '14' AS tipoRegistro,
      JOIN orcorgao ON o40_orgao = o41_orgao
      AND o40_anousu = o41_anousu
      WHERE db01_coddepto=l20_codepartamento
-         AND db01_anousu=2020
+         AND db01_anousu=".db_getsession('DB_anousu')."
      LIMIT 1) AS codUnidadeSubResp,
                 liclicita.l20_anousu AS exercicioLicitacao,
                 liclicita.l20_edital AS nroProcessoLicitatorio,
@@ -731,7 +739,7 @@ WHERE db_config.codigo= " . db_getsession("DB_instit") . "
                     else{
                         $oDados14->si50_vlrefpercentual = $oResult14->vlrefpercentual;
                     }
-                    if($oDados10->criterioadjudicacao == 1 || $oDados10->criterioadjudicacao == 3){
+                    if($oDados10->criterioadjudicacao == 2 || $oDados10->criterioadjudicacao == 3){
                         $oDados14->si50_vlcotprecosunitario = $oResult14->pc23_vlrun;
                     }else{
                         $oDados14->si50_vlcotprecosunitario = 0;
