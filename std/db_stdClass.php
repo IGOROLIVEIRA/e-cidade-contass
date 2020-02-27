@@ -237,6 +237,7 @@ class db_stdClass {
   static function oo2pdf($tipoDoc, $codDoc=null, $sAgt, $aParam, $sCaminhoSalvoSxw, $sNomeRelatorio) {
 
   	$clagata = new cl_dbagata($sAgt);
+
   	$api     = $clagata->api;
     $api->setOutputPath($sCaminhoSalvoSxw);
 
@@ -245,7 +246,9 @@ class db_stdClass {
     }
 
 	  try {
+        //echo $codDoc.' '.$tipoDoc;exit;
 	    $oDocumentoTemplate = new documentoTemplate($tipoDoc,$codDoc);
+          //print_r($oDocumentoTemplate);exit;
 	  } catch (Exception $eException){
 	    $sErroMsg  = $eException->getMessage();
 	    db_redireciona("db_erros.php?fechar=true&db_erro={$sErroMsg}");
@@ -254,14 +257,17 @@ class db_stdClass {
 	  $lProcessado = $api->parseOpenOffice($oDocumentoTemplate->getArquivoTemplate());
 
 	  if ( $lProcessado ) {
-
+          //echo 'teste3';exit;
 	  	if( db_stdClass::ex_oo2pdf($sCaminhoSalvoSxw, $sNomeRelatorio) ) {
+            echo 'teste';exit;
 	  		db_redireciona($sNomeRelatorio);
 	  	} else {
+            echo 'teste2';exit;
 	  		db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gerar PDF<br><b>Possíveis Causas:</b><br>1- Permissão da pasta tmp/<br>2- Serviço não está em execução<br>3- Falta de espaço em disco<br><b>Contate o CPD</b>");
 	  	}
 
 	  } else {
+          echo 'teste4';exit;
 	  	db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gerar relatório !!!");
 	  }
 
@@ -276,18 +282,23 @@ class db_stdClass {
    * @return void
    */
   static function ex_oo2pdf($sCaminhoSalvoSxw, $sNomeRelatorio) {
+
     $sComandoConverte = `bin/oo2pdf/oo2pdf.sh {$sCaminhoSalvoSxw} {$sNomeRelatorio}`;
-
+     ini_set('display_errors', 'On');
+     error_reporting(E_ALL);
+    echo fsockopen("localhost",8100);exit;
     if (fsockopen("localhost",8100)){
-
+        echo 'aki2';exit;
 	    if (trim($sComandoConverte) != "") {
+            echo 'aki3';exit;
 	      return false;
 	    }else{
+            echo 'aki4';exit;
 	    	return true;
 	    }
 
     } else {
-
+        echo 'aki5';exit;
       db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao executar o serviço!!!");
       return false;
 
