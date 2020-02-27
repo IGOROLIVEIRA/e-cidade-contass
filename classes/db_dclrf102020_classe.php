@@ -114,7 +114,7 @@ class cl_dclrf102020 {
        $this->si157_vlirpnpincentinstfinanc = ($this->si157_vlirpnpincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlirpnpincentinstfinanc"]:$this->si157_vlirpnpincentinstfinanc);
        $this->si157_vlapropiacaodepositosjudiciais = ($this->si157_vlapropiacaodepositosjudiciais == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlapropiacaodepositosjudiciais"]:$this->si157_vlapropiacaodepositosjudiciais);
 
-       $this->si157_vlapropiacaodepositosjudiciais = ($this->si157_vlajustesrelativosrpps == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlajustesrelativosrpps"]:$this->si157_vlajustesrelativosrpps);
+       $this->si157_vlajustesrelativosrpps = ($this->si157_vlajustesrelativosrpps == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlajustesrelativosrpps"]:$this->si157_vlajustesrelativosrpps);
 
        $this->si157_vloutrosajustes = ($this->si157_vloutrosajustes == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vloutrosajustes"]:$this->si157_vloutrosajustes);
        $this->si157_metarrecada = ($this->si157_metarrecada == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_metarrecada"]:$this->si157_metarrecada);

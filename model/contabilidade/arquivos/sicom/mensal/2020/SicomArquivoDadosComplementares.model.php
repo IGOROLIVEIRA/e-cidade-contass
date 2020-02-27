@@ -124,7 +124,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
         $sSqldadoscomplementares = $cldadoscomplementareslrf->sql_query(null,"*",null, "c218_mesusu=".$this->sDataFinal['5'].$this->sDataFinal['6']." AND c218_codorgao = '$iCodOrgao' AND c218_anousu = ".db_getsession('DB_anousu')." ");
         $rsDadoscomplementares = $cldadoscomplementareslrf->sql_record($sSqldadoscomplementares);
         $rsDadoscomplementares = db_utils::getColectionByRecord($rsDadoscomplementares);
-//    echo '<pre>'; var_dump($rsDadoscomplementares);die;
+    //echo '<pre>'; var_dump($rsDadoscomplementares);die;
         foreach ($rsDadoscomplementares as $dados) {
 
             $cldclrf10 = new cl_dclrf102020();
