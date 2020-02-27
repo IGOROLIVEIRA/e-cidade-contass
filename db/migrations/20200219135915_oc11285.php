@@ -10,8 +10,6 @@ class Oc11285 extends AbstractMigration
         
         BEGIN;
         
-        --ALTER TABLE dadoscomplementareslrf DROP column c218_vldotinicialincentivocontrib;
-        
         ALTER TABLE dadoscomplementareslrf ADD column c218_vldotinicialincentivocontrib float8 NOT NULL default 0;
         ALTER TABLE dadoscomplementareslrf ADD column c218_vldotincentconcedinstfinanc float8 NOT NULL default 0;
         ALTER TABLE dadoscomplementareslrf ADD column c218_vlajustesrelativosrpps float8 NOT NULL default 0;
