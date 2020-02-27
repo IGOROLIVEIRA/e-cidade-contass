@@ -2386,6 +2386,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi = new DBTextField('txtBdi' + sId, 'txtBdi' + sId, '');
     me.oBdi.addStyle('width', '100%');
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
+    me.oBdi.setMaxLength(4);
     me.oBdi.show($('ctnBdi' + sId));
     $('ctnBdi' + sId).observe('change', me.changeBdi);
 //-------------------------------------Fim da Manipulação do BDI-------------------------------------------------
