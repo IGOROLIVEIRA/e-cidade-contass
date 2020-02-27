@@ -155,7 +155,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        db_input('l20_nroedital',10,$Il20_nroedital,true,'text',3,"");
+										$mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1 ? 3 : 1;
+                                        db_input('l20_nroedital',10,$Il20_nroedital,true,'text',$mostra,"");
                                         ?>
                                     </td>
                                 </tr>
