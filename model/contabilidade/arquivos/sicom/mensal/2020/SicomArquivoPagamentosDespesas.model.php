@@ -845,6 +845,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                   $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
               }
             $clops11->si133_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
+            if (in_array($clops11->si133_codfontrecursos, $this->aFontesEncerradas)) {
+                $clops11->si133_codfontrecursos = substr($clops11->si133_codfontrecursos, 0, 1).'59';
+            }
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
             $clops11->si133_nrodocumento = $reg11->nrodocumento;
