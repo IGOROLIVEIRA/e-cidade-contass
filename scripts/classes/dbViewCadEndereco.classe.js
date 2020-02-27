@@ -62,14 +62,14 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
   sContent += "    <legend><b>Dados Endereço :</b></legend>";
   sContent += "     <table border='0' style=\"border-collapse:collapse;\">";
   sContent += "       <tr >";
-  // sContent += "         <td id='ctnLabelCep"+sId+"' >";
-  // sContent += "           <a href='#' onclick='"+me.sNameInstance+".lookupCep();'><b>Pesquisa Cep:</b></a>";
-  // sContent += "         </td>"
+  sContent += "         <td id='ctnLabelCep"+sId+"' >";
+  sContent += "           <a href='#' onclick='"+me.sNameInstance+".lookupCep();'><b>Pesquisa Cep:</b></a>";
+  sContent += "         </td>"
   sContent += "         <td id='ctnCodigoCep"+sId+"' >";
   sContent += "         </td>";
-  // sContent += "         <td colspan='3' ><input type='button' id='btnPesquisarCep"+sId+"' value='Pesquisar' ";
-  // sContent += "                  onClick='"+me.sNameInstance+".pesquisaCep();' style='display:none'>";
-  // sContent += "         </td>";
+  sContent += "         <td colspan='3' ><input type='button' id='btnPesquisarCep"+sId+"' value='Pesquisar' ";
+  sContent += "                  onClick='"+me.sNameInstance+".pesquisaCep();' style='display:none'>";
+  sContent += "         </td>";
   sContent += "       </tr>";
   sContent += "       <tr>";
   sContent += "         <td id='ctnLabelPais"+sId+"'>";
