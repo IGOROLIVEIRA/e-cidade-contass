@@ -159,7 +159,7 @@ class GerarFLPGO extends GerarAM {
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1299' ||
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1403' ||
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '6129' ||
-                            $aCSVFLPGO11['si196_codrubricaremuneracao'] == '9989'){
+                            $aCSVFLPGO11['si196_codrubricaremuneracao'] == '9299'){
                             $aCSVFLPGO11['si196_desctiporubrica']          =    substr($aFLPGO11['si196_desctiporubrica'],0,150);
                         }else{
                             $aCSVFLPGO11['si196_desctiporubrica']          =    ' ';
