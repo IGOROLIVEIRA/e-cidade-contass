@@ -141,9 +141,13 @@ $clrotulo->label("c61_reduz");
 
            $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
            $sql     = $clconplano->sql_query_reduz("",$campos,null, "c61_reduz as db_c61_reduz,c60_estrut as db_c60_estrut","c60_estrut", $sWhere);
-        }else{
-
-           $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
+        }
+        else if ($filtroCodsis != null && $filtroCodsis != ""){
+          $sWhere .= " and c60_codsis = $filtroCodsis and c60_anousu=".db_getsession("DB_anousu");
+          $sql     = $clconplano->sql_query("",null,$campos,"c60_estrut", $sWhere);
+        }
+        else{
+          $sWhere .= " and c60_anousu=".db_getsession("DB_anousu");
            $sql     = $clconplano->sql_query("",null,$campos,"c60_estrut", $sWhere);
         }
         db_lovrot($sql,15,"()","",$funcao_js);
@@ -152,8 +156,10 @@ $clrotulo->label("c61_reduz");
 
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
           $campo = "c60_codcon";
-          if($reduz==true){
-            $campo="c61_reduz";
+          if (($reduz == true) && ($filtroCodsis != null && $filtroCodsis != "")) {
+            $campo = "c60_codsis = $filtroCodsis and c61_reduz ";
+          } elseif($reduz == true) {
+            $campo = "c61_reduz";
           }
 
           $sWhere .= " and $campo = $pesquisa_chave and c60_anousu = ".db_getsession("DB_anousu");
@@ -171,7 +177,7 @@ $clrotulo->label("c61_reduz");
 
           } else {
 
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Reduzido(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
 
         } else {

@@ -75,7 +75,7 @@
 
         <?php endforeach; ?>
         <center>
-            <input type="submit" value="Salvar" id="btmSalvar" name="">
+            <input type="submit" value="Salvar" id="btmSalvar" name="incluir">
             <input type="button" onclick="carregarSicom()" value="Atualizar" id="btmAtualizar" name="">
         </center>
     </form>

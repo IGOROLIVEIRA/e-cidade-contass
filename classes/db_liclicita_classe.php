@@ -131,8 +131,8 @@ class cl_liclicita
   var $l20_cadinicial = null;
 
 
-    // cria propriedade com as variaveis do arquivo
-    var $campos = "
+  // cria propriedade com as variaveis do arquivo
+  var $campos = "
                  l20_codigo = int8 = Sequencial
                  l20_codtipocom = int4 = Código do tipo de compra
                  l20_numero = int8 = Numeração
@@ -3028,8 +3028,8 @@ class cl_liclicita
             }
 
 
-            function alterar_liclicitajulgamento($l20_codigo)
-            {
+  function alterar_liclicitajulgamento($l20_codigo)
+  {
 
                 $sql = " update liclicita set ";
                 $virgula = "";
@@ -3458,5 +3458,21 @@ class cl_liclicita
 
 
         }
+  function getPcmaterObras($liclicita){
+    $sql = "
+            select pc16_codmater from liclicitem
+                  inner join pcprocitem on pc81_codprocitem = l21_codpcprocitem
+                  inner join solicitem on pc11_codigo = pc81_solicitem
+                  inner join solicitempcmater on pc16_solicitem = pc11_codigo
+                  inner join pcmater on pc01_codmater = pc16_codmater
+                  where l21_codliclicita = $liclicita and pc01_obras = 't'";
+    $rsResult = db_query($sql);
+    $aItensPcmater = array();
+    for ($icont = 0; $icont < pg_num_rows($rsResult); $icont++){
+      $aItensPcmater[] = db_utils::fieldsMemory($rsResult, $icont);
+    }
+    return $aItensPcmater;
+  }
+}
 
 ?>

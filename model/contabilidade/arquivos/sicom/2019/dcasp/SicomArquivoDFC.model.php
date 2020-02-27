@@ -297,9 +297,22 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
       $cldfcdcasp10->si219_instit                           = db_getsession("DB_instit");
       $cldfcdcasp10->si219_tiporegistro                     = 10;
       $cldfcdcasp10->si219_exercicio                        = $iValorNumerico;
-      $cldfcdcasp10->si219_vlreceitaderivadaoriginaria      = $aRetornoDFC[3]->$sChave;
-      $cldfcdcasp10->si219_vltranscorrenterecebida          = $aRetornoDFC[4]->$sChave;
-      $cldfcdcasp10->si219_vloutrosingressosoperacionais    = $aRetornoDFC[5]->$sChave;
+
+//      $cldfcdcasp10->si219_vlreceitaderivadaoriginaria      = $aRetornoDFC[3]->$sChave;
+//      $cldfcdcasp10->si219_vltranscorrenterecebida          = $aRetornoDFC[4]->$sChave;
+//      $cldfcdcasp10->si219_vloutrosingressosoperacionais    = $aRetornoDFC[5]->$sChave;
+
+      $cldfcdcasp10->si219_vlreceitatributaria = $aRetornoDFC[36]->$sChave;
+        $cldfcdcasp10->si219_vlreceitacontribuicao = $aRetornoDFC[37]->$sChave;
+        $cldfcdcasp10->si219_vlreceitapatrimonial = $aRetornoDFC[38]->$sChave;
+        $cldfcdcasp10->si219_vlreceitaagropecuaria = $aRetornoDFC[39]->$sChave;
+        $cldfcdcasp10->si219_vlreceitaindustrial = $aRetornoDFC[40]->$sChave;
+        $cldfcdcasp10->si219_vlreceitaservicos = $aRetornoDFC[41]->$sChave;
+        $cldfcdcasp10->si219_vlremuneracaodisponibilidade = $aRetornoDFC[42]->$sChave;
+        $cldfcdcasp10->si219_vloutrasreceitas = $aRetornoDFC[43]->$sChave;
+        $cldfcdcasp10->si219_vltransferenciarecebidas = $aRetornoDFC[53]->$sChave;
+
+
       $cldfcdcasp10->si219_vltotalingressosativoperacionais = $aRetornoDFC[2]->$sChave;
 
       $cldfcdcasp10->incluir(null);
