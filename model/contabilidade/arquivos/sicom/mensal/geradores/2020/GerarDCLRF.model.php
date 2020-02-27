@@ -75,7 +75,7 @@ class GerarDCLRF extends GerarAM {
                     $aCSVDCLRF10['si157_vlajustesrelativosrpps']            = number_format($aDCLRF['si157_vlajustesrelativosrpps'], 2, ",", "");
                     $aCSVDCLRF10['si157_vloutrosajustes']                   = number_format($aDCLRF['si157_vloutrosajustes'], 2, ",", "");
                     $aCSVDCLRF10['si157_metarrecada']                       = ($aDCLRF['si157_metarrecada'] == 0 || $aDCLRF['si157_metarrecada'] == "") ? ' ' : $aDCLRF['si157_metarrecada'] ;
-                    $aCSVDCLRF10['si157_dscmedidasadotadas']                = $aDCLRF['si157_dscmedidasadotadas'] == '' ? ' ' : substr($aDCLRF['si157_dscmedidasadotadas'], 0, 4000);
+//                    $aCSVDCLRF10['si157_dscmedidasadotadas']                = $aDCLRF['si157_dscmedidasadotadas'] == '' ? ' ' : substr($aDCLRF['si157_dscmedidasadotadas'], 0, 4000);
                     $this->sLinha = $aCSVDCLRF10;
                     $this->adicionaLinha();
                 endif;
