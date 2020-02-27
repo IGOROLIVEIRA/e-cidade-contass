@@ -248,6 +248,18 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $sSqlVerifica .= " AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ;
           $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
+
+          // vericando se o ctb foi enviado em 2019
+          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102019 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
+
             // vericando se o ctb foi enviado em 2018
           $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102018 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
@@ -557,17 +569,17 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tipomovimentacao = 1;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
-                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_final;
+                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_anterior;
                       $oDadosMovi21->si97_codctbtransf = ' ';
                       $oDadosMovi21->si97_codfontectbtransf = ' ';
                       $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                       $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                       $oDadosMovi21->registro22 = array();
 
-                      $aCtb20Agrupado[$sHash20]->ext21[$sHash21a] = $oDadosMovi21;
+                            $aCtb20Agrupado[$sHash20]->ext21[$sHash21a] = $oDadosMovi21;
 
                   } else {
-                      $aCtb20Agrupado[$sHash20]->ext21[$sHash21a]->si97_valorentrsaida += $oTotalMov->saldo_final;
+                        $aCtb20Agrupado[$sHash20]->ext21[$sHash21a]->si97_valorentrsaida += $oTotalMov->saldo_anterior;
                   }
 
                   $sHash21b = $oContaAgrupada->si95_codctb . $iFonte . '02';
@@ -582,7 +594,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tipomovimentacao = 2;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
-                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_final;
+                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_anterior;
                       $oDadosMovi21->si97_codctbtransf = ' ';
                       $oDadosMovi21->si97_codfontectbtransf = ' ';
                       $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -592,7 +604,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $aCtb20Agrupado[$shash20b]->ext21[$sHash21b] = $oDadosMovi21;
 
                   } else {
-                      $aCtb20Agrupado[$shash20b]->ext21[$sHash21b]->si97_valorentrsaida += $oTotalMov->saldo_final;
+                        $aCtb20Agrupado[$shash20b]->ext21[$sHash21b]->si97_valorentrsaida += $oTotalMov->saldo_anterior;
                   }
 
               } else {
@@ -609,17 +621,17 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tipomovimentacao = 2;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
-                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_final * -1;
+                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_anterior * -1;
                       $oDadosMovi21->si97_codctbtransf = ' ';
                       $oDadosMovi21->si97_codfontectbtransf = ' ';
                       $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                       $oDadosMovi21->si97_instit = db_getsession("DB_instit");
                       $oDadosMovi21->registro22 = array();
 
-                      $aCtb20Agrupado[$sHash20]->ext21[$sHash21c] = $oDadosMovi21;
+                            $aCtb20Agrupado[$sHash20]->ext21[$sHash21c] = $oDadosMovi21;
 
                   } else {
-                      $aCtb20Agrupado[$sHash20]->ext21[$sHash21c]->si97_valorentrsaida += $oTotalMov->saldo_final * -1;
+                            $aCtb20Agrupado[$sHash20]->ext21[$sHash21c]->si97_valorentrsaida += $oTotalMov->saldo_anterior * -1;
                   }
 
                   $sHash21d = $oContaAgrupada->si95_codctb . $iFonte . '01';
@@ -634,7 +646,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $oDadosMovi21->si97_tipomovimentacao = 1;
                       $oDadosMovi21->si97_tipoentrsaida = '98';
                       $oDadosMovi21->si97_dscoutrasmov = ' ';
-                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_final * -1;
+                      $oDadosMovi21->si97_valorentrsaida = $oTotalMov->saldo_anterior * -1;
                       $oDadosMovi21->si97_codctbtransf = ' ';
                       $oDadosMovi21->si97_codfontectbtransf = ' ';
                       $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -644,7 +656,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                       $aCtb20Agrupado[$shash20b]->ext21[$sHash21d] = $oDadosMovi21;
 
                   } else {
-                      $aCtb20Agrupado[$shash20b]->ext21[$sHash21d]->si97_valorentrsaida += $oTotalMov->saldo_final * -1;
+                            $aCtb20Agrupado[$shash20b]->ext21[$sHash21d]->si97_valorentrsaida += $oTotalMov->saldo_anterior * -1;
                   }
 
               }
@@ -1108,7 +1120,17 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
             $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
             $oMovi40->tiporegistro = 40;
 
-            $sSqlVerficaReg40  = "SELECT 'ctb102018' AS ano, ctb102018.* FROM ctb102018
+            $sSqlVerficaReg40  = "SELECT 'ctb102019' AS ano, ctb102019.* FROM ctb102019
+                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                                    AND si95_banco = '$oRegistro10->c63_banco'
+                                    AND si95_agencia = '$oRegistro10->c63_agencia'
+                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
+                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
+                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
+                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
+                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
+            $sSqlVerficaReg40 .= " UNION ALL ";
+            $sSqlVerficaReg40  .= "SELECT 'ctb102018' AS ano, ctb102018.* FROM ctb102018
                                   WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                     AND si95_banco = '$oRegistro10->c63_banco'
                                     AND si95_agencia = '$oRegistro10->c63_agencia'
