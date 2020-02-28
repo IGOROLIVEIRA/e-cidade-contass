@@ -251,14 +251,14 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
-		if ($this->db150_bairro == null || $this->db150_bairro == "") {
-			$this->erro_sql = " Campo Bairro nao declarado.";
-			$this->erro_banco = "Campo db150_bairro nao declarado.";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
-		}
+//		if ($this->db150_bairro == null || $this->db150_bairro == "") {
+//			$this->erro_sql = " Campo Bairro nao declarado.";
+//			$this->erro_banco = "Campo db150_bairro nao declarado.";
+//			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+//			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+//			$this->erro_status = "0";
+//			return false;
+//		}
 		if ($this->db150_cep == null || $this->db150_cep == "") {
 			$this->erro_sql = " Campo CEP nao declarado.";
 			$this->erro_banco = "Campo db150_cep nao declarado.";
@@ -267,7 +267,9 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
-
+		if(!$this->db150_numero){
+			$this->db150_numero = 'null';
+		}
 		$sql = "insert into obrasdadoscomplementares(
                                         db150_sequencial
                                         ,db150_codobra
