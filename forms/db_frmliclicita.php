@@ -958,7 +958,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         }
 
-        let aModalidades = ['48', '49', '50', '52', '54'];
+        let aModalidades = ['48', '49', '50', '52', '53', '54'];
         if(aModalidades.includes(oRetorno.tribunal)){
           document.getElementById('linha_nroedital').style.display = '';
         }else{
