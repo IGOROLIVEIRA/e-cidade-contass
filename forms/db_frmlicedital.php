@@ -307,7 +307,7 @@ $db_botao = true;
             let sEndereco = "";
             sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
             sEndereco += ", "+aDados[iInd].descrmunicipio.urlDecode();
-            sEndereco += ", "+aDados[iInd].bairro.urlDecode();
+            sEndereco += aDados[iInd].bairro != '' ? ", "+aDados[iInd].bairro.urlDecode() : '';
 
             $('dados_complementares').value = sEndereco;
         }
