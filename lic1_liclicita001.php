@@ -158,16 +158,18 @@ if(isset($incluir)){
 		$sqlerro = true;
 	  }
 
-	  if ($clpccfeditalnum->numrows>0){
-	      db_fieldsmemory($result_numedital,0);
-	      $aModalidades = array(48, 49, 50, 52, 53, 54);
-        if(in_array($modalidade_tribunal, $aModalidades)){
-            $l20_nroedital=$l47_numero+1;
+    if(db_getsession('DB_anousu') >= 2020){
+        if ($clpccfeditalnum->numrows>0){
+            db_fieldsmemory($result_numedital,0);
+            $aModalidades = array(48, 49, 50, 52, 53, 54);
+            if(in_array($modalidade_tribunal, $aModalidades)){
+                $l20_nroedital=$l47_numero+1;
+            }
+        } else {
+            $erro_msg="Configure a numeração do edital.";
+            $sqlerro = true;
         }
-    } else {
-        $erro_msg="Configure a numeração do edital.";
-        $sqlerro = true;
-	  }
+    }
 
 	  // if ($sqlerro == false){
       // #2
@@ -250,9 +252,11 @@ if(isset($incluir)){
 		if ($sqlerro == false){
 			$clliclicita->l20_numero      	  =  $l20_numero;
 			$clliclicita->l20_edital      	  =  $l20_edital;
-			$clliclicita->l20_nroedital      	=  $l20_nroedital;
+			if($anousu >= 2020){
+                $clliclicita->l20_nroedital      	=  $l20_nroedital;
+			    $clliclicita->l20_exercicioedital =  $anousu;
+			}
 			$clliclicita->l20_anousu      	  =  $anousu;
-			$clliclicita->l20_exercicioedital =  $anousu;
 			$clliclicita->l20_licsituacao = '0';
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
@@ -305,10 +309,12 @@ if(isset($incluir)){
       $clpccflicitanum->l24_numero=$l24_numero+1;
       $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
 
-      $clpccfeditalnum->l47_numero=$l47_numero+1;
-      $clpccfeditalnum->l47_instit=db_getsession('DB_instit');
-      $clpccfeditalnum->l47_anousu=db_getsession('DB_anousu');
-      $clpccfeditalnum->incluir(null);
+      if(db_getsession('DB_anousu') >= 2020){
+          $clpccfeditalnum->l47_numero=$l47_numero+1;
+          $clpccfeditalnum->l47_instit=db_getsession('DB_instit');
+          $clpccfeditalnum->l47_anousu=db_getsession('DB_anousu');
+          $clpccfeditalnum->incluir(null);
+      }
     }
 
 		// db_fim_transacao(false);

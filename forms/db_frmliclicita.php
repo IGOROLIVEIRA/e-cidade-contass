@@ -959,7 +959,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
-        if(aModalidades.includes(oRetorno.tribunal)){
+        let anousu = <?=db_getsession('DB_anousu');?>;
+
+        if(aModalidades.includes(oRetorno.tribunal) && anousu >= 2020){
           document.getElementById('linha_nroedital').style.display = '';
         }else{
             document.getElementById('linha_nroedital').style.display = 'none';
@@ -967,8 +969,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         let tiposLicitacoes = document.getElementById('l20_tipliticacao').options;
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
-        let anousu = "<?php echo db_getsession('DB_anousu');?>";
-        if(anousu >= 2019){
+
+        if(anousu >= 2020){
             if(oRetorno.tribunal == 107){
                 tiposLicitacoes.add(new Option("5- Maior Oferta de Preço", 5));
                 tiposLicitacoes.add(new Option("6- Maior Retorno Econômico", 6));
