@@ -318,7 +318,7 @@ $sWhereContratos = " and 1 = 1 ";
                             WHEN liclancedital.l47_dataenvio is not null
                               THEN liclancedital.l47_dataenvio
                             END) as dl_Data_Referencia,
-                            (CASE WHEN liclicita.l20_cadinicial = 1 THEN 'PENDENTE'
+                            (CASE WHEN liclicita.l20_cadinicial = 1 or liclicita.l20_cadinicial is null THEN 'PENDENTE'
                                 WHEN liclicita.l20_cadinicial = 2 THEN 'AGUARDANDO ENVIO'
                             END) as status
                         FROM liclicita
@@ -341,7 +341,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = ".db_getsession('DB_instit')."
-                           AND EXTRACT (YEAR from l20_datacria) >= 2020 $sWhere
+                           AND EXTRACT (YEAR from l20_datacria) >= 2020 $sWhere and liclicita.l20_naturezaobjeto in (1, 7)
                         ORDER BY l20_codigo
           ";
                 }
