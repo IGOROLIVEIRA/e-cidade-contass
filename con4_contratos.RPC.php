@@ -628,6 +628,7 @@ switch($oParam->exec) {
         $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
         $oContrato->setValorContrato($oParam->contrato->nValorContrato);
         $oContrato->setDataInclusao(date("Y-m-d"));
+        $oContrato->setITipocadastro(1);
         $oContrato->save();
 
         /*
