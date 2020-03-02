@@ -143,12 +143,26 @@ class MSC {
   public function getIC6() {
     return $this->iIC6;
   }
+  //IC7
+  public function setIC7($iIC7) {
+      $this->iIC7 = $iIC7;
+  }
+  public function getIC7() {
+      return $this->iIC7;
+  }
   //Tipo6
   public function setTipoIC6($sTipoIC6) {
     $this->sTipoIC6 = $sTipoIC6;
   }
   public function getTipoIC6() {
     return $this->sTipoIC6;
+  }
+  //Tipo7
+  public function setTipoIC7($sTipoIC7) {
+      $this->sTipoIC7 = $sTipoIC7;
+  }
+  public function getTipoIC7() {
+      return $this->sTipoIC7;
   }
   //Valor
   public function setValor($iValor) {
@@ -311,7 +325,7 @@ class MSC {
     $aRegistros = array();
     $indice = "";
 
-    for ($ind = 0; $ind <= 6; $ind++) {
+    for ($ind = 0; $ind <= 7; $ind++) {
       $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
@@ -342,7 +356,7 @@ class MSC {
 
           $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es");
 
-          for ($ii = 1; $ii <= 6; $ii++) {
+          for ($ii = 1; $ii <= 7; $ii++) {
             $IC = "IC".$ii;
             $TipoIC = "TipoIC".$ii;
 
@@ -397,32 +411,32 @@ class MSC {
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       $oReg = db_utils::fieldsMemory($rsResult, $iCont);
       $sHash = "";
-      for ($ind = 0; $ind <= 6; $ind++) {
+      for ($ind = 0; $ind <= 7; $ind++) {
         $sHash .= (isset($oReg->{$aCampos[$ind]}) && !empty($oReg->{$aCampos[$ind]})) ? $oReg->{$aCampos[$ind]} : '';
       }
       if (!isset(${$aDadosIC}[$sHash])) {
         $$aIC = array();
-        for ($i = 0; $i < 17; $i++) {
+        for ($i = 0; $i < 18; $i++) {
 
-          if ($i > 0 && $i <= 6) {
+          if ($i > 0 && $i <= 7) {
             ${$aIC}[$i] = isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}";
           }
-          else if ($i == 7) {
+          else if ($i == 8) {
             ${$aIC}[$i] = ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
           }
-          else if ($i == 10) {
+          else if ($i == 11) {
             ${$aIC}[$i] += $oReg->debito;
           }
-          else if ($i == 11) {
+          else if ($i == 12) {
             ${$aIC}[$i] = $oReg->tipovalordeb;
           }
-          else if ($i == 12) {
+          else if ($i == 13) {
             ${$aIC}[$i] += $oReg->credito;
           }
-          else if ($i == 13) {
+          else if ($i == 14) {
             ${$aIC}[$i] = $oReg->tipovalorcred;
           }
-          else if ($i == 14) {
+          else if ($i == 15) {
             ${$aIC}[$i] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
           }
           else {
@@ -432,20 +446,20 @@ class MSC {
         ${$aDadosIC}[$sHash] = $$aIC;
 
       } else {
-          ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
-          ${$aDadosIC}[$sHash][10] += $oReg->debito;
+          ${$aDadosIC}[$sHash][8]  += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
+          ${$aDadosIC}[$sHash][11] += $oReg->debito;
 
           if (!empty($oReg->tipovalordeb)) {
-            ${$aDadosIC}[$sHash][11] = $oReg->tipovalordeb;
+            ${$aDadosIC}[$sHash][12] = $oReg->tipovalordeb;
           }
 
-          ${$aDadosIC}[$sHash][12] += $oReg->credito;
+          ${$aDadosIC}[$sHash][13] += $oReg->credito;
 
           if (!empty($oReg->tipovalorcred)) {
-            ${$aDadosIC}[$sHash][13] = $oReg->tipovalorcred;
+            ${$aDadosIC}[$sHash][14] = $oReg->tipovalorcred;
           }
 
-          ${$aDadosIC}[$sHash][14] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
+          ${$aDadosIC}[$sHash][15] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
       }
 
     }
@@ -455,14 +469,14 @@ class MSC {
 
     foreach (${$aDadosIC} as $obj) {
       $sHash = "";
-      for ($ind = 0; $ind <= 6; $ind++) {
+      for ($ind = 0; $ind <= 7; $ind++) {
         $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
       }
       $oIC = $obj;
-      $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
-      $oIC[7]  = abs($obj[7]);
-      $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
-      $oIC[14] = abs($oIC[14]);
+      $oIC[10]  = $obj[8] > 0 ? 'D' : 'C';
+      $oIC[8]  = abs($obj[8]);
+      $oIC[17] = $oIC[15] > 0 ? 'D' : 'C';
+      $oIC[15] = abs($oIC[15]);
 
       ${$aDadosICFinal}[$sHash] = $oIC;
 
@@ -514,8 +528,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
     if ($rsResult) {
       return $this->getDadosIC(1, $aCampos, $rsResult);
     } else {
@@ -572,7 +585,7 @@ class MSC {
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(2, $aCampos, $rsResult);
@@ -640,7 +653,7 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(4, $aCampos, $rsResult);
@@ -703,7 +716,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(5, $aCampos, $rsResult);
@@ -779,7 +792,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(6, $aCampos, $rsResult);
@@ -861,7 +874,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
@@ -940,7 +953,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
@@ -998,7 +1011,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(8, $aCampos, $rsResult);
@@ -1077,7 +1090,7 @@ class MSC {
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
@@ -1183,7 +1196,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
