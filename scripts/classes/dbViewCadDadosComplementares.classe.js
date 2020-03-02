@@ -3951,9 +3951,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
-        $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace('+', ' ');
+        $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
-        $('txtDistrito' + sId).value = dadoscomplementares.distrito.replace('+', ' ');
+        $('txtDistrito' + sId).value = dadoscomplementares.distrito.replace(/\+/g, ' ');
         me.setDistrito(dadoscomplementares.distrito);
         $('txtCodigoObra' + sId).value = dadoscomplementares.codigoobra;
         me.setCodigoObra(dadoscomplementares.codigoobra);
@@ -3989,7 +3989,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
-        $('txtDescrBairro' + sId).value = dadoscomplementares.bairro;
+        $('txtDescrBairro' + sId).value = dadoscomplementares.bairro.replace(/\+/g, ' ');
+        console.log($('txtDescrBairro' + sId).value);
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = dadoscomplementares.descratividadeservico;
         $('txtDescrAtividadeServicoEsp' + sId).value = dadoscomplementares.descratividadeservicoesp;
