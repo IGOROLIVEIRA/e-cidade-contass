@@ -1,9 +1,5 @@
 <?php
 
-
-require_once("model/MSCXbrl.model.php");
-require_once("model/MSCCsv.model.php");
-
 class MSC {
 
   //@var integer
@@ -147,12 +143,26 @@ class MSC {
   public function getIC6() {
     return $this->iIC6;
   }
+  //IC7
+  public function setIC7($iIC7) {
+      $this->iIC7 = $iIC7;
+  }
+  public function getIC7() {
+      return $this->iIC7;
+  }
   //Tipo6
   public function setTipoIC6($sTipoIC6) {
     $this->sTipoIC6 = $sTipoIC6;
   }
   public function getTipoIC6() {
     return $this->sTipoIC6;
+  }
+  //Tipo7
+  public function setTipoIC7($sTipoIC7) {
+      $this->sTipoIC7 = $sTipoIC7;
+  }
+  public function getTipoIC7() {
+      return $this->sTipoIC7;
   }
   //Valor
   public function setValor($iValor) {
@@ -264,26 +274,42 @@ class MSC {
 
       case 'xbrl' :
 
-          $xbrl = new MSCXbrl;
-          $xbrl->setIdentifier($this->getIdentifier());
-          $xbrl->setEntriesType($this->getEntriesType());
-          $xbrl->setPeriodIdentifier($this->getPeriodIdentifier());
-          $xbrl->setPeriodDescription($this->getPeriodDescription());
-          $xbrl->setPeriodStart($this->getPeriodStart());
-          $xbrl->setPeriodEnd($this->getPeriodEnd());
-          $xbrl->setInstant($this->getInstant());
-          $xbrl->setNomeArq($this->getNomeArq());
-          $xbrl->gerarArquivoXBRL($this->aRegistros);
+          if (file_exists("model/contabilidade/arquivos/msc/" . $ano . "/MSCXbrl.model.php")) {
+
+              require_once("model/contabilidade/arquivos/msc/" . $ano . "/MSCXbrl.model.php");
+
+              $xbrl = new MSCXbrl;
+              $xbrl->setIdentifier($this->getIdentifier());
+              $xbrl->setEntriesType($this->getEntriesType());
+              $xbrl->setPeriodIdentifier($this->getPeriodIdentifier());
+              $xbrl->setPeriodDescription($this->getPeriodDescription());
+              $xbrl->setPeriodStart($this->getPeriodStart());
+              $xbrl->setPeriodEnd($this->getPeriodEnd());
+              $xbrl->setInstant($this->getInstant());
+              $xbrl->setNomeArq($this->getNomeArq());
+              $xbrl->gerarArquivoXBRL($this->aRegistros);
+
+          } else {
+              throw new Exception ("Arquivo MSCXbrl para o ano {$ano} não existe. ");
+          }
 
       break;
 
       case 'csv' :
 
-          $csv = new MSCCsv;
-          $csv->setNomeArq($this->getNomeArq());
-          $csv->setIdentifier($this->getIdentifier());
-          $csv->setPeriodIdentifier($this->getPeriodIdentifier());
-          $csv->gerarArquivoCSV($this->aRegistros);
+          if (file_exists("model/contabilidade/arquivos/msc/" . $ano . "/MSCCsv.model.php")) {
+
+              require_once("model/contabilidade/arquivos/msc/" . $ano . "/MSCCsv.model.php");
+
+              $csv = new MSCCsv;
+              $csv->setNomeArq($this->getNomeArq());
+              $csv->setIdentifier($this->getIdentifier());
+              $csv->setPeriodIdentifier($this->getPeriodIdentifier());
+              $csv->gerarArquivoCSV($this->aRegistros);
+
+          } else {
+              throw new Exception ("Arquivo MSCCsv para o ano {$ano} não existe. ");
+          }
 
       break;
 
@@ -299,7 +325,7 @@ class MSC {
     $aRegistros = array();
     $indice = "";
 
-    for ($ind = 0; $ind <= 6; $ind++) {
+    for ($ind = 0; $ind <= 7; $ind++) {
       $indice .= ($oRegistro[$ind] != "null") ? $oRegistro[$ind] : '';
     }
 
@@ -330,7 +356,7 @@ class MSC {
 
           $aTipoIC = array("po", "fp", "fr", "nr", "nd", "fs", "ai", "dc", "es");
 
-          for ($ii = 1; $ii <= 6; $ii++) {
+          for ($ii = 1; $ii <= 7; $ii++) {
             $IC = "IC".$ii;
             $TipoIC = "TipoIC".$ii;
 
@@ -385,32 +411,32 @@ class MSC {
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       $oReg = db_utils::fieldsMemory($rsResult, $iCont);
       $sHash = "";
-      for ($ind = 0; $ind <= 6; $ind++) {
+      for ($ind = 0; $ind <= 7; $ind++) {
         $sHash .= (isset($oReg->{$aCampos[$ind]}) && !empty($oReg->{$aCampos[$ind]})) ? $oReg->{$aCampos[$ind]} : '';
       }
       if (!isset(${$aDadosIC}[$sHash])) {
         $$aIC = array();
-        for ($i = 0; $i < 17; $i++) {
+        for ($i = 0; $i < 18; $i++) {
 
-          if ($i > 0 && $i <= 6) {
+          if ($i > 0 && $i <= 7) {
             ${$aIC}[$i] = isset($oReg->{$aCampos[$i]}) ? "{$oReg->{$aCampos[$i]}}_{$aCampos[$i]}" : "_{$aCampos[$i]}";
           }
-          else if ($i == 7) {
+          else if ($i == 8) {
             ${$aIC}[$i] = ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
           }
-          else if ($i == 10) {
+          else if ($i == 11) {
             ${$aIC}[$i] += $oReg->debito;
           }
-          else if ($i == 11) {
+          else if ($i == 12) {
             ${$aIC}[$i] = $oReg->tipovalordeb;
           }
-          else if ($i == 12) {
+          else if ($i == 13) {
             ${$aIC}[$i] += $oReg->credito;
           }
-          else if ($i == 13) {
+          else if ($i == 14) {
             ${$aIC}[$i] = $oReg->tipovalorcred;
           }
-          else if ($i == 14) {
+          else if ($i == 15) {
             ${$aIC}[$i] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
           }
           else {
@@ -420,20 +446,20 @@ class MSC {
         ${$aDadosIC}[$sHash] = $$aIC;
 
       } else {
-          ${$aDadosIC}[$sHash][7]  += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
-          ${$aDadosIC}[$sHash][10] += $oReg->debito;
+          ${$aDadosIC}[$sHash][8]  += ($oReg->nat_vlr_si == 'C') ? $oReg->saldoinicial * -1 : $oReg->saldoinicial;
+          ${$aDadosIC}[$sHash][11] += $oReg->debito;
 
           if (!empty($oReg->tipovalordeb)) {
-            ${$aDadosIC}[$sHash][11] = $oReg->tipovalordeb;
+            ${$aDadosIC}[$sHash][12] = $oReg->tipovalordeb;
           }
 
-          ${$aDadosIC}[$sHash][12] += $oReg->credito;
+          ${$aDadosIC}[$sHash][13] += $oReg->credito;
 
           if (!empty($oReg->tipovalorcred)) {
-            ${$aDadosIC}[$sHash][13] = $oReg->tipovalorcred;
+            ${$aDadosIC}[$sHash][14] = $oReg->tipovalorcred;
           }
 
-          ${$aDadosIC}[$sHash][14] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
+          ${$aDadosIC}[$sHash][15] += ($oReg->nat_vlr_sf == 'C' ? $oReg->saldofinal * -1 : $oReg->saldofinal);
       }
 
     }
@@ -443,14 +469,14 @@ class MSC {
 
     foreach (${$aDadosIC} as $obj) {
       $sHash = "";
-      for ($ind = 0; $ind <= 6; $ind++) {
+      for ($ind = 0; $ind <= 7; $ind++) {
         $sHash .= ($obj[$ind] != "_null") ? $obj[$ind] : '';
       }
       $oIC = $obj;
-      $oIC[9]  = $obj[7] > 0 ? 'D' : 'C';
-      $oIC[7]  = abs($obj[7]);
-      $oIC[16] = $oIC[14] > 0 ? 'D' : 'C';
-      $oIC[14] = abs($oIC[14]);
+      $oIC[10]  = $obj[8] > 0 ? 'D' : 'C';
+      $oIC[8]  = abs($obj[8]);
+      $oIC[17] = $oIC[15] > 0 ? 'D' : 'C';
+      $oIC[15] = abs($oIC[15]);
 
       ${$aDadosICFinal}[$sHash] = $oIC;
 
@@ -496,14 +522,13 @@ class MSC {
        inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
        inner join db_config ON codigo = r.c61_instit
          left outer join consistema on c60_codsis = c52_codsis
-         left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
+         left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
          where {$this->getTipoMatriz()} (c60_infcompmsc is null or c60_infcompmsc = 0 or c60_infcompmsc = 1) and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-
+    $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
     if ($rsResult) {
       return $this->getDadosIC(1, $aCampos, $rsResult);
     } else {
@@ -555,12 +580,12 @@ class MSC {
      inner join conplano p on r.c61_codcon = c60_codcon and r.c61_anousu = c60_anousu
          inner join db_config ON codigo = r.c61_instit
        left outer join consistema on c60_codsis = c52_codsis
-       left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
+       left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
        where {$this->getTipoMatriz()} c60_infcompmsc = 2 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(2, $aCampos, $rsResult);
@@ -622,13 +647,13 @@ class MSC {
           inner join db_config ON codigo = r.c61_instit
           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
         left outer join consistema on c60_codsis = c52_codsis
-        left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
+        left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
         left join orctiporec on c19_orctiporec = o15_codigo
         where {$this->getTipoMatriz()} c60_infcompmsc = 4 or c60_infcompmsc is null and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(4, $aCampos, $rsResult);
@@ -684,14 +709,14 @@ class MSC {
           inner join db_config ON codigo = r.c61_instit
           inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
         left outer join consistema on c60_codsis = c52_codsis
-        left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
+        left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
         left join orctiporec on c19_orctiporec = o15_codigo
         where {$this->getTipoMatriz()} c60_infcompmsc = 5 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(5, $aCampos, $rsResult);
@@ -760,14 +785,14 @@ class MSC {
            inner join db_config ON codigo = r.c61_instit
          inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
          left outer join consistema on c60_codsis = c52_codsis
-         left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
+         left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
          left join orctiporec on c19_orctiporec = o15_codigo
          where {$this->getTipoMatriz()} c60_infcompmsc = 6 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(6, $aCampos, $rsResult);
@@ -840,16 +865,16 @@ class MSC {
           left join empempenho on e60_numemp=c19_numemp
           left join empelemento on e64_numemp = e60_numemp
           LEFT JOIN orcelemento ON o56_codele=e64_codele AND o56_anousu=e60_anousu
-          left join elemdespmsc on substr(o56_elemento,2,8) = c211_elemdespestrut
+          left join elemdespmsc on (substr(o56_elemento,2,8), o56_anousu) = (c211_elemdespestrut, c211_anousu)
           left outer join consistema on c60_codsis = c52_codsis
-          left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
+          left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
           left join orctiporec on c19_orctiporec = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=102 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
@@ -919,16 +944,16 @@ class MSC {
          inner join db_config ON codigo = r.c61_instit
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
-       left join elemdespmsc on  substr(c19_estrutural,2,8) = c211_elemdespestrut
+       left join elemdespmsc on  (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
-       left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
+       left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), c60_anousu) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on c19_orctiporec = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=101 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
@@ -980,13 +1005,13 @@ class MSC {
       inner join orctiporec on o15_codigo = c61_codigo
           inner join db_config ON codigo = r.c61_instit
         left outer join consistema on c60_codsis = c52_codsis
-        left join vinculopcaspmsc on substr(p.c60_estrut,1,9) = c210_pcaspestrut
+        left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
         where {$this->getTipoMatriz()} c60_infcompmsc = 8 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(8, $aCampos, $rsResult);
@@ -1057,15 +1082,15 @@ class MSC {
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
        inner join empempenho on c19_numemp=e60_numemp
-       left join elemdespmsc on substr(c19_estrutural,2,8) = c211_elemdespestrut
+       left join elemdespmsc on (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
-       left join vinculopcaspmsc on substr(p.c60_estrut,2,8) = c210_pcaspestrut
+       left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on o58_codigo = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=102 and c60_infcompmsc = 9 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
@@ -1156,9 +1181,9 @@ class MSC {
                         INNER JOIN empelemento ON e64_numemp=e60_numemp
                         LEFT JOIN dotacaorpsicom ON e60_numemp = si177_numemp
                         LEFT JOIN conplanoorcamento ON conplanoorcamento.c60_codcon=e64_codele AND conplanoorcamento.c60_anousu=e60_anousu
-                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8) = elemdespmsc.c211_elemdespestrut)
-                        LEFT JOIN elemdespmsc tb ON si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0) = tb.c211_elemdespestrut
-                        LEFT JOIN elemdespmsc a1 ON substr(contacorrentedetalhe.c19_estrutural,2,8) = a1.c211_elemdespestrut
+                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8), conplanoorcamento.c60_anousu) = (elemdespmsc.c211_elemdespestrut, elemdespmsc.c211_anousu)
+                        LEFT JOIN elemdespmsc tb ON (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0), e60_anousu) = (tb.c211_elemdespestrut, tb.c211_anousu) 
+                        LEFT JOIN elemdespmsc a1 ON (substr(contacorrentedetalhe.c19_estrutural,2,8), c62_anousu) = (a1.c211_elemdespestrut, a1.c211_anousu)
                         LEFT OUTER JOIN consistema ON p.c60_codsis = c52_codsis
                         LEFT JOIN vinculopcaspmsc ON substr(c19_estrutural,2,8) = c210_pcaspestrut
                         LEFT JOIN orctiporec ON o58_codigo = o15_codigo
@@ -1171,7 +1196,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
+    $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "ai", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);

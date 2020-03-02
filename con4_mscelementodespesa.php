@@ -11,13 +11,13 @@ $clelemdespmsc = new cl_elemdespmsc;
 
 if(isset($incluir)){
   db_inicio_transacao();
-  $clelemdespmsc->incluir($c211_elemdespestrut,$c211_mscestrut);
+  $clelemdespmsc->incluir($c211_elemdespestrut,$c211_mscestrut,$c211_anousu);
   db_fim_transacao();
 }
 
 if(isset($excluir)){
   db_inicio_transacao();
-  $clelemdespmsc->excluir($c211_elemdespestrut,$c211_mscestrut);
+  $clelemdespmsc->excluir($c211_elemdespestrut,$c211_mscestrut,$c211_anousu);
   db_fim_transacao();
 } else if(isset($chavepesquisa)){
    $result = $clelemdespmsc->sql_record($clelemdespmsc->sql_query($chavepesquisa));

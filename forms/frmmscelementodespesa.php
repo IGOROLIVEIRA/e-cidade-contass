@@ -28,6 +28,7 @@ $clelemdespmsc->rotulo->label();
     </td>
   </tr>
 </table>
+<input name="c211_anousu" value="<?= isset($c211_anousu) ? $c211_anousu : db_getsession("DB_anousu") ?>" type="hidden" >
 <input style="display:none" name="novo" type="submit" id="novo" value="Novo" onclick="novoEst();">
 <input name="incluir" type="submit" id="incluir" value="Incluir">
 <input style="display:none" name="excluir" type="submit" id="excluir" value="Excluir">
@@ -36,9 +37,9 @@ $clelemdespmsc->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('','db_iframe_elemdespmsc','func_elemdespmsc.php?funcao_js=parent.js_preenchepesquisa|c211_elemdespestrut|c211_mscestrut','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_elemdespmsc','func_elemdespmsc.php?funcao_js=parent.js_preenchepesquisa|c211_elemdespestrut|c211_mscestrut|c211_anousu','Pesquisa',true);
 }
-function js_preenchepesquisa(chave, chave1){
+function js_preenchepesquisa(chave, chave1,chave2){
   document.form1.novo.style.display = 'inline-block';
   document.form1.excluir.style.display = 'inline-block';
   document.form1.incluir.style.display = 'none';
@@ -48,6 +49,7 @@ function js_preenchepesquisa(chave, chave1){
   document.form1.c211_mscestrut.setAttribute('readonly',true);
   document.form1.c211_elemdespestrut.value = chave;
   document.form1.c211_mscestrut.value = chave1;
+  document.form1.c211_anousu.value = chave2;
   db_iframe_elemdespmsc.hide();
 
 }
@@ -63,6 +65,7 @@ function novoEst() {
   document.form1.c211_mscestrut.setAttribute('readonly',false);
   document.form1.c211_elemdespestrut.value = "";
   document.form1.c211_mscestrut.value = "";
+  document.form1.c211_anousu.value = <?= db_getsession("DB_anousu") ?>
 
 }
 
