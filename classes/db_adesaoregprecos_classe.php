@@ -182,7 +182,7 @@ class cl_adesaoregprecos {
        return false;
      }
      if($this->si06_edital == null && db_getsession('DB_anousu') >= 2020){
-       $this->erro_sql = " Campo Número do Edital não Informado.";
+       $this->erro_sql = " Campo Edital não Informado.";
        $this->erro_campo = "si06_edital";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

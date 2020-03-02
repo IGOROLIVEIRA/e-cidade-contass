@@ -254,6 +254,7 @@ db_input('si06_processocompra',10,$Isi06_processocompra,true,'text',$db_opcao," 
 </div>
 </form>
 <script>
+    js_exibeEdital();
 function js_pesquisasi06_orgaogerenciador(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgmorgao1|z01_numcgm|z01_nome','Pesquisa',true);
@@ -357,14 +358,12 @@ function js_pesquisal20_codtipocom(mostra){
 	  document.form1.pc50_descr.value = chave2;
 	  db_iframe_pctipocompra.hide();
 	}
-    function js_exibeEdital(ano){
+    function js_exibeEdital(ano=null){
         let anousuario = "<?=db_getsession('DB_anousu');?>";
-        if(anousuario>=2020){
-            console.log('Enter...');
-            document.getElementById('tr_edital').style.display = 'none';
-        }else{
-            console.log('OUT...');
+        if(parseInt(anousuario) >= 2020){
             document.getElementById('tr_edital').style.display = '';
+        }else{
+            document.getElementById('tr_edital').style.display = 'none';
         }
     }
 </script>
