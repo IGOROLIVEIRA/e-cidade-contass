@@ -101,7 +101,7 @@ class GerarCONTRATOS extends GerarAM {
          * OC11837
          */
 
-        if($aCONTRATOS10['si83_naturezaobjeto'] == "7"){
+        if($aCONTRATOS10['si83_naturezaobjeto'] == "7" || $aCONTRATOS10['si83_naturezaobjeto'] == "1"){
           for ($iCont2 = 0;$iCont2 < pg_num_rows($rsCONTRATOS11); $iCont2++) {
 
             $aCONTRATOS11  = pg_fetch_array($rsCONTRATOS11,$iCont2);
