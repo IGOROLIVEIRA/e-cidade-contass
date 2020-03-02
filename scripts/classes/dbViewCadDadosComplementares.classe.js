@@ -1678,34 +1678,34 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtDescrBairro.addStyle('width', '100%');
     me.oTxtDescrBairro.show($('ctnDescrBairro' + sId));
     me.oTxtDescrBairro.addEvent('onKeyUp', "js_ValidaCampos(this,2,\"Campo Bairro\",\"f\",\"t\",event)");
-    $('txtDescrBairro' + sId).observe('change', me.changeDescrBairro);
+    // $('txtDescrBairro' + sId).observe('change', me.changeDescrBairro);
     /*
     *Função para realizar a busca pelo autocomplete do Bairro
     */
-    var sUrl = this.sUrlRpc;
-    var oParam = new Object();
-    oAutoCompleteBairro = new dbAutoComplete($('txtDescrBairro' + sId), sUrl);
-    oAutoCompleteBairro.setTxtFieldId($('txtCodigoBairro' + sId));
-    oAutoCompleteBairro.show();
-    oAutoCompleteBairro.setQueryStringFunction(function () {
-        /*
-        *Função para validar se deve disparar a busca do autocomplete
-        */
-        oAutoCompleteBairro.setValidateFunction(function () {
-
-            if (($F('cboCodigoMunicipio' + sId).trim() == '')) {
-                return false;
-            } else {
-                return true;
-            }
-        });
-        oParam.exec = 'findBairroByName';
-        oParam.iCodigoEstado = $F('cboCodigoEstado' + sId);
-        oParam.iCodigoMunicipio = $F('cboCodigoMunicipio' + sId).trim();
-        oParam.sQuery = $F('txtDescrBairro' + sId);
-        sQuery = 'json=' + Object.toJSON(oParam);
-        return sQuery;
-    });
+    // var sUrl = this.sUrlRpc;
+    // var oParam = new Object();
+    // oAutoCompleteBairro = new dbAutoComplete($('txtDescrBairro' + sId), sUrl);
+    // oAutoCompleteBairro.setTxtFieldId($('txtCodigoBairro' + sId));
+    // oAutoCompleteBairro.show();
+    // oAutoCompleteBairro.setQueryStringFunction(function () {
+    //     /*
+    //     *Função para validar se deve disparar a busca do autocomplete
+    //     */
+    //     oAutoCompleteBairro.setValidateFunction(function () {
+    //
+    //         if (($F('cboCodigoMunicipio' + sId).trim() == '')) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     });
+    //     oParam.exec = 'findBairroByName';
+    //     oParam.iCodigoEstado = $F('cboCodigoEstado' + sId);
+    //     oParam.iCodigoMunicipio = $F('cboCodigoMunicipio' + sId).trim();
+    //     oParam.sQuery = $F('txtDescrBairro' + sId);
+    //     sQuery = 'json=' + Object.toJSON(oParam);
+    //     return sQuery;
+    // });
     /**
      *Seta o codigo do bairro
      *@param {string} iCodigoBairro
@@ -1724,12 +1724,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
 
-    oAutoCompleteBairro.setCallBackFunction(function (id, label) {
-
-        me.oTxtCodigoBairro.setValue(id);
-        me.oTxtDescrBairro.setValue(label);
-        me.findComplementoBairro(id);
-    });
+    // oAutoCompleteBairro.setCallBackFunction(function (id, label) {
+    //
+    //     me.oTxtCodigoBairro.setValue(id);
+    //     me.oTxtDescrBairro.setValue(label);
+    //     me.findComplementoBairro(id);
+    // });
 
     /**
      *Metodo utilizado para buscar os dados complementares do bairro e preencher os campos acima dele
@@ -2386,9 +2386,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi = new DBTextField('txtBdi' + sId, 'txtBdi' + sId, '');
     me.oBdi.addStyle('width', '100%');
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
-    me.oBdi.setMaxLength(4);
+    me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
     $('ctnBdi' + sId).observe('change', me.changeBdi);
+    $('ctnBdi' + sId).observe('keyup',() => {
+        me.js_formataValor($('txtBdi' + sId), 4);
+    });
 //-------------------------------------Fim da Manipulação do BDI-------------------------------------------------
 //-------------------------------------Início da Manipulação do Logradouro----------------------------------------------
      /**
@@ -2502,11 +2505,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.setSegundosLatitude(event.target.value);
     }
 
-    this.js_formataSegundos = (elemento) => {
-       if(!elemento.value.includes('.') && elemento.value.length > 5){
+    this.js_formataValor = (elemento, tamanho) => {
+       if(!elemento.value.includes('.') && elemento.value.length > tamanho){
            novoValor = elemento.value.substr(0, elemento.value.length-1);
            elemento.value = novoValor;
-           alert('É permitido a inserção de até 5 caracteres!');
+           alert('É permitido a inserção de até '+tamanho+' caracteres!');
        }
     }
 
@@ -2517,7 +2520,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oSegundoLatitude.show($('ctnSegundoLatitude' + sId));
     $('ctnSegundoLatitude' + sId).observe('change', me.changeSegundoLatitude);
     $('ctnSegundoLatitude' + sId).observe('keyup',() => {
-        me.js_formataSegundos($('txtSegundoLatitude' + sId));
+        me.js_formataValor($('txtSegundoLatitude' + sId), 5);
     });
 
 //-------------------------------------Fim da Manipulação do Segundo Latitude-------------------------------------------------
@@ -2609,7 +2612,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oSegundoLongitude.show($('ctnSegundoLongitude' + sId));
     $('ctnSegundoLongitude' + sId).observe('change', me.changeSegundoLongitude);
     $('ctnSegundoLongitude' + sId).observe('keyup',() => {
-        me.js_formataSegundos($('txtSegundoLongitude' + sId));
+        me.js_formataValor($('txtSegundoLongitude' + sId), 5);
     });
 
 //-------------------------------------Fim da Manipulação do Segundos Longitude-------------------------------------------------
@@ -3661,15 +3664,15 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         }
 
         //Verifica se o Bairro foi informado
-        if ($F('txtDescrBairro' + sId).trim() == '' && me.getTipoValidacao() == 1) {
-
-            $('txtCodigoBairro' + sId).focus();
-            alert("Usuário:\n\n\Bairro não informado!\n\n");
-            return false;
-        } else if (me.getTipoValidacao() == 2 && $F('txtDescrBairro' + sId).trim() == '') {
-            me.setBairro('0');
-            me.setNomeBairro('');
-        }
+        // if ($F('txtDescrBairro' + sId).trim() == '' && me.getTipoValidacao() == 1) {
+        //
+        //     $('txtCodigoBairro' + sId).focus();
+        //     alert("Usuário:\n\n\Bairro não informado!\n\n");
+        //     return false;
+        // } else if (me.getTipoValidacao() == 2 && $F('txtDescrBairro' + sId).trim() == '') {
+        //     me.setBairro('0');
+        //     me.setNomeBairro('');
+        // }
 
         if ($F('txtGrausLatitude' + sId).trim() == '') {
             $('txtGrausLatitude' + sId).focus();
@@ -3948,9 +3951,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
-        $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace('+', ' ');
+        $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
-        $('txtDistrito' + sId).value = dadoscomplementares.distrito.replace('+', ' ');
+        $('txtDistrito' + sId).value = dadoscomplementares.distrito.replace(/\+/g, ' ');
         me.setDistrito(dadoscomplementares.distrito);
         $('txtCodigoObra' + sId).value = dadoscomplementares.codigoobra;
         me.setCodigoObra(dadoscomplementares.codigoobra);
@@ -3986,7 +3989,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
-        $('txtDescrBairro' + sId).value = dadoscomplementares.bairro;
+        $('txtDescrBairro' + sId).value = dadoscomplementares.bairro.replace(/\+/g, ' ');
+        console.log($('txtDescrBairro' + sId).value);
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = dadoscomplementares.descratividadeservico;
         $('txtDescrAtividadeServicoEsp' + sId).value = dadoscomplementares.descratividadeservicoesp;

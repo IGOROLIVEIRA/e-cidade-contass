@@ -612,6 +612,18 @@ switch ($oParam->exec) {
 			$filename = md5(time());
 			$ext = $path['extension'];
 
+			$anexo = db_utils::getDao('db_config');
+			$sSqlCliente = $anexo->sql_query(null, 'munic', null, "codigo = ".db_getsession('DB_instit'));
+			$rsSqlCliente = $anexo->sql_record($sSqlCliente);
+			$nomeCliente = strtolower(db_utils::fieldsMemory($rsSqlCliente, 0)->munic);
+			$nomePasta = str_replace(' ', '', $nomeCliente);
+
+			/* Verifica se já existe diretório para a instituição corrente */
+			if(!is_dir($target_dir.$nomePasta)){
+				mkdir($target_dir.$nomePasta, 0775);
+			}
+			$target_dir .= $nomePasta.'/';
+
 			/* Verifica se já existe diretório para a instituição corrente */
 			if(!is_dir($target_dir.'instit_'.db_getsession('DB_instit'))){
 				mkdir($target_dir.'instit_'.db_getsession('DB_instit'), 0775);
@@ -622,6 +634,7 @@ switch ($oParam->exec) {
 			if(!is_dir($target_dir.'/'.db_getsession('DB_anousu'))){
 				mkdir($target_dir.'/'.db_getsession('DB_anousu'), 0775);
 			}
+
 			$target_dir .= db_getsession('DB_anousu').'/';
 
 			/* Verifica se já existe diretório para a licitação corrente */

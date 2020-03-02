@@ -342,6 +342,7 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = ".db_getsession('DB_instit')."
                            AND EXTRACT (YEAR from l20_datacria) >= 2020 $sWhere and liclicita.l20_naturezaobjeto in (1, 7)
+                           AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) > 1
                         ORDER BY l20_codigo
           ";
                 }

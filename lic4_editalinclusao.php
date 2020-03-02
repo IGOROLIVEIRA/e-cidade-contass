@@ -104,21 +104,20 @@ if (isset($incluir) && isset($licitacao)) {
                     $erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
                 }
 
-
                 $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
                 $aSelecionados = array();
                 foreach ($aTipos as $tipo){
                     $aSelecionados[] = $tipo->l48_tipo;
                 }
 
-                $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
+                $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
 
                 if(!$sqlerro){
                     if($cleditaldocumento->numrows == 0){
                         $sqlerro = true;
                         $erro_msg = 'Nenhum documento anexo à licitação';
                     }else{
-                        if(count($tiposCadastrados) < 4){
+                        if(count($tiposCadastrados) < 5){
                             $sqlerro = true;
                             $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
                         }

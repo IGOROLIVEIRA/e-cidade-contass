@@ -114,6 +114,7 @@ $db_opcao = 1;
                     $aTipos['ed'] = 'Edital';
                   }else{
                     $aTipos[] = 'Selecione';
+					$aTipos['ed'] = 'Edital';
                     $aTipos['mc'] = 'Minuta do Contrato';
                     $aTipos['po'] = 'Planilha Orçamentária';
                     $aTipos['cr'] = 'Cronograma';

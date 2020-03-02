@@ -307,7 +307,7 @@ $db_botao = true;
             let sEndereco = "";
             sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
             sEndereco += ", "+aDados[iInd].descrmunicipio.urlDecode();
-            sEndereco += ", "+aDados[iInd].bairro.urlDecode();
+            sEndereco += aDados[iInd].bairro != '' ? ", "+aDados[iInd].bairro.urlDecode() : '';
 
             $('dados_complementares').value = sEndereco;
         }
@@ -371,7 +371,7 @@ $db_botao = true;
         oRetorno.dadoscomplementares.forEach((dado) => {
             let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}, ${dado.bairro}`;
+            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}, ${dado.bairro.replace(/\+/g, ' ')}`;
             let aLinha = new Array();
             aLinha[0] = linhas+1;
             aLinha[1] = descricaoLinha;

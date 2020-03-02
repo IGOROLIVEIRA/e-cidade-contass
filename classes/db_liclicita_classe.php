@@ -677,7 +677,7 @@ class cl_liclicita
             return false;
         }
         if ($this->l20_nroedital == null) {
-            if (in_array($tribunal, array(48, 49, 50, 52, 53, 54))) {
+            if (in_array($tribunal, array(48, 49, 50, 52, 53, 54)) && db_getsession('DB_anousu') >= 2020) {
                 $this->erro_sql = " Campo Numero Edital não Informado.";
                 $this->erro_campo = "l20_nroedital";
                 $this->erro_banco = "";
@@ -860,7 +860,6 @@ class cl_liclicita
             return false;
         }
 
-
         if ($this->l20_codepartamento == null) {
             $this->erro_sql = " Campo codigo departamento não foi informado.";
             $this->erro_campo = "l20_codepartamento";
@@ -883,24 +882,6 @@ class cl_liclicita
 
         if ($this->l20_criterioadjudicacao == null) {
             $this->l20_criterioadjudicacao = "3";
-        }
-
-        if ($this->l20_cadinicial == null) {
-            $this->erro_sql = " Campo Tipo de Cadastro da licitação não foi informado.";
-            $this->erro_campo = "l20_cadinicial";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-        }
-
-        if ($this->l20_exercicioedital == null) {
-            $this->erro_sql = " Campo Exercício do edital não foi informado.";
-            $this->erro_campo = "l20_exercicioedital";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
         }
 
         if ($l20_codigo == "" || $l20_codigo == null) {
@@ -953,9 +934,18 @@ class cl_liclicita
             }
         }
 
-        if ($this->l20_cadinicial == null) {
-            $this->l20_cadinicial = 1;
-        };
+        if(db_getsession('DB_anousu') >= 2020){
+            if (!$this->l20_cadinicial) {
+                $this->l20_cadinicial = 1;
+            };
+
+            if (!$this->l20_exercicioedital) {
+                $this->l20_exercicioedital = db_getsession('DB_anousu');
+            };
+        }else{
+            $this->l20_cadinicial = 'null';
+            $this->l20_exercicioedital = 'null';
+        }
 
         $sql = "insert into liclicita(
                                  l20_codigo
