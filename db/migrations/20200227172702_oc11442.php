@@ -6,8 +6,6 @@ class Oc11442 extends AbstractMigration
 {
     public function up()
     {
-		$sql = "ALTER TABLE adesaoregprecos ADD COLUMN si06_cadinicial integer, ADD COLUMN si06_edital integer;";
-
 		$sql = "
 
 				ALTER TABLE adesaoregprecos add column si06_edital integer;
