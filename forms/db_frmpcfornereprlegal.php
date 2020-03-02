@@ -116,7 +116,8 @@ db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
     <td> 
 <?
 //db_input('pc81_tipopart',10,$Ipc81_tipopart,true,'text',$db_opcao,"")
-$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual");
+$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
+"5"=>"Empresa Individual de Responsabilidade Limitada (EIRELI)");
 db_select("pc81_tipopart",$x,true,$db_opcao);
 ?>
     </td>
