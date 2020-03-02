@@ -181,7 +181,7 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si06_edital == null && db_getsession('DB_anousu') >= 2020){
+     if(!$this->si06_edital && db_getsession('DB_anousu') >= 2020){
        $this->erro_sql = " Campo Edital não Informado.";
        $this->erro_campo = "si06_edital";
        $this->erro_banco = "";
@@ -189,8 +189,6 @@ class cl_adesaoregprecos {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }else{
-       $this->si06_edital = 'null';
      }
      if(!$this->si06_exercicioedital){
        $this->si06_exercicioedital = 'null';

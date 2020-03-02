@@ -46,6 +46,7 @@ if(isset($incluir)){
     if ($sqlerro == false) {
         $cladesaoregprecos->si06_anocadastro = db_getsession('DB_anousu');
         if(db_getsession('DB_anousu') >= 2020){
+			$cladesaoregprecos->si06_edital = $si06_edital;
             $cladesaoregprecos->si06_cadinicial = 1;
             $cladesaoregprecos->si06_exercicioedital = db_getsession('DB_anousu');
         }

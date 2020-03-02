@@ -360,7 +360,7 @@ function js_pesquisal20_codtipocom(mostra){
 	}
     function js_exibeEdital(ano=null){
         let anousuario = "<?=db_getsession('DB_anousu');?>";
-        if(parseInt(anousuario) >= 2020){
+        if(parseInt(anousuario) >= 2020 && (!ano || ano)){
             document.getElementById('tr_edital').style.display = '';
         }else{
             document.getElementById('tr_edital').style.display = 'none';
