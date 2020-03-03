@@ -178,34 +178,34 @@ class cl_contratos212020 {
                                       ,si88_tiporegistro
                                       ,si88_codaditivo
                                       ,si88_coditem
+                                      ,si88_tipomaterial
+                                      ,si88_coditemsinapi
+                                      ,si88_coditemsimcro
+                                      ,si88_descoutrosmateriais
+                                      ,si88_itemplanilha
                                       ,si88_tipoalteracaoitem
                                       ,si88_quantacrescdecresc
                                       ,si88_valorunitarioitem
                                       ,si88_mes
                                       ,si88_reg20
                                       ,si88_instit
-                                      ,si88_tipomaterial
-                                      ,si88_coditemsinapi
-                                      ,si88_coditemsimcro
-                                      ,si88_descoutrosmateriais
-                                      ,si88_itemplanilha
                        )
                 values (
                                 $this->si88_sequencial
                                ,$this->si88_tiporegistro
                                ,$this->si88_codaditivo
                                ,$this->si88_coditem
+                               ,$this->si88_tipomaterial
+                               ,'$this->si88_coditemsinapi'
+                               ,'$this->si88_coditemsimcro'
+                               ,'$this->si88_descoutrosmateriais'
+                               ,$this->si88_itemplanilha
                                ,$this->si88_tipoalteracaoitem
                                ,$this->si88_quantacrescdecresc
                                ,$this->si88_valorunitarioitem
                                ,$this->si88_mes
                                ,$this->si88_reg20
                                ,$this->si88_instit
-                               ,$this->si88_tipomaterial
-                               ,'$this->si88_coditemsinapi'
-                               ,'$this->si88_coditemsimcro'
-                               ,'$this->si88_descoutrosmateriais'
-                               ,$this->si88_itemplanilha
                       )";
      $result = db_query($sql);
      if($result==false){

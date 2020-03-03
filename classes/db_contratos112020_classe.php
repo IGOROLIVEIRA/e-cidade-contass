@@ -171,32 +171,32 @@ class cl_contratos112020 {
                                       ,si84_tiporegistro
                                       ,si84_codcontrato
                                       ,si84_coditem
-                                      ,si84_quantidadeitem
-                                      ,si84_valorunitarioitem
-                                      ,si84_mes
-                                      ,si84_reg10
-                                      ,si84_instit
                                       ,si84_tipomaterial
                                       ,si84_coditemsinapi
                                       ,si84_coditemsimcro
                                       ,si84_descoutrosmateriais
                                       ,si84_itemplanilha
+                                      ,si84_quantidadeitem
+                                      ,si84_valorunitarioitem
+                                      ,si84_mes
+                                      ,si84_reg10
+                                      ,si84_instit
                        )
                 values (
                                 $this->si84_sequencial
                                ,$this->si84_tiporegistro
                                ,$this->si84_codcontrato
                                ,$this->si84_coditem
-                               ,$this->si84_quantidadeitem
-                               ,$this->si84_valorunitarioitem
-                               ,$this->si84_mes
-                               ,$this->si84_reg10
-                               ,$this->si84_instit
                                ,$this->si84_tipomaterial
                                ,'$this->si84_coditemsinapi'
                                ,'$this->si84_coditemsimcro'
                                ,'$this->si84_descoutrosmateriais'
                                ,$this->si84_itemplanilha
+                               ,$this->si84_quantidadeitem
+                               ,$this->si84_valorunitarioitem
+                               ,$this->si84_mes
+                               ,$this->si84_reg10
+                               ,$this->si84_instit
                       )";
      $result = db_query($sql);//die($sql);
      if($result==false){

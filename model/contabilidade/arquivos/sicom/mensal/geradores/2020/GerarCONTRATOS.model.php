@@ -86,7 +86,8 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS10['si83_vlcontrato']                   =   number_format($aCONTRATOS10['si83_vlcontrato'], 2, ",", "");
         $aCSVCONTRATOS10['si83_formafornecimento']            =   substr($aCONTRATOS10['si83_formafornecimento'], 0, 50);
         $aCSVCONTRATOS10['si83_formapagamento']               =   substr($aCONTRATOS10['si83_formapagamento'], 0, 100);
-        $aCSVCONTRATOS10['si83_prazoexecucao']                =   substr($aCONTRATOS10['si83_prazoexecucao'], 0, 100);
+        $aCSVCONTRATOS10['si83_unidadedemedidaprazoexex']     =   $aCONTRATOS10['si83_unidadedemedidaprazoexex'];
+        $aCSVCONTRATOS10['si83_prazoexecucao']                =   $aCONTRATOS10['si83_prazoexecucao'];
         $aCSVCONTRATOS10['si83_multarescisoria']              =   substr($aCONTRATOS10['si83_multarescisoria'], 0, 100);
         $aCSVCONTRATOS10['si83_multainadimplemento']          =   substr($aCONTRATOS10['si83_multainadimplemento'], 0, 100);
         $aCSVCONTRATOS10['si83_garantia']                     =   str_pad($aCONTRATOS10['si83_garantia'], 1, "0", STR_PAD_LEFT);
