@@ -49,13 +49,13 @@ class Oc11654novoano extends AbstractMigration
           AND o56_anousu = 2020;        
         
         UPDATE conplanoorcamento
-        SET c60_descr = 'LICENÇA SAÚDE'
+        SET c60_descr = 'LICENCA SAUDE'
         WHERE c60_anousu >= 2020
           AND c60_estrut IN
         ('331901152000000', '331951152000000', '331961152000000');        
         
         UPDATE orcelemento
-        SET o56_descr = 'LICENÇA SAÚDE'
+        SET o56_descr = 'LICENCA SAUDE'
         WHERE o56_anousu >= 2020
           AND o56_elemento IN
         ('3319011520000', '3319511520000', '3319611520000');
