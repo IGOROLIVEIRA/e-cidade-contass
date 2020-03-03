@@ -1191,4 +1191,50 @@ class MSC {
         $this->setErroSQL(9);
     }
   }
+
+  public function getRegistrosRelatorio($aRegis) {
+
+      ksort($aRegis);
+
+      $keys = array_keys($aRegis);
+      $last_key = array_pop($keys);
+
+      foreach ($aRegis as $key => $value) {
+
+          if ($iConta != $value[0]) {
+
+              if (!empty($iConta)) {
+                  $aRegistros[$iConta] = $oNovoResgistro;
+              }
+              $oNovoResgistro                     = new stdClass;
+              $oNovoResgistro->conta = $iConta    = $value[0];
+              $oNovoResgistro->beginning_balance  = 0;
+              $oNovoResgistro->period_change_deb  = 0;
+              $oNovoResgistro->period_change_cred = 0;
+              $oNovoResgistro->ending_balance     = 0;
+
+          }
+
+          if (!empty($value[7])) {
+              $oNovoResgistro->beginning_balance  += $value[9] == 'D' ? $value[7] : $value[7] * -1;
+          }
+          if (!empty($value[10])) {
+              $oNovoResgistro->period_change_deb  += $value[10];
+          }
+          if (!empty($value[12])) {
+              $oNovoResgistro->period_change_cred += $value[12] * -1;
+          }
+          if (!empty($value[14])) {
+              $oNovoResgistro->ending_balance     += $value[16] == 'D' ? $value[14] : $value[14] * -1;
+          }
+
+          if ($key == $last_key) {
+              $aRegistros[$iConta] = $oNovoResgistro;
+          }
+
+      }
+
+      return $aRegistros;
+
+  }
 }
