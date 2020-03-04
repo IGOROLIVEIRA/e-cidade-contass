@@ -3748,6 +3748,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
+        if (!$F('txtCodigoNumero' + sId)) {
+            alert('Campo Número é obrigatório!\n\n');
+            return false;
+        }
+
         oEndereco.codigoPais = me.getPais();
         oEndereco.codigoEstado = me.getEstado();
         oEndereco.codigoMunicipio = me.getMunicipio();
@@ -3990,7 +3995,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
         $('txtDescrBairro' + sId).value = dadoscomplementares.bairro.replace(/\+/g, ' ');
-        console.log($('txtDescrBairro' + sId).value);
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = dadoscomplementares.descratividadeservico;
         $('txtDescrAtividadeServicoEsp' + sId).value = dadoscomplementares.descratividadeservicoesp;
