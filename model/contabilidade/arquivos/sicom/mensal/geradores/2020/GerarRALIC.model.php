@@ -112,7 +112,7 @@ class GerarRALIC extends GerarAM
 							$aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
 							$aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
 							$aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
-							$aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
+							$aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
 							$aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
 							$aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
 							$aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];

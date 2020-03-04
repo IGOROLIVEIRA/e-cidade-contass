@@ -3748,11 +3748,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
-        if (!$F('txtCodigoNumero' + sId)) {
-            alert('Campo Número é obrigatório!\n\n');
-            return false;
-        }
-
         oEndereco.codigoPais = me.getPais();
         oEndereco.codigoEstado = me.getEstado();
         oEndereco.codigoMunicipio = me.getMunicipio();
