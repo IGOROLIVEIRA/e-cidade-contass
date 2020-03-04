@@ -944,7 +944,7 @@ class MSC {
          inner join db_config ON codigo = r.c61_instit
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
-       left join elemdespmsc on  (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+       left join elemdespmsc on  (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
        left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), c60_anousu) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on c19_orctiporec = o15_codigo
@@ -1082,7 +1082,7 @@ class MSC {
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
        inner join empempenho on c19_numemp=e60_numemp
-       left join elemdespmsc on (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+       left join elemdespmsc on (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
        left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on o58_codigo = o15_codigo
