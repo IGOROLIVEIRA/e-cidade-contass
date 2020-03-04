@@ -41,15 +41,15 @@ class gerarCADOBRAS extends GerarAM
 
       $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
 
-      $aCSVCADOBRAS10['si198_tiporegistro']         = str_pad($aCADORBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
-      $aCSVCADOBRAS10['si198_codorgaoresp']         = substr($aCADORBRAS10['si195_codorgaoresp'], 0, 3);
+      $aCSVCADOBRAS10['si198_tiporegistro']         = $aCADORBRAS10['si198_tiporegistro'];
+      $aCSVCADOBRAS10['si198_codorgaoresp']         = $aCADORBRAS10['si198_codorgaoresp'];
       $aCSVCADOBRAS10['si198_codobra']              = $aCADORBRAS10['si198_codobra'];
       $aCSVCADOBRAS10['si198_tiporesponsavel']      = $aCADORBRAS10['si198_tiporesponsavel'];
       $aCSVCADOBRAS10['si198_nrodocumento']         = $aCADORBRAS10['si198_nrodocumento'];
       $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
       $aCSVCADOBRAS10['si198_nroregistroconseprof'] = $aCADORBRAS10['si198_nroregistroconseprof'];
       $aCSVCADOBRAS10['si198_numrt']                = $aCADORBRAS10['si198_numrt'];
-      $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $aCADORBRAS10['si198_dtinicioatividadeseng'];
+      $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $this->sicomDate($aCADORBRAS10['si198_dtinicioatividadeseng']);
       $aCSVCADOBRAS10['si198_tipovinculo']          = $aCADORBRAS10['si198_tipovinculo'];
       $this->sLinha = $aCSVCADOBRAS10;
       $this->adicionaLinha();
@@ -64,13 +64,13 @@ class gerarCADOBRAS extends GerarAM
 
       $aCADORBRAS20 = pg_fetch_array($rscadobras202020, $iCont);
 
-      $aCSVCADOBRAS20['si199_tiporegistro']         = str_pad($aCADORBRAS20['si199_tiporegistro'], 2, "0", STR_PAD_LEFT);
+      $aCSVCADOBRAS20['si199_tiporegistro']         = $aCADORBRAS20['si199_tiporegistro'];
       $aCSVCADOBRAS20['si199_codorgaoresp']         = substr($aCADORBRAS20['si199_codorgaoresp'], 0, 3);
       $aCSVCADOBRAS20['si199_codobra']              = $aCADORBRAS20['si199_codobra'];
       $aCSVCADOBRAS20['si199_situacaodaobra']       = $aCADORBRAS20['si199_situacaodaobra'];
-      $aCSVCADOBRAS20['si199_dtsituacao']           = $aCADORBRAS20['si199_dtsituacao'];
+      $aCSVCADOBRAS20['si199_dtsituacao']           = $this->sicomDate($aCADORBRAS20['si199_dtsituacao']);
       $aCSVCADOBRAS20['si199_veiculopublicacao']    = $aCADORBRAS20['si199_veiculopublicacao'];
-      $aCSVCADOBRAS20['si199_dtpublicacao']         = $aCADORBRAS20['si199_dtpublicacao'];
+      $aCSVCADOBRAS20['si199_dtpublicacao']         = $this->sicomDate($aCADORBRAS20['si199_dtpublicacao']);
       $aCSVCADOBRAS20['si199_descsituacao']         = $aCADORBRAS20['si199_descsituacao'];
       $this->sLinha = $aCSVCADOBRAS20;
       $this->adicionaLinha();
@@ -85,13 +85,13 @@ class gerarCADOBRAS extends GerarAM
 
       $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont);
 
-      $aCSVCADOBRAS21['si200_tiporegistro']         = str_pad($aCADORBRAS21['si200_tiporegistro'], 2, "0", STR_PAD_LEFT);
+      $aCSVCADOBRAS21['si200_tiporegistro']         = $aCADORBRAS21['si200_tiporegistro'];
       $aCSVCADOBRAS21['si200_codorgaoresp']         = substr($aCADORBRAS21['si200_codorgaoresp'], 0, 3);
       $aCSVCADOBRAS21['si200_codobra']              = $aCADORBRAS21['si200_codobra'];
-      $aCSVCADOBRAS21['si200_dtparalisacao']        = $aCADORBRAS21['si200_dtparalisacao'];
+      $aCSVCADOBRAS21['si200_dtparalisacao']        = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
       $aCSVCADOBRAS21['si200_motivoparalisacap']    = $aCADORBRAS21['si200_motivoparalisacap'];
       $aCSVCADOBRAS21['si200_descoutrosparalisacao']= $aCADORBRAS21['si200_descoutrosparalisacao'];
-      $aCSVCADOBRAS21['si200_dtretomada']           = $aCADORBRAS21['si200_dtretomada'];
+      $aCSVCADOBRAS21['si200_dtretomada']           = $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
       $this->sLinha = $aCSVCADOBRAS21;
       $this->adicionaLinha();
     }
@@ -111,9 +111,9 @@ class gerarCADOBRAS extends GerarAM
       $aCSVCADOBRAS30['si201_tipomedicao']          = $aCADORBRAS30['si201_tipomedicao'];
       $aCSVCADOBRAS30['si201_descoutrostiposmed']     = $aCADORBRAS30['si201_descoutrostiposmed'];
       $aCSVCADOBRAS30['si201_nummedicao']             = $aCADORBRAS30['si201_nummedicao'];
-      $aCSVCADOBRAS30['si201_dtiniciomedicao']        = $aCADORBRAS30['si201_dtiniciomedicao'];
-      $aCSVCADOBRAS30['si201_dtfimmedicao']           = $aCADORBRAS30['si201_dtfimmedicao'];
-      $aCSVCADOBRAS30['si201_dtmedicao']              = $aCADORBRAS30['si201_dtmedicao'];
+      $aCSVCADOBRAS30['si201_dtiniciomedicao']        = $this->sicomDate($aCADORBRAS30['si201_dtiniciomedicao']);
+      $aCSVCADOBRAS30['si201_dtfimmedicao']           = $this->sicomDate($aCADORBRAS30['si201_dtfimmedicao']);
+      $aCSVCADOBRAS30['si201_dtmedicao']              = $this->sicomDate($aCADORBRAS30['si201_dtmedicao']);
       $aCSVCADOBRAS30['si201_valormedicao']           = number_format($aCADORBRAS30['si201_valormedicao'],2,",","");
       $this->sLinha = $aCSVCADOBRAS30;
       $this->adicionaLinha();

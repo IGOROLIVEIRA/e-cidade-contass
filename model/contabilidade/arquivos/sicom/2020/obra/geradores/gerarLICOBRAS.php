@@ -45,7 +45,7 @@ class gerarLICOBRAS extends GerarAM
 
         $aCSVLICOBRAS10['si195_tiporegistro'] = str_pad($alICOBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVLICOBRAS10['si195_codorgaoresp'] = substr($alICOBRAS10['si195_codorgaoresp'], 0, 2);
-        $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = substr($alICOBRAS10['si195_codunidadesubrespestadual'], 0, 4);
+        $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = $alICOBRAS10['si195_codunidadesubrespestadual'];
         $aCSVLICOBRAS10['si195_exerciciolicitacao'] = $alICOBRAS10['si195_exerciciolicitacao'];
         $aCSVLICOBRAS10['si195_nroprocessolicitatorio'] = $alICOBRAS10['si195_nroprocessolicitatorio'];
         $aCSVLICOBRAS10['si195_codobra'] = $alICOBRAS10['si195_codobra'];

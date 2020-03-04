@@ -57,7 +57,7 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
 
   public function gerarDados()
   {
-    /**
+        /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clpessoasobra102020 = new cl_pessoasobra102020();

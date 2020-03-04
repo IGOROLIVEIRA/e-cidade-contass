@@ -24,7 +24,7 @@ class cl_cadobras102020 {
   public $si198_nrodocumento = null;
   public $si198_tiporegistroconselho = 0;
   public $si198_nroregistroconseprof = null;
-  public $si198_numrt = 0;
+  public $si198_numrt = null;
   public $si198_dtinicioatividadeseng_dia = null;
   public $si198_dtinicioatividadeseng_mes = null;
   public $si198_dtinicioatividadeseng_ano = null;
@@ -171,15 +171,9 @@ class cl_cadobras102020 {
       $this->erro_status = "0";
       return false;
     }
-//    if ($this->si198_numrt == null ) {
-//      $this->erro_sql = " Campo numRT não informado.";
-//      $this->erro_campo = "si198_numrt";
-//      $this->erro_banco = "";
-//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//      $this->erro_status = "0";
-//      return false;
-//    }
+    if ($this->si198_numrt == null ) {
+      $this->si198_numrt = "0";
+    }
     if ($this->si198_dtinicioatividadeseng == null ) {
       $this->erro_sql = " Campo dtinicioatividadeseng não informado.";
       $this->erro_campo = "si198_dtinicioatividadeseng_dia";

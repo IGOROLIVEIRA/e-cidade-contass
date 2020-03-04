@@ -104,7 +104,6 @@ switch($oParam->exec) {
   break;
 
   case "processarObra":
-
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";

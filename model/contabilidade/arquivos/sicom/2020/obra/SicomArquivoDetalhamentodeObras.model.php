@@ -1,6 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarCADOBRAS.php");
 require_once("classes/db_cadobras102020_classe.php");
 require_once("classes/db_cadobras202020_classe.php");
 require_once("classes/db_cadobras212020_classe.php");
@@ -77,9 +78,9 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     /**
      * registro 30 exclusão
      */
-    $result = db_query($clcadobras302020->sql_query(null, "*", null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit")));
+    $result = db_query($clcadobras302020->sql_query(null, "*", null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clcadobras302020->excluir(null, "si200_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si200_instit=" . db_getsession("DB_instit"));
+      $clcadobras302020->excluir(null, "si201_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si201_instit=" . db_getsession("DB_instit"));
       if ($clcadobras302020->erro_status == 0) {
         throw new Exception($clcadobras302020->erro_msg);
       }
@@ -127,6 +128,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
             INNER JOIN liclicita ON l20_codigo = obr01_licitacao
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+            INNER JOIN cgm on z01_numcgm = obr05_responsavel
             WHERE DATE_PART('YEAR',licobras.obr01_dtinicioatividades)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtinicioatividades)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult10 = db_query($sql);
@@ -163,8 +165,11 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               INNER JOIN licobrasresponsaveis ON obr05_seqobra = obr01_sequencial
               INNER JOIN cgm ON z01_numcgm = obr05_responsavel
               INNER JOIN licobrasituacao ON obr02_seqobra = obr01_sequencial
+              INNER JOIN liclicita ON l20_codigo = obr01_licitacao
+              INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
+              LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
-                  AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult20 = db_query($sql);
 
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
