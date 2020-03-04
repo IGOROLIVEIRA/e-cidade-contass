@@ -534,6 +534,7 @@ switch($oParam->exec) {
     break;
 
   case "salvarContrato":
+
     try {
 
       db_inicio_transacao();

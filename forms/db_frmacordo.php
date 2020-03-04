@@ -492,7 +492,7 @@ db_app::load("dbtextFieldData.widget.js");
                                             </tr>
                                             <tr>
                                                 <td nowrap title="Prazo de Execução">
-                                                    <strong>Prazo de Execução:</strong>
+                                                    <strong>Unid.Execução/Entrega:</strong>
                                                 </td>
                                                 <td>
                                                     <?
@@ -1077,6 +1077,7 @@ db_app::load("dbtextFieldData.widget.js");
     }
 
     function js_mostraacordogrupo(chave, erro) {
+        let chave1 = $('ac16_acordogrupo').value;
 
         $('ac02_descricao').value = chave;
         if (erro == true) {
@@ -1097,7 +1098,7 @@ db_app::load("dbtextFieldData.widget.js");
             }*/
 
         }
-
+      js_verificaNatureza(chave1);
     }
 
     function js_getNumeroAcordo(){
@@ -1113,6 +1114,7 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac02_descricao').value = chave2;
         $('ac16_acordogrupo').focus();
 
+        js_verificaNatureza(chave1);
         var oGet = js_urlToObject();
 
         /*
@@ -1125,6 +1127,21 @@ db_app::load("dbtextFieldData.widget.js");
         }*/
 
         db_iframe_acordogrupo.hide();
+    }
+
+    function js_verificaNatureza(codnat) {
+
+        if(codnat == "1"){
+          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+        }else if(codnat == "2"){
+          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+        }else if(codnat == "3"){
+          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+        }else if(codnat == "7"){
+          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+        }else{
+          $('ac16_qtdperiodo').style.backgroundColor = "#E6E4F1";
+        }
     }
 
     function js_pesquisa() {
