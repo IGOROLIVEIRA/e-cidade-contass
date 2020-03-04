@@ -86,6 +86,7 @@ if (isset($incluir) && !$lErro) {
   $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
   $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
   $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
+  $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
 
   if($rh02_diasgozoferias >= 30) {
 
@@ -239,6 +240,7 @@ if (isset($incluir) && !$lErro) {
   $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
   $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
   $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
+  $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
 
   if($rh02_diasgozoferias >= 30) {
 
