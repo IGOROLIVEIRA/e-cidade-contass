@@ -73,8 +73,7 @@ class GerarRALIC extends GerarAM
 
                 $this->sLinha = $aCSVRALIC10;
                 $this->adicionaLinha();
-
-                for ($iCont2 = 0; $iCont2 < pg_num_rows($rsRALIC11); $iCont2++) {
+				for ($iCont2 = 0; $iCont2 < pg_num_rows($rsRALIC11); $iCont2++) {
 
                     $aRALIC11 = pg_fetch_array($rsRALIC11, $iCont2);
 
