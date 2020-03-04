@@ -103,6 +103,70 @@ switch($oParam->exec) {
   }
   break;
 
+  case "processarObra":
+    $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
+    $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
+    $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+    if (count($oParam->arquivos) > 0) {
+      $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+      $rsInst = db_query($sSql);
+      $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+      $iAnoReferencia = db_getsession('DB_anousu');
+
+      $sSql  = "SELECT si09_codorgaotce AS codorgao
+                    FROM db_config
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+                    WHERE codigo = ".db_getsession("DB_instit");
+      $rsOrgao = db_query($sSql);
+      $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
+      echo pg_last_error();
+      /*
+       * array para adicionar os arquivos de inslusao de programas
+       */
+      $aArquivoProgramas =  array();
+      /*
+       * gerar arquivos correspondentes a todas as opcoes selecionadas
+       */
+      $oEscritorCSV          = new padArquivoEscritorCSV();
+      $oEscritorProgramasCSV = new padArquivoEscritorCSV();
+      /*
+       * instanciar cada arqivo selecionado e gerar o CSV correspondente
+       */
+      $aArrayArquivos = array();
+      foreach ($oParam->arquivos as $sArquivo) {
+        if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/obra/SicomArquivo{$sArquivo}.model.php")) {
+          require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/obra/SicomArquivo{$sArquivo}.model.php");
+          $sNomeClasse = "SicomArquivo{$sArquivo}";
+          $oArquivo    = new $sNomeClasse;
+          $oArquivo->setDataInicial($sDataInicial);
+          $oArquivo->setDataFinal($sDataFinal);
+          $oArquivoCsv = new stdClass();
+          try {
+            $oArquivo->gerarDados();
+            $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
+            $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
+            $aArrayArquivos[] = $oArquivoCsv;
+          } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+          }
+        }
+      }
+      $aListaArquivos = " ";
+      foreach ($aArrayArquivos as $oArquivo){
+        $aListaArquivos .= " ".$oArquivo->caminho;
+      }
+      system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+      system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+      $oArquivoZip = new stdClass();
+      $oArquivoZip->nome    = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $aArrayArquivos[] = $oArquivoZip;
+      $oRetorno->itens  = $aArrayArquivos;
+    }
+    break;
+
   case "processarSicomAnual" :
     /**
      * sempre usar essa funcao para pegar o ano
@@ -538,7 +602,7 @@ case "processarBalancete" :
       $oRetorno->itens  = $aArrayArquivos;
       if($bEncerramento)
         $oRetorno->calculos = getCalculoEncerramento();
-        // var_dump($oRetorno);
+      // var_dump($oRetorno);
     }
 
 
@@ -944,7 +1008,7 @@ case "processarBalancete" :
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$dia'
+					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia'
 				";
 
 				$rsAnexos = db_query($sSql);

@@ -1,6 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarEXEOBRAS.php");
 require_once("classes/db_exeobras102020_classe.php");
 
 /**

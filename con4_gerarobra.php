@@ -79,19 +79,16 @@ $clrotulo->label("o15_codigo");
             <td style="border: 2px groove white;" valign="top">
               <input type="checkbox" value="IDE" id="IDE" />
               <label for="IDE">Identificação da Remessa (IDE)</label><br>
-              <input type="checkbox" value="PESSOA" id="PESSOA" />
+              <input type="checkbox" value="PessoaObras" id="PessoaObras" />
               <label for="PESSOA">Pessoas Físicas (PESSOA)</label><br>
-              <input type="checkbox" value="LICOBRAS" id="LICOBRAS" />
+              <input type="checkbox" value="Licobras" id="Licobras" />
               <label for="LICOBRAS">Licitação, Obras e Serviços de Engenharia (LICOBRAS)</label><br>
-              <input type="checkbox" value="EXEOBRAS" id="EXEOBRAS" />
+              <input type="checkbox" value="ExecucaodeContratosObras" id="ExecucaodeContratosObras" />
               <label for="EXEOBRAS">Execução dos Contratos de Obras e Serviços de Engenharia (EXEOBRAS)</label><br>
-              <input type="checkbox" value="CADOBRAS" id="CADOBRAS" />
+              <input type="checkbox" value="DetalhamentodeObras" id="DetalhamentodeObras" />
               <label for="CADOBRAS">Cadastro do Detalhamento de Obras e Serviços de Engenharia (CADOBRAS)</label><br>
             </td>
             <td style="border: 2px groove white;" valign="top">
-
-
-
             </td>
             <td style="border: 2px groove white;" valign="top">
               <div id='retorno'
@@ -138,7 +135,7 @@ $clrotulo->label("o15_codigo");
     js_divCarregando('Aguarde, processando arquivos','msgBox');
 
     var oParam           = new Object();
-    oParam.exec          = "processarOBRA";
+    oParam.exec          = "processarObra";
     oParam.arquivos      = aArquivosSelecionados;
     oParam.mesReferencia = iMesReferencia.value;
     var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
