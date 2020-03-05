@@ -576,15 +576,15 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
-        if ($F('txtDescrBairro' + sId).trim() != "" ||
-            $F('txtDescrRua' + sId).trim() != "" ||
-            $F('txtCodigoNumero' + sId).trim() != "") {
+        // if ($F('txtDescrBairro' + sId).trim() != "" ||
+        //     $F('txtDescrRua' + sId).trim() != "" ||
+        //     $F('txtCodigoNumero' + sId).trim() != "") {
 
-            if (!confirm('usuário:\n\nExistem dados abaixo preenchidos serão perdidos Deseja Continuar?\n\n')) {
-                $('txtCep' + sId).value = ''
-                return false;
-            }
-        }
+            // if (!confirm('usuário:\n\nExistem dados abaixo preenchidos serão perdidos Deseja Continuar?\n\n')) {
+            //     $('txtCep' + sId).value = ''
+            //     return false;
+            // }
+        // }
 
         var oPesquisa = new Object();
         oPesquisa.exec = 'findCep';
@@ -722,10 +722,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         } else {
 
             alert('usuário:\n\n\Nenhum endereço retornado para o cep informado !\n\n');
-            $('txtCep' + sId).value = '';
-            me.clearAll(1);
-            me.setCodigoEndereco('');
-            me.buscaEndereco();
+            // $('txtCep' + sId).value = '';
+            // me.clearAll(1);
+            // me.setCodigoEndereco('');
+            // me.buscaEndereco();
         }
     }
 
