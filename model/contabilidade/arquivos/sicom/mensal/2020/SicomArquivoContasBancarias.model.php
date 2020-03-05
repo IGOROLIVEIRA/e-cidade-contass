@@ -257,7 +257,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio FROM ctb102018 ";
+          $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -267,7 +267,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio FROM ctb102017 ";
+          $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -277,7 +277,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio FROM ctb102016 ";
+          $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -287,7 +287,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio FROM ctb102015 ";
+          $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
                                AND si95_banco = '$oRegistro10->c63_banco'
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
@@ -297,7 +297,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_tipoconta::int = $oRegistro10->tipoconta 
                                AND si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION ";
-          $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio FROM ctb102014 ";
+          $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
           $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' 
                                AND si95_banco = '$oRegistro10->c63_banco' 
                                AND si95_agencia = '$oRegistro10->c63_agencia' 
