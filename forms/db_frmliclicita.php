@@ -149,7 +149,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <?php if($l20_anousu >= 2020):?>
+                                <?php if($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1):?>
                                 <tr id="linha_nroedital">
                                     <td nowrap title="<?=@$Tl20_nroedital?>">
                                         <?=@$Ll20_nroedital?>
