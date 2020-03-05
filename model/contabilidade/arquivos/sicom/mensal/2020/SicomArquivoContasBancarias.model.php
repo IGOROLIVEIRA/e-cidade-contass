@@ -236,84 +236,76 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->recurso = $oRegistro10->recurso;
           $cCtb10->contas = array();
 
-          // vericando se o ctb foi enviado em 2020
-          $sSqlVerifica  = "SELECT si95_codctb FROM ctb102020 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ;
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-
-          // vericando se o ctb foi enviado em 2019
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102019 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-            // vericando se o ctb foi enviado em 2018
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102018 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco' ";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-            // vericando se o ctb foi enviado em 2017
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102017 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco' ";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-            // vericando se o ctb foi enviado em 2016
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102016 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-            // vericando se o ctb foi enviado em 2015
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102015 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
-
-          // vericando se o ctb foi enviado em 2014
-          $sSqlVerifica .= " UNION SELECT si95_codctb FROM ctb102014 ";
-          $sSqlVerifica .= "WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' ";
-          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco' ";
-          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica = "SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                              AND si95_banco = '$oRegistro10->c63_banco'
+                              AND si95_agencia = '$oRegistro10->c63_agencia' 
+                              AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                              AND si95_contabancaria = '$oRegistro10->c63_conta'
+                              AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                              AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                              AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
+                              AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio FROM ctb102019 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio FROM ctb102018 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio FROM ctb102017 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio FROM ctb102016 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio FROM ctb102015 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
+                               AND si95_banco = '$oRegistro10->c63_banco'
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION ";
+          $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio FROM ctb102014 ";
+          $sSqlVerifica .= " WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' 
+                               AND si95_banco = '$oRegistro10->c63_banco' 
+                               AND si95_agencia = '$oRegistro10->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' 
+                               AND si95_contabancaria = '$oRegistro10->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' 
+                               AND si95_tipoconta::int = $oRegistro10->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
 
           $rsResultVerifica = db_query($sSqlVerifica);
           //echo $sSqlVerifica."<br>";
@@ -1109,105 +1101,70 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
     /*
      * REGISTRO 40 ALTERACAO DE CONTAS BANCARIAS
      */
-     $rsCtasReg40 = db_query($sSqlGeral);
-     //echo $sSqlGeral."<br>";
-     //db_criatabela($rsCtasReg40);
+    $rsCtasReg40 = db_query($sSqlGeral);
 
-      if (pg_num_rows($rsCtasReg40) != 0) {
+    if (pg_num_rows($rsCtasReg40) != 0) {
 
-          for ($icont40 = 0; $icont40 < pg_num_rows($rsCtasReg40); $icont40++) {
+      for ($icont40 = 0; $icont40 < pg_num_rows($rsCtasReg40); $icont40++) {
 
-            $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
-            $oMovi40->tiporegistro = 40;
+        $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
+        $oMovi40->tiporegistro = 40;
+        $rsVerificaReg40 = db_query($sSqlVerifica);
+        $oVerificaReg40 = db_utils::fieldsMemory($rsVerificaReg40, $icont40);
 
-            $sSqlVerficaReg40  = "SELECT 'ctb102019' AS ano, ctb102019.* FROM ctb102019
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
-            $sSqlVerficaReg40 .= " UNION ALL ";
-            $sSqlVerficaReg40  .= "SELECT 'ctb102018' AS ano, ctb102018.* FROM ctb102018
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
-           $sSqlVerficaReg40 .= " UNION ALL ";
-           $sSqlVerficaReg40  .= "SELECT 'ctb102017' AS ano, ctb102017.* FROM ctb102017
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
-           $sSqlVerficaReg40 .= " UNION ALL ";
-           $sSqlVerficaReg40  .= "SELECT 'ctb102016' AS ano, ctb102016.* FROM ctb102016
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
-           $sSqlVerficaReg40 .= " UNION ALL ";
-           $sSqlVerficaReg40  .= "SELECT 'ctb102015' AS ano, ctb102015.* FROM ctb102015
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit') . " ";
-           $sSqlVerficaReg40 .= " UNION ALL ";
-           $sSqlVerficaReg40  .= "SELECT 'ctb102014' AS ano, ctb102014.* FROM ctb102014
-                                  WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce 
-                                    AND si95_banco = '$oRegistro10->c63_banco'
-                                    AND si95_agencia = '$oRegistro10->c63_agencia'
-                                    AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia'
-                                    AND si95_contabancaria = '$oRegistro10->c63_conta'
-                                    AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta'
-                                    AND si95_tipoconta::int = $oRegistro10->tipoconta
-                                    AND si95_instit = " . db_getsession('DB_instit');
-           $rsVerificaReg40 = db_query($sSqlVerficaReg40);
-           //echo $sSqlVerficaReg40."<br>";
-           //db_criatabela($rsVerificaReg40);
+        $sSql40 = "SELECT 'ctb402020' AS ano, ctb402020.* FROM ctb402020
+                     JOIN ctb102020 ON (si95_codctb, si95_nroconvenio, si95_mes) = (si101_codctb, si101_nroconvenio, si100_mes)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
+                      AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "SELECT 'ctb402019' AS ano, ctb402019.* FROM ctb402019
+                    JOIN ctb102019 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "SELECT 'ctb402018' AS ano, ctb402018.* FROM ctb402018
+                    JOIN ctb102018 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "SELECT 'ctb402017' AS ano, ctb402017.* FROM ctb402017
+                    JOIN ctb102017 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "SELECT 'ctb402016' AS ano, ctb402016.* FROM ctb402016
+                    JOIN ctb102016 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "SELECT 'ctb402015' AS ano, ctb402015.* FROM ctb402015
+                    JOIN ctb102015 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                      AND si101_instit = " . db_getsession('DB_instit');
 
-           $oVerificaReg40 = db_utils::fieldsMemory($rsVerificaReg40, $icont40);
-           //echo "<pre>";print_r($oVerificaReg40);
+        $rsQuery40 = db_query($sSql40);
 
-           if (($oMovi40->contaconvenio == 1 && ($oVerificaReg40->si95_nroconvenio != $oMovi40->nroconvenio)) && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1) {
+        if ($oMovi40->contaconvenio == 1 && ($oVerificaReg40->si95_nroconvenio != $oMovi40->nroconvenio) && pg_num_rows($rsQuery40) == 0) {
 
-                $cCtb40 = new cl_ctb402020();
+          $cCtb40 = new cl_ctb402020();
 
-                $cCtb40->si101_tiporegistro = 40;
-                $cCtb40->si101_codorgao = $oMovi40->si09_codorgaotce;
-                $cCtb40->si101_codctb = ($oMovi40->codtce != 0 || $oMovi40->codtce != NULL) ? $oMovi40->codtce : $oMovi40->codctb;
-                $cCtb40->si101_desccontabancaria = substr($oMovi40->desccontabancaria,0,50);
-                $cCtb40->si101_nroconvenio = $oMovi40->nroconvenio;
-                $cCtb40->si101_dataassinaturaconvenio = ($oMovi40->dataassinaturaconvenio == NULL || $oMovi40->dataassinaturaconvenio == ' ') ? NULL : $oMovi40->dataassinaturaconvenio;
-                $cCtb40->si101_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $cCtb40->si101_instit = db_getsession("DB_instit");
+          $cCtb40->si101_tiporegistro = 40;
+          $cCtb40->si101_codorgao = $oMovi40->si09_codorgaotce;
+          $cCtb40->si101_codctb = ($oMovi40->codtce != 0 || $oMovi40->codtce != NULL) ? $oMovi40->codtce : $oMovi40->codctb;
+          $cCtb40->si101_desccontabancaria = substr($oMovi40->desccontabancaria,0,50);
+          $cCtb40->si101_nroconvenio = $oMovi40->nroconvenio;
+          $cCtb40->si101_dataassinaturaconvenio = ($oMovi40->dataassinaturaconvenio == NULL || $oMovi40->dataassinaturaconvenio == ' ') ? NULL : $oMovi40->dataassinaturaconvenio;
+          $cCtb40->si101_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          $cCtb40->si101_instit = db_getsession("DB_instit");
 
-                $cCtb40->incluir(null);
-                if ($cCtb40->erro_status == 0) {
-                    throw new Exception($cCtb40->erro_msg);
-               }
-
-            }
-
+          $cCtb40->incluir(null);
+          if ($cCtb40->erro_status == 0) {
+            throw new Exception($cCtb40->erro_msg);
+          }
         }
-     }
+      }
+    }
 
 
 
