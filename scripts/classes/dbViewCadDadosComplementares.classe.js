@@ -3990,7 +3990,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
         $('txtDescrBairro' + sId).value = dadoscomplementares.bairro.replace(/\+/g, ' ');
-        console.log($('txtDescrBairro' + sId).value);
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = dadoscomplementares.descratividadeservico;
         $('txtDescrAtividadeServicoEsp' + sId).value = dadoscomplementares.descratividadeservicoesp;
