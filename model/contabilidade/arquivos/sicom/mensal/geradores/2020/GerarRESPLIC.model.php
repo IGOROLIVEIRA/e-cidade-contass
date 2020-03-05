@@ -50,7 +50,7 @@ class GerarRESPLIC extends GerarAM
         $aCSVRESPLIC10['si55_codunidadesub']          =   substr($aRESPLIC10['si55_codunidadesub'], 0, 8);
         $aCSVRESPLIC10['si55_exerciciolicitacao']     = $this->padLeftZero($aRESPLIC10['si55_exerciciolicitacao'], 4);
         $aCSVRESPLIC10['si55_nroprocessolicitatorio'] = substr($aRESPLIC10['si55_nroprocessolicitatorio'], 0, 12);
-        $aCSVRESPLIC10['si55_tiporesp']               = substr($aRESPLIC10['si55_tiporesp'], 0, 1);
+        $aCSVRESPLIC10['si55_tiporesp']               = $this->padLeftZero($aRESPLIC10['si55_tiporesp'], 2);
         $aCSVRESPLIC10['si55_nrocpfresp']             = $this->padLeftZero($aRESPLIC10['si55_nrocpfresp'], 11);
         
         $this->sLinha = $aCSVRESPLIC10;

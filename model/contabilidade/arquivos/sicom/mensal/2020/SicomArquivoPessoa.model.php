@@ -88,7 +88,42 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
            where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
            and (z01_cgccpf != '' and z01_cgccpf is not null)
            and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
-           or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) ";
+           or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) 
+           AND z01_cgccpf NOT IN
+   (SELECT si12_nrodocumento
+    FROM pessoa102020
+    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+    WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )
+ AND z01_cgccpf NOT IN
+    (SELECT si12_nrodocumento
+     FROM pessoa102019
+     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+     WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )
+AND z01_cgccpf NOT IN
+    (SELECT si12_nrodocumento
+     FROM pessoa102018
+     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+     WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) ) 
+ AND z01_cgccpf NOT IN
+   (SELECT si12_nrodocumento
+    FROM pessoa102017
+    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+    WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )
+ AND z01_cgccpf NOT IN
+   (SELECT si12_nrodocumento
+    FROM pessoa102016
+    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+    WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )
+ AND z01_cgccpf NOT IN
+   (SELECT si12_nrodocumento
+    FROM pessoa102015
+    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+    WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )
+ AND z01_cgccpf NOT IN
+   (SELECT si12_nrodocumento
+    FROM pessoa102014
+    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+    WHERE (z01_ultalt < '{$this->sDataInicial}' OR z01_ultalt IS NULL) )";
 
 //    } else {
 //      $sSql = "select z01_cgccpf,

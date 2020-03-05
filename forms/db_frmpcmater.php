@@ -260,6 +260,17 @@ function js_executaIframe(val) {
         ?>
       </td>
     </tr>
+  <tr>
+    <td>
+      <strong>Material Utilizado em Obras/serviços?</strong>
+    </td>
+    <td>
+      <?php
+      $aObra = array("0"=>"Selecione","f"=>"Não","t"=>"Sim");
+      db_select("pc01_obras",$aObra,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>
     <!--FIM OC3770 -->
 
    <tr>

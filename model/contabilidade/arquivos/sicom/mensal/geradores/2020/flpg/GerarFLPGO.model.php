@@ -12,7 +12,7 @@ class GerarFLPGO extends GerarAM {
 
     /**
      *
-     * Mes de referência
+     * Mes de refer?cia
      * @var Integer
      */
     public $iMes;
@@ -55,13 +55,16 @@ class GerarFLPGO extends GerarAM {
                 $aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
                 $aCSVFLPGO10['si195_dsctipopagextra']                     =   substr($aFLPGO10['si195_dsctipopagextra'], 0, 150);
                 $aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);
+                $aCSVFLPGO10['si195_dscsituacao']                         =   substr($aFLPGO10['si195_dscsituacao'], 0, 150);
+                $aCSVFLPGO10['si195_indpensionistaprevidenciario']                         =   empty($aFLPGO10['si195_indpensionistaprevidenciario']) ? ' ' : $aFLPGO10['si195_indpensionistaprevidenciario'];
                 $aCSVFLPGO10['si195_nrocpfinstituidor']                   =   (!empty($aFLPGO10['si195_nrocpfinstituidor']))? $aFLPGO10['si195_nrocpfinstituidor']   : '';
                 $aCSVFLPGO10['si195_datobitoinstituidor']                 =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datobitoinstituidor'])));
                 $aCSVFLPGO10['si195_tipodependencia']                     =   str_pad($aFLPGO10['si195_tipodependencia'], 1, "", STR_PAD_LEFT);
                 if($aCSVFLPGO10['si195_tipodependencia'] == 0){
                   $aCSVFLPGO10['si195_tipodependencia'] = '';
                 }
-                $aCSVFLPGO10['si195_dscsituacao']                         =   substr($aFLPGO10['si195_dscsituacao'], 0, 150);
+                $aCSVFLPGO10['si195_dscdependencia']                         =   substr($aFLPGO10['si195_dscdependencia'], 0, 150);
+                $aCSVFLPGO10['si195_datafastpreliminar']                     =   empty($aFLPGO10['si195_datafastpreliminar']) ? ' ' : $aFLPGO10['si195_datafastpreliminar']; 
 
                 if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'P'){
 
@@ -86,7 +89,7 @@ class GerarFLPGO extends GerarAM {
                         $aCSVFLPGO10['si195_natcargo']           = ' ';
 
                     $aCSVFLPGO10['si195_dscnatcargo']            =   $aFLPGO10['si195_dscnatcargo'];
-                    $aCSVFLPGO10['si195_indcessao']              =   ' ';
+                    $aCSVFLPGO10['si195_indcessao']              =   $aFLPGO10['si195_indcessao'];
 
                     if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I') {
                         $aCSVFLPGO10['si195_dsclotacao']         = ' ';
@@ -124,7 +127,7 @@ class GerarFLPGO extends GerarAM {
                     $aCSVFLPGO10['si195_indsalaaula']            =   $aFLPGO10['si195_indsalaaula'];
                     $aCSVFLPGO10['si195_vlrcargahorariasemanal'] = (!empty($aFLPGO10['si195_vlrcargahorariasemanal'])) ? number_format(str_pad($aFLPGO10['si195_vlrcargahorariasemanal'], 2, "0", STR_PAD_LEFT),2,',', '') : '';
                 }
-                if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'A') {
+                if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'A' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'O') {
                     $aCSVFLPGO10['si195_datefetexercicio']       = implode("", array_reverse(explode("-", $aFLPGO10['si195_datefetexercicio'])));
                 }else{
                     $aCSVFLPGO10['si195_datefetexercicio']       = ' ';
@@ -156,7 +159,7 @@ class GerarFLPGO extends GerarAM {
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1299' ||
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1403' ||
                             $aCSVFLPGO11['si196_codrubricaremuneracao'] == '6129' ||
-                            $aCSVFLPGO11['si196_codrubricaremuneracao'] == '9989'){
+                            $aCSVFLPGO11['si196_codrubricaremuneracao'] == '9299'){
                             $aCSVFLPGO11['si196_desctiporubrica']          =    substr($aFLPGO11['si196_desctiporubrica'],0,150);
                         }else{
                             $aCSVFLPGO11['si196_desctiporubrica']          =    ' ';

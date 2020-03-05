@@ -256,8 +256,9 @@ try{
                                    round(sum(si165_vlsaldoatualfonte),2) AS si165_vlsaldoatualfonte,
                                    si165_natsaldoatualfonte,
                                    si124_tipolancamento
-                            FROM ext202018
-                            JOIN ext102018 ON (si165_codext, si165_instit) = (si124_codext,  si124_instit)
+                            FROM ext20".db_getsession("DB_anousu")."
+                            JOIN conplanoreduz ON c61_anousu = ".db_getsession("DB_anousu")." AND (c61_reduz = si165_codext OR c61_codtce = si165_codext)
+                            JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
                             WHERE (si165_instit, si165_mes) = ($instit, 12)
                              AND si124_tipolancamento IN ('03')
                             GROUP BY si165_codfontrecursos, si165_instit, si165_natsaldoatualfonte, si124_tipolancamento

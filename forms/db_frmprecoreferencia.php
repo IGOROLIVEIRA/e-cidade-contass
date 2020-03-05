@@ -71,7 +71,7 @@
   <?php endif; ?>
   <b>Quantidade de casas decimais:</b>
   <?php
-  $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+  $aQuant_casas = array("2" => "2", "3" => "3");
   db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
   ?>
 </form>

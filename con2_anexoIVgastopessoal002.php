@@ -725,11 +725,11 @@ ob_start();
                     $oInstit = new Instituicao($iInstit);
                     if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA || $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_CAMARA) {
                         $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                        $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4)) ? $aSaldoEstrut1[0]->liquidado : 0;
+                        $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->liquidado : 0;
                         $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                        $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4)) ? $aSaldoEstrut2[0]->liquidado : 0;
+                        $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->liquidado : 0;
                         $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
-                        $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4)) ? $aSaldoEstrut3[0]->liquidado : 0;
+                        $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->liquidado : 0;
                         $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
                     }
                 }
@@ -865,7 +865,7 @@ ob_start();
             <td class="s3 bdleft" colspan="2"><b>RECEITA CORRENTE LÍQUIDA</b></td>
             <td class="s5">
                 <?php
-                $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
+                $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSACRPPS) - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
                 echo db_formatar($fRecCorrLiq, "f");
                 ?>
             </td>
