@@ -2715,9 +2715,17 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                       
                       $obalancete24->si191_tiporegistro = 24;
                       $obalancete24->si191_contacontabil = $oContas10->si177_contacontaabil;
-                        $obalancete24->si191_codfundo = $sCodFundo;
-                      $obalancete24->si191_codorgao = $this->getCodOrgaoTce(db_getsession("DB_instit"));
-                      $obalancete24->si191_codunidadesub = "";
+                      $obalancete24->si191_codfundo = $sCodFundo;
+                      if($this->getTipoinstit(db_getsession("DB_instit")) == 2){
+                          $obalancete24->si191_codorgao = $this->getCodOrgaoTce(1);
+                          $obalancete24->si191_codunidadesub = $this->getCodUnidadeTce(1);
+                      }elseif ($this->getTipoinstit(db_getsession("DB_instit")) == 1){
+                          $obalancete24->si191_codorgao = $this->getCodOrgaoTce(2);
+                          $obalancete24->si191_codunidadesub = $this->getCodUnidadeTce(2);
+                      }else{
+                          $obalancete24->si191_codorgao = "00";
+                          $obalancete24->si191_codunidadesub = "00000000";
+                      }
                       $obalancete24->si191_saldoinicialorgao = $oReg24Saldo->saldoanterior;
                       $obalancete24->si191_naturezasaldoinicialorgao = $oReg24Saldo->saldoanterior >= 0 ? 'D' : 'C';
                       $obalancete24->si191_totaldebitosorgao = $oReg24Saldo->debitos;
