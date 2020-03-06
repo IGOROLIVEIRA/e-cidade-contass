@@ -87,8 +87,8 @@ $clrotulo->label("o15_codigo");
                             <input type="checkbox" value="RPSD" id="RPSD" />
                             <label for="RPSD">Restos a Pagar (RPSD)</label><br>
                             <? if( db_getsession("DB_anousu") >= 2019 ){ ?>
-                                    <input type="checkbox" value="PREFUNDEF" id="PREFUNDEF" />
-                                    <label for="PREFUNDEF">Precatórios do FUNDEF (PREFUNDEF)</label><br>
+                                <input type="checkbox" value="PREFUNDEF" id="PREFUNDEF" />
+                                <label for="PREFUNDEF">Precatórios do FUNDEF (PREFUNDEF)</label><br>
                             <? } ?>
                         </td>
                         <td style="border: 2px groove white;" valign="top">
@@ -296,7 +296,6 @@ $clrotulo->label("o15_codigo");
         jan.moveTo(0,0);
 
     }
-
 
 </script>
 <div id='debug'>
