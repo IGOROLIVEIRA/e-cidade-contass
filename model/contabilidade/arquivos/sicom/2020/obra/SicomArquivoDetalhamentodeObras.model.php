@@ -6,6 +6,9 @@ require_once("classes/db_cadobras102020_classe.php");
 require_once("classes/db_cadobras202020_classe.php");
 require_once("classes/db_cadobras212020_classe.php");
 require_once("classes/db_cadobras302020_classe.php");
+require('model/relatorios/Relatorio.php');
+require_once('vendor/mpdf/mpdf/mpdf.php');
+require_once('fpdf151/pdf.php');
 
 /**
  * Dados Cadastro de Reponsaveis Sicom Obras
@@ -56,6 +59,16 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       "linkObra"
     );
     return $aElementos;
+  }
+
+  public function gerarPDFobra($iCodObra)
+  {
+$pdf = new FPDF();
+$pdf->AddPage();
+$pdf->SetFont('Arial','B',16);
+$pdf->Cell(40,10,'danilo mais cedo sicom!');
+$pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
+
   }
 
   public function gerarDados()
@@ -243,6 +256,13 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
       $clcadobras302020 = new cl_cadobras302020();
       $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+
+      /**
+       * Aqui e gerado os relatorios pdf com as fotos da medicao.
+       */
+      if($oDados30->obr03_tipomedicao != "2" || $oDados30->obr03_tipomedicao != "9"){
+        $this->gerarPDFobra($oDados30->obr03_sequencial);
+      }
 
       $clcadobras302020->si201_tiporegistro = 30;
       $clcadobras302020->si201_codorgaoresp = $oDados30->si09_codorgaotce;

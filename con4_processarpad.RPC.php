@@ -104,6 +104,7 @@ switch($oParam->exec) {
   break;
 
   case "processarObra":
+//    ini_set('display_errors','on');
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
@@ -142,7 +143,7 @@ switch($oParam->exec) {
           $oArquivo->setDataFinal($sDataFinal);
           $oArquivoCsv = new stdClass();
           try {
-            $oArquivo->gerarDados();
+//            $oArquivo->gerarPDFobra();
             $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
             $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
             $aArrayArquivos[] = $oArquivoCsv;
