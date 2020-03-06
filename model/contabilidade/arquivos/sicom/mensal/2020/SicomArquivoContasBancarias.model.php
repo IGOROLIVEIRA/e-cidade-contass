@@ -167,7 +167,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             o15_codtri as recurso
 				       from saltes 
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
-				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
+				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu /*and c61_codtce = 42550*/
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
@@ -1113,35 +1113,35 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $oVerificaReg40 = db_utils::fieldsMemory($rsVerificaReg40, $icont40);
 
         $sSql40 = "SELECT 'ctb402020' AS ano, ctb402020.* FROM ctb402020
-                     JOIN ctb102020 ON (si95_codctb, si95_nroconvenio, si95_mes) = (si101_codctb, si101_nroconvenio, si100_mes)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
+                     JOIN ctb102020 ON (si95_codctb, si95_nroconvenio::varchar, si95_mes) = (si101_codctb, si101_nroconvenio, si101_mes)
+                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
                       AND si101_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
                       AND si101_instit = " . db_getsession('DB_instit');
-        $sSql40 .= " UNION ALL ";
+        $sSql40 .= "UNION ALL ";
         $sSql40 .= "SELECT 'ctb402019' AS ano, ctb402019.* FROM ctb402019
-                    JOIN ctb102019 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
-                      AND si101_instit = " . db_getsession('DB_instit');
-        $sSql40 .= " UNION ALL ";
+                      JOIN ctb102019 ON (si95_codctb, si95_nroconvenio::varchar) = (si101_codctb, si101_nroconvenio)
+                     WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
+                       AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= "UNION ALL ";
         $sSql40 .= "SELECT 'ctb402018' AS ano, ctb402018.* FROM ctb402018
-                    JOIN ctb102018 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
-                      AND si101_instit = " . db_getsession('DB_instit');
-        $sSql40 .= " UNION ALL ";
+                      JOIN ctb102018 ON (si95_codctb, si95_nroconvenio::varchar) = (si101_codctb, si101_nroconvenio)
+                     WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
+                       AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= "UNION ALL ";
         $sSql40 .= "SELECT 'ctb402017' AS ano, ctb402017.* FROM ctb402017
-                    JOIN ctb102017 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
-                      AND si101_instit = " . db_getsession('DB_instit');
-        $sSql40 .= " UNION ALL ";
+                      JOIN ctb102017 ON (si95_codctb, si95_nroconvenio::varchar) = (si101_codctb, si101_nroconvenio)
+                     WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
+                       AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= "UNION ALL ";
         $sSql40 .= "SELECT 'ctb402016' AS ano, ctb402016.* FROM ctb402016
-                    JOIN ctb102016 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
-                      AND si101_instit = " . db_getsession('DB_instit');
-        $sSql40 .= " UNION ALL ";
+                      JOIN ctb102016 ON (si95_codctb, si95_nroconvenio::varchar) = (si101_codctb, si101_nroconvenio)
+                     WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
+                       AND si101_instit = " . db_getsession('DB_instit');
+        $sSql40 .= "UNION ALL ";
         $sSql40 .= "SELECT 'ctb402015' AS ano, ctb402015.* FROM ctb402015
-                    JOIN ctb102015 ON (si95_codctb, si95_nroconvenio) = (si101_codctb, si101_nroconvenio)
-                    WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, $oVerificaReg40->si95_nroconvenio)
-                      AND si101_instit = " . db_getsession('DB_instit');
+                      JOIN ctb102015 ON (si95_codctb, si95_nroconvenio::varchar) = (si101_codctb, si101_nroconvenio)
+                     WHERE (si101_codctb, si101_nroconvenio) = ($oVerificaReg40->si95_codctb, '$oVerificaReg40->si95_nroconvenio')
+                       AND si101_instit = " . db_getsession('DB_instit');
 
         $rsQuery40 = db_query($sSql40);
 
