@@ -37,24 +37,29 @@ class gerarCADOBRAS extends GerarAM
      *
      * Registros 10
      */
-    for ($iCont = 0; $iCont < pg_num_rows($rscadobras102020); $iCont++) {
-
-      $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
-
-      $aCSVCADOBRAS10['si198_tiporegistro']         = $aCADORBRAS10['si198_tiporegistro'];
-      $aCSVCADOBRAS10['si198_codorgaoresp']         = $aCADORBRAS10['si198_codorgaoresp'];
-      $aCSVCADOBRAS10['si198_codobra']              = $aCADORBRAS10['si198_codobra'];
-      $aCSVCADOBRAS10['si198_tiporesponsavel']      = $aCADORBRAS10['si198_tiporesponsavel'];
-      $aCSVCADOBRAS10['si198_nrodocumento']         = $aCADORBRAS10['si198_nrodocumento'];
-      $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
-      $aCSVCADOBRAS10['si198_nroregistroconseprof'] = $aCADORBRAS10['si198_nroregistroconseprof'];
-      $aCSVCADOBRAS10['si198_numrt']                = $aCADORBRAS10['si198_numrt'];
-      $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $this->sicomDate($aCADORBRAS10['si198_dtinicioatividadeseng']);
-      $aCSVCADOBRAS10['si198_tipovinculo']          = $aCADORBRAS10['si198_tipovinculo'];
-      $this->sLinha = $aCSVCADOBRAS10;
+    if(pg_num_rows($rscadobras102020) == 0){
+      $aCSV['tiporegistro'] = '99';
+      $this->sLinha = $aCSV;
       $this->adicionaLinha();
-    }
+    }else {
+      for ($iCont = 0; $iCont < pg_num_rows($rscadobras102020); $iCont++) {
 
+        $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
+
+        $aCSVCADOBRAS10['si198_tiporegistro'] = $aCADORBRAS10['si198_tiporegistro'];
+        $aCSVCADOBRAS10['si198_codorgaoresp'] = $aCADORBRAS10['si198_codorgaoresp'];
+        $aCSVCADOBRAS10['si198_codobra'] = $aCADORBRAS10['si198_codobra'];
+        $aCSVCADOBRAS10['si198_tiporesponsavel'] = $aCADORBRAS10['si198_tiporesponsavel'];
+        $aCSVCADOBRAS10['si198_nrodocumento'] = $aCADORBRAS10['si198_nrodocumento'];
+        $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
+        $aCSVCADOBRAS10['si198_nroregistroconseprof'] = $aCADORBRAS10['si198_nroregistroconseprof'];
+        $aCSVCADOBRAS10['si198_numrt'] = $aCADORBRAS10['si198_numrt'];
+        $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $this->sicomDate($aCADORBRAS10['si198_dtinicioatividadeseng']);
+        $aCSVCADOBRAS10['si198_tipovinculo'] = $aCADORBRAS10['si198_tipovinculo'];
+        $this->sLinha = $aCSVCADOBRAS10;
+        $this->adicionaLinha();
+      }
+    }
     /**
      *
      * Registros 20
