@@ -1002,7 +1002,7 @@ class AcordoItem {
     	$this->setOrdem($this->getProximaPosicao());
     }
 
-    $nValorUnitario     = (float)round(str_replace('.','',$this->getValorUnitario()),2);
+    $nValorUnitario     = (float)$this->getValorUnitario();
     $nValorAditado      = (float)$this->getValorAditado();//OC5304
     $nQuantidadeAditada = (float)$this->getQuantiAditada();//OC5304
 
