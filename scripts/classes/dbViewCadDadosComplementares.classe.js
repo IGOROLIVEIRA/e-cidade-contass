@@ -278,7 +278,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
 //Metodo para fechar a janela e retornar o endereco salvo
     me.close = function () {
-
+        js_buscaDadosComplementares();
         if (me.getObjetoRetorno() != "") {
             me.getObjetoRetorno().value = me.getCodigoObra();
         }
@@ -3748,6 +3748,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
+        if (!$F('txtLogradouro' + sId)) {
+            alert('Campo Logradouro é obrigatório!\n\n');
+            return false;
+        }
+
         oEndereco.codigoPais = me.getPais();
         oEndereco.codigoEstado = me.getEstado();
         oEndereco.codigoMunicipio = me.getMunicipio();
@@ -3798,7 +3803,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         var oRetorno = eval('(' + oAjax.responseText + ')');
         var sExpReg = new RegExp('\\\\n', 'g');
-
         if (oRetorno.status == 1) {
             // me.setCodigoEndereco(oRetorno.icodigoEndereco);
             // $('cboCodigoMunicipio'+sId).value = oRetorno.icodigoMunicipio;
@@ -3808,6 +3812,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             // $('txtCodigoRua'+sId).value       = oRetorno.icodigoRua;
             // me.setRua(oRetorno.icodigoRua);
             //Fecha a janela e preenche o campo com o endereco informado
+            alert('Dados salvos com sucesso!');
             me.close();
             me.callBackFunction();
             return false;
