@@ -973,7 +973,8 @@ case "processarEditais" :
 							break;
 					}
 					$valores = explode('/', $oAnexo->caminho);
-					$extensao = explode('.', $valores[4]);
+					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
+					$extensao = explode('.', $nomeArq);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
 					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
