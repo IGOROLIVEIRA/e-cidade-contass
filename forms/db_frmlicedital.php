@@ -351,6 +351,7 @@ $db_botao = true;
     js_init();
 
     function js_buscaDadosComplementares() {
+        oDBGrid.clearAll(true);
         var sUrlRpc = "con4_endereco.RPC.php";
         let oParam = new Object();
         oParam.exec = 'findDadosObraLicitacao';
