@@ -53,6 +53,7 @@ $sDescricaoConta = $oContaCorrente->getDescricao();
 
 $sCamposContaCorrenteDetalhe  = " distinct ";
 $sCamposContaCorrenteDetalhe .= "c19_contacorrente, ";
+$sCamposContaCorrenteDetalhe .= "c19_sequencial, ";
 $sCamposContaCorrenteDetalhe .= "c19_reduz, ";
 $sCamposContaCorrenteDetalhe .= "c19_orcunidadeanousu, ";
 $sCamposContaCorrenteDetalhe .= "c19_orcunidadeorgao, ";
@@ -62,6 +63,7 @@ $sCamposContaCorrenteDetalhe .= "c19_orcorgaoorgao, ";
 $sCamposContaCorrenteDetalhe .= "c19_conplanoreduzanousu, ";
 $sCamposContaCorrenteDetalhe .= "c19_acordo, ";
 $sCamposContaCorrenteDetalhe .= "c19_instit, ";
+$sCamposContaCorrenteDetalhe .= "c19_estrutural, ";
 $sCamposContaCorrenteDetalhe .= "z01_numcgm, z01_nome, z01_cgccpf, ";
 $sCamposContaCorrenteDetalhe .= "db83_descricao, ";
 $sCamposContaCorrenteDetalhe .= "db83_bancoagencia, ";
@@ -101,7 +103,8 @@ $sSqlContaCorrenteDetalhe = $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(n
 $rsContaCorrenteDetalhe   = $oDaoContaCorrenteDetalhe->sql_record($sSqlContaCorrenteDetalhe);
 
 $aContacorrenteDetalhe    = db_utils::getColectionByRecord($rsContaCorrenteDetalhe);
-
+// echo $sSqlContaCorrenteDetalhe;
+// echo "<pre>";print_r($aContacorrenteDetalhe);exit;
 if ($oDaoContaCorrenteDetalhe->erro_status == "0") {
 
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado para os filtros selecionados.");
@@ -120,7 +123,7 @@ $troca        = 1;
 $iAlturalinha = 4;
 $iFonte       = 6;
 
-function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFiltroContaCorrente, $iInstituicao, $iReduzido, $iCodOrgao, $iCodUnidade, $iAnousu){
+function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFiltroContaCorrente, $iInstituicao, $iReduzido, $iCodOrgao, $iCodUnidade, $iAnousu, $c19_sequencial){
 
   $sCampos  = " distinct c71_data,   ";
   $sCampos .= "c69_codlan, ";
@@ -152,6 +155,7 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   $sSqlLancamentos .= "    and c19_contacorrente = {$iFiltroContaCorrente} ";
   $sSqlLancamentos .= "    and c19_reduz = {$iReduzido}  ";
   $sSqlLancamentos .= "    and c19_instit = {$iInstituicao} ";
+  $sSqlLancamentos .= "    and c19_sequencial = {$c19_sequencial} ";
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sSqlLancamentos .= "    and c19_numcgm = {$iNumcgm} ";
   }
@@ -296,7 +300,7 @@ $iReduzConta        = db_utils::fieldsMemory($rsContaCorrenteDetalhe, 0)->c19_re
 $nTotalGeralDebito  = 0;
 $nTotalGeralCredito = 0;
 $nSaldoFinalConta   = 0;
-
+// inicio for para detalhes do conta corrente
 foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
 
   imprimirCabecalho($oPdf, $iAlturalinha, false);
@@ -375,7 +379,8 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   		                                               $oValorDados->c19_reduz,
   		                                               $oValorDados->c19_orcorgaoorgao,
                                                      $oValorDados->c19_orcunidadeunidade,
-  		                                               $oValorDados->c19_orcorgaoanousu);
+                                                     $oValorDados->c19_orcorgaoanousu,
+                                                     $oValorDados->c19_sequencial);
 
   $nTotalMovDebito  = "0.00";
   $nTotalMovCredito = "0.00";
@@ -453,7 +458,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
    $oPdf->cell(25 ,  $iAlturalinha, db_formatar(abs($nSaldoInicial), 'f'), "TB",  1, "R", 1);
  }
   $oPdf->Ln();
-}
+}// fim for para detalhes do conta corrente
 
 $oPdf->Ln();
 // RESUMO GERAL
