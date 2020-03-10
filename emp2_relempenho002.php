@@ -513,7 +513,7 @@ if ($processar == "a") {
 } else {
 
     $sqlperiodo = "
-	      select 	empempenho.e60_numemp,
+	      select distinct	empempenho.e60_numemp,
 					e60_resumo,
 					e60_codemp,
 					e60_emiss,
@@ -540,12 +540,13 @@ if ($processar == "a") {
 					fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural,
 					e60_codcom,
 					pc50_descr,
-          			e60_concarpeculiar,
-          			e60_numerol,
-          			e54_gestaut,
-          			descrdepto,
-          			e94_empanuladotipo,
-          			e38_descr
+          e60_concarpeculiar,
+          e60_numerol,
+          e54_gestaut,
+          descrdepto,
+          e94_empanuladotipo,
+          e38_descr,
+          to_number(e60_codemp::text,'9999999999')
 			   from (
 			  select e60_numemp, e60_vlremp,
 

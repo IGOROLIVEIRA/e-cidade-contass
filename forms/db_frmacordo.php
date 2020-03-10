@@ -203,6 +203,23 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
+                                          <?if($db_opcao == 1):?>
+                                          <tr id="credenciamento" style="display: none">
+                                            <td>
+                                              <strong>Credenciamento/Chamada Pública:</strong>
+                                            </td>
+                                            <td>
+                                              <?
+                                              $aValores = array(
+                                                0 => 'Selecione',
+                                                1 => '1 - Sim',
+                                                2 => '2 - Não'
+                                              );
+                                              db_select('tipodispenca', $aValores, true, $db_opcao,"","");
+                                              ?>
+                                            </td>
+                                          </tr>
+                                          <?endif; ?>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
                                                 <td nowrap title="<?@$Tac16_licoutroorgao?>">
                                                     <?=
@@ -1141,7 +1158,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function jsPesquisaContratadoHabilitado() {
 
-        if ($('ac16_origem').value == 3) {
+        if ($('ac16_origem').value == 3 || $('ac16_origem').value == 1) {
             var nLicitacao = $('ac16_licitacao').value;
 
             if (nLicitacao == '') {
@@ -1464,7 +1481,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if(iOrigem == 1){
           document.getElementById('tradesaoregpreco').style.display = "none";
-          document.getElementById('trLicitacao').style.display = "none";
+          document.getElementById('trLicitacao').style.display = "";
           document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
@@ -1481,6 +1498,12 @@ db_app::load("dbtextFieldData.widget.js");
         if(iTipoOrigem != 5 || iTipoOrigem != 6) {
             document.form1.ac16_licoutroorgao.value = "";
             document.form1.z01_nome.value = "";
+        }
+
+        if(iTipoOrigem == 3){
+          document.getElementById('credenciamento').style.display = "";
+        }else{
+          document.getElementById('credenciamento').style.display = "none";
         }
 
     }

@@ -245,6 +245,18 @@ class AcordoItem {
    */
   protected $aPrevisaoExecucao;
 
+    protected $iLicitacao;
+
+    protected $iContrato;
+
+    protected $iContratado;
+
+    protected $iQtdcontratada;
+
+    protected $iLicitem;
+
+    protected $iTipocompratribunal;
+
   /**
    * Divisão Mensal das Quantidades
    * @var integer
@@ -550,6 +562,102 @@ class AcordoItem {
     $this->iCodigoPeriodoPrevisao = $iCodigoPeriodoPrevisao;
     return $this;
   }
+
+    /**
+     * @return mixed
+     */
+    public function getILicitacao()
+    {
+        return $this->iLicitacao;
+    }
+
+    /**
+     * @param mixed $iLicitacao
+     */
+    public function setILicitacao($iLicitacao)
+    {
+        $this->iLicitacao = $iLicitacao;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIContrato()
+    {
+        return $this->iContrato;
+    }
+
+    /**
+     * @param mixed $iContrato
+     */
+    public function setIContrato($iContrato)
+    {
+        $this->iContrato = $iContrato;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIContratado()
+    {
+        return $this->iContratado;
+    }
+
+    /**
+     * @param mixed $iContratado
+     */
+    public function setIContratado($iContratado)
+    {
+        $this->iContratado = $iContratado;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIQtdcontratada()
+    {
+        return $this->iQtdcontratada;
+    }
+
+    /**
+     * @param mixed $iQtdcontratada
+     */
+    public function setIQtdcontratada($iQtdcontratada)
+    {
+        $this->iQtdcontratada = $iQtdcontratada;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getILicitem()
+    {
+        return $this->iLicitem;
+    }
+
+    /**
+     * @param mixed $iLicitem
+     */
+    public function setILicitem($iLicitem)
+    {
+        $this->iLicitem = $iLicitem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getITipocompratribunal()
+    {
+        return $this->iTipocompratribunal;
+    }
+
+    /**
+     * @param mixed $iTipocompratribunal
+     */
+    public function setITipocompratribunal($iTipocompratribunal)
+    {
+        $this->iTipocompratribunal = $iTipocompratribunal;
+    }
 
   /**
    * @return integer
@@ -888,6 +996,7 @@ class AcordoItem {
    * @return AcordoItem
    */
   public function save($lReservarSaldo = false) {
+        $cl_credenciamentosaldo = new cl_credenciamentosaldo();
 
     if ($this->getCodigo() == "") {
     	$this->setOrdem($this->getProximaPosicao());
@@ -896,6 +1005,7 @@ class AcordoItem {
     $nValorUnitario     = (float)$this->getValorUnitario();
     $nValorAditado      = (float)$this->getValorAditado();//OC5304
     $nQuantidadeAditada = (float)$this->getQuantiAditada();//OC5304
+
     $oDaoAcordoItem = db_utils::getDao("acordoitem");
     $oDaoAcordoItem->ac20_acordoposicao     = $this->getCodigoPosicao();
     $oDaoAcordoItem->ac20_acordoposicaotipo = $this->getCodigoPosicaoTipo();
@@ -915,6 +1025,20 @@ class AcordoItem {
     $oDaoAcordoItem->ac20_tipocontrole      = $this->getTipocontrole();
     $oDaoAcordoItem->ac20_servicoquantidade = !$this->getServicoQuantidade() ? 'f' : $this->getServicoQuantidade();
 
+        /**
+         * Credenciamentosaldo
+         * OC8339
+         */
+
+        if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
+            $cl_credenciamentosaldo->l213_licitacao = $this->getILicitacao();
+            $cl_credenciamentosaldo->l213_item = $this->getCodigo();
+            $cl_credenciamentosaldo->l213_qtdcontratada = $this->getIQtdcontratada();
+            $cl_credenciamentosaldo->l213_contratado = $this->getIContratado();
+            $cl_credenciamentosaldo->l213_acordo = $this->getIContrato();
+            $cl_credenciamentosaldo->l213_itemlicitacao = $this->getILicitem();
+        }
+
     /**
      * Define se será alterado o contrato ou incluído um novo
      */
@@ -922,6 +1046,18 @@ class AcordoItem {
 
       $oDaoAcordoItem->ac20_sequencial = $this->getCodigo();
       $oDaoAcordoItem->alterar($this->getCodigo());
+
+            /**
+             * alterar Credenciamentosaldo
+             * OC8339
+             */
+
+            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
+                $rsCredenciamentosaldo = $cl_credenciamentosaldo->sql_record($cl_credenciamentosaldo->sql_query_file(null, "*", null, "l213_licitacao = {$this->getILicitacao()} and l213_item={$this->getCodigo()} and l213_contratado={$this->getIContratado()} and l213_acordo = {$this->getIContrato()}"));
+                $oCredenciamentosaldo = db_utils::fieldsMemory($rsCredenciamentosaldo, 0);
+                $cl_credenciamentosaldo->l213_qtdlicitada = $oCredenciamentosaldo->l213_qtdlicitada;
+                $cl_credenciamentosaldo->alterar($oCredenciamentosaldo->l213_sequencial);
+            }
     } else {
 
       $oDaoAcordoItem->incluir(null);
@@ -929,6 +1065,21 @@ class AcordoItem {
         throw new Exception("Não foi possível salvar ítem do acordo.\n\n{$oDaoAcordoItem->erro_msg}");
       }
       $this->setCodigo($oDaoAcordoItem->ac20_sequencial);
+
+            /**
+             * Incluir Credenciamentosaldo
+             * OC8339
+             */
+
+            if($this->getITipocompratribunal() == "103" || $this->getITipocompratribunal() == "102") {
+                $cl_credenciamentosaldo->l213_item = $this->getCodigo();
+                $cl_credenciamentosaldo->l213_qtdlicitada = $this->getQuantidade();
+                $cl_credenciamentosaldo->incluir();
+
+                if ($cl_credenciamentosaldo->erro_status == 0) {
+                    throw new Exception("Não foi possível salvar ítem do acordo.\n\n{$cl_credenciamentosaldo->erro_msg}");
+                }
+            }
 
       /**
        * SALVA NA LICLICITEM
@@ -1398,6 +1549,7 @@ class AcordoItem {
     $oDaoItemPeriodo                 = db_utils::getDao("acordoitemperiodo");
     $oDaoItemEmpenho                 = db_utils::getDao("acordoempempitem");
     $oDaoAcordoItemExecutadoEmpautItem= db_utils::getDao("acordoitemexecutadoempautitem");
+    $oDaocredenciamentosaldo            = db_utils::getDao("credenciamentosaldo");
 
     /**
      * Excluimos todas as dotaçoes vinculadas com o item e incluimos novamente
@@ -1492,6 +1644,24 @@ class AcordoItem {
       throw new Exception($sErroMsg);
     }
 
+        $oDaocredenciamentosaldo->excluir(null,"l213_item = {$this->getCodigo()}");
+        if ($oDaocredenciamentosaldo->erro_status == 0) {
+
+            $sErroMsg = "Erro[7] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaocredenciamentosaldo->erro_msg}";
+            throw new Exception($sErroMsg);
+        }
+    }
+
+    public function removercredsaldo($icodItemLicitacao){
+
+        $oDaoCredenciamentoSaldo                 = db_utils::getDao("credenciamentosaldo");
+        $oDaoCredenciamentoSaldo->excluir(null,"l213_item = {$icodItemLicitacao} ");
+
+        if ($oDaoCredenciamentoSaldo->erro_status == 0) {
+
+            $sErroMsg = "Erro[7] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoCredenciamentoSaldo->erro_msg}";
+            throw new Exception($sErroMsg);
+        }
   }
 
   /**

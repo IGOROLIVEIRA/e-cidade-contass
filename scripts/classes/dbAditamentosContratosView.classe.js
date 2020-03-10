@@ -398,7 +398,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          * Numero do aditamento
          */
         me.oTxtNumeroAditamento = new DBTextField('oTxtNumeroAditamento', me.sInstance + '.oTxtNumeroAditamento', '', 10);
-        me.oTxtNumeroAditamento.setMaxLength(20);
+        me.oTxtNumeroAditamento.setMaxLength(2);
         me.oTxtNumeroAditamento.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '')");
         me.oTxtNumeroAditamento.show($('ctnTxtNumeroAditamento'));
 
@@ -862,6 +862,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return alert("Obrigatório informar a data de Publicacao do aditivo.");
         }
 
+        var dataAssinatura = me.oTxtDataAssinatura.getValue().split("/");
+        var dtAssinatura   =  dataAssinatura[2] + "-" + dataAssinatura[1] + "-" + dataAssinatura[0];
+        var dataPublicacao = me.oTxtDataPublicacao.getValue().split("/");
+        var dtPublicacao   = dataPublicacao[2] + "-" + dataPublicacao[1] + "-" + dataPublicacao[0];
+
+        if(dtAssinatura > dtPublicacao ){
+          return alert("Data de Assinatura deve ser menor ou igual a data de Publicação.")
+        }
+
         me.oGridItens.getRows().forEach(function (oRow) {
             if (oRow.isSelected) {
                 oSelecionados[oRow.aCells[11].getValue()] = oRow;
@@ -1102,9 +1111,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
              */
             oItemAdicionar.aPeriodos = new Array();
 
-            if (oItem.aPeriodos != undefined) {
-                oItemAdicionar.aPeriodos = oItem.aPeriodos;
-            }
+      if (oItem.aPeriodos != undefined) {
+        oItemAdicionar.aPeriodos = oItem.aPeriodos;
+      }
 
             /**
              * Limpa os valores para aditamento de prazo e renovação quando o item não é selecionado
@@ -1281,7 +1290,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oTxtVlrUnitario.setValue("0,000");
         oTxtVlrUnitario.setClassName("text-right");
         oTxtVlrUnitario.show($('ctntxtVlrUnitario'));
-        
+
 
         oCboDesdobramento = new DBComboBox('oCboDesdobramento', 'oCboDesdobramento', new Array("Selecione"));
         oCboDesdobramento.show($('ctnCboDesdobramento'));
@@ -1809,22 +1818,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.salvarInfoDotacoes(iLinha);
     }
 
-    this.js_bloqueivalorunt = function (iLinha,iTipo) {
-
-        if(iTipo == 14){
-            document.getElementById('valorunitario'+iLinha).disabled = true;
-            document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
-        }
-
-    };
-
-    this.js_bloqueiquantidade = function (iLinha,iTipo) {
-
-        if(iTipo == 14) {
-            document.getElementById('quantidade' + iLinha).disabled = true;
-            document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
-        }
-    };
+    // this.js_bloqueivalorunt = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14){
+    //         document.getElementById('valorunitario'+iLinha).disabled = true;
+    //         document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    //
+    // };
+    //
+    // this.js_bloqueiquantidade = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14) {
+    //         document.getElementById('quantidade' + iLinha).disabled = true;
+    //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    // };
 
     this.pesquisaMaterial = function (mostra) {
 
@@ -1880,7 +1889,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('servico-quantidade').style.display = mostra;
 
       let controlaQuantidade = document.getElementById('oCboServicoQuantidade').value;
-      
+
       if(!Number(controlaQuantidade) && servico == 't'){
         oTxtQuantidade.setValue("1,000");
         oTxtQuantidade.setReadOnly(true);

@@ -8,7 +8,6 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("std/DBDate.php");
-require_once('model/MSC.model.php');
 db_postmemory($_POST);
 
 $oJson  = new services_json();
@@ -34,44 +33,52 @@ $sNomeArq = "MSC";
 
 switch ($oParam->exec) {
 
-  case 'gerarMsc':
+    case 'gerarMsc':
 
-    try {
+        try {
 
-      if (empty($sIdentifier)) {
-        throw new Exception ("Não existe código SICONFI para a Prefeitura no cadastro de Instituições");
-      }
+            if (empty($sIdentifier)) {
+                throw new Exception ("Não existe código SICONFI para a Prefeitura no cadastro de Instituições");
+            }
 
-      $msc = new MSC;
+            if (file_exists("model/contabilidade/arquivos/msc/".$iAnoUsu."/MSC.model.php")) {
 
-      $msc->setIdentifier($sIdentifier);
-      $msc->setEntriesType($sEntriesType);
-      $msc->setPeriodIdentifier($sPeriodIdentifier);
-      $msc->setPeriodDescription($sPeriodDescription);
-      $msc->setPeriodStart($sPeriodStart);
-      $msc->setPeriodEnd($sPeriodEnd);
-      $msc->setInstant($sInstant);
-      $msc->setTipoMatriz($iInstituicao);
-      $msc->setNomeArq($sNomeArq."$iAnoUsu$iMes");
-      $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
+                require_once("model/contabilidade/arquivos/msc/" . $iAnoUsu . "/MSC.model.php");
 
-      if ($msc->getErroSQL() > 0 ) {
-        throw new Exception ("Ocorreu um erro ao gerar IC ".$msc->getErroSQL());
-      }
+                $msc = new MSC;
 
-      $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
+                $msc->setIdentifier($sIdentifier);
+                $msc->setEntriesType($sEntriesType);
+                $msc->setPeriodIdentifier($sPeriodIdentifier);
+                $msc->setPeriodDescription($sPeriodDescription);
+                $msc->setPeriodStart($sPeriodStart);
+                $msc->setPeriodEnd($sPeriodEnd);
+                $msc->setInstant($sInstant);
+                $msc->setTipoMatriz($iInstituicao);
+                $msc->setNomeArq($sNomeArq . "$iAnoUsu$iMes");
+                $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
 
-      system("rm -f {$msc->getNomeArq()}.zip");
-      system("bin/zip -q {$msc->getNomeArq()}.zip $oRetorno->caminho");
-      $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$msc->getNomeArq()}.zip";
+                if ($msc->getErroSQL() > 0) {
+                    throw new Exception ("Ocorreu um erro ao gerar IC " . $msc->getErroSQL());
+                }
 
-    } catch(Exception $eErro) {
+                $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
 
-      $oRetorno->status  = 2;
-      $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \n \n {$eErro->getMessage()}";
-      $oRetorno->message = $sGetMessage;
+                system("rm -f {$msc->getNomeArq()}.zip");
+                system("bin/zip -q {$msc->getNomeArq()}.zip $oRetorno->caminho");
+                $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$msc->getNomeArq()}.zip";
 
-    }
+            } else {
+                throw new Exception ("Arquivo MSC para o ano {$iAnoUsu} não existe. ");
+            }
+
+        } catch(Exception $eErro) {
+
+            $oRetorno->status  = 2;
+            $sGetMessage       = "Arquivo:{$sNomeArq} retornou com erro: \n \n {$eErro->getMessage()}";
+            $oRetorno->message = $sGetMessage;
+
+        }
 
     break;
 

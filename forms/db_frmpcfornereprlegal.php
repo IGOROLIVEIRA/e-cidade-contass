@@ -116,7 +116,8 @@ db_textarea('pc81_obs',3,51,$Ipc81_obs,true,'text',$db_opcao,"")
     <td> 
 <?
 //db_input('pc81_tipopart',10,$Ipc81_tipopart,true,'text',$db_opcao,"")
-$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual");
+$x = array("1"=>"Representante Legal","2"=>"Demais Membros","3"=>"MicroEmpreendedor Individual (MEI)", "4" => "Empresário Individual (EI)",
+"5"=>"Empresa Individual de Responsabilidade Limitada (EIRELI)");
 db_select("pc81_tipopart",$x,true,$db_opcao);
 ?>
     </td>
@@ -145,7 +146,8 @@ if($db_opcao != 1){
       $chavepri= array("pc81_sequencia"=>@$pc81_sequencia);
       $cliframe_alterar_excluir->chavepri=$chavepri;
       $cliframe_alterar_excluir->sql     = $clpcfornereprlegal->sql_query(null,"pc81_sequencia, pc81_datini, pc81_datfin, pc81_obs,b.z01_nome as pc81_cgmresp,
-      case when pc81_tipopart = 1 then 'Representante Legal' when pc81_tipopart = 2 then 'Demais Membros' when pc81_tipopart = 3 then 'MicroEmpreendedor Individual' end as pc81_tipopart","b.z01_nome",$dbwhere);
+      case when pc81_tipopart = 1 then 'Representante Legal' when pc81_tipopart = 2 then 'Demais Membros' when pc81_tipopart = 3 then 'MicroEmpreendedor Individual(MEI)'
+       when pc81_tipopart = 4 then 'Empresário Individual (EI)' when pc81_tipopart = 5 then 'Empresa Individual de Responsabilidade Limitada (EIRELI)' end as pc81_tipopart","b.z01_nome",$dbwhere);
       $cliframe_alterar_excluir->campos  = "pc81_sequencia, pc81_cgmresp, pc81_datini, pc81_datfin,pc81_tipopart,pc81_obs";
       $cliframe_alterar_excluir->legenda = "REPRESENTANTES CADASTRADOS";
       $cliframe_alterar_excluir->iframe_height ="160";

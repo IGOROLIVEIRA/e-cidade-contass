@@ -543,7 +543,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                                        AND c70_data <= '" . $this->sDataFinal . "'
                                                        AND c80_codord = (SELECT c80_codord FROM conlancamord
                                                                          WHERE c80_codlan=c69_codlan
-                                                                         LIMIT 1)) > 0 THEN 8
+                                                                         LIMIT 1)) >= 0 THEN 8
                                          WHEN c71_coddoc IN (151, 161)
                                               AND (SELECT k17_situacao FROM slip
                                                    JOIN conlancamslip ON k17_codigo = c84_slip
@@ -707,10 +707,6 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                                 WHEN db83_tipoconta IN (2, 3) THEN 2
                                                 ELSE 1
                                             END AS contadebito,
-                                          CASE
-                                              WHEN db83_tipoaplicacao  != 0 OR db83_tipoaplicacao  != NULL THEN db83_tipoaplicacao
-                                          ELSE NULL
-                                          END tipoaplicao,
                                           c61_reduz,
                                           CASE
                                                WHEN db83_tipoconta IN (2, 3) THEN 2
@@ -740,8 +736,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                   $iCodSis = db_utils::fieldsMemory($rsCodSis, 0)->c60_codsis;
                 } else {
 
-                  $tipoApliCta = db_utils::fieldsMemory($rsConta, 0)->tipoaplicao;
-                  $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito.$tipoApliCta;
+                  $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito;
                   $conta = $aBancosAgrupados[$contaTransf]->si95_codctb;
                   $recurso = $aBancosAgrupados[$contaTransf]->recurso;
 

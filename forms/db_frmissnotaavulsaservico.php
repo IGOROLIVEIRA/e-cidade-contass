@@ -89,8 +89,11 @@ if (pg_num_rows($rsHasRecibo) > 0) {
     $hasRecibo = true;
 }
 
+$sSqlAnoFolha = "select max(r11_anousu) as r11_anousu from cfpess";
+$oAnoFolha = db_utils::fieldsMemory(db_query($sSqlAnoFolha), 0);
+
 $iCodInstit = intval(db_getsession('DB_instit'));
-$iCodAnousu = intval(db_getsession('DB_anousu'));
+$iCodAnousu = intval($oAnoFolha->r11_anousu);
 
 $sSQLTabelaIRRF = "
 SELECT r33_inic, r33_fim, r33_perc, r33_deduzi
@@ -660,7 +663,7 @@ $aTiposRetencoesINSS = array(
         var select = document.getElementById('q62_tiporetinss');
 
         var info = {
-            limiteINSS: 642.34,
+            limiteINSS: 671.12,
             baseCalculo: parseFloat(document.getElementById('q62_vlrtotal').value),
             retencoesAntigas: document.getElementById('q62_deducaoinss')
         };

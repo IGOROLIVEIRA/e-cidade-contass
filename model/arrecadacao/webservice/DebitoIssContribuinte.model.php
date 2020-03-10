@@ -200,7 +200,7 @@ class DebitoIssContribuinte {
     $oNotaRetencao->setNumeroNf($oDadosNota->numero_nota_fiscal);
     $oNotaRetencao->setSerie($oDadosNota->serie_nota_fiscal);
     $oNotaRetencao->setDataNF($oDadosNota->data_nota_fiscal);
-    $oNotaRetencao->setServicoPrestado(pg_escape_string($oDadosNota->servico_prestado));
+    $oNotaRetencao->setServicoPrestado(pg_escape_string(urldecode($oDadosNota->servico_prestado)));
     $oNotaRetencao->setValorServicoPrestado($oDadosNota->valor_servico_prestado);
     $oNotaRetencao->setValorDeducaoNota("{$oDadosNota->valor_deducao}");
     $oNotaRetencao->setValorBaseCalculoNota($oDadosNota->valor_base_calculo);

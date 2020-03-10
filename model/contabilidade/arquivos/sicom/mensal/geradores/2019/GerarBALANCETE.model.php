@@ -1,6 +1,7 @@
 <?php
 
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
+require_once ("classes/db_conplano_classe.php");
 
 /**
  * Sicom Acompanhamento Mensal
@@ -20,6 +21,7 @@ class GerarBALANCETE extends GerarAM
     public function gerarDados()
     {
 
+        $clconplano     = new cl_conplano();
         $this->sArquivo = "BALANCETE";
         $this->abreArquivo();
 
@@ -114,11 +116,21 @@ class GerarBALANCETE extends GerarAM
                 $aCSVBALANCETE10['si177_contacontaabil']        = $this->padLeftZero($aBALACETE10['si177_contacontaabil'], 9);
                 $aCSVBALANCETE10['si177_codfundo']              = $aBALACETE10['si177_codfundo'];
                 $aCSVBALANCETE10['si177_saldoinicial']          = $this->sicomNumberReal($aBALACETE10['si177_saldoinicial'], 2);
-                $aCSVBALANCETE10['si177_naturezasaldoinicial']  = $this->padLeftZero($aBALACETE10['si177_naturezasaldoinicial'], 1);
+
+                $result = $clconplano->sql_record($clconplano->sql_query(null, null, "case when c60_naturezasaldo = '1' then 'D' when c60_naturezasaldo = '2' then 'C' when c60_naturezasaldo = '3' then 'N' end as c60_naturezasaldo ", "", "substr(c60_estrut, 1, 9) = '".$aBALACETE10['si177_contacontaabil'] ."'" ));
+
+                if (pg_num_rows($result) > 0) {
+                    $sNaturezaSaldo = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
+                } else {
+                    $result = $clconplano->sql_record("select case when c60_naturezasaldo = '1' then 'D' when c60_naturezasaldo = '2' then 'C' when c60_naturezasaldo = '3' then 'N' end as c60_naturezasaldo from conplano join vinculopcasptce on c209_pcaspestrut = substr(c60_estrut, 1, 9) where c209_tceestrut = '{$aBALACETE10['si177_contacontaabil']}' and c60_anousu = 2019");
+                    $sNaturezaSaldo = substr(db_utils::fieldsMemory($result, 0)->c60_naturezasaldo, 0, 1);
+                }
+
+                $aCSVBALANCETE10['si177_naturezasaldoinicial']  = $aBALACETE10['si177_saldoinicial'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE10['si177_naturezasaldoinicial'], 1);
                 $aCSVBALANCETE10['si177_totaldebitos']          = $this->sicomNumberReal($aBALACETE10['si177_totaldebitos'], 2);
                 $aCSVBALANCETE10['si177_totalcreditos']         = $this->sicomNumberReal($aBALACETE10['si177_totalcreditos'], 2);
                 $aCSVBALANCETE10['si177_saldofinal']            = $this->sicomNumberReal($aBALACETE10['si177_saldofinal'], 2);
-                $aCSVBALANCETE10['si177_naturezasaldofinal']    = $this->padLeftZero($aBALACETE10['si177_naturezasaldofinal'], 1);
+                $aCSVBALANCETE10['si177_naturezasaldofinal']    = $aBALACETE10['si177_saldofinal'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE10['si177_naturezasaldofinal'], 1);
 
                 $this->sLinha = $aCSVBALANCETE10;
                 $this->adicionaLinha();
@@ -144,11 +156,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE11['si178_subelemento']             = $this->padLeftZero($aBALACETE11['si178_subelemento'], 2);
                         $aCSVBALANCETE11['si178_codfontrecursos']         = $this->padLeftZero($aBALACETE11['si178_codfontrecursos'], 3);
                         $aCSVBALANCETE11['si178_saldoinicialcd']          = $this->sicomNumberReal($aBALACETE11['si178_saldoinicialcd'], 2);
-                        $aCSVBALANCETE11['si178_naturezasaldoinicialcd']  = $this->padLeftZero($aBALACETE11['si178_naturezasaldoinicialcd'], 1);
+                        $aCSVBALANCETE11['si178_naturezasaldoinicialcd']  = $aBALACETE11['si178_saldoinicialcd'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE11['si178_naturezasaldoinicialcd'], 1);
                         $aCSVBALANCETE11['si178_totaldebitoscd']          = $this->sicomNumberReal($aBALACETE11['si178_totaldebitoscd'], 2);
                         $aCSVBALANCETE11['si178_totalcreditoscd']         = $this->sicomNumberReal($aBALACETE11['si178_totalcreditoscd'], 2);
                         $aCSVBALANCETE11['si178_saldofinalcd']            = $this->sicomNumberReal($aBALACETE11['si178_saldofinalcd'], 2);
-                        $aCSVBALANCETE11['si178_naturezasaldofinalcd']    = $this->padLeftZero($aBALACETE11['si178_naturezasaldofinalcd'], 1);
+                        $aCSVBALANCETE11['si178_naturezasaldofinalcd']    = $aBALACETE11['si178_saldofinalcd'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE11['si178_naturezasaldofinalcd'], 1);
 
                         $this->sLinha = $aCSVBALANCETE11;
                         $this->adicionaLinha();
@@ -167,11 +179,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE12['si179_naturezareceita']         = $this->padLeftZero($aBALACETE12['si179_naturezareceita'], 6);
                         $aCSVBALANCETE12['si179_codfontrecursos']         = $this->padLeftZero($aBALACETE12['si179_codfontrecursos'], 3);
                         $aCSVBALANCETE12['si179_saldoinicialcr']          = $this->sicomNumberReal($aBALACETE12['si179_saldoinicialcr'], 2);
-                        $aCSVBALANCETE12['si179_naturezasaldoinicialcr']  = $this->padLeftZero($aBALACETE12['si179_naturezasaldoinicialcr'], 1);
+                        $aCSVBALANCETE12['si179_naturezasaldoinicialcr']  = $aBALACETE12['si179_saldoinicialcr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE12['si179_naturezasaldoinicialcr'], 1);
                         $aCSVBALANCETE12['si179_totaldebitoscr']          = $this->sicomNumberReal($aBALACETE12['si179_totaldebitoscr'], 2);
                         $aCSVBALANCETE12['si179_totalcreditoscr']         = $this->sicomNumberReal($aBALACETE12['si179_totalcreditoscr'], 2);
                         $aCSVBALANCETE12['si179_saldofinalcr']            = $this->sicomNumberReal($aBALACETE12['si179_saldofinalcr'], 2);
-                        $aCSVBALANCETE12['si179_naturezasaldofinalcr']    = $this->padLeftZero($aBALACETE12['si179_naturezasaldofinalcr'], 1);
+                        $aCSVBALANCETE12['si179_naturezasaldofinalcr']    = $aBALACETE12['si179_saldofinalcr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE12['si179_naturezasaldofinalcr'], 1);
 
                         $this->sLinha = $aCSVBALANCETE12;
                         $this->adicionaLinha();
@@ -191,12 +203,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE13['si180_idacao']                  = $this->padLeftZero($aBALACETE13['si180_idacao'], 3);
                         $aCSVBALANCETE13['si180_idsubacao']               = $aBALACETE13['si180_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE13['si180_idacao'], 4);
                         $aCSVBALANCETE13['si180_saldoinicialpa']          = $this->sicomNumberReal($aBALACETE13['si180_saldoiniciaipa'], 2);
-                        $aCSVBALANCETE13['si180_naturezasaldoinicialpa']  = $this->padLeftZero($aBALACETE13['si180_naturezasaldoiniciaipa'], 1);
+                        $aCSVBALANCETE13['si180_naturezasaldoinicialpa']  = $aBALACETE13['si180_saldoiniciaipa'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE13['si180_naturezasaldoiniciaipa'], 1);
                         $aCSVBALANCETE13['si180_totaldebitospa']          = $this->sicomNumberReal($aBALACETE13['si180_totaldebitospa'], 2);
                         $aCSVBALANCETE13['si180_totalcreditospa']         = $this->sicomNumberReal($aBALACETE13['si180_totalcreditospa'], 2);
                         $aCSVBALANCETE13['si180_saldofinalpa']            = $this->sicomNumberReal($aBALACETE13['si180_saldofinaipa'], 2);
-                        $aCSVBALANCETE13['si180_naturezasaldofinalpa']    = $this->padLeftZero($aBALACETE13['si180_naturezasaldofinaipa'], 1);
-
+                        $aCSVBALANCETE13['si180_naturezasaldofinalpa']    = $aBALACETE13['si180_saldofinaipa'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE13['si180_naturezasaldofinaipa'], 1);
                         $this->sLinha = $aCSVBALANCETE13;
                         $this->adicionaLinha();
                     }
@@ -225,11 +236,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE14['si181_nroempenho']              = $aBALACETE14['si181_nroempenho'];
                         $aCSVBALANCETE14['si181_anoinscricao']            = $aBALACETE14['si181_anoinscricao'];
                         $aCSVBALANCETE14['si181_saldoinicialrsp']         = $this->sicomNumberReal($aBALACETE14['si181_saldoinicialrsp'], 2);
-                        $aCSVBALANCETE14['si181_naturezasaldoinicialrsp'] = $this->padLeftZero($aBALACETE14['si181_naturezasaldoinicialrsp'], 1);
+                        $aCSVBALANCETE14['si181_naturezasaldoinicialrsp'] = $aBALACETE14['si181_saldoinicialrsp'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE14['si181_naturezasaldoinicialrsp'], 1);
                         $aCSVBALANCETE14['si181_totaldebitosrsp']         = $this->sicomNumberReal($aBALACETE14['si181_totaldebitosrsp'], 2);
                         $aCSVBALANCETE14['si181_totalcreditosrsp']        = $this->sicomNumberReal($aBALACETE14['si181_totalcreditosrsp'], 2);
                         $aCSVBALANCETE14['si181_saldofinalrsp']           = $this->sicomNumberReal($aBALACETE14['si181_saldofinalrsp'], 2);
-                        $aCSVBALANCETE14['si181_naturezasaldofinalrsp']   = $this->padLeftZero($aBALACETE14['si181_naturezasaldofinalrsp'], 1);
+                        $aCSVBALANCETE14['si181_naturezasaldofinalrsp']   = $aBALACETE14['si181_saldofinalrsp'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE14['si181_naturezasaldofinalrsp'], 1);
 
                         $this->sLinha = $aCSVBALANCETE14;
                         $this->adicionaLinha();
@@ -247,11 +258,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE15['si182_codfundo']                = $aBALACETE15['si182_codfundo'];
                         $aCSVBALANCETE15['si182_atributosf']              = trim($aBALACETE15['si182_atributosf']);
                         $aCSVBALANCETE15['si182_saldoinicialsf']          = $this->sicomNumberReal($aBALACETE15['si182_saldoinicialsf'], 2);
-                        $aCSVBALANCETE15['si182_naturezasaldoinicialsf']  = $this->padLeftZero($aBALACETE15['si182_naturezasaldoinicialsf'], 1);
+                        $aCSVBALANCETE15['si182_naturezasaldoinicialsf']  = $aBALACETE15['si182_saldoinicialsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE15['si182_naturezasaldoinicialsf'], 1);
                         $aCSVBALANCETE15['si182_totaldebitossf']          = $this->sicomNumberReal($aBALACETE15['si182_totaldebitossf'], 2);
                         $aCSVBALANCETE15['si182_totalcreditossf']         = $this->sicomNumberReal($aBALACETE15['si182_totalcreditossf'], 2);
                         $aCSVBALANCETE15['si182_saldofinalsf']            = $this->sicomNumberReal($aBALACETE15['si182_saldofinalsf'], 2);
-                        $aCSVBALANCETE15['si182_naturezasaldofinalsf']    = $this->padLeftZero($aBALACETE15['si182_naturezasaldofinalsf'], 1);
+                        $aCSVBALANCETE15['si182_naturezasaldofinalsf']    = $aBALACETE15['si182_saldofinalsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE15['si182_naturezasaldofinalsf'], 1);
 
                         $this->sLinha = $aCSVBALANCETE15;
                         $this->adicionaLinha();
@@ -270,11 +281,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE16['si183_atributosf']                  = trim($aBALACETE16['si183_atributosf']);
                         $aCSVBALANCETE16['si183_codfontrecursos']             = $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
                         $aCSVBALANCETE16['si183_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_saldoinicialfontsf'], 2);
-                        $aCSVBALANCETE16['si183_naturezasaldoinicialfontsf']  = $this->padLeftZero($aBALACETE16['si183_naturezasaldoinicialfontsf'], 1);
+                        $aCSVBALANCETE16['si183_naturezasaldoinicialfontsf']  = $aBALACETE16['si183_saldoinicialfontsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE16['si183_naturezasaldoinicialfontsf'], 1);
                         $aCSVBALANCETE16['si183_totaldebitosfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_totaldebitosfontsf'], 2);
                         $aCSVBALANCETE16['si183_totalcreditosfontsf']         = $this->sicomNumberReal($aBALACETE16['si183_totalcreditosfontsf'], 2);
                         $aCSVBALANCETE16['si183_saldofinalfontsf']            = $this->sicomNumberReal($aBALACETE16['si183_saldofinalfontsf'], 2);
-                        $aCSVBALANCETE16['si183_naturezasaldofinalfontsf']    = $this->padLeftZero($aBALACETE16['si183_naturezasaldofinalfontsf'], 1);
+                        $aCSVBALANCETE16['si183_naturezasaldofinalfontsf']    = $aBALACETE16['si183_saldofinalfontsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE16['si183_naturezasaldofinalfontsf'], 1);
 
                         $this->sLinha = $aCSVBALANCETE16;
                         $this->adicionaLinha();
@@ -294,12 +305,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE17['si184_codctb']                  = trim($aBALACETE17['si184_codctb']);
                         $aCSVBALANCETE17['si184_codfontrecursos']         = $this->padLeftZero($aBALACETE17['si184_codfontrecursos'], 3);
                         $aCSVBALANCETE17['si184_saldoinicialctb']         = $this->sicomNumberReal($aBALACETE17['si184_saldoinicialctb'], 2);
-                        $aCSVBALANCETE17['si184_naturezasaldoinicialctb'] = $this->padLeftZero($aBALACETE17['si184_naturezasaldoinicialctb'], 1);
+                        $aCSVBALANCETE17['si184_naturezasaldoinicialctb'] = $aBALACETE17['si184_saldoinicialctb'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE17['si184_naturezasaldoinicialctb'], 1);
                         $aCSVBALANCETE17['si184_totaldebitosctb']         = $this->sicomNumberReal($aBALACETE17['si184_totaldebitosctb'], 2);
                         $aCSVBALANCETE17['si184_totalcreditosctb']        = $this->sicomNumberReal($aBALACETE17['si184_totalcreditosctb'], 2);
                         $aCSVBALANCETE17['si184_saldofinalctb']           = $this->sicomNumberReal($aBALACETE17['si184_saldofinalctb'], 2);
-                        $aCSVBALANCETE17['si184_naturezasaldofinalctb']   = $this->padLeftZero($aBALACETE17['si184_naturezasaldofinalctb'], 1);
-
+                        $aCSVBALANCETE17['si184_naturezasaldofinalctb']   = $aBALACETE17['si184_saldofinalctb'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE17['si184_naturezasaldofinalctb'], 1);
                         $this->sLinha = $aCSVBALANCETE17;
                         $this->adicionaLinha();
                     }
@@ -316,12 +326,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE18['si185_codfundo']                = $aBALACETE18['si185_codfundo'];
                         $aCSVBALANCETE18['si185_codfontrecursos']         = $this->padLeftZero($aBALACETE18['si185_codfontrecursos'], 3);
                         $aCSVBALANCETE18['si185_saldoinicialfr']          = $this->sicomNumberReal($aBALACETE18['si185_saldoinicialfr'], 2);
-                        $aCSVBALANCETE18['si185_naturezasaldoinicialfr']  = $this->padLeftZero($aBALACETE18['si185_naturezasaldoinicialfr'], 1);
+                        $aCSVBALANCETE18['si185_naturezasaldoinicialfr']  = $aBALACETE18['si185_saldoinicialfr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE18['si185_naturezasaldoinicialfr'], 1);
                         $aCSVBALANCETE18['si185_totaldebitosfr']          = $this->sicomNumberReal($aBALACETE18['si185_totaldebitosfr'], 2);
                         $aCSVBALANCETE18['si185_totalcreditosfr']         = $this->sicomNumberReal($aBALACETE18['si185_totalcreditosfr'], 2);
                         $aCSVBALANCETE18['si185_saldofinalfr']            = $this->sicomNumberReal($aBALACETE18['si185_saldofinalfr'], 2);
-                        $aCSVBALANCETE18['si185_naturezasaldofinalfr']    = $this->padLeftZero($aBALACETE18['si185_naturezasaldofinalfr'], 1);
-
+                        $aCSVBALANCETE18['si185_naturezasaldofinalfr']    = $aBALACETE18['si185_saldofinalfr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE18['si185_naturezasaldofinalfr'], 1);
                         $this->sLinha = $aCSVBALANCETE18;
                         $this->adicionaLinha();
                     }
@@ -338,12 +347,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE19['si186_codfundo']                    = $aBALACETE19['si186_codfundo'];
                         $aCSVBALANCETE19['si186_cnpjconsorcio']               = $this->padLeftZero($aBALACETE19['si186_cnpjconsorcio'], 3);
                         $aCSVBALANCETE19['si186_saldoinicialconsor']          = $this->sicomNumberReal($aBALACETE19['si186_saldoinicialconsor'], 2);
-                        $aCSVBALANCETE19['si186_naturezasaldoinicialconsor']  = $this->padLeftZero($aBALACETE19['si186_naturezasaldoinicialconsor'], 1);
+                        $aCSVBALANCETE19['si186_naturezasaldoinicialconsor']  = $aBALACETE19['si186_saldoinicialconsor'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE19['si186_naturezasaldoinicialconsor'], 1);
                         $aCSVBALANCETE19['si186_totaldebitosconsor']          = $this->sicomNumberReal($aBALACETE19['si186_totaldebitosconsor'], 2);
                         $aCSVBALANCETE19['si186_totalcreditosconsor']         = $this->sicomNumberReal($aBALACETE19['si186_totalcreditosconsor'], 2);
                         $aCSVBALANCETE19['si186_saldofinalconsor']            = $this->sicomNumberReal($aBALACETE19['si186_saldofinalconsor'], 2);
-                        $aCSVBALANCETE19['si186_naturezasaldofinalconsor']    = $this->padLeftZero($aBALACETE19['si186_naturezasaldofinalconsor'], 1);
-
+                        $aCSVBALANCETE19['si186_naturezasaldofinalconsor']    = $aBALACETE19['si186_saldofinalconsor'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE19['si186_naturezasaldofinalconsor'], 1);
                         $this->sLinha = $aCSVBALANCETE19;
                         $this->adicionaLinha();
                     }
@@ -367,12 +375,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE20['si187_subelemento']                 = $this->padLeftZero($aBALACETE20['si178_subelemento'], 3);
                         $aCSVBALANCETE20['si187_codfontrecursos']             = $this->padLeftZero($aBALACETE20['si187_codfontrecursos'], 3);
                         $aCSVBALANCETE20['si187_saldoinicialcons']            = $this->sicomNumberReal($aBALACETE20['si187_saldoinicialcons'], 2);
-                        $aCSVBALANCETE20['si187_naturezasaldoinicialcons']    = $this->padLeftZero($aBALACETE20['si187_naturezasaldoinicialcons'], 1);
+                        $aCSVBALANCETE20['si187_naturezasaldoinicialcons']    = $aBALACETE20['si187_saldoinicialcons'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE20['si187_naturezasaldoinicialcons'], 1);
                         $aCSVBALANCETE20['si187_totaldebitoscons']            = $this->sicomNumberReal($aBALACETE20['si187_totaldebitoscons'], 2);
                         $aCSVBALANCETE20['si187_totalcreditoscons']           = $this->sicomNumberReal($aBALACETE20['si187_totalcreditoscons'], 2);
                         $aCSVBALANCETE20['si187_saldofinalcons']              = $this->sicomNumberReal($aBALACETE20['si187_saldofinalcons'], 2);
-                        $aCSVBALANCETE20['si187_naturezasaldofinalcons']      = $this->padLeftZero($aBALACETE20['si187_naturezasaldofinalcons'], 1);
-
+                        $aCSVBALANCETE20['si187_naturezasaldofinalcons']      = $aBALACETE20['si187_saldofinalcons'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE20['si187_naturezasaldofinalcons'], 1);
                         $this->sLinha = $aCSVBALANCETE20;
                         $this->adicionaLinha();
                     }
@@ -389,12 +396,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE21['si188_cnpjconsorcio']               = $this->padLeftZero($aBALACETE21['si188_cnpjconsorcio'], 3);
                         $aCSVBALANCETE21['si188_codfontrecursos']               = $this->padLeftZero($aBALACETE21['si188_codfontrecursos'], 3);
                         $aCSVBALANCETE21['si188_saldoinicialconsorfr']          = $this->sicomNumberReal($aBALACETE21['si188_saldoinicialconsorfr'], 2);
-                        $aCSVBALANCETE21['si188_naturezasaldoinicialconsorfr']  = $this->padLeftZero($aBALACETE21['si188_naturezasaldoinicialconsorfr'], 1);
+                        $aCSVBALANCETE21['si188_naturezasaldoinicialconsorfr']  = $aBALACETE21['si188_saldoinicialconsorfr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE21['si188_naturezasaldoinicialconsorfr'], 1);
                         $aCSVBALANCETE21['si188_totaldebitosconsorfr']          = $this->sicomNumberReal($aBALACETE21['si188_totaldebitosconsorfr'], 2);
                         $aCSVBALANCETE21['si188_totalcreditosconsorfr']         = $this->sicomNumberReal($aBALACETE21['si188_totalcreditosconsorfr'], 2);
                         $aCSVBALANCETE21['si188_saldofinalconsorfr']            = $this->sicomNumberReal($aBALACETE21['si188_saldofinalconsorfr'], 2);
-                        $aCSVBALANCETE21['si188_naturezasaldofinalconsorfr']    = $this->padLeftZero($aBALACETE21['si188_naturezasaldofinalconsorfr'], 1);
-
+                        $aCSVBALANCETE21['si188_naturezasaldofinalconsorfr']    = $aBALACETE21['si188_saldofinalconsorfr'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE21['si188_naturezasaldofinalconsorfr'], 1);
                         $this->sLinha = $aCSVBALANCETE21;
                         $this->adicionaLinha();
                     }
@@ -414,12 +420,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE22['si189_codctb']                        = $this->padLeftZero($aBALACETE22['si189_codctb'], 3);
                         $aCSVBALANCETE22['si189_codfontrecursos']               = $this->padLeftZero($aBALACETE22['si189_codfontrecursos'], 3);
                         $aCSVBALANCETE22['si189_saldoinicialctbsf']             = $this->sicomNumberReal($aBALACETE22['si189_saldoinicialctbsf'], 2);
-                        $aCSVBALANCETE22['si189_naturezasaldoinicialctbsf']     = $this->padLeftZero($aBALACETE22['si189_naturezasaldoinicialctbsf'], 1);
+                        $aCSVBALANCETE22['si189_naturezasaldoinicialctbsf']     = $aBALACETE22['si189_saldoinicialctbsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE22['si189_naturezasaldoinicialctbsf'], 1);
                         $aCSVBALANCETE22['si189_totaldebitosctbsf']             = $this->sicomNumberReal($aBALACETE22['si189_totaldebitosctbsf'], 2);
                         $aCSVBALANCETE22['si189_totalcreditosctbsf']            = $this->sicomNumberReal($aBALACETE22['si189_totalcreditosctbsf'], 2);
                         $aCSVBALANCETE22['si189_saldofinalctbsf']               = $this->sicomNumberReal($aBALACETE22['si189_saldofinalctbsf'], 2);
-                        $aCSVBALANCETE22['si189_naturezasaldofinalctbsf']       = $this->padLeftZero($aBALACETE22['si189_naturezasaldofinalctbsf'], 1);
-
+                        $aCSVBALANCETE22['si189_naturezasaldofinalctbsf']       = $aBALACETE22['si189_saldofinalctbsf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE22['si189_naturezasaldofinalctbsf'], 1);
                         $this->sLinha = $aCSVBALANCETE22;
                         $this->adicionaLinha();
                     }
@@ -436,12 +441,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE23['si190_codfundo']                        = $aBALACETE23['si190_codfundo'];
                         $aCSVBALANCETE23['si190_naturezareceita']                 = $this->padLeftZero($aBALACETE23['si190_naturezareceita'], 6);
                         $aCSVBALANCETE23['si190_saldoinicialnatreceita']          = $this->sicomNumberReal($aBALACETE23['si190_saldoinicialnatreceita'], 2);
-                        $aCSVBALANCETE23['si190_naturezasaldoinicialnatreceita']  = $this->padLeftZero($aBALACETE23['si190_naturezasaldoinicialnatreceita'], 1);
+                        $aCSVBALANCETE23['si190_naturezasaldoinicialnatreceita']  = $aBALACETE23['si190_saldoinicialnatreceita'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE23['si190_naturezasaldoinicialnatreceita'], 1);
                         $aCSVBALANCETE23['si190_totaldebitosnatreceita']          = $this->sicomNumberReal($aBALACETE23['si190_totaldebitosnatreceita'], 2);
                         $aCSVBALANCETE23['si190_totalcreditosnatreceita']         = $this->sicomNumberReal($aBALACETE23['si190_totalcreditosnatreceita'], 2);
                         $aCSVBALANCETE23['si190_saldofinalnatreceita']            = $this->sicomNumberReal($aBALACETE23['si190_saldofinalnatreceita'], 2);
-                        $aCSVBALANCETE23['si190_naturezasaldofinalnatreceita']    = $this->padLeftZero($aBALACETE23['si190_naturezasaldofinalnatreceita'], 1);
-
+                        $aCSVBALANCETE23['si190_naturezasaldofinalnatreceita']    = $aBALACETE23['si190_saldofinalnatreceita'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE23['si190_naturezasaldofinalnatreceita'], 1);
                         $this->sLinha = $aCSVBALANCETE23;
                         $this->adicionaLinha();
                     }
@@ -459,12 +463,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE24['si191_codorgao']                  = $this->padLeftZero($aBALACETE24['si191_codorgao'], 2);
                         $aCSVBALANCETE24['si191_codunidadesub']             = $this->padLeftZero($aBALACETE24['si191_codunidadesub'], (strlen($aBALACETE24['si191_codorgao']) <= 5 ? 5 : 8));
                         $aCSVBALANCETE24['si191_saldoinicialorgao']         = $this->sicomNumberReal($aBALACETE24['si191_saldoinicialorgao'], 2);
-                        $aCSVBALANCETE24['si191_naturezasaldoinicialorgao'] = $this->padLeftZero($aBALACETE24['si191_naturezasaldoinicialorgao'], 1);
+                        $aCSVBALANCETE24['si191_naturezasaldoinicialorgao'] = $aBALACETE24['si191_saldoinicialorgao'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE24['si191_naturezasaldoinicialorgao'], 1);
                         $aCSVBALANCETE24['si191_totaldebitosorgao']         = $this->sicomNumberReal($aBALACETE24['si191_totaldebitosorgao'], 2);
                         $aCSVBALANCETE24['si191_totalcreditosorgao']        = $this->sicomNumberReal($aBALACETE24['si191_totalcreditosorgao'], 2);
                         $aCSVBALANCETE24['si191_saldofinalorgao']           = $this->sicomNumberReal($aBALACETE24['si191_saldofinalorgao'], 2);
-                        $aCSVBALANCETE24['si191_naturezasaldofinalorgao']   = $this->padLeftZero($aBALACETE24['si191_naturezasaldofinalorgao'], 1);
-
+                        $aCSVBALANCETE24['si191_naturezasaldofinalorgao']   = $aBALACETE24['si191_saldofinalorgao'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE24['si191_naturezasaldofinalorgao'], 1);
                         $this->sLinha = $aCSVBALANCETE24;
                         $this->adicionaLinha();
                     }
@@ -481,12 +484,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE25['si182_atributosf']                = $aBALACETE25['si195_atributosf'];
                         $aCSVBALANCETE25['si195_naturezareceita']           = $this->padLeftZero($aBALACETE25['si195_naturezareceita'], 2);
                         $aCSVBALANCETE25['si195_saldoinicialnrsf']            = $this->sicomNumberReal($aBALACETE25['si195_saldoinicialnrsf'], 2);
-                        $aCSVBALANCETE25['si195_naturezasaldoinicialnrsf']    = $aBALACETE25['si195_naturezasaldoinicialnrsf'];
+                        $aCSVBALANCETE25['si195_naturezasaldoinicialnrsf']    = $aBALACETE25['si195_saldoinicialnrsf'] == 0 ? $sNaturezaSaldo : $aBALACETE25['si195_naturezasaldoinicialnrsf'];
                         $aCSVBALANCETE25['si195_totaldebitosnrsf']            = $this->sicomNumberReal($aBALACETE25['si195_totaldebitosnrsf'], 2);
                         $aCSVBALANCETE25['si195_totalcreditosnrsf']           = $this->sicomNumberReal($aBALACETE25['si195_totalcreditosnrsf'], 2);
                         $aCSVBALANCETE25['si195_saldofinalnrsf']              = $this->sicomNumberReal($aBALACETE25['si195_saldofinalnrsf'], 2);
-                        $aCSVBALANCETE25['si195_naturezasaldofinalnrsf']      = $aBALACETE25['si195_naturezasaldofinalnrsf'];
-
+                        $aCSVBALANCETE25['si195_naturezasaldofinalnrsf']      = $aBALACETE25['si195_saldofinalnrsf'] == 0 ? $sNaturezaSaldo : $aBALACETE25['si195_naturezasaldofinalnrsf'];
                         $this->sLinha = $aCSVBALANCETE25;
                         $this->adicionaLinha();
                     }
@@ -505,12 +507,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE26['si196_nrodocumentopessoaatributosf'] = $aBALACETE26['si196_nrodocumentopessoaatributosf'];
                         $aCSVBALANCETE26['si196_atributosf']              = trim($aBALACETE26['si196_atributosf']);
                         $aCSVBALANCETE26['si196_saldoinicialpessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si196_saldoinicialpessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si196_naturezasaldoinicialpessoaatributosf']  = $this->padLeftZero($aBALACETE26['si196_naturezasaldoinicialpessoaatributosf'], 1);
+                        $aCSVBALANCETE26['si196_naturezasaldoinicialpessoaatributosf']  = $aBALACETE26['si196_saldoinicialpessoaatributosf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE26['si196_naturezasaldoinicialpessoaatributosf'], 1);
                         $aCSVBALANCETE26['si196_totaldebitospessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si196_totaldebitospessoaatributosf'], 2);
                         $aCSVBALANCETE26['si196_totalcreditospessoaatributosf']         = $this->sicomNumberReal($aBALACETE26['si196_totalcreditospessoaatributosf'], 2);
                         $aCSVBALANCETE26['si196_saldofinalpessoaatributosf']            = $this->sicomNumberReal($aBALACETE26['si196_saldofinalpessoaatributosf'], 2);
-                        $aCSVBALANCETE26['si196_naturezasaldofinalpessoaatributosf']    = $this->padLeftZero($aBALACETE26['si196_naturezasaldofinalpessoaatributosf'], 1);
-
+                        $aCSVBALANCETE26['si196_naturezasaldofinalpessoaatributosf']    = $aBALACETE26['si196_saldofinalpessoaatributosf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE26['si196_naturezasaldofinalpessoaatributosf'], 1);
                         $this->sLinha = $aCSVBALANCETE26;
                         $this->adicionaLinha();
                     }
@@ -530,12 +531,11 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE27['si197_codfontrecursos']                 = $aBALACETE27['si197_codfontrecursos'];
                         $aCSVBALANCETE27['si197_atributosf']                      = trim($aBALACETE27['si197_atributosf']);
                         $aCSVBALANCETE27['si197_saldoinicialoufontesf']           = $this->sicomNumberReal($aBALACETE27['si197_saldoinicialoufontesf'], 2);
-                        $aCSVBALANCETE27['si197_naturezasaldoinicialoufontesf']   = $this->padLeftZero($aBALACETE27['si197_naturezasaldoinicialoufontesf'], 1);
+                        $aCSVBALANCETE27['si197_naturezasaldoinicialoufontesf']   = $aBALACETE27['si197_saldoinicialoufontesf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE27['si197_naturezasaldoinicialoufontesf'], 1);
                         $aCSVBALANCETE27['si197_totaldebitosoufontesf']           = $this->sicomNumberReal($aBALACETE27['si197_totaldebitosoufontesf'], 2);
                         $aCSVBALANCETE27['si197_totalcreditosoufontesf']          = $this->sicomNumberReal($aBALACETE27['si197_totalcreditosoufontesf'], 2);
                         $aCSVBALANCETE27['si197_saldofinaloufontesf']             = $this->sicomNumberReal($aBALACETE27['si197_saldofinaloufontesf'], 2);
-                        $aCSVBALANCETE27['si197_naturezasaldofinaloufontesf']     = $this->padLeftZero($aBALACETE27['si197_naturezasaldofinaloufontesf'], 1);
-
+                        $aCSVBALANCETE27['si197_naturezasaldofinaloufontesf']     = $aBALACETE27['si197_saldofinaloufontesf'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE27['si197_naturezasaldofinaloufontesf'], 1);
                         $this->sLinha = $aCSVBALANCETE27;
                         $this->adicionaLinha();
                     }
@@ -554,11 +554,10 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE28['si198_codfontrecursos']               = trim($aBALACETE28['si198_codfontrecursos']);
                         $aCSVBALANCETE28['si198_saldoinicialctbfonte']          = $this->sicomNumberReal($aBALACETE28['si198_saldoinicialctbfonte'], 2);
                         $aCSVBALANCETE28['si198_naturezasaldoinicialctbfonte']  = $this->padLeftZero($aBALACETE28['si198_naturezasaldoinicialctbfonte'], 1);
-                        $aCSVBALANCETE28['si198_totaldebitosctbfonte']          = $this->sicomNumberReal($aBALACETE28['si198_totaldebitosctbfonte'], 2);
+                        $aCSVBALANCETE28['si198_totaldebitosctbfonte']          = $aBALACETE28['si198_naturezasaldoinicialctbfonte'] == 0 ? $sNaturezaSaldo : $this->sicomNumberReal($aBALACETE28['si198_totaldebitosctbfonte'], 2);
                         $aCSVBALANCETE28['si198_totalcreditosctbfonte']         = $this->sicomNumberReal($aBALACETE28['si198_totalcreditosctbfonte'], 2);
                         $aCSVBALANCETE28['si198_saldofinalctbfonte']            = $this->sicomNumberReal($aBALACETE28['si198_saldofinalctbfonte'], 2);
-                        $aCSVBALANCETE28['si198_naturezasaldofinalctbfonte']    = $this->padLeftZero($aBALACETE28['si198_naturezasaldofinalctbfonte'], 1);
-
+                        $aCSVBALANCETE28['si198_naturezasaldofinalctbfonte']    = $aBALACETE28['si198_saldofinalctbfonte'] == 0 ? $sNaturezaSaldo : $this->padLeftZero($aBALACETE28['si198_naturezasaldofinalctbfonte'], 1);
                         $this->sLinha = $aCSVBALANCETE28;
                         $this->adicionaLinha();
                     }

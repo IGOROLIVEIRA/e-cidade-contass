@@ -124,7 +124,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
         /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de dados compl licitacao inexistente!");
-         }*/
+        }*/
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
         $oDOMDocument->loadXML($sTextoXml);
@@ -132,223 +132,223 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
 
         $sSql = "SELECT si09_codorgaotce AS codorgao,
-                        si09_tipoinstit
-              FROM infocomplementaresinstit
-              WHERE si09_instit = " . db_getsession("DB_instit");
+        si09_tipoinstit
+        FROM infocomplementaresinstit
+        WHERE si09_instit = " . db_getsession("DB_instit");
 
         $rsResult = db_query($sSql);
         $sCodorgao = db_utils::fieldsMemory($rsResult, 0);
 
         $sSql = "SELECT DISTINCT 10 AS tiporegistro,
-                        CASE
-                            WHEN orcorgao.o40_codtri = '0'
-                                 OR NULL THEN orcorgao.o40_orgao::varchar
-                            ELSE orcorgao.o40_codtri
-                        END AS o58_orgao,
-                        CASE
-                            WHEN orcunidade.o41_codtri = '0'
-                                 OR NULL THEN orcunidade.o41_unidade::varchar
-                            ELSE orcunidade.o41_codtri
-                        END AS o58_unidade,
-                        o15_codtri,
-                        si09_codorgaotce AS codorgao,
-                        lpad((CASE
-                                  WHEN orcorgao.o40_codtri = '0'
-                                       OR NULL THEN orcorgao.o40_orgao::varchar
-                                  ELSE orcorgao.o40_codtri
-                              END),2,0)||lpad((CASE
-                                                   WHEN orcunidade.o41_codtri = '0'
-                                                        OR NULL THEN orcunidade.o41_unidade::varchar
-                                                   ELSE orcunidade.o41_codtri
-                                               END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
-                                                                     OR NULL THEN ''
-                                                                ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0)
-                                                           END) AS codunidadesub,
-                        o58_funcao AS codfuncao,
-                        o58_subfuncao AS codsubfuncao,
-                        o58_programa AS codprograma,
-                        o58_projativ AS idacao,
-                        o55_origemacao AS idsubacao,
-                        substr(o56_elemento,2,8) AS naturezadadespesa,
-                        substr(o56_elemento,7,2) AS subelemento,
-                        e60_codemp AS nroempenho,
-                        e60_emiss AS dtempenho,
-                        CASE
-                            WHEN e60_codtipo = 2 THEN 3
-                            WHEN e60_codtipo = 3 THEN 2
-                            ELSE 1
-                        END AS modalidadempenho,
-                        CASE
-                            WHEN si09_tipoinstit = 5 THEN COALESCE(e54_tipodespesa,0)
-                            ELSE 0
-                        END AS tipodespesa,
-                        CASE
-                            WHEN substr(o56_elemento,1,3) = '346' THEN 2
-                            ELSE 1
-                        END AS tpempenho,
-                        e60_vlremp AS vlbruto,
-                        e60_resumo AS especificaoempenho,
+        CASE
+        WHEN orcorgao.o40_codtri = '0'
+        OR NULL THEN orcorgao.o40_orgao::varchar
+        ELSE orcorgao.o40_codtri
+        END AS o58_orgao,
+        CASE
+        WHEN orcunidade.o41_codtri = '0'
+        OR NULL THEN orcunidade.o41_unidade::varchar
+        ELSE orcunidade.o41_codtri
+        END AS o58_unidade,
+        o15_codtri,
+        si09_codorgaotce AS codorgao,
+        lpad((CASE
+        WHEN orcorgao.o40_codtri = '0'
+        OR NULL THEN orcorgao.o40_orgao::varchar
+        ELSE orcorgao.o40_codtri
+        END),2,0)||lpad((CASE
+        WHEN orcunidade.o41_codtri = '0'
+        OR NULL THEN orcunidade.o41_unidade::varchar
+        ELSE orcunidade.o41_codtri
+        END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
+        OR NULL THEN ''
+        ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0)
+        END) AS codunidadesub,
+        o58_funcao AS codfuncao,
+        o58_subfuncao AS codsubfuncao,
+        o58_programa AS codprograma,
+        o58_projativ AS idacao,
+        o55_origemacao AS idsubacao,
+        substr(o56_elemento,2,8) AS naturezadadespesa,
+        substr(o56_elemento,7,2) AS subelemento,
+        e60_codemp AS nroempenho,
+        e60_emiss AS dtempenho,
+        CASE
+        WHEN e60_codtipo = 2 THEN 3
+        WHEN e60_codtipo = 3 THEN 2
+        ELSE 1
+        END AS modalidadempenho,
+        CASE
+        WHEN si09_tipoinstit = 5 THEN COALESCE(e54_tipodespesa,0)
+        ELSE 0
+        END AS tipodespesa,
+        CASE
+        WHEN substr(o56_elemento,1,3) = '346' THEN 2
+        ELSE 1
+        END AS tpempenho,
+        e60_vlremp AS vlbruto,
+        e60_resumo AS especificaoempenho,
 
-                        CASE
-                            WHEN ac16_sequencial IS NULL THEN 2
-                            ELSE 1
-                        END AS despdeccontrato,
-                        ' '::char AS codorgaorespcontrato,
+        CASE
+        WHEN ac16_sequencial IS NULL THEN 2
+        ELSE 1
+        END AS despdeccontrato,
+        ' '::char AS codorgaorespcontrato,
 
-                        CASE WHEN ac16_sequencial IS NULL THEN NULL ELSE (SELECT CASE
-                                                                                    WHEN o41_subunidade != 0
-                                                                                         OR NOT NULL THEN lpad((CASE
-                                                                                                                    WHEN o40_codtri = '0'
-                                                                                                                         OR NULL THEN o40_orgao::varchar
-                                                                                                                    ELSE o40_codtri
-                                                                                                                END),2,0)||lpad((CASE
-                                                                                                                                     WHEN o41_codtri = '0'
-                                                                                                                                          OR NULL THEN o41_unidade::varchar
-                                                                                                                                     ELSE o41_codtri
-                                                                                                                                 END),3,0)||lpad(o41_subunidade::integer,3,0)
-                                                                                    ELSE lpad((CASE
-                                                                                                   WHEN o40_codtri = '0'
-                                                                                                        OR NULL THEN o40_orgao::varchar
-                                                                                                   ELSE o40_codtri
-                                                                                               END),2,0)||lpad((CASE
-                                                                                                                    WHEN o41_codtri = '0'
-                                                                                                                         OR NULL THEN o41_unidade::varchar
-                                                                                                                    ELSE o41_codtri
-                                                                                                                END),3,0)
-                                                                                END AS unidadesub
-                                                                          FROM db_departorg
-                                                                          LEFT JOIN infocomplementares ON (si08_anousu, si08_instit) = (db01_anousu, 1)
-                                                                          JOIN orcunidade u ON (db01_orgao, db01_unidade, db01_anousu) = (u.o41_orgao, u.o41_unidade, u.o41_anousu)
-                                                                          JOIN orcorgao o ON (o.o40_orgao, o.o40_anousu) = (u.o41_orgao, u.o41_anousu)
-                                                                          WHERE db01_coddepto = ac16_deptoresponsavel
-                                                                            AND db01_anousu = ac16_anousu
-                                                                          LIMIT 1)
-                        END AS codunidadesubrespcontrato, 
-        				
-                        CASE
-                            WHEN ac16_sequencial IS NULL THEN NULL
-                            ELSE ac16_numeroacordo
-                        END AS nrocontrato,
-                        CASE
-                            WHEN ac16_sequencial IS NULL THEN NULL
-                            ELSE ac16_dataassinatura
-                        END AS dataassinaturacontrato,
-                        CASE
-                            WHEN ac16_sequencial IS NULL THEN NULL
-                            ELSE ac26_numeroaditamento
-                        END AS nrosequencialtermoaditivo,
+        CASE WHEN ac16_sequencial IS NULL THEN NULL ELSE (SELECT CASE
+        WHEN o41_subunidade != 0
+        OR NOT NULL THEN lpad((CASE
+        WHEN o40_codtri = '0'
+        OR NULL THEN o40_orgao::varchar
+        ELSE o40_codtri
+        END),2,0)||lpad((CASE
+        WHEN o41_codtri = '0'
+        OR NULL THEN o41_unidade::varchar
+        ELSE o41_codtri
+        END),3,0)||lpad(o41_subunidade::integer,3,0)
+        ELSE lpad((CASE
+        WHEN o40_codtri = '0'
+        OR NULL THEN o40_orgao::varchar
+        ELSE o40_codtri
+        END),2,0)||lpad((CASE
+        WHEN o41_codtri = '0'
+        OR NULL THEN o41_unidade::varchar
+        ELSE o41_codtri
+        END),3,0)
+        END AS unidadesub
+        FROM db_departorg
+        LEFT JOIN infocomplementares ON (si08_anousu, si08_instit) = (db01_anousu, 1)
+        JOIN orcunidade u ON (db01_orgao, db01_unidade, db01_anousu) = (u.o41_orgao, u.o41_unidade, u.o41_anousu)
+        JOIN orcorgao o ON (o.o40_orgao, o.o40_anousu) = (u.o41_orgao, u.o41_anousu)
+        WHERE db01_coddepto = ac16_deptoresponsavel
+        AND db01_anousu = ac16_anousu
+        LIMIT 1)
+        END AS codunidadesubrespcontrato, 
 
-                        CASE
-                            WHEN e60_numconvenio is null THEN 2
-                            ELSE 1
-                        END AS despdecconvenio,
-                        CASE
-                            WHEN e60_numconvenio IS NULL THEN NULL
-                            ELSE (SELECT c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
-                        END AS nroconvenio,
-                        CASE
-                            WHEN e60_convenio IS NULL THEN NULL
-                            ELSE (SELECT c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
-                        END AS dataassinaturaconvenio,
-                        CASE
-                            WHEN l20_codigo IS NULL THEN 1
-                            WHEN l03_pctipocompratribunal IN (100, 101, 102) THEN 3
-                            ELSE 2
-                        END AS despDecLicitacao,
-                        ' ' AS codorgaoresplicit,
-                        CASE
-                            WHEN l20_codigo IS NULL THEN NULL
-                            ELSE
-                                     (SELECT CASE
-                                                 WHEN o41_subunidade != 0
-                                                      OR NOT NULL THEN lpad((CASE
-                                                                                 WHEN o40_codtri = '0'
-                                                                                      OR NULL THEN o40_orgao::varchar
-                                                                                 ELSE o40_codtri
-                                                                             END),2,0)||lpad((CASE
-                                                                                                  WHEN o41_codtri = '0'
-                                                                                                       OR NULL THEN o41_unidade::varchar
-                                                                                                  ELSE o41_codtri
-                                                                                              END),3,0)||lpad(o41_subunidade::integer,3,0)
-                                                 ELSE lpad((CASE
-                                                                WHEN o40_codtri = '0'
-                                                                     OR NULL THEN o40_orgao::varchar
-                                                                ELSE o40_codtri
-                                                            END),2,0)||lpad((CASE
-                                                                                 WHEN o41_codtri = '0'
-                                                                                      OR NULL THEN o41_unidade::varchar
-                                                                                 ELSE o41_codtri
-                                                                             END),3,0)
-                                             END AS unidadesub
-                                      FROM db_departorg
-                                      JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
-                                      JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
-                                      JOIN orcorgao o ON o.o40_orgao = u.o41_orgao AND o.o40_anousu = u.o41_anousu
-                                      WHERE db01_coddepto = l20_codepartamento
-                                        AND db01_anousu = e60_anousu
-                                      LIMIT 1)
-                        END AS codunidadesubresplicit,
-                        liclicita.l20_codigo,
-                        CASE
-                            WHEN l20_codigo IS NULL THEN NULL
-                            ELSE l20_edital
-                        END nroprocessolicitatorio,
-                        CASE
-                            WHEN l20_codigo IS NULL THEN NULL
-                            ELSE l20_anousu
-                        END exercicioprocessolicitatorio,
-                        CASE
-                            WHEN l20_codigo IS NULL THEN NULL
-                            WHEN l03_pctipocompratribunal NOT IN (100, 101, 102) THEN NULL
-                            WHEN l03_pctipocompratribunal = 100 THEN 2
-                            WHEN l03_pctipocompratribunal = 101 THEN 1
-                            ELSE 3
-                        END AS tipoprocesso,
-                        o.z01_cgccpf AS ordenador,
-                        e60_numemp AS numemp,
-                        CASE
-                            WHEN length(cgm.z01_cgccpf) = 11 THEN 1
-                            ELSE 2
-                        END AS tipodocumento,
-                        cgm.z01_cgccpf AS nrodocumento,
-                        orcunidade.o41_subunidade AS subunidade,
-                        homologacaoadjudica.l202_datahomologacao AS datahomologacao,
-                        ac16_deptoresponsavel,
-                        2 as si106_despdecconvenioconge,
-                        NULL as si106_nroconvenioconge,
-                        NULL as si106_dataassinaturaconvenioconge,
-                        e60_tipodespesa
+        CASE
+        WHEN ac16_sequencial IS NULL THEN NULL
+        ELSE ac16_numeroacordo
+        END AS nrocontrato,
+        CASE
+        WHEN ac16_sequencial IS NULL THEN NULL
+        ELSE ac16_dataassinatura
+        END AS dataassinaturacontrato,
+        CASE
+        WHEN ac16_sequencial IS NULL THEN NULL
+        ELSE ac26_numeroaditamento
+        END AS nrosequencialtermoaditivo,
 
-                 FROM empempenho
-                 JOIN orcdotacao ON e60_coddot = o58_coddot
-                 JOIN empelemento ON e60_numemp = e64_numemp
-                 JOIN orcelemento ON e64_codele = o56_codele
-                 JOIN orctiporec ON o58_codigo = o15_codigo
-                 JOIN emptipo ON e60_codtipo = e41_codtipo
-                 JOIN cgm ON e60_numcgm = z01_numcgm
-                 JOIN orcprojativ ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
-                 LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
-                 LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . "
-                 LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
-                 LEFT JOIN liclicita ON (ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0'), l20_anousu::varchar, l03_codigo) = (l20_edital::varchar, ((string_to_array(e60_numerol, '/'))[2])::varchar, l20_codtipocom)
-                 LEFT JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (orcunidade.o41_anousu, orcunidade.o41_orgao, orcunidade.o41_unidade)
-                 LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
-                 LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
-                 LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
-                 LEFT JOIN empempaut ON e61_numemp = e60_numemp
-                 LEFT JOIN empautoriza ON e61_autori = e60_numemp
+        CASE
+        WHEN e60_numconvenio is null THEN 2
+        ELSE 1
+        END AS despdecconvenio,
+        CASE
+        WHEN e60_numconvenio IS NULL THEN NULL
+        ELSE (SELECT c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
+        END AS nroconvenio,
+        CASE
+        WHEN e60_convenio IS NULL THEN NULL
+        ELSE (SELECT c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio)
+        END AS dataassinaturaconvenio,
+        CASE
+        WHEN l20_codigo IS NULL THEN 1
+        WHEN l03_pctipocompratribunal IN (100, 101, 102) THEN 3
+        ELSE 2
+        END AS despDecLicitacao,
+        ' ' AS codorgaoresplicit,
+        CASE
+        WHEN l20_codigo IS NULL THEN NULL
+        ELSE
+        (SELECT CASE
+        WHEN o41_subunidade != 0
+        OR NOT NULL THEN lpad((CASE
+        WHEN o40_codtri = '0'
+        OR NULL THEN o40_orgao::varchar
+        ELSE o40_codtri
+        END),2,0)||lpad((CASE
+        WHEN o41_codtri = '0'
+        OR NULL THEN o41_unidade::varchar
+        ELSE o41_codtri
+        END),3,0)||lpad(o41_subunidade::integer,3,0)
+        ELSE lpad((CASE
+        WHEN o40_codtri = '0'
+        OR NULL THEN o40_orgao::varchar
+        ELSE o40_codtri
+        END),2,0)||lpad((CASE
+        WHEN o41_codtri = '0'
+        OR NULL THEN o41_unidade::varchar
+        ELSE o41_codtri
+        END),3,0)
+        END AS unidadesub
+        FROM db_departorg
+        JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
+        JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
+        JOIN orcorgao o ON o.o40_orgao = u.o41_orgao AND o.o40_anousu = u.o41_anousu
+        WHERE db01_coddepto = l20_codepartamento
+        AND db01_anousu = e60_anousu
+        LIMIT 1)
+        END AS codunidadesubresplicit,
+        liclicita.l20_codigo,
+        CASE
+        WHEN l20_codigo IS NULL THEN NULL
+        ELSE l20_edital
+        END nroprocessolicitatorio,
+        CASE
+        WHEN l20_codigo IS NULL THEN NULL
+        ELSE l20_anousu
+        END exercicioprocessolicitatorio,
+        CASE
+        WHEN l20_codigo IS NULL THEN NULL
+        WHEN l03_pctipocompratribunal NOT IN (100, 101, 102) THEN NULL
+        WHEN l03_pctipocompratribunal = 100 THEN 2
+        WHEN l03_pctipocompratribunal = 101 THEN 1
+        ELSE 3
+        END AS tipoprocesso,
+        o.z01_cgccpf AS ordenador,
+        e60_numemp AS numemp,
+        CASE
+        WHEN length(cgm.z01_cgccpf) = 11 THEN 1
+        ELSE 2
+        END AS tipodocumento,
+        cgm.z01_cgccpf AS nrodocumento,
+        orcunidade.o41_subunidade AS subunidade,
+        homologacaoadjudica.l202_datahomologacao AS datahomologacao,
+        ac16_deptoresponsavel,
+        2 as si106_despdecconvenioconge,
+        NULL as si106_nroconvenioconge,
+        NULL as si106_dataassinaturaconvenioconge,
+        e60_tipodespesa
+
+        FROM empempenho
+        JOIN orcdotacao ON e60_coddot = o58_coddot
+        JOIN empelemento ON e60_numemp = e64_numemp
+        JOIN orcelemento ON e64_codele = o56_codele
+        JOIN orctiporec ON o58_codigo = o15_codigo
+        JOIN emptipo ON e60_codtipo = e41_codtipo
+        JOIN cgm ON e60_numcgm = z01_numcgm
+        JOIN orcprojativ ON (o58_anousu, o58_projativ) = (o55_anousu, o55_projativ)
+        LEFT JOIN pctipocompra ON e60_codcom = pc50_codcom
+        LEFT JOIN cflicita ON pc50_pctipocompratribunal = l03_pctipocompratribunal AND l03_instit = " . db_getsession("DB_instit") . "
+        LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+        LEFT JOIN liclicita ON (ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0'), l20_anousu::varchar, l03_codigo) = (l20_edital::varchar, ((string_to_array(e60_numerol, '/'))[2])::varchar, l20_codtipocom)
+        LEFT JOIN orcunidade ON (o58_anousu, o58_orgao, o58_unidade) = (orcunidade.o41_anousu, orcunidade.o41_orgao, orcunidade.o41_unidade)
+        LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
+        LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
+        LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
+        LEFT JOIN empempaut ON e61_numemp = e60_numemp
+        LEFT JOIN empautoriza ON e61_autori = e60_numemp
         
-                 LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
-                 LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
-                 LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
-                 LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
-                 LEFT JOIN acordo on ac26_acordo = ac16_sequencial AND ac16_acordosituacao = 4
+        LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
+        LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
+        LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
+        LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
+        LEFT JOIN acordo on ac26_acordo = ac16_sequencial AND ac16_acordosituacao = 4
         
-                 WHERE e60_anousu = " . db_getsession("DB_anousu") . "
-                   AND o56_anousu = " . db_getsession("DB_anousu") . "
-                   AND o58_anousu = " . db_getsession("DB_anousu") . "
-                   AND e60_instit = " . db_getsession("DB_instit") . "
-                   AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
+        WHERE e60_anousu = " . db_getsession("DB_anousu") . "
+        AND o56_anousu = " . db_getsession("DB_anousu") . "
+        AND o58_anousu = " . db_getsession("DB_anousu") . "
+        AND e60_instit = " . db_getsession("DB_instit") . "
+        AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
         
         $rsEmpenho10 = db_query($sSql);
 
@@ -375,21 +375,21 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
              */
             if($oEmpenho10->despdeccontrato == 1) {
                 $sSql = " SELECT CASE
-                                     WHEN o40_codtri = '0'
-                                          OR NULL THEN o40_orgao::varchar
-                                     ELSE o40_codtri
-                                 END AS db01_orgao,
-                                 CASE
-                                     WHEN o41_codtri = '0'
-                                          OR NULL THEN o41_unidade::varchar
-                                     ELSE o41_codtri
-                                 END AS db01_unidade,
-                                 o41_subunidade
-                          FROM db_departorg
-                          JOIN orcunidade ON (db01_orgao, db01_unidade, db01_anousu) = (o41_orgao, o41_unidade, o41_anousu)
-                          JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
-                          WHERE db01_anousu = " . db_getsession("DB_anousu") . "
-                            AND db01_coddepto =" . $oEmpenho10->ac16_deptoresponsavel;
+                WHEN o40_codtri = '0'
+                OR NULL THEN o40_orgao::varchar
+                ELSE o40_codtri
+                END AS db01_orgao,
+                CASE
+                WHEN o41_codtri = '0'
+                OR NULL THEN o41_unidade::varchar
+                ELSE o41_codtri
+                END AS db01_unidade,
+                o41_subunidade
+                FROM db_departorg
+                JOIN orcunidade ON (db01_orgao, db01_unidade, db01_anousu) = (o41_orgao, o41_unidade, o41_anousu)
+                JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
+                WHERE db01_anousu = " . db_getsession("DB_anousu") . "
+                AND db01_coddepto =" . $oEmpenho10->ac16_deptoresponsavel;
                 $rsDepart = db_query($sSql);
 
                 $sOrgDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_orgao;
@@ -420,15 +420,15 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 ) {
 
                     $sElemento = $oElemento->getAttribute('elementoSicom');
-                    break;
-
-                }
+                break;
 
             }
 
-            db_inicio_transacao();
+        }
 
-            $oDadosEmpenho10 = new cl_emp102019();
+        db_inicio_transacao();
+
+        $oDadosEmpenho10 = new cl_emp102019();
 
             $oDadosEmpenho10->si106_tiporegistro = $oEmpenho10->tiporegistro; // campo 1
             $oDadosEmpenho10->si106_codorgao = $oEmpenho10->codorgao; // campo 2
@@ -447,9 +447,21 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             $oDadosEmpenho10->si106_vlbruto = $oEmpenho10->vlbruto; // campo 15
             $oDadosEmpenho10->si106_especificacaoempenho = $oEmpenho10->especificaoempenho == '' ? 'SEM HISTORICO' :
                 trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho10->especificaoempenho), 0, 200))); // campo 16
-            $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
-            if (date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) || $oEmpenho10->dataassinaturacontrato == null) {
-                $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
+
+                $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
+
+
+
+                if ( (date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) ) 
+                    || $oEmpenho10->dataassinaturacontrato == null) {
+
+
+
+                    if ($oEmpenho10->despdeccontrato == 1) {
+                    $oDadosEmpenho10->si106_despdeccontrato = 4; // campo 17
+                } else {
+                    $oDadosEmpenho10->si106_despdeccontrato = 2; // campo 17
+                }
                 if ($oEmpenho10->despdeccontrato == 3) {
                     $oDadosEmpenho10->si106_codorgaorespcontrato = $sCodorgao->codorgao; // campo 18
                 } else {
@@ -459,6 +471,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 $oDadosEmpenho10->si106_nrocontrato = ''; // campo 20
                 $oDadosEmpenho10->si106_dtassinaturacontrato = ''; // campo 21
                 $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
+                
             }else {
                 $oDadosEmpenho10->si106_despdeccontrato = $oEmpenho10->despdeccontrato; // campo 17
                 if ($oEmpenho10->despdeccontrato == 3) {
@@ -512,7 +525,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             $oDadosEmpenho10->incluir();
             if ($oDadosEmpenho10->erro_status == 0) {
               throw new Exception($oDadosEmpenho10->erro_msg);
-            }
+          }
 
             /**
              * dados registro 11
@@ -557,16 +570,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
          */
 
         $sSql = "SELECT  ac16_sequencial AS acordo, ac16_dataassinatura, e60_emiss, e60_codemp, e60_numemp
-                   FROM  empempenhocontrato
-             INNER JOIN  acordo ON ac16_sequencial = e100_acordo
-             INNER JOIN  empempenho ON e100_numemp = e60_numemp
-                  WHERE  (
-                          (date_part('year', empempenho.e60_emiss) < date_part('year',acordo.ac16_dataassinatura))
-                           OR  (date_part('year',empempenho.e60_emiss) = date_part('year', acordo.ac16_dataassinatura)
-                          AND  date_part('month', empempenho.e60_emiss) < date_part('month', acordo.ac16_dataassinatura))
-                         )
-                    AND  acordo.ac16_dataassinatura between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
-                    AND  e60_instit = " . db_getsession("DB_instit") .";";
+        FROM  empempenhocontrato
+        INNER JOIN  acordo ON ac16_sequencial = e100_acordo
+        INNER JOIN  empempenho ON e100_numemp = e60_numemp
+        WHERE  (
+        (date_part('year', empempenho.e60_emiss) < date_part('year',acordo.ac16_dataassinatura))
+        OR  (date_part('year',empempenho.e60_emiss) = date_part('year', acordo.ac16_dataassinatura)
+        AND  date_part('month', empempenho.e60_emiss) < date_part('month', acordo.ac16_dataassinatura))
+        )
+        AND  acordo.ac16_dataassinatura between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
+        AND  e60_instit = " . db_getsession("DB_instit") .";";
 
         $rsEmpenhoContrato30 = db_query($sSql);
 
@@ -582,36 +595,36 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           for($jCont = 0; $jCont < pg_num_rows($rsEmpenhoContrato30); $jCont++){
 
             $sSql = "SELECT  DISTINCT 30 AS tiporegistro,
-                    si09_codorgaotce AS codorgao,
-                    lpad((CASE WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao::varchar ELSE orcorgao.o40_codtri END),2,0)||lpad(
-                      (CASE WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade::varchar ELSE orcunidade.o41_codtri END),3,0)||(
-                        CASE WHEN orcunidade.o41_subunidade = '0' OR NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) AS codunidadesub,
-                    e60_codemp AS nroempenho,
-                    e60_emiss AS dtempenho,
-                    ' '::char as codorgaorespcontrato,
-                    case when ac16_sequencial is null then null else (
-                      SELECT CASE WHEN o41_subunidade != 0 OR NOT NULL THEN lpad(
-                        (CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
-                        lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||
-                        lpad(o41_subunidade::integer,3,0) ELSE
-                        lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
-                        lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-                    END AS unidadesub
-                      FROM db_departorg
-                      JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
-                      JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
-                      JOIN orcorgao o ON o.o40_orgao = u.o41_orgao
-                      AND o.o40_anousu = u.o41_anousu
-                      WHERE db01_coddepto = ac16_deptoresponsavel AND db01_anousu = ac16_anousu LIMIT 1) END AS codunidadesubrespcontrato,
-                      case when ac16_sequencial is null then null else ac16_numeroacordo end as nrocontrato,
-                      case when ac16_sequencial is null then null else ac16_dataassinatura end as dataassinaturacontrato,
-                      case when ac16_sequencial is null then null else ac26_numeroaditamento end as nrosequencialtermoaditivo,
-                      CASE WHEN e60_numconvenio IS NULL THEN NULL ELSE
-                        (select c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS nroconvenio,
-                      CASE WHEN e60_convenio IS NULL THEN NULL ELSE
-                        (select c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS dataassinaturaconvenio,
-                      NULL as si106_nroconvenioconge,
-                      NULL as si106_dataassinaturaconvenioconge
+            si09_codorgaotce AS codorgao,
+            lpad((CASE WHEN orcorgao.o40_codtri = '0' OR NULL THEN orcorgao.o40_orgao::varchar ELSE orcorgao.o40_codtri END),2,0)||lpad(
+            (CASE WHEN orcunidade.o41_codtri = '0' OR NULL THEN orcunidade.o41_unidade::varchar ELSE orcunidade.o41_codtri END),3,0)||(
+            CASE WHEN orcunidade.o41_subunidade = '0' OR NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) AS codunidadesub,
+            e60_codemp AS nroempenho,
+            e60_emiss AS dtempenho,
+            ' '::char as codorgaorespcontrato,
+            case when ac16_sequencial is null then null else (
+            SELECT CASE WHEN o41_subunidade != 0 OR NOT NULL THEN lpad(
+            (CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
+            lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||
+            lpad(o41_subunidade::integer,3,0) ELSE
+            lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||
+            lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+            END AS unidadesub
+            FROM db_departorg
+            JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
+            JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
+            JOIN orcorgao o ON o.o40_orgao = u.o41_orgao
+            AND o.o40_anousu = u.o41_anousu
+            WHERE db01_coddepto = ac16_deptoresponsavel AND db01_anousu = ac16_anousu LIMIT 1) END AS codunidadesubrespcontrato,
+            case when ac16_sequencial is null then null else ac16_numeroacordo end as nrocontrato,
+            case when ac16_sequencial is null then null else ac16_dataassinatura end as dataassinaturacontrato,
+            case when ac16_sequencial is null then null else ac26_numeroaditamento end as nrosequencialtermoaditivo,
+            CASE WHEN e60_numconvenio IS NULL THEN NULL ELSE
+            (select c206_nroconvenio FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS nroconvenio,
+            CASE WHEN e60_convenio IS NULL THEN NULL ELSE
+            (select c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS dataassinaturaconvenio,
+            NULL as si106_nroconvenioconge,
+            NULL as si106_dataassinaturaconvenioconge
             
             FROM empempenho
             JOIN orcdotacao ON e60_coddot = o58_coddot
@@ -638,61 +651,61 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
             LEFT JOIN empempaut ON e61_numemp = e60_numemp
             LEFT JOIN empautoriza ON e61_autori = e60_numemp
-  
+
             LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
             LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
             LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
             LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
             LEFT JOIN acordo on ac26_acordo = ac16_sequencial
-                      and ac16_acordosituacao = 4          
+            and ac16_acordosituacao = 4          
             WHERE  e60_numemp = ".db_utils::fieldsMemory($rsEmpenhoContrato30, $jCont)->e60_numemp.";";
-  
+
             $rsRegistro30 = db_query($sSql);
-  
+
             for ($kCont = 0; $kCont < pg_num_rows($rsRegistro30); $kCont++) {
-  
+
               $oEmpenho30 = db_utils::fieldsMemory($rsRegistro30, $kCont);
-  
+
               /**
               * dados do registro 30
               */
               $oDadosEmpenho30 = new cl_emp302019();
-  
+
               $oDadosEmpenho30->si206_tiporegistro = $oEmpenho30->tiporegistro; // campo 1
               $oDadosEmpenho30->si206_codorgao = $oEmpenho30->codorgao; //campo 2
               $oDadosEmpenho30->si206_codunidadesub = $oEmpenho30->codunidadesub; // campo 3
               $oDadosEmpenho30->si206_nroempenho = $oEmpenho30->nroempenho; // campo 4
               $oDadosEmpenho30->si206_dtempenho = $oEmpenho30->dtempenho; // campo 5
-  
+
               $oDadosEmpenho30->si206_codorgaorespcontrato = $oEmpenho30->codorgaorespcontrato; // campo 18
               $oDadosEmpenho30->si206_codunidadesubrespcontrato = $oEmpenho30->codunidadesubrespcontrato; // campo 19
               $oDadosEmpenho30->si206_nrocontrato = $oEmpenho30->nrocontrato; // campo 20
               $oDadosEmpenho30->si206_dtassinaturacontrato = $oEmpenho30->dataassinaturacontrato; // campo 21
               $oDadosEmpenho30->si206_nrosequencialtermoaditivo = $oEmpenho30->nrosequencialtermoaditivo; // campo 22
-  
+
               $oDadosEmpenho30->si206_nroconvenio = $oEmpenho30->nroconvenio; // campo 24
               $oDadosEmpenho30->si206_dtassinaturaconvenio = $oEmpenho30->dataassinaturaconvenio; // campo 25
               $oDadosEmpenho30->si206_nroconvenioconge = ''; // campo 27
               $oDadosEmpenho30->si206_dtassinaturaconge = ''; // campo 28
               $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
               $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
-  
+
               $oDadosEmpenho30->incluir();
-            }
           }
-  
-          if ($oDadosEmpenho30->erro_status == 0) {
-            throw new Exception($oDadosEmpenho30->erro_msg);
-          }
+      }
 
-        }
-
-        
-      db_fim_transacao();
-
-      $oGerarEMP = new GerarEMP();
-      $oGerarEMP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $oGerarEMP->gerarDados();
-
+      if ($oDadosEmpenho30->erro_status == 0) {
+        throw new Exception($oDadosEmpenho30->erro_msg);
     }
+
+}
+
+
+db_fim_transacao();
+
+$oGerarEMP = new GerarEMP();
+$oGerarEMP->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+$oGerarEMP->gerarDados();
+
+}
 }

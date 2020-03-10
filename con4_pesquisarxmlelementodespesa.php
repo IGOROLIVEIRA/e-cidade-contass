@@ -71,6 +71,7 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 		$oValores->elementoEcidade = $oRow->getAttribute("elementoEcidade");
 		$oValores->elementoSicom   = $oRow->getAttribute("elementoSicom");
 		$oValores->instituicao   = $oRow->getAttribute("instituicao");
+		$oValores->deParaDesdobramento   = $oRow->getAttribute("deParaDesdobramento") == '' ? '' : ($oRow->getAttribute("deParaDesdobramento") == 1 ? 'Sim' : 'Nao');
 		$aValores[] = $oValores;
 	  if ($iCont == $oDados->length-1) {
 			break;

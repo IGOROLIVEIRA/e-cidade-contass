@@ -84,7 +84,7 @@ $clrotulo->label("o15_codigo");
                     </tr>
                     <tr>
                         <td colspan="2" align="center">Dados Mensais</td>
-                        <td>Inclusão de Programas</td>
+                        <!-- <td>Inclusão de Programas</td> -->
                         <td>Arquivos Gerados</td>
                     </tr>
                     <tr>
@@ -262,7 +262,7 @@ $clrotulo->label("o15_codigo");
 
                         </td>
 
-                        <td style="border: 2px groove white; padding-right:10px;" valign="top">
+                        <!-- <td style="border: 2px groove white; padding-right:10px;" valign="top">
 
                             <input type="checkbox" value="IdentificacaoRemessa" id="IdentificacaoRemessa" />
                             <label for="IdentificacaoRemessa">IDE - Identificação da Remessa</label><br>
@@ -273,7 +273,7 @@ $clrotulo->label("o15_codigo");
                             <input type="checkbox" value="AcoesMetasAnuais" id="AcoesMetasAnuais" />
                             <label for="AcoesMetasAnuais">Ações e Metas Anuais</label><br>
 
-                        </td>
+                        </td> -->
 
                         <td style="border: 2px groove white;" valign="top">
                             <div id='retorno'

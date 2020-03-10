@@ -9,14 +9,14 @@ require_once("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
 include("classes/db_disponibilidadecaixa_classe.php");
 
-$cldisponibilidadecaixa = new cl_disponibilidadecaixa();
+db_postmemory($HTTP_POST_VARS);
 
-$recurso = $HTTP_POST_VARS;
+if ($incluir) {
+    db_inicio_transacao();
+    $sqlerro = false;
+    foreach ($aFonte as $fonte){
 
-//echo "<pre>";
-foreach ($recurso as $item){
-
-    foreach ($item as $fonte) {
+        $cldisponibilidadecaixa = new cl_disponibilidadecaixa();
 
         $cldisponibilidadecaixa->c224_fonte = $fonte['fonte'];
         $cldisponibilidadecaixa->c224_vlrcaixabruta = $fonte['vlr_dispCaixaBruta'];
@@ -26,17 +26,19 @@ foreach ($recurso as $item){
         $cldisponibilidadecaixa->c224_vlrdisponibilidadecaixa = $fonte['vlr_DispCaixa'];
         $cldisponibilidadecaixa->c224_anousu = db_getsession("DB_anousu");
         $cldisponibilidadecaixa->c224_instit = db_getsession("DB_instit");
-        $result = $cldisponibilidadecaixa->sql_record($cldisponibilidadecaixa->sql_query(null,"c224_fonte",null," c224_fonte = {$fonte['fonte']}"));
-        db_fieldsmemory($result,0)->c224_fonte;
-        if($c224_fonte == null){
+        $result = $cldisponibilidadecaixa->sql_record($cldisponibilidadecaixa->sql_query(null,"c224_fonte",null," c224_fonte = {$fonte['fonte']} and c224_anousu = {$cldisponibilidadecaixa->c224_anousu} and c224_instit = {$cldisponibilidadecaixa->c224_instit}"));
+        
+        if(pg_num_rows($result) == 0){
             $cldisponibilidadecaixa->incluir();
         }else{
             $cldisponibilidadecaixa->alterar(null);
         }
-
+        if ($cldisponibilidadecaixa->erro_status == 0) {
+            $sqlerro = true;
+        }
     }
+    db_fim_transacao($sqlerro);
 }
-
 //if ($cldisponibilidadecaixa->erro_status != 1) {
 //    throw new Exception(
 //        db_msgbox($cldisponibilidadecaixa->erro_msg),

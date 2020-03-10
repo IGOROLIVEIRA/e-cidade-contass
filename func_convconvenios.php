@@ -43,15 +43,19 @@ $clconvconvenios = new cl_convconvenios;
            $campos = "convconvenios.oid,convconvenios.*";
            }
         }
-	       $sql = $clconvconvenios->sql_query();
+        if($iFonte!=null && $iFonte!="") {
+            $sql = $clconvconvenios->sql_query("", "c206_sequencial, c206_instit, c206_nroconvenio, c206_dataassinatura, regexp_replace(c206_objetoconvenio, '[\r|\n]+', '', '') c206_objetoconvenio, c206_datainiciovigencia, c206_datafinalvigencia, c206_vlconvenio, c206_vlcontrapartida, c206_datacadastro, c206_tipocadastro ", "", " c206_tipocadastro = {$iFonte} or c206_tipocadastro = null or c206_tipocadastro = 0 ");
+        } else {
+            $sql = $clconvconvenios->sql_query();
+        }
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-           $result = $clconvconvenios->sql_record($clconvconvenios->sql_query($pesquisa_chave));
+           $result = $clconvconvenios->sql_record($clconvconvenios->sql_query($pesquisa_chave, "regexp_replace(c206_objetoconvenio, '[\r|\n]+', '', '') c206_objetoconvenio, c206_tipocadastro"));
           if($clconvconvenios->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$c206_objetoconvenio',false);</script>";
+            echo "<script>".$funcao_js."('$c206_objetoconvenio',false, '$c206_tipocadastro');</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

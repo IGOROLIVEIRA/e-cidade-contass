@@ -13,7 +13,7 @@ $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $clvinculopcaspmsc->excluir($c210_pcaspestrut,$c210_mscestrut);
+  $clvinculopcaspmsc->excluir($c210_pcaspestrut,$c210_mscestrut,$c210_anousu);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){//
    $db_opcao = 3;

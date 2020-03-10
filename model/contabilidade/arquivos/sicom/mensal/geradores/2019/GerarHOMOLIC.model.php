@@ -16,21 +16,24 @@ class GerarHOMOLIC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "HOMOLIC";
     $this->abreArquivo();
-    
+
     $sSql = "select * from homolic102019 where si63_mes = " . $this->iMes . " and si63_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC10 = db_query($sSql);
 
     $sSql2 = "select * from homolic202019 where si64_mes = " . $this->iMes . " and si64_instit=" . db_getsession("DB_instit");
     $rsHOMOLIC20 = db_query($sSql2);
 
-    $sSql3 = "select * from homolic402019 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
-    $rsHOMOLIC40 = db_query($sSql3);
+    $sSql3 = "select * from homolic302019 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+    $rsHOMOLIC30 = db_query($sSql3);
+
+    $sSql4 = "select * from homolic402019 where si65_mes = " . $this->iMes . " and si65_instit=" . db_getsession("DB_instit");
+    $rsHOMOLIC40 = db_query($sSql4);
 
     if (pg_num_rows($rsHOMOLIC10) == 0 && pg_num_rows($rsHOMOLIC20) == 0 && pg_num_rows($rsHOMOLIC40) == 0) {
 
@@ -83,8 +86,33 @@ class GerarHOMOLIC extends GerarAM
         $aCSVHOMOLIC20['si64_nrolote']                = substr($aHOMOLIC20['si64_nrolote'], 0, 4);
         $aCSVHOMOLIC20['si64_coditem']                = substr($aHOMOLIC20['si64_coditem'], 0, 15);
         $aCSVHOMOLIC20['si64_percdesconto']           = $this->sicomNumberReal($aHOMOLIC20['si64_percdesconto'], 2);
-        
+
         $this->sLinha = $aCSVHOMOLIC20;
+        $this->adicionaLinha();
+
+      }
+
+      /**
+       *
+       * Registros 30
+       */
+
+      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsHOMOLIC30); $iCont3++) {
+
+        $aHOMOLIC30 = pg_fetch_array($rsHOMOLIC30, $iCont3);
+
+        $aCSVHOMOLIC30['si65_tiporegistro']           = $this->padLeftZero($aHOMOLIC30['si65_tiporegistro'], 2);
+        $aCSVHOMOLIC30['si65_codorgao']               = $this->padLeftZero($aHOMOLIC30['si65_codorgao'], 2);
+        $aCSVHOMOLIC30['si65_codunidadesub']          = $this->padLeftZero($aHOMOLIC30['si65_codunidadesub'], 5);
+        $aCSVHOMOLIC30['si65_exerciciolicitacao']     = $this->padLeftZero($aHOMOLIC30['si65_exerciciolicitacao'], 4);
+        $aCSVHOMOLIC30['si65_nroprocessolicitatorio'] = substr($aHOMOLIC30['si65_nroprocessolicitatorio'], 0, 12);
+        $aCSVHOMOLIC30['si65_tipodocumento']          = $this->padLeftZero($aHOMOLIC30['si65_tipodocumento'], 1);
+        $aCSVHOMOLIC30['si65_nrodocumento']           = substr($aHOMOLIC30['si65_nrodocumento'], 0, 14);
+        $aCSVHOMOLIC30['si65_nrolote']                = substr($aHOMOLIC30['si65_nrolote'], 0, 4);
+        $aCSVHOMOLIC30['si65_coditem']                = substr($aHOMOLIC30['si65_coditem'], 0, 15);
+        $aCSVHOMOLIC30['si65_perctaxaadm']           = $this->sicomNumberReal($aHOMOLIC30['si65_perctaxaadm'], 2);
+
+        $this->sLinha = $aCSVHOMOLIC30;
         $this->adicionaLinha();
 
       }
@@ -93,9 +121,9 @@ class GerarHOMOLIC extends GerarAM
        *
        * Registros 40
        */
-      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsHOMOLIC40); $iCont3++) {
+      for ($iCont4 = 0; $iCont4 < pg_num_rows($rsHOMOLIC40); $iCont4++) {
 
-        $aHOMOLIC40 = pg_fetch_array($rsHOMOLIC40, $iCont3);
+        $aHOMOLIC40 = pg_fetch_array($rsHOMOLIC40, $iCont4);
 
         $aCSVHOMOLIC40['si65_tiporegistro']           = $this->padLeftZero($aHOMOLIC40['si65_tiporegistro'], 2);
         $aCSVHOMOLIC40['si65_codorgao']               = $this->padLeftZero($aHOMOLIC40['si65_codorgao'], 2);
@@ -104,7 +132,7 @@ class GerarHOMOLIC extends GerarAM
         $aCSVHOMOLIC40['si65_nroprocessolicitatorio'] = substr($aHOMOLIC40['si65_nroprocessolicitatorio'], 0, 12);
         $aCSVHOMOLIC40['si65_dthomologacao']          = $this->sicomDate($aHOMOLIC40['si65_dthomologacao']);
         $aCSVHOMOLIC40['si65_dtadjudicacao']          = $this->sicomDate($aHOMOLIC40['si65_dtadjudicacao']);
-        
+
         $this->sLinha = $aCSVHOMOLIC40;
         $this->adicionaLinha();
 
@@ -113,6 +141,5 @@ class GerarHOMOLIC extends GerarAM
       $this->fechaArquivo();
 
     }
-
   }
 }

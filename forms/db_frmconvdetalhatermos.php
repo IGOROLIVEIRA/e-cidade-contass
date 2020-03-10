@@ -41,7 +41,7 @@ db_input('c208_sequencial',12,$Ic208_sequencial,true,'text',3,"")
   </tr>
   <tr>
     <td nowrap title="Número Aditivo">
-       <strong> Número Aditivo <strong>
+       <strong> Número Aditivo: <strong>
     </td>
     <td> 
 <?
@@ -49,6 +49,16 @@ db_input('c208_nroseqtermo',2,$Ic208_nroseqtermo,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="<?=@$Tc208_datacadastro?>">
+            <?=@$Lc208_datacadastro?>
+        </td>
+        <td>
+            <?
+            db_inputdata('c208_datacadastro',@$c208_datacadastro_dia,@$c208_datacadastro_mes,@$c208_datacadastro_ano,true,'text',$db_opcao,"")
+            ?>
+        </td>
+    </tr>
   <tr>
     <td nowrap title="<?=@$Tc208_dscalteracao?>">
        <?=@$Lc208_dscalteracao?>
@@ -59,6 +69,39 @@ db_textarea('c208_dscalteracao', 6, 50,'',true,"text",$db_opcao,"","","",500);
 ?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="<?=@$Tc208_tipotermoaditivo?>">
+            <?=@$Lc208_tipotermoaditivo?>
+        </td>
+        <td>
+            <?
+            $aTpTermoAtivo = array(
+                    '' => 'Selecione',
+                    '01' => '01 - Acréscimo',
+                    '02' => '02 - Supressão',
+                    '03' => '03 - Alteração da Vigência',
+                    '04' => '04 - Ampliação do Objeto',
+                    '05' => '05 - Indicação de Crédito',
+                    '06' => '06 - Alteração de Responsável do Concedente',
+                    '07' => '07 - Exclusão de Dados Orçamentários',
+                    '08' => '08 - Inclusão de Dados Orçamentários',
+                    '09' => '09 - Alteração de Executor',
+                    '99' => '99 - Outros'
+            );
+            db_select("c208_tipotermoaditivo", $aTpTermoAtivo, true, $db_opcao, 'onchange="js_changeTipo(this.value)"');
+            ?>
+        </td>
+    </tr>
+    <tr id="dsctipotermoaditivo" <?= $c208_tipotermoaditivo == 99 ? '' : 'style="display: none;"' ?>>
+        <td nowrap title="<?=@$Tc208_dsctipotermoaditivo?>">
+            <?=@$Lc208_dsctipotermoaditivo?>
+        </td>
+        <td>
+            <?
+            db_textarea('c208_dsctipotermoaditivo', 6, 50,'',true,"text",$db_opcao,"","","",250);
+            ?>
+        </td>
+    </tr>
   <tr>
     <td nowrap title="<?=@$Tc208_dataassinaturatermoaditivo?>">
        <?=@$Lc208_dataassinaturatermoaditivo?>
@@ -135,5 +178,15 @@ function js_cancelar(){
   opcao.setAttribute("value","true");
   document.form1.appendChild(opcao);
   document.form1.submit();
+}
+
+function js_changeTipo(c208_tipotermoaditivo) {
+    var dsctipotermoaditivo = document.getElementById('dsctipotermoaditivo');
+    if (c208_tipotermoaditivo == 99) {
+        dsctipotermoaditivo.style.display = "table-row";
+    } else {
+        dsctipotermoaditivo.style.display = "none";
+        c208_dsctipotermoaditivo.value = '';
+    }
 }
 </script>

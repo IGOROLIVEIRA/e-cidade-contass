@@ -18,10 +18,12 @@ class cl_natdespmsc {
   // cria variaveis do arquivo 
   public $c212_natdespestrut = null; 
   public $c212_mscestrut = null; 
-  // cria propriedade com as variaveis do arquivo 
+  public $c212_anousu = null;
+  // cria propriedade com as variaveis do arquivo
   public $campos = "
                  c212_natdespestrut = varchar(8) = E-Cidade 
                  c212_mscestrut = varchar(8) = MSC 
+                 c212_anousu = int4 = Ano
                  ";
 
   //funcao construtor da classe 
@@ -46,12 +48,13 @@ class cl_natdespmsc {
     if ($exclusao==false) {
        $this->c212_natdespestrut = ($this->c212_natdespestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c212_natdespestrut"]:$this->c212_natdespestrut);
        $this->c212_mscestrut = ($this->c212_mscestrut == ""?@$GLOBALS["HTTP_POST_VARS"]["c212_mscestrut"]:$this->c212_mscestrut);
+        $this->c212_anousu = ($this->c212_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c212_anousu"]:$this->c212_anousu);
      } else {
      }
    }
 
   // funcao para inclusao
-  function incluir ($c212_natdespestrut, $c212_mscestrut) { 
+  function incluir ($c212_natdespestrut, $c212_mscestrut, $c212_anousu) {
     $this->atualizacampos();
     $this->c212_natdespestrut = $c212_natdespestrut; 
     $this->c212_mscestrut = $c212_mscestrut; 
@@ -74,10 +77,12 @@ class cl_natdespmsc {
      $sql = "insert into natdespmsc(
                                        c212_natdespestrut 
                                       ,c212_mscestrut 
+                                      ,c212_anousu
                        )
                 values (
                                 '$this->c212_natdespestrut' 
                                ,'$this->c212_mscestrut' 
+                               ,'$this->c212_anousu'
                       )";
      $result = db_query($sql); 
      if ($result==false) { 
@@ -174,7 +179,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao 
-  function excluir ($c212_natdespestrut=null,$c212_mscestrut=null,$dbwhere=null) { 
+  function excluir ($c212_natdespestrut=null,$c212_mscestrut=null,$c212_anousu=null,$dbwhere=null) {
 
     $sql = " delete from natdespmsc
                    where ";
@@ -191,6 +196,12 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
            $sql2 .= " and ";
          }
          $sql2 .= " c212_mscestrut = '$c212_mscestrut' ";
+       }
+       if ($c212_anousu != "") {
+           if ($sql2 != "") {
+               $sql2 .= " and ";
+           }
+           $sql2 .= " c212_anousu = '$c212_anousu' ";
        }
     } else {
       $sql2 = $dbwhere;

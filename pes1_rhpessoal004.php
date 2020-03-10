@@ -243,6 +243,7 @@ if (isset($incluir)) {
         $clrhdepend->rh31_depend = $rh31_depend;
         $clrhdepend->rh31_irf = $rh31_irf;
         $clrhdepend->rh31_especi = $rh31_especi;
+        $clrhdepend->rh31_cpf = $rh31_cpf;
         $clrhdepend->incluir(null);
         if ($clrhdepend->erro_status == 0) {
           

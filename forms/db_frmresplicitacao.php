@@ -28,6 +28,7 @@
 //MODULO: licitação
 include("dbforms/db_classesgenericas.php");
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
+$clliclicita2   = new cl_liclicita;
 $clliccomissaocgm->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("l30_codigo");
@@ -99,8 +100,10 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
 <?
 $result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
 
-$clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
-
+$clliclicita2->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+$sSql = $clliclicita2->sql_query('', 'l20_naturezaobjeto', '', "l20_codigo = $l31_licitacao limit 1");
+$rsSql = $clliclicita2->sql_record($sSql);
+$natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
 $bDispenca = false;
 if($clliclicita->numrows > 0) {
 
@@ -111,6 +114,9 @@ if($clliclicita->numrows > 0) {
 	', '5' => 'Publicação em órgão oficial
 	', '6' => 'Parecer Jurídico
 	', '7' => 'Parecer (outros)');
+    if($natureza_objeto == 1 || $natureza_objeto == 7){
+        $x['10'] = 'Orçamento da obra ou serviço';
+    }
     db_select('l31_tipo', $x, true, $db_opcao, "");
     $bDispenca = true;
 
@@ -140,6 +146,9 @@ if($clliclicita->numrows > 0) {
 	', '6' => 'Homologação
 	', '7' => 'Adjudicação
 	', '8' => 'Publicação em órgão Oficial');
+		if($natureza_objeto == 1 || $natureza_objeto == 7){
+			$x['10'] = 'Orçamento da obra ou serviço';
+		}
         db_select('l31_tipo', $x, true, $db_opcao, "");
     }
 }
@@ -166,13 +175,14 @@ if($clliclicita->numrows > 0) {
 
          $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome ,
    case
-   when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento de dispensa ou inexigibilidade'
-   when l31_tipo::varchar = '2' then '2-Cotação de preços'
-   when l31_tipo::varchar = '3' then '3-Informação de existência de recursos orçamentários'
-   when l31_tipo::varchar = '4' then '4-Ratificação'
-   when l31_tipo::varchar = '5' then '5-Publicação em órgão oficial'
-   when l31_tipo::varchar = '6' then '6-Parecer Jurídico'
-   when l31_tipo::varchar = '7' then '7-Parecer (outros)'
+   when l31_tipo::varchar = '1' then '01-Autorização para abertura do procedimento de dispensa ou inexigibilidade'
+   when l31_tipo::varchar = '2' then '02-Cotação de preços'
+   when l31_tipo::varchar = '3' then '03-Informação de existência de recursos orçamentários'
+   when l31_tipo::varchar = '4' then '04-Ratificação'
+   when l31_tipo::varchar = '5' then '05-Publicação em órgão oficial'
+   when l31_tipo::varchar = '6' then '06-Parecer Jurídico'
+   when l31_tipo::varchar = '7' then '07-Parecer (outros)'
+   when l31_tipo::varchar = '10' then '10-Orçamento da obra ou serviço'
    end as l31_tipo
    ", null, "l31_licitacao=$l31_licitacao");
 
@@ -182,15 +192,16 @@ if($clliclicita->numrows > 0) {
 
              $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome,
                case
-               when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
-               when l31_tipo::varchar = '2' then '2-Emissão do edital'
-               when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
-               when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
-               when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
-               when l31_tipo::varchar = '6' then '6-Homologação'
-               when l31_tipo::varchar = '7' then '7-Adjudicação'
-               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
-               when l31_tipo::varchar = '9' then '9-Avaliação de Bens'
+               when l31_tipo::varchar = '1' then '01-Autorização para abertura do procedimento licitatório'
+               when l31_tipo::varchar = '2' then '02-Emissão do edital'
+               when l31_tipo::varchar = '3' then '03-Pesquisa de preços'
+               when l31_tipo::varchar = '4' then '04-Informação de existência de recursos orçamentários'
+               when l31_tipo::varchar = '5' then '05-Condução do procedimento licitatório'
+               when l31_tipo::varchar = '6' then '06-Homologação'
+               when l31_tipo::varchar = '7' then '07-Adjudicação'
+               when l31_tipo::varchar = '8' then '08-Publicação em órgão Oficial'
+               when l31_tipo::varchar = '9' then '09-Avaliação de Bens'
+               when l31_tipo::varchar = '10' then '10-Orçamento da obra ou serviço'
                end as l31_tipo
                ", null, "l31_licitacao=$l31_licitacao");
 
@@ -198,14 +209,15 @@ if($clliclicita->numrows > 0) {
 
              $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome,
                case
-               when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
-               when l31_tipo::varchar = '2' then '2-Emissão do edital'
-               when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
-               when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
-               when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
-               when l31_tipo::varchar = '6' then '6-Homologação'
-               when l31_tipo::varchar = '7' then '7-Adjudicação'
-               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
+               when l31_tipo::varchar = '1' then '01-Autorização para abertura do procedimento licitatório'
+               when l31_tipo::varchar = '2' then '02-Emissão do edital'
+               when l31_tipo::varchar = '3' then '03-Pesquisa de preços'
+               when l31_tipo::varchar = '4' then '04-Informação de existência de recursos orçamentários'
+               when l31_tipo::varchar = '5' then '05-Condução do procedimento licitatório'
+               when l31_tipo::varchar = '6' then '06-Homologação'
+               when l31_tipo::varchar = '7' then '07-Adjudicação'
+               when l31_tipo::varchar = '8' then '08-Publicação em órgão Oficial'
+               when l31_tipo::varchar = '10' then '10-Orçamento da obra ou serviço'
                end as l31_tipo
                ", null, "l31_licitacao=$l31_licitacao");
 

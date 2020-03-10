@@ -121,27 +121,23 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
         if($oDados->o57_fonte == "410000000000000"){
             $fTotalarrecadado+=$oDados->saldo_arrecadado;
         }
-        if($oDados->o57_fonte == "490000000000000"){
+        if($oDados->o57_fonte == "470000000000000"){
             $fTotalarrecadado+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102907000000"){
+        if($oDados->o57_fonte == "491000000000000"){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102909000000"){
+        if($oDados->o57_fonte == "495000000000000"){
             $fCSICRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102911000000"){
+        if($oDados->o57_fonte == "470000000000000"){
             $fCPRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102917000000"){
-            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
-        }
-
-        if($oDados->o57_fonte == "412102918000000"){
+        if($oDados->o57_fonte == "419900300000000"){
             $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
         }
 
@@ -149,32 +145,132 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
             $fRRCPPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "419221000000000"){
+        if($oDados->o57_fonte == "417180800000000"){
             $fCFRP+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412100421000000"){
+        if($oDados->o57_fonte == "492000000000000"){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "493000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "496000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "498000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "499000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180100000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180200000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100421000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100422000000"){
-            $fCSACRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100423000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100424000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100431000000"){
-            $fCSICRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100432000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100433000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100434000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100441000000"){
-            $fCPRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100442000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100443000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100444000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100461000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
+        if($oDados->o57_fonte == "412100462000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100463000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100464000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
         if($oDados->o57_fonte == "412100471000000"){
-            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100472000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100473000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100474000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100481000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100482000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100483000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100484000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100481000000"){
@@ -193,71 +289,147 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
         if($oDados->o57_fonte == "410000000000000"){
             $fTotalarrecadado+=$oDados->saldo_arrecadado;
         }
-        if($oDados->o57_fonte == "490000000000000"){
+        if($oDados->o57_fonte == "470000000000000"){
             $fTotalarrecadado+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412100421000000"){
+        if($oDados->o57_fonte == "491000000000000"){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "492000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "493000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "496000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "498000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "499000000000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "495000000000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "470000000000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180100000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412180200000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100421000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100422000000"){
-            $fCSACRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180111000000"){
-            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100423000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180211000000"){
-            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100424000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100431000000"){
-            $fCSICRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180121000000"){
-            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100432000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180221000000"){
-            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100433000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100434000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100441000000"){
-            $fCPRPPS+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180131000000"){
-            $fCPRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100442000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180231000000"){
-            $fCPRPPS+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100443000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100444000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100461000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180141000000"){
+        if($oDados->o57_fonte == "412100462000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180241000000"){
+        if($oDados->o57_fonte == "412100463000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100464000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
         if($oDados->o57_fonte == "412100471000000"){
-            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180151000000"){
-            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        if($oDados->o57_fonte == "412100472000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412180251000000"){
+        if($oDados->o57_fonte == "412100473000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100474000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100481000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100482000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100483000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412100484000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "419900300000000"){
             $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
         }
 
@@ -273,15 +445,7 @@ function getDespesasReceitas($iInstituicoes,$dtini,$dtfim){
             $fRRCPPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "419900311000000"){
-            $fCFRP+=$oDados->saldo_arrecadado;
-        }
-
-        if($oDados->o57_fonte == "419900311010000"){
-            $fCFRP+=$oDados->saldo_arrecadado;
-        }
-
-        if($oDados->o57_fonte == "419900311020000"){
+        if($oDados->o57_fonte == "417180800000000"){
             $fCFRP+=$oDados->saldo_arrecadado;
         }
 
@@ -457,6 +621,25 @@ ob_start();
                 ?>
                 <tr style='height:19px;'>
                     <td class="s3 bdleft" colspan="2">
+
+                        <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                    </td>
+                    <td class="s5">
+                        <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <tr style='height:19px;'>
+                <td class="s3 bdleft" colspan="2">3.3.00.00.00 - OUTRAS DESPESAS CORRENTES</td>
+                <td class="s4"></td>
+            </tr>
+            <?php $aDespesas2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3339034%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+            foreach ($aDespesas2 as $oDespesa) :
+                $fTotalLiquidado += $oDespesa->liquidado;
+            ?>
+
+                <tr style='height:19px;'>
+                    <td class="s3 bdleft" colspan="2">
                         <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
                     </td>
                     <td class="s5">
@@ -486,10 +669,11 @@ ob_start();
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
-                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                        $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331900101%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"103, 203", "");
+                        $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331900301%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"103, 203", "");
+                        $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331900501%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"103, 203", "");
+                        $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331900502%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"103, 203", "");
+                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado + $aSaldoEstrut4[0]->liquidado;
                     }
 
                 }
@@ -502,7 +686,14 @@ ob_start();
             <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
             <td class="s5">
                 <?php
-                $fSaldoSentencasJudAnt = getValorManual($codigorelatorio, 2, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
+                $fSaldoSentencasJudAnt = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    $aSaldoEstrut1 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319091%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
+                    $aSaldoEstrut2 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319191%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
+                    $aSaldoEstrut3 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319691%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2,3");
+                    $fSaldoSentencasJudAnt += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                }
                 echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt, "f");
                 ?>
             </td>
@@ -515,8 +706,10 @@ ob_start();
                 $fSaldoDespesasAnteriores = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
-                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319092%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->liquidado;
+                    $aSaldoEstrut1 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319092%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2");
+                    $aSaldoEstrut2 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319192%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2");
+                    $aSaldoEstrut3 = getSaldoDespesaSentenca(null, "e60_numemp, o58_elemento, o56_descr, sum(liquidado) as liquidado", null, "o58_elemento like '3319692%' and o58_instit = {$oInstit->getCodigo()} and e60_datasentenca < '{$dtini}' group by 1,2");
+                    $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                 }
                 echo db_formatar($fSaldoDespesasAnteriores, "f");
                 ?>
@@ -531,10 +724,13 @@ ob_start();
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
                     if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA || $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_CAMARA) {
-                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
+                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $fSaldo1 = ($aSaldoEstrut1[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut1[0]->o58_anousu <= 2018) ? $aSaldoEstrut1[0]->liquidado : 0;
+                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $fSaldo2 = ($aSaldoEstrut2[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut2[0]->o58_anousu <= 2018) ? $aSaldoEstrut2[0]->liquidado : 0;
+                        $aSaldoEstrut3 = getSaldoDespesa(null, "o58_anousu, o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319005%' and o58_instit = {$oInstit->getCodigo()} and o58_codigo not in (103, 203) group by 1,2,3");
+                        $fSaldo3 = ($aSaldoEstrut3[0]->o58_anousu == substr($dtini, 0, 4) && $aSaldoEstrut3[0]->o58_anousu <= 2018) ? $aSaldoEstrut3[0]->liquidado : 0;
+                        $fSaldoAposentadoriaPensoesTesouro += $fSaldo1 + $fSaldo2 + $fSaldo3;
                     }
                 }
                 echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
@@ -549,12 +745,13 @@ ob_start();
                 $fSaldoIndenizacaoDemissaoServidores = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
-                    //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    $aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
-                    //}
+                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331919403%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado + $aSaldoEstrut4[0]->liquidado + $aSaldoEstrut5[0]->liquidado + $aSaldoEstrut6[0]->liquidado;
                 }
                 echo db_formatar($fSaldoIndenizacaoDemissaoServidores, "f");
                 ?>
@@ -567,13 +764,10 @@ ob_start();
                 $fSaldoIncentivosDemissaoVoluntaria = 0;
                 foreach ($aInstits as $iInstit) {
                     $oInstit = new Instituicao($iInstit);
-                    //if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                    //$aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319094%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    //$aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319194%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                    //$aSaldoEstrut3 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319694%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-
-                    //$fSaldoIncentivosDemissaoVoluntaria += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
-                    //}
+                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909402%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331919402%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331969402%'",array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim,"", "");
+                    $fSaldoIncentivosDemissaoVoluntaria += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado + $aSaldoEstrut3[0]->liquidado;
                 }
                 echo db_formatar($fSaldoIncentivosDemissaoVoluntaria, "f");
                 ?>
@@ -617,27 +811,27 @@ ob_start();
                       </tr>
                     -->
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
+            <td class="s3 bdleft" colspan="2">(-) Deduções da Receita Corrente (Exceto FUNDEB)</td>
             <td class="s5">
                 <?php
 
-                echo db_formatar($fCSACRPPS, "f");
+                echo db_formatar(abs($fCSACRPPS), "f");
                 ?>
             </td>
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Inativo Civil para o Regime Próprio</td>
+            <td class="s3 bdleft" colspan="2">(-) Deduções de Receita para formação do FUNDEB</td>
             <td class="s5">
                 <?php
 
-                echo db_formatar($fCSICRPPS, "f");
+                echo db_formatar(abs($fCSICRPPS), "f");
                 ?>
             </td>
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Contribuição do Pensionista Civil para o Regime Próprio</td>
+            <td class="s3 bdleft" colspan="2">(-) Receitas Corrente Intraorçamentária</td>
             <td class="s5">
                 <?php
                 echo db_formatar($fCPRPPS, "f");
@@ -646,8 +840,7 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.Contrib.Servidor Ativo Civil oriunda do
-                Pagto.Sent.Judiciais
+            <td class="s3 bdleft" colspan="2">(-) Contribuição dos Servidores para o Sistema Próprio de Previdência
             </td>
             <td class="s5">
                 <?php
@@ -658,8 +851,7 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.Contrib.Servidor Inativo Civil oriunda do
-                Pagto.Sent.Judiciais
+            <td class="s3 bdleft" colspan="2">(-) Compensação entre Regimes de Previdência
             </td>
             <td class="s5">
                 <?php
@@ -670,16 +862,17 @@ ob_start();
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Rec.da Contrib.Pensionista sob Pagto.Sent.Judiciais</td>
+            <td class="s3 bdleft" colspan="2"><b>RECEITA CORRENTE LÍQUIDA</b></td>
             <td class="s5">
                 <?php
-                echo db_formatar($fRRCPPSJ, "f");
+                $fRecCorrLiq = $fTotalReceitasArrecadadas - abs($fCSACRPPS) - abs($fCSICRPPS) - $fCPRPPS - $fRRCSACOPSJ - $fRRCSICOPSJ;
+                echo db_formatar($fRecCorrLiq, "f");
                 ?>
             </td>
         </tr>
 
         <tr style='height:19px;'>
-            <td class="s3 bdleft" colspan="2">(-) Comp.Financ.entre o RGPS e os RPPS</td>
+            <td class="s3 bdleft" colspan="2">(-) Transferências Advindas de Emendas Parlamentares (Art. 166, §13 da CF)</td>
             <td class="s5">
                 <?php
                 echo db_formatar($fCFRP, "f");
@@ -720,10 +913,10 @@ ob_start();
         <?php } ?>
 
         <tr style='height:20px;'>
-            <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
+            <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA AJUSTADA = BASE DE CÁLCULO</td>
             <td class="s8">
                 <?php
-                $fRCLBase = $fRCL - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
+                $fRCLBase = $fRecCorrLiq - $fCFRP;
                 echo db_formatar($fRCLBase, "f");
                 ?>
             </td>

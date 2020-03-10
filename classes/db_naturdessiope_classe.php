@@ -18,11 +18,13 @@ class cl_naturdessiope {
     // cria variaveis do arquivo
     public $c222_natdespecidade = null;
     public $c222_natdespsiope = null;
+    public $c222_previdencia = null;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  c222_natdespecidade = varchar(11) = E-Cidade
                  c222_natdespsiope = varchar(11) = Siope
                  c222_anousu = int4 = Ano
+                 c222_previdencia = bool = Previdência
                  ";
 
     //funcao construtor da classe
@@ -48,15 +50,17 @@ class cl_naturdessiope {
             $this->c222_natdespecidade = ($this->c222_natdespecidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespecidade"]:$this->c222_natdespecidade);
             $this->c222_natdespsiope = ($this->c222_natdespsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespsiope"]:$this->c222_natdespsiope);
             $this->c222_anousu = ($this->c222_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_anousu"]:$this->c222_anousu);
+            $this->c222_previdencia = ($this->c222_previdencia == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_previdencia"]:$this->c222_previdencia);
         } else {
             $this->c222_natdespecidade = ($this->c222_natdespecidade == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespecidade"]:$this->c222_natdespecidade);
             $this->c222_natdespsiope = ($this->c222_natdespsiope == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_natdespsiope"]:$this->c222_natdespsiope);
             $this->c222_anousu = ($this->c222_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_anousu"]:$this->c222_anousu);
+            $this->c222_previdencia = ($this->c222_previdencia == ""?@$GLOBALS["HTTP_POST_VARS"]["c222_previdencia"]:$this->c222_previdencia);
         }
     }
 
     // funcao para inclusao
-    function incluir ($c222_natdespecidade,$c222_natdespsiope, $c222_anousu) {
+    function incluir ($c222_natdespecidade,$c222_natdespsiope, $c222_anousu, $c222_previdencia) {
         $this->atualizacampos();
         $this->c222_natdespecidade = $c222_natdespecidade;
         $this->c222_natdespsiope = $c222_natdespsiope;
@@ -80,11 +84,13 @@ class cl_naturdessiope {
                                        c222_natdespecidade
                                       ,c222_natdespsiope
                                       ,c222_anousu
+                                      ,c222_previdencia
                        )
                 values (
                                 '$this->c222_natdespecidade'
                                ,'$this->c222_natdespsiope'
                                ,'$this->c222_anousu'
+                               ,'$this->c222_previdencia'
                       )";
         $result = db_query($sql);
         if ($result==false) {
@@ -115,7 +121,7 @@ class cl_naturdessiope {
     }
 
     // funcao para alteracao
-    function alterar ($c222_natdespecidade=null,$c222_natdespsiope=null) {
+    function alterar ($c222_natdespecidade=null,$c222_natdespsiope=null,$c222_previdencia) {
         $this->atualizacampos();
         $sql = " update naturdessiope set ";
         $virgula = "";
@@ -145,7 +151,20 @@ class cl_naturdessiope {
                 return false;
             }
         }
-        $sql .= " c222_anousu = ".$this->c222_anousu." ";
+        if (trim($this->c222_previdencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c222_previdencia"])) {
+            $sql  .= $virgula." c222_previdencia = '$this->c222_previdencia' ";
+            $virgula = ",";
+            if (trim($this->c222_previdencia) == null ) {
+                $this->erro_sql = " Campo Previdência não informado.";
+                $this->erro_campo = "c222_previdencia";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        $sql .= " , c222_anousu = ".$this->c222_anousu." ";
         $sql .= " where ";
         if ($c222_natdespecidade!=null) {
             $sql .= " c222_natdespecidade = '$this->c222_natdespecidade'";
@@ -361,7 +380,7 @@ class cl_naturdessiope {
         return $sql;
     }
 
-    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="", $c222_anousu="",$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_siope ( $c222_natdespecidade=null, $c222_natdespsiope="", $c222_anousu="", $c222_previdencia="",$campos="*",$ordem=null,$dbwhere="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -395,6 +414,14 @@ class cl_naturdessiope {
                     $sql2 .= " where ";
                 }
                 $sql2 .= " naturdessiope.c222_anousu = '$c222_anousu' ";
+            }
+            if ($c222_previdencia!=null) {
+                if ($sql2!="") {
+                    $sql2 .= " and ";
+                } else {
+                    $sql2 .= " where ";
+                }
+                $sql2 .= " naturdessiope.c222_previdencia = '$c222_previdencia' ";
             }
 
         } else if ($dbwhere != "") {

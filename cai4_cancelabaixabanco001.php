@@ -66,11 +66,8 @@ if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == Instituica
            <td>
             <?php
 
-           	 $aTipos = array("1" => "Excluir arquivo de retorno", "2" => "Cancelar classificação");
-             if (!USE_PCASP) {
-             	 $aTipos = array("1" => "Excluir arquivo de retorno", "2" => "Cancelar classificação", "3" => "Excluir Autenticação");
-             }
-             db_select("tipo", $aTipos, true, 1, "onchange=js_tipoprocessamento()");
+            $aTipos = array("1" => "Excluir arquivo de retorno", "2" => "Cancelar classificação", "3" => "Excluir Autenticação");
+            db_select("tipo", $aTipos, true, 1, "onchange=js_tipoprocessamento()");
             ?>
            </td>
          </tr>
@@ -181,53 +178,46 @@ if (db_getsession("DB_id_usuario") == 1 || ( $oConfig->db21_codcli == Instituica
 
  function js_retornoValida(oAjax) {
 
-	 js_removeObj("msgBox");
-   var oRetorno = eval("("+oAjax.responseText+")");
+     js_removeObj("msgBox");
 
-   if (oRetorno.boletim_processado != "") {
+     var oRetorno = eval("("+oAjax.responseText+")");
 
-	   <?php if (!USE_PCASP) { ?>
+     if (oRetorno.boletim_processado != "") {
 
-	        alert("Arquivo Autenticado e com boletim processado!\nPara prosseguir com a operação estorne o processamento do Boletim da Tesouraria.\nData do Boletim: "+js_formatar(oRetorno.boletim_processado,'d'));
-	        return false;
-	   <?php  } else { ?>
+         alert("Arquivo Autenticado e com boletim processado!\\nOperação não permitida!");
+         return false;
+     } else if(oRetorno.boletim_liberado != "") {
 
-	   	    alert("Arquivo Autenticado e com boletim processado!\\nOperação não permitida!");
-	   	    return false;
-     <?php  } ?>
-
-   } else if(oRetorno.boletim_liberado != "") {
-     alert("Arquivo Autenticado e com boletim liberado!\nPara prosseguir com a operação cancele a liberação do Boletim da Tesouraria.\nData da Liberação: "+js_formatar(oRetorno.boletim_liberado,'d'));
-	   return false;
-   }
-
-   if (oRetorno.arqautent != ""){
-	   <?php if (!USE_PCASP) { ?>
-
-          if (!confirm("Arquivo Autenticado!\nDeseja continuar o processamento da operação e excluir a autenticação ?")){
-            return false;
-          }
-	   <?php } else { ?>
-
-	      	alert("Arquivo Autenticado!\nNão é possível realizar a operação!");
-	      	return false;
-	   <?php } ?>
-   }
-
-   if (oRetorno.arqsimples != "") {
-
-     if (!confirm("Arquivo de retorno do Simples Nacional!\nDeseja continuar o processamento da operação e cancelar o processamento do arquivo ?")){
-       return false;
+         alert("Arquivo Autenticado e com boletim liberado!\nPara prosseguir com a operação cancele a liberação do Boletim da Tesouraria.\nData da Liberação: "+js_formatar(oRetorno.boletim_liberado,'d'));
+         return false;
      }
-   }
 
-   if (oRetorno.arquivo_retencao != "" && $F('tipo') == 1) {
+     if (oRetorno.arqsimples != "") {
 
-     alert("Arquivo de retorno de Retenção!\nNão é possível realizar a operação!");
-     return false;
-   }
+         if (!confirm("Arquivo de retorno do Simples Nacional!\nDeseja continuar o processamento da operação e cancelar o processamento do arquivo ?")){
+             return false;
+         }
+     }
 
-   js_processa();
+     if (oRetorno.arqautent != ""){
+
+         if (!confirm("Arquivo Autenticado!\nDeseja continuar o processamento da operação e excluir as autenticações na tesouraria e lançamentos contábeis vinculados a este ?")){
+             return false;
+         }else{
+
+             if (!confirm("Este procedimento não poderá ser revertido após processado!\nSe estiver ciente dos impactos da confirmação dessa operação e se os dados informados estão corretos clique em 'OK'!")){
+                 return false;
+             }
+         }
+     }
+
+     if (oRetorno.arquivo_retencao != "" && $F('tipo') == 1) {
+
+         alert("Arquivo de retorno de Retenção!\nNão é possível realizar a operação!");
+         return false;
+     }
+
+     js_processa();
  }
 
  function js_processa() {

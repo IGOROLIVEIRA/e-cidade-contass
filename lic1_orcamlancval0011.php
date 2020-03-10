@@ -133,7 +133,9 @@ function js_verquant(nome,val,max,param){
     }
     if(verpos==1){
       vltot = new Number(valpos*val);
-      //eval("document.form1.valor_"+param+".value='"+vltot.toFixed(2)+"'");
+      /*
+       *    Função js_roundDecimal() substituída pela toFixed() 
+       */
       eval("document.form1.valor_"+param+".value='"+js_roundDecimal(vltot,2)+"'");
     }else if(verpos==2){
       vltot = new Number(valpos/val);
@@ -168,16 +170,12 @@ function js_calcvaltot(valor,param,nome){
     if(valor==""){
       valor = 0;
     }
-    /**
-     * @todo
-     * Alterar arredondamento
-    **/
+    /*
+     *    Função js_roundDecimal() substituída pela toFixed() 
+     */
+      document.getElementById("valor_"+param).value = js_roundDecimal(valortotal,2);
 
-    //eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
-    //eval("document.form1."+nome+".value='"+valor.toFixed(<?=$numdec?>)+"'");
-    //document.getElementById("valor_"+param).value = valortotal.toFixed(2);
-    document.getElementById("valor_"+param).value = js_roundDecimal(valortotal,2);
-    if(valortotal==0){
+      if(valortotal==0){
       eval("document.form1."+nome+".value='0.00'");
     }
   }else{

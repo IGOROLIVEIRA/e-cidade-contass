@@ -9,7 +9,7 @@ require_once("classes/db_aoc142019_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2019/GerarAOC.model.php");
 
 /**
- * AlteraÃ§Ãµes OrÃ§amentÃ¡rias Sicom Acompanhamento Mensal
+ * Alterações Orçamentárias Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
  */
@@ -171,13 +171,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
      where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
         $rsResult10 = db_query($sSql);
-        //db_criatabela($rsResult10);
+
         $sSqlPrefeitura = "select * from infocomplementaresinstit where  si09_instit =" . db_getsession("DB_instit") . " and si09_tipoinstit = 2";
         $rsPrefeitura = db_query($sSqlPrefeitura);
-        //db_criatabela($rsPrefeitura);
-        //$sSql     = "select * from orcprojetolei where o138_altpercsuplementacao = 2 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
-        //$rsResultLei = db_query($sSql);
-        // && pg_num_rows($rsResultLei) > 0
 
         if (pg_num_rows($rsPrefeitura) > 0) {
 
@@ -203,29 +199,30 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 /**
                  * registro 11
                  */
-                $sSql = "select '11' as tiporegistro,
-       o46_codlei as codreduzidodecreto,
-       o39_numero as nrodecreto ,
-       (case when o46_tiposup in (1002,1003,1004,1005,1006,1007,1008,1009,1010) then 2
-       when o46_tiposup = 1001 then 1
-       when o46_tiposup = 1012 then 6
-       when o46_tiposup = 1013 then 7
-       when o46_tiposup = 1016 then 8
-       when o46_tiposup = 1014 then 9
-       when o46_tiposup = 1015 then 10
-       when o46_tiposup = 1017 then 5
-             when o46_tiposup = 1011 then 4 end
-       ) as tipoDecretoAlteracao,
-       sum(o47_valor) as valorAberto
-     from orcsuplem
-     join orcsuplemval  on o47_codsup = o46_codsup
-     join orcprojeto    on o46_codlei = o39_codproj
-     join orcsuplemtipo on o46_tiposup =  o48_tiposup
-     join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
-    where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
-    group by o46_codlei, o39_numero,o46_tiposup";
+                $sSql = "SELECT '11' AS tiporegistro,
+                                 o46_codlei AS codreduzidodecreto,
+                                 o39_numero AS nrodecreto,
+                                 (CASE
+                                      WHEN o46_tiposup IN (1002, 1004, 1005, 1006, 1007, 1008, 1009, 1010) THEN 2
+                                      WHEN o46_tiposup IN (1001, 1003) THEN 1
+                                      WHEN o46_tiposup = 1012 THEN 6
+                                      WHEN o46_tiposup = 1013 THEN 7
+                                      WHEN o46_tiposup = 1016 THEN 8
+                                      WHEN o46_tiposup = 1014 THEN 9
+                                      WHEN o46_tiposup = 1015 THEN 10
+                                      WHEN o46_tiposup = 1017 THEN 5
+                                      WHEN o46_tiposup = 1011 THEN 4
+                                  END ) AS tipoDecretoAlteracao,
+                                 sum(o47_valor) AS valorAberto
+                         FROM orcsuplem
+                         JOIN orcsuplemval ON o47_codsup = o46_codsup
+                         JOIN orcprojeto ON o46_codlei = o39_codproj
+                         JOIN orcsuplemtipo ON o46_tiposup = o48_tiposup
+                         JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                         WHERE o47_valor > 0
+                           AND o46_codlei IN ({$oDados10->codigovinc})
+                         GROUP BY o46_codlei, o39_numero, o46_tiposup";
                 $rsResult11 = db_query($sSql);
-                //db_criatabela($rsResult11);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
@@ -275,8 +272,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     where o39_codproj in ({$oDados10->codigovinc})";
 
                 }
-
-
                 $rsResult12 = db_query($sSql);
                 //db_criatabela($rsResult12);echo $sSql;
 
@@ -365,65 +360,83 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                  * registro 14
                  */
                 $sSql = "SELECT DISTINCT o46_codsup,
-                        CASE
-                            WHEN o47_valor > 0 THEN 14
-                            WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006) THEN 15
-                        END AS tipoRegistro,
-                        o46_codlei AS codReduzidoDecreto,
-                        (CASE
-                             WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
-                             WHEN o46_tiposup = 1002 THEN 4
-                             WHEN o46_tiposup = 1003 THEN 1
-                             WHEN o46_tiposup IN (1004, 1005, 1007, 1008, 1009, 1010) THEN 2
-                             ELSE 98
-                         END) AS tipoDecretoAlteracao,
-                        si09_codorgaotce AS codOrgao,
-                        substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
-                        o47_codsup,
-                        CASE
-                            WHEN o41_subunidade != 0
-                                 OR NOT NULL THEN lpad((CASE
-                                                            WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
-                                                            ELSE o40_codtri
-                                                        END),2,0)||lpad((CASE
-                                                                             WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
-                                                                             ELSE o41_codtri
-                                                                         END),3,0)||lpad(o41_subunidade::integer,3,0)
-                            ELSE lpad((CASE
-                                           WHEN o40_codtri = '0'
-                                                OR NULL THEN o40_orgao::varchar
-                                           ELSE o40_codtri
-                                       END),2,0)||lpad((CASE
-                                                            WHEN o41_codtri = '0'
-                                                                 OR NULL THEN o41_unidade::varchar
-                                                            ELSE o41_codtri
-                                                        END),3,0)
-                        END AS codunidadesub,
-                        o58_funcao AS codFuncao,
-                        o58_subfuncao AS codSubFuncao,
-                        o58_programa AS codPrograma,
-                        o58_projativ AS idAcao,
-                        ' ' AS idSubAcao,
-                        substr(o56_elemento,2,6) AS naturezaDespesa,
-                        o15_codtri AS codFontRecursos,
-                        abs(o47_valor) AS vlacrescimoreducao,
-                        o41_subunidade AS subunidade
-                FROM orcsuplemval
-                JOIN orcsuplem ON o47_codsup = o46_codsup
-                JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
-                JOIN orcelemento ON (o58_codele, o58_anousu) = (o56_codele, o56_anousu)
-                JOIN orctiporec ON o58_codigo = o15_codigo
-                JOIN db_config ON o58_instit = codigo
-                JOIN orcunidade ON (orcdotacao.o58_orgao, orcdotacao.o58_unidade, orcdotacao.o58_anousu) = (orcunidade.o41_orgao, orcunidade.o41_unidade, orcunidade.o41_anousu)
-                JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
-                JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
-                LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
-                WHERE o46_codlei IN ({$oDados10->codigovinc})
-                ORDER BY o46_codsup";
+                                CASE
+                                    WHEN o47_valor > 0 THEN 14
+                                    WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006) THEN 15
+                                END AS tipoRegistro,
+                                o46_codlei AS codReduzidoDecreto,
+                                CASE
+                                   WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
+                                   WHEN o46_tiposup = 1002 THEN 4
+                                   WHEN o46_tiposup = 1003 THEN 1
+                                   WHEN o46_tiposup IN (1004, 1005, 1007, 1008, 1009, 1010) THEN 2
+                                   ELSE 98
+                                 END AS tipoDecretoAlteracao,
+                                si09_codorgaotce AS codOrgao,
+                                substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
+                                o47_codsup,
+                                CASE
+                                    WHEN o41_subunidade != 0
+                                         OR NOT NULL THEN lpad((CASE
+                                                                    WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+                                                                    ELSE o40_codtri
+                                                                END),2,0)||lpad((CASE
+                                                                                     WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+                                                                                     ELSE o41_codtri
+                                                                                 END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    ELSE lpad((CASE
+                                                   WHEN o40_codtri = '0'
+                                                        OR NULL THEN o40_orgao::varchar
+                                                   ELSE o40_codtri
+                                               END),2,0)||lpad((CASE
+                                                                    WHEN o41_codtri = '0'
+                                                                         OR NULL THEN o41_unidade::varchar
+                                                                    ELSE o41_codtri
+                                                                END),3,0)
+                                END AS codunidadesub,
+                                o58_funcao AS codFuncao,
+                                o58_subfuncao AS codSubFuncao,
+                                o58_programa AS codPrograma,
+                                o58_projativ AS idAcao,
+                                ' ' AS idSubAcao,
+                                substr(o56_elemento,2,6) AS naturezaDespesa,
+                                o15_codtri AS codFontRecursos,
+                                abs(o47_valor) AS vlacrescimoreducao,
+                                o41_subunidade AS subunidade
+                         FROM orcsuplemval
+                         JOIN orcsuplem ON o47_codsup = o46_codsup
+                         JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
+                         JOIN orcelemento ON (o58_codele, o58_anousu) = (o56_codele, o56_anousu)
+                         JOIN orctiporec ON o58_codigo = o15_codigo
+                         JOIN db_config ON o58_instit = codigo
+                         JOIN orcunidade ON (orcdotacao.o58_orgao, orcdotacao.o58_unidade, orcdotacao.o58_anousu) = (orcunidade.o41_orgao, orcunidade.o41_unidade, orcunidade.o41_anousu)
+                         JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
+                         JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                         LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                         WHERE o46_codlei IN ({$oDados10->codigovinc})
+                         ORDER BY o46_codsup";
 
                 $rsResult = db_query($sSql);
-                //echo $sSql;
-                //db_criatabela($rsResult);
+
+                $rsResult14 = db_query("
+                            SELECT tiporegistro,
+                                   codreduzidodecreto,
+                                   tipodecretoalteracao,
+                                   codorgao,
+                                   codunidadesub,
+                                   codfuncao,
+                                   codsubfuncao,
+                                   codprograma,
+                                   idacao,
+                                   idsubacao,
+                                   naturezadespesa,
+                                   codfontrecursos,
+                                   sum(vlacrescimoreducao) vlacrescimoreducao,
+                                   subunidade
+                            FROM
+                            ($sSql) reg14
+                            GROUP BY codorgao, codunidadesub, codfuncao, codsubfuncao, codprograma, idacao, idsubacao, tiporegistro, codreduzidodecreto, 
+                                     tipodecretoalteracao, naturezadespesa, codfontrecursos, subunidade");
 
                 $aDadosAgrupados14 = array();
                 $aDadosAgrupados15 = array();
@@ -433,70 +446,106 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $oDadosSql14 = db_utils::fieldsMemory($rsResult, $iCont14);
 
-                    $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorigem . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
-                    $sHash .= $oDadosSql14->codsubfuncao . $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
+                    if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98){
 
-                    if ($oDadosSql14->tiporegistro == 14) {
-                        $aCodOrigem[$oDadosSql14->o47_codsup][14][] = $sHash;
+                        $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorigem . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
+                        $sHash .= $oDadosSql14->codsubfuncao . $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
 
-                        if (!isset($aDadosAgrupados14[$sHash])) {
+                        if ($oDadosSql14->tiporegistro == 14) {
+                            $aCodOrigem[$oDadosSql14->o47_codsup][14][] = $sHash;
 
-                            $oDados14 = new stdClass();
-                            $oDados14->si42_tiporegistro = 14;
-                            $oDados14->si42_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
-                            $oDados14->si42_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
-                            $oDados14->si42_codorigem = $oDadosSql14->codorigem;
-                            $oDados14->si42_codorgao = $oDadosSql14->codorgao;
-                            $oDados14->si42_codunidadesub = $oDadosSql14->codunidadesub;
-                            $oDados14->si42_codfuncao = $oDadosSql14->codfuncao;
-                            $oDados14->si42_codsubfuncao = $oDadosSql14->codsubfuncao;
-                            $oDados14->si42_codprograma = $oDadosSql14->codprograma;
-                            $oDados14->si42_idacao = $oDadosSql14->idacao;
-                            $oDados14->si42_idsubacao = $oDadosSql14->idsubacao;
-                            $oDados14->si42_naturezadespesa = $oDadosSql14->naturezadespesa;
-                            $oDados14->si42_codfontrecursos = $oDadosSql14->codfontrecursos;
-                            $oDados14->si42_vlacrescimo = $oDadosSql14->vlacrescimoreducao;
-                            $oDados14->si42_codsup = $oDadosSql14->o47_codsup;
-                            $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                            $oDados14->si42_reg10 = $claoc10->si38_sequencial;
-                            $oDados14->si42_instit = db_getsession("DB_instit");
-                            $aDadosAgrupados14[$sHash] = $oDados14;
+                            if (!isset($aDadosAgrupados14[$sHash])) {
 
-                        } else {
+                                $oDados14 = new stdClass();
+                                $oDados14->si42_tiporegistro = 14;
+                                $oDados14->si42_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
+                                $oDados14->si42_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
+                                $oDados14->si42_codorigem = $oDadosSql14->codorigem;
+                                $oDados14->si42_codorgao = $oDadosSql14->codorgao;
+                                $oDados14->si42_codunidadesub = $oDadosSql14->codunidadesub;
+                                $oDados14->si42_codfuncao = $oDadosSql14->codfuncao;
+                                $oDados14->si42_codsubfuncao = $oDadosSql14->codsubfuncao;
+                                $oDados14->si42_codprograma = $oDadosSql14->codprograma;
+                                $oDados14->si42_idacao = $oDadosSql14->idacao;
+                                $oDados14->si42_idsubacao = $oDadosSql14->idsubacao;
+                                $oDados14->si42_naturezadespesa = $oDadosSql14->naturezadespesa;
+                                $oDados14->si42_codfontrecursos = $oDadosSql14->codfontrecursos;
+                                $oDados14->si42_vlacrescimo = $oDadosSql14->vlacrescimoreducao;
+                                $oDados14->si42_codsup = $oDadosSql14->o47_codsup;
+                                $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $oDados14->si42_reg10 = $claoc10->si38_sequencial;
+                                $oDados14->si42_instit = db_getsession("DB_instit");
+                                $aDadosAgrupados14[$sHash] = $oDados14;
 
-                            $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
-                        }
+                            } else {
 
-                    } else {
-                        $aCodOrigem[$oDadosSql14->o47_codsup][15][] = $sHash;
-
-                        if (!isset($aDadosAgrupados15[$sHash])) {
-
-                            $oDados15 = new stdClass();
-                            $oDados15->si194_tiporegistro = 15;
-                            $oDados15->si194_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
-                            $oDados15->si194_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
-                            $oDados15->si194_codorigem = $oDadosSql14->codorigem;
-                            $oDados15->si194_codorgao = $oDadosSql14->codorgao;
-                            $oDados15->si194_codunidadesub = $oDadosSql14->codunidadesub;
-                            $oDados15->si194_codfuncao = $oDadosSql14->codfuncao;
-                            $oDados15->si194_codsubfuncao = $oDadosSql14->codsubfuncao;
-                            $oDados15->si194_codprograma = $oDadosSql14->codprograma;
-                            $oDados15->si194_idacao = $oDadosSql14->idacao;
-                            $oDados15->si194_idsubacao = $oDadosSql14->idsubacao;
-                            $oDados15->si194_naturezadespesa = $oDadosSql14->naturezadespesa;
-                            $oDados15->si194_codfontrecursos = $oDadosSql14->codfontrecursos;
-                            $oDados15->si194_vlreducao = $oDadosSql14->vlacrescimoreducao;
-                            $oDados15->si194_codsup = $oDadosSql14->o47_codsup;
-                            $oDados15->si194_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                            $oDados15->si194_reg10 = $claoc10->si38_sequencial;
-                            $oDados15->si194_instit = db_getsession("DB_instit");
-                            $aDadosAgrupados15[$sHash] = $oDados15;
+                                $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
+                            }
 
                         } else {
+                            $aCodOrigem[$oDadosSql14->o47_codsup][15][] = $sHash;
 
-                            $aDadosAgrupados15[$sHash]->si194_vlreducao += $oDadosSql14->vlreduz;
+                            if (!isset($aDadosAgrupados15[$sHash])) {
+
+                                $oDados15 = new stdClass();
+                                $oDados15->si194_tiporegistro = 15;
+                                $oDados15->si194_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
+                                $oDados15->si194_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
+                                $oDados15->si194_codorigem = $oDadosSql14->codorigem;
+                                $oDados15->si194_codorgao = $oDadosSql14->codorgao;
+                                $oDados15->si194_codunidadesub = $oDadosSql14->codunidadesub;
+                                $oDados15->si194_codfuncao = $oDadosSql14->codfuncao;
+                                $oDados15->si194_codsubfuncao = $oDadosSql14->codsubfuncao;
+                                $oDados15->si194_codprograma = $oDadosSql14->codprograma;
+                                $oDados15->si194_idacao = $oDadosSql14->idacao;
+                                $oDados15->si194_idsubacao = $oDadosSql14->idsubacao;
+                                $oDados15->si194_naturezadespesa = $oDadosSql14->naturezadespesa;
+                                $oDados15->si194_codfontrecursos = $oDadosSql14->codfontrecursos;
+                                $oDados15->si194_vlreducao = $oDadosSql14->vlacrescimoreducao;
+                                $oDados15->si194_codsup = $oDadosSql14->o47_codsup;
+                                $oDados15->si194_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $oDados15->si194_reg10 = $claoc10->si38_sequencial;
+                                $oDados15->si194_instit = db_getsession("DB_instit");
+                                $aDadosAgrupados15[$sHash] = $oDados15;
+
+                            } else {
+
+                                $aDadosAgrupados15[$sHash]->si194_vlreducao += $oDadosSql14->vlreduz;
+                            }
                         }
+                    }else{
+                      $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
+                      if (!empty($oDadosSql14Vlr->tipodecretoalteracao)){
+
+                        $sHash  = $oDadosSql14Vlr->codorgao . $oDadosSql14Vlr->codunidadesub . $oDadosSql14Vlr->codfuncao . $oDadosSql14Vlr->codsubfuncao;
+                        $sHash .= $oDadosSql14Vlr->codprograma . $oDadosSql14Vlr->idacao . $oDadosSql14Vlr->naturezadespesa . $oDadosSql14Vlr->codfontrecursos;
+
+                        if (!isset($aDadosAgrupados14[$sHash])){
+
+                          $oDados14 = new stdClass();
+                          $oDados14->si42_tiporegistro = 14;
+                          $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
+                          $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
+                          $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
+                          $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
+                          $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
+                          $oDados14->si42_codfuncao = $oDadosSql14Vlr->codfuncao;
+                          $oDados14->si42_codsubfuncao = $oDadosSql14Vlr->codsubfuncao;
+                          $oDados14->si42_codprograma = $oDadosSql14Vlr->codprograma;
+                          $oDados14->si42_idacao = $oDadosSql14Vlr->idacao;
+                          $oDados14->si42_idsubacao = $oDadosSql14Vlr->idsubacao;
+                          $oDados14->si42_naturezadespesa = $oDadosSql14Vlr->naturezadespesa;
+                          $oDados14->si42_codfontrecursos = $oDadosSql14Vlr->codfontrecursos;
+                          $oDados14->si42_vlacrescimo = $oDadosSql14Vlr->vlacrescimoreducao;
+                          $oDados14->si42_codsup = $oDadosSql14Vlr->o47_codsup;
+                          $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                          $oDados14->si42_reg10 = $claoc10->si38_sequencial;
+                          $oDados14->si42_instit = db_getsession("DB_instit");
+                          $aDadosAgrupados14[$sHash] = $oDados14;
+                        }else{
+                          $aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
+                        }
+                      }
                     }
                 }
 
@@ -532,8 +581,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     }
 
                     /**
-                     * 15 â€“ AlteraÃ§Ãµes OrÃ§amentÃ¡rias de ReduÃ§Ã£o
-                     * Novo Registro Inserido a partir de 2019, conforme layout VersÃ£o 8.0_2019
+                     * 15 ? Alterações Orçamentárias de Redução
+                     * Novo Registro Inserido a partir de 2019, conforme layout Versão 8.0_2019
                      *
                      */
 
@@ -582,7 +631,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         $claoc14->si42_idsubacao = $oDadosReg14->si42_idsubacao;
                         $claoc14->si42_naturezadespesa = $oDadosReg14->si42_naturezadespesa;
                         $claoc14->si42_codfontrecursos = $oDadosReg14->si42_codfontrecursos;
-                        $claoc14->si42_vlacrescimo = $oDadosSql14->vlacrescimoreducao;
+                        $claoc14->si42_vlacrescimo = $oDadosReg14->si42_vlacrescimo;
                         $claoc14->si42_origemrecalteracao = $oDadosReg14->si42_origemrecalteracao;
                         $claoc14->si42_mes = $oDadosReg14->si42_mes;
                         $claoc14->si42_reg10 = $oDadosReg14->si42_reg10;

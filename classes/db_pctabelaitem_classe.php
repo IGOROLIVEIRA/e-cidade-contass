@@ -426,7 +426,7 @@ class cl_pctabelaitem {
      return $sql;
   }
 
-  function buscarItensTabela($sWhere) {
+  function buscarItensTabela($sWhere) { 
     $result = $this->sql_record($this->sql_query(null,"pc95_codmater,pc01_descrmater",null,$sWhere));
     $aItens = array();
     for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
@@ -439,5 +439,50 @@ class cl_pctabelaitem {
     }
     return $aItens;
   }
+
+  function buscarTabFonecVencedor($e54_autori, $z01_numcgm) {
+    
+    $sSQL = "
+      SELECT DISTINCT pctabela.pc94_sequencial,
+            pcmater.pc01_descrmater
+        FROM liclicitem
+        LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+        LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+        LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+        LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+        LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+        LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+        LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+        LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+        LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+        LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = pctabela.pc94_codmater
+        LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pctabela.pc94_codmater
+        INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+        AND orcelemento.o56_anousu = ".db_getsession("DB_anousu")."
+          WHERE l20_codigo =
+            (SELECT e54_codlicitacao
+            FROM empautoriza
+            WHERE e54_autori = $e54_autori)  
+            AND pc24_pontuacao = 1
+            AND z01_numcgm = $z01_numcgm
+              ORDER BY pc94_sequencial
+    ";
+
+    $rsResult = db_query($sSQL);
+
+    return db_utils::getCollectionByRecord($rsResult);
+    
+  } 
 }
 ?>

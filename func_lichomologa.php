@@ -31,15 +31,15 @@ $sWhereContratos = " and 1 = 1 ";
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tl20_codigo?>">
               <?=$Ll20_codigo?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("l20_codigo",10,$Il20_codigo,true,"text",4,"","chave_l20_codigo");
 		       ?>
@@ -57,11 +57,11 @@ $sWhereContratos = " and 1 = 1 ";
             </td>
             </tr>
 
-            <tr> 
+            <tr>
             <td width="4%" align="right" nowrap title="<?=$Tl20_numero?>">
               <?=$Ll20_numero?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("l20_numero",10,$Il20_numero,true,"text",4,"","chave_l20_numero");
 		       ?>
@@ -69,20 +69,20 @@ $sWhereContratos = " and 1 = 1 ";
           </tr>
            <tr>
 
-          <tr> 
+          <tr>
           <td width="4%" align="right" nowrap title="<?=$Tl03_descr?>">
               <?=$Ll03_descr?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 	        db_input("l03_descr",60,$Il03_descr,true,"text",4,"","chave_l03_descr");
                 db_input("param",10,"",false,"hidden",3);
 	      ?>
             </td>
-          </tr>          
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          </tr>
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
              </td>
@@ -91,8 +91,8 @@ $sWhereContratos = " and 1 = 1 ";
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       $and            = "and ";
       $dbwhere        = "";
@@ -104,19 +104,19 @@ $sWhereContratos = " and 1 = 1 ";
 
              $dbwhere .= "l20_licsituacao = $situacao and l200_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."'
              and l11_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."' and ";
-         
+
 			}
 			$sWhereModalidade = "";
-			
+
 			if (isset($iModalidadeLicitacao) && !empty($iModalidadeLicitacao)) {
 			  $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
 			}
 
       $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
 
-      
+
       if (isset($lContratos) && $lContratos == 1 ) {
-        
+
         $sWhereContratos .= " and ac24_sequencial is null ";
       }
 
@@ -127,12 +127,12 @@ $sWhereContratos = " and 1 = 1 ";
        */
 
       if ($validafornecedor == "1"){
-
           $whereHab = " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) ";
+          $whereHab .= "AND l03_pctipocompratribunal NOT IN (100,101,102,103)";
       }
-      
+
       if(!isset($pesquisa_chave)){
-        
+
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_liclicita.php")==true){
              include("funcoes/db_func_liclicita.php");
@@ -140,9 +140,9 @@ $sWhereContratos = " and 1 = 1 ";
            $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
            }
         }
-        
+
         $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-        
+
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
 	         $sql = $clliclicita->sql_queryContratosContass(null," " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -173,45 +173,45 @@ $sWhereContratos = " and 1 = 1 ";
 	      }
 
         db_lovrot($sql.' desc ',15,"()","",$funcao_js);
-        
-        
+
+
       } else {
-        
-        
+
+
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
-          
+
             if (isset($param) && trim($param) != ""){
-             
+
               $result = $clliclicitem->sql_record($clliclicitem->sql_query_inf($pesquisa_chave));
-              
+
               if ($clliclicitem->numrows!=0) {
-                
+
                 db_fieldsmemory($result,0);
                 /**
                  *
-                 * Adicionado o campo pc50_descr, removido o campo $l20_codigo e, coforme solicitado por Deborah@contass, 
+                 * Adicionado o campo pc50_descr, removido o campo $l20_codigo e, coforme solicitado por Deborah@contass,
                  * inserido a numeração da modalidade. linhas: 187 e 197.
                  *
                  */
-                
+
                 echo "<script>".$funcao_js."('$pc50_descr $l20_numero',false);</script>";
               }else{
   	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }
 	          } else {
                  $result = $clliclicita->sql_record($clliclicita->sql_queryContratosContass(null,"*",null,"l20_codigo = $pesquisa_chave $and $dbwhere $dbwhere_instit"));
-                 
+
                  if($clliclicita->numrows != 0){
-                   
+
                      db_fieldsmemory($result,0);
                      echo "<script>".$funcao_js."('$pc50_descr $l20_numero',false);</script>";
-                     
+
                  } else {
-                   
+
 	                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
                  }
 	         }
-	         
+
         } else {
 	       echo "<script>".$funcao_js."('',false);</script>";
         }

@@ -150,7 +150,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP30['si206_nroempenho']                    = substr($aEMP30['si206_nroempenho'], 0, 22);
         $aCSVEMP30['si206_dtempenho']                     = $this->sicomDate($aEMP30['si206_dtempenho']);
         $aCSVEMP30['si206_codorgaorespcontrato']          = $aEMP30['si206_codorgaorespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP30['si206_codorgaorespcontrato'], 2); // campo 18
-        $aCSVEMP30['si206_codunidadesubrespcontrato']     = $aEMP30['si206_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP10['si206_codunidadesubrespcontrato'], 5); // campo 19
+        $aCSVEMP30['si206_codunidadesubrespcontrato']     = $aEMP30['si206_codunidadesubrespcontrato'] == '' ? ' ' : $this->padLeftZero($aEMP30['si206_codunidadesubrespcontrato'], 5); // campo 19
         $aCSVEMP30['si206_nrocontrato']                   = $aEMP30['si206_nrocontrato'] == 0 ? ' ' : substr($aEMP30['si206_nrocontrato'], 0, 14); // campo 20
         $aCSVEMP30['si206_dtassinaturacontrato']          = $aEMP30['si206_dtassinaturacontrato'] == '' ? ' ' : $this->sicomDate($aEMP30['si206_dtassinaturacontrato']); // campo 21
         $aCSVEMP30['si206_nrosequencialtermoaditivo']     = $aEMP30['si206_nrosequencialtermoaditivo'] == '' ? ' ' : $this->padLeftZero($aEMP30['si206_nrosequencialtermoaditivo'], 2);  // campo 22

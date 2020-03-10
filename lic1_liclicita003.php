@@ -39,6 +39,9 @@ include("classes/db_pcorcamitemlic_classe.php");
 include("classes/db_liclicitemlote_classe.php");
 include("classes/db_liclicitemanu_classe.php");
 include("classes/db_liclicitasituacao_classe.php");
+include("classes/db_liclancedital_classe.php");
+include("classes/db_editaldocumento_classe.php");
+include("classes/db_obrasdadoscomplementares_classe.php");
 include("classes/db_cflicita_classe.php");
 include("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
@@ -56,6 +59,9 @@ $clliclicitasituacao = new cl_liclicitasituacao;
 $clcflicita          = new cl_cflicita;
 $clliclicitaproc     = new cl_liclicitaproc;
 $clliccomissaocgm    = new cl_liccomissaocgm;
+$clliclancedital     = new cl_liclancedital;
+$cleditaldocumentos  = new cl_editaldocumento;
+$clobrasdadoscompl   = new cl_obrasdadoscomplementares;
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -65,6 +71,30 @@ if(isset($excluir)){
 
   
   db_inicio_transacao();
+
+	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial');
+	$rsSql = $clliclicita->sql_record($sSql);
+	$status = db_utils::fieldsMemory($rsSql, 0)->l20_cadinicial;
+	$sqlerro = $status == 2 ? true : false;
+
+	if(!$sqlerro){
+	    $cleditaldocumentos->excluir('', 'l48_liclicita = '.$l20_codigo);
+		if ($cleditaldocumentos->erro_status == 0){
+        	$sqlerro  = true;
+			$erro_msg = $cleditaldocumentos->erro_msg;
+        }
+		$clobrasdadoscompl->excluir('', 'db150_liclicita = '.$l20_codigo);
+		if ($clobrasdadoscompl->erro_status == 0){
+			$sqlerro  = true;
+			$erro_msg = $clobrasdadoscompl->erro_msg;
+		}
+
+		$clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
+		if ($clliclancedital->erro_status == 0){
+			$sqlerro  = true;
+			$erro_msg = $clliclancedital->erro_msg;
+		}
+	}
 
   $clliclicitaweb->sql_record($clliclicitaweb->sql_query_file(null,"*",null,"l29_liclicita=$l20_codigo"));
 	if ($clliclicitaweb->numrows > 0){

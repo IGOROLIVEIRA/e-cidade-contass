@@ -330,6 +330,29 @@ function js_calcvaltaxa(valor,param,nome){
 
   }
 }
+
+function validaCaracteres(item, campo){
+  let valor_final = 0;
+  
+  if(item.includes('.')){
+    
+    let valor = item.split('.');
+    
+    if(valor[1].length > 4 ){
+      valor_final = valor[1].substr(0, 4);
+    }else valor_final = valor[1];
+
+    let numero_valido = valor[0]+'.'+valor_final;
+    
+    if(valor[1]){
+      eval("document.form1.vlrun_"+campo+".value='"+numero_valido+"'");
+    }
+
+  }
+
+  return;
+}
+
 /*FIM - OC3770*/
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -555,12 +578,12 @@ else {
     /*FIM - OC3770*/
         echo "
     <td align='center'  class='bordas_corp'>";
-      db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();'");
-      echo "
+          db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_tabela == 'f' && $pc01_taxa == 'f') ? 1 : 3,($pc80_criterioadjudicacao != 2) ? "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();'" : "onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltaxaun();'");
+          echo "
     </td>
     <td align='center'  class='bordas_corp' width='15%'>";
-    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
-echo"
+          db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange='js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);'");
+          echo"
       </td>
         </tr>";
 

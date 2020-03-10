@@ -63,7 +63,7 @@
               if (isset($oParam->iIntervaloInicial) && isset($oParam->iIntervaloFinal)) {
                 $sWhere .= " and {$sCampo} between {$oParam->iIntervaloInicial} and {$oParam->iIntervaloFinal}";
               } else if (isset($oParam->iIntervaloInicial)) {
-                $sWhere .= " and {$sCampo} >= $oParam->iIntervaloInicia";
+                $sWhere .= " and {$sCampo} >= $oParam->iIntervaloInicial";
               } else if (isset($oParam->iIntervaloFinal)) {
                 $sWhere .= " and {$sCampo} <= $oParam->iIntervaloFinal";
               }
@@ -106,6 +106,8 @@
           if (isset($oParam->sTipoReajuste)) {
             $sWhere .= " and rh01_reajusteparidade = '{$oParam->sTipoReajuste}'";
           }
+
+          $sWhere .= ' and rh05_recis IS NULL ';
 
           $oDaoRhPessoal = db_utils::getDao('rhpessoal');
           $sSqlRhPessoal = $oDaoRhPessoal->sql_query_cgmmov(null, "rh01_regist,z01_nome", 'z01_nome', $sWhere);

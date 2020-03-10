@@ -286,7 +286,7 @@ if ($modelo == 1) {
                 $pdf->cell(20, $alt, number_format($pc23_vlrun, $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
             }
 
-            $pdf->cell(20, $alt, number_format($pc23_valor,$oGet->quant_casas,',','.'), 1, 1, "R", 0);
+            $pdf->cell(20, $alt, number_format($pc23_valor,2,',','.'), 1, 1, "R", 0);
             $total_unit  += $pc23_vlrun;
             $total_percentualdesconto += $pc23_percentualdesconto;
             $total_percentualdescontotaxa += $pc23_perctaxadesctabela;
@@ -323,15 +323,15 @@ if ($modelo == 1) {
             }
 
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
-            if ($quant_casas == 2) {
+//            if ($quant_casas == 2) {
                 $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
                 $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
                 $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-            } else {
-                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
-                $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
-                $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-            }
+//            } else {
+//                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
+//                $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
+//                $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
+//            }
         }else{
             $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
 
@@ -339,15 +339,15 @@ if ($modelo == 1) {
             if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
                 $pdf->cell(20, $alt, "", 0, 0, "R", 0);
             } else {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, $oGet->quant_casas, ',', '.'), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 2, ',', '.'), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
 
-            if ($quant_casas == 2) {
-                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
-            } else {
-                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
-            }
+            //if ($quant_casas == 2) {
+                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, 2, ',', '.'), 0, 1, "R", 0);
+//            } else {
+//                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
+//            }
 
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
             if ($quant_casas == 2) {
@@ -392,15 +392,15 @@ if ($modelo == 1) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
         if($pc80_criterioadjudicacao == 1){
             $pdf->cell(224, $alt, $total_mediapercentualtaxa . "%", 0, 0, "R", 0);
-            $pdf->cell(40, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+            $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
         }else if($pc80_criterioadjudicacao == 2){
             $pdf->cell(224, $alt, $total_mediapercentual . "%", 0, 0, "R", 0);
-            $pdf->cell(40, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+            $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
         }else{
-            $pdf->cell(40, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+            $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
         }
     }else{
-        $pdf->cell(264, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+        $pdf->cell(264, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
     }
 
 } else if ($modelo == 2) {
@@ -751,21 +751,21 @@ ORDER BY pc11_seq";
     if ($quant_imp < $max_forne) {
 
         if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
-            $pdf->cell(110, $alt, "QUANT. TOTAL " . number_format($total_quant, $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+            $pdf->cell(110, $alt, "QUANT. TOTAL " . number_format($total_quant, 2,',','.'), 1, 0, "R", 0);
             $pdf->cell(88, $alt, "", 1, 1, "R", 0);
-            $pdf->cell(125, $alt, "SUBTOTAL GANHO " . number_format($arr_subtotganhoun [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
-            $pdf->cell(73, $alt, number_format($arr_subtotganhovlr [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 1, "R", 0);
+            $pdf->cell(125, $alt, "SUBTOTAL GANHO " . number_format($arr_subtotganhoun [$quant_imp], 2, ',', '.'), 1, 0, "R", 0);
+            $pdf->cell(73, $alt, number_format($arr_subtotganhovlr [$quant_imp], 2, ',', '.'), 1, 1, "R", 0);
 
-            $pdf->cell(125, $alt, "SUBTOTAL COTADO " . number_format($arr_subtotcotadoun [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
-            $pdf->cell(73, $alt, number_format($arr_subtotcotadovlr [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 1, "R", 0);
+            $pdf->cell(125, $alt, "SUBTOTAL COTADO " . number_format($arr_subtotcotadoun [$quant_imp], 2, ',', '.'), 1, 0, "R", 0);
+            $pdf->cell(73, $alt, number_format($arr_subtotcotadovlr [$quant_imp], 2, ',', '.'), 1, 1, "R", 0);
         }else {
-            $pdf->cell(110, $alt, "QUANT. TOTAL " . number_format($total_quant, $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+            $pdf->cell(110, $alt, "QUANT. TOTAL " . number_format($total_quant, 2,',','.'), 1, 0, "R", 0);
             $pdf->cell(85, $alt, "", 1, 1, "R", 0);
-            $pdf->cell(125, $alt, "SUBTOTAL GANHO " . number_format($arr_subtotganhoun [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
-            $pdf->cell(70, $alt, number_format($arr_subtotganhovlr [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 1, "R", 0);
+            $pdf->cell(125, $alt, "SUBTOTAL GANHO " . number_format($arr_subtotganhoun [$quant_imp], 2, ',', '.'), 1, 0, "R", 0);
+            $pdf->cell(70, $alt, number_format($arr_subtotganhovlr [$quant_imp], 2, ',', '.'), 1, 1, "R", 0);
 
-            $pdf->cell(125, $alt, "SUBTOTAL COTADO " . number_format($arr_subtotcotadoun [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
-            $pdf->cell(70, $alt, number_format($arr_subtotcotadovlr [$quant_imp], $oGet->quant_casas, ',', '.'), 1, 1, "R", 0);
+            $pdf->cell(125, $alt, "SUBTOTAL COTADO " . number_format($arr_subtotcotadoun [$quant_imp], 2, ',', '.'), 1, 0, "R", 0);
+            $pdf->cell(70, $alt, number_format($arr_subtotcotadovlr [$quant_imp], 2, ',', '.'), 1, 1, "R", 0);
         }
         $pdf->ln();
     }

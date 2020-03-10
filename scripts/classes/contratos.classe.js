@@ -16,7 +16,8 @@ contrato = function () {
         oParam.exec        = sFuncao;
         oParam.iContratado = $F('ac16_contratado');
         oParam.iContrato   = $F('ac16_sequencial');
-
+        oParam.iTipoOrigem = $F('ac16_tipoorigem');
+        oParam.credenciamento = $F('tipodispenca');
         js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
@@ -98,9 +99,9 @@ contrato = function () {
             return true;
         };
 
-        oGridDados.setCellWidth(new Array("5%", "5%", "60%", "10%", "10%", "10%"));
-        oGridDados.setCellAlign(new Array("right", "right", "left", "right", "right", "right"));
-        oGridDados.setHeader(new Array("Código","Número", "Objeto", "Número do Exercício", "CGM", "Data da Inclusão"));
+        oGridDados.setCellWidth(new Array("5%", "5%", "60%", "10%", "10%"));
+        oGridDados.setCellAlign(new Array("right", "right", "left", "right", "right"));
+        oGridDados.setHeader(new Array("Código","Número", "Objeto", "Número do Exercício", "Data da Inclusão"));
         oGridDados.show($('cntDados'));
 
 
@@ -124,8 +125,7 @@ contrato = function () {
                     aLinha[1]  = oDados.itens[i].numero;
                     aLinha[2]  = oDados.itens[i].objeto.urlDecode();
                     aLinha[3]  = oDados.itens[i].numero_exercicio;
-                    aLinha[4]  = oDados.itens[i].cgm;
-                    aLinha[5]  = js_formatar(oDados.itens[i].data, 'd');
+                    aLinha[4]  = js_formatar(oDados.itens[i].data, 'd');
 
                     var lMarcado = false;
 
