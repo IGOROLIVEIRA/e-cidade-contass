@@ -130,7 +130,7 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   $sCampos .= "c69_valor,   ";
   $sCampos .= "o15_codtri,  ";
   $sCampos .= "e60_codemp||'/'||e60_anousu as e60_codemp,  ";
-  $sCampos .= " lpad(o58_orgao,2,0)||'.'||lpad(o58_unidade,2,0)||'.'||lpad(o58_funcao,2,0)||'.'||lpad(o58_subfuncao,3,0)||'.'||lpad(o58_programa,4,0)||'.'||lpad(o58_projativ,4,0)||'.'||substr(dotacao.o56_elemento,2,6)||'.'||lpad(o15_codtri,3,0) as dot,";
+  $sCampos .= " '('||o58_coddot||') '||lpad(o58_orgao,2,0)||'.'||lpad(o58_unidade,2,0)||'.'||lpad(o58_funcao,2,0)||'.'||lpad(o58_subfuncao,3,0)||'.'||lpad(o58_programa,4,0)||'.'||lpad(o58_projativ,4,0)||'.'||substr(dotacao.o56_elemento,2,6)||'.'||lpad(o15_codtri,3,0) as dot,";
   $sCampos .= "elemento.o56_elemento as subelemento,  ";
   $sCampos .= "c19_estrutural as estrutural  ";
 
@@ -166,7 +166,6 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   }
 
   $sSqlLancamentos .= "  order by c69_codlan, c53_coddoc " ;
-
   $rsLancamentos    = db_query($sSqlLancamentos);
 
   $aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
@@ -306,7 +305,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
 
     $oPdf->setfont('arial','b',$iFonte);
     $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-    $oPdf->cell(40,  $iAlturalinha, "TOTAIS DAS MOVIMENTAÇÕES: ", "TB",  0, "R", 1);
+    $oPdf->cell(40,  $iAlturalinha, "TOTAIS DO CONTA CORRENTE: ", "TB",  0, "R", 1);
     $oPdf->setfont('arial','',6);
     $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralDebito , 'f'),  "TB",  0, "R", 1);
     $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralCredito, 'f'), "TB",  1, "R", 1);
@@ -356,7 +355,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   }
 
   $oPdf->setfont('arial','b',6);
-  $oPdf->cell(140,  $iAlturalinha, "SALDO INICIAL: " , ""    , 0, "R", 0);
+  $oPdf->cell(140,  $iAlturalinha, "SALDO INICIAL CONTA CORRENTE: " , ""    , 0, "R", 0);
   $oPdf->setfont('arial','',6);
 
   if ($nSaldoInicial > 0){
@@ -434,25 +433,25 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   $nTotalGeralDebito  += $nTotalMovDebito;
   $nTotalGeralCredito += $nTotalMovCredito;
 
-//  //TOTAIS DA MOVIMENTACAO;
-//  $oPdf->setfont('arial','b',$iFonte);
-//  $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-//  $oPdf->cell(40,  $iAlturalinha, "TOTAIS DA MOVIMENTAÇÃO: ", "TB",  0, "R", 1);
-//  $oPdf->setfont('arial','',6);
-//  $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovDebito, 'f'),  "TB",  0, "R", 1);
-//  $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovCredito, 'f'), "TB",  1, "R", 1);
-//
-//  $oPdf->setfont('arial','b',$iFonte);
-//  $oPdf->cell(100,  $iAlturalinha, "",             "",  0, "R", 0);
-//  $oPdf->cell(40,  $iAlturalinha, "SALDO FINAL: ", "TB",  0, "R", 1);
-//  $oPdf->setfont('arial','',6);
-//  if ($nSaldoInicial > 0){
-//    $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nSaldoInicial     , 'f'), "TB",  0, "R", 1);
-//    $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  1, "R", 1);
-//  }else{
-//    $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  0, "R", 1);
-//    $oPdf->cell(25 ,  $iAlturalinha, db_formatar(abs($nSaldoInicial), 'f'), "TB",  1, "R", 1);
-//  }
+ //TOTAIS DA MOVIMENTACAO;
+ $oPdf->setfont('arial','b',$iFonte);
+ $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
+ $oPdf->cell(40,  $iAlturalinha, "TOTAIS DO CONTA CORRENTE: ", "TB",  0, "R", 1);
+ $oPdf->setfont('arial','',6);
+ $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovDebito, 'f'),  "TB",  0, "R", 1);
+ $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovCredito, 'f'), "TB",  1, "R", 1);
+
+ $oPdf->setfont('arial','b',$iFonte);
+ $oPdf->cell(100,  $iAlturalinha, "",             "",  0, "R", 0);
+ $oPdf->cell(40,  $iAlturalinha, "SALDO FINAL CONTA CORRENTE: ", "TB",  0, "R", 1);
+ $oPdf->setfont('arial','',6);
+ if ($nSaldoInicial > 0){
+   $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nSaldoInicial     , 'f'), "TB",  0, "R", 1);
+   $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  1, "R", 1);
+ }else{
+   $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  0, "R", 1);
+   $oPdf->cell(25 ,  $iAlturalinha, db_formatar(abs($nSaldoInicial), 'f'), "TB",  1, "R", 1);
+ }
   $oPdf->Ln();
 }
 
@@ -460,7 +459,7 @@ $oPdf->Ln();
 // RESUMO GERAL
 $oPdf->setfont('arial','b',$iFonte);
 $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-$oPdf->cell(40,  $iAlturalinha, "TOTAIS DAS MOVIMENTAÇÕES: ", "TB",  0, "R", 1);
+$oPdf->cell(40,  $iAlturalinha, "TOTAIS DA CONTA: ", "TB",  0, "R", 1);
 $oPdf->setfont('arial','',6);
 $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralDebito , 'f'),  "TB",  0, "R", 1);
 $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralCredito, 'f'), "TB",  1, "R", 1);
@@ -493,7 +492,7 @@ function imprimirCabecalho($oPdf, $iAlturalinha, $lImprime, $nDebitoInicial = nu
     $oPdf->setfont('arial','b',6);
     $oPdf->cell(20,  $iAlturalinha, "DATA"             , "TB" , 0, "C", 1);
     $oPdf->cell(21,  $iAlturalinha, "CÓD. LANÇAMENTO"  , "TB" , 0, "C", 1);
-    $oPdf->cell(99,  $iAlturalinha, "DOCUMENTO"        , "TB" , 0, "C", 1);
+    $oPdf->cell(99,  $iAlturalinha, "DETALHAMENTO CONTA CORRENTE"        , "TB" , 0, "C", 1);
     $oPdf->cell(25,  $iAlturalinha, "DÉBITO"           , "TB" , 0, "C", 1);
     $oPdf->cell(25,  $iAlturalinha, "CRÉDITO"          , "TB" , 1, "C", 1);
 
