@@ -11,10 +11,10 @@ foreach ($oInfoRelatorio->aHeader as $key => $value) {
 $sSql  = "SELECT db21_codigomunicipoestado,cgc FROM db_config where codigo = ".db_getsession("DB_instit");
 $rsInst = db_query($sSql);
 $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
-//cisaje
-//$aCgcExtFonte = $arrayName = array('00699767000150');
+//Cimva
+$aCgcExecaoRelFinanceiro = $arrayName = array('21466841000169');
 
-$aCgcExtFonte = $arrayName = array('');
+//$aCgcExecaoRelFinanceiro = $arrayName = array('');
 
 //db_criatabela($rsInst);exit;
 
@@ -201,7 +201,7 @@ ob_start();
         </tbody>
     </table>
 </div>
-<?php if(!in_array($sInstCgc, $aCgcExtFonte)) {?>
+<?php if(!in_array($sInstCgc, $aCgcExecaoRelFinanceiro)) {?>
 <div class="ritz grid-container" dir="ltr">
 
     <table class="waffle" cellspacing="0" cellpadding="0" >
