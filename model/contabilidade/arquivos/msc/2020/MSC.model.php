@@ -782,7 +782,7 @@ class MSC {
                            c61_reduz,
                            c61_codcon,
                            c61_codigo,
-                           c61_instit,
+                           c61_instit/*,
                            CASE
                                WHEN estrut IN ('621100000', '621200000')
                                         AND substr(natreceita, 1, 2) IN ('17', '24') THEN
@@ -792,7 +792,7 @@ class MSC {
                                        ELSE '' 
                                    END
                                ELSE ''
-                           END AS cf
+                           END AS cf*/
                     FROM
                          (SELECT 
                                  CASE 
@@ -810,8 +810,8 @@ class MSC {
                                      WHEN substr(c19_estrutural,2,1) = '9' THEN substr(c19_estrutural,4,8)
                                      ELSE substr(c19_estrutural,2,8)
                                  END AS natreceita,
-                                 fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo),
-                                 k81_emparlamentar
+                                 fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo)/*,
+                                 k81_emparlamentar*/
                          FROM conplanoexe e
                              INNER JOIN conplanoreduz r 
                                 ON (r.c61_anousu, r.c61_reduz) = (c62_anousu, c62_reduz)
@@ -821,7 +821,7 @@ class MSC {
                                  ON codigo = r.c61_instit
                              INNER JOIN contacorrentedetalhe 
                                  ON (c19_conplanoreduzanousu, c19_reduz) = (c61_anousu, c61_reduz)
-                             LEFT JOIN contacorrentedetalheconlancamval 
+                             /*LEFT JOIN contacorrentedetalheconlancamval 
                                  ON c28_contacorrentedetalhe = c19_sequencial
                              LEFT JOIN conlancamval 
                                  ON c28_conlancamval = c69_sequen
@@ -834,7 +834,7 @@ class MSC {
                              LEFT JOIN tabrec 
                                  ON tabrec.k02_codigo = taborc.k02_codigo
                              LEFT JOIN placaixarec 
-                                 ON (k81_receita, date_part('month', k81_datareceb)::int4, date_part('year', k81_datareceb)::int4) = (tabrec.k02_codigo, $iMes, $iAno)
+                                 ON (k81_receita, date_part('month', k81_datareceb)::int4, date_part('year', k81_datareceb)::int4) = (tabrec.k02_codigo, $iMes, $iAno)*/
                              LEFT OUTER JOIN consistema 
                                  ON c60_codsis = c52_codsis
                              LEFT JOIN vinculopcaspmsc 
@@ -842,7 +842,7 @@ class MSC {
                              LEFT JOIN orctiporec 
                                  ON c19_orctiporec = o15_codigo
                          WHERE {$this->getTipoMatriz()} c60_infcompmsc = 6 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL 
-                         GROUP BY estrut, db21_tipoinstit, o15_codtri, c61_reduz, c61_codcon, c61_codigo, c61_instit, c60_identificadorfinanceiro, o15_codstn, natreceita, c19_sequencial, db_config.codigo, p.c60_estrut, fc_saldocontacorrente, k81_emparlamentar
+                         /*GROUP BY estrut, db21_tipoinstit, o15_codtri, c61_reduz, c61_codcon, c61_codigo, c61_instit, c60_identificadorfinanceiro, o15_codstn, natreceita, c19_sequencial, db_config.codigo, p.c60_estrut, fc_saldocontacorrente, k81_emparlamentar*/
                          ORDER BY p.c60_estrut
                          ) AS movgeral
                      ) AS movfinal
@@ -850,7 +850,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
 
-    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "cf", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf", "cf");
+    $aCampos  = array("conta", "po", "fr", "nr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
       return $this->getDadosIC(6, $aCampos, $rsResult);
@@ -1065,7 +1065,7 @@ class MSC {
                             INNER JOIN orcdotacao 
                                 ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
                             LEFT JOIN elemdespmsc 
-                                ON (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+                                ON (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
                             LEFT OUTER JOIN consistema 
                                 ON c60_codsis = c52_codsis
                             LEFT JOIN vinculopcaspmsc 
@@ -1235,7 +1235,7 @@ class MSC {
                             INNER JOIN empempenho 
                                 ON c19_numemp = e60_numemp
                             LEFT JOIN elemdespmsc 
-                                ON (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+                                ON (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
                             LEFT OUTER JOIN consistema 
                                 ON c60_codsis = c52_codsis
                             LEFT JOIN vinculopcaspmsc 
