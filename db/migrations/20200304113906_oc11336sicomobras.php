@@ -449,6 +449,7 @@ class Oc11336sicomobras extends AbstractMigration
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'si201_dtmedicao'                ,'date' ,'data medicao'                 ,'', 'data medicao'                     ,10     ,false, false, false, 0, 'date', 'data medicao');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'si201_valormedicao'             ,'float','valor medicao'                ,'', 'valor medicao'                    ,10     ,false, false, false, 0, 'float','valor medicao');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'si201_mes'                      ,'int4' ,'Mes'                          ,'', 'Mes'                              ,10     ,false, false, false, 0, 'int4', 'Mes');
+                INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'si201_pdf'                      ,'text' ,'pdf'                          ,'', 'pdf'                              ,25     ,false, false, false, 0, 'int4', 'pdf');
                 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'si201_instit'                   ,'int4' ,'Instituição'                  ,'', 'Instituição'                      ,10     ,false, false, false, 0, 'int4', 'Instituição');
 
                 -- INSERE db_sysarqcamp
@@ -465,7 +466,8 @@ class Oc11336sicomobras extends AbstractMigration
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_dtmedicao')                    , 11, 0);
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_valormedicao')                 , 12, 0);
                 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_mes')                          , 13, 0);
-                INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_instit')                       , 14, 0);
+                INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_pdf')                          , 14, 0);
+                INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'si201_instit')                       , 15, 0);
 
 
                 CREATE TABLE cadobras302020(
@@ -482,6 +484,7 @@ class Oc11336sicomobras extends AbstractMigration
                 si201_dtmedicao                 date,
                 si201_valormedicao              float,
                 si201_mes                       int8,
+                si201_pdf                       varchar(25),
                 si201_instit                    int4);
 
                 CREATE SEQUENCE cadobras302020_si201_sequencial_seq

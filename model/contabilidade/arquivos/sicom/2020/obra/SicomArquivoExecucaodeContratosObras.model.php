@@ -65,7 +65,6 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
      */
-    db_inicio_transacao();
 
     /**
      * registro 10 exclusão

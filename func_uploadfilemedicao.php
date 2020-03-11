@@ -53,7 +53,11 @@ if(isset($uploadfile)) {
 
   $extensao = strtolower(substr($nomearq,-4));
 
-  $novo_nome = md5(time()).$extensao;
+  if($extensao == "jpeg"){
+    $novo_nome = md5(time()).".".$extensao;
+  }else{
+    $novo_nome = md5(time()).$extensao;
+  }
 
   $diretorio = "imagens/obras/";
 

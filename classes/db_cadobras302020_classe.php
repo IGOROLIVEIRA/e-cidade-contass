@@ -38,6 +38,7 @@ class cl_cadobras302020 {
   public $si201_dtmedicao = null;
   public $si201_valormedicao = 0;
   public $si201_mes = 0;
+  public $si201_pdf = null;
   public $si201_instit = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
@@ -54,6 +55,7 @@ class cl_cadobras302020 {
                  si201_dtmedicao = date = data medicao
                  si201_valormedicao = float = valor medicao
                  si201_mes = int4 = Mes
+                 si201_pdf = text = pdf
                  si201_instit = int4 = Instituição
                  ";
 
@@ -110,6 +112,7 @@ class cl_cadobras302020 {
       }
       $this->si201_valormedicao = ($this->si201_valormedicao == ""?@$GLOBALS["HTTP_POST_VARS"]["si201_valormedicao"]:$this->si201_valormedicao);
       $this->si201_mes = ($this->si201_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si201_mes"]:$this->si201_mes);
+      $this->si201_pdf = ($this->si201_pdf == ""?@$GLOBALS["HTTP_POST_VARS"]["si201_pdf"]:$this->si201_pdf);
       $this->si201_instit = ($this->si201_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si201_instit"]:$this->si201_instit);
     } else {
     }
@@ -252,6 +255,7 @@ class cl_cadobras302020 {
                                       ,si201_dtmedicao
                                       ,si201_valormedicao
                                       ,si201_mes
+                                      ,si201_pdf
                                       ,si201_instit
                        )
                 values (
@@ -268,6 +272,7 @@ class cl_cadobras302020 {
                                ,".($this->si201_dtmedicao == "null" || $this->si201_dtmedicao == ""?"null":"'".$this->si201_dtmedicao."'")."
                                ,$this->si201_valormedicao
                                ,$this->si201_mes
+                               ,'$this->si201_pdf'
                                ,$this->si201_instit
                       )";
     $result = db_query($sql);
@@ -287,17 +292,18 @@ class cl_cadobras302020 {
       $this->numrows_incluir= 0;
       return false;
     }
+
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir= pg_affected_rows($result);
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-        && ($lSessaoDesativarAccount === false))) {
-
-    }
+//    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+//    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+//        && ($lSessaoDesativarAccount === false))) {
+//
+//    }
     return true;
   }
 

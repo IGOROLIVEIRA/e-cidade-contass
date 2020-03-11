@@ -6,9 +6,9 @@ require_once("classes/db_cadobras102020_classe.php");
 require_once("classes/db_cadobras202020_classe.php");
 require_once("classes/db_cadobras212020_classe.php");
 require_once("classes/db_cadobras302020_classe.php");
-require('model/relatorios/Relatorio.php');
+require_once('model/relatorios/Relatorio.php');
 require_once('vendor/mpdf/mpdf/mpdf.php');
-require_once('fpdf151/pdf.php');
+require('fpdf151/fpdf.php');
 
 /**
  * Dados Cadastro de Reponsaveis Sicom Obras
@@ -61,14 +61,58 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     return $aElementos;
   }
 
-  public function gerarPDFobra($iCodObra)
+  public function gerarPDFobra($iCodMedicao)
   {
-$pdf = new FPDF();
-$pdf->AddPage();
-$pdf->SetFont('Arial','B',16);
-$pdf->Cell(40,10,'danilo mais cedo sicom!');
-$pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
+    define('FPDF_FONTPATH','fpdf151/font/');
 
+    $sql = "select *,infocomplementaresinstit.si09_codorgaotce AS si197_codorgao from licobrasmedicao
+            inner join licobras on obr03_seqobra = obr01_sequencial
+            inner join liclicita on l20_codigo = obr01_licitacao
+            INNER JOIN licobrasanexo on obr04_licobrasmedicao = obr03_sequencial
+            INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
+            LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+            where obr03_sequencial = $iCodMedicao";
+    $rsMedicao = db_query($sql);
+
+    $aDadosAgrupados = array();
+    $oMedicao = new stdClass();
+    for ($iContMed = 0; $iContMed < pg_numrows($rsMedicao); $iContMed++) {
+      $aMedicao = db_utils::fieldsMemory($rsMedicao, $iContMed);
+      $sOrgao  = str_pad($aMedicao->si197_codorgao, 2,"0",STR_PAD_LEFT);
+      $sHash = $aMedicao->obr03_sequencial;
+        $oMedicao->nomearq = 'FOTO_MEDICAO' ."_" . $sOrgao . "_" . $aMedicao->obr01_numeroobra . "_" . $aMedicao->obr03_tipomedicao . "_" . $aMedicao->obr03_nummedicao . ".pdf";
+        $extencao = substr($aMedicao->obr04_codimagem, 33, 36);
+        if ($extencao == "jpg") {
+          $type = 'JPG';
+        } elseif ($extencao == "png") {
+          $type = 'PNG';
+        }
+        $oMedicao->anexos[$aMedicao->obr04_sequencial]->file = 'imagens/obras/' . $aMedicao->obr04_codimagem;
+        $oMedicao->anexos[$aMedicao->obr04_sequencial]->legenda = $aMedicao->obr04_legenda;
+        $oMedicao->anexos[$aMedicao->obr04_sequencial]->type = $type;
+
+        $aDadosAgrupados[$sHash] = $oMedicao;
+    }
+
+    foreach ($aDadosAgrupados as $aMed){
+      $pdf = new FPDF();
+      $pdf->open();
+      foreach ($aMed->anexos as $anexo){
+        $pdf->addpage();
+        $pdf->Image($anexo->file,10,10,190,150,$anexo->type);
+        $pdf->ln(155);
+        $pdf->SetFont('Arial','B',12);
+        $pdf->Cell(190,10,$anexo->legenda,0,1,"C",0);
+        $nomearq = $aMed->nomearq;
+        $arquivo = 'tmp/'.$nomearq;
+      }
+      if( file_exists( $arquivo ) ){
+        unlink( $arquivo );
+      }
+      $pdf->Output($arquivo,false,true);
+    }
+
+//    unset($pdf);
   }
 
   public function gerarDados()
@@ -85,8 +129,6 @@ $pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
     /**
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
      */
-
-    db_inicio_transacao();
 
     /**
      * registro 30 exclusão
@@ -235,8 +277,8 @@ $pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
       $clcadobras212020->si200_instit = db_getsession("DB_instit");
       $clcadobras212020->incluir(null);
 
-      if ($clcadobras202020->erro_status == 0) {
-        throw new Exception($clcadobras202020->erro_msg);
+      if ($clcadobras212020->erro_status == 0) {
+        throw new Exception($clcadobras212020->erro_msg);
       }
     }
 
@@ -246,12 +288,13 @@ $pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
 
     $sql = "SELECT *
               FROM licobras
-              INNER JOIN licobrasresponsaveis ON obr05_seqobra = obr01_sequencial
-              INNER JOIN cgm ON z01_numcgm = obr05_responsavel
               INNER JOIN licobrasmedicao on obr03_seqobra = obr01_sequencial
+              inner join liclicita on l20_codigo = obr01_licitacao
+              INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
+              LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtiniciomedicao)=  " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',licobrasmedicao.obr03_dtiniciomedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult30 = db_query($sql);
+    $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);
 
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
       $clcadobras302020 = new cl_cadobras302020();
@@ -276,11 +319,12 @@ $pdf->Output('model/contabilidade/arquivos/sicom/2020/obra/pdfs/teste.pdf');
       $clcadobras302020->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;
       $clcadobras302020->si201_valormedicao = $oDados30->obr03_vlrmedicao;
       $clcadobras302020->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
       $clcadobras302020->si201_instit = db_getsession("DB_instit");
       $clcadobras302020->incluir(null);
 
-      if ($clcadobras202020->erro_status == 0) {
-        throw new Exception($clcadobras202020->erro_msg);
+      if ($clcadobras302020->erro_status == 0) {
+        throw new Exception($clcadobras302020->erro_msg);
       }
     }
 
