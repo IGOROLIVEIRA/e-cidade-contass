@@ -91,7 +91,7 @@ class SicomArquivoIdentificacaoRemessaobras extends SicomArquivoBase implements 
     /**
      * inserir informacoes no banco de dados
      */
-    db_inicio_transacao();
+
     $result = $clide->sql_record($clide->sql_query(null, "*", null, "si11_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si11_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clide->excluir(null, "si11_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si11_instit = " . db_getsession("DB_instit"));
