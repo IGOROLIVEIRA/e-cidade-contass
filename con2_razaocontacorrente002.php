@@ -178,7 +178,7 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   return $aLancamento;
 }
 
-function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade) {
+function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
 
   $aDataInicial = explode('-', $dtInicial);
   $iDataInicial = mktime(null, null, null,$aDataInicial[1]  ,$aDataInicial[2]  , $aDataInicial[0], null);
@@ -196,6 +196,7 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
   $sWhere  = "     c69_data < '{$dDataInicial}' ";
   $sWhere .= " and c19_contacorrente = {$iContaCorrente} ";
   $sWhere .= " and c19_reduz  = {$iReduzido} ";
+  $sWhere .= " and c19_sequencial  = {$c19_sequencial} ";
 
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sWhere .= " and c19_numcgm = {$iNumcgm} ";
@@ -221,7 +222,7 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
   $oSadosIniciais->nTotalDebito  = db_utils::fieldsMemory($rsSaldos, 0)->debito;
   $oSadosIniciais->nTotalCredito = db_utils::fieldsMemory($rsSaldos, 0)->credito;
 
-  $oDadosImplantacao = buscaDadosImplantacao($iReduzido, $iNumcgm, $iOrgao, $iUnidade);
+  $oDadosImplantacao = buscaDadosImplantacao($iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial);
   $oSadosIniciais->nTotalDebito  += $oDadosImplantacao->debito;
   $oSadosIniciais->nTotalCredito += $oDadosImplantacao->credito;
 
@@ -237,9 +238,10 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
  * @param  integer  $iUnidade
  * @return stdClass
  */
-function buscaDadosImplantacao( $iReduzido, $iNumcgm, $iOrgao, $iUnidade) {
+function buscaDadosImplantacao( $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
 
   $sWhere  = " c19_reduz  = {$iReduzido} ";
+  $sWhere  .= " and c19_sequencial  = {$c19_sequencial} ";
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sWhere .= " and c19_numcgm = {$iNumcgm} ";
   }
@@ -297,6 +299,7 @@ if ($oDaoContaCorrenteDetalhe->numrows == 0) {
 
 // saldo inicial de debito e saldo inicial de credito
 $iReduzConta        = db_utils::fieldsMemory($rsContaCorrenteDetalhe, 0)->c19_reduz;
+$nSaldoInicialConta   = 0;
 $nTotalGeralDebito  = 0;
 $nTotalGeralCredito = 0;
 $nSaldoFinalConta   = 0;
@@ -327,6 +330,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
     }
 
     $iReduzConta     = $oValorDados->c19_reduz;
+    $nSaldoInicialConta   = 0;
     $nTotalGeralDebito  = 0;
     $nTotalGeralCredito = 0;
     $nSaldoFinalConta   = 0;
@@ -339,7 +343,8 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
                                          $iReduzConta,
                                          $oValorDados->z01_numcgm,
                                          $oValorDados->c19_orcunidadeorgao,
-                                         $oValorDados->c19_orcunidadeunidade);
+                                         $oValorDados->c19_orcunidadeunidade,
+                                         $oValorDados->c19_sequencial);
   $nSaldoInicial     = ($oSaldosIniciais->nTotalDebito - $oSaldosIniciais->nTotalCredito);
   // escrevemos os atributos
   $aAtributos = ContaCorrente::getAtributos($oValorDados->c19_contacorrente);
