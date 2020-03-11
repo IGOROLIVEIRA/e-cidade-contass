@@ -564,8 +564,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       }else{
         $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
         $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-        $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Ms(s)' : ' Dia(s)';
-        $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo . $sTipoUnidade;
+        $clcontratos10->si83_unidadedemedidaprazoexex = $oDados10->ac16_tipounidtempoperiodo;
+        $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo;
         $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
         $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
         $clcontratos10->si83_garantia = $this->getGarantiaByAcordo($oDados10->ac16_sequencial);

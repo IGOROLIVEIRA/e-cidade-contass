@@ -55,15 +55,11 @@ class cl_contratos102020 {
    var $si83_datapublicacao_dia = null;
    var $si83_datapublicacao_mes = null;
    var $si83_datapublicacao_ano = null;
-   var $si83_datapublicacao = null;
-   var $si83_veiculodivulgacao = null;
-   var $si83_tipocadastro = null;
-   var $si83_mes = 0;
-   var $si83_instit = 0;
-   // cria propriedade com as variaveis do arquivo
+   var $si83_unidadedemedidaprazoexex = null;
    var $campos = "
                  si83_sequencial = int8 = sequencial
                  si83_tiporegistro = int8 = Tipo do registro
+                 si83_tipocadastro = int8 = tipo cadastro
                  si83_codcontrato = int8 = Código do contrato
                  si83_codorgao = varchar(2) = Código do órgão
                  si83_codunidadesub = varchar(8) = Código da unidade
@@ -84,7 +80,8 @@ class cl_contratos102020 {
                  si83_vlcontrato = float8 = Valor do contrato
                  si83_formafornecimento = varchar(50) = Forma de  fornecimento
                  si83_formapagamento = varchar(100) = Forma de  pagamento
-                 si83_prazoexecucao = varchar(100) = Prazo de Execução
+                 si83_unidadedemedidaprazoexex = int8 = unidade prazo de execucao
+                 si83_prazoexecucao = int8 = Prazo de Execução
                  si83_multarescisoria = varchar(100) = Multa Rescisória
                  si83_multainadimplemento = varchar(100) = Multa  inadimplemento
                  si83_garantia = int8 = Tipo de garantia  contratual
@@ -93,8 +90,13 @@ class cl_contratos102020 {
                  si83_veiculodivulgacao = varchar(50) = Veículo de  Divulgação
                  si83_mes = int8 = Mês
                  si83_instit = int8 = Instituição
-                 si83_tipocadastro = int8 = tipo cadastro
                  ";
+  var $si83_datapublicacao = null;
+  var $si83_veiculodivulgacao = null;
+  var $si83_tipocadastro = null;
+  var $si83_mes = 0;
+  var $si83_instit = 0;
+  // cria propriedade com as variaveis do arquivo
    //funcao construtor da classe
    function cl_contratos102020() {
      //classes dos rotulos dos campos
@@ -173,6 +175,7 @@ class cl_contratos102020 {
        $this->si83_mes = ($this->si83_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si83_mes"]:$this->si83_mes);
        $this->si83_instit = ($this->si83_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si83_instit"]:$this->si83_instit);
        $this->si83_tipocadastro = ($this->si83_tipocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["si83_tipocadastro"]:$this->si83_tipocadastro);
+       $this->si83_unidadedemedidaprazoexex = ($this->si83_unidadedemedidaprazoexex == ""?@$GLOBALS["HTTP_POST_VARS"]["si83_unidadedemedidaprazoexex"]:$this->si83_unidadedemedidaprazoexex);
      }else{
        $this->si83_sequencial = ($this->si83_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si83_sequencial"]:$this->si83_sequencial);
      }
@@ -234,6 +237,9 @@ class cl_contratos102020 {
      if($this->si83_datapublicacao == null ){
        $this->si83_datapublicacao = "null";
      }
+     if($this->si83_unidadedemedidaprazoexex == null ){
+       $this->si83_unidadedemedidaprazoexex = "0";
+     }
      if($this->si83_mes == null ){
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si83_mes";
@@ -287,6 +293,7 @@ class cl_contratos102020 {
      $sql = "insert into contratos102020(
                                        si83_sequencial
                                       ,si83_tiporegistro
+                                      ,si83_tipocadastro
                                       ,si83_codcontrato
                                       ,si83_codorgao
                                       ,si83_codunidadesub
@@ -307,6 +314,7 @@ class cl_contratos102020 {
                                       ,si83_vlcontrato
                                       ,si83_formafornecimento
                                       ,si83_formapagamento
+                                      ,si83_unidadedemedidaprazoexex
                                       ,si83_prazoexecucao
                                       ,si83_multarescisoria
                                       ,si83_multainadimplemento
@@ -316,11 +324,11 @@ class cl_contratos102020 {
                                       ,si83_veiculodivulgacao
                                       ,si83_mes
                                       ,si83_instit
-                                      ,si83_tipocadastro
                        )
                 values (
                                 $this->si83_sequencial
                                ,$this->si83_tiporegistro
+                               ,$this->si83_tipocadastro
                                ,$this->si83_codcontrato
                                ,'$this->si83_codorgao'
                                ,'$this->si83_codunidadesub'
@@ -341,7 +349,8 @@ class cl_contratos102020 {
                                ,$this->si83_vlcontrato
                                ,'$this->si83_formafornecimento'
                                ,'$this->si83_formapagamento'
-                               ,'$this->si83_prazoexecucao'
+                               ,$this->si83_unidadedemedidaprazoexex
+                               ,$this->si83_prazoexecucao
                                ,'$this->si83_multarescisoria'
                                ,'$this->si83_multainadimplemento'
                                ,$this->si83_garantia
@@ -350,7 +359,6 @@ class cl_contratos102020 {
                                ,'$this->si83_veiculodivulgacao'
                                ,$this->si83_mes
                                ,$this->si83_instit
-                               ,$this->si83_tipocadastro
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -564,7 +572,7 @@ class cl_contratos102020 {
        $virgula = ",";
      }
      if(trim($this->si83_prazoexecucao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si83_prazoexecucao"])){
-       $sql  .= $virgula." si83_prazoexecucao = '$this->si83_prazoexecucao' ";
+       $sql  .= $virgula." si83_prazoexecucao = $this->si83_prazoexecucao ";
        $virgula = ",";
      }
      if(trim($this->si83_multarescisoria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si83_multarescisoria"])){

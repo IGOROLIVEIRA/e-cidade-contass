@@ -1107,37 +1107,49 @@ WHERE rh30_vinculo = 'I'
 
 //echo "entrou no select"."\n\n";
 
-    $sql = "SELECT rh01_regist AS matricula,
-       '1'||'#' 
-       ||'3'||'#' 
-       ||instituicao.z01_cgccpf||'#' 
-       ||instituicao.z01_nome||'#' 
-       ||'1'||'#' 
-       ||'1'||'#' 
-       ||'7'||'#' 
-       ||'3'||'#'||
-       COALESCE(instintuidor.z01_numcgm::varchar,' ')||'# '||
-       COALESCE(instintuidor.z01_nome,' ')||'# '||
-       COALESCE(instintuidor.z01_cgccpf::varchar,' ')||'# '||
-       COALESCE(instintuidor.z01_pis,' ')||'#'|| 
-       ' '||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||rh01_regist||'#' 
-       ||servidor.z01_cgccpf||'#' 
-       ||CASE
-          WHEN rh01_sexo = 'M' THEN 2
-          ELSE 1
-          END ||'#'
-       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
-       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
-       ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
-       ||'0'||'#' 
-       ||'0'||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||case when rh02_rhtipoapos = 4 then 2 else 1 end||'#' 
-       ||' ' AS todo
+    $sql = "
+       SELECT rh01_regist||'# '||
+       servidor.z01_nome||'# '||
+       servidor.z01_cgccpf||'# '||
+       CASE
+        WHEN rh01_sexo = 'M' THEN 2
+        ELSE 1
+       END ||'#' ||  
+       to_char(rh01_nasc, 'DD/MM/YYYY')||'# '|| 
+       instituicao.z01_nome||'# '|| 
+       instituicao.z01_cgccpf||'# '||
+       db21_tipopoder ||'# '|| 
+       '1'||'# '||
+       coalesce(case when rh02_tipoparentescoinst = 3 then 1
+            when rh02_tipoparentescoinst = 1 then 2
+            when rh02_tipoparentescoinst = 4 then 3
+            when rh02_tipoparentescoinst = 5 or rh02_tipoparentescoinst = 6 then 4 end::varchar,'') ||'# '||
+       ' '||'# '||
+       case when coalesce(rhpessoalmov.rh02_validadepensao::varchar, '') = '' then 1 else 2 end ||'# '||
+       coalesce(to_char(rh02_validadepensao, 'DD/MM/YYYY'),' ')||'# '||
+       to_char(rh01_admiss, 'DD/MM/YYYY')||'# '||
+       trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+      coalesce(case when rh01_reajusteparidade = 2 then 1
+                    else 2 end::varchar,'')||'# '||
+      ' '||'# '||
+      coalesce(instintuidor.z01_numcgm::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_nome,' ')||'# '||
+      coalesce(instintuidor.z01_cgccpf::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_pis,' ')||'#' ||
+      coalesce(to_char(instintuidor.z01_nasc, 'DD/MM/YYYY'),' ')||'# '||
+      coalesce(to_char(instintuidor.z01_dtfalecimento, 'DD/MM/YYYY'),' ')||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '||
+      rh02_anousu ||'# '||
+      rh02_mesusu as todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $anofolha
