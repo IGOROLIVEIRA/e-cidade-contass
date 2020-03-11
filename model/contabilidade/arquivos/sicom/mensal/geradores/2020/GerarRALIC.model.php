@@ -73,8 +73,7 @@ class GerarRALIC extends GerarAM
 
                 $this->sLinha = $aCSVRALIC10;
                 $this->adicionaLinha();
-
-                for ($iCont2 = 0; $iCont2 < pg_num_rows($rsRALIC11); $iCont2++) {
+				for ($iCont2 = 0; $iCont2 < pg_num_rows($rsRALIC11); $iCont2++) {
 
                     $aRALIC11 = pg_fetch_array($rsRALIC11, $iCont2);
 
@@ -112,7 +111,7 @@ class GerarRALIC extends GerarAM
 							$aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
 							$aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
 							$aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
-							$aCSVRALIC12['si182_numero']                      = $aRALIC12['si182_numero'];
+							$aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
 							$aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
 							$aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
 							$aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];

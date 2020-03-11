@@ -351,6 +351,7 @@ $db_botao = true;
     js_init();
 
     function js_buscaDadosComplementares() {
+        oDBGrid.clearAll(true);
         var sUrlRpc = "con4_endereco.RPC.php";
         let oParam = new Object();
         oParam.exec = 'findDadosObraLicitacao';
@@ -371,7 +372,8 @@ $db_botao = true;
         oRetorno.dadoscomplementares.forEach((dado) => {
             let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}, ${dado.bairro.replace(/\+/g, ' ')}`;
+            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}`;
+            descricaoLinha += dado.bairro ? `, ${dado.bairro.replace(/\+/g, ' ')}` : '';
             let aLinha = new Array();
             aLinha[0] = linhas+1;
             aLinha[1] = descricaoLinha;
