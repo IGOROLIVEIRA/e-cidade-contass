@@ -204,12 +204,6 @@ class cl_regadesao102020
     if ($this->si67_processoporlote == null) {
       $this->si67_processoporlote = "0";
     }
-    if ($this->si67_nroedital == null) {
-      $this->si67_nroedital = "0";
-    }
-    if ($this->si67_exercicioedital == null) {
-      $this->si67_exercicioedital = "0";
-    }
     if ($this->si67_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
       $this->erro_campo = "si67_mes";
