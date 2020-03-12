@@ -30,8 +30,8 @@
     <join tipo="inner"  tabela="issgruposervicoativid"           condicao="q03_ativ               = q127_ativid"          />
     <join tipo="inner"  tabela="issgruposervico"                 condicao="q127_issgruposerviso   = q126_sequencial"      />
     <join tipo="inner"  tabela="db_estruturavalor"               condicao="q126_db_estruturavalor = db121_sequencial"     />
-    <join tipo="left"   tabela="issconfiguracaogruposervico"     condicao="q126_sequencial        = q136_issgruposervico" />
-    <join tipo="left"   tabela="tabativ"                          condicao="ativid.q03_ativ        = tabativ.q07_ativ"    />
+    <join tipo="inner"   tabela="issconfiguracaogruposervico"     condicao="q126_sequencial        = q136_issgruposervico" />
+    <join tipo="inner"   tabela="tabativ"                          condicao="ativid.q03_ativ        = tabativ.q07_ativ"    />
   </juncoes>
   <filtros>
     <filtro label="atividade" condicao="q03_ativ = '$atividade'" obrigatorio="false"/>
