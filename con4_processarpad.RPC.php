@@ -933,14 +933,14 @@ case "processarEditais" :
 								END AS codunidadesubresp
 						 FROM db_departorg
 						 JOIN infocomplementares ON si08_anousu = db01_anousu
-						 AND si08_instit = 1
+						 AND si08_instit = ".db_getsession('DB_instit')."
 						 JOIN orcunidade ON db01_orgao=o41_orgao
 						 AND db01_unidade=o41_unidade
 						 AND db01_anousu = o41_anousu
 						 JOIN orcorgao ON o40_orgao = o41_orgao
 						 AND o40_anousu = o41_anousu
 						 WHERE db01_coddepto=l20_codepartamento
-							 AND db01_anousu = 2020
+							 AND db01_anousu = ".db_getsession('DB_anousu')."
 						 LIMIT 1) AS unidade
 					FROM liclancedital
 					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclicita = liclancedital.l47_liclicita
