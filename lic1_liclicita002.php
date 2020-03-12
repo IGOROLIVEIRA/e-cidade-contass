@@ -35,6 +35,7 @@ require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitaproc_classe.php");
 require_once("classes/db_pctipocompra_classe.php");
 require_once("classes/db_pctipocompranumero_classe.php");
+require_once("classes/db_pccfeditalnum_classe.php");
 require_once("classes/db_db_usuarios_classe.php");
 require_once("classes/db_liclicitemlote_classe.php");
 require_once("classes/db_liclicitem_classe.php");
@@ -47,6 +48,8 @@ require_once("classes/db_condataconf_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+$oPost = db_utils::postMemory($_POST);
+
 
 $clliclicita          = new cl_liclicita;
 $clliclicitaproc      = new cl_liclicitaproc;
@@ -61,13 +64,15 @@ $clcflicita           = new cl_cflicita;
 $oDaoLicitaPar        = new cl_pccflicitapar;
 $clhomologacao        = new cl_homologacaoadjudica;
 $clliccomissaocgm     = new cl_liccomissaocgm;
+$clpccfeditalnum      = new cl_pccfeditalnum;
 
 $db_opcao = 22;
 $db_botao = true;
 $sqlerro  = false;
+$instit     = db_getsession("DB_instit") ;
+$anousu     = db_getsession("DB_anousu");
 
 if(isset($alterar)){
-
   db_inicio_transacao();
   $db_opcao = 2;
 
@@ -150,6 +155,24 @@ if(isset($alterar)){
   $rsLicLicita      = $clliclicita->sql_record($sSqlLicLicita);
   $iLinhasLicLicita = $clliclicita->numrows;
 
+  $aModalidades = array(48, 49, 50, 52, 54);
+  if(in_array($modalidade_tribunal, $aModalidades)){
+    if($l20_nroedital){
+      $result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"*",null,"l47_instit=$instit and l47_anousu=$anousu 
+      and l47_numero = $l20_nroedital"));
+      $sql = $clliclicita->sql_query_file($l20_codigo, 'l20_nroedital as codigoEdital, l20_codigo as numeroLicitacao');
+      $result = $clliclicita->sql_record($sql);
+      db_fieldsmemory($result);
+
+      if($codigoedital != $l20_nroedital && $clpccfeditalnum->numrows==0){
+        $clpccfeditalnum->l47_numero = $l20_nroedital;
+        $clpccfeditalnum->l47_anousu = $anousu;
+        $clpccfeditalnum->l47_instit = $instit;
+        $clpccfeditalnum->incluir();
+      }
+    }
+  }
+
   if ($iLinhasLicLicita > 0) {
 
     $iModalidade = db_utils::fieldsMemory($rsLicLicita, 0)->l20_codtipocom;
@@ -177,7 +200,7 @@ if(isset($alterar)){
         }
       } else {
 
-        $erro_msg = "Veririfque se está configurado a numeração de licitação por modalidade.";
+        $erro_msg = "Verifique se está configurado a numeração de licitação por modalidade.";
         $sqlerro  = true;
       }
     }
@@ -228,12 +251,15 @@ if(isset($alterar)){
 
     }
 
+
   if ($sqlerro == false ){
     $clliclicita->l20_numero       = $iNumero;
     $clliclicita->l20_procadmin    = $sProcAdmin;
     $clliclicita->l20_equipepregao = $l20_equipepregao;
     //$clliclicita->l20_horaaber     = $l20_horaaber;
+    $clliclicita->l20_nroedital = $l20_nroedital;
     $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+    $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
     $clliclicita->alterar($l20_codigo,$descricao);
 
     if ($clliclicita->erro_status == "0") {

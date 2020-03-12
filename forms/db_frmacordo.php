@@ -526,7 +526,7 @@ db_app::load("dbtextFieldData.widget.js");
             </tr>
         </table>
 
-        <input name="<?= ($db_opcao == 1 ? "aco1_acordo004" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
+        <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
                type="button"
                id="db_opcao"
                value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"

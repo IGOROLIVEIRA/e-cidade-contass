@@ -11,7 +11,7 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
-  $clvinculopcaspmsc->incluir($c210_pcaspestrut,$c210_mscestrut);
+  $clvinculopcaspmsc->incluir($c210_pcaspestrut,$c210_mscestrut,$c210_anousu);
   db_fim_transacao();
 }
 ?>

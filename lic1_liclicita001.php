@@ -34,6 +34,7 @@ require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitaproc_classe.php");
 require_once("classes/db_pccflicitapar_classe.php");
 require_once("classes/db_pccflicitanum_classe.php");
+require_once("classes/db_pccfeditalnum_classe.php");
 require_once("classes/db_db_usuarios_classe.php");
 require_once("classes/db_liclicitasituacao_classe.php");
 require_once("classes/db_cflicita_classe.php");
@@ -49,6 +50,7 @@ $clliclicita         = new cl_liclicita;
 $clliclicitaproc     = new cl_liclicitaproc;
 $clpccflicitapar     = new cl_pccflicitapar;
 $clpccflicitanum     = new cl_pccflicitanum;
+$clpccfeditalnum     = new cl_pccfeditalnum;
 $cldb_usuarios       = new cl_db_usuarios;
 $clliclicitasituacao = new cl_liclicitasituacao;
 $clcflicita          = new cl_cflicita;
@@ -78,11 +80,11 @@ if(isset($incluir)){
   if(in_array($iTipoCompraTribunal,$aTipoLicNatProc)){
 
     if( $oPost->l20_tipliticacao == '0' || empty($oPost->l20_tipliticacao) ){
-      $msg .= 'Campo Tipo de Licitao no informado\n\n';
+      $msg .= 'Campo Tipo de Licitacao nao informado\n\n';
       $erro = true;
     }
     if( $oPost->l20_tipnaturezaproced == '0' || empty($oPost->l20_tipnaturezaproced) ){
-      $msg .= 'Campo Natureza do Procedimento no informado\n\n';
+      $msg .= 'Campo Natureza do Procedimento nao informado\n\n';
       $erro = true;
     }
 
@@ -92,7 +94,7 @@ if(isset($incluir)){
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
   if( $oPost->l20_naturezaobjeto == '0' || empty($oPost->l20_naturezaobjeto) ){
-    $msg .= 'Campo Natureza do Objeto no informado\n\n';
+    $msg .= 'Campo Natureza do Objeto nao informado\n\n';
     $erro = true;
   }
 
@@ -106,31 +108,37 @@ if(isset($incluir)){
   	if(in_array(db_utils::fieldsMemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocomdescr,"distinct l03_pctipocompratribunal")),0)->l03_pctipocompratribunal,array("52","53"))){
   		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('','*'));
   		if($cldecretopregao->numrows == 0){
-  			$erro_msg="Não há decreto de pregão cadastrado.";
+  			$erro_msg="Não há decreto pregão";
     		$sqlerro = true;
   		}
   	}
 	//verifica se as duas modalidades esto configuradas.
 	$result_modalidade=$clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null,"*",null,"l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
-	if ($clpccflicitapar->numrows == 0){
-	  $erro_msg="Veririfque se est configurado a numerao de licitao por modalidade.";
+  if ($clpccflicitapar->numrows == 0){
+	  $erro_msg="Verifique se esta configurado a numeração de licitação por modalidade.";
     $sqlerro = true;
 	}
 
 	$result_numgeral=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_file(null,"*",null,"l24_instit=$instit and l24_anousu=$anousu"));
 	if ($clpccflicitanum->numrows==0){
-	 $erro_msg="Veririfque se est configurado a numerao de licitao por edital.";
+	 $erro_msg="Verifique se esta configurado a numeração de licitação por edital.";
 	 $sqlerro = true;
 	}
 
-	//numerao por modalidade
+	$result_numedital=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null,"max(l47_numero) as l47_numero",null,"l47_instit=$instit and l47_anousu=$anousu"));
+  if ($clpccfeditalnum->numrows==0){
+	 $erro_msg="Verifique se esta configurado a numeração do edital por licitação.";
+	 $sqlerro = true;
+	}
+
+	//numeracao por modalidade
 	if ($sqlerro == false){
 
 	  if ($clpccflicitapar->numrows > 0){
-	    db_fieldsmemory($result_modalidade,0,2);
+	  	db_fieldsmemory($result_modalidade,0,2);
 	    $l20_numero=$l25_numero+1;
 	  } else {
-	    $erro_msg="Configure a numerao de licitao por modalidade.";
+	    $erro_msg="Configure a numeração de licitação por modalidade.";
 	    $sqlerro = true;
 	  }
 
@@ -140,16 +148,28 @@ if(isset($incluir)){
 	    // $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
 	  // }
 
-	  //numerao geral
+	  //numeração geral
 
 	  if ($clpccflicitanum->numrows>0){
-      db_fieldsmemory($result_numgeral,0);
-      $l20_edital=$l24_numero+1;
-    } else {
-		  $erro_msg="Configure a numerao de licitao por edital.";
-		  $sqlerro = true;
+	    db_fieldsmemory($result_numgeral,0);
+	    $l20_edital=$l24_numero+1;
+	  } else {
+		$erro_msg="Configure a numeração de licitação por edital.";
+		$sqlerro = true;
 	  }
 
+    if(db_getsession('DB_anousu') >= 2020){
+        if ($clpccfeditalnum->numrows>0){
+            db_fieldsmemory($result_numedital,0);
+            $aModalidades = array(48, 49, 50, 52, 53, 54);
+            if(in_array($modalidade_tribunal, $aModalidades)){
+                $l20_nroedital=$l47_numero+1;
+            }
+        } else {
+            $erro_msg="Configure a numeração do edital.";
+            $sqlerro = true;
+        }
+    }
 
 	  // if ($sqlerro == false){
       // #2
@@ -160,12 +180,12 @@ if(isset($incluir)){
 	  // }
 
 
-	  //verifica se j existe licitao por modadlidade
+	  //verifica se ja existe licitacao por modalidade
     $sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null,"l25_numero as xx",null,"l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
 		$result_verif_licitamod=$clpccflicitapar->sql_record( $sqlveriflicitamod );
 
 		if ($clpccflicitapar->numrows>0){
-		  $erro_msg="J existe licitao nmero $l20_numero.Verificar o cadastro por modalidade.";
+		  $erro_msg="Ja existe licitação numero $l20_numero.Verificar o cadastro por modalidade.";
 		  $sqlerro = true;
 		}
 
@@ -173,9 +193,20 @@ if(isset($incluir)){
 		$result_verif_licitaedital=$clpccflicitanum->sql_record($clpccflicitanum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l25_anousu=$anousu and l20_edital= $l20_edital and l20_anousu=$anousu"));
 
 		if ($clpccflicitanum->numrows>0){
-		  $erro_msg="J existe licitao nmero $l20_edital.Verificar numerao por edital.";
+		  $erro_msg="Ja existe licitação numero $l20_edital.Verificar numeração por edital.";
 		  $sqlerro = true;
 		}
+
+		//verifica se existe numero do edital
+
+		if($l20_nroedital){
+        $result_verif_editalnum=$clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_edital(null,"l20_edital as yy",null,"l20_instit=$instit and l47_anousu=$anousu and l20_nroedital= $l20_nroedital and l20_anousu=$anousu"));
+        if ($clpccfeditalnum->numrows>0){
+            $erro_msg="Ja existe edital da licitação com numero $l47_edital.Verificar numeração por edital.";
+            $sqlerro = true;
+        }
+    }
+
 
 //    /**
 //     * Verificar Encerramento Periodo Contabil
@@ -197,44 +228,46 @@ if(isset($incluir)){
                 $erro_msg = $clcondataconf->erro_msg;
                 $sqlerro  = true;
             }
-				}
+		}
 
-				if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
+		if ($modalidade_tribunal == 52 || $modalidade_tribunal == 53) {
 
-					$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
-					if (!$verifica) {
-						$erro_msg = "Para as modalidades Prego presencial e Prego eletrnico  necessrio\nque a Comisso de Licitao tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
-						$sqlerro = true;
-					}
+			$verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
+			if (!$verifica) {
+				$erro_msg = "Para as modalidades Pregao presencial e Pregao eletronico  necessario\nque a Comissao de Licitacao tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
+				$sqlerro = true;
+			}
 
-				}
-				else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
+		}
+		else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
 
-					$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
-					if (!$verifica) {
-						$erro_msg = "Para as modalidades Tomada de Preos, Concorrncia e Convite  necessrio\nque a Comisso de Licitao tenham os tipos Secretrio, Presidente e Membro da Equipe de Apoio";
-						$sqlerro = true;
-					}
+			$verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
+			if (!$verifica) {
+				$erro_msg = "Para as modalidades Tomada de Preços, Concorrencia e Convite  necessario\nque a Comissao de Licitacao tenham os tipos Secretario, Presidente e Membro da Equipe de Apoio";
+				$sqlerro = true;
+			}
 
-				}
+		}
 
 		if ($sqlerro == false){
+			$clliclicita->l20_numero      	  =  $l20_numero;
+			$clliclicita->l20_edital      	  =  $l20_edital;
+			if($anousu >= 2020){
+                $clliclicita->l20_nroedital      	=  $l20_nroedital;
+			    $clliclicita->l20_exercicioedital =  $anousu;
+			}
+			$clliclicita->l20_anousu      	  =  $anousu;
+			$clliclicita->l20_licsituacao = '0';
+			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
-		  $clliclicita->l20_numero      = $l20_numero;
-		  $clliclicita->l20_edital      = $l20_edital;
-		  $clliclicita->l20_anousu      =  $anousu;
-		  $clliclicita->l20_licsituacao = '0';
-		  $clliclicita->l20_instit      = db_getsession("DB_instit");
+      		$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+            $clliclicita->incluir(null);
 
-      $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
-
-
-      $clliclicita->incluir(null);
-		  if ($clliclicita->erro_status=="0"){
-		  	$erro_msg = $clliclicita->erro_msg;
-		  	$sqlerro=true;
-		  }
-    }
+		  	if ($clliclicita->erro_status=="0"){
+		  		$erro_msg = $clliclicita->erro_msg;
+		  		$sqlerro=true;
+		  	}
+    	}
 
 		if ( !$sqlerro && $lprocsis == 's') {
 
@@ -255,12 +288,12 @@ if(isset($incluir)){
 	    $clliclicitasituacao->l11_id_usuario  = DB_getSession("DB_id_usuario");
 	    $clliclicitasituacao->l11_licsituacao = '0';
 	    $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
-			$clliclicitasituacao->l11_obs         = "Licitao em andamento.";
+			$clliclicitasituacao->l11_obs         = "Licitacao em andamento.";
 	    $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
 	    $clliclicitasituacao->l11_hora        = DB_hora();
       $clliclicitasituacao->incluir($l11_sequencial);
 
-	    $erro_msg = " Licitao {$l03_descr} nmero {$l20_numero} incluida com sucesso.";
+	    $erro_msg = " Licitacao {$l03_descr} número {$l20_numero} incluida com sucesso.";
 
 	    if ($clliclicitasituacao->erro_status == 0){
 			  $erro_msg = $clliclicitasituacao->erro_msg;
@@ -275,10 +308,17 @@ if(isset($incluir)){
 
       $clpccflicitanum->l24_numero=$l24_numero+1;
       $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
+
+      if(db_getsession('DB_anousu') >= 2020){
+          $clpccfeditalnum->l47_numero=$l47_numero+1;
+          $clpccfeditalnum->l47_instit=db_getsession('DB_instit');
+          $clpccfeditalnum->l47_anousu=db_getsession('DB_anousu');
+          $clpccfeditalnum->incluir(null);
+      }
     }
 
-		db_fim_transacao(false);
-	  //db_fim_transacao($sqlerro);
+		// db_fim_transacao(false);
+	  db_fim_transacao($sqlerro);
 	}
 }
 $l20_liclocal = 0;

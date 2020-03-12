@@ -738,7 +738,7 @@ class AcordoPosicao {
             $iTotaldeDotacoes = pg_num_rows($rsDotacoes);
 
             $iQtdporDotacao   = $oItemAcordo->quantidade / $iTotaldeDotacoes;
-            $iValorUnt        = (float)(str_replace(",",".",$oItemAcordo->valorunitario));
+            $iValorUnt        = (float)$oItemAcordo->valorunitario;
             $iValor           = $iValorUnt * round($iQtdporDotacao,2);
 
             foreach ($aDotacoes as $oDotacaoItem) {
