@@ -292,6 +292,7 @@ global $pess;
                        inner join rhlota       on rhlota.r70_codigo           = rhpessoalmov.rh02_lota
 											                        and rhlota.r70_instit           = rhpessoalmov.rh02_instit
                        inner join cgm          on cgm.z01_numcgm              = rhpessoal.rh01_numcgm
+                       INNER JOIN rhfuncao ON rh02_funcao = rh37_funcao AND rh37_cbo NOT IN ('515320','111250','111255','111120')
                        left join rhpesrescisao on rhpesrescisao.rh05_seqpes   = rhpessoalmov.rh02_seqpes
                        left join rhpesdoc      on rhpesdoc.rh16_regist        = rhpessoalmov.rh02_regist
                        left join rhpespadrao on rhpespadrao.rh03_seqpes       = rhpessoalmov.rh02_seqpes
