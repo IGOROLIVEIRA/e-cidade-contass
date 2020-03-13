@@ -991,4 +991,52 @@ class cl_gerfcom {
 
     return $sSql;
   }
+
+  public function verificaRubrica($rubrica, $matriculas = null)
+    {
+        $sWhereMatricula = "";
+        if (!empty($matriculas)) {
+            $sWhereMatricula = "AND r48_regist IN ($matriculas)";
+        }
+        $sql = "SELECT r48_regist AS regist,r48_rubric
+            FROM gerfcom
+            INNER JOIN rhrubricas ON rh27_rubric = r48_rubric
+            AND rh27_instit = " . db_getsession("DB_instit") . "
+            WHERE r48_anousu = " . db_anofolha() . "
+            AND r48_mesusu = " . db_mesfolha() . "
+            AND r48_instit = " . db_getsession("DB_instit") . "
+            {$sWhereMatricula}
+            AND r48_rubric = '{$rubrica}'";
+        return $sql;
+    }
+
+    public function verificaValorNegativo($matriculas = null)
+    {
+        $sWhereMatricula = "";
+        if (!empty($matriculas)) {
+            $sWhereMatricula = "AND r48_regist IN ($matriculas)";
+        }
+        $sql = "SELECT
+                   r48_regist AS regist,
+                   round(provento-desconto,2) AS liquido
+            FROM
+                (SELECT r48_regist,sum(CASE
+                                WHEN r48_pd = 1 THEN r48_valor
+                                ELSE 0
+                            END) AS provento,
+                        sum(CASE
+                                WHEN r48_pd = 2 THEN r48_valor
+                                ELSE 0
+                            END) AS desconto
+                 FROM gerfcom
+                 INNER JOIN rhrubricas ON rh27_rubric = r48_rubric
+                 AND rh27_instit = " . db_getsession("DB_instit") . "
+                 WHERE r48_anousu = " . db_anofolha() . "
+                     AND r48_mesusu = " . db_mesfolha() . "
+                     AND r48_instit = " . db_getsession("DB_instit") . "
+                     {$sWhereMatricula}
+                     AND r48_pd != 3 GROUP BY r48_regist) AS x WHERE round(provento-desconto,2) < 0";
+        return $sql;
+    }
+    
 }
