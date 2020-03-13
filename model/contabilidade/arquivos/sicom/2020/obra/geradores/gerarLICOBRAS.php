@@ -73,10 +73,14 @@ class gerarLICOBRAS extends GerarAM
         $aLICOBRAS20 = pg_fetch_array($rslicobras202020, $iCont);
 
         $aCSVLICOBRAS20['si196_tiporegistro'] = str_pad($aLICOBRAS20['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
-        $aCSVLICOBRAS20['si196_nrodocumento'] = substr($aLICOBRAS20['si196_nrodocumento'], 0, 50);
-        $aCSVLICOBRAS20['si196_nome'] = substr($aLICOBRAS20['si196_nome'], 0, 120);
-        $aCSVLICOBRAS20['si196_tipocadastro'] = $aLICOBRAS20['si196_tipocadastro'];
-        $aCSVLICOBRAS20['si196_justificativaalteracao'] = $aLICOBRAS20['si196_justificativaalteracao'];
+        $aCSVLICOBRAS20['si196_codorgaoresp'] = substr($aLICOBRAS20['si196_codorgaoresp'], 0, 2);
+        $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
+        $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
+        $aCSVLICOBRAS20['si196_exerciciolicitacao'] = $aLICOBRAS20['si196_exerciciolicitacao'];
+        $aCSVLICOBRAS20['si196_nroprocessolicitatorio'] = $aLICOBRAS20['si196_nroprocessolicitatorio'];
+        $aCSVLICOBRAS20['si196_codobra'] = $aLICOBRAS20['si196_codobra'];
+        $aCSVLICOBRAS20['si196_objeto'] = $aLICOBRAS20['si196_objeto'];
+        $aCSVLICOBRAS20['si196_linkobra'] = $aLICOBRAS20['si196_linkobra'];
         $this->sLinha = $aCSVLICOBRAS20;
         $this->adicionaLinha();
       }

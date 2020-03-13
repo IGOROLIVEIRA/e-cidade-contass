@@ -2,7 +2,7 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_ide2020_classe.php");
-require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarIDE.model.php");
+require_once("model/contabilidade/arquivos/sicom/2020/obra/geradores/gerarIDE.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal

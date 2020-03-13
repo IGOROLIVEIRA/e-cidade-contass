@@ -168,7 +168,7 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             INNER JOIN cflicita on l20_codtipocom = l03_codigo
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
-	              AND l03_pctipocompratribunal in (100,101)
+	              AND l03_pctipocompratribunal not in (100,101)
                 AND DATE_PART('YEAR',licobras.obr01_dtinicioatividades)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobras.obr01_dtinicioatividades)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult20 = db_query($sql);
@@ -179,13 +179,13 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
         $cllicobras202020->si196_tiporegistro = 20;
-        $cllicobras202020->si196_codorgaoresp = $oDados20->si196_codorgaoresp;
-        $cllicobras202020->si196_codunidadesubrespestadual = substr($oDados20->si196_codunidadesubrespestadual, 0, 4);
-        $cllicobras202020->si196_exerciciolicitacao = $oDados20->si196_exerciciolicitacao;
-        $cllicobras202020->si196_nroprocessolicitatorio = $oDados20->si196_nroprocessolicitatorio;
-        $cllicobras202020->si196_codobra = $oDados20->si196_codobra;
-        $cllicobras202020->si196_objeto = $oDados20->si196_objeto;
-        $cllicobras202020->si196_linkobra = $oDados20->si196_linkobra;
+        $cllicobras202020->si196_codorgaoresp = $oDados20->si195_codorgaoresp;
+        $cllicobras202020->si196_codunidadesubrespestadual = substr($oDados20->si195_codunidadesubrespestadual, 0, 4);
+        $cllicobras202020->si196_exerciciolicitacao = $oDados20->si195_exerciciolicitacao;
+        $cllicobras202020->si196_nroprocessolicitatorio = $oDados20->si195_nroprocessolicitatorio;
+        $cllicobras202020->si196_codobra = $oDados20->si195_codobra;
+        $cllicobras202020->si196_objeto = $oDados20->si195_objeto;
+        $cllicobras202020->si196_linkobra = $oDados20->si195_linkobra;
         $cllicobras202020->si196_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $cllicobras202020->si196_instit = db_getsession("DB_instit");
         $cllicobras202020->incluir(null);

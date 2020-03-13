@@ -104,7 +104,7 @@ switch($oParam->exec) {
   break;
 
   case "processarObra":
-//    ini_set('display_errors','on');
+    ini_set('display_errors','on');
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
@@ -173,32 +173,38 @@ switch($oParam->exec) {
       }
       system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-      foreach ($arquivosgerados as $arq) {
-        $aListaArquivospdf .= " ".$arq;
-        system("cd tmp/");
-        if (file_exists("tmp/$arq")){
-          $oEscritorPDF->adicionarArquivo("$arq", "$arq");
-        }
-      }
-      $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+//      echo "<pre>";print_r($arquivosgerados);exit;
+      if(pg_num_rows($rsRegistro30) > 0){
 
-      foreach ($arquivosgerados as $arquivo) {
-        unlink("tmp/".$arquivo);
+        foreach ($arquivosgerados as $arq) {
+          $aListaArquivospdf .= " ".$arq;
+          system("cd tmp/");
+          if (file_exists("tmp/$arq")){
+            $oEscritorPDF->adicionarArquivo("$arq", "$arq");
+          }
+        }
+        $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+
+        foreach ($arquivosgerados as $arquivo) {
+          unlink("tmp/".$arquivo);
+        }
+
+        $oArquivopdf = new stdClass();
+        $aPdfs = array();
+        foreach ($oEscritorPDF->getListaArquivos() as $pdf){
+          $aPdfs[] =$pdf;
+        }
+        $oArquivopdf->pdfs = $aPdfs;
+        $oArquivopdf->nome = "FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+        $oArquivopdf->caminho = "tmp/FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+        $aArrayArquivos[] = $oArquivopdf;
       }
 
       $oArquivoZip = new stdClass();
       $oArquivoZip->nome    = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
       $oArquivoZip->caminho = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
-      $oArquivopdf = new stdClass();
-      $aPdfs = array();
-      foreach ($oEscritorPDF->getListaArquivos() as $pdf){
-        $aPdfs[] =$pdf;
-      }
-      $oArquivopdf->pdfs = $aPdfs;
-      $oArquivopdf->nome = "FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivopdf->caminho = "tmp/FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $aArrayArquivos[] = $oArquivopdf;
+
 //      echo "<pre>";print_r($aArrayArquivos);exit;
       $oRetorno->itens  = $aArrayArquivos;
 
