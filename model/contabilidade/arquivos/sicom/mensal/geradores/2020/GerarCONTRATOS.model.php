@@ -137,6 +137,11 @@ class GerarCONTRATOS extends GerarAM {
               $aCSVCONTRATOS11['si84_tiporegistro']          =   str_pad($aCONTRATOS11['si84_tiporegistro'], 2, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS11['si84_codcontrato']           =   substr($aCONTRATOS11['si84_codcontrato'], 0, 15);
               $aCSVCONTRATOS11['si84_coditem']               =   substr($aCONTRATOS11['si84_coditem'], 0, 15);
+              $aCSVCONTRATOS11['si84_tipomaterial']          =   $aCONTRATOS11['si84_tipomaterial'] == 0 ? ' ' : $aCONTRATOS11['si84_tipomaterial'];
+              $aCSVCONTRATOS11['si84_coditemsinapi']         =   $aCONTRATOS11['si84_coditemsinapi'];
+              $aCSVCONTRATOS11['si84_coditemsimcro']         =   $aCONTRATOS11['si84_coditemsimcro'];
+              $aCSVCONTRATOS11['si84_descoutrosmateriais']   =   $aCONTRATOS11['si84_descoutrosmateriais'];
+              $aCSVCONTRATOS11['si84_itemplanilha']          =   $aCONTRATOS11['si84_itemplanilha'] == 0 ? ' ' : $aCONTRATOS11['si84_itemplanilha'];
               $aCSVCONTRATOS11['si84_quantidadeitem']        =   number_format($aCONTRATOS11['si84_quantidadeitem'], 4, ",", "");
               $aCSVCONTRATOS11['si84_valorunitarioitem']     =   number_format($aCONTRATOS11['si84_valorunitarioitem'], 4, ",", "");
 
