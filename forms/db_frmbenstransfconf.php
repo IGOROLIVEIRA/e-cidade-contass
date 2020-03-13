@@ -153,7 +153,7 @@ $clrotulo->label("t52_ident");
 <script>
 function js_pesquisat96_codtran(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_mostrabenstransf1|t93_codtran|nome','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf001.php?transfdireta=false&funcao_js=parent.js_mostrabenstransf1|t93_codtran|nome','Pesquisa',true);
   }else{
      if(document.form1.t96_codtran.value != ''){ 
         js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf001.php?pesquisa_chave='+document.form1.t96_codtran.value+'&funcao_js=parent.js_mostrabenstransf','Pesquisa',false);

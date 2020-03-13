@@ -607,7 +607,7 @@
 
         $sWhere   = " db150_liclicita = ".$iCodigoLicitacao;
 
-        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,null,$sWhere);
+        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,'db150_codobra',$sWhere);
         $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
 
         if( $rsQueryObra !== false) {

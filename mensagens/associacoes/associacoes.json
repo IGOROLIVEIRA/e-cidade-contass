@@ -35,7 +35,7 @@
     ,{  "fonte" : "patrimonial/patrimonio/db_frmbensmotbaixa.json",                             "menus" : [3595,3596,3597]  }
     ,{  "fonte" : "patrimonial/patrimonio/db_frmbenstransf.json",                               "menus" : [3954,3955,3956,3627,3628,3629]  }
     ,{  "fonte" : "patrimonial/patrimonio/db_frmbenstransfcodigolote.json",                     "menus" : [7303,7302]  }
-    ,{  "fonte" : "patrimonial/patrimonio/db_frmbenstransfconf.json",                           "menus" : [3636]  }
+    ,{  "fonte" : "patrimonial/patrimonio/db_frmbenstransfconf.json",                           "menus" : [3636,4001247]  }
     ,{  "fonte" : "patrimonial/patrimonio/db_frmbenstransflote.json",                           "menus" : [7302,7304]  }
     ,{  "fonte" : "patrimonial/patrimonio/db_frmcfpatri.json",                                  "menus" : [3944]  }
     ,{  "fonte" : "patrimonial/patrimonio/db_frmcfpatriplaca.json",                             "menus" : [5684]  }
