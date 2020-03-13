@@ -495,6 +495,32 @@ class Oc11336sicomobras extends AbstractMigration
                 CACHE 1;
 
                 ALTER TABLE cadobras102020 ALTER COLUMN si198_numrt SET DEFAULT 0;
+
+                --DROP TABLE:
+                DROP TABLE IF EXISTS licobrasresponsaveis CASCADE;
+
+                -- TABELAS E ESTRUTURA
+
+                          -- Módulo: Obras
+                          CREATE TABLE licobrasresponsaveis(
+                          obr05_sequencial		      int8 ,
+                          obr05_seqobra 			      int8 ,
+                          obr05_responsavel		      int8 ,
+                          obr05_tiporesponsavel	    int8 ,
+                          obr05_tiporegistro		    int8 ,
+                          obr05_numregistro		      varchar(10) ,
+                          obr05_numartourrt		      int8 ,
+                          obr05_vinculoprofissional int8 ,
+                          obr05_dtcadastrores       date ,
+                          obr05_instit			        int8 );
+
+                -- CHAVE ESTRANGEIRA
+                    ALTER TABLE licobrasresponsaveis ADD PRIMARY KEY (obr05_sequencial);
+                    ALTER TABLE licobrasresponsaveis ADD CONSTRAINT licobrasresponsaveis_licobras_fk
+                    FOREIGN KEY (obr05_seqobra) REFERENCES licobras (obr01_sequencial);
+
+                    ALTER TABLE licobrasresponsaveis ADD CONSTRAINT licobrasresponsaveis_cgm_fk
+                    FOREIGN KEY (obr05_responsavel) REFERENCES cgm (z01_numcgm);
 COMMIT;
 
 

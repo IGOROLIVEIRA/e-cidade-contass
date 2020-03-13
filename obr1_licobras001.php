@@ -75,7 +75,7 @@ if(isset($incluir)){
     $cllicobras->obr01_dtlancamento        = $obr01_dtlancamento;
     $cllicobras->obr01_numeroobra          = $obr01_numeroobra;
     $cllicobras->obr01_linkobra            = $obr01_linkobra;
-    $cllicobras->obr01_dtinicioatividades  = $obr01_dtinicioatividades;
+//    $cllicobras->obr01_dtinicioatividades  = $obr01_dtinicioatividades;
     $cllicobras->obr01_instit              = db_getsession('DB_instit');
     $cllicobras->incluir();
 
