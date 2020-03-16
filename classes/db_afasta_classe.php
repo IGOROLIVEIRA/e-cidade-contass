@@ -85,9 +85,12 @@ class cl_afasta {
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro 
-   function erro($mostra,$retorna) { 
+   function erro($mostra,$retorna,$incluir = false) { 
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
+        if ($incluir) {
+          echo "<script>alert('Faça o cálculo financeiro do servidor e confira os Proventos/Descontos que poderão ser proporcionalizados de acordo com a data do afastamento.');</script>";
+        }
         if($retorna==true){
            echo "<script>location.href='".$this->pagina_retorno."'</script>";
         }

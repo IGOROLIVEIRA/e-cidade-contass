@@ -278,7 +278,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
 //Metodo para fechar a janela e retornar o endereco salvo
     me.close = function () {
-        js_buscaDadosComplementares();
+        if(!me.acao){
+            js_buscaDadosComplementares();
+        }
+
         if (me.getObjetoRetorno() != "") {
             me.getObjetoRetorno().value = me.getCodigoObra();
         }
