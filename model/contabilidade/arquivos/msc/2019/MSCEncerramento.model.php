@@ -538,7 +538,7 @@ class MSCEncerramento {
         ELSE 10131
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
-      abs(round(substr(fc_planosaldonovo,45,15)::float8,2)::float8) AS saldoinicial,
+      abs(round(substr(fc_planosaldonovo,45,14)::float8,2)::float8) AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_si,
       round(substr(fc_movencerramentomsc,1,15)::float8,2)::float8 AS debito,  
@@ -551,9 +551,9 @@ class MSCEncerramento {
           WHEN round(substr(fc_movencerramentomsc,17,15)::float8,2)::float8 = 0 THEN NULL
           ELSE 'period_change_cred'
       END AS tipovalorcred,
-      abs(round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,15)::float8 * -1 else substr(fc_planosaldonovo,45,15)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,15)::float8,2)::float8) AS saldofinal,
+      abs(round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,15)::float8,2)::float8) AS saldofinal,
       'ending_balance' AS tipovalor_sf,
-       case when round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,15)::float8 * -1 else substr(fc_planosaldonovo,45,15)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,15)::float8,2)::float8 > 0 then 'D' else 'C' end AS nat_vlr_sf,
+       case when round((case when substr(fc_planosaldonovo,60,1)::varchar(1) = 'C' then substr(fc_planosaldonovo,45,14)::float8 * -1 else substr(fc_planosaldonovo,45,14)::float8 end  )  + substr(fc_movencerramentomsc,1,15)::float8 - substr(fc_movencerramentomsc,17,15)::float8,2)::float8 > 0 then 'D' else 'C' end AS nat_vlr_sf,
       c61_reduz,
       c61_codcon,
       c61_codigo,

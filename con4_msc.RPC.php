@@ -44,7 +44,7 @@ switch ($oParam->exec) {
 
             if ($iMes == 13) {
 
-                $sPeriodIdentifier = "$iAnoUsu-12";
+                $sPeriodIdentifier = "$iAnoUsu-$iMes";
                 $sPeriodStart = $sPeriodDescription = "$iAnoUsu-12-01";
                 $sInstant = $sPeriodEnd = "$iAnoUsu-12-".cal_days_in_month(CAL_GREGORIAN, 12, $iAnoUsu);
 

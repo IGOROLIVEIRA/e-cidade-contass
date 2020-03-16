@@ -256,9 +256,9 @@ class Oc11552 extends PostgresMigration
           THEN nFonte := 0;
         END IF;
         
-        sinal_ant_enc := sinal_ant;
+        sinal_ant_enc := sinal_final;
 
-        nSaldoInicialMesEnc := nSaldoFinalMes;
+        nSaldoInicialMesEnc := nSaldoFinalMes::float8;
 
         return TO_CHAR(ABS(iSequencia),'999999999999')
            ||';'||TO_CHAR(iCC::integer,'999999999999')
@@ -269,7 +269,7 @@ class Oc11552 extends PostgresMigration
            ||';'||replace(TO_CHAR(ABS(nSaldoFinalMes),'99999999990D99'),',','.')
            ||';'||sinal_ant
            ||';'||'-'||';'||sinal_final
-           ||';'||replace(TO_CHAR(ABS(nSaldoInicialMesEnc),'99999999990D99'),',','.')
+           ||';'||replace(TO_CHAR(ABS(nSaldoInicialMesEnc::float8),'99999999990D99'),',','.')
            ||';'||replace(TO_CHAR(ABS(tDebitoMesEncerramento),'99999999990D99'),',','.')
            ||';'||replace(TO_CHAR(ABS(tCreditoMesEncerramento),'99999999990D99'),',','.')
            ||';'||replace(TO_CHAR(ABS(nSaldoFinalMesEnc),'99999999990D99'),',','.')
