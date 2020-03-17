@@ -29,7 +29,8 @@ $sEntriesType = "trialbalance";
 $sPeriodIdentifier = "$iAnoUsu-$iMes";
 $sPeriodStart = $sPeriodDescription = "$iAnoUsu-$iMes-01";
 $sInstant = $sPeriodEnd = "$iAnoUsu-$iMes-".cal_days_in_month(CAL_GREGORIAN, $iMes, $iAnoUsu);
-$sNomeArq = "MSC";
+$sNomeArq = $iMes == 13 ? "MSCEncerramento" : "MSC";
+$sMscPath = "model/contabilidade/arquivos/msc/{$iAnoUsu}";
 
 switch ($oParam->exec) {
 
@@ -41,36 +42,58 @@ switch ($oParam->exec) {
                 throw new Exception ("Não existe código SICONFI para a Prefeitura no cadastro de Instituições");
             }
 
-            if (file_exists("model/contabilidade/arquivos/msc/".$iAnoUsu."/MSC.model.php")) {
+            if ($iMes == 13) {
 
-                require_once("model/contabilidade/arquivos/msc/" . $iAnoUsu . "/MSC.model.php");
+                $sPeriodIdentifier = "$iAnoUsu-$iMes";
+                $sPeriodStart = $sPeriodDescription = "$iAnoUsu-12-01";
+                $sInstant = $sPeriodEnd = "$iAnoUsu-12-".cal_days_in_month(CAL_GREGORIAN, 12, $iAnoUsu);
 
-                $msc = new MSC;
+                $sMscFilePath = "{$sMscPath}/MSCEncerramento.model.php";
 
-                $msc->setIdentifier($sIdentifier);
-                $msc->setEntriesType($sEntriesType);
-                $msc->setPeriodIdentifier($sPeriodIdentifier);
-                $msc->setPeriodDescription($sPeriodDescription);
-                $msc->setPeriodStart($sPeriodStart);
-                $msc->setPeriodEnd($sPeriodEnd);
-                $msc->setInstant($sInstant);
-                $msc->setTipoMatriz($iInstituicao);
-                $msc->setNomeArq($sNomeArq . "$iAnoUsu$iMes");
-                $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
+                if (file_exists($sMscFilePath)) {
 
-                if ($msc->getErroSQL() > 0) {
-                    throw new Exception ("Ocorreu um erro ao gerar IC " . $msc->getErroSQL());
+                    require_once($sMscFilePath);
+                    $msc = new MSCEncerramento;
+
+                } else {
+                    throw new Exception ("Arquivo {$sNomeArq} para o ano {$iAnoUsu} não existe. ");
                 }
 
-                $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
-
-                system("rm -f {$msc->getNomeArq()}.zip");
-                system("bin/zip -q {$msc->getNomeArq()}.zip $oRetorno->caminho");
-                $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$msc->getNomeArq()}.zip";
-
             } else {
-                throw new Exception ("Arquivo MSC para o ano {$iAnoUsu} não existe. ");
+
+                $sMscFilePath = "{$sMscPath}/MSC.model.php";
+
+                if (file_exists($sMscFilePath)) {
+
+                    require_once($sMscFilePath);
+                    $msc = new MSC;
+
+                } else {
+                    throw new Exception ("Arquivo {$sNomeArq} para o ano {$iAnoUsu} não existe. ");
+                }
+
             }
+
+            $msc->setIdentifier($sIdentifier);
+            $msc->setEntriesType($sEntriesType);
+            $msc->setPeriodIdentifier($sPeriodIdentifier);
+            $msc->setPeriodDescription($sPeriodDescription);
+            $msc->setPeriodStart($sPeriodStart);
+            $msc->setPeriodEnd($sPeriodEnd);
+            $msc->setInstant($sInstant);
+            $msc->setTipoMatriz($iInstituicao);
+            $msc->setNomeArq($sNomeArq . "$iAnoUsu$iMes");
+            $msc->gerarMSC($iAnoUsu, $iMes, $sFormato);
+
+            if ($msc->getErroSQL() > 0) {
+                throw new Exception ("Ocorreu um erro ao gerar IC " . $msc->getErroSQL());
+            }
+
+            $oRetorno->caminho = $oRetorno->nome = ($sFormato == 'csv') ? "{$msc->getNomeArq()}.csv" : "{$msc->getNomeArq()}.xml";
+
+            system("rm -f {$msc->getNomeArq()}.zip");
+            system("bin/zip -q {$msc->getNomeArq()}.zip $oRetorno->caminho");
+            $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$msc->getNomeArq()}.zip";
 
         } catch(Exception $eErro) {
 
