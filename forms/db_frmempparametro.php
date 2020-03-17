@@ -135,6 +135,7 @@ $clempparametro->rotulo->label();
                 <td nowrap title="<?=@$Te30_empdataemp?>"><?=@$Le30_empdataemp ?></td>
                 <td><? $matriz = array("f"=>"Não","t"=>"Sim");
                     db_select("e30_empdataemp", $matriz,true,1);
+                    db_select("e30_empdataemp", $matriz,true,1);
                     ?>
                 </td>
             </tr>
@@ -211,6 +212,16 @@ $clempparametro->rotulo->label();
                     );
                     $e94_empanuladotipo = $e30_tipoanulacaopadrao;
                     db_selectrecord("e30_tipoanulacaopadrao",$rsEmpAnuladoTipo,true,1);
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap title="<?=@$Te30_atestocontinterno ?>">
+                    <?=@$Le30_atestocontinterno ?>
+                </td>
+                <td><?
+                    $matriz = array("f"=>"Não","t"=>"Sim");
+                    db_select("e30_atestocontinterno",$matriz,true,1);
                     ?>
                 </td>
             </tr>
