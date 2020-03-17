@@ -521,6 +521,9 @@ class Oc11336sicomobras extends AbstractMigration
 
                     ALTER TABLE licobrasresponsaveis ADD CONSTRAINT licobrasresponsaveis_cgm_fk
                     FOREIGN KEY (obr05_responsavel) REFERENCES cgm (z01_numcgm);
+
+                    ALTER table licobrasanexo alter COLUMN obr04_legenda type varchar(250);
+
 COMMIT;
 
 

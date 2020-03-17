@@ -178,7 +178,7 @@ $cllicobrasmedicao->rotulo->label();
           </td>
           <td>
             <?
-            db_input('obr04_legenda',40,$Iobr04_legenda,true,'text',$db_opcao,"");
+            db_input('obr04_legenda',250,$Iobr04_legenda,true,'text',$db_opcao,"");
             ?>
           </td>
         </tr>

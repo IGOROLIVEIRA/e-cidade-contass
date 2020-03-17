@@ -110,15 +110,15 @@ class cl_pcorcam {
        $this->erro_status = "0";
        return false;
      }*/
-     if($this->pc20_hrate == null ){
-       $this->erro_sql = " Campo Hora limite para entrega do orçamento nao Informado.";
-       $this->erro_campo = "pc20_hrate";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+//     if($this->pc20_hrate == null ){
+//       $this->erro_sql = " Campo Hora limite para entrega do orçamento nao Informado.";
+//       $this->erro_campo = "pc20_hrate";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
      if($this->pc20_prazoentrega == null ){
        $this->pc20_prazoentrega = "0";
      }

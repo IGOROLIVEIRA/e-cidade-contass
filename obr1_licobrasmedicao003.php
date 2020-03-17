@@ -65,6 +65,9 @@ if(isset($excluir)){
     margin-left: -58px;
     margin-bottom: 20px;
   }
+  #obr04_legenda{
+    width: 430px;
+  }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-left: 16%; margin-top: 2%;">
