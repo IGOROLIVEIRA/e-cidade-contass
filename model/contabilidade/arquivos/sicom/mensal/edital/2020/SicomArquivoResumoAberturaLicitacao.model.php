@@ -343,7 +343,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
       $clralic10->si180_nroedital = $oDados10->nroedital;
       $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital: intval($oDados10->exerciciolicitacao);
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
-      $clralic10->si180_link = $oDados10->link;
+      $clralic10->si180_link = preg_replace("/\r|\n/", "", $oDados10->link);
       $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao;
       $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto;
       $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);

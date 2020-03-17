@@ -75,7 +75,7 @@ $clrotulo->label('DBtxt23');
   </tr>
   <tr>
     <td colspan="2" align = "center"> 
-      <input name="<?=($db_opcao == 1?'false':'true')?>" id="processar" type="button" value="<?=($db_opcao == 1?'Processar':'Desprocessar')?>" onclick="js_processar();" >
+      <input name="<?=($db_opcao == 1?'false':'true')?>" id="processar" type="button" value="<?=($db_opcao == 1?'Processar':'Desprocessar')?>" onclick="js_verificaProcessar();" >
     </td>
   </tr>
   </form>
@@ -92,8 +92,38 @@ function js_mostrardiv(TorF,texto){
   	document.getElementById('texto').innerHTML = '';
   }
 }
-function js_processar(){
+function js_verificaProcessar() {
+  var oParam           = new Object();
+  oParam.exec          = "verificaFolha";
+  var oAjax = new Ajax.Request("pes4_verificaFolha.RPC.php",
+      {
+          method:'post',
+          parameters:'json='+Object.toJSON(oParam),
+          onComplete:js_retornoProcessamento
+      }
+  );
+}
 
+function js_retornoProcessamento(oAjax) {
+  var oRetorno = eval("("+oAjax.responseText+")");
+  if (oRetorno.status == 2) {
+      if (oRetorno.aMatriculasValorNegativo.length > 0) {
+        if(!confirm("Matricula(s) ("+oRetorno.aMatriculasValorNegativo.join(",")+"), servidor(es) com valores negativos. Deseja continuar?")) {
+          return false;
+        }
+      }
+      if (oRetorno.aMatriculasRubrica.length > 0) {
+        if(!confirm("Existem servidores com Insuficiência de saldo, Rubrica R928. Matrículas ("+oRetorno.aMatriculasRubrica.join(",")+"). Deseja continuar")) {
+          return false;
+        }
+      }
+      js_processar();
+  } else {
+    js_processar();
+  }
+}
+
+function js_processar(){
   var lLotesFechados = <?php echo $lLotesFechados ?>;
 
   if (lLotesFechados) {

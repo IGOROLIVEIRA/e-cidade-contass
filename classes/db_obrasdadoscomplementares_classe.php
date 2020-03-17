@@ -83,10 +83,10 @@ class cl_obrasdadoscomplementares
                     db150_logradouro = varchar(150) = Logradouro
                     db150_grauslatitude = int4 = Graus da Latitude
                     db150_minutolatitude = int4 = Minuto da Latitude 
-                    db150_segundolatitude = int4 = Segundo da Latitude
+                    db150_segundolatitude = numeric = Segundo da Latitude
                     db150_grauslongitude = int4 = Graus da Longitude
                     db150_minutolongitude = int4 = Minuto da Longitude
-                    db150_segundolongitude = int4 = Segundo da Latitude
+                    db150_segundolongitude = numeric = Segundo da Latitude
                     db150_classeobjeto =  int4 = Classe do objeto
                     db150_grupobempublico = int4 = Grupo Bem Público
                     db150_subgrupobempublico = int4 = Subgrupo Bem Público
@@ -95,7 +95,7 @@ class cl_obrasdadoscomplementares
                     db150_descratividadeservico = varchar(150) = Descrição da Atividade do Serviço
                     db150_atividadeservicoesp = int4 = Atividade do Serviço Especializado
                     db150_descratividadeservicoesp = varchar(150) = Descrição da Atividade do Serviço Especializado
-                    db150_bdi = int4 = BDI
+                    db150_bdi = numeric = BDI
                     db150_liclicita = int4 = Número da licitação
                     db150_cep = char(8) = CEP
                   ";
@@ -401,13 +401,22 @@ class cl_obrasdadoscomplementares
 		if (trim($this->db150_distrito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_distrito"])) {
 			$sql .= $virgula . " db150_distrito = '$this->db150_distrito' ";
 			$virgula = ",";
+		}else{
+			$sql .= $virgula . " db150_distrito = '' ";
+			$virgula = ",";
 		}
-		if (trim($this->db150_bairro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])) {
+		if (trim($this->db150_bairro) != null || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])) {
 			$sql .= $virgula . " db150_bairro = '$this->db150_bairro' ";
+			$virgula = ",";
+		}else{
+			$sql .= $virgula . " db150_bairro = '' ";
 			$virgula = ",";
 		}
 		if (trim($this->db150_numero) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
 			$sql .= $virgula . " db150_numero = $this->db150_numero ";
+			$virgula = ",";
+		}else{
+			$sql .= $virgula . " db150_numero = null ";
 			$virgula = ",";
 		}
 		if (trim($this->db150_logradouro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])) {
@@ -514,7 +523,6 @@ class cl_obrasdadoscomplementares
 		if ($db150_sequencial != null) {
 			$sql .= " db150_sequencial = $db150_sequencial";
 		}
-
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());

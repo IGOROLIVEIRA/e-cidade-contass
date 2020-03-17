@@ -181,7 +181,7 @@
 
     /**
      * Metodo para setar a propriedade segundolatitude
-     * @param integer segundolatitude
+     * @param float segundolatitude
      * @return void
      */
     public function setSegundoLatitude($iSegundoLatitude) {
@@ -189,7 +189,7 @@
     }
     /**
      * Metodo para retornar a propriedade segundolatitude
-     * @return integer segundolatitude
+     * @return float segundolatitude
      */
     public function getSegundoLatitude() {
       return $this->db150_segundolatitude;
@@ -229,7 +229,7 @@
 
     /**
      * Metodo para setar a propriedade segundolongitude
-     * @param integer segundolongitude
+     * @param float segundolongitude
      * @return void
      */
     public function setSegundoLongitude($iSegundoLongitude) {
@@ -237,7 +237,7 @@
     }
     /**
      * Metodo para retornar a propriedade segundolongitude
-     * @return integer segundolongitude
+     * @return float segundolongitude
      */
     public function getSegundoLongitude() {
       return $this->db150_segundolongitude;
@@ -371,7 +371,7 @@
 
     /**
      * Metodo para setar a propriedade bdi
-     * @param integer bdi
+     * @param float bdi
      * @return void
      */
     public function setBdi($ibdi) {
@@ -379,7 +379,7 @@
     }
     /**
      * Metodo para retornar a propriedade bdi
-     * @return integer bdi
+     * @return float bdi
      */
     public function getBdi() {
       return $this->db150_bdi;
@@ -607,7 +607,7 @@
 
         $sWhere   = " db150_liclicita = ".$iCodigoLicitacao;
 
-        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,null,$sWhere);
+        $sQueryObra  = $oDaoObra->sql_query_completo(null,$sCampos,'db150_codobra',$sWhere);
         $rsQueryObra = $oDaoObra->sql_record($sQueryObra);
 
         if( $rsQueryObra !== false) {

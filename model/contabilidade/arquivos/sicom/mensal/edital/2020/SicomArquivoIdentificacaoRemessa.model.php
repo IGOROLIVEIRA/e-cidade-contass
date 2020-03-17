@@ -108,11 +108,32 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
             $clideedital->si186_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
             $clideedital->si186_datageracao          = date("d-m-Y");
             $clideedital->si186_codcontroleremessa   = " ";
-            $clideedital->si186_codseqremessames     = $iCont+1;
             $clideedital->si186_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
             $clideedital->si186_instit               = db_getsession("DB_instit");
 
-            $clideedital->incluir(null);
+		/*
+		 * Busca pelo sequencial do IDEEDITAL para o mês corrente que o usuário esta gerando os arquivos...
+		 */
+
+			$sSqlSeq = "SELECT (Row_Number() Over (Partition BY TRUE
+                           ORDER BY tabela.l47_dataenvio ASC)) AS sequencial,
+			   				tabela.l47_dataenvio
+							FROM
+							(SELECT DISTINCT l47_dataenvio
+				 				FROM liclancedital
+				 					WHERE extract(MONTH FROM l47_dataenvio) = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+				 		ORDER BY l47_dataenvio) AS tabela";
+			$rsSqlSeq = db_query($sSqlSeq);
+
+			for($iCount = 0; $iCount < pg_num_rows($rsSqlSeq); $iCount++){
+				$valores = db_utils::fieldsMemory($rsSqlSeq, $iCount);
+
+				if($valores->l47_dataenvio == $this->sDataFinal){
+					$clideedital->si186_codseqremessames = $valores->sequencial;
+				};
+			}
+
+			$clideedital->incluir(null);
 
             if ($clideedital->erro_status == 0) {
                 throw new Exception($clideedital->erro_msg);
