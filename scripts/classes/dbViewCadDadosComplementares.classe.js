@@ -3966,7 +3966,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtCodigoObra' + sId).value = dadoscomplementares.codigoobra;
         me.setCodigoObra(dadoscomplementares.codigoobra);
         $('txtBdi' + sId).value = dadoscomplementares.bdi;
-        me.setBdi(js_formatar(dadoscomplementares.bdi, 'f'));
+        me.setBdi(dadoscomplementares.bdi);
         $('txtGrausLatitude' + sId).value = dadoscomplementares.grauslatitude;
         me.setGrausLatitude(dadoscomplementares.grauslatitude);
         $('txtMinutoLatitude' + sId).value = dadoscomplementares.minutolatitude;
