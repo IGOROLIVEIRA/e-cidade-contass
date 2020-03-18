@@ -21,7 +21,7 @@
                                                   and db71_sigla              = uf
                inner join cadenderpais             on db71_cadenderpais       = db70_sequencial
                inner join cadenderpaissistema      on db70_sequencial         = db135_db_cadenderpais and db135_db_sistemaexterno = 3
-         where prefeitura = 't')"                                                                                                      label="cod_ibge"           />
+         where prefeitura = 't' limit 1)"                                                                                                      label="cod_ibge"           />
     <campo campo="(select db72_descricao
           from db_config
                inner join cadendermunicipio on munic =  db72_descricao
@@ -30,7 +30,7 @@
                                                   and db71_sigla              = uf
                inner join cadenderpais             on db71_cadenderpais       = db70_sequencial
                inner join cadenderpaissistema      on db70_sequencial         = db135_db_cadenderpais and db135_db_sistemaexterno = 3
-        where prefeitura = 't')"                                                                                                       label="munic"              />
+        where prefeitura = 't' limit 1)"                                                                                                       label="munic"              />
     <campo campo="(select db71_sigla
           from db_config
                inner join cadendermunicipio on munic =  db72_descricao
@@ -39,7 +39,7 @@
                                                   and db71_sigla              = uf
                inner join cadenderpais             on db71_cadenderpais       = db70_sequencial
                inner join cadenderpaissistema      on db70_sequencial         = db135_db_cadenderpais and db135_db_sistemaexterno = 3
-         where prefeitura = 't')"                                                                                                      label="uf"                 />
+         where prefeitura = 't' limit 1)"                                                                                                      label="uf"                 />
     <campo campo="(select db135_codigo
           from db_config
                inner join cadendermunicipio on munic =  db72_descricao
@@ -48,7 +48,7 @@
                                                   and db71_sigla              = uf
                inner join cadenderpais             on db71_cadenderpais       = db70_sequencial
                inner join cadenderpaissistema      on db70_sequencial         = db135_db_cadenderpais and db135_db_sistemaexterno = 3
-        where prefeitura = 't')"                                                                                                       label="cod_pais"           />
+        where prefeitura = 't' limit 1)"                                                                                                       label="cod_pais"           />
     <campo campo="(select db70_descricao
                         from db_config
                            inner join cadendermunicipio on munic =  db72_descricao
@@ -59,7 +59,7 @@
                            inner join cadenderpais              on db71_cadenderpais       = db70_sequencial
                            inner join cadenderpaissistema       on db70_sequencial         = db135_db_cadenderpais
                                                                and db135_db_sistemaexterno = 3
-                        where prefeitura = 't')"                                                                                       label="pais"                 />
+                        where prefeitura = 't' limit 1)"                                                                                       label="pais"                 />
     <campo campo="coalesce(cgm.z01_cep, cgm.z01_cep, issqn.issruas.z01_cep)"                                                           label="cep"                  />
     <campo campo="cgm.z01_telef"                                                                                                       label="telefone"             />
     <campo campo="cgm.z01_fax"                                                                                                         label="fax"                  />
