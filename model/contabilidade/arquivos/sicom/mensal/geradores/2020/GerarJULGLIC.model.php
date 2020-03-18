@@ -80,7 +80,7 @@ class GerarJULGLIC extends GerarAM
         $aCSVJULGLIC20['si61_nroprocessolicitatorio'] = substr($aJULGLIC20['si61_nroprocessolicitatorio'], 0, 12);
         $aCSVJULGLIC20['si61_tipodocumento']          = $this->padLeftZero($aJULGLIC20['si61_tipodocumento'], 1);
         $aCSVJULGLIC20['si61_nrodocumento']           = substr($aJULGLIC20['si61_nrodocumento'], 0, 14);
-        $aCSVJULGLIC20['si61_nrolote']                = substr($aJULGLIC20['si61_nrolote'], 0, 4);
+        $aCSVJULGLIC20['si61_nrolote']                = !$aJULGLIC20['si61_nrolote'] ? '' : substr($aJULGLIC20['si61_nrolote'], 0, 4);
         $aCSVJULGLIC20['si61_coditem']                = substr($aJULGLIC20['si61_coditem'], 0, 15);
         $aCSVJULGLIC20['si61_percdesconto']           = $this->sicomNumberReal($aJULGLIC20['si61_percdesconto'], 2);
         
