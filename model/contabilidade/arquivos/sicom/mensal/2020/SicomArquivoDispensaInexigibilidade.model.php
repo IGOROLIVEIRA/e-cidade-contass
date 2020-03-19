@@ -1044,7 +1044,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	cgm.z01_cgccpf as nroDocumento,
 	credenciamento.l205_datacred as dataCredenciamento,
 	dispensa112020.si75_nrolote as nroLote,
-	(credenciamento.l205_item::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
+	(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
 	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
@@ -1069,6 +1069,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+	INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 	INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
 	LEFT JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
