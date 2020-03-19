@@ -338,7 +338,7 @@ else if(isset($excluir)){
   }
 }else if(isset($r33_codigo) && trim($r33_codigo) != ""){
   $dbwhere = "r33_anousu = ".db_anofolha()." and r33_mesusu = ".db_mesfolha()." and r33_codigo = $r33_codigo and r33_instit = ".db_getsession("DB_instit")." and r33_codtab = '$codtab'";
-  $result = $clinssirf->sql_record($clinssirf->sql_query_file(null,null,"r33_codigo,r33_codtab as codtab,round(r33_inic,2) as r33_inic,round(r33_fim,2) as r33_fim,round(r33_perc,2) as r33_perc,round(r33_deduzi,2) as r33_deduzi,r33_nome",null,$dbwhere)); 
+  $result = $clinssirf->sql_record($clinssirf->sql_query_file(null,null,"r33_codigo,r33_codtab as codtab,round(r33_inic,2) as r33_inic,round(r33_fim,2) as r33_fim,round(r33_perc,2) as r33_perc,round(r33_deduzi,2) as r33_deduzi,r33_nome,r33_novocalculo",null,$dbwhere)); 
   db_fieldsmemory($result,0);
   $db_botao = true;
 
