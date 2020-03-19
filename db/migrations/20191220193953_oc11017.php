@@ -19,7 +19,8 @@ class Oc11017 extends PostgresMigration
         $table  = $this->table('inssirf', array('schema' => 'pessoal'));
         $table->removeColumn('r33_novocalculo')
               ->save();
-        $codCam = $this->fetchRow("SELECT codcam FROM db_syscampo WHERE nomecam = 'r33_novocalculo'")['codcam'];
+        $codCam = $this->fetchRow("SELECT codcam FROM db_syscampo WHERE nomecam = 'r33_novocalculo'");
+        $codCam = $codCam['codcam'];
         $sql = "DELETE FROM db_sysarqcamp WHERE codcam = {$codCam}";
         $this->execute($sql);
         $sql = "DELETE FROM db_syscampo WHERE codcam = {$codCam}";
