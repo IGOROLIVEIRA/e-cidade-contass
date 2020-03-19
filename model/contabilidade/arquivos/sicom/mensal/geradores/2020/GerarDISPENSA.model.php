@@ -275,7 +275,7 @@ class GerarDISPENSA extends GerarAM
           $aCSVDISPENSA18['si82_nrodocumento']                        = substr($aDISPENSA18['si82_nrodocumento'], 0, 14);
           $aCSVDISPENSA18['si82_datacredenciamento']                  = $this->sicomDate($aDISPENSA18['si82_datacredenciamento']);
           $aCSVDISPENSA18['si82_nrolote']                             = $aDISPENSA18['si82_nrolote'] == '0' ? ' ' : substr($aDISPENSA18['si82_nrolote'], 0, 4);
-          $aCSVDISPENSA18['si82_coditem']                             = $this->padLeftZero($aDISPENSA18['si82_coditem'], 15);
+          $aCSVDISPENSA18['si82_coditem']                             = substr($aDISPENSA18['si82_coditem'], 0, 15);
           $aCSVDISPENSA18['si82_nroinscricaoestadual']                = substr($aDISPENSA18['si82_nroinscricaoestadual'], 0, 30);
           $aCSVDISPENSA18['si82_ufinscricaoestadual']                 = strlen($aDISPENSA18['si82_ufinscricaoestadual']) < 2 ? ' ' : substr($aDISPENSA18['si82_ufinscricaoestadual'], 0, 2);
           $aCSVDISPENSA18['si82_nrocertidaoregularidadeinss']         = substr($aDISPENSA18['si82_nrocertidaoregularidadeinss'], 0, 30);
