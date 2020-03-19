@@ -1107,37 +1107,49 @@ WHERE rh30_vinculo = 'I'
 
 //echo "entrou no select"."\n\n";
 
-    $sql = "SELECT rh01_regist AS matricula,
-       '1'||'#' 
-       ||'3'||'#' 
-       ||instituicao.z01_cgccpf||'#' 
-       ||instituicao.z01_nome||'#' 
-       ||'1'||'#' 
-       ||'1'||'#' 
-       ||'7'||'#' 
-       ||'3'||'#'||
-       COALESCE(instintuidor.z01_numcgm::varchar,' ')||'# '||
-       COALESCE(instintuidor.z01_nome,' ')||'# '||
-       COALESCE(instintuidor.z01_cgccpf::varchar,' ')||'# '||
-       COALESCE(instintuidor.z01_pis,' ')||'#'|| 
-       ' '||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||rh01_regist||'#' 
-       ||servidor.z01_cgccpf||'#' 
-       ||CASE
-          WHEN rh01_sexo = 'M' THEN 2
-          ELSE 1
-          END ||'#'
-       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
-       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
-       ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
-       ||'0'||'#' 
-       ||'0'||'#' 
-       ||' '||'#' 
-       ||' '||'#' 
-       ||case when rh02_rhtipoapos = 4 then 2 else 1 end||'#' 
-       ||' ' AS todo
+    $sql = "
+       SELECT rh01_regist||'# '||
+       servidor.z01_nome||'# '||
+       servidor.z01_cgccpf||'# '||
+       CASE
+        WHEN rh01_sexo = 'M' THEN 2
+        ELSE 1
+       END ||'#' ||  
+       to_char(rh01_nasc, 'DD/MM/YYYY')||'# '|| 
+       instituicao.z01_nome||'# '|| 
+       instituicao.z01_cgccpf||'# '||
+       db21_tipopoder ||'# '|| 
+       '1'||'# '||
+       coalesce(case when rh02_tipoparentescoinst = 3 then 1
+            when rh02_tipoparentescoinst = 1 then 2
+            when rh02_tipoparentescoinst = 4 then 3
+            when rh02_tipoparentescoinst = 5 or rh02_tipoparentescoinst = 6 then 4 end::varchar,'') ||'# '||
+       ' '||'# '||
+       case when coalesce(rhpessoalmov.rh02_validadepensao::varchar, '') = '' then 1 else 2 end ||'# '||
+       coalesce(to_char(rh02_validadepensao, 'DD/MM/YYYY'),' ')||'# '||
+       to_char(rh01_admiss, 'DD/MM/YYYY')||'# '||
+       trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+       ' '||'# '|| 
+       ' '||'# '||
+      coalesce(case when rh01_reajusteparidade = 2 then 1
+                    else 2 end::varchar,'')||'# '||
+      ' '||'# '||
+      coalesce(instintuidor.z01_numcgm::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_nome,' ')||'# '||
+      coalesce(instintuidor.z01_cgccpf::varchar,' ')||'# '||
+      coalesce(instintuidor.z01_pis,' ')||'#' ||
+      coalesce(to_char(instintuidor.z01_nasc, 'DD/MM/YYYY'),' ')||'# '||
+      coalesce(to_char(instintuidor.z01_dtfalecimento, 'DD/MM/YYYY'),' ')||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '|| 
+      ' '||'# '||
+      rh02_anousu ||'# '||
+      rh02_mesusu as todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $anofolha
@@ -1259,7 +1271,7 @@ function calcatua_sprev($anofolha,$mesfolha,$where){
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
                   FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh31_dtnasc DESC) AS dependentes)::varchar,' ')
@@ -1385,7 +1397,7 @@ WHERE rh30_vinculo = 'A'
                   CASE WHEN rh31_especi IN('C','S') THEN 2
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'C' THEN 1
-                  WHEN rh31_gparen = 'F' AND rh31_especi = 'N' THEN 2
+                  WHEN rh31_gparen = 'F' AND (rh31_especi = 'N' OR rh31_especi IS NULL) THEN 2
                   WHEN rh31_gparen = 'F' AND rh31_especi IN ('C','S') THEN 3
                   ELSE 6 END AS depend
                   FROM rhdepend WHERE rh31_regist = rh01_regist ORDER BY rh01_regist DESC) AS dependentes)::varchar,' ')
@@ -1460,13 +1472,12 @@ WHERE rh30_vinculo = 'I'
                 db21_tipopoder ||'# '||
                 '1' ||'# '||
                 '1' ||'# '||
-                rhpessoalmov.rh02_cgminstituidor ||'# '||
-                (SELECT z01_cgccpf||'# '||
-                 coalesce(z01_pis,' ') ||'# '||
-                 to_char(z01_nasc, 'DD/MM/YYYY') FROM cgm 
-                 WHERE z01_numcgm = rhpessoalmov.rh02_cgminstituidor 
-                 LIMIT 1) ||'# '||
-                rhpessoalmov.rh02_dtobitoinstituidor ||'# '||
+                COALESCE(rhpessoalmov.rh02_cgminstituidor::varchar,' ') ||'# '||
+                COALESCE((SELECT z01_cgccpf||'# '|| coalesce(z01_pis,' ') ||'# '|| to_char(z01_nasc, 'DD/MM/YYYY')
+                FROM cgm
+                WHERE z01_numcgm = rhpessoalmov.rh02_cgminstituidor
+                LIMIT 1),' #  #  ') ||'# '||
+                COALESCE(rhpessoalmov.rh02_dtobitoinstituidor::varchar,' ') ||'# '||
                 servidor.z01_cgccpf ||'# '||
                 rh01_regist ||'# '||
                 CASE
@@ -1521,7 +1532,6 @@ INNER JOIN
      join db_config on codigo = rh01_instit
      join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
      join cgm servidor on servidor.z01_numcgm = rh01_numcgm
-     join cgm instintuidor on instintuidor.z01_numcgm = rh02_cgminstituidor
 where rh30_vinculo = 'P'
   $where ";
 

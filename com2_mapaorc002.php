@@ -51,7 +51,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
     if (empty($oGet->pc20_codorc)) {
 
         $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
-        $sMsgErro .= "Neste não é possí­vel informar intervalos de códigos ou datas.<br><br>";
+        $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
         db_redireciona("db_erros.php?fechar=true&db_erro={$sMsgErro}");
         exit;
     }
@@ -74,6 +74,7 @@ $clrotulo = new rotulocampo();
 $clrotulo->label('');
 
 parse_str($HTTP_SERVER_VARS ['QUERY_STRING']);
+//echo $HTTP_SERVER_VARS['QUERY_STRING'];
 
 $sOrigem = "";
 
@@ -95,7 +96,6 @@ if ($sOrigem == "solicitacao") {
              inner join solicitem                on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
 
 }
-
 
 $result_info = $clpcorcamitem->sql_record($sSqlMater);
 if ($clpcorcamitem->numrows > 0) {
@@ -135,6 +135,7 @@ if (isset($imp_troca) && $imp_troca == "S") {
                       order by pc25_orcamitem desc, pc25_codtroca desc) as x
                 order by pc01_descrmater";
 
+    //echo $sql_troca; exit;
     $res_troca = $clpcorcamtroca->sql_record($sql_troca);
 }
 
@@ -214,14 +215,13 @@ if ($modelo == 1) {
             "pc23_orcamitem=$pc22_orcamitem and pc23_vlrun > 0");
         $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "($sSql) as vlrunit, pc23_quant as quant, pc24_pontuacao, pc23_obs", null,
             "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
-
         $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
         db_fieldsmemory($result_valor_item);
         $pdf->setfont('arial', '', 8);
         $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
         $pdf->cell(159, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
         $pdf->cell(65, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
-        $pdf->cell(20, $alt, number_format($vlrunit, $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
+        $pdf->cell(20, $alt, number_format($vlrunit,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
         $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
         $pdf->cell(279,$alt/2,'','',1,"L",0);
 
@@ -269,7 +269,6 @@ if ($modelo == 1) {
                 $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
                 $pdf->cell(200, $alt, $z01_nome, 1, 0, "L", 0);
                 /*OC3770*/
-
                 if ($pc23_perctaxadesctabela != 0) {
                     $pdf->cell(24, $alt, $pc23_perctaxadesctabela . "%", 1, 0, "R", 0);
                     $pdf->cell(20, $alt, "", 1, 0, "R", 0);
@@ -279,7 +278,6 @@ if ($modelo == 1) {
                 } else {
                     $pdf->cell(24, $alt, "", 1, 0, "R", 0);
                     $pdf->cell(20, $alt, number_format($pc23_vlrun, $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
-                    // $pdf->cell(20, $alt, $pc23_vlrun, 1, 0, "R", 0);
                 }
                 /*FIM - OC3770*/
             }else{
@@ -288,7 +286,7 @@ if ($modelo == 1) {
                 $pdf->cell(20, $alt, number_format($pc23_vlrun, $oGet->quant_casas, ',', '.'), 1, 0, "R", 0);
             }
 
-            $pdf->cell(20, $alt, number_format($pc23_vlrun * $pc23_quant, $oGet->quant_casas, ',', '.'), 1, 1, "R", 0);
+            $pdf->cell(20, $alt, number_format($pc23_valor,2,',','.'), 1, 1, "R", 0);
             $total_unit  += $pc23_vlrun;
             $total_percentualdesconto += $pc23_percentualdesconto;
             $total_percentualdescontotaxa += $pc23_perctaxadesctabela;
@@ -299,7 +297,6 @@ if ($modelo == 1) {
 
         $pdf->setfont('arial', '', 7);
         $pdf->cell(20, $alt, "", 0, 0, "L", 0);
-
         if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
             $pdf->cell(199, $alt, "Média", 0, 0, "L", 0);
 
@@ -319,17 +316,22 @@ if ($modelo == 1) {
             }
             /*FIM - OC3770*/
 
-            if ($quant_casas) {
-                $pdf->cell(20, $alt, number_format(($total_unit / $iContOrcamento) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
+            if ($quant_casas == 2) {
+                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
+            } else {
+                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
             }
-       
+
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
-            
-            if ($quant_casas) {
-                $total_media += round(($total_unit / $iContOrcamento), $quant_casas) * $quant;
+//            if ($quant_casas == 2) {
+                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
                 $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
                 $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-            }
+//            } else {
+//                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
+//                $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
+//                $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
+//            }
         }else{
             $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
 
@@ -337,19 +339,25 @@ if ($modelo == 1) {
             if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
                 $pdf->cell(20, $alt, "", 0, 0, "R", 0);
             } else {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, $oGet->quant_casas), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 2, ',', '.'), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
 
-            if ($quant_casas) {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
-            }
-            
+            //if ($quant_casas == 2) {
+                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, 2, ',', '.'), 0, 1, "R", 0);
+//            } else {
+//                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
+//            }
+
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
-            $total_media += round(($total_unit / $iContOrcamento) * $quant, 2);
+            if ($quant_casas == 2) {
+                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
+            } else {
+                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
+            }
         }
     }
-    
+
     $troca = 1;
     for($y = 0; $y < $numrows_forne; $y ++) {
         db_fieldsmemory($result_forne, $y);
@@ -374,7 +382,7 @@ if ($modelo == 1) {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
             $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-            $pdf->cell(40, $alt, number_format($vltotal, 2,',','.'), 1, 1, "R", 0);
+            $pdf->cell(40, $alt, number_format($vltotal, $oGet->quant_casas,',','.'), 1, 1, "R", 0);
         }
 
     }
@@ -384,13 +392,12 @@ if ($modelo == 1) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
         if($pc80_criterioadjudicacao == 1){
             $pdf->cell(224, $alt, $total_mediapercentualtaxa . "%", 0, 0, "R", 0);
-            $pdf->cell(40, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+            $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
         }else if($pc80_criterioadjudicacao == 2){
             $pdf->cell(224, $alt, $total_mediapercentual . "%", 0, 0, "R", 0);
             $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
         }else{
             $pdf->cell(40, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
-            $pdf->cell(40, $alt, $total_media, 0, 1, "R", 0);
         }
     }else{
         $pdf->cell(264, $alt, number_format($total_media, 2,',','.'), 0, 1, "R", 0);
@@ -450,6 +457,7 @@ WHERE pc22_codorc= $orcamento
 ORDER BY pc11_seq";
     }
     $result_itens = $clpcorcamitem->sql_record($sSqlItens);
+//    echo $sSqlItens; db_criatabela($result_itens);exit;
 
     $numrows_itens = $clpcorcamitem->numrows;
     if ($numrows_itens == 0) {
@@ -550,7 +558,6 @@ ORDER BY pc11_seq";
                     }
 
                 }
-
                 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                     $pdf->cell(53, $alt, substr($z01_nome, 0, 25) . "(" . ($w + 1) . ")", 1, $t, "C", 1);
                 }else{
@@ -632,7 +639,6 @@ ORDER BY pc11_seq";
                 if ($imp_vlrun == "S") {
                     $pdf->cell(15, $alt, "0,00", 1, 0, "R", 0);
                 }
-
                 if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                     $pdf->cell(53, $alt, "0,00", 1, $t, "R", 0);
                 }else{
@@ -785,8 +791,8 @@ ORDER BY pc11_seq";
         $cont ++;
 
         $pdf->cell(45, $alt, $z01_numcgm." - ".substr($z01_nome, 0, 25) . " (" . $cont . ")", 0, 0, "L", $p);
-        $pdf->cell(30, $alt, number_format($arr_totalganho [$pc21_orcamforne], 2,',','.'), 0, 0, "R", $p);
-        $pdf->cell(30, $alt, number_format($arr_totalcotado [$pc21_orcamforne], 2,',','.'), 0, 1, "R", $p);
+        $pdf->cell(30, $alt, number_format($arr_totalganho [$pc21_orcamforne], $oGet->quant_casas,',','.'), 0, 0, "R", $p);
+        $pdf->cell(30, $alt, number_format($arr_totalcotado [$pc21_orcamforne], $oGet->quant_casas,',','.'), 0, 1, "R", $p);
 
         if ($p == 0) {
             $p = 1;
@@ -799,8 +805,8 @@ ORDER BY pc11_seq";
     }
     if ($numrows_forne > 0) {
         $pdf->cell(125, 1, "", "T", 1, "R", 0);
-        $pdf->cell(95, $alt, "TOTAIS " . number_format($total_ganho, 2,',','.'), 0, 0, "R", 0);
-        $pdf->cell(30, $alt, number_format($total_cotado, 2,',','.'), 0, 1, "R", 0);
+        $pdf->cell(95, $alt, "TOTAIS " . number_format($total_ganho, $oGet->quant_casas,',','.'), 0, 0, "R", 0);
+        $pdf->cell(30, $alt, number_format($total_cotado, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
     }
 
     $pdf->ln();
@@ -811,7 +817,7 @@ ORDER BY pc11_seq";
             $pdf->cell(20, $alt * 2, "", 0, 1, "L", 0);
         }
 
-        $pdf->cell(55, $alt, "TOTAL GERAL " . number_format($valor_total, 2,',','.'), 0, 1, "R", 0);
+        $pdf->cell(55, $alt, "TOTAL GERAL " . number_format($valor_total, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
     }
 } else {
     db_redireciona('db_erros.php?fechar=true&db_erro=Modelo não foi selecionado.');

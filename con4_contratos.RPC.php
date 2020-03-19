@@ -436,7 +436,7 @@ switch($oParam->exec) {
 
   case "getLicitacoesContratado":
 
-    if($oParam->iTipoOrigem == 3){
+    if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
       $aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true);
     }else{
       $aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true);
@@ -541,9 +541,11 @@ switch($oParam->exec) {
       $lAcordoValido            = true;
       $sMessagemInvalido        = '';
 
-      if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
-        $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
-        $oParam->contrato->iLicitacao = $oLicitacao;
+      if($oParam->contrato->iOrigem != "1"){
+        if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
+          $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
+          $oParam->contrato->iLicitacao = $oLicitacao;
+        }
       }
 
       if ($oParam->contrato->iOrigem == 1 || $oParam->contrato->iOrigem == 2) {
@@ -558,10 +560,17 @@ switch($oParam->exec) {
         $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
       }
 
-      if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
-        $lAcordoValido = false;
-        $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
-      }
+          if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2){
+             if($oParam->contrato->iLicitacao == ""){
+               $lAcordoValido = false;
+               $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+             }
+          }
+
+          if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
+            $lAcordoValido = false;
+            $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+          }
 
       if ($lAcordoValido) {
 
@@ -619,6 +628,7 @@ switch($oParam->exec) {
         $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
         $oContrato->setValorContrato($oParam->contrato->nValorContrato);
         $oContrato->setDataInclusao(date("Y-m-d"));
+        $oContrato->setITipocadastro(1);
         $oContrato->save();
 
         /*

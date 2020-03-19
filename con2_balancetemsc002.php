@@ -4,7 +4,6 @@ include("libs/db_utils.php");
 include("std/DBDate.php");
 include("dbforms/db_funcoes.php");
 include("fpdf151/pdf.php");
-include('model/MSC.model.php');
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
@@ -65,6 +64,40 @@ $iTotalControlesCredoresEB = 0;
 
 try {
 
+  $sMscPath = "model/contabilidade/arquivos/msc/{$iAnoUsu}";
+
+  if ($iMes == 13) {
+
+      $iMes = 12;
+      $sMscFilePath = "{$sMscPath}/MSCEncerramento.model.php";
+
+      if (file_exists($sMscFilePath)) {
+
+          require_once($sMscFilePath);
+          $msc = new MSCEncerramento;
+
+          $head4 = "PERÍODO: ENCERRAMENTO";
+
+      } else {
+          throw new Exception ("Arquivo MSCEncerramento para o ano {$iAnoUsu} não existe. ");
+      }
+
+  } else {
+
+      $sMscFilePath = "{$sMscPath}/MSC.model.php";
+
+      if (file_exists($sMscFilePath)) {
+
+          require_once($sMscFilePath);
+          $msc = new MSC;
+
+          $head4 = "PERÍODO: ".array_search($iMes, $aMeses);
+
+      } else {
+          throw new Exception ("Arquivo MSC para o ano {$iAnoUsu} não existe. ");
+      }
+
+  }
   $sSQL = "
           select si09_instsiconfi, db21_nome
             from infocomplementaresinstit
@@ -86,48 +119,9 @@ try {
     $virgula = ", ";
   }
 
-  $msc = new MSC;
-
   $msc->setTipoMatriz($sInstituicao);
   $aRegis = $msc->getConsulta($iAnoUsu, $iMes);
-  ksort($aRegis);
-
-  $keys = array_keys($aRegis);
-  $last_key = array_pop($keys);
-
-  foreach ($aRegis as $key => $value) {
-
-    if ($iConta != $value[0]) {
-      if (!empty($iConta)) {
-        $aRegistros[$iConta] = $oNovoResgistro;
-      }
-      $oNovoResgistro                     = new stdClass;
-      $oNovoResgistro->conta = $iConta    = $value[0];
-      $oNovoResgistro->beginning_balance  = 0;
-      $oNovoResgistro->period_change_deb  = 0;
-      $oNovoResgistro->period_change_cred = 0;
-      $oNovoResgistro->ending_balance     = 0;
-
-    }
-
-    if (!empty($value[7])) {
-      $oNovoResgistro->beginning_balance  += $value[9] == 'D' ? $value[7] : $value[7] * -1;
-    }
-    if (!empty($value[10])) {
-      $oNovoResgistro->period_change_deb  += $value[10];
-    }
-    if (!empty($value[12])) {
-      $oNovoResgistro->period_change_cred += $value[12] * -1;
-    }
-    if (!empty($value[14])) {
-      $oNovoResgistro->ending_balance     += $value[16] == 'D' ? $value[14] : $value[14] * -1;
-    }
-
-    if ($key == $last_key) {
-      $aRegistros[$iConta] = $oNovoResgistro;
-    }
-
-  }
+  $aRegistros = $msc->getRegistrosRelatorio($aRegis);
 
   if ($msc->getErroSQL() > 0 ) {
     throw new Exception ("Ocorreu um erro ao consultar a IC ".$msc->getErroSQL());
@@ -135,7 +129,7 @@ try {
 
 
 } catch (Exception $e) {
-  echo $e->getMessage();
+  die($e->getMessage());
 }
 
 $pdf = new PDF();
@@ -143,7 +137,6 @@ $pdf->Open();
 $pdf->AliasNbPages();
 $head2 = "BALANCETE MSC";
 $head3 = "EXERCÍCIO: {$iAnoUsu}";
-$head4 = "PERÍODO: ".array_search($iMes, $aMeses);
 $head5 = "INSTIUIÇÕES: {$sInstituicoes}";
 $alt   = 5;
 $pdf->SetAutoPageBreak('on',0);

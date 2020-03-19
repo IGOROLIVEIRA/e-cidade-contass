@@ -1,21 +1,21 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE contratos212020
-class cl_contratos212020 { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
+class cl_contratos212020 {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
    var $si88_sequencial = 0;
    var $si88_tiporegistro = 0;
    var $si88_codaditivo = 0;
@@ -23,30 +23,40 @@ class cl_contratos212020 {
    var $si88_tipoalteracaoitem = 0;
    var $si88_quantacrescdecresc = 0;
    var $si88_valorunitarioitem = 0;
+   var $si88_tipomaterial = null;
+   var $si88_coditemsinapi = null;
+   var $si88_coditemsimcro = null;
+   var $si88_descoutrosmateriais = null;
+   var $si88_itemplanilha = null;
    var $si88_mes = 0;
    var $si88_reg20 = 0;
    var $si88_instit = 0;
-   // cria propriedade com as variaveis do arquivo 
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si88_sequencial = int8 = sequencial 
-                 si88_tiporegistro = int8 = Tipo do  registro 
-                 si88_codaditivo = int8 = Código do Termo  Aditivo 
-                 si88_coditem = int8 = Código do Item 
-                 si88_tipoalteracaoitem = int8 = Tipo de alteração  sofrida pelo item 
-                 si88_quantacrescdecresc = float8 = Quantidade acrescida 
-                 si88_valorunitarioitem = float8 = Valor unitário do  item 
-                 si88_mes = int8 = Mês 
-                 si88_reg20 = int8 = reg20 
-                 si88_instit = int8 = Instituição 
+                 si88_sequencial = int8 = sequencial
+                 si88_tiporegistro = int8 = Tipo do  registro
+                 si88_codaditivo = int8 = Código do Termo  Aditivo
+                 si88_coditem = int8 = Código do Item
+                 si88_tipoalteracaoitem = int8 = Tipo de alteração  sofrida pelo item
+                 si88_quantacrescdecresc = float8 = Quantidade acrescida
+                 si88_valorunitarioitem = float8 = Valor unitário do  item
+                 si88_tipomaterial = int8 = tipo de material
+                 si88_coditemsinapi = vachar = codigo do item sinapi
+                 si88_coditemsimcro = vachar = codigo do item simcro
+                 si88_descoutrosmateriais = text = descricao do material
+                 si88_itemplanilha = int8 = codigo da planilha
+                 si88_mes = int8 = Mês
+                 si88_reg20 = int8 = reg20
+                 si88_instit = int8 = Instituição
                  ";
-   //funcao construtor da classe 
-   function cl_contratos212020() { 
+   //funcao construtor da classe
+   function cl_contratos212020() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("contratos212020"); 
+     $this->rotulo = new rotulo("contratos212020");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -67,14 +77,19 @@ class cl_contratos212020 {
        $this->si88_mes = ($this->si88_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_mes"]:$this->si88_mes);
        $this->si88_reg20 = ($this->si88_reg20 == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_reg20"]:$this->si88_reg20);
        $this->si88_instit = ($this->si88_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_instit"]:$this->si88_instit);
+       $this->si88_tipomaterial = ($this->si88_tipomaterial == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_tipomaterial"]:$this->si88_tipomaterial);
+       $this->si88_coditemsinapi = ($this->si88_coditemsinapi == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_coditemsinapi"]:$this->si88_coditemsinapi);
+       $this->si88_coditemsimcro = ($this->si88_coditemsimcro == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_coditemsimcro"]:$this->si88_coditemsimcro);
+       $this->si88_descoutrosmateriais = ($this->si88_descoutrosmateriais == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_descoutrosmateriais"]:$this->si88_descoutrosmateriais);
+       $this->si88_itemplanilha = ($this->si88_itemplanilha == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_itemplanilha"]:$this->si88_itemplanilha);
      }else{
        $this->si88_sequencial = ($this->si88_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_sequencial"]:$this->si88_sequencial);
      }
    }
    // funcao para inclusao
-   function incluir ($si88_sequencial){ 
+   function incluir ($si88_sequencial){
       $this->atualizacampos();
-     if($this->si88_tiporegistro == null ){ 
+     if($this->si88_tiporegistro == null ){
        $this->erro_sql = " Campo Tipo do  registro nao Informado.";
        $this->erro_campo = "si88_tiporegistro";
        $this->erro_banco = "";
@@ -83,22 +98,28 @@ class cl_contratos212020 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si88_codaditivo == null ){ 
+     if($this->si88_codaditivo == null ){
        $this->si88_codaditivo = "0";
      }
-     if($this->si88_coditem == null ){ 
+     if($this->si88_coditem == null ){
        $this->si88_coditem = "0";
      }
-     if($this->si88_tipoalteracaoitem == null ){ 
+     if($this->si88_tipoalteracaoitem == null ){
        $this->si88_tipoalteracaoitem = "0";
      }
-     if($this->si88_quantacrescdecresc == null ){ 
+     if($this->si88_quantacrescdecresc == null ){
        $this->si88_quantacrescdecresc = "0";
      }
-     if($this->si88_valorunitarioitem == null ){ 
+     if($this->si88_valorunitarioitem == null ){
        $this->si88_valorunitarioitem = "0";
      }
-     if($this->si88_mes == null ){ 
+     if($this->si88_tipomaterial == null){
+       $this->si88_tipomaterial = "0";
+     }
+     if($this->si88_itemplanilha == null){
+       $this->si88_itemplanilha = "0";
+     }
+     if($this->si88_mes == null ){
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si88_mes";
        $this->erro_banco = "";
@@ -107,10 +128,10 @@ class cl_contratos212020 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si88_reg20 == null ){ 
+     if($this->si88_reg20 == null ){
        $this->si88_reg20 = "0";
      }
-     if($this->si88_instit == null ){ 
+     if($this->si88_instit == null ){
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "si88_instit";
        $this->erro_banco = "";
@@ -120,17 +141,17 @@ class cl_contratos212020 {
        return false;
      }
      if($si88_sequencial == "" || $si88_sequencial == null ){
-       $result = db_query("select nextval('contratos212020_si88_sequencial_seq')"); 
+       $result = db_query("select nextval('contratos212020_si88_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("
 ","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: contratos212020_si88_sequencial_seq do campo: si88_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: contratos212020_si88_sequencial_seq do campo: si88_sequencial";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->si88_sequencial = pg_result($result,0,0); 
+       $this->si88_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from contratos212020_si88_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si88_sequencial)){
@@ -141,10 +162,10 @@ class cl_contratos212020 {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->si88_sequencial = $si88_sequencial; 
+         $this->si88_sequencial = $si88_sequencial;
        }
      }
-     if(($this->si88_sequencial == null) || ($this->si88_sequencial == "") ){ 
+     if(($this->si88_sequencial == null) || ($this->si88_sequencial == "") ){
        $this->erro_sql = " Campo si88_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -153,33 +174,42 @@ class cl_contratos212020 {
        return false;
      }
      $sql = "insert into contratos212020(
-                                       si88_sequencial 
-                                      ,si88_tiporegistro 
-                                      ,si88_codaditivo 
-                                      ,si88_coditem 
-                                      ,si88_tipoalteracaoitem 
-                                      ,si88_quantacrescdecresc 
-                                      ,si88_valorunitarioitem 
-                                      ,si88_mes 
-                                      ,si88_reg20 
-                                      ,si88_instit 
+                                       si88_sequencial
+                                      ,si88_tiporegistro
+                                      ,si88_codaditivo
+                                      ,si88_coditem
+                                      ,si88_tipomaterial
+                                      ,si88_coditemsinapi
+                                      ,si88_coditemsimcro
+                                      ,si88_descoutrosmateriais
+                                      ,si88_itemplanilha
+                                      ,si88_tipoalteracaoitem
+                                      ,si88_quantacrescdecresc
+                                      ,si88_valorunitarioitem
+                                      ,si88_mes
+                                      ,si88_reg20
+                                      ,si88_instit
                        )
                 values (
-                                $this->si88_sequencial 
-                               ,$this->si88_tiporegistro 
-                               ,$this->si88_codaditivo 
-                               ,$this->si88_coditem 
-                               ,$this->si88_tipoalteracaoitem 
-                               ,$this->si88_quantacrescdecresc 
-                               ,$this->si88_valorunitarioitem 
-                               ,$this->si88_mes 
-                               ,$this->si88_reg20 
-                               ,$this->si88_instit 
+                                $this->si88_sequencial
+                               ,$this->si88_tiporegistro
+                               ,$this->si88_codaditivo
+                               ,$this->si88_coditem
+                               ,$this->si88_tipomaterial
+                               ,'$this->si88_coditemsinapi'
+                               ,'$this->si88_coditemsimcro'
+                               ,'$this->si88_descoutrosmateriais'
+                               ,$this->si88_itemplanilha
+                               ,$this->si88_tipoalteracaoitem
+                               ,$this->si88_quantacrescdecresc
+                               ,$this->si88_valorunitarioitem
+                               ,$this->si88_mes
+                               ,$this->si88_reg20
+                               ,$this->si88_instit
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
-       $this->erro_banco = str_replace("
-","",@pg_last_error());
+     $result = db_query($sql);
+     if($result==false){
+       $this->erro_banco = str_replace("","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "contratos212020 ($this->si88_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -219,23 +249,23 @@ class cl_contratos212020 {
        $resac = db_query("insert into db_acount values($acount,2010317,2011601,'','".AddSlashes(pg_result($resaco,0,'si88_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($si88_sequencial=null) { 
+   function alterar ($si88_sequencial=null) {
       $this->atualizacampos();
      $sql = " update contratos212020 set ";
      $virgula = "";
-     if(trim($this->si88_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_sequencial"])){ 
-        if(trim($this->si88_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_sequencial"])){ 
-           $this->si88_sequencial = "0" ; 
-        } 
+     if(trim($this->si88_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_sequencial"])){
+        if(trim($this->si88_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_sequencial"])){
+           $this->si88_sequencial = "0" ;
+        }
        $sql  .= $virgula." si88_sequencial = $this->si88_sequencial ";
        $virgula = ",";
      }
-     if(trim($this->si88_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_tiporegistro"])){ 
+     if(trim($this->si88_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_tiporegistro"])){
        $sql  .= $virgula." si88_tiporegistro = $this->si88_tiporegistro ";
        $virgula = ",";
-       if(trim($this->si88_tiporegistro) == null ){ 
+       if(trim($this->si88_tiporegistro) == null ){
          $this->erro_sql = " Campo Tipo do  registro nao Informado.";
          $this->erro_campo = "si88_tiporegistro";
          $this->erro_banco = "";
@@ -245,45 +275,45 @@ class cl_contratos212020 {
          return false;
        }
      }
-     if(trim($this->si88_codaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_codaditivo"])){ 
-        if(trim($this->si88_codaditivo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_codaditivo"])){ 
-           $this->si88_codaditivo = "0" ; 
-        } 
+     if(trim($this->si88_codaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_codaditivo"])){
+        if(trim($this->si88_codaditivo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_codaditivo"])){
+           $this->si88_codaditivo = "0" ;
+        }
        $sql  .= $virgula." si88_codaditivo = $this->si88_codaditivo ";
        $virgula = ",";
      }
-     if(trim($this->si88_coditem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_coditem"])){ 
-        if(trim($this->si88_coditem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_coditem"])){ 
-           $this->si88_coditem = "0" ; 
-        } 
+     if(trim($this->si88_coditem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_coditem"])){
+        if(trim($this->si88_coditem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_coditem"])){
+           $this->si88_coditem = "0" ;
+        }
        $sql  .= $virgula." si88_coditem = $this->si88_coditem ";
        $virgula = ",";
      }
-     if(trim($this->si88_tipoalteracaoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_tipoalteracaoitem"])){ 
-        if(trim($this->si88_tipoalteracaoitem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_tipoalteracaoitem"])){ 
-           $this->si88_tipoalteracaoitem = "0" ; 
-        } 
+     if(trim($this->si88_tipoalteracaoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_tipoalteracaoitem"])){
+        if(trim($this->si88_tipoalteracaoitem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_tipoalteracaoitem"])){
+           $this->si88_tipoalteracaoitem = "0" ;
+        }
        $sql  .= $virgula." si88_tipoalteracaoitem = $this->si88_tipoalteracaoitem ";
        $virgula = ",";
      }
-     if(trim($this->si88_quantacrescdecresc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_quantacrescdecresc"])){ 
-        if(trim($this->si88_quantacrescdecresc)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_quantacrescdecresc"])){ 
-           $this->si88_quantacrescdecresc = "0" ; 
-        } 
+     if(trim($this->si88_quantacrescdecresc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_quantacrescdecresc"])){
+        if(trim($this->si88_quantacrescdecresc)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_quantacrescdecresc"])){
+           $this->si88_quantacrescdecresc = "0" ;
+        }
        $sql  .= $virgula." si88_quantacrescdecresc = $this->si88_quantacrescdecresc ";
        $virgula = ",";
      }
-     if(trim($this->si88_valorunitarioitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_valorunitarioitem"])){ 
-        if(trim($this->si88_valorunitarioitem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_valorunitarioitem"])){ 
-           $this->si88_valorunitarioitem = "0" ; 
-        } 
+     if(trim($this->si88_valorunitarioitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_valorunitarioitem"])){
+        if(trim($this->si88_valorunitarioitem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_valorunitarioitem"])){
+           $this->si88_valorunitarioitem = "0" ;
+        }
        $sql  .= $virgula." si88_valorunitarioitem = $this->si88_valorunitarioitem ";
        $virgula = ",";
      }
-     if(trim($this->si88_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_mes"])){ 
+     if(trim($this->si88_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_mes"])){
        $sql  .= $virgula." si88_mes = $this->si88_mes ";
        $virgula = ",";
-       if(trim($this->si88_mes) == null ){ 
+       if(trim($this->si88_mes) == null ){
          $this->erro_sql = " Campo Mês nao Informado.";
          $this->erro_campo = "si88_mes";
          $this->erro_banco = "";
@@ -293,17 +323,17 @@ class cl_contratos212020 {
          return false;
        }
      }
-     if(trim($this->si88_reg20)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_reg20"])){ 
-        if(trim($this->si88_reg20)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_reg20"])){ 
-           $this->si88_reg20 = "0" ; 
-        } 
+     if(trim($this->si88_reg20)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_reg20"])){
+        if(trim($this->si88_reg20)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si88_reg20"])){
+           $this->si88_reg20 = "0" ;
+        }
        $sql  .= $virgula." si88_reg20 = $this->si88_reg20 ";
        $virgula = ",";
      }
-     if(trim($this->si88_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_instit"])){ 
+     if(trim($this->si88_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si88_instit"])){
        $sql  .= $virgula." si88_instit = $this->si88_instit ";
        $virgula = ",";
-       if(trim($this->si88_instit) == null ){ 
+       if(trim($this->si88_instit) == null ){
          $this->erro_sql = " Campo Instituição nao Informado.";
          $this->erro_campo = "si88_instit";
          $this->erro_banco = "";
@@ -347,7 +377,7 @@ class cl_contratos212020 {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        $this->erro_sql   = "contratos212020 nao Alterado. Alteracao Abortada.\n";
@@ -376,14 +406,14 @@ class cl_contratos212020 {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($si88_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($si88_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($si88_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -418,7 +448,7 @@ class cl_contratos212020 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("
 ","",@pg_last_error());
        $this->erro_sql   = "contratos212020 nao Excluído. Exclusão Abortada.\n";
@@ -447,11 +477,11 @@ class cl_contratos212020 {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -474,8 +504,8 @@ class cl_contratos212020 {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si88_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si88_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -492,8 +522,8 @@ class cl_contratos212020 {
      $sql2 = "";
      if($dbwhere==""){
        if($si88_sequencial!=null ){
-         $sql2 .= " where contratos212020.si88_sequencial = $si88_sequencial "; 
-       } 
+         $sql2 .= " where contratos212020.si88_sequencial = $si88_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -509,8 +539,8 @@ class cl_contratos212020 {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si88_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si88_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -526,8 +556,8 @@ class cl_contratos212020 {
      $sql2 = "";
      if($dbwhere==""){
        if($si88_sequencial!=null ){
-         $sql2 .= " where contratos212020.si88_sequencial = $si88_sequencial "; 
-       } 
+         $sql2 .= " where contratos212020.si88_sequencial = $si88_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

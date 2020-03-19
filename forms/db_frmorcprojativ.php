@@ -30,7 +30,7 @@ $clorcprojativ->rotulo->label();
 $clorcprojativunidaderesp->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("nomeinst");
-
+$clrotulo->label("o55_rateio");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -316,6 +316,21 @@ $clrotulo->label("nomeinst");
         ?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="<?=@$To55_rateio?>">
+            <?=@$Lo55_rateio?>
+        </td>
+        <td>
+            <?
+            $aRateio = array(
+                0 =>'Não',
+                1  =>'Sim',
+            );
+
+            db_select('o55_rateio',$aRateio,true,$db_opcao,"style='width:100%;'");
+            ?>
+        </td>
+    </tr>
   <tr>
     <td nowrap >
     </td>

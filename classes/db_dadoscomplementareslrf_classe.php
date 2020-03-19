@@ -35,6 +35,11 @@ class cl_dadoscomplementareslrf {
    var $c218_vloutrosajustes = 0;
    var $c218_metarrecada = 0;
    var $c218_dscmedidasadotadas = null;
+
+   var $c218_vldotinicialincentivocontrib = 0;
+   var $c218_vldotincentconcedinstfinanc = 0;
+   var $c218_vlajustesrelativosrpps = 0;
+
    var $c218_anousu = null;
    var $c218_mesusu = null;
    // cria propriedade com as variaveis do arquivo
@@ -61,6 +66,11 @@ class cl_dadoscomplementareslrf {
                  c218_vloutrosajustes = double = Valores não considerados
                  c218_metarrecada = int4 = A meta bimestral de arrecadação foi cumprida
                  c218_dscmedidasadotadas = text = Medidas adotadas e a adotar
+                 
+                 c218_vldotinicialincentivocontrib = double = valor dotação inicial de incentivo  a contribuinte
+                 c218_vldotinicialincentivocontrib = double = valor dotação de incentivo concedido por instituição financeira
+                 c218_vldotinicialincentivocontrib = double = valor de ajustes relativos ao rpps
+                 
                  c218_anousu = int4 = Ano de referencia
                  c218_mesusu = int2 = Mês de referencia
                  ";
@@ -104,6 +114,11 @@ class cl_dadoscomplementareslrf {
        $this->c218_vloutrosajustes = ($this->c218_vloutrosajustes == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_vloutrosajustes"]:$this->c218_vloutrosajustes);
        $this->c218_metarrecada = ($this->c218_metarrecada == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_metarrecada"]:$this->c218_metarrecada);
        $this->c218_dscmedidasadotadas = ($this->c218_dscmedidasadotadas == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_dscmedidasadotadas"]:$this->c218_dscmedidasadotadas);
+
+       $this->c218_vldotinicialincentivocontrib = ($this->c218_vldotinicialincentivocontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_vldotinicialincentivocontrib"]:$this->c218_vldotinicialincentivocontrib);
+       $this->c218_vldotincentconcedinstfinanc = ($this->c218_vldotincentconcedinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_vldotincentconcedinstfinanc"]:$this->c218_vldotincentconcedinstfinanc);
+       $this->c218_vlajustesrelativosrpps = ($this->c218_vlajustesrelativosrpps == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_vlajustesrelativosrpps"]:$this->c218_vlajustesrelativosrpps);
+
        $this->c218_anousu = ($this->c218_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_anousu"]:$this->c218_anousu);
        $this->c218_mesusu = ($this->c218_mesusu == ""?@$GLOBALS["HTTP_POST_VARS"]["c218_mesusu"]:$this->c218_mesusu);
      }else{
@@ -173,6 +188,15 @@ class cl_dadoscomplementareslrf {
      if($this->c218_vloutrosajustes == null ){
        $this->c218_vloutrosajustes =0;
      }
+       if($this->c218_vldotinicialincentivocontrib == null ){
+           $this->c218_vldotinicialincentivocontrib =0;
+       }
+       if($this->c218_vldotincentconcedinstfinanc == null ){
+           $this->c218_vldotincentconcedinstfinanc =0;
+       }
+       if($this->c218_vlajustesrelativosrpps == null ){
+           $this->c218_vlajustesrelativosrpps =0;
+       }
      if($this->c218_metarrecada == null ){
        $this->erro_sql = " Campo A meta bimestral de arrecadação foi cumprida nao Informado.";
        $this->erro_campo = "c218_metarrecada";
@@ -248,6 +272,9 @@ class cl_dadoscomplementareslrf {
                                       ,c218_vloutrosajustes
                                       ,c218_metarrecada
                                       ,c218_dscmedidasadotadas
+                                      ,c218_vldotinicialincentivocontrib
+                                      ,c218_vldotincentconcedinstfinanc
+                                      ,c218_vlajustesrelativosrpps
                                       ,c218_anousu
                                       ,c218_mesusu
                        )
@@ -274,6 +301,9 @@ class cl_dadoscomplementareslrf {
                                ,$this->c218_vloutrosajustes
                                ,$this->c218_metarrecada
                                ,'$this->c218_dscmedidasadotadas'
+                               ,$this->c218_vldotinicialincentivocontrib
+                               ,$this->c218_vldotincentconcedinstfinanc
+                               ,$this->c218_vlajustesrelativosrpps
                                ,'$this->c218_anousu'
                                ,'$this->c218_mesusu'
                       )";
@@ -558,6 +588,49 @@ class cl_dadoscomplementareslrf {
          return false;
        }
      }
+
+       if(trim($this->c218_vldotinicialincentivocontrib)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c218_vldotinicialincentivocontrib"])){
+           $sql  .= $virgula." c218_vldotinicialincentivocontrib = $this->c218_vldotinicialincentivocontrib ";
+           $virgula = ",";
+           if(trim($this->c218_vldotinicialincentivocontrib) == null ){
+               $this->erro_sql = " Campo valor dotação inicial de incentivo  a contribuinte nao Informado.";
+               $this->erro_campo = "c218_vldotinicialincentivocontrib";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
+       if(trim($this->c218_vldotincentconcedinstfinanc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c218_vldotincentconcedinstfinanc"])){
+           $sql  .= $virgula." c218_vldotincentconcedinstfinanc = $this->c218_vldotincentconcedinstfinanc ";
+           $virgula = ",";
+           if(trim($this->c218_vldotinicialincentivocontrib) == null ){
+               $this->erro_sql = " Campo valor dotação de incentivo concedido por instituição financeira nao Informado.";
+               $this->erro_campo = "c218_vldotincentconcedinstfinanc";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
+       if(trim($this->c218_vlajustesrelativosrpps)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c218_vlajustesrelativosrpps"])){
+           $sql  .= $virgula." c218_vlajustesrelativosrpps = $this->c218_vlajustesrelativosrpps ";
+           $virgula = ",";
+           if(trim($this->c218_vlajustesrelativosrpps) == null ){
+               $this->erro_sql = " Campo valor de ajustes relativos ao rpps nao Informado.";
+               $this->erro_campo = "c218_vlajustesrelativosrpps";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
      if(trim($this->c218_metarrecada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c218_metarrecada"])){
         if(trim($this->c218_metarrecada)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c218_metarrecada"])){
            $this->c218_metarrecada = "0" ;

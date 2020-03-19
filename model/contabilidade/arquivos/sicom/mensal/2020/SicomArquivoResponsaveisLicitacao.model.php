@@ -156,7 +156,7 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 			liclicita.l20_anousu as exercicioLicitacao, liclicita.l20_edital as nroProcessoLicitatorio, 
-			liccomissaocgm.l31_tipo as tipoResp, l20_codigo as codigolicitacao, cgm.z01_cgccpf as nroCPFResp,
+			liccomissaocgm.l31_tipo::int as tipoResp, l20_codigo as codigolicitacao, cgm.z01_cgccpf as nroCPFResp,
 			liclicita.l20_codigo as codlicitacao,
 			liclicita.l20_naturezaobjeto
 			FROM liclicita as liclicita 
@@ -176,7 +176,6 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 		                                                  '52',
 		                                                  '53',
 		                                                  '54') order by liclicita.l20_edital";
-    
     $rsResult10 = db_query($sSql);//echo $sSql;exit;db_criatabela($rsResult10);
     
     $aLicitacoes = array();

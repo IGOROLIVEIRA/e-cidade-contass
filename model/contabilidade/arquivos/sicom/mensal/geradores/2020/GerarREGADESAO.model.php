@@ -61,6 +61,7 @@ class GerarREGADESAO extends GerarAM
         $aREGADESAO10 = pg_fetch_array($rsREGADESAO10, $iCont);
 
         $aCSVREGADESAO10['si67_tiporegistro']               = $this->padLeftZero($aREGADESAO10['si67_tiporegistro'], 2);
+        $aCSVREGADESAO10['si67_tipocadastro']               = !$aREGADESAO10['si67_tipocadastro'] ? '' : $this->padLeftZero($aREGADESAO10['si67_tipocadastro'], 1);
         $aCSVREGADESAO10['si67_codorgao']                   = $this->padLeftZero($aREGADESAO10['si67_codorgao'], 2);
         $aCSVREGADESAO10['si67_codunidadesub']              = $this->padLeftZero($aREGADESAO10['si67_codunidadesub'], 5);
         $aCSVREGADESAO10['si67_nroprocadesao']              = substr($aREGADESAO10['si67_nroprocadesao'], 0, 12);
@@ -70,7 +71,8 @@ class GerarREGADESAO extends GerarAM
         $aCSVREGADESAO10['si67_exerciciolicitacao']         = $this->padLeftZero($aREGADESAO10['si67_exerciciolicitacao'], 4);
         $aCSVREGADESAO10['si67_nroprocessolicitatorio']     = substr($aREGADESAO10['si67_nroprocessolicitatorio'], 0, 20);
         $aCSVREGADESAO10['si67_codmodalidadelicitacao']     = $this->padLeftZero($aREGADESAO10['si67_codmodalidadelicitacao'], 1);
-        $aCSVREGADESAO10['si67_nromodalidade']              = substr($aREGADESAO10['si67_nromodalidade'], 0, 10);
+        $aCSVREGADESAO10['si67_nroedital']     				= !$aREGADESAO10['si67_nroedital'] ? '': substr($aREGADESAO10['si67_nroedital'], 0, 10);
+        $aCSVREGADESAO10['si67_exercicioedital']  			= !$aREGADESAO10['si67_exercicioedital'] ? '' : $this->padLeftZero($aREGADESAO10['si67_exercicioedital'], 4);
         $aCSVREGADESAO10['si67_dtataregpreco']              = $this->sicomDate($aREGADESAO10['si67_dtataregpreco']);
         $aCSVREGADESAO10['si67_dtvalidade']                 = $this->sicomDate($aREGADESAO10['si67_dtvalidade']);
         $aCSVREGADESAO10['si67_naturezaprocedimento']       = $this->padLeftZero($aREGADESAO10['si67_naturezaprocedimento'], 1);

@@ -17,17 +17,22 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
 }
 
 if(isset($processar)){
-  $result = $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','ces02_codcon,ces02_reduz,ces02_anousu,ces02_inst','',"ces02_codcon = $ces02_codcon"));
+  $result = $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','ces02_codcon,ces02_reduz,ces02_anousu,ces02_inst','',"ces02_reduz = $ces02_reduz"));
   db_fieldsmemory($result,0);
 }
 elseif(isset($incluir)){
   db_inicio_transacao();
 
-  $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*','',"ces02_codcon = $ces02_codcon and ces02_fonte = $ces02_fonte and ces02_anousu = " .db_getsession('DB_anousu')));
+  $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*','',"ces02_reduz = $ces02_reduz and ces02_fonte = $ces02_fonte and ces02_anousu = " .db_getsession('DB_anousu')));
   if($clconctbsaldo->numrows > 0){
     db_msgbox('Esse lancançamento já existe!');
   }else{
-    $clconctbsaldo->incluir($ces02_sequencial);
+    $clconctbsaldo->incluir();
+    if ($clconctbsaldo->erro_msg != "0"){
+      $ces02_fonte = $ces02_valor = $o15_descr = '';
+    } elseif ($clconctbsaldo->erro_msg == "0"){
+      echo $clconctbsaldo->erro_msg;
+    }
   }
   db_fim_transacao();
 }
@@ -35,25 +40,33 @@ elseif(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*','',
-    "ces02_codcon = $ces02_codcon and ces02_fonte = $ces02_fonte and ces02_anousu = " .db_getsession('DB_anousu')));
+    "ces02_reduz = $ces02_reduz and ces02_fonte = $ces02_fonte and ces02_valor = $ces02_valor and ces02_anousu = " .db_getsession('DB_anousu')));
   if($clconctbsaldo->numrows > 0){
-    db_msgbox('Esse lancançamento já existe!');
+    db_msgbox("Esse lancançamento já existe!\nVerifique os dados informados.");
   }else {
     $clconctbsaldo->alterar($ces02_sequencial);
-    db_msgbox('Alteração efetuada com sucesso!');
+    if ($clconctbsaldo->erro_status!="0"){
+      db_msgbox('Alteração efetuada com sucesso!');
+      $ces02_fonte = $ces02_valor = $o15_descr = '';
+      $db_opcao = 1;
+    }
   }
   db_fim_transacao();
 }
 elseif(isset($excluir)){
   db_inicio_transacao();
-  $db_opcao = 3;
+  $db_opcao = 2;
   $clconctbsaldo->excluir($ces02_sequencial);
+  if ($clconctbsaldo->erro_status!="0"){
+    $ces02_fonte = $ces02_valor = $o15_descr = '';
+    $db_opcao = 1;
+  }
   db_fim_transacao();
 }else if(isset($opcao)){
 
   $result = $clconctbsaldo->sql_record($clconctbsaldo->sql_query_file('', '*', '',
       "ces02_anousu = " . db_getsession('DB_anousu') ." and ces02_inst = ". db_getsession('DB_instit') .
-      " and ces02_codcon = " . $ces02_codcon . " and ces02_sequencial = $ces02_sequencial"
+      " and ces02_reduz = " . $ces02_reduz . " and ces02_sequencial = $ces02_sequencial"
   ));
 
   if($result!=false && $clconctbsaldo->numrows>0){
@@ -78,8 +91,8 @@ elseif(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
-  <fieldset style=" margin-top: 30px; width: 800px; height: 400px;">
-    <legend>Saldo Ctb Fonte</legend>
+  <fieldset style=" margin-top: 30px; width: 800px; height: 300px;">
+    <legend>Saldo CTB Fonte</legend>
 	<?
 	include("forms/db_frmconctbsaldo.php");
 	?>
