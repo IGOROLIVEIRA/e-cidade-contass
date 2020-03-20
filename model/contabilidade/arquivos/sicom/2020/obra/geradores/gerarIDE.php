@@ -55,7 +55,7 @@ class GerarIDE extends GerarAM
 
         $aIDE['si11_codmunicipio'] = str_pad($aIDE['si11_codmunicipio'], 5, "0", STR_PAD_LEFT);
         $aIDE['si11_cnpjmunicipio'] = str_pad($aIDE['si11_cnpjmunicipio'], 14, "0", STR_PAD_LEFT);
-        $aIDE['si11_codorgao'] = str_pad($aIDE['si11_codorgao'], 2, "0", STR_PAD_LEFT);
+        $aIDE['si11_codorgao'] = str_pad($aIDE['si11_codorgao'], 3, "0", STR_PAD_LEFT);
         $aIDE['si11_tipoorgao'] = str_pad($aIDE['si11_tipoorgao'], 2, "0", STR_PAD_LEFT);
         $aIDE['si11_exercicioreferencia'] = str_pad($aIDE['si11_exercicioreferencia'], 4, "0", STR_PAD_LEFT);
         $aIDE['si11_mesreferencia'] = str_pad($aIDE['si11_mesreferencia'], 2, "0", STR_PAD_LEFT);

@@ -53,7 +53,7 @@ class gerarCADOBRAS extends GerarAM
         $aCSVCADOBRAS10['si198_nrodocumento'] = $aCADORBRAS10['si198_nrodocumento'];
         $aCSVCADOBRAS10['si198_tiporegistroconselho'] = $aCADORBRAS10['si198_tiporegistroconselho'];
         $aCSVCADOBRAS10['si198_nroregistroconseprof'] = $aCADORBRAS10['si198_nroregistroconseprof'];
-        $aCSVCADOBRAS10['si198_numrt'] = $aCADORBRAS10['si198_numrt'];
+        $aCSVCADOBRAS10['si198_numrt'] = $aCADORBRAS10['si198_numrt'] == "0" ? "" : $aCADORBRAS10['si198_numrt'];
         $aCSVCADOBRAS10['si198_dtinicioatividadeseng'] = $this->sicomDate($aCADORBRAS10['si198_dtinicioatividadeseng']);
         $aCSVCADOBRAS10['si198_tipovinculo'] = $aCADORBRAS10['si198_tipovinculo'];
         $this->sLinha = $aCSVCADOBRAS10;
