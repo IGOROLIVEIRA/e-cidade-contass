@@ -1065,11 +1065,11 @@ class MSC {
                             INNER JOIN orcdotacao 
                                 ON (c19_orcdotacao, o58_anousu) = (o58_coddot, c19_orcdotacaoanousu)
                             LEFT JOIN elemdespmsc 
-                                ON (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
+                                ON (substr(c19_estrutural,2,8), $iAno) = (c211_elemdespestrut, c211_anousu)
                             LEFT OUTER JOIN consistema 
                                 ON c60_codsis = c52_codsis
                             LEFT JOIN vinculopcaspmsc 
-                                ON (substr(p.c60_estrut,2,8), c60_anousu) = (c210_pcaspestrut, c210_anousu)
+                                ON (substr(p.c60_estrut,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
                             LEFT JOIN orctiporec 
                                 ON c19_orctiporec = o15_codigo
                             LEFT JOIN empempenho 
@@ -1138,6 +1138,7 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
+
     $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
@@ -1351,11 +1352,11 @@ class MSC {
                         INNER JOIN empelemento ON e64_numemp=e60_numemp
                         LEFT JOIN dotacaorpsicom ON e60_numemp = si177_numemp
                         LEFT JOIN conplanoorcamento ON conplanoorcamento.c60_codcon=e64_codele AND conplanoorcamento.c60_anousu=e60_anousu
-                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8), conplanoorcamento.c60_anousu) = (elemdespmsc.c211_elemdespestrut, elemdespmsc.c211_anousu)
-                        LEFT JOIN elemdespmsc tb ON (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0), e60_anousu) = (tb.c211_elemdespestrut, tb.c211_anousu) 
-                        LEFT JOIN elemdespmsc a1 ON (substr(contacorrentedetalhe.c19_estrutural,2,8), c62_anousu) = (a1.c211_elemdespestrut, a1.c211_anousu)
+                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8), $iAno) = (elemdespmsc.c211_elemdespestrut, elemdespmsc.c211_anousu)
+                        LEFT JOIN elemdespmsc tb ON (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0), $iAno) = (tb.c211_elemdespestrut, tb.c211_anousu) 
+                        LEFT JOIN elemdespmsc a1 ON (substr(contacorrentedetalhe.c19_estrutural,2,8), $iAno) = (a1.c211_elemdespestrut, a1.c211_anousu)
                         LEFT OUTER JOIN consistema ON p.c60_codsis = c52_codsis
-                        LEFT JOIN vinculopcaspmsc ON substr(c19_estrutural,2,8) = c210_pcaspestrut
+                        LEFT JOIN vinculopcaspmsc ON (substr(c19_estrutural,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
                         LEFT JOIN orctiporec ON o58_codigo = o15_codigo
                         WHERE {$this->getTipoMatriz()} c19_contacorrente=106
                             AND p.c60_infcompmsc = 9

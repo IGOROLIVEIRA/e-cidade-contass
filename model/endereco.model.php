@@ -1594,17 +1594,14 @@ db72_sequencial =
     $sCampos  = "p.db70_sequencial, p.db70_descricao, a.db71_sequencial, a.db71_descricao, db72_sequencial ";
     $sCampos .= ",  db72_cadenderestado , db72_descricao ";
 
-    $sWhere .="  db125_db_sistemaexterno = 4 and ";
-    $sWhere .="  db72_sequencial = ";
-    $sWhere .="    (SELECT db125_cadendermunicipio ";
-    $sWhere .="     FROM db_config ";
-    $sWhere .="     JOIN cadendermunicipio ON munic = to_ascii(db72_descricao) ";
-    $sWhere .="     JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial ";
-    $sWhere .="     AND codigo = ".db_getsession('DB_instit')." AND db125_db_sistemaexterno = 4 limit 1) ";
-
+    $sWhere  ="  db125_db_sistemaexterno = 4 and ";
+    $sWhere .="  db72_sequencial = (";
+    $sWhere .="  SELECT db125_cadendermunicipio ";
+    $sWhere .="  FROM cadendermunicipiosistema ";
+    $sWhere .="  INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 ";
+    $sWhere .="  LIMIT 1) ";
 
     $sQueryParametros = $oDaoParametros->sql_query_params(null, $sCampos, "db72_descricao ASC", $sWhere);
-    // print_r($sQueryParametros);die('Mrte');
 
     $rsQueryParametros = $oDaoParametros->sql_record($sQueryParametros);
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
  include("fpdf151/pdf1.php");
@@ -237,12 +237,15 @@ if ($timbre =='s'){
        db_fieldsmemory($res,0);
        $pdf->setX(20);
        $pref = ucfirst($pref);
+
       // $pref = 'VIVIAN LITIA FLORES DA SILVA';
 
      //  $txt="$pref, PREFEITA MUNICIPAL EM EXERCÍCIO DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
-       if ( $db21_codcli == 34 ) {
+     if($si09_tipoinstit == 51){
+      $txt="$pref, PRESIDENTE DO CONSÓRICO MUNICIPAL localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
+     }else if ( $db21_codcli == 34 ) {
          $txt="$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal n" . chr(186) ." $o45_numlei";
-       } else {
+       }  else {
          $txt="$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
        }
        if($o39_compllei != ""){
@@ -262,7 +265,9 @@ if ($timbre =='s'){
 
        $pdf->setX(20);
        $pref = strtoupper($pref);
-       if ( $db21_codcli == 34 ) {
+       if($si09_tipoinstit == 51){
+        $txt="$pref, PRESIDENTE DO CONSÓRICO MUNICIPAL localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
+       }else if ( $db21_codcli == 34 ) {
          $txt="$pref, PREFEITO MUNICIPAL DE $munic, $uf.";
        } else {
          $txt="$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf.";
@@ -563,6 +568,7 @@ if ($timbre =='s'){
    $pdf->setX(40);
    $pdf->multicell(170,4,$txt,'0','J','0',20);
 
+
    if ($projeto_tipo == "1" && strtoupper(trim($munic)) == "SAPIRANGA"){
    // texto de sapiranga
 //      $pdf->Ln(10);
@@ -664,7 +670,7 @@ if ($timbre =='s'){
  if($ass=='s'){
       $pdf->ln();
       $assin      =  "\n\n_______________________________________________________"."\n";
-      $assin     .=  $pref."\n"; 
+      $assin     .=  $pref."\n";
       $assin     .= " PREFEITO MUNICIPAL DE ".$munic." - ".$uf;
 
       $ass_pref     = $classinatura->assinatura(1000,$assin);

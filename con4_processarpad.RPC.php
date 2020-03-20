@@ -29,13 +29,13 @@ switch($oParam->exec) {
 
       if (file_exists("PPA{$ano}.pdf")){
         array_map( "unlink", glob( "PPA{$ano}.pdf" ) );
-      } 
+      }
       if(file_exists("LDO{$ano}.pdf")){
         array_map( "unlink", glob( "LDO{$ano}.pdf" ) );
       }
       if(file_exists("LOA{$ano}.pdf")){
         array_map( "unlink", glob( "LOA{$ano}.pdf" ) );
-      } 
+      }
       if(file_exists("ANEXOS_LOA.pdf")){
         array_map( "unlink", glob( "ANEXOS_LOA.pdf" ) );
       }
@@ -103,13 +103,120 @@ switch($oParam->exec) {
   }
   break;
 
+  case "processarObra":
+//    ini_set('display_errors','on');
+    $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
+    $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
+    $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+    if (count($oParam->arquivos) > 0) {
+      $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+      $rsInst = db_query($sSql);
+      $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+      $iAnoReferencia = db_getsession('DB_anousu');
+
+      $sSql  = "SELECT si09_codorgaotce AS codorgao
+                    FROM db_config
+                    LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+                    WHERE codigo = ".db_getsession("DB_instit");
+      $rsOrgao = db_query($sSql);
+      $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
+      echo pg_last_error();
+
+      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao from cadobras302020 where si201_mes = $oParam->mesReferencia";
+      $rsRegistro30 = db_query($sql);
+
+      $arquivosgerados = array();
+
+      /*
+       * array para adicionar os arquivos de inslusao de programas
+       */
+      $aArquivoProgramas =  array();
+      /*
+       * gerar arquivos correspondentes a todas as opcoes selecionadas
+       */
+      $oEscritorPDF          = new padArquivoEscritorCSV();
+      $oEscritorProgramasCSV = new padArquivoEscritorCSV();
+      /*
+       * instanciar cada arqivo selecionado e gerar o CSV correspondente
+       */
+      $aArrayArquivos = array();
+      foreach ($oParam->arquivos as $sArquivo) {
+        if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/obra/SicomArquivo{$sArquivo}.model.php")) {
+          require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/obra/SicomArquivo{$sArquivo}.model.php");
+          $sNomeClasse = "SicomArquivo{$sArquivo}";
+          $oArquivo    = new $sNomeClasse;
+          $oArquivo->setDataInicial($sDataInicial);
+          $oArquivo->setDataFinal($sDataFinal);
+          $oArquivoCsv = new stdClass();
+          try {
+            $oArquivo->gerarDados();
+            $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
+            $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
+            $aArrayArquivos[] = $oArquivoCsv;
+          } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+          }
+        }
+        if($sArquivo == "DetalhamentodeObras"){
+          for ($iCont30 = 0; $iCont30 < pg_num_rows($rsRegistro30); $iCont30++) {
+
+            $oDados30 = db_utils::fieldsMemory($rsRegistro30, $iCont30);
+            $filePdf = 'FOTO_MEDICAO' . "_" . $sOrgao . "_" . $oDados30->si201_codobra . "_" . $oDados30->si201_tipomedicao . "_" . $oDados30->si201_nummedicao . ".pdf";
+            $arquivosgerados[] = $filePdf;
+          }
+        }
+      }
+      $aListaArquivos = " ";
+      foreach ($aArrayArquivos as $oArquivo){
+        $aListaArquivos .= " ".$oArquivo->caminho;
+      }
+      system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+      system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+//echo "<pre>"; print_r($arquivosgerados);exit;
+      if($arquivosgerados[0] != null){
+
+        foreach ($arquivosgerados as $arq) {
+          $aListaArquivospdf .= " ".$arq;
+          if (file_exists("$arq")){
+            $oEscritorPDF->adicionarArquivo("$arq", "$arq");
+          }
+        }
+        $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+
+        foreach ($arquivosgerados as $arquivo) {
+          unlink($arquivo);
+        }
+
+        $oArquivopdf = new stdClass();
+        $aPdfs = array();
+        foreach ($oEscritorPDF->getListaArquivos() as $pdf){
+          $aPdfs[] =$pdf;
+        }
+        $oArquivopdf->pdfs = $aPdfs;
+        $oArquivopdf->nome = "FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+        $oArquivopdf->caminho = "tmp/FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+        $aArrayArquivos[] = $oArquivopdf;
+      }
+
+      $oArquivoZip = new stdClass();
+      $oArquivoZip->nome    = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $aArrayArquivos[] = $oArquivoZip;
+
+      $oRetorno->itens  = $aArrayArquivos;
+
+    }
+    break;
+
   case "processarSicomAnual" :
     /**
      * sempre usar essa funcao para pegar o ano
      */
     $sDataInicial = db_getsession("DB_anousu").'-01-01';
     $sDataFinal   = db_getsession("DB_anousu")."-12-31";
-    
+
 
     $sSql  = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = ".db_getsession('DB_instit');
 
@@ -135,7 +242,7 @@ switch($oParam->exec) {
       if (file_exists("PPA{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
         $iVerifica=1;
-      } 
+      }
       if(file_exists("LDO{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
         $iVerifica=1;
@@ -143,7 +250,7 @@ switch($oParam->exec) {
       if(file_exists("LOA{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
         $iVerifica=1;
-      } 
+      }
       if(file_exists("ANEXOS_LOA.pdf")){
         $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
         $iVerifica=1;
@@ -167,7 +274,7 @@ switch($oParam->exec) {
       foreach ($oParam->arquivos as $sArquivo) {
 
         $sArquivoPath = "model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php";
-        
+
         if (file_exists($sArquivoPath)) {
 
           require_once($sArquivoPath);
@@ -538,7 +645,7 @@ case "processarBalancete" :
       $oRetorno->itens  = $aArrayArquivos;
       if($bEncerramento)
         $oRetorno->calculos = getCalculoEncerramento();
-        // var_dump($oRetorno);
+      // var_dump($oRetorno);
     }
 
 
@@ -791,18 +898,16 @@ case "processarBalancete" :
       $aArrayArquivos = array();
 
       foreach ($oParam->arquivos as $sArquivo) {
-
         if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php")) {
           require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php");
-
           $sNomeClasse = "SicomArquivo{$sArquivo}";
           $oArquivo    = new $sNomeClasse;
-
-          $oArquivo->setDataInicial($sDataInicial);
+          $oArquivo->setDataInicial(db_getsession('DB_'));
           $oArquivo->setDataFinal($sDataFinal);
           if($sArquivo != "IDE") {
             $oArquivo->setTipoGeracao($oParam->tipoGeracao);
           }
+
           $oArquivoCsv = new stdClass();
           try {
             $oArquivo->gerarDados();
@@ -830,11 +935,11 @@ case "processarBalancete" :
     }
     break;
 
-case "processarEditais" :
+  	case "processarEditais" :
 
-		if (count($oParam->arquivos) > 0) {
+    	if (count($oParam->arquivos) > 0) {
 
-			$sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+      		$sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
 
 			$rsInst = db_query($sSql);
 			$iMunicipio  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
@@ -897,7 +1002,6 @@ case "processarEditais" :
 			}
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
-				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
 				$sSql = "
 					SELECT l47_dataenvio AS dataenvio,
 						   editaldocumentos.l48_caminho AS caminho,
@@ -905,7 +1009,7 @@ case "processarEditais" :
 						   editaldocumentos.l48_sequencial as sequencial,
 						   liclicita.l20_edital AS nroprocesso,
 						   (CASE
-								WHEN liclicita.l20_exercicioedital IS NULL 
+								WHEN liclicita.l20_exercicioedital IS NULL
 									THEN EXTRACT(YEAR FROM l20_datacria)
 									ELSE l20_exercicioedital
 							END )AS exercicio,
@@ -949,11 +1053,17 @@ case "processarEditais" :
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$dia' 
+					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia'
 				";
 
 				$rsAnexos = db_query($sSql);
+
 				$aListaAnexos = " ";
+
+				if(!pg_num_rows($rsAnexos)){
+					$oRetorno->erro = urlencode('Não há registros a serem gerados para a data informada!');
+					break;
+				}
 
 				for ($cont = 0; $cont < pg_num_rows($rsAnexos); $cont++) {
 					$oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
@@ -976,8 +1086,7 @@ case "processarEditais" :
 							break;
 					}
 					$valores = explode('/', $oAnexo->caminho);
-					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
-					$extensao = explode('.', $nomeArq);
+					$extensao = explode('.', $valores[4]);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
 					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
@@ -1022,9 +1131,10 @@ case "processarEditais" :
 
 		}
 
-		break;
+    break;
 
-}
+  }
+
   echo $oJson->encode($oRetorno);
 
 /**
