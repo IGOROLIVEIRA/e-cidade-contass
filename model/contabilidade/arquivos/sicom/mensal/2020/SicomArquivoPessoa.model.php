@@ -85,9 +85,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
                  z01_obs,
                  z01_cadast
             from cgm
-            join db_config on numcgm=z01_numcgm
            where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-           db21_tipoinstit = " . db_getsession("DB_instit") . "
            and (z01_cgccpf != '' and z01_cgccpf is not null)
            and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
            or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) 
