@@ -1057,7 +1057,13 @@ case "processarBalancete" :
 				";
 
 				$rsAnexos = db_query($sSql);
+
 				$aListaAnexos = " ";
+
+				if(!pg_num_rows($rsAnexos)){
+					$oRetorno->erro = urlencode('Não há registros a serem gerados para a data informada!');
+					break;
+				}
 
 				for ($cont = 0; $cont < pg_num_rows($rsAnexos); $cont++) {
 					$oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);

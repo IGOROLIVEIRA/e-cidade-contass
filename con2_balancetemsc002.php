@@ -64,12 +64,40 @@ $iTotalControlesCredoresEB = 0;
 
 try {
 
-  if (file_exists("model/contabilidade/arquivos/msc/{$iAnoUsu}/MSC.model.php")) {
-      require_once("model/contabilidade/arquivos/msc/{$iAnoUsu}/MSC.model.php");
-  } else {
-      throw new Exception ("Arquivo MSC para o ano {$iAnoUsu} não existe. ");
-  }
+  $sMscPath = "model/contabilidade/arquivos/msc/{$iAnoUsu}";
 
+  if ($iMes == 13) {
+
+      $iMes = 12;
+      $sMscFilePath = "{$sMscPath}/MSCEncerramento.model.php";
+
+      if (file_exists($sMscFilePath)) {
+
+          require_once($sMscFilePath);
+          $msc = new MSCEncerramento;
+
+          $head4 = "PERÍODO: ENCERRAMENTO";
+
+      } else {
+          throw new Exception ("Arquivo MSCEncerramento para o ano {$iAnoUsu} não existe. ");
+      }
+
+  } else {
+
+      $sMscFilePath = "{$sMscPath}/MSC.model.php";
+
+      if (file_exists($sMscFilePath)) {
+
+          require_once($sMscFilePath);
+          $msc = new MSC;
+
+          $head4 = "PERÍODO: ".array_search($iMes, $aMeses);
+
+      } else {
+          throw new Exception ("Arquivo MSC para o ano {$iAnoUsu} não existe. ");
+      }
+
+  }
   $sSQL = "
           select si09_instsiconfi, db21_nome
             from infocomplementaresinstit
@@ -91,8 +119,6 @@ try {
     $virgula = ", ";
   }
 
-  $msc = new MSC;
-
   $msc->setTipoMatriz($sInstituicao);
   $aRegis = $msc->getConsulta($iAnoUsu, $iMes);
   $aRegistros = $msc->getRegistrosRelatorio($aRegis);
@@ -111,7 +137,6 @@ $pdf->Open();
 $pdf->AliasNbPages();
 $head2 = "BALANCETE MSC";
 $head3 = "EXERCÍCIO: {$iAnoUsu}";
-$head4 = "PERÍODO: ".array_search($iMes, $aMeses);
 $head5 = "INSTIUIÇÕES: {$sInstituicoes}";
 $alt   = 5;
 $pdf->SetAutoPageBreak('on',0);

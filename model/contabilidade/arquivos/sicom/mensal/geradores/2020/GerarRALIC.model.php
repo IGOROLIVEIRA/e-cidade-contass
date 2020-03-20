@@ -118,10 +118,10 @@ class GerarRALIC extends GerarAM
 							$aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
 							$aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
 							$aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
-							$aCSVRALIC12['si182_segundolatitude']             = $aRALIC12['si182_segundolatitude'];
+							$aCSVRALIC12['si182_segundolatitude']             = $this->sicomNumberReal($aRALIC12['si182_segundolatitude'],2);
 							$aCSVRALIC12['si182_graulongitude']               = $aRALIC12['si182_graulongitude'];
 							$aCSVRALIC12['si182_minutolongitude']             = $aRALIC12['si182_minutolongitude'];
-							$aCSVRALIC12['si182_segundolongitude']            = $aRALIC12['si182_segundolongitude'];
+							$aCSVRALIC12['si182_segundolongitude']            = $this->sicomNumberReal($aRALIC12['si182_segundolongitude'], 2);
 
 							$this->sLinha = $aCSVRALIC12;
 							$this->adicionaLinha();
