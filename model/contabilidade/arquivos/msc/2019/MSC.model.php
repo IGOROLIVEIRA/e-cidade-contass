@@ -931,9 +931,9 @@ class MSC {
          inner join db_config ON codigo = r.c61_instit
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
-       left join elemdespmsc on  (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+       left join elemdespmsc on  (substr(c19_estrutural,2,8), $iAno) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
-       left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), c60_anousu) = (c210_pcaspestrut, c210_anousu)
+       left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on c19_orctiporec = o15_codigo
        where {$this->getTipoMatriz()} c19_contacorrente=101 and c60_infcompmsc = 7 and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
      ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
@@ -1069,7 +1069,7 @@ class MSC {
        inner join contacorrentedetalhe on c19_conplanoreduzanousu = c61_anousu and c19_reduz = c61_reduz
        inner join orcdotacao on c19_orcdotacao= o58_coddot and o58_anousu=c19_orcdotacaoanousu
        inner join empempenho on c19_numemp=e60_numemp
-       left join elemdespmsc on (substr(c19_estrutural,2,8), c19_orcunidadeanousu) = (c211_elemdespestrut, c211_anousu)
+       left join elemdespmsc on (substr(c19_estrutural,2,8), c60_anousu) = (c211_elemdespestrut, c211_anousu)
        left outer join consistema on c60_codsis = c52_codsis
        left join vinculopcaspmsc on (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
        left join orctiporec on o58_codigo = o15_codigo
@@ -1168,11 +1168,11 @@ class MSC {
                         INNER JOIN empelemento ON e64_numemp=e60_numemp
                         LEFT JOIN dotacaorpsicom ON e60_numemp = si177_numemp
                         LEFT JOIN conplanoorcamento ON conplanoorcamento.c60_codcon=e64_codele AND conplanoorcamento.c60_anousu=e60_anousu
-                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8), conplanoorcamento.c60_anousu) = (elemdespmsc.c211_elemdespestrut, elemdespmsc.c211_anousu)
-                        LEFT JOIN elemdespmsc tb ON (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0), e60_anousu) = (tb.c211_elemdespestrut, tb.c211_anousu) 
-                        LEFT JOIN elemdespmsc a1 ON (substr(contacorrentedetalhe.c19_estrutural,2,8), c62_anousu) = (a1.c211_elemdespestrut, a1.c211_anousu)
+                        LEFT JOIN elemdespmsc ON (substr(conplanoorcamento.c60_estrut,2,8), $iAno) = (elemdespmsc.c211_elemdespestrut, elemdespmsc.c211_anousu)
+                        LEFT JOIN elemdespmsc tb ON (si177_naturezadespesa||lpad(si177_subelemento::varchar,2,0), $iAno) = (tb.c211_elemdespestrut, tb.c211_anousu) 
+                        LEFT JOIN elemdespmsc a1 ON (substr(contacorrentedetalhe.c19_estrutural,2,8), $iAno) = (a1.c211_elemdespestrut, a1.c211_anousu)
                         LEFT OUTER JOIN consistema ON p.c60_codsis = c52_codsis
-                        LEFT JOIN vinculopcaspmsc ON substr(c19_estrutural,2,8) = c210_pcaspestrut
+                        LEFT JOIN vinculopcaspmsc ON (substr(c19_estrutural,2,8), $iAno) = (c210_pcaspestrut, c210_anousu)
                         LEFT JOIN orctiporec ON o58_codigo = o15_codigo
                         WHERE {$this->getTipoMatriz()} c19_contacorrente=106
                             AND p.c60_infcompmsc = 9
@@ -1190,5 +1190,51 @@ class MSC {
     } else {
         $this->setErroSQL(9);
     }
+  }
+
+  public function getRegistrosRelatorio($aRegis) {
+
+      ksort($aRegis);
+
+      $keys = array_keys($aRegis);
+      $last_key = array_pop($keys);
+
+      foreach ($aRegis as $key => $value) {
+
+          if ($iConta != $value[0]) {
+
+              if (!empty($iConta)) {
+                  $aRegistros[$iConta] = $oNovoResgistro;
+              }
+              $oNovoResgistro                     = new stdClass;
+              $oNovoResgistro->conta = $iConta    = $value[0];
+              $oNovoResgistro->beginning_balance  = 0;
+              $oNovoResgistro->period_change_deb  = 0;
+              $oNovoResgistro->period_change_cred = 0;
+              $oNovoResgistro->ending_balance     = 0;
+
+          }
+
+          if (!empty($value[7])) {
+              $oNovoResgistro->beginning_balance  += $value[9] == 'D' ? $value[7] : $value[7] * -1;
+          }
+          if (!empty($value[10])) {
+              $oNovoResgistro->period_change_deb  += $value[10];
+          }
+          if (!empty($value[12])) {
+              $oNovoResgistro->period_change_cred += $value[12] * -1;
+          }
+          if (!empty($value[14])) {
+              $oNovoResgistro->ending_balance     += $value[16] == 'D' ? $value[14] : $value[14] * -1;
+          }
+
+          if ($key == $last_key) {
+              $aRegistros[$iConta] = $oNovoResgistro;
+          }
+
+      }
+
+      return $aRegistros;
+
   }
 }

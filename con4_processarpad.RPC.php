@@ -29,13 +29,13 @@ switch($oParam->exec) {
 
       if (file_exists("PPA{$ano}.pdf")){
         array_map( "unlink", glob( "PPA{$ano}.pdf" ) );
-      }
+      } 
       if(file_exists("LDO{$ano}.pdf")){
         array_map( "unlink", glob( "LDO{$ano}.pdf" ) );
       }
       if(file_exists("LOA{$ano}.pdf")){
         array_map( "unlink", glob( "LOA{$ano}.pdf" ) );
-      }
+      } 
       if(file_exists("ANEXOS_LOA.pdf")){
         array_map( "unlink", glob( "ANEXOS_LOA.pdf" ) );
       }
@@ -109,7 +109,7 @@ switch($oParam->exec) {
      */
     $sDataInicial = db_getsession("DB_anousu").'-01-01';
     $sDataFinal   = db_getsession("DB_anousu")."-12-31";
-
+    
 
     $sSql  = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = ".db_getsession('DB_instit');
 
@@ -135,7 +135,7 @@ switch($oParam->exec) {
       if (file_exists("PPA{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("PPA{$ano}.pdf", "PPA{$ano}.pdf");
         $iVerifica=1;
-      }
+      } 
       if(file_exists("LDO{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("LDO{$ano}.pdf", "LDO{$ano}.pdf");
         $iVerifica=1;
@@ -143,7 +143,7 @@ switch($oParam->exec) {
       if(file_exists("LOA{$ano}.pdf")){
         $oEscritorCSV->adicionarArquivo("LOA{$ano}.pdf", "LOA{$ano}.pdf");
         $iVerifica=1;
-      }
+      } 
       if(file_exists("ANEXOS_LOA.pdf")){
         $oEscritorCSV->adicionarArquivo("ANEXOS_LOA.pdf", "ANEXOS_LOA.pdf");
         $iVerifica=1;
@@ -167,7 +167,7 @@ switch($oParam->exec) {
       foreach ($oParam->arquivos as $sArquivo) {
 
         $sArquivoPath = "model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php";
-
+        
         if (file_exists($sArquivoPath)) {
 
           require_once($sArquivoPath);
@@ -755,84 +755,86 @@ case "processarBalancete" :
     break;
 
     case "processarDCASP" :
-        /*
-         * Definindo o periodo em que serao selecionado os dados
-         * Sempre em dezembro
-         */
-        $oParam->mesReferencia = 12;
+    /*
+     * Definindo o periodo em que serao selecionado os dados
+     * Sempre em dezembro
+     */
+    $oParam->mesReferencia = 12;
 
-        $iUltimoDiaMes = date("d", mktime(0, 0, 0, $oParam->mesReferencia + 1, 0, db_getsession("DB_anousu")));
-        $sDataInicial = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-01";
-        $sDataFinal = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
-        if (count($oParam->arquivos) > 0) {
-            $sSql = "SELECT db21_codigomunicipoestado FROM db_config where codigo = " . db_getsession("DB_instit");
-            $rsInst = db_query($sSql);
-            $sInst = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
-            $iAnoReferencia = db_getsession('DB_anousu');
-            $sSql = "SELECT si09_codorgaotce AS codorgao
+    $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
+    $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
+    $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+    if (count($oParam->arquivos) > 0) {
+      $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+      $rsInst = db_query($sSql);
+      $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+      $iAnoReferencia = db_getsession('DB_anousu');
+      $sSql  = "SELECT si09_codorgaotce AS codorgao
       FROM db_config
       LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-      WHERE codigo = " . db_getsession("DB_instit");
-            $rsOrgao = db_query($sSql);
-            $sOrgao = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2, "0", STR_PAD_LEFT);
-            echo pg_last_error();
-            /*
-             * array para adicionar os arquivos de inslusao de programas
-             */
-            $aArquivoProgramas = array();
-            /*
-             * gerar arquivos correspondentes a todas as opcoes selecionadas
-             */
-            $oEscritorCSV = new padArquivoEscritorCSV();
-            $oEscritorProgramasCSV = new padArquivoEscritorCSV();
-            /*
-             * instanciar cada arqivo selecionado e gerar o CSV correspondente
-             */
-            $aArrayArquivos = array();
+      WHERE codigo = ".db_getsession("DB_instit");
+      $rsOrgao = db_query($sSql);
+      $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
+      echo pg_last_error();
+      /*
+       * array para adicionar os arquivos de inslusao de programas
+       */
+      $aArquivoProgramas =  array();
+      /*
+       * gerar arquivos correspondentes a todas as opcoes selecionadas
+       */
+      $oEscritorCSV          = new padArquivoEscritorCSV();
+      $oEscritorProgramasCSV = new padArquivoEscritorCSV();
+      /*
+       * instanciar cada arqivo selecionado e gerar o CSV correspondente
+       */
+      $aArrayArquivos = array();
 
-            foreach ($oParam->arquivos as $sArquivo) {
-                if (file_exists("model/contabilidade/arquivos/sicom/" . db_getsession('DB_anousu') . "/dcasp/SicomArquivo{$sArquivo}.model.php")) {
-                    require_once("model/contabilidade/arquivos/sicom/" . db_getsession('DB_anousu') . "/dcasp/SicomArquivo{$sArquivo}.model.php");
-                    $sNomeClasse = "SicomArquivo{$sArquivo}";
-                    $oArquivo = new $sNomeClasse;
-                    $oArquivo->setDataInicial($sDataInicial);
-                    $oArquivo->setDataFinal($sDataFinal);
-                    if ($sArquivo != "IDE") {
-                        $oArquivo->setTipoGeracao($oParam->tipoGeracao);
-                    }
+      foreach ($oParam->arquivos as $sArquivo) {
 
-                    $oArquivoCsv = new stdClass();
-                    try {
-                        $oArquivo->gerarDados();
-                        $oArquivoCsv->nome = "{$oArquivo->getNomeArquivo()}.csv";
-                        $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
-                        $aArrayArquivos[] = $oArquivoCsv;
-                    } catch (Exception $eErro) {
-                        $oRetorno->status = 2;
-                        $sGetMessage = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
-                        $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
-                    }
-                }
-            }
-            $aListaArquivos = " ";
-            foreach ($aArrayArquivos as $oArquivo) {
-                $aListaArquivos .= " " . $oArquivo->caminho;
-            }
-            system("rm -f DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip");
-            system("bin/zip -q DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
-            $oArquivoZip = new stdClass();
-            $oArquivoZip->nome = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
-            $oArquivoZip->caminho = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
-            $aArrayArquivos[] = $oArquivoZip;
-            $oRetorno->itens = $aArrayArquivos;
+        if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php")) {
+          require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php");
+
+          $sNomeClasse = "SicomArquivo{$sArquivo}";
+          $oArquivo    = new $sNomeClasse;
+
+          $oArquivo->setDataInicial($sDataInicial);
+          $oArquivo->setDataFinal($sDataFinal);
+          if($sArquivo != "IDE") {
+            $oArquivo->setTipoGeracao($oParam->tipoGeracao);
+          }
+          $oArquivoCsv = new stdClass();
+          try {
+            $oArquivo->gerarDados();
+            $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
+            $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
+            $aArrayArquivos[] = $oArquivoCsv;
+          } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+            $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+          }
         }
-        break;
+      }
+      $aListaArquivos = " ";
+      foreach ($aArrayArquivos as $oArquivo){
+        $aListaArquivos .= " ".$oArquivo->caminho;
+      }
+      system("rm -f DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
+      $oArquivoZip = new stdClass();
+      $oArquivoZip->nome    = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
+      $aArrayArquivos[] = $oArquivoZip;
+      $oRetorno->itens  = $aArrayArquivos;
+    }
+    break;
 
-  	case "processarEditais" :
+case "processarEditais" :
 
-    	if (count($oParam->arquivos) > 0) {
+		if (count($oParam->arquivos) > 0) {
 
-      		$sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+			$sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
 
 			$rsInst = db_query($sSql);
 			$iMunicipio  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
@@ -895,6 +897,7 @@ case "processarBalancete" :
 			}
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
+				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
 				$sSql = "
 					SELECT l47_dataenvio AS dataenvio,
 						   editaldocumentos.l48_caminho AS caminho,
@@ -907,27 +910,27 @@ case "processarBalancete" :
 									ELSE l20_exercicioedital
 							END )AS exercicio,
 						   pctipocompratribunal.l44_sequencial AS tipo_tribunal,
-						   (SELECT CASE
-                                WHEN o41_subunidade != 0
-                                     OR NOT NULL THEN lpad((CASE
-                                                                WHEN o40_codtri = '0'
-                                                                     OR NULL THEN o40_orgao::varchar
-                                                                ELSE o40_codtri
-                                                            END),2,0)||lpad((CASE
-                                                                                 WHEN o41_codtri = '0'
-                                                                                      OR NULL THEN o41_unidade::varchar
-                                                                                 ELSE o41_codtri
-                                                                             END),3,0)||lpad(o41_subunidade::integer,3,0)
-                                ELSE lpad((CASE
-                                               WHEN o40_codtri = '0'
-                                                    OR NULL THEN o40_orgao::varchar
-                                               ELSE o40_codtri
-                                           END),2,0)||lpad((CASE
-                                                                WHEN o41_codtri = '0'
-                                                                     OR NULL THEN o41_unidade::varchar
-                                                                ELSE o41_codtri
-                                                            END),3,0)
-                            END AS codunidadesubresp
+						       (SELECT CASE
+									WHEN o41_subunidade != 0
+										 OR NOT NULL THEN lpad((CASE
+																	WHEN o40_codtri = '0'
+																		 OR NULL THEN o40_orgao::varchar
+																	ELSE o40_codtri
+																END),2,0)||lpad((CASE
+																					 WHEN o41_codtri = '0'
+																						  OR NULL THEN o41_unidade::varchar
+																					 ELSE o41_codtri
+																				 END),3,0)||lpad(o41_subunidade::integer,3,0)
+									ELSE lpad((CASE
+												   WHEN o40_codtri = '0'
+														OR NULL THEN o40_orgao::varchar
+												   ELSE o40_codtri
+											   END),2,0)||lpad((CASE
+																	WHEN o41_codtri = '0'
+																		 OR NULL THEN o41_unidade::varchar
+																	ELSE o41_codtri
+																END),3,0)
+								END AS codunidadesubresp
 						 FROM db_departorg
 						 JOIN infocomplementares ON si08_anousu = db01_anousu
 						 AND si08_instit = ".db_getsession('DB_instit')."
@@ -936,6 +939,8 @@ case "processarBalancete" :
 						 AND db01_anousu = o41_anousu
 						 JOIN orcorgao ON o40_orgao = o41_orgao
 						 AND o40_anousu = o41_anousu
+						 WHERE db01_coddepto=l20_codepartamento
+							 AND db01_anousu = ".db_getsession('DB_anousu')."
 						 LIMIT 1) AS unidade
 					FROM liclancedital
 					INNER JOIN editaldocumentos ON editaldocumentos.l48_liclicita = liclancedital.l47_liclicita
@@ -944,11 +949,17 @@ case "processarBalancete" :
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia' 
+					WHERE liclancedital.l47_dataenvio = '$dia' 
 				";
 
 				$rsAnexos = db_query($sSql);
+
 				$aListaAnexos = " ";
+
+				if(!pg_num_rows($rsAnexos)){
+					$oRetorno->erro = urlencode('Não há registros a serem gerados para a data informada!');
+					break;
+				}
 
 				for ($cont = 0; $cont < pg_num_rows($rsAnexos); $cont++) {
 					$oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
@@ -971,7 +982,8 @@ case "processarBalancete" :
 							break;
 					}
 					$valores = explode('/', $oAnexo->caminho);
-					$extensao = explode('.', $valores[4]);
+					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
+					$extensao = explode('.', $nomeArq);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
 					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
@@ -983,6 +995,7 @@ case "processarBalancete" :
 
 				if(trim($aListaAnexos)){
 					system("rm -f EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip");
+
 					system("bin/zip -q EDITAL_TERMO_{$iMunicipio}_{$sOrgao}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaAnexos");
 
 					$aAnexos = explode(' ', $aListaAnexos);
@@ -1015,10 +1028,9 @@ case "processarBalancete" :
 
 		}
 
-    break;
+		break;
 
-  }
-
+}
   echo $oJson->encode($oRetorno);
 
 /**

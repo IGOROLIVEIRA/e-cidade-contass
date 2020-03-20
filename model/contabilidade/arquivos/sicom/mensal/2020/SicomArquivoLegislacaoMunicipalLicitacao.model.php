@@ -100,7 +100,21 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
   FROM licitacao.decretopregao as decretopregao
   WHERE decretopregao.l201_numdecreto not in
   (select si44_nrodecretomunicipal from reglic102014
-  UNION select si44_nrodecretomunicipal from reglic102020 where si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") ";
+   UNION 
+   select si44_nrodecretomunicipal from reglic102015
+   UNION
+   select si44_nrodecretomunicipal from reglic102016
+   UNION
+   select si44_nrodecretomunicipal from reglic102017
+   UNION
+   select si44_nrodecretomunicipal from reglic102018
+   UNION
+   select si44_nrodecretomunicipal from reglic102019
+   UNION
+   select si44_nrodecretomunicipal from reglic102020 where si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
+    AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2020'
+    AND DATE_PART ( 'MONTH' , l201_datapublicacao ) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+    ";
     
     
     $rsResult10 = db_query($sSql);

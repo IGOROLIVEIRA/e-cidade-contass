@@ -69,7 +69,7 @@ $clrotulo->label("l47_numero");
     </td>
   </tr>
   <tr>
-    <td class="label">Processo Licitatório:</td>
+    <td class="label">Processo Licitatório</td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tl24_numero?>">
@@ -82,7 +82,7 @@ $clrotulo->label("l47_numero");
     </td>
   </tr>
   <tr>
-    <td class="label">Edital:</td>
+    <td class="label">Edital</td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tl47_numero?>">

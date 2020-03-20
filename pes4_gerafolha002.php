@@ -36,6 +36,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("pes4_gerafolha003.php");
 require_once("pes4_gerafolha004.php");
 require_once("libs/db_app.utils.php");
+require_once("model/pessoal/VerificacaoFolha.model.php");
 
 $oPost= db_utils::postMemory($_POST);
 $oGet = db_utils::postMemory($_GET);
@@ -384,6 +385,30 @@ flush();
 
 if ( isset($_GET["sCallBack"]) ) {
   echo "<script>parent.$sCallBack;</script>";
+}
+
+if($opcao_gml != 'g') {
+  $matriculas = $faixa_regis;
+} else {
+  $aMatriculas = array();
+  for ($Ipessoal=0; $Ipessoal<count($pessoal); $Ipessoal++) {
+    $aMatriculas[] = $pessoal[$Ipessoal]["r01_regist"];
+  }
+  $matriculas = implode(",", $aMatriculas);
+}
+
+$oVerificacaoFolha = new VerificacaoFolha();
+
+//  Verifica valores abaixo de zero
+$aMatriculasVerificar = $oVerificacaoFolha->verificaValorNegativo($matriculas, $opcao_geral);
+if (count($aMatriculasVerificar) > 0) {
+  db_msgbox("Verifique matricula(s) (".implode(",", $aMatriculasVerificar)."), servidor(es) com valores negativos.");
+}
+
+//  Verifica servidores com rubrica R928
+$aMatriculasVerificar = $oVerificacaoFolha->verificaServidoresRubricaR928($matriculas, $opcao_geral);
+if (count($aMatriculasVerificar) > 0) {
+  db_msgbox("Existem servidores com Insuficiência de saldo, Rubrica R928. Matrículas (".implode(",", $aMatriculasVerificar).")");
 }
 
 if(!isset($oGet->lAutomatico)){

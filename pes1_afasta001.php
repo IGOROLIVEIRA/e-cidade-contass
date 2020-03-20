@@ -308,7 +308,7 @@ if(isset($incluir)){
   if($sqlerro == true){
     db_msgbox($erro_msg);
   }else{
-    $clafasta->erro(true,true);
+    $clafasta->erro(true,true,true);
   };
 };
 ?>

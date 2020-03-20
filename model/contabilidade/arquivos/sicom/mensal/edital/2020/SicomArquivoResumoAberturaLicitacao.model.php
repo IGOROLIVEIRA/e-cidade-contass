@@ -343,7 +343,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
       $clralic10->si180_nroedital = $oDados10->nroedital;
       $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital: intval($oDados10->exerciciolicitacao);
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
-      $clralic10->si180_link = $oDados10->link;
+      $clralic10->si180_link = preg_replace("/\r|\n/", "", $oDados10->link);
       $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao;
       $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto;
       $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
@@ -368,8 +368,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
            /**
            * Selecionar informações do registro 11
            */
-
-          $sSql = "SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+		  $sSql = "SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                     (SELECT CASE
                                 WHEN o41_subunidade != 0
                                      OR NOT NULL THEN lpad((CASE
@@ -428,17 +427,18 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio";
+                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
+				order by obrasdadoscomplementares.db150_codobra";
 
-          $rsResult11 = db_query($sSql);
+		  $rsResult11 = db_query($sSql);
 
-          $aDadosAgrupados11 = array();
+		  $aDadosAgrupados11 = array();
           for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
             $oResult11 = db_utils::fieldsMemory($rsResult11, $iCont11);
-            $sHash11 = $oResult11->tiporegistro . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
+            $sHash11 = '11' . $oResult11->codorgaoresp . $oResult11->codunidadesubresp . $oResult11->codunidadesubrespestadual .
               $oResult11->exerciciolicitacao . $oResult11->nroprocessolicitatorio . $oResult11->classeobjeto . $oResult11->tipoatividadeobra . $oResult11->tipoatividadeservico .
-              $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao;
+              $oResult11->tipoatividadeservespecializado . $oResult11->codfuncao . $oResult11->codsubfuncao . $oResult11->codobralocal; // Foi adicionado a chave codobralocal
 
             if (!isset($aDadosAgrupados11[$sHash11])) {
 
@@ -465,6 +465,8 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
               $clralic11->si181_instit = db_getsession("DB_instit");
 
               $clralic11->incluir(null);
+//              ini_set('display_errors', 1);
+//              error_reporting(E_ALL);
               if ($clralic11->erro_status == 0) {
                 throw new Exception($clralic11->erro_msg);
               }
@@ -549,7 +551,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
             for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
                 $oResult12 = db_utils::fieldsMemory($rsResult12, $iCont12);
-                $sHash12 = $oResult12->tiporegistro . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
+                $sHash12 = '12' . $oResult12->codorgaoresp . $oResult12->codunidadesubresp . $oResult12->codunidadesubrespestadual .
                 $oResult12->exercicioprocesso . $oResult12->nroprocessolicitatorio . $oResult12->codobralocal . $oResult12->cep;
 
                 if (!isset($aDadosAgrupados12[$sHash12])) {

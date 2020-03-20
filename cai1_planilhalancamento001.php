@@ -789,7 +789,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    $('k02_drecei') .value = sReceita;
    $('recurso').value = chave3;
    $('estrutural') .value = chave4;
-   $('k02_tipo')   .value = chave5;
+   $('k02_tipo')   .value = chave6;
 
    if(erro){
      $('k81_receita').focus();
