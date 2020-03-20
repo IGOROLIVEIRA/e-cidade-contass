@@ -1,7 +1,7 @@
 <?php
-//MODULO: Obras
-//CLASSE DA ENTIDADE licobras
-class cl_licobras {
+//MODULO: sicom
+//CLASSE DA ENTIDADE pessoasobra102020
+class cl_pessoasobra102020 {
   // cria variaveis de erro
   public $rotulo     = null;
   public $query_sql  = null;
@@ -16,34 +16,30 @@ class cl_licobras {
   public $erro_campo = null;
   public $pagina_retorno = null;
   // cria variaveis do arquivo
-  public $obr01_sequencial = 0;
-  public $obr01_licitacao = 0;
-  public $obr01_dtlancamento_dia = null;
-  public $obr01_dtlancamento_mes = null;
-  public $obr01_dtlancamento_ano = null;
-  public $obr01_dtlancamento = null;
-  public $obr01_numeroobra = 0;
-  public $obr01_linkobra = null;
-//  public $obr01_dtinicioatividades_dia = null;
-//  public $obr01_dtinicioatividades_mes = null;
-//  public $obr01_dtinicioatividades_ano = null;
-//  public $obr01_dtinicioatividades = null;
-  public $obr01_instit = 0;
+  public $si194_sequencial = 0;
+  public $si194_tiporegistro = 0;
+  public $si194_nrodocumento = null;
+  public $si194_nome = null;
+  public $si194_tipocadastro = 0;
+  public $si194_justificativaalteracao = null;
+  public $si194_mes = 0;
+  public $si194_instit = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 obr01_sequencial = int4 = Sequencial
-                 obr01_licitacao = int4 = Processo Licitatório
-                 obr01_dtlancamento = date = Data Lançamento
-                 obr01_numeroobra = int4 = Nº Obra
-                 obr01_linkobra = text = Link da Obra
-                 obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra
-                 obr01_instit = int4 = Instituição
+                 si194_sequencial = int8 = Sequencial
+                 si194_tiporegistro = int8 = Tiporegistro
+                 si194_nrodocumento = text = Numero Documento
+                 si194_nome = text = Nome
+                 si194_tipocadastro = int4 = Tipo Cadastro
+                 si194_justificativaalteracao = text = Justificativa Alteracao
+                 si194_mes = int4 = Mes
+                 si194_instit = int4 = Instituição
                  ";
 
   //funcao construtor da classe
   function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("licobras");
+    $this->rotulo = new rotulo("pessoasobra102020");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -60,27 +56,14 @@ class cl_licobras {
   // funcao para atualizar campos
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
-      $this->obr01_sequencial = ($this->obr01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_sequencial"]:$this->obr01_sequencial);
-      $this->obr01_licitacao = ($this->obr01_licitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_licitacao"]:$this->obr01_licitacao);
-      if ($this->obr01_dtlancamento == "") {
-        $this->obr01_dtlancamento_dia = ($this->obr01_dtlancamento_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_dia"]:$this->obr01_dtlancamento_dia);
-        $this->obr01_dtlancamento_mes = ($this->obr01_dtlancamento_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_mes"]:$this->obr01_dtlancamento_mes);
-        $this->obr01_dtlancamento_ano = ($this->obr01_dtlancamento_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_ano"]:$this->obr01_dtlancamento_ano);
-        if ($this->obr01_dtlancamento_dia != "") {
-          $this->obr01_dtlancamento = $this->obr01_dtlancamento_ano."-".$this->obr01_dtlancamento_mes."-".$this->obr01_dtlancamento_dia;
-        }
-      }
-      $this->obr01_numeroobra = ($this->obr01_numeroobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_numeroobra"]:$this->obr01_numeroobra);
-      $this->obr01_linkobra = ($this->obr01_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"]:$this->obr01_linkobra);
-//      if ($this->obr01_dtinicioatividades == "") {
-//        $this->obr01_dtinicioatividades_dia = ($this->obr01_dtinicioatividades_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]:$this->obr01_dtinicioatividades_dia);
-//        $this->obr01_dtinicioatividades_mes = ($this->obr01_dtinicioatividades_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_mes"]:$this->obr01_dtinicioatividades_mes);
-//        $this->obr01_dtinicioatividades_ano = ($this->obr01_dtinicioatividades_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_ano"]:$this->obr01_dtinicioatividades_ano);
-//        if ($this->obr01_dtinicioatividades_dia != "") {
-//          $this->obr01_dtinicioatividades = $this->obr01_dtinicioatividades_ano."-".$this->obr01_dtinicioatividades_mes."-".$this->obr01_dtinicioatividades_dia;
-//        }
-//      }
-      $this->obr01_instit = ($this->obr01_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_instit"]:$this->obr01_instit);
+      $this->si194_sequencial = ($this->si194_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_sequencial"]:$this->si194_sequencial);
+      $this->si194_tiporegistro = ($this->si194_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"]:$this->si194_tiporegistro);
+      $this->si194_nrodocumento = ($this->si194_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nrodocumento"]:$this->si194_nrodocumento);
+      $this->si194_nome = ($this->si194_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nome"]:$this->si194_nome);
+      $this->si194_tipocadastro = ($this->si194_tipocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tipocadastro"]:$this->si194_tipocadastro);
+      $this->si194_justificativaalteracao = ($this->si194_justificativaalteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_justificativaalteracao"]:$this->si194_justificativaalteracao);
+      $this->si194_mes = ($this->si194_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_mes"]:$this->si194_mes);
+      $this->si194_instit = ($this->si194_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_instit"]:$this->si194_instit);
     } else {
     }
   }
@@ -88,101 +71,112 @@ class cl_licobras {
   // funcao para inclusao
   function incluir () {
     $this->atualizacampos();
-    if ($this->obr01_sequencial == null ) {
-
-      $result = db_query("select nextval('licobras_obr01_sequencial_seq')");
+    if ($this->si194_sequencial == null ) {
+      $result = db_query("select nextval('pessoasobra102020_si194_sequencial_seq')");
       if($result==false){
         $this->erro_banco = str_replace("\n","",@pg_last_error());
-        $this->erro_sql   = "Verifique o cadastro da sequencia: licobras_obr01_sequencial_seq do campo: obr01_sequencial";
+        $this->erro_sql   = "Verifique o cadastro da sequencia: pessoasobra102020_si194_sequencial_seq do campo: si194_sequencial";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
       }
-      $this->obr01_sequencial = pg_result($result,0,0);
+      $this->si194_sequencial = pg_result($result,0,0);
     }
-    if ($this->obr01_licitacao == null ) {
-      $this->erro_sql = " Campo Processo Licitatório não informado.";
-      $this->erro_campo = "obr01_licitacao";
+
+    if ($this->si194_tiporegistro == null ) {
+      $this->erro_sql = " Campo Tiporegistro não informado.";
+      $this->erro_campo = "si194_tiporegistro";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr01_dtlancamento == null ) {
-      $this->erro_sql = " Campo Data Lançamento não informado.";
-      $this->erro_campo = "obr01_dtlancamento_dia";
+    if ($this->si194_nrodocumento == null ) {
+      $this->erro_sql = " Campo Numero Documento não informado.";
+      $this->erro_campo = "si194_nrodocumento";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr01_numeroobra == null ) {
-      $this->erro_sql = " Campo Nº Obra não informado.";
-      $this->erro_campo = "obr01_numeroobra";
+    if ($this->si194_nome == null ) {
+      $this->erro_sql = " Campo Nome não informado.";
+      $this->erro_campo = "si194_nome";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr01_linkobra == null ) {
-      $this->erro_sql = " Campo Link da Obra não informado.";
-      $this->erro_campo = "obr01_linkobra";
+    if ($this->si194_tipocadastro == null ) {
+      $this->erro_sql = " Campo Tipo Cadastro não informado.";
+      $this->erro_campo = "si194_tipocadastro";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
-//    if ($this->obr01_dtinicioatividades == null ) {
-//      $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//      $this->erro_campo = "obr01_dtinicioatividades_dia";
+//    if ($this->si194_justificativaalteracao == null ) {
+//      $this->erro_sql = " Campo Justificativa Alteracao não informado.";
+//      $this->erro_campo = "si194_justificativaalteracao";
 //      $this->erro_banco = "";
 //      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
 //      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
 //      $this->erro_status = "0";
 //      return false;
 //    }
-    if ($this->obr01_instit == null ) {
-      $this->erro_sql = " Campo Instituição não informado.";
-      $this->erro_campo = "obr01_instit";
+    if ($this->si194_mes == null ) {
+      $this->erro_sql = " Campo Mes não informado.";
+      $this->erro_campo = "si194_mes";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
-    $sql = "insert into licobras(
-                                       obr01_sequencial
-                                      ,obr01_licitacao
-                                      ,obr01_dtlancamento
-                                      ,obr01_numeroobra
-                                      ,obr01_linkobra
-                                      ,obr01_dtinicioatividades
-                                      ,obr01_instit
+    if ($this->si194_instit == null ) {
+      $this->erro_sql = " Campo Instituição não informado.";
+      $this->erro_campo = "si194_instit";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    $sql = "insert into pessoasobra102020(
+                                       si194_sequencial
+                                      ,si194_tiporegistro
+                                      ,si194_nrodocumento
+                                      ,si194_nome
+                                      ,si194_tipocadastro
+                                      ,si194_justificativaalteracao
+                                      ,si194_mes
+                                      ,si194_instit
                        )
                 values (
-                                $this->obr01_sequencial
-                               ,$this->obr01_licitacao
-                               ,".($this->obr01_dtlancamento == "null" || $this->obr01_dtlancamento == ""?"null":"'".$this->obr01_dtlancamento."'")."
-                               ,$this->obr01_numeroobra
-                               ,'$this->obr01_linkobra'
-                               ,".($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == ""?"null":"'".$this->obr01_dtinicioatividades."'")."
-                               ,$this->obr01_instit
+                                $this->si194_sequencial
+                               ,$this->si194_tiporegistro
+                               ,'$this->si194_nrodocumento'
+                               ,'$this->si194_nome'
+                               ,$this->si194_tipocadastro
+                               ,'$this->si194_justificativaalteracao'
+                               ,$this->si194_mes
+                               ,$this->si194_instit
                       )";
     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
       if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-        $this->erro_sql   = "licobras () nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "cadastro pessoas obra () nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_banco = "licobras já Cadastrado";
+        $this->erro_banco = "cadastro pessoas obra já Cadastrado";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       } else {
-        $this->erro_sql   = "licobras () nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "cadastro pessoas obra () nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       }
@@ -205,16 +199,16 @@ class cl_licobras {
   }
 
   // funcao para alteracao
-  function alterar ( $obr01_sequencial=null ) {
+  function alterar ( $si194_sequencial=null ) {
     $this->atualizacampos();
-    $sql = " update licobras set ";
+    $sql = " update pessoasobra102020 set ";
     $virgula = "";
-    if (trim($this->obr01_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_sequencial"])) {
-      $sql  .= $virgula." obr01_sequencial = $this->obr01_sequencial ";
+    if (trim($this->si194_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_sequencial"])) {
+      $sql  .= $virgula." si194_sequencial = $this->si194_sequencial ";
       $virgula = ",";
-      if (trim($this->obr01_sequencial) == null ) {
+      if (trim($this->si194_sequencial) == null ) {
         $this->erro_sql = " Campo Sequencial não informado.";
-        $this->erro_campo = "obr01_sequencial";
+        $this->erro_campo = "si194_sequencial";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -222,12 +216,12 @@ class cl_licobras {
         return false;
       }
     }
-    if (trim($this->obr01_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_licitacao"])) {
-      $sql  .= $virgula." obr01_licitacao = $this->obr01_licitacao ";
+    if (trim($this->si194_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"])) {
+      $sql  .= $virgula." si194_tiporegistro = $this->si194_tiporegistro ";
       $virgula = ",";
-      if (trim($this->obr01_licitacao) == null ) {
-        $this->erro_sql = " Campo Processo Licitatório não informado.";
-        $this->erro_campo = "obr01_licitacao";
+      if (trim($this->si194_tiporegistro) == null ) {
+        $this->erro_sql = " Campo Tiporegistro não informado.";
+        $this->erro_campo = "si194_tiporegistro";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -235,39 +229,12 @@ class cl_licobras {
         return false;
       }
     }
-    if (trim($this->obr01_dtlancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_dia"] !="") ) {
-      $sql  .= $virgula." obr01_dtlancamento = '$this->obr01_dtlancamento' ";
+    if (trim($this->si194_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_nrodocumento"])) {
+      $sql  .= $virgula." si194_nrodocumento = '$this->si194_nrodocumento' ";
       $virgula = ",";
-      if (trim($this->obr01_dtlancamento) == null ) {
-        $this->erro_sql = " Campo Data Lançamento não informado.";
-        $this->erro_campo = "obr01_dtlancamento_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }     else{
-      if (isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtlancamento_dia"])) {
-        $sql  .= $virgula." obr01_dtlancamento = null ";
-        $virgula = ",";
-        if (trim($this->obr01_dtlancamento) == null ) {
-          $this->erro_sql = " Campo Data Lançamento não informado.";
-          $this->erro_campo = "obr01_dtlancamento_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-      }
-    }
-    if (trim($this->obr01_numeroobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_numeroobra"])) {
-      $sql  .= $virgula." obr01_numeroobra = $this->obr01_numeroobra ";
-      $virgula = ",";
-      if (trim($this->obr01_numeroobra) == null ) {
-        $this->erro_sql = " Campo Nº Obra não informado.";
-        $this->erro_campo = "obr01_numeroobra";
+      if (trim($this->si194_nrodocumento) == null ) {
+        $this->erro_sql = " Campo Numero Documento não informado.";
+        $this->erro_campo = "si194_nrodocumento";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -275,12 +242,12 @@ class cl_licobras {
         return false;
       }
     }
-    if (trim($this->obr01_linkobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"])) {
-      $sql  .= $virgula." obr01_linkobra = '$this->obr01_linkobra' ";
+    if (trim($this->si194_nome)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_nome"])) {
+      $sql  .= $virgula." si194_nome = '$this->si194_nome' ";
       $virgula = ",";
-      if (trim($this->obr01_linkobra) == null ) {
-        $this->erro_sql = " Campo Link da Obra não informado.";
-        $this->erro_campo = "obr01_linkobra";
+      if (trim($this->si194_nome) == null ) {
+        $this->erro_sql = " Campo Nome não informado.";
+        $this->erro_campo = "si194_nome";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -288,39 +255,51 @@ class cl_licobras {
         return false;
       }
     }
-//    if (trim($this->obr01_dtinicioatividades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"] !="") ) {
-//      $sql  .= $virgula." obr01_dtinicioatividades = '$this->obr01_dtinicioatividades' ";
-//      $virgula = ",";
-//      if (trim($this->obr01_dtinicioatividades) == null ) {
-//        $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//        $this->erro_campo = "obr01_dtinicioatividades_dia";
-//        $this->erro_banco = "";
-//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//        $this->erro_status = "0";
-//        return false;
-//      }
-//    }     else{
-//      if (isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"])) {
-//        $sql  .= $virgula." obr01_dtinicioatividades = null ";
-//        $virgula = ",";
-//        if (trim($this->obr01_dtinicioatividades) == null ) {
-//          $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//          $this->erro_campo = "obr01_dtinicioatividades_dia";
-//          $this->erro_banco = "";
-//          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//          $this->erro_status = "0";
-//          return false;
-//        }
-//      }
-//    }
-    if (trim($this->obr01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_instit"])) {
-      $sql  .= $virgula." obr01_instit = $this->obr01_instit ";
+    if (trim($this->si194_tipocadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_tipocadastro"])) {
+      $sql  .= $virgula." si194_tipocadastro = $this->si194_tipocadastro ";
       $virgula = ",";
-      if (trim($this->obr01_instit) == null ) {
+      if (trim($this->si194_tipocadastro) == null ) {
+        $this->erro_sql = " Campo Tipo Cadastro não informado.";
+        $this->erro_campo = "si194_tipocadastro";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si194_justificativaalteracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_justificativaalteracao"])) {
+      $sql  .= $virgula." si194_justificativaalteracao = '$this->si194_justificativaalteracao' ";
+      $virgula = ",";
+      if (trim($this->si194_justificativaalteracao) == null ) {
+        $this->erro_sql = " Campo Justificativa Alteracao não informado.";
+        $this->erro_campo = "si194_justificativaalteracao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si194_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_mes"])) {
+      $sql  .= $virgula." si194_mes = $this->si194_mes ";
+      $virgula = ",";
+      if (trim($this->si194_mes) == null ) {
+        $this->erro_sql = " Campo Mes não informado.";
+        $this->erro_campo = "si194_mes";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si194_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_instit"])) {
+      $sql  .= $virgula." si194_instit = $this->si194_instit ";
+      $virgula = ",";
+      if (trim($this->si194_instit) == null ) {
         $this->erro_sql = " Campo Instituição não informado.";
-        $this->erro_campo = "obr01_instit";
+        $this->erro_campo = "si194_instit";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -329,11 +308,10 @@ class cl_licobras {
       }
     }
     $sql .= " where ";
-    $sql .= "obr01_sequencial = $obr01_sequencial";
-    $result = db_query($sql);//die($sql);
+    $sql .= "si194_sequencial = '$si194_sequencial'";     $result = db_query($sql);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "licobras nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = "cadastro pessoas obra nao Alterado. Alteracao Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
@@ -342,7 +320,7 @@ class cl_licobras {
     } else {
       if (pg_affected_rows($result)==0) {
         $this->erro_banco = "";
-        $this->erro_sql = "licobras nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_sql = "cadastro pessoas obra nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
@@ -361,20 +339,20 @@ class cl_licobras {
   }
 
   // funcao para exclusao
-  function excluir ( $obr01_sequencial=null ,$dbwhere=null) {
+  function excluir ( $si194_sequencial=null ,$dbwhere=null) {
 
-    $sql = " delete from licobras
+    $sql = " delete from pessoasobra102020
                     where ";
     $sql2 = "";
     if ($dbwhere==null || $dbwhere =="") {
-      $sql2 = "obr01_sequencial = $obr01_sequencial";
+      $sql2 = "si194_sequencial = '$si194_sequencial'";
     } else {
       $sql2 = $dbwhere;
     }
     $result = db_query($sql.$sql2);
     if ($result==false) {
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "licobras nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "cadastro pessoas obra nao Excluído. Exclusão Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
@@ -383,7 +361,7 @@ class cl_licobras {
     } else {
       if (pg_affected_rows($result)==0) {
         $this->erro_banco = "";
-        $this->erro_sql = "licobras nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "cadastro pessoas obra nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
@@ -416,7 +394,7 @@ class cl_licobras {
     $this->numrows = pg_numrows($result);
     if ($this->numrows==0) {
       $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:licobras";
+      $this->erro_sql   = "Record Vazio na Tabela:pessoasobra102020";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
@@ -426,7 +404,7 @@ class cl_licobras {
   }
 
   // funcao do sql
-  function sql_query ( $obr01_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query ( $si194_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);
@@ -438,13 +416,11 @@ class cl_licobras {
     } else {
       $sql .= $campos;
     }
-    $sql .= " from licobras ";
-    $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
-    $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+    $sql .= " from pessoasobra102020 ";
     $sql2 = "";
     if ($dbwhere=="") {
-      if ( $obr01_sequencial != "" && $obr01_sequencial != null) {
-        $sql2 = " where obr01_sequencial = $obr01_sequencial";
+      if ( $si194_sequencial != "" && $si194_sequencial != null) {
+        $sql2 = " where pessoasobra102020.si194_sequencial = '$si194_sequencial'";
       }
     } else if ($dbwhere != "") {
       $sql2 = " where $dbwhere";
@@ -463,7 +439,7 @@ class cl_licobras {
   }
 
   // funcao do sql
-  function sql_query_file ( $obr01_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
+  function sql_query_file ( $si194_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if ($campos != "*" ) {
       $campos_sql = explode("#", $campos);
@@ -475,7 +451,7 @@ class cl_licobras {
     } else {
       $sql .= $campos;
     }
-    $sql .= " from licobras ";
+    $sql .= " from pessoasobra102020 ";
     $sql2 = "";
     if ($dbwhere=="") {
     } else if ($dbwhere != "") {

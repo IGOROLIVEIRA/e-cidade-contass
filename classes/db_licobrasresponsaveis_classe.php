@@ -24,6 +24,7 @@ class cl_licobrasresponsaveis {
   public $obr05_numregistro = null;
   public $obr05_numartourrt = 0;
   public $obr05_vinculoprofissional = 0;
+  public $obr05_dtcadastrores = null;
   public $obr05_instit = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
@@ -35,6 +36,7 @@ class cl_licobrasresponsaveis {
                  obr05_numregistro = text = Numero Registro
                  obr05_numartourrt = int8 = Numero da ART ou RRT
                  obr05_vinculoprofissional = int8 = Vinculo do Prof. com a Adm. Pública
+                 obr05_dtcadastrores = date = data de cadastro responsavel
                  obr05_instit = int8 = Instituição
                  ";
 
@@ -66,6 +68,7 @@ class cl_licobrasresponsaveis {
        $this->obr05_numregistro = ($this->obr05_numregistro == ""?@$GLOBALS["HTTP_POST_VARS"]["obr05_numregistro"]:$this->obr05_numregistro);
        $this->obr05_numartourrt = ($this->obr05_numartourrt == ""?@$GLOBALS["HTTP_POST_VARS"]["obr05_numartourrt"]:$this->obr05_numartourrt);
        $this->obr05_vinculoprofissional = ($this->obr05_vinculoprofissional == ""?@$GLOBALS["HTTP_POST_VARS"]["obr05_vinculoprofissional"]:$this->obr05_vinculoprofissional);
+       $this->obr05_dtcadastrores = ($this->obr05_dtcadastrores == ""?@$GLOBALS["HTTP_POST_VARS"]["obr05_dtcadastrores"]:$this->obr05_dtcadastrores);
        $this->obr05_instit = ($this->obr05_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["obr05_instit"]:$this->obr05_instit);
      } else {
      }
@@ -143,6 +146,16 @@ class cl_licobrasresponsaveis {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->obr05_dtcadastrores == null ) {
+       $this->erro_sql = " Campo data de cadastro não informado.";
+       $this->erro_campo = "obr05_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
      if ($this->obr05_instit == null ) {
        $this->erro_sql = " Campo Instituição não informado.";
        $this->erro_campo = "obr05_instit";
@@ -161,6 +174,7 @@ class cl_licobrasresponsaveis {
                                       ,obr05_numregistro
                                       ,obr05_numartourrt
                                       ,obr05_vinculoprofissional
+                                      ,obr05_dtcadastrores
                                       ,obr05_instit
                        )
                 values (
@@ -172,6 +186,7 @@ class cl_licobrasresponsaveis {
                                ,'$this->obr05_numregistro'
                                ,$this->obr05_numartourrt
                                ,$this->obr05_vinculoprofissional
+                               ,'$this->obr05_dtcadastrores'
                                ,$this->obr05_instit
                       )";
      $result = db_query($sql);
@@ -307,6 +322,19 @@ class cl_licobrasresponsaveis {
        if (trim($this->obr05_vinculoprofissional) == null ) {
          $this->erro_sql = " Campo Vinculo do Prof. com a Adm. Pública não informado.";
          $this->erro_campo = "obr05_vinculoprofissional";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if (trim($this->obr05_dtcadastrores)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr05_dtcadastrores"])) {
+       $sql  .= $virgula." obr05_dtcadastrores = '$this->obr05_dtcadastrores' ";
+       $virgula = ",";
+       if (trim($this->obr05_dtcadastrores) == null ) {
+         $this->erro_sql = " Campo data cadastro não informado.";
+         $this->erro_campo = "obr05_instit";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
