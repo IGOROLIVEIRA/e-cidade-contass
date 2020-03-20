@@ -37,11 +37,11 @@ class gerarCADOBRAS extends GerarAM
      *
      * Registros 10
      */
-    if(pg_num_rows($rscadobras102020) == 0){
-      $aCSV['tiporegistro'] = '99';
-      $this->sLinha = $aCSV;
-      $this->adicionaLinha();
-    }else {
+//    if(pg_num_rows($rscadobras102020) == 0){
+//      $aCSV['tiporegistro'] = '99';
+//      $this->sLinha = $aCSV;
+//      $this->adicionaLinha();
+//    }else {
       for ($iCont = 0; $iCont < pg_num_rows($rscadobras102020); $iCont++) {
 
         $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
@@ -59,7 +59,7 @@ class gerarCADOBRAS extends GerarAM
         $this->sLinha = $aCSVCADOBRAS10;
         $this->adicionaLinha();
       }
-    }
+//    }
     /**
      *
      * Registros 20

@@ -38,7 +38,7 @@ $cllicitemobra->rotulo->label();
             <?
             $aTab = array("0"=>"Selecione",
                           "1" => "1 - Tabela SINAP",
-                          "2" => "2 - Tabela SIPRO",
+                          "2" => "2 - Tabela SICRO",
                           "3" => "3 - Outras Tabelas Oficiais",
                           "4" => "4 - Cadastro Próprio" );
             db_select('obr06_tabela',$aTab,true,$db_opcao,"")

@@ -81,7 +81,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
      * registro 10
      */
 
-    $sql = "SELECT 10 AS si197_tiporegistro,
+    $sql = "SELECT DISTINCT 10 AS si197_tiporegistro,
              infocomplementaresinstit.si09_codorgaotce AS si197_codorgao,
           (SELECT CASE
                       WHEN o41_subunidade != 0

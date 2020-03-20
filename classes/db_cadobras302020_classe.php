@@ -160,15 +160,15 @@ class cl_cadobras302020 {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si201_descoutrostiposmed == null ) {
-      $this->erro_sql = " Campo desc outros tipos medicao não informado.";
-      $this->erro_campo = "si201_descoutrostiposmed";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if ($this->si201_descoutrostiposmed == null ) {
+//      $this->erro_sql = " Campo desc outros tipos medicao não informado.";
+//      $this->erro_campo = "si201_descoutrostiposmed";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if ($this->si201_nummedicao == null ) {
       $this->erro_sql = " Campo numero medicao não informado.";
       $this->erro_campo = "si201_nummedicao";
@@ -178,15 +178,15 @@ class cl_cadobras302020 {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si201_descmedicao == null ) {
-      $this->erro_sql = " Campo desc medicao não informado.";
-      $this->erro_campo = "si201_descmedicao";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if ($this->si201_descmedicao == null ) {
+//      $this->erro_sql = " Campo desc medicao não informado.";
+//      $this->erro_campo = "si201_descmedicao";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if ($this->si201_dtiniciomedicao == null ) {
       $this->erro_sql = " Campo data incio não informado.";
       $this->erro_campo = "si201_dtiniciomedicao_dia";

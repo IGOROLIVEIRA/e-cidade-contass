@@ -118,6 +118,7 @@ if(isset($alterar)){
   #obr02_descrisituacao{
     width: 710px;
     height: 43px;
+    background-color: #E6E4F1;
   }
   #obr02_outrosmotivos{
     width: 756px;

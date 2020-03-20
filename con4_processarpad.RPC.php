@@ -127,13 +127,6 @@ switch($oParam->exec) {
 
       $arquivosgerados = array();
 
-      for ($iCont30 = 0; $iCont30 < pg_num_rows($rsRegistro30); $iCont30++) {
-
-        $oDados30 = db_utils::fieldsMemory($rsRegistro30, $iCont30);
-        $filePdf = 'FOTO_MEDICAO' . "_" . $sOrgao . "_" . $oDados30->si201_codobra . "_" . $oDados30->si201_tipomedicao . "_" . $oDados30->si201_nummedicao . ".pdf";
-        $arquivosgerados[] = $filePdf;
-      }
-
       /*
        * array para adicionar os arquivos de inslusao de programas
        */
@@ -166,6 +159,14 @@ switch($oParam->exec) {
             $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
           }
         }
+        if($sArquivo == "DetalhamentodeObras"){
+          for ($iCont30 = 0; $iCont30 < pg_num_rows($rsRegistro30); $iCont30++) {
+
+            $oDados30 = db_utils::fieldsMemory($rsRegistro30, $iCont30);
+            $filePdf = 'FOTO_MEDICAO' . "_" . $sOrgao . "_" . $oDados30->si201_codobra . "_" . $oDados30->si201_tipomedicao . "_" . $oDados30->si201_nummedicao . ".pdf";
+            $arquivosgerados[] = $filePdf;
+          }
+        }
       }
       $aListaArquivos = " ";
       foreach ($aArrayArquivos as $oArquivo){
@@ -173,20 +174,19 @@ switch($oParam->exec) {
       }
       system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-//      echo "<pre>";print_r($arquivosgerados);exit;
-      if(pg_num_rows($rsRegistro30) > 0){
+//echo "<pre>"; print_r($arquivosgerados);exit;
+      if($arquivosgerados[0] != null){
 
         foreach ($arquivosgerados as $arq) {
           $aListaArquivospdf .= " ".$arq;
-          system("cd tmp/");
-          if (file_exists("tmp/$arq")){
+          if (file_exists("$arq")){
             $oEscritorPDF->adicionarArquivo("$arq", "$arq");
           }
         }
         $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
 
         foreach ($arquivosgerados as $arquivo) {
-          unlink("tmp/".$arquivo);
+          unlink($arquivo);
         }
 
         $oArquivopdf = new stdClass();
@@ -205,7 +205,6 @@ switch($oParam->exec) {
       $oArquivoZip->caminho = "OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
 
-//      echo "<pre>";print_r($aArrayArquivos);exit;
       $oRetorno->itens  = $aArrayArquivos;
 
     }

@@ -122,6 +122,7 @@ if(isset($incluir)){
   #obr03_descmedicao{
     width: 733px;
     height: 50px;
+    background-color:#E6E4F1;
   }
   #incluirmedicao{
     margin-top: 14px;

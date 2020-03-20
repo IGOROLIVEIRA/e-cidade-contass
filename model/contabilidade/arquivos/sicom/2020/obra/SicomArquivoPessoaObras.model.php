@@ -82,7 +82,7 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
      * registro 10
      */
 
-    $sql = "SELECT 10 AS si194_tiporegistro,
+    $sql = "SELECT DISTINCT 10 AS si194_tiporegistro,
              cgm.z01_cgccpf AS si194_nrodocumento,
              cgm.z01_nome AS si194_nome,
              1 AS si194_tipocadastro,
@@ -90,9 +90,9 @@ class SicomArquivoPessoaObras extends SicomArquivoBase implements iPadArquivoBas
             FROM licobrasresponsaveis
             INNER JOIN cgm ON z01_numcgm = obr05_responsavel
             INNER JOIN licobras ON obr05_seqobra = obr01_sequencial
-            WHERE DATE_PART('YEAR',licobras.obr01_dtinicioatividades)= " . db_getsession("DB_anousu") . "
-            AND DATE_PART('MONTH',licobras.obr01_dtinicioatividades)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult10 = db_query($sql);
+            WHERE DATE_PART('YEAR',licobrasresponsaveis.obr05_dtcadastrores)= " . db_getsession("DB_anousu") . "
+            AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+    $rsResult10 = db_query($sql);//db_criatabela($rsResult10);die($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       $clpessoasobra102020 = new cl_pessoasobra102020();
