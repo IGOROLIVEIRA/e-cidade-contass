@@ -902,7 +902,7 @@ case "processarBalancete" :
           require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php");
           $sNomeClasse = "SicomArquivo{$sArquivo}";
           $oArquivo    = new $sNomeClasse;
-          $oArquivo->setDataInicial(db_getsession('DB_'));
+          $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
           if($sArquivo != "IDE") {
             $oArquivo->setTipoGeracao($oParam->tipoGeracao);
