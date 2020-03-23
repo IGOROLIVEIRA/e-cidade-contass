@@ -51,7 +51,7 @@ $sqlerro = false;
 $db_opcao = 2;
 
 if(!isset($alterar)){
-  $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = '.$licitacao. ' and extract(year from l20_datacria) >= 2020 ');
+  $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = '.$licitacao. ' and extract(year from l20_dtpublic) >= 2020 ');
   $rsEdital = $clliclicita->sql_record($sqlEdital);
   $oDados = db_utils::fieldsMemory($rsEdital, 0);
 

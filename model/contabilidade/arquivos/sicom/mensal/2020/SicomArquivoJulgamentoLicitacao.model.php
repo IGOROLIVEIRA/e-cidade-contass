@@ -16,134 +16,140 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2020/GerarJULG
 class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
-    /**
-     *
-     * Codigo do layout. (db_layouttxt.db50_codigo)
-     * @var Integer
-     */
-    protected $iCodigoLayout = 157;
+	/**
+	 *
+	 * Codigo do layout. (db_layouttxt.db50_codigo)
+	 * @var Integer
+	 */
+	protected $iCodigoLayout = 157;
 
-    /**
-     *
-     * Nome do arquivo a ser criado
-     * @var String
-     */
-    protected $sNomeArquivo = 'JULGLIC';
+	/**
+	 *
+	 * Nome do arquivo a ser criado
+	 * @var String
+	 */
+	protected $sNomeArquivo = 'JULGLIC';
 
-    /**
-     *
-     * Construtor da classe
-     */
-    public function __construct()
-    {
+	/**
+	 *
+	 * Construtor da classe
+	 */
+	public function __construct()
+	{ }
 
-    }
+	/**
+	 * Retorna o codigo do layout
+	 *
+	 * @return Integer
+	 */
+	public function getCodigoLayout()
+	{
+		return $this->iCodigoLayout;
+	}
 
-    /**
-     * Retorna o codigo do layout
-     *
-     * @return Integer
-     */
-    public function getCodigoLayout()
-    {
-        return $this->iCodigoLayout;
-    }
+	/**
+	 *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
+	 */
+	public function getCampos()
+	{
 
-    /**
-     *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
-     */
-    public function getCampos()
-    {
+		$aElementos[10] = array(
+			"tipoRegistro",
+			"codOrgao",
+			"codUnidadeSub",
+			"exercicioLicitacao",
+			"nroProcessoLicitatorio",
+			"tipoDocumento",
+			"nroDocumento",
+			"nroLote",
+			"nroItem",
+			"dscProdutoServico",
+			"vlUnitario",
+			"quantidade",
+			"unidade"
+		);
+		$aElementos[20] = array(
+			"tipoRegistro",
+			"codOrgao",
+			"codUnidadeSub",
+			"exercicioLicitacao",
+			"nroProcessoLicitatorio",
+			"tipoDocumento",
+			"nroDocumento",
+			"nroLote",
+			"nroItem",
+			"dscLote",
+			"dscItem",
+			"percDesconto"
+		);
+		$aElementos[40] = array(
+			"tipoRegistro",
+			"codOrgao",
+			"codUnidadeSub",
+			"exercicioLicitacao",
+			"nroProcessoLicitatorio",
+			"dtJulgamento",
+			"PresencaLicitantes",
+			"renunciaRecurso"
+		);
 
-        $aElementos[10] = array(
-            "tipoRegistro",
-            "codOrgao",
-            "codUnidadeSub",
-            "exercicioLicitacao",
-            "nroProcessoLicitatorio",
-            "tipoDocumento",
-            "nroDocumento",
-            "nroLote",
-            "nroItem",
-            "dscProdutoServico",
-            "vlUnitario",
-            "quantidade",
-            "unidade"
-        );
-        $aElementos[20] = array(
-            "tipoRegistro",
-            "codOrgao",
-            "codUnidadeSub",
-            "exercicioLicitacao",
-            "nroProcessoLicitatorio",
-            "tipoDocumento",
-            "nroDocumento",
-            "nroLote",
-            "nroItem",
-            "dscLote",
-            "dscItem",
-            "percDesconto"
-        );
-        $aElementos[40] = array(
-            "tipoRegistro",
-            "codOrgao",
-            "codUnidadeSub",
-            "exercicioLicitacao",
-            "nroProcessoLicitatorio",
-            "dtJulgamento",
-            "PresencaLicitantes",
-            "renunciaRecurso"
-        );
+		return $aElementos;
+	}
 
-        return $aElementos;
-    }
+	/**
+	 * Julgamento da Licitação do mes para gerar o arquivo
+	 * @see iPadArquivoBase::gerarDados()
+	 */
+	public function gerarDados()
+	{
+		/**
+		 * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+		 */
+		$cljulglic10 = new cl_julglic102020();
+		$cljulglic20 = new cl_julglic202020();
+		$cljulglic30 = new cl_julglic302020();
+		$cljulglic40 = new cl_julglic402020();
 
-    /**
-     * Julgamento da Licitação do mes para gerar o arquivo
-     * @see iPadArquivoBase::gerarDados()
-     */
-    public function gerarDados()
-    {
-        /**
-         * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
-         */
-        $cljulglic10 = new cl_julglic102020();
-        $cljulglic20 = new cl_julglic202020();
-        $cljulglic30 = new cl_julglic302020();
-        $cljulglic40 = new cl_julglic402020();
+		/**
+		 * excluir informacoes do mes selecioado
+		 */
+		db_inicio_transacao();
+		$result = db_query($cljulglic10->sql_query(null, "*", null, "si60_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si60_instit=" . db_getsession("DB_instit")));
+		if (pg_num_rows($result) > 0) {
+			$cljulglic10->excluir(null, "si60_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si60_instit=" . db_getsession("DB_instit"));
+			if ($cljulglic10->erro_status == 0) {
+				throw new Exception($cljulglic10->erro_msg);
+			}
+		}
 
-        /**
-         * excluir informacoes do mes selecioado
-         */
-        db_inicio_transacao();
-        $result = db_query($cljulglic10->sql_query(null, "*", null, "si60_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si60_instit=" . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-            $cljulglic10->excluir(null, "si60_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si60_instit=" . db_getsession("DB_instit"));
-            if ($cljulglic10->erro_status == 0) {
-                throw new Exception($cljulglic10->erro_msg);
-            }
-        }
+		$result = db_query($cljulglic20->sql_query(null, "*", null, "si61_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si61_instit=" . db_getsession("DB_instit")));
+		if (pg_num_rows($result) > 0) {
+			$cljulglic20->excluir(null, "si61_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si61_instit=" . db_getsession("DB_instit"));
+			if ($cljulglic20->erro_status == 0) {
+				throw new Exception($cljulglic20->erro_msg);
+			}
+		}
 
-        $result = db_query($cljulglic20->sql_query(null, "*", null, "si61_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si61_instit=" . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-            $cljulglic20->excluir(null, "si61_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si61_instit=" . db_getsession("DB_instit"));
-            if ($cljulglic20->erro_status == 0) {
-                throw new Exception($cljulglic20->erro_msg);
-            }
-        }
+		$result = db_query($cljulglic30->sql_query(null, "*", null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit")));
+		if (pg_num_rows($result) > 0) {
+			$cljulglic30->excluir(null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit"));
+			if ($cljulglic30->erro_status == 0) {
+				throw new Exception($cljulglic30->erro_msg);
+			}
+		}
 
-        $result = db_query($cljulglic40->sql_query(null, "*", null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
-            $cljulglic40->excluir(null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit"));
-            if ($cljulglic40->erro_status == 0) {
-                throw new Exception($cljulglic40->erro_msg);
-            }
-        }
-        db_fim_transacao();
+		$result = db_query($cljulglic40->sql_query(null, "*", null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit")));
+		if (pg_num_rows($result) > 0) {
+			$cljulglic40->excluir(null, "si62_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si62_instit=" . db_getsession("DB_instit"));
+			if ($cljulglic40->erro_status == 0) {
+				throw new Exception($cljulglic40->erro_msg);
+			}
+		}
+		db_fim_transacao();
 
 
-        db_inicio_transacao();
-        $sSql = "SELECT distinct '10' as tipoRegistro,
+		db_inicio_transacao();
+		$sSql = "SELECT distinct '10' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -172,7 +178,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
 	pcorcamval.pc23_vlrun as vlUnitario,
 	pcorcamval.pc23_quant as quantidade,
-	l20_codigo as codlicitacao
+  l20_codigo as codlicitacao,
+  aberlic102020.si46_criterioadjudicacao as criterioadjudicacao
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -186,8 +193,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
-	LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-	LEFT  JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+  LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+  LEFT JOIN aberlic102020 on (aberlic102020.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+	LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
   INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
@@ -204,73 +212,72 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		                                                  '53',
 		                                                  '54')";
 
-        $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
-        /**
-         * registro 10
-         */
-        $aLicitacoes = array();
-        $aDadosAgrupados10 = array();
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+		$rsResult10 = db_query($sSql);
+		/**
+		 * registro 10
+		 */
+		$aLicitacoes = array();
+		$aDadosAgrupados10 = array();
+		for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $oResult10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-            $sHash10 = $oResult10->exerciciolicitacao . $oResult10->nroprocessolicitatorio . $oResult10->nrodocumento . $oResult10->nrolote . $oResult10->coditem;
+			$oResult10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+			$sHash10 = $oResult10->exerciciolicitacao . $oResult10->nroprocessolicitatorio . $oResult10->nrodocumento . $oResult10->nrolote . $oResult10->coditem;
 
-            if (!$aDadosAgrupados10[$sHash10]) {
+			if (!$aDadosAgrupados10[$sHash10]) {
 
-                $oDados10 = new stdClass();
+				if ($oResult10->criterioadjudicacao == 3) {
+					$oDados10 = new stdClass();
 
-                $oDados10->si60_tiporegistro = 10;
-                $oDados10->si60_codorgao = $oResult10->codorgaoresp;
-                $oDados10->si60_codunidadesub = $oResult10->codunidadesubresp;
-                $oDados10->si60_exerciciolicitacao = $oResult10->exerciciolicitacao;
-                $oDados10->si60_nroprocessolicitatorio = $oResult10->nroprocessolicitatorio;
-                $oDados10->si60_tipodocumento = $oResult10->tipodocumento;
-                $oDados10->si60_nrodocumento = $oResult10->nrodocumento;
-                $oDados10->si60_nrolote = $oResult10->nrolote;
-                $oDados10->si60_coditem = $oResult10->coditem;
-                $oDados10->si60_vlunitario = $oResult10->vlunitario;
-                $oDados10->si60_quantidade = $oResult10->quantidade;
-                $oDados10->si60_instit = db_getsession("DB_instit");
-                $oDados10->si60_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+					$oDados10->si60_tiporegistro = 10;
+					$oDados10->si60_codorgao = $oResult10->codorgaoresp;
+					$oDados10->si60_codunidadesub = $oResult10->codunidadesubresp;
+					$oDados10->si60_exerciciolicitacao = $oResult10->exerciciolicitacao;
+					$oDados10->si60_nroprocessolicitatorio = $oResult10->nroprocessolicitatorio;
+					$oDados10->si60_tipodocumento = $oResult10->tipodocumento;
+					$oDados10->si60_nrodocumento = $oResult10->nrodocumento;
+					$oDados10->si60_nrolote = $oResult10->nrolote;
+					$oDados10->si60_coditem = $oResult10->coditem;
+					$oDados10->si60_vlunitario = $oResult10->vlunitario;
+					$oDados10->si60_quantidade = $oResult10->quantidade;
+					$oDados10->si60_instit = db_getsession("DB_instit");
+					$oDados10->si60_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                $aDadosAgrupados10[$sHash10] = $oDados10;
+					$aDadosAgrupados10[$sHash10] = $oDados10;
+				}
 
-                if (!in_array($oResult10->codlicitacao, $aLicitacoes)) {
-                    $aLicitacoes[] = $oResult10->codlicitacao;
-                }
+				if (!in_array($oResult10->codlicitacao, $aLicitacoes)) {
+					$aLicitacoes[] = $oResult10->codlicitacao;
+				}
+			} else {
+				$aDadosAgrupados10[$sHash10]->si60_quantidade += $oResult10->quantidade;
+			}
+		}
 
-            } else {
-                $aDadosAgrupados10[$sHash10]->si60_quantidade += $oResult10->quantidade;
-            }
+		foreach ($aDadosAgrupados10 as $oDadosAgrupados10) {
 
-        }
+			$cljulglic10 = new cl_julglic102020();
 
-        foreach ($aDadosAgrupados10 as $oDadosAgrupados10) {
+			$cljulglic10->si60_tiporegistro = $oDadosAgrupados10->si60_tiporegistro;
+			$cljulglic10->si60_codorgao = $oDadosAgrupados10->si60_codorgao;
+			$cljulglic10->si60_codunidadesub = $oDadosAgrupados10->si60_codunidadesub;
+			$cljulglic10->si60_exerciciolicitacao = $oDadosAgrupados10->si60_exerciciolicitacao;
+			$cljulglic10->si60_nroprocessolicitatorio = $oDadosAgrupados10->si60_nroprocessolicitatorio;
+			$cljulglic10->si60_tipodocumento = $oDadosAgrupados10->si60_tipodocumento;
+			$cljulglic10->si60_nrodocumento = $oDadosAgrupados10->si60_nrodocumento;
+			$cljulglic10->si60_nrolote = $oDadosAgrupados10->si60_nrolote;
+			$cljulglic10->si60_coditem = $oDadosAgrupados10->si60_coditem;
+			$cljulglic10->si60_vlunitario = $oDadosAgrupados10->si60_vlunitario;
+			$cljulglic10->si60_quantidade = $oDadosAgrupados10->si60_quantidade;
+			$cljulglic10->si60_instit = $oDadosAgrupados10->si60_instit;
+			$cljulglic10->si60_mes = $oDadosAgrupados10->si60_mes;
 
-            $cljulglic10 = new cl_julglic102020();
+			$cljulglic10->incluir(null);
+			if ($cljulglic10->erro_status == 0) {
+				throw new Exception($cljulglic10->erro_msg);
+			}
+		}
 
-            $cljulglic10->si60_tiporegistro = $oDadosAgrupados10->si60_tiporegistro;
-            $cljulglic10->si60_codorgao = $oDadosAgrupados10->si60_codorgao;
-            $cljulglic10->si60_codunidadesub = $oDadosAgrupados10->si60_codunidadesub;
-            $cljulglic10->si60_exerciciolicitacao = $oDadosAgrupados10->si60_exerciciolicitacao;
-            $cljulglic10->si60_nroprocessolicitatorio = $oDadosAgrupados10->si60_nroprocessolicitatorio;
-            $cljulglic10->si60_tipodocumento = $oDadosAgrupados10->si60_tipodocumento;
-            $cljulglic10->si60_nrodocumento = $oDadosAgrupados10->si60_nrodocumento;
-            $cljulglic10->si60_nrolote = $oDadosAgrupados10->si60_nrolote;
-            $cljulglic10->si60_coditem = $oDadosAgrupados10->si60_coditem;
-            $cljulglic10->si60_vlunitario = $oDadosAgrupados10->si60_vlunitario;
-            $cljulglic10->si60_quantidade = $oDadosAgrupados10->si60_quantidade;
-            $cljulglic10->si60_instit = $oDadosAgrupados10->si60_instit;
-            $cljulglic10->si60_mes = $oDadosAgrupados10->si60_mes;
-
-            $cljulglic10->incluir(null);
-            if ($cljulglic10->erro_status == 0) {
-                throw new Exception($cljulglic10->erro_msg);
-            }
-
-        }
-
-        $sSql = "SELECT   '20' as tipoRegistro,
+		$sSql = "SELECT   '20' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -297,7 +304,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	cgm.z01_cgccpf as nroDocumento,
 	aberlic112020.si47_nrolote as nroLote,
 	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-	pcorcamval.pc23_percentualdesconto as percDesconto
+  pcorcamval.pc23_perctaxadesctabela as percDesconto,
+  aberlic102020.si46_criterioadjudicacao as criterioadjudicacao
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
 	INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -311,76 +319,77 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
-	LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+  LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+  LEFT JOIN aberlic102020 on (aberlic102020.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 	LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-	INNER JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
+	LEFT JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
 	and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
 	and descontotabela.l204_item=solicitempcmater.pc16_codmater)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
+	AND aberlic102020.si46_criterioadjudicacao = 1 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
-        if (count($aLicitacoes) > 0) {
-            $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);
-        }
-        /**
-         * registro 20
-         */
-        $aDadosAgrupados20 = array();
-        for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
+		if (count($aLicitacoes) > 0) {
+			$rsResult20 = db_query($sSql);
+		}
+		/**
+		 * registro 20
+		 */
+		$aDadosAgrupados20 = array();
+		for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
-            $oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-            $sHash20 = $oResult20->exerciciolicitacao . $oResult20->nroprocessolicitatorio . $oResult20->nrodocumento . $oResult20->nrolote . $oResult20->coditem;
+			$oResult20 = db_utils::fieldsMemory($rsResult20, $iCont20);
 
-            if (!$aDadosAgrupados20[$sHash20]) {
+			if ($oResult20->criterioadjudicacao == 1) {
+				$sHash20 = $oResult20->exerciciolicitacao . $oResult20->nroprocessolicitatorio . $oResult20->nrodocumento . $oResult20->nrolote . $oResult20->coditem;
 
-                $oDados20 = new stdClass();
+				if (!$aDadosAgrupados20[$sHash20]) {
 
-                $oDados20->si61_tiporegistro = 20;
-                $oDados20->si61_codorgao = $oResult20->codorgaoresp;
-                $oDados20->si61_codunidadesub = $oResult20->codunidadesubresp;
-                $oDados20->si61_exerciciolicitacao = $oResult20->exerciciolicitacao;
-                $oDados20->si61_nroprocessolicitatorio = $oResult20->nroprocessolicitatorio;
-                $oDados20->si61_tipodocumento = $oResult20->tipodocumento;
-                $oDados20->si61_nrodocumento = $oResult20->nrodocumento;
-                $oDados20->si61_nrolote = $oResult20->nrolote;
-                $oDados20->si61_coditem = $oResult20->coditem;
-                $oDados20->si61_percdesconto = $oResult20->percdesconto;
-                $oDados20->si61_instit = db_getsession("DB_instit");
-                $oDados20->si61_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $aDadosAgrupados20[$sHash20] = $oDados20;
+					$oDados20 = new stdClass();
 
-            }
+					$oDados20->si61_tiporegistro = 20;
+					$oDados20->si61_codorgao = $oResult20->codorgaoresp;
+					$oDados20->si61_codunidadesub = $oResult20->codunidadesubresp;
+					$oDados20->si61_exerciciolicitacao = $oResult20->exerciciolicitacao;
+					$oDados20->si61_nroprocessolicitatorio = $oResult20->nroprocessolicitatorio;
+					$oDados20->si61_tipodocumento = $oResult20->tipodocumento;
+					$oDados20->si61_nrodocumento = $oResult20->nrodocumento;
+					$oDados20->si61_nrolote = $oResult20->nrolote;
+					$oDados20->si61_coditem = $oResult20->coditem;
+					$oDados20->si61_percdesconto = $oResult20->percdesconto;
+					$oDados20->si61_instit = db_getsession("DB_instit");
+					$oDados20->si61_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+					$aDadosAgrupados20[$sHash20] = $oDados20;
+				}
+			}
+		}
 
-        }
+		foreach ($aDadosAgrupados20 as $oDadosAgrupados20) {
 
-        foreach ($aDadosAgrupados20 as $oDadosAgrupados20) {
+			$cljulglic20 = new cl_julglic202020();
 
-            $cljulglic20 = new cl_julglic202020();
+			$cljulglic20->si61_tiporegistro = $oDadosAgrupados20->si61_tiporegistro;
+			$cljulglic20->si61_codorgao = $oDadosAgrupados20->si61_codorgao;
+			$cljulglic20->si61_codunidadesub = $oDadosAgrupados20->si61_codunidadesub;
+			$cljulglic20->si61_exerciciolicitacao = $oDadosAgrupados20->si61_exerciciolicitacao;
+			$cljulglic20->si61_nroprocessolicitatorio = $oDadosAgrupados20->si61_nroprocessolicitatorio;
+			$cljulglic20->si61_tipodocumento = $oDadosAgrupados20->si61_tipodocumento;
+			$cljulglic20->si61_nrodocumento = $oDadosAgrupados20->si61_nrodocumento;
+			$cljulglic20->si61_nrolote = $oDadosAgrupados20->si61_nrolote;
+			$cljulglic20->si61_coditem = $oDadosAgrupados20->si61_coditem;
+			$cljulglic20->si61_percdesconto = $oDadosAgrupados20->si61_percdesconto;
+			$cljulglic20->si61_instit = $oDadosAgrupados20->si61_instit;
+			$cljulglic20->si61_mes = $oDadosAgrupados20->si61_mes;
 
-            $cljulglic20->si61_tiporegistro = $oDadosAgrupados20->si61_tiporegistro;
-            $cljulglic20->si61_codorgao = $oDadosAgrupados20->si61_codorgao;
-            $cljulglic20->si61_codunidadesub = $oDadosAgrupados20->si61_codunidadesub;
-            $cljulglic20->si61_exerciciolicitacao = $oDadosAgrupados20->si61_exerciciolicitacao;
-            $cljulglic20->si61_nroprocessolicitatorio = $oDadosAgrupados20->si61_nroprocessolicitatorio;
-            $cljulglic20->si61_tipodocumento = $oDadosAgrupados20->si61_tipodocumento;
-            $cljulglic20->si61_nrodocumento = $oDadosAgrupados20->si61_nrodocumento;
-            $cljulglic20->si61_nrolote = $oDadosAgrupados20->si61_nrolote;
-            $cljulglic20->si61_coditem = $oDadosAgrupados20->si61_coditem;
-            $cljulglic20->si61_percdesconto = $oDadosAgrupados20->si61_percdesconto;
-            $cljulglic20->si61_instit = $oDadosAgrupados20->si61_instit;
-            $cljulglic20->si61_mes = $oDadosAgrupados20->si61_mes;
+			$cljulglic20->incluir(null);
+			if ($cljulglic20->erro_status == 0) {
+				throw new Exception($cljulglic20->erro_msg);
+			}
+		}
 
-            $cljulglic20->incluir(null);
-            if ($cljulglic20->erro_status == 0) {
-                throw new Exception($cljulglic20->erro_msg);
-            }
-
-        }
-
-        $sSql = "SELECT '30' as tipoRegistro,
+		$sSql = "SELECT '30' as tipoRegistro,
   infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
   (SELECT CASE
     WHEN o41_subunidade != 0
@@ -407,7 +416,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   cgm.z01_cgccpf as nroDocumento,
   aberlic112020.si47_nrolote as nroLote,
   (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
-  pcorcamval.pc23_perctaxadesctabela as perctaxaadm
+  pcorcamval.pc23_percentualdesconto as perctaxaadm,
+  aberlic102020.si46_criterioadjudicacao as criterioadjudicacao
   FROM liclicita as liclicita
   INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
   INNER JOIN liclicitem on (liclicita.l20_codigo=liclicitem.l21_codliclicita)
@@ -422,78 +432,75 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
   INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
+  LEFT JOIN aberlic102020 on (aberlic102020.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
   LEFT JOIN aberlic112020 on (liclicitemlote.l04_descricao = aberlic112020.si47_dsclote and aberlic112020.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-  INNER JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
+  LEFT JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
   and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
   and descontotabela.l204_item=solicitempcmater.pc16_codmater)
   LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
   LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-  AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
+  AND aberlic102020.si46_criterioadjudicacao = 2 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
-        if (count($aLicitacoes) > 0) {
-            $rsResult30 = db_query($sSql);//db_criatabela($rsResult30);
-        }
-        /**
-         * registro 30
-         */
-        $aDadosAgrupados30 = array();
-        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
+		if (count($aLicitacoes) > 0) {
+			$rsResult30 = db_query($sSql);
+		}
+		/**
+		 * registro 30
+		 */
+		$aDadosAgrupados30 = array();
+		for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-            $oResult30 = db_utils::fieldsMemory($rsResult30, $iCont30);
-            $sHash30 = $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio . $oResult30->nrodocumento . $oResult30->nrolote . $oResult30->coditem;
+			$oResult30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+			$sHash30 = $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio . $oResult30->nrodocumento . $oResult30->nrolote . $oResult30->coditem;
 
-            if (!$aDadosAgrupados30[$sHash30]) {
+			if (!$aDadosAgrupados30[$sHash30]) {
+				if ($oResult30->criterioadjudicacao == 2) {
+					$oDados30 = new stdClass();
 
-                $oDados30 = new stdClass();
+					$oDados30->si62_tiporegistro = 30;
+					$oDados30->si62_codorgao = $oResult30->codorgaoresp;
+					$oDados30->si62_codunidadesub = $oResult30->codunidadesubresp;
+					$oDados30->si62_exerciciolicitacao = $oResult30->exerciciolicitacao;
+					$oDados30->si62_nroprocessolicitatorio = $oResult30->nroprocessolicitatorio;
+					$oDados30->si62_tipodocumento = $oResult30->tipodocumento;
+					$oDados30->si62_nrodocumento = $oResult30->nrodocumento;
+					$oDados30->si62_nrolote = $oResult30->nrolote;
+					$oDados30->si62_coditem = $oResult30->coditem;
+					$oDados30->si62_perctaxaadm = $oResult30->perctaxaadm;
+					$oDados30->si62_instit = db_getsession("DB_instit");
+					$oDados30->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+					$aDadosAgrupados30[$sHash30] = $oDados30;
+				}
+			}
+		}
 
-                $oDados30->si62_tiporegistro = 30;
-                $oDados30->si62_codorgao = $oResult30->codorgaoresp;
-                $oDados30->si62_codunidadesub = $oResult30->codunidadesubresp;
-                $oDados30->si62_exerciciolicitacao = $oResult30->exerciciolicitacao;
-                $oDados30->si62_nroprocessolicitatorio = $oResult30->nroprocessolicitatorio;
-                $oDados30->si62_tipodocumento = $oResult30->tipodocumento;
-                $oDados30->si62_nrodocumento = $oResult30->nrodocumento;
-                $oDados30->si62_nrolote = $oResult30->nrolote;
-                $oDados30->si62_coditem = $oResult30->coditem;
-                $oDados30->si62_perctaxaadm = $oResult30->perctaxaadm;
-                $oDados30->si62_instit = db_getsession("DB_instit");
-                $oDados30->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $aDadosAgrupados30[$sHash30] = $oDados30;
+		foreach ($aDadosAgrupados30 as $oDadosAgrupados30) {
 
-            }
+			$cljulglic30 = new cl_julglic302020();
 
-        }
+			$cljulglic30->si62_tiporegistro = $oDadosAgrupados30->si62_tiporegistro;
+			$cljulglic30->si62_codorgao = $oDadosAgrupados30->si62_codorgao;
+			$cljulglic30->si62_codunidadesub = $oDadosAgrupados30->si62_codunidadesub;
+			$cljulglic30->si62_exerciciolicitacao = $oDadosAgrupados30->si62_exerciciolicitacao;
+			$cljulglic30->si62_nroprocessolicitatorio = $oDadosAgrupados30->si62_nroprocessolicitatorio;
+			$cljulglic30->si62_tipodocumento = $oDadosAgrupados30->si62_tipodocumento;
+			$cljulglic30->si62_nrodocumento = $oDadosAgrupados30->si62_nrodocumento;
+			$cljulglic30->si62_nrolote = $oDadosAgrupados30->si62_nrolote;
+			$cljulglic30->si62_coditem = $oDadosAgrupados30->si62_coditem;
+			$cljulglic30->si62_perctaxaadm = $oDadosAgrupados30->si62_perctaxaadm;
+			$cljulglic30->si62_instit = $oDadosAgrupados30->si62_instit;
+			$cljulglic30->si62_mes = $oDadosAgrupados30->si62_mes;
+			$cljulglic30->incluir(null);
+			if ($cljulglic30->erro_status == 0) {
+				throw new Exception($cljulglic30->erro_msg);
+			}
 
-        foreach ($aDadosAgrupados30 as $oDadosAgrupados30) {
-
-            $cljulglic30 = new cl_julglic302020();
-
-            $cljulglic30->si62_tiporegistro = $oDadosAgrupados30->si62_tiporegistro;
-            $cljulglic30->si62_codorgao = $oDadosAgrupados30->si62_codorgao;
-            $cljulglic30->si62_codunidadesub = $oDadosAgrupados30->si62_codunidadesub;
-            $cljulglic30->si62_exerciciolicitacao = $oDadosAgrupados30->si62_exerciciolicitacao;
-            $cljulglic30->si62_nroprocessolicitatorio = $oDadosAgrupados30->si62_nroprocessolicitatorio;
-            $cljulglic30->si62_tipodocumento = $oDadosAgrupados30->si62_tipodocumento;
-            $cljulglic30->si62_nrodocumento = $oDadosAgrupados30->si62_nrodocumento;
-            $cljulglic30->si62_nrolote = $oDadosAgrupados30->si62_nrolote;
-            $cljulglic30->si62_coditem = $oDadosAgrupados30->si62_coditem;
-            $cljulglic30->si62_perctaxaadm = $oDadosAgrupados30->perctaxaadm;
-            $cljulglic30->si62_instit = $oDadosAgrupados30->si62_instit;
-            $cljulglic30->si62_mes = $oDadosAgrupados30->si62_mes;
-
-            $cljulglic30->incluir(null);
-            if ($cljulglic30->erro_status == 0) {
-                throw new Exception($cljulglic30->erro_msg);
-            }
-
-        }
-
-        foreach ($aLicitacoes as $lic) {
+		}
 
 
-            $sSql = " SELECT '40' as tipoRegistro,
+		$sSql = " SELECT distinct '40' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -524,40 +531,36 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	LEFT  JOIN  pcorcamfornelic on liclicita.l20_codigo=pcorcamfornelic.pc31_liclicita
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . "  AND liclicitasituacao.l11_licsituacao = 1
-	AND liclicita.l20_codigo = $lic
-	ORDER BY l11_sequencial DESC LIMIT 1";
+	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
-            $rsResult40 = db_query($sSql);
+		$rsResult40 = db_query($sSql);
 
-            for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
+		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-                $cljulglic40 = new cl_julglic402020();
-                $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
+			$cljulglic40 = new cl_julglic402020();
+			$oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
-                $cljulglic40->si62_tiporegistro = 40;
-                $cljulglic40->si62_codorgao = $oDados40->codorgaoresp;
-                $cljulglic40->si62_codunidadesub = $oDados40->codunidadesubresp;
-                $cljulglic40->si62_exerciciolicitacao = $oDados40->exerciciolicitacao;
-                $cljulglic40->si62_nroprocessolicitatorio = $oDados40->nroprocessolicitatorio;
-                $cljulglic40->si62_dtjulgamento = $oDados40->dtjulgamento;
-                $cljulglic40->si62_presencalicitantes = $oDados40->presencalicitantes;
-                $cljulglic40->si62_renunciarecurso = $oDados40->renunciarecurso;
-                $cljulglic40->si62_instit = db_getsession("DB_instit");
-                $cljulglic40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+			$cljulglic40->si62_tiporegistro = 40;
+			$cljulglic40->si62_codorgao = $oDados40->codorgaoresp;
+			$cljulglic40->si62_codunidadesub = $oDados40->codunidadesubresp;
+			$cljulglic40->si62_exerciciolicitacao = $oDados40->exerciciolicitacao;
+			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->nroprocessolicitatorio;
+			$cljulglic40->si62_dtjulgamento = $oDados40->dtjulgamento;
+			$cljulglic40->si62_presencalicitantes = $oDados40->presencalicitantes;
+			$cljulglic40->si62_renunciarecurso = $oDados40->renunciarecurso;
+			$cljulglic40->si62_instit = db_getsession("DB_instit");
+			$cljulglic40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                $cljulglic40->incluir(null);
-                if ($cljulglic40->erro_status == 0) {
-                    throw new Exception($cljulglic40->erro_msg);
-                }
+			$cljulglic40->incluir(null);
+			if ($cljulglic40->erro_status == 0) {
+				throw new Exception($cljulglic40->erro_msg);
+			}
+		}
 
-            }
-        }
+		db_fim_transacao();
 
-        db_fim_transacao();
-
-        $oGerarJULGLIC = new GerarJULGLIC();
-        $oGerarJULGLIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $oGerarJULGLIC->gerarDados();
-
-    }
+		$oGerarJULGLIC = new GerarJULGLIC();
+		$oGerarJULGLIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+		$oGerarJULGLIC->gerarDados();
+	}
 }

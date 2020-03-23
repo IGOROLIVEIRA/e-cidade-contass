@@ -255,8 +255,18 @@ class cl_regadesao102020
       $this->erro_status = "0";
       return false;
     }
-    if(!$this->si67_tipocadastro){
+    if(!$this->si67_tipocadastro && db_getsession('DB_anousu') >= 2020){
       $this->si67_tipocadastro = 1;
+    }else if(!$this->si67_tipocadastro && db_getsession('DB_anousu') < 2020){
+      $this->si67_tipocadastro = '0';
+    }
+    if(!$this->si67_exercicioedital && db_getsession('DB_anousu') >= 2020){
+      $this->si67_exercicioedital = db_getsession('DB_anousu');
+    }else if(!$this->si67_exercicioedital && db_getsession('DB_anousu') < 2020){
+      $this->si67_exercicioedital = '0';
+    }
+    if(!$this->si67_nroedital && db_getsession('DB_anousu') < 2020){
+      $this->si67_nroedital = '0';
     }
     $sql = "insert into regadesao102020(
                                        si67_sequencial 

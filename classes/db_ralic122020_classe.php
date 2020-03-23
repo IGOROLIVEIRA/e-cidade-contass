@@ -194,6 +194,9 @@ class cl_ralic122020
       return false;
     }
 
+    if(!$this->si182_numero || $this->si182_numero == null){
+        $this->si182_numero = 0;
+    }
     $sql = "insert into ralic122020(
                                        si182_sequencial
                                       ,si182_tiporegistro

@@ -191,15 +191,15 @@ class cl_licobrasmedicao {
          return false;
        }
      }
-     if ($this->obr03_descmedicao == null ) {
-       $this->erro_sql = " Campo Desc. Medição não informado.";
-       $this->erro_campo = "obr03_descmedicao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+//     if ($this->obr03_descmedicao == null ) {
+//       $this->erro_sql = " Campo Desc. Medição não informado.";
+//       $this->erro_campo = "obr03_descmedicao";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
      if ($this->obr03_dtfimmedicao == null ) {
        $this->erro_sql = " Campo Fim da Medição não informado.";
        $this->erro_campo = "obr03_dtfimmedicao_dia";
