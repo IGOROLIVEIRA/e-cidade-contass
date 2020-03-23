@@ -138,12 +138,12 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         }
 
     }
-    public function getCodOrgaoTce($iCodInstit)
+    public function getCodOrgaoTce($iTipoInstit)
     {
-        $sSqlorgao = "select si09_codorgaotce as codorgao,numcgm from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$iCodInstit}";
+        $sSqlorgao = "select si09_codorgaotce as codorgao, numcgm from infocomplementaresinstit inner join db_config on codigo = si09_instit where si09_tipoinstit = {$iTipoInstit}";
         $iCodOrgaoTce = db_utils::fieldsMemory(db_query($sSqlorgao), 0)->codorgao;
         if ($iCodOrgaoTce == "") {
-          throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iCodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+          throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
         }
 
         return $iCodOrgaoTce;
@@ -476,27 +476,27 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 if (substr($oContas10->si177_contacontaabil, 0, 5) != '62213') {
                     $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
-                                    si09_codorgaotce as codorgao,
-                                    case when o41_subunidade != 0 or not null then
-                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
-					                o58_funcao as codfuncao,
-					                o58_subfuncao as codsubfuncao,
-					                o58_programa as codprograma,
-					                o58_projativ as idacao,
-					                o55_origemacao as idsubacao,
-					                substr(o56_elemento,2,6) as naturezadadespesa,
-					                '00' as subelemento,
-					                o15_codtri as codfontrecursos, si08_orcmodalidadeaplic
-					  from orcdotacao
-					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
-					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-					  join orcelemento ON o56_codele = o58_codele and o58_anousu = o56_anousu
-					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
-					  JOIN orctiporec ON o58_codigo = o15_codigo
-					  inner join infocomplementaresinstit on  o58_instit = si09_instit
-					  inner join infocomplementares on si09_instit = si08_instit
-					  where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
+                                            si09_codorgaotce as codorgao,
+                                            case when o41_subunidade != 0 or not null then
+                                            lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                            else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+                                            o58_funcao as codfuncao,
+                                            o58_subfuncao as codsubfuncao,
+                                            o58_programa as codprograma,
+                                            o58_projativ as idacao,
+                                            o55_origemacao as idsubacao,
+                                            substr(o56_elemento,2,6) as naturezadadespesa,
+                                            '00' as subelemento,
+                                            o15_codtri as codfontrecursos, si08_orcmodalidadeaplic
+                                     from orcdotacao
+                                     join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                                     join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                     join orcelemento ON o56_codele = o58_codele and o58_anousu = o56_anousu
+                                     JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+                                     JOIN orctiporec ON o58_codigo = o15_codigo
+                                     inner join infocomplementaresinstit on  o58_instit = si09_instit
+                                     inner join infocomplementares on si09_instit = si08_instit
+                                     where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
 
                 } else if (substr($oContas10->si177_contacontaabil, 0, 5) == '62213') {
@@ -561,9 +561,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
-                    //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
-                    $nContaCorrente = 102;
+            $nContaCorrente = 102;
 
                 }
 
@@ -1574,7 +1573,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1585,7 +1585,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',FALSE),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1613,8 +1613,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                              from
                                 (select 15 as tiporegistro,
                                         case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
-                                        (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '$this->sDataInicial' and '$this->sDataFinal') as credito,
-                                        (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '$this->sDataInicial' and '$this->sDataFinal') as debito,
+                                        (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '$this->sDataFinal' and '$this->sDataFinal') as credito,
+                                        (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '$this->sDataFinal' and '$this->sDataFinal') as debito,
                                         (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
                                         c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo
                                   from contabilidade.conplano
@@ -1636,7 +1636,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                         $oReg15Saldo = db_utils::fieldsMemory($rsReg15saldos, $iContSaldo15);
 
-                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro;
+                        $sHash15 = '15' . $oContas10->si177_contacontaabil . $oReg15Saldo->identificadorfinanceiro;
 
                         $oReg15Saldo->anterior = $oReg15Saldo->naturezasaldoinicialsf == 'C' ? $oReg15Saldo->anterior * -1 : $oReg15Saldo->anterior;
 
@@ -1645,7 +1645,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             $obalancete15 = new stdClass();
                             $obalancete15->si182_tiporegistro = 15;
                             $obalancete15->si182_contacontabil = $oContas10->si177_contacontaabil;
-                            $obalancete15->si182_atributosf = $oContas10->identificadorfinanceiro;
+                            $obalancete15->si182_atributosf = $oReg15Saldo->identificadorfinanceiro;
                             $obalancete15->si182_codfundo = $sCodFundo;
                             $obalancete15->si182_saldoinicialsf = $oReg15Saldo->anterior;
                             $obalancete15->si182_naturezasaldoinicialsf = $obalancete15->anterior >= 0 ? 'D' : 'C';
@@ -1714,7 +1714,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1725,7 +1726,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',FALSE),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1787,7 +1788,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                 $obalancete16->si183_tiporegistro = 16;
                                 $obalancete16->si183_contacontabil = $oContas10->si177_contacontaabil;
                                 $obalancete16->si183_codfundo = $sCodFundo;
-                                $obalancete16->si183_atributosf = $oContas10->identificadorfinanceiro;
+                                $obalancete16->si183_atributosf = $oReg16Saldo->identificadorfinanceiro;
                                 $obalancete16->si183_codfontrecursos = $oReg16Font->codfontrecursos;
                                 $obalancete16->si183_saldoinicialfontsf = $oReg16Saldo->saldoanterior;
                                 $obalancete16->si183_naturezasaldoinicialfontsf = $oReg16Saldo->saldoanterior >= 0 ? 'D' : 'C';
@@ -1878,6 +1879,12 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2018 as ano FROM ctb102018 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2017 as ano FROM ctb102017 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
                     $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2016 as ano FROM ctb102016 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
@@ -1899,7 +1906,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -1910,7 +1918,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',false),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -1938,8 +1946,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                              from
                                 (select 15 as tiporegistro,
                                         case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
-                                        (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '$this->sDataInicial' and '$this->sDataFinal') as credito,
-                                        (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '$this->sDataInicial' and '$this->sDataFinal') as debito,
+                                        (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '$this->sDataFinal' and '$this->sDataFinal') as credito,
+                                        (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '$this->sDataFinal' and '$this->sDataFinal') as debito,
                                         (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
                                         c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo
                                   from contabilidade.conplano
@@ -1967,7 +1975,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                                 $iCodCtb = ($objContasctb->codctbtce == 0 ? $objContasctb->k13_reduz : $objContasctb->codctbtce);
 
-                                $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
+                                $sHash17 = '17' . $oContas10->si177_contacontaabil . $oReg17Saldo->identificadorfinanceiro . $iCodCtb . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
@@ -1975,7 +1983,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     $obalancete17->si184_tiporegistro = 17;
                                     $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete17->si184_codfundo = $sCodFundo;
-                                    $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
+                                    $obalancete17->si184_atributosf = $oReg17Saldo->identificadorfinanceiro;
                                     $obalancete17->si184_codctb = $iCodCtb;
                                     $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
                                     $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
@@ -2020,7 +2028,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
                                                round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
                                                substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialctb,
-                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalctb,
+                                               identificadorfinanceiro
                                         FROM
                                           (SELECT p.c60_estrut AS estrut_mae,
                                                   p.c60_estrut AS estrut,
@@ -2031,7 +2040,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_finali,
                                                   r.c61_instit,
                                                   fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',false),
-                                                  p.c60_identificadorfinanceiro,
+                                                  p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta
                                            FROM conplanoexe e
                                            INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
@@ -2095,7 +2104,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                         $obalancete17->si184_tiporegistro = 17;
                                         $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                         $obalancete17->si184_codfundo = $sCodFundo;
-                                        $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
+                                        $obalancete17->si184_atributosf = $oReg17Saldo->identificadorfinanceiro;
                                         $obalancete17->si184_codctb = $oCtb->si95_codctb;
                                         $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($oCtb->si95_codctb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($oCtb->si95_codctb));
                                         $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
@@ -2823,16 +2832,17 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo, c60_estrut
                                        from
                                           (select 25 as tiporegistro,
-                                                  case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil,
+                                                  case when c209_tceestrut is null then substr(conplano.c60_estrut,1,9) else c209_tceestrut end as contacontabil,
                                                   (select sum(c69_valor) as credito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_credito = c61_reduz and c69_data between '2019-12-31' and '2019-12-31') as credito,
                                                   (select sum(c69_valor) as debito from conlancamval inner join conlancamdoc on c69_codlan = c71_codlan inner join conhistdoc on c53_coddoc = c71_coddoc where c53_tipo in (1000) and c69_debito = c61_reduz and c69_data between '2019-12-31' and '2019-12-31') as debito,
-                                                  (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig,
-                                                  c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo, c60_estrut
+                                                  (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, conplano.c60_nregobrig,
+                                                  conplano.c60_codcon as codcon, conplano.c60_identificadorfinanceiro, conplano.c60_naturezasaldo, o.c60_estrut as c60_estrut
                                             from contabilidade.conplano
                                             inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                                             inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
-                                            left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                                            where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$oReduz}) as x
+                                            INNER JOIN conplanoorcamento o ON o.c60_codcon = conplano.c60_naturezadareceita AND o.c60_anousu = conplano.c60_anousu
+                                            left join vinculopcasptce on substr(conplano.c60_estrut,1,9) = c209_pcaspestrut
+                                            where conplano.c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$oReduz}) as x
                                        where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
                   $rsReg25saldos = db_query($sSqlReg25saldos) or die($sSqlReg25saldos);
@@ -2942,7 +2952,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                   p.c60_descr,
                                                   p.c60_finali,
                                                   r.c61_instit,
-                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',false),
+                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz, '2019-12-31', '2019-12-31',false),
                                                   p.c60_identificadorfinanceiro as identificadorfinanceiro,
                                                   c60_consistemaconta,
                                                   cgm.z01_cgccpf as nrodocumentopessoaatributosf,z01_numcgm
@@ -3253,11 +3263,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldoinicialsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldoinicialsf > 0 ? 'D' : 'C');
                 $obalreg15->si182_totaldebitossf = number_format(abs($reg15->si182_totaldebitossf), 2, ".", "");
                 $obalreg15->si182_totalcreditossf = number_format(abs($reg15->si182_totalcreditossf), 2, ".", "");
-//                echo 'saldoinicialsf '.$reg15->si182_saldoinicialsf.' ';
-//                echo 'si182_totaldebitossf '.$reg15->si182_totaldebitossf.' ';
-//                echo 'si182_totalcreditossf '.$reg15->si182_totalcreditossf.' ';
                 $saldoFinal = ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf) == '' ? 0 : ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf);
-                //echo 'saldofinal: '.$saldoFinal;
                 $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal), 2, ".", "");
                 if ($this->bEncerramento) {
                     /**
@@ -3271,7 +3277,6 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg15->si182_totalcreditossf = number_format(abs($reg15->si182_totalcreditosencerramento), 2, ".", "");
 
                     $saldoFinal = ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf) == '' ? 0 : ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf);
-                    //echo 'saldofinal 2: '.$saldoFinal;
                     $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
                 $obalreg15->si182_naturezasaldofinalsf = $obalreg15->si182_saldofinalsf == 0 ? $obalreg15->si182_naturezasaldoinicialsf : ($saldoFinal > 0 ? 'D' : 'C');
@@ -3530,6 +3535,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     throw new Exception($obalreg22->erro_msg);
                 }
             }
+
             foreach ($oDado10->reg24 as $reg24) {
 
                 $obalreg24 = new cl_balancete242019();
