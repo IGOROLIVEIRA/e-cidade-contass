@@ -904,9 +904,8 @@ case "processarBalancete" :
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
-          if($sArquivo != "IDE") {
-            $oArquivo->setTipoGeracao($oParam->tipoGeracao);
-          }
+
+          $oArquivo->setTipoGeracao($oParam->tipoGeracao);
 
           $oArquivoCsv = new stdClass();
           try {
