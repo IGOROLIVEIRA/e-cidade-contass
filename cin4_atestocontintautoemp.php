@@ -136,7 +136,7 @@ if ($oParam->e30_atestocontinterno != 't') {
         </tr>
         <tr>
             <td align="center">
-                <input  name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisaEmpenho();" <?=$sDisable;?>>
+                <input  name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisaAutorizacao();" <?=$sDisable;?>>
                 <input  name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limparcampos();" <?=$sDisable;?>>
             </td>
         </tr>
@@ -177,10 +177,10 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     /*
-     * Pesquisa os Empenhos para liberação
+     * Pesquisa as autorizações para liberação
     */
 
-    function js_pesquisaEmpenho() {
+    function js_pesquisaAutorizacao() {
 
         var dtEmissini = $F('dtemissaoini');
         var dtEmissfim = $F('dtemissaofim');
@@ -201,9 +201,8 @@ if ($oParam->e30_atestocontinterno != 't') {
         oParam.dtemissfim = dtEmissfim;
 
         // consulta ajax retorna objeto json
-        console.log(oParam); return false;
         var oAjax        = new Ajax.Request(
-            "emp4_liberarempenhos.RPC.php",
+            "cin4_atestocontint.RPC.php",
             {
                 method    : 'post',
                 parameters: 'json='+js_objectToJson(oParam),
@@ -213,7 +212,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     /*
-     * Preocessa o retono da pesquisa de empenhos para liberacao
+     * Preocessa o retono da pesquisa de autorizações para liberação
     */
 
     function js_retornoPesquisa(oAjax) {
@@ -222,84 +221,78 @@ if ($oParam->e30_atestocontinterno != 't') {
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
-            js_openPesquisaEmpenhos(oRetorno.aItens,oRetorno.aItens.length);
+            js_openPesquisaAutorizacoes(oRetorno.aItens,oRetorno.aItens.length);
         }
     }
 
     /*
-     * Mostra a GRID com os registros retornado da pesquisa de empenhos para a liberacao
+     * Mostra a GRID com os registros retornado da pesquisa de autorizações para a liberação
     */
 
-    function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
-
-
+    function js_openPesquisaAutorizacoes(aAutorizacoes,iRetornoAutorizacoes) {
         /**
          * Adiciona a grid na janela
          */
 
-        oGridEmpenho              = new DBGrid('gridEmpenho');
-        oGridEmpenho.nameInstance = "oGridEmpenho";
-        oGridEmpenho.setHeight((document.body.scrollHeight/2)-50);
-        oGridEmpenho.setCheckbox(0);
-        oGridEmpenho.setHeader(new Array('Numero','Código','Valor','Valor Anulado','Saldo',
-            'CNPJ/CPF','Credor','Data Emissao','Depto Origem'));
-        oGridEmpenho.setCellWidth(new Array("7%","10%","7%",'10%',"7%","15%","16%","10%","14%"));
-        oGridEmpenho.setCellAlign(new Array("center", "center", "right", "right", "right", "center", "left","center","left"));
-        //oGridEmpenho.aHeaders[9].lDisplayed = false;
+        oGridAutorizacao              = new DBGrid('gridAutorizacoes');
+        oGridAutorizacao.nameInstance = "oGridAutorizacao";
+        oGridAutorizacao.setHeight((document.body.scrollHeight/2)-50);
+        oGridAutorizacao.setCheckbox(0);
+        oGridAutorizacao.setHeader(new Array('Data de Emissão','Autorização de Empenho','Credor','Valor','Resumo'));
+        oGridAutorizacao.setCellWidth(new Array("18%","16%","25%","7%","43%"));
+        oGridAutorizacao.setCellAlign(new Array("center", "center", "center", "right", "center"));
 
-        windowEmpenhosLiberados = new windowAux('windowEmpenhosLiberados','Empenhos', document.body.getWidth() /1.3);
-        windowEmpenhosLiberados.allowCloseWithEsc(false);
+        windowAutorizacoesLiberadas = new windowAux('windowAutorizacoesLiberadas','Autorizações', document.body.getWidth() /1.3);
+        windowAutorizacoesLiberadas.allowCloseWithEsc(false);
         var sContent  = "<div style='width:100%;'><fieldset>";
-        sContent += "  <div id='ctnGridEmpenhosLiberados' style='width:99%;'>";
+        sContent += "  <div id='ctnGridAutorizacoesLiberadas' style='width:99%;'>";
         sContent += "  </div>";
         sContent += "</fieldset>";
         sContent += "<br>";
         sContent += "<center>";
-        sContent += "  <table id='frmLiberaEmpenho'>";
+        sContent += "  <table id='frmLiberaAutorizacao'>";
         sContent += "    <tr align='center'>";
         sContent += "      <td>";
-        sContent += "        <input type='button' id='btnLiberarEmpenho' value='Liberar/Bloquear' onclick='js_liberarempenho();'>";
+        sContent += "        <input type='button' id='btnLiberarAutorizacao' value='Liberar/Bloquear' onclick='js_liberarautorizacao();'>";
         sContent += "      </td>";
         sContent += "    </tr>";
         sContent += "  </table>";
         sContent += "</center></div>";
-        windowEmpenhosLiberados.setContent(sContent);
-        oGridEmpenho.show($('ctnGridEmpenhosLiberados'));
-        windowEmpenhosLiberados.show();
+        windowAutorizacoesLiberadas.setContent(sContent);
+        oGridAutorizacao.show($('ctnGridAutorizacoesLiberadas'));
+        windowAutorizacoesLiberadas.show();
 
 
-        $('windowwindowEmpenhosLiberados_btnclose').onclick= function () {
+        $('windowwindowAutorizacoesLiberadas_btnclose').onclick= function () {
 
-            windowEmpenhosLiberados.destroy();
+            windowAutorizacoesLiberadas.destroy();
             $('pesquisar').disabled = false;
             $('limpar').disabled    = false;
         }
 
-        oGridEmpenho.clearAll(true);
+        oGridAutorizacao.clearAll(true);
 
-        if (iRetornoEmpenhos == 0) {
-            oGridEmpenho.setStatus('Não foram encontrados Registros');
+        if (iRetornoAutorizacoes == 0) {
+            oGridAutorizacao.setStatus('Não foram encontrados Registros');
         } else {
-            for (var i = 0; i < aEmpenhos.length; i++) {
+            for (var i = 0; i < aAutorizacoes.length; i++) {
 
-                with(aEmpenhos[i]) {
+                with(aAutorizacoes[i]) {
 
-                    var aLinha        = new Array();
-                    aLinha[0]     = e60_numemp;
-                    aLinha[1]     = "<a href='#' onclick='javascript: js_mostraDadosEmpenho("+e60_numemp+");'>"+e60_codemp+"/"+e60_anousu+"</a>";
-                    aLinha[2]     = js_formatar(e60_vlremp,'f');
-                    aLinha[3]     = js_formatar(e60_vlranu,'f');
-                    aLinha[4]     = js_formatar(saldo,'f');
-                    aLinha[5]     = js_formatar(z01_cgccpf,'cpfcnpj');
-                    aLinha[6]     = z01_nome.urlDecode().substring(0,30);
-                    aLinha[7]     = js_formatar(e60_emiss,'f');
-                    aLinha[8]     = origem.urlDecode().substring(0,40);
+
+                    var aLinha    = new Array();
+
+                    aLinha[0]     = e54_emiss;
+                    aLinha[1]     = "<a href='javascript:;' onclick='js_mostraDadosAutorizacao("+e54_autori+");'>" + e54_autori + "</a>";
+                    aLinha[2]     = z01_nome.urlDecode().substring(0,40);
+                    aLinha[3]     = js_formatar(e54_valor,'f');
+                    aLinha[4]     = e54_resumo.urlDecode().substring(0, 105);//oMovimento.sDespacho.urlDecode().replace(/<br>/g, '');
 
                     var lMarca    = false;
                     var lBloquear = false;
-                    if (e22_sequencial != "") {
-                        lMarca = true;
-                    }
+                    // if (e22_sequencial != "") {
+                    //     lMarca = true;
+                    // }
 
                     if (temordemdecompra == 't') {
 
@@ -307,22 +300,23 @@ if ($oParam->e30_atestocontinterno != 't') {
                         lMarca    = true;
 
                     }
-                    oGridEmpenho.addRow(aLinha, false, lBloquear, lMarca);
-                    oGridEmpenho.aRows[i].aCells[7].sEvents += "onMouseOver='js_setAjuda(\""+z01_nome.urlDecode()+"\",true)'";
-                    oGridEmpenho.aRows[i].aCells[7].sEvents += "onMouseOut='js_setAjuda(null, false)'";
-                    oGridEmpenho.aRows[i].aCells[9].sEvents += "onMouseOver='js_setAjuda(\""+origem.urlDecode()+"\",true)'";
-                    oGridEmpenho.aRows[i].aCells[9].sEvents += "onMouseOut='js_setAjuda(null, false)'";
+                    //encodeURIComponent(tagString($F('e54_resumo')));
+                    oGridAutorizacao.addRow(aLinha, false, lBloquear, lMarca);
+                    oGridAutorizacao.aRows[i].aCells[3].sEvents += "onMouseOver='js_setAjuda(\""+z01_nome+"\",true)'";
+                    oGridAutorizacao.aRows[i].aCells[3].sEvents += "onMouseOut='js_setAjuda(null, false)'";
+                    oGridAutorizacao.aRows[i].aCells[5].sEvents += "onMouseOver='js_setAjuda(\""+e54_resumo.replace('\\n',' ')+"\",true)'";
+                    oGridAutorizacao.aRows[i].aCells[5].sEvents += "onMouseOut='js_setAjuda(null, false)'";
                 }
             }
         }
 
-        oGridEmpenho.renderRows();
+        oGridAutorizacao.renderRows();
         $('pesquisar').disabled = false;
         $('limpar').disabled    = false;
         var oMessageBoard = new messageBoard('msg1',
-            'Liberar Empenhos para Ordem de Compra e Liquidação',
-            'Somente os empenhos selecionados serão liberados para geração de Ordem de Compra. Os Empenhos que estiverem desmarcados continuarão ou serão bloqueados',
-            $('windowwindowEmpenhosLiberados_content')
+            ' Liberação Autorizações de Empenhos',
+            'Somente as autorizações de empenhos selecionadas serão liberadas para emissões dos empenhos, as demais permanecerão bloqueadas',
+            $('windowwindowAutorizacoesLiberadas_content')
         );
         oMessageBoard.show();
     }
@@ -331,9 +325,9 @@ if ($oParam->e30_atestocontinterno != 't') {
      * Libera empenhos
     */
 
-    function js_liberarempenho() {
+    function js_liberarautorizacao() {
 
-        var aItens     = oGridEmpenho.aRows;
+        var aItens     = oGridAutorizacao.aRows;
 
         if (!confirm('Está rotina irá Liberar os empenhos marcados e Bloquear os empenhos desmarcados contidos na lista . Deseja Continuar?')){
             return false;
@@ -342,18 +336,18 @@ if ($oParam->e30_atestocontinterno != 't') {
         js_divCarregando("Aguarde.. Processando ","msgbox");
         $('pesquisar').disabled         = true;
         $('limpar').disabled            = true;
-        $('btnLiberarEmpenho').disabled = true;
+        $('btnLiberarAutorizacao').disabled = true;
 
         var oParam        = new Object();
         oParam.exec       = "processaEmpenhoLiberados";
-        oParam.aEmpenhos  = new Array();
+        oParam.aAutorizacoes  = new Array();
 
         for (var i = 0; i < aItens.length; i++) {
 
             var oEmpenho          = new Object();
             oEmpenho.iNumemp  = aItens[i].aCells[1].getValue();
             oEmpenho.lLiberar = aItens[i].isSelected;
-            oParam.aEmpenhos.push(oEmpenho);
+            oParam.aAutorizacoes.push(oEmpenho);
 
         }
         var oAjax        = new Ajax.Request(
@@ -361,7 +355,7 @@ if ($oParam->e30_atestocontinterno != 't') {
             {
                 method    : 'post',
                 parameters: 'json='+js_objectToJson(oParam),
-                onComplete: js_retornoLiberarEmpenho
+                onComplete: js_retornoLiberarAutorizacao
             }
         );
     }
@@ -370,16 +364,16 @@ if ($oParam->e30_atestocontinterno != 't') {
      * Retorno dos empenhos liberados
     */
 
-    function js_retornoLiberarEmpenho(oAjax) {
+    function js_retornoLiberarAutorizacao(oAjax) {
 
         js_removeObj("msgbox");
-        $('btnLiberarEmpenho').disabled  = false;
+        $('btnLiberarAutorizacao').disabled  = false;
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
 
             alert('Processo efetuado com sucesso.');
-            windowEmpenhosLiberados.destroy();
+            windowAutorizacoesLiberadas.destroy();
             js_pesquisaEmpenho();
         } else {
             alert(oRetorno.message.urlDecode());
@@ -394,7 +388,7 @@ if ($oParam->e30_atestocontinterno != 't') {
 
         if (lShow) {
 
-            var el =  $('gridgridEmpenho');
+            var el =  $('gridgridAutorizacoes');
             var x  = 0;
             var y  = el.offsetHeight;
 
@@ -411,7 +405,7 @@ if ($oParam->e30_atestocontinterno != 't') {
             }
             x += el.offsetLeft
             y += el.offsetTop;
-            $('ajudaItem').innerHTML     = sTexto;
+            $('ajudaItem').innerHTML     = sTexto.urlDecode();
             $('ajudaItem').style.display = '';
             $('ajudaItem').style.top     = y+"px";
             $('ajudaItem').style.left    = x+"px";
@@ -422,19 +416,19 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_pesquisae54_autoriIni(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutIni|e54_autori|e55_codele', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutIni|e54_autori', 'Pesquisa', true, 0);
     }
 
     function js_mostracodAutIni(chave1,chave2){
-        $('e54_autori_ini').value = chave1+'/'+chave2;
+        $('e54_autori_ini').value = chave1;
         db_iframe_orcreservaaut.hide();
     }
 
     function js_pesquisae54_autoriFim(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutFim|e54_autori|e55_codele', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutFim|e54_autori', 'Pesquisa', true, 0);
     }
     function js_mostracodAutFim(chave1,chave2){
-        $('e54_autori_fim').value = chave1+'/'+chave2;
+        $('e54_autori_fim').value = chave1;
         db_iframe_orcreservaaut.hide();
     }
 
@@ -469,8 +463,8 @@ if ($oParam->e30_atestocontinterno != 't') {
         func_nome.hide();
     }
 
-    function js_mostraDadosEmpenho(empChave) {
-
+    function js_mostraDadosAutorizacao(autChave) {
+        console.log('js_mostraDadosAutorizacao');
         js_JanelaAutomatica('empempenho',empChave);
         $('Jandb_janelaReceita').style.zIndex = '10000';
     }
