@@ -171,7 +171,7 @@ for($x = 0; $x < $numrows_forne;$x++){
             }
             if ($z01_nome!=$z01_nomeant){
                 if ($quant_forne!=0){
-                    $oPDF->cell(80,$alt,"VALOR TOTAL ADJUDICADO:","T",0,"R",0);
+                    $oPDF->cell(80,$alt,"VALOR TOTAL DO FORNECEDOR:","T",0,"R",0);
                     $oPDF->cell(30,$alt,"R$".db_formatar($val_forne, 'f'),"T",1,"R",0);
                     $oPDF->ln();
                     $quant_forne = 0;
@@ -202,7 +202,10 @@ for($x = 0; $x < $numrows_forne;$x++){
         }
     }
 
-
+$oPDF->cell(80,$alt,"VALOR TOTAL DO FORNECEDOR:","T",0,"R",0);
+$oPDF->cell(30,$alt,"R$".db_formatar($val_forne, 'f'),"T",1,"R",0);
+$oPDF->ln();
+$oPDF->ln();
 $oPDF->cell(80,$alt,"VALOR TOTAL ADJUDICADO:",'T',0,"R",0);
 $oPDF->cell(30,$alt,"R$".db_formatar($val_tot, 'f'),'T',1,"R",0);
 if($l12_usuarioadjundica == 't') {
