@@ -51,7 +51,7 @@ include("dbforms/db_funcoes.php");
                                   <tr>
                                       <td>Tipo da Geração: </td>
                                       <td>
-                                          <select id="TipoGeracao" class="TipoGeracao" onchange="tipoGeracao()>
+                                          <select id="TipoGeracao" class="TipoGeracao" onchange="tipoGeracao()">
                                               <option value="CONSOLIDADO">CONSOLIDADO</option>
                                               <option value="ISOLADO">ISOLADO</option>
                                           </select>
@@ -71,7 +71,7 @@ include("dbforms/db_funcoes.php");
             			<b>Enviar Arquivos</b>
           				</legend>
                     <table>
-                      <div id="consolidacao">
+                      <div id="consolidado">
 
                           <tr>
                               <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
@@ -279,7 +279,7 @@ include("dbforms/db_funcoes.php");
 
                       </div>
 
-                      <div id="isolamento">
+                      <div id="isolado">
 
                       <tr>
                       <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
@@ -408,14 +408,17 @@ function js_retornoProcessamento(oAjax) {
 
 function tipoGeracao(){
     var x = document.getElementById("TipoGeracao").value;
-    if(x == 'CONSOLIDACAO'){
-        document.getElementById("isolamento").style.display = "none";
-        document.getElementById("consolidacao").style.display = "inline";
+    if(x == 'CONSOLIDADO'){
+        document.getElementById("isolado").style.display = "none";
+        document.getElementById("consolidado").style.display = "inline";
     }else{
-        document.getElementById("isolamento").style.display = "inline";
-        document.getElementById("consolidacao").style.display = "none";
+        document.getElementById("isolado").style.display = "inline";
+        document.getElementById("consolidado").style.display = "none";
     }
 }
+
+document.getElementById("isolado").style.display = "none";
+document.getElementById("consolidado").style.display = "inline";
 
 </script>
 <div id='debug'>
