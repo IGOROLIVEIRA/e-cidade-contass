@@ -70,9 +70,7 @@ include("dbforms/db_funcoes.php");
                   <legend>
             			<b>Enviar Arquivos</b>
           				</legend>
-                    <table>
-                      <div id="consolidado">
-
+                    <table id="consolidado">
                           <tr>
                               <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
                                   <td>
@@ -277,9 +275,9 @@ include("dbforms/db_funcoes.php");
                               </form>
                           </tr>
 
-                      </div>
+                    </table>
 
-                      <div id="isolado">
+                      <table id="isolado">
 
                       <tr>
                       <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
@@ -314,9 +312,6 @@ include("dbforms/db_funcoes.php");
                                 </td>
                             </form>
                         </tr>
-
-                      </div>
-
                     </table>
                   </fieldset>
                   
