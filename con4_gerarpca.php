@@ -40,7 +40,28 @@ include("dbforms/db_funcoes.php");
             <b>Gerar PCA - Prestação de Contas Anual</b>
           </legend>
           <table style='empty-cells: show; border-collapse: collapse;'>
-
+              <?php
+              $oInstit = new Instituicao(db_getsession('DB_instit'));
+              if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
+                  ?>
+                  <tr>
+                      <td colspan="4">
+                          <fieldset>
+                              <table>
+                                  <tr>
+                                      <td>Tipo da Geração: </td>
+                                      <td>
+                                          <select id="TipoGeracao" class="TipoGeracao" onchange="tipoGeracao()>
+                                              <option value="CONSOLIDADO">CONSOLIDADO</option>
+                                              <option value="ISOLADO">ISOLADO</option>
+                                          </select>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </fieldset>
+                      </td>
+                  </tr>
+              <?php } ?>
              <tr>
               <td colspan="3">
                 <div id='dadospca'>
@@ -50,126 +71,216 @@ include("dbforms/db_funcoes.php");
             			<b>Enviar Arquivos</b>
           				</legend>
                     <table>
-                    
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Relatório de controle interno:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="RCI" />
-    <div id="RCI" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','RCI','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Parecer  elaborado pelo Conselho do FUNDEB:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="PARECER_FUNDEB" />
-    <div id="PARECER_FUNDEB" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','PARECER_FUNDEB','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                                            
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Balanço orçamentário:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="BO" />
-    <div id="BO" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BO','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Balanço financeiro:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="BF" />
-    <div id="BF" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BF','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Demonstração das variações patrimoniais:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="DVP" />
-    <div id="DVP" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DVP','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Balanço patrimonial:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="BP" />
-    <div id="BP" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','BP','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
-                      <tr>
-                      <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
-                      	<td>
-                      	Demonstração dos fluxos de caixa:
-                      	<div>&nbsp;</div>
-                      	</td>
-                        <td>
-                        	<input type="file" name="DFC" />
-    <div id="DFC" class="recebe">&nbsp;</div>
-                        </td>
-                        <td>
-                        <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DFC','Carregando...','Erro ao carregar')" />
-                        <div>&nbsp;</div>
-                        </td>
-                      </form>
-                      </tr>
-                      
+                      <div id="consolidacao">
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Receita base de cálculo para aplicação MDE:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="REC_MDE" />
+                                      <div id="REC_MDE" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','REC_MDE','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Demonstrativo dos gastos MDE:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="GASTO_MDE" />
+                                      <div id="GASTO_MDE" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','GASTO_MDE','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Receita base de cálculo para aplicação ASPS:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="REC_ASPS" />
+                                      <div id="REC_ASPS" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','REC_ASPS','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Demonstrativo dos gastos ASPS:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="GASTO_ASPS" />
+                                      <div id="GASTO_ASPS" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','GASTO_ASPS','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Demonstrativo da aplicação do resíduo:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="RES_ASPS" />
+                                      <div id="RES_ASPS" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','RES_ASPS','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Demonstrativo da despesa com pessoal:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="DESP_PESSOAL" />
+                                      <div id="DESP_PESSOAL" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DESP_PESSOAL','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Demonstrativo da aplicação dos recursos do Fundeb:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="RECURSO_FUNDEB" />
+                                      <div id="RECURSO_FUNDEB" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','RECURSO_FUNDEB','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Certidão inventário Tesouraria:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="CERTIDAO_TESOURARIA" />
+                                      <div id="CERTIDAO_TESOURARIA" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_TESOURARIA','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Certidão inventário Almoxarifado:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="CERTIDAO_ALMOXARIFADO" />
+                                      <div id="CERTIDAO_ALMOXARIFADO" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_ALMOXARIFADO','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Certidão inventário Bens Patrimoniais:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="CERTIDAO_BENS_PATRIMONIAIS" />
+                                      <div id="CERTIDAO_BENS_PATRIMONIAIS" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_BENS_PATRIMONIAIS','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Certidão inventário do Passivo:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="CERTIDAO_PASSIVO" />
+                                      <div id="CERTIDAO_PASSIVO" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_PASSIVO','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                          <tr>
+                              <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                  <td>
+                                      Certidão inventário Atos Potenciais:
+                                      <div>&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="file" name="CERTIDAO_ATOS_POTENCIAIS" />
+                                      <div id="CERTIDAO_ATOS_POTENCIAIS" class="recebe">&nbsp;</div>
+                                  </td>
+                                  <td>
+                                      <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_ATOS_POTENCIAIS','Carregando...','Erro ao carregar')" />
+                                      <div>&nbsp;</div>
+                                  </td>
+                              </form>
+                          </tr>
+
+                      </div>
+
+                      <div id="isolamento">
+
                       <tr>
                       <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
                       	<td>
@@ -186,6 +297,25 @@ include("dbforms/db_funcoes.php");
                         </td>
                       </form>
                       </tr>
+
+                        <tr>
+                            <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+                                <td>
+                                    Demonstrativo de Resultado da Avaliação Atuarial:
+                                    <div>&nbsp;</div>
+                                </td>
+                                <td>
+                                    <input type="file" name="DRAA" />
+                                    <div id="DRAA" class="recebe">&nbsp;</div>
+                                </td>
+                                <td>
+                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','DRAA','Carregando...','Erro ao carregar')" />
+                                    <div>&nbsp;</div>
+                                </td>
+                            </form>
+                        </tr>
+
+                      </div>
 
                     </table>
                   </fieldset>
@@ -274,7 +404,18 @@ function js_retornoProcessamento(oAjax) {
 	    alert(oRetorno.message.urlDecode());
 	    return false;
 	  }
-	} 
+	}
+
+function tipoGeracao(){
+    var x = document.getElementById("TipoGeracao").value;
+    if(x == 'CONSOLIDACAO'){
+        document.getElementById("isolamento").style.display = "none";
+        document.getElementById("consolidacao").style.display = "inline";
+    }else{
+        document.getElementById("isolamento").style.display = "inline";
+        document.getElementById("consolidacao").style.display = "none";
+    }
+}
 
 </script>
 <div id='debug'>
