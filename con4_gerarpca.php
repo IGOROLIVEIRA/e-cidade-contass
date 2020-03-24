@@ -287,7 +287,7 @@ include("dbforms/db_funcoes.php");
                       	</td>
                         <td>
                         	<input class="isolado" type="file" name="NE" />
-    <div id="NE" class="recebe">&nbsp;</div>
+                             <div id="NE" class="recebe">&nbsp;</div>
                         </td>
                         <td>
                         <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NE','Carregando...','Erro ao carregar')" />
@@ -352,9 +352,9 @@ function js_processar() {
 	var aArquivosSelecionados = new Array();
 
 	var select = document.getElementById('TipoGeracao');
-    var value = select.options[select.selectedIndex].value;
+    var tipoGeracao = select.options[select.selectedIndex].value;
 
-    if(value == 'CONSOLIDADO'){
+    if(tipoGeracao == 'CONSOLIDADO'){
         var aArquivos             = $$(".consolidado");
     }else{
         var aArquivos             = $$(".isolado");
@@ -373,6 +373,7 @@ function js_processar() {
   var oParam           = new Object();
   oParam.exec          = "processarPCA";
   oParam.arquivos      = aArquivosSelecionados;
+  oParam.tipoGeracao   = tipoGeracao;
   var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
 		                            {
                                   method:'post',
