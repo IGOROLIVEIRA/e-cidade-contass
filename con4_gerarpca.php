@@ -407,8 +407,10 @@ function js_retornoProcessamento(oAjax) {
 	}
 
 function tipoGeracao(){
-    var x = document.getElementById("TipoGeracao").value;
-    if(x == 'CONSOLIDADO'){
+    var select = document.getElementById('TipoGeracao');
+    var value = select.options[select.selectedIndex].value;
+    console.log(value);
+    if(value == 'CONSOLIDADO'){
         document.getElementById("isolado").style.display = "none";
         document.getElementById("consolidado").style.display = "inline";
     }else{
