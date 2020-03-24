@@ -350,6 +350,10 @@ include("dbforms/db_funcoes.php");
 function js_processar() {
 
 	var aArquivosSelecionados = new Array();
+
+	var select = document.getElementById('TipoGeracao');
+    var value = select.options[select.selectedIndex].value;
+
     if(value == 'CONSOLIDADO'){
         var aArquivos             = $$(".consolidado");
     }else{
