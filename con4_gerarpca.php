@@ -78,7 +78,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="REC_MDE" />
+                                      <input class="consolidado" type="file" name="REC_MDE" />
                                       <div id="REC_MDE" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -95,7 +95,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="GASTO_MDE" />
+                                      <input class="consolidado" type="file" name="GASTO_MDE" />
                                       <div id="GASTO_MDE" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -112,7 +112,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="REC_ASPS" />
+                                      <input class="consolidado" type="file" name="REC_ASPS" />
                                       <div id="REC_ASPS" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -129,7 +129,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="GASTO_ASPS" />
+                                      <input class="consolidado" type="file" name="GASTO_ASPS" />
                                       <div id="GASTO_ASPS" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -146,7 +146,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="RES_ASPS" />
+                                      <input class="consolidado" type="file" name="RES_ASPS" />
                                       <div id="RES_ASPS" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -163,7 +163,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="DESP_PESSOAL" />
+                                      <input class="consolidado" type="file" name="DESP_PESSOAL" />
                                       <div id="DESP_PESSOAL" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -180,7 +180,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="RECURSO_FUNDEB" />
+                                      <input class="consolidado" type="file" name="RECURSO_FUNDEB" />
                                       <div id="RECURSO_FUNDEB" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -197,7 +197,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="CERTIDAO_TESOURARIA" />
+                                      <input class="consolidado" type="file" name="CERTIDAO_TESOURARIA" />
                                       <div id="CERTIDAO_TESOURARIA" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -214,7 +214,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="CERTIDAO_ALMOXARIFADO" />
+                                      <input class="consolidado" type="file" name="CERTIDAO_ALMOXARIFADO" />
                                       <div id="CERTIDAO_ALMOXARIFADO" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -231,7 +231,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="CERTIDAO_BENS_PATRIMONIAIS" />
+                                      <input class="consolidado" type="file" name="CERTIDAO_BENS_PATRIMONIAIS" />
                                       <div id="CERTIDAO_BENS_PATRIMONIAIS" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -248,7 +248,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="CERTIDAO_PASSIVO" />
+                                      <input class="consolidado" type="file" name="CERTIDAO_PASSIVO" />
                                       <div id="CERTIDAO_PASSIVO" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -265,7 +265,7 @@ include("dbforms/db_funcoes.php");
                                       <div>&nbsp;</div>
                                   </td>
                                   <td>
-                                      <input type="file" name="CERTIDAO_ATOS_POTENCIAIS" />
+                                      <input class="consolidado" type="file" name="CERTIDAO_ATOS_POTENCIAIS" />
                                       <div id="CERTIDAO_ATOS_POTENCIAIS" class="recebe">&nbsp;</div>
                                   </td>
                                   <td>
@@ -286,7 +286,7 @@ include("dbforms/db_funcoes.php");
                       	<div>&nbsp;</div>
                       	</td>
                         <td>
-                        	<input type="file" name="NE" />
+                        	<input class="isolado" type="file" name="NE" />
     <div id="NE" class="recebe">&nbsp;</div>
                         </td>
                         <td>
@@ -303,7 +303,7 @@ include("dbforms/db_funcoes.php");
                                     <div>&nbsp;</div>
                                 </td>
                                 <td>
-                                    <input type="file" name="DRAA" />
+                                    <input class="isolado" type="file" name="DRAA" />
                                     <div id="DRAA" class="recebe">&nbsp;</div>
                                 </td>
                                 <td>
@@ -350,7 +350,12 @@ include("dbforms/db_funcoes.php");
 function js_processar() {
 
 	var aArquivosSelecionados = new Array();
-	var aArquivos             = $$("input[type='file']");
+    if(value == 'CONSOLIDADO'){
+        var aArquivos             = $$(".consolidado");
+    }else{
+        var aArquivos             = $$(".isolado");
+    }
+//    var aArquivos             = $$("input[type='file']");
   /*
    * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
    */ 
