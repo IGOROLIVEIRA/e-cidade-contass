@@ -408,7 +408,7 @@ class cl_empautorizliberado {
         }
         $sql .= " from empautorizliberado ";
         $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = empautorizliberado.e232_id_usuario";
-        $sql .= "      inner join empautoriza  on  empautoriza.e54_autori = empautorizliberado.e232_id_usuario ";
+        $sql .= "      inner join empautoriza  on  empautoriza.e54_autori = empautorizliberado.e232_autori ";
         $sql2 = "";
         if($dbwhere==""){
             if($e232_sequencial!=null ){
@@ -462,6 +462,51 @@ class cl_empautorizliberado {
             }
         }
         return $sql;
+    }
+
+    function liberarAutorizacao ($aAutorizacoes) {
+
+        if (!db_utils::inTransaction()) {
+            throw new Exception('Nao existe transação com o banco de dados ativa.');
+        }
+
+        foreach ($aAutorizacoes as $oAutorizacao) {
+
+            $sCampos = "empautorizliberado.*";
+            $sWhere  = "e232_autori = {$oAutorizacao->iNumAut}";
+
+            $sSqlEmpAutorizLiberada  = $this->sql_query( null,$sCampos,null, $sWhere);
+            $rsSqlEmpAutorizLiberada = $this->sql_record($sSqlEmpAutorizLiberada);
+
+            if ($oAutorizacao->lLiberar) {
+
+                if ($this->numrows == 0) {
+
+                    $this->e232_autori     = $oAutorizacao->iNumAut;
+                    $this->e232_id_usuario = db_getsession('DB_id_usuario');
+                    $this->e232_data       = date("Y-m-d", db_getsession("DB_datausu"));
+                    $this->e232_hora       = db_hora();
+                    $this->incluir(null);
+                    if ( $this->erro_status == 0 ){
+                        throw new Exception($this->erro_msg);
+                    }
+
+                }
+
+            } else {
+                if ($this->numrows > 0) {
+
+                    $oAutorizacoesLiberadas = db_utils::fieldsMemory($rsSqlEmpAutorizLiberada,0);
+
+                    $this->excluir($oAutorizacoesLiberadas->e232_sequencial);
+                    if ( $this->erro_status == 0 ){
+                        throw new Exception($this->erro_msg);
+                    }
+                }
+
+            }
+
+        }
     }
 }
 ?>

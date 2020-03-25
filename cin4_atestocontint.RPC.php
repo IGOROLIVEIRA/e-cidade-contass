@@ -31,6 +31,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_empautoriza_classe.php");
+require_once("classes/db_empautorizliberado_classe.php");
 
 include("libs/JSON.php");
 
@@ -50,25 +51,26 @@ switch ($oParam->exec) {
     case "pesquisaAutorizacao":
 
         $oAutorizacao   = new cl_empautoriza();
-        $sWhere         = "";
-        $sAnd           = "";
+        $sWhere         = " e54_anousu = ".db_getsession("DB_anousu");
+        $sWhere         .= " AND e54_instit = ".db_getsession("DB_instit");
+        $sWhere         .= " AND e61_numemp IS NULL";
+        $sWhere         .= " AND e94_numemp IS NULL";
         $sCampos        = "e54_autori, e54_emiss, z01_nome, e54_valor, e54_resumo, e232_sequencial, 'f' AS temordemdecompra";
+        $sOrdem         = " e54_emiss DESC ";
 
         if (isset($oParam->codautini) && $oParam->codautini != null) {
 
             if (isset($oParam->codautfim) && $oParam->codautfim != null) {
-                $sStr = " e54_autori BETWEEN $oParam->codautini AND $oParam->codautfim ";
+                $sStr = " AND e54_autori BETWEEN $oParam->codautini AND $oParam->codautfim ";
             } else {
-                $sStr = " e54_autori = $oParam->codautini ";
+                $sStr = " AND e54_autori = $oParam->codautini ";
             }
-            $sWhere .= "$sAnd$sStr";
-            $sAnd    = " AND ";
+            $sWhere .= "$sStr";
 
         }
 
         if (isset($oParam->numcgm) && $oParam->numcgm != null) {
-            $sWhere .= "$sAnd e54_numcgm = $oParam->numcgm";
-            $sAnd    = " AND ";
+            $sWhere .= " AND e54_numcgm = $oParam->numcgm";
         }
 
         if (isset($oParam->dtemissini) && $oParam->dtemissini != null) {
@@ -84,19 +86,14 @@ switch ($oParam->exec) {
             }
 
             if (isset($oParam->dtemissfim) && $oParam->dtemissfim != null) {
-                $sWhere .= "$sAnd e54_emiss BETWEEN '$dtDataIni' AND '$dtDataFim'";
+                $sWhere .= " AND e54_emiss BETWEEN '$dtDataIni' AND '$dtDataFim'";
             } else {
-                $sWhere .= "$sAnd e54_emiss = '$dtDataIni'";
+                $sWhere .= " AND e54_emiss = '$dtDataIni'";
             }
 
         }
 
-        $sWhere .= " AND e54_anousu = ".db_getsession("DB_anousu");
-        $sWhere .= " AND e54_instit = ".db_getsession("DB_instit");
-        $sWhere .= " AND e61_numemp IS NULL";
-        $sWhere .= " AND e94_numemp IS NULL";
-
-        $sSqlAutorizacao  = $oAutorizacao->sql_query_autorizacao_liberada(null, $sCampos, null, $sWhere);
+        $sSqlAutorizacao  = $oAutorizacao->sql_query_autorizacao_liberada(null, $sCampos, $sOrdem, $sWhere);
         $rsSqlAutorizacao = $oAutorizacao->sql_record($sSqlAutorizacao);
         $oRetorno->aItens = db_utils::getCollectionByRecord($rsSqlAutorizacao, true, false, true);
 
@@ -106,13 +103,13 @@ switch ($oParam->exec) {
      * Processa empenhos selecionados para a liberação
      */
 
-    case "processaEmpenhoLiberados":
+    case "processaAutorizacaoLiberadas":
 
-        $oEmpenho = new empenho();
+        $oEmpAutorizLiberado = new cl_empautorizliberado();
         try {
 
             db_inicio_transacao();
-            $oEmpenho->liberarEmpenho($oParam->aEmpenhos);
+            $oEmpAutorizLiberado->liberarAutorizacao($oParam->aAutorizacoes);
             db_fim_transacao(false);
         } catch (Exception $eErro) {
 

@@ -290,9 +290,9 @@ if ($oParam->e30_atestocontinterno != 't') {
 
                     var lMarca    = false;
                     var lBloquear = false;
-                    // if (e22_sequencial != "") {
-                    //     lMarca = true;
-                    // }
+                    if (e232_sequencial != "") {
+                        lMarca = true;
+                    }
 
                     if (temordemdecompra == 't') {
 
@@ -329,7 +329,7 @@ if ($oParam->e30_atestocontinterno != 't') {
 
         var aItens     = oGridAutorizacao.aRows;
 
-        if (!confirm('Está rotina irá Liberar os empenhos marcados e Bloquear os empenhos desmarcados contidos na lista . Deseja Continuar?')){
+        if (!confirm('Está rotina irá Liberar as autorizações de empenhos marcadas e Bloquear as autorizações desmarcadas contidas na lista . Deseja Continuar?')){
             return false;
         }
 
@@ -339,19 +339,19 @@ if ($oParam->e30_atestocontinterno != 't') {
         $('btnLiberarAutorizacao').disabled = true;
 
         var oParam        = new Object();
-        oParam.exec       = "processaEmpenhoLiberados";
+        oParam.exec       = "processaAutorizacaoLiberadas";
         oParam.aAutorizacoes  = new Array();
 
         for (var i = 0; i < aItens.length; i++) {
 
-            var oEmpenho          = new Object();
-            oEmpenho.iNumemp  = aItens[i].aCells[1].getValue();
-            oEmpenho.lLiberar = aItens[i].isSelected;
-            oParam.aAutorizacoes.push(oEmpenho);
+            var oAutorizacao          = new Object();
+            oAutorizacao.iNumAut  = aItens[i].aCells[2].getValue();
+            oAutorizacao.lLiberar = aItens[i].isSelected;
+            oParam.aAutorizacoes.push(oAutorizacao);
 
         }
         var oAjax        = new Ajax.Request(
-            "emp4_liberarempenhos.RPC.php",
+            "cin4_atestocontint.RPC.php",
             {
                 method    : 'post',
                 parameters: 'json='+js_objectToJson(oParam),
@@ -374,7 +374,7 @@ if ($oParam->e30_atestocontinterno != 't') {
 
             alert('Processo efetuado com sucesso.');
             windowAutorizacoesLiberadas.destroy();
-            js_pesquisaEmpenho();
+            js_pesquisaAutorizacao();
         } else {
             alert(oRetorno.message.urlDecode());
         }
@@ -464,8 +464,11 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_mostraDadosAutorizacao(autChave) {
-        console.log('js_mostraDadosAutorizacao');
-        js_JanelaAutomatica('empempenho',empChave);
-        $('Jandb_janelaReceita').style.zIndex = '10000';
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp',
+            'db_iframe_empconsulta003',
+            'emp1_empconsulta003.php?e54_autori='+autChave+'&bAtestoContInt=1',
+            'Autorização de Empenho',
+            true, 0);
+        $('Jandb_iframe_empconsulta003').style.zIndex = '1000';
     }
 </script>
