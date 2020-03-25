@@ -94,8 +94,8 @@ switch($oParam->exec) {
 
       $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
       $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
-      $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
-      db_fieldsmemory($result,0);
+      $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+      db_fieldsmemory($resultresp,0);
 
     try{
       if($datahomologacao != null){
@@ -123,7 +123,7 @@ switch($oParam->exec) {
       $oRetorno->message = urlencode($eErro->getMessage());
     }
 
-    if(pg_num_rows($result) > 0){
+    if(pg_num_rows($resultresp) > 0){
       $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
       $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
       $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
