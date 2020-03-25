@@ -657,7 +657,7 @@ case "processarBalancete" :
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
     $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
-    $iCodOrgao  = db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce;
+    $iCodOrgao  = str_pad(db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
 
     $iAnoReferencia = db_getsession('DB_anousu');
 
