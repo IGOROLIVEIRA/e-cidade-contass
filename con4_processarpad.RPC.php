@@ -657,6 +657,7 @@ case "processarBalancete" :
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
     $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
+    $iCodOrgao  = db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce;
 
     $iAnoReferencia = db_getsession('DB_anousu');
 
@@ -695,12 +696,12 @@ case "processarBalancete" :
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
       //print_r($aListaArquivos);
-      system("rm -f DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip");
-      system("bin/zip -q DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
       //echo $aListaArquivos;
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
 
       $oRetorno->itens  = $aArrayArquivos;
