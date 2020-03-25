@@ -1002,6 +1002,7 @@ case "processarBalancete" :
 			}
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
+				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
 				$sSql = "
 					SELECT l47_dataenvio AS dataenvio,
 						   editaldocumentos.l48_caminho AS caminho,
@@ -1053,7 +1054,7 @@ case "processarBalancete" :
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia'
+					WHERE liclancedital.l47_dataenvio = '$dia'
 				";
 
 				$rsAnexos = db_query($sSql);
@@ -1086,7 +1087,8 @@ case "processarBalancete" :
 							break;
 					}
 					$valores = explode('/', $oAnexo->caminho);
-					$extensao = explode('.', $valores[4]);
+					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
+					$extensao = explode('.', $nomeArq);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
 					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
