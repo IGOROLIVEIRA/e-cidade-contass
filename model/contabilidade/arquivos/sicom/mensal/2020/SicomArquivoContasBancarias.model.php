@@ -308,9 +308,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                AND si95_instit = " . db_getsession('DB_instit');
 
           $rsResultVerifica = db_query($sSqlVerifica);
-          //echo $sSqlVerifica."<br>";
-          //db_criatabela($rsResultVerifica);
-
 
           /**
           * Adicionada consulta abaixo para verificação da data de cadastro da conta
@@ -337,8 +334,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
           $rsResultDtCad = db_query($sSqlDtCad);
           $oDtCadastro = db_utils::fieldsMemory($rsResultDtCad, 0);
-          //echo $sSqlDtCad."<br>";
-          //db_criatabela($rsResultDtCad);
 
           /*
            * condição adicionada para criar um registro das contas bancaria de aplicação que foram alteradas o tipo de aplicação no MES de 01/2018
@@ -1144,8 +1139,9 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                        AND si101_instit = " . db_getsession('DB_instit');
 
         $rsQuery40 = db_query($sSql40);
+        $oReg40 = db_utils::fieldsMemory($rsQuery40, $icont40);
 
-        if ($oMovi40->contaconvenio == 1 && ($oVerificaReg40->si95_nroconvenio != $oMovi40->nroconvenio) && pg_num_rows($rsQuery40) == 0) {
+        if ($oMovi40->contaconvenio == 1 && ($oVerificaReg40->si95_nroconvenio != $oReg40->si101_nroconvenio) && pg_num_rows($rsQuery40) == 0) {
 
           $cCtb40 = new cl_ctb402020();
 
