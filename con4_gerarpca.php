@@ -113,6 +113,25 @@ include("dbforms/db_funcoes.php");
                                         <form name="form1" id='form1' method="post" action=""
                                               enctype="multipart/form-data">
                                             <td>
+                                                Notas explicativas às demonstrações contábeis:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="NE"/>
+                                                <div id="NE" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NE','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
                                                 Receita base de cálculo para aplicação MDE:
                                                 <div>&nbsp;</div>
                                             </td>
@@ -333,25 +352,6 @@ include("dbforms/db_funcoes.php");
                                             <td>
                                                 <input type="button" value="Enviar"
                                                        onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','CERTIDAO_ATOS_POTENCIAIS','Carregando...','Erro ao carregar')"/>
-                                                <div>&nbsp;</div>
-                                            </td>
-                                        </form>
-                                    </tr>
-
-                                    <tr>
-                                        <form name="form1" id='form1' method="post" action=""
-                                              enctype="multipart/form-data">
-                                            <td>
-                                                Notas explicativas às demonstrações contábeis:
-                                                <div>&nbsp;</div>
-                                            </td>
-                                            <td>
-                                                <input class="consolidado" type="file" name="NE"/>
-                                                <div id="NE" class="recebe">&nbsp;</div>
-                                            </td>
-                                            <td>
-                                                <input type="button" value="Enviar"
-                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NE','Carregando...','Erro ao carregar')"/>
                                                 <div>&nbsp;</div>
                                             </td>
                                         </form>
