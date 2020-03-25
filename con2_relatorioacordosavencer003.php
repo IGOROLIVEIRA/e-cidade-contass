@@ -65,7 +65,8 @@ $oRotulo->label("ac50_descricao");
       <input type="hidden" id="listaacordogrupo"             name="listaacordogrupo"             value="" />
       <input type="hidden" id="listacontratado"              name="listacontratado"              value="" />
       <input type="hidden" id="ordemdescricao"               name="ordemdescricao"               value="" />
-      <input type="hidden" id="sDepartamentos"               name="sDepartamentos"               value="" />
+      <input type="hidden" id="sDepartsInclusao"             name="sDepartsInclusao"             value="" />
+      <input type="hidden" id="sDepartsResponsavel"          name="sDepartsResponsavel"          value="" />
     <table style="margin-top: 20px;">
       <tr>
         <td>
@@ -85,28 +86,51 @@ $oRotulo->label("ac50_descricao");
                 ?>
               </td>
             </tr>
-            <tr id="trDepartamentos" style="display:none;">
+            <tr id="trDepartInclusao" style="display:none;">
               <td colspan="4">
                 <table>
                   <tr>
-                    <td nowrap="nowrap"><?db_ancora('<b>Departamento:</b>', 'js_pesquisaDepartamento(true);', 1)?></td>
+                    <td nowrap="nowrap"><?db_ancora('<b>Depto. de Inclusão:</b>', 'js_pesquisaDepartamento(true);', 1)?></td>
                     <td nowrap="nowrap">
                       <?php
-                        db_input('iCodigoDepartamento', 17, @$Icoddepto, true, 'text', 1, " onchange='js_pesquisaDepartamento(false);' ");
-                        db_input('sDescricaoDepartamento', 26, @$Idescrdepto, true, 'text', 3, "");
+                        db_input('iCodigoDepartInclusao', 17, @$Icoddepto, true, 'text', 1, " onchange='js_pesquisaDepartamento(false);' ");
+                        db_input('sDescricaoDepartInclusao', 26, @$Idescrdepto, true, 'text', 3, "");
                       ?>
                     </td>
                     <td>
-                      <input type="button" onClick="js_lancarDepartamento()" value="Lançar" />
+                      <input type="button" onClick="js_lancarDepartInclusao()" value="Lançar" />
                     </td>
                   </tr>
                   <tr>
                     <td colspan="3">
-                      <div id="ctnDepartamentos"></div>
+                      <div id="ctnDepartInclusao"></div>
                     </td>
                   </tr>
                 </table>
               </td>
+            </tr>
+            <tr id="trDepartResponsavel" style="display:none;">
+                <td colspan="4">
+                    <table>
+                        <tr>
+                            <td nowrap="nowrap"><?db_ancora('<b>Depto. Responsável:</b>', 'js_pesquisaDepartResp(true);', 1)?></td>
+                            <td nowrap="nowrap">
+                                <?php
+                                db_input('iCodigoDepartResponsavel', 17, @$Icoddepto, true, 'text', 1, " onchange='js_pesquisaDepartResp(false);' ");
+                                db_input('sDescricaoDepartResponsavel', 26, @$Idescrdepto, true, 'text', 3, "");
+                                ?>
+                            </td>
+                            <td>
+                                <input type="button" onClick="js_lancarDepartResponsavel()" value="Lançar" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div id="ctnDepartResponsavel"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr id="trAcordos">
               <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
@@ -205,7 +229,7 @@ function js_acordo(mostra){
 
 function js_mostraAcordo(chave,erro){
 
-  $('ac16_resumoobjeto').value = erro
+  $('ac16_resumoobjeto').value = erro;
   if(erro==true){
     $('ac16_sequencial').focus();
     $('ac16_sequencial').value = '';
@@ -244,32 +268,49 @@ function js_gerarRelatorio(){
 
   var sVirgula         = '';
   var listaacordogrupo = '';
-  for(i=0; i < parent.iframe_grupoacordo.$('listaacordogrupo').length; i++) {
-    listaacordogrupo += sVirgula + parent.iframe_grupoacordo.$('listaacordogrupo').options[i].value;
-    sVirgula          = ",";
-  }
 
-  $('listaacordogrupo').value = listaacordogrupo;
+  if(typeof parent.iframe_grupoacordo != 'undefined'){
+      for(let i=0; i < parent.iframe_grupoacordo.$('listaacordogrupo').length; i++) {
+        listaacordogrupo += sVirgula + parent.iframe_grupoacordo.$('listaacordogrupo').options[i].value;
+        sVirgula          = ",";
+      }
+
+      $('listaacordogrupo').value = listaacordogrupo;
+  }
 
   var sVirgula        = '';
   var listacontratado = '';
-  for(i=0; i < parent.iframe_contratado.$('listacontratado').length; i++) {
+
+
+  for(let i=0; i < parent.iframe_contratado.$('listacontratado').length; i++) {
     listacontratado += sVirgula + parent.iframe_contratado.$('listacontratado').options[i].value;
     sVirgula         = ",";
   }
 
   $('listacontratado').value = listacontratado;
-  var sDepartamentos         = "";
+  var sDepartsInclusao         = "";
 
-  for (var iDepartamento = 0; iDepartamento < aDepartamentos.length; iDepartamento++) {
-		sDepartamentos += aDepartamentos[iDepartamento].iDepartamento + ",";
+    for (var iDepartamento = 0; iDepartamento < aDepartInclusao.length; iDepartamento++) {
+		sDepartsInclusao += aDepartInclusao[iDepartamento].iDepartInclusao + ",";
 	}
 
-	if (sDepartamentos != "") {
-		sDepartamentos = sDepartamentos.substring(0, sDepartamentos.length -1);
+	if (sDepartsInclusao != "") {
+		sDepartsInclusao = sDepartsInclusao.substring(0, sDepartsInclusao.length -1);
 	}
 
-	$("sDepartamentos").value = sDepartamentos;
+	$("sDepartsInclusao").value = sDepartsInclusao;
+
+    var sDepartsResponsavel         = "";
+
+    for (var iDepartamento = 0; iDepartamento < aDepartResponsavel.length; iDepartamento++) {
+        sDepartsResponsavel += aDepartResponsavel[iDepartamento].iDepartReponsavel + ",";
+    }
+
+    if (sDepartsResponsavel != "") {
+        sDepartsResponsavel = sDepartsResponsavel.substring(0, sDepartsResponsavel.length -1);
+    }
+
+    $("sDepartsResponsavel").value = sDepartsResponsavel;
 
   jan = window.open('', 'relatorioacordosavencer',
                     'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
@@ -287,21 +328,25 @@ function js_verificaFiltro(iValor) {
   if (iValor == 1) {
 
     $("trAcordos").style.display = "";
-    $("trDepartamentos").style.display = "none";
+    $("trDepartInclusao").style.display = "none";
+    $("trDepartResponsavel").style.display = "none";
   } else { // Filtro por departamento
 
-    $("trDepartamentos").style.display = "";
+    $("trDepartInclusao").style.display = "";
+    $("trDepartResponsavel").style.display = "";
     $("trAcordos").style.display = "none";
   }
 }
 
-var aDepartamentos     = new Array();
-var oGridDepartamentos = js_montaGrid();
+var aDepartInclusao         = new Array();
+var aDepartResponsavel      = new Array();
+var oGridDepartInclusao     = js_montaGrid("oGridDepartInclusao", "inclusao");
+var oGridDepartResponsavel  = js_montaGrid("oGridDepartResponsavel", "responsavel");
 
 /**
  * Monta grid
  */
-function js_montaGrid() {
+function js_montaGrid(nomeGrid, tipoDepart) {
 
   var aAlinhamentos = new Array();
   var aHeader       = new Array();
@@ -319,66 +364,127 @@ function js_montaGrid() {
   aAlinhamentos[1] = 'left';
   aAlinhamentos[2] = 'center';
 
-  oGridDepartamentos              = new DBGrid('datagridDepartamentos');
-  oGridDepartamentos.sName        = 'datagridDepartamentos';
-  oGridDepartamentos.nameInstance = 'oGridDepartamentos';
-  oGridDepartamentos.setCellWidth( aWidth );
-  oGridDepartamentos.setCellAlign( aAlinhamentos );
-  oGridDepartamentos.setHeader( aHeader );
-  oGridDepartamentos.allowSelectColumns(true);
-  oGridDepartamentos.show( $('ctnDepartamentos') );
-  oGridDepartamentos.clearAll(true);
-  return oGridDepartamentos;
+  if(tipoDepart == 'inclusao'){
+      oGridDepartInclusao              = new DBGrid('datagridDepartInclusao');
+      oGridDepartInclusao.sName        = 'datagridDepartInclusao';
+      oGridDepartInclusao.nameInstance = 'oGridDepartInclusao';
+      oGridDepartInclusao.setCellWidth( aWidth );
+      oGridDepartInclusao.setCellAlign( aAlinhamentos );
+      oGridDepartInclusao.setHeader( aHeader );
+      oGridDepartInclusao.allowSelectColumns(true);
+      oGridDepartInclusao.show( $('ctnDepartInclusao') );
+      oGridDepartInclusao.clearAll(true);
+      return oGridDepartInclusao;
+  }else{
+      oGridDepartResponsavel              = new DBGrid('datagridDepartResponsavel');
+      oGridDepartResponsavel.sName        = 'datagridDepartResponsavel';
+      oGridDepartResponsavel.nameInstance = 'oGridDepartResponsavel';
+      oGridDepartResponsavel.setCellWidth( aWidth );
+      oGridDepartResponsavel.setCellAlign( aAlinhamentos );
+      oGridDepartResponsavel.setHeader( aHeader );
+      oGridDepartResponsavel.allowSelectColumns(true);
+      oGridDepartResponsavel.show( $('ctnDepartResponsavel') );
+      oGridDepartResponsavel.clearAll(true);
+      return oGridDepartResponsavel;
+  }
 }
 
-function js_lancarDepartamento() {
+function js_lancarDepartInclusao() {
 
-  var sDescricaoDepartamento = $F('sDescricaoDepartamento');
+  var sDescricaoDepartInclusao = $F('sDescricaoDepartInclusao');
 
-  if ( sDescricaoDepartamento == '' ) {
+  if ( sDescricaoDepartInclusao == '' ) {
     return false;
   }
 
-  oDepartamento = new Object();
-  oDepartamento.iDepartamento          = $F('iCodigoDepartamento');
-  oDepartamento.sDescricaoDepartamento = sDescricaoDepartamento;
-  oDepartamento.iIndice                = aDepartamentos.length;
+    oDepartamento = new Object();
+    oDepartamento.iDepartInclusao          = $F('iCodigoDepartInclusao');
+    oDepartamento.sDescricaoDepartInclusao = sDescricaoDepartInclusao;
+    oDepartamento.iIndice                  = aDepartInclusao.length;
 
   //Limpa os campos
-  $('sDescricaoDepartamento').value = "";
-  $('iCodigoDepartamento').value    = "";
+  $('sDescricaoDepartInclusao').value = "";
+  $('iCodigoDepartInclusao').value    = "";
 
-  aDepartamentos.push(oDepartamento);
-  renderizarGrid(aDepartamentos);
+  aDepartInclusao.push(oDepartamento);
+  renderizarGrid(aDepartInclusao, 'inclusao');
 }
 
-function js_removeDepartamentoLancado(iIndice) {
+function js_lancarDepartResponsavel() {
 
-  aDepartamentos.splice(iIndice, 1);
-  renderizarGrid (aDepartamentos);
-}
+    var sDescricaoDepartResponsavel = $F('sDescricaoDepartResponsavel');
 
-function renderizarGrid (aDepartamentos) {
-
-    oGridDepartamentos.clearAll(true);
-
-    for ( var iIndice = 0; iIndice < aDepartamentos.length; iIndice++ ) {
-
-      oDepartamento = aDepartamentos[iIndice];
-
-      var aLinha = new Array();
-
-      aLinha[0] = oDepartamento.iDepartamento;
-      aLinha[1] = oDepartamento.sDescricaoDepartamento;
-
-      sDisabled = '';
-
-      aLinha[2] = '<input type="button" value="Remover" onclick="js_removeDepartamentoLancado(' + iIndice + ')" ' + sDisabled + ' />';
-
-      oGridDepartamentos.addRow(aLinha, null, null, true);
+    if ( sDescricaoDepartResponsavel == '' ) {
+        return false;
     }
 
-    oGridDepartamentos.renderRows();
+    oDepartamento = new Object();
+    oDepartamento.iDepartReponsavel           = $F('iCodigoDepartResponsavel');
+    oDepartamento.sDescricaoDepartResponsavel = sDescricaoDepartResponsavel;
+    oDepartamento.iIndice                     = aDepartResponsavel.length;
+
+    //Limpa os campos
+    $('sDescricaoDepartResponsavel').value = "";
+    $('iCodigoDepartResponsavel').value    = "";
+
+    aDepartResponsavel.push(oDepartamento);
+    renderizarGrid(aDepartResponsavel, 'responsavel');
+}
+
+function js_removeDepartamentoLancado(iIndice, nomeGrid) {
+    if(nomeGrid == 'inclusao'){
+        aDepartInclusao.splice(iIndice, 1);
+        renderizarGrid (aDepartInclusao, 'inclusao');
+    }else{
+        aDepartResponsavel.splice(iIndice, 1);
+        renderizarGrid (aDepartResponsavel, 'responsavel');
+    }
+
+}
+
+function renderizarGrid (lista, nomeGrid) {
+
+    if(nomeGrid == 'inclusao'){
+        oGridDepartInclusao.clearAll(true);
+
+        for ( var iIndice = 0; iIndice < lista.length; iIndice++ ) {
+
+          oDepartamento = lista[iIndice];
+
+          var aLinha = new Array();
+
+          aLinha[0] = oDepartamento.iDepartInclusao;
+          aLinha[1] = oDepartamento.sDescricaoDepartInclusao;
+
+          sDisabled = '';
+
+          aLinha[2] = `<input type="button" value="Remover" onclick="js_removeDepartamentoLancado(${iIndice}, 'inclusao')" ${sDisabled}/>`;
+
+          oGridDepartInclusao.addRow(aLinha, null, null, true);
+        }
+
+        oGridDepartInclusao.renderRows();
+    }else{
+        oGridDepartResponsavel.clearAll(true);
+
+        for ( var iIndice = 0; iIndice < lista.length; iIndice++ ) {
+
+            oDepartamento = lista[iIndice];
+
+            var aLinha = new Array();
+
+            aLinha[0] = oDepartamento.iDepartReponsavel;
+            aLinha[1] = oDepartamento.sDescricaoDepartResponsavel;
+
+            sDisabled = '';
+
+            aLinha[2] = `<input type="button" value="Remover" onclick="js_removeDepartamentoLancado(${iIndice}, 'responsavel')" ${sDisabled}/>`;
+
+            oGridDepartResponsavel.addRow(aLinha, null, null, true);
+        }
+
+        oGridDepartResponsavel.renderRows();
+    }
 }
 
 /**
@@ -386,32 +492,67 @@ function renderizarGrid (aDepartamentos) {
  */
 function js_pesquisaDepartamento(lMostra) {
 
-  var sFuncao = 'func_departamento.php?funcao_js=parent.js_mostraDepartamento|coddepto|descrdepto';
+  var sFuncao = 'func_departamento.php?funcao_js=parent.js_mostraDepartInclusao|coddepto|descrdepto';
 
   if (lMostra == false) {
 
-    var iDepartamento = $F('iCodigoDepartamento');
-    sFuncao = 'func_departamento.php?pesquisa_chave='+iDepartamento+'&funcao_js=parent.js_completaDepartamento';
+    var iDepartamento = $F('iCodigoDepartInclusao');
+    sFuncao = 'func_departamento.php?pesquisa_chave='+iDepartamento+'&funcao_js=parent.js_completaDepartInclusao';
   }
 
   js_OpenJanelaIframe('', 'db_iframe_departamento', sFuncao,'Pesquisar Departamento', lMostra, '10');
 }
 
-function js_completaDepartamento(sDescricao, lErro) {
+function js_completaDepartInclusao(sDescricao, lErro) {
 
-  $('sDescricaoDepartamento').value = sDescricao;
+  $('sDescricaoDepartInclusao').value = sDescricao;
 
   if (lErro) {
-    $('iCodigoDepartamento').focus();
-    $('iCodigoDepartamento').value = '';
+    $('iCodigoDepartInclusao').focus();
+    $('iCodigoDepartInclusao').value = '';
   }
 }
 
-function js_mostraDepartamento (iCodigo, sDescricao) {
+function js_mostraDepartInclusao (iCodigo, sDescricao) {
 
-  $('iCodigoDepartamento').value = iCodigo;
-  $('sDescricaoDepartamento').value = sDescricao;
+  $('iCodigoDepartInclusao').value = iCodigo;
+  $('sDescricaoDepartInclusao').value = sDescricao;
   db_iframe_departamento.hide();
+}
+
+/*
+*
+* Funções para busca de departamentos
+*
+*/
+function js_pesquisaDepartResp(lMostra) {
+
+    var sFuncao = 'func_departamento_alternativo.php?funcao_js=parent.js_mostraDepartResponsavel|dl_Codigo_Departamento|dl_Departamento';
+
+    if (lMostra == false) {
+
+        var iDepartamento = $F('iCodigoDepartResponsavel');
+        sFuncao = 'func_departamento_alternativo.php?pesquisa_chave='+iDepartamento+'&funcao_js=parent.js_completaDepartResponsavel';
+    }
+
+    js_OpenJanelaIframe('', 'db_iframe_departamento_resp', sFuncao,'Pesquisar Departamento', lMostra, '10');
+}
+
+function js_completaDepartResponsavel(sDescricao, lErro) {
+
+    $('sDescricaoDepartResponsavel').value = sDescricao;
+
+    if (lErro) {
+        $('iCodigoDepartResponsavel').focus();
+        $('iCodigoDepartResponsavel').value = '';
+    }
+}
+
+function js_mostraDepartResponsavel (iCodigo, sDescricao) {
+
+    $('iCodigoDepartResponsavel').value = iCodigo;
+    $('sDescricaoDepartResponsavel').value = sDescricao;
+    db_iframe_departamento_resp.hide();
 }
 
 

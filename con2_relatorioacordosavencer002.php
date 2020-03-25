@@ -67,9 +67,15 @@ if (isset($oPost->ac16_sequencial)) {
   }
 }
 
-if (isset($oPost->sDepartamentos) && !empty($oPost->sDepartamentos)) {
+if (isset($oPost->sDepartsInclusao) && !empty($oPost->sDepartsInclusao)) {
 	
-	$sWhere .= "{$sAnd} (ac16_coddepto in ({$oPost->sDepartamentos}) or ac16_deptoresponsavel in ({$oPost->sDepartamentos}))";
+	$sWhere .= "{$sAnd} ac16_coddepto in ({$oPost->sDepartsInclusao})";
+	$sAnd    = " and ";
+}
+
+if (isset($oPost->sDepartsResponsavel) && !empty($oPost->sDepartsResponsavel)) {
+
+	$sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oPost->sDepartsResponsavel})";
 	$sAnd    = " and ";
 }
 

@@ -131,10 +131,11 @@ $oGet = db_utils::postMemory($_GET);
 		          $sWhere = " coddepto = $pesquisa_chave";
 		          $sSql = $cldbdepart->sql_query_file(null, $sCampos, $sOrder, $sWhere);
 		      	  $result = $cldbdepart->sql_record($sSql);
+
 		          if ($cldbdepart->numrows != 0) {
 
 		            db_fieldsmemory($result,0);
-		            echo "<script>".$funcao_js."('$descrdepto',false);</script>";
+		            echo "<script>".$funcao_js."('$dl_departamento',false);</script>";
 		          } else {
 		            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
 		          }
