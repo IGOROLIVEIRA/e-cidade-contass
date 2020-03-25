@@ -338,6 +338,25 @@ include("dbforms/db_funcoes.php");
                                         </form>
                                     </tr>
 
+                                    <tr>
+                                        <form name="form1" id='form1' method="post" action=""
+                                              enctype="multipart/form-data">
+                                            <td>
+                                                Notas explicativas às demonstrações contábeis:
+                                                <div>&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input class="consolidado" type="file" name="NE"/>
+                                                <div id="NE" class="recebe">&nbsp;</div>
+                                            </td>
+                                            <td>
+                                                <input type="button" value="Enviar"
+                                                       onclick="micoxUpload(this.form,'con4_uploadarquivospca.php','NE','Carregando...','Erro ao carregar')"/>
+                                                <div>&nbsp;</div>
+                                            </td>
+                                        </form>
+                                    </tr>
+
                                 </table>
 
                                 <table id="isolado">
