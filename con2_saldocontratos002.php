@@ -42,9 +42,6 @@ require_once("model/CgmFactory.model.php");
 db_postmemory($HTTP_GET_VARS);
 
 
-$departamentos = json_decode(utf8_decode(str_replace("\\", '',$departamentos)), JSON_UNESCAPED_UNICODE);
-
-
 $sWhere = " where ac26_sequencial = (select max(ac26_sequencial) from acordoposicao where ac26_acordo = ac16_sequencial) ";
 $sOrder = " ORDER BY ac16_sequencial, ac26_sequencial, ac20_ordem, ";
 
@@ -60,12 +57,24 @@ if($iAgrupamento == 1){
 
 
 }else{
-  //selecionado o filtro Departamento
-  $sWhere.= " AND (1<>1 ";
-  foreach ($departamentos as $idpto) {
-    $sWhere.="OR coddepto = '".$idpto[0]."' ";
-  }
-  $sWhere.= ")";
+/*
+ * Filtro pelo departamento de Inclusão
+ * */
+
+    if(isset($sDepartsInclusao)){
+        $sWhere .= $sWhere ? ' AND ' : ' ';
+        $sWhere .= ' ac16_coddepto in ('.$sDepartsInclusao.') ';
+    }
+
+    /*
+    * Filtro pelo departamento Responsável
+    * */
+
+    if(isset($sDepartsInclusao)){
+        $sWhere .= $sWhere ? ' AND ' : ' ';
+        $sWhere .= ' ac16_deptoresponsavel in ('.$sDepartsResponsavel.') ';
+    }
+
 
 }
 if(isset($ac02_acordonatureza) && $ac02_acordonatureza!=""){
