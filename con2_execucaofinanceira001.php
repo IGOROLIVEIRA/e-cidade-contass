@@ -57,6 +57,7 @@ $oRotuloAcordo->label();
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="width: 600px; margin: 0 auto;">
 <center>
+<form name="form1" id="form1">
     <input type="hidden" id="iNumeroEmpenhoInicial" />
     <input type="hidden" id="iNumeroEmpenhoFinal"   />
     <br><br>
@@ -100,6 +101,32 @@ $oRotuloAcordo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td>
+					<?php db_ancora('Depto. de Inclusão:', "js_pesquisa_depart(true);", 1); ?>
+                </td>
+                <td>
+					<?php
+					db_input("coddeptoinc", 10, $Icoddepto, true, "text", 4, "style='width: 90px;'onchange='js_pesquisa_depart(false);'");
+					?>
+                </td>
+                <td>
+                    <?php db_input("descrdeptoinc", 50, $Idescrdepto, true, "text", 3);?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+					<?php db_ancora('Depto. Responsável',"js_pesquisa_departamento(true);",1); ?>
+                </td>
+                <td>
+					<?php
+					db_input('coddeptoresp',10,'',true,'text',4," style='width: 90px;'onchange='js_pesquisa_departamento(false);'");
+					?>
+                </td>
+                <td>
+                    <?php db_input('descrdeptoresp', 50, '', true, 'text', 3,"",""); ?>
+                </td>
+            </tr>
 
         </table>
     </fieldset>
@@ -107,6 +134,7 @@ $oRotuloAcordo->label();
     <p>
         <input type="button" name="btnImprimir" id="btnImprimir" value="Imprimir" onclick="js_imprimir()"/>
     </p>
+</form>
 </center>
 </body>
 </html>
@@ -164,6 +192,8 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         var dtVigenciaInicial     = $F("dtVigenciaInicial");
         var dtVigenciaFinal       = $F("dtVigenciaFinal");
         var iFornecedor           = $F("pc60_numcgm");
+        var iDepartInclusao       = $F("coddeptoinc");
+        var iDepartResponsavel    = $F("coddeptoresp");
         var oContratos            = oLancadorContrato.getRegistros();
         var aContratos            = new Array();
 
@@ -171,13 +201,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
             aContratos.push(oContratos[iContrato].sCodigo);
         }
 
-        if(aContratos.length != 0 && iFornecedor != ''){
-            alert("Não foi retornado nenhum registro para a seleção.");
-            return false;
-        }
+        // if(aContratos.length != 0 && iFornecedor != ''){
+        //     alert("Não foi retornado nenhum registro para a seleção.");
+        //     return false;
+        // }
 
-        if(aContratos.length == 0 && iFornecedor == ''){
-            alert("Selecione uma opção de filtro (Acordo ou Fornecedor)");
+        if(aContratos.length == 0 && iFornecedor == '' && !iDepartInclusao && !iDepartResponsavel){
+            alert("Selecione uma opção de filtro (Acordo, Fornecedor ou Departamento)");
             return false;
         }
 
@@ -195,13 +225,67 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         sQuery += "&dtVigenciaFinal="       + dtVigenciaFinal;
         sQuery += "&fornecedor="            + iFornecedor;
         sQuery += "&aContratos="            + aContratos;
-
+        sQuery += "&departInclusao="        + iDepartInclusao;
+        sQuery += "&departResponsavel="     + iDepartResponsavel;
 
         var oJanela = window.open('con2_execucaofinanceira002.php' + sQuery, 'relatorioexecfinanacordo',
             'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
         oJanela.moveTo(0,0);
         return true;
     }
+
+    function js_pesquisa_depart(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
+        } else {
+            if (document.form1.coddeptoinc.value != '') {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
+            } else {
+                document.form1.descrdeptoinc.value = '';
+            }
+        }
+    }
+    function js_mostradepart(chave, erro) {
+        document.form1.descrdeptoinc.value = chave;
+        if (erro == true) {
+            document.form1.coddeptoinc.focus();
+            document.form1.coddeptoinc.value = '';
+        }
+    }
+    function js_mostradepart1(chave1, chave2) {
+        document.form1.coddeptoinc.value = chave1;
+        document.form1.descrdeptoinc.value = chave2;
+        console.log(chave1, chave2);
+        db_iframe_db_depart.hide();
+    }
+
+    function js_pesquisa_departamento(mostra){
+        console.log(mostra);
+        if (mostra==true) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
+        } else {
+            console.log('Entrou agora...');
+            if (document.form1.coddeptoresp.value != '') {
+                js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddeptoresp.value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);
+            } else {
+                document.form1.descrdeptoresp.value = '';
+            }
+        }
+    }
+
+    function js_mostradepartamento1(chave1, chave2, erro) {
+        document.form1.coddeptoresp.value = chave1;
+        document.form1.descrdeptoresp.value = chave2;
+        db_iframe_departamento.hide();
+    }
+
+    function js_mostradepartamento(chave1,erro) {
+        if(!erro){
+            document.form1.descrdeptoresp.value = chave1;
+        }
+        db_iframe_departamento.hide();
+    }
+
 
     js_criarDBLancador();
 </script>

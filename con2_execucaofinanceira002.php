@@ -41,22 +41,30 @@ if( empty($dtVigenciaInicial) && !empty($dtVigenciaFinal) ){
     $head4 .= "\nPeríodo: de $dtVigenciaInicial até $dtVigenciaFinal";
 }
 $oContratosRelatorio = array();
+$sWhere = '';
 
-if($aContratos == ""){
-    $oContratosRelatorio = ExecucaoDeContratos::getAcordosFornecedor($fornecedor);
-    foreach ($oContratosRelatorio as $ik => $oCo){
-        $arrayContratos[$ik] = $oCo;
-    }
+if($aContratos){
+	$sWhere .= ' ac16_sequencial in ('.$aContratos.') ';
+}
 
-}else{
-    $oContratosRelatorio = explode(",", $aContratos);
+if($fornecedor){
+	$sWhere .= $sWhere ? ' AND ' : ' ';
+	$sWhere .= ' ac16_contratado = '.$fornecedor;
+}
 
-    $arrayContratos = array();
-    foreach ($oContratosRelatorio as $oCo){
-        $oContratos =  new stdClass();
-        $oContratos->ac16_sequencial = $oCo;
-        $arrayContratos[] = $oContratos;
-    }
+if($departInclusao){
+	$sWhere .= $sWhere ? ' AND ' : ' ';
+	$sWhere .= ' ac16_coddepto in ('.$departInclusao.')';
+}
+
+if($departResponsavel){
+	$sWhere .= $sWhere ? ' AND ' : ' ';
+	$sWhere .= ' ac16_deptoresponsavel in ('.$departResponsavel.')';
+}
+
+$oContratosRelatorio = ExecucaoDeContratos::getAcordos($sWhere);
+foreach ($oContratosRelatorio as $ik => $oCo){
+	$arrayContratos[$ik] = $oCo;
 }
 
 foreach ($arrayContratos as $iContrato){
@@ -228,5 +236,4 @@ function quebrarTexto($texto,$tamanho){
 
 }
 $oPdf->SetFont('Arial','',$iFonte-1);
-
 $oPdf->Output();
