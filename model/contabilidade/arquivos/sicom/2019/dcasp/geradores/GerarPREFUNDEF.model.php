@@ -23,14 +23,14 @@ class GerarPREFUNDEF extends GerarAM
       }else{
           $aCSV['tiporegistro']              = '10';
           $aCSV['recebfundef']               = '2';
-          $aCSV['vlprecatoriofundef']        = '';
+          $aCSV['vlprecatoriofundef']        = '0,00';
           $aCSV['banco']                     = '';
           $aCSV['agencia']                   = '';
           $aCSV['digitoverificadoragencia']  = '';
           $aCSV['contabancaria']             = '';
           $aCSV['digitoverificadorcontabancaria']  = '';
           $aCSV['rendaplicacao']  = '';
-          $aCSV['vlrendimentoaplic']  = '';
+          $aCSV['vlrendimentoaplic']  = '0,00';
           $aCSV['empfundef']  = '';
       }
     $this->sLinha = $aCSV;
