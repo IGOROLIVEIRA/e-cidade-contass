@@ -343,7 +343,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp40->si204_institu                         = db_getsession("DB_instit");
       $clbodcasp40->si204_tiporegistro                    = 40;
       $clbodcasp40->si204_faserestospagarnaoproc          = $iValorNumerico;
-      $clbodcasp40->si204_vlrspnaoprocpessoalencarsociais = ($oRetornoBO[53]->$sChave == '0,00')? abs($oRetornoBO[53]->$sChave) : $oRetornoBO[53]->$sChave;
+      $clbodcasp40->si204_vlrspnaoprocpessoalencarsociais = $oRetornoBO[53]->$sChave;
       $clbodcasp40->si204_vlrspnaoprocjurosencardividas   = $oRetornoBO[54]->$sChave;
       $clbodcasp40->si204_vlrspnaoprocoutrasdespcorrentes = $oRetornoBO[55]->$sChave;
       $clbodcasp40->si204_vlrspnaoprocinvestimentos       = $oRetornoBO[57]->$sChave;
