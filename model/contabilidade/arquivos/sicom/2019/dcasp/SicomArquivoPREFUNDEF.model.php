@@ -64,7 +64,7 @@ class SicomArquivoPREFUNDEF extends SicomArquivoBase implements iPadArquivoBaseC
     $oGerarPrefundef = new GerarPREFUNDEF();
     $oGerarPrefundef->iAnousu     = $iAnousu;
     $oGerarPrefundef->iCodInstit  = $iCodInstit;
-    $oGerarPrefundef->gerarDados();
+    $oGerarPrefundef->gerarDados($this->getTipoGeracao());
 
   }
 
