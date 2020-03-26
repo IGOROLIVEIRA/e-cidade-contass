@@ -46,82 +46,104 @@ require_once("con2_execcontratosquebraaditivo.php");
 require_once("con2_execcontratosquebraaditivoempenho.php");
 
 db_postmemory($HTTP_GET_VARS);
+$sWhereAcordo = '';
 
-if(is_null($ac16_sequencial) || $ac16_sequencial=="" || is_null($iQuebra) || empty($iQuebra)){
-  db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
+if(trim($coddeptoinc) != '') {
+	$sWhereAcordo = ' ac16_coddepto = '.$coddeptoinc;
 }
 
-$sWhere = " WHERE ac26_sequencial = (SELECT MAX(ac26_sequencial) FROM acordoposicao WHERE ac26_acordo = ac16_sequencial)
-              AND ac26_sequencial =
-                (SELECT MAX(ac26_sequencial)
-                  FROM acordoposicao
-                    WHERE ac26_acordo = '$ac16_sequencial') ";
-
-$sOrder = " ORDER BY codigomaterial, ac16_sequencial, ac26_sequencial, ac20_ordem ";
-
-$oAcordoItem = new cl_acordoitem();
-$sSql = $oAcordoItem->sql_query_execucaoDeContratos($sWhere,$sOrder);
-$aMateriais = db_utils::getColectionByRecord($oAcordoItem->sql_record($sSql));
-
-if(pg_num_rows($oAcordoItem->sql_record($sSql)) <= 0){
-  db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
+if(trim($coddeptoresp) != ''){
+	$sWhereAcordo .= $sWhereAcordo != '' ? ' AND ' : ' ';
+	$sWhereAcordo .= ' ac16_deptoresponsavel = '.$coddeptoresp;
 }
 
-$oPost               = db_utils::postMemory($_POST);
-$sAcordo             = 'Todos';
-$sDataInicio         = ' / / ';
-$sDataFim            = ' / / ';
-$sOrdemDescricao     = '';
+if(trim($ac16_sequencial) != ''){
+	$sWhereAcordo .= $sWhereAcordo != '' ? ' AND ' : ' ';
+	$sWhereAcordo .= ' ac16_sequencial = '.$ac16_sequencial;
+}
 
+$rsAcordos = db_query("SELECT ac16_sequencial from acordo where $sWhereAcordo");
 
-$oPdf  = new PDF();
+if(!pg_num_rows($rsAcordos)){
+	db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
+}
+
+$oPdf = new PDF();
 $oPdf->Open();
-$oPdf->AliasNbPages();
-$oPdf->SetTextColor(0,0,0);
-$oPdf->SetFillColor(220);
-$oPdf->SetAutoPageBreak(false);
 
-$iFonte     = 9;
-$iAlt       = 7;
+for($cont=0; $cont<pg_num_rows($rsAcordos); $cont++) {
 
-$head4 .= "Relatório de Execução de Contratos\n";
+	$oPdf->AliasNbPages();
+	$oPdf->SetTextColor(0, 0, 0);
+	$oPdf->SetFillColor(220);
+	$oPdf->SetAutoPageBreak(false);
 
-switch($iQuebra){
+	$sequencial = db_utils::fieldsMemory($rsAcordos, $cont)->ac16_sequencial;
 
-  case '2':
-    $head4 .= "Quebra: Por empenho";
-    break;
+	$sWhere = " WHERE ac26_sequencial = (SELECT MAX(ac26_sequencial) FROM acordoposicao WHERE ac26_acordo = ac16_sequencial)
+				  AND ac26_sequencial =
+					(SELECT MAX(ac26_sequencial)
+					  FROM acordoposicao
+						WHERE ac26_acordo = '$sequencial')";
 
-  case '3':
-    $head4 .= "Quebra: Por aditivo";
-    break;
+	$sOrder = " ORDER BY codigomaterial, ac16_sequencial, ac26_sequencial, ac20_ordem ";
 
-  case '4':
-    $head4 .= "Quebra: Por aditivo e empenho";
-    break;
-}
+	$oAcordoItem = new cl_acordoitem();
+	$sSql = $oAcordoItem->sql_query_execucaoDeContratos($sWhere, $sOrder);
+	$aMateriais = db_utils::getColectionByRecord($oAcordoItem->sql_record($sSql));
 
-if( empty($ac16_datainicio) && !empty($ac16_datafim) ){
-  $head4 .= "\nPeríodo: até $ac16_datafim";
-}else if( !empty($ac16_datainicio) && empty($ac16_datafim) ){
-  $head4 .= "\nPeríodo: a partir de $ac16_datainicio";
-}else if( !empty($ac16_datainicio) && !empty($ac16_datafim) ){
-  $head4 .= "\nPeríodo: de $ac16_datainicio até $ac16_datafim";
-}
+	if (pg_num_rows($oAcordoItem->sql_record($sSql)) <= 0) {
+		db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
+	}
 
-$oPdf->AddPage('L');
+	$oPost = db_utils::postMemory($_POST);
+	$sAcordo = 'Todos';
+	$sDataInicio = ' / / ';
+	$sDataFim = ' / / ';
+	$sOrdemDescricao = '';
 
-switch($iQuebra){
+	$iFonte = 9;
+	$iAlt = 7;
 
-  case '2':
-    execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,(int)$ac16_sequencial,$oPdf,$iQuebra,$ac16_datainicio,$ac16_datafim);
-    break;
+	$head4 .= "Relatório de Execução de Contratos\n";
 
-  case '3':
-    execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,(int)$ac16_sequencial,$oPdf,$iQuebra,$ac16_datainicio,$ac16_datafim);
-    break;
+	switch ($iQuebra) {
 
-  case '4':
-    execucaoDeContratosQuebraPorAditivoEmpenho($aMateriais,$iFonte,$iAlt,(int)$ac16_sequencial,$oPdf,$iQuebra,$ac16_datainicio,$ac16_datafim);
-    break;
+		case '2':
+			$head4 .= "Quebra: Por empenho";
+			break;
+
+		case '3':
+			$head4 .= "Quebra: Por aditivo";
+			break;
+
+		case '4':
+			$head4 .= "Quebra: Por aditivo e empenho";
+			break;
+	}
+
+	if (empty($ac16_datainicio) && !empty($ac16_datafim)) {
+		$head4 .= "\nPeríodo: até $ac16_datafim";
+	} else if (!empty($ac16_datainicio) && empty($ac16_datafim)) {
+		$head4 .= "\nPeríodo: a partir de $ac16_datainicio";
+	} else if (!empty($ac16_datainicio) && !empty($ac16_datafim)) {
+		$head4 .= "\nPeríodo: de $ac16_datainicio até $ac16_datafim";
+	}
+
+	$oPdf->AddPage('L');
+
+	switch ($iQuebra) {
+
+		case '2':
+			execucaoDeContratosQuebraPorEmpenho($aMateriais, $iFonte, $iAlt, (int)$sequencial, $oPdf, $iQuebra, $ac16_datainicio, $ac16_datafim);
+			break;
+
+		case '3':
+			execucaoDeContratosQuebraPorAditivo($aMateriais, $iFonte, $iAlt, (int)$sequencial, $oPdf, $iQuebra, $ac16_datainicio, $ac16_datafim);
+			break;
+
+		case '4':
+			execucaoDeContratosQuebraPorAditivoEmpenho($aMateriais, $iFonte, $iAlt, (int)$sequencial, $oPdf, $iQuebra, $ac16_datainicio, $ac16_datafim);
+			break;
+	}
 }

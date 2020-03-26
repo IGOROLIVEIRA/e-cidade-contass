@@ -120,6 +120,28 @@ $oRotulo->label("ac16_resumoobjeto");
                 ?>
               </td>
             </tr>
+            <tr>
+                <td>
+					<?php db_ancora('Depto. de Inclusão:', "js_pesquisa_depart(true);", 1); ?>
+                </td>
+                <td>
+                    <?php
+					db_input("coddeptoinc", 10, $Icoddepto, true, "text", 4, "onchange='js_pesquisa_depart(false);'");
+                    db_input("descrdeptoinc", 50, $Idescrdepto, true, "text", 3);
+                    ?>
+                </td>
+            </tr>
+              <tr>
+                  <td>
+					  <?php db_ancora('Depto. Responsável',"js_pesquisa_departamento(true);",1); ?>
+                  </td>
+                  <td>
+					  <?php
+					  db_input('coddeptoresp',10,'',true,'text',4," onchange='js_pesquisa_departamento(false);'","");
+					  db_input('descrdeptoresp', 50, '', true, 'text', 3,"","");
+					  ?>
+                  </td>
+              </tr>
 
           </table>
         </fieldset>
@@ -196,10 +218,59 @@ $oRotulo->label("ac16_resumoobjeto");
     db_iframe_acordo.hide();
   }
 
+    function js_pesquisa_depart(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
+        } else {
+        if (document.form1.coddeptoinc.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
+        } else {
+                document.form1.descrdeptoinc.value = '';
+            }
+        }
+    }
+    function js_mostradepart(chave, erro) {
+        document.form1.descrdeptoinc.value = chave;
+        if (erro == true) {
+            document.form1.coddeptoinc.focus();
+            document.form1.coddeptoinc.value = '';
+        }
+    }
+    function js_mostradepart1(chave1, chave2) {
+        document.form1.coddeptoinc.value = chave1;
+        document.form1.descrdeptoinc.value = chave2;
+        db_iframe_db_depart.hide();
+    }
+
+    function js_pesquisa_departamento(mostra){
+        if (mostra==true) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
+        } else {
+            if (document.form1.coddeptoresp.value != '') {
+                js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddeptoresp.value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);
+            } else {
+                document.form1.descrdeptoresp.value = '';
+            }
+        }
+    }
+
+    function js_mostradepartamento1(chave1, chave2, erro) {
+        document.form1.coddeptoresp.value = chave1;
+        document.form1.descrdeptoresp.value = chave2;
+        db_iframe_departamento.hide();
+    }
+
+    function js_mostradepartamento(chave1,erro) {
+        if(!erro){
+            document.form1.descrdeptoresp.value = chave1;
+        }
+        db_iframe_departamento.hide();
+    }
+
   function js_gerarRelatorio(){
 
     var iAcordo    = $F("ac16_sequencial");
-    var sResumoObjeto = $('ac16_resumoobjeto').value
+    var sResumoObjeto = $('ac16_resumoobjeto').value;
 
     rel = 'relatorioacordosavencer'+Math.floor((Math.random() * 10) + 1);
     document.form1.setAttribute('target',rel);
