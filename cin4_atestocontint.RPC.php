@@ -31,7 +31,8 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_empautoriza_classe.php");
-require_once("classes/db_empautorizliberado_classe.php");
+require_once("classes/db_pcproc_classe.php");
+require_once("classes/db_pcprocliberado_classe.php");
 
 include("libs/JSON.php");
 
@@ -45,7 +46,7 @@ $oRetorno->aItens  = array();
 switch ($oParam->exec) {
 
     /*
-     * Pesquisa empenhos para a liberacao
+     * Pesquisa Autorização de Empenho para a liberacao
      */
 
     case "pesquisaAutorizacao":
@@ -55,7 +56,7 @@ switch ($oParam->exec) {
         $sWhere         .= " AND e54_instit = ".db_getsession("DB_instit");
         $sWhere         .= " AND e61_numemp IS NULL";
         $sWhere         .= " AND e94_numemp IS NULL";
-        $sCampos        = "e54_autori, e54_emiss, z01_nome, e54_valor, e54_resumo, e232_sequencial, 'f' AS temordemdecompra";
+        $sCampos        = "e54_autori, e54_emiss, z01_nome, e54_valor, e54_resumo, e232_sequencial";
         $sOrdem         = " e54_emiss DESC ";
 
         if (isset($oParam->codautini) && $oParam->codautini != null) {
@@ -100,7 +101,7 @@ switch ($oParam->exec) {
         break;
 
     /*
-     * Processa empenhos selecionados para a liberação
+     * Processa Autorização de Empenhos selecionados para a liberação
      */
 
     case "processaAutorizacaoLiberadas":
@@ -117,6 +118,88 @@ switch ($oParam->exec) {
             $oRetorno->status = 2;
             $oRetorno->message = urlencode($eErro->getMessage());
         }
+
+        break;
+
+    /*
+     * Pesquisa processo de compra para a liberação
+     */
+
+    case "pesquisaProcessoCompra":
+
+        $oProcComp = new cl_pcproc();
+
+        $sCampos = "DISTINCT pc80_codproc, pc80_data, descrdepto, si01_datacotacao, pc80_resumo, e233_sequencial";
+        $sWhere = "(e55_sequen IS NULL OR (e55_sequen IS NOT NULL AND e54_anulad IS NOT NULL))";
+        $sWhere .= "AND pc10_instit = ".db_getsession("DB_instit");
+        $sWhere .= "AND pc10_solicitacaotipo IN(1, 2)";
+        $sWhere .= "AND pc80_situacao = 2";
+        $sWhere .= "AND NOT EXISTS (SELECT 1
+                                        FROM acordopcprocitem
+                                        INNER JOIN acordoitem ON ac23_acordoitem = ac20_sequencial
+                                        INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+                                        INNER JOIN acordo ON ac26_acordo = ac16_sequencial
+                                    WHERE ac23_pcprocitem = pc81_codprocitem AND (ac16_acordosituacao NOT IN (2, 3)))";
+        $sWhere .= "AND pc80_codproc IN (SELECT si01_processocompra FROM precoreferencia)";
+        $sWhere .= "AND date_part('YEAR', pc80_data) = ".db_getsession("DB_anousu");
+        $sOrdem = "pc80_data DESC";
+
+        if (isset($oParam->codprocini) && $oParam->codprocini != null) {
+
+            if (isset($oParam->codprocfim) && $oParam->codprocfim != null) {
+                $sStr = " AND pc80_codproc BETWEEN $oParam->codprocini AND $oParam->codprocfim ";
+            } else {
+                $sStr = " AND pc80_codproc = $oParam->codprocini ";
+            }
+            $sWhere .= "$sStr";
+
+        }
+
+        if (isset($oParam->dtemissini) && $oParam->dtemissini != null) {
+
+            if (!empty($oParam->dtemissini)) {
+                $dtDataIni = explode("/", $oParam->dtemissini);
+                $dtDataIni = $dtDataIni[2]."-".$dtDataIni[1]."-".$dtDataIni[0];
+            }
+
+            if (!empty($oParam->dtemissfim)) {
+                $dtDataFim = explode("/", $oParam->dtemissfim);
+                $dtDataFim = $dtDataFim[2]."-".$dtDataFim[1]."-".$dtDataFim[0];
+            }
+
+            if (isset($oParam->dtemissfim) && $oParam->dtemissfim != null) {
+                $sWhere .= " AND pc80_data BETWEEN '$dtDataIni' AND '$dtDataFim'";
+            } else {
+                $sWhere .= " AND pc80_data = '$dtDataIni'";
+            }
+
+        }
+
+        $sSubSqlProcCompra  = $oProcComp->sql_query_aut(null, "*", $sOrdem, $sWhere);
+        $sSqlProcCompra     = "SELECT $sCampos
+                                    FROM ($sSubSqlProcCompra) as x 
+                                        LEFT JOIN precoreferencia ON precoreferencia.si01_processocompra = pc80_codproc
+                                        LEFT JOIN pcprocliberado ON pc80_codproc = pcprocliberado.e233_codproc";
+        $rsProcCompra = $oProcComp->sql_record($sSqlProcCompra);
+        $oRetorno->aItens = db_utils::getCollectionByRecord($rsProcCompra, true, false, true);
+
+        break;
+
+    case "processaProcessoCompraLiberados":
+
+        $oProcCompLiberado = new cl_pcprocliberado();
+        try {
+
+            db_inicio_transacao();
+            $oProcCompLiberado->liberarProcessoCompra($oParam->aProcCompras);
+            db_fim_transacao(false);
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+
         break;
 }
 echo $oJson->encode($oRetorno);

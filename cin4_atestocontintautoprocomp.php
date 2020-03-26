@@ -43,9 +43,8 @@ include("classes/db_empparametro_classe.php");
 
 $clempparametro = new cl_empparametro;
 $clrotulo = new rotulocampo;
-$clrotulo->label("e54_autori");
-$clrotulo->label("e54_numcgm");
-$clrotulo->label("e54_emiss");
+$clrotulo->label("pc80_codproc");
+$clrotulo->label("pc80_data");
 
 $dbopcao  = 1;
 $bOpcao   = true;
@@ -94,49 +93,38 @@ if ($oParam->e30_atestocontinterno != 't') {
             <td>
                 <fieldset>
                     <legend><b>Atesto do Controle Interno<b></legend>
-<!--                    <table  align="center" border="0">-->
-<!--                        <tr>-->
-<!--                            <td nowrap title="--><?//=@$Te60_codemp?><!--" align="left">-->
-<!--                                --><?// db_ancora(@$Le60_codemp,"js_pesquisae60_codempIni();",$dbopcao); ?>
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                --><?// db_input('e60_codemp',10,$Ie60_codemp,$bOpcao,
-//                                    'text',$dbopcao,"","e60_codemp_ini");  ?>
-<!--                                <strong>-->
-<!--                                    --><?// db_ancora('até',"js_pesquisae60_codempFim();",$dbopcao); ?>
-<!--                                </strong>-->
-<!--                                --><?// db_input('e60_codemp',10,$Ie60_codemp,$bOpcao,
-//                                    'text',$dbopcao,"","e60_codemp_fim");  ?>
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td nowrap align="left">-->
-<!--                                --><?// db_ancora("<b>Razão Social:</b>","js_pesquisa_z01_numcgm(true);",$dbopcao); ?>
-<!--                            </td>-->
-<!--                            <td  align="left" nowrap>-->
-<!--                                --><?// db_input('z01_numcgm',10,@$Iz01_numcgm,$bOpcao,'text',
-//                                    $dbopcao," onchange='js_pesquisa_z01_numcgm(false);'","" );
-//
-//                                db_input('z01_nome',40,@$Iz01_nome,$bOpcao,'text',3,"","" );  ?>
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td nowrap align="left"><b>Data Emissão:</b></td>-->
-<!--                            <td  align="left" nowrap>-->
-<!--                                --><?//
-//                                db_inputdata('dtemissaoini',@$dia,@$mes,@$ano,$bOpcao,'text',$dbopcao,"");
-//                                echo " <b>até:</b> ";
-//                                db_inputdata('dtemissaofim',@$dia2,@$mes2,@$ano2,$bOpcao,'text',$dbopcao,"");
-//                                ?>
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                    </table>-->
+                    <table  align="center" border="0">
+                        <tr>
+                            <td nowrap title="<?=@$Tpc80_codproc?>" align="left">
+                                <? db_ancora(@$Lpc80_codproc,"js_pesquisasi01_processocompraIni();",$dbopcao); ?>
+                            </td>
+                            <td>
+                                <? db_input('pc80_codproc',10,$Ipc80_codproc,$bOpcao,
+                                    'text',$dbopcao,"","pc80_codproc_ini");  ?>
+                                <strong>
+                                    <? db_ancora('até',"js_pesquisasi01_processocompraFim();",$dbopcao); ?>
+                                </strong>
+                                <? db_input('pc80_codproc',10,$Ipc80_codproc,$bOpcao,
+                                    'text',$dbopcao,"","pc80_codproc_fim");  ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap align="left"><b>Data de Emissão:</b></td>
+                            <td  align="left" nowrap>
+                                <?
+                                db_inputdata('dtemissaoini',@$dia,@$mes,@$ano,$bOpcao,'text',$dbopcao,"");
+                                echo " <b>até:</b> ";
+                                db_inputdata('dtemissaofim',@$dia2,@$mes2,@$ano2,$bOpcao,'text',$dbopcao,"");
+                                ?>
+                            </td>
+                        </tr>
+                    </table>
                 </fieldset>
             </td>
         </tr>
         <tr>
             <td align="center">
-                <input  name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisaEmpenho();" <?=$sDisable;?>>
+                <input  name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisaProcessoCompra();" <?=$sDisable;?>>
                 <input  name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limparcampos();" <?=$sDisable;?>>
             </td>
         </tr>
@@ -168,42 +156,38 @@ if ($oParam->e30_atestocontinterno != 't') {
     */
 
     function js_limparcampos(){
-        $('e60_codemp_ini').value = '';
-        $('e60_codemp_fim').value = '';
-        $('z01_numcgm').value     = '';
-        $('z01_nome').value       = '';
-        $('dtemissaoini').value   = '';
-        $('dtemissaofim').value   = '';
+        $('pc80_codproc_ini').value = '';
+        $('pc80_codproc_fim').value = '';
+        $('dtemissaoini').value     = '';
+        $('dtemissaofim').value     = '';
     }
 
     /*
-     * Pesquisa os Empenhos para liberação
+     * Pesquisa os Processos de Compra para liberação
     */
 
-    function js_pesquisaEmpenho() {
+    function js_pesquisaProcessoCompra() {
 
-        var dtEmissini = $F('dtemissaoini');
-        var dtEmissfim = $F('dtemissaofim');
-        var codEmpIni  = $F('e60_codemp_ini');
-        var codEmpFim  = $F('e60_codemp_fim');
-        var numCgm     = $F('z01_numcgm');
+        var dtEmissini   = $F('dtemissaoini');
+        var dtEmissfim   = $F('dtemissaofim');
+        var codProcIni   = $F('pc80_codproc_ini');
+        var codProcFim   = $F('pc80_codproc_fim');
 
         $('pesquisar').disabled = true;
         $('limpar').disabled    = true;
 
         js_divCarregando("Aguarde.. Pesquisando ","msgbox");
-        var oParam        = new Object();
-        oParam.exec       = "pesquisaEmpempenho";
-        oParam.codempini  = codEmpIni;
-        oParam.codempfim  = codEmpFim;
-        oParam.numcgm     = numCgm;
-        oParam.dtemissini = dtEmissini;
-        oParam.dtemissfim = dtEmissfim;
+        var oParam          = new Object();
+        oParam.exec         = "pesquisaProcessoCompra";
+        oParam.codprocini   = codProcIni;
+        oParam.codprocfim   = codProcFim;
+        oParam.dtemissini   = dtEmissini;
+        oParam.dtemissfim   = dtEmissfim;
 
         // consulta ajax retorna objeto json
 
         var oAjax        = new Ajax.Request(
-            "emp4_liberarempenhos.RPC.php",
+            "cin4_atestocontint.RPC.php",
             {
                 method    : 'post',
                 parameters: 'json='+js_objectToJson(oParam),
@@ -213,7 +197,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     /*
-     * Preocessa o retono da pesquisa de empenhos para liberacao
+     * Preocessa o retono da pesquisa de processos de compra para liberacao
     */
 
     function js_retornoPesquisa(oAjax) {
@@ -222,35 +206,33 @@ if ($oParam->e30_atestocontinterno != 't') {
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
-            js_openPesquisaEmpenhos(oRetorno.aItens,oRetorno.aItens.length);
+            js_openPesquisaProcessoCompra(oRetorno.aItens,oRetorno.aItens.length);
         }
     }
 
     /*
-     * Mostra a GRID com os registros retornado da pesquisa de empenhos para a liberacao
+     * Mostra a GRID com os registros retornado da pesquisa de processos de compras para a liberacao
     */
 
-    function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
+    function js_openPesquisaProcessoCompra(aProcCompras,iRetornoProcCompras) {
 
 
         /**
          * Adiciona a grid na janela
          */
 
-        oGridEmpenho              = new DBGrid('gridEmpenho');
-        oGridEmpenho.nameInstance = "oGridEmpenho";
-        oGridEmpenho.setHeight((document.body.scrollHeight/2)-50);
-        oGridEmpenho.setCheckbox(0);
-        oGridEmpenho.setHeader(new Array('Numero','Código','Valor','Valor Anulado','Saldo',
-            'CNPJ/CPF','Credor','Data Emissao','Depto Origem'));
-        oGridEmpenho.setCellWidth(new Array("7%","10%","7%",'10%',"7%","15%","16%","10%","14%"));
-        oGridEmpenho.setCellAlign(new Array("center", "center", "right", "right", "right", "center", "left","center","left"));
-        //oGridEmpenho.aHeaders[9].lDisplayed = false;
+        oGridProcessoCompra              = new DBGrid('processoCompra');
+        oGridProcessoCompra.nameInstance = "oGridProcessoCompra";
+        oGridProcessoCompra.setHeight((document.body.scrollHeight/2)-50);
+        oGridProcessoCompra.setCheckbox(0);
+        oGridProcessoCompra.setHeader(new Array('Data de Emissão','Processo de Compras','Departamento','Data da Última Cotação','Resumo'));
+        oGridProcessoCompra.setCellWidth(new Array("15%","16%","24%",'20%',"24%"));
+        oGridProcessoCompra.setCellAlign(new Array("center", "center", "center", "center", "center"))
 
-        windowEmpenhosLiberados = new windowAux('windowEmpenhosLiberados','Empenhos', document.body.getWidth() /1.3);
-        windowEmpenhosLiberados.allowCloseWithEsc(false);
+        windowProcCompraLiberados = new windowAux('windowProcCompraLiberados','Empenhos', document.body.getWidth() /1.3);
+        windowProcCompraLiberados.allowCloseWithEsc(false);
         var sContent  = "<div style='width:100%;'><fieldset>";
-        sContent += "  <div id='ctnGridEmpenhosLiberados' style='width:99%;'>";
+        sContent += "  <div id='ctnGridProcCompraLiberados' style='width:99%;'>";
         sContent += "  </div>";
         sContent += "</fieldset>";
         sContent += "<br>";
@@ -258,110 +240,101 @@ if ($oParam->e30_atestocontinterno != 't') {
         sContent += "  <table id='frmLiberaEmpenho'>";
         sContent += "    <tr align='center'>";
         sContent += "      <td>";
-        sContent += "        <input type='button' id='btnLiberarEmpenho' value='Liberar/Bloquear' onclick='js_liberarempenho();'>";
+        sContent += "        <input type='button' id='btnLiberarProcCompra' value='Liberar/Bloquear' onclick='js_liberarproccompra();'>";
         sContent += "      </td>";
         sContent += "    </tr>";
         sContent += "  </table>";
         sContent += "</center></div>";
-        windowEmpenhosLiberados.setContent(sContent);
-        oGridEmpenho.show($('ctnGridEmpenhosLiberados'));
-        windowEmpenhosLiberados.show();
+        windowProcCompraLiberados.setContent(sContent);
+        oGridProcessoCompra.show($('ctnGridProcCompraLiberados'));
+        windowProcCompraLiberados.show();
 
 
-        $('windowwindowEmpenhosLiberados_btnclose').onclick= function () {
+        $('windowwindowProcCompraLiberados_btnclose').onclick= function () {
 
-            windowEmpenhosLiberados.destroy();
+            windowProcCompraLiberados.destroy();
             $('pesquisar').disabled = false;
             $('limpar').disabled    = false;
         }
 
-        oGridEmpenho.clearAll(true);
+        oGridProcessoCompra.clearAll(true);
 
-        if (iRetornoEmpenhos == 0) {
-            oGridEmpenho.setStatus('Não foram encontrados Registros');
+        if (iRetornoProcCompras == 0) {
+            oGridProcessoCompra.setStatus('Não foram encontrados Registros');
         } else {
-            for (var i = 0; i < aEmpenhos.length; i++) {
+            for (var i = 0; i < aProcCompras.length; i++) {
 
-                with(aEmpenhos[i]) {
+                with(aProcCompras[i]) {
 
                     var aLinha        = new Array();
-                    aLinha[0]     = e60_numemp;
-                    aLinha[1]     = "<a href='#' onclick='javascript: js_mostraDadosEmpenho("+e60_numemp+");'>"+e60_codemp+"/"+e60_anousu+"</a>";
-                    aLinha[2]     = js_formatar(e60_vlremp,'f');
-                    aLinha[3]     = js_formatar(e60_vlranu,'f');
-                    aLinha[4]     = js_formatar(saldo,'f');
-                    aLinha[5]     = js_formatar(z01_cgccpf,'cpfcnpj');
-                    aLinha[6]     = z01_nome.urlDecode().substring(0,30);
-                    aLinha[7]     = js_formatar(e60_emiss,'f');
-                    aLinha[8]     = origem.urlDecode().substring(0,40);
+                    aLinha[0]     = pc80_data;
+                    aLinha[1]     = "<a href='#' onclick='javascript: js_mostraDadosProcCompra("+pc80_codproc+");'>"+pc80_codproc+"</a>";
+                    aLinha[2]     = descrdepto.urlDecode().substring(0,40);
+                    aLinha[3]     = si01_datacotacao;
+                    aLinha[4]     = pc80_resumo.urlDecode().substring(0,70);
 
                     var lMarca    = false;
                     var lBloquear = false;
-                    if (e22_sequencial != "") {
+
+                    if (e233_sequencial != "") {
                         lMarca = true;
                     }
 
-                    if (temordemdecompra == 't') {
-
-                        lBloquear = true;
-                        lMarca    = true;
-
-                    }
-                    oGridEmpenho.addRow(aLinha, false, lBloquear, lMarca);
-                    oGridEmpenho.aRows[i].aCells[7].sEvents += "onMouseOver='js_setAjuda(\""+z01_nome.urlDecode()+"\",true)'";
-                    oGridEmpenho.aRows[i].aCells[7].sEvents += "onMouseOut='js_setAjuda(null, false)'";
-                    oGridEmpenho.aRows[i].aCells[9].sEvents += "onMouseOver='js_setAjuda(\""+origem.urlDecode()+"\",true)'";
-                    oGridEmpenho.aRows[i].aCells[9].sEvents += "onMouseOut='js_setAjuda(null, false)'";
+                    oGridProcessoCompra.addRow(aLinha, false, lBloquear, lMarca);
+                    oGridProcessoCompra.aRows[i].aCells[3].sEvents += "onMouseOver='js_setAjuda(\""+descrdepto.urlDecode()+"\",true)'";
+                    oGridProcessoCompra.aRows[i].aCells[3].sEvents += "onMouseOut='js_setAjuda(null, false)'";
+                    oGridProcessoCompra.aRows[i].aCells[5].sEvents += "onMouseOver='js_setAjuda(\""+pc80_resumo.urlDecode()+"\",true)'";
+                    oGridProcessoCompra.aRows[i].aCells[5].sEvents += "onMouseOut='js_setAjuda(null, false)'";
                 }
             }
         }
 
-        oGridEmpenho.renderRows();
+        oGridProcessoCompra.renderRows();
         $('pesquisar').disabled = false;
         $('limpar').disabled    = false;
         var oMessageBoard = new messageBoard('msg1',
-            'Liberar Empenhos para Ordem de Compra e Liquidação',
-            'Somente os empenhos selecionados serão liberados para geração de Ordem de Compra. Os Empenhos que estiverem desmarcados continuarão ou serão bloqueados',
-            $('windowwindowEmpenhosLiberados_content')
+            'Liberação de Processos de Compras para Licitações',
+            'Somente os processos de compras selecionados serão liberados para vinculação à licitação, os demais permanecerão bloqueados.',
+            $('windowwindowProcCompraLiberados_content')
         );
         oMessageBoard.show();
     }
 
     /*
-     * Libera empenhos
+     * Libera processos de compra
     */
 
-    function js_liberarempenho() {
+    function js_liberarproccompra() {
 
-        var aItens     = oGridEmpenho.aRows;
+        var aItens     = oGridProcessoCompra.aRows;
 
-        if (!confirm('Está rotina irá Liberar os empenhos marcados e Bloquear os empenhos desmarcados contidos na lista . Deseja Continuar?')){
+        if (!confirm('Está rotina irá Liberar os Processos de Compras marcados e Bloquear os empenhos desmarcados contidos na lista. Deseja Continuar?')){
             return false;
         }
 
         js_divCarregando("Aguarde.. Processando ","msgbox");
         $('pesquisar').disabled         = true;
         $('limpar').disabled            = true;
-        $('btnLiberarEmpenho').disabled = true;
+        $('btnLiberarProcCompra').disabled = true;
 
         var oParam        = new Object();
-        oParam.exec       = "processaEmpenhoLiberados";
-        oParam.aEmpenhos  = new Array();
+        oParam.exec       = "processaProcessoCompraLiberados";
+        oParam.aProcCompras  = new Array();
 
         for (var i = 0; i < aItens.length; i++) {
 
-            var oEmpenho          = new Object();
-            oEmpenho.iNumemp  = aItens[i].aCells[1].getValue();
-            oEmpenho.lLiberar = aItens[i].isSelected;
-            oParam.aEmpenhos.push(oEmpenho);
+            var oProcCompra          = new Object();
+            oProcCompra.iNumProc  = aItens[i].aCells[2].getValue();
+            oProcCompra.lLiberar = aItens[i].isSelected;
+            oParam.aProcCompras.push(oProcCompra);
 
         }
         var oAjax        = new Ajax.Request(
-            "emp4_liberarempenhos.RPC.php",
+            "cin4_atestocontint.RPC.php",
             {
                 method    : 'post',
                 parameters: 'json='+js_objectToJson(oParam),
-                onComplete: js_retornoLiberarEmpenho
+                onComplete: js_retornoLiberarProcCompra
             }
         );
     }
@@ -370,17 +343,17 @@ if ($oParam->e30_atestocontinterno != 't') {
      * Retorno dos empenhos liberados
     */
 
-    function js_retornoLiberarEmpenho(oAjax) {
+    function js_retornoLiberarProcCompra(oAjax) {
 
         js_removeObj("msgbox");
-        $('btnLiberarEmpenho').disabled  = false;
+        $('btnLiberarProcCompra').disabled  = false;
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
 
             alert('Processo efetuado com sucesso.');
-            windowEmpenhosLiberados.destroy();
-            js_pesquisaEmpenho();
+            windowProcCompraLiberados.destroy();
+            js_pesquisaProcessoCompra();
         } else {
             alert(oRetorno.message.urlDecode());
         }
@@ -394,7 +367,7 @@ if ($oParam->e30_atestocontinterno != 't') {
 
         if (lShow) {
 
-            var el =  $('gridgridEmpenho');
+            var el =  $('gridprocessoCompra');
             var x  = 0;
             var y  = el.offsetHeight;
 
@@ -421,64 +394,42 @@ if ($oParam->e30_atestocontinterno != 't') {
         }
     }
 
-    function js_pesquisae60_codempIni(){
-        var e60_codemp_ini = $('e60_codemp_ini').value;
-        var sUrl1          = 'func_empempenho.php?libperm=T&funcao_js=parent.js_mostracodempIni|e60_codemp|e60_anousu';
-
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
-    }
-    function js_mostracodempIni(chave1,chave2){
-        $('e60_codemp_ini').value = chave1+'/'+chave2;
-        db_iframe_empempenho.hide();
+    function js_pesquisasi01_processocompraIni(){
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocIni|pc80_codproc', 'Pesquisa', true, 0);
     }
 
-    function js_pesquisae60_codempFim(){
-        var e60_codemp_fim = $('e60_codemp_fim').value;
-        var sUrl1          = 'func_empempenho.php?libperm=T&funcao_js=parent.js_mostracodempFim|e60_codemp|e60_anousu';
-
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
-
-    }
-    function js_mostracodempFim(chave1,chave2){
-        $('e60_codemp_fim').value = chave1+'/'+chave2;
-        db_iframe_empempenho.hide();
+    function js_mostrapcprocIni(chave1){
+        $('pc80_codproc_ini').value = chave1;
+        db_iframe_pcproc.hide();
     }
 
-    function js_pesquisa_z01_numcgm(mostra){
-        var z01_numcgm  = $('z01_numcgm').value;
-        var sUrl1       = 'func_nome.php?funcao_js=parent.js_mostraz01_numcgm1|z01_numcgm|z01_nome';
-        var sUrl2       = 'func_nome.php?pesquisa_chave='+z01_numcgm+'&funcao_js=parent.js_mostraz01_numcgm';
+    function js_pesquisasi01_processocompraFim(){
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp', 'db_iframe_pcproc', 'func_pcprocnovo.php?funcao_js=parent.js_mostrapcprocFim|pc80_codproc', 'Pesquisa', true, 0);
+    }
 
-        if(mostra == true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_cgm',sUrl1,'Pesquisa',true);
-        }else{
-            if(z01_numcgm != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_cgm',sUrl2,'Pesquisa',false);
-            }else{
-                $('z01_numcgm').value = '';
-                $('z01_nome').value   = '';
-            }
-        }
-    }
-    function js_mostraz01_numcgm(erro,chave){
-        if(erro == true){
-            $('z01_numcgm').focus();
-            $('z01_numcgm').value = '';
-            $('z01_nome').value   = '';
-            alert(chave);
-        } else {
-            $('z01_nome').value   = chave;
-        }
-    }
-    function js_mostraz01_numcgm1(chave1,chave2){
-        $('z01_numcgm').value = chave1;
-        $('z01_nome').value   = chave2;
-        db_iframe_cgm.hide();
+    function js_mostrapcprocFim(chave1){
+        $('pc80_codproc_fim').value = chave1;
+        db_iframe_pcproc.hide();
     }
 
     function js_mostraDadosEmpenho(empChave) {
 
         js_JanelaAutomatica('empempenho',empChave);
-        $('Jandb_janelaReceita').style.zIndex = '10000';
+        $('Jandb_iframe_processos_filtrados').style.zIndex = '10000';
     }
+
+    function js_mostraDadosProcCompra(pcompraChave) {
+
+        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoprocomp',
+            'db_iframe_pesquisa_processo',
+            'com3_pesquisaprocessocompras003.php?pc80_codproc=' + pcompraChave,
+            'Consulta Processo de Compras',
+            true,
+            0
+        );
+
+        $('Jandb_iframe_pesquisa_processo').style.zIndex = '10000';
+
+    }
+
 </script>

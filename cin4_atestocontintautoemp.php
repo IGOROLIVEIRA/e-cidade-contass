@@ -239,7 +239,7 @@ if ($oParam->e30_atestocontinterno != 't') {
         oGridAutorizacao.setHeight((document.body.scrollHeight/2)-50);
         oGridAutorizacao.setCheckbox(0);
         oGridAutorizacao.setHeader(new Array('Data de Emissão','Autorização de Empenho','Credor','Valor','Resumo'));
-        oGridAutorizacao.setCellWidth(new Array("18%","16%","25%","7%","43%"));
+        oGridAutorizacao.setCellWidth(new Array("14%","20%","28%","7%","30%"));
         oGridAutorizacao.setCellAlign(new Array("center", "center", "center", "right", "center"));
 
         windowAutorizacoesLiberadas = new windowAux('windowAutorizacoesLiberadas','Autorizações', document.body.getWidth() /1.3);
@@ -284,9 +284,9 @@ if ($oParam->e30_atestocontinterno != 't') {
 
                     aLinha[0]     = e54_emiss;
                     aLinha[1]     = "<a href='javascript:;' onclick='js_mostraDadosAutorizacao("+e54_autori+");'>" + e54_autori + "</a>";
-                    aLinha[2]     = z01_nome.urlDecode().substring(0,40);
+                    aLinha[2]     = z01_nome.urlDecode().substring(0,50);
                     aLinha[3]     = js_formatar(e54_valor,'f');
-                    aLinha[4]     = e54_resumo.urlDecode().substring(0, 105);//oMovimento.sDespacho.urlDecode().replace(/<br>/g, '');
+                    aLinha[4]     = e54_resumo.urlDecode().substring(0, 55);
 
                     var lMarca    = false;
                     var lBloquear = false;
@@ -294,13 +294,6 @@ if ($oParam->e30_atestocontinterno != 't') {
                         lMarca = true;
                     }
 
-                    if (temordemdecompra == 't') {
-
-                        lBloquear = true;
-                        lMarca    = true;
-
-                    }
-                    //encodeURIComponent(tagString($F('e54_resumo')));
                     oGridAutorizacao.addRow(aLinha, false, lBloquear, lMarca);
                     oGridAutorizacao.aRows[i].aCells[3].sEvents += "onMouseOver='js_setAjuda(\""+z01_nome+"\",true)'";
                     oGridAutorizacao.aRows[i].aCells[3].sEvents += "onMouseOut='js_setAjuda(null, false)'";

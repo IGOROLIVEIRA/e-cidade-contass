@@ -1212,7 +1212,7 @@ if(isset($incluir)) {
 
     /* Ocorrência 11933
      * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
-     * e valida se a autorização de empenho está desbloqueada na rotia Controle Interno - Procedimentos - Atesto de Controle Interno
+     * e valida se a autorização de empenho está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
      */
     $bAtestoContInt = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
     $clempautorizliberado->sql_record($clempautorizliberado->sql_query(null, "*", "", "e232_autori = $chavepesquisa"));
