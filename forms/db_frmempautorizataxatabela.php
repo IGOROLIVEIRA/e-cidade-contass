@@ -757,4 +757,10 @@ db_app::load("DBFormCache.js");
             ',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
         jan.moveTo(0,0);
     }
+    js_carregarfornecedor();
+    function js_carregarfornecedor() {
+      let fornecedor = <?=$e54_numcgm?>
+      console.log(fornecedor);
+
+    }
 </script>
