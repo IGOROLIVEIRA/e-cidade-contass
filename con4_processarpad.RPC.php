@@ -653,9 +653,11 @@ case "processarBalancete" :
 
     case "processarPCA" :
 
-    $sSql  = "SELECT db21_codigomunicipoestado FROM db_config where codigo = ".db_getsession("DB_instit");
+    $sSql  = "SELECT db21_codigomunicipoestado,si09_tipoinstit,si09_codorgaotce FROM db_config left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
     $rsInst = db_query($sSql);
     $sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+    $iTipoInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
+    $iCodOrgao  = str_pad(db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce, 2, "0", STR_PAD_LEFT);
 
     $iAnoReferencia = db_getsession('DB_anousu');
 
@@ -670,6 +672,7 @@ case "processarBalancete" :
 
       foreach ($oParam->arquivos as $sArquivo) {
 
+
         if (file_exists("{$sArquivo}_{$iAnoReferencia}.pdf")) {
 
         	$oArquivoCsv          = new stdClass();
@@ -679,9 +682,11 @@ case "processarBalancete" :
 
         } else {
 
-          $oRetorno->status  = 2;
-          $sGetMessage       = "Arquivo {$sArquivo}_{$iAnoReferencia}.pdf não encontrado. Envie este arquivo e tente novamente";
-          $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+          if($iTipoInst == 5 && $sArquivo == 'DRAA') {
+              $oRetorno->status = 2;
+              $sGetMessage = "Arquivo {$sArquivo}_{$iAnoReferencia}.pdf não encontrado. Envie este arquivo e tente novamente";
+              $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
+          }
 
         }
       }
@@ -691,12 +696,12 @@ case "processarBalancete" :
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
       //print_r($aListaArquivos);
-      system("rm -f PCA_{$sInst}_{$iAnoReferencia}.zip");
-      system("bin/zip -q PCA_{$sInst}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
       //echo $aListaArquivos;
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "PCA_{$sInst}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "PCA_{$sInst}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
 
       $oRetorno->itens  = $aArrayArquivos;
@@ -904,9 +909,8 @@ case "processarBalancete" :
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
-          if($sArquivo != "IDE") {
-            $oArquivo->setTipoGeracao($oParam->tipoGeracao);
-          }
+
+          $oArquivo->setTipoGeracao($oParam->tipoGeracao);
 
           $oArquivoCsv = new stdClass();
           try {
@@ -1002,6 +1006,7 @@ case "processarBalancete" :
 			}
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
+				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
 				$sSql = "
 					SELECT l47_dataenvio AS dataenvio,
 						   editaldocumentos.l48_caminho AS caminho,
@@ -1053,7 +1058,7 @@ case "processarBalancete" :
 					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
 					INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
 					INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
-					WHERE liclancedital.l47_dataenvio = '$oParam->diaReferencia'
+					WHERE liclancedital.l47_dataenvio = '$dia'
 				";
 
 				$rsAnexos = db_query($sSql);
@@ -1086,7 +1091,8 @@ case "processarBalancete" :
 							break;
 					}
 					$valores = explode('/', $oAnexo->caminho);
-					$extensao = explode('.', $valores[4]);
+					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
+					$extensao = explode('.', $nomeArq);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
 					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
