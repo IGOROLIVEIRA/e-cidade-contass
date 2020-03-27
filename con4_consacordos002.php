@@ -51,16 +51,20 @@ if (trim($oGet->ac16_contratado) != "") {
 }
 
 $sAnd = $sWhere != "" ? " and " : "";
-if (trim($oGet->ac16_coddepto) != "") {
+if (trim($oGet->deptos_inclusao) != "") {
+    $sWhere .= "{$sAnd} ac16_coddepto in ({$oGet->deptos_inclusao})";
+}
 
-	$sWhere .= "{$sAnd} ( ac16_coddepto = {$oGet->ac16_coddepto}";
-	$sWhere .= "          or ac16_deptoresponsavel = {$oGet->ac16_coddepto} )";
+$sAnd = $sWhere != "" ? " and " : "";
+if (trim($oGet->deptos_responsavel) != ''){
+    $sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oGet->deptos_responsavel})";
 }
 
 $sCampos    = "ac16_sequencial, (ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
 $sCampos   .= "ac16_resumoobjeto, ac16_datainicio, ac16_datafim, descrdepto, z01_nome";
 $oDaoAcordo = db_utils::getDao("acordo");
 $sSql       = $oDaoAcordo->sql_query(null, $sCampos, null, $sWhere);
+
 ?>
 <html>
 <head>

@@ -39,7 +39,6 @@ $clrotulo = new rotulocampo;
 $db_opcao = 3;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
-$clrotulo->label("ac16_coddepto");
 $clrotulo->label("descrdepto");
 $clrotulo->label("z01_nome");
 $clrotulo->label("ac16_contratado");
@@ -55,22 +54,15 @@ db_app::load("widgets/windowAux.widget.js, widgets/DBToogle.widget.js");
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
-<!--    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>-->
-<!--    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>-->
-<!--    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>-->
-<!--    <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>-->
-<!--    <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>-->
 <style>
 
  .fora {background-color: #d1f07c;}
-
-    #fieldset_depart_responsavel, #fieldset_depart_inclusao{
-        width: 500px;
-        text-align: center;
+    #fieldset_depart_inclusao, #fieldset_depart_responsavel {
+     width: 500px;
     }
 
-    #fieldset_depart_responsavel table, #fieldset_depart_inclusao table{
-        margin: 0 auto;
+    #fieldset_depart_inclusao table, #fieldset_depart_responsavel table{
+     margin: 0 auto;
     }
 </style>
 </head>
@@ -157,7 +149,7 @@ db_app::load("widgets/windowAux.widget.js, widgets/DBToogle.widget.js");
                     <td>
                         <?php
                         $oDptoInclusao = new cl_arquivo_auxiliar;
-                        $oDptoInclusao->cabecalho = "<strong>Depto. Inclusão</strong>";
+                        $oDptoInclusao->cabecalho = "<strong>Depto. de Inclusão</strong>";
                         $oDptoInclusao->codigo = "coddepto"; //chave de retorno da func
                         $oDptoInclusao->descr  = "descrdepto";   //chave de retorno
                         $oDptoInclusao->nomeobjeto = 'depart_inclusao';
@@ -173,8 +165,8 @@ db_app::load("widgets/windowAux.widget.js, widgets/DBToogle.widget.js");
                         $oDptoInclusao->tipo = 2;
                         $oDptoInclusao->top = 1;
                         $oDptoInclusao->linhas = 4;
-                        $oDptoInclusao->vwhidth = 600;
-						$oDptoInclusao->Labelancora = "Depto. Inclusão:";
+                        $oDptoInclusao->vwidth = 390;
+						$oDptoInclusao->Labelancora = "Depto. de Inclusão:";
                         $oDptoInclusao->funcao_gera_formulario();
                         ?>
                     </td>
@@ -199,7 +191,7 @@ db_app::load("widgets/windowAux.widget.js, widgets/DBToogle.widget.js");
                         $oDptoResponsavel->tipo = 2;
                         $oDptoResponsavel->top = 1;
                         $oDptoResponsavel->linhas = 4;
-                        $oDptoResponsavel->vwhidth = 400;
+                        $oDptoResponsavel->vwidth = 390;
 						$oDptoResponsavel->Labelancora = "Depto. Responsável:";
                         $oDptoResponsavel->funcao_gera_formulario();
                         ?>
@@ -229,7 +221,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 function js_abrir(){
 
  var ac16_sequencial  = "";
- var ac16_coddepto    = "";
+ // var ac16_coddepto    = "";
  var ac16_contratado  = "";
  var ac16_origem      = $F('ac16_origem');
  var sQuery           = "";
@@ -238,22 +230,37 @@ function js_abrir(){
   ac16_sequencial = $F('ac16_sequencial');
  }
 
- if ($F('ac16_coddepto') != "") {
-  ac16_coddepto = $F('ac16_coddepto');
- }
+    let aDeptosInclusao = $('depart_inclusao');
+    let sDeptosInclusao = "";
+    sVirgula = "";
+
+    for(let iRowDepto = 0; iRowDepto < $('depart_inclusao').length; iRowDepto++){
+        let oDeptoInclusao = aDeptosInclusao[iRowDepto];
+        sDeptosInclusao += sVirgula+oDeptoInclusao.value;
+        sVirgula = ", ";
+    }
+
+    let aDeptosResponsavel = $('depart_responsavel');
+    let sDeptosResponsavel = "";
+    sVirgula = "";
+
+    for(let iRowDeptoResp = 0; iRowDeptoResp < $('depart_responsavel').length; iRowDeptoResp++){
+        let oDeptoResponsavel = aDeptosResponsavel[iRowDeptoResp];
+        sDeptosResponsavel += sVirgula+oDeptoResponsavel.value;
+        sVirgula = ", ";
+    }
 
  if ($F('ac16_contratado') != "") {
   ac16_contratado = $F('ac16_contratado');
  }
 
-
-
  funcao_js = 'parent.retornoSelecao|ac16_sequencial';
 
  sQuery += "ac16_sequencial="+ac16_sequencial;
- sQuery += "&ac16_coddepto="+ac16_coddepto;
  sQuery += "&ac16_contratado="+ac16_contratado;
  sQuery += "&ac16_origem="+ac16_origem;
+ sQuery += "&deptos_inclusao="+sDeptosInclusao;
+ sQuery += "&deptos_responsavel="+sDeptosResponsavel;
  sQuery += "&funcao_js="+funcao_js;
 
  js_OpenJanelaIframe('','db_iframe_consulta',
