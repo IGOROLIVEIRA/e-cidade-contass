@@ -130,6 +130,7 @@ if(!empty($oPost->ac50_sequencial)) {
 $sWhere     .= "          or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." ) ";*/
 
 $sSqlAcordo  = $clacordo->sql_query_completo(null, "DISTINCT acordo.ac16_sequencial, acordotipo.ac04_descricao, acordo.ac16_deptoresponsavel, depresp.descrdepto, acordo.ac16_datafim", $sOrder, $sWhere);
+//print_r($sSqlAcordo);die();
 $rsSqlAcordo = $clacordo->sql_record($sSqlAcordo);
 if ( $clacordo->numrows == 0  ) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");

@@ -132,6 +132,29 @@ $oRotulo->label("ac50_descricao");
                     </table>
                 </td>
             </tr>
+                <tr id="trDepartResponsavel" style="display:none;">
+                    <td colspan="4">
+                        <table>
+                            <tr>
+                                <td nowrap="nowrap"><?db_ancora('<b>Depto. Responsável:</b>', 'js_pesquisaDepartResp(true);', 1)?></td>
+                                <td nowrap="nowrap">
+									<?php
+									db_input('iCodigoDepartResponsavel', 17, @$Icoddepto, true, 'text', 1, " onchange='js_pesquisaDepartResp(false);' ");
+									db_input('sDescricaoDepartResponsavel', 26, @$Idescrdepto, true, 'text', 3, "");
+									?>
+                                </td>
+                                <td>
+                                    <input type="button" onClick="js_lancarDepartResponsavel()" value="Lançar" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div id="ctnDepartResponsavel"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             <tr id="trAcordos">
               <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
                  <?php
@@ -539,7 +562,6 @@ function js_pesquisaDepartResp(lMostra) {
 }
 
 function js_completaDepartResponsavel(sDescricao, lErro) {
-
     $('sDescricaoDepartResponsavel').value = sDescricao;
 
     if (lErro) {
@@ -549,7 +571,6 @@ function js_completaDepartResponsavel(sDescricao, lErro) {
 }
 
 function js_mostraDepartResponsavel (iCodigo, sDescricao) {
-
     $('iCodigoDepartResponsavel').value = iCodigo;
     $('sDescricaoDepartResponsavel').value = sDescricao;
     db_iframe_departamento_resp.hide();
