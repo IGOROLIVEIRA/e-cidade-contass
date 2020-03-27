@@ -25,13 +25,37 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once('model/pessoal/calculoatuarial/CalculoAtuarialBase.model.php');
-
 /**
- * Calculo Atuarial RTM
+ * Calculo Atuarial BB
  * @author Robson de Jesus <robson.silva@contassconsultoria.com.br>
  */
-abstract class CalculoAtuarialRTMBase extends CalculoAtuarialBase {
+ class CalculoAtuarialBB {
 
+ 	function __construct()
+	{
+		
+	}
 
-}
+ 	public function processar($anofolha,$mesfolha,$where) {
+ 		$oAtivos = $this->getSpecificInstance($anofolha,'Ativos');
+ 		$oAtivos->processar($anofolha,$mesfolha,$where);
+
+ 		$oInativos = $this->getSpecificInstance($anofolha,'Inativos');
+ 		$oInativos->processar($anofolha,$mesfolha,$where);
+
+ 		$oPensionistas = $this->getSpecificInstance($anofolha,'Pensionistas');
+ 		$oPensionistas->processar($anofolha,$mesfolha,$where);
+ 	}
+
+ 	private function getSpecificInstance($anofolha,$sArquivo) {
+ 		$sPathBB = 'model/pessoal/calculoatuarial/bb/';
+ 		if (file_exists($sPathBB."{$anofolha}/CalculoAtuarialBB{$sArquivo}{$anofolha}.model.php")) {
+ 			require_once($sPathBB."{$anofolha}/CalculoAtuarialBB{$sArquivo}{$anofolha}.model.php");
+ 			$sClassName = "CalculoAtuarialBB{$sArquivo}";
+ 			return new $sClassName;
+ 		}
+ 		require_once($sPathBB."CalculoAtuarialBB{$sArquivo}.model.php");
+ 		$sClassName = "CalculoAtuarialBB{$sArquivo}";
+ 		return new $sClassName;
+ 	}
+ }

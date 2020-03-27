@@ -25,13 +25,48 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once('model/pessoal/calculoatuarial/CalculoAtuarialBase.model.php');
-
 /**
- * Calculo Atuarial RTM
+ * Calculo Atuarial RTM Ativos
  * @author Robson de Jesus <robson.silva@contassconsultoria.com.br>
  */
-abstract class CalculoAtuarialRTMBase extends CalculoAtuarialBase {
+abstract class CalculoAtuarialBase {
 
+   /**
+    * arquivo que sera gerado
+    * @var String
+    */
+	protected $sFile;
 
+   /**
+    *
+    * @var String
+    */
+    protected $file;
+
+    /**
+     * gerar dados para o arquivo
+     * @param integer $iAnoFolha
+     * @param integer $iMesFolha
+     * @param string $sWhere
+     */
+	public function processar($iAnoFolha,$iMesFolha,$sWhere) {
+		
+	}
+
+	protected function abreArquivo()
+	{
+		$this->file = fopen($this->sFile,'w');
+	}
+
+	protected function adicionaLinha($sLine)
+	{
+		fputs($this->file,$sLine."\r\n");
+	}
+	
+	protected function fechaArquivo()
+	{
+		fclose($this->file);
+	}
+
+	
 }

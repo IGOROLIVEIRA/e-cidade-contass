@@ -28,10 +28,10 @@
 require_once('model/pessoal/calculoatuarial/CalculoAtuarialBase.model.php');
 
 /**
- * Calculo Atuarial RTM
+ * Calculo Atuarial BB
  * @author Robson de Jesus <robson.silva@contassconsultoria.com.br>
  */
-abstract class CalculoAtuarialRTMBase extends CalculoAtuarialBase {
+abstract class CalculoAtuarialBBBase extends CalculoAtuarialBase {
 
-
+	
 }
