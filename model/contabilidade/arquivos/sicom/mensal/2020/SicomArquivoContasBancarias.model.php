@@ -167,7 +167,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             o15_codtri as recurso
 				       from saltes 
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
-				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu /*and c61_codtce = 42550*/
+				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
@@ -1103,9 +1103,80 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
       for ($icont40 = 0; $icont40 < pg_num_rows($rsCtasReg40); $icont40++) {
 
         $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
-        $oMovi40->tiporegistro = 40;
-        $rsVerificaReg40 = db_query($sSqlVerifica);
-        $oVerificaReg40 = db_utils::fieldsMemory($rsVerificaReg40, $icont40);
+
+        $sSqlVerifica = "SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
+        $sSqlVerifica .= "WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                              AND si95_banco = '$oMovi40->c63_banco'
+                              AND si95_agencia = '$oMovi40->c63_agencia' 
+                              AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                              AND si95_contabancaria = '$oMovi40->c63_conta'
+                              AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                              AND si95_tipoconta::int = $oMovi40->tipoconta 
+                              AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ."
+                              AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102019' AS ano, si95_codctb, si95_nroconvenio FROM ctb102019 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                               AND si95_banco = '$oMovi40->c63_banco'
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102018' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102018 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                               AND si95_banco = '$oMovi40->c63_banco' 
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102017' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102017 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                               AND si95_banco = '$oMovi40->c63_banco' 
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102016' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102016 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                               AND si95_banco = '$oMovi40->c63_banco'
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta'
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102015' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102015 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
+                               AND si95_banco = '$oMovi40->c63_banco'
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+        $sSqlVerifica .= " UNION ";
+        $sSqlVerifica .= " SELECT 'ctb102014' AS ano, si95_codctb, si95_nroconvenio::varchar FROM ctb102014 ";
+        $sSqlVerifica .= " WHERE si95_codorgao::int = '$oMovi40->si09_codorgaotce' 
+                               AND si95_banco = '$oMovi40->c63_banco' 
+                               AND si95_agencia = '$oMovi40->c63_agencia' 
+                               AND si95_digitoverificadoragencia = '$oMovi40->c63_dvagencia' 
+                               AND si95_contabancaria = '$oMovi40->c63_conta' 
+                               AND si95_digitoverificadorcontabancaria = '$oMovi40->c63_dvconta' 
+                               AND si95_tipoconta::int = $oMovi40->tipoconta 
+                               AND si95_instit = " . db_getsession('DB_instit');
+
+        $rsResultVerifica40 = db_query($sSqlVerifica);
+        $oVerificaReg40 = db_utils::fieldsMemory($rsResultVerifica40, 0);
 
         $sSql40 = "SELECT 'ctb402020' AS ano, ctb402020.* FROM ctb402020
                      JOIN ctb102020 ON (si95_codctb, si95_nroconvenio::varchar, si95_mes) = (si101_codctb, si101_nroconvenio, si101_mes)
@@ -1139,15 +1210,15 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                        AND si101_instit = " . db_getsession('DB_instit');
 
         $rsQuery40 = db_query($sSql40);
-        $oReg40 = db_utils::fieldsMemory($rsQuery40, $icont40);
+        $oReg40 = db_utils::fieldsMemory($rsQuery40, 0);
 
-        if ($oMovi40->contaconvenio == 1 && ($oVerificaReg40->si95_nroconvenio != $oReg40->si101_nroconvenio) && pg_num_rows($rsQuery40) == 0) {
+        if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio) && pg_num_rows($rsQuery40) == 0) {
 
           $cCtb40 = new cl_ctb402020();
 
           $cCtb40->si101_tiporegistro = 40;
           $cCtb40->si101_codorgao = $oMovi40->si09_codorgaotce;
-          $cCtb40->si101_codctb = ($oMovi40->codtce != 0 || $oMovi40->codtce != NULL) ? $oMovi40->codtce : $oMovi40->codctb;
+          $cCtb40->si101_codctb = $oMovi40->codtce != 0 ? $oMovi40->codtce : $oMovi40->codctb;
           $cCtb40->si101_desccontabancaria = substr($oMovi40->desccontabancaria,0,50);
           $cCtb40->si101_nroconvenio = $oMovi40->nroconvenio;
           $cCtb40->si101_dataassinaturaconvenio = ($oMovi40->dataassinaturaconvenio == NULL || $oMovi40->dataassinaturaconvenio == ' ') ? NULL : $oMovi40->dataassinaturaconvenio;
@@ -1161,9 +1232,6 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         }
       }
     }
-
-
-
 
     /*
      * REGISTRO 50 CONTAS ENCERRADAS
