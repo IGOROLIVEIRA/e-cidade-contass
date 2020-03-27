@@ -1,6 +1,6 @@
 <?php
 
-require_once("model/MSC.model.php");
+require_once("model/contabilidade/arquivos/msc/".db_getsession("DB_anousu")."/MSC.model.php");
 
 class MSCXbrl extends MSC {
 
@@ -126,7 +126,7 @@ class MSCXbrl extends MSC {
           $xbrl->text($this->getConta());
         $xbrl->endElement();//gl-cor:accountMainID
 
-        for ($ic = 1; $ic <= 6; $ic++) {
+        for ($ic = 1; $ic <= 7; $ic++) {
             $IC = "iIC".$ic;
             $getIC = "getIC".$ic;
             $getTipoIC = "getTipoIC".$ic;
@@ -185,7 +185,7 @@ class MSCXbrl extends MSC {
 
     $this->setConta($oRegistro->conta);
 
-    for ($ic = 1; $ic <= 6; $ic++) {
+    for ($ic = 1; $ic <= 7; $ic++) {
       $IC = "IC".$ic;
       $TipoIC = "TipoIC".$ic;
       $setIC = "setIC".$ic;
@@ -206,7 +206,7 @@ class MSCXbrl extends MSC {
 
     $this->iConta = "";
 
-    for ($ic = 1; $ic <= 6; $ic++) {
+    for ($ic = 1; $ic <= 7; $ic++) {
       $IC     = "iIC".$ic;
       $TipoIC = "sTipoIC".$ic;
       $this->{$IC} = "";

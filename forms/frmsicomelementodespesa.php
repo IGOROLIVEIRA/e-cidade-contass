@@ -45,8 +45,18 @@
   <td><strong>Elemento da Despesa:</strong></td>
   <td ><input type="text" name="elementoEcidade" id="elementoEcidade" maxlength="8" 
   onkeyup="js_ValidaCampos(this,1,'O Código','f','f',event);" size="8"></td>
-  <td><input type="text" name="elementoSicom" id="elementoSicom" maxlength="8" 
+  <td><input type="text" name="elementoSicom" id="elementoSicom" maxlength="8"
   onkeyup="js_ValidaCampos(this,1,'O Código','f','f',event);" size="8"></td>
+  </tr>
+
+  <tr>
+      <td><strong>De/Para Desdobramento</strong></td>
+      <td>
+          <select name="deParaDesdobramento" id="deParaDesdobramento" onchange="js_changeDePara(this.value);">
+              <option value="2">Não</option>
+              <option value="1">Sim</option>
+          </select>
+      </td>
   </tr>
   
   <tr>
@@ -163,11 +173,21 @@ function proximo(){
 /**
  * passar valores para os campos
  */
-function pegar_valor(param1, param2, param3) {
+function pegar_valor(param1, param2, param3, param4) {
 	 
 	$('codigo').value = param1;
 	$('elementoEcidade').value = param2;
 	$('elementoSicom').value = param3;
+
+	if(param4 && param4 == 'Sim'){
+        document.getElementById("elementoEcidade").maxLength = 12;
+        document.getElementById("elementoEcidade").size = 12;
+        document.getElementById("deParaDesdobramento").options[1].selected = true;
+    } else {
+        document.getElementById("elementoEcidade").maxLength = 8;
+        document.getElementById("elementoEcidade").size = 8;
+        document.getElementById("deParaDesdobramento").options[0].selected = true;
+    }
 	fechar();
 	
 }
@@ -184,6 +204,7 @@ function fechar(){
 function cria_tabela(json){
 
 	var jsonObj = eval("("+json.responseText+")");
+	console.log(jsonObj);
 	var tabela;
 	var color = "#e796a4";
 	tabela  = "<table id=\"TabDbLov\" cellspacing=\"1\" cellpadding=\"2\" border=\"1\">";
@@ -205,7 +226,10 @@ function cria_tabela(json){
 	tabela += "Elemento SICOM";
 	tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
 	tabela += "Instituição";
-	tabela += "</td></tr>";
+	tabela += "</td>";
+    tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
+    tabela += "De/Para Desdobramento";
+    tabela += "</td></tr>";
 
 	try {
 	
@@ -219,19 +243,23 @@ function cria_tabela(json){
 	
 			tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].codigo+"</a>";	
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].codigo+"</a>";
 			
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].elementoEcidade+"</a>";	
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].elementoEcidade+"</a>";
 			
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].elementoSicom+"</a>";
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].elementoSicom+"</a>";
 
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
-			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].instituicao+"</a>";
+			+jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+jsonObj[i].instituicao+"</a>";
+
+            tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
+            tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
+            +jsonObj[i].elementoSicom+"','"+jsonObj[i].deParaDesdobramento+"')\">"+ jsonObj[i].deParaDesdobramento === '' ? '' : jsonObj[i].deParaDesdobramento +"</a>";
 			
 			tabela += "</td></tr>";
 			
@@ -244,5 +272,16 @@ function cria_tabela(json){
 	conteudo.innerHTML += tabela;
   conteudo.style.visibility = "visible";
 	
+}
+
+function js_changeDePara(value) {
+    if (value == 1) {
+        document.getElementById("elementoEcidade").maxLength = 12;
+        document.getElementById("elementoEcidade").size = 12;
+    } else {
+        document.getElementById("elementoEcidade").value = document.getElementById("elementoEcidade").value.substr(0, 8)
+        document.getElementById("elementoEcidade").maxLength = 8;
+        document.getElementById("elementoEcidade").size = 8;
+    }
 }
 </script>

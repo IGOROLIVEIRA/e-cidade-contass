@@ -1285,7 +1285,7 @@ class licitacao {
             $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_edital}/{$oDadosLicitacao->l20_anousu}");
             $oAutorizacao->setModalidade($oDadosLicitacao->l20_numero);
             /**
-             * Verifico o tipo de origem da compra pelo codigo do tribunal
+             * Verifico o tipo de origem dalic4_editaldocumentos compra pelo codigo do tribunal
              *  @OC7425
              *  1 ? Não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
              *  2 ? Licitação;

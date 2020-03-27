@@ -104,7 +104,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         $clrec11 = new cl_rec112020();
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
-        $rsResult10 = db_receitasaldosicom(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
+        $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
         // db_criatabela($rsResult10);
 
         $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
@@ -145,91 +145,102 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
             $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte FROM conlancamrec
+            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte, k81_regrepasse, k81_exerc, k81_emparlamentar FROM conlancamrec
                JOIN conlancamdoc ON c71_codlan = c74_codlan
                JOIN conhistdoc ON c71_coddoc = c53_coddoc
                JOIN conlancam ON c70_codlan = c74_codlan
                JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+               JOIN conlancamcorrente ON c86_conlancam = c70_codlan
+               JOIN corrente ON (c86_id, c86_data, c86_autent) = (corrente.k12_id, corrente.k12_data, corrente.k12_autent)
+               LEFT JOIN corplacaixa ON (corrente.k12_id, corrente.k12_data, corrente.k12_autent) = (k82_id, k82_data, k82_autent)
+               LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla    
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                  AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
                         OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
-               ORDER BY 4, 3";
+               GROUP BY 1, 2, 3, 4, 5, 6, 7 ORDER BY 4, 3, 6";
 
-      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x 
+            /* $sSqlValor = "SELECT SUM(c70_valor) c70_valor, k81_regrepasse, k81_exerc, k81_emparlamentar, o57_fonte, c53_tipo FROM (" . $sSql . ") x
                     WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
-                        OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))";
+                        OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49')) GROUP BY 2, 3, 4, 5, 6 ORDER BY 3"; */
 
-      $rsDocRec = db_query($sSql);
-      $rsDocRecVlr = db_query($sSqlValor);
+            $rsDocRec = db_query($sSql);
+            //$rsDocRecVlr = db_query($sSqlValor);
 
-      $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
-      $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr, 0);
+            $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
+//            $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr, 0);
 
-      if (($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
+            if (($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
 
-            if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
+                if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
+                    $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
+                    foreach ($oNaturezaReceita as $oNatureza) {
 
-                $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
-                foreach ($oNaturezaReceita as $oNatureza) {
+                        if ($oNatureza->getAttribute('instituicao') == db_getsession("DB_instit")
+                            && $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita
+                        ) {
+                            $sNaturezaReceita = $oNatureza->getAttribute('receitaSicom');
+                            break;
 
-                    if ($oNatureza->getAttribute('instituicao') == db_getsession("DB_instit")
-                        && $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita
-                    ) {
-                        $sNaturezaReceita = $oNatureza->getAttribute('receitaSicom');
-                        break;
+                        }
 
                     }
 
-                }
+                    if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
 
-                if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
+                        if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
+                            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 6) . "00";
+                        } else if (substr($oDadosRec->o57_fonte, 0, 2) == '49') {
+                            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 3, 8);
+                        } else {
+                            $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
+                        }
 
-                    if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
-                        $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 6) . "00";
-                    } else if (substr($oDadosRec->o57_fonte, 0, 2) == '49') {
-                        $sNaturezaReceita = substr($oDadosRec->o57_fonte, 3, 8);
-                    } else {
-                        $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
                     }
 
-                }
-                $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
-                $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2);
+                    for($i=0; $i<pg_num_rows($rsDocRec);$i++){
 
+                        $oCodDoc2 = db_utils::fieldsMemory($rsDocRec, $i);
 
-                if (!isset($aDadosAgrupados[$sHash10])) {
+                        $sRegRepasse    = $oCodDoc2->k81_regrepasse == '' ? '2' : $oCodDoc2->k81_regrepasse;
+                        $sEmParlamentar = $oCodDoc2->k81_emparlamentar == '' ? '3' : $oCodDoc2->k81_emparlamentar;
 
-                    $oDados10 = new stdClass();
-                    $oDados10->si25_tiporegistro = 10;
-                    $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
-                    $oDados10->si25_codorgao = $sCodOrgaoTce;
-                    $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
-                    $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
-                    $oDados10->si25_naturezareceita = $sNaturezaReceita;
-                    $oDados10->si25_regularizacaorepasse = $oDadosRec->k81_regrepasse;
-                    $oDados10->si25_exercicio = $oDadosRec->k81_exerc;
-                    $oDados10->si25_emendaparlamentar = $oDadosRec->k81_emparlamentar;
-                    $oDados10->si25_vlarrecadado = 0;
-                    $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $oDados10->Reg11 = array();
+                        $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
+                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
 
-                    $aDadosAgrupados[$sHash10] = $oDados10;
+                        if (!isset($aDadosAgrupados[$sHash10])) {
 
-                }
-                $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDocVlr->c70_valor;
+                            $oDados10 = new stdClass();
+                            $oDados10->si25_tiporegistro = 10;
+                            $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
+                            $oDados10->si25_codorgao = $sCodOrgaoTce;
+                            $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
+                            $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
+                            $oDados10->si25_naturezareceita = $sNaturezaReceita;
+                            $oDados10->si25_regularizacaorepasse = $sRegRepasse;
+                            $oDados10->si25_exercicio = $oCodDoc2->k81_exerc;
+                            $oDados10->si25_emendaparlamentar = $sEmParlamentar;
+                            $oDados10->si25_vlarrecadado = 0;
+                            $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                            $oDados10->Reg11 = array();
 
-                /**
-                 * agrupar registro 11
-                 */
-                $sHash11 = $oDadosRec->o70_codigo;
-                if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+                            $aDadosAgrupados[$sHash10] = $oDados10;
 
-                    $var = trim("\ ");
-                    $sSql = "SELECT taborc.k02_estorc,
+                        }
+                        $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDoc2->c70_valor;
+
+                        /**
+                         * agrupar registro 11
+                         */
+                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+
+                        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+
+                            $var = trim("\ ");
+                            $sSql = "SELECT taborc.k02_estorc,
                                     CASE
                                         WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') AND cgm.z01_cgccpf IS NULL OR cgm.z01_cgccpf = '' THEN t2.z01_cgccpf
                                         WHEN substr(taborc.k02_estorc,2,4) IN ('1218', '7218') THEN cgm.z01_cgccpf
@@ -273,59 +284,55 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
                              ORDER BY 1, 4, 2";
 
-                    $result = db_query($sSql);
+                            $result = db_query($sSql);
 
-                    $aDadosCgm11 = array();
+                            $aDadosCgm11 = array();
 
-                    for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++){
+                            for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
 
-                        $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
-                        $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                        if (!isset($aDadosCgm11[$sHashCgm])){
+                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
-                            $oDados11 = new stdClass();
-                            $oDados11->si26_tiporegistro = 11;
-                            $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                            $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
-                            if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
-                                $oDados11->si26_tipodocumento = 1;
-                            } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
-                                $oDados11->si26_tipodocumento = 2;
-                            }else{
-                                $oDados11->si26_tipodocumento = "";
+                                if($sHashCgm != ''){
+                                    $sHashCgm = $sHashCgm . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+                                    $oDados11->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
+                                    $aDadosCgm11[$sHashCgm] = $oDados11;
+                                } else {
+                                    $oDados11->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
+                                    $aDadosCgm11[$sHash10.$sHash11] = $oDados11;
+                                }
+
                             }
-                            $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
-                            $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
-                            $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
-                            $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                            $aDadosCgm11[$sHashCgm] = $oDados11;
+                            $aDados = new stdClass();
+                            $aDados->si26_tiporegistro = 11;
+                            $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                            $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
+                            if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
+                                $aDados->si26_tipodocumento = 1;
+                            } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
+                                $aDados->si26_tipodocumento = 2;
+                            }else{
+                                $aDados->si26_tipodocumento = "";
+                            }
+                            $aDados->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                            $aDados->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                            $aDados->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                            $aDados->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
+                            $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+                            $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
+
+                        } else {
+
+                            $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
+
                         }
-                        $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
-                    }
-
-                    $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-
-                    if(empty($aDadosCgm11)){
-
-                        $aDados = new stdClass();
-                        $aDados->si26_tiporegistro = 11;
-                        $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                        $aDados->si26_codfontrecursos = $sHash11;
-                        $aDados->si26_tipodocumento = "";
-                        $aDados->si26_cnpjorgaocontribuinte = "";
-                        $aDados->si26_nroconvenio = "";
-                        $aDados->si26_dataassinatura = "";
-                        $aDados->si26_vlarrecadadofonte = $oDadosRec->saldo_arrecadado;
-                        $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
-                        $aDadosAgrupados[$sHash10]->Reg11[$sHash11][''] = $aDados;
                     }
                 }
             }
-         }
-      }
+        }
 
         /*
          * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2020!

@@ -38,6 +38,7 @@ class cl_dispensa102020
   var $si74_dtpublicacaotermoratificacao = null;
   var $si74_veiculopublicacao = null;
   var $si74_processoporlote = 0;
+  var $si74_tipocadastro = 0;
   var $si74_mes = 0;
   var $si74_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -57,6 +58,7 @@ class cl_dispensa102020
                  si74_dtpublicacaotermoratificacao = date = Data de Publicação  do Termo 
                  si74_veiculopublicacao = varchar(50) = Nome do veículo 
                  si74_processoporlote = int8 = Processo por Lote 
+                 si74_processoporlote = int8 = Tipo de cadastro 
                  si74_mes = int8 = Mês 
                  si74_instit = int8 = Instituição 
                  ";
@@ -113,6 +115,7 @@ class cl_dispensa102020
       }
       $this->si74_veiculopublicacao = ($this->si74_veiculopublicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_veiculopublicacao"] : $this->si74_veiculopublicacao);
       $this->si74_processoporlote = ($this->si74_processoporlote == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_processoporlote"] : $this->si74_processoporlote);
+      $this->si74_tipocadastro = ($this->si74_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_tipocadastro"] : $this->si74_tipocadastro);
       $this->si74_mes = ($this->si74_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_mes"] : $this->si74_mes);
       $this->si74_instit = ($this->si74_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si74_instit"] : $this->si74_instit);
     } else {
@@ -202,6 +205,9 @@ class cl_dispensa102020
       $this->erro_status = "0";
       return false;
     }
+    if(!$this->si74_tipocadastro){
+      $this->si74_tipocadastro = 1;
+    }
     $sql = "insert into dispensa102020(
                                        si74_sequencial 
                                       ,si74_tiporegistro 
@@ -217,7 +223,8 @@ class cl_dispensa102020
                                       ,si74_razao 
                                       ,si74_dtpublicacaotermoratificacao 
                                       ,si74_veiculopublicacao 
-                                      ,si74_processoporlote 
+                                      ,si74_processoporlote
+                                      ,si74_tipocadastro
                                       ,si74_mes 
                                       ,si74_instit 
                        )
@@ -237,9 +244,11 @@ class cl_dispensa102020
                                ," . ($this->si74_dtpublicacaotermoratificacao == "null" || $this->si74_dtpublicacaotermoratificacao == "" ? "null" : "'" . $this->si74_dtpublicacaotermoratificacao . "'") . " 
                                ,'$this->si74_veiculopublicacao' 
                                ,$this->si74_processoporlote 
+                               ,$this->si74_tipocadastro 
                                ,$this->si74_mes 
                                ,$this->si74_instit 
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
@@ -390,6 +399,13 @@ class cl_dispensa102020
         $this->si74_processoporlote = "0";
       }
       $sql .= $virgula . " si74_processoporlote = $this->si74_processoporlote ";
+      $virgula = ",";
+    }
+    if (trim($this->si74_tipocadastro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si74_tipocadastro"])) {
+      if (trim($this->si74_tipocadastro) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si74_tipocadastro"])) {
+        $this->si74_tipocadastro = "1";
+      }
+      $sql .= $virgula . " si74_tipocadastro = $this->si74_tipocadastro ";
       $virgula = ",";
     }
     if (trim($this->si74_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si74_mes"])) {

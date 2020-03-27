@@ -95,6 +95,7 @@ class cl_acordo {
     var $ac16_semvigencia = null;
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
+    var $ac16_tipocadastro = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
  ac16_sequencial = int4 = Acordo
@@ -134,6 +135,7 @@ class cl_acordo {
  ac16_semvigencia = bool = Contrato criado sem vigência
  ac16_licoutroorgao = int8 = licitacao de outros orgaos
  ac16_adesaoregpreco = int8 = adesao de registro de precos
+ ac16_tipocadastro   = int8 = tipo de cadastro
  ";
     //funcao construtor da classe
     function cl_acordo() {
@@ -229,6 +231,7 @@ class cl_acordo {
             $this->ac16_valorrescisao = ($this->ac16_valorrescisao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"]:$this->ac16_valorrescisao);
             $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
             $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
+            $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"]:$this->ac16_tipocadastro);
         }else{
             $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
         }
@@ -513,6 +516,7 @@ class cl_acordo {
      ,ac16_licitacao
      ,ac16_licoutroorgao
      ,ac16_adesaoregpreco
+     ,ac16_tipocadastro
      )
      values (
      $this->ac16_sequencial
@@ -550,6 +554,7 @@ class cl_acordo {
      ,".($this->ac16_licitacao == "null" || $this->ac16_licitacao == ""?'null':$this->ac16_licitacao)."
      ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
      ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
+     ,$this->ac16_tipocadastro
      )";
 
         $result = db_query($sql);
@@ -1041,6 +1046,20 @@ class cl_acordo {
             }
         }
 
+        if(($this->ac16_tipocadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"])){
+            $sql  .= $virgula." ac16_tipocadastro = $this->ac16_tipocadastro ";
+            $virgula = ",";
+            if(($this->ac16_tipocadastro) == null ){
+                $this->erro_sql = " Campo Tipo Cadastro não informado.";
+                $this->erro_campo = "ac16_tipocadastro";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
 
         if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
             $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";
@@ -1397,8 +1416,8 @@ class cl_acordo {
         $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
         $sql .= "
             LEFT JOIN (
-                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo 
-                from acordoposicao 
+                select max(ac26_sequencial) as ac26_sequencial,ac26_acordo
+                from acordoposicao
                     GROUP BY ac26_acordo
             ) acordoposicao ON acordoposicao.ac26_acordo = ac16_sequencial
             LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial

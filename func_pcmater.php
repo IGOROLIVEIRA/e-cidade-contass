@@ -111,6 +111,10 @@ $clpcmater->rotulo->label("pc01_descrmater");
         }
       }
 
+      if(isset($obras)){
+        $where_ativo .= "and pc01_obras = 't'";
+      }
+
       /*OC3770*/
       if (isset($tabela)) {
         $where_ativo = " and pc01_tabela='{$tabela}' ";

@@ -133,7 +133,7 @@ GROUP BY e96_descr,e53_valor";
   $aOrdem = array();
 	if (!empty($ordemauxiliar)) {
 
-		$sSql = "SELECT e43_valor as k00_valor,e50_codord as k00_codord,slip.k17_codigo,z01_numcgm AS k00_cgmfornec,z01_nome,pc63_contabanco as k00_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec
+		$sSql = "SELECT e43_valor-fc_valorretencaomov(e81_codmov,FALSE) as k00_valor,fc_valorretencaomov(e81_codmov,FALSE) AS valorretencao,e50_codord as k00_codord,slip.k17_codigo,z01_numcgm AS k00_cgmfornec,z01_nome,pc63_contabanco as k00_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec
 			FROM empagenotasordem
 			INNER JOIN empagemov ON empagemov.e81_codmov = empagenotasordem.e43_empagemov
 			LEFT JOIN empageordem ON empageordem.e42_sequencial = empagenotasordem.e43_ordempagamento

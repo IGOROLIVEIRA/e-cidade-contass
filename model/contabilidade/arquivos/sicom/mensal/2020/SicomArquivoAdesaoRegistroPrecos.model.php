@@ -59,6 +59,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
 
     $aElementos[10] = array(
       "tipoRegistro",
+      "tipoCadastro",
       "codOrgao",
       "codUnidadeSub",
       "nroProcAdesao",
@@ -67,7 +68,8 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       "exercicioLicitacao",
       "nroProcessoLicitatorio",
       "codModalidadeLicitacao",
-      "nroModalidade",
+      "nroEdital",
+      "exercicioEdital",
       "dtAtaRegPreco",
       "dtValidade",
       "naturezaProcedimento",
@@ -240,6 +242,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       $regadesao10 = new cl_regadesao102020();
       $regadesao10->si67_tiporegistro = 10;
+      $regadesao10->si67_tipocadastro = $oDados10->si06_cadinicial;
       $regadesao10->si67_codorgao = $oDados10->codorgao;
       $regadesao10->si67_codunidadesub = $oDados10->codunidadesub;
       $regadesao10->si67_nroprocadesao = $oDados10->si06_numeroadm;
@@ -249,7 +252,8 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_exerciciolicitacao = $oDados10->exerciciolicitacao;
       $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;
       $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;
-      $regadesao10->si67_nromodalidade = $oDados10->si06_numlicitacao;
+      $regadesao10->si67_nroedital = $oDados10->si06_edital;
+      $regadesao10->si67_exercicioedital = $oDados10->si06_exercicioedital;
       $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;
       $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;
       $regadesao10->si67_naturezaprocedimento = $oDados10->si06_orgarparticipante;
@@ -262,6 +266,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
       $regadesao10->incluir(null);
+
       if ($regadesao10->erro_status == 0) {
         throw new Exception($regadesao10->erro_msg);
       }
@@ -307,7 +312,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao12->si69_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao12->si69_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao12->si69_coditem = $oDados12->coditem;
-        $regadesao12->si69_nroitem = $oDados12->si07_numeroitem;
+        $regadesao12->si69_nroitem = $iCont12+1;
         $regadesao12->si69_instit = db_getsession("DB_instit");
         $regadesao12->si69_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $regadesao12->si69_reg10 = $regadesao10->si67_sequencial;

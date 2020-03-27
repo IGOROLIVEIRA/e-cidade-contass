@@ -207,7 +207,7 @@ $cldadoscomplementareslrf->rotulo->label();
                 ?>
             </td>
         </tr>
-        <tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
+        <tr style="display:none;">
             <td nowrap title="<?=@$Tc218_vlrecursosnaoaplicados?>">
                 <b>Recursos do FUNDEB não aplicados:</b>
             </td>
@@ -286,7 +286,36 @@ $cldadoscomplementareslrf->rotulo->label();
             </td>
 
         </tr>
-
+        <tr>
+            <td nowrap title="<?=@$Tc218_vldotinicialincentivocontrib?>">
+                <b>Valor dotação inicial de incentivo  a contribuinte:</b>
+            </td>
+            <td align="right">
+                <?
+                db_input('c218_vldotinicialincentivocontrib',10,$Ic218_vldotinicialincentivocontrib,true,'text',$db_opcao,"")
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Tc218_vldotincentconcedinstfinanc?>">
+                <b>Valor dotação de incentivo concedido por instituição financeira:</b>
+            </td>
+            <td align="right">
+                <?
+                db_input('c218_vldotincentconcedinstfinanc',10,$Ic218_vldotincentconcedinstfinanc,true,'text',$db_opcao,"")
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=@$Tc218_vlajustesrelativosrpps?>">
+                <b>Valor de ajustes relativos ao rpps:</b>
+            </td>
+            <td align="right">
+                <?
+                db_input('c218_vlajustesrelativosrpps',10,$Ic218_vlajustesrelativosrpps,true,'text',$db_opcao,"")
+                ?>
+            </td>
+        </tr>
         <tr>
             <td colspan="2">
                 <center>
@@ -379,6 +408,10 @@ $cldadoscomplementareslrf->rotulo->label();
         top.corpo.dadoscomplementares.c218_metarrecada = document.form1.c218_metarrecada.value;
         top.corpo.dadoscomplementares.c218_dscmedidasadotadas = document.form1.c218_dscmedidasadotadas.value;
 
+        top.corpo.dadoscomplementares.c218_vldotinicialincentivocontrib = document.form1.c218_vldotinicialincentivocontrib.value;
+        top.corpo.dadoscomplementares.c218_vldotincentconcedinstfinanc = document.form1.c218_vldotincentconcedinstfinanc.value;
+        top.corpo.dadoscomplementares.c218_vlajustesrelativosrpps = document.form1.c218_vlajustesrelativosrpps.value;
+
 
         <?php if($tipoInstint == 1): ?>
         parent.mo_camada('publicacaoeperiodicidadergf');
@@ -445,6 +478,10 @@ $cldadoscomplementareslrf->rotulo->label();
                     document.form1.c218_metarrecada.disabled = "true";
                     document.form1.c218_metarrecada.style.background = "#DEB887";
                     document.form1.c218_dscmedidasadotadas.value = oRetorno.c218_dscmedidasadotadas;
+
+                    document.form1.c218_vldotinicialincentivocontrib.value = oRetorno.c218_vldotinicialincentivocontrib;
+                    document.form1.c218_vldotincentconcedinstfinanc.value = oRetorno.c218_vldotincentconcedinstfinanc;
+                    document.form1.c218_vlajustesrelativosrpps.value = oRetorno.c218_vlajustesrelativosrpps;
                     js_buscarMedidas(oRetornoMedidas);
 
                     top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value = oRetorno.c219_contopcredito;
@@ -489,6 +526,12 @@ $cldadoscomplementareslrf->rotulo->label();
                     top.corpo.dadoscomplementares.c218_vloutrosajustes = oRetorno.c218_vloutrosajustes;
                     top.corpo.dadoscomplementares.c218_metarrecada = oRetorno.c218_metarrecada;
                     top.corpo.dadoscomplementares.c218_dscmedidasadotadas = oRetorno.c218_dscmedidasadotadas;
+
+                    top.corpo.dadoscomplementares.c218_vldotinicialincentivocontrib = oRetorno.c218_vldotinicialincentivocontrib;
+                    top.corpo.dadoscomplementares.c218_vldotincentconcedinstfinanc = oRetorno.c218_vldotincentconcedinstfinanc;
+                    top.corpo.dadoscomplementares.c218_vlajustesrelativosrpps = oRetorno.c218_vlajustesrelativosrpps;
+
+
 
                     top.corpo.operacoesdecredito.c219_contopcredito = oRetorno.c219_contopcredito;
                     top.corpo.operacoesdecredito.c219_dsccontopcredito = oRetorno.c219_dsccontopcredito;

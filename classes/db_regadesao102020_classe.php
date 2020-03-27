@@ -31,7 +31,6 @@ class cl_regadesao102020
   var $si67_exerciciolicitacao = 0;
   var $si67_nroprocessolicitatorio = null;
   var $si67_codmodalidadelicitacao = 0;
-  var $si67_nromodalidade = 0;
   var $si67_dtataregpreco_dia = null;
   var $si67_dtataregpreco_mes = null;
   var $si67_dtataregpreco_ano = null;
@@ -49,6 +48,9 @@ class cl_regadesao102020
   var $si67_cpfresponsavel = null;
   var $si67_descontotabela = 0;
   var $si67_processoporlote = 0;
+  var $si67_tipocadastro = 0;
+  var $si67_exercicioedital = 0;
+  var $si67_nroedital = 0;
   var $si67_mes = 0;
   var $si67_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -64,7 +66,6 @@ class cl_regadesao102020
                  si67_exerciciolicitacao = int8 = Exercício em que   foi instaurado 
                  si67_nroprocessolicitatorio = varchar(20) = Número sequencial  do processo 
                  si67_codmodalidadelicitacao = int8 = Modalidade da Licitação 
-                 si67_nromodalidade = int8 = Número sequencial da Modalidade 
                  si67_dtataregpreco = date = Data da Ata do  Registro de Preços 
                  si67_dtvalidade = date = Data de validade 
                  si67_naturezaprocedimento = int8 = Natureza do Procedimento 
@@ -73,6 +74,9 @@ class cl_regadesao102020
                  si67_cpfresponsavel = varchar(11) = CPF do  responsável 
                  si67_descontotabela = int8 = Desconto Tabela 
                  si67_processoporlote = int8 = Processo por Lote 
+                 si67_tipocadastro = int8 = Cadastro inicial 
+                 si67_nroedital = int8 = Número do edital 
+                 si67_exercicioedital = int8 = Exercício do edital 
                  si67_mes = int8 = Mês 
                  si67_instit = int8 = Instituição 
                  ";
@@ -118,7 +122,6 @@ class cl_regadesao102020
       $this->si67_exerciciolicitacao = ($this->si67_exerciciolicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_exerciciolicitacao"] : $this->si67_exerciciolicitacao);
       $this->si67_nroprocessolicitatorio = ($this->si67_nroprocessolicitatorio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nroprocessolicitatorio"] : $this->si67_nroprocessolicitatorio);
       $this->si67_codmodalidadelicitacao = ($this->si67_codmodalidadelicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_codmodalidadelicitacao"] : $this->si67_codmodalidadelicitacao);
-      $this->si67_nromodalidade = ($this->si67_nromodalidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nromodalidade"] : $this->si67_nromodalidade);
       if ($this->si67_dtataregpreco == "") {
         $this->si67_dtataregpreco_dia = ($this->si67_dtataregpreco_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_dtataregpreco_dia"] : $this->si67_dtataregpreco_dia);
         $this->si67_dtataregpreco_mes = ($this->si67_dtataregpreco_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_dtataregpreco_mes"] : $this->si67_dtataregpreco_mes);
@@ -148,6 +151,9 @@ class cl_regadesao102020
       $this->si67_cpfresponsavel = ($this->si67_cpfresponsavel == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_cpfresponsavel"] : $this->si67_cpfresponsavel);
       $this->si67_descontotabela = ($this->si67_descontotabela == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_descontotabela"] : $this->si67_descontotabela);
       $this->si67_processoporlote = ($this->si67_processoporlote == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_processoporlote"] : $this->si67_processoporlote);
+      $this->si67_tipocadastro = ($this->si67_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_tipocadastro"] : $this->si67_tipocadastro);
+      $this->si67_nroedital = ($this->si67_nroedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_nroedital"] : $this->si67_nroedital);
+      $this->si67_exercicioedital = ($this->si67_exercicioedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_exercicioedital"] : $this->si67_exercicioedital);
       $this->si67_mes = ($this->si67_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_mes"] : $this->si67_mes);
       $this->si67_instit = ($this->si67_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si67_instit"] : $this->si67_instit);
     } else {
@@ -179,9 +185,6 @@ class cl_regadesao102020
     }
     if ($this->si67_codmodalidadelicitacao == null) {
       $this->si67_codmodalidadelicitacao = "0";
-    }
-    if ($this->si67_nromodalidade == null) {
-      $this->si67_nromodalidade = "0";
     }
     if ($this->si67_dtataregpreco == null) {
       $this->si67_dtataregpreco = "null";
@@ -252,6 +255,19 @@ class cl_regadesao102020
       $this->erro_status = "0";
       return false;
     }
+    if(!$this->si67_tipocadastro && db_getsession('DB_anousu') >= 2020){
+      $this->si67_tipocadastro = 1;
+    }else if(!$this->si67_tipocadastro && db_getsession('DB_anousu') < 2020){
+      $this->si67_tipocadastro = '0';
+    }
+    if(!$this->si67_exercicioedital && db_getsession('DB_anousu') >= 2020){
+      $this->si67_exercicioedital = db_getsession('DB_anousu');
+    }else if(!$this->si67_exercicioedital && db_getsession('DB_anousu') < 2020){
+      $this->si67_exercicioedital = '0';
+    }
+    if(!$this->si67_nroedital && db_getsession('DB_anousu') < 2020){
+      $this->si67_nroedital = '0';
+    }
     $sql = "insert into regadesao102020(
                                        si67_sequencial 
                                       ,si67_tiporegistro 
@@ -264,7 +280,6 @@ class cl_regadesao102020
                                       ,si67_exerciciolicitacao 
                                       ,si67_nroprocessolicitatorio 
                                       ,si67_codmodalidadelicitacao 
-                                      ,si67_nromodalidade 
                                       ,si67_dtataregpreco 
                                       ,si67_dtvalidade 
                                       ,si67_naturezaprocedimento 
@@ -273,6 +288,9 @@ class cl_regadesao102020
                                       ,si67_cpfresponsavel 
                                       ,si67_descontotabela 
                                       ,si67_processoporlote 
+                                      ,si67_tipocadastro 
+                                      ,si67_nroedital 
+                                      ,si67_exercicioedital 
                                       ,si67_mes 
                                       ,si67_instit 
                        )
@@ -288,7 +306,6 @@ class cl_regadesao102020
                                ,$this->si67_exerciciolicitacao 
                                ,'$this->si67_nroprocessolicitatorio' 
                                ,$this->si67_codmodalidadelicitacao 
-                               ,$this->si67_nromodalidade 
                                ," . ($this->si67_dtataregpreco == "null" || $this->si67_dtataregpreco == "" ? "null" : "'" . $this->si67_dtataregpreco . "'") . " 
                                ," . ($this->si67_dtvalidade == "null" || $this->si67_dtvalidade == "" ? "null" : "'" . $this->si67_dtvalidade . "'") . " 
                                ,$this->si67_naturezaprocedimento 
@@ -297,6 +314,9 @@ class cl_regadesao102020
                                ,'$this->si67_cpfresponsavel' 
                                ,$this->si67_descontotabela 
                                ,$this->si67_processoporlote 
+                               ,$this->si67_tipocadastro 
+                               ,$this->si67_nroedital 
+                               ,$this->si67_exercicioedital 
                                ,$this->si67_mes 
                                ,$this->si67_instit 
                       )";
@@ -342,7 +362,6 @@ class cl_regadesao102020
       $resac = db_query("insert into db_acount values($acount,2010296,2010171,'','" . AddSlashes(pg_result($resaco, 0, 'si67_exerciciolicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010296,2010172,'','" . AddSlashes(pg_result($resaco, 0, 'si67_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010296,2010173,'','" . AddSlashes(pg_result($resaco, 0, 'si67_codmodalidadelicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010296,2010174,'','" . AddSlashes(pg_result($resaco, 0, 'si67_nromodalidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010296,2010175,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtataregpreco')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010296,2010176,'','" . AddSlashes(pg_result($resaco, 0, 'si67_dtvalidade')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010296,2010177,'','" . AddSlashes(pg_result($resaco, 0, 'si67_naturezaprocedimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -433,13 +452,6 @@ class cl_regadesao102020
       $sql .= $virgula . " si67_codmodalidadelicitacao = $this->si67_codmodalidadelicitacao ";
       $virgula = ",";
     }
-    if (trim($this->si67_nromodalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_nromodalidade"])) {
-      if (trim($this->si67_nromodalidade) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si67_nromodalidade"])) {
-        $this->si67_nromodalidade = "0";
-      }
-      $sql .= $virgula . " si67_nromodalidade = $this->si67_nromodalidade ";
-      $virgula = ",";
-    }
     if (trim($this->si67_dtataregpreco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_dtataregpreco_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si67_dtataregpreco_dia"] != "")) {
       $sql .= $virgula . " si67_dtataregpreco = '$this->si67_dtataregpreco' ";
       $virgula = ",";
@@ -494,6 +506,18 @@ class cl_regadesao102020
         $this->si67_processoporlote = "0";
       }
       $sql .= $virgula . " si67_processoporlote = $this->si67_processoporlote ";
+      $virgula = ",";
+    }
+    if (trim($this->si67_nroedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_nroedital"])) {
+      $sql .= $virgula . " si67_nroedital = '$this->si67_nroedital' ";
+      $virgula = ",";
+    }
+    if (trim($this->si67_exercicioedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_exercicioedital"])) {
+      $sql .= $virgula . " si67_exercicioedital = '$this->si67_exercicioedital' ";
+      $virgula = ",";
+    }
+    if (trim($this->si67_tipocadastro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_tipocadastro"])) {
+      $sql .= $virgula . " si67_tipocadastro = '$this->si67_tipocadastro' ";
       $virgula = ",";
     }
     if (trim($this->si67_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si67_mes"])) {

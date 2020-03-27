@@ -43,9 +43,15 @@ if(isset($incluir)){
     }
   }
 
-  if ($sqlerro == false) {
-    $cladesaoregprecos->incluir(null);
-  }
+    if ($sqlerro == false) {
+        $cladesaoregprecos->si06_anocadastro = db_getsession('DB_anousu');
+        if(db_getsession('DB_anousu') >= 2020){
+			$cladesaoregprecos->si06_edital = $si06_edital;
+            $cladesaoregprecos->si06_cadinicial = 1;
+            $cladesaoregprecos->si06_exercicioedital = db_getsession('DB_anousu');
+        }
+        $cladesaoregprecos->incluir(null);
+    }
   if($cladesaoregprecos->erro_status=="0"){
 
     $cladesaoregprecos->erro(true,false);
@@ -104,7 +110,7 @@ if(isset($alterar)){
     }
 
   if ($sqlerro == false) {
-    $cladesaoregprecos->alterar($si06_sequencial);
+     $cladesaoregprecos->alterar($si06_sequencial);
   }
   db_fim_transacao();
   $_SESSION["codigoAdesao"] = $si06_sequencial;

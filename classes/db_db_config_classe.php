@@ -1,161 +1,161 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
 //CLASSE DA ENTIDADE db_config
-class cl_db_config { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $codigo = 0; 
-   var $nomeinst = null; 
-   var $ender = null; 
-   var $munic = null; 
-   var $uf = null; 
-   var $telef = null; 
-   var $ident = 0; 
-   var $tx_banc = 0; 
-   var $numbanco = null; 
-   var $url = null; 
-   var $logo = null; 
-   var $figura = null; 
-   var $dtcont_dia = null; 
-   var $dtcont_mes = null; 
-   var $dtcont_ano = null; 
-   var $dtcont = null; 
-   var $diario = 0; 
-   var $pref = null; 
-   var $vicepref = null; 
-   var $fax = null; 
-   var $cgc = null; 
-   var $cep = null; 
-   var $tpropri = 'f'; 
-   var $tsocios = 'f'; 
-   var $prefeitura = 'f'; 
-   var $bairro = null; 
-   var $numcgm = 0; 
-   var $codtrib = null; 
-   var $tribinst = 0; 
-   var $segmento = 0; 
-   var $formvencfebraban = 0; 
-   var $numero = 0; 
-   var $nomedebconta = null; 
-   var $db21_tipoinstit = 0; 
-   var $db21_ativo = 0; 
-   var $db21_regracgmiss = 0; 
-   var $db21_regracgmiptu = 0; 
-   var $db21_codcli = 0; 
-   var $nomeinstabrev = null; 
-   var $db21_usasisagua = 'f'; 
-   var $db21_codigomunicipoestado = 0; 
-   var $db21_datalimite_dia = null; 
-   var $db21_datalimite_mes = null; 
-   var $db21_datalimite_ano = null; 
-   var $db21_datalimite = null; 
-   var $db21_criacao_dia = null; 
-   var $db21_criacao_mes = null; 
-   var $db21_criacao_ano = null; 
-   var $db21_criacao = null; 
-   var $db21_compl = null; 
-   var $email = null; 
-   var $db21_imgmarcadagua = 0; 
-   var $db21_esfera = 0; 
+class cl_db_config {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $codigo = 0;
+   var $nomeinst = null;
+   var $ender = null;
+   var $munic = null;
+   var $uf = null;
+   var $telef = null;
+   var $ident = 0;
+   var $tx_banc = 0;
+   var $numbanco = null;
+   var $url = null;
+   var $logo = null;
+   var $figura = null;
+   var $dtcont_dia = null;
+   var $dtcont_mes = null;
+   var $dtcont_ano = null;
+   var $dtcont = null;
+   var $diario = 0;
+   var $pref = null;
+   var $vicepref = null;
+   var $fax = null;
+   var $cgc = null;
+   var $cep = null;
+   var $tpropri = 'f';
+   var $tsocios = 'f';
+   var $prefeitura = 'f';
+   var $bairro = null;
+   var $numcgm = 0;
+   var $codtrib = null;
+   var $tribinst = 0;
+   var $segmento = 0;
+   var $formvencfebraban = 0;
+   var $numero = 0;
+   var $nomedebconta = null;
+   var $db21_tipoinstit = 0;
+   var $db21_ativo = 0;
+   var $db21_regracgmiss = 0;
+   var $db21_regracgmiptu = 0;
+   var $db21_codcli = 0;
+   var $nomeinstabrev = null;
+   var $db21_usasisagua = 'f';
+   var $db21_codigomunicipoestado = 0;
+   var $db21_datalimite_dia = null;
+   var $db21_datalimite_mes = null;
+   var $db21_datalimite_ano = null;
+   var $db21_datalimite = null;
+   var $db21_criacao_dia = null;
+   var $db21_criacao_mes = null;
+   var $db21_criacao_ano = null;
+   var $db21_criacao = null;
+   var $db21_compl = null;
+   var $email = null;
+   var $db21_imgmarcadagua = 0;
+   var $db21_esfera = 0;
    var $db21_tipopoder = 0;
-   var $db21_codtj = 0; 
+   var $db21_codtj = 0;
    var $db21_habitantes = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 codigo = int4 = Cod. Instituição 
-                 nomeinst = varchar(80) = Nome da Instituição 
-                 ender = varchar(80) = endereço da instituição 
-                 munic = varchar(40) = Municipio da instituição 
-                 uf = char(2) = Unidade Federativa da Instituição 
-                 telef = char(11) = Telefone 
-                 ident = int4 = identidade 
-                 tx_banc = float8 = taxa bancaria 
-                 numbanco = varchar(10) = numero do banco 
-                 url = varchar(200) = url 
-                 logo = varchar(100) = logo 
-                 figura = varchar(100) = figura 
-                 dtcont = date = data da contabilidade 
-                 diario = int4 = Diário 
-                 pref = varchar(40) = prefeito 
-                 vicepref = varchar(40) = vice prefeito 
-                 fax = char(11) = fax 
-                 cgc = char(14) = cgc 
-                 cep = char(8) = cep 
-                 tpropri = bool = Débitos proprietário 
-                 tsocios = bool = Débitos Sócios 
-                 prefeitura = bool = Prefeitura 
-                 bairro = char(35) = Bairro 
-                 numcgm = int4 = Número do CGM 
-                 codtrib = char(4) = Órgão/Unidade da Instituição 
-                 tribinst = int4 = Instituição SIAPC/PAD 
-                 segmento = int4 = Segmento Código de Barras Febraban 
-                 formvencfebraban = int4 = Forma do vencimento Febraban 
-                 numero = int4 = Número do endereço 
-                 nomedebconta = char(20) = Nome da instituição no débito em conta 
-                 db21_tipoinstit = int4 = Tipo de Instituição 
-                 db21_ativo = int4 = Ativo 
-                 db21_regracgmiss = int4 = Regra CGM issbase 
-                 db21_regracgmiptu = int4 = Regra Cgm Iptu 
-                 db21_codcli = int4 = Código do cliente 
-                 nomeinstabrev = varchar(20) = Nome da instituição para relatório 
-                 db21_usasisagua = bool = Usa sistema de água 
-                 db21_codigomunicipoestado = int4 = Código do município no estado 
-                 db21_datalimite = date = Data limite que instituição é valida 
-                 db21_criacao = date = Data de criação da instituição 
-                 db21_compl = varchar(20) = Complemento do endereço 
-                 email = varchar(200) = email 
-                 db21_imgmarcadagua = oid = Marca D'agua Instituição 
-                 db21_esfera = int4 = Esfera 
-                 db21_tipopoder = int4 = Poder 
-                 db21_codtj = int4 = Código do município na TJ 
+                 codigo = int4 = Cod. Instituição
+                 nomeinst = varchar(80) = Nome da Instituição
+                 ender = varchar(80) = endereço da instituição
+                 munic = varchar(40) = Municipio da instituição
+                 uf = char(2) = Unidade Federativa da Instituição
+                 telef = char(11) = Telefone
+                 ident = int4 = identidade
+                 tx_banc = float8 = taxa bancaria
+                 numbanco = varchar(10) = numero do banco
+                 url = varchar(200) = url
+                 logo = varchar(100) = logo
+                 figura = varchar(100) = figura
+                 dtcont = date = data da contabilidade
+                 diario = int4 = Diário
+                 pref = varchar(40) = prefeito
+                 vicepref = varchar(40) = vice prefeito
+                 fax = char(11) = fax
+                 cgc = char(14) = cgc
+                 cep = char(8) = cep
+                 tpropri = bool = Débitos proprietário
+                 tsocios = bool = Débitos Sócios
+                 prefeitura = bool = Prefeitura
+                 bairro = char(35) = Bairro
+                 numcgm = int4 = Número do CGM
+                 codtrib = char(4) = Órgão/Unidade da Instituição
+                 tribinst = int4 = Instituição SIAPC/PAD
+                 segmento = int4 = Segmento Código de Barras Febraban
+                 formvencfebraban = int4 = Forma do vencimento Febraban
+                 numero = int4 = Número do endereço
+                 nomedebconta = char(20) = Nome da instituição no débito em conta
+                 db21_tipoinstit = int4 = Tipo de Instituição
+                 db21_ativo = int4 = Ativo
+                 db21_regracgmiss = int4 = Regra CGM issbase
+                 db21_regracgmiptu = int4 = Regra Cgm Iptu
+                 db21_codcli = int4 = Código do cliente
+                 nomeinstabrev = varchar(20) = Nome da instituição para relatório
+                 db21_usasisagua = bool = Usa sistema de água
+                 db21_codigomunicipoestado = int4 = Código do município no estado
+                 db21_datalimite = date = Data limite que instituição é valida
+                 db21_criacao = date = Data de criação da instituição
+                 db21_compl = varchar(20) = Complemento do endereço
+                 email = varchar(200) = email
+                 db21_imgmarcadagua = oid = Marca D'agua Instituição
+                 db21_esfera = int4 = Esfera
+                 db21_tipopoder = int4 = Poder
+                 db21_codtj = int4 = Código do município na TJ
                  db21_habitantes = int4 = Número de Habitantes
                  ";
-   //funcao construtor da classe 
-   function cl_db_config() { 
+   //funcao construtor da classe
+   function cl_db_config() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("db_config"); 
+     $this->rotulo = new rotulo("db_config");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -239,9 +239,9 @@ class cl_db_config {
      }
    }
    // funcao para inclusao
-   function incluir ($codigo){ 
+   function incluir ($codigo){
       $this->atualizacampos();
-     if($this->nomeinst == null ){ 
+     if($this->nomeinst == null ){
        $this->erro_sql = " Campo Nome da Instituição nao Informado.";
        $this->erro_campo = "nomeinst";
        $this->erro_banco = "";
@@ -250,7 +250,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ender == null ){ 
+     if($this->ender == null ){
        $this->erro_sql = " Campo endereço da instituição nao Informado.";
        $this->erro_campo = "ender";
        $this->erro_banco = "";
@@ -259,7 +259,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->munic == null ){ 
+     if($this->munic == null ){
        $this->erro_sql = " Campo Municipio da instituição nao Informado.";
        $this->erro_campo = "munic";
        $this->erro_banco = "";
@@ -268,7 +268,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->uf == null ){ 
+     if($this->uf == null ){
        $this->erro_sql = " Campo Unidade Federativa da Instituição nao Informado.";
        $this->erro_campo = "uf";
        $this->erro_banco = "";
@@ -277,7 +277,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->telef == null ){ 
+     if($this->telef == null ){
        $this->erro_sql = " Campo Telefone nao Informado.";
        $this->erro_campo = "telef";
        $this->erro_banco = "";
@@ -286,7 +286,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ident == null ){ 
+     if($this->ident == null ){
        $this->erro_sql = " Campo identidade nao Informado.";
        $this->erro_campo = "ident";
        $this->erro_banco = "";
@@ -295,10 +295,10 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->tx_banc == null ){ 
+     if($this->tx_banc == null ){
        $this->tx_banc = "0";
      }
-     if($this->url == null ){ 
+     if($this->url == null ){
        $this->erro_sql = " Campo url nao Informado.";
        $this->erro_campo = "url";
        $this->erro_banco = "";
@@ -307,7 +307,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->dtcont == null ){ 
+     if($this->dtcont == null ){
        $this->erro_sql = " Campo data da contabilidade nao Informado.";
        $this->erro_campo = "dtcont_dia";
        $this->erro_banco = "";
@@ -316,7 +316,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->diario == null ){ 
+     if($this->diario == null ){
        $this->erro_sql = " Campo Diário nao Informado.";
        $this->erro_campo = "diario";
        $this->erro_banco = "";
@@ -325,7 +325,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pref == null ){ 
+     if($this->pref == null ){
        $this->erro_sql = " Campo prefeito nao Informado.";
        $this->erro_campo = "pref";
        $this->erro_banco = "";
@@ -334,7 +334,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->vicepref == null ){ 
+     if($this->vicepref == null ){
        $this->erro_sql = " Campo vice prefeito nao Informado.";
        $this->erro_campo = "vicepref";
        $this->erro_banco = "";
@@ -343,7 +343,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->fax == null ){ 
+     if($this->fax == null ){
        $this->erro_sql = " Campo fax nao Informado.";
        $this->erro_campo = "fax";
        $this->erro_banco = "";
@@ -352,7 +352,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->cgc == null ){ 
+     if($this->cgc == null ){
        $this->erro_sql = " Campo cgc nao Informado.";
        $this->erro_campo = "cgc";
        $this->erro_banco = "";
@@ -361,7 +361,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->cep == null ){ 
+     if($this->cep == null ){
        $this->erro_sql = " Campo cep nao Informado.";
        $this->erro_campo = "cep";
        $this->erro_banco = "";
@@ -370,7 +370,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->tpropri == null ){ 
+     if($this->tpropri == null ){
        $this->erro_sql = " Campo Débitos proprietário nao Informado.";
        $this->erro_campo = "tpropri";
        $this->erro_banco = "";
@@ -379,7 +379,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->tsocios == null ){ 
+     if($this->tsocios == null ){
        $this->erro_sql = " Campo Débitos Sócios nao Informado.";
        $this->erro_campo = "tsocios";
        $this->erro_banco = "";
@@ -388,7 +388,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->prefeitura == null ){ 
+     if($this->prefeitura == null ){
        $this->erro_sql = " Campo Prefeitura nao Informado.";
        $this->erro_campo = "prefeitura";
        $this->erro_banco = "";
@@ -397,7 +397,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->numcgm == null ){ 
+     if($this->numcgm == null ){
        $this->erro_sql = " Campo Número do CGM nao Informado.";
        $this->erro_campo = "numcgm";
        $this->erro_banco = "";
@@ -406,7 +406,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->codtrib == null ){ 
+     if($this->codtrib == null ){
        $this->erro_sql = " Campo Órgão/Unidade da Instituição nao Informado.";
        $this->erro_campo = "codtrib";
        $this->erro_banco = "";
@@ -415,7 +415,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->tribinst == null ){ 
+     if($this->tribinst == null ){
        $this->erro_sql = " Campo Instituição SIAPC/PAD nao Informado.";
        $this->erro_campo = "tribinst";
        $this->erro_banco = "";
@@ -424,7 +424,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->segmento == null ){ 
+     if($this->segmento == null ){
        $this->erro_sql = " Campo Segmento Código de Barras Febraban nao Informado.";
        $this->erro_campo = "segmento";
        $this->erro_banco = "";
@@ -433,7 +433,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->formvencfebraban == null ){ 
+     if($this->formvencfebraban == null ){
        $this->erro_sql = " Campo Forma do vencimento Febraban nao Informado.";
        $this->erro_campo = "formvencfebraban";
        $this->erro_banco = "";
@@ -442,10 +442,10 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->numero == null ){ 
+     if($this->numero == null ){
        $this->numero = "0";
      }
-     if($this->nomedebconta == null ){ 
+     if($this->nomedebconta == null ){
        $this->erro_sql = " Campo Nome da instituição no débito em conta nao Informado.";
        $this->erro_campo = "nomedebconta";
        $this->erro_banco = "";
@@ -454,7 +454,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_tipoinstit == null ){ 
+     if($this->db21_tipoinstit == null ){
        $this->erro_sql = " Campo Tipo de Instituição nao Informado.";
        $this->erro_campo = "db21_tipoinstit";
        $this->erro_banco = "";
@@ -463,7 +463,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_ativo == null ){ 
+     if($this->db21_ativo == null ){
        $this->erro_sql = " Campo Ativo nao Informado.";
        $this->erro_campo = "db21_ativo";
        $this->erro_banco = "";
@@ -472,7 +472,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_regracgmiss == null ){ 
+     if($this->db21_regracgmiss == null ){
        $this->erro_sql = " Campo Regra CGM issbase nao Informado.";
        $this->erro_campo = "db21_regracgmiss";
        $this->erro_banco = "";
@@ -481,7 +481,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_regracgmiptu == null ){ 
+     if($this->db21_regracgmiptu == null ){
        $this->erro_sql = " Campo Regra Cgm Iptu nao Informado.";
        $this->erro_campo = "db21_regracgmiptu";
        $this->erro_banco = "";
@@ -490,7 +490,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_codcli == null ){ 
+     if($this->db21_codcli == null ){
        $this->erro_sql = " Campo Código do cliente nao Informado.";
        $this->erro_campo = "db21_codcli";
        $this->erro_banco = "";
@@ -499,7 +499,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->nomeinstabrev == null ){ 
+     if($this->nomeinstabrev == null ){
        $this->erro_sql = " Campo Nome da instituição para relatório nao Informado.";
        $this->erro_campo = "nomeinstabrev";
        $this->erro_banco = "";
@@ -508,7 +508,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_usasisagua == null ){ 
+     if($this->db21_usasisagua == null ){
        $this->erro_sql = " Campo Usa sistema de água nao Informado.";
        $this->erro_campo = "db21_usasisagua";
        $this->erro_banco = "";
@@ -517,7 +517,7 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_codigomunicipoestado == null ){ 
+     if($this->db21_codigomunicipoestado == null ){
        $this->erro_sql = " Campo Código do município no estado nao Informado.";
        $this->erro_campo = "db21_codigomunicipoestado";
        $this->erro_banco = "";
@@ -526,19 +526,19 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db21_datalimite == null ){ 
+     if($this->db21_datalimite == null ){
        $this->db21_datalimite = "null";
      }
-     if($this->db21_criacao == null ){ 
+     if($this->db21_criacao == null ){
        $this->db21_criacao = "null";
      }
-     if($this->db21_esfera == null ){ 
+     if($this->db21_esfera == null ){
        $this->db21_esfera = "0";
      }
-     if($this->db21_tipopoder == null ){ 
+     if($this->db21_tipopoder == null ){
        $this->db21_tipopoder = "0";
      }
-     if($this->db21_codtj == null ){ 
+     if($this->db21_codtj == null ){
        $this->erro_sql = " Campo Código do município na TJ nao Informado.";
        $this->erro_campo = "db21_codtj";
        $this->erro_banco = "";
@@ -557,16 +557,16 @@ class cl_db_config {
        return false;
      }
      if($codigo == "" || $codigo == null ){
-       $result = db_query("select nextval('db_config_codigo_seq')"); 
+       $result = db_query("select nextval('db_config_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: db_config_codigo_seq do campo: codigo"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: db_config_codigo_seq do campo: codigo";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->codigo = pg_result($result,0,0); 
+       $this->codigo = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from db_config_codigo_seq");
        if(($result != false) && (pg_result($result,0,0) < $codigo)){
@@ -577,10 +577,10 @@ class cl_db_config {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->codigo = $codigo; 
+         $this->codigo = $codigo;
        }
      }
-     if(($this->codigo == null) || ($this->codigo == "") ){ 
+     if(($this->codigo == null) || ($this->codigo == "") ){
        $this->erro_sql = " Campo codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -589,105 +589,105 @@ class cl_db_config {
        return false;
      }
      $sql = "insert into db_config(
-                                       codigo 
-                                      ,nomeinst 
-                                      ,ender 
-                                      ,munic 
-                                      ,uf 
-                                      ,telef 
-                                      ,ident 
-                                      ,tx_banc 
-                                      ,numbanco 
-                                      ,url 
-                                      ,logo 
-                                      ,figura 
-                                      ,dtcont 
-                                      ,diario 
-                                      ,pref 
-                                      ,vicepref 
-                                      ,fax 
-                                      ,cgc 
-                                      ,cep 
-                                      ,tpropri 
-                                      ,tsocios 
-                                      ,prefeitura 
-                                      ,bairro 
-                                      ,numcgm 
-                                      ,codtrib 
-                                      ,tribinst 
-                                      ,segmento 
-                                      ,formvencfebraban 
-                                      ,numero 
-                                      ,nomedebconta 
-                                      ,db21_tipoinstit 
-                                      ,db21_ativo 
-                                      ,db21_regracgmiss 
-                                      ,db21_regracgmiptu 
-                                      ,db21_codcli 
-                                      ,nomeinstabrev 
-                                      ,db21_usasisagua 
-                                      ,db21_codigomunicipoestado 
-                                      ,db21_datalimite 
-                                      ,db21_criacao 
-                                      ,db21_compl 
-                                      ,email 
-                                      ,db21_imgmarcadagua 
-                                      ,db21_esfera 
-                                      ,db21_tipopoder 
-                                      ,db21_codtj 
+                                       codigo
+                                      ,nomeinst
+                                      ,ender
+                                      ,munic
+                                      ,uf
+                                      ,telef
+                                      ,ident
+                                      ,tx_banc
+                                      ,numbanco
+                                      ,url
+                                      ,logo
+                                      ,figura
+                                      ,dtcont
+                                      ,diario
+                                      ,pref
+                                      ,vicepref
+                                      ,fax
+                                      ,cgc
+                                      ,cep
+                                      ,tpropri
+                                      ,tsocios
+                                      ,prefeitura
+                                      ,bairro
+                                      ,numcgm
+                                      ,codtrib
+                                      ,tribinst
+                                      ,segmento
+                                      ,formvencfebraban
+                                      ,numero
+                                      ,nomedebconta
+                                      ,db21_tipoinstit
+                                      ,db21_ativo
+                                      ,db21_regracgmiss
+                                      ,db21_regracgmiptu
+                                      ,db21_codcli
+                                      ,nomeinstabrev
+                                      ,db21_usasisagua
+                                      ,db21_codigomunicipoestado
+                                      ,db21_datalimite
+                                      ,db21_criacao
+                                      ,db21_compl
+                                      ,email
+                                      ,db21_imgmarcadagua
+                                      ,db21_esfera
+                                      ,db21_tipopoder
+                                      ,db21_codtj
                                       ,db21_habitantes
                        )
                 values (
-                                $this->codigo 
-                               ,'$this->nomeinst' 
-                               ,'$this->ender' 
-                               ,'$this->munic' 
-                               ,'$this->uf' 
-                               ,'$this->telef' 
-                               ,$this->ident 
-                               ,$this->tx_banc 
-                               ,'$this->numbanco' 
-                               ,'$this->url' 
-                               ,'$this->logo' 
-                               ,'$this->figura' 
-                               ,".($this->dtcont == "null" || $this->dtcont == ""?"null":"'".$this->dtcont."'")." 
-                               ,$this->diario 
-                               ,'$this->pref' 
-                               ,'$this->vicepref' 
-                               ,'$this->fax' 
-                               ,'$this->cgc' 
-                               ,'$this->cep' 
-                               ,'$this->tpropri' 
-                               ,'$this->tsocios' 
-                               ,'$this->prefeitura' 
-                               ,'$this->bairro' 
-                               ,$this->numcgm 
-                               ,'$this->codtrib' 
-                               ,$this->tribinst 
-                               ,$this->segmento 
-                               ,$this->formvencfebraban 
-                               ,$this->numero 
-                               ,'$this->nomedebconta' 
-                               ,$this->db21_tipoinstit 
-                               ,$this->db21_ativo 
-                               ,$this->db21_regracgmiss 
-                               ,$this->db21_regracgmiptu 
-                               ,$this->db21_codcli 
-                               ,'$this->nomeinstabrev' 
-                               ,'$this->db21_usasisagua' 
-                               ,$this->db21_codigomunicipoestado 
-                               ,".($this->db21_datalimite == "null" || $this->db21_datalimite == ""?"null":"'".$this->db21_datalimite."'")." 
-                               ,".($this->db21_criacao == "null" || $this->db21_criacao == ""?"null":"'".$this->db21_criacao."'")." 
-                               ,'$this->db21_compl' 
-                               ,'$this->email' 
-                               ,$this->db21_imgmarcadagua 
-                               ,$this->db21_esfera 
-                               ,$this->db21_tipopoder 
-                               ,$this->db21_codtj 
+                                $this->codigo
+                               ,'$this->nomeinst'
+                               ,'$this->ender'
+                               ,'$this->munic'
+                               ,'$this->uf'
+                               ,'$this->telef'
+                               ,$this->ident
+                               ,$this->tx_banc
+                               ,'$this->numbanco'
+                               ,'$this->url'
+                               ,'$this->logo'
+                               ,'$this->figura'
+                               ,".($this->dtcont == "null" || $this->dtcont == ""?"null":"'".$this->dtcont."'")."
+                               ,$this->diario
+                               ,'$this->pref'
+                               ,'$this->vicepref'
+                               ,'$this->fax'
+                               ,'$this->cgc'
+                               ,'$this->cep'
+                               ,'$this->tpropri'
+                               ,'$this->tsocios'
+                               ,'$this->prefeitura'
+                               ,'$this->bairro'
+                               ,$this->numcgm
+                               ,'$this->codtrib'
+                               ,$this->tribinst
+                               ,$this->segmento
+                               ,$this->formvencfebraban
+                               ,$this->numero
+                               ,'$this->nomedebconta'
+                               ,$this->db21_tipoinstit
+                               ,$this->db21_ativo
+                               ,$this->db21_regracgmiss
+                               ,$this->db21_regracgmiptu
+                               ,$this->db21_codcli
+                               ,'$this->nomeinstabrev'
+                               ,'$this->db21_usasisagua'
+                               ,$this->db21_codigomunicipoestado
+                               ,".($this->db21_datalimite == "null" || $this->db21_datalimite == ""?"null":"'".$this->db21_datalimite."'")."
+                               ,".($this->db21_criacao == "null" || $this->db21_criacao == ""?"null":"'".$this->db21_criacao."'")."
+                               ,'$this->db21_compl'
+                               ,'$this->email'
+                               ,$this->db21_imgmarcadagua
+                               ,$this->db21_esfera
+                               ,$this->db21_tipopoder
+                               ,$this->db21_codtj
                                ,$this->db21_habitantes
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = " ($this->codigo) nao Incluído. Inclusao Abortada.";
@@ -765,16 +765,16 @@ class cl_db_config {
        $resac = db_query("insert into db_acount values($acount,83,18161,'','".AddSlashes(pg_result($resaco,0,'db21_habitantes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($codigo=null) { 
+   function alterar ($codigo=null) {
       $this->atualizacampos();
      $sql = " update db_config set ";
      $virgula = "";
-     if(trim($this->codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["codigo"])){ 
+     if(trim($this->codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["codigo"])){
        $sql  .= $virgula." codigo = $this->codigo ";
        $virgula = ",";
-       if(trim($this->codigo) == null ){ 
+       if(trim($this->codigo) == null ){
          $this->erro_sql = " Campo Cod. Instituição nao Informado.";
          $this->erro_campo = "codigo";
          $this->erro_banco = "";
@@ -784,10 +784,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->nomeinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeinst"])){ 
+     if(trim($this->nomeinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeinst"])){
        $sql  .= $virgula." nomeinst = '$this->nomeinst' ";
        $virgula = ",";
-       if(trim($this->nomeinst) == null ){ 
+       if(trim($this->nomeinst) == null ){
          $this->erro_sql = " Campo Nome da Instituição nao Informado.";
          $this->erro_campo = "nomeinst";
          $this->erro_banco = "";
@@ -797,10 +797,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->ender)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ender"])){ 
+     if(trim($this->ender)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ender"])){
        $sql  .= $virgula." ender = '$this->ender' ";
        $virgula = ",";
-       if(trim($this->ender) == null ){ 
+       if(trim($this->ender) == null ){
          $this->erro_sql = " Campo endereço da instituição nao Informado.";
          $this->erro_campo = "ender";
          $this->erro_banco = "";
@@ -810,10 +810,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->munic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["munic"])){ 
+     if(trim($this->munic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["munic"])){
        $sql  .= $virgula." munic = '$this->munic' ";
        $virgula = ",";
-       if(trim($this->munic) == null ){ 
+       if(trim($this->munic) == null ){
          $this->erro_sql = " Campo Municipio da instituição nao Informado.";
          $this->erro_campo = "munic";
          $this->erro_banco = "";
@@ -823,10 +823,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->uf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["uf"])){ 
+     if(trim($this->uf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["uf"])){
        $sql  .= $virgula." uf = '$this->uf' ";
        $virgula = ",";
-       if(trim($this->uf) == null ){ 
+       if(trim($this->uf) == null ){
          $this->erro_sql = " Campo Unidade Federativa da Instituição nao Informado.";
          $this->erro_campo = "uf";
          $this->erro_banco = "";
@@ -836,10 +836,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->telef)!="" || isset($GLOBALS["HTTP_POST_VARS"]["telef"])){ 
+     if(trim($this->telef)!="" || isset($GLOBALS["HTTP_POST_VARS"]["telef"])){
        $sql  .= $virgula." telef = '$this->telef' ";
        $virgula = ",";
-       if(trim($this->telef) == null ){ 
+       if(trim($this->telef) == null ){
          $this->erro_sql = " Campo Telefone nao Informado.";
          $this->erro_campo = "telef";
          $this->erro_banco = "";
@@ -849,10 +849,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->ident)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ident"])){ 
+     if(trim($this->ident)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ident"])){
        $sql  .= $virgula." ident = $this->ident ";
        $virgula = ",";
-       if(trim($this->ident) == null ){ 
+       if(trim($this->ident) == null ){
          $this->erro_sql = " Campo identidade nao Informado.";
          $this->erro_campo = "ident";
          $this->erro_banco = "";
@@ -862,21 +862,21 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->tx_banc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tx_banc"])){ 
-        if(trim($this->tx_banc)=="" && isset($GLOBALS["HTTP_POST_VARS"]["tx_banc"])){ 
-           $this->tx_banc = "0" ; 
-        } 
+     if(trim($this->tx_banc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tx_banc"])){
+        if(trim($this->tx_banc)=="" && isset($GLOBALS["HTTP_POST_VARS"]["tx_banc"])){
+           $this->tx_banc = "0" ;
+        }
        $sql  .= $virgula." tx_banc = $this->tx_banc ";
        $virgula = ",";
      }
-     if(trim($this->numbanco)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numbanco"])){ 
+     if(trim($this->numbanco)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numbanco"])){
        $sql  .= $virgula." numbanco = '$this->numbanco' ";
        $virgula = ",";
      }
-     if(trim($this->url)!="" || isset($GLOBALS["HTTP_POST_VARS"]["url"])){ 
+     if(trim($this->url)!="" || isset($GLOBALS["HTTP_POST_VARS"]["url"])){
        $sql  .= $virgula." url = '$this->url' ";
        $virgula = ",";
-       if(trim($this->url) == null ){ 
+       if(trim($this->url) == null ){
          $this->erro_sql = " Campo url nao Informado.";
          $this->erro_campo = "url";
          $this->erro_banco = "";
@@ -886,18 +886,18 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->logo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["logo"])){ 
+     if(trim($this->logo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["logo"])){
        $sql  .= $virgula." logo = '$this->logo' ";
        $virgula = ",";
      }
-     if(trim($this->figura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["figura"])){ 
+     if(trim($this->figura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["figura"])){
        $sql  .= $virgula." figura = '$this->figura' ";
        $virgula = ",";
      }
-     if(trim($this->dtcont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"] !="") ){ 
+     if(trim($this->dtcont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"] !="") ){
        $sql  .= $virgula." dtcont = '$this->dtcont' ";
        $virgula = ",";
-       if(trim($this->dtcont) == null ){ 
+       if(trim($this->dtcont) == null ){
          $this->erro_sql = " Campo data da contabilidade nao Informado.";
          $this->erro_campo = "dtcont_dia";
          $this->erro_banco = "";
@@ -906,11 +906,11 @@ class cl_db_config {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["dtcont_dia"])){
          $sql  .= $virgula." dtcont = null ";
          $virgula = ",";
-         if(trim($this->dtcont) == null ){ 
+         if(trim($this->dtcont) == null ){
            $this->erro_sql = " Campo data da contabilidade nao Informado.";
            $this->erro_campo = "dtcont_dia";
            $this->erro_banco = "";
@@ -921,10 +921,10 @@ class cl_db_config {
          }
        }
      }
-     if(trim($this->diario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["diario"])){ 
+     if(trim($this->diario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["diario"])){
        $sql  .= $virgula." diario = $this->diario ";
        $virgula = ",";
-       if(trim($this->diario) == null ){ 
+       if(trim($this->diario) == null ){
          $this->erro_sql = " Campo Diário nao Informado.";
          $this->erro_campo = "diario";
          $this->erro_banco = "";
@@ -934,10 +934,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->pref)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pref"])){ 
+     if(trim($this->pref)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pref"])){
        $sql  .= $virgula." pref = '$this->pref' ";
        $virgula = ",";
-       if(trim($this->pref) == null ){ 
+       if(trim($this->pref) == null ){
          $this->erro_sql = " Campo prefeito nao Informado.";
          $this->erro_campo = "pref";
          $this->erro_banco = "";
@@ -947,10 +947,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->vicepref)!="" || isset($GLOBALS["HTTP_POST_VARS"]["vicepref"])){ 
+     if(trim($this->vicepref)!="" || isset($GLOBALS["HTTP_POST_VARS"]["vicepref"])){
        $sql  .= $virgula." vicepref = '$this->vicepref' ";
        $virgula = ",";
-       if(trim($this->vicepref) == null ){ 
+       if(trim($this->vicepref) == null ){
          $this->erro_sql = " Campo vice prefeito nao Informado.";
          $this->erro_campo = "vicepref";
          $this->erro_banco = "";
@@ -960,10 +960,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->fax)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fax"])){ 
+     if(trim($this->fax)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fax"])){
        $sql  .= $virgula." fax = '$this->fax' ";
        $virgula = ",";
-       if(trim($this->fax) == null ){ 
+       if(trim($this->fax) == null ){
          $this->erro_sql = " Campo fax nao Informado.";
          $this->erro_campo = "fax";
          $this->erro_banco = "";
@@ -973,10 +973,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->cgc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["cgc"])){ 
+     if(trim($this->cgc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["cgc"])){
        $sql  .= $virgula." cgc = '$this->cgc' ";
        $virgula = ",";
-       if(trim($this->cgc) == null ){ 
+       if(trim($this->cgc) == null ){
          $this->erro_sql = " Campo cgc nao Informado.";
          $this->erro_campo = "cgc";
          $this->erro_banco = "";
@@ -986,10 +986,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->cep)!="" || isset($GLOBALS["HTTP_POST_VARS"]["cep"])){ 
+     if(trim($this->cep)!="" || isset($GLOBALS["HTTP_POST_VARS"]["cep"])){
        $sql  .= $virgula." cep = '$this->cep' ";
        $virgula = ",";
-       if(trim($this->cep) == null ){ 
+       if(trim($this->cep) == null ){
          $this->erro_sql = " Campo cep nao Informado.";
          $this->erro_campo = "cep";
          $this->erro_banco = "";
@@ -999,10 +999,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->tpropri)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tpropri"])){ 
+     if(trim($this->tpropri)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tpropri"])){
        $sql  .= $virgula." tpropri = '$this->tpropri' ";
        $virgula = ",";
-       if(trim($this->tpropri) == null ){ 
+       if(trim($this->tpropri) == null ){
          $this->erro_sql = " Campo Débitos proprietário nao Informado.";
          $this->erro_campo = "tpropri";
          $this->erro_banco = "";
@@ -1012,10 +1012,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->tsocios)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tsocios"])){ 
+     if(trim($this->tsocios)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tsocios"])){
        $sql  .= $virgula." tsocios = '$this->tsocios' ";
        $virgula = ",";
-       if(trim($this->tsocios) == null ){ 
+       if(trim($this->tsocios) == null ){
          $this->erro_sql = " Campo Débitos Sócios nao Informado.";
          $this->erro_campo = "tsocios";
          $this->erro_banco = "";
@@ -1025,10 +1025,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->prefeitura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["prefeitura"])){ 
+     if(trim($this->prefeitura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["prefeitura"])){
        $sql  .= $virgula." prefeitura = '$this->prefeitura' ";
        $virgula = ",";
-       if(trim($this->prefeitura) == null ){ 
+       if(trim($this->prefeitura) == null ){
          $this->erro_sql = " Campo Prefeitura nao Informado.";
          $this->erro_campo = "prefeitura";
          $this->erro_banco = "";
@@ -1038,14 +1038,14 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->bairro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["bairro"])){ 
+     if(trim($this->bairro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["bairro"])){
        $sql  .= $virgula." bairro = '$this->bairro' ";
        $virgula = ",";
      }
-     if(trim($this->numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numcgm"])){ 
+     if(trim($this->numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numcgm"])){
        $sql  .= $virgula." numcgm = $this->numcgm ";
        $virgula = ",";
-       if(trim($this->numcgm) == null ){ 
+       if(trim($this->numcgm) == null ){
          $this->erro_sql = " Campo Número do CGM nao Informado.";
          $this->erro_campo = "numcgm";
          $this->erro_banco = "";
@@ -1055,10 +1055,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->codtrib)!="" || isset($GLOBALS["HTTP_POST_VARS"]["codtrib"])){ 
+     if(trim($this->codtrib)!="" || isset($GLOBALS["HTTP_POST_VARS"]["codtrib"])){
        $sql  .= $virgula." codtrib = '$this->codtrib' ";
        $virgula = ",";
-       if(trim($this->codtrib) == null ){ 
+       if(trim($this->codtrib) == null ){
          $this->erro_sql = " Campo Órgão/Unidade da Instituição nao Informado.";
          $this->erro_campo = "codtrib";
          $this->erro_banco = "";
@@ -1068,10 +1068,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->tribinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tribinst"])){ 
+     if(trim($this->tribinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tribinst"])){
        $sql  .= $virgula." tribinst = $this->tribinst ";
        $virgula = ",";
-       if(trim($this->tribinst) == null ){ 
+       if(trim($this->tribinst) == null ){
          $this->erro_sql = " Campo Instituição SIAPC/PAD nao Informado.";
          $this->erro_campo = "tribinst";
          $this->erro_banco = "";
@@ -1081,10 +1081,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->segmento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["segmento"])){ 
+     if(trim($this->segmento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["segmento"])){
        $sql  .= $virgula." segmento = $this->segmento ";
        $virgula = ",";
-       if(trim($this->segmento) == null ){ 
+       if(trim($this->segmento) == null ){
          $this->erro_sql = " Campo Segmento Código de Barras Febraban nao Informado.";
          $this->erro_campo = "segmento";
          $this->erro_banco = "";
@@ -1094,10 +1094,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->formvencfebraban)!="" || isset($GLOBALS["HTTP_POST_VARS"]["formvencfebraban"])){ 
+     if(trim($this->formvencfebraban)!="" || isset($GLOBALS["HTTP_POST_VARS"]["formvencfebraban"])){
        $sql  .= $virgula." formvencfebraban = $this->formvencfebraban ";
        $virgula = ",";
-       if(trim($this->formvencfebraban) == null ){ 
+       if(trim($this->formvencfebraban) == null ){
          $this->erro_sql = " Campo Forma do vencimento Febraban nao Informado.";
          $this->erro_campo = "formvencfebraban";
          $this->erro_banco = "";
@@ -1107,17 +1107,17 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numero"])){ 
-        if(trim($this->numero)=="" && isset($GLOBALS["HTTP_POST_VARS"]["numero"])){ 
-           $this->numero = "0" ; 
-        } 
+     if(trim($this->numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["numero"])){
+        if(trim($this->numero)=="" && isset($GLOBALS["HTTP_POST_VARS"]["numero"])){
+           $this->numero = "0" ;
+        }
        $sql  .= $virgula." numero = $this->numero ";
        $virgula = ",";
      }
-     if(trim($this->nomedebconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomedebconta"])){ 
+     if(trim($this->nomedebconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomedebconta"])){
        $sql  .= $virgula." nomedebconta = '$this->nomedebconta' ";
        $virgula = ",";
-       if(trim($this->nomedebconta) == null ){ 
+       if(trim($this->nomedebconta) == null ){
          $this->erro_sql = " Campo Nome da instituição no débito em conta nao Informado.";
          $this->erro_campo = "nomedebconta";
          $this->erro_banco = "";
@@ -1127,10 +1127,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_tipoinstit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_tipoinstit"])){ 
+     if(trim($this->db21_tipoinstit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_tipoinstit"])){
        $sql  .= $virgula." db21_tipoinstit = $this->db21_tipoinstit ";
        $virgula = ",";
-       if(trim($this->db21_tipoinstit) == null ){ 
+       if(trim($this->db21_tipoinstit) == null ){
          $this->erro_sql = " Campo Tipo de Instituição nao Informado.";
          $this->erro_campo = "db21_tipoinstit";
          $this->erro_banco = "";
@@ -1140,10 +1140,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_ativo"])){ 
+     if(trim($this->db21_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_ativo"])){
        $sql  .= $virgula." db21_ativo = $this->db21_ativo ";
        $virgula = ",";
-       if(trim($this->db21_ativo) == null ){ 
+       if(trim($this->db21_ativo) == null ){
          $this->erro_sql = " Campo Ativo nao Informado.";
          $this->erro_campo = "db21_ativo";
          $this->erro_banco = "";
@@ -1153,10 +1153,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_regracgmiss)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_regracgmiss"])){ 
+     if(trim($this->db21_regracgmiss)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_regracgmiss"])){
        $sql  .= $virgula." db21_regracgmiss = $this->db21_regracgmiss ";
        $virgula = ",";
-       if(trim($this->db21_regracgmiss) == null ){ 
+       if(trim($this->db21_regracgmiss) == null ){
          $this->erro_sql = " Campo Regra CGM issbase nao Informado.";
          $this->erro_campo = "db21_regracgmiss";
          $this->erro_banco = "";
@@ -1166,10 +1166,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_regracgmiptu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_regracgmiptu"])){ 
+     if(trim($this->db21_regracgmiptu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_regracgmiptu"])){
        $sql  .= $virgula." db21_regracgmiptu = $this->db21_regracgmiptu ";
        $virgula = ",";
-       if(trim($this->db21_regracgmiptu) == null ){ 
+       if(trim($this->db21_regracgmiptu) == null ){
          $this->erro_sql = " Campo Regra Cgm Iptu nao Informado.";
          $this->erro_campo = "db21_regracgmiptu";
          $this->erro_banco = "";
@@ -1179,10 +1179,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_codcli)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codcli"])){ 
+     if(trim($this->db21_codcli)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codcli"])){
        $sql  .= $virgula." db21_codcli = $this->db21_codcli ";
        $virgula = ",";
-       if(trim($this->db21_codcli) == null ){ 
+       if(trim($this->db21_codcli) == null ){
          $this->erro_sql = " Campo Código do cliente nao Informado.";
          $this->erro_campo = "db21_codcli";
          $this->erro_banco = "";
@@ -1192,10 +1192,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->nomeinstabrev)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeinstabrev"])){ 
+     if(trim($this->nomeinstabrev)!="" || isset($GLOBALS["HTTP_POST_VARS"]["nomeinstabrev"])){
        $sql  .= $virgula." nomeinstabrev = '$this->nomeinstabrev' ";
        $virgula = ",";
-       if(trim($this->nomeinstabrev) == null ){ 
+       if(trim($this->nomeinstabrev) == null ){
          $this->erro_sql = " Campo Nome da instituição para relatório nao Informado.";
          $this->erro_campo = "nomeinstabrev";
          $this->erro_banco = "";
@@ -1205,10 +1205,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_usasisagua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_usasisagua"])){ 
+     if(trim($this->db21_usasisagua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_usasisagua"])){
        $sql  .= $virgula." db21_usasisagua = '$this->db21_usasisagua' ";
        $virgula = ",";
-       if(trim($this->db21_usasisagua) == null ){ 
+       if(trim($this->db21_usasisagua) == null ){
          $this->erro_sql = " Campo Usa sistema de água nao Informado.";
          $this->erro_campo = "db21_usasisagua";
          $this->erro_banco = "";
@@ -1218,10 +1218,10 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_codigomunicipoestado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codigomunicipoestado"])){ 
+     if(trim($this->db21_codigomunicipoestado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codigomunicipoestado"])){
        $sql  .= $virgula." db21_codigomunicipoestado = $this->db21_codigomunicipoestado ";
        $virgula = ",";
-       if(trim($this->db21_codigomunicipoestado) == null ){ 
+       if(trim($this->db21_codigomunicipoestado) == null ){
          $this->erro_sql = " Campo Código do município no estado nao Informado.";
          $this->erro_campo = "db21_codigomunicipoestado";
          $this->erro_banco = "";
@@ -1231,54 +1231,54 @@ class cl_db_config {
          return false;
        }
      }
-     if(trim($this->db21_datalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"] !="") ){ 
+     if(trim($this->db21_datalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"] !="") ){
        $sql  .= $virgula." db21_datalimite = '$this->db21_datalimite' ";
        $virgula = ",";
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["db21_datalimite_dia"])){
          $sql  .= $virgula." db21_datalimite = null ";
          $virgula = ",";
        }
      }
-     if(trim($this->db21_criacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"] !="") ){ 
+     if(trim($this->db21_criacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"] !="") ){
        $sql  .= $virgula." db21_criacao = '$this->db21_criacao' ";
        $virgula = ",";
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["db21_criacao_dia"])){
          $sql  .= $virgula." db21_criacao = null ";
          $virgula = ",";
        }
      }
-     if(trim($this->db21_compl)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_compl"])){ 
+     if(trim($this->db21_compl)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_compl"])){
        $sql  .= $virgula." db21_compl = '$this->db21_compl' ";
        $virgula = ",";
      }
-     if(trim($this->email)!="" || isset($GLOBALS["HTTP_POST_VARS"]["email"])){ 
+     if(trim($this->email)!="" || isset($GLOBALS["HTTP_POST_VARS"]["email"])){
        $sql  .= $virgula." email = '$this->email' ";
        $virgula = ",";
      }
-     if(trim($this->db21_imgmarcadagua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_imgmarcadagua"])){ 
+     if(trim($this->db21_imgmarcadagua)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_imgmarcadagua"])){
        $sql  .= $virgula." db21_imgmarcadagua = $this->db21_imgmarcadagua ";
        $virgula = ",";
      }
-     if(trim($this->db21_esfera)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_esfera"])){ 
-        if(trim($this->db21_esfera)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db21_esfera"])){ 
-           $this->db21_esfera = "0" ; 
-        } 
+     if(trim($this->db21_esfera)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_esfera"])){
+        if(trim($this->db21_esfera)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db21_esfera"])){
+           $this->db21_esfera = "0" ;
+        }
        $sql  .= $virgula." db21_esfera = $this->db21_esfera ";
        $virgula = ",";
      }
-     if(trim($this->db21_tipopoder)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_tipopoder"])){ 
-        if(trim($this->db21_tipopoder)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db21_tipopoder"])){ 
-           $this->db21_tipopoder = "0" ; 
-        } 
+     if(trim($this->db21_tipopoder)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_tipopoder"])){
+        if(trim($this->db21_tipopoder)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db21_tipopoder"])){
+           $this->db21_tipopoder = "0" ;
+        }
        $sql  .= $virgula." db21_tipopoder = $this->db21_tipopoder ";
        $virgula = ",";
      }
-     if(trim($this->db21_codtj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codtj"])){ 
+     if(trim($this->db21_codtj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_codtj"])){
        $sql  .= $virgula." db21_codtj = $this->db21_codtj ";
        $virgula = ",";
-       if(trim($this->db21_codtj) == null ){ 
+       if(trim($this->db21_codtj) == null ){
          $this->erro_sql = " Campo Código do município na TJ nao Informado.";
          $this->erro_campo = "db21_codtj";
          $this->erro_banco = "";
@@ -1409,7 +1409,7 @@ class cl_db_config {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->codigo;
@@ -1437,14 +1437,14 @@ class cl_db_config {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -1516,7 +1516,7 @@ class cl_db_config {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$codigo;
@@ -1544,11 +1544,11 @@ class cl_db_config {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -1570,8 +1570,8 @@ class cl_db_config {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -1586,11 +1586,12 @@ class cl_db_config {
      $sql .= " from db_config ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
+     $sql .= "      left join infocomplementaresinstit  on  si09_instit = cgm.z01_numcgm";
      $sql2 = "";
      if($dbwhere==""){
        if($codigo!=null ){
-         $sql2 .= " where db_config.codigo = $codigo "; 
-       } 
+         $sql2 .= " where db_config.codigo = $codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -1606,8 +1607,8 @@ class cl_db_config {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -1624,8 +1625,8 @@ class cl_db_config {
      $sql2 = "";
      if($dbwhere==""){
        if($codigo!=null ){
-         $sql2 .= " where db_config.codigo = $codigo "; 
-       } 
+         $sql2 .= " where db_config.codigo = $codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -1743,7 +1744,7 @@ class cl_db_config {
 
 }
    function sql_query_siafi( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
-   	
+
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -1784,15 +1785,15 @@ class cl_db_config {
    * @return mixed boolean, object db_fields
    */
   function getParametrosInstituicao($iInstit=null) {
-  
+
     if (empty($iInstit)){
       $iInstit = db_getsession("DB_instit");
     }
-    
+
   	$sSql = "select * from db_config where codigo = " . $iInstit;
-  
+
   	$rsSql = db_query($sSql);
-  
+
   	if  ( $rsSql && pg_num_rows($rsSql) ) {
   		return db_utils::fieldsMemory($rsSql, 0);
   	}

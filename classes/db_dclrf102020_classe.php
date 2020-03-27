@@ -23,16 +23,18 @@ class cl_dclrf102020 {
 	var $si157_vlsaldoatualcontragarantiaexterna = 0;
 	var $si157_medidascorretivas = null;
 	var $si157_recalieninvpermanente = 0;
+    var $si157_vldotinicialincentcontrib = 0;
 	var $si157_vldotatualizadaincentcontrib = 0;
 	var $si157_vlempenhadoicentcontrib = 0;
+    var $si157_vldotinicialincentinstfinanc = 0;
 	var $si157_vldotatualizadaincentinstfinanc = 0;
 	var $si157_vlempenhadoincentinstfinanc = 0;
 	var $si157_vlliqincentcontrib = 0;
 	var $si157_vlliqincentinstfinanc = 0;
 	var $si157_vlirpnpincentcontrib = 0;
 	var $si157_vlirpnpincentinstfinanc = 0;
-	var $si157_vlrecursosnaoaplicados = 0;
 	var $si157_vlapropiacaodepositosjudiciais = 0;
+    var $si157_vlajustesrelativosrpps = 0;
 	var $si157_vloutrosajustes = 0;
 	var $si157_metarrecada = 0;
 	var $si157_dscmedidasadotadas = null;
@@ -49,16 +51,18 @@ class cl_dclrf102020 {
                  si157_vlsaldoatualcontragarantiaexterna = double = Saldo atual das contragarantias externas
                  si157_medidascorretivas = text = Medidas corretivas adotadas
                  si157_recalieninvpermanente = Double = cálculo apurado da receita de alienação
+                 si157_vldotinicialincentcontrib = Double = valor dotação inicial de incentivo  a contribuinte
                  si157_vldotatualizadaincentcontrib = double = Valor da dotação atualizada de Incentivo
                  si157_vlempenhadoicentcontrib = Double = Valor empenhado de Incentivo
+                 si157_vldotinicialincentinstfinanc = Double = valor dotação de incentivo concedido por instituição financeira
                  si157_vldotatualizadaincentinstfinanc = double = Valor da dotação atualizada de Incentivo
                  si157_vlempenhadoincentinstfinanc = double = Valor empenhado de Incentivo concedido
                  si157_vlliqincentcontrib = double = Valor Liquidado de Incentivo
                  si157_vlliqincentinstfinanc = double = Valor Liquidado de Incentivo
                  si157_vlirpnpincentcontrib = double = Restos a Pagar Não Processados
                  si157_vlirpnpincentinstfinanc = double = Restos a Pagar Não Processados de Incen
-                 si157_vlrecursosnaoaplicados = double = Recursos do FUNDEB não aplicados
                  si157_vlapropiacaodepositosjudiciais = double = Saldo apurado da apropriação
+                 si157_vlajustesrelativosrpps = double = valor de ajustes relativos ao rpps
                  si157_vloutrosajustes = double = Valores não considerados
                  si157_metarrecada = int4 = Atingimento da meta bimestral de arrec
                  si157_dscmedidasadotadas = text = Medidas adotadas e a adotar
@@ -94,16 +98,24 @@ class cl_dclrf102020 {
        $this->si157_vlsaldoatualcontragarantiaexterna = ($this->si157_vlsaldoatualcontragarantiaexterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlsaldoatualcontragarantiaexterna"]:$this->si157_vlsaldoatualcontragarantiaexterna);
        $this->si157_medidascorretivas = ($this->si157_medidascorretivas == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_medidascorretivas"]:$this->si157_medidascorretivas);
        $this->si157_recalieninvpermanente = ($this->si157_recalieninvpermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_recalieninvpermanente"]:$this->si157_recalieninvpermanente);
+
+       $this->si157_vldotinicialincentcontrib = ($this->si157_vldotinicialincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vldotinicialincentcontrib"]:$this->si157_vldotinicialincentcontrib);
+
        $this->si157_vldotatualizadaincentcontrib = ($this->si157_vldotatualizadaincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vldotatualizadaincentcontrib"]:$this->si157_vldotatualizadaincentcontrib);
        $this->si157_vlempenhadoicentcontrib = ($this->si157_vlempenhadoicentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlempenhadoicentcontrib"]:$this->si157_vlempenhadoicentcontrib);
+
+       $this->si157_vldotinicialincentinstfinanc = ($this->si157_vldotinicialincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vldotinicialincentinstfinanc"]:$this->si157_vldotinicialincentinstfinanc);
+
        $this->si157_vldotatualizadaincentinstfinanc = ($this->si157_vldotatualizadaincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vldotatualizadaincentinstfinanc"]:$this->si157_vldotatualizadaincentinstfinanc);
        $this->si157_vlempenhadoincentinstfinanc = ($this->si157_vlempenhadoincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlempenhadoincentinstfinanc"]:$this->si157_vlempenhadoincentinstfinanc);
        $this->si157_vlliqincentcontrib = ($this->si157_vlliqincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlliqincentcontrib"]:$this->si157_vlliqincentcontrib);
        $this->si157_vlliqincentinstfinanc = ($this->si157_vlliqincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlliqincentinstfinanc"]:$this->si157_vlliqincentinstfinanc);
        $this->si157_vlirpnpincentcontrib = ($this->si157_vlirpnpincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlirpnpincentcontrib"]:$this->si157_vlirpnpincentcontrib);
        $this->si157_vlirpnpincentinstfinanc = ($this->si157_vlirpnpincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlirpnpincentinstfinanc"]:$this->si157_vlirpnpincentinstfinanc);
-       $this->si157_vlrecursosnaoaplicados = ($this->si157_vlrecursosnaoaplicados == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlrecursosnaoaplicados"]:$this->si157_vlrecursosnaoaplicados);
        $this->si157_vlapropiacaodepositosjudiciais = ($this->si157_vlapropiacaodepositosjudiciais == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlapropiacaodepositosjudiciais"]:$this->si157_vlapropiacaodepositosjudiciais);
+
+       $this->si157_vlajustesrelativosrpps = ($this->si157_vlajustesrelativosrpps == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlajustesrelativosrpps"]:$this->si157_vlajustesrelativosrpps);
+
        $this->si157_vloutrosajustes = ($this->si157_vloutrosajustes == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vloutrosajustes"]:$this->si157_vloutrosajustes);
        $this->si157_metarrecada = ($this->si157_metarrecada == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_metarrecada"]:$this->si157_metarrecada);
        $this->si157_dscmedidasadotadas = ($this->si157_dscmedidasadotadas == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_dscmedidasadotadas"]:$this->si157_dscmedidasadotadas);
@@ -181,6 +193,16 @@ class cl_dclrf102020 {
        $this->erro_status = "0";
        return false;
      }
+
+       if($this->si157_vldotinicialincentcontrib == null ){
+           $this->erro_sql = " Campo valor dotação inicial de incentivo  a contribuinte nao Informado.";
+           $this->erro_campo = "si157_vldotinicialincentcontrib";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
      if($this->si157_vldotatualizadaincentcontrib == null ){
        $this->erro_sql = " Campo Valor da dotação atualizada de Incentivo nao Informado.";
        $this->erro_campo = "si157_vldotatualizadaincentcontrib";
@@ -199,6 +221,17 @@ class cl_dclrf102020 {
        $this->erro_status = "0";
        return false;
      }
+
+       if($this->si157_vldotinicialincentinstfinanc == null ){
+           $this->erro_sql = " Campo valor dotação de incentivo concedido por instituição financeira nao Informado.";
+           $this->erro_campo = "si157_vldotinicialincentinstfinanc";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
      if($this->si157_vldotatualizadaincentinstfinanc == null ){
        $this->erro_sql = " Campo Valor da dotação atualizada de Incentivo nao Informado.";
        $this->erro_campo = "si157_vldotatualizadaincentinstfinanc";
@@ -253,15 +286,6 @@ class cl_dclrf102020 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si157_vlrecursosnaoaplicados == null ){
-       $this->erro_sql = " Campo Recursos do FUNDEB não aplicados nao Informado.";
-       $this->erro_campo = "si157_vlrecursosnaoaplicados";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si157_vlapropiacaodepositosjudiciais == null ){
        $this->erro_sql = " Campo Saldo apurado da apropriação nao Informado.";
        $this->erro_campo = "si157_vlapropiacaodepositosjudiciais";
@@ -271,6 +295,17 @@ class cl_dclrf102020 {
        $this->erro_status = "0";
        return false;
      }
+
+       if($this->si157_vlajustesrelativosrpps == null ){
+           $this->erro_sql = " Campo valor de ajustes relativos ao rpps nao Informado.";
+           $this->erro_campo = "si157_vlajustesrelativosrpps";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
      if($this->si157_vloutrosajustes == null ){
        $this->erro_sql = " Campo Valores não considerados nao Informado.";
        $this->erro_campo = "si157_vloutrosajustes";
@@ -351,16 +386,18 @@ class cl_dclrf102020 {
                                       ,si157_vlsaldoatualcontragarantiaexterna
                                       ,si157_medidascorretivas
                                       ,si157_recalieninvpermanente
+                                      ,si157_vldotinicialincentcontrib
                                       ,si157_vldotatualizadaincentcontrib
                                       ,si157_vlempenhadoicentcontrib
+                                      ,si157_vldotinicialincentinstfinanc
                                       ,si157_vldotatualizadaincentinstfinanc
                                       ,si157_vlempenhadoincentinstfinanc
                                       ,si157_vlliqincentcontrib
                                       ,si157_vlliqincentinstfinanc
                                       ,si157_vlirpnpincentcontrib
                                       ,si157_vlirpnpincentinstfinanc
-                                      ,si157_vlrecursosnaoaplicados
                                       ,si157_vlapropiacaodepositosjudiciais
+                                      ,si157_vlajustesrelativosrpps
                                       ,si157_vloutrosajustes
                                       ,si157_metarrecada
                                       ,si157_tiporegistro
@@ -377,16 +414,18 @@ class cl_dclrf102020 {
                                ,$this->si157_vlsaldoatualcontragarantiaexterna
                                ,'$this->si157_medidascorretivas'
                                ,$this->si157_recalieninvpermanente
+                               ,$this->si157_vldotinicialincentcontrib
                                ,$this->si157_vldotatualizadaincentcontrib
                                ,$this->si157_vlempenhadoicentcontrib
+                               ,$this->si157_vldotinicialincentinstfinanc
                                ,$this->si157_vldotatualizadaincentinstfinanc
                                ,$this->si157_vlempenhadoincentinstfinanc
                                ,$this->si157_vlliqincentcontrib
                                ,$this->si157_vlliqincentinstfinanc
                                ,$this->si157_vlirpnpincentcontrib
                                ,$this->si157_vlirpnpincentinstfinanc
-                               ,$this->si157_vlrecursosnaoaplicados
                                ,$this->si157_vlapropiacaodepositosjudiciais
+                               ,$this->si157_vlajustesrelativosrpps
                                ,$this->si157_vloutrosajustes
                                ,$this->si157_metarrecada
                                ,$this->si157_tiporegistro

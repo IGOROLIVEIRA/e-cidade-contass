@@ -186,19 +186,7 @@ $sWhereContratos = " and 1 = 1 ";
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
             }
 
-            if($listacred == "false"){
-                $sWhereCredenciamento = " and l03_pctipocompratribunal not in (103,102)";
-            }
-
-            if($credenciamento == 'true'){
-                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao = 1 AND l20_dtpubratificacao IS NULL";
-            }
-
-            if($credenciamento == 'false'){
-                $sWherePublicCredenciamento = " AND l03_pctipocompratribunal IN (100,101,102,103) AND l20_licsituacao IN (10) AND l20_dtpubratificacao IS NOT NULL";
-            }
-
-            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}"."{$sWhereCredenciamento}"."$sWherePublicCredenciamento";
+            $dbwhere_instit = "l20_instit = ".db_getsession("DB_instit"). "{$sWhereModalidade}";
             if (isset($lContratos) && $lContratos == 1 ) {
                 $sWhereContratos .= " and ac24_sequencial is null ";
             }
@@ -212,6 +200,9 @@ $sWhereContratos = " and 1 = 1 ";
 
             }
 
+            if($obras == "true"){
+              $dbwhere .= " l20_naturezaobjeto in (1,7) and";
+            }
 
             if(!isset($pesquisa_chave)){
 
@@ -303,8 +294,59 @@ $sWhereContratos = " and 1 = 1 ";
           ";
                 }
 
-                $aRepassa = array();
+                if (isset($edital) && $edital == true) {
+                    $sWhere = '';
+                    if($aguardando_envio){
+                      $sWhere = ' AND liclicita.l20_cadinicial = 1';
+                    }
 
+                    $sql = "
+                      SELECT DISTINCT liclicita.l20_codigo,
+                            liclicita.l20_edital,
+                            liclicita.l20_nroedital,
+                            liclicita.l20_anousu,
+                            pctipocompra.pc50_descr,
+                            liclicita.l20_numero,
+                            pctipocompra.pc50_pctipocompratribunal,
+                            liclicita.l20_objeto,
+                            liclicita.l20_naturezaobjeto dl_Natureza_objeto,
+                            (CASE
+                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null
+                              THEN liclicita.l20_dtpublic
+                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null
+                              THEN liclicita.l20_datacria
+                            WHEN liclancedital.l47_dataenvio is not null
+                              THEN liclancedital.l47_dataenvio
+                            END) as dl_Data_Referencia,
+                            (CASE WHEN liclicita.l20_cadinicial = 1 or liclicita.l20_cadinicial is null THEN 'PENDENTE'
+                                WHEN liclicita.l20_cadinicial = 2 THEN 'AGUARDANDO ENVIO'
+                            END) as status
+                        FROM liclicita
+                        INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
+                        INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+                        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                        INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal
+                        INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
+                        INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao
+                        INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm
+                        INNER JOIN db_config AS dbconfig ON dbconfig.codigo = cflicita.l03_instit
+                        INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                        INNER JOIN bairro ON bairro.j13_codi = liclocal.l26_bairro
+                        INNER JOIN ruas ON ruas.j14_codigo = liclocal.l26_lograd
+                        LEFT JOIN liclicitaproc ON liclicitaproc.l34_liclicita = liclicita.l20_codigo
+                        LEFT JOIN protprocesso ON protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
+                        LEFT JOIN liclicitem ON liclicita.l20_codigo = l21_codliclicita
+                        LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
+                        LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+                        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                        LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
+                        WHERE l20_instit = ".db_getsession('DB_instit')."
+                           AND EXTRACT (YEAR from l20_dtpublic) >= 2020 $sWhere and liclicita.l20_naturezaobjeto in (1, 7)
+                           AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
+                        ORDER BY l20_codigo
+          ";
+                }
+                $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
 
@@ -400,17 +442,28 @@ $sWhereContratos = " and 1 = 1 ";
                         }
                     }
                     else {
-                        $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+                        if($obras == "true"){
+                          $result = $clliclicita->sql_record($clliclicita->sql_query(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
 
-                        if($clliclicita->numrows != 0){
+                          if($clliclicita->numrows != 0){
+                            db_fieldsmemory($result,0);
+                            echo "<script>".$funcao_js."('$l20_objeto','$l20_numero','$l03_descr',false);</script>";
+                          } else {
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                          }
+                        }else{
+                          $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
+
+                          if($clliclicita->numrows != 0){
                             db_fieldsmemory($result,0);
                             if($tipoproc == "true"){
-                                echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
+                              echo "<script>".$funcao_js."('$l20_objeto','$l03_pctipocompratribunal',false);</script>";
                             }else{
-                                echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
+                              echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                             }
-                        } else {
+                          } else {
                             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+                          }
                         }
                     }
 

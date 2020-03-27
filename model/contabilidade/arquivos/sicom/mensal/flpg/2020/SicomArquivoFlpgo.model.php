@@ -151,9 +151,23 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
            ELSE NULL
        END AS rh37_exerceatividade,
     case
-    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1 ) is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1)
-    else 'A'
+    when rh05_recis < '{$this->sDataInicial}' then  'O'
+    else COALESCE((select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1),'A')
       end as si195_indsituacaoservidorpensionista,
+      case when rh05_recis < '{$this->sDataInicial}' then (SELECT r59_descr
+FROM rescisao
+WHERE (r59_anousu,
+       r59_mesusu,
+       r59_regime,
+       r59_causa,
+       r59_caub) = (rh02_anousu,
+                    rh02_mesusu,
+                    rh30_regime,
+                    rh05_causa,
+                    rh05_caub) LIMIT 1) else '' end as si195_dscsituacao,
+      case when rh30_vinculo = 'P' AND rh30_naturezaregime = 4 then 2 
+           when rh30_vinculo = 'P' AND rh30_naturezaregime != 4 then 1
+      else null end as si195_indpensionistaprevidenciario,
     rh01_admiss as si195_datconcessaoaposentadoriapensao,
     case
     when rh20_cargo <> 0 then rh04_descr
@@ -389,7 +403,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        AND r20_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6']."))))
    AND   rh01_sicom = 1
    AND rh01_instit = ".db_getsession('DB_instit')."
-   GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
+   GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,rh05_recis
    ";
 
    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
@@ -496,6 +510,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
         $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
+        $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
+        $clflpgo10->si195_indpensionistaprevidenciario      = $oDados10->si195_indpensionistaprevidenciario;
         if($oDados10->rh30_vinculo == 'P') {
             if($oDados10->rh02_cgminstituidor == "" || $oDados10->rh02_cgminstituidor == null){
                 $clflpgo10->si195_nrocpfinstituidor         = "";
@@ -509,7 +525,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
             $clflpgo10->si195_datobitoinstituidor           = "";
             $clflpgo10->si195_tipodependencia               = "";
         }
-        $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
+        $clflpgo10->si195_dscdependencia                       = ' ';
+        $clflpgo10->si195_datafastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
         $clflpgo10->si195_codcargo                          = ($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0;

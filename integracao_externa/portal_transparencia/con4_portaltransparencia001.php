@@ -1661,7 +1661,7 @@ try {
 
     // RECEITAS *******************************************************************************************************//
 
-    $sSqlInstitPref = "SELECT db21_tipoinstit FROM configuracoes.db_config WHERE db21_tipoinstit IN (2,12) ";
+    $sSqlInstitPref = "SELECT db21_tipoinstit FROM configuracoes.db_config WHERE db21_tipoinstit NOT IN (2, 12)";
     $rsInstitPref   = db_query($connOrigem,$sSqlInstitPref);
     $sInstitPref    = pg_result($rsInstitPref,0,0);
     if (!empty($sInstitPref)) {

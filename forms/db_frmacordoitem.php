@@ -1682,12 +1682,13 @@ db_app::load("estilos.css, grid.style.css");
         var VlrTotal = 0
 
         VlrTotal = Number(aRow[6]) * Number(oRow[11]);
+        let nvalor = aRow[6];
 
         oDadosItens = new Object();
         oDadosItens.codigo = aRow[0];
         oDadosItens.codigomaterial = aRow[3];
         oDadosItens.quantidade = aRow[11];
-        oDadosItens.valorunitario = aRow[6];
+        oDadosItens.valorunitario = nvalor.replace('.','').replace(',','.');
         oDadosItens.valortotal = VlrTotal;
         oDadosItens.iFormaControle = 1;
         oDadosItens.dtInicial = aRow[12];

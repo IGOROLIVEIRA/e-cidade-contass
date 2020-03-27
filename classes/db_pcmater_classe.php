@@ -60,6 +60,7 @@ class cl_pcmater {
    /*OC3770*/
    var $pc01_tabela = 'f';
    var $pc01_taxa   = 'f';
+   var $pc01_obras = 'f';
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc01_codmater = int4 = Código do Material
@@ -80,6 +81,7 @@ class cl_pcmater {
                  pc01_data = date = Data da inclusão
                  pc01_tabela = bool = Tabela
                  pc01_taxa = bool = Taxa
+                 pc01_obras = boll = obras
                  ";
    //funcao construtor da classe
    function cl_pcmater() {
@@ -113,6 +115,7 @@ class cl_pcmater {
        $this->pc01_validademinima = ($this->pc01_validademinima == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_validademinima"]:$this->pc01_validademinima);
        $this->pc01_obrigatorio = ($this->pc01_obrigatorio == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_obrigatorio"]:$this->pc01_obrigatorio);
        $this->pc01_liberaresumo = ($this->pc01_liberaresumo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberaresumo"]:$this->pc01_liberaresumo);
+       $this->pc01_obras = ($this->pc01_obras == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_obras"]:$this->pc01_obras);
      }else{
        $this->pc01_codmater = ($this->pc01_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]:$this->pc01_codmater);
      }
@@ -278,6 +281,7 @@ class cl_pcmater {
                                       ,pc01_data
                                       ,pc01_tabela
                                       ,pc01_taxa
+                                      ,pc01_obras
                        )
                 values (
                                 $this->pc01_codmater
@@ -297,6 +301,7 @@ class cl_pcmater {
                                ,'$this->pc01_data'
                                ,'$this->pc01_tabela'
                                ,'$this->pc01_taxa'
+                               ,'$this->pc01_obras'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -543,6 +548,10 @@ class cl_pcmater {
      }
      if(trim($this->pc01_taxa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_taxa"])){
        $sql  .= $virgula." pc01_taxa = '$this->pc01_taxa' ";
+       $virgula = ",";
+     }
+     if(trim($this->pc01_obras)!="" || isset($GLOBALS["HTTP_POST_VARS"]["$this->pc01_obras"])){
+       $sql  .= $virgula." pc01_obras = '$this->pc01_obras' ";
        $virgula = ",";
      }
      /*FIM - OC3770*/
