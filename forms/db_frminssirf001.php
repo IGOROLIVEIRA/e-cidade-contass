@@ -206,6 +206,19 @@ if(isset($codtab) && $codigo_tab <= 2){
             if($alteraform == true){
 	    ?>
                     </tr>
+      <? if($codtab > 2) { ?>
+      <tr>
+          <td nowrap title="<?=$Tr33_novocalculo?>" >
+              <?=$Lr33_novocalculo?>
+          </td>
+          <td>
+              <?
+              $arrNovoCalculo = array("f"=>"Não","t"=>"Sim");
+              db_select("r33_novocalculo", $arrNovoCalculo, true, $db_opcao);
+              ?>
+          </td>
+      </tr>
+    <? } ?>
                   </table>
                 </fieldset>
 	      </td>
@@ -370,13 +383,13 @@ if(isset($opcao)){
   	$dbwhere .= " and r33_codigo <> ".$r33_codigo;
       }
 
-      $sql_iframe = $clinssirf->sql_query_file(null,null,"r33_codigo,r33_anousu,r33_mesusu,r33_codtab,r33_inic,r33_fim,r33_perc,r33_deduzi","r33_inic",$dbwhere);
+      $sql_iframe = $clinssirf->sql_query_file(null,null,"r33_codigo,r33_anousu,r33_mesusu,r33_codtab,r33_inic,r33_fim,r33_perc,r33_deduzi,r33_novocalculo","r33_inic",$dbwhere);
 
       $chavepri= array("r33_codigo"=>@$r33_codigo,"r33_anousu"=>@$r33_anousu,"r33_mesusu"=>@$r33_mesusu);
       $cliframe_alterar_excluir->chavepri = $chavepri;
       $cliframe_alterar_excluir->opcoes   = 1;
       $cliframe_alterar_excluir->sql      = $sql_iframe;
-      $cliframe_alterar_excluir->campos   = "r33_inic,r33_fim,r33_perc,r33_deduzi";
+      $cliframe_alterar_excluir->campos   = "r33_inic,r33_fim,r33_perc,r33_deduzi,r33_novocalculo";
       $cliframe_alterar_excluir->legenda  = "FAIXAS LANÇADAS";
       $cliframe_alterar_excluir->alignlegenda  = "left";
       $cliframe_alterar_excluir->iframe_height = "200";
