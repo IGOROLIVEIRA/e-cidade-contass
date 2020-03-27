@@ -140,6 +140,11 @@ switch ($oParam->exec) {
                                         INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                                         INNER JOIN acordo ON ac26_acordo = ac16_sequencial
                                     WHERE ac23_pcprocitem = pc81_codprocitem AND (ac16_acordosituacao NOT IN (2, 3)))";
+        $sWhere .= "AND NOT EXISTS (SELECT 1
+                                                FROM liclicitem
+                                                INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+                                                WHERE pc81_codproc = pc80_codproc)";
+        $sWhere .= "AND empautoriza.e54_autori IS NULL ";
         $sWhere .= "AND pc80_codproc IN (SELECT si01_processocompra FROM precoreferencia)";
         $sWhere .= "AND date_part('YEAR', pc80_data) = ".db_getsession("DB_anousu");
         $sOrdem = "pc80_data DESC";
@@ -179,7 +184,9 @@ switch ($oParam->exec) {
         $sSqlProcCompra     = "SELECT $sCampos
                                     FROM ($sSubSqlProcCompra) as x 
                                         LEFT JOIN precoreferencia ON precoreferencia.si01_processocompra = pc80_codproc
-                                        LEFT JOIN pcprocliberado ON pc80_codproc = pcprocliberado.e233_codproc";
+                                        LEFT JOIN pcprocliberado ON pc80_codproc = pcprocliberado.e233_codproc 
+                                        LEFT JOIN empautitempcprocitem ON e73_pcprocitem = pc81_codprocitem 
+                                    WHERE e73_autori IS NULL";
         $rsProcCompra = $oProcComp->sql_record($sSqlProcCompra);
         $oRetorno->aItens = db_utils::getCollectionByRecord($rsProcCompra, true, false, true);
 
