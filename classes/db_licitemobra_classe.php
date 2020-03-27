@@ -496,6 +496,7 @@ class cl_licitemobra {
       $sql .= $campos;
     }
     $sql .= " from licitemobra ";
+    $sql .= " inner join pcmater on pc01_codmater = obr06_pcmater ";
     $sql2 = "";
     if ($dbwhere=="") {
       if ( $obr06_sequencial != "" && $obr06_sequencial != null) {

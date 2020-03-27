@@ -201,7 +201,7 @@ $sWhereContratos = " and 1 = 1 ";
             }
 
             if($obras == "true"){
-              $dbwhere .= " l20_naturezaobjeto = 1 and";
+              $dbwhere .= " l20_naturezaobjeto in (1,7) and";
             }
 
             if(!isset($pesquisa_chave)){
@@ -310,10 +310,10 @@ $sWhereContratos = " and 1 = 1 ";
                             pctipocompra.pc50_pctipocompratribunal,
                             liclicita.l20_objeto,
                             liclicita.l20_naturezaobjeto dl_Natureza_objeto,
-                            (CASE 
-                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
+                            (CASE
+                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null
                               THEN liclicita.l20_dtpublic
-                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null 
+                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null
                               THEN liclicita.l20_datacria
                             WHEN liclancedital.l47_dataenvio is not null
                               THEN liclancedital.l47_dataenvio

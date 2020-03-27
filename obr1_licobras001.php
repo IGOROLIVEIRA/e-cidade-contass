@@ -22,29 +22,9 @@ if(isset($incluir)){
   $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
 
   $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
-  $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
   $dtlancamentoobra = DateTime::createFromFormat('d/m/Y', $obr01_dtlancamento);
+
   try {
-
-    /**
-     * validação com sicom
-     */
-    if(!empty($datainicioatividades)){
-      $anousu = db_getsession('DB_anousu');
-      $instituicao = db_getsession('DB_instit');
-      $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
-      db_fieldsmemory($result);
-      $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
-      $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
-
-      if ($datainicioatividades <= $dtencerramento) {
-        throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-      }
-    }
-
-    if($obr01_dtinicioatividades == null || $obr01_dtinicioatividades == ""){
-      throw new Exception ("Usuário: Campo Data Inicio das Ativ. do Eng na Obra, não informado!");
-    }
 
     if($obr01_licitacao == null || $obr01_licitacao == ""){
       throw new Exception ("Nenhuma licitação informada!");
@@ -52,12 +32,6 @@ if(isset($incluir)){
 
     if($datahomologacao == null){
       throw new Exception ("Usuário: Licitação não homologada! Inclusão Abortada!");
-    }
-
-    if($datahomologacao != null){
-      if($datainicioatividades < $datahomologacao){
-        throw new Exception ("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Homologação da Licitação.");
-      }
     }
 
     if($obr01_numeroobra == null || $obr01_numeroobra == "0"){
@@ -75,7 +49,6 @@ if(isset($incluir)){
     $cllicobras->obr01_dtlancamento        = $obr01_dtlancamento;
     $cllicobras->obr01_numeroobra          = $obr01_numeroobra;
     $cllicobras->obr01_linkobra            = $obr01_linkobra;
-    $cllicobras->obr01_dtinicioatividades  = $obr01_dtinicioatividades;
     $cllicobras->obr01_instit              = db_getsession('DB_instit');
     $cllicobras->incluir();
 
