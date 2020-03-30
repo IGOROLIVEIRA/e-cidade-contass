@@ -213,7 +213,11 @@ $clrotulo->label("db89_codagencia");
                         '33' => 'ETF (índices em geral) - Art. 8°, II, b',
                         '34' => 'Fundos Multimercado (com até 20% ativos exterior)- Art. 8°, III',
                         '35' => 'Fundos de Investimento em Participações - FIP - Art. 8°, IV, a',
-                        '36' => 'Fundo de Investimento Imobiliário - FII - Art. 8°, IV, b');
+                        '36' => "Fundo de Investimento Imobiliário - FII - Art. 8°, IV, b",
+                        '37' => "Fundos de Investimento classificados como \"Ações - Mercado de Acesso\" - Art. 8°, IV, \"c\"",
+                        '38' => "Fundos de Investimento classificados como \"Renda Fixa - Dívida Externa\" - Art. 9°-A, I",
+                        '39' => "Fundos de Investimento - Sufixo Investimento no Exterior - Art. 9°-A, II",
+                        '40' => "Fundos de Ações BDR Nível 1 - Art. 9°-A, III");
                     db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
                 }
 				?>
