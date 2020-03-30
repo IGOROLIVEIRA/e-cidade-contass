@@ -66,6 +66,7 @@ $rotulo->label("coddepto");
 $rotulo->label("login");
 $lAcordo = false;
 $iAcordo = "";
+$dbOpcao = 1;
 
 if (isset($e54_autori) and $e54_autori !=""){
     $res = $clempautoriza->sql_record($clempautoriza->sql_query($e54_autori));
@@ -101,6 +102,9 @@ if (isset($e54_autori) and $e54_autori !=""){
 
     }
 }
+if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
+    $dbOpcao = 3;
+}
 ?>
 <html>
 <head>
@@ -112,7 +116,8 @@ if (isset($e54_autori) and $e54_autori !=""){
         //    js_OpenJanelaIframe('top.corpo','db_iframe_clonlancam002','func_conlancam002.php?chavepesquisa='+"<?=$e54_autori  ?>",'Pesquisa',true);
         // }
         function js_abre_empempitem(){
-            js_OpenJanelaIframe('top.corpo','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>",'Pesquisa',true);
+            <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_empempitem').style.zIndex = '2000';" : ""; ?>
         }
         function pesquisa_cgm(){
             js_JanelaAutomatica('cgm','<?=@$e54_numcgm ?>');
@@ -124,10 +129,12 @@ if (isset($e54_autori) and $e54_autori !=""){
             js_JanelaAutomatica('empempenho','<?=@$e61_numemp ?>');
         }
         function js_abre_solicita(){
-            js_OpenJanelaIframe('top.corpo','db_iframe_solicita','func_solicita001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_solicita','func_solicita001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_solicita').style.zIndex = '2000';" : ""; ?>
         }
         function js_abre_pcproc(){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_pcproc','func_pcproc001.php?e55_autori='+"<?=$e54_autori?>",'Pesquisa',true);
+            <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_pcproc').style.zIndex = '2000';" : ""; ?>
         }
         function js_abre_acordo(iAcordo){
 
@@ -150,12 +157,12 @@ if (isset($e54_autori) and $e54_autori !=""){
     </tr>
     <tr>
         <td align="right" nowrap>
-            <?  db_ancora($Le61_numemp,"pesquisa_emp();",1);     ?>
+            <?  db_ancora($Le61_numemp,"pesquisa_emp();",$dbOpcao);     ?>
         <td nowrap>
             <?
             db_input("e61_numemp",10,"",true,"text",3);      ?></td>
         <td colspan="2" nowrap>
-            <?  db_ancora($Le60_codemp,"pesquisa_emp();",1);
+            <?  db_ancora($Le60_codemp,"pesquisa_emp();",$dbOpcao);
             db_input("e60_codemp",12,"",true,"text",3);      ?></td>
     </tr>
     <tr>
@@ -226,7 +233,7 @@ if (isset($e54_autori) and $e54_autori !=""){
         </td>
     </tr>
     <tr>
-        <td  align="right" nowrap title="<?=$Te54_numcgm ?>"><b><? db_ancora($Le54_numcgm,"pesquisa_cgm();",1);?></b></td>
+        <td  align="right" nowrap title="<?=$Te54_numcgm ?>"><b><? db_ancora($Le54_numcgm,"pesquisa_cgm();",$dbOpcao);?></b></td>
         <td  colspan=2   align="left" nowrap title="<?=$Te54_numcgm ?>">
             <? db_input("e54_numcgm",8,"",true,"text",3);   db_input("z01_nome",40,"",true,"text",3); ?>
         </td>
@@ -234,7 +241,7 @@ if (isset($e54_autori) and $e54_autori !=""){
 
     <tr><!---  dotacao --->
         <td  align="right" nowrap title="<?=$Te56_coddot ?>">
-            <?  db_ancora($Le56_coddot,"pesquisa_dot();",1); ?></td>
+            <?  db_ancora($Le56_coddot,"pesquisa_dot();",$dbOpcao); ?></td>
         <td  colspan=2   align="left" >
             <? db_input("e56_coddot",8,"",true,"text",3);
             db_input("o58_estrutdespesa",50,"",true,"text",3);   ?> </td>
