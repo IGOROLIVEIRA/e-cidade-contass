@@ -11438,14 +11438,14 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
       
       if ($inssirf[$Iinssirf]["r33_novocalculo"] == 't') {
         if( $base_inss >= $inssirf[$Iinssirf]["r33_inic"]) {
+          $vrlIni = $inssirf[$Iinssirf]["r33_inic"]-0.01;
           if( $base_inss > $inssirf[$Iinssirf]["r33_fim"]) {
-            $vrlIni = $inssirf[$Iinssirf]["r33_inic"];
             if ($Iinssirf == 0) {
               $vrlIni = 0;
             }
-            $novoDesconto += (($inssirf[$Iinssirf]["r33_fim"]-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"];
+            $novoDesconto += arredondarValor((($inssirf[$Iinssirf]["r33_fim"]-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
           } else {
-            $novoDesconto += (($base_inss-$inssirf[$Iinssirf]["r33_inic"])/100)*$inssirf[$Iinssirf]["r33_perc"];
+            $novoDesconto += arredondarValor((($base_inss-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
           }
        }
      } else {
@@ -14297,6 +14297,20 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
   }
 }
 /// fim da funcao calc_pensao ///
+
+
+/**
+ * Deixar valores com duas casas decimais sem arredondar
+ * A verificacao eh feita porque em alguns caso,
+ * o floor em valores com 2 decimais altera o valor
+ */
+function arredondarValor($valor) {
+  $aVlr = explode(".", $valor);
+  if (strlen($aVlr[1]) > 2) {
+    return floor(($valor*100))/100;
+  }
+  return $valor;
+}
 
 
 ?>

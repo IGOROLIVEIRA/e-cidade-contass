@@ -97,7 +97,7 @@ $sWhere        = " and e54_instit = ".db_getsession("DB_instit");
         $sql = $clempautoriza->sql_query(null, $campos, null, "e54_autori = $e54_autori {$sWhere}");
         ?>
         <script>
-          location.href = 'func_empempenhoaut001.php?e54_autori=<?=$e54_autori ?>';
+          location.href = 'func_empempenhoaut001.php?e54_autori=<?=$e54_autori ?><?= (isset($bAtestoContInt) && $bAtestoContInt != "") ? '&bAtestoContInt='.$bAtestoContInt : ''?>';
         </script> <?
         exit;
       } else if (isset($o58_coddot) and $o58_coddot != "") {
