@@ -654,6 +654,19 @@ if(isset($incluir)) {
             }
             //FIM OC 7037
 
+            /* Ocorrência 11933
+             * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
+             * e valida se a autorização de empenho está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
+             */
+            $bAtestoContInt = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
+            $clempautorizliberado->sql_record($clempautorizliberado->sql_query(null, "*", "", "e232_autori = $chavepesquisa"));
+
+            if ( $bAtestoContInt == 't' && $clempautorizliberado->numrows == 0 ) {
+                $sqlerro = true;
+                $erro_msg = "Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!";
+            }
+
+
             if($sqlerro == false) {
 
                 $clempempenho->incluir($e60_numemp);
@@ -1209,18 +1222,6 @@ if(isset($incluir)) {
 
     $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
-
-    /* Ocorrência 11933
-     * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
-     * e valida se a autorização de empenho está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
-     */
-    $bAtestoContInt = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
-    $clempautorizliberado->sql_record($clempautorizliberado->sql_query(null, "*", "", "e232_autori = $chavepesquisa"));
-
-    if ( $bAtestoContInt == 't' && $clempautorizliberado->numrows == 0 ) {
-        db_msgbox('Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!');
-        db_redireciona("emp4_empempenho004.php");
-    }
 
     /* Ocorrência 2630
      * Validações de datas para geração de autorizações de empenhos e geração de empenhos

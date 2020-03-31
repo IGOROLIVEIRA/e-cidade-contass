@@ -1802,48 +1802,5 @@ class cl_empautoriza {
         return $sql;
     }
 
-    function sql_query_autorizacao_liberada($e54_autori=null,$campos="*",$ordem=null,$dbwhere="") {
-        $sql = "SELECT ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }else{
-            $sql .= $campos;
-        }
-        $sql .= " FROM empautoriza ";
-        $sql .= "      LEFT JOIN empempaut ON empempaut.e61_autori = empautoriza.e54_autori                     ";
-        $sql .= "      LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp                     ";
-        $sql .= "      LEFT JOIN empanulado on empempenho.e60_numemp = empanulado.e94_numemp                    ";
-        $sql .= "      INNER JOIN cgm ON cgm.z01_numcgm = empautoriza.e54_numcgm                                ";
-        $sql .= "      INNER JOIN db_usuarios ON db_usuarios.id_usuario = empautoriza.e54_login                 ";
-        $sql .= "      LEFT JOIN empautorizliberado ON empautoriza.e54_autori = empautorizliberado.e232_autori ";
-        $sql2 = "";
-        if($dbwhere==""){
-            if($e54_autori!=null ){
-                $sql2 .= " WHERE empautoriza.e54_autori = $e54_autori AND e54_instit=".db_getsession("DB_instit");
-            }
-        }else if($dbwhere != ""){
-            $sql2 = " where $dbwhere";
-        }else{
-            $sql2 = " where e54_instit=".db_getsession("DB_instit");
-        }
-
-        $sql .= $sql2;
-        if($ordem != null ){
-            $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
-            $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
-                $virgula = ",";
-            }
-        }
-
-        return $sql;
-    }
 }
 ?>
