@@ -30,7 +30,7 @@ require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
-require_once("classes/db_empautoriza_classe.php");
+require_once("classes/db_orcreservaaut_classe.php");
 require_once("classes/db_pcproc_classe.php");
 require_once("classes/db_pcprocliberado_classe.php");
 
@@ -51,11 +51,12 @@ switch ($oParam->exec) {
 
     case "pesquisaAutorizacao":
 
-        $oAutorizacao   = new cl_empautoriza();
-        $sWhere         = " e54_anousu = ".db_getsession("DB_anousu");
+        $clorcreservaaut = new cl_orcreservaaut;
+        $sWhere          = " e54_anousu = ".db_getsession("DB_anousu");
         $sWhere         .= " AND e54_instit = ".db_getsession("DB_instit");
-        $sWhere         .= " AND e61_numemp IS NULL";
-        $sWhere         .= " AND e94_numemp IS NULL";
+        $sWhere         .= " AND empempaut.e61_autori IS NULL";
+//        $sWhere         .= " AND e94_numemp IS NULL";
+//        $sWhere         .= " AND e54_anulad IS NULL";
         $sCampos        = "e54_autori, e54_emiss, z01_nome, e54_valor, e54_resumo, e232_sequencial";
         $sOrdem         = " e54_emiss DESC ";
 
@@ -94,8 +95,11 @@ switch ($oParam->exec) {
 
         }
 
-        $sSqlAutorizacao  = $oAutorizacao->sql_query_autorizacao_liberada(null, $sCampos, $sOrdem, $sWhere);
-        $rsSqlAutorizacao = $oAutorizacao->sql_record($sSqlAutorizacao);
+        $sSqlReservaAut  = $clorcreservaaut->sql_query(null, "*", $sOrdem, $sWhere);
+        $sSqlAutorizacao = "SELECT $sCampos 
+                                FROM ($sSqlReservaAut) AS x 
+                                    LEFT JOIN empautorizliberado ON e54_autori = empautorizliberado.e232_autori";
+        $rsSqlAutorizacao = $clorcreservaaut->sql_record($sSqlAutorizacao);
         $oRetorno->aItens = db_utils::getCollectionByRecord($rsSqlAutorizacao, true, false, true);
 
         break;
