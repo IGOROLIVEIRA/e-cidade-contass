@@ -57,10 +57,7 @@ $oRotulo->label("ac16_resumoobjeto");
   <style>
     .fora {background-color: #d1f07c;}
     #iQuebra{
-      width:330px;
-    }
-    fieldset{
-        width: 472px;
+      width:100%;
     }
   </style>
 </head>
@@ -86,7 +83,7 @@ $oRotulo->label("ac16_resumoobjeto");
               <td colspan="3">
                 <?php
                 db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
-                db_input('ac16_resumoobjeto', 33, $Iac16_resumoobjeto, true, 'text', 3);
+                db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
                 ?>
               </td>
             </tr>
@@ -104,7 +101,7 @@ $oRotulo->label("ac16_resumoobjeto");
               <td align="right" title="<?=@$Tac16_datafim?>">
                 <b>Data de Fim:</b>
               </td>
-              <td align="right" style="padding-right: 3px">
+              <td align="right">
                 <?
                 db_inputdata('ac16_datafim',@$ac16_datafim_dia,@$ac16_datafim_mes,@$ac16_datafim_ano,true,
                   'text',1)
@@ -123,28 +120,6 @@ $oRotulo->label("ac16_resumoobjeto");
                 ?>
               </td>
             </tr>
-            <tr>
-                <td>
-					<?php db_ancora('Depto. de Inclusão:', "js_pesquisa_depart(true);", 1); ?>
-                </td>
-                <td colspan="3">
-                    <?php
-					db_input("coddeptoinc", 10, $Icoddepto, true, "text", 4, "onchange='js_pesquisa_depart(false);'");
-                    db_input("descrdeptoinc", 33, $Idescrdepto, true, "text", 3);
-                    ?>
-                </td>
-            </tr>
-              <tr>
-                  <td>
-					  <?php db_ancora('Depto. Responsável:',"js_pesquisa_departamento(true);",1); ?>
-                  </td>
-                  <td colspan="3">
-					  <?php
-					  db_input('coddeptoresp',10,'',true,'text',4," onchange='js_pesquisa_departamento(false);'","");
-					  db_input('descrdeptoresp', 33, '', true, 'text', 3,"","");
-					  ?>
-                  </td>
-              </tr>
 
           </table>
         </fieldset>
@@ -221,64 +196,10 @@ $oRotulo->label("ac16_resumoobjeto");
     db_iframe_acordo.hide();
   }
 
-    function js_pesquisa_depart(mostra) {
-        if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
-        } else {
-        if (document.form1.coddeptoinc.value != '') {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
-        } else {
-                document.form1.descrdeptoinc.value = '';
-            }
-        }
-    }
-    function js_mostradepart(chave, erro) {
-        document.form1.descrdeptoinc.value = chave;
-        if (erro == true) {
-            document.form1.coddeptoinc.focus();
-            document.form1.coddeptoinc.value = '';
-        }
-    }
-    function js_mostradepart1(chave1, chave2) {
-        document.form1.coddeptoinc.value = chave1;
-        document.form1.descrdeptoinc.value = chave2;
-        db_iframe_db_depart.hide();
-    }
-
-    function js_pesquisa_departamento(mostra){
-        if (mostra==true) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
-        } else {
-            if (document.form1.coddeptoresp.value != '') {
-                js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddeptoresp.value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);
-            } else {
-                document.form1.descrdeptoresp.value = '';
-            }
-        }
-    }
-
-    function js_mostradepartamento1(chave1, chave2, erro) {
-        document.form1.coddeptoresp.value = chave1;
-        document.form1.descrdeptoresp.value = chave2;
-        db_iframe_departamento.hide();
-    }
-
-    function js_mostradepartamento(chave1,erro) {
-        if(!erro){
-            document.form1.descrdeptoresp.value = chave1;
-        }
-        db_iframe_departamento.hide();
-    }
-
   function js_gerarRelatorio(){
 
-      if(!$F('ac16_sequencial') && !$F('coddeptoinc') && !$F('coddeptoresp')){
-          alert('Selecione uma opção de filtro (Acordo, Fornecedor ou Departamento)!');
-          return false;
-      }
-
     var iAcordo    = $F("ac16_sequencial");
-    var sResumoObjeto = $('ac16_resumoobjeto').value;
+    var sResumoObjeto = $('ac16_resumoobjeto').value
 
     rel = 'relatorioacordosavencer'+Math.floor((Math.random() * 10) + 1);
     document.form1.setAttribute('target',rel);
@@ -289,23 +210,91 @@ $oRotulo->label("ac16_resumoobjeto");
     return true;
   }
 
-    let codDepartInc = document.getElementById('coddeptoinc');
-    let codDepartResp = document.getElementById('coddeptoresp');
+  var aDepartamentos     = new Array();
+  var oGridDepartamentos = js_montaGrid();
 
-    codDepartInc.addEventListener('keyup', (e) => {
-        js_verificaTipo(e.target);
-    });
+  /**
+   * Monta grid
+   */
+  function js_montaGrid() {
 
-    codDepartResp.addEventListener('keyup', (e) => {
-        js_verificaTipo(e.target);
-    });
+    var aAlinhamentos = new Array();
+    var aHeader       = new Array();
+    var aWidth        = new Array();
 
-    function js_verificaTipo(obj){
-        if(/[aA-zZ]/.test(obj.value)){
-            alert('Insira somente números');
-            document.getElementById(obj.id).value = '';
-            return false;
-        }
+    aHeader[0]       = 'Código';
+    aHeader[1]       = 'Departamento';
+    aHeader[2]       = 'Remover';
+
+    aWidth[0]        = '10%';
+    aWidth[1]        = '75%';
+    aWidth[2]        = '15%';
+
+    aAlinhamentos[0] = 'left';
+    aAlinhamentos[1] = 'left';
+    aAlinhamentos[2] = 'center';
+
+    oGridDepartamentos              = new DBGrid('datagridDepartamentos');
+    oGridDepartamentos.sName        = 'datagridDepartamentos';
+    oGridDepartamentos.nameInstance = 'oGridDepartamentos';
+    oGridDepartamentos.setCellWidth( aWidth );
+    oGridDepartamentos.setCellAlign( aAlinhamentos );
+    oGridDepartamentos.setHeader( aHeader );
+    oGridDepartamentos.allowSelectColumns(true);
+    oGridDepartamentos.show( $('ctnDepartamentos') );
+    oGridDepartamentos.clearAll(true);
+    return oGridDepartamentos;
+  }
+
+  function js_lancarDepartamento() {
+
+    var sDescricaoDepartamento = $F('sDescricaoDepartamento');
+
+    if ( sDescricaoDepartamento == '' ) {
+      return false;
     }
+
+    oDepartamento = new Object();
+    oDepartamento.iDepartamento          = $F('iCodigoDepartamento');
+    oDepartamento.sDescricaoDepartamento = sDescricaoDepartamento;
+    oDepartamento.iIndice                = aDepartamentos.length;
+
+    //Limpa os campos
+    $('sDescricaoDepartamento').value = "";
+    $('iCodigoDepartamento').value    = "";
+
+    aDepartamentos.push(oDepartamento);
+    renderizarGrid(aDepartamentos);
+    console.log(aDepartamentos);
+  }
+
+  function js_removeDepartamentoLancado(iIndice) {
+
+    aDepartamentos.splice(iIndice, 1);
+    renderizarGrid (aDepartamentos);
+  }
+
+  function renderizarGrid (aDepartamentos) {
+
+    oGridDepartamentos.clearAll(true);
+
+    for ( var iIndice = 0; iIndice < aDepartamentos.length; iIndice++ ) {
+
+      oDepartamento = aDepartamentos[iIndice];
+
+      var aLinha = new Array();
+
+      aLinha[0] = oDepartamento.iDepartamento;
+      aLinha[1] = oDepartamento.sDescricaoDepartamento;
+
+      sDisabled = '';
+
+      aLinha[2] = '<input type="button" value="Remover" onclick="js_removeDepartamentoLancado(' + iIndice + ')" ' + sDisabled + ' />';
+
+      oGridDepartamentos.addRow(aLinha, null, null, true);
+    }
+
+    oGridDepartamentos.renderRows();
+  }
 
 </script>
