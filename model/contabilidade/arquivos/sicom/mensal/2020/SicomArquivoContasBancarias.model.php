@@ -1104,6 +1104,32 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
         $oMovi40 = db_utils::fieldsMemory($rsCtasReg40, $icont40);
 
+        /**
+         * Adicionada consulta abaixo para verificação da data de cadastro da conta
+         **/
+        $sSqlDtCad = "SELECT k13_dtimplantacao,
+                               si09_codorgaotce,
+                               CASE
+                                   WHEN c61_codtce = 0 OR c61_codtce IS NULL THEN c61_reduz
+                                   ELSE c61_codtce
+                               END AS codctb
+                        FROM conplanoconta 
+                        JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu) 
+                        JOIN saltes ON (k13_reduz) = (c61_reduz)
+                        LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit 
+                        WHERE si09_codorgaotce = $oMovi40->si09_codorgaotce
+                          AND c63_banco = '$oMovi40->c63_banco'
+                          AND c63_agencia = '$oMovi40->c63_agencia' 
+                          AND c63_dvagencia = '$oMovi40->c63_dvagencia' 
+                          AND c63_conta = '$oMovi40->c63_conta'
+                          AND c63_dvconta = '$oMovi40->c63_dvconta' 
+                          AND (($oMovi40->tipoconta IN (2,3) AND c63_tipoconta IN (2,3)) OR ($oMovi40->tipoconta = 1 AND c63_tipoconta = 1))
+                          AND c61_instit = " . db_getsession('DB_instit') ."
+                          AND c61_anousu = " . db_getsession('DB_anousu');
+
+        $rsResultDtCad = db_query($sSqlDtCad);
+        $oDtCad = db_utils::fieldsMemory($rsResultDtCad, 0);
+
         $sSqlVerifica = "SELECT 'ctb102020' AS ano, si95_codctb, si95_nroconvenio FROM ctb102020 ";
         $sSqlVerifica .= "WHERE si95_codorgao::int = $oMovi40->si09_codorgaotce 
                             AND si95_banco = '$oMovi40->c63_banco'
@@ -1206,7 +1232,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $rsQuery40 = db_query($sSql40);
         $oReg40 = db_utils::fieldsMemory($rsQuery40, 0);
 
-        if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio) && pg_num_rows($rsQuery40) == 0) {
+        if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio)
+          && pg_num_rows($rsQuery40) == 0 && ($oDtCad->k13_dtimplantacao <= $this->sDataFinal)) {
 
           $cCtb40 = new cl_ctb402020();
 
