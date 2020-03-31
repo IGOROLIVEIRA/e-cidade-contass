@@ -57,7 +57,10 @@ $oRotulo->label("ac16_resumoobjeto");
   <style>
     .fora {background-color: #d1f07c;}
     #iQuebra{
-      width:100%;
+      width:330px;
+    }
+    fieldset{
+        width: 472px;
     }
   </style>
 </head>
@@ -83,7 +86,7 @@ $oRotulo->label("ac16_resumoobjeto");
               <td colspan="3">
                 <?php
                 db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
-                db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                db_input('ac16_resumoobjeto', 33, $Iac16_resumoobjeto, true, 'text', 3);
                 ?>
               </td>
             </tr>
@@ -101,7 +104,7 @@ $oRotulo->label("ac16_resumoobjeto");
               <td align="right" title="<?=@$Tac16_datafim?>">
                 <b>Data de Fim:</b>
               </td>
-              <td align="right">
+              <td align="right" style="padding-right: 3px">
                 <?
                 db_inputdata('ac16_datafim',@$ac16_datafim_dia,@$ac16_datafim_mes,@$ac16_datafim_ano,true,
                   'text',1)
@@ -124,21 +127,21 @@ $oRotulo->label("ac16_resumoobjeto");
                 <td>
 					<?php db_ancora('Depto. de Inclusão:', "js_pesquisa_depart(true);", 1); ?>
                 </td>
-                <td>
+                <td colspan="3">
                     <?php
 					db_input("coddeptoinc", 10, $Icoddepto, true, "text", 4, "onchange='js_pesquisa_depart(false);'");
-                    db_input("descrdeptoinc", 50, $Idescrdepto, true, "text", 3);
+                    db_input("descrdeptoinc", 33, $Idescrdepto, true, "text", 3);
                     ?>
                 </td>
             </tr>
               <tr>
                   <td>
-					  <?php db_ancora('Depto. Responsável',"js_pesquisa_departamento(true);",1); ?>
+					  <?php db_ancora('Depto. Responsável:',"js_pesquisa_departamento(true);",1); ?>
                   </td>
-                  <td>
+                  <td colspan="3">
 					  <?php
 					  db_input('coddeptoresp',10,'',true,'text',4," onchange='js_pesquisa_departamento(false);'","");
-					  db_input('descrdeptoresp', 50, '', true, 'text', 3,"","");
+					  db_input('descrdeptoresp', 33, '', true, 'text', 3,"","");
 					  ?>
                   </td>
               </tr>
@@ -269,6 +272,11 @@ $oRotulo->label("ac16_resumoobjeto");
 
   function js_gerarRelatorio(){
 
+      if(!$F('ac16_sequencial') && !$F('coddeptoinc') && !$F('coddeptoresp')){
+          alert('Selecione uma opção de filtro (Acordo, Fornecedor ou Departamento)!');
+          return false;
+      }
+
     var iAcordo    = $F("ac16_sequencial");
     var sResumoObjeto = $('ac16_resumoobjeto').value;
 
@@ -281,91 +289,23 @@ $oRotulo->label("ac16_resumoobjeto");
     return true;
   }
 
-  var aDepartamentos     = new Array();
-  var oGridDepartamentos = js_montaGrid();
+    let codDepartInc = document.getElementById('coddeptoinc');
+    let codDepartResp = document.getElementById('coddeptoresp');
 
-  /**
-   * Monta grid
-   */
-  function js_montaGrid() {
+    codDepartInc.addEventListener('keyup', (e) => {
+        js_verificaTipo(e.target);
+    });
 
-    var aAlinhamentos = new Array();
-    var aHeader       = new Array();
-    var aWidth        = new Array();
+    codDepartResp.addEventListener('keyup', (e) => {
+        js_verificaTipo(e.target);
+    });
 
-    aHeader[0]       = 'Código';
-    aHeader[1]       = 'Departamento';
-    aHeader[2]       = 'Remover';
-
-    aWidth[0]        = '10%';
-    aWidth[1]        = '75%';
-    aWidth[2]        = '15%';
-
-    aAlinhamentos[0] = 'left';
-    aAlinhamentos[1] = 'left';
-    aAlinhamentos[2] = 'center';
-
-    oGridDepartamentos              = new DBGrid('datagridDepartamentos');
-    oGridDepartamentos.sName        = 'datagridDepartamentos';
-    oGridDepartamentos.nameInstance = 'oGridDepartamentos';
-    oGridDepartamentos.setCellWidth( aWidth );
-    oGridDepartamentos.setCellAlign( aAlinhamentos );
-    oGridDepartamentos.setHeader( aHeader );
-    oGridDepartamentos.allowSelectColumns(true);
-    oGridDepartamentos.show( $('ctnDepartamentos') );
-    oGridDepartamentos.clearAll(true);
-    return oGridDepartamentos;
-  }
-
-  function js_lancarDepartamento() {
-
-    var sDescricaoDepartamento = $F('sDescricaoDepartamento');
-
-    if ( sDescricaoDepartamento == '' ) {
-      return false;
+    function js_verificaTipo(obj){
+        if(/[aA-zZ]/.test(obj.value)){
+            alert('Insira somente números');
+            document.getElementById(obj.id).value = '';
+            return false;
+        }
     }
-
-    oDepartamento = new Object();
-    oDepartamento.iDepartamento          = $F('iCodigoDepartamento');
-    oDepartamento.sDescricaoDepartamento = sDescricaoDepartamento;
-    oDepartamento.iIndice                = aDepartamentos.length;
-
-    //Limpa os campos
-    $('sDescricaoDepartamento').value = "";
-    $('iCodigoDepartamento').value    = "";
-
-    aDepartamentos.push(oDepartamento);
-    renderizarGrid(aDepartamentos);
-    console.log(aDepartamentos);
-  }
-
-  function js_removeDepartamentoLancado(iIndice) {
-
-    aDepartamentos.splice(iIndice, 1);
-    renderizarGrid (aDepartamentos);
-  }
-
-  function renderizarGrid (aDepartamentos) {
-
-    oGridDepartamentos.clearAll(true);
-
-    for ( var iIndice = 0; iIndice < aDepartamentos.length; iIndice++ ) {
-
-      oDepartamento = aDepartamentos[iIndice];
-
-      var aLinha = new Array();
-
-      aLinha[0] = oDepartamento.iDepartamento;
-      aLinha[1] = oDepartamento.sDescricaoDepartamento;
-
-      sDisabled = '';
-
-      aLinha[2] = '<input type="button" value="Remover" onclick="js_removeDepartamentoLancado(' + iIndice + ')" ' + sDisabled + ' />';
-
-      oGridDepartamentos.addRow(aLinha, null, null, true);
-    }
-
-    oGridDepartamentos.renderRows();
-  }
 
 </script>

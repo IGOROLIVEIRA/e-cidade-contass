@@ -255,16 +255,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     function js_mostradepart1(chave1, chave2) {
         document.form1.coddeptoinc.value = chave1;
         document.form1.descrdeptoinc.value = chave2;
-        console.log(chave1, chave2);
         db_iframe_db_depart.hide();
     }
 
     function js_pesquisa_departamento(mostra){
-        console.log(mostra);
         if (mostra==true) {
             js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
         } else {
-            console.log('Entrou agora...');
             if (document.form1.coddeptoresp.value != '') {
                 js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddeptoresp.value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);
             } else {
@@ -286,6 +283,25 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         db_iframe_departamento.hide();
     }
 
-
     js_criarDBLancador();
+
+    let codDepartInc = document.getElementById('coddeptoinc');
+    let codDepartResp = document.getElementById('coddeptoresp');
+
+    codDepartInc.addEventListener('keyup', (e) => {
+        js_verificaTipo(e.target);
+    });
+
+    codDepartResp.addEventListener('keyup', (e) => {
+        js_verificaTipo(e.target);
+    });
+
+    function js_verificaTipo(obj){
+        if(/[aA-zZ]/.test(obj.value)){
+            alert('Insira somente números');
+            document.getElementById(obj.id).value = '';
+            return false;
+        }
+    }
+
 </script>

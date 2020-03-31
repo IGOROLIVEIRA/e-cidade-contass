@@ -34,6 +34,9 @@ require_once("dbforms/db_funcoes.php");
 
 $oGet   = db_utils::postMemory($_GET);
 
+$sCampos    = "ac16_sequencial, (ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
+$sCampos   .= "ac16_resumoobjeto, ac16_datainicio, ac16_datafim";
+
 $sWhere = "";
 $sAnd   = $sWhere != "" ? " and " : "";
 if (trim($oGet->ac16_sequencial) != "") {
@@ -53,15 +56,19 @@ if (trim($oGet->ac16_contratado) != "") {
 $sAnd = $sWhere != "" ? " and " : "";
 if (trim($oGet->deptos_inclusao) != "") {
     $sWhere .= "{$sAnd} ac16_coddepto in ({$oGet->deptos_inclusao})";
+	$sCampos .= ", descrdepto as dl_Dep_Inclusão";
+}else{
+	$sCampos .= ", descrdepto as dl_Departamento";
 }
 
 $sAnd = $sWhere != "" ? " and " : "";
 if (trim($oGet->deptos_responsavel) != ''){
     $sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oGet->deptos_responsavel})";
+    $sCampos .= ", dpt.z01_nome as dl_Dep_Responsável";
 }
 
-$sCampos    = "ac16_sequencial, (ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
-$sCampos   .= "ac16_resumoobjeto, ac16_datainicio, ac16_datafim, descrdepto, z01_nome";
+$sCampos .= ", cgm.z01_nome";
+
 $oDaoAcordo = db_utils::getDao("acordo");
 $sSql       = $oDaoAcordo->sql_query(null, $sCampos, null, $sWhere);
 

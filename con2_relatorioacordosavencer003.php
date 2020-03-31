@@ -178,7 +178,7 @@ $oRotulo->label("ac50_descricao");
     		      <td colspan="3">
     		        <?php
     		          db_input('ac50_sequencial', 10, $Iac50_descricao, true, 'text', 1,
-    		                   "style='width: 90px;' onchange=pesquisaCategoria(false)");
+    		                   "style='width: 83px;' onchange=pesquisaCategoria(false)");
     		          ?>
                 <?php
     		          db_input('ac50_descricao', 40, $Iac50_descricao, true, 'text', 3);
@@ -611,4 +611,19 @@ function js_mostraCategoria(chave1, chave2) {
 
   db_iframe_acordocategoria.hide();
 }
+
+let categoria = document.getElementById('ac50_sequencial');
+
+categoria.addEventListener('keyup', (e) => {
+    js_verificaTipo(e.target);
+});
+
+function js_verificaTipo(obj){
+    if(/[aA-zZ]/.test(obj.value)){
+        alert('Insira somente números');
+        document.getElementById(obj.id).value = '';
+        return false;
+    }
+}
+
 </script>

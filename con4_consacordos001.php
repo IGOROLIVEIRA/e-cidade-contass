@@ -159,7 +159,6 @@ db_app::load("widgets/windowAux.widget.js, widgets/DBToogle.widget.js");
                         $oDptoInclusao->func_arquivo = "func_db_depart.php";  //func a executar
                         $oDptoInclusao->nomeiframe = "db_iframe_inclusao";
                         $oDptoInclusao->localjan = "";
-                        $oDptoInclusao->onclick = "";
                         $oDptoInclusao->nome_botao = "db_lanca_inclusao";
                         $oDptoInclusao->db_opcao = 2;
                         $oDptoInclusao->tipo = 2;
@@ -398,7 +397,49 @@ function js_mostraAcordo1(chave1,chave2){
     }
   );
 
-  function js_teste(){
-      console.log('Entrou na bitela...');
-  }
+    let codDepartInc = document.getElementById('dl_Codigo_Departamento');
+    let codDepartResp = document.getElementById('coddepto');
+
+    codDepartInc.addEventListener('keyup', (e) => {
+     js_verificaTipo(e.target);
+    });
+
+    codDepartResp.addEventListener('keyup', (e) => {
+        js_verificaTipo(e.target);
+    });
+
+    function js_verificaTipo(obj){
+        if(/[aA-zZ]/.test(obj.value)){
+            alert('Insira somente números');
+            document.getElementById(obj.id).value = '';
+            return false;
+        }
+    }
+
+    let elementosInclusao = document.querySelectorAll('#fieldset_depart_inclusao strong');
+    let limpaInclusao = false;
+    elementosInclusao[0].addEventListener('click', (e) => {
+        if(limpaInclusao){
+            let objeto = document.getElementById('depart_inclusao').options;
+            if(objeto.length){
+                document.getElementById('depart_inclusao').options.length = 0;
+            }
+            limpaInclusao = false;
+        }
+        limpaInclusao = true;
+    });
+
+    let elementosResponsavel = document.querySelectorAll('#fieldset_depart_responsavel strong');
+    let limpaResponsavel = false;
+    elementosResponsavel[0].addEventListener('click', (e) => {
+        if(limpaResponsavel){
+            let objeto = document.getElementById('depart_responsavel').options;
+            if(objeto.length){
+                document.getElementById('depart_responsavel').options.length = 0;
+            }
+            limpaResponsavel = false;
+        }
+        limpaResponsavel = true;
+    });
+
 </script>

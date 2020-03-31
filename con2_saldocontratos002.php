@@ -61,7 +61,7 @@ if($iAgrupamento == 1){
  * Filtro pelo departamento de Inclusão
  * */
 
-    if(isset($sDepartsInclusao)){
+    if(isset($sDepartsInclusao) && $sDepartsInclusao != ''){
         $sWhere .= $sWhere ? ' AND ' : ' ';
         $sWhere .= ' ac16_coddepto in ('.$sDepartsInclusao.') ';
     }
@@ -70,7 +70,7 @@ if($iAgrupamento == 1){
     * Filtro pelo departamento Responsável
     * */
 
-    if(isset($sDepartsInclusao)){
+    if(isset($sDepartsResponsavel) && $sDepartsResponsavel != ''){
         $sWhere .= $sWhere ? ' AND ' : ' ';
         $sWhere .= ' ac16_deptoresponsavel in ('.$sDepartsResponsavel.') ';
     }
