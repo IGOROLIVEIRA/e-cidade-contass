@@ -1232,7 +1232,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         $rsQuery40 = db_query($sSql40);
         $oReg40 = db_utils::fieldsMemory($rsQuery40, 0);
 
-        if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio)
+        if ($oMovi40->contaconvenio == 1 && ($oMovi40->nroconvenio != $oReg40->si101_nroconvenio) && empty($oMovi40->nroconvenio)
           && pg_num_rows($rsQuery40) == 0 && ($oDtCad->k13_dtimplantacao <= $this->sDataFinal)) {
 
           $cCtb40 = new cl_ctb402020();
