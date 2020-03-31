@@ -76,7 +76,7 @@ class GerarCTB extends GerarAM
                 $aCSVCTB10['si95_nroseqaplicacao']                = substr($aCTB10['si95_nroseqaplicacao'], 0, 2) == 0 ? " " : substr($aCTB10['si95_nroseqaplicacao'], 0, 2);
                 $aCSVCTB10['si95_desccontabancaria']              = substr($aCTB10['si95_desccontabancaria'], 0, 50) == "" ? " " : substr($aCTB10['si95_desccontabancaria'], 0, 50);
                 $aCSVCTB10['si95_contaconvenio']                  = $this->padLeftZero($aCTB10['si95_contaconvenio'], 1) == 0 ? " " : $this->padLeftZero($aCTB10['si95_contaconvenio'], 1);
-                $aCSVCTB10['si95_nroconvenio']                    = $aCTB10['si95_nroconvenio'] == 0 ? " " : $aCTB10['si95_nroconvenio'];
+                $aCSVCTB10['si95_nroconvenio']                    = $aCTB10['si95_nroconvenio'] == '0' ? " " : $aCTB10['si95_nroconvenio'];
                 $aCSVCTB10['si95_dataassinaturaconvenio']         = $this->sicomDate($aCTB10['si95_dataassinaturaconvenio']) == null ? " " : $this->sicomDate($aCTB10['si95_dataassinaturaconvenio']);
 
                 $this->sLinha = $aCSVCTB10;
@@ -214,7 +214,7 @@ class GerarCTB extends GerarAM
                 $aCSVCTB40['si101_codorgao']                = $this->padLeftZero($aCTB40['si101_codorgao'], 2);
                 $aCSVCTB40['si101_codctb']                  = substr($aCTB40['si101_codctb'], 0, 20);
                 $aCSVCTB40['si101_desccontabancaria']       = substr($aCTB40['si101_desccontabancaria'], 0, 50);
-                $aCSVCTB40['si101_nroconvenio']             = substr($aCTB40['si101_nroconvenio'], 0, 30);
+                $aCSVCTB40['si101_nroconvenio']             = $aCTB10['si101_nroconvenio'] == '0' ? " " : substr($aCTB10['si101_nroconvenio'], 0, 30);
                 $aCSVCTB40['si101_dataassinaturaconvenio']  = $this->sicomDate($aCTB40['si101_dataassinaturaconvenio']);
 
                 $this->sLinha = $aCSVCTB40;
