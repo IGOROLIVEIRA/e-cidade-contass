@@ -51,7 +51,7 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
 </head>
 <style>
    #cabecalho p:first-child {
-       padding: 20px;
+       padding: 18px;
        background: #fff;
        margin: 0px;
    }
@@ -61,7 +61,7 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
     }
 
     #rodape{
-      margin-top: 1%;
+      margin-top: 5px;
     }
 
     #conteudo{
@@ -77,9 +77,26 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
     }
 
     #img_atual{
-        max-height: 360px;
+        max-height: 358px;
         display: block;
         margin: 10% auto auto auto;;
+    }
+
+    #contador{
+        width: 4%;
+        display: flex;
+        margin-left: 568px;
+        margin-top: 6px;
+        border: 1px solid #999797;
+    }
+    #contImagem {
+        text-align: right;
+    }
+    #contImagem, #totalImagem{
+        width: 50%;
+    }
+    #contador span{
+        padding: 2px;
     }
 
 </style>
@@ -91,6 +108,11 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
         <div id="container_image">
             <img src="" id="img_atual">
         </div>
+    </div>
+    <div id="contador">
+        <span id="contImagem"></span>
+        <span>/</span>
+        <span id="totalImagem"></span>
     </div>
     <div id="rodape">
         <input type='button' id="inicio" value='Início' onclick="acaoFoto('inicio')">
@@ -121,6 +143,7 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
         let response = eval('('+oAjax.responseText+')');
         fotos = response.itens;
 
+        document.getElementById('totalImagem').innerText = fotos.length;
         if(response.length == 1){
             document.getElementById('inicio').disabled = true;
             document.getElementById('anterior').disabled = true;
@@ -134,8 +157,9 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
                 let img = document.getElementById('img_atual');
                 img.src = caminho;
                 indice_atual = index;
+                document.getElementById('contImagem').innerText = indice_atual+1;
             }
-        })
+        });
         js_controlabotoes();
     }
 
@@ -162,7 +186,7 @@ $mostra_fotos = count($sizeFotos) == 1 ? true : false;
                 indice_atual = 0;
                 break;
         }
-
+        document.getElementById('contImagem').innerText = indice_atual+1;
         let caminho = "<?="func_mostrarimagem.php?oid="?>"+fotos[indice_atual].oid;
         let img = document.getElementById('img_atual');
         img.src = caminho;
