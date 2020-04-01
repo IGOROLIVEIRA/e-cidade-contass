@@ -622,6 +622,8 @@ db_app::load("estilos.css, grid.style.css");
         oRetorno.itens.each(function (oLinha, id) {
           with (oLinha) {
             var sCor = '';
+            var valortotal = js_formatar(valortotal,'f');
+            var totaldotacoes = js_formatar(totaldotacoes,'f');
             if (valortotal == totaldotacoes) {
               var sCor = '';
               if (aPeriodosItem.length == 0) {
@@ -637,11 +639,11 @@ db_app::load("estilos.css, grid.style.css");
             aLinha[1] = codigo;
             aLinha[2] = material.urlDecode();
             aLinha[3] = quantidade;
-            var iCasas = js_getNumeroCasasDecimais(valorunitario);
-            if (iCasas < 2) {
-              iCasas = 2;
-            }
-            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            // var iCasas = js_getNumeroCasasDecimais(valorunitario);
+            // if (iCasas < 2) {
+            //   iCasas = 2;
+            // }
+            aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
             aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
@@ -698,6 +700,8 @@ db_app::load("estilos.css, grid.style.css");
         oRetorno.itens.each(function (oLinha, id) {
           with (oLinha) {
             var sCor = '';
+            var valortotal = js_formatar(valortotal,'f');
+            var totaldotacoes = js_formatar(totaldotacoes,'f');
             if (valortotal == totaldotacoes) {
               var sCor = '';
               if (aPeriodosItem.length == 0) {
@@ -713,11 +717,11 @@ db_app::load("estilos.css, grid.style.css");
             aLinha[1] = codigo;
             aLinha[2] = material.urlDecode();
             aLinha[3] = quantidade;
-            var iCasas = js_getNumeroCasasDecimais(valorunitario);
-            if (iCasas < 2) {
-              iCasas = 2;
-            }
-            aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
+            // var iCasas = js_getNumeroCasasDecimais(valorunitario);
+            // if (iCasas < 2) {
+            //   iCasas = 2;
+            // }
+            aLinha[4] = js_formatar(valorunitario, 'f', 4);
             aLinha[5] = js_formatar(valortotal, 'f');
             aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
             aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
@@ -1590,7 +1594,7 @@ db_app::load("estilos.css, grid.style.css");
         aLinha[2] = oRow.codigomaterial;
         aLinha[3] = oRow.material.urlDecode();
         aLinha[4] = oRow.quantidade;
-        aLinha[5] = js_formatar(oRow.valorunitario, 'f');
+        aLinha[5] = js_formatar(oRow.valorunitario, 'f',4);
         aLinha[6] = js_formatar(oRow.valortotal, 'f');
         aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
         aLinha[8] = "";
@@ -1627,7 +1631,7 @@ db_app::load("estilos.css, grid.style.css");
         aLinha[2] = oRow.codigomaterial;
         aLinha[3] = oRow.material.urlDecode();
         aLinha[4] = oRow.quantidade;
-        aLinha[5] = js_formatar(oRow.valorunitario, 'f');
+        aLinha[5] = js_formatar(oRow.valorunitario, 'f',4);
         aLinha[6] = js_formatar(oRow.valortotal, 'f');
         aLinha[7] = oRow.servico == 't' ? 'Serviço' : 'Material';
         aLinha[8] = "";
