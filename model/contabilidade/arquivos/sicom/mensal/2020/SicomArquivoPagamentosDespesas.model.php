@@ -663,9 +663,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $sSql13 = "SELECT 13 AS tiporegistro,
                               e20_pagordem AS codreduzidoop,
                               CASE
-                                  WHEN e21_retencaotipocalc = 5 THEN 4
+                                  WHEN c60_subtipolancamento IS NOT NULL THEN lpad(c60_subtipolancamento::int4,4,0)::integer 
+                                  WHEN e21_retencaotipocalc = 5 OR substr(k02_estorc,1,9)::integer = 411180231 THEN 4
                                   WHEN e21_retencaotipocalc IN (3, 4, 7) THEN 1
-                                  WHEN e21_retencaotipocalc IN (1, 2) THEN 3
+                                  WHEN e21_retencaotipocalc IN (1, 2) OR substr(k02_estorc,1,9)::integer IN (411130311, 411130341) THEN 3
                                   ELSE lpad(k02_reduz,4,0)::integer
                               END AS tiporetencao,
                               CASE
@@ -677,7 +678,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
                        LEFT JOIN tabrec tr ON tr.k02_codigo = e21_receita
-                       LEFT JOIN tabplan tp ON tp.k02_codigo = e21_receita AND k02_anousu = " . db_getsession("DB_anousu") . "
+                       LEFT JOIN tabplan tp ON tp.k02_codigo = e21_receita AND tp.k02_anousu = " . db_getsession("DB_anousu") . "
+                       LEFT JOIN taborc ON tp.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
+                       LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (c60_anousu, c60_estrut)
                        WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
