@@ -34,12 +34,14 @@ include("classes/db_pcmater_classe.php");
 include("classes/db_pcmaterele_classe.php");
 include("classes/db_pcgrupo_classe.php");
 include("classes/db_pcsubgrupo_classe.php");
+include("classes/db_pcorcamforne_classe.php");
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 $clpcmater    = new cl_pcmater;
 $clpcmaterele = new cl_pcmaterele;
 $clpcgrupo    = new cl_pcgrupo;
 $clpcsubgrupo = new cl_pcsubgrupo;
+$clpcorcamforne = new cl_pcorcamforne;
 $clpcgrupo->rotulo->label();
 $clpcsubgrupo->rotulo->label();
 
@@ -65,6 +67,14 @@ function js_reload(){
 }
 </script>
 </head>
+<style>
+    select#chave_pc03_codgrupo{
+        width: 55px;
+    }
+    select#chave_pc03_codgrupodescr{
+        width: 264px;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='document.form1.chave_pc01_descrmater.focus();'>
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
   <tr> 
@@ -119,6 +129,22 @@ function js_reload(){
 	?> 
 	</td>
       </tr>
+        <tr>
+          <td width="4%" align="right" nowrap title="<?=$Tpc03_codgrupo?>"><b>Fornecedor:</b></td>
+          <td width="46%" align="left" nowrap>
+              <?
+                //onchange='js_buscaFornecedor(this.value);'
+                db_input('pc21_orcamforne', 6, '', false, 'text', '', "onchange='js_buscaFornecedor(this.value);'", "chave_pc21_orcamforne");
+                $rsFornecedor = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_forne_julg(null,"DISTINCT pc21_orcamforne as codigo, z01_nome as nome","pc21_orcamforne"," pc11_numero = ".$iRegistroPreco)); //pc03_ativo='t'
+                $aResult = db_utils::getCollectionByRecord($rsFornecedor);
+                $aFornecedores = array('Selecione');
+                foreach ($aResult as $objeto){
+                    $aFornecedores[$objeto->codigo] = $objeto->nome;
+                }
+                db_select("listaForne",$aFornecedores,true,4,"onchange='js_altera(this.value)';");
+              ?>
+          </td>
+        </tr>
       <tr> 
         <td colspan="4" align="center"> 
           <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
@@ -189,6 +215,7 @@ function js_reload(){
       $where_ativo .= "   ) < {$iTotalFornecedores}";
 
       $where_ativo .= "   and solicitem.pc11_numero        = {$iRegistroPreco} ";
+
       if(!isset($pesquisa_chave)){
         if(empty($campos)){
            if(file_exists("funcoes/db_func_pcmatersolicita.php")==true){
@@ -204,17 +231,19 @@ function js_reload(){
                  pc11_resum,o56_codele,o56_elemento,substr(o56_descr,1,40) as o56_descr,
                  pcsubgrupo.pc04_descrsubgrupo as DB_pc04_descrsubgrupo,
                  pcmater.pc01_servico,
-								 pcmater.pc01_veiculo";
+                 pcmater.pc01_veiculo,
+                 z01_nome as dl_fornecedor";
 				$repassa = array(
                          "chave_pc01_codmater"    => @$chave_pc01_codmater,
                          "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
                          "chave_pc07_codele"      => @$chave_pc07_codele,
                          "chave_o56_descr"        => @$chave_o56_descr,
                          "chave_o56_elemento"     => @$chave_o56_elemento,
-			 "chave_pc03_codgrupo"    => @$chave_pc03_codgrupo,
-			 "chave_pc04_codsubgrupo" => @$chave_pc04_codsubgrupo
+                            "chave_pc03_codgrupo"    => @$chave_pc03_codgrupo,
+                            "chave_pc04_codsubgrupo" => @$chave_pc04_codsubgrupo,
+                            "chave_pc21_orcamforne" => @$chave_pc21_orcamforne
                         );
-        if(isset($chave_pc01_codmater) && (trim($chave_pc01_codmater)!="") ){
+		if(isset($chave_pc01_codmater) && (trim($chave_pc01_codmater)!="") ){
 	         $sql = $clpcmater->sql_query_desdobraregistropreco(null,$campos,"pc01_codmater","pc01_codmater=$chave_pc01_codmater and $where_ativo");
         }else if(isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater)!="") ){
 	         $sql = $clpcmater->sql_query_desdobraregistropreco("",$campos,"pc01_descrmater"," pc01_descrmater like '$chave_pc01_descrmater%' and $where_ativo");
@@ -224,6 +253,8 @@ function js_reload(){
 	         $sql = $clpcmater->sql_query_desdobraregistropreco("",$campos,"pc01_codmater"," o56_descr like '$chave_o56_descr%' and $where_ativo");
         }else if(isset($chave_o56_elemento) && (trim($chave_o56_elemento)!="") ){
 	         $sql = $clpcmater->sql_query_desdobraregistropreco("",$campos,"pc01_codmater"," o56_elemento like '$chave_o56_elemento%' and $where_ativo");
+        }else if(isset($chave_pc21_orcamforne) && (trim($chave_pc21_orcamforne)!="") ){
+		     $sql = $clpcmater->sql_query_desdobraregistropreco("",$campos,"pc01_codmater"," pc21_orcamforne like '$chave_pc21_orcamforne%' and $where_ativo");
         }else if(isset($chave_pc03_codgrupo) && trim($chave_pc03_codgrupo)!="" && $chave_pc03_codgrupo <> 0){
 	         
           if(isset($chave_pc04_codsubgrupo) && trim($chave_pc04_codsubgrupo)!="" && $chave_pc04_codsubgrupo <> 0){
@@ -235,7 +266,6 @@ function js_reload(){
         } else {
           $sql = $clpcmater->sql_query_desdobraregistropreco(null,$campos,"pc01_codmater", "$where_ativo");
         }
-
 
         db_lovrot(@$sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
@@ -270,4 +300,43 @@ if(isset($zero)){
   echo "parent.db_iframe_pcmater.hide();";
 }
 ?>
+
+    function js_buscaFornecedor(valor){
+
+        if(!js_validaNumeros(valor)){
+            return false;
+        }
+
+        let aFornecedores = document.getElementById('listaForne').options;
+        let index = 0;
+
+        for(let cont=0; cont<aFornecedores.length;cont++){
+            if(parseInt(valor) == aFornecedores[cont].value){
+                index = cont;
+                break;
+            }
+        }
+
+        if(index){
+            document.getElementById('listaForne').options.selectedIndex = index;
+        }else{
+            alert('Código do Fornecedor inválido para este registro de preço!');
+            document.getElementById('chave_pc21_orcamforne').value = '';
+            document.getElementById('listaForne').options.selectedIndex = 0;
+        }
+    }
+
+    function js_altera(valor){
+        let index = !parseInt(valor) ? '' : parseInt(valor);
+        document.getElementById('chave_pc21_orcamforne').value = index;
+    }
+
+    function js_validaNumeros(valor){
+        if(/[aA-zZ]/.test(valor)){
+            alert('Insira somente números');
+            document.getElementById('chave_pc21_orcamforne').value = '';
+            return false;
+        }
+        return true;
+    }
 </script>
