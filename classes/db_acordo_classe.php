@@ -1315,6 +1315,7 @@ class cl_acordo {
         //$sql .= "      inner join db_datausuarios  on  db_datausuarios.id_usuario = db_depart.id_usuarioresp";
         $sql .= "      inner join acordonatureza  on  acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
         $sql .= "      inner join acordotipo  on  acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo";
+        $sql .= "      inner join cgm dpt on acordo.ac16_deptoresponsavel = dpt.z01_numcgm";
         //$sql .= "      inner join db_config  as a on   a.codigo = acordocomissao.ac08_instit";
         //$sql .= "      inner join acordocomissaotipo  on  acordocomissaotipo.ac43_sequencial = acordocomissao.ac08_acordocomissaotipo";
         $sql2 = "";
