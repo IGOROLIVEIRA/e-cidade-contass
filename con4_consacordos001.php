@@ -314,7 +314,7 @@ function js_mostradepart1(chave1,chave2){
 function js_acordo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_acordo',
-                        'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto',
+                        'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|z01_nome',
                         'Pesquisa',true);
   }else{
      if($F('ac16_sequencial').trim() != ''){
