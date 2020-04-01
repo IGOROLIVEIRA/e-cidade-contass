@@ -830,6 +830,8 @@ class Siope {
             return $this->getCod146246($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif($oDespesa->o58_codigo == 147 || $oDespesa->o58_codigo == 247) {
             return $this->getCod147247($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif($oDespesa->o58_codigo == 106 || $oDespesa->o58_codigo == 206) {
+            return $this->getCod106206($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } else {
             return $this->getCodGenerico($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         }
@@ -3030,6 +3032,64 @@ class Siope {
                     return 763;
                 }
 
+            }
+
+        }
+
+    }
+
+    public function getCod106206($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        if ($iSubFuncao == 361) {
+            return 1179;
+        } elseif ($iSubFuncao == 362) {
+            return 1190;
+        } elseif ($iSubFuncao == 363) {
+            return 1218;
+        } elseif ($iSubFuncao == 364) {
+            return 1206;
+        } elseif ($iSubFuncao == 366) {
+
+            if ($iTipoEnsino == 2) {
+                return 1193;
+            } else {
+                return 1179;
+            }
+
+        } elseif ($iSubFuncao == 367) {
+
+            if ($iTipoEnsino == 2) {
+                return 1193;
+            } elseif ($iTipoEnsino == 5) {
+                return 1231;
+            } elseif ($iTipoEnsino == 6) {
+                return 1244;
+            } else {
+                return 1179;
+            }
+
+        } elseif ($iSubFuncao == 365) {
+
+            if ($iTipoEnsino == 5) {
+                return 1231;
+            } else {
+                return 1244;
+            }
+
+        } else {
+
+            if ($iTipoEnsino == 2) {
+                return 1193;
+            } elseif ($iTipoEnsino == 3) {
+                return 1218;
+            } elseif ($iTipoEnsino == 4) {
+                return 1206;
+            } elseif ($iTipoEnsino == 5) {
+                return 1231;
+            } elseif ($iTipoEnsino == 6) {
+                return 1244;
+            } else {
+                return 1179;
             }
 
         }
