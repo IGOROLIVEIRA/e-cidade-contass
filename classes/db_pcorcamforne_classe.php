@@ -517,6 +517,45 @@ class cl_pcorcamforne {
      }
      return $sql;
   }
+	function sql_query_forne_julg ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
+		$sql = "select ";
+		if($campos != "*" ){
+			$campos_sql = split("#",$campos);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}else{
+			$sql .= $campos;
+		}
+		$sql.= " FROM pcorcamforne ";
+		$sql.= " INNER JOIN cgm ON pc21_numcgm = z01_numcgm ";
+		$sql.= " INNER JOIN pcorcamjulg ON pc21_orcamforne = pc24_orcamforne AND pc24_pontuacao = 1 ";
+		$sql.= " INNER JOIN pcorcamitemlic ON pc26_orcamitem = pc24_orcamitem ";
+		$sql.= " INNER JOIN liclicitem ON pc26_liclicitem = l21_codigo ";
+		$sql.= " INNER JOIN pcprocitem ON l21_codpcprocitem = pc81_codprocitem ";
+		$sql.= " INNER JOIN solicitem ON pc81_solicitem = pc11_codigo ";
+		$sql2 = "";
+		if($dbwhere==""){
+			if($pc21_orcamforne!=null ){
+				$sql2 .= " where pcorcamforne.pc21_orcamforne = $pc21_orcamforne ";
+			}
+		}else if($dbwhere != ""){
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if($ordem != null ){
+			$sql .= " order by ";
+			$campos_sql = split("#",$ordem);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}
+		return $sql;
+	}
    function sql_query_fornec ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){

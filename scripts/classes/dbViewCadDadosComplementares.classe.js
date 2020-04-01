@@ -278,7 +278,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
 //Metodo para fechar a janela e retornar o endereco salvo
     me.close = function () {
-        js_buscaDadosComplementares();
+        if(!me.acao){
+            js_buscaDadosComplementares();
+        }
+
         if (me.getObjetoRetorno() != "") {
             me.getObjetoRetorno().value = me.getCodigoObra();
         }
@@ -3956,9 +3959,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
-        $('txtLogradouro' + sId).value = dadoscomplementares.logradouro.replace(/\+/g, ' ');
+        $('txtLogradouro' + sId).value = decodeURI(dadoscomplementares.logradouro).replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
-        $('txtDistrito' + sId).value = dadoscomplementares.distrito.replace(/\+/g, ' ');
+        $('txtDistrito' + sId).value = decodeURI(dadoscomplementares.distrito).replace(/\+/g, ' ');
         me.setDistrito(dadoscomplementares.distrito);
         $('txtCodigoObra' + sId).value = dadoscomplementares.codigoobra;
         me.setCodigoObra(dadoscomplementares.codigoobra);
@@ -3994,10 +3997,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
-        $('txtDescrBairro' + sId).value = dadoscomplementares.bairro.replace(/\+/g, ' ');
+        $('txtDescrBairro' + sId).value = decodeURI(dadoscomplementares.bairro).replace(/\+/g, ' ');
         $('txtCep' + sId).value = dadoscomplementares.cep;
-        $('txtDescrAtividadeServico' + sId).value = dadoscomplementares.descratividadeservico;
-        $('txtDescrAtividadeServicoEsp' + sId).value = dadoscomplementares.descratividadeservicoesp;
+        $('txtDescrAtividadeServico' + sId).value = decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' ');
+        $('txtDescrAtividadeServicoEsp' + sId).value = decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' ');
 
     }
 

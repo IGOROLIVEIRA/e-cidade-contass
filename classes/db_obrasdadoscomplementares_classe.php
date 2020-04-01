@@ -83,10 +83,10 @@ class cl_obrasdadoscomplementares
                     db150_logradouro = varchar(150) = Logradouro
                     db150_grauslatitude = int4 = Graus da Latitude
                     db150_minutolatitude = int4 = Minuto da Latitude 
-                    db150_segundolatitude = int4 = Segundo da Latitude
+                    db150_segundolatitude = numeric = Segundo da Latitude
                     db150_grauslongitude = int4 = Graus da Longitude
                     db150_minutolongitude = int4 = Minuto da Longitude
-                    db150_segundolongitude = int4 = Segundo da Latitude
+                    db150_segundolongitude = numeric = Segundo da Latitude
                     db150_classeobjeto =  int4 = Classe do objeto
                     db150_grupobempublico = int4 = Grupo Bem Público
                     db150_subgrupobempublico = int4 = Subgrupo Bem Público
@@ -95,7 +95,7 @@ class cl_obrasdadoscomplementares
                     db150_descratividadeservico = varchar(150) = Descrição da Atividade do Serviço
                     db150_atividadeservicoesp = int4 = Atividade do Serviço Especializado
                     db150_descratividadeservicoesp = varchar(150) = Descrição da Atividade do Serviço Especializado
-                    db150_bdi = int4 = BDI
+                    db150_bdi = numeric = BDI
                     db150_liclicita = int4 = Número da licitação
                     db150_cep = char(8) = CEP
                   ";
