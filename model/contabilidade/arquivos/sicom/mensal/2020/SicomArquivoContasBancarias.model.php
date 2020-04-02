@@ -542,7 +542,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                   $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
               }
 
-              if ($oTotalMov->sinalfinal == 'D') {
+              if ($oTotalMov->sinalfinal == 'D' && $oTotalMov->saldo_anterior != 0) {
 
                   $sHash21a = $oContaAgrupada->si95_codctb . $iFonte2 . '01';
 
@@ -594,7 +594,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                         $aCtb20Agrupado[$shash20b]->ext21[$sHash21b]->si97_valorentrsaida += $oTotalMov->saldo_anterior;
                   }
 
-              } else {
+              } elseif ($oTotalMov->saldo_anterior != 0) {
 
                   $sHash21c = $oContaAgrupada->si95_codctb . $iFonte2 . '02';
 
@@ -1023,6 +1023,14 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
        * inclusão do registro 20 e 21 do procedimento normal
        */
       foreach ($aCtb20Agrupado as $oCtb20) {
+
+        $bFonteEncerrada  = in_array($oCtb20->si96_codfontrecursos, $this->aFontesEncerradas);
+        $bCorrecaoFonte   = ($bFonteEncerrada && $oCtb20->si96_mes == '01' && db_getsession("DB_anousu") == 2020);
+
+        if ($bFonteEncerrada && $bCorrecaoFonte && $oCtb20->si96_vlsaldoinicialfonte == 0) {
+          continue;
+        }
+
         $cCtb20 = new cl_ctb202020();
 
         $cCtb20->si96_tiporegistro = $oCtb20->si96_tiporegistro;
