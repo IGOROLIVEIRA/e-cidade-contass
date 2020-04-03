@@ -8,15 +8,15 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 
 $aBimestres = array(
-    "1"  => "Janeiro",
-    "2"  => "Fevereiro",
-    "3"  => "Março",
-    "4"  => "Abril",
-    "5"  => "Maio",
-    "6"  => "Junho",
-    "7"  => "Julho",
-    "8"  => "Agosto",
-    "9"  => "Setembro",
+    "01"  => "Janeiro",
+    "02"  => "Fevereiro",
+    "03"  => "Março",
+    "04"  => "Abril",
+    "05"  => "Maio",
+    "06"  => "Junho",
+    "07"  => "Julho",
+    "08"  => "Agosto",
+    "09"  => "Setembro",
     "10" => "Outubro",
     "11" => "Novembro",
     "12" => "Dezembro"
@@ -148,7 +148,7 @@ $aBimestres = array(
             return false;
         }
 
-        if (!iBimestre) {
+        if (!iMes) {
             alert("Selecione o mês");
             return false;
         }

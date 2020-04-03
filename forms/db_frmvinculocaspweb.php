@@ -16,7 +16,7 @@ $c232_anousu = isset($chavepesquisa2) ? $chavepesquisa2 : $c232_anousu;
                     </td>
                     <td>
                         <?
-                        db_input('c232_estrutecidade',9,$Ic232_estrutecidade,true,'text',$db_opcao,"")
+                        db_input('c232_estrutecidade',15,$Ic232_estrutecidade,true,'text',$db_opcao,"")
                         ?>
                     </td>
                 </tr>
@@ -26,7 +26,7 @@ $c232_anousu = isset($chavepesquisa2) ? $chavepesquisa2 : $c232_anousu;
                     </td>
                     <td>
                         <?
-                        db_input('c232_estrutcaspweb',9,$Ic232_estrutcaspweb,true,'text',$db_opcao,"")
+                        db_input('c232_estrutcaspweb',15,$Ic232_estrutcaspweb,true,'text',$db_opcao,"")
                         ?>
                     </td>
                 </tr>

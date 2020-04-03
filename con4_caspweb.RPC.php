@@ -16,7 +16,7 @@ db_postmemory($_POST);
 $oJson              = new services_json();
 
 $oParam             = $oJson->decode(str_replace("\\","",$_POST["json"]));
-$iMes               = (!empty($oParam->bimestre)) ? $oParam->bimestre : '';
+$iMes               = (!empty($oParam->iMes)) ? $oParam->iMes : '';
 
 $iInstit            = db_getsession('DB_instit');
 $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
@@ -46,6 +46,12 @@ switch ($oParam->exec) {
                         if ($sArquivo == 'mapaAprop') {
 
                             $oCaspweb = new Caspweb();
+                            $oCaspweb->setAno($iAnoUsu);
+                            $oCaspweb->setInstit($iInstit);
+                            $oCaspweb->setMes($iMes);
+                            $oCaspweb->setPeriodo();
+                            $oCaspweb->setNomeArquivo($sNomeArqmapaAprop);
+                            $oCaspweb->gerarMapaApropriacao();
 
 
                             if ($oCaspweb->status == 2) {
