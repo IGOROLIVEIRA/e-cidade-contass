@@ -663,16 +663,20 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $sSql13 = "SELECT 13 AS tiporegistro,
                               e20_pagordem AS codreduzidoop,
                               CASE
-                                  WHEN substr(k02_estorc,1,9) IN ('411130311', '411130341', '411180231') THEN 1
+                                  WHEN substr(k02_estorc,1,9) = '411180231' THEN 4
+                                  WHEN substr(k02_estorc,1,9) IN ('411130311', '411130341') THEN 3
                                   ELSE c60_tipolancamento
                               END AS c60_tipolancamento,
-                              c60_subtipolancamento,
+                              CASE
+                                  WHEN substr(k02_estorc,1,9) = '411180231' THEN 4
+                                  WHEN substr(k02_estorc,1,9) IN ('411130311', '411130341') THEN 3
+                                  ELSE c60_subtipolancamento
+                              END AS c60_subtipolancamento,
                               CASE 
                                  WHEN k02_reduz IS NULL THEN k02_codrec
                                  ELSE k02_reduz
                               END AS k02_reduz,
                               CASE
-                                  WHEN c60_subtipolancamento IS NOT NULL THEN lpad(c60_subtipolancamento::int4,4,0)::integer 
                                   WHEN e21_retencaotipocalc = 5 OR substr(k02_estorc,1,9)::integer = 411180231 THEN 4
                                   WHEN e21_retencaotipocalc IN (3, 4, 7) THEN 1
                                   WHEN e21_retencaotipocalc IN (1, 2) OR substr(k02_estorc,1,9)::integer IN (411130311, 411130341) THEN 3
@@ -708,16 +712,23 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
                   $clops13->si135_tiporegistro = $reg13->tiporegistro;
                   $clops13->si135_codreduzidoop = $reg11->codreduzidoop;
-                  if (($reg13->c60_tipolancamento != 1) && ($reg13->tiporetencao == 1 || $reg13->tiporetencao == 2 || $reg13->tiporetencao == 3 || $reg13->tiporetencao == 4)){
-                    $clops13->si135_tiporetencao = $reg13->c60_tipolancamento.substr($reg13->k02_reduz,-3);
+
+                  if (($reg13->c60_tipolancamento != 9999 && !empty($reg13->c60_tipolancamento))
+                    && ($reg13->c60_subtipolancamento == 1 || $reg13->c60_subtipolancamento == 2 || $reg13->c60_subtipolancamento == 3 || $reg13->c60_subtipolancamento == 4)){
+                    $clops13->si135_tiporetencao = $reg13->c60_tipolancamento;
+                  } elseif ($reg13->c60_tipolancamento == 9999) {
+                    $clops13->si135_tiporetencao = '99'.substr($reg13->c60_subtipolancamento,-2);
                   } else {
                     $clops13->si135_tiporetencao = $reg13->tiporetencao;
                   }
-                  if (($reg13->c60_tipolancamento == 1) && ($reg13->tiporetencao == 1 || $reg13->tiporetencao == 3 || $reg13->tiporetencao == 4)) {
+
+                  if (($reg13->c60_tipolancamento != 9999 && !empty($reg13->c60_tipolancamento))
+                    && ($reg13->c60_subtipolancamento == 1 || $reg13->c60_subtipolancamento == 2 || $reg13->c60_subtipolancamento == 3 || $reg13->c60_subtipolancamento == 4)) {
                     $clops13->si135_descricaoretencao = " ";
                   } else {
                     $clops13->si135_descricaoretencao = substr($reg13->descricaoretencao, 0, 50);
                   }
+
                   $clops13->si135_vlretencao = $reg13->vlrentencao;
                   $clops13->si135_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                   $clops13->si135_reg10 = $clops10->si132_sequencial;
