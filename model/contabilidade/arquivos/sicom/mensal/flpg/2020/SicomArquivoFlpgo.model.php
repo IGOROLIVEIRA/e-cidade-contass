@@ -145,6 +145,8 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    rh02_cgminstituidor,
    rh02_dtobitoinstituidor,
    rh02_tipoparentescoinst,
+   CASE WHEN rh02_tipoparentescoinst = 11 THEN rh02_desctipoparentescoinst
+   ELSE ' ' END AS si195_dscdependencia,
        CASE
            WHEN rh37_exerceatividade = 't' THEN 1
            WHEN rh37_exerceatividade = 'f' THEN 2
@@ -403,7 +405,7 @@ WHERE (r59_anousu,
        AND r20_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6']."))))
    AND   rh01_sicom = 1
    AND rh01_instit = ".db_getsession('DB_instit')."
-   GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,rh05_recis
+   GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,rh05_recis,rh02_hrssem
    ";
 
    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
@@ -525,7 +527,7 @@ WHERE (r59_anousu,
             $clflpgo10->si195_datobitoinstituidor           = "";
             $clflpgo10->si195_tipodependencia               = "";
         }
-        $clflpgo10->si195_dscdependencia                       = ' ';
+        $clflpgo10->si195_dscdependencia                       = $this->convert_accented_characters($oDados10->si195_dscdependencia);
         $clflpgo10->si195_datafastpreliminar                   = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
