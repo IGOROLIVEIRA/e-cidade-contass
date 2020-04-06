@@ -24,3 +24,4 @@ integracao_externa/portal_transparencia/log/
 imagens/obras/*
 !imagens/obras/obras.txt
 anexos/*
+.phpintel/

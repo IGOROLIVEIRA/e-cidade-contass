@@ -80,7 +80,7 @@ class GerarHOMOLIC extends GerarAM
         $aCSVHOMOLIC20['si64_nroprocessolicitatorio'] = substr($aHOMOLIC20['si64_nroprocessolicitatorio'], 0, 12);
         $aCSVHOMOLIC20['si64_tipodocumento']          = $this->padLeftZero($aHOMOLIC20['si64_tipodocumento'], 1);
         $aCSVHOMOLIC20['si64_nrodocumento']           = substr($aHOMOLIC20['si64_nrodocumento'], 0, 14);
-        $aCSVHOMOLIC20['si64_nrolote']                = substr($aHOMOLIC20['si64_nrolote'], 0, 4);
+        $aCSVHOMOLIC20['si64_nrolote']                = !$aHOMOLIC20['si64_nrolote'] ? '' : substr($aHOMOLIC20['si64_nrolote'], 0, 4);
         $aCSVHOMOLIC20['si64_coditem']                = substr($aHOMOLIC20['si64_coditem'], 0, 15);
         $aCSVHOMOLIC20['si64_percdesconto']           = $this->sicomNumberReal($aHOMOLIC20['si64_percdesconto'], 2);
         

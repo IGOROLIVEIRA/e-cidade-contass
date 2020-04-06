@@ -88,6 +88,7 @@ require_once ("classes/db_pctipocompra_classe.php");
 require_once ("classes/db_conplanoreduz_classe.php");
 require_once ("classes/db_empparamnum_classe.php");
 require_once ("classes/db_concarpeculiar_classe.php");
+require_once ("classes/db_empautorizliberado_classe.php");
 require_once "libs/db_app.utils.php";
 
 require_once("model/configuracao/Instituicao.model.php");
@@ -147,6 +148,7 @@ $clconcarpeculiar = new cl_concarpeculiar;
 $oDaoEmpenhoNl    = new cl_empempenhonl;
 $cldb_depusu	  	= new cl_db_depusu;
 $clpctipocompra	  = new cl_pctipocompra;
+$clempautorizliberado = new cl_empautorizliberado;
 
 //retorna os arrays de lancamento...
 $cltranslan       = new cl_translan;
@@ -651,6 +653,19 @@ if(isset($incluir)) {
 
             }
             //FIM OC 7037
+
+            /* Ocorrência 11933
+             * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
+             * e valida se a autorização de empenho está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
+             */
+            $bAtestoContInt = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
+            $clempautorizliberado->sql_record($clempautorizliberado->sql_query(null, "*", "", "e232_autori = $chavepesquisa"));
+
+            if ( $bAtestoContInt == 't' && $clempautorizliberado->numrows == 0 ) {
+                $sqlerro = true;
+                $erro_msg = "Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!";
+            }
+
 
             if($sqlerro == false) {
 

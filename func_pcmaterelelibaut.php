@@ -207,40 +207,19 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                             $campos = "pc01_codmater,pc01_descrmater,pc01_complmater,o56_elemento,o56_descr,pc07_codele,pc01_servico";
                         }
                     }
-                    if (isset($chave_pc07_codmater) && (trim($chave_pc07_codmater) != "")) {
+                  if (isset($criterioadjudicacao) && $criterioadjudicacao == true && isset($z01_numcgm)) {
+                    $whereTab = "";
+                    if (isset($chave_pc94_sequencial) && (trim($chave_pc94_sequencial) != "")) {
+                      $whereTab .= " AND pctabela.pc94_sequencial = {$chave_pc94_sequencial} ";
+                    }else if (isset($chave_pc07_codmater) && (trim($chave_pc07_codmater) != "")) {
+                      $whereTab .= " AND pcmater.pc01_codmater = {$chave_pc07_codmater} ";
+                    }else if (isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")){
+                      $whereTab .= " and o56_elemento like '$chave_o56_elemento%'  ";
+                    }else if(isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "")){
+                      $whereTab .= "     pc01_descrmater like '%{$chave_pc01_descrmater}%' ";
+                    }
 
-                        $sql = $clpcmaterele->sql_query(null, null, $campos, "pc07_codmater", " pc07_codmater=$chave_pc07_codmater $where_ativo and $where_libaut {$sWhereElementoAutorizacao}");
-                        $repassa["chave_pc07_codmater"] = $chave_pc07_codmater;
-                    } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "") && isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")) {
-
-                        $sql = $clpcmaterele->sql_query_funcauteledescr("", "", $campos, "pc07_codmater", "$chave_pc01_descrmater#$chave_o56_elemento", $sWhereElementoAutorizacao);
-                        $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
-                        $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
-                    } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "")) {
-
-                        $sPesquisaPorElemento = "";
-                        if ((isset($chave_o56_elemento) and trim($chave_o56_elemento)  != "")) {
-                            $sPesquisaPorElemento = " and o56_elemento like '$chave_o56_elemento%' ";
-                        }
-
-                        $sWhere  = "     pc01_descrmater like '%{$chave_pc01_descrmater}%' ";
-                        $sWhere .= " and {$where_libaut} ";
-                        $sWhere .= "     {$where_ativo} ";
-                        $sWhere .= "     {$sPesquisaPorElemento}";
-
-                        $sql = $clpcmaterele->sql_query_funcaut(null, null, $campos, "pc07_codmater", $sWhere, $sWhereElementoAutorizacao);
-                        $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
-                    } else if (isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")) {
-
-                        $sql = $clpcmaterele->sql_query_funcautele("", "", $campos, "pc07_codmater", " o56_elemento like '$chave_o56_elemento%' and o56_anousu = " . db_getsession("DB_anousu"),  " {$sWhereElementoAutorizacao} ");
-                        $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
-                    } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true && isset($z01_numcgm)) {
-                        $whereTab = "";
-                        if (isset($chave_pc94_sequencial) && (trim($chave_pc94_sequencial) != "")) {
-                            $whereTab .= " AND pctabela.pc94_sequencial = {$chave_pc94_sequencial} ";
-                        }
-
-                        $sql = "
+                    $sql = "
             SELECT * FROM (
               SELECT DISTINCT pcmater.pc01_codmater,
                               pcmater.pc01_descrmater,
@@ -335,6 +314,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
                       FROM empautoriza
                       WHERE e54_autori = {$iCodigoAutorizacao})
                 AND pc24_pontuacao=1
+                {$whereTab}
                 AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
                 AND pcmater.pc01_codmater NOT IN (select pc94_codmater from pctabela)
 
@@ -342,10 +322,39 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
             WHERE fornecedores.z01_numcgm = {$z01_numcgm}
             ORDER BY fornecedores.pc01_codmater
             ";
+                  }else{
+                    if (isset($chave_pc07_codmater) && (trim($chave_pc07_codmater) != "")) {
+
+                      $sql = $clpcmaterele->sql_query(null, null, $campos, "pc07_codmater", " pc07_codmater=$chave_pc07_codmater $where_ativo and $where_libaut {$sWhereElementoAutorizacao}");
+                      $repassa["chave_pc07_codmater"] = $chave_pc07_codmater;
+                    } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "") && isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")) {
+
+                      $sql = $clpcmaterele->sql_query_funcauteledescr("", "", $campos, "pc07_codmater", "$chave_pc01_descrmater#$chave_o56_elemento", $sWhereElementoAutorizacao);
+                      $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
+                      $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
+                    } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "")) {
+
+                      $sPesquisaPorElemento = "";
+                      if ((isset($chave_o56_elemento) and trim($chave_o56_elemento)  != "")) {
+                        $sPesquisaPorElemento = " and o56_elemento like '$chave_o56_elemento%' ";
+                      }
+
+                      $sWhere  = "     pc01_descrmater like '%{$chave_pc01_descrmater}%' ";
+                      $sWhere .= " and {$where_libaut} ";
+                      $sWhere .= "     {$where_ativo} ";
+                      $sWhere .= "     {$sPesquisaPorElemento}";
+
+                      $sql = $clpcmaterele->sql_query_funcaut(null, null, $campos, "pc07_codmater", $sWhere, $sWhereElementoAutorizacao);
+                      $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
+                    } else if (isset($chave_o56_elemento) && (trim($chave_o56_elemento) != "")) {
+
+                      $sql = $clpcmaterele->sql_query_funcautele("", "", $campos, "pc07_codmater", " o56_elemento like '$chave_o56_elemento%' and o56_anousu = " . db_getsession("DB_anousu"),  " {$sWhereElementoAutorizacao} ");
+                      $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
                     } else {
-                        $sql = $clpcmaterele->sql_query_funcaut("", "", $campos, "pc07_codmater#pc07_codele", " 1=1 and $where_libaut $where_ativo {$sWhereElementoAutorizacao}");
-                        $sql = "";
+                      $sql = $clpcmaterele->sql_query_funcaut("", "", $campos, "pc07_codmater#pc07_codele", " 1=1 and $where_libaut $where_ativo {$sWhereElementoAutorizacao}");
+                      $sql = "";
                     }
+                  }
                     db_lovrot($sql, 12, "()", "", $funcao_js, "", "NoMe", $repassa);
                 } else {
                     if ($pesquisa_chave != null && $pesquisa_chave != "") {

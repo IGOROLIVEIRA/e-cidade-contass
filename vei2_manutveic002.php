@@ -69,8 +69,17 @@ if($idCentral){
 if($ve62_veiccadtiposervico){
     $sSql .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico";
 }
-       //echo $sSql;exit;
+if($ve62_tipogasto){
+	$sSql .= " and ve62_tipogasto = $ve62_tipogasto ";
+}
 $rsResult = db_query($sSql) or die(pg_last_error());//db_criatabela($rsResult);exit;
+//echo pg_num_rows($rsResult);die();
+if(!pg_num_rows($rsResult)){
+    echo "<script>alert('Nenhum registro encontrado!');";
+    echo "window.close();";
+    echo "</script>";
+    exit;
+}
 
 $mPDF = new Relatorio('', 'A4-L');
 $mPDF->addInfo("Manutenção de Veiculos", 2);
@@ -210,6 +219,10 @@ HTML;
                         }
                         if ($ve62_veiccadtiposervico) {
                       $sSql2 .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico
+                          ";
+                        }
+                        if($ve62_tipogasto){
+							$sSql2 .= " and ve62_tipogasto = $ve62_tipogasto
                           ";
                         }
 

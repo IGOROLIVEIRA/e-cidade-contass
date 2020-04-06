@@ -122,6 +122,7 @@ if(isset($incluir)){
   #obr03_descmedicao{
     width: 733px;
     height: 50px;
+    background-color:#E6E4F1;
   }
   #incluirmedicao{
     margin-top: 14px;
@@ -130,6 +131,9 @@ if(isset($incluir)){
   }
   #tipocompra{
     width: 263px;
+  }
+  #obr04_legenda{
+  width: 430px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

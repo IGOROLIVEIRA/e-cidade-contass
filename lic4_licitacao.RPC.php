@@ -757,7 +757,7 @@ switch ($oParam->exec) {
                  END) AS data_Referencia
     ";
 
-    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_codigo = '.$oParam->iCodigoLicitacao. ' and EXTRACT(YEAR FROM l20_datacria) >= 2020');
+    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_codigo = '.$oParam->iCodigoLicitacao. ' and EXTRACT(YEAR FROM l20_dtpublic) >= 2020');
     $rsLicEdital = $oDaoLicEdital->sql_record($sSqlLicEdital);
     $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
     $oRetorno->dadosLicitacao = $oDados;

@@ -24,10 +24,10 @@ class cl_licobras {
   public $obr01_dtlancamento = null;
   public $obr01_numeroobra = 0;
   public $obr01_linkobra = null;
-  public $obr01_dtinicioatividades_dia = null;
-  public $obr01_dtinicioatividades_mes = null;
-  public $obr01_dtinicioatividades_ano = null;
-  public $obr01_dtinicioatividades = null;
+//  public $obr01_dtinicioatividades_dia = null;
+//  public $obr01_dtinicioatividades_mes = null;
+//  public $obr01_dtinicioatividades_ano = null;
+//  public $obr01_dtinicioatividades = null;
   public $obr01_instit = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
@@ -72,14 +72,14 @@ class cl_licobras {
       }
       $this->obr01_numeroobra = ($this->obr01_numeroobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_numeroobra"]:$this->obr01_numeroobra);
       $this->obr01_linkobra = ($this->obr01_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"]:$this->obr01_linkobra);
-      if ($this->obr01_dtinicioatividades == "") {
-        $this->obr01_dtinicioatividades_dia = ($this->obr01_dtinicioatividades_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]:$this->obr01_dtinicioatividades_dia);
-        $this->obr01_dtinicioatividades_mes = ($this->obr01_dtinicioatividades_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_mes"]:$this->obr01_dtinicioatividades_mes);
-        $this->obr01_dtinicioatividades_ano = ($this->obr01_dtinicioatividades_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_ano"]:$this->obr01_dtinicioatividades_ano);
-        if ($this->obr01_dtinicioatividades_dia != "") {
-          $this->obr01_dtinicioatividades = $this->obr01_dtinicioatividades_ano."-".$this->obr01_dtinicioatividades_mes."-".$this->obr01_dtinicioatividades_dia;
-        }
-      }
+//      if ($this->obr01_dtinicioatividades == "") {
+//        $this->obr01_dtinicioatividades_dia = ($this->obr01_dtinicioatividades_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]:$this->obr01_dtinicioatividades_dia);
+//        $this->obr01_dtinicioatividades_mes = ($this->obr01_dtinicioatividades_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_mes"]:$this->obr01_dtinicioatividades_mes);
+//        $this->obr01_dtinicioatividades_ano = ($this->obr01_dtinicioatividades_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_ano"]:$this->obr01_dtinicioatividades_ano);
+//        if ($this->obr01_dtinicioatividades_dia != "") {
+//          $this->obr01_dtinicioatividades = $this->obr01_dtinicioatividades_ano."-".$this->obr01_dtinicioatividades_mes."-".$this->obr01_dtinicioatividades_dia;
+//        }
+//      }
       $this->obr01_instit = ($this->obr01_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_instit"]:$this->obr01_instit);
     } else {
     }
@@ -137,15 +137,15 @@ class cl_licobras {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr01_dtinicioatividades == null ) {
-      $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-      $this->erro_campo = "obr01_dtinicioatividades_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if ($this->obr01_dtinicioatividades == null ) {
+//      $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
+//      $this->erro_campo = "obr01_dtinicioatividades_dia";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if ($this->obr01_instit == null ) {
       $this->erro_sql = " Campo Instituição não informado.";
       $this->erro_campo = "obr01_instit";
@@ -288,33 +288,33 @@ class cl_licobras {
         return false;
       }
     }
-    if (trim($this->obr01_dtinicioatividades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"] !="") ) {
-      $sql  .= $virgula." obr01_dtinicioatividades = '$this->obr01_dtinicioatividades' ";
-      $virgula = ",";
-      if (trim($this->obr01_dtinicioatividades) == null ) {
-        $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-        $this->erro_campo = "obr01_dtinicioatividades_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }     else{
-      if (isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"])) {
-        $sql  .= $virgula." obr01_dtinicioatividades = null ";
-        $virgula = ",";
-        if (trim($this->obr01_dtinicioatividades) == null ) {
-          $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-          $this->erro_campo = "obr01_dtinicioatividades_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-      }
-    }
+//    if (trim($this->obr01_dtinicioatividades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"] !="") ) {
+//      $sql  .= $virgula." obr01_dtinicioatividades = '$this->obr01_dtinicioatividades' ";
+//      $virgula = ",";
+//      if (trim($this->obr01_dtinicioatividades) == null ) {
+//        $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
+//        $this->erro_campo = "obr01_dtinicioatividades_dia";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
+//    }     else{
+//      if (isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"])) {
+//        $sql  .= $virgula." obr01_dtinicioatividades = null ";
+//        $virgula = ",";
+//        if (trim($this->obr01_dtinicioatividades) == null ) {
+//          $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
+//          $this->erro_campo = "obr01_dtinicioatividades_dia";
+//          $this->erro_banco = "";
+//          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//          $this->erro_status = "0";
+//          return false;
+//        }
+//      }
+//    }
     if (trim($this->obr01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_instit"])) {
       $sql  .= $virgula." obr01_instit = $this->obr01_instit ";
       $virgula = ",";

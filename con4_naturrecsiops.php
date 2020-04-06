@@ -17,7 +17,7 @@ if(isset($incluir)){
 
 if(isset($excluir)){
     db_inicio_transacao();
-    $clnaturrecsiops->excluir($c230_natrececidade,$c230_natrecsiops);
+    $clnaturrecsiops->excluir($c230_natrececidade,$c230_natrecsiops,"c230_anousu = '$c230_anousu' and c230_natrececidade = '$c230_natrececidade' and c230_natrecsiops = '$c230_natrecsiops'");
     db_fim_transacao();
 } else if(isset($chavepesquisa)){
     $result = $clnaturrecsiops->sql_record($clnaturrecsiops->sql_query($chavepesquisa));

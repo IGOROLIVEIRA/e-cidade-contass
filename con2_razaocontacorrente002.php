@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -53,6 +53,7 @@ $sDescricaoConta = $oContaCorrente->getDescricao();
 
 $sCamposContaCorrenteDetalhe  = " distinct ";
 $sCamposContaCorrenteDetalhe .= "c19_contacorrente, ";
+$sCamposContaCorrenteDetalhe .= "c19_sequencial, ";
 $sCamposContaCorrenteDetalhe .= "c19_reduz, ";
 $sCamposContaCorrenteDetalhe .= "c19_orcunidadeanousu, ";
 $sCamposContaCorrenteDetalhe .= "c19_orcunidadeorgao, ";
@@ -62,6 +63,7 @@ $sCamposContaCorrenteDetalhe .= "c19_orcorgaoorgao, ";
 $sCamposContaCorrenteDetalhe .= "c19_conplanoreduzanousu, ";
 $sCamposContaCorrenteDetalhe .= "c19_acordo, ";
 $sCamposContaCorrenteDetalhe .= "c19_instit, ";
+$sCamposContaCorrenteDetalhe .= "c19_estrutural, ";
 $sCamposContaCorrenteDetalhe .= "z01_numcgm, z01_nome, z01_cgccpf, ";
 $sCamposContaCorrenteDetalhe .= "db83_descricao, ";
 $sCamposContaCorrenteDetalhe .= "db83_bancoagencia, ";
@@ -71,7 +73,6 @@ $sCamposContaCorrenteDetalhe .= "db83_identificador, ";
 $sCamposContaCorrenteDetalhe .= "db83_codigooperacao, ";
 $sCamposContaCorrenteDetalhe .= "db83_tipoconta, ";
 $sCamposContaCorrenteDetalhe .= "db83_contaplano,";
-$sCamposContaCorrenteDetalhe .= "o15_descr, ";
 $sCamposContaCorrenteDetalhe .= "o40_descr, ";
 $sCamposContaCorrenteDetalhe .= "o41_descr, c58_descr, ";
 $sCamposContaCorrenteDetalhe .= "nomeinst, ";
@@ -100,7 +101,10 @@ require_once "classes/db_contacorrentedetalhe_classe.php";
 $oDaoContaCorrenteDetalhe = new cl_contacorrentedetalhe;
 $sSqlContaCorrenteDetalhe = $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(null, $sCamposContaCorrenteDetalhe, "c19_reduz, z01_nome", "$sWhereContaCorrenteDetalhe" );
 $rsContaCorrenteDetalhe   = $oDaoContaCorrenteDetalhe->sql_record($sSqlContaCorrenteDetalhe);
+
 $aContacorrenteDetalhe    = db_utils::getColectionByRecord($rsContaCorrenteDetalhe);
+// echo $sSqlContaCorrenteDetalhe;
+// echo "<pre>";print_r($aContacorrenteDetalhe);exit;
 if ($oDaoContaCorrenteDetalhe->erro_status == "0") {
 
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado para os filtros selecionados.");
@@ -119,14 +123,19 @@ $troca        = 1;
 $iAlturalinha = 4;
 $iFonte       = 6;
 
-function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFiltroContaCorrente, $iInstituicao, $iReduzido, $iCodOrgao, $iCodUnidade, $iAnousu){
+function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFiltroContaCorrente, $iInstituicao, $iReduzido, $iCodOrgao, $iCodUnidade, $iAnousu, $c19_sequencial){
 
   $sCampos  = " distinct c71_data,   ";
   $sCampos .= "c69_codlan, ";
   $sCampos .= "c53_coddoc, ";
   $sCampos .= "c53_descr,  ";
   $sCampos .= "c28_tipo,   ";
-  $sCampos .= "c69_valor   ";
+  $sCampos .= "c69_valor,   ";
+  $sCampos .= "o15_codtri,  ";
+  $sCampos .= "e60_codemp||'/'||e60_anousu as e60_codemp,  ";
+  $sCampos .= " '('||o58_coddot||') '||lpad(o58_orgao,2,0)||'.'||lpad(o58_unidade,2,0)||'.'||lpad(o58_funcao,2,0)||'.'||lpad(o58_subfuncao,3,0)||'.'||lpad(o58_programa,4,0)||'.'||lpad(o58_projativ,4,0)||'.'||substr(dotacao.o56_elemento,2,6)||'.'||lpad(o15_codtri,3,0) as dot,";
+  $sCampos .= "elemento.o56_elemento as subelemento,  ";
+  $sCampos .= "c19_estrutural as estrutural  ";
 
   $sSqlLancamentos  = " select {$sCampos}      ";
   $sSqlLancamentos .= "   from conlancamval " ;
@@ -136,32 +145,40 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   $sSqlLancamentos .= "        inner join conhistdoc on conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc ";
   $sSqlLancamentos .= "        inner join contacorrentedetalheconlancamval on contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen ";
   $sSqlLancamentos .= "        inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe";
+  $sSqlLancamentos .= "        left join orctiporec on c19_orctiporec = o15_codigo ";
+  $sSqlLancamentos .= "        left join empempenho on e60_numemp=c19_numemp ";
+  $sSqlLancamentos .= "        left join orcdotacao on o58_coddot=e60_coddot and o58_anousu=e60_anousu ";
+  $sSqlLancamentos .= "        left join orcelemento dotacao on o58_codele=dotacao.o56_codele and o58_anousu=dotacao.o56_anousu ";
+  $sSqlLancamentos .= "        left join empelemento on e64_numemp=e60_numemp ";
+  $sSqlLancamentos .= "        left join orcelemento elemento on e64_codele=elemento.o56_codele and e60_anousu=elemento.o56_anousu ";
   $sSqlLancamentos .= "  where c69_data between '{$dtInicial}' and '{$dtFinal}' ";
   $sSqlLancamentos .= "    and c19_contacorrente = {$iFiltroContaCorrente} ";
   $sSqlLancamentos .= "    and c19_reduz = {$iReduzido}  ";
   $sSqlLancamentos .= "    and c19_instit = {$iInstituicao} ";
+  $sSqlLancamentos .= "    and c19_sequencial = {$c19_sequencial} ";
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sSqlLancamentos .= "    and c19_numcgm = {$iNumcgm} ";
   }
-  
+
   if (isset($iCodOrgao) && !empty($iCodOrgao)) {
     $sSqlLancamentos .= "    and c19_orcorgaoanousu = {$iAnousu} ";
     $sSqlLancamentos .= "    and c19_orcorgaoorgao = {$iCodOrgao} ";
   }
-  
+
   if (isset($iCodUnidade) && !empty($iCodUnidade)) {
     $sSqlLancamentos .= "    and c19_orcunidadeunidade = {$iCodUnidade} ";
   }
-  
-  $sSqlLancamentos .= "  order by c69_codlan, c53_coddoc " ;
 
+  $sSqlLancamentos .= "  order by c69_codlan, c53_coddoc " ;
   $rsLancamentos    = db_query($sSqlLancamentos);
+
   $aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
+
 
   return $aLancamento;
 }
- 
-function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade) {
+
+function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
 
   $aDataInicial = explode('-', $dtInicial);
   $iDataInicial = mktime(null, null, null,$aDataInicial[1]  ,$aDataInicial[2]  , $aDataInicial[0], null);
@@ -179,19 +196,20 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
   $sWhere  = "     c69_data < '{$dDataInicial}' ";
   $sWhere .= " and c19_contacorrente = {$iContaCorrente} ";
   $sWhere .= " and c19_reduz  = {$iReduzido} ";
+  $sWhere .= " and c19_sequencial  = {$c19_sequencial} ";
 
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sWhere .= " and c19_numcgm = {$iNumcgm} ";
   }
-  
+
   if (isset($iOrgao) && !empty($iOrgao)) {
     $sWhere .= " and c19_orcunidadeorgao   = {$iOrgao} ";
   }
-  
+
   if (isset($iUnidade) && !empty($iUnidade)) {
     $sWhere .= " and c19_orcunidadeunidade = {$iUnidade} ";
   }
-  
+
   $sSql  = " select {$sCampos} ";
   $sSql .= "   from contacorrentedetalhe ";
   $sSql .= "        left join contacorrentedetalheconlancamval on contacorrentedetalhe.c19_sequencial               = contacorrentedetalheconlancamval.c28_contacorrentedetalhe ";
@@ -204,7 +222,7 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
   $oSadosIniciais->nTotalDebito  = db_utils::fieldsMemory($rsSaldos, 0)->debito;
   $oSadosIniciais->nTotalCredito = db_utils::fieldsMemory($rsSaldos, 0)->credito;
 
-  $oDadosImplantacao = buscaDadosImplantacao($iReduzido, $iNumcgm, $iOrgao, $iUnidade);
+  $oDadosImplantacao = buscaDadosImplantacao($iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial);
   $oSadosIniciais->nTotalDebito  += $oDadosImplantacao->debito;
   $oSadosIniciais->nTotalCredito += $oDadosImplantacao->credito;
 
@@ -220,9 +238,10 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
  * @param  integer  $iUnidade
  * @return stdClass
  */
-function buscaDadosImplantacao( $iReduzido, $iNumcgm, $iOrgao, $iUnidade) {
+function buscaDadosImplantacao( $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
 
   $sWhere  = " c19_reduz  = {$iReduzido} ";
+  $sWhere  .= " and c19_sequencial  = {$c19_sequencial} ";
   if (isset($iNumcgm) && !empty($iNumcgm)) {
     $sWhere .= " and c19_numcgm = {$iNumcgm} ";
   }
@@ -251,9 +270,9 @@ function buscaDadosImplantacao( $iReduzido, $iNumcgm, $iOrgao, $iUnidade) {
     $oStdDetalhe->credito += $oDetalhe->credito;
     $oStdDetalhe->debito  += $oDetalhe->debito;
   }
-  
+
   return $oStdDetalhe;
-  
+
 }
 
 
@@ -280,10 +299,11 @@ if ($oDaoContaCorrenteDetalhe->numrows == 0) {
 
 // saldo inicial de debito e saldo inicial de credito
 $iReduzConta        = db_utils::fieldsMemory($rsContaCorrenteDetalhe, 0)->c19_reduz;
+$nSaldoInicialConta   = 0;
 $nTotalGeralDebito  = 0;
 $nTotalGeralCredito = 0;
 $nSaldoFinalConta   = 0;
-
+// inicio for para detalhes do conta corrente
 foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
 
   imprimirCabecalho($oPdf, $iAlturalinha, false);
@@ -292,7 +312,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
 
     $oPdf->setfont('arial','b',$iFonte);
     $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-    $oPdf->cell(40,  $iAlturalinha, "TOTAIS DAS MOVIMENTAÇÕES: ", "TB",  0, "R", 1);
+    $oPdf->cell(40,  $iAlturalinha, "TOTAIS DO CONTA CORRENTE: ", "TB",  0, "R", 1);
     $oPdf->setfont('arial','',6);
     $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralDebito , 'f'),  "TB",  0, "R", 1);
     $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralCredito, 'f'), "TB",  1, "R", 1);
@@ -310,6 +330,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
     }
 
     $iReduzConta     = $oValorDados->c19_reduz;
+    $nSaldoInicialConta   = 0;
     $nTotalGeralDebito  = 0;
     $nTotalGeralCredito = 0;
     $nSaldoFinalConta   = 0;
@@ -322,7 +343,8 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
                                          $iReduzConta,
                                          $oValorDados->z01_numcgm,
                                          $oValorDados->c19_orcunidadeorgao,
-                                         $oValorDados->c19_orcunidadeunidade);
+                                         $oValorDados->c19_orcunidadeunidade,
+                                         $oValorDados->c19_sequencial);
   $nSaldoInicial     = ($oSaldosIniciais->nTotalDebito - $oSaldosIniciais->nTotalCredito);
   // escrevemos os atributos
   $aAtributos = ContaCorrente::getAtributos($oValorDados->c19_contacorrente);
@@ -342,7 +364,7 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   }
 
   $oPdf->setfont('arial','b',6);
-  $oPdf->cell(140,  $iAlturalinha, "SALDO INICIAL: " , ""    , 0, "R", 0);
+  $oPdf->cell(140,  $iAlturalinha, "SALDO INICIAL CONTA CORRENTE: " , ""    , 0, "R", 0);
   $oPdf->setfont('arial','',6);
 
   if ($nSaldoInicial > 0){
@@ -353,23 +375,22 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   }
 
   imprimirCabecalho($oPdf, $iAlturalinha, true);
-
   // aqui percorremos os varios lançamentos do filtro selecionado por contas e numcgm
-  $aLancamentos = getLancamentosContaCorrenteDetalhe($oValorDados->z01_numcgm, 
-  		                                               $dtInicial, 
-  		                                               $dtFinal, 
+  $aLancamentos = getLancamentosContaCorrenteDetalhe($oValorDados->z01_numcgm,
+  		                                               $dtInicial,
+  		                                               $dtFinal,
   		                                               $oValorDados->c19_contacorrente,
-                                                     $oValorDados->c19_instit, 
-  		                                               $oValorDados->c19_reduz, 
+                                                     $oValorDados->c19_instit,
+  		                                               $oValorDados->c19_reduz,
   		                                               $oValorDados->c19_orcorgaoorgao,
-                                                     $oValorDados->c19_orcunidadeunidade, 
-  		                                               $oValorDados->c19_orcorgaoanousu);
+                                                     $oValorDados->c19_orcunidadeunidade,
+                                                     $oValorDados->c19_orcorgaoanousu,
+                                                     $oValorDados->c19_sequencial);
 
   $nTotalMovDebito  = "0.00";
   $nTotalMovCredito = "0.00";
 
   foreach ($aLancamentos as $oLancamentos) {
-
     $dtLancamento = db_formatar($oLancamentos->c71_data, "d");
 
     $nValorDebito     = "0.00";
@@ -387,17 +408,32 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
         $nTotalMovDebito  += $oLancamentos->c69_valor;
       break;
     }
+    $sDescricaoFinal = "Doc: ". $oLancamentos->c53_coddoc;
+
+    if($oLancamentos->o15_codtri != '')
+     $sDescricaoFinal .= "  Fonte: " .$oLancamentos->o15_codtri ;
+    if($oLancamentos->e60_codemp != '')
+      $sDescricaoFinal .= "  Emp: " .$oLancamentos->e60_codemp;
+    if($oLancamentos->c19_estrutural != '')
+      $sDescricaoFinal .= "  Estrutural: " .$oLancamentos->c19_estrutural;
+    if($oLancamentos->estrutural != '' && $oLancamentos->dot == '')
+      $sDescricaoFinal .= "  Estrutural: " .$oLancamentos->estrutural;
+    if($oLancamentos->dot != '')
+      $sDescricaoFinal .= "  Dot: " .$oLancamentos->dot;
+    if($oLancamentos->subelemento != '')
+      $sDescricaoFinal .= "  Elemento: " .$oLancamentos->subelemento;
 
     $oPdf->setfont('arial','',6);
-    $oPdf->cell(25,  $iAlturalinha, $dtLancamento                                              , "", 0, "C", 0);
-    $oPdf->cell(25,  $iAlturalinha, $oLancamentos->c69_codlan                                  , "", 0, "R", 0);
-    $oPdf->cell(90,  $iAlturalinha, $oLancamentos->c53_coddoc . " " .$oLancamentos->c53_descr  , "", 0, "L", 0);
+    $oPdf->cell(20,  $iAlturalinha, $dtLancamento                                              , "", 0, "C", 0);
+    $oPdf->cell(21,  $iAlturalinha, $oLancamentos->c69_codlan                                  , "", 0, "R", 0);
+    $oPdf->cell(99,  $iAlturalinha, $sDescricaoFinal  , "", 0, "L", 0);
     $oPdf->cell(25,  $iAlturalinha, db_formatar($nValorDebito, "f")                            , "", 0, "R", 0);
     $oPdf->cell(25,  $iAlturalinha, db_formatar($nValorCredito, 'f')                           , "", 1, "R", 0);
 
     imprimirCabecalho($oPdf, $iAlturalinha, false);
 
   }
+
 
   // calcula novo saldo
   $nSaldoInicial += ($nTotalMovDebito - $nTotalMovCredito);
@@ -407,33 +443,33 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
   $nTotalGeralDebito  += $nTotalMovDebito;
   $nTotalGeralCredito += $nTotalMovCredito;
 
-  //TOTAIS DA MOVIMENTACAO;
-  $oPdf->setfont('arial','b',$iFonte);
-  $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-  $oPdf->cell(40,  $iAlturalinha, "TOTAIS DA MOVIMENTAÇÃO: ", "TB",  0, "R", 1);
-  $oPdf->setfont('arial','',6);
-  $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovDebito, 'f'),  "TB",  0, "R", 1);
-  $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovCredito, 'f'), "TB",  1, "R", 1);
+ //TOTAIS DA MOVIMENTACAO;
+ $oPdf->setfont('arial','b',$iFonte);
+ $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
+ $oPdf->cell(40,  $iAlturalinha, "TOTAIS DO CONTA CORRENTE: ", "TB",  0, "R", 1);
+ $oPdf->setfont('arial','',6);
+ $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovDebito, 'f'),  "TB",  0, "R", 1);
+ $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalMovCredito, 'f'), "TB",  1, "R", 1);
 
-  $oPdf->setfont('arial','b',$iFonte);
-  $oPdf->cell(100,  $iAlturalinha, "",             "",  0, "R", 0);
-  $oPdf->cell(40,  $iAlturalinha, "SALDO FINAL: ", "TB",  0, "R", 1);
-  $oPdf->setfont('arial','',6);
-  if ($nSaldoInicial > 0){
-    $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nSaldoInicial     , 'f'), "TB",  0, "R", 1);
-    $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  1, "R", 1);
-  }else{
-    $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  0, "R", 1);
-    $oPdf->cell(25 ,  $iAlturalinha, db_formatar(abs($nSaldoInicial), 'f'), "TB",  1, "R", 1);
-  }
+ $oPdf->setfont('arial','b',$iFonte);
+ $oPdf->cell(100,  $iAlturalinha, "",             "",  0, "R", 0);
+ $oPdf->cell(40,  $iAlturalinha, "SALDO FINAL CONTA CORRENTE: ", "TB",  0, "R", 1);
+ $oPdf->setfont('arial','',6);
+ if ($nSaldoInicial > 0){
+   $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nSaldoInicial     , 'f'), "TB",  0, "R", 1);
+   $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  1, "R", 1);
+ }else{
+   $oPdf->cell(25 ,  $iAlturalinha,                                    "", "TB",  0, "R", 1);
+   $oPdf->cell(25 ,  $iAlturalinha, db_formatar(abs($nSaldoInicial), 'f'), "TB",  1, "R", 1);
+ }
   $oPdf->Ln();
-}
+}// fim for para detalhes do conta corrente
 
 $oPdf->Ln();
 // RESUMO GERAL
 $oPdf->setfont('arial','b',$iFonte);
 $oPdf->cell(100,  $iAlturalinha, "",                          "",  0, "R", 0);
-$oPdf->cell(40,  $iAlturalinha, "TOTAIS DAS MOVIMENTAÇÕES: ", "TB",  0, "R", 1);
+$oPdf->cell(40,  $iAlturalinha, "TOTAIS DA CONTA: ", "TB",  0, "R", 1);
 $oPdf->setfont('arial','',6);
 $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralDebito , 'f'),  "TB",  0, "R", 1);
 $oPdf->cell(25 ,  $iAlturalinha, db_formatar($nTotalGeralCredito, 'f'), "TB",  1, "R", 1);
@@ -464,9 +500,9 @@ function imprimirCabecalho($oPdf, $iAlturalinha, $lImprime, $nDebitoInicial = nu
     }else{
 
     $oPdf->setfont('arial','b',6);
-    $oPdf->cell(25,  $iAlturalinha, "DATA"             , "TB" , 0, "C", 1);
-    $oPdf->cell(25,  $iAlturalinha, "CÓD. LANÇAMENTO"  , "TB" , 0, "C", 1);
-    $oPdf->cell(90,  $iAlturalinha, "DOCUMENTO"        , "TB" , 0, "C", 1);
+    $oPdf->cell(20,  $iAlturalinha, "DATA"             , "TB" , 0, "C", 1);
+    $oPdf->cell(21,  $iAlturalinha, "CÓD. LANÇAMENTO"  , "TB" , 0, "C", 1);
+    $oPdf->cell(99,  $iAlturalinha, "DETALHAMENTO CONTA CORRENTE"        , "TB" , 0, "C", 1);
     $oPdf->cell(25,  $iAlturalinha, "DÉBITO"           , "TB" , 0, "C", 1);
     $oPdf->cell(25,  $iAlturalinha, "CRÉDITO"          , "TB" , 1, "C", 1);
 

@@ -83,16 +83,6 @@ $cllicobras->rotulo->label();
             ?>
           </td>
         </tr>
-        <tr>
-          <td nowrap title="<?=@$Tobr01_dtinicioatividades?>">
-            <?=@$Lobr01_dtinicioatividades?>
-          </td>
-          <td>
-            <?
-            db_inputdata('obr01_dtinicioatividades',@$obr01_dtinicioatividades_dia,@$obr01_dtinicioatividades_mes,@$obr01_dtinicioatividades_ano,true,'text',$db_opcao,"")
-            ?>
-          </td>
-        </tr>
       </table>
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" >
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
@@ -169,6 +159,14 @@ $cllicobras->rotulo->label();
                 2 => 'Servidor(a) Efetivo(a)',
                 3 => 'Contratado(a) da administração');
                 db_select('obr05_vinculoprofissional', $aValoresvinculo, true, $db_opcao," onchange=''");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Data Inicio das Ativ. do Eng na Obra:</strong></td>
+            <td>
+              <?
+              db_inputdata('obr05_dtcadastrores',@$obr05_dtcadastrores_dia,@$obr05_dtcadastrores_mes,@$obr05_dtcadastrores_ano,true,'text',$db_opcao,"")
               ?>
             </td>
           </tr>
@@ -342,7 +340,9 @@ $cllicobras->rotulo->label();
     oParam.obr05_numregistro          = $F('obr05_numregistro');
     oParam.obr05_numartourrt          = $F('obr05_numartourrt');
     oParam.obr05_vinculoprofissional  = $F('obr05_vinculoprofissional');
-    js_divCarregando('Aguarde... Salvando Responsável','msgbox');
+    oParam.obr05_dtcadastrores        = $F('obr05_dtcadastrores');
+    oParam.licitacao                  = $F('obr01_licitacao');
+    // js_divCarregando('Aguarde... Salvando Responsável','msgbox');
     var oAjax         = new Ajax.Request(
       'obr1_obras.RPC.php',
       { parameters: 'json='+Object.toJSON(oParam),

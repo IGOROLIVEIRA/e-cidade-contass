@@ -12,6 +12,10 @@ require_once("std/DBDate.php");
 require_once("classes/db_licobrasmedicao_classe.php");
 require_once("classes/db_licobrasanexo_classe.php");
 require_once("classes/db_licobrasresponsaveis_classe.php");
+require_once("classes/db_homologacaoadjudica_classe.php");
+include("classes/db_condataconf_classe.php");
+
+
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -79,18 +83,47 @@ switch($oParam->exec) {
   case 'SalvarResp':
 
     $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
+    $clhomologacaoadjudica = new cl_homologacaoadjudica();
+    $clcondataconf = new cl_condataconf;
 
-//    if($oParam->iCodigo == null || $oParam->iCodigo == ""){
+    $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $oParam->licitacao"));
+    db_fieldsmemory($resulthomologacao,0);
+    $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
+    $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+    $datainicioatividades = DateTime::createFromFormat('d/m/Y', $oParam->obr05_dtcadastrores);
+
       $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
       $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
-      $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
-      db_fieldsmemory($result,0);
-//    }else{
-//      $result = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,"obr05_sequencial = $oParam->iCodigo"));
-//      db_fieldsmemory($result,0);
-//    }
+      $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+      db_fieldsmemory($resultresp,0);
 
-    if(pg_num_rows($result) > 0){
+    try{
+      if($datahomologacao != null){
+        if($datainicioatividades < $datahomologacao){
+          throw new Exception("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Homologação da Licitação.");
+        }
+      }
+
+      /**
+       * validação com sicom
+       */
+      if(!empty($datainicioatividades)){
+        $anousu = db_getsession('DB_anousu');
+        $instituicao = db_getsession('DB_instit');
+        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+        db_fieldsmemory($result);
+        $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
+        $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
+
+        if ($datainicioatividades <= $dtencerramento) {
+          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        }
+      }
+    }catch (Exception $eErro){
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+    if(pg_num_rows($resultresp) > 0){
       $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
       $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
       $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
@@ -122,6 +155,7 @@ switch($oParam->exec) {
         $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
       }
       $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
       $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
       $cllicobrasresponsaveis->incluir();
 

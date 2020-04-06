@@ -50,9 +50,9 @@ $clnaturdessiope->rotulo->label();
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_naturdessiope','func_naturdessiope.php?funcao_js=parent.js_preenchepesquisa|c222_natdespecidade|c222_natdespsiope|c222_previdencia','Pesquisa',true,0);
+        js_OpenJanelaIframe('','db_iframe_naturdessiope','func_naturdessiope.php?funcao_js=parent.js_preenchepesquisa|c222_natdespecidade|c222_natdespsiope|c222_previdencia|c222_anousu','Pesquisa',true,0);
     }
-    function js_preenchepesquisa(chave, chave1, chave2){
+    function js_preenchepesquisa(chave, chave1, chave2, chave3){
         document.form1.novo.style.display = 'inline-block';
         document.form1.excluir.style.display = 'inline-block';
         document.form1.incluir.style.display = 'none';
@@ -64,6 +64,7 @@ $clnaturdessiope->rotulo->label();
         document.form1.c222_natdespecidade.value = chave;
         document.form1.c222_natdespsiope.value = chave1;
         document.form1.c222_previdencia.value = chave2;
+        document.form1.c222_anousu.value = chave3;
         db_iframe_naturdessiope.hide();
 
     }
