@@ -125,7 +125,7 @@ class CalculoAtuarialRTMAtivos extends CalculoAtuarialRTMBase {
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'F' THEN 1 ELSE 4 
                   END AS depend
-                  FROM rhdepend WHERE rh31_regist = rh01_regist AND rh31_gparen != 'C' ORDER BY rh31_dtnasc LIMIT 1 OFFSET 1) AS dependentes)::varchar,' ')||'# '||
+                  FROM rhdepend WHERE rh31_regist = rh01_regist AND rh31_gparen != 'C' ORDER BY rh31_dtnasc LIMIT 1 OFFSET 1) AS dependentes)::varchar,' #  # # ')||'# '||
 	    2 ||'# '||
 	    2 ||'# '||
 	    3 ||'# '||
