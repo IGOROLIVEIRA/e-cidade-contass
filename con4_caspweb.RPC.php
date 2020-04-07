@@ -23,8 +23,8 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
-$sNomeArqmapaAprop  = "Mapa-de-Apropriacao";
-$sNomeArqmapaRsp    = "Mapa-de-Restos-a-Pagar";
+$sNomeArqmapaAprop  = "MapaApropriacao";
+$sNomeArqmapaRsp    = "MapaRSP";
 $sNomeZip           = "Caspweb";
 
 switch ($oParam->exec) {
@@ -52,31 +52,7 @@ switch ($oParam->exec) {
                             $oCaspweb->setPeriodo();
                             $oCaspweb->setNomeArquivo($sNomeArqmapaAprop);
                             $oCaspweb->gerarMapaApropriacao();
-
-
-                            if ($oCaspweb->status == 2) {
-                                $oRetorno->message = "Não foi possível gerar o Caspweb. De/Para dos seguintes estruturais não encontrado: {$oCaspweb->sMensagem}";
-                                $oRetorno->status = 2;
-                            }
-
-                            if ($oCaspweb->getErroSQL() > 0) {
-                                throw new Exception ("Ocorreu um erro ao gerar Caspweb " . $oCaspweb->getErroSQL());
-                            }
-
-                            $oRetorno->arquivos->$index->nome = "{$oCaspweb->getNomeArquivo()}.csv";
-                            $sArquivosZip .= " {$oCaspweb->getNomeArquivo()}.csv ";
-
-                        }
-
-                        if ($sArquivo == 'mapaRsp') {
-
-                            $oCaspweb = new Caspweb();
-
-
-                            if ($oCaspweb->status == 2) {
-                                $oRetorno->message = "Não foi possível gerar o Caspweb. De/Para dos seguintes estruturais não encontrado: {$oCaspweb->sMensagem}";
-                                $oRetorno->status = 2;
-                            }
+                            $oCaspweb->gerarMapaCsv();
 
                             if ($oCaspweb->getErroSQL() > 0) {
                                 throw new Exception ("Ocorreu um erro ao gerar Caspweb " . $oCaspweb->getErroSQL());

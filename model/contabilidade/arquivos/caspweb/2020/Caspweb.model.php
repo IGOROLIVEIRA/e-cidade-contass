@@ -18,6 +18,20 @@ class Caspweb {
     public $dtFim;
     //@var string
     public $sNomeArquivo;
+    //@var resource
+    public $rsMapa;
+    //@var integer
+    public $status;
+    //@var integer
+    public $iErroSQL;
+
+    public function setErroSQL($iErroSQL) {
+        $this->iErroSQL = $iErroSQL;
+    }
+
+    public function getErroSQL() {
+        return $this->iErroSQL;
+    }
 
     public function setAno($iAnoUsu) {
         $this->iAnoUsu = $iAnoUsu;
@@ -45,9 +59,33 @@ class Caspweb {
         $this->sNomeArquivo = $sNomeArq;
     }
 
+    public function getNomeArquivo() {
+        return $this->sNomeArquivo;
+    }
+
+    public function gerarMapaCsv() {
+
+        $rsDados = $this->rsMapa;
+
+        if (file_exists("model/contabilidade/arquivos/caspweb/".db_getsession("DB_anousu")."/CaspwebCsv.model.php")) {
+
+            require_once("model/contabilidade/arquivos/caspweb/" . db_getsession("DB_anousu") . "/CaspwebCsv.model.php");
+
+            $csv = new CaspwebCsv;
+            $csv->setNomeArquivo($this->getNomeArquivo());
+            $csv->gerarArquivoCSV($rsDados);
+
+        }
+
+    }
+
     public function gerarMapaApropriacao() {
 
         $sSqlMapaApropriacao = "    SELECT
+                                        codtipomapa,
+                                        codentcont,
+                                        exercicio,
+                                        mes,
                                         contacontabil,
                                         indsuperavit,
                                         codbanco, 
@@ -61,19 +99,23 @@ class Caspweb {
                                         NULL AS espfontanalitica,
                                         NULL AS instjuridico,
                                         codenttransfinanc,
-                                        coalesce(debito,0) debito,
-                                        coalesce(credito,0) credito,
+                                        replace(TO_CHAR(ABS(coalesce(debito,0)),'99999999990D99'),'.',',') AS debito,
+                                        replace(TO_CHAR(ABS(coalesce(credito,0)),'99999999990D99'),'.',',') AS credito,
                                         NULL AS saldoini
                                     FROM
                                     (SELECT 
+                                        32 AS codtipomapa,
+                                        227 AS codentcont,
+                                        $this->iAnoUsu AS exercicio,
+                                        lpad($this->iMes, 2, '0') AS mes,
                                         CASE 
-                                            WHEN c232_estrutcaspweb IS NULL THEN c60_estrut
-                                            ELSE c232_estrutcaspweb
+                                            WHEN c232_estrutcaspweb IS NULL THEN rpad(c60_estrut, 17, '0')
+                                            ELSE rpad(c232_estrutcaspweb, 17, '0')
                                         END AS contacontabil,
                                         c60_identificadorfinanceiro AS indsuperavit,
-                                        c63_banco AS codbanco, 
-                                        c63_agencia AS codagencia, 
-                                        c63_conta AS codconta,
+                                        substr(c63_banco, 1, 9) AS codbanco, 
+                                        substr(c63_agencia, 1, 7) AS codagencia, 
+                                        substr(c63_conta, 1, 15) AS codconta,
                                         CASE 
                                             WHEN c63_tipoconta IN (2,3) THEN 'S'
                                             WHEN c63_tipoconta = 1 THEN 'N'
@@ -102,8 +144,7 @@ class Caspweb {
                                     OR credito != 0
                                     ORDER BY contacontabil";
 
-        $rsMapaApropriacao = db_query($sSqlMapaApropriacao);
-        db_criatabela($rsMapaApropriacao);die();
+        $this->rsMapa = db_query($sSqlMapaApropriacao);
 
     }
 
