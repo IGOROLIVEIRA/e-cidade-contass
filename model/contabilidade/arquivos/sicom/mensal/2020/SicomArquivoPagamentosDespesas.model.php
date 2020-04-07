@@ -715,14 +715,14 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                   $clops13->si135_codreduzidoop = $reg11->codreduzidoop;
 
                   if ($reg13->c60_tipolancamento == 1){
-                    $clops13->si135_tiporetencao = $reg13->c60_subtipolancamento;                  
+                    $clops13->si135_tiporetencao = $reg13->c60_subtipolancamento;
                   } elseif ($reg13->c60_tipolancamento != 1 && !empty($reg13->c60_subtipolancamento)) {
-                    $clops13->si135_tiporetencao = substr($reg13->c60_tipolancamento, 0, 2).substr($reg13->c60_subtipolancamento,-2);                  
+                    $clops13->si135_tiporetencao = substr($reg13->c60_tipolancamento, 0, 2).substr($reg13->c60_subtipolancamento,-2);
                   } else {
                     $clops13->si135_tiporetencao = $reg13->tiporetencao;
                   }
 
-                  if ($reg13->c60_tipolancamento == 1 && array_key_exists($reg13->c60_subtipolancamento, $subTipo)){
+                  if ($reg13->c60_tipolancamento == 1 && in_array($reg13->c60_subtipolancamento, $subTipo)){
                     $clops13->si135_descricaoretencao = " ";
                   } else {
                     $clops13->si135_descricaoretencao = substr($reg13->descricaoretencao, 0, 50);
