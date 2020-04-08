@@ -248,6 +248,13 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		       							AND si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 				$sSqlVerifica .= " UNION
 								 SELECT si124_sequencial
+										FROM ext102019
+										WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
+		       							AND si124_subtipo = '$cExt10->si124_subtipo'
+		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
+				$sSqlVerifica .= " UNION
+								 SELECT si124_sequencial
 										FROM ext102018
 										WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
@@ -549,6 +556,17 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											si95_tipoconta::int8 = c63_tipoconta join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
 											        and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
+											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
+											join orctiporec on c61_codigo = o15_codigo
+											join ctb102019 on
+											si95_banco   = c63_banco and
+											si95_agencia = c63_agencia and
+											si95_digitoverificadoragencia = c63_dvagencia and
+											si95_contabancaria = c63_conta::int8 and
+											si95_digitoverificadorcontabancaria = c63_dvconta and
+											si95_tipoconta::int8 = c63_tipoconta join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
 								$sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join orctiporec on c61_codigo = o15_codigo
