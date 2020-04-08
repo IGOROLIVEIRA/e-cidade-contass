@@ -16,18 +16,16 @@ class CaspwebCsv extends Caspweb {
     //@var String
     protected $sLinha;
 
-    public function gerarArquivoCSV($rsDados) {
+    public function gerarArquivoCSV($aDados) {
 
         $this->sArquivo = $this->getNomeArquivo();
         $this->abreArquivo();
 
-        for ($iCont = 0; $iCont < pg_num_rows($rsDados); $iCont++) {
-
-            $oLinhaMapa = db_utils::fieldsMemory($rsDados, $iCont);
+        foreach ($aDados as $sItens) {
 
             $sLinha = "";
 
-            foreach($oLinhaMapa as $sIndex => $sItem) {
+            foreach ($sItens as $sItem) {
                 $sLinha .= ($sItem != null || $sItem != "") ? $sItem.$this->sDelim : " ".$this->sDelim;
             }
 
@@ -47,16 +45,5 @@ class CaspwebCsv extends Caspweb {
     function fechaArquivo() {
         fclose($this->_arquivo);
     }
-
-//    function adicionaLinha() {
-//        $aLinha = array();
-//
-//        foreach ($this->sLinha as $sLinha) {
-//            $aLinha[] = $sLinha;
-//        }
-//
-//        $sLinha = implode(";", $aLinha);
-//
-//    }
 
 }

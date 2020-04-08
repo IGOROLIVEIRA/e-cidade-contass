@@ -63,6 +63,26 @@ switch ($oParam->exec) {
 
                         }
 
+                        if ($sArquivo == 'mapaRsp') {
+
+                            $oCaspweb = new Caspweb();
+                            $oCaspweb->setAno($iAnoUsu);
+                            $oCaspweb->setInstit($iInstit);
+                            $oCaspweb->setMes($iMes);
+                            $oCaspweb->setPeriodo();
+                            $oCaspweb->setNomeArquivo($sNomeArqmapaRsp);
+                            $oCaspweb->gerarMapaRsp();
+                            $oCaspweb->gerarMapaCsv();
+
+                            if ($oCaspweb->getErroSQL() > 0) {
+                                throw new Exception ("Ocorreu um erro ao gerar Caspweb " . $oCaspweb->getErroSQL());
+                            }
+
+                            $oRetorno->arquivos->$index->nome = "{$oCaspweb->getNomeArquivo()}.csv";
+                            $sArquivosZip .= " {$oCaspweb->getNomeArquivo()}.csv ";
+
+                        }
+
                     }
 
                     system("rm -f {$sNomeZip}.zip");
