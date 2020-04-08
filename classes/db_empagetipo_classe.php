@@ -806,6 +806,8 @@ class cl_empagetipo {
       $whereFonte2 = " ";
     }elseif(substr($iFonteEmpenho, 1, 2) == '05') {
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('105','205','103')) and";
+    }elseif(substr($iFonteEmpenho, 1, 2) == '54') {
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('154','154','159')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
       $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
