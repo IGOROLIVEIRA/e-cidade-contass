@@ -107,12 +107,12 @@ function js_verificaProcessar() {
 function js_retornoProcessamento(oAjax) {
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 2) {
-      if (oRetorno.aMatriculasValorNegativo.length > 0) {
+      if (typeof oRetorno.aMatriculasValorNegativo !== 'undefined' && oRetorno.aMatriculasValorNegativo.length > 0) {
         if(!confirm("Matricula(s) ("+oRetorno.aMatriculasValorNegativo.join(",")+"), servidor(es) com valores negativos. Deseja continuar?")) {
           return false;
         }
       }
-      if (oRetorno.aMatriculasRubrica.length > 0) {
+      if (typeof oRetorno.aMatriculasRubrica !== 'undefined' && oRetorno.aMatriculasRubrica.length > 0) {
         if(!confirm("Existem servidores com Insuficiência de saldo, Rubrica R928. Matrículas ("+oRetorno.aMatriculasRubrica.join(",")+"). Deseja continuar")) {
           return false;
         }
