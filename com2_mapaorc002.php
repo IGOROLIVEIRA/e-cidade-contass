@@ -608,7 +608,7 @@ ORDER BY pc11_seq";
                 $arr_totalcotado [$pc21_orcamforne] += $pc23_valor;
 
                 if ($imp_vlrun == "S") {
-                    $pdf->cell(15, $alt, number_format(@$pc23_vlrun, 2,',','.'), 1, 0, "R", $fundo);
+                    $pdf->cell(15, $alt, @$pc23_vlrun, 1, 0, "R", $fundo);
                     if($pc80_criterioadjudicacao == 2 ){
                         $pdf->cell(20, $alt, $pc23_percentualdesconto, 1, 0, "C", $fundo);
                     }else if ($pc80_criterioadjudicacao == 1){
