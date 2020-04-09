@@ -57,6 +57,9 @@ class Oc11962 extends PostgresMigration
             );
         
         CREATE UNIQUE INDEX vinculocaspweb_index ON vinculocaspweb(c232_estrutecidade,c232_estrutcaspweb,c232_anousu);
+
+        -- Atualiza descrição do item de virada
+        UPDATE db_viradacaditem SET c33_descricao = 'DE/PARA MSC, SIOPE, SIOPS, CASPWEB' WHERE c33_sequencial = 34;
         
         COMMIT;
 
