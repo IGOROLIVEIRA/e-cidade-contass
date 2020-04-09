@@ -23,8 +23,6 @@ $iAnoUsu            = date("Y", db_getsession("DB_datausu"));
 
 $oRetorno           = new stdClass();
 $oRetorno->status   = 1;
-$sNomeArqmapaAprop  = "MapaApropriacao";
-$sNomeArqmapaRsp    = "MapaRSP";
 $sNomeZip           = "Caspweb";
 
 switch ($oParam->exec) {
@@ -45,12 +43,14 @@ switch ($oParam->exec) {
 
                         if ($sArquivo == 'mapaAprop') {
 
+                            $sNomeMapa = "Mapa_32_".ucfirst(db_mes($iMes));
+
                             $oCaspweb = new Caspweb();
                             $oCaspweb->setAno($iAnoUsu);
                             $oCaspweb->setInstit($iInstit);
                             $oCaspweb->setMes($iMes);
                             $oCaspweb->setPeriodo();
-                            $oCaspweb->setNomeArquivo($sNomeArqmapaAprop);
+                            $oCaspweb->setNomeArquivo($sNomeMapa);
                             $oCaspweb->gerarMapaApropriacao();
                             $oCaspweb->gerarMapaCsv();
 
@@ -65,12 +65,14 @@ switch ($oParam->exec) {
 
                         if ($sArquivo == 'mapaRsp') {
 
+                            $sNomeMapa = "Mapa_32_".ucfirst(db_mes($iMes));
+
                             $oCaspweb = new Caspweb();
                             $oCaspweb->setAno($iAnoUsu);
                             $oCaspweb->setInstit($iInstit);
                             $oCaspweb->setMes($iMes);
                             $oCaspweb->setPeriodo();
-                            $oCaspweb->setNomeArquivo($sNomeArqmapaRsp);
+                            $oCaspweb->setNomeArquivo($sNomeMapa);
                             $oCaspweb->gerarMapaRsp();
                             $oCaspweb->gerarMapaCsv();
 
