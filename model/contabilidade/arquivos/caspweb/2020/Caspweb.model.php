@@ -218,7 +218,7 @@ class Caspweb {
                                 lpad(o58_funcao,2,'0') AS codfuncao,
                                 lpad(o58_subfuncao,3,'0') AS codsubfuncao,
                                 lpad(substr(o58_programa,1,3),3,'0') AS codprograma,
-                                o58_projativ AS acao,
+                                lpad(o58_projativ,4,'0') AS acao,
                                 o55_origemacao AS subacao,
                                 substr(o56_elemento,2,6) AS naturezadadespesa,
                                 substr(o56_elemento,8,2) AS itemdespesa,
@@ -226,7 +226,7 @@ class Caspweb {
                                     WHEN substr(o56_elemento,2,2) = '31' THEN '01'
                                     WHEN substr(o56_elemento,2,2) = '33' THEN '03'
                                     WHEN substr(o56_elemento,2,2) = '44' THEN '04'
-                                    ELSE ''
+                                    ELSE '00'
                                 END AS fonte,
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
