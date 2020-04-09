@@ -31,6 +31,23 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
   }
 
 
+    /**
+     * @return mixed
+     */
+    public function getTipoGeracao()
+    {
+        return $this->sTipoGeracao;
+    }
+
+    /**
+     * @param mixed $sTipoGeracao
+     */
+    public function setTipoGeracao($sTipoGeracao)
+    {
+        $this->sTipoGeracao = $sTipoGeracao;
+    }
+
+
   /**
    * Contrutor da classe
    */
@@ -91,7 +108,11 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clidedcasp->si200_cnpjorgao           = $oDadosIde->cnpjorgao;
       $clidedcasp->si200_codorgao            = $oDadosIde->codorgao;
       $clidedcasp->si200_tipoorgao           = $oDadosIde->tipoorgao;
-      $clidedcasp->si200_tipodemcontabil     = $oDadosIde->tipoorgao == '2' ? 2 : 1;
+        if ($this->getTipoGeracao() == 'CONSOLIDADO') {
+            $clidedcasp->si200_tipodemcontabil = 2;
+        }else{
+            $clidedcasp->si200_tipodemcontabil = 1;
+        }
       $clidedcasp->si200_exercicioreferencia = db_getsession("DB_anousu");
       $clidedcasp->si200_datageracao         = date("d-m-Y");
       $clidedcasp->si200_codcontroleremessa  = ' ';

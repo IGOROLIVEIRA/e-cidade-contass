@@ -129,6 +129,10 @@ $clpcforne->rotulo->label();
                 query += "&";
             }
 
+            if(obj.ve62_tipogasto != '0'){
+                query += "ve62_tipogasto="+obj.ve62_tipogasto.value;
+            }
+
             var jan = window.open('vei2_manutveic002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
             jan.moveTo(0,0);
         }
@@ -276,6 +280,18 @@ $clpcforne->rotulo->label();
                 <?
                 db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
                 ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?= @$Tve62_tipogasto ?>">
+				<?= @$Lve62_tipogasto ?>
+            </td>
+            <td>
+				<?
+				$x = array("0" => "Selecione", "6" => "ÓLEO LUBRIFICANTE", "7" => "GRAXA (QUILOGRAMA)", "8" => "PEÇAS", "9" => "SERVIÇOS");
+				db_select('ve62_tipogasto', $x, true, $db_opcao, "");
+				?>
+
             </td>
         </tr>
         <tr>

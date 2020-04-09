@@ -34,7 +34,9 @@ require_once("classes/db_solicitem_classe.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_pcproc_classe.php");
 require_once("classes/db_pcparam_classe.php");
+require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_liclicitem_classe.php");
+require_once("classes/db_pcprocliberado_classe.php");
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 $clsolicitem = new cl_solicitem;
@@ -188,8 +190,31 @@ function js_submit(codproc){
     </td>
     <?
     if (isset($codproc)&&$codproc!=""){
-      $result_pcproc=$clpcproc->sql_record($clpcproc->sql_query($codproc));
-      db_fieldsmemory($result_pcproc,0);
+
+        /* Ocorrência 11933
+         * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
+         * e valida se o processo de compra está desbloqueada na rotina Controle Interno - Procedimentos - Atesto de Controle Interno
+         */
+        $clempparametro	    = new cl_empparametro;
+        $bAtestoContInt     = db_utils::fieldsMemory($clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"), "e30_atestocontinterno", null, "")), 0)->e30_atestocontinterno;
+        $clpcprocliberado = new cl_pcprocliberado();
+        $clpcprocliberado->sql_record($clpcprocliberado->sql_query(null, "*", "", "e233_codproc = $codproc"));
+
+        if ( $bAtestoContInt == 't' && $clpcprocliberado->numrows == 0 ) {
+
+            echo "<script>";
+            echo "  parent.itens.document.form1.codproc.value = '';";
+            echo "  parent.itens.document.form1.submit();";
+            echo "</script>";
+
+            db_msgbox('Usuário: Este processo de compras ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para continuar com o processo!');
+
+        } else {
+
+            $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query($codproc));
+            db_fieldsmemory($result_pcproc, 0);
+
+        }
     }
     ?>
     <td align="right" nowrap title="<?=@$Tnome?>">
