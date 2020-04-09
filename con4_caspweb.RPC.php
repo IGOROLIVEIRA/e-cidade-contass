@@ -65,7 +65,7 @@ switch ($oParam->exec) {
 
                         if ($sArquivo == 'mapaRsp') {
 
-                            $sNomeMapa = "Mapa_32_".ucfirst(db_mes($iMes));
+                            $sNomeMapa = "Mapa_33_".ucfirst(db_mes($iMes));
 
                             $oCaspweb = new Caspweb();
                             $oCaspweb->setAno($iAnoUsu);
