@@ -60,7 +60,9 @@ class CalculoAtuarialRTMPensionistas extends CalculoAtuarialRTMBase {
 		db21_tipopoder ||'# '|| 
 		'1'||'# '||
 		CASE WHEN rh02_tipoparentescoinst = 1 THEN 2
-		WHEN rh02_tipoparentescoinst = 4 then 3
+		WHEN rh02_tipoparentescoinst = 3 THEN 1
+		WHEN rh02_tipoparentescoinst = 4 THEN 3
+		WHEN rh02_tipoparentescoinst IN (5,6) THEN 4
 		ELSE 6 END ||'# '||
 		CASE WHEN rh02_rhtipoapos = 4 THEN 2 ELSE 1 END ||'# '||
 		CASE WHEN rh02_validadepensao IS NOT NULL THEN 2 ELSE 1 END ||'# '||

@@ -94,12 +94,11 @@ class CalculoAtuarialRTMInativos extends CalculoAtuarialRTMBase {
         ELSE rh01_estciv::varchar
         END 
         ||'# '||
-        COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+        COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
+        CASE WHEN rh01_sexo = 'M' THEN 1 ELSE 2 END
         FROM rhdepend
         WHERE rh31_regist = rh01_regist
-        AND rh31_gparen = 'C' LIMIT 1),'')
-        ||'# '||
-        CASE WHEN rh01_sexo = 'M' THEN 1 ELSE 2 END
+        AND rh31_gparen = 'C' LIMIT 1),'# ')
         ||'# '||
         COALESCE((SELECT CASE
         WHEN rh31_especi IN('C','S') THEN 2
@@ -124,7 +123,7 @@ class CalculoAtuarialRTMInativos extends CalculoAtuarialRTMBase {
                   ELSE 1 END||'# '||
                   CASE WHEN rh31_gparen = 'F' THEN 1 ELSE 4 
                   END AS depend
-                  FROM rhdepend WHERE rh31_regist = rh01_regist AND rh31_gparen != 'C' ORDER BY rh31_dtnasc LIMIT 1 OFFSET 1) AS dependentes)::varchar,' ')||'# '||
+                  FROM rhdepend WHERE rh31_regist = rh01_regist AND rh31_gparen != 'C' ORDER BY rh31_dtnasc LIMIT 1 OFFSET 1) AS dependentes)::varchar,' #  # # ')||'# '||
         1 ||'# '||
         2 ||'# '||
         3 ||'# '||

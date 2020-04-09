@@ -95,12 +95,11 @@ class CalculoAtuarialRTMAtivos extends CalculoAtuarialRTMBase {
 	    ELSE rh01_estciv::varchar
 	    END 
 	    ||'# '||
-	    COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')
+	    COALESCE((SELECT to_char(rh31_dtnasc, 'DD/MM/YYYY')||'# '||
+	    CASE WHEN rh01_sexo = 'M' THEN 1 ELSE 2 END
 	    FROM rhdepend
 	    WHERE rh31_regist = rh01_regist
-	    AND rh31_gparen = 'C' LIMIT 1),'')
-	    ||'# '||
-	    CASE WHEN rh01_sexo = 'M' THEN 1 ELSE 2 END
+	    AND rh31_gparen = 'C' LIMIT 1),'# ')
 	    ||'# '||
 	    COALESCE((SELECT CASE
 	    WHEN rh31_especi IN('C','S') THEN 2
