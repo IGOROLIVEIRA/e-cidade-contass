@@ -150,7 +150,7 @@ if (!empty($oProcessoProtocolo)) {
       <td  nowrap="nowrap" class="valor" style="text-align: left; max-width:2px;">
         <?php echo $oLicitatacao->l20_numero;?>
       </td>
-        <?php if(!in_array($tipoTribunal, array('100', '101', '102', '103'))): ?>
+        <?php if(!in_array($tipoTribunal, array('100', '101', '102', '103')) && $oLicitatacao->l20_exercicioedital >= 2020): ?>
         <td nowrap="nowrap" title="<?=$Tl20_nroedital?>" style="max-width: 1px;">
             <b>Edital:</b>
         </td>
