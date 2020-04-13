@@ -100,8 +100,7 @@ class Caspweb {
                                         NULL AS instjuridico,
                                         codenttransfinanc,
                                         replace(TO_CHAR(ABS(coalesce(debito,0)),'99999999990D99'),'.',',') AS debito,
-                                        replace(TO_CHAR(ABS(coalesce(credito,0)),'99999999990D99'),'.',',') AS credito,
-                                        NULL AS saldoini
+                                        replace(TO_CHAR(ABS(coalesce(credito,0)),'99999999990D99'),'.',',') AS credito
                                     FROM
                                     (SELECT 
                                         32 AS codtipomapa,
@@ -173,7 +172,6 @@ class Caspweb {
             $oMapaAprop['codenttransfinanc'] =    $oContaContabil->codenttransfinanc;
             $oMapaAprop['debito'] =               $oContaContabil->debito;
             $oMapaAprop['credito'] =              $oContaContabil->credito;
-            $oMapaAprop['saldoini'] =             $oContaContabil->saldoini;
 
             array_push($this->aMapa, $oMapaAprop);
 
@@ -324,7 +322,6 @@ class Caspweb {
                 $oMapaRsp['codenttransfinanc']  = '';
                 $oMapaRsp['debito']             = number_format($oDebCred->debitos,2,',','');
                 $oMapaRsp['credito']            = number_format($oDebCred->creditos,2,',','');
-                $oMapaRsp['saldoini']           = '';
 
                 array_push($this->aMapa, $oMapaRsp);
 
