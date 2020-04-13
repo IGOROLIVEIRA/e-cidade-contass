@@ -196,10 +196,8 @@ $sWhereContratos = " and 1 = 1 ";
   	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }
 	          } else {
-                 $dbwhere .= $dbwhere ? ' AND ' : '';
-                 $dbwhere .= " pctipocompra.pc50_pctipocompratribunal not in (100, 101, 102, 103) ";
+                 $dbwhere .= " pctipocompra.pc50_pctipocompratribunal not in (100, 101, 102, 103) AND ";
                  $result = $clliclicita->sql_record($clliclicita->sql_queryContratosContass(null,"*",null,"l20_codigo = $pesquisa_chave $and $dbwhere $dbwhere_instit"));
-
                  if($clliclicita->numrows != 0){
 
                      db_fieldsmemory($result,0);
