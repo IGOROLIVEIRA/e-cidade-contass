@@ -25,8 +25,12 @@ class CaspwebCsv extends Caspweb {
 
             $sLinha = "";
 
-            foreach ($sItens as $sItem) {
-                $sLinha .= ($sItem != null || $sItem != "") ? $sItem.$this->sDelim : " ".$this->sDelim;
+            foreach ($sItens as $chave => $sItem) {
+                if ($chave == 'debito' || $chave == 'credito') {
+                    $sLinha .= number_format($sItem,2,',','') . $this->sDelim;
+                } else {
+                    $sLinha .= ($sItem != null || $sItem != "") ? $sItem . $this->sDelim : " " . $this->sDelim;
+                }
             }
 
             fputs($this->_arquivo, $sLinha);

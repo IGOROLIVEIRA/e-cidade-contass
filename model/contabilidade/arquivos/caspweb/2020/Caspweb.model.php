@@ -99,8 +99,8 @@ class Caspweb {
                                         NULL AS espfontanalitica,
                                         NULL AS instjuridico,
                                         codenttransfinanc,
-                                        replace(TO_CHAR(ABS(coalesce(debito,0)),'99999999990D99'),'.',',') AS debito,
-                                        replace(TO_CHAR(ABS(coalesce(credito,0)),'99999999990D99'),'.',',') AS credito
+                                        coalesce(debito,0) AS debito,
+                                        coalesce(credito,0) AS credito
                                     FROM
                                     (SELECT 
                                         32 AS codtipomapa,
@@ -116,8 +116,14 @@ class Caspweb {
                                             ELSE ''
                                         END AS indsuperavit,
                                         substr(c63_banco, 1, 9) AS codbanco, 
-                                        substr(c63_agencia, 1, 7) AS codagencia, 
-                                        substr(c63_conta, 1, 15) AS codconta,
+                                        CASE
+                                            WHEN c63_agencia = '233' THEN '23337'
+                                            ELSE substr(c63_agencia, 1, 7)
+                                        END AS codagencia, 
+                                        CASE 
+                                            WHEN c63_conta = '2' OR c63_conta = '001' THEN '06000002-2'
+                                            ELSE substr(c63_conta, 1, 15) 
+                                        END AS codconta,
                                         CASE 
                                             WHEN c63_tipoconta IN (2,3) THEN 'S'
                                             WHEN c63_tipoconta = 1 THEN 'N'
@@ -152,28 +158,39 @@ class Caspweb {
 
             $oContaContabil = db_utils::fieldsMemory($rsMapaAprop, $iCont);
 
-            $oMapaAprop = array();
-            $oMapaAprop['codtipomapa'] =          $oContaContabil->codtipomapa;
-            $oMapaAprop['codentcont'] =           $oContaContabil->codentcont;
-            $oMapaAprop['exercicio'] =            $oContaContabil->exercicio;
-            $oMapaAprop['mes'] =                  $oContaContabil->mes;
-            $oMapaAprop['contacontabil'] =        $oContaContabil->contacontabil;
-            $oMapaAprop['indsuperavit'] =         $oContaContabil->indsuperavit;
-            $oMapaAprop['codbanco'] =             $oContaContabil->codbanco;
-            $oMapaAprop['codagencia'] =           $oContaContabil->codagencia;
-            $oMapaAprop['codconta'] =             $oContaContabil->codconta;
-            $oMapaAprop['indapfincanc'] =         $oContaContabil->indapfincanc;
-            $oMapaAprop['dotorcamentaria'] =      $oContaContabil->dotorcamentaria;
-            $oMapaAprop['tipopesssoa'] =          $oContaContabil->tipopesssoa;
-            $oMapaAprop['codcred_forn'] =         $oContaContabil->codcred_forn;
-            $oMapaAprop['grupfontanalitica'] =    $oContaContabil->grupfontanalitica;
-            $oMapaAprop['espfontanalitica'] =     $oContaContabil->espfontanalitica;
-            $oMapaAprop['instjuridico'] =         $oContaContabil->instjuridico;
-            $oMapaAprop['codenttransfinanc'] =    $oContaContabil->codenttransfinanc;
-            $oMapaAprop['debito'] =               $oContaContabil->debito;
-            $oMapaAprop['credito'] =              $oContaContabil->credito;
+            $sHash = $oContaContabil->contacontabil;
 
-            array_push($this->aMapa, $oMapaAprop);
+            if(!isset($this->aMapa[$sHash])) {
+
+                $aMapaAprop = array();
+                $aMapaAprop['codtipomapa'] = $oContaContabil->codtipomapa;
+                $aMapaAprop['codentcont'] = $oContaContabil->codentcont;
+                $aMapaAprop['exercicio'] = $oContaContabil->exercicio;
+                $aMapaAprop['mes'] = $oContaContabil->mes;
+                $aMapaAprop['contacontabil'] = $oContaContabil->contacontabil;
+                $aMapaAprop['indsuperavit'] = $oContaContabil->indsuperavit;
+                $aMapaAprop['codbanco'] = $oContaContabil->codbanco;
+                $aMapaAprop['codagencia'] = $oContaContabil->codagencia;
+                $aMapaAprop['codconta'] = $oContaContabil->codconta;
+                $aMapaAprop['indapfincanc'] = $oContaContabil->indapfincanc;
+                $aMapaAprop['dotorcamentaria'] = $oContaContabil->dotorcamentaria;
+                $aMapaAprop['tipopesssoa'] = $oContaContabil->tipopesssoa;
+                $aMapaAprop['codcred_forn'] = $oContaContabil->codcred_forn;
+                $aMapaAprop['grupfontanalitica'] = $oContaContabil->grupfontanalitica;
+                $aMapaAprop['espfontanalitica'] = $oContaContabil->espfontanalitica;
+                $aMapaAprop['instjuridico'] = $oContaContabil->instjuridico;
+                $aMapaAprop['codenttransfinanc'] = $oContaContabil->codenttransfinanc;
+                $aMapaAprop['debito'] = $oContaContabil->debito;
+                $aMapaAprop['credito'] = $oContaContabil->credito;
+
+                $this->aMapa[$sHash] = $aMapaAprop;
+
+            } else {
+
+                $this->aMapa[$sHash]['debito'] += $oContaContabil->debito;
+                $this->aMapa[$sHash]['credito'] += $oContaContabil->credito;
+
+            }
 
         }
 
@@ -295,7 +312,7 @@ class Caspweb {
                 $sDotacaoOrcamentaria .= "$oResto->codsubfuncao.";      //Subfunção: o58_subfuncao
                 $sDotacaoOrcamentaria .= "$oResto->codprograma.";       //Programa: o58_programa s/ 0 esquerda
                 $sDotacaoOrcamentaria .= "000.";                        //SubPrograma: 000
-                $sDotacaoOrcamentaria .= "$oResto->acao.";              //Ação: o58_projativ
+                $sDotacaoOrcamentaria .= substr($oResto->acao,0,1).".".substr($oResto->acao,1,3).".";//Ação: o58_projativ
                 $sDotacaoOrcamentaria .= "0001.";                       //Sub-ação: o55_origemacao eu não sei se tá retornando no sistema, mas é sempre 0001
                 $sDotacaoOrcamentaria .= "$oResto->naturezadadespesa";  //Natureza Despesa: substr(o56_elemento,2,6)
                 $sDotacaoOrcamentaria .= "$oResto->itemdespesa.";        //Item Despesa: substr(o56_elemento,8,2)
@@ -307,7 +324,7 @@ class Caspweb {
                 $oMapaRsp['codentcont']         = 227;
                 $oMapaRsp['exercicio']          = $this->iAnoUsu;
                 $oMapaRsp['mes']                = $this->iMes;
-                $oMapaRsp['contacontabil']      = $oContaContabil->contacontabil.'00';
+                $oMapaRsp['contacontabil']      = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao;
                 $oMapaRsp['indsuperavit']       = '';
                 $oMapaRsp['codbanco']           = '';
                 $oMapaRsp['codagencia']         = '';
@@ -320,8 +337,8 @@ class Caspweb {
                 $oMapaRsp['espfontanalitica']   = '';
                 $oMapaRsp['instjuridico']       = '';
                 $oMapaRsp['codenttransfinanc']  = '';
-                $oMapaRsp['debito']             = number_format($oDebCred->debitos,2,',','');
-                $oMapaRsp['credito']            = number_format($oDebCred->creditos,2,',','');
+                $oMapaRsp['debito']             = $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
+                $oMapaRsp['credito']            = $oDebCred->creditos != '' ? $oDebCred->creditos: 0;
 
                 array_push($this->aMapa, $oMapaRsp);
 

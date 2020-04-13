@@ -105,7 +105,7 @@ $aBimestres = array(
                     <td style="border: 2px groove white;" valign="top">
                     </td>
                     <td style="border: 2px groove white;" valign="top">
-                        <div id='arquivo' style="width: 200px; height: 250px; overflow: scroll;">
+                        <div id='arquivo' style="width: 350px; height: 250px; overflow: scroll;">
                         </div>
                     </td>
                 </tr>
