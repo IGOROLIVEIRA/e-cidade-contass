@@ -424,7 +424,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        FROM retencaopagordem
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                       WHERE e23_recolhido = TRUE
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIsIs = db_query($sqlReten);
@@ -693,7 +693,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        LEFT JOIN tabplan tp ON tp.k02_codigo = tr.k02_codigo AND tp.k02_anousu = " . db_getsession("DB_anousu") . "
                        LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                        LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                       WHERE e23_recolhido = TRUE
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
@@ -974,7 +974,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        FROM retencaopagordem
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                       WHERE e23_recolhido = TRUE
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
           $rsReteIs = db_query($sqlReten);
@@ -1260,7 +1260,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        LEFT JOIN tabplan tp ON tp.k02_codigo = tr.k02_codigo AND tp.k02_anousu = " . db_getsession("DB_anousu") . "
                        LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                        LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
-                       WHERE (e23_ativo, e23_recolhido) = (TRUE, TRUE)
+                       WHERE e23_recolhido = TRUE
                          AND e20_pagordem = {$oEmpPago->ordem}
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
