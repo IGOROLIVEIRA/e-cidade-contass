@@ -199,8 +199,10 @@ if ($oBem->getCedente() != null) {
                 $mostrarimagem = "func_mostrarimagem.php?oid=".$principal;
                 $href = "<img src='".$mostrarimagem."' id='fotobem' onclick='exibeImagem(".$oBem->getCodigoBem().");'>";
                 echo $href;
-            else: ?>
+            elseif(!count($oBem->getFotos())): ?>
                 <img src="imagens/moveis.png" id='preview'>
+            <?else: ?>
+                <p style="color:red;"><b>Nenhuma imagem principal selecionada.</b></p>
             <?endif;?>
         </td>
       </tr>
