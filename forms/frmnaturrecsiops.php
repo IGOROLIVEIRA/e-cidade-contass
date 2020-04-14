@@ -37,9 +37,9 @@ $clnaturrecsiops->rotulo->label();
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_naturrecsiops','func_naturrecsiops.php?funcao_js=parent.js_preenchepesquisa|c230_natrececidade|c230_natrecsiops','Pesquisa',true,0);
+        js_OpenJanelaIframe('','db_iframe_naturrecsiops','func_naturrecsiops.php?funcao_js=parent.js_preenchepesquisa|c230_natrececidade|c230_natrecsiops|c230_anousu','Pesquisa',true,0);
     }
-    function js_preenchepesquisa(chave, chave1){
+    function js_preenchepesquisa(chave, chave1, chave2){
         console.log(chave, chave1);
         document.form1.novo.style.display = 'inline-block';
         document.form1.excluir.style.display = 'inline-block';
@@ -50,6 +50,7 @@ $clnaturrecsiops->rotulo->label();
         document.form1.c230_natrecsiops.setAttribute('readonly',true);
         document.form1.c230_natrececidade.value = chave;
         document.form1.c230_natrecsiops.value = chave1;
+        document.form1.c230_anousu.value = chave2;
         db_iframe_naturrecsiops.hide();
 
     }

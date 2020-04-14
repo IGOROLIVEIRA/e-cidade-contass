@@ -79,6 +79,7 @@ class cl_rhpessoalmov {
     var $rh02_cgminstituidor = null;
     var $rh02_dtobitoinstituidor = null;
     var $rh02_tipoparentescoinst = null;
+    var $rh02_desctipoparentescoinst = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -112,6 +113,7 @@ class cl_rhpessoalmov {
                  rh02_cgminstituidor = int4 = CGM do Instituidor
                  rh02_dtobitoinstituidor = int4 = Data de Obito do Instituidor
                  rh02_tipoparentescoinst = int4 = Tipo de Parentesco
+                 rh02_desctipoparentescoinst = Text = Descrição do Tipo de Parentesco
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov() {
@@ -176,6 +178,7 @@ class cl_rhpessoalmov {
             $this->rh02_cgminstituidor = ($this->rh02_cgminstituidor == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_cgminstituidor"]:$this->rh02_cgminstituidor);
             $this->rh02_dtobitoinstituidor = ($this->rh02_dtobitoinstituidor == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_dtobitoinstituidor"]:$this->rh02_dtobitoinstituidor);
             $this->rh02_tipoparentescoinst = ($this->rh02_tipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_tipoparentescoinst"]:$this->rh02_tipoparentescoinst);
+            $this->rh02_desctipoparentescoinst = ($this->rh02_desctipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"]:$this->rh02_desctipoparentescoinst);
         }else{
             $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
@@ -404,6 +407,17 @@ class cl_rhpessoalmov {
             $this->erro_status = "0";
             return false;
         }
+        if($this->rh02_tipoparentescoinst == 11 && empty($this->rh02_desctipoparentescoinst) ){
+            $this->erro_sql = " Campo Descrição Tipo do Parentesco não informado.";
+            $this->erro_campo = "rh02_portadormolestia";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        } else if ($this->rh02_tipoparentescoinst != 11) {
+            $this->rh02_desctipoparentescoinst = "";
+        }
         $sql = "insert into rhpessoalmov(
                                        rh02_instit
                                       ,rh02_seqpes
@@ -436,6 +450,7 @@ class cl_rhpessoalmov {
                                       ,rh02_cgminstituidor
                                       ,rh02_dtobitoinstituidor
                                       ,rh02_tipoparentescoinst
+                                      ,rh02_desctipoparentescoinst
                        )
                 values (
                                 $this->rh02_instit
@@ -469,6 +484,7 @@ class cl_rhpessoalmov {
                                ,".($this->rh02_cgminstituidor == "null" || $this->rh02_cgminstituidor == ""?"null":"'".$this->rh02_cgminstituidor."'")."
                                ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")."
                                ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")."
+                               ,".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -883,6 +899,21 @@ class cl_rhpessoalmov {
 
         if(trim($this->rh02_tipoparentescoinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipoparentescoinst"])){
             $sql  .= $virgula." rh02_tipoparentescoinst = $this->rh02_tipoparentescoinst ";
+            $virgula = ",";
+        }
+        if(trim($this->rh02_desctipoparentescoinst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"])){
+            if($this->rh02_tipoparentescoinst == 11 && empty($this->rh02_desctipoparentescoinst) ){
+                $this->erro_sql = " Campo Descrição Tipo do Parentesco não informado.";
+                $this->erro_campo = "rh02_portadormolestia";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if ($this->rh02_tipoparentescoinst != 11) {
+                $this->rh02_desctipoparentescoinst = "";
+            }
+            $sql  .= $virgula." rh02_desctipoparentescoinst = ".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'");
             $virgula = ",";
         }
         $sql .= " where ";

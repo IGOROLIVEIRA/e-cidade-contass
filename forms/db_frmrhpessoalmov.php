@@ -337,7 +337,17 @@ if(isset($db_opcaoal)){
                                         10 => "Tutelado/curatelado(a)",
                                         11 => "Outras Situações"
                                     );
-                                    db_select("rh02_tipoparentescoinst",$iparentesco,true,"",$db_opcao);
+                                    db_select("rh02_tipoparentescoinst",$iparentesco,true,$db_opcao,"onchange='js_desctipoparentescoinst()'");
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr id="desctipoparentescoinst" style="display: none">
+                                <td nowrap title="<?=@$Trh02_desctipoparentescoinst?>">
+                                    <?=@$Lrh02_desctipoparentescoinst?>
+                                </td>
+                                <td>
+                                    <?
+                                    db_textarea("rh02_desctipoparentescoinst",3,43,0,true,'text',$db_opcao);
                                     ?>
                                 </td>
                             </tr>
@@ -1414,6 +1424,7 @@ if(isset($db_opcaoal)){
                 }
                 js_disabpropri(chave4);
                 js_disabledtipoapos(chave4);
+                js_desctipoparentescoinst()
             }
             function js_disabpropri(opcao){
                 if(opcao == "A"){
@@ -1565,6 +1576,16 @@ if(isset($db_opcaoal)){
                 echo "js_disabpropri('".@$rh30_vinculo."');";
             }
             ?>
+
+            function js_desctipoparentescoinst() {
+                if (document.querySelector('#rh02_tipoparentescoinst').value == 11) {
+                    document.querySelector("#desctipoparentescoinst").style.display = "";
+                } else {
+                    document.querySelector("#desctipoparentescoinst").style.display = "none";
+                    document.querySelector("#rh02_desctipoparentescoinst").value = '';
+                }
+            }
+            js_desctipoparentescoinst();
 
         </script>
         <?

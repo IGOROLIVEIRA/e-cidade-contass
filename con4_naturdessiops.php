@@ -17,7 +17,7 @@ if(isset($incluir)){
 
 if(isset($excluir)){
     db_inicio_transacao();
-    $clnaturdessiops->excluir($c226_natdespecidade,$c226_natdespsiops);
+    $clnaturdessiops->excluir($c226_natdespecidade,$c226_natdespsiops,"c226_anousu = '$c226_anousu' and c226_natdespecidade = '$c226_natdespecidade' and c226_natdespsiops = '$c226_natdespsiops'");
     db_fim_transacao();
 } else if(isset($chavepesquisa)){
     $result = $clnaturdessiops->sql_record($clnaturdessiops->sql_query($chavepesquisa));
