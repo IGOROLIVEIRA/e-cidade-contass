@@ -252,12 +252,15 @@ $clliclicita->rotulo->label();
             }
         }
     }
-    function js_mostraliclicita(chave,chave2,erro){
-        window.location.href = "lic1_publicratificacao001.php?l20_codigo="+document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
+    function js_mostraliclicita(chave,erro, chave2){
+        document.form1.l20_objeto.value = chave;
         if(erro==true){
             document.form1.l20_codigo.focus();
             document.form1.l20_codigo.value = '';
+        }else{
+            window.location.href = "lic1_publicratificacao001.php?l20_codigo="+document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
         }
+
     }
 
     function js_mostraliclicita1(chave1,chave2,chave3){
