@@ -78,7 +78,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_dtassinaturacontrato']          = $aEMP10['si106_dtassinaturacontrato'] == '' ? ' ' : $this->sicomDate($aEMP10['si106_dtassinaturacontrato']); // campo 21
         $aCSVEMP10['si106_nrosequencialtermoaditivo']     = $aEMP10['si106_nrosequencialtermoaditivo'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_nrosequencialtermoaditivo'], 2);  // campo 22
         $aCSVEMP10['si106_despdecconvenio']               = $this->padLeftZero($aEMP10['si106_despdecconvenio'], 1);  // campo 23
-        $aCSVEMP10['si106_nroconvenio']                   = $aEMP10['si106_nroconvenio'] == 0 ? ' ' : substr($aEMP10['si106_nroconvenio'], 0, 30);  // campo 24
+        $aCSVEMP10['si106_nroconvenio']                   = $aEMP10['si106_nroconvenio'] == '' ? ' ' : substr($aEMP10['si106_nroconvenio'], 0, 30);  // campo 24
         $aCSVEMP10['si106_dataassinaturaconvenio']        = $aEMP10['si106_dataassinaturaconvenio'] == '' ? ' ' : $this->sicomDate($aEMP10['si106_dataassinaturaconvenio']);  // campo 25
 
         $aCSVEMP10['si106_despdecconvenioconge']          = $this->padLeftZero($aEMP10['si106_despdecconvenioconge'], 1); // campo 26

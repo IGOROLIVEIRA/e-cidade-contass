@@ -486,6 +486,44 @@ if($sqlerro==false) {
 
     }
 
+    //De/Para Estrutural da conta contábil Caspweb
+    $sqlEstContaCaspweborigem = "select * from vinculocaspweb where c232_anousu = $anoorigem limit 1";
+    $resultEstContaCaspweborigem = db_query($sqlEstContaCaspweborigem);
+    $linhasEstContaCaspweborigem = pg_num_rows($resultEstContaCaspweborigem);
+
+    $sqlEstContaCaspwebdestino = "select * from vinculocaspweb where c232_anousu = $anodestino limit 1";
+    $resultEstContaCaspwebdestino = db_query($sqlEstContaCaspwebdestino);
+    $linhasEstContaCaspwebdestino = pg_num_rows($resultEstContaCaspwebdestino);
+
+    if (($linhasEstContaCaspweborigem > 0) && ($linhasEstContaCaspwebdestino == 0 )) {
+
+        $sqlEstContaCaspweb = "select fc_duplica_exercicio('vinculocaspweb', 'c232_anousu', ".$anoorigem.",".$anodestino.",null);";
+        $resultEstContaCaspweb = db_query($sqlEstContaCaspweb);
+        if ($resultEstContaCaspweb==true) {
+            $sqlerro = false;
+        } else {
+            $sqlerro = true;
+            $erro_msg = pg_last_error($resultEstContaCaspweb);
+        }
+
+    } else {
+        if ($linhasEstContaCaspweborigem == 0) {
+            $cldb_viradaitemlog->c35_log = "Não existem estruturais para ano de origem $anoorigem";
+        } else if ($linhasEstContaCaspwebdestino>0) {
+            $cldb_viradaitemlog->c35_log = "Ja existem estruturais para ano de destino $anodestino";
+        }
+        $cldb_viradaitemlog->c35_codarq        = 2010491;
+        $cldb_viradaitemlog->c35_db_viradaitem = $cldb_viradaitem->c31_sequencial;
+        $cldb_viradaitemlog->c35_data          = date("Y-m-d");
+        $cldb_viradaitemlog->c35_hora          = date("H:i");
+        $cldb_viradaitemlog->incluir(null);
+        if ($cldb_viradaitemlog->erro_status==0) {
+            $sqlerro = true;
+            $erro_msg = $cldb_viradaitemlog->erro_msg;
+        }
+
+    }
+
     db_atutermometro(1, $iTotPassos, 'termometroitem', 1, $sMensagemTermometroItem);
 }
 
