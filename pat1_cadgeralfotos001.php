@@ -37,7 +37,6 @@ require_once("classes/db_bemfoto_classe.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet = db_utils::postMemory($_GET);
-
 $clbem = new cl_bens;
 $clbem->rotulo->label();
 $clbemfoto = new cl_bemfoto;
@@ -148,6 +147,7 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
     var iNumBem = '<?=$oGet->t52_codbem?>';
     var iLote = '<?=$oGet->cod_lote?>';
     var tela_inativa = '<?=$oGet->db_opcaoal?>';
+    var iPlaca = '<?=$oGet->cod_placa?>';
 
     var sUrlRpc = "pat1_bensnovo.RPC.php";
 
@@ -230,6 +230,7 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
         oParam.exec = 'adicionarFoto';
         oParam.iBem = iNumBem;
         oParam.iLote = iLote;
+        oParam.iPlaca = iPlaca;
         oParam.principal = $F('t54_principal') == "t" ? true : false;
         oParam.ativa = $F('t54_fotoativa') == "t" ? true : false;
         oParam.arquivo = $F('namefile');
@@ -263,6 +264,7 @@ if (isset($oPost->cpf) && trim($oPost->cpf) != "") {
         oParam.exec = 'getFotos';
         oParam.iBem = iNumBem;
         oParam.iLote = iLote;
+        oParam.iPlaca = iPlaca;
         var oAjax = new Ajax.Request(
             sUrlRpc,
             {

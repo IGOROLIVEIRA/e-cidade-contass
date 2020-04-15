@@ -557,13 +557,32 @@ switch ($oParam->exec){
                         $oBem = new Bem($codigoBem);
                         db_inicio_transacao();
                         $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
-                        unlink($oParam->arquivo);
                         db_fim_transacao(false);
                     }
+                    unlink($oParam->arquivo);
                   $oRetorno->status = 1;
                 }
 
-            }else{
+            }elseif (isset($oParam->iPlaca) && $oParam->iPlaca != ''){
+              $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
+              $rsBemPlaca = db_query($sql);
+              $oDaoBemLote  = db_utils::getDao('benslote');
+              $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
+              $rsBemLote = $oDaoBemLote->sql_record($sql);
+
+              if(pg_num_rows($rsBemLote) > 0){
+                for($cont=0;$cont<pg_num_rows($rsBemLote);$cont++){
+                  $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
+                  $oBem = new Bem($codigoBem);
+                  db_inicio_transacao();
+                  $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
+                  db_fim_transacao(false);
+                }
+                unlink($oParam->arquivo);
+                $oRetorno->status = 1;
+              }
+            }
+            else{
                 $oBem = new Bem($oParam->iBem);
                 db_inicio_transacao();
                 $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
@@ -580,13 +599,19 @@ switch ($oParam->exec){
         break;
 
     case 'getFotos':
-
         if(isset($oParam->iBem) && $oParam->iBem ){
           $codigoBem = $oParam->iBem;
         }
-        else if(isset($oParam->iLote) && $oParam->iLote){
+        elseif(isset($oParam->iLote) && $oParam->iLote){
           $oDaoBemLote  = db_utils::getDao('benslote');
           $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.$oParam->iLote);
+          $rsBemLote = $oDaoBemLote->sql_record($sql);
+          $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
+        }else{
+          $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
+          $rsBemPlaca = db_query($sql);
+          $oDaoBemLote  = db_utils::getDao('benslote');
+          $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
           $rsBemLote = $oDaoBemLote->sql_record($sql);
           $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
         }

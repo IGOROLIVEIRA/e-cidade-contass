@@ -498,9 +498,8 @@ function js_retornoBusca(oJson) {
     if (iParametroPlaca == 3) {
       js_buscaPlacaString();
     }
-    console.log('Enter here....');
     parent.document.formaba.bensfotos.disabled = false;
-    top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_lote=${$F('cod_lote')}`;
+    top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
   }
 }
 /**
@@ -1071,7 +1070,7 @@ function salvarDados() {
    } else {
      alert(_M('patrimonial.patrimonio.db_frm_bensglobalnovo.bens_cadastrados'));
      parent.document.formaba.bensfotos.disabled = false;
-     top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_lote=${$F('cod_lote')}`;
+     top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
      parent.mo_camada('bensfotos');
      // $('form1').reset();
      // js_carregaDadosForm(1);
