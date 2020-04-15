@@ -166,7 +166,8 @@ function js_calcvaltot(valor,param,nome){
         valor = 0;
       valor = new Number(valor);
       quant = new Number(quant);
-      valortotal = new Number(quant*valor);
+      valor2 = valor.toFixed(4);
+      valortotal = new Number(quant*valor2);
     }
 
     eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
