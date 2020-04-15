@@ -116,6 +116,7 @@ class gerarCADOBRAS extends GerarAM
       $aCSVCADOBRAS30['si201_tipomedicao']          = $aCADORBRAS30['si201_tipomedicao'];
       $aCSVCADOBRAS30['si201_descoutrostiposmed']     = $aCADORBRAS30['si201_descoutrostiposmed'];
       $aCSVCADOBRAS30['si201_nummedicao']             = $aCADORBRAS30['si201_nummedicao'];
+      $aCSVCADOBRAS30['si201_descmedicao']            = $aCADORBRAS30['si201_descmedicao'];
       $aCSVCADOBRAS30['si201_dtiniciomedicao']        = $this->sicomDate($aCADORBRAS30['si201_dtiniciomedicao']);
       $aCSVCADOBRAS30['si201_dtfimmedicao']           = $this->sicomDate($aCADORBRAS30['si201_dtfimmedicao']);
       $aCSVCADOBRAS30['si201_dtmedicao']              = $this->sicomDate($aCADORBRAS30['si201_dtmedicao']);

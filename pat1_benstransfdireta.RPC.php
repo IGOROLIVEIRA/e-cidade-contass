@@ -167,34 +167,36 @@ try{
                           db_fieldsmemory($result_clbenstransfdiv,0);
                         }
 
-                        if ($sqlerro == false) {
-                                $clhistbemdiv->t32_histbem=$t97_histbem;
-                                $clhistbemdiv->t32_divisao=$t31_divisao;
-                                $clhistbemdiv->incluir(null);
-                                if ($clhistbemdiv->erro_status == 0) {
-                                    $sqlerro = true;
-                                    $erro_msg = $clhistbemdiv->erro_msg;
-                                    break;
-                                }
+                        if($t31_divisao !=  null){
+                          if ($sqlerro == false) {
+                            $clhistbemdiv->t32_histbem=$t97_histbem;
+                            $clhistbemdiv->t32_divisao=$t31_divisao;
+                            $clhistbemdiv->incluir(null);
+                            if ($clhistbemdiv->erro_status == 0) {
+                              $sqlerro = true;
+                              $erro_msg = $clhistbemdiv->erro_msg;
+                              break;
+                            }
+                          }
+                          if ($sqlerro == false) {
+                            $result_bensdiv=$clbensdiv->sql_record($clbensdiv->sql_query_file($t95_codbem));
+                            if ($clbensdiv->numrows>0){
+                              $clbensdiv->excluir($t95_codbem);
+                              if($clbensdiv->erro_status==0){
+                                $sqlerro=true;
+                                $erro_msg=$clbensdiv->erro_msg;
+                              }
                             }
                             if ($sqlerro == false) {
-                                $result_bensdiv=$clbensdiv->sql_record($clbensdiv->sql_query_file($t95_codbem));
-                                if ($clbensdiv->numrows>0){
-                                    $clbensdiv->excluir($t95_codbem);
-                                    if($clbensdiv->erro_status==0){
-                                        $sqlerro=true;
-                                        $erro_msg=$clbensdiv->erro_msg;
-                                    }
-                                }
-                                if ($sqlerro == false) {
-                                    $clbensdiv->t33_divisao=$t31_divisao;
-                                    $clbensdiv->incluir($t95_codbem);
-                                    if($clbensdiv->erro_status==0){
-                                        $sqlerro=true;
-                                        $erro_msg=$clbensdiv->erro_msg;
-                                    }
-                                }
+                              $clbensdiv->t33_divisao=$t31_divisao;
+                              $clbensdiv->incluir($t95_codbem);
+                              if($clbensdiv->erro_status==0){
+                                $sqlerro=true;
+                                $erro_msg=$clbensdiv->erro_msg;
+                              }
                             }
+                          }
+                        }
                         }else{
                             if ($sqlerro == false) {
                                 $result_bensdiv=$clbensdiv->sql_record($clbensdiv->sql_query_file($t95_codbem));
@@ -207,6 +209,9 @@ try{
                                 }
                             }
                         }
+                      if($t31_divisao == null){
+                          $clbensdiv->excluir($t95_codbem);
+                      }
                     }
                 }
 
