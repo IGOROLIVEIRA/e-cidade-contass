@@ -66,7 +66,7 @@ if(isset($alterar)){
     }
 }
 if($db_opcao==22){
-    echo "<script>document.form1.pesquisar.click();</script>";
+    echo "<script>js_pesquisa();</script>";
 }
 ?>
 <script>
