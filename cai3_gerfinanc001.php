@@ -2359,6 +2359,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
         function js_justifica(){
           debitos.document.form1.action = 'cai3_gerfinanc066.php?valor='+document.getElementById('total2').innerHTML;
           debitos.document.form1.target = '_self';
+          debitos.document.form1.elements['numpreNumparChecked'].removeAttribute('disabled');
           debitos.document.form1.submit();
         }
       </script>
