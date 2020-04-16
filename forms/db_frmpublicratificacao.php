@@ -192,8 +192,12 @@ $clliclicita->rotulo->label();
 <script>
     js_verificatipoproc();
 
-    function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+    function js_pesquisa(ratificacao=false){
+        if(ratificacao) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+        }else {
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+        }
     }
 
     function js_preenchepesquisa(chave,tipocompratribunal){

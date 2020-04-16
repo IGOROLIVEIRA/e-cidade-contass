@@ -206,8 +206,14 @@ $sWhereContratos = " and 1 = 1 ";
 
 			if($credenciamento == 'true'){
 			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
-				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND l20_dtpubratificacao IS NULL AND ";
+				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
 			}
+
+			if($ratificacao == 'true'){
+				$dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
+            }else{
+				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
+            }
 
 			if($situacao == '10'){
 			    $dbwhere .= " l20_licsituacao = 10 AND ";
