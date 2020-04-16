@@ -211,7 +211,7 @@ $sWhereContratos = " and 1 = 1 ";
 
 			if($situacao == '10'){
 			    $dbwhere .= " l20_licsituacao = 10 AND ";
-            }else{
+            }elseif($situacao){
 				$dbwhere .= " l20_licsituacao = 1 AND ";
             }
 
