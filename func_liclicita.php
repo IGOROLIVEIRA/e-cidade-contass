@@ -211,7 +211,7 @@ $sWhereContratos = " and 1 = 1 ";
 
 			if($ratificacao == 'true'){
 				$dbwhere .= " l20_dtpubratificacao IS NOT NULL AND ";
-            }else{
+            }elseif($ratificacao == 'false'){
 				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
             }
 
