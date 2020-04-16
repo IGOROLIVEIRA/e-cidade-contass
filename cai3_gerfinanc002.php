@@ -1058,7 +1058,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
       echo "</tr>\n";
 
       echo " <input type='hidden' id='txtNumpreUnicaSelecionados' name='txtNumpreUnicaSelecionados'>";
-      echo " <input type='hidden' id='numpreNumparChecked' name='numpreNumparChecked'>";
+      echo " <input type='hidden' disabled='disabled' id='numpreNumparChecked' name='numpreNumparChecked'>";
       echo " <input type='hidden' id='DadosUnicas'				  name='DadosUnicas'> ";
 
       //verifica se foi clicado no link agrupar e recria as variaveis do QUERY_STRING pra atualizar o agnump e agpar
