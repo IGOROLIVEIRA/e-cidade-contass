@@ -6,23 +6,23 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
+include("classes/db_scripts_classe.php");
 require_once("dbforms/db_funcoes.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("e60_codemp");
+
+db_postmemory($HTTP_POST_VARS);
+
+if(isset($incluir)){
+  db_inicio_transacao();
+  //$clidentificacaoresponsaveis->incluir($si166_sequencial);
+  db_fim_transacao();
+}
 
 ?>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <?php
-    db_app::load("scripts.js, prototype.js, datagrid.widget.js, messageboard.widget.js, dbtextField.widget.js");
-    db_app::load("windowAux.widget.js, strings.js,dbtextFieldData.widget.js");
-    db_app::load("classes/infoLancamentoContabil.classe.js");
-    db_app::load("grid.style.css, estilos.css");
-    ?>
-    <style>
-      .temdesconto {background-color: #D6EDFF}
-    </style>
   </head>
 <body bgcolor="#CCCCCC">
 <?php
@@ -48,7 +48,8 @@ if (db_getsession("DB_id_usuario") != 1) {
           </tr>
         </table>
       </fieldset>
-      <input type="button" id='btnVisualizarLancamento' value='Visualizar Lançamentos'>
+      <input type="submit" id='buttonSubmit' value='Excluir Empenho'>
+      <input type="submit" id="db_opcao" value="Executar" >
     </div>
   </form>
 
@@ -64,7 +65,7 @@ if (db_getsession("DB_id_usuario") != 1) {
             display:none;' id='ajudaItem'>
 
   </div>
-  <script>
+ <!--  <script>
     sUrlRPC = 'con4_lancamentoscontabeisempenho.RPC.php';
     function js_pesquisa_empenho(mostra) {
 
@@ -485,7 +486,7 @@ if (db_getsession("DB_id_usuario") != 1) {
     }
     $('btnVisualizarLancamento').observe("click", function (){js_visualizarEmpenhos($F('e60_numemp'))});
 
-  </script>
+  </script> -->
 <?
 }
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
