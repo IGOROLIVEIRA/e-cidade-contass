@@ -1277,6 +1277,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
                 $reg13 = db_utils::fieldsMemory($rsPagOrd13, $iCont13);
                 $sHash = $reg13->tiporetencao . $reg11->e50_codord;
+                if ($reg13->c60_tipolancamento == 1){
+                  $sHash .= $reg13->c60_tipolancamento.$reg13->c60_subtipolancamento;
+                }
 
                 if (!isset($aOps23[$sHash])) {
                   $clops13 = new stdClass();
