@@ -59,6 +59,15 @@ db_fieldsmemory($result1,0);
 $k27_dias = $k03_diasjust;
 if ( (isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) ) {
  $vt = $HTTP_POST_VARS;
+    /**
+     * Sobrescreve os valores para garantir que o limit de inputs via post seja atingido
+     */
+     $arrNumpresSelected = json_decode(stripslashes($vt['numpreNumparChecked']));
+     foreach($arrNumpresSelected as $numpreSelected){
+         foreach ($vt as $value) {
+             $vt[$numpreSelected->id] = $numpreSelected->value;
+         }
+     }
  $virgula = "";
  $numpar1 = "";
  $numpre1 = "";

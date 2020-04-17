@@ -168,6 +168,22 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
     <script language="JavaScript" src="scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
     <script>
+
+      function js_appendSelected(input){
+        let arrDados = [];
+        if(document.getElementById('numpreNumparChecked').value != "") {
+          arrDados = JSON.parse(document.getElementById('numpreNumparChecked').value);
+        }
+
+        if(input.checked){
+          arrDados.push({"id": input.id, "value": input.value});
+        } else {
+          arrDados = arrDados.filter( element => element.id != input.id);
+        }
+
+        document.getElementById('numpreNumparChecked').value = arrDados.length == 0 ? "" : JSON.stringify(arrDados);
+      }
+
       function js_desabilitaBotoes() {
 
         parent.document.getElementById("geranotif").disabled  	  = true; //botao Gerar Notificacao
@@ -676,6 +692,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
               F.elements[i].click();
             } else if(F.elements[i].style.visibility!="hidden"){
               F.elements[i].checked = dis;
+              js_appendSelected(F.elements[i]);
             }
           }
         }
@@ -1041,6 +1058,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
       echo "</tr>\n";
 
       echo " <input type='hidden' id='txtNumpreUnicaSelecionados' name='txtNumpreUnicaSelecionados'>";
+      echo " <input type='hidden' disabled='disabled' id='numpreNumparChecked' name='numpreNumparChecked'>";
       echo " <input type='hidden' id='DadosUnicas'				  name='DadosUnicas'> ";
 
       //verifica se foi clicado no link agrupar e recria as variaveis do QUERY_STRING pra atualizar o agnump e agpar
@@ -1322,7 +1340,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           //      if($emrec == "t")
           echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".
               ""
-              ."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\""."checkbox"."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
+              ."<input class='{$sClassVenc} checkBoxNumpre' style=\"visibility:'visible'\" type=\""."checkbox"."\" value=\"".$numpres."\" onclick=\"js_soma(2); js_appendSelected(this);\" data-numpre=\"".pg_result($result,$i,"k00_numpre")."\" data-numpar=\"".pg_result($result,$i,"k00_numpar")."\" data-receita=\"".pg_result($result,$i,"k00_receit")."\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
         <input style=\"visibility:'visible'\" type=\""."hidden"."\" value=\"".$numpres_valores."\" id=\"_VALORES$i\" name=\"_VALORES$i\">
         </td>\n";
 
@@ -1609,7 +1627,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"multa$ContadorUnico\" value=\"".$multa."\">".db_formatar($multa,"f")."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"desconto$ContadorUnico\" value=\"" . $desconto . "\">" . db_formatar($desconto, "f") . "</td>\n";
               echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"total$ContadorUnico\" value=\"" . $total . "\">" . db_formatar($total, "f") . "</td>\n";
-            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$ContadorUnico\" nowrap>".""."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"checkbox":"checkbox")."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$ContadorUnico\" name=\"CHECK".$ContadorUnico++."\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
+            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$ContadorUnico\" nowrap>".""."<input class='{$sClassVenc} checkBoxNumpre' style=\"visibility:'visible'\" type=\"".($tipo==3?"checkbox":"checkbox")."\" value=\"".$numpres."\" onclick=\"js_soma(2); js_appendSelected(this)\" data-numpre=\"".pg_result($result,$i,"k00_numpre")."\" data-numpar=\"".pg_result($result,$i,"k00_numpar")."\" data-receita=\"".pg_result($result,$i,"k00_receit")."\" id=\"CHECK$ContadorUnico\" name=\"CHECK".$ContadorUnico++."\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
           <input style=\"visibility:'visible'\" type=\"hidden\" value=\"".$numpres_valores."\" id=\"_VALORES$ContadorUnico\" name=\"_VALORES".$ContadorUnico++."\">
           </td>\n";
             /*
@@ -1928,14 +1946,14 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"total$i\" value=\"" . $SomaDasParcelasTotal[pg_result($result, $i, "k00_numpre")][pg_result($result, $i, "k00_numpar")][pg_result($result, $i, "k00_receit")] . "\">" . (trim(pg_result($result, $i, "total")) == "" ? "&nbsp" : db_formatar(pg_result($result, $i, "total"), "f")) . "</td>\n";
 
           if($elementos_numpres[$cont2] == pg_result($result,$i,"k00_numpre")) {
-            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".($tipo==3?"<input type=\"submit\" class=\"opa1\"  onclick=\"this.form.target = '';return js_validatamanho(document.getElementById('VAL_ISS$i').value,'calculavalor$i','VAL_ISS$i');\" name=\"calculavalor\" id=\"calculavalor$i\" value=\"Calcular\" $sDisabled >":"")."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".pg_result($result,$i,"k00_numpre")."P".pg_result($result,$i,"k00_numpar")."R".pg_result($result,$i,"k00_receit")."\" onclick=\"js_soma(2)\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs(pg_result($result,$i,"k00_valor"))!=0 && $tipo==3)?"disabled":"").">
+            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".($tipo==3?"<input type=\"submit\" class=\"opa1\"  onclick=\"this.form.target = '';return js_validatamanho(document.getElementById('VAL_ISS$i').value,'calculavalor$i','VAL_ISS$i');\" name=\"calculavalor\" id=\"calculavalor$i\" value=\"Calcular\" $sDisabled >":"")."<input class='{$sClassVenc} checkBoxNumpre' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".pg_result($result,$i,"k00_numpre")."P".pg_result($result,$i,"k00_numpar")."R".pg_result($result,$i,"k00_receit")."\" onclick=\"js_soma(2)\" onchange=\"js_appendSelected(this)\" data-numpre=\"".pg_result($result,$i,"k00_numpre")."\" data-numpar=\"".pg_result($result,$i,"k00_numpar")."\" data-receita=\"".pg_result($result,$i,"k00_receit")."\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs(pg_result($result,$i,"k00_valor"))!=0 && $tipo==3)?"disabled":"").">
                 <input style=\"visibility:'visible'\" type=\""."hidden"."\" value=\"".pg_result($result,$i,"total")."\" id=\"_VALORES$i\" name=\"_VALORES$i\">
                 </td>\n";
             $verf_parc = pg_result($result,$i,"k00_numpar");
           } else {
             $cont2++;
             $verf_parc = pg_result($result,$i,"k00_numpar");
-            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".($tipo==3?"<input type=\"submit\" class=\"opa2\" onclick=\"this.form.target = ''\" name=\"calculavalor\"  id=\"calculavalor$i\" value=\"Calcular\" $sDisabled >":"")."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".pg_result($result,$i,"k00_numpre")."P".pg_result($result,$i,"k00_numpar")."R".pg_result($result,$i,"k00_receit")."\" onclick=\"js_soma(2)\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs(pg_result($result,$i,"k00_valor"))!=0 && $tipo==3)?"disabled":"")."></td>\n";
+            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".($tipo==3?"<input type=\"submit\" class=\"opa2\" onclick=\"this.form.target = ''\" name=\"calculavalor\"  id=\"calculavalor$i\" value=\"Calcular\" $sDisabled >":"")."<input class='{$sClassVenc} checkBoxNumpre' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".pg_result($result,$i,"k00_numpre")."P".pg_result($result,$i,"k00_numpar")."R".pg_result($result,$i,"k00_receit")."\" onclick=\"js_soma(2)\" onchange=\"js_appendSelected(this)\" data-numpre=\"".pg_result($result,$i,"k00_numpre")."\" data-numpar=\"".pg_result($result,$i,"k00_numpar")."\" data-receita=\"".pg_result($result,$i,"k00_receit")."\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs(pg_result($result,$i,"k00_valor"))!=0 && $tipo==3)?"disabled":"")."></td>\n";
           }
           echo "</tr></label>\n";
 
