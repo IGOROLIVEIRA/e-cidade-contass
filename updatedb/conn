@@ -24,6 +24,7 @@ e-cidade            5432    cmarinos
 pmcapitaoeneas      5432    ecidadepref
 pmclarodospocoes    5432    ecidadepref
 pmlagoadospatos     5432    ecidadepref
+pmsaoromao          5432    ecidadepref
 
 e-cidade            5432    cmbhecid
 
@@ -66,8 +67,4 @@ cmubai_folha        5432    e-cidade
 cmbotumirim_folha   5432    e-cidade
 comar               5432    e-cidade
 conserrageral       5432    e-cidade
-
-cisgraomogol			5432	manutencao
-pmbotumirim_23_05_2017		5432	manutencao
-pmlagoadospatos			5432	manutencao
-pmsaoromao			5432	manutencao
+cisgraomogol		5432	e-cidade
