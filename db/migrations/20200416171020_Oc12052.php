@@ -96,6 +96,7 @@ class Oc12052 extends AbstractMigration
         FROM conplanoorcamento
         JOIN temp_table ON c61_anousu = c60_anousu
         WHERE conplanoorcamento.c60_estrut IN (SELECT estrut FROM new_ctas_orc)
+          AND conplanoorcamento.c60_codcon NOT IN (SELECT c61_codcon FROM conplanoorcamentoanalitica WHERE c61_anousu >= 2020)
           AND conplanoorcamento.c60_anousu >= 2020;
 
         -- Inserindo vínculos com PCASP das novas contas do Plano Orçamentário
