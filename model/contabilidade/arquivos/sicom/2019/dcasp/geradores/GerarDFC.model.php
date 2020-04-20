@@ -78,9 +78,22 @@ class GerarDFC extends GerarAM
 
         $aCSVDFC10 = array();
         $aCSVDFC10['si219_tiporegistro']                      = $this->padLeftZero($aDFC10['si219_tiporegistro'], 2);
-        $aCSVDFC10['si219_vlreceitaderivadaoriginaria']       = $this->sicomNumberReal($aDFC10['si219_vlreceitaderivadaoriginaria'], 2);
-        $aCSVDFC10['si219_vltranscorrenterecebida']           = $this->sicomNumberReal($aDFC10['si219_vltranscorrenterecebida'], 2);
-        $aCSVDFC10['si219_vloutrosingressosoperacionais']     = $this->sicomNumberReal($aDFC10['si219_vloutrosingressosoperacionais'], 2);
+
+//        $aCSVDFC10['si219_vlreceitaderivadaoriginaria']       = $this->sicomNumberReal($aDFC10['si219_vlreceitaderivadaoriginaria'], 2);
+//        $aCSVDFC10['si219_vltranscorrenterecebida']           = $this->sicomNumberReal($aDFC10['si219_vltranscorrenterecebida'], 2);
+//        $aCSVDFC10['si219_vloutrosingressosoperacionais']     = $this->sicomNumberReal($aDFC10['si219_vloutrosingressosoperacionais'], 2);
+
+          $aCSVDFC10['si219_vlreceitatributaria']  = $this->sicomNumberReal($aDFC10['si219_vlreceitatributaria'], 2);
+          $aCSVDFC10['si219_vlreceitacontribuicao']  = $this->sicomNumberReal($aDFC10['si219_vlreceitacontribuicao'], 2);
+          $aCSVDFC10['si219_vlreceitapatrimonial']  = $this->sicomNumberReal($aDFC10['si219_vlreceitapatrimonial'], 2);
+          $aCSVDFC10['si219_vlreceitaagropecuaria']  = $this->sicomNumberReal($aDFC10['si219_vlreceitaagropecuaria'], 2);
+          $aCSVDFC10['si219_vlreceitaindustrial']  = $this->sicomNumberReal($aDFC10['si219_vlreceitaindustrial'], 2);
+          $aCSVDFC10['si219_vlreceitaservicos']  = $this->sicomNumberReal($aDFC10['si219_vlreceitaservicos'], 2);
+          $aCSVDFC10['si219_vlremuneracaodisponibilidade']  = $this->sicomNumberReal($aDFC10['si219_vlremuneracaodisponibilidade'], 2);
+          $aCSVDFC10['si219_vloutrasreceitas']  = $this->sicomNumberReal($aDFC10['si219_vloutrasreceitas'], 2);
+          $aCSVDFC10['si219_vltransferenciarecebidas']  = $this->sicomNumberReal($aDFC10['si219_vltransferenciarecebidas'], 2);
+
+
         $aCSVDFC10['si219_vltotalingressosativoperacionais']  = $this->sicomNumberReal($aDFC10['si219_vltotalingressosativoperacionais'], 2);
 
         $this->sLinha = $aCSVDFC10;

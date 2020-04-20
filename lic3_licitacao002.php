@@ -44,6 +44,12 @@ $oGet = db_utils::postMemory($_GET);
 
 $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query($l20_codigo);
 $rsLicitacao        = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
+
+$sSqlTribunal = $oDaoLicitacao->getTipocomTribunal($l20_codigo);
+$rsTribunal = db_query($sSqlTribunal);
+$tipoTribunal = db_utils::fieldsMemory($rsTribunal, 0)->l03_pctipocompratribunal;
+
+
 if ($oDaoLicitacao->numrows == 0) {
 
   db_redireciona('db_erros.php?fechar=true&db_erro=Este registro não possui licitação.');
@@ -113,7 +119,7 @@ if (!empty($oProcessoProtocolo)) {
            }
           ?>
       </td>
-      <td align='left' class="valor" >
+      <td align='left' class="valor" colspan="3">
         <?php echo $sProcessoProtocolo ?>
       </td>
     </tr>
@@ -127,7 +133,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" style=" width: 100px;">
         <?=$Ll20_anousu?>
       </td>
-      <td nowrap="nowrap" class="valor" style="width:500px; text-align: left; ">
+      <td nowrap="nowrap" class="valor" style="width:500px; text-align: left; " colspan="3">
         <?php echo $oLicitatacao->l20_anousu;?>
       </td>
     </tr>
@@ -138,12 +144,20 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" class="valor" style="text-align: left;">
         <?php echo $oLicitatacao->l20_codtipocom . " - " . $oLicitatacao->l03_descr;?>
       </td>
-      <td nowrap="nowrap" title="<?=$Tl20_numero?>">
+      <td nowrap="nowrap" title="<?=$Tl20_numero?>" style="width:13%;">
         <?=$Ll20_numero?>
       </td>
-      <td  nowrap="nowrap" class="valor" style="text-align: left; ">
+      <td  nowrap="nowrap" class="valor" style="text-align: left; width:12%;">
         <?php echo $oLicitatacao->l20_numero;?>
       </td>
+        <?php if(!in_array($tipoTribunal, array('100', '101', '102', '103')) && $oLicitatacao->l20_exercicioedital >= 2020): ?>
+        <td nowrap="nowrap" title="<?=$Tl20_nroedital?>" style="width: 7%;text-align:center;padding-right: 3px;">
+            <b>Edital:</b>
+        </td>
+        <td  nowrap="nowrap" class="valor" style="text-align: left;">
+            <?php echo $oLicitatacao->l20_nroedital;?>
+        </td>
+        <?php endif;?>
     </tr>
      <tr>
       <td nowrap="nowrap" title="<?=@$Tl20_datacria?>">
@@ -155,7 +169,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_horacria?>">
         <b><?=@$Ll20_horacria?></b>
       </td>
-      <td  nowrap="nowrap" class="valor" style="text-align: left;">
+      <td  nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php echo $oLicitatacao->l20_horacria; ?>
       </td>
     </tr>
@@ -169,7 +183,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_horaaber?>">
         <b><?=@$Ll20_horaaber?></b>
       </td>
-      <td nowrap="nowrap" class="valor" style="text-align: left;">
+      <td nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php echo $oLicitatacao->l20_horaaber; ?>
       </td>
     </tr>
@@ -183,7 +197,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" style="text-align: left;" title="<?=@$Tl20_dtpublic?>">
         <b><?=@$Ll20_dtpublic?></b>
       </td>
-      <td  nowrap="nowrap" class="valor" style="text-align: left;">
+      <td  nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php echo implode("/", array_reverse(explode("-", $oLicitatacao->l20_dtpublic))); ?>
       </td>
     </tr>
@@ -198,7 +212,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" >
         <b>Situação:</b>
       </td>
-      <td nowrap="nowrap" class="valor" style="text-align: left;">
+      <td nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php echo $oLicitatacao->l08_descr; ?>
       </td>
     </tr>
@@ -228,7 +242,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_usaregistropreco?>">
         <?=@$Ll20_usaregistropreco?>
       </td>
-      <td nowrap="nowrap" class="valor" style="text-align: left;">
+      <td nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php echo $oLicitatacao->l20_usaregistropreco == 't' ? 'Sim' : 'Não'; ?>
       </td>
     </tr>
@@ -244,7 +258,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_tipojulg?>">
         <b><?=@$Ll20_tipojulg?></b>
       </td>
-      <td nowrap="nowrap" class="valor" style="text-align: left;" >
+      <td nowrap="nowrap" class="valor" style="text-align: left;" colspan="3">
         <?php switch($oLicitatacao->l20_tipojulg){
           case 1:
                 echo "Por item";
@@ -264,7 +278,7 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_objeto?>">
         <b><?=@$Ll20_objeto?></b>
       </td>
-      <td colspan='3' align='left' class="valor" >
+      <td colspan="5" align='left' class="valor" >
         <?php echo $oLicitatacao->l20_objeto ?>
       </td>
     </tr>

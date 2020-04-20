@@ -71,6 +71,12 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
         }
     }
 
+    if ($pc01_obras == "0"){
+      $erro_msg = "Campo  Material Utilizado em Obras/serviços?  nao informado.";
+      $sqlerro  = true;
+      db_msgbox($erro_msg);
+    }
+
     if($sqlerro == false){
         $clpcmater->incluir(null);
     }

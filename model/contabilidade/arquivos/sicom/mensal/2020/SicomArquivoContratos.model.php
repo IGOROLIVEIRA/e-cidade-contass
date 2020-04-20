@@ -409,7 +409,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                       CASE WHEN l2.l20_codepartamento = NULL THEN NULL ELSE l2.l20_codepartamento END AS departmanual,
                       CASE WHEN l2.l20_naturezaobjeto = NULL THEN NULL ELSE l2.l20_naturezaobjeto END AS naturezamanual,
                       ac02_acordonatureza,
-                      ac16_veiculodivulgacao
+                      ac16_veiculodivulgacao,
+                      ac16_tipocadastro
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                 INNER JOIN acordo ON ac16_sequencial = ac26_acordo
@@ -556,6 +557,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       if($oDados10->ac02_acordonatureza == '4' || $oDados10->ac02_acordonatureza == '5'){
         $clcontratos10->si83_formafornecimento = '';
         $clcontratos10->si83_formapagamento = '';
+        $clcontratos10->si83_unidadedemedidaprazoexex = '';
         $clcontratos10->si83_prazoexecucao = '';
         $clcontratos10->si83_multarescisoria = '';
         $clcontratos10->si83_multainadimplemento = '';
@@ -563,8 +565,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       }else{
         $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
         $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-        $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Ms(s)' : ' Dia(s)';
-        $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo . $sTipoUnidade;
+        $clcontratos10->si83_unidadedemedidaprazoexex = $oDados10->ac16_tipounidtempoperiodo;
+        $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo;
         $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
         $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
         $clcontratos10->si83_garantia = $this->getGarantiaByAcordo($oDados10->ac16_sequencial);
@@ -575,6 +577,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
       $clcontratos10->si83_veiculodivulgacao = $this->removeCaracteres($oDados10->ac16_veiculodivulgacao);
       $clcontratos10->si83_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clcontratos10->si83_instit = db_getsession('DB_instit');
+      $clcontratos10->si83_tipocadastro = $oDados10->ac16_tipocadastro;
 
       $clcontratos10->incluir(null);
 
@@ -593,6 +596,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         foreach ($oAcordo->getItensPosicaoInicial() as $oItens) {
           $iUnidade = $oItens->getUnidade() == "" ? 1 : $oItens->getUnidade();
           $iCodItem = $oItens->getMaterial()->getCodigo() . $iUnidade;
+          $iCodPcmater = $oItens->getMaterial()->getMaterial();
+
+          /**
+           * busca itens obra;
+           */
+          $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+          $rsItems = db_query($sqlItemobra);
+          $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
 
           $sHash = $iCodItem;
           if (!isset($aDadosAgrupados[$sHash])) {
@@ -606,6 +617,21 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oContrato11->si84_valorunitarioitem = $oItens->getValorUnitario();
             $oContrato11->si84_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $oContrato11->si84_instit = db_getsession("DB_instit");
+            $oContrato11->si84_tipomaterial = $oDadosItensObra->obr06_tabela;
+            if($oDadosItensObra->obr06_tabela == "1"){
+              $oContrato11->si84_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+              $oContrato11->si84_coditemsimcro = null;
+              $oContrato11->si84_descoutrosmateriais = null;
+            }elseif ($oDadosItensObra->obr06_tabela == "2"){
+              $oContrato11->si84_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+              $oContrato11->si84_coditemsinapi = null;
+              $oContrato11->si84_descoutrosmateriais = null;
+            }elseif ($oDadosItensObra->obr06_tabela == "3"){
+              $oContrato11->si84_coditemsinapi = null;
+              $oContrato11->si84_coditemsimcro = null;
+              $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+            }
+            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_codigotabela;
             $aDadosAgrupados[$sHash] = $oContrato11;
 
           } else {
@@ -627,6 +653,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           $clcontratos11->si84_valorunitarioitem = $oDadosReg11->si84_valorunitarioitem;
           $clcontratos11->si84_mes = $oDadosReg11->si84_mes;
           $clcontratos11->si84_instit = $oDadosReg11->si84_instit;
+          $clcontratos11->si84_tipomaterial = $oDadosReg11->si84_tipomaterial;
+          $clcontratos11->si84_coditemsimcro = $oDadosReg11->si84_coditemsimcro;
+          $clcontratos11->si84_coditemsinapi = $oDadosReg11->si84_coditemsinapi;
+          $clcontratos11->si84_descoutrosmateriais = $oDadosReg11->si84_descoutrosmateriais;
+          $clcontratos11->si84_itemplanilha = $oDadosReg11->si84_itemplanilha;
 
           $clcontratos11->incluir(null);
           if ($clcontratos11->erro_status == 0) {
@@ -1065,7 +1096,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
               $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
             }
-
+            $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
 
             $iTipoAlteraoItem = 1;
             if ($oAcordoPosicao->getTipo() == 9) {
@@ -1088,7 +1119,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos21->si88_tiporegistro = 21;
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
-            $clcontratos21->si88_coditem = $iCodItem;
+            $clcontratos21->si88_coditem = $iCodItem  ;
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
             //$clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidadeAditivada($oDados20->ac26_numero);
             $sqlServico = "
@@ -1113,8 +1144,29 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantiAditada();
             }
 
+            /**
+             * busca itens obra;
+             */
+            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+            $rsItems = db_query($sqlItemobra);
+            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
+            if($oDadosItensObra->obr06_tabela == "1"){
+              $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+              $clcontratos21->si88_coditemsimcro = null;
+              $clcontratos21->si88_descoutrosmateriais = null;
+            }elseif ($oDadosItensObra->obr06_tabela == "2"){
+              $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+              $clcontratos21->si88_coditemsinapi = null;
+              $clcontratos21->si88_descoutrosmateriais = null;
+            }elseif ($oDadosItensObra->obr06_tabela == "3"){
+              $clcontratos21->si88_coditemsinapi = null;
+              $clcontratos21->si88_coditemsimcro = null;
+              $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+            }
+            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_codigotabela;
 
             $clcontratos21->incluir(null);
             if ($clcontratos21->erro_status == 0) {

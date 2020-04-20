@@ -804,6 +804,10 @@ class cl_empagetipo {
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
       $whereFonte2 = " ";
+    }elseif(substr($iFonteEmpenho, 1, 2) == '05') {
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('105','205','103')) and";
+    }elseif(substr($iFonteEmpenho, 1, 2) == '54') {
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('154','154','159')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
       $whereFonte = " ";
       $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";

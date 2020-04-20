@@ -23,7 +23,7 @@ if(isset($alterar)){
 
 if(isset($excluir)){
     db_inicio_transacao();
-    $clnaturdessiope->excluir($c222_natdespecidade,$c222_natdespsiope);
+    $clnaturdessiope->excluir($c222_natdespecidade,$c222_natdespsiope,"c222_natdespecidade = '$c222_natdespecidade'and c222_natdespsiope = '$c222_natdespsiope' and c222_anousu = '$c222_anousu'");
     db_fim_transacao();
 } else if(isset($chavepesquisa)){
     $result = $clnaturdessiope->sql_record($clnaturdessiope->sql_query($chavepesquisa));

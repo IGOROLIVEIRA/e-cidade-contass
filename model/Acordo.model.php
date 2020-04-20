@@ -417,7 +417,10 @@ class Acordo
      */
 
     protected $sTipo;
-
+    /**
+    *  Tipo cadastros
+    */
+    protected $iTipocadastro;
 
     /**
      * Data Rescisao do acordo acordo.ac16_datarescisao
@@ -540,6 +543,22 @@ class Acordo
         $this->iLicitacao = $iLicitacao;
         return $this;
     }
+
+  /**
+   * @return mixed
+   */
+  public function getITipocadastro()
+  {
+    return $this->iTipocadastro;
+  }
+
+  /**
+   * @param mixed $iTipocadastro
+   */
+  public function setITipocadastro($iTipocadastro)
+  {
+    $this->iTipocadastro = $iTipocadastro;
+  }
 
     /**
      * Construtor
@@ -1608,6 +1627,7 @@ class Acordo
         $oDaoAcordo->ac16_licitacao                = $this->getLicitacao();
         $oDaoAcordo->ac16_licoutroorgao            = $this->getiLicoutroorgao();
         $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
+        $oDaoAcordo->ac16_tipocadastro             = $this->getITipocadastro();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**

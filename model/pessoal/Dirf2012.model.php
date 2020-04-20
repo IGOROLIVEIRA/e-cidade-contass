@@ -202,7 +202,7 @@ class Dirf2012 extends Dirf {
 
     $sSqlDadosContabilidade .= "   and e60_instit = ".db_getsession("DB_instit");
 
-    $sSqlDadosContabilidade .= " AND o56_elemento IN ('3339036990000','3339039990000','3339036140000','3339036260000','3339039360000','3449051010000','3339032000000','3339036060000','3339039050000')  
+    $sSqlDadosContabilidade .= " AND o56_elemento IN ('3339036990000','3339039990000','3339036140000','3339036260000','3339039360000','3449051010000','3339032000000','3339036060000','3339039050000','3339039160000','3339039150000','3339034000000','3339036300000')  
          AND NOT EXISTS (select rh76_numemp from rhempenhofolhaempenho where rh76_numemp = e60_numemp)";
     $sSqlDadosContabilidade .= " group by z01_numcgm,z01_cgccpf,z01_nome,6,7,c80_codord";
     $sSqlDadosContabilidade .= " order by z01_numcgm, 6, c80_codord   ";
@@ -652,7 +652,7 @@ class Dirf2012 extends Dirf {
           $sSqlMolestias .= "       inner join rhpessoalmov on rh01_regist = rh02_regist ";
           $sSqlMolestias .= " where rh02_anousu = ".$this->iAno;
           $sSqlMolestias .= "   and rh02_mesusu = ".$this->iMes;
-          $sSqlMolestias .= "   and rh01_numcgm = {$oTipoReceita->rh96_numcgm}";
+          $sSqlMolestias .= "   and rh01_numcgm = {$oTipoReceita->rh96_numcgm} order by rh01_regist desc";
 
           $rsMolestias   = db_query($sSqlMolestias);
 

@@ -22,11 +22,8 @@ class cl_bpdcasp102019 {
    var $si208_vlativocircucredicurtoprazo = 0; 
    var $si208_vlativocircuinvestapliccurtoprazo = 0; 
    var $si208_vlativocircuestoques = 0; 
-   var $si208_vlativocircuvpdantecipada = 0; 
-   var $si208_vlativonaocircucredilongoprazo = 0; 
-   var $si208_vlativonaocircuinvestemplongpraz = 0; 
-   var $si208_vlativonaocircuestoques = 0; 
-   var $si208_vlativonaocircuvpdantecipada = 0; 
+   var $si208_vlativocircuvpdantecipada = 0;
+   var $si208_vlativonaocircurlp = 0;
    var $si208_vlativonaocircuinvestimentos = 0; 
    var $si208_vlativonaocircuimobilizado = 0; 
    var $si208_vlativonaocircuintagivel = 0; 
@@ -43,10 +40,7 @@ class cl_bpdcasp102019 {
                  si208_vlativocircuinvestapliccurtoprazo = float4 = si208_vlativocircuinvestapliccurtoprazo 
                  si208_vlativocircuestoques = float4 = si208_vlativocircuestoques 
                  si208_vlativocircuvpdantecipada = float4 = si208_vlativocircuvpdantecipada 
-                 si208_vlativonaocircucredilongoprazo = float4 = si208_vlativonaocircucredilongoprazo 
-                 si208_vlativonaocircuinvestemplongpraz = float4 = si208_vlativonaocircuinvestemplongpraz 
-                 si208_vlativonaocircuestoques = float4 = si208_vlativonaocircuestoques 
-                 si208_vlativonaocircuvpdantecipada = float4 = si208_vlativonaocircuvpdantecipada 
+                 si208_vlativonaocircurlp        = float4 = si208_vlativonaocircurlp
                  si208_vlativonaocircuinvestimentos = float4 = si208_vlativonaocircuinvestimentos 
                  si208_vlativonaocircuimobilizado = float4 = si208_vlativonaocircuimobilizado 
                  si208_vlativonaocircuintagivel = float4 = si208_vlativonaocircuintagivel 
@@ -77,10 +71,7 @@ class cl_bpdcasp102019 {
        $this->si208_vlativocircuinvestapliccurtoprazo = ($this->si208_vlativocircuinvestapliccurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircuinvestapliccurtoprazo"]:$this->si208_vlativocircuinvestapliccurtoprazo);
        $this->si208_vlativocircuestoques = ($this->si208_vlativocircuestoques == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircuestoques"]:$this->si208_vlativocircuestoques);
        $this->si208_vlativocircuvpdantecipada = ($this->si208_vlativocircuvpdantecipada == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircuvpdantecipada"]:$this->si208_vlativocircuvpdantecipada);
-       $this->si208_vlativonaocircucredilongoprazo = ($this->si208_vlativonaocircucredilongoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircucredilongoprazo"]:$this->si208_vlativonaocircucredilongoprazo);
-       $this->si208_vlativonaocircuinvestemplongpraz = ($this->si208_vlativonaocircuinvestemplongpraz == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuinvestemplongpraz"]:$this->si208_vlativonaocircuinvestemplongpraz);
-       $this->si208_vlativonaocircuestoques = ($this->si208_vlativonaocircuestoques == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuestoques"]:$this->si208_vlativonaocircuestoques);
-       $this->si208_vlativonaocircuvpdantecipada = ($this->si208_vlativonaocircuvpdantecipada == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuvpdantecipada"]:$this->si208_vlativonaocircuvpdantecipada);
+       $this->si208_vlativonaocircurlp = ($this->si208_vlativonaocircurlp == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircurlp"]:$this->si208_vlativonaocircurlp);
        $this->si208_vlativonaocircuinvestimentos = ($this->si208_vlativonaocircuinvestimentos == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuinvestimentos"]:$this->si208_vlativonaocircuinvestimentos);
        $this->si208_vlativonaocircuimobilizado = ($this->si208_vlativonaocircuimobilizado == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuimobilizado"]:$this->si208_vlativonaocircuimobilizado);
        $this->si208_vlativonaocircuintagivel = ($this->si208_vlativonaocircuintagivel == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuintagivel"]:$this->si208_vlativonaocircuintagivel);
@@ -119,17 +110,8 @@ class cl_bpdcasp102019 {
      if($this->si208_vlativocircuvpdantecipada == null ){
          $this->si208_vlativocircuvpdantecipada = 0;
      }
-     if($this->si208_vlativonaocircucredilongoprazo == null ){
-         $this->si208_vlativonaocircucredilongoprazo = 0;
-     }
-     if($this->si208_vlativonaocircuinvestemplongpraz == null ){
-         $this->si208_vlativonaocircuinvestemplongpraz = 0;
-     }
-     if($this->si208_vlativonaocircuestoques == null ){
-         $this->si208_vlativonaocircuestoques = 0;
-     }
-     if($this->si208_vlativonaocircuvpdantecipada == null ){
-         $this->si208_vlativonaocircuvpdantecipada = 0;
+     if($this->si208_vlativonaocircurlp == null ){
+         $this->si208_vlativonaocircurlp = 0;
      }
      if($this->si208_vlativonaocircuinvestimentos == null ){
          $this->si208_vlativonaocircuinvestimentos = 0;
@@ -176,10 +158,7 @@ class cl_bpdcasp102019 {
                                       ,si208_vlativocircuinvestapliccurtoprazo 
                                       ,si208_vlativocircuestoques 
                                       ,si208_vlativocircuvpdantecipada 
-                                      ,si208_vlativonaocircucredilongoprazo 
-                                      ,si208_vlativonaocircuinvestemplongpraz 
-                                      ,si208_vlativonaocircuestoques 
-                                      ,si208_vlativonaocircuvpdantecipada 
+                                      ,si208_vlativonaocircurlp
                                       ,si208_vlativonaocircuinvestimentos 
                                       ,si208_vlativonaocircuimobilizado 
                                       ,si208_vlativonaocircuintagivel 
@@ -196,11 +175,8 @@ class cl_bpdcasp102019 {
                                ,$this->si208_vlativocircuinvestapliccurtoprazo 
                                ,$this->si208_vlativocircuestoques 
                                ,$this->si208_vlativocircuvpdantecipada 
-                               ,$this->si208_vlativonaocircucredilongoprazo 
-                               ,$this->si208_vlativonaocircuinvestemplongpraz 
-                               ,$this->si208_vlativonaocircuestoques 
-                               ,$this->si208_vlativonaocircuvpdantecipada 
-                               ,$this->si208_vlativonaocircuinvestimentos 
+                               ,$this->si208_vlativonaocircurlp
+                               ,$this->si208_vlativonaocircuinvestimentos
                                ,$this->si208_vlativonaocircuimobilizado 
                                ,$this->si208_vlativonaocircuintagivel
                                ,$this->si208_vltotalativo

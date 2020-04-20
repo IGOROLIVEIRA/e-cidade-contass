@@ -36,6 +36,14 @@ db_input('z01_nomeorg',40,$Iz01_nome,true,'text',3,'')
        ?>
     </td>
   </tr>
+    <tr id="tr_edital">
+        <td>
+            <b><?="Edital:"?></b>
+        </td>
+        <td>
+            <?= db_input('si06_edital', 10, $Isi06_edital, true, 'text', $db_opcao, '', '', '', '', 10);?>
+        </td>
+    </tr>
   <tr>
     <td nowrap title="<?=@$Tsi06_numeroprc?>">
        <?=@$Lsi06_numeroprc?>
@@ -246,6 +254,7 @@ db_input('si06_processocompra',10,$Isi06_processocompra,true,'text',$db_opcao," 
 </div>
 </form>
 <script>
+    js_exibeEdital();
 function js_pesquisasi06_orgaogerenciador(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgmorgao1|z01_numcgm|z01_nome','Pesquisa',true);
@@ -314,10 +323,11 @@ function js_mostrapcproc1(chave1,chave2){
 
 function js_pesquisa(){
 	parent.document.formaba.db_itens.disabled=true;
-  js_OpenJanelaIframe('','db_iframe_adesaoregprecos','func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_adesaoregprecos','func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial|si06_anocadastro','Pesquisa',true);
 }
-function js_preenchepesquisa(chave){
+function js_preenchepesquisa(chave, anocadastro){
   db_iframe_adesaoregprecos.hide();
+  js_exibeEdital(anocadastro);
   <?
   if($db_opcao){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
@@ -348,5 +358,12 @@ function js_pesquisal20_codtipocom(mostra){
 	  document.form1.pc50_descr.value = chave2;
 	  db_iframe_pctipocompra.hide();
 	}
-
+    function js_exibeEdital(ano=null){
+        let anousuario = "<?=db_getsession('DB_anousu');?>";
+        if(parseInt(anousuario) >= 2020 && (!ano || ano)){
+            document.getElementById('tr_edital').style.display = '';
+        }else{
+            document.getElementById('tr_edital').style.display = 'none';
+        }
+    }
 </script>

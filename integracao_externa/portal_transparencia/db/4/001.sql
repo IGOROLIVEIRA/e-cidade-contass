@@ -22,6 +22,7 @@ CREATE TABLE servidor_movimentacoes (
 
   cargo        character varying(255) NOT NULL,
   lotacao      character varying(255) NOT NULL,
+  localtrabalho character varying(255) NOT NULL,
   vinculo      character varying(255) NOT NULL,
   CONSTRAINT servidor_movimentacoes_id_pk         PRIMARY KEY (id), 
   CONSTRAINT servidor_movimentacoes_servidores_fk FOREIGN KEY (servidor_id) REFERENCES servidores(id)
@@ -31,6 +32,7 @@ create index servidores_ano_in     on servidor_movimentacoes using btree ( ano )
 create index servidores_mes_in     on servidor_movimentacoes using btree ( mes );
 create index servidores_cargo_in   on servidor_movimentacoes using btree ( cargo );
 create index servidores_lotacao_in on servidor_movimentacoes using btree ( lotacao );
+create index servidores_localtrabalho_in on servidor_movimentacoes using btree ( localtrabalho );
 create index servidores_vinculo_in on servidor_movimentacoes using btree ( vinculo );
 create index servidores_ano_mes_in on servidor_movimentacoes using btree ( ano, mes );
 

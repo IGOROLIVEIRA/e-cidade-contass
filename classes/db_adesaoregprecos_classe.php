@@ -50,7 +50,11 @@ class cl_adesaoregprecos {
    var $si06_processocompra = 0; 
    var $si06_fornecedor = 0; 
    var $si06_processoporlote = 0;
-   // cria propriedade com as variaveis do arquivo 
+   var $si06_edital = null;
+   var $si06_cadinicial = null;
+   var $si06_exercicioedital = null;
+   var $si06_anocadastro = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si06_sequencial = int8 = Sequencial 
                  si06_orgaogerenciador = int8 = Orgão Gerenciador 
@@ -70,6 +74,10 @@ class cl_adesaoregprecos {
                  si06_processocompra = int8 = Processo de compra 
                  si06_fornecedor = int8 = Fornecedor 
                  si06_processoporlote = int8 = Processo por Lote 
+                 si06_edital = int8 = Número do edital 
+                 si06_exercicioedital = int8 = Exercício do edital 
+                 si06_cadinicial = int4 = Cadastro Inicial 
+                 si06_anocadastro = int4 = Ano cadastro 
                  ";
    //funcao construtor da classe 
    function cl_adesaoregprecos() { 
@@ -143,6 +151,10 @@ class cl_adesaoregprecos {
        $this->si06_processocompra = ($this->si06_processocompra == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_processocompra"]:$this->si06_processocompra);
        $this->si06_fornecedor = ($this->si06_fornecedor == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_fornecedor"]:$this->si06_fornecedor);
        $this->si06_processoporlote = ($this->si06_processoporlote == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_processoporlote"]:$this->si06_processoporlote);
+       $this->si06_edital = ($this->si06_edital == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_edital"]:$this->si06_edital);
+       $this->si06_exercicioedital = ($this->si06_exercicioedital == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_exercicioedital"]:$this->si06_exercicioedital);
+       $this->si06_cadinicial = ($this->si06_cadinicial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_cadinicial"]:$this->si06_cadinicial);
+       $this->si06_anocadastro = ($this->si06_anocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_anocadastro"]:$this->si06_anocadastro);
      }else{
        $this->si06_sequencial = ($this->si06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"]:$this->si06_sequencial);
      }
@@ -169,6 +181,18 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
+     if(!$this->si06_edital && db_getsession('DB_anousu') >= 2020){
+       $this->erro_sql = " Campo Edital não Informado.";
+       $this->erro_campo = "si06_edital";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if(!$this->si06_exercicioedital){
+       $this->si06_exercicioedital = 'null';
+     }
      if($this->si06_anoproc == null ){
        $this->erro_sql = " Campo Ano Processo nao Informado.";
        $this->erro_campo = "si06_anoproc";
@@ -178,8 +202,7 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
-
-     if($this->si06_numeroprc == null ){ 
+     if($this->si06_numeroprc == null ){
        $this->erro_sql = " Campo Número do PRC nao Informado.";
        $this->erro_campo = "si06_numeroprc";
        $this->erro_banco = "";
@@ -315,7 +338,13 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
-     
+
+     if($this->si06_cadinicial == null && db_getsession('DB_anousu') >= 2020){
+       $this->si06_cadinicial = 1;
+     }else{
+       $this->si06_cadinicial = 'null';
+     }
+
     if($si06_sequencial == "" || $si06_sequencial == null ){
        $result = db_query("select nextval('sic_adesaoregprecos_si06_sequencial_seq')"); 
        if($result==false){
@@ -369,6 +398,10 @@ class cl_adesaoregprecos {
                                       ,si06_processoporlote
                                       ,si06_instit
                                       ,si06_anoproc
+                                      ,si06_edital
+                                      ,si06_exercicioedital
+                                      ,si06_cadinicial
+                                      ,si06_anocadastro
                        )
                 values (
                                 $this->si06_sequencial
@@ -390,6 +423,10 @@ class cl_adesaoregprecos {
                                ,$this->si06_processoporlote
                                ,".db_getsession("DB_instit")."
                                ,$this->si06_anoproc
+                               ,$this->si06_edital
+                               ,$this->si06_exercicioedital
+                               ,$this->si06_cadinicial
+                               ,$this->si06_anocadastro
                       )";
      $result = db_query($sql);
      if($result==false){ 
@@ -764,6 +801,27 @@ class cl_adesaoregprecos {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->si06_edital)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])){
+       $sql  .= $virgula." si06_edital = $this->si06_edital ";
+       $virgula = ",";
+       if(trim($this->si06_edital) == null ){
+         $this->erro_sql = " Campo Edital não Informado.";
+         $this->erro_campo = "si06_edital";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si06_cadinicial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_cadinicial"])){
+       $sql  .= $virgula." si06_cadinicial = $this->si06_cadinicial ";
+       $virgula = ",";
+     }
+     if(trim($this->si06_exercicioedital)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_exercicioedital"])){
+       $sql  .= $virgula." si06_exercicioedital = $this->si06_exercicioedital ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($si06_sequencial!=null){

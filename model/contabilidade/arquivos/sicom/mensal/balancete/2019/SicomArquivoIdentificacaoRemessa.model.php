@@ -24,6 +24,25 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
    * @var String
    */
   protected $sNomeArquivo = 'IDE';
+
+
+    protected $bEncerramento = false;
+
+    /**
+     * @return boolean
+     */
+    public function isEncerramento()
+    {
+        return $this->bEncerramento;
+    }
+
+    /**
+     * @param boolean $bEncerramento
+     */
+    public function setEncerramento($bEncerramento)
+    {
+        $this->bEncerramento = $bEncerramento;
+    }
   
   /**
    * 
@@ -93,7 +112,6 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
     	  throw new Exception($clide->erro_msg);
       }
     }
-    
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
       
     	$clide = new cl_ide2019();
@@ -104,7 +122,11 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 		  $clide->si11_codorgao							= $oDadosIde->codorgao;
 		  $clide->si11_tipoorgao            = $oDadosIde->tipoorgao;
 		  $clide->si11_exercicioreferencia  = db_getsession("DB_anousu");
-		  $clide->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  if($this->bEncerramento){
+              $clide->si11_mesreferencia    =  '13';
+          }else {
+              $clide->si11_mesreferencia = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          }
 		  $clide->si11_datageracao          = date("d-m-Y");
 		  $clide->si11_codcontroleremessa   = " ";
 		  $clide->si11_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];

@@ -30,6 +30,11 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   protected $sNomeArquivo = 'LQD';
 
   /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+  /**
    *
    * Construtor da classe
    */
@@ -233,6 +238,9 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);
         $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 3);
+        if (in_array($oDadosLiquidacaoFonte->si119_codfontrecursos, $this->aFontesEncerradas)) {
+            $oDadosLiquidacaoFonte->si119_codfontrecursos = substr($oDadosLiquidacaoFonte->si119_codfontrecursos, 0 , 1).'59';
+        }
         $oDadosLiquidacaoFonte->si119_valorfonte = $oLiquidacao->e53_valor;
         $oDadosLiquidacaoFonte->si119_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 

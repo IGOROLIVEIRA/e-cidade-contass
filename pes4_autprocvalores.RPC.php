@@ -115,13 +115,13 @@ try {
     $sSqlConsultaAutonomos .= "       pis,                                                                                                               ";
     $sSqlConsultaAutonomos .= "       cbo,                                                                                                               ";
     $sSqlConsultaAutonomos .= "       configurado,                                                                                                       ";
-    $sSqlConsultaAutonomos .= "       data_liquidacao,                                                                                                   ";
+    $sSqlConsultaAutonomos .= "       c70_data AS data_liquidacao,                                                                                                   ";
     $sSqlConsultaAutonomos .= "       sum(valor_inss) as valor_inss,                                                                                     ";
     $sSqlConsultaAutonomos .= "       sum(valor_irrf) as valor_irrf,                                                                                     ";
     $sSqlConsultaAutonomos .= "       sum(c70_valor) as valor_servico                                                                                    ";
     $sSqlConsultaAutonomos .= " from (select z01_nome,                                                                                                   ";
     $sSqlConsultaAutonomos .= "              z01_numcgm, e20_pagordem as codord,                                                                         ";
-    $sSqlConsultaAutonomos .= "              retencaoreceitas.e23_dtcalculo as data_liquidacao,                                                          ";
+    $sSqlConsultaAutonomos .= "              retencaoreceitas.e23_dtcalculo as data_calculo,                                                          ";
     $sSqlConsultaAutonomos .= "              sum(coalesce((select rr.e23_valorretencao                                                                   ";
     $sSqlConsultaAutonomos .= "                              from retencaoreceitas rr                                                                    ";
     $sSqlConsultaAutonomos .= "                                   inner join retencaotiporec  on retencaotiporec.e21_sequencial = rr.e23_retencaotiporec ";
@@ -153,7 +153,7 @@ try {
     $sSqlConsultaAutonomos .= "        where retencaotiporec.e21_retencaotiporecgrupo = 1                                                                ";
     $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_ativo is true                                                                          ";
     $sSqlConsultaAutonomos .= "          and retencaotiporec.e21_retencaotipocalc in (1,2,3,7)                                                           ";
-    $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_dtcalculo between '{$sDataCompIni}'::date and '{$sDataCompFim}'::date                  ";
+    $sSqlConsultaAutonomos .= "          and retencaoreceitas.e23_dtcalculo > '{$sDataCompIni}'::date ";
     $sSqlConsultaAutonomos .= "          and length(trim(cgm.z01_cgccpf)) <= 11 																																				 ";
     $sSqlConsultaAutonomos .= "        group by e20_pagordem,                                                                                            ";
     $sSqlConsultaAutonomos .= "              e23_dtcalculo,                                                                                              ";
@@ -169,6 +169,7 @@ try {
     $sSqlConsultaAutonomos .= "       inner join conlancamdoc on c70_codlan       = c71_codlan                                                           ";
     $sSqlConsultaAutonomos .= "       inner join conhistdoc   on c71_coddoc       = c53_coddoc                                                           ";
     $sSqlConsultaAutonomos .= " where c53_tipo = 20                                                                                                      ";
+    $sSqlConsultaAutonomos .= " AND c70_data BETWEEN '{$sDataCompIni}'::date and '{$sDataCompFim}'::date ";
     $sSqlConsultaAutonomos .= " group by codord,                                                                                                         ";
     $sSqlConsultaAutonomos .= "          z01_nome,                                                                                                       ";
     $sSqlConsultaAutonomos .= "          z01_numcgm,                                                                                                     ";

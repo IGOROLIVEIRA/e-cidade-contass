@@ -52,7 +52,16 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   $clpcmater->pc01_tabela = $pc01_tabela;
   $clpcmater->pc01_taxa   = $pc01_taxa;
   /*FIM - OC3770*/
-  $clpcmater->alterar($pc01_codmater);
+
+  if ($pc01_obras == "0"){
+    $erro_msg = "Campo  Material Utilizado em Obras/serviços?  nao informado.";
+    $sqlerro  = true;
+    db_msgbox($erro_msg);
+  }
+
+  if($sqlerro == false){
+    $clpcmater->alterar($pc01_codmater);
+  }
   if($clpcmater->erro_status==0){
     $sqlerro = true;
   }else{

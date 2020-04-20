@@ -54,7 +54,8 @@ $aMeses = array(
 
             <div>
                 <strong>Mês</strong>
-                <select name="mes" onchange="carregaEntesDotacoes(this.value);">
+                <!-- <select name="mes" onchange="carregaEntesDotacoes(this.value);"> -->
+                <select name="mes" onchange="carregaEntesProjetos(this.value);">
                     <?php foreach ($aMeses as $key => $value): ?>
                         <option value="<?= $key ?>"><?= $value ?></option>
                     <?php endforeach; ?>
@@ -86,8 +87,9 @@ $aMeses = array(
                 </table>
 
             </div>
-
-            <div>
+ <!-- FEITO POR: Igor Ruas: foi solicitado para selecioar projetos no lugar de dotação.
+ até ficar definido isso somente comentei a tabela antiga -->
+            <!-- <div>
                 <table class="table">
                     <thead>
                     <tr>
@@ -110,7 +112,32 @@ $aMeses = array(
                     </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
+
+            <!-- <div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th class="th_titulo">Projetos para Rateio</th>
+                        <th>Selecionar</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="table_projetos">
+
+                    </tbody>
+
+                    <tbody>
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <input type="button" value="Marcar todos" onclick="checkProjAtivs(true);">
+                            <input type="button" value="Desmarcar todos" onclick="checkProjAtivs(false);">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div> -->
 
             <input name="processar" type="submit" id="processar" value="Processar">
         </fieldset>
@@ -129,7 +156,8 @@ $aMeses = array(
             exec: 'processarRateio',
             mes: form.mes.value,
             entes: [],
-            dotacoes: []
+            dotacoes: [],
+            projetos: []
         };
 
         var entes = form.elements['entes[]'];
@@ -171,6 +199,24 @@ $aMeses = array(
 
             }
         }
+        var projetos = form.elements['projetos[]'];
+        if (projetos) {
+            if (projetos['forEach']) {
+
+                projetos.forEach(function (item) {
+                    if (item.checked) {
+                        params.projetos.push(item.value);
+                    }
+                });
+
+            } else {
+
+                if (projetos.checked) {
+                    params.projetos.push(projetos.value);
+                }
+
+            }
+        }
 
         js_divCarregando('Aguarde', 'div_aguarde');
 
@@ -204,7 +250,11 @@ $aMeses = array(
 
     }
 
-    function carregaEntesDotacoes(mes) {
+    // function carregaEntesDotacoes(mes) {
+    //     carregarEntesConsorciados(mes);
+    // }
+
+    function carregaEntesProjetos(mes) {
         carregarEntesConsorciados(mes);
     }
 
@@ -309,6 +359,44 @@ $aMeses = array(
         });
 
     }
+    function carregarProjAtivParaRateio(mes) {
+
+    var tableProjetos = document.getElementById('table_projetos');
+
+    tableProjetos.innerHTML = '<tr><td colspan="3" class="text-center">carregando...</td></tr>';
+
+    var params = {
+        exec: 'buscaProjAtiv',
+        mes: mes
+    };
+
+    novoAjax(params, function(e) {
+
+        var projetos = JSON.parse(e.responseText).projetos;
+
+        var trs   = [];
+
+        projetos.forEach(function(projeto, i) {
+
+            var tr = ''
+                + '<tr class="bg_' + (i % 2 == 0) + '">'
+                + '<td class="text-center">' + projeto.codigo + '</td>'
+                + '<td class="th_titulo">'+ projeto.descricao + '</td>'
+                + '<td class="text-center">'
+                + '<input value="' + projeto.codigo + '" type="checkbox" name="projetos[]">'
+                + '</td>'
+                + '</tr>';
+
+            trs.push(tr);
+
+        });
+
+        tableProjetos.innerHTML = trs.join('');
+
+    });
+
+    }
+
 
     function checkDotacoes(valor) {
 
@@ -327,7 +415,26 @@ $aMeses = array(
 
     }
 
-    carregaEntesDotacoes('01');
-    carregarDotacoesParaRateio();
+    function checkProjAtivs(valor) {
+
+      var projetos = document.form1.elements['projetos[]'];
+      if (projetos) {
+          if (projetos['forEach']) {
+
+            projetos.forEach(function (item) {
+                  item.checked = !!valor;
+              });
+
+          } else {
+            projetos.checked = !!valor;
+          }
+      }
+
+      }
+
+    // carregaEntesDotacoes('01');
+    carregaEntesProjetos('01');
+    //carregarDotacoesParaRateio();
+    //carregarProjAtivParaRateio();
 
 </script>

@@ -1043,4 +1043,49 @@ class cl_gerfsal {
     
   }
 
+  public function verificaRubrica($rubrica, $matriculas = null) {
+    $sWhereMatricula = "";
+    if (!empty($matriculas)) {
+      $sWhereMatricula = "AND r14_regist IN ($matriculas)";
+    }
+    $sql = "SELECT r14_regist AS regist,r14_rubric
+            FROM gerfsal
+            INNER JOIN rhrubricas ON rh27_rubric = r14_rubric
+            AND rh27_instit = ".db_getsession("DB_instit")."
+            WHERE r14_anousu = ".db_anofolha()."
+            AND r14_mesusu = ".db_mesfolha()."
+            AND r14_instit = ".db_getsession("DB_instit")."
+            {$sWhereMatricula}
+            AND r14_rubric = '{$rubrica}'";
+    return $sql;
+  }
+
+  public function verificaValorNegativo($matriculas = null) {
+    $sWhereMatricula = "";
+    if (!empty($matriculas)) {
+      $sWhereMatricula = "AND r14_regist IN ($matriculas)";
+    }
+    $sql = "SELECT 
+                   r14_regist AS regist,
+                   round(provento-desconto,2) AS liquido
+            FROM
+                (SELECT r14_regist,sum(CASE
+                                WHEN r14_pd = 1 THEN r14_valor
+                                ELSE 0
+                            END) AS provento,
+                        sum(CASE
+                                WHEN r14_pd = 2 THEN r14_valor
+                                ELSE 0
+                            END) AS desconto
+                 FROM gerfsal
+                 INNER JOIN rhrubricas ON rh27_rubric = r14_rubric
+                 AND rh27_instit = ".db_getsession("DB_instit")."
+                 WHERE r14_anousu = ".db_anofolha()."
+                     AND r14_mesusu = ".db_mesfolha()."
+                     AND r14_instit = ".db_getsession("DB_instit")."
+                     {$sWhereMatricula}
+                     AND r14_pd != 3 GROUP BY r14_regist) AS x WHERE round(provento-desconto,2) < 0";
+    return $sql;
+  }
+
 }

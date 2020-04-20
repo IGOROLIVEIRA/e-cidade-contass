@@ -67,6 +67,7 @@ class GerarDISPENSA extends GerarAM
         $aDISPENSA10 = pg_fetch_array($rsDISPENSA10, $iCont);
 
         $aCSVDISPENSA10['si74_tiporegistro'] = $this->padLeftZero($aDISPENSA10['si74_tiporegistro'], 2);
+        $aCSVDISPENSA10['si74_tipocadastro'] = $this->padLeftZero($aDISPENSA10['si74_tipocadastro'], 1);
         $aCSVDISPENSA10['si74_codorgaoresp'] = $this->padLeftZero($aDISPENSA10['si74_codorgaoresp'], 2);
         $aCSVDISPENSA10['si74_codunidadesubresp'] = $this->padLeftZero($aDISPENSA10['si74_codunidadesubresp'], 5);
         $aCSVDISPENSA10['si74_exercicioprocesso'] = $this->padLeftZero($aDISPENSA10['si74_exercicioprocesso'], 4);
@@ -274,7 +275,7 @@ class GerarDISPENSA extends GerarAM
           $aCSVDISPENSA18['si82_nrodocumento']                        = substr($aDISPENSA18['si82_nrodocumento'], 0, 14);
           $aCSVDISPENSA18['si82_datacredenciamento']                  = $this->sicomDate($aDISPENSA18['si82_datacredenciamento']);
           $aCSVDISPENSA18['si82_nrolote']                             = $aDISPENSA18['si82_nrolote'] == '0' ? ' ' : substr($aDISPENSA18['si82_nrolote'], 0, 4);
-          $aCSVDISPENSA18['si82_coditem']                             = $this->padLeftZero($aDISPENSA18['si82_coditem'], 15);
+          $aCSVDISPENSA18['si82_coditem']                             = substr($aDISPENSA18['si82_coditem'], 0, 15);
           $aCSVDISPENSA18['si82_nroinscricaoestadual']                = substr($aDISPENSA18['si82_nroinscricaoestadual'], 0, 30);
           $aCSVDISPENSA18['si82_ufinscricaoestadual']                 = strlen($aDISPENSA18['si82_ufinscricaoestadual']) < 2 ? ' ' : substr($aDISPENSA18['si82_ufinscricaoestadual'], 0, 2);
           $aCSVDISPENSA18['si82_nrocertidaoregularidadeinss']         = substr($aDISPENSA18['si82_nrocertidaoregularidadeinss'], 0, 30);

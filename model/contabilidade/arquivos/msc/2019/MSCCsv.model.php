@@ -1,6 +1,6 @@
 <?php
 
-require_once("model/MSC.model.php");
+require_once("model/contabilidade/arquivos/msc/".db_getsession("DB_anousu")."/MSC.model.php");
 
 class MSCCsv extends MSC {
 

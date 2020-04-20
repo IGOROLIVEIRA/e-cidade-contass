@@ -305,6 +305,18 @@ class ExecucaoDeContratos{
         return $aAcordosRetorno;
     }
 
+	public static function getAcordos($sWhere){
+		$oDaoAcordo    = db_utils::getDao("acordo");
+		$sSqlAcordos = $oDaoAcordo->sql_query(null,"ac16_sequencial","ac16_anousu", $sWhere);
+		$rsBuscaAcordo = $oDaoAcordo->sql_record($sSqlAcordos);
+		$aAcordosRetorno = array();
+		for ($iRowItem = 0; $iRowItem < pg_num_rows($rsBuscaAcordo); $iRowItem++) {
+			$aAcordosRetorno[] = db_utils::fieldsMemory($rsBuscaAcordo, $iRowItem);
+		}
+
+		return $aAcordosRetorno;
+	}
+
     public static function getValoresEmpenho($iEmpenho){
         $oDaoEmpempenho    = db_utils::getDao("empempenho");
         $sSqlEmpempenho    = $oDaoEmpempenho->sql_query(null,"e60_vlremp,e60_vlrliq,e60_vlrpag,e60_vlranu",null,"e60_numemp = $iEmpenho",null,null);

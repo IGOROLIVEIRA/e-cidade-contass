@@ -39,7 +39,6 @@ class cl_flpgo102020 {
     var $si195_datconcessaoaposentadoriapensao_mes = null;
     var $si195_datconcessaoaposentadoriapensao_ano = null;
     var $si195_datconcessaoaposentadoriapensao = null;
-    var $si195_datconcessaoaposentadoriapensao = null;
     var $si195_dsccargo = null;
     var $si195_codcargo = 0;
     var $si195_sglcargo = null;
@@ -419,7 +418,7 @@ class cl_flpgo102020 {
                                ,'$this->si195_dscdependencia'
                                ,".($this->si195_datafastpreliminar == "null" || $this->si195_datafastpreliminar == ""?"null":"'".$this->si195_datafastpreliminar."'")."
                                ,'$this->si195_dscsituacao'
-                               ,$this->si195_indpensionistaprevidenciario
+                               ,".($this->si195_indpensionistaprevidenciario == null ? 'NULL' : $this->si195_indpensionistaprevidenciario)." 
                                ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")."
                                ,'$this->si195_dsccargo'
                                ,$this->si195_codcargo

@@ -393,6 +393,27 @@ contrato = function () {
             return false;
         }
 
+      if(iGrupoContrato == 1 && iQtdPeriodoVigencia == ""){
+            alert('Unid.Execução/Entrega não informado.');
+            $('ac16_qtdperiodo').focus();
+            return false;
+      }
+      if(iGrupoContrato == 2 && iQtdPeriodoVigencia == ""){
+            alert('Unid.Execução/Entrega não informado.');
+            $('ac16_qtdperiodo').focus();
+            return false;
+      }
+      if(iGrupoContrato == 3 && iQtdPeriodoVigencia == ""){
+            alert('Unid.Execução/Entrega não informado.');
+            $('ac16_qtdperiodo').focus();
+            return false;
+      }
+      if(iGrupoContrato == 7 && iQtdPeriodoVigencia == ""){
+            alert('Unid.Execução/Entrega não informado.');
+            $('ac16_qtdperiodo').focus();
+            return false;
+      }
+
         var oParam      = new Object();
         oParam.exec     = "salvarContrato";
         oParam.contrato = new Object();

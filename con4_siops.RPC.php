@@ -103,11 +103,17 @@ switch ($oParam->exec) {
 
                     }
 
-                }
+                    system("rm -f {$sNomeZip}.zip");
+                    system("bin/zip -q {$sNomeZip}.zip $sArquivosZip");
+                    $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$sNomeZip}.zip";
 
-                system("rm -f {$sNomeZip}.zip");
-                system("bin/zip -q {$sNomeZip}.zip $sArquivosZip");
-                $oRetorno->caminhoZip = $oRetorno->nomeZip = "{$sNomeZip}.zip";
+                } else {
+
+                    $oRetorno->status  = 2;
+                    $sGetMessage       = "Arquivos Siops não encontrados para o ano $iAnoUsu.";
+                    $oRetorno->message = $sGetMessage;
+
+                }
 
             }
 

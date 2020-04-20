@@ -124,34 +124,36 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
         $sSqldadoscomplementares = $cldadoscomplementareslrf->sql_query(null,"*",null, "c218_mesusu=".$this->sDataFinal['5'].$this->sDataFinal['6']." AND c218_codorgao = '$iCodOrgao' AND c218_anousu = ".db_getsession('DB_anousu')." ");
         $rsDadoscomplementares = $cldadoscomplementareslrf->sql_record($sSqldadoscomplementares);
         $rsDadoscomplementares = db_utils::getColectionByRecord($rsDadoscomplementares);
-//    echo '<pre>'; var_dump($rsDadoscomplementares);die;
+    //echo '<pre>'; var_dump($rsDadoscomplementares);die;
         foreach ($rsDadoscomplementares as $dados) {
 
             $cldclrf10 = new cl_dclrf102020();
             $cldclrf10->si157_tiporegistro = 10;
-            $cldclrf10->si157_codorgao = $dados->c218_codorgao;
-            $cldclrf10->si157_passivosreconhecidos = $dados->c218_passivosreconhecidos;
-            $cldclrf10->si157_vlsaldoatualconcgarantiainterna = $dados->c218_vlsaldoatualconcgarantiainterna;
-            $cldclrf10->si157_vlsaldoatualconcgarantia = $dados->c218_vlsaldoatualconcgarantia;
+            $cldclrf10->si157_codorgao                          = $dados->c218_codorgao;
+            $cldclrf10->si157_passivosreconhecidos              = $dados->c218_passivosreconhecidos;
+            $cldclrf10->si157_vlsaldoatualconcgarantiainterna   = $dados->c218_vlsaldoatualconcgarantiainterna;
+            $cldclrf10->si157_vlsaldoatualconcgarantia          = $dados->c218_vlsaldoatualconcgarantia;
             $cldclrf10->si157_vlsaldoatualcontragarantiainterna = $dados->c218_vlsaldoatualcontragarantiainterna;
             $cldclrf10->si157_vlsaldoatualcontragarantiaexterna = $dados->c218_vlsaldoatualcontragarantiaexterna;
-            $cldclrf10->si157_medidascorretivas = $this->removeCaracteres($dados->c218_medidascorretivas);
-            $cldclrf10->si157_recalieninvpermanente = $dados->c218_recalieninvpermanente;
-            $cldclrf10->si157_vldotatualizadaincentcontrib = $dados->c218_vldotatualizadaincentcontrib;
-            $cldclrf10->si157_vlempenhadoicentcontrib = $dados->c218_vlempenhadoicentcontrib;
-            $cldclrf10->si157_vldotatualizadaincentinstfinanc = $dados->c218_vldotatualizadaincentinstfinanc;
-            $cldclrf10->si157_vlempenhadoincentinstfinanc = $dados->c218_vlempenhadoincentinstfinanc;
-            $cldclrf10->si157_vlliqincentcontrib = $dados->c218_vlliqincentcontrib;
-            $cldclrf10->si157_vlliqincentinstfinanc = $dados->c218_vlliqincentinstfinanc;
-            $cldclrf10->si157_vlirpnpincentcontrib = $dados->c218_vlirpnpincentcontrib;
-            $cldclrf10->si157_vlirpnpincentinstfinanc = $dados->c218_vlirpnpincentinstfinanc;
-            $cldclrf10->si157_vlrecursosnaoaplicados = $dados->c218_vlrecursosnaoaplicados;
-            $cldclrf10->si157_vlapropiacaodepositosjudiciais = $dados->c218_vlapropiacaodepositosjudiciais;
-            $cldclrf10->si157_vloutrosajustes = $dados->c218_vloutrosajustes;
-            $cldclrf10->si157_metarrecada = $dados->c218_metarrecada;
-            $cldclrf10->si157_dscmedidasadotadas = $this->removeCaracteres($dados->c218_dscmedidasadotadas);//OC8680
-            $cldclrf10->si157_instit = db_getsession("DB_instit");
-            $cldclrf10->si157_mes = $dados->c218_mesusu;
+            $cldclrf10->si157_medidascorretivas                 = $this->removeCaracteres($dados->c218_medidascorretivas);
+            $cldclrf10->si157_recalieninvpermanente             = $dados->c218_recalieninvpermanente;
+            $cldclrf10->si157_vldotinicialincentcontrib         = $dados->c218_vldotinicialincentivocontrib;
+            $cldclrf10->si157_vldotatualizadaincentcontrib      = $dados->c218_vldotatualizadaincentcontrib;
+            $cldclrf10->si157_vlempenhadoicentcontrib           = $dados->c218_vlempenhadoicentcontrib;
+            $cldclrf10->si157_vldotinicialincentinstfinanc      = $dados->c218_vldotincentconcedinstfinanc;
+            $cldclrf10->si157_vldotatualizadaincentinstfinanc   = $dados->c218_vldotatualizadaincentinstfinanc;
+            $cldclrf10->si157_vlempenhadoincentinstfinanc       = $dados->c218_vlempenhadoincentinstfinanc;
+            $cldclrf10->si157_vlliqincentcontrib                = $dados->c218_vlliqincentcontrib;
+            $cldclrf10->si157_vlliqincentinstfinanc             = $dados->c218_vlliqincentinstfinanc;
+            $cldclrf10->si157_vlirpnpincentcontrib              = $dados->c218_vlirpnpincentcontrib;
+            $cldclrf10->si157_vlirpnpincentinstfinanc           = $dados->c218_vlirpnpincentinstfinanc;
+            $cldclrf10->si157_vlapropiacaodepositosjudiciais    = $dados->c218_vlapropiacaodepositosjudiciais;
+            $cldclrf10->si157_vlajustesrelativosrpps            = $dados->c218_vlajustesrelativosrpps;
+            $cldclrf10->si157_vloutrosajustes                   = $dados->c218_vloutrosajustes;
+            $cldclrf10->si157_metarrecada                       = $dados->c218_metarrecada;
+            $cldclrf10->si157_dscmedidasadotadas                = $this->removeCaracteres($dados->c218_dscmedidasadotadas);//OC8680
+            $cldclrf10->si157_instit                            = db_getsession("DB_instit");
+            $cldclrf10->si157_mes                               = $dados->c218_mesusu;
 
             $cldclrf10->incluir(null);
             if ($cldclrf10->erro_status == 0) {

@@ -47,24 +47,24 @@ $clrotulo->label("o15_codigo");
                     <?php
                     $oInstit = new Instituicao(db_getsession('DB_instit'));
                     if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-                    ?>
-                    <tr>
-                        <td colspan="4">
-                            <fieldset>
-                                <table>
-                                    <tr>
-                                        <td>Tipo da Geração: </td>
-                                        <td>
-                                            <select id="TipoGeracao" class="TipoGeracao">
-                                                <option value="CONSOLIDADO">CONSOLIDADO</option>
-                                                <option value="ISOLADO">ISOLADO</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </td>
-                    </tr>
+                        ?>
+                        <tr>
+                            <td colspan="4">
+                                <fieldset>
+                                    <table>
+                                        <tr>
+                                            <td>Tipo da Geração: </td>
+                                            <td>
+                                                <select id="TipoGeracao" class="TipoGeracao">
+                                                    <option value="CONSOLIDADO">CONSOLIDADO</option>
+                                                    <option value="ISOLADO">ISOLADO</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </td>
+                        </tr>
                     <?php } ?>
                     <tr>
                         <td colspan="2" align="center">Dados</td>
@@ -86,6 +86,10 @@ $clrotulo->label("o15_codigo");
                             <label for="DFC">Demonstração dos Fluxos de Caixa (DFC)</label><br>
                             <input type="checkbox" value="RPSD" id="RPSD" />
                             <label for="RPSD">Restos a Pagar (RPSD)</label><br>
+                            <? if( db_getsession("DB_anousu") >= 2019 ){ ?>
+                                <input type="checkbox" value="PREFUNDEF" id="PREFUNDEF" />
+                                <label for="PREFUNDEF">Precatórios do FUNDEF (PREFUNDEF)</label><br>
+                            <? } ?>
                         </td>
                         <td style="border: 2px groove white;" valign="top">
 

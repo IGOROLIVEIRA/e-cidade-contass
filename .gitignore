@@ -21,3 +21,7 @@ libs/..cache/
 *.yml
 integracao_externa/portal_transparencia/log/
 *.IMPT
+imagens/obras/*
+!imagens/obras/obras.txt
+anexos/*
+.phpintel/

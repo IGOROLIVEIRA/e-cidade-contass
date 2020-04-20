@@ -80,7 +80,8 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
      * selecionar informacoes registro 10
      */
 
-    $sSql       = "select * from consideracoes where si171_mesreferencia = '{$this->sDataFinal['6']}';";
+    $sSql  = "select * from consideracoes where si171_mesreferencia = ".$this->sDataFinal['5'].$this->sDataFinal['6'];
+    $sSql .= " and si171_anousu = ".db_getsession("DB_anousu");
 
     $rsResult10 = db_query($sSql);
 
@@ -92,7 +93,8 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
       $clconsid10->si158_tiporegistro          = 10;
       $clconsid10->si158_codarquivo            = $oDados10->si171_codarquivo;
       $clconsid10->si158_consideracoes         = $oDados10->si171_consideracoes;
-      $clconsid10->si158_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clconsid10->si158_mesreferenciaconsid   = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clconsid10->si158_instit                = db_getsession("DB_instit");
 
       $clconsid10->incluir(null);
       if ($clconsid10->erro_status == 0) {

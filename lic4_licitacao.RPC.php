@@ -7,12 +7,12 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
-
 require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/licitacao.model.php");
 require_once("model/licitacao/SituacaoLicitacao.model.php");
+require_once("model/EditalDocumento.model.php");
 
-$clliclicita = new cl_liclicita;
+$clliclicita       = new cl_liclicita;
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
 $oRetorno          = new stdClass();
@@ -582,6 +582,185 @@ switch ($oParam->exec) {
         }
 
 
-        break;
+    break;
+
+    case "adicionarDocumento":
+
+    	try{
+
+    		$anexo = db_utils::getDao('editaldocumento');
+    		$sSql = $anexo->sql_query(null, 'l48_sequencial', null, "l48_tipo = '$oParam->tipo' and l48_liclicita = $oParam->licitacao");
+    		$rsSql = $anexo->sql_record($sSql);
+
+			if($anexo->numrows > 0){
+				$oRetorno->message = 'Ja existe um documento anexado para esse tipo';
+				$oRetorno->status = 2;
+				break;
+			}
+
+    		$erro = false;
+
+			$target_dir = "anexos/";
+			if(!is_dir($target_dir)){
+				mkdir($target_dir, 0775);
+			}
+
+			$nometmp = $oParam->arquivo;
+
+			// Nome do arquivo temporário gerado no /tmp
+			$path = pathinfo($oParam->arquivo);
+			$filename = md5(time());
+			$ext = $path['extension'];
+
+			$anexo = db_utils::getDao('db_config');
+			$sSqlCliente = $anexo->sql_query(null, 'munic', null, "codigo = ".db_getsession('DB_instit'));
+			$rsSqlCliente = $anexo->sql_record($sSqlCliente);
+			$nomeCliente = strtolower(db_utils::fieldsMemory($rsSqlCliente, 0)->munic);
+			$nomePasta = str_replace(' ', '', $nomeCliente);
+
+			/* Verifica se já existe diretório para a instituição corrente */
+			if(!is_dir($target_dir.$nomePasta)){
+				mkdir($target_dir.$nomePasta, 0775);
+			}
+			$target_dir .= $nomePasta.'/';
+
+			/* Verifica se já existe diretório para a instituição corrente */
+			if(!is_dir($target_dir.'instit_'.db_getsession('DB_instit'))){
+				mkdir($target_dir.'instit_'.db_getsession('DB_instit'), 0775);
+			}
+			$target_dir .= 'instit_'.db_getsession('DB_instit').'/';
+
+			/* Verifica se já existe diretório para o ano corrente */
+			if(!is_dir($target_dir.'/'.db_getsession('DB_anousu'))){
+				mkdir($target_dir.'/'.db_getsession('DB_anousu'), 0775);
+			}
+
+			$target_dir .= db_getsession('DB_anousu').'/';
+
+			/* Verifica se já existe diretório para a licitação corrente */
+			if(!is_dir($target_dir.'/'.$oParam->licitacao)){
+				mkdir($target_dir.'/'.$oParam->licitacao, 0775);
+			}
+			$target_dir .= $oParam->licitacao.'/';
+			// Seta o nome do arquivo destino do upload
+			$arquivoDocument = $target_dir.$filename.".".$ext;
+
+			// Move o arquivo da tmp para o local especificado
+			if(!copy($nometmp, $arquivoDocument)){
+				$erro = true;
+			}
+			unlink($nometmp);
+
+			if(!$erro){
+				$oEdital = new EditalDocumento;
+				$oEdital->setCodigo('');
+				$oEdital->setTipo($oParam->tipo);
+				$nome = explode('/', $nometmp);
+				$oEdital->setLicLicita($oParam->licitacao);
+				$oEdital->setNomeArquivo($nome[1]);
+				$oEdital->setCaminho($arquivoDocument);
+				$oEdital->salvar();
+				$oRetorno->message = 'Anexo cadastrado com sucesso!';
+			}
+		}catch (Exception $erro){
+			$oRetorno->message = $oErro->getMessage();
+			$oRetorno->status  = 2;
+    	}
+    break;
+
+  	case "getDocumento":
+
+    	$oEdital          = new EditalDocumento();
+
+		$aEditalDocumento = $oEdital->getDocumentos($oParam->licitacao);
+
+		$oRetorno->dados  = array();
+
+		for($i = 0; $i < count($aEditalDocumento); $i++) {
+
+			$oDocumentos      = new stdClass();
+			$oDocumentos->iCodigo    = $aEditalDocumento[$i]->getCodigo();
+			$oDocumentos->iTipo = $aEditalDocumento[$i]->getTipo();
+			$oDocumentos->iEdital = $aEditalDocumento[$i]->getEdital();
+			$oRetorno->dados[] = $oDocumentos;
+		}
+
+
+		$oRetorno->detalhe    = "documentos";
+		break;
+
+	case "excluirDocumento":
+		try {
+			$oEdital          = new EditalDocumento($oParam->codigoDocumento);
+			unlink($oEdital->getCaminho());
+       		$oEdital->remover();
+       		$oRetorno->message = 'Documento removido com sucesso!';
+
+    	} catch (Exception $oErro) {
+	  		$oRetorno->message = $oErro->getMessage();
+      		$oRetorno->status  = 2;
+    	}
+
+    break;
+
+	case "downloadDocumento":
+		$oDocumento = new EditalDocumento($oParam->iCodigoDocumento);
+	    $sNomeArquivo = $oDocumento->getNomeArquivo();
+		file_put_contents( $sNomeArquivo, file_get_contents($oDocumento->getCaminho()));
+		ini_set('display_errors', 1);
+		$oRetorno->nomearquivo = $sNomeArquivo;
+    break;
+
+  case "buscaPeriodosItem":
+
+    $oAcordoItem      = new AcordoItem($oParam->iCodigoItem);
+
+    $oRetorno->iCodigoItem = $oParam->iCodigoItem;
+
+    $oRetorno->nomeItem    = $oAcordoItem->getMaterial()->getDescricao();
+    $oRetorno->periodos    = $oAcordoItem->getPeriodosItem();
+
+    break;
+
+  case 'findDadosLicitacao':
+    $oDaoLicEdital = db_utils::getDao("liclicita");
+
+    $campos = "
+                liclicita.l20_codigo,
+                liclancedital.l47_sequencial,
+                liclicita.l20_edital,
+                liclicita.l20_nroedital,
+                liclicita.l20_anousu,
+                pctipocompra.pc50_descr,
+                liclicita.l20_numero,
+                pctipocompra.pc50_pctipocompratribunal,
+                liclicita.l20_objeto,
+                l47_origemrecurso,
+                liclicita.l20_naturezaobjeto,
+                liclicita.l20_cadinicial,
+                liclancedital.l47_linkpub,
+                liclancedital.l47_descrecurso,
+                liclancedital.l47_dataenvio,
+                (CASE
+                     WHEN pc50_pctipocompratribunal IN (48,
+                                                        49,
+                                                        50,
+                                                        52,
+                                                        53,
+                                                        54)
+                          AND liclicita.l20_dtpublic IS NOT NULL THEN liclicita.l20_dtpublic
+                     WHEN pc50_pctipocompratribunal IN (100,
+                                                        101,
+                                                        102,
+                                                        106)
+                          AND liclicita.l20_datacria IS NOT NULL THEN liclicita.l20_datacria
+                 END) AS data_Referencia
+    ";
+
+    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_codigo = '.$oParam->iCodigoLicitacao. ' and EXTRACT(YEAR FROM l20_dtpublic) >= 2020');
+    $rsLicEdital = $oDaoLicEdital->sql_record($sSqlLicEdital);
+    $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
+    $oRetorno->dadosLicitacao = $oDados;
+    break;
 }
 echo $oJson->encode($oRetorno);

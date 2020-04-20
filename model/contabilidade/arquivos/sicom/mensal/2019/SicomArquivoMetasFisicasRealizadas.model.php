@@ -62,8 +62,6 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
 
     db_inicio_transacao();
 
-    if($this->sDataFinal['5'].$this->sDataFinal['6'] == 12 && InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'))->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-
       /*
        * excluir informacoes do mes selecionado registro 10
        */
@@ -74,6 +72,8 @@ class SicomArquivoMetasFisicasRealizadas extends SicomArquivoBase implements iPa
           throw new Exception($clmetareal10->erro_msg);
         }
       }
+
+    if($this->sDataFinal['5'].$this->sDataFinal['6'] == 12 && InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'))->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
 
       require_once ("model/ppaVersao.model.php");
       require_once ("model/ppadespesa.model.php");

@@ -314,7 +314,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $aDados->si26_cnpjorgaocontribuinte = "";
                         $aDados->si26_nroconvenio = "";
                         $aDados->si26_dataassinatura = "";
-                        $aDados->si26_vlarrecadadofonte = $oDadosRec->saldo_arrecadado;
+                        $aDados->si26_vlarrecadadofonte = $oCodDocVlr->c70_valor;
                         $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
                         $aDadosAgrupados[$sHash10]->Reg11[$sHash11][''] = $aDados;

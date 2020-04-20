@@ -78,6 +78,9 @@ function js_enviar(){
 	virgula = ",";
       }
     }
+    if (!confirm('Confirma Inicialização do ponto '+document.querySelector("#mesfolha").value+'/'+document.querySelector("#anofolha").value+'? Caso haja dados lançados no mês serão perdidos.')) {
+      return false;
+    }
     document.form1.action = "pes4_inicializaponto002.php";
     return true;
   }

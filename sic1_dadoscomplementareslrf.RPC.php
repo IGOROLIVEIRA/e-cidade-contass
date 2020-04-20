@@ -70,6 +70,10 @@ switch ($oParam->exec) {
         $oDaoDadoscomplementareslrf->c218_metarrecada = $oParam->dadoscomplementares->c218_metarrecada;
         $oDaoDadoscomplementareslrf->c218_dscmedidasadotadas = $oParam->dadoscomplementares->c218_dscmedidasadotadas;
 
+        $oDaoDadoscomplementareslrf->c218_vldotinicialincentivocontrib = $oParam->dadoscomplementares->c218_vldotinicialincentivocontrib;
+        $oDaoDadoscomplementareslrf->c218_vldotincentconcedinstfinanc = $oParam->dadoscomplementares->c218_vldotincentconcedinstfinanc;
+        $oDaoDadoscomplementareslrf->c218_vlajustesrelativosrpps = $oParam->dadoscomplementares->c218_vlajustesrelativosrpps;
+
         if($oParam->alteracao){
             $oDaoDadoscomplementareslrf->alterar($oParam->dadoscomplementares->c218_sequencial);
             $metasadotadas = $oParam->dadoscomplementares->c225_metasadotadas;

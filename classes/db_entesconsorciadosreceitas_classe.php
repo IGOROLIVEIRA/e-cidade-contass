@@ -256,7 +256,7 @@ class cl_entesconsorciadosreceitas {
          return false;
        }
      }
-     
+
      if (trim($this->c216_percentual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c216_percentual"])) {
        $sql  .= $virgula." c216_percentual = $this->c216_percentual ";
        $virgula = ",";
@@ -399,7 +399,7 @@ class cl_entesconsorciadosreceitas {
        $sql .= $campos;
      }
      $sql .= " from entesconsorciadosreceitas ";
-     $sql .= "      inner join orcfontes  on  orcfontes.o57_codfon = entesconsorciadosreceitas.c216_receita";
+     $sql .= "      inner join orcfontes  on  orcfontes.o57_codfon = entesconsorciadosreceitas.c216_receita and orcfontes.o57_anousu=c216_anousu";
      $sql .= "      inner join entesconsorciados  on  entesconsorciados.c215_sequencial = entesconsorciadosreceitas.c216_enteconsorciado";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = entesconsorciados.c215_cgm";
      $sql2 = "";

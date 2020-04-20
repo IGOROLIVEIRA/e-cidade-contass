@@ -23,7 +23,7 @@ class GerarMETAREAL extends GerarAM
     $this->sArquivo = "METAREAL";
     $this->abreArquivo();
 
-    $sSql = "select * from metareal102019 where si171_mes = " . $this->iMes;
+    $sSql = "select * from metareal102019 where si171_mes = " . $this->iMes . " and si171_instit = ".db_getsession("DB_instit");
     $rsMETAREAL10 = db_query($sSql);
 
 

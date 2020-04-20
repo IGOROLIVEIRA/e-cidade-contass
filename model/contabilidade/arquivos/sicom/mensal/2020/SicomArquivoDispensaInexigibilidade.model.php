@@ -309,6 +309,10 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	liclicita.l20_dtpubratificacao as dtPublicacaoTermoRatificacao,
 	l20_codigo as codlicitacao,
 	liclicita.l20_veicdivulgacao as veiculoPublicacao,
+	 (CASE 
+        WHEN liclicita.l20_cadInicial is null or liclicita.l20_cadInicial = 0 and liclicita.l20_anousu >= 2020 THEN 1
+     	ELSE liclicita.l20_cadInicial
+     END) as cadInicial,
 	(CASE liclicita.l20_tipojulg WHEN 3 THEN 1
 		ELSE 2
 	END) as processoPorLote
@@ -324,7 +328,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	AND DATE_PART('YEAR',l20_dtpubratificacao)=" . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -345,6 +349,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
       $dispensa10->si74_dtpublicacaotermoratificacao = $oDados10->dtpublicacaotermoratificacao;
       $dispensa10->si74_veiculopublicacao = $this->removeCaracteres($oDados10->veiculopublicacao);
       $dispensa10->si74_processoporlote = $oDados10->processoporlote;
+      $dispensa10->si74_tipocadastro = !$oDados10->cadInicial ? 1 : $oDados10->cadInicial;
       $dispensa10->si74_instit = db_getsession("DB_instit");
       $dispensa10->si74_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -1039,7 +1044,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	cgm.z01_cgccpf as nroDocumento,
 	credenciamento.l205_datacred as dataCredenciamento,
 	dispensa112020.si75_nrolote as nroLote,
-	(credenciamento.l205_item::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
+	(pcmater.pc01_codmater::varchar || (case when matunid.m61_codmatunid is null then 1 else matunid.m61_codmatunid end)::varchar) as codItem,
 	pcforne.pc60_inscriestadual as nroInscricaoEstadual,
 	pcforne.pc60_uf as ufInscricaoEstadual,
 	habilitacaoforn.l206_numcertidaoinss as nroCertidaoRegularidadeINSS,
@@ -1064,6 +1069,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+	INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 	INNER JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
 	LEFT JOIN dispensa112020 on (liclicitemlote.l04_descricao = dispensa112020.si75_dsclote and dispensa112020.si75_nroprocesso = liclicita.l20_edital::varchar)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)

@@ -13,7 +13,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clvinculopcaspmsc->alterar($c210_pcaspestrut,$c210_mscestrut,$c210_pcaspestrutant,$c210_mscestrutant);
+  $clvinculopcaspmsc->alterar($c210_pcaspestrut,$c210_mscestrut,$c210_pcaspestrutant,$c210_mscestrutant,$c210_anousu);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;

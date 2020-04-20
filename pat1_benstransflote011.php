@@ -86,7 +86,8 @@ if(isset($oPost->incluir)){
   	$clbenstransf->t93_id_usuario = $oPost->t93_id_usuario;
   	$clbenstransf->t93_instit     = db_getsession('DB_instit');
   	$clbenstransf->t93_obs        = $oPost->t93_obs;
-  	
+  	$clbenstransf->t93_tipo       = 3;
+
     $clbenstransf->incluir(null);
     
     if($clbenstransf->erro_status==0){

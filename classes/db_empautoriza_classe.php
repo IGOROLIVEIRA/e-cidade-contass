@@ -1801,5 +1801,6 @@ class cl_empautoriza {
         }
         return $sql;
     }
+
 }
 ?>

@@ -21,9 +21,17 @@ class cl_dfcdcasp102019 {
    var $si219_instit  = 0;
    var $si219_sequencial = 0;
    var $si219_tiporegistro = 0;
-   var $si219_vlreceitaderivadaoriginaria = 0;
-   var $si219_vltranscorrenterecebida = 0;
-   var $si219_vloutrosingressosoperacionais = 0;
+
+  var $si219_vlreceitatributaria = 0;
+  var $si219_vlreceitacontribuicao = 0;
+  var $si219_vlreceitapatrimonial = 0;
+  var $si219_vlreceitaagropecuaria = 0;
+  var $si219_vlreceitaindustrial = 0;
+  var $si219_vlreceitaservicos = 0;
+  var $si219_vlremuneracaodisponibilidade = 0;
+  var $si219_vloutrasreceitas = 0;
+  var $si219_vltransferenciarecebidas = 0;
+
    var $si219_vltotalingressosativoperacionais = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -32,9 +40,17 @@ class cl_dfcdcasp102019 {
                  si219_instit = int4 = si219_instit
                  si219_sequencial = int4 = si219_sequencial
                  si219_tiporegistro = int4 = si219_tiporegistro
-                 si219_vlreceitaderivadaoriginaria = float8 = si219_vlreceitaderivadaoriginaria
-                 si219_vltranscorrenterecebida = float8 = si219_vltranscorrenterecebida
-                 si219_vloutrosingressosoperacionais = float8 = si219_vloutrosingressosoperacionais
+                 
+                 si219_vlreceitatributaria = float8 = si219_vlreceitatributaria
+                  si219_vlreceitacontribuicao = float8 = si219_vlreceitacontribuicao
+                  si219_vlreceitapatrimonial = float8 = si219_vlreceitapatrimonial
+                  si219_vlreceitaagropecuaria = float8 = si219_vlreceitaagropecuaria
+                  si219_vlreceitaindustrial = float8 = si219_vlreceitaindustrial
+                  si219_vlreceitaservicos = float8 = si219_vlreceitaservicos
+                  si219_vlremuneracaodisponibilidade = float8 = si219_vlremuneracaodisponibilidade
+                  si219_vloutrasreceitas = float8 = i219_vloutrasreceitas
+                  si219_vltransferenciarecebidas = float8 = si219_vltransferenciarecebidas
+                 
                  si219_vltotalingressosativoperacionais = float8 = si219_vltotalingressosativoperacionais
                  ";
    //funcao construtor da classe
@@ -60,9 +76,17 @@ class cl_dfcdcasp102019 {
        $this->si219_instit = ($this->si219_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_instit"]:$this->si219_instit);
        $this->si219_sequencial = ($this->si219_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_sequencial"]:$this->si219_sequencial);
        $this->si219_tiporegistro = ($this->si219_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_tiporegistro"]:$this->si219_tiporegistro);
-       $this->si219_vlreceitaderivadaoriginaria = ($this->si219_vlreceitaderivadaoriginaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitaderivadaoriginaria"]:$this->si219_vlreceitaderivadaoriginaria);
-       $this->si219_vltranscorrenterecebida = ($this->si219_vltranscorrenterecebida == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vltranscorrenterecebida"]:$this->si219_vltranscorrenterecebida);
-       $this->si219_vloutrosingressosoperacionais = ($this->si219_vloutrosingressosoperacionais == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vloutrosingressosoperacionais"]:$this->si219_vloutrosingressosoperacionais);
+
+         $this->si219_vlreceitatributaria = ($this->si219_vlreceitatributaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitatributaria"]:$this->si219_vlreceitatributaria);
+         $this->si219_vlreceitacontribuicao = ($this->si219_vlreceitacontribuicao == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitacontribuicao"]:$this->si219_vlreceitacontribuicao);
+         $this->si219_vlreceitapatrimonial = ($this->si219_vlreceitapatrimonial == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitapatrimonial"]:$this->si219_vlreceitapatrimonial);
+         $this->si219_vlreceitaagropecuaria = ($this->si219_vlreceitaagropecuaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitaagropecuaria"]:$this->si219_vlreceitaagropecuaria);
+         $this->si219_vlreceitaindustrial = ($this->si219_vlreceitaindustrial == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitaindustrial"]:$this->si219_vlreceitaindustrial);
+         $this->si219_vlreceitaservicos = ($this->si219_vlreceitaservicos == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlreceitaservicos"]:$this->si219_vlreceitaservicos);
+         $this->si219_vlremuneracaodisponibilidade = ($this->si219_vlremuneracaodisponibilidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vlremuneracaodisponibilidade"]:$this->si219_vlremuneracaodisponibilidade);
+         $this->si219_vloutrasreceitas = ($this->si219_vloutrasreceitas == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vloutrasreceitas"]:$this->si219_vloutrasreceitas);
+         $this->si219_vltransferenciarecebidas = ($this->si219_vltransferenciarecebidas == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vltransferenciarecebidas"]:$this->si219_vltransferenciarecebidas);
+
        $this->si219_vltotalingressosativoperacionais = ($this->si219_vltotalingressosativoperacionais == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_vltotalingressosativoperacionais"]:$this->si219_vltotalingressosativoperacionais);
      }else{
        $this->si219_sequencial = ($this->si219_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si219_sequencial"]:$this->si219_sequencial);
@@ -84,15 +108,36 @@ class cl_dfcdcasp102019 {
      if($this->si219_tiporegistro == null ){
         $this->si219_tiporegistro = 10;
      }
-     if(empty($this->si219_vlreceitaderivadaoriginaria)){
-        $this->si219_vlreceitaderivadaoriginaria = 0;
-     }
-     if(empty($this->si219_vltranscorrenterecebida)){
-        $this->si219_vltranscorrenterecebida = 0;
-     }
-     if(empty($this->si219_vloutrosingressosoperacionais)){
-        $this->si219_vloutrosingressosoperacionais = 0;
-     }
+
+       if(empty($this->si219_vlreceitatributaria)){
+           $this->si219_vlreceitatributaria = 0;
+       }
+       if(empty($this->si219_vlreceitacontribuicao)){
+           $this->si219_vlreceitacontribuicao = 0;
+       }
+       if(empty($this->si219_vlreceitapatrimonial)){
+           $this->si219_vlreceitapatrimonial = 0;
+       }
+       if(empty($this->si219_vlreceitaagropecuaria)){
+           $this->si219_vlreceitaagropecuaria = 0;
+       }
+       if(empty($this->si219_vlreceitaindustrial)){
+           $this->si219_vlreceitaindustrial = 0;
+       }
+       if(empty($this->si219_vlreceitaservicos)){
+           $this->si219_vlreceitaservicos = 0;
+       }
+       if(empty($this->si219_vlremuneracaodisponibilidade)){
+           $this->si219_vlremuneracaodisponibilidade = 0;
+       }
+       if(empty($this->si219_vloutrasreceitas)){
+           $this->si219_vloutrasreceitas = 0;
+       }
+       if(empty($this->si219_vltransferenciarecebidas)){
+           $this->si219_vltransferenciarecebidas = 0;
+       }
+
+
      if(empty($this->si219_vltotalingressosativoperacionais)){
         $this->si219_vltotalingressosativoperacionais = 0;
      }
@@ -131,9 +176,17 @@ class cl_dfcdcasp102019 {
                                       ,si219_instit
                                       ,si219_sequencial
                                       ,si219_tiporegistro
-                                      ,si219_vlreceitaderivadaoriginaria
-                                      ,si219_vltranscorrenterecebida
-                                      ,si219_vloutrosingressosoperacionais
+                                      
+                                      ,si219_vlreceitatributaria
+                                      ,si219_vlreceitacontribuicao
+                                      ,si219_vlreceitapatrimonial
+                                      ,si219_vlreceitaagropecuaria
+                                      ,si219_vlreceitaindustrial
+                                      ,si219_vlreceitaservicos
+                                      ,si219_vlremuneracaodisponibilidade
+                                      ,si219_vloutrasreceitas
+                                      ,si219_vltransferenciarecebidas
+                                      
                                       ,si219_vltotalingressosativoperacionais
                        )
                 values (
@@ -142,9 +195,17 @@ class cl_dfcdcasp102019 {
                                ,{$this->si219_instit}
                                ,$this->si219_sequencial
                                ,$this->si219_tiporegistro
-                               ,$this->si219_vlreceitaderivadaoriginaria
-                               ,$this->si219_vltranscorrenterecebida
-                               ,$this->si219_vloutrosingressosoperacionais
+                               
+                               ,$this->si219_vlreceitatributaria
+                               ,$this->si219_vlreceitacontribuicao
+                               ,$this->si219_vlreceitapatrimonial
+                               ,$this->si219_vlreceitaagropecuaria
+                               ,$this->si219_vlreceitaindustrial
+                               ,$this->si219_vlreceitaservicos
+                               ,$this->si219_vlremuneracaodisponibilidade
+                               ,$this->si219_vloutrasreceitas
+                               ,$this->si219_vltransferenciarecebidas
+                               
                                ,$this->si219_vltotalingressosativoperacionais
                       )";
      $result = db_query($sql);
