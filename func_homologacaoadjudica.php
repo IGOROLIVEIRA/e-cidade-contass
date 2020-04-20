@@ -37,9 +37,17 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
       <?
       if($validadispensa == "true"){
         $where = "pc50_pctipocompratribunal not in (100,101,103,102)";
+        $where .= ' AND EXISTS
+                        (SELECT 1
+                            FROM habilitacaoforn
+                                WHERE l206_licitacao = liclicita.l20_codigo) ';
       }else{
         $where = null;
       }
+        if($situacao){
+            $where .= ' and l20_licsituacao = '.$situacao;
+        }
+
       if(!isset($pesquisa_chave)){
         /*if(isset($campos)==false){
            if(file_exists("funcoes/db_func_homologacaoadjudica.php")==true){
