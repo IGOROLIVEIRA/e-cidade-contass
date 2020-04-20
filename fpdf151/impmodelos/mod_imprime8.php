@@ -84,7 +84,7 @@
 		$nomeinst = db_utils::fieldsMemory($rsSqlDepart , 0)->nomeinst;
 		$mostraMensagem = $nomeinst ==  'CM BELO HORIZONTE';
 
-		$altura = $mostraMensagem ? 68 : 70;
+		$altura = $mostraMensagem && $this->texto_info ? 68 : 70;
 
 		$this->objpdf->Roundedrect($xcol,$xlin+24,202,$altura,2,'DF','1234');
 		$this->objpdf->Setfont('Arial','',8);
@@ -182,7 +182,7 @@
     $iAlturaAntiga = $this->objpdf->getY();
     $iMargemAntiga = $this->objpdf->getX(); 
 
-    if($mostraMensagem){
+    if($mostraMensagem && $this->texto_info){
     	$this->objpdf->setY($xlin + 92);
 	}else{
 		$this->objpdf->setY($xlin + 94);
@@ -207,7 +207,7 @@
     $this->objpdf->setY($iAlturaAntiga);
     $this->objpdf->setX($iMargemAntiga); 
 
-		if($mostraMensagem){
+		if($mostraMensagem && $this->texto_info){
 			$xlin = $xlin - 12;
 		}
 
@@ -216,7 +216,7 @@
 		$this->objpdf->line($xcol+135,$xlin+116,$xcol+195,$xlin+116);
 		$this->objpdf->text($xcol+155,$xlin+120,'RECEBEDOR');
 
-		if($mostraMensagem){
+		if($mostraMensagem && $this->texto_info){
 			$paragrafo = db_utils::getDao('db_docparagpadrao');
 			$sql = $paragrafo->sql_query('', '', 'db61_texto', '',"db60_descr like 'TEXTO PADRAO RELATORIO DE TRANSFERENCIA' and db60_instit = ".db_getsession('DB_instit'));
 			$rsSql = $paragrafo->sql_record($sql);
