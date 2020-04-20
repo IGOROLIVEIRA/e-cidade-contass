@@ -144,6 +144,7 @@ $pdf1->t52_ident  = "t52_ident";
 $pdf1->divorigem  = "divorigem";
 $pdf1->divdestino = 'divdestino';
 $pdf1->situacao   = "situacao";
+$pdf1->texto_info = $texto_info;
 
 $pdf1->imprime();
 
