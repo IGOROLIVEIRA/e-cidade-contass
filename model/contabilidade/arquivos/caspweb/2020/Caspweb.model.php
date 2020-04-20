@@ -199,7 +199,7 @@ class Caspweb {
     public function gerarMapaRsp () {
 
         $aContasContRSP = "'531200000000000', '532200000000000', '631100000000000', '631200000000000', '631300000000000', 
-                            '631400000000000', '631910000000000', '632100000000000', '632200000000000', '632910000000000'";
+                            '631400000000000', '631910000000000', '632100000000000', '632200000000000', '632910000000000', '631990000000000'";
 
         $sSqlContasContabeis = "    SELECT 
                                         reduz,
@@ -319,28 +319,39 @@ class Caspweb {
                 $sDotacaoOrcamentaria .= "$oResto->fonte";              //Fonte: elemento iniciado em 31 a fonte é 01, ini em 33 é 03 e ini em 44 é 04
                 $sDotacaoOrcamentaria .= "00";                          //Fonte Detalhe: 00
 
-                $oMapaRsp = array();
-                $oMapaRsp['codtipomapa']        = 33;
-                $oMapaRsp['codentcont']         = 227;
-                $oMapaRsp['exercicio']          = $this->iAnoUsu;
-                $oMapaRsp['mes']                = $this->iMes;
-                $oMapaRsp['contacontabil']      = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao;
-                $oMapaRsp['indsuperavit']       = '';
-                $oMapaRsp['codbanco']           = '';
-                $oMapaRsp['codagencia']         = '';
-                $oMapaRsp['codconta']           = '';
-                $oMapaRsp['indapfincanc']       = '';
-                $oMapaRsp['dotorcamentaria']    = $sDotacaoOrcamentaria;
-                $oMapaRsp['tipopesssoa']        = '';
-                $oMapaRsp['codcred_forn']       = '';
-                $oMapaRsp['grupfontanalitica']  = '';
-                $oMapaRsp['espfontanalitica']   = '';
-                $oMapaRsp['instjuridico']       = '';
-                $oMapaRsp['codenttransfinanc']  = '';
-                $oMapaRsp['debito']             = $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
-                $oMapaRsp['credito']            = $oDebCred->creditos != '' ? $oDebCred->creditos: 0;
+                $sHash = substr($oContaContabil->contacontabil,0,13).$oResto->anoinscricao.$sDotacaoOrcamentaria;
 
-                array_push($this->aMapa, $oMapaRsp);
+                if(!isset($this->aMapa[$sHash])) {
+
+                    $aMapaRsp = array();
+                    $aMapaRsp['codtipomapa'] = 33;
+                    $aMapaRsp['codentcont'] = 227;
+                    $aMapaRsp['exercicio'] = $this->iAnoUsu;
+                    $aMapaRsp['mes'] = $this->iMes;
+                    $aMapaRsp['contacontabil'] = substr($oContaContabil->contacontabil, 0, 13) . $oResto->anoinscricao;
+                    $aMapaRsp['indsuperavit'] = '';
+                    $aMapaRsp['codbanco'] = '';
+                    $aMapaRsp['codagencia'] = '';
+                    $aMapaRsp['codconta'] = '';
+                    $aMapaRsp['indapfincanc'] = '';
+                    $aMapaRsp['dotorcamentaria'] = $sDotacaoOrcamentaria;
+                    $aMapaRsp['tipopesssoa'] = '';
+                    $aMapaRsp['codcred_forn'] = '';
+                    $aMapaRsp['grupfontanalitica'] = '';
+                    $aMapaRsp['espfontanalitica'] = '';
+                    $aMapaRsp['instjuridico'] = '';
+                    $aMapaRsp['codenttransfinanc'] = '';
+                    $aMapaRsp['debito'] = $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
+                    $aMapaRsp['credito'] = $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
+
+                    $this->aMapa[$sHash] = $aMapaRsp;
+
+                } else {
+
+                    $this->aMapa[$sHash]['debito'] += $oDebCred->debitos != '' ? $oDebCred->debitos : 0;
+                    $this->aMapa[$sHash]['credito'] += $oDebCred->creditos != '' ? $oDebCred->creditos : 0;
+
+                }
 
             }
 
