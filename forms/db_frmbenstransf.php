@@ -250,8 +250,15 @@ function js_preenchepesquisa(chave){
   ?>
 }
 function js_imprime(){
-  jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.form1.t93_codtran.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-  jan.moveTo(0,0);  
+    let param = "<?=$db_param?>";
+    let direta = "<?=$transfdireta?>";
+    if(param != 'ext' && param == 'int' && direta=='false'){
+        jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.form1.t93_codtran.value+'&texto_info=true','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
+    }else{
+        jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.form1.t93_codtran.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);forms/db_frmbenstransfcodigolote.php
+    }
 }
 </script>
 <script>

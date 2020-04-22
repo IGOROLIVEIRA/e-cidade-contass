@@ -75,8 +75,18 @@
 		$this->objpdf->Setfont('Arial','',8);
 		$this->objpdf->text($xcol+138,$xlin+16,db_formatar($this->datatransf,"d"));
 
-//		$this->objpdf->setfillcolor(245);
-		$this->objpdf->Roundedrect($xcol,$xlin+24,202,70,2,'DF','1234');
+		/*
+		 * @todo Corrigir para aparecer somente na instituição câmara.
+		*/
+
+		$sqlDepart = 'SELECT nomeinstabrev as nomeinst from db_config where codigo = '.db_getsession('DB_instit');
+		$rsSqlDepart = db_query($sqlDepart);
+		$nomeinst = db_utils::fieldsMemory($rsSqlDepart , 0)->nomeinst;
+		$mostraMensagem = $nomeinst ==  'CM BELO HORIZONTE';
+
+		$altura = $mostraMensagem && $this->texto_info ? 68 : 70;
+
+		$this->objpdf->Roundedrect($xcol,$xlin+24,202,$altura,2,'DF','1234');
 		$this->objpdf->Setfont('Arial','',8);
 		$this->objpdf->text($xcol+2,$xlin+27,'Itens a Transmitir :');
 		$this->objpdf->Setfont('Arial','b',8);
@@ -172,7 +182,11 @@
     $iAlturaAntiga = $this->objpdf->getY();
     $iMargemAntiga = $this->objpdf->getX(); 
 
-    $this->objpdf->setY($xlin + 94);
+    if($mostraMensagem && $this->texto_info){
+    	$this->objpdf->setY($xlin + 92);
+	}else{
+		$this->objpdf->setY($xlin + 94);
+	}
     $this->objpdf->setX(5);
 
 		$this->objpdf->Setfont('Arial','',8);
@@ -193,11 +207,25 @@
     $this->objpdf->setY($iAlturaAntiga);
     $this->objpdf->setX($iMargemAntiga); 
 
+		if($mostraMensagem && $this->texto_info){
+			$xlin = $xlin - 12;
+		}
+
 		$this->objpdf->line($xcol+10,$xlin+116,$xcol+70,$xlin+116);
 		$this->objpdf->text($xcol+30,$xlin+120,'TRANSMITENTE');
 		$this->objpdf->line($xcol+135,$xlin+116,$xcol+195,$xlin+116);
 		$this->objpdf->text($xcol+155,$xlin+120,'RECEBEDOR');
-		
+
+		if($mostraMensagem && $this->texto_info){
+			$paragrafo = db_utils::getDao('db_docparagpadrao');
+			$sql = $paragrafo->sql_query('', '', 'db61_texto', '',"db60_descr like 'TEXTO PADRAO RELATORIO DE TRANSFERENCIA' and db60_instit = ".db_getsession('DB_instit'));
+			$rsSql = $paragrafo->sql_record($sql);
+			$texto = db_utils::fieldsMemory($rsSql, 0)->db61_texto;
+			$this->objpdf->setY($xlin + 121);
+			$this->objpdf->setX($xcol+112);
+			$this->objpdf->multicell(90, 4, $texto, 0);
+		}
+
     if (($i % 2 ) == 0)
       $xlin = 169;
     else

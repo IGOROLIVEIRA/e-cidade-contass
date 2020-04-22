@@ -96,7 +96,7 @@ if(isset($excluir)){
   }
 }
 if($db_opcao==33){
-  echo "<script>document.form1.pesquisar.click();</script>";
+  echo "<script>js_pesquisa(true);</script>";
 }
 ?>
 <script>

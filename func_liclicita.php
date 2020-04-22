@@ -175,6 +175,12 @@ $sWhereContratos = " and 1 = 1 ";
             if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
 
                 $dbwhere .= "l20_licsituacao in ($situacao) and ";
+            }else{
+				if($situacao == '10'){
+					$dbwhere .= " l20_licsituacao = 10 AND ";
+				}elseif($situacao){
+					$dbwhere .= " l20_licsituacao = 1 AND ";
+				}
             }
 
             if (!empty($oGet->validasaldo)){
@@ -205,7 +211,7 @@ $sWhereContratos = " and 1 = 1 ";
             }
 
 			if($credenciamento == 'true'){
-			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
+//			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
 				$dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
 			}
 
@@ -215,13 +221,7 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
             }
 
-			if($situacao == '10'){
-			    $dbwhere .= " l20_licsituacao = 10 AND ";
-            }elseif($situacao){
-				$dbwhere .= " l20_licsituacao = 1 AND ";
-            }
-
-            if(!isset($pesquisa_chave)){
+			if(!isset($pesquisa_chave)){
 
                 if(isset($campos)==false){
 
