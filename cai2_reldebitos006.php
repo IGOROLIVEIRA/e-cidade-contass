@@ -81,7 +81,13 @@ if($origem=="matricula"){
   $origem_descr="Inscrição";
 }else if($origem=="cgm"){
   $dbwhere.=" and coalesce(k22_numcgm,0) <> 0"; 
-  $origem_descr="Numcgm";
+  $origem_descr="CGM";
+}else if($origem=="cgmpf"){
+  $dbwhere.=" and coalesce(k22_numcgm,0) <> 0";
+  $origem_descr="CGM - PF";
+}else if($origem=="cgmpj"){
+  $dbwhere.=" and coalesce(k22_numcgm,0) <> 0";
+  $origem_descr="CGM - PJ";
 }
 
 //tipo de receitas... tabrec
@@ -128,7 +134,8 @@ if($origem=="matricula"){
                 multa, 
                 desconto, 
                 total,
-                proprietario_nome.z01_nome
+                proprietario_nome.z01_nome,
+                proprietario_nome.z01_cgccpf
 	 	       from ( select k22_data,
 	 	                     k02_descr,
 	 	                     k00_descr,
@@ -155,6 +162,7 @@ if($origem=="matricula"){
                 k00_descr,
                 codig,
                 empresa.z01_nome,
+                empresa.z01_cgccpf,
                 vlrcor, 
                 vlrhis, 
                 juros, 
@@ -192,7 +200,8 @@ if($origem=="matricula"){
                 multa, 
                 desconto, 
                 total,
-                cgm.z01_nome
+                cgm.z01_nome,
+                cgm.z01_cgccpf
 	 	       from (select k22_data,
 			                  k02_descr,
 			                  k00_descr,
@@ -210,10 +219,74 @@ if($origem=="matricula"){
 				          group by k22_numcgm,k02_descr,k00_descr,k22_data) as x 
           inner join cgm on x.codig=cgm.z01_numcgm
           order by $order $ordem,codig $ordem $limite";
+}else if($origem=="cgmpf"){
+    $sql= "
+         select k22_data,
+                k02_descr,
+                k00_descr,
+                codig,
+                vlrcor,
+                vlrhis,
+                juros,
+                multa,
+                desconto,
+                total,
+                cgm.z01_nome,
+                cgm.z01_cgccpf
+	 	       from (select k22_data,
+			                  k02_descr,
+			                  k00_descr,
+			                  k22_numcgm as codig,
+			                  round(sum(k22_vlrcor),2) as vlrcor,
+			                  round(sum(k22_vlrhis),2) as vlrhis,
+			                  round(sum(k22_juros),2) as juros,
+			                  round(sum(k22_multa),2) as multa,
+			                  round(sum(k22_desconto),2) as desconto,
+			                  round((sum(k22_vlrcor)+sum(k22_juros)+sum(k22_multa)-sum(k22_desconto)),2) as total
+		               from debitos
+					        inner join tabrec on k22_receit = k02_codigo
+				          inner join arretipo on k00_tipo = k22_tipo
+					        where $dbwhere  and k22_instit = $instit
+				          group by k22_numcgm,k02_descr,k00_descr,k22_data) as x
+          inner join cgm on x.codig=cgm.z01_numcgm
+          where (CHAR_LENGTH(cgm.z01_cgccpf) <= 11 or CHAR_LENGTH(cgm.z01_cgccpf) is null)
+          order by $order $ordem,codig $ordem $limite";
+}else if($origem=="cgmpj"){
+    $sql= "
+         select k22_data,
+                k02_descr,
+                k00_descr,
+                codig,
+                vlrcor,
+                vlrhis,
+                juros,
+                multa,
+                desconto,
+                total,
+                cgm.z01_nome,
+                cgm.z01_cgccpf
+	 	       from (select k22_data,
+			                  k02_descr,
+			                  k00_descr,
+			                  k22_numcgm as codig,
+			                  round(sum(k22_vlrcor),2) as vlrcor,
+			                  round(sum(k22_vlrhis),2) as vlrhis,
+			                  round(sum(k22_juros),2) as juros,
+			                  round(sum(k22_multa),2) as multa,
+			                  round(sum(k22_desconto),2) as desconto,
+			                  round((sum(k22_vlrcor)+sum(k22_juros)+sum(k22_multa)-sum(k22_desconto)),2) as total
+		               from debitos
+					        inner join tabrec on k22_receit = k02_codigo
+				          inner join arretipo on k00_tipo = k22_tipo
+					        where $dbwhere  and k22_instit = $instit
+				          group by k22_numcgm,k02_descr,k00_descr,k22_data) as x
+          inner join cgm on x.codig=cgm.z01_numcgm
+          where CHAR_LENGTH(cgm.z01_cgccpf) > 11
+          order by $order $ordem,codig $ordem $limite";
 }
 
 if($modelo!="completo"){
-  $sql = "select codig, z01_nome, round(sum(vlrcor),2) as vlrcor, round(sum(vlrhis),2) as vlrhis, round(sum(juros),2) as juros, round(sum(multa),2) as multa, round(sum(desconto),2) as desconto, round(sum(total),2) as total from ($sql) as x group by codig, z01_nome order by $order $ordem $limite";
+  $sql = "select codig, z01_nome,z01_cgccpf, round(sum(vlrcor),2) as vlrcor, round(sum(vlrhis),2) as vlrhis, round(sum(juros),2) as juros, round(sum(multa),2) as multa, round(sum(desconto),2) as desconto, round(sum(total),2) as total from ($sql) as x group by codig, z01_nome, z01_cgccpf order by $order $ordem $limite";
 }
 
 $result = @pg_query($sql);
@@ -245,16 +318,17 @@ $pdf->AddPage("L");
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',10);
 
-$pdf->cell(20,$alt,$origem_descr,1,0,"C",1);
-$pdf->cell(70,$alt,'Nome',1,0,"C",1);
+$pdf->cell(19,$alt,$origem_descr,1,0,"C",1);
+$pdf->cell(23,$alt,'CPF/CNPJ',1,0,"C",1);
+$pdf->cell(60,$alt,'Nome',1,0,"C",1);
 if($modelo=="completo"){
   $pdf->cell(28,$alt,"Procedência",1,0,"C",1);
-  $pdf->cell(40,$alt,"Tipo de débito",1,0,"C",1);
+  $pdf->cell(38,$alt,"Tipo de débito",1,0,"C",1);
 }
-$pdf->cell(33,$alt,"Valor histórico",1,0,"C",1);
-$pdf->cell(33,$alt,"Valor corrigido",1,0,"C",1);
-$pdf->cell(15,$alt,"Multa",1,0,"C",1);
-$pdf->cell(15,$alt,"Juros",1,0,"C",1);
+$pdf->cell(30,$alt,"Valor histórico",1,0,"C",1);
+$pdf->cell(30,$alt,"Valor corrigido",1,0,"C",1);
+$pdf->cell(16,$alt,"Multa",1,0,"C",1);
+$pdf->cell(16,$alt,"Juros",1,0,"C",1);
 $pdf->cell(23,$alt,"Total",1,0,"C",1);
 $pdf->setfont('arial','',7);
 $pdf->ln();
@@ -268,30 +342,32 @@ for ($i = 0;$i < $numrows;$i++){
       $pdf->setfillcolor(235);
       $pdf->setfont('arial','b',10);
 
-      $pdf->cell(20,$alt,$origem_descr,1,0,"C",1);
-      $pdf->cell(70,$alt,'Nome',1,0,"C",1);
+      $pdf->cell(19,$alt,$origem_descr,1,0,"C",1);
+      $pdf->cell(23,$alt,'CPF/CNPJ',1,0,"C",1);
+      $pdf->cell(60,$alt,'Nome',1,0,"C",1);
       if($modelo=="completo"){
         $pdf->cell(28,$alt,"Procedência",1,0,"C",1);
-        $pdf->cell(40,$alt,"Tipo de débito",1,0,"C",1);
+        $pdf->cell(38,$alt,"Tipo de débito",1,0,"C",1);
       }
-      $pdf->cell(33,$alt,"Valor histórico",1,0,"C",1);
-      $pdf->cell(33,$alt,"Valor corrigido",1,0,"C",1);
-      $pdf->cell(15,$alt,"Multa",1,0,"C",1);
-      $pdf->cell(15,$alt,"Juros",1,0,"C",1);
+      $pdf->cell(30,$alt,"Valor histórico",1,0,"C",1);
+      $pdf->cell(30,$alt,"Valor corrigido",1,0,"C",1);
+      $pdf->cell(16,$alt,"Multa",1,0,"C",1);
+      $pdf->cell(16,$alt,"Juros",1,0,"C",1);
       $pdf->cell(23,$alt,"Total",1,0,"C",1);
       $pdf->setfont('arial','',7);
       $pdf->ln();
   }  
-  $pdf->cell(20,$alt,$codig,1,0,"C",0);
-  $pdf->cell(70,$alt,$z01_nome,1,0,"L",0);
+  $pdf->cell(19,$alt,$codig,1,0,"C",0);
+  $pdf->cell(23,$alt,$z01_cgccpf,1,0,"L",0);
+  $pdf->cell(60,$alt,$z01_nome,1,0,"L",0);
   if($modelo=="completo"){
     $pdf->cell(28,$alt,$k02_descr,1,0,"C",0);
-    $pdf->cell(40,$alt,$k00_descr,1,0,"C",0);
+    $pdf->cell(38,$alt,$k00_descr,1,0,"C",0);
   }
-  $pdf->cell(33,$alt,db_formatar($vlrhis,"f"),1,0,"C",0);
-  $pdf->cell(33,$alt,db_formatar($vlrcor,"f"),1,0,"C",0);
-  $pdf->cell(15,$alt,db_formatar($multa,"f"),1,0,"C",0);
-  $pdf->cell(15,$alt,db_formatar($juros,"f"),1,0,"C",0);
+  $pdf->cell(30,$alt,db_formatar($vlrhis,"f"),1,0,"C",0);
+  $pdf->cell(30,$alt,db_formatar($vlrcor,"f"),1,0,"C",0);
+  $pdf->cell(16,$alt,db_formatar($multa,"f"),1,0,"C",0);
+  $pdf->cell(16,$alt,db_formatar($juros,"f"),1,0,"C",0);
   $pdf->cell(23,$alt,db_formatar($total,"f"),1,0,"C",0);
   $pdf->ln();
 
