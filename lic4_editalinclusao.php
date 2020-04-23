@@ -52,7 +52,7 @@ if ($licitacao) {
 	$sWhere = "
     	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 106) 
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020;
     ";
