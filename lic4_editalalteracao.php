@@ -51,22 +51,29 @@ $sqlerro = false;
 $db_opcao = 2;
 
 if(!isset($alterar)){
-  $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = '.$licitacao. ' and extract(year from l20_dtpublic) >= 2020 ');
-  $rsEdital = $clliclicita->sql_record($sqlEdital);
-  $oDados = db_utils::fieldsMemory($rsEdital, 0);
+	$sWhere = "
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 106) 
+                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                                END) >= 2020;
+    ";
+    $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = '.$licitacao. $sWhere);
+	$rsEdital = $clliclicita->sql_record($sqlEdital);
+	$oDados = db_utils::fieldsMemory($rsEdital, 0);
 
-  $numero_edital = $oDados->l20_nroedital;
-  $objeto = $oDados->l20_objeto;
-  $edital = $oDados->l20_edital;
-  $tipo_tribunal = $oDados->l44_sequencial;
-  $descr_tribunal = strtoupper($oDados->l44_descricao);
-  $origem_recurso = $oDados->l47_origemrecurso;
-  $descricao_recurso = $oDados->l47_descrecurso;
-  $links = $oDados->l47_linkpub;
-  $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
-  $natureza_objeto = $oDados->l20_naturezaobjeto;
-  $sequencial = $oDados->l47_sequencial;
-  $codigolicitacao = $oDados->l20_codigo;
+    $numero_edital = $oDados->l20_nroedital;
+    $objeto = $oDados->l20_objeto;
+    $edital = $oDados->l20_edital;
+    $tipo_tribunal = $oDados->l44_sequencial;
+    $descr_tribunal = strtoupper($oDados->l44_descricao);
+    $origem_recurso = $oDados->l47_origemrecurso;
+    $descricao_recurso = $oDados->l47_descrecurso;
+    $links = $oDados->l47_linkpub;
+    $data_referencia = join('/', array_reverse(explode('-', $oDados->l47_dataenvio)));
+    $natureza_objeto = $oDados->l20_naturezaobjeto;
+    $sequencial = $oDados->l47_sequencial;
+    $codigolicitacao = $oDados->l20_codigo;
 }
 
 if(isset($alterar)){

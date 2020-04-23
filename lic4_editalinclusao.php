@@ -48,9 +48,18 @@ $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
 if ($licitacao) {
+
+	$sWhere = "
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 106) 
+                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                                END) >= 2020;
+    ";
+
 	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
-        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . ' and EXTRACT(YEAR from l20_dtpublic) >= 2020 ', '', 1);
+        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
 	$rsLicita = $clliclicita->sql_record($sqlLicita);
 	$oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
 	$natureza_objeto = $oDadosLicitacao->natureza_objeto;
@@ -64,7 +73,7 @@ if ($licitacao) {
 
 if (isset($incluir) && isset($licitacao)) {
 	$sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '',
-		'l47_liclicita = ' . $codigolicitacao . ' and EXTRACT(YEAR from l20_dtpublic) >= 2020 ');
+		'l47_liclicita = ' . $codigolicitacao);
 	$rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
 	if ($clliclancedital->numrows == 0) {
