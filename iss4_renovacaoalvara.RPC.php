@@ -35,18 +35,18 @@ require_once("dbforms/db_funcoes.php");
 require_once("model/issqn/alvara/MovimentacaoAlvaraFactory.model.php");
 
 $oJson    = new services_json();
-$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam   = $oJson->decode(db_stdClass::db_stripTagsJsonSemEscape(str_replace("\\","",$_POST["json"])));
 $oRetorno = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = "";
 
 switch ($oParam->exec) {
-	
+
 	/**
 	 * Efetua a renovação do alvará
 	 */
 	case "renovarAlvara" :
-		
+
 		 db_inicio_transacao();
 
 		 try {
@@ -55,7 +55,7 @@ switch ($oParam->exec) {
              $oRenovarAlvara  = $oAlvara->incluirMovimentacao( MovimentacaoAlvara::TIPO_RENOVACAO );
              $oDtMov = new DBDate($oParam->q120_dtmov);
              $oDtValidade = new DBDate($oParam->q120_validadealvara);
-             $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
+             $iValidade = $oDtMov->diff($oDtValidade)->format('%a');
 			 $oRenovarAlvara->setValidadeAlvara($iValidade);
 			 $oRenovarAlvara->setDataMovimentacao($oParam->q120_dtmov);
              $oRenovarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
