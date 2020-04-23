@@ -153,7 +153,7 @@ if (isset($confirmar)) {
     $dataLancamento = new DBDate($dataLancamento);
     $dataLancamento = $dataLancamento->getDate();
     if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
-      $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE c99_data < '$dataLancamento' AND c99_anousu = ".db_getsession('DB_anousu')." ");
+      $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE (c99_data < '$dataLancamento' OR c99_data IS NULL) AND c99_anousu = ".db_getsession('DB_anousu')." ");
 
       if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
         throw new Exception("Data informada inferior à data do fim do período contábil.");
