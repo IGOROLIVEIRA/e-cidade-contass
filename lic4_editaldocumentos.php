@@ -95,6 +95,7 @@ $db_opcao = 1;
                 case 101:
                 case 102:
                 case 103:
+                case 106:
                   if($natureza_objeto != 1 && $natureza_objeto != 7){
                     $aTipos[] = 'Selecione';
                     $aTipos['td'] = 'Termo de Dispensa';
