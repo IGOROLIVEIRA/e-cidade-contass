@@ -164,7 +164,7 @@ function js_relatorio() {
 	  </td>
 	  <td>
 			<? 
-			  $result=array("cgm"=>"Numcgm","matricula"=>"Matrícula","inscricao"=>"Inscricao");
+			  $result=array("cgm"=>"CGM","cgmpf"=>"CGM - Pessoa Física","cgmpj"=>"CGM - Pessoa Jurídica","matricula"=>"Matrícula","inscricao"=>"Inscricao");
 			  db_select("origem",$result,true,$db_opcao);
 			?>	 
    </td>

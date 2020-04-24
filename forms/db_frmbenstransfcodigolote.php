@@ -160,7 +160,7 @@ function js_valida(){
 
 function js_imprime(){
 
-  jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.form1.t95_codtran.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.form1.t95_codtran.value+'&texto_info=true','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 
 }
@@ -488,7 +488,7 @@ function oRetTransfLote(res) {
 
         if(confirm('Deseja imprimir relatorio?')) {
 
-            jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.getElementById('t95_codtran').value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+            jan = window.open('pat2_relbenstransf002.php?t96_codtran='+document.getElementById('t95_codtran').value+'&texto_info=true','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
             document.form1.t96_codtran.style.backgroundColor='';
             jan.moveTo(0,0);
         }
