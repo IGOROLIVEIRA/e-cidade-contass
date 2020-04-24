@@ -192,13 +192,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 
 
       $sSqlExtornos = "SELECT sum(c70_valor) AS valor
-                        FROM conlancamdoc
-                        JOIN conhistdoc ON c53_coddoc = c71_coddoc
-                        JOIN conlancamord ON c71_codlan = c80_codlan
-                        JOIN conlancam ON c70_codlan = c71_codlan
-                        WHERE c53_tipo IN (31, 30)
-        AND c80_codord = {$oEmpPago->ordem}
-                          AND c70_data BETWEEN  '{$this->sDataInicial}'  AND '{$this->sDataFinal}'";
+                       FROM conlancamdoc
+                       JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                       JOIN conlancamord ON c71_codlan = c80_codlan
+                       JOIN conlancam ON c70_codlan = c71_codlan
+                       WHERE c53_tipo IN (31, 30)
+                         AND c80_codord = {$oEmpPago->ordem}
+                         AND c70_data BETWEEN  '{$this->sDataInicial}'  AND '{$this->sDataFinal}'";
       $rsQuantExtornos = db_query($sSqlExtornos);
 
       if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
@@ -377,7 +377,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                 WHEN c60_codsis = 5 THEN ''
                                 ELSE e96_descr
                             END desctipodocumentoop,
-                            c23_conlancam AS codlan
+                            c23_conlancam AS codlan,
+                            e81_codmov
                      FROM empagemov
                      INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                      INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -420,13 +421,18 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           /**
            * VERIFICA SE HOUVE RETENCAO NA ORDEM. CASO TENHA O VALOR SERA SUBTRAIDO NO VALOR DO LANCAMENTO.
            */
+          if ($reg12->e81_codmov == ''){
+            $reg12->e81_codmov = 0;
+          }
           $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
                        FROM retencaopagordem
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
                        WHERE e23_recolhido = TRUE
-                         AND e20_pagordem = {$oEmpPago->ordem}
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
+                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                       GROUP BY e27_empagemov";
           $rsReteIsIs = db_query($sqlReten);
 
           if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
@@ -693,9 +699,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        LEFT JOIN tabplan tp ON tp.k02_codigo = tr.k02_codigo AND tp.k02_anousu = " . db_getsession("DB_anousu") . "
                        LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                        LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
+                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
                        WHERE e23_recolhido = TRUE
-                         AND e20_pagordem = {$oEmpPago->ordem}
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
+                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                       GROUP BY e27_empagemov";
 
             $rsPagOrd13 = db_query($sSql13);
 
@@ -706,7 +714,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
               for ($iCont13 = 0; $iCont13 < pg_num_rows($rsPagOrd13); $iCont13++) {
 
                 $reg13 = db_utils::fieldsMemory($rsPagOrd13, $iCont13);
-                $sHash = $reg13->tiporetencao . $reg11->e50_codord;
+                $sHash = $reg13->tiporetencao . $reg13->codreduzidoop;
                 if ($reg13->c60_tipolancamento == 1){
                   $sHash .= $reg13->c60_tipolancamento.$reg13->c60_subtipolancamento;
                 }
@@ -929,7 +937,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              END AS codfontectb,
                              e50_data AS dtemissao,
                              k12_valor AS vldocumento,
-                             c23_conlancam AS codlan
+                             c23_conlancam AS codlan,
+                             e81_codmov                             
                       FROM empagemov
                       INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                       INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -973,13 +982,18 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           /**
            * NOVA VERIFICAÇÃO RETENÇÃO PARA A ORDEM, PARA QUE O VALOR DA RETENÇÃO SEJA SUBTRAIDO DO VALOR DO LANCAMENTO.
            */
+          if ($reg12->e81_codmov == ''){
+            $reg12->e81_codmov = 0;
+          }
           $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
                        FROM retencaopagordem
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
                        WHERE e23_recolhido = TRUE
-                         AND e20_pagordem = {$oEmpPago->ordem}
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
+                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                       GROUP BY e27_empagemov";
           $rsReteIs = db_query($sqlReten);
 
           if ($aInformado[$sHash]->retencao == 0) {
@@ -1263,8 +1277,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        LEFT JOIN tabplan tp ON tp.k02_codigo = tr.k02_codigo AND tp.k02_anousu = " . db_getsession("DB_anousu") . "
                        LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                        LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
+                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
                        WHERE e23_recolhido = TRUE
-                         AND e20_pagordem = {$oEmpPago->ordem}
+                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
                          AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
             $rsPagOrd13 = db_query($sSql13);
@@ -1276,7 +1291,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
               for ($iCont13 = 0; $iCont13 < pg_num_rows($rsPagOrd13); $iCont13++) {
 
                 $reg13 = db_utils::fieldsMemory($rsPagOrd13, $iCont13);
-                $sHash = $reg13->tiporetencao . $reg11->e50_codord;
+                $sHash = $reg13->tiporetencao . $reg13->codreduzidoop;
                 if ($reg13->c60_tipolancamento == 1){
                   $sHash .= $reg13->c60_tipolancamento.$reg13->c60_subtipolancamento;
                 }
