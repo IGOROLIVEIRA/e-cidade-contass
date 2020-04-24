@@ -103,7 +103,7 @@ if (isset($incluir) && isset($licitacao)) {
 		$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
 		if(!$sqlerro){
-		    if($natureza_objeto == 1){
+		    if($natureza_objeto == 1 || $natureza_objeto == 7){
 
 				/* Verifica se tem dados complementares vinculados à licitação */
                 $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
@@ -119,14 +119,20 @@ if (isset($incluir) && isset($licitacao)) {
                     $aSelecionados[] = $tipo->l48_tipo;
                 }
 
-                $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+                if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
+					$quant_documentos = 4;
+                }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+					$quant_documentos = 5;
+                }
 
                 if(!$sqlerro){
                     if($cleditaldocumento->numrows == 0){
                         $sqlerro = true;
                         $erro_msg = 'Nenhum documento anexo à licitação';
                     }else{
-                        if(count($tiposCadastrados) < 5){
+                        if(count($tiposCadastrados) < $quant_documentos){
                             $sqlerro = true;
                             $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
                         }
@@ -221,7 +227,7 @@ if (isset($incluir)) {
 }
 
 echo "<script>";
-echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "parent.iframe_editais.js_buscaDadosComplementares();";
 echo "parent.iframe_documentos.js_getDocumento();";
 echo "</script>";
