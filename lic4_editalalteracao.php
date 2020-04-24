@@ -56,10 +56,10 @@ if(!isset($alterar)){
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
                                      WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                                END) >= 2020;
+                                END) >= 2020
     ";
     $sqlEdital = $clliclicita->sql_query_edital('', 'DISTINCT *', 'l47_sequencial DESC', 'l20_codigo = '.$licitacao. $sWhere);
-	$rsEdital = $clliclicita->sql_record($sqlEdital);
+    $rsEdital = $clliclicita->sql_record($sqlEdital);
 	$oDados = db_utils::fieldsMemory($rsEdital, 0);
 
     $numero_edital = $oDados->l20_nroedital;

@@ -54,7 +54,7 @@ if ($licitacao) {
                                      AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
                                      WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                                END) >= 2020;
+                                END) >= 2020
     ";
 
 	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
