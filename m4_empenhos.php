@@ -1,21 +1,28 @@
 <?php
-
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-include("classes/db_scripts_classe.php");
 require_once("dbforms/db_funcoes.php");
+include("classes/db_scripts_classe.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("e60_codemp");
 
-db_postmemory($HTTP_POST_VARS);
 
-if(isset($incluir)){
+db_postmemory($HTTP_POST_VARS);
+$cl_scripts = new cl_scripts;
+if(isset($excluir)){
+  //print_r($HTTP_POST_VARS);exit;
+  $db_botao=false;
+  $codemp = explode('/',$e60_codemp);
+  //print_r($codemp[1]);exit;
+  //echo 'testeasdljfhçapsdfhasdfhasdfkhasjdfhaskjdfhajsdfhkasdflakdsfj';exit;
   db_inicio_transacao();
-  //$clidentificacaoresponsaveis->incluir($si166_sequencial);
+  $cl_scripts->excluiEmpenho($e60_numemp,$codemp[1]);
   db_fim_transacao();
 }
 
@@ -23,6 +30,14 @@ if(isset($incluir)){
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <?php
+    db_app::load("scripts.js, prototype.js, datagrid.widget.js, messageboard.widget.js, dbtextField.widget.js");
+    db_app::load("windowAux.widget.js, strings.js,dbtextFieldData.widget.js");
+    db_app::load("grid.style.css, estilos.css");
+    ?>
+    <style>
+      .temdesconto {background-color: #D6EDFF}
+    </style>
   </head>
 <body bgcolor="#CCCCCC">
 <?php
@@ -32,10 +47,10 @@ if (db_getsession("DB_id_usuario") != 1) {
 } else {
   ?>
 
-  <form name='form1'>
+  <form name='form1' method="post" action="">
     <div class="container">
       <fieldset>
-        <legend><b>Manutenção de empenho</b></legend>
+        <legend><b>Manutenção de Empenhos</b></legend>
         <table>
           <tr>
             <td  align="left" nowrap title="<?=$Te60_numemp?>">
@@ -48,10 +63,10 @@ if (db_getsession("DB_id_usuario") != 1) {
           </tr>
         </table>
       </fieldset>
-      <input type="submit" id='buttonSubmit' value='Excluir Empenho'>
-      <input type="submit" id="db_opcao" value="Executar" >
+      <input name="excluir" type="submit" id="excluir" value="Excluir Empenho" <?=($db_botao==false?"disabled":"")?> >
     </div>
   </form>
+  </div>
 
   </body>
   </html>
@@ -65,15 +80,15 @@ if (db_getsession("DB_id_usuario") != 1) {
             display:none;' id='ajudaItem'>
 
   </div>
-<script>
-    sUrlRPC = 'con4_lancamentoscontabeisempenho.RPC.php';
+  <script>
+   
     function js_pesquisa_empenho(mostra) {
 
       if (mostra == true) {
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_empempenho',
-          'func_empempenho.php?funcao_js=parent.js_mostraempenho1|e60_codemp|e60_anousu|e60_numemp',
+          'func_empempenho_manut.php?funcao_js=parent.js_mostraempenho1|e60_codemp|e60_anousu|e60_numemp',
           'Pesquisa',
           true);
 
@@ -85,9 +100,9 @@ if (db_getsession("DB_id_usuario") != 1) {
       document.form1.e60_codemp.value = chave1+"/"+chave2;
       document.form1.e60_numemp.value = chave3;
       db_iframe_empempenho.hide();
-      js_visualizarEmpenhos(chave3);
-
+      document.form1.excluir.disabled = false;
     }
+
 
   </script>
 <?
