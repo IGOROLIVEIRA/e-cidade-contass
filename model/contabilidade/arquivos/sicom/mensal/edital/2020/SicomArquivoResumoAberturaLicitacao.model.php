@@ -281,7 +281,7 @@ FROM
      JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
      JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
      WHERE db_config.codigo= ".db_getsession('DB_instit')."
-         AND pctipocompratribunal.l44_sequencial NOT IN ('100', '101', '102', '103') and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
+         AND pctipocompratribunal.l44_sequencial NOT IN ('100', '101', '102', '103', '106') and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
          AND pc81_codproc IN (SELECT DISTINCT pc80_codproc
 								 FROM liclicitem
 								   INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
@@ -427,7 +427,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
+                                                                    '102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio 
 				order by obrasdadoscomplementares.db150_codobra";
 
 		  $rsResult11 = db_query($sSql);
@@ -542,7 +542,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial NOT IN ('100',
                                                                     '101',
-                                                                    '102', '103') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
+                                                                    '102', '103', '106') and liclicita.l20_edital = $oDados10->nroprocessolicitatorio
     ";
 
             $rsResult12 = db_query($sSql);
