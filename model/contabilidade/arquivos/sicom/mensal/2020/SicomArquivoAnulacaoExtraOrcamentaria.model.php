@@ -156,19 +156,25 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 
                 $oFont = db_utils::fieldsMemory($rsFont,$iCont);
 
-                $sSqlMov = " SELECT                                 
+                $sSqlMov = " SELECT DISTINCT 
                                 conlancamcorrente.c86_id AS id,
-                                conlancamcorrente.c86_data AS data,
-                                conlancamcorrente.c86_autent AS autent
+                                slip.k17_dtanu AS DATA,
+                                conlancamcorrente.c86_autent AS autent,
+                                k17_situacao,
+                                c86_conlancam
                             FROM conlancamval
                                 INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
                                 INNER JOIN conlancamcorrente ON conlancamval.c69_codlan = conlancamcorrente.c86_conlancam
                                 INNER JOIN conplanoreduz ON conplanoreduz.c61_reduz = conlancamval.c69_credito
                                 INNER JOIN orctiporec ON orctiporec.o15_codigo = conplanoreduz.c61_codigo AND conplanoreduz.c61_anousu = conlancamval.c69_anousu
+                                INNER JOIN corrente ON conlancamcorrente.c86_id = corrente.k12_id
+                                INNER JOIN corlanc ON corlanc.k12_id = corrente.k12_id AND corlanc.k12_data = corrente.k12_data AND corlanc.k12_autent = corrente.k12_autent AND conplanoreduz.c61_anousu = conlancamval.c69_anousu
+                                INNER JOIN slip ON slip.k17_codigo = corlanc.k12_codigo
+	                            INNER JOIN slipanul ON k18_codigo = k17_codigo
                             WHERE conlancamdoc.c71_coddoc in (120,151,161)
                                 AND conlancamval.c69_debito = {$oContaExtra->codext}
-                                AND DATE_PART('YEAR',conlancamval.c69_data) = " . db_getsession("DB_anousu") . "
-                                AND DATE_PART('MONTH',conlancamval.c69_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                                AND DATE_PART('YEAR',slip.k17_dtanu) = " . db_getsession("DB_anousu") . "
+                                AND DATE_PART('MONTH',slip.k17_dtanu) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                                 AND orctiporec.o15_codigo = {$oFont->fonte}";
 
                 $rsMov = db_query($sSqlMov);
@@ -220,8 +226,9 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
                                 LEFT JOIN empageforma ON e97_codforma = e96_codigo
                                 LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id AND conlancamcorrente.c86_data = corrente.k12_data AND conlancamcorrente.c86_autent = corrente.k12_autent
                             WHERE c86_id = {$oMov->id} 
-                                AND c86_data = '{$oMov->data}' 
-                                AND c86_autent = {$oMov->autent} ";
+                                AND slip.k17_dtanu = '{$oMov->data}' 
+                                AND c86_autent = {$oMov->autent}
+                                AND c86_conlancam = {$oMov->c86_conlancam}";
 
                     $rsAex10 = db_query($sSql10) or die($sSql10);
 
