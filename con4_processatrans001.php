@@ -193,6 +193,8 @@ if (isset ($processar)) {
       throw new Exception('Nenhum lançamento encontrado.');
     }
 
+
+
     for ($i = 0; $i < $numrows; $i ++) {
 
       flush();
@@ -353,7 +355,7 @@ if (isset ($processar)) {
         if ($debug) {
           echo "<br><br>Código do documento: {$c53_coddoc}<br><br>";
         }
-        
+
         switch ($c53_coddoc) {
 
           case 1   : //EMPENHAR
@@ -855,7 +857,14 @@ if (isset ($processar)) {
         /**
          * Usuario dbseller, salva log do reprocessamento
          */
-        if (db_getsession('DB_login') == 'dbseller') {
+
+        /**
+         * OC12145
+         * Verificar se o usuario é contass e administrador e liberar menu
+         *
+         */
+        $sContass = explode(".",db_getsession("DB_login"));
+        if (db_getsession('DB_login') == 'dbseller' || ($sContass[1] == 'contass') && db_getsession("DB_administrador") == 1 ) {
           $sLogReprocessamento .= "\n" . str_repeat('-', 120) . "\n$sErroMensagem\n" . str_repeat('-', 120) . "\n";
         }
       }

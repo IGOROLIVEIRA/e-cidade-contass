@@ -32,6 +32,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_db_usuarios_classe.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("e60_codemp");
 
@@ -51,8 +52,17 @@ $clrotulo->label("e60_codemp");
   </head>
 <body bgcolor="#CCCCCC">
 <?php
-if (db_getsession("DB_id_usuario") != 1) {
 
+
+/**
+ * OC12145
+ * Verificar se o usuario é contass e administrador e liberar menu
+ *
+ */
+
+$sContass = explode(".",db_getsession("DB_login"));
+
+if (db_getsession("DB_id_usuario") != 1 && ($sContass[1] != 'contass') && db_getsession("DB_administrador") != 1) {
   echo "<br><center><br><H2>Essa rotina apenas poderá ser usada pelo usuario dbseller</h2></center>";
 } else {
   ?>
