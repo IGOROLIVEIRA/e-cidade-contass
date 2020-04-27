@@ -76,28 +76,27 @@
 
 <script>
 
+    /*
+    Array para recuperar todos os itens marcados quando fizer o uso do filtro da placa e a lista for atualizada.
+    */
 
-  ///*
-  //  Array para recuperar todos os itens marcados quando fizer o uso do filtro da placa e a lista for atualizada.
-  //*/
-  //var itens = [];
-  //
-  //let ordenacao = '';
-  //document.getElementById('placa').style.width = '100px';
-  //document.getElementById('placa').addEventListener("keyup", () => {
-  //  let valor = document.form1.placa.value;
-  //  filtraBens(valor);
-  //});
-  //
-  //let headers = document.getElementsByTagName('th');
-  //
-  //for(let cont=0; cont < headers.length - 1; cont++){
-  //  headers[cont].style.textDecoration = "underline";
-  //  headers[cont].addEventListener('click', () => {
-  //    extraiItens(headers[cont].innerText);
-  //  });
-  //}
+    let itens = [];
+    let aIndices = [];
 
+    let ordenacao = '';
+    document.getElementById('placa').style.width = '100px';
+    document.getElementById('placa').addEventListener("keyup", (e) => {
+        filtraBens(e.target.value);
+    });
+
+    let headers = document.getElementsByTagName('th');
+
+    for(let cont=0; cont < headers.length - 1; cont++){
+        headers[cont].style.textDecoration = "underline";
+        headers[cont].addEventListener('click', () => {
+            extraiItens(headers[cont].innerText);
+        });
+    }
 
 function js_pesquisaBens(){
 
@@ -117,17 +116,18 @@ function js_pesquisaBens(){
 
 function js_retornoBens(oAjax){
 
-  js_removeObj("msgBox");
-  objListaBens = eval("("+oAjax.responseText+")");
+    js_removeObj("msgBox");
+    objListaBens = eval("("+oAjax.responseText+")");
 
 
-  if ( objListaBens.lErro && objListaBens.lErro == true ){
-    alert(objListaBens.sMensagem.urlDecode());
-    return false ;
-  }
+    if ( objListaBens.lErro && objListaBens.lErro == true ){
+        alert(objListaBens.sMensagem.urlDecode());
+        return false;
+    }
 
-  preencheLista(objListaBens);
-  js_removeObj("msgBox");
+    console.log(objListaBens);
+    preencheLista(objListaBens);
+    js_removeObj("msgBox");
 
 }
 
@@ -167,68 +167,83 @@ function js_imprime(){
 
 
 function js_marcaTodos(){
+    let aObjChk = '';
+    let placa_value = document.getElementById('placa').value.trim();
 
-  var aObjChk = js_getElementbyClass(document.form1,"chk");
-  var iLinhas = aObjChk.length;
-
-  for ( var iInd=0; iInd < iLinhas; iInd++ ) {
-    if ( aObjChk[iInd].checked == true  ) {
-      aObjChk[iInd].checked = false;
-    } else {
-      aObjChk[iInd].checked = true;
+    if(placa_value != ''){
+         aObjChk = novaListaBens;
+    }else{
+        aObjChk = objListaBens;
     }
-  }
 
+    let iLinhas = aObjChk.length;
+
+    for(let iInd=0; iInd < iLinhas; iInd++){
+        if(aObjChk[iInd].checked == true){
+            aObjChk[iInd].checked = false;
+        }else{
+            aObjChk[iInd].checked = true;
+        }
+    }
+
+    preencheLista(aObjChk, true);
 }
 
 /* Função utilizada para filtrar os registros pela placa */
 function filtraBens(placa){
-  let novaListaBens = [];
-  objListaBens.forEach((bem) => {
-    let quantidade = placa.length;
-    let stringFinal = '';
+    novaListaBens = [];
+    if(placa.trim() != ''){
+        objListaBens.forEach((bem) => {
+            let quantidade = placa.length;
+            let stringFinal = '';
 
-    for(let cont=0;cont < quantidade; cont++){
-      stringFinal += bem.t52_ident[cont];
+            for(let cont=0;cont < quantidade; cont++){
+                stringFinal += bem.t52_ident[cont];
 
-      if(stringFinal.includes(placa)){
-        novaListaBens.push(bem);
-      }
+                if(stringFinal.includes(placa)){
+                    novaListaBens.push(bem);
+                }
+            }
+        });
+        itens = novaListaBens;
     }
-  });
 
-  preencheLista(novaListaBens);
+    if(novaListaBens.length){
+        preencheLista(novaListaBens, true);
+    }else{
+        preencheLista(objListaBens, true);
+    }
 
 }
 
-function preencheLista(aBens){
-  if(!aBens.length){
-    preencheLista(objListaBens);
-    return;
-  }
-
-  var iLinhasBens = aBens.length;
-  var sLinha      =  "";
+function preencheLista(aBens, todos=false){
+    var iLinhasBens = aBens.length;
+    var sLinha      =  "";
 
   $('listaBens').innerHTML = '';
   for ( var iInd = 0; iInd < iLinhasBens; iInd++ ) {
-
     with (aBens[iInd]) {
 
-      var sChecked = "";
+        let sChecked = "";
 
-      if ( transf == "t" ) {
+        if (transf == "t") {
 
-        sChecked = "checked";
-        document.form1.rel.disabled = false;
-        document.form1.con.disabled = false;
-        document.form1.transf.value = "Alterar";
-      }
+            sChecked = "checked";
+            document.form1.rel.disabled = false;
+            document.form1.con.disabled = false;
+            document.form1.transf.value = "Alterar";
+        }
+
+        if(todos){
+            if(typeof(checked) != 'undefined'){
+                sChecked = checked ? "checked" : "";
+            }
+        }
 
       sCheck = "<input class='chk' type='checkbox' id='"+t52_bem+"|"+situacao+"' "+sChecked+">";
       let dataFormatada = t52_dtaqu.includes('/') ? t52_dtaqu : js_formatar(t52_dtaqu,"d");
 
-      sLinha +=  "<tr>";
+      sLinha +=  "<tr class='linhabem'>";
       sLinha +=  "  <td class='linhagrid marcador'>"+sCheck+"                                      </td>";
       sLinha +=  "  <td class='linhagrid'> "+t52_bem.urlDecode()+"&nbsp;                   </td>";
       sLinha +=  "  <td class='linhagrid'> "+t64_descr.urlDecode()+"&nbsp;                 </td>";
@@ -242,134 +257,123 @@ function preencheLista(aBens){
 
     }
   }
-  $('listaBens').innerHTML = sLinha;
+    $('listaBens').innerHTML = sLinha;
 
-  let linhas = document.getElementsByClassName('marcador');
+    let linhas = document.getElementsByClassName('linhabem');
 
-  for(let i in linhas){
-    if(linhas[i].children){
-      linhas[i].children[0].addEventListener('click', (e)=>{
-        if(!itens.includes(e.target.id)){
-          itens.push(e.target.id);
-        }else{
-          itens = itens.filter((element) => {
-            return element != e.target.id;
-          });
-        }
-      });
+    for(let count=0; count<linhas.length; count++){
+        let cod_bem = linhas[count].children[1].innerText.trim();
+        linhas[count].addEventListener('change', (e) => {
+            objListaBens = objListaBens.map(item => {
+                if(item.t52_bem == cod_bem){
+                    if(typeof(item.checked) == 'undefined'){
+                        item.checked = true;
+                    }else{
+                        item.checked = item.checked ? false : true;
+                    }
+                }else{
+                    if(typeof(item.checked) == 'undefined'){
+                        item.checked = false;
+                    }
+                }
+                return item;
+            });
+        });
     }
-  }
-
-  if(itens.length){
-    itens.forEach(elemento => {
-      for(let pos in linhas){
-        if(linhas[pos].firstChild){
-          if(linhas[pos].firstChild.id == elemento){
-            linhas[pos].firstChild.setAttribute("checked", "checked");
-            break;
-          }
-        }
-      }
-    });
-  }
-
 }
 
 function extraiItens(campo){
 
-  let childrens = $('listaBens').childNodes;
-  let listaBens = [];
+    let childrens = $('listaBens').childNodes;
+    let listaBens = [];
 
-  for(let cont=0; cont < childrens.length; cont++){
-    let elementsChildrens = childrens[cont].childNodes;
-    let contentObject = [];
-    for(let cont=0; cont < elementsChildrens.length; cont++){
-      if(elementsChildrens[cont].innerText){
-        contentObject.push(elementsChildrens[cont].innerText);
-      }
+    for(let cont=0; cont < childrens.length; cont++){
+        let elementsChildrens = childrens[cont].childNodes;
+        let contentObject = [];
+        for(let cont=0; cont < elementsChildrens.length; cont++){
+            if(elementsChildrens[cont].innerText){
+                contentObject.push(elementsChildrens[cont].innerText);
+            }
+        }
+
+        let objeto = new Object({
+            't52_bem': contentObject[0].trim(),
+            't64_descr': contentObject[1].trim(),
+            't52_descr': contentObject[2].trim(),
+            't52_obs': contentObject[3].trim(),
+            't52_ident': contentObject[4].trim(),
+            't52_dtaqu': contentObject[5].trim(),
+            'transf': contentObject[6].trim(),
+            'situacao': contentObject[7].trim()
+        });
+
+        listaBens.push(objeto);
     }
 
-    let objeto = new Object({
-      't52_bem': contentObject[0].trim(),
-      't64_descr': contentObject[1].trim(),
-      't52_descr': contentObject[2].trim(),
-      't52_obs': contentObject[3].trim(),
-      't52_ident': contentObject[4].trim(),
-      't52_dtaqu': contentObject[5].trim(),
-      'transf': contentObject[6].trim(),
-      'situacao': contentObject[7].trim()
-    });
-
-    listaBens.push(objeto);
-
-  }
-
-  if(!ordenacao || ordenacao == 'asc'){
-    ordenacao = 'desc';
-  }else{
-    ordenacao = 'asc';
-  }
-
-  let aRegistros = [];
-  let campoReferencia = '';
-  switch(campo){
-
-    case 'Cód. Bem':
-    case 'Placa': {
-
-      campoReferencia = campo == 'Placa' ? 't52_ident' : 't52_bem';
-      listaBens.forEach(e => {
-        aRegistros.push(e[campoReferencia]);
-      });
-
-      break;
-    }
-    case 'Classificação':
-    case 'Observação':
-    case 'Descrição':{
-      campoReferencia = campo == 'Classificação' ? 't64_descr' : campo == 'Descrição' ? 't52_descr' : 't52_obs';
-      listaBens.forEach(e => {
-        aRegistros.push({
-          'valor': e[campoReferencia],
-          'chave': e.t52_bem});
-      });
-      break;
+    if(!ordenacao || ordenacao == 'asc'){
+        ordenacao = 'desc';
+    }else{
+        ordenacao = 'asc';
     }
 
-    case 'Data Aquisição':{
-      campoReferencia = 't52_dtaqu';
+    let aRegistros = [];
+    let campoReferencia = '';
 
-      listaBens.sort(function(a, b){
-        return new Date(a.t52_dtaqu.split('/').reverse().join('-')) - new Date(b.t52_dtaqu.split('/').reverse().join('-'))})
-      .forEach(item => {
-        aRegistros.push(item);
-      });
+    switch(campo){
+        case 'Cód. Bem':
+        case 'Placa': {
+            campoReferencia = campo == 'Placa' ? 't52_ident' : 't52_bem';
+            listaBens.forEach(e => {
+                aRegistros.push(e[campoReferencia]);
+            });
+            break;
+        }
+        case 'Classificação':
+        case 'Observação':
+        case 'Descrição':{
+            campoReferencia = campo == 'Classificação' ? 't64_descr' : campo == 'Descrição' ? 't52_descr' : 't52_obs';
+            listaBens.forEach(e => {
+                aRegistros.push({
+                'valor': e[campoReferencia],
+                'chave': e.t52_bem});
+            });
+            break;
+        }
 
-      break;
+        case 'Data Aquisição':{
+            campoReferencia = 't52_dtaqu';
+
+            listaBens.sort(function(a, b){
+                return new Date(a.t52_dtaqu.split('/').reverse().join('-')) - new Date(b.t52_dtaqu.split('/').reverse().join('-'))
+            })
+            .forEach(item => {
+                aRegistros.push(item);
+            });
+            break;
+        }
     }
-  }
 
-  ordenaLista(listaBens, aRegistros, campoReferencia);
+    // ordenaLista(listaBens, campoReferencia);
 }
 
 
-function ordenaLista(listaGeral, listaReferencia, campo)
-{
-  let listaOrdenada = [];
+function ordenaLista(listaGeral, campo) {
+    let listaOrdenada = [];
+    let listaReferencia = objListaBens;
 
-  switch(ordenacao){
+    switch(ordenacao){
     case 'asc':{
 
-      if(campo == 't52_bem' || campo == 't52_ident'){
-        listaReferencia.sort((a, b) => {return a-b})
-        .forEach(item => {
-          listaGeral.forEach(bem => {
-            if(bem[campo] == item){
-              listaOrdenada.push(bem);
-            }
-          })
-        })
-      }
+        if(campo == 't52_bem' || campo == 't52_ident'){
+            listaReferencia.sort((a, b) => {return a-b})
+            .forEach(item => {
+                listaGeral.forEach(bem => {
+                    if(bem[campo] == item){
+                        listaOrdenada.push(bem);
+                    }
+                })
+            });
+        }
 
       if(campo == 't64_descr' || campo == 't52_descr' || campo == 't52_obs'){
         listaReferencia.sort((a, b) => {
@@ -402,52 +406,52 @@ function ordenaLista(listaGeral, listaReferencia, campo)
     }
 
 
-    case 'desc':{
+        case 'desc':{
 
-      if(campo == 't52_bem' || campo == 't52_ident'){
-        listaReferencia.sort(function(a, b){return b-a})
-        .forEach(item => {
-          listaGeral.forEach(bem => {
-            if(bem[campo] == item){
-              listaOrdenada.push(bem);
+            if(campo == 't52_bem' || campo == 't52_ident'){
+                listaReferencia.sort(function(a, b){return b-a})
+                .forEach(item => {
+                    listaGeral.forEach(bem => {
+                        if(bem[campo] == item){
+                            listaOrdenada.push(bem);
+                        }
+                    })
+                });
             }
-          })
-        });
-      }
 
-      if(campo == 't64_descr' || campo == 't52_descr' || campo == 't52_obs'){
-        listaReferencia.sort((a, b) => {
-          if(a.valor == b.valor){
-            return Number(b.chave)-Number(a.chave);
-          }
-          return b.valor > a.valor;
-        }).forEach(item => {
-          listaGeral.forEach( bem => {
-            if(bem.t52_bem == item.chave){
-              listaOrdenada.push(bem);
+            if(campo == 't64_descr' || campo == 't52_descr' || campo == 't52_obs'){
+                listaReferencia.sort((a, b) => {
+                    if(a.valor == b.valor){
+                        return Number(b.chave)-Number(a.chave);
+                    }
+                    return b.valor > a.valor;
+                }).forEach(item => {
+                    listaGeral.forEach( bem => {
+                        if(bem.t52_bem == item.chave){
+                            listaOrdenada.push(bem);
+                        }
+                    })
+                })
             }
-          })
-        })
-      }
 
-      if(campo == 't52_dtaqu'){
-        listaGeral.sort(function(a, b){
-          let dtA = new Date(a.t52_dtaqu.split('/').reverse().join('-'));
-          let dtB = new Date(b.t52_dtaqu.split('/').reverse().join('-'));
-          if(dtB == dtA){
-            return Number(b.t52_bem) - Number(a.t52_bem);
-          }
-          return dtB - dtA;
-        }).forEach(item => {
-          listaOrdenada.push(item);
-        });
-      }
+            if(campo == 't52_dtaqu'){
+                listaGeral.sort(function(a, b){
+                    let dtA = new Date(a.t52_dtaqu.split('/').reverse().join('-'));
+                    let dtB = new Date(b.t52_dtaqu.split('/').reverse().join('-'));
+                    if(dtB == dtA){
+                        return Number(b.t52_bem) - Number(a.t52_bem);
+                    }
+                    return dtB - dtA;
+                }).forEach(item => {
+                    listaOrdenada.push(item);
+                });
+            }
 
-      break;
+          break;
+        }
     }
-  }
-
-  preencheLista(listaOrdenada);
+    // console.log('Ordenada: ', listaOrdenada);
+  // preencheLista(listaOrdenada, true);
 }
 
 function js_conTrasfLote() {
