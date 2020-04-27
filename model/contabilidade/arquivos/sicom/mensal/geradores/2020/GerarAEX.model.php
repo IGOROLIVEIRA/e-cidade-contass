@@ -23,10 +23,10 @@ class GerarAEX extends GerarAM
     $this->sArquivo = "AEX";
     $this->abreArquivo();
 
-    $sSql = "select * from aex102020 where si129_mes = " . $this->iMes;
-    $rsAEX10 = db_query($sSql);
+//    $sSql = "select * from aex102020 where si129_mes = " . $this->iMes;
+//    $rsAEX10 = db_query($sSql);
 
-    $sSql2 = "select * from AEX102020 where si130_mes = " . $this->iMes;
+    $sSql2 = "select * from aex102020 where si130_mes = " . $this->iMes;
     $rsAEX10 = db_query($sSql2);
 
 
@@ -46,9 +46,9 @@ class GerarAEX extends GerarAM
         $aCSVAEX10['si130_codext']          = substr($aAEX10['si130_codext'], 0, 15);
         $aCSVAEX10['si130_codfontrecursos'] = $this->padLeftZero($aAEX10['si130_codfontrecursos'], 3);
         $aCSVAEX10['si130_nroop']           = substr($aAEX10['si130_nroop'], 0, 22);
-        $aCSVAEX10['si130_codunidadesub']   = $this->padLeftZero($aAEX10['si130_codunidadesub'], 5);
+        $aCSVAEX10['si130_codunidadesub']   = $this->padLeftZero($aAEX10['si130_codunidadesub'], (strlen($aAEX10['si130_codunidadesub']) <= 5 ? 5 : 8));
         $aCSVAEX10['si130_dtpagamento']     = $this->sicomDate($aAEX10['si130_dtpagamento']);
-        $aCSVAEX10['si130_nroanulacaoop']   = substr($aAEX10['si130_codfontrecursos'], 0, 22);
+        $aCSVAEX10['si130_nroanulacaoop']   = substr($aAEX10['si130_nroanulacaoop'], 0, 22);
         $aCSVAEX10['si130_dtanulacaoop']    = $this->sicomDate($aAEX10['si130_dtanulacaoop']);
         $aCSVAEX10['si130_vlanulacaoop']    = $this->sicomNumberReal(abs($aAEX10['si130_vlanulacaoop']), 2);
 
