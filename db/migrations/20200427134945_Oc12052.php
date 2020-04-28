@@ -111,6 +111,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('333801400000000', '344501400000000', '344901400000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         INSERT INTO conplanoconplanoorcamento
@@ -124,6 +125,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('333939100000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         INSERT INTO conplanoconplanoorcamento
@@ -137,6 +139,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('344900400000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         INSERT INTO conplanoconplanoorcamento
@@ -150,6 +153,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('344901800000000', '344902000000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         INSERT INTO conplanoconplanoorcamento
@@ -163,6 +167,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('344909500000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         INSERT INTO conplanoconplanoorcamento
@@ -176,6 +181,7 @@ class Oc12052 extends AbstractMigration
                c60_anousu AS c72_anousu
         FROM conplanoorcamento
         WHERE c60_estrut IN ('345902700000000')
+          AND c60_codcon NOT IN (SELECT c72_conplanoorcamento FROM conplanoconplanoorcamento WHERE c72_anousu = 2020)
           AND c60_anousu = 2020;
 
         -- Inserindo os novos estruturais para usar como dotações
@@ -188,11 +194,12 @@ class Oc12052 extends AbstractMigration
                c60_finali,
                't' AS o56_orcado
         FROM conplanoorcamento
+        JOIN new_ctas_orc ON estrut = c60_estrut
         WHERE c60_anousu >= 2020
-            AND substr(c60_estrut,1,1) = '3'
-            AND (c60_codcon, substr(c60_estrut,1,13)) NOT IN
-                (SELECT o56_codele, o56_elemento FROM orcelemento
-         WHERE o56_anousu = c60_anousu);
+          AND substr(c60_estrut,1,1) = '3'
+          AND c60_codcon NOT IN
+              (SELECT o56_codele FROM orcelemento
+               WHERE o56_anousu = c60_anousu);
 
         COMMIT;
 
