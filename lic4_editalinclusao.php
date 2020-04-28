@@ -120,11 +120,9 @@ if (isset($incluir) && isset($licitacao)) {
                 }
 
                 if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
-					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb'));
-					$quant_documentos = 4;
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'dp'));
                 }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
 					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
-					$quant_documentos = 5;
                 }
 
                 if(!$sqlerro){
@@ -132,7 +130,7 @@ if (isset($incluir) && isset($licitacao)) {
                         $sqlerro = true;
                         $erro_msg = 'Nenhum documento anexo à licitação';
                     }else{
-                        if(count($tiposCadastrados) < $quant_documentos){
+                        if(count($tiposCadastrados) < 5){
                             $sqlerro = true;
                             $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
                         }
