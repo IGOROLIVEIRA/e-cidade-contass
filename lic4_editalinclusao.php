@@ -78,7 +78,10 @@ if (isset($incluir) && isset($licitacao)) {
 
 	if ($clliclancedital->numrows == 0) {
 
-        // Buscar dados complementares pelo numero da licitacao
+        if(!$links && in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+            $sqlerro = true;
+            $erro_msg = 'Campo Link da publicação é obrigatório';
+        }
         if(!$sqlerro){
             $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
             $clliclancedital->l47_linkpub = $links;
