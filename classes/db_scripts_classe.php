@@ -18,7 +18,7 @@ class cl_scripts {
    //   }
    // }
 
-   // funcÃµes
+   // funcões
   function excluiEmpenho ($seq_emp){ 
 
     $ano    = db_getsession('DB_anousu');
@@ -575,7 +575,7 @@ class cl_scripts {
      }
  
      $this->erro_msg = "";
-     $this->erro_msg = "ExclusÃ£o efetuada com Sucesso\\n";
+     $this->erro_msg = "Exclusão efetuada com Sucesso\\n";
      $this->erro_msg .= "Valores : ".$this->si166_sequencial;
  
      $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");

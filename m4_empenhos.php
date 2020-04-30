@@ -1,6 +1,4 @@
 <?php
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -49,7 +47,7 @@ if (db_getsession("DB_id_usuario") != 1) {
   <form name='form1' method="post" action="">
     <div class="container">
       <fieldset>
-        <legend><b>ManutenÃ§Ã£o de Empenhos</b></legend>
+        <legend><b>Manutenção de Empenhos</b></legend>
         <table>
           <tr>
             <td  align="left" nowrap title="<?=$Te60_numemp?>">
