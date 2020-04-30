@@ -155,7 +155,9 @@ $rotulo->label("z01_cgccpf");
           RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
           ";
           $campos = " distinct " . $campos;
-          $dbwhere=" e60_instit = " . db_getsession("DB_instit") . " AND e60_emiss < c99_data";
+          $dbwhere=" e60_instit = " . db_getsession("DB_instit") . " AND e60_emiss < c99_data ";
+          $dbwhere .= "AND e60_vlremp = e60_vlranu ";
+          $dbwhere .= "AND e60_anousu = ".db_getsession("DB_anousu");
 
           if (isset($anul) && $anul == false) {
             $dbwhere .= " and e60_vlranu<e60_vlremp ";
@@ -263,11 +265,12 @@ $rotulo->label("z01_cgccpf");
                }
 
                $result = $clempempenho->sql_record($sql);
-
+               
                ?>
 
                <fieldset>
                 <legend><strong>Resultado da Pesquisa</strong></legend>
+                
                 <?php db_lovrot($sql, 15, "()", "%", $funcao_js, "", "NoMe", $repassa, false); ?>
               </fieldset>
               <?php

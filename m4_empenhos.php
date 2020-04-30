@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -16,13 +16,12 @@ $clrotulo->label("e60_codemp");
 db_postmemory($HTTP_POST_VARS);
 $cl_scripts = new cl_scripts;
 if(isset($excluir)){
-  //print_r($HTTP_POST_VARS);exit;
+
   $db_botao=false;
   $codemp = explode('/',$e60_codemp);
-  //print_r($codemp[1]);exit;
-  //echo 'testeasdljfhçapsdfhasdfhasdfkhasjdfhaskjdfhajsdfhkasdflakdsfj';exit;
   db_inicio_transacao();
   $cl_scripts->excluiEmpenho($e60_numemp,$codemp[1]);
+  echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
   db_fim_transacao();
 }
 
