@@ -83,9 +83,19 @@
     let ordenacao = '';
     document.getElementById('placa').style.width = '100px';
     document.getElementById('placa').addEventListener("keyup", (e) => {
-        filtraBens(e.target.value);
+        if(/^[0-9]+$/.test(e.target.value)){
+            filtraBens(e.target.value);
+        }else{
+            if((e.target.value.length)){
+                document.getElementById('placa').value = e.target.value.substr(0, e.target.value.length - 1);
+                alert('Insira somente números');
+            }
+        }
     });
 
+    /*
+    * Adiciona o evento click para todos os cabeçalhos para ordenação dos bens
+    * */
     let headers = document.getElementsByTagName('th');
 
     for(let cont=0; cont < headers.length - 1; cont++){
@@ -276,7 +286,6 @@ function preencheLista(aBens, todos=false){
 
 function extraiItens(campo){
     let childrens = $('listaBens').childNodes;
-    let listaBens = [];
 
     for(let cont=0; cont < childrens.length; cont++){
         let elementsChildrens = childrens[cont].childNodes;
@@ -298,7 +307,6 @@ function extraiItens(campo){
             'situacao': contentObject[7].trim()
         });
 
-        listaBens.push(objeto);
     }
 
     ordenacao = !ordenacao || ordenacao == 'asc' ? 'desc' : 'asc';
