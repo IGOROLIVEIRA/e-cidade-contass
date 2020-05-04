@@ -330,7 +330,7 @@ $sWhereContratos = " and 1 = 1 ";
                             (CASE
                             WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null
                               THEN liclicita.l20_dtpublic
-                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null
+                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 103, 106) and liclicita.l20_datacria is not null
                               THEN liclicita.l20_datacria
                             WHEN liclancedital.l47_dataenvio is not null
                               THEN liclancedital.l47_dataenvio
@@ -358,8 +358,12 @@ $sWhereContratos = " and 1 = 1 ";
                         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                         LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                         WHERE l20_instit = ".db_getsession('DB_instit')."
-                           AND EXTRACT (YEAR from l20_dtpublic) >= 2020 $sWhere and liclicita.l20_naturezaobjeto in (1, 7)
-                           AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
+                           AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                                END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto IN (1, 7)
+                            AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
                         ORDER BY l20_codigo
           ";
                 }

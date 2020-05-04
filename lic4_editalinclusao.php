@@ -48,9 +48,18 @@ $sqlerro = false;
 $db_opcao = 1;
 //  Realizar busca pelos campos
 if ($licitacao) {
+
+	$sWhere = "
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                                END) >= 2020
+    ";
+
 	$sqlLicita = $clliclicita->sql_query_edital('', 'DISTINCT l20_codigo, l20_edital, l20_nroedital, l20_objeto, pctipocompratribunal.l44_sequencial as tipo_tribunal,
         UPPER(pctipocompratribunal.l44_descricao) as descr_tribunal, l20_naturezaobjeto as natureza_objeto,
-        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . ' and EXTRACT(YEAR from l20_dtpublic) >= 2020 ', '', 1);
+        l47_dataenvio', '', 'l20_codigo = ' . $licitacao . $sWhere, '', 1);
 	$rsLicita = $clliclicita->sql_record($sqlLicita);
 	$oDadosLicitacao = db_utils::fieldsMemory($rsLicita, 0);
 	$natureza_objeto = $oDadosLicitacao->natureza_objeto;
@@ -64,12 +73,15 @@ if ($licitacao) {
 
 if (isset($incluir) && isset($licitacao)) {
 	$sSqlEdital = $clliclancedital->sql_query_file('', 'l47_sequencial', '',
-		'l47_liclicita = ' . $codigolicitacao . ' and EXTRACT(YEAR from l20_dtpublic) >= 2020 ');
+		'l47_liclicita = ' . $codigolicitacao);
 	$rsEdital = $clliclancedital->sql_record($sSqlEdital);
 
 	if ($clliclancedital->numrows == 0) {
 
-        // Buscar dados complementares pelo numero da licitacao
+        if(!$links && in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+            $sqlerro = true;
+            $erro_msg = 'Campo Link da publicação é obrigatório';
+        }
         if(!$sqlerro){
             $data_formatada = str_replace('/', '-', db_formatar($data_referencia, 'd'));
             $clliclancedital->l47_linkpub = $links;
@@ -94,7 +106,7 @@ if (isset($incluir) && isset($licitacao)) {
 		$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
 		if(!$sqlerro){
-		    if($natureza_objeto == 1){
+		    if($natureza_objeto == 1 || $natureza_objeto == 7){
 
 				/* Verifica se tem dados complementares vinculados à licitação */
                 $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
@@ -110,7 +122,11 @@ if (isset($incluir) && isset($licitacao)) {
                     $aSelecionados[] = $tipo->l48_tipo;
                 }
 
-                $tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+                if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'dp'));
+                }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
+                }
 
                 if(!$sqlerro){
                     if($cleditaldocumento->numrows == 0){
@@ -212,7 +228,7 @@ if (isset($incluir)) {
 }
 
 echo "<script>";
-echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto';";
+echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "parent.iframe_editais.js_buscaDadosComplementares();";
 echo "parent.iframe_documentos.js_getDocumento();";
 echo "</script>";
