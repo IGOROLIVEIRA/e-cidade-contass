@@ -4,19 +4,9 @@ class cl_scripts {
 
   var $erro_msg   = null;
 
-  //funcao construtor da classe 
-   function cl_scripts() { 
-     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
-   }
-   //funcao erro 
-   // function erro($mostra,$retorna) { 
-   //   if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
-   //      echo "<script>alert(\"".$this->erro_msg."\");</script>";
-   //      if($retorna==true){
-   //         echo "<script>location.href='".$this->pagina_retorno."'</script>";
-   //      }
-   //   }
-   // }
+  function cl_scripts() { 
+    $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+  }
 
    // funcões
   function excluiEmpenho ($seq_emp){ 
