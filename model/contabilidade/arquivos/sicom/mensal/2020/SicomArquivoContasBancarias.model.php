@@ -826,19 +826,6 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                         WHERE fontemovimento::integer = $iFonte";
 
           $rsMovi21 = db_query($sSqlReg21);
-//          if($oContaAgrupada->si95_codctb == '27190') {
-//
-//              db_criatabela($rsMovi21);
-//              echo $sSqlReg21 . "<br>";
-//
-//          }
-
-
-            /*echo $nConta."<br>";
-            if($nConta==4362){
-    //db_criatabela($rsMovi21);
-  }
-  //echo pg_last_error();*/
 
 
             if (pg_num_rows($rsMovi21) != 0) {
