@@ -702,8 +702,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
                        WHERE e23_recolhido = TRUE
                          AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-                       GROUP BY e27_empagemov";
+                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
             $rsPagOrd13 = db_query($sSql13);
 
