@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -55,25 +55,25 @@ $iInstituicao = db_getsession("DB_instit");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form1" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tve01_codigo?>">
               <?=$Lve01_codigo?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("ve01_codigo",10,$Ive01_codigo,true,"text",4,"","chave_ve01_codigo");
 		       ?>
             </td>
-          </tr>          
-          <tr> 
+          </tr>
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tve01_placa?>">
               <?=$Lve01_placa?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
            db_input("ve01_placa",10,$Ive01_placa,true,"text",4,"","chave_ve01_placa");
            ?>
@@ -88,9 +88,20 @@ $iInstituicao = db_getsession("DB_instit");
             ?>
             </td>
           </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+         <tr>
+           <td align="right">
+             <strong>Seleção por:</strong>
+           </td>
+           <td>
+             <?
+             $x = array("0"=>"Selecione","1"=>"Ativos","2"=>"Baixados");
+             db_select('chave_baixa',$x,true,2,"","chave_baixa","");
+             ?>
+           </td>
+         </tr>
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veiculos.hide();">
              </td>
@@ -99,50 +110,52 @@ $iInstituicao = db_getsession("DB_instit");
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       $where = "";
-      if (isset($baixa)&&$baixa!=""){
-      	$where = " ve01_ativo = '$baixa' and ";
-      } else {
-      	$where = " ve01_ativo = '1' ";
-			}
-
 
       if (isset($chave_veiccadcentral) && trim($chave_veiccadcentral) != "" && $chave_veiccadcentral != "0"){
-        $where .= "and  ve37_veiccadcentral = $chave_veiccadcentral "; 
+        $where .= "and  ve37_veiccadcentral = $chave_veiccadcentral ";
       } else {
         $where .="";
       }
 
-      if(!isset($pesquisa_chave)){
-      	
-        if(isset($campos)==false){
-        	
-           $campos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,";
-           $campos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";           
+      if(isset($chave_baixa) && trim($chave_baixa) != "" && $chave_baixa != "0"){
+        if ($chave_baixa == "1"){
+          $where = "and ve01_ativo = '1' and not exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo and ve04_veiccadtipobaixa not in (1,2,3,4,5,99))";
+        }else{
+          $where = "and exists (select ve04_codigo from veicbaixa where ve04_veiculo = ve01_codigo and ve04_veiccadtipobaixa not in (7))";
         }
-        
+      }
+
+      if(!isset($pesquisa_chave)){
+
+        if(isset($campos)==false){
+
+           $campos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,";
+           $campos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";
+        }
+
         if (isset($chave_ve01_codigo) && (trim($chave_ve01_codigo)!="") ) {
 	         $sql = $clveiculos->sql_query($chave_ve01_codigo,$campos,"ve01_codigo","ve01_codigo=$chave_ve01_codigo and instit = {$iInstituicao} ");
         } else if( isset($chave_ve01_placa) && (trim($chave_ve01_placa)!="") ) {
            $sql = $clveiculos->sql_query("",$campos,"ve01_placa"," trim(ve01_placa) like '$chave_ve01_placa%' and instit = {$iInstituicao} ");
         } else {
-           $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","$where and instit = {$iInstituicao} ");
+           $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","instit = {$iInstituicao} $where");
         }
 
         $repassa = array();
         if(isset($chave_ve01_codigo)){
           $repassa = array("chave_ve01_codigo" => $chave_ve01_codigo, "chave_ve01_codigo"=>$chave_ve01_codigo);
         }
-				
+
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa,false);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           if ($where!=""){
            	$where = " and ".$where;
-          }	
+          }
           $result = $clveiculos->sql_record($clveiculos->sql_query($pesquisa_chave,"*",null,"ve01_codigo=$pesquisa_chave $where and instit = {$iInstituicao} "));
           if($clveiculos->numrows!=0){
             db_fieldsmemory($result,0);
