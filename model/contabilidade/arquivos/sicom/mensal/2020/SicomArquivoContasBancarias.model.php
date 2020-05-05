@@ -772,7 +772,6 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                         WHEN c71_coddoc = 100 AND substr(o57_fonte,2,4) = '1321' AND bancodebito.c63_tipoconta IN (2, 3) THEN 4
                                         WHEN c71_coddoc = 100 THEN 1
                                         WHEN c71_coddoc IN (6,36,38,121,153,163) THEN 17
-                                        --WHEN c71_coddoc IN (153) THEN 10
                                         WHEN c71_coddoc IN (131,152,162) THEN 10
                                         WHEN c71_coddoc IN (130) THEN 12
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
