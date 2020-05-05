@@ -54,6 +54,8 @@ require_once("classes/db_empelemento_classe.php");
 require_once("classes/db_empempitem_classe.php");
 require_once("classes/db_convconvenios_classe.php");
 require_once("std/Modification.php");
+require_once("classes/db_empnotaele_classe.php");
+require_once("classes/db_empnota_classe.php");
 
 $clempempaut			= new cl_empempaut;
 $clempempenho	  	= new cl_empempenho;
@@ -77,6 +79,8 @@ $clorcelemento    = new cl_orcelemento;
 $clempautitem	  	= new cl_empautitem;
 $clempelemento	  = new cl_empelemento;
 $clempempitem			= new cl_empempitem;
+$clempnotaele           = new cl_empnotaele;
+$clempnota           = new cl_empnota;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -224,6 +228,37 @@ if(isset($alterar)){
         if($clempelemento->erro_status=="0"){
             $sqlerro=true;
             $erro_msg = $clempelemento->erro_msg;
+        }
+    }
+
+    if(!$sqlerro && isset($e64_codele)){
+
+        $sqlNota = $clempnota->sql_query_file(null,"e69_codnota",null,"e69_numemp = {$e60_numemp}");
+        $rsNota = db_query($sqlNota);
+
+        $iNumRows = pg_num_rows($rsNota);
+
+        if($iNumRows > 0) {
+
+            for ($i=0; $i < $iNumRows; $i++) {
+
+                $oRow = db_utils::fieldsMemory($rsNota,$i);
+
+                $result = $clempnotaele->sql_record($clempnotaele->sql_query($oRow->e69_codnota));
+                db_fieldsmemory($result,0);
+
+                $clempnotaele->e70_codele = $e56_codele;
+                $clempnotaele->e70_codnota = $e69_codnota;
+                
+                $clempnotaele->alterar($oRow->e69_codnota);
+                
+                if($clempnotaele->erro_status=="0"){
+                    $sqlerro=true;
+                    $erro_msg = $clempnotaele->erro_msg;
+
+                }
+
+            }
         }
     }
 

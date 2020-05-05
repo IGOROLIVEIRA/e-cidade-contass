@@ -12,7 +12,9 @@ include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_credenciamento_classe.php");
 include("classes/db_habilitacaoforn_classe.php");
 include("classes/db_parecerlicitacao_classe.php");
+include("classes/db_licitemobra_classe.php");
 
+$cllicitemobra         = new cl_licitemobra;
 $clcredenciamento      = new cl_credenciamento;
 $clitenshomologacao    = new cl_itenshomologacao;
 $clhomologacaoadjudica = new cl_homologacaoadjudica;

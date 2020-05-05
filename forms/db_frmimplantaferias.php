@@ -85,7 +85,7 @@ fieldset > table >tbody >tr > td> select {
         if(isset($r30_peraf_dia) && trim($r30_peraf_dia) != "" && isset($r30_peraf_mes) && trim($r30_peraf_mes) != "" && isset($r30_peraf_ano) && trim($r30_peraf_ano) != ""){
           $r30_peraf_ant = $r30_peraf_ano."-".$r30_peraf_mes."-".$r30_peraf_dia;
         }
-        db_inputdata('r30_perai', @$r30_perai_dia, @$r30_perai_mes, @$r30_perai_ano, true, 'text', ($db_opcao == 3 ? 3 : 1), "onchange='js_verificaaquiini(1, event);'","","","parent.js_verificaaquiini(1, event);");
+        db_inputdata('r30_perai', @$r30_perai_dia, @$r30_perai_mes, @$r30_perai_ano, true, 'text', ($db_opcao == 3 ? 3 : 1), "onchange='js_verificaaquiini(event);'","","","parent.js_verificaaquiini(event);");
         db_input('r30_perai', 10, $Ir30_perai, true, 'hidden', 3,'','r30_perai_ant');
         ?> <b>a</b> <?
         db_inputdata('r30_peraf', @$r30_peraf_dia, @$r30_peraf_mes, @$r30_peraf_ano, true, 'text', ($db_opcao == 3 ? 3 : 1), "onchange='js_verificaaquifim();'","","","parent.js_verificaaquifim();");
@@ -312,7 +312,7 @@ fieldset > table >tbody >tr > td> select {
 ?>
 </form>
 <script>
-document.getElementById("r30_perai").addEventListener("keyup", function(e){js_verificaaquiini(1, e)}, false);
+document.getElementById("r30_perai").addEventListener("keyup", function(e){js_verificaaquiini(e)}, false);
 function js_pesquisar30_regist(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ar&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
@@ -517,7 +517,7 @@ function js_montaPeriodo(oInputInicio, oInputFinal) {
   oInputFinal.value = oFinal.toLocaleDateString('pt-BR').replace("-", "/", 'g');
 }
 
-function js_verificaaquiini(iOpcao, e = null) {
+function js_verificaaquiini(e = null) {
   /**
    * Define variáveis.
    */
@@ -608,9 +608,7 @@ function js_verificaaquiini(iOpcao, e = null) {
     /**
      * Para prefeituras que pagam as férias antecipadas.
      */
-    if (iOpcao == 1 &&
-       (iOpcao == 2 ||
-       confirm('O período aquisitivo ainda não venceu.\nContinua geração das Férias?'))) {
+    if (confirm('O período aquisitivo ainda não venceu.\nContinua geração das Férias?')) {
 
       // Não faz nada
     } else {
@@ -672,7 +670,7 @@ function js_montaselect(ndias){
     document.form1.r30_tip1.options[i] = null;
     i = -1;
   }
-  if (ndias == 30) {
+  if (ndias == 30 && typeof(document.form1.r30_tip1.options) !== 'undefined') {
 
     document.form1.r30_tip1.options[0] = new Option('01 - 30 dias ferias',                 '01');
     document.form1.r30_tip1.options[1] = new Option('02 - 20 dias ferias',                 '02');
@@ -691,7 +689,7 @@ function js_montaselect(ndias){
     document.form1.r30_tip1.options[4].setAttribute('data-ferias', '20');
     document.form1.r30_tip1.options[5].setAttribute('data-ferias', '15');
     document.form1.r30_tip1.options[6].setAttribute('data-ferias', '10');
-  } else {
+  } else if (ndias == 30 && typeof(document.form1.r30_tip1.options) !== 'undefined') {
 
     document.form1.r30_tip1.options[0] = new Option('01 - '+ndias+' dias férias', '01');
     document.form1.r30_tip1.options[1] = new Option('02 - '+ndias+' dias abono', '02');
@@ -847,6 +845,10 @@ function js_validaDataInicialSegundoPeriodo() {
 
 
 function js_validamtipo(){
+
+  if(typeof(document.form1.r30_tip1.options) === 'undefined') {
+    return;
+  }
   valmtipo = document.form1.r30_tip1.options[document.form1.r30_tip1.selectedIndex].value;
   valntipo = new Number(document.form1.r30_tip1.options[document.form1.r30_tip1.selectedIndex].value);
   valorndt = new Number(document.form1.r30_ndias.value);
@@ -983,7 +985,7 @@ function array_reverse (array) {
 
 <?php if (isset($dbopcao) && $dbopcao == true) { ?>
 <?php } elseif (isset($dbopcao) && $dbopcao == false) { ?>
-  js_verificaaquiini(2, null);
+  js_verificaaquiini(null);
   js_montaselect(document.form1.r30_ndias.value);
 <?php } ?>
 </script>

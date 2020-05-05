@@ -269,7 +269,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                 WHERE db_config.codigo = ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103)
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
     
 ";
     $rsResult10 = db_query($sSql);
@@ -371,7 +371,8 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103)";
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)";
+
             $rsResult11 = db_query($sSql);
             $aDadosAgrupados11 = array();
             for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -479,7 +480,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
                 INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103);
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106);
     ";
             $rsResult12 = db_query($sSql);
 
