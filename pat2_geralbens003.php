@@ -308,8 +308,6 @@ readfile( 'geral_bens.csv' );
 
 echo $info.($head6 ? $head6.";" : '' ).($head7 ? $head7.";" : '');
 
-/* Impressão da primeira linha do cabeçalho */
-
 echo "\nCódigo;";
 echo "Descrição do Bem;";
 echo "Vlr Aquisição;";
@@ -320,17 +318,16 @@ echo "Departamento;";
 echo "Divisão;";
 echo "Nota F.;";
 
-/* Impressão da segunda linha do cabeçalho */
-
-echo "\nFornecedor;";
-echo "Nome;";
-echo "Observações;";
-
-if($flag_classi){
-    echo "\nClassificação;";
-    echo "Descrição da Classificação;";
+if($flag_forn){
+    echo "Fornecedor;";
+    echo "Nome;";
+    echo "Observações;";
 }
 
+if($flag_classi){
+    echo "Classificação;";
+    echo "Descrição da Classificação;";
+}
 
 for ($count=0;$count<pg_numrows($result);$count++){
     $oBem = db_utils::fieldsMemory($result, $count);
@@ -344,12 +341,14 @@ for ($count=0;$count<pg_numrows($result);$count++){
     echo $oBem->t33_divisao.";";
     echo $oBem->t53_ntfisc.";";
 
-    echo "\n".$oBem->t52_numcgm.";";
-    echo $oBem->z01_nome.";";
-    echo $oBem->t52_obs.";";
+    if($flag_forn){
+        echo $oBem->t52_numcgm.";";
+        echo $oBem->z01_nome.";";
+        echo $oBem->t52_obs.";";
+    }
 
     if($flag_classi){
-        echo "\n".$oBem->t64_class.";";
+        echo $oBem->t64_class.";";
         echo $oBem->t64_descr.";";
     }
 }
