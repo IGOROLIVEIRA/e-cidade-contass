@@ -1004,9 +1004,9 @@ class cl_tabrec {
       $sql .= $campos;
     }
     $sql .= " from tabrec ";
-    $sql .= "      inner join tabplan        on tabplan.k02_codigo       = tabrec.k02_codigo ";
-    $sql .= "      inner join conplanoreduz  on conplanoreduz.c61_reduz  = tabplan.k02_reduz ";
-    $sql .= "                               and conplanoreduz.c61_anousu = tabplan.k02_anousu";
+    //$sql .= "      inner join tabplan        on tabplan.k02_codigo       = tabrec.k02_codigo ";
+    //$sql .= "      inner join conplanoreduz  on conplanoreduz.c61_reduz  = tabplan.k02_reduz ";
+    //$sql .= "                               and conplanoreduz.c61_anousu = tabplan.k02_anousu";
 
     $sql2 = "";
     if($dbwhere==""){
@@ -1115,7 +1115,7 @@ class cl_tabrec {
   	  }
   	} else {
   		$sql .= "        from tabrec ";
-  	  $sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
+  	  //$sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
   	}
   	$sql2 = "";
   	if($dbwhere==""){
