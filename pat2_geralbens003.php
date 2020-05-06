@@ -332,7 +332,7 @@ if($flag_classi){
 for ($count=0;$count<pg_numrows($result);$count++){
     $oBem = db_utils::fieldsMemory($result, $count);
     echo "\n".$oBem->t52_bem.";";
-    echo $oBem->t52_descr.";";
+    echo str_replace(';',',', $oBem->t52_descr).";";
     echo $oBem->t52_valaqu.";";
     echo join('/', array_reverse(explode('-', $oBem->t52_dtaqu))).";";
     echo $oBem->t52_ident.";";
@@ -344,12 +344,12 @@ for ($count=0;$count<pg_numrows($result);$count++){
     if($flag_forn){
         echo $oBem->t52_numcgm.";";
         echo $oBem->z01_nome.";";
-        echo $oBem->t52_obs.";";
+        echo str_replace(';', ',', $oBem->t52_obs).";";
     }
 
     if($flag_classi){
         echo $oBem->t64_class.";";
-        echo $oBem->t64_descr.";";
+        echo str_replace(';', ',', $oBem->t64_descr).";";
     }
 }
 
