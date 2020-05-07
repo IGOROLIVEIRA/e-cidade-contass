@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -73,7 +73,7 @@ if ($clliclicita->numrows > 0) {
 function js_submit(codproc){
 	parent.itens.js_submit_form();
 	parent.itens.document.form1.codproc.value=codproc;
-	
+
 	parent.itens.document.form1.submit();
 	document.form1.submit();
 }
@@ -97,7 +97,7 @@ function js_submit(codproc){
     <td>
     <?
     $vir="";
-        
+
         $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query(
                                            null,"distinct pc80_codproc",null,"l21_codliclicita = $licitacao"));
     if ($clliclicitem->numrows>0){
@@ -115,9 +115,9 @@ function js_submit(codproc){
   <tr>
      <td><b>Processo de Compra:</b></td>
     <td>
-    
+
     <?
-    
+
     $rsPcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_contrandsol"));
     db_fieldsmemory($rsPcparam, 0);
     $sWhere = "";
@@ -128,7 +128,7 @@ function js_submit(codproc){
       $sWhere .= " and pc10_solicitacaotipo in(1,2)";
     }
     $sWhere .= " and pc80_situacao = 2";
-    $sWhere .= " and not exists (select 1 "; 
+    $sWhere .= " and not exists (select 1 ";
     $sWhere .= "                   from acordopcprocitem ";
     $sWhere .= "                        inner join acordoitem    on ac23_acordoitem    = ac20_sequencial";
     $sWhere .= "                        inner join acordoposicao on ac20_acordoposicao = ac26_sequencial";
@@ -148,23 +148,35 @@ function js_submit(codproc){
         $sWhere .= " and pc80_data <= '$l20_dataaber' ";
     }
 
+    /**
+     * Validação inserida no sql que retorna processos de compras no modulo licitação
+     * @OC11589
+     */
+    $sWhere .= "and not EXISTS (SELECT *
+         FROM liclicitem
+         INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+         WHERE pc81_codproc = pc80_codproc)";
 
-    
+    //aqui e removido processos com autorização de empenho geradas no compras.
+    $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
+
+
+
 	if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {
-	    
+
 	    $sSqlProc = $clpcproc->sql_query_soland(null, "distinct pc80_codproc",
 	                                           "pc80_codproc",
 	                                           "(e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))
 	                                             and pc43_depto = ".db_getsession('DB_coddepto')." {$sWhere}");
-      
+
     } else {
-      $sSqlProc = $clpcproc->sql_query_aut(null, 
-                                           "distinct pc80_codproc", 
+      $sSqlProc = $clpcproc->sql_query_aut(null,
+                                           "distinct pc80_codproc",
                                            "pc80_codproc",
                                            "(e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))
                                              and pc10_instit = ".db_getsession("DB_instit")." {$sWhere}");
     }
-    //echo $sSqlProc;
+//    echo $sSqlProc;
     $result_pcproc=$clpcproc->sql_record($sSqlProc);
     if (isset($codproc)&&$codproc!=""){
       $couni="codproc";
@@ -177,7 +189,7 @@ function js_submit(codproc){
         $pc80_data_mes="";
         $pc80_data_ano="";
     }
-    
+
 	echo"<select name='codproc' id='codproc' onchange='js_submit(this.value);'>";
 	echo "<option value=''></option>\n";
 	for($y=0;$y<$clpcproc->numrows;$y++){
@@ -185,7 +197,7 @@ function js_submit(codproc){
 	  echo "<option value=$pc80_codproc ".(isset($couni)?($$couni==$pc80_codproc?"selected":""):"")." >$pc80_codproc</option>\n";
    	}
     echo " </select>";
-  
+
     ?>
     </td>
     <?
@@ -218,18 +230,18 @@ function js_submit(codproc){
     }
     ?>
     <td align="right" nowrap title="<?=@$Tnome?>">
-      <strong>Usuário:</strong>      
+      <strong>Usuário:</strong>
     </td>
     <td align="left" nowrap>
     <?
       db_input('nome',41,$Inome,true,'text',3);
     ?>
     </td>
-    
+
   </tr>
   <tr>
     <td align="right" nowrap title="<?=@$Tpc80_data?>">
-      <strong>Data: </strong>      
+      <strong>Data: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -239,7 +251,7 @@ function js_submit(codproc){
     ?>
     </td>
     <td align="right" nowrap title="<?=@$Tdescrdepto?>">
-      <strong>Departamento: </strong>      
+      <strong>Departamento: </strong>
     </td>
     <td align="left" nowrap>
     <?
@@ -253,7 +265,7 @@ function js_submit(codproc){
     </td>
     <td colspan="3" nowrap>
     <?
-      db_textarea('pc80_resumo',2,73,$Ipc80_resumo,true,'text',3,"")     
+      db_textarea('pc80_resumo',2,73,$Ipc80_resumo,true,'text',3,"")
     ?>
     </td>
   </tr>
