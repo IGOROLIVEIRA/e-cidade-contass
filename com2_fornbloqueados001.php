@@ -34,6 +34,50 @@ db_postmemory($HTTP_POST_VARS);
 ?>
 
 <html>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
+<center>
+  <fieldset style="width: 43%;margin-top: 5%">
+    <legend>Fornecedores Bloqueados</legend>
+    <table  align="center">
+      <form name="form1" method="post" action="">
+        <tr>
+          <td >&nbsp;</td>
+          <td >&nbsp;</td>
+        </tr>
+        <tr >
+          <td align="left" nowrap title="Período" >
+            <strong>Período :&nbsp;&nbsp;</strong>
+          </td>
+          <td>
+
+            <?php db_inputdata("data_ini",'', '', '', true, "text", 4, "", "data_ini"); ?> a
+            <?php db_inputdata("data_fim",'', '', '', true, "text", 4, "", "data_fim"); ?>
+
+          </td>
+        </tr>
+        <tr>
+          <td >&nbsp;</td>
+          <td >&nbsp;</td>
+        </tr>
+
+      </form>
+    </table>
+  </fieldset>
+  <table>
+    <tr>
+      <td>
+        <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
+      </td>
+    </tr>
+  </table>
+</center>
+
+
+
+<?
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+?>
+</body>
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -43,53 +87,6 @@ db_postmemory($HTTP_POST_VARS);
 
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-
-<fieldset style="width: 50%;margin-left: 26%;margin-top: 5%">
-  <legend>Fornecedores Bloqueados:</legend>
-  <table  align="center">
-    <form name="form1" method="post" action="">
-      <tr>
-        <td >&nbsp;</td>
-        <td >&nbsp;</td>
-      </tr>
-      <tr >
-        <td align="left" nowrap title="Período" >
-          <strong>Período :&nbsp;&nbsp;</strong>
-        </td>
-        <td>
-
-          <?php db_inputdata("data_ini",'', '', '', true, "text", 4, "", "data_ini"); ?> a
-          <?php db_inputdata("data_fim",'', '', '', true, "text", 4, "", "data_fim"); ?>
-
-        </td>
-      </tr>
-      <tr>
-        <td >&nbsp;</td>
-        <td >&nbsp;</td>
-      </tr>
-      <tr>
-        <td colspan="2" align = "center">
-          <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
-        </td>
-      </tr>
-
-    </form>
-  </table>
-</fieldset>
-
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
-</body>
 </html>
 <script>
   function js_emite(){
