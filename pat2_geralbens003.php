@@ -123,10 +123,6 @@ if (isset($quebra_por) && $quebra_por != "" && $imp_classi == "S") {
 
 }
 
-//if($q_pagina == 'departamento'){
-//	$ordem .= ",db01_coddepto ";
-//}
-
 if (isset($coddepart) and $coddepart != 0 && $coddepart != "") {
     $where_instit .= " and t52_depart=$coddepart ";
 }
@@ -190,18 +186,6 @@ if ($imp_forn == "S") {
 if ($imp_classi == "S") {
     $flag_classi = true;
 }
-
-
-if ($q_pagina == 'S') {
-    $head5 = "";
-} elseif ($q_pagina == 'orgao') {
-    $head5 = "Quebra por Órgão ";
-} else if ($q_pagina == 'unidade') {
-    $head5 = "Quebra por Unidade ";
-} else if ($q_pagina == 'departamento') {
-    $head5 = "Quebra por Departamento ";
-}
-
 
 if ($where_instit != "") {
     $where_instit .= " and ";
@@ -293,9 +277,10 @@ if($cgmFornecedor){
 
 $sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
 $result = $clbens->sql_record($sqlrelatorio);
+
 if ($clbens->numrows == 0) {
 
-    $sMsg = _M('patrimonial.patrimonio.pat2_geralbens002.nao_existem_registros');
+    $sMsg = _M('patrimonial.patrimonio.pat2_geralbens003.nao_existem_registros');
     db_redireciona('db_erros.php?fechar=true&db_erro=' . $sMsg);
     exit;
 }
@@ -331,20 +316,44 @@ if($flag_classi){
 
 for ($count=0;$count<pg_numrows($result);$count++){
     $oBem = db_utils::fieldsMemory($result, $count);
+    $sSql = "select (e60_codemp || '/' || e60_anousu) as e60_codemp from bensmater join empempenho on e60_numemp=t53_empen where t53_codbem = $oBem->t52_bem ";
+
+    if ($t53_empen != "") {
+        $sSql .= " and e60_numemp = '" . $t53_empen . "'";
+    }
+    $rsNumemp = db_query($sSql);
+
+    if (pg_num_rows($rsNumemp) == 0 && $t53_empen != "") {
+        continue;
+    }
+    $iNumemp = db_utils::fieldsMemory($rsNumemp, 0)->e60_codemp;
+
+    $sWhereBensBaixados = " t55_codbem = {$oBem->t52_bem}  ";
+    if (!empty($data_final)) {
+        $sWhereBensBaixados .= " and t55_baixa <= '{$data_final}' ";
+    }
+    $sSqlBuscaBensBaixados = $clbensbaix->sql_query_file(null, "*", null, $sWhereBensBaixados);
+    $result_bensbaix = $clbensbaix->sql_record($sSqlBuscaBensBaixados);
+    if ($clbensbaix->numrows > 0) {
+        continue;
+    }
+
     echo "\n".$oBem->t52_bem.";";
     echo str_replace(';',',', $oBem->t52_descr).";";
     echo $oBem->t52_valaqu.";";
     echo join('/', array_reverse(explode('-', $oBem->t52_dtaqu))).";";
+    echo $iNumemp.";";
     echo $oBem->t52_ident.";";
     echo $oBem->t52_depart."-".$oBem->descrdepto.";";
-    echo $oBem->t33_divisao.";";
-    echo $oBem->t33_divisao.";";
+    echo $oBem->t33_divisao ? ($oBem->t33_divisao. "-" . substr($oBem->t30_descr, 0, 27)).';' : ' '.";";
     echo $oBem->t53_ntfisc.";";
 
     if($flag_forn){
         echo $oBem->t52_numcgm.";";
         echo $oBem->z01_nome.";";
-        echo str_replace(';', ',', $oBem->t52_obs).";";
+        $observacoes = str_replace(',,', ',', preg_replace('/[\r\n;]/', ',', $oBem->t52_obs));
+        $observacoes = trim($observacoes) == '.' ? '' : $observacoes;
+        echo "$observacoes;";
     }
 
     if($flag_classi){
