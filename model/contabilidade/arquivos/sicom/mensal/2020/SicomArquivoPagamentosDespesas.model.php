@@ -155,7 +155,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                    e50_codord AS ordem,
                    e60_numemp,
                    o41_subunidade AS subunidade,
-                   c71_codlan AS lancamento
+                   c71_codlan AS lancamento,
+                   CASE
+       		            WHEN c72_complem ILIKE 'Referente%' THEN 1
+       		            ELSE 0
+   		           END AS retencao
             FROM pagordem
             JOIN pagordemele ON e53_codord = e50_codord
             JOIN empempenho ON e50_numemp = e60_numemp
@@ -165,6 +169,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             JOIN conlancamord ON c80_codord = e50_codord
             JOIN conlancamdoc ON c71_codlan = c80_codlan
             JOIN conlancam ON c70_codlan = c71_codlan
+            LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan
             LEFT JOIN db_usuacgm ON id_usuario = e50_id_usuario
             LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
             LEFT JOIN cgm o ON o.z01_numcgm = o41_ordpagamento
@@ -421,18 +426,22 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           /**
            * VERIFICA SE HOUVE RETENCAO NA ORDEM. CASO TENHA O VALOR SERA SUBTRAIDO NO VALOR DO LANCAMENTO.
            */
-          if ($reg12->e81_codmov == ''){
-            $reg12->e81_codmov = 0;
-          }
           $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
                        FROM retencaopagordem
                        JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
                        JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
                        JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
-                       WHERE e23_recolhido = TRUE
-                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-                       GROUP BY e27_empagemov";
+                       WHERE e23_recolhido = TRUE";
+
+          if ($reg12->e81_codmov == ''){
+              $sqlReten .= " AND (e20_pagordem) = ({$oEmpPago->ordem})";
+          } else {
+              $sqlReten .= " AND (e20_pagordem , e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})";
+          }
+
+          $sqlReten .= " AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                            GROUP BY e27_empagemov";
+
           $rsReteIsIs = db_query($sqlReten);
 
           if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
@@ -700,9 +709,14 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        LEFT JOIN conplano ON (tp.k02_anousu, tp.k02_estpla) = (conplano.c60_anousu, conplano.c60_estrut)
                        LEFT JOIN taborc ON tr.k02_codigo = taborc.k02_codigo AND taborc.k02_anousu = " . db_getsession("DB_anousu") . "
                        JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
-                       WHERE e23_recolhido = TRUE
-                         AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})
-                         AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
+                       WHERE e23_recolhido = TRUE";
+
+            if ($reg12->e81_codmov == ''){
+                $sSql13 .= " AND (e20_pagordem) = ({$oEmpPago->ordem})";
+            } else {
+                $sSql13 .= " AND (e20_pagordem, e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})";
+            }
+            $sSql13 .= " AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
 
             $rsPagOrd13 = db_query($sSql13);
 
@@ -994,7 +1008,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                        GROUP BY e27_empagemov";
           $rsReteIs = db_query($sqlReten);
 
-          if ($aInformado[$sHash]->retencao == 0) {
+          if ($aInformado[$sHash]->retencao == 0 && $oEmpPago->retencao == 1) {
             if (pg_num_rows($rsReteIs) > 0) {
 
               $retencao2 = $aInformado[$sHash]->retencao;
@@ -1240,7 +1254,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             throw new Exception($clops12->erro_msg);
           }
 
-          if ($saldopag >= 0 && $retencao2 == 0) {
+          if ($saldopag >= 0 && $retencao2 == 0 && $oEmpPago->retencao == 1) {
 
             $sSql13 = "SELECT 13 AS tiporegistro,
                               e20_pagordem AS codreduzidoop,
