@@ -453,17 +453,13 @@ AND e60_codemp = '$codemp'";
          */
 
         $sSql20 = "SELECT *
-                   FROM disponibilidadecaixa
-                   WHERE c224_anousu = ". db_getsession('DB_anousu')."
-                        AND c224_instit = ". db_getsession('DB_instit')."
-                        AND c224_sequencial NOT IN
-                            (SELECT c224_sequencial
-                                 FROM disponibilidadecaixa
-                             WHERE c224_vlrcaixabruta = 0
-                             AND c224_rpexercicioanterior = 0
-                             AND c224_vlrrestoarecolher = 0
-                             AND c224_vlrrestoregativofinanceiro = 0
-                             AND c224_vlrdisponibilidadecaixa = 0)";
+        FROM disponibilidadecaixa
+        WHERE c224_anousu = ". db_getsession('DB_anousu')."
+        AND c224_instit = ". db_getsession('DB_instit')."
+        AND (c224_vlrcaixabruta != 0
+        OR c224_rpexercicioanterior != 0
+        OR c224_vlrrestoarecolher != 0
+        OR c224_vlrdisponibilidadecaixa != 0)";
         $rsResult20 = db_query($sSql20);
 
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
