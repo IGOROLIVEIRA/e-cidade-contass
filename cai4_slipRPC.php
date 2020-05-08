@@ -756,11 +756,6 @@ if ($oParam->exec == "isExtra") {
     $sSqlSlip .= " DELETE FROM conlancamrec ";
     $sSqlSlip .= " WHERE c74_codlan IN ";
     $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
-    $sSqlSlip .= " DELETE FROM contacorrentedetalhe ";
-    $sSqlSlip .= " WHERE c19_sequencial IN ";
-    $sSqlSlip .= "         (SELECT c28_sequencial FROM contacorrentedetalheconlancamval ";
-    $sSqlSlip .= "          WHERE c28_conlancamval IN ";
-    $sSqlSlip .= "                  (SELECT lancam FROM w_lancamentos)); ";
     $sSqlSlip .= " DELETE FROM contacorrentedetalheconlancamval ";
     $sSqlSlip .= " WHERE c28_conlancamval IN ";
     $sSqlSlip .= "         (SELECT c69_sequen FROM conlancamval ";

@@ -72,7 +72,7 @@ $db_botao = true;
             <fieldset style="border:0px;">
 
               <table border="0">
-                  <? if(!in_array($tipo_tribunal, array(100, 101, 102, 103))): ?>
+                  <? if(!in_array($tipo_tribunal, array(100, 101, 102, 103, 106))): ?>
                 <tr>
                   <td title="Edital">
                     <b>Edital:</b>

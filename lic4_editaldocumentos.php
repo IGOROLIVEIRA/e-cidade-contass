@@ -95,11 +95,13 @@ $db_opcao = 1;
                 case 101:
                 case 102:
                 case 103:
+                case 106:
                   if($natureza_objeto != 1 && $natureza_objeto != 7){
                     $aTipos[] = 'Selecione';
                     $aTipos['td'] = 'Termo de Dispensa';
                   }else{
                     $aTipos[] = 'Selecione';
+                    $aTipos['dp'] = 'Dispensa';
                     $aTipos['mc'] = 'Minuta do Contrato';
                     $aTipos['po'] = 'Planilha Orçamentária';
                     $aTipos['cr'] = 'Cronograma';
@@ -278,6 +280,9 @@ $db_opcao = 1;
                 break;
             case 'fl':
                 nova_sigla = 'Fotos do local';
+                break;
+            case 'dp':
+                nova_sigla = 'Dispensa';
                 break;
         }
         return nova_sigla;
