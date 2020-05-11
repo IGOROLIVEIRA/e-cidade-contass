@@ -652,8 +652,8 @@ db_app::load("estilos.css, grid.style.css");
             if (oRetorno.iTipoContrato != 6) {
               aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
             }
-
-            nTotal = nTotal + parseFloat(totaldotacoes);
+            valortotaldot = totaldotacoes.replace('.','').replace(',','.');
+            nTotal = nTotal + parseFloat(valortotaldot);
             oGridItens.addRow(aLinha);
             oGridItens.aRows[id].sStyle += ';padding:1px;' + sCor;
           }
@@ -730,8 +730,9 @@ db_app::load("estilos.css, grid.style.css");
             if (oRetorno.iTipoContrato != 6) {
               aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
             }
+            valortotaldot = totaldotacoes.replace('.','').replace(',','.');
+            nTotal = nTotal + parseFloat(valortotaldot);
 
-            nTotal = nTotal + parseFloat(totaldotacoes);
             oGridItens.addRow(aLinha);
             oGridItens.aRows[id].sStyle += ';padding:1px;' + sCor;
           }

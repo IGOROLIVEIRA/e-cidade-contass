@@ -215,7 +215,7 @@ if ($modelo == 1) {
             "pc23_orcamitem=$pc22_orcamitem and pc23_vlrun > 0");
         $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "($sSql) as vlrunit, pc23_quant as quant, pc24_pontuacao, pc23_obs", null,
             "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
-        $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
+        $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);//die($sSqlJulg);
         db_fieldsmemory($result_valor_item);
         $pdf->setfont('arial', '', 8);
         $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
@@ -335,12 +335,12 @@ if ($modelo == 1) {
             if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
                 $pdf->cell(20, $alt, "", 0, 0, "R", 0);
             } else {
-                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 2, ',', '.'), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
 
             //if ($quant_casas == 2) {
-                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, 2, ',', '.'), 0, 1, "R", 0);
+                $pdf->cell(20, $alt, number_format(($total_unit / $iContOrcamento) * $quant,2), 0, 1, "R", 0);
 //            } else {
 //                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, 2, ',', '.'), 0, 1, "R", 0);
 //            }
