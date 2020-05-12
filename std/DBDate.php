@@ -514,5 +514,18 @@ class DBDate {
     return $aRetorno;
   }
 
+  /**
+   * Returns the difference between two DateTime objects
+   * @param DBDate $oDtFim The date to compare to.
+   * @param boolean $absolute [optional] Whether to return absolute difference.
+   * @return DateInterval|boolean The DateInterval object representing the difference between the two dates or FALSE on failure.
+   */
+  public function diff(DBDate $oDtFim, $absolute = false)
+  {
+    $oDateTimeInicio = new DateTime($this->getDate());
+    $oDateTimeFim = new DateTime($oDtFim->getDate());
+
+    return $oDateTimeInicio->diff($oDateTimeFim, $absolute);
+  }
 
 }

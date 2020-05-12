@@ -191,8 +191,12 @@ $pdf->setfont('arial','b',8);
 $troca = 1;
 $alt = 4;
 $total = 0;
+$vvt = 0;
 for($x = 0; $x < $numrows;$x++){
    db_fieldsmemory($result,$x);
+    $valorVenalTerreno = getValorVenalTerreno($j01_matric);
+    $valorVenalConstrucao = getValorVenalConstrucao($j01_matric);
+    $vvt += $valorVenalTerreno+$valorVenalConstrucao;
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage("L");
       $pdf->setfont('arial','b',8);
@@ -202,35 +206,39 @@ for($x = 0; $x < $numrows;$x++){
       $pdf->cell(8,$alt,$RLj34_lote,1,0,"C",1);
       $pdf->cell(16,$alt,"Area Lote",1,0,"C",1);
       $pdf->cell(16,$alt,"Area Constr",1,0,"C",1);
-      $pdf->cell(45,$alt,"Testada Principal",1,0,"C",1);
+      $pdf->cell(44,$alt,"Testada Principal",1,0,"C",1);
       $pdf->cell(12,$alt,"N°",1,0,"C",1);
       $pdf->cell(15,$alt,"Compl",1,0,"C",1);
       $pdf->cell(45,$alt,"Proprietario",1,0,"C",1);
       $pdf->cell(28,$alt,"Cidade",1,0,"C",1);
-      $pdf->cell(44,$alt,"Possuidor",1,0,"C",1);
-      $pdf->cell(8,$alt,"Q.R.I",1,0,"C",1);
-      $pdf->cell(8,$alt,"L.R.I",1,0,"C",1);
-      $pdf->cell(5,$alt,"Tp",1,1,"C",1); 
-      $troca = 0;
+       $pdf->cell(8,$alt,"Q.R.I",1,0,"C",1);
+       $pdf->cell(8,$alt,"L.R.I",1,0,"C",1);
+       $pdf->cell(5,$alt,"Tp",1,0,"C",1);
+       $pdf->cell(15,$alt,"V.V.T",1,0,"C",1);
+       $pdf->cell(15,$alt,"V.V.C",1,0,"C",1);
+       $pdf->cell(15,$alt,"Total",1,1,"C",1);
+       $troca = 0;
       $p=0;
    }
    $pdf->setfont('arial','',7);
-   $pdf->cell(13,$alt,$j01_matric,0,0,"R",$p);
-   $pdf->cell(8,$alt,$j34_setor,0,0,"L",$p);
-   $pdf->cell(8,$alt,$j34_quadra,0,0,"L",$p);
-   $pdf->cell(8,$alt,$j34_lote,0,0,"L",$p);
-   $pdf->cell(16,$alt,db_formatar($area_lote+0,'p'),0,0,"R",$p);
-   $pdf->cell(16,$alt,db_formatar($area_const+0,'p'),0,0,"R",$p);
-   $pdf->cell(45,$alt,substr($testada_principal,0,30),0,0,"L",$p);
-   $pdf->cell(12,$alt,$j39_numero,0,0,"R",$p);
+   $pdf->cell(13,$alt,$j01_matric,0,0,"C",$p);
+   $pdf->cell(8,$alt,$j34_setor,0,0,"C",$p);
+   $pdf->cell(8,$alt,$j34_quadra,0,0,"C",$p);
+   $pdf->cell(8,$alt,$j34_lote,0,0,"C",$p);
+   $pdf->cell(16,$alt,db_formatar($area_lote+0,'p'),0,0,"C",$p);
+   $pdf->cell(16,$alt,db_formatar($area_const+0,'p'),0,0,"C",$p);
+   $pdf->cell(44,$alt,substr($testada_principal,0,30),0,0,"L",$p);
+   $pdf->cell(12,$alt,$j39_numero,0,0,"C",$p);
    $pdf->cell(15,$alt,substr($j39_compl,0,9),0,0,"L",$p);
    $pdf->cell(45,$alt,substr($proprietario,0,30),0,0,"L",$p);
    $pdf->cell(28,$alt,substr($z01_municpri,0,29),0,0,"L",$p);
-   $pdf->cell(44,$alt,substr($possuidor,0,32),0,0,"L",$p);
    $pdf->cell(8,$alt,$j04_quadraregimo,0,0,"L",$p);
    $pdf->cell(8,$alt,$j04_loteregimo,0,0,"L",$p);
-   $pdf->cell(5,$alt,substr($tipo,0,1),0,1,"L",$p);
-   
+   $pdf->cell(5,$alt,substr($tipo,0,1),0,0,"L",$p);
+   $pdf->cell(15,$alt,db_formatar($valorVenalTerreno,'f'),0,0,"R",$p);
+   $pdf->cell(15,$alt,db_formatar($valorVenalConstrucao,'f'),0,0,"R",$p);
+   $pdf->cell(15,$alt,db_formatar($valorVenalTerreno+$valorVenalConstrucao,'f'),0,1,"R",$p);
+
    if ($p==1)$p=0;
    else $p=1;
    
@@ -238,7 +246,48 @@ for($x = 0; $x < $numrows;$x++){
 }
 
 $pdf->setfont('arial','b',8);
-$pdf->cell(0,$alt,'TOTAL DE REGISTROS  :  '.$total,"T",0,"L",0);
+$pdf->cell(224,$alt,'TOTAL DE REGISTROS  :  '.$total,"T",0,"L",0);
+$pdf->cell(54,$alt,"VALOR VENAL TOTAL  : ".db_formatar($vvt,'f'),"T",1,"L",0);
+$pdf->ln(2);
+$pdf->setfont('arial',null,8);
+$pdf->cell(0,$alt,"* Valores Venais calculados de acordo com o último ano de cálculo de cada imóvel. ","",1,"L",0);
+$pdf->cell(0,$alt,"* Valores Venais Territoriais zerados significa que não houve cálculo de IPTU para o imóvel. ","",1,"L",0);
+$pdf->cell(0,$alt,"* Valores Venais de Construção zerados significa que não houve cálculo de IPTU para aquela construção. ","",1,"L",0);
 $pdf->Output();
+
+function getValorVenalTerreno($matric){
+    $cl_iptucalc = new cl_iptucalc();
+    $sSqlMaxAnousu = $cl_iptucalc->sql_query_file(null, $matric,"j23_anousu"," j23_anousu DESC limit 1");
+    $resMaxAnoUsu = $cl_iptucalc->sql_record($sSqlMaxAnousu);
+    if(!$resMaxAnoUsu){
+        return 0;
+    }
+
+    $iAnousu = db_utils::fieldsMemory($resMaxAnoUsu,0)->j23_anousu;
+    $sSqlValorVenalTerreno = $cl_iptucalc->sql_query_file($iAnousu, $matric,"j23_vlrter");
+    $resValorVenalTerreno  = $cl_iptucalc->sql_record($sSqlValorVenalTerreno);
+
+    return db_utils::fieldsMemory($resValorVenalTerreno,0)->j23_vlrter;
+}
+
+function getValorVenalConstrucao($matric){
+    $cl_iptucale = new cl_iptucale();
+    $cl_iptucalc = new cl_iptucalc();
+    $sSqlMaxAnousu = $cl_iptucalc->sql_query_file(null, $matric,"j23_anousu"," j23_anousu DESC limit 1");
+    $resMaxAnoUsu = $cl_iptucalc->sql_record($sSqlMaxAnousu);
+    if(!$resMaxAnoUsu){
+        return 0;
+    }
+
+    $iAnousu = db_utils::fieldsMemory($resMaxAnoUsu,0)->j23_anousu;
+    $sSqlValorVenalConstrucao = $cl_iptucale->sql_query_file($iAnousu, $matric,null,"j22_valor");
+    $resValorVenalConstrucao = $cl_iptucale->sql_record($sSqlValorVenalConstrucao);
+
+    if(!$resValorVenalConstrucao){
+        return 0;
+    }
+
+    return db_utils::fieldsMemory($resValorVenalConstrucao,0)->j22_valor;
+}
 
 ?>

@@ -304,7 +304,7 @@ try {
 
           /**
            * Dados para conta corrente credor e despesa
-           */ 
+           */
           $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
           $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
           $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
@@ -504,7 +504,7 @@ try {
 
         if ( !empty($oDadosConlancam->c75_numemp) ) {
 
-          $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oDadosConlancam->c75_numemp);
+            $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oDadosConlancam->c75_numemp);
           if ( $iInstituicaoSessao !== $oEmpenhoFinanceiro->getInstituicao()->getSequencial() ) {
             continue;
           }
