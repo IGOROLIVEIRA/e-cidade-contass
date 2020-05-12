@@ -249,7 +249,7 @@ $db_botao = true;
     }
 
     function js_exibeDadosCompl(idObra = null, incluir = true){
-        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir);
+        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, codigoLicitacao);
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
         if(idObra){
@@ -265,7 +265,8 @@ $db_botao = true;
     function js_lancaDadosCompCallBack(){
         var oEndereco = new Object();
         oEndereco.exec = 'findDadosObra';
-        oEndereco.iCodigoObra = $F('idObra');
+        oEndereco.licitacao = codigoLicitacao;
+        // oEndereco.sequencial = $F('idObra');
         js_AjaxCgm(oEndereco, js_retornoDadosObra);
 
         function js_retornoDadosObra(oAjax) {
@@ -302,12 +303,14 @@ $db_botao = true;
     }
 
     function js_PreencheObra(aDados) {
+
         var iNumDados = aDados.length;
         for (var iInd=0; iInd < iNumDados; iInd++) {
             let sEndereco = "";
-            sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode();
-            sEndereco += ", "+aDados[iInd].descrmunicipio.urlDecode();
-            sEndereco += aDados[iInd].bairro != '' ? ", "+aDados[iInd].bairro.urlDecode() : '';
+            sEndereco += "Sequencial: "+aDados[iInd].sequencial.urlDecode()+", ";
+            sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode()+", ";
+            sEndereco += aDados[iInd].descrmunicipio.urlDecode()+", ";
+            sEndereco += aDados[iInd].bairro != '' ? aDados[iInd].bairro.urlDecode() : '';
 
             $('dados_complementares').value = sEndereco;
         }
@@ -316,9 +319,9 @@ $db_botao = true;
     function js_init() {
         oDBGrid              = new DBGrid("gridDocumentos");
         oDBGrid.nameInstance = "oDBGrid";
-        oDBGrid.aWidths      = new Array("20%","65%","15%");
-        oDBGrid.setCellAlign(new Array("center", "left", "center"));
-        oDBGrid.setHeader(new Array("Código", "Descrição", "Opções"));
+        oDBGrid.aWidths      = new Array("10%","15%","59%","16%");
+        oDBGrid.setCellAlign(new Array("center", "center", "left", "center"));
+        oDBGrid.setHeader(new Array("Código", "Sequencial","Descrição", "Opções"));
         oDBGrid.show($('cntDBGrid'));
         oDBGrid.clearAll(true);
     }
@@ -326,18 +329,24 @@ $db_botao = true;
     function js_lancaDadosObra(){
 
         let dadoscomplementares = $('dados_complementares').value;
+        let valores = dadoscomplementares.split(',');
 
         if(dadoscomplementares != ''){
             let linhas = oDBGrid.aRows.length;
 
             let aLinha = new Array();
             aLinha[0] = linhas+1;
-            aLinha[1] = dadoscomplementares;
-            let valores = dadoscomplementares.split(',');
-            let dadosObra = valores[0].split(':');
+            aLinha[1] = valores[0].split(':')[1].trim();
+            valores[0] = '';
+            let novosValores = valores.filter( e => {
+                let valor = e.trim().replace(',','');
+                return valor;
+            });
 
-            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dadosObra[1].trim()+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+dadosObra[1].trim()+'"'+");'>";
+            aLinha[2] = novosValores.join(',');
+
+            aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
 
             oDBGrid.addRow(aLinha);
             oDBGrid.renderRows();
@@ -346,6 +355,7 @@ $db_botao = true;
         }else{
             alert('Informe algum endereço');
         }
+
     }
 
     js_init();
@@ -372,14 +382,16 @@ $db_botao = true;
         oRetorno.dadoscomplementares.forEach((dado) => {
             let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
-            let descricaoLinha = `Obra: ${dado.codigoobra}, ${descMunicipio}`;
-            descricaoLinha += dado.bairro ? `, ${dado.bairro.replace(/\+/g, ' ')}` : '';
+            let descricaoLinha = `Obra: ${dado.codigoobra},`;
+            descricaoLinha += `${descMunicipio},`;
+            descricaoLinha += dado.bairro ? ` ${dado.bairro.replace(/\+/g, ' ')}` : '';
+
             let aLinha = new Array();
             aLinha[0] = linhas+1;
-            aLinha[1] = descricaoLinha;
-            aLinha[2] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+dado.codigoobra+'"'+");'>"+
-                "<input type='button' value='E' onclick='js_excluiDados("+'"'+dado.codigoobra+'"'+");'>";
-
+            aLinha[1] = dado.sequencial;
+            aLinha[2] = descricaoLinha;
+            aLinha[3] = "<input type='button' value='A' onclick='js_lancaDadosAlt("+'"'+aLinha[1]+'"'+");'>"+
+                "<input type='button' value='E' onclick='js_excluiDados("+'"'+aLinha[1]+'"'+");'>";
             oDBGrid.addRow(aLinha);
         });
         oDBGrid.renderRows();
@@ -399,7 +411,8 @@ $db_botao = true;
             var sUrlRpc = "con4_endereco.RPC.php";
             let oParam = new Object();
             oParam.exec = 'excluiDadosObra';
-            oParam.codObra = valor;
+            oParam.sequencial = valor;
+            oParam.licitacao = codigoLicitacao;
 
             var oAjax = new Ajax.Request(
                 sUrlRpc,
@@ -412,24 +425,23 @@ $db_botao = true;
     }
 
     function js_retornoExclusao(oAjax){
-        let codigoRequisitado = JSON.parse(oAjax.request.parameters.json);
+        let obra = JSON.parse(oAjax.request.parameters.json);
         let resposta = eval("("+oAjax.responseText+")");
 
         alert(resposta.message.urlDecode());
 
-        for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
-            let conteudo = oDBGrid.aRows[cont].aCells[1].content.split(',');
-            let obra = conteudo[0].split(':');
-            let codigoObra = obra[1].trim();
+        if(resposta.status == 1){
+            for(let cont = 0; cont < oDBGrid.aRows.length; cont++){
+                let codigoobra = oDBGrid.aRows[cont].aCells[1].content;
 
-            if(codigoObra == codigoRequisitado.codObra){
-                let valores = [];
-                valores.push(cont);
-                oDBGrid.removeRow(valores);
+                if(codigoobra == obra.sequencial){
+                    let valores = [];
+                    valores.push(cont);
+                    oDBGrid.removeRow(valores);
+                }
             }
+            oDBGrid.renderRows();
         }
-
-        oDBGrid.renderRows();
 
     }
 

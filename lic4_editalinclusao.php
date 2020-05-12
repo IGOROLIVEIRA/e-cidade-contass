@@ -106,7 +106,7 @@ if (isset($incluir) && isset($licitacao)) {
 		$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
 		if(!$sqlerro){
-		    if($natureza_objeto == 1 || $natureza_objeto == 7){
+		    if($natureza_objeto == 1){
 
 				/* Verifica se tem dados complementares vinculados à licitação */
                 $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);

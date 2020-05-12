@@ -369,9 +369,10 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
-                INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
+                INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
-                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)";
+                    AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106) limit 1"; /* Limite inserido depois das alterações lançadas pelo tribunal de contas*/
 
             $rsResult11 = db_query($sSql);
             $aDadosAgrupados11 = array();
@@ -470,14 +471,16 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                        obrasdadoscomplementares.db150_segundolatitude AS segundolatitude,
                        obrasdadoscomplementares.db150_grauslongitude AS grauslongitude,
                        obrasdadoscomplementares.db150_minutolongitude AS minutolongitude,
-                       obrasdadoscomplementares.db150_segundolongitude AS segundolongitude
+                       obrasdadoscomplementares.db150_segundolongitude AS segundolongitude,
+                       obrasdadoscomplementares.db150_sequencial as sequencial
                 FROM liclicita
                 INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
                 INNER JOIN pctipocompratribunal ON (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
-                INNER JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
+                INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
                 INNER JOIN cadendermunicipio on obrasdadoscomplementares.db150_municipio = db72_sequencial
                 WHERE db_config.codigo= ".db_getsession('DB_instit')."
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106);
