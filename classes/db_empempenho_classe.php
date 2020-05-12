@@ -2245,7 +2245,8 @@ class cl_empempenho {
         $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
         $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
         $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
-        $sql .= "       join condataconf ON (c99_anousu, c99_instit) = (e60_anousu, e60_instit) ";
+        //$sql .= "       join condataconf ON (c99_anousu, c99_instit) = (e60_anousu, e60_instit) ";
+        $sql .= "   inner join empanulado  ON empanulado.e94_numemp = empempenho.e60_numemp ";
 
         $sql2 = "";
         if($dbwhere==""){

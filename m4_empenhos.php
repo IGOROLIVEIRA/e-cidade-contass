@@ -16,11 +16,51 @@ $cl_scripts = new cl_scripts;
 if(isset($excluir)){
 
   $db_botao=false;
+  $ano    = db_getsession('DB_anousu');
+  $instit = db_getsession('DB_instit');
   $codemp = explode('/',$e60_codemp);
-  db_inicio_transacao();
-  $cl_scripts->excluiEmpenho($e60_numemp,$codemp[1]);
-  echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
-  db_fim_transacao();
+  $rsVerify = db_query(
+    "SELECT 1
+    FROM empempenho
+    JOIN condataconf ON (c99_anousu,
+                         c99_instit) = (e60_anousu,
+                                        e60_instit)
+    WHERE e60_emiss > c99_data
+    AND e60_codemp = '$codemp[0]'
+    AND c99_instit = $instit
+    AND e60_anousu = '$ano'"
+  );
+
+  if(pg_num_rows($rsVerify) > 0 ){
+    db_inicio_transacao();
+    $cl_scripts->excluiEmpenho($e60_numemp);
+    echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
+    //echo "<script>alert(\"maior\");</script>";
+    db_fim_transacao();
+  }
+
+  $rsVerify2 = db_query(
+    "SELECT 1
+    FROM empempenho
+    JOIN condataconf ON (c99_anousu,
+                         c99_instit) = (e60_anousu,
+                                        e60_instit)
+    WHERE e60_codemp = '$codemp[0]'
+    AND c99_instit = $instit
+    AND e60_anousu = '$ano'"
+  );
+
+  if(pg_num_rows($rsVerify2) == 0){
+    db_inicio_transacao();
+    $cl_scripts->excluiEmpenho($e60_numemp);
+    echo "<script>alert(\"".$cl_scripts->erro_msg."\");</script>";
+    //echo "<script>alert(\"periodo vazio\");</script>";
+    db_fim_transacao();
+  }
+
+  if(pg_num_rows($rsVerify2) != 0 && pg_num_rows($rsVerify) == 0 ){
+    echo "<script>alert('Exclusão não efetuada. A data de emissão do empenho é menor ou igual a data do encerramento do período contábil');</script>";
+  }
 }
 
 ?>
@@ -44,7 +84,7 @@ if (db_getsession("DB_id_usuario") != 1) {
 } else {
   ?>
 
-  <form name='form1' method="post" action="">
+  <form name='form1' method="post" action="" onsubmit="return confirm('Deseja realmente excluir?');">
     <div class="container">
       <fieldset>
         <legend><b>Manutenção de Empenhos</b></legend>

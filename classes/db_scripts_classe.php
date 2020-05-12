@@ -334,6 +334,17 @@ class cl_scripts {
              (SELECT e60_numemp
               FROM w_empenhos));
 
+    DELETE FROM retencaocorgrupocorrente where e47_retencaoreceita in (SELECT e23_sequencial FROM retencaoreceitas
+    WHERE e23_retencaopagordem IN
+        (SELECT e20_sequencial
+         FROM retencaopagordem
+         WHERE e20_pagordem IN
+             (SELECT e50_codord
+              FROM pagordem
+              WHERE e50_numemp IN
+                  (SELECT e60_numemp
+                   FROM w_empenhos))));
+
     DELETE FROM retencaoempagemov
     WHERE e27_retencaoreceitas IN
         (SELECT e23_sequencial
@@ -558,15 +569,14 @@ class cl_scripts {
       AND c99_instit = $instit;
 
     ");
+    
 
-     if($result==false){ 
-       $this->erro_msg = str_replace("\n","",@pg_last_error());
-       return false;
+     if($result===false){
+       echo @pg_last_error();exit;
      }
  
      $this->erro_msg = "";
      $this->erro_msg = "Exclusão efetuada com Sucesso\\n";
-     $this->erro_msg .= "Valores : ".$this->si166_sequencial;
  
      $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
      $seq   = pg_result($resmanut,0,0);
