@@ -296,17 +296,33 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $claoc12->si40_tiporegistro = 12;
                     $claoc12->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
-                    $claoc12->si40_nroleialteracao = substr($oDados12->nroleialteracao, 0, 6);
-                    $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
-                    $claoc12->si40_tpleiorigdecreto = $oDados12->o138_altpercsuplementacao;
-                    $claoc12->si40_tipoleialteracao = $oDados12->o138_altpercsuplementacao == "LAO" ? $si40_tipoleialteracao : 0;
-                    $claoc12->si40_valorabertolei = $oDados11->valoraberto;
+
+                    
+                    if ($oDados11->tipodecretoalteracao != 4) {
+                        
+                        $claoc12->si40_nroleialteracao  = substr($oDados12->nroleialteracao, 0, 6);
+                        $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
+                        $claoc12->si40_tpleiorigdecreto = $oDados12->o138_altpercsuplementacao;
+                        $claoc12->si40_tipoleialteracao = $oDados12->o138_altpercsuplementacao == "LAO" ? $si40_tipoleialteracao : 0;
+                        $claoc12->si40_valorabertolei   = $oDados11->valoraberto;
+
+                    }else{
+                        
+                        $claoc12->si40_nroleialteracao  = '';
+                        $claoc12->si40_dataleialteracao = '';
+                        $claoc12->si40_tpleiorigdecreto = '';
+                        $claoc12->si40_tipoleialteracao = '';
+                        $claoc12->si40_valorabertolei   = '';
+                    }
+
+
                     $claoc12->si40_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $claoc12->si40_reg10 = $claoc10->si38_sequencial;
                     $claoc12->si40_instit = db_getsession("DB_instit");
 
                     $claoc12->incluir(null);
-                    //echo pg_last_error();
+                    // echo $claoc12->erro_sql;
+                    // echo pg_last_error();
                     if ($claoc12->erro_status == 0) {
                         throw new Exception($claoc12->erro_msg);
                     }
@@ -416,6 +432,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                          WHERE o46_codlei IN ({$oDados10->codigovinc})
                          ORDER BY o46_codsup";
 
+                         // echo $oDados10->codigovinc;
+                         // echo $sSql;
+                         
                 $rsResult = db_query($sSql);
 
                 $rsResult14 = db_query("
@@ -548,30 +567,31 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                       }
                     }
                 }
-
+                
                 if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
 
-                    foreach ($aDadosAgrupados15 as $oDadosReg14) {
-
+                    foreach ($aDadosAgrupados14 as $oDadosReg14) {  
+                        
                         $claoc14 = new cl_aoc142020();
 
                         $claoc14->si42_tiporegistro = 14;
                         $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
-                        $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
-                        $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
+                        //$claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
+                        $claoc14->si42_codorigem = '';
+                        $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codorgao;
                         $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
-                        $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
-                        $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
-                        $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codprograma;
-                        $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idacao;
-                        $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idsubacao;
-                        $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_naturezadespesa;
-                        $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfontrecursos;
-                        $claoc14->si42_vlacrescimo = $oDadosReg14->si194_vlreducao;
-                        $claoc14->si42_origemrecalteracao = $oDadosReg14->si194_origemrecalteracao;
-                        $claoc14->si42_mes = $oDadosReg14->si194_mes;
-                        $claoc14->si42_reg10 = $oDadosReg14->si194_reg10;
-                        $claoc14->si42_instit = $oDadosReg14->si194_instit;
+                        $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codfuncao;
+                        $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codsubfuncao;
+                        $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codprograma;
+                        $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_idacao;
+                        $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_idsubacao;
+                        $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_naturezadespesa;
+                        $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codfontrecursos;
+                        $claoc14->si42_vlacrescimo = $oDadosReg14->si42_vlreducao;
+                        $claoc14->si42_origemrecalteracao = $oDadosReg14->si42_origemrecalteracao;
+                        $claoc14->si42_mes = $oDadosReg14->si42_mes;
+                        $claoc14->si42_reg10 = $oDadosReg14->si42_reg10;
+                        $claoc14->si42_instit = $oDadosReg14->si42_instit;
 
                         $claoc14->incluir(null);
                         if ($claoc14->erro_status == 0) {

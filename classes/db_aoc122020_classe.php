@@ -190,11 +190,11 @@ class cl_aoc122020
                                ,'$this->si40_nroleialteracao' 
                                ," . ($this->si40_dataleialteracao == "null" || $this->si40_dataleialteracao == "" ? "null" : "'" . $this->si40_dataleialteracao . "'") . "
                                ,'$this->si40_tpleiorigdecreto'
-                               ,$this->si40_tipoleialteracao
+                               ," . ($this->si40_tipoleialteracao == "null" || $this->si40_tipoleialteracao == "" ? "null" : "'" . $this->si40_tipoleialteracao . "'") . "
                                ,$this->si40_mes 
                                ,$this->si40_reg10 
                                ,$this->si40_instit 
-                               ,$this->si40_valorabertolei
+                               ," . ($this->si40_valorabertolei == "null" || $this->si40_valorabertolei == "" ? "null" : "'" . $this->si40_valorabertolei . "'") . "
                       )";
     $result = db_query($sql);
     if ($result == false) {
