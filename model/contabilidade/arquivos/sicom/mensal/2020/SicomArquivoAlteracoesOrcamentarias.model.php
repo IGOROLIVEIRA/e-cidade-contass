@@ -567,31 +567,31 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                       }
                     }
                 }
-                
+                // print_r($oDadosSql14);exit;
                 if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
 
-                    foreach ($aDadosAgrupados14 as $oDadosReg14) {  
-                        
+                    foreach ($aDadosAgrupados15 as $oDadosReg14) {
+
                         $claoc14 = new cl_aoc142020();
 
                         $claoc14->si42_tiporegistro = 14;
                         $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
-                        //$claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
-                        $claoc14->si42_codorigem = '';
-                        $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codorgao;
+                        $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
+                        $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
+
                         $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
-                        $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codfuncao;
-                        $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codsubfuncao;
-                        $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codprograma;
-                        $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_idacao;
-                        $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_idsubacao;
-                        $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_naturezadespesa;
-                        $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si42_codsup][14][0]]->si42_codfontrecursos;
-                        $claoc14->si42_vlacrescimo = $oDadosReg14->si42_vlreducao;
-                        $claoc14->si42_origemrecalteracao = $oDadosReg14->si42_origemrecalteracao;
-                        $claoc14->si42_mes = $oDadosReg14->si42_mes;
-                        $claoc14->si42_reg10 = $oDadosReg14->si42_reg10;
-                        $claoc14->si42_instit = $oDadosReg14->si42_instit;
+                        $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
+                        $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
+                        $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codprograma;
+                        $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idacao;
+                        $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idsubacao;
+                        $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_naturezadespesa;
+                        $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfontrecursos;
+                        $claoc14->si42_vlacrescimo = $oDadosReg14->si194_vlreducao;
+                        $claoc14->si42_origemrecalteracao = $oDadosReg14->si194_origemrecalteracao;
+                        $claoc14->si42_mes = $oDadosReg14->si194_mes;
+                        $claoc14->si42_reg10 = $oDadosReg14->si194_reg10;
+                        $claoc14->si42_instit = $oDadosReg14->si194_instit;
 
                         $claoc14->incluir(null);
                         if ($claoc14->erro_status == 0) {
