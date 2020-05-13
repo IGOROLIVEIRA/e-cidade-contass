@@ -13,7 +13,7 @@ class Oc12134 extends AbstractMigration
             (SELECT max(menusequencia)+1 as count FROM db_menu  WHERE id_item = 32), 
             (1));
 
-        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Empenhos', 'Empenhos', 'm4_empenhos.php', 1, 1, 'Empenhos', 't');
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Excluir Empenhos', 'Excluir Empenhos', 'm4_empenhos.php', 1, 1, 'Empenhos', 't');
 
         INSERT INTO db_menu VALUES (
             (SELECT id_item from db_itensmenu where descricao = 'Manutenção de dados'), 
