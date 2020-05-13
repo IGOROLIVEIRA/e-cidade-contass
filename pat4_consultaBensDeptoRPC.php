@@ -68,7 +68,7 @@ if ( $clbenstransf->numrows > 0 ) {
 	$sCampos .= " end as transf                                       ";
 
 	$sWhere   = " t52_depart  = {$oTransf->t93_depart}                                                               ";
-
+	$sWhere  .= " AND t55_baixa IS NULL ";
 	// Valida se o bem está em transferência que não seja a atual ($oPost->iCodTransf)
 
   $sWhere  .= "    and not exists ( select *                                                                       ";
