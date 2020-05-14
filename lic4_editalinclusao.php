@@ -109,7 +109,7 @@ if (isset($incluir) && isset($licitacao)) {
 		    if($natureza_objeto == 1){
 
 				/* Verifica se tem dados complementares vinculados à licitação */
-                $sSqlObras = $clobrasdadoscomplementares->sql_query(null, '*', null, 'db150_liclicita = '.$licitacao);
+                $sSqlObras = $clobrasdadoscomplementares->sql_query_completo(null, '*', null, 'db151_liclicita = '.$licitacao);
                 $rsObras = $clobrasdadoscomplementares->sql_record($sSqlObras);
                 if($clobrasdadoscomplementares->numrows == 0){
                     $sqlerro = true;

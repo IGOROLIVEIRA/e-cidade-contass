@@ -266,9 +266,10 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                 INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
                 LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
                 INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
-                LEFT JOIN obrasdadoscomplementares ON obrasdadoscomplementares.db150_liclicita = liclicita.l20_codigo
-                INNER JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo and liclancedital.l47_dataenvio = '".$this->sDataFinal."'
-                WHERE db_config.codigo = ".db_getsession('DB_instit')."
+                INNER JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                INNER JOIN obrascodigos on obrascodigos.db151_liclicita = liclancedital.l47_liclicita
+				INNER JOIN obrasdadoscomplementares ON obrascodigos.db151_codigoobra = obrasdadoscomplementares.db150_codobra
+                WHERE db_config.codigo = ".db_getsession('DB_instit')." AND liclancedital.l47_dataenvio = '".$this->sDataFinal."'
                     AND pctipocompratribunal.l44_sequencial IN (100, 101, 102, 103, 106)
     
 ";
@@ -407,8 +408,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
                     $clredispi11->si184_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clredispi11->si184_reg10 = $clredispi10->si183_sequencial;// chave estrangeira
                     $clredispi11->si184_instit = db_getsession("DB_instit");
-
-                    $clredispi11->incluir(null);
+					$clredispi11->incluir(null);
                     if ($clredispi11->erro_status == 0) {
                         throw new Exception($clredispi11->erro_msg);
                     }
