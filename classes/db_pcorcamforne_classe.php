@@ -484,6 +484,42 @@ class cl_pcorcamforne {
      }
      return $sql;
   }
+	function sql_query_credenciados ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
+		$sql = "select ";
+		if($campos != "*" ){
+			$campos_sql = split("#",$campos);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}else{
+			$sql .= $campos;
+		}
+		$sql .= " from pcorcamforne ";
+		$sql .= "      inner join cgm  on  cgm.z01_numcgm = pcorcamforne.pc21_numcgm";
+		$sql .= "      inner join pcorcam  on  pcorcam.pc20_codorc = pcorcamforne.pc21_codorc";
+		$sql .= "      LEFT JOIN credenciamento ON credenciamento.l205_fornecedor = pcorcamforne.pc21_numcgm";
+		$sql2 = "";
+		if($dbwhere==""){
+			if($pc21_orcamforne!=null ){
+				$sql2 .= " where pcorcamforne.pc21_orcamforne = $pc21_orcamforne ";
+			}
+		}else if($dbwhere != ""){
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if($ordem != null ){
+			$sql .= " order by ";
+			$campos_sql = split("#",$ordem);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}
+		return $sql;
+	}
    function sql_query_file ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
