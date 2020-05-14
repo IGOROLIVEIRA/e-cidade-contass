@@ -21,10 +21,10 @@ e-cidade			5432	cii-amaje
 e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 
-pmcapitaoeneas      5432    ecidadepref
-pmclarodospocoes    5432    ecidadepref
-pmlagoadospatos     5432    ecidadepref
-pmsaoromao          5432    ecidadepref
+pmcapitaoeneas      5432    prefeituras
+pmclarodospocoes    5432    prefeituras
+pmlagoadospatos     5432    prefeituras
+pmsaoromao          5432    prefeituras
 
 e-cidade            5432    cmbhecid
 
