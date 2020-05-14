@@ -568,7 +568,7 @@ db_app::load("estilos.css, grid.style.css");
 
           var aLinha = new Array();
           aLinha[0] = ordem;
-          aLinha[1] = codigo;
+          aLinha[1] = codigomaterial;
           aLinha[2] = material.urlDecode();
           aLinha[3] = quantidade;
           var iCasas = js_getNumeroCasasDecimais(valorunitario);
