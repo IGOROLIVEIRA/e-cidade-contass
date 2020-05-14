@@ -20,6 +20,10 @@ class Oc12251 extends AbstractMigration
 				
 				ALTER TABLE obrasdadoscomplementares ADD CONSTRAINT fk_codigoobra FOREIGN KEY(db150_codobra) REFERENCES obrascodigos(db151_codigoobra);
 				ALTER TABLE obrasdadoscomplementares DROP COLUMN db150_liclicita;
+				
+				ALTER TABLE redispi102020 ALTER COLUMN si183_codorgaoresp TYPE varchar(3);
+				ALTER TABLE redispi112020 ALTER COLUMN si184_codorgaoresp TYPE varchar(3);
+				ALTER TABLE redispi122020 ALTER COLUMN si185_codorgaoresp TYPE varchar(3);
 		";
 		$this->execute($sql);
     }
