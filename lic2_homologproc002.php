@@ -76,7 +76,7 @@ if ($clliclicita->numrows == 0){
 }
 db_fieldsmemory($rsLicitacao,0);
   $head3 = "HOMOLOGAÇÃO DO PROCESSO ";
-  $head4 = "LICITAÇÃO : $l20_edital/".substr($l20_dataaber,0,4);
+  $head4 = "LICITAÇÃO : $l20_edital/".substr($l202_datahomologacao,0,4);
   $head5 = "SEQUENCIAL: $l20_codigo";
   $oPDF->addpage();
   $oPDF->setfont('arial','b',14);
@@ -91,7 +91,7 @@ $olicitacao = db_utils::fieldsMemory($rsLicitacao,0);
 $oLibDocumento->l20_edital    = $olicitacao->l20_edital;
 $oLibDocumento->l03_descr     = $olicitacao->l03_descr;
 $oLibDocumento->l20_procadmin = $olicitacao->l20_procadmin;
-$oLibDocumento->l20_datacria  = substr($olicitacao->l20_dataaber,0,4);
+$oLibDocumento->l20_datacria  = substr($olicitacao->l202_datahomologacao,0,4);
 $oLibDocumento->l20_codigo    = $olicitacao->l20_codigo;
 $oLibDocumento->l45_numatonomeacao  = $olicitacao->l45_numatonomeacao;
 $oLibDocumento->l20_objeto    = $olicitacao->l20_objeto;
