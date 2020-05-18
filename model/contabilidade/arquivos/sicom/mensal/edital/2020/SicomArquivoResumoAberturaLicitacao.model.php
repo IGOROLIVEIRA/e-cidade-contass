@@ -596,13 +596,11 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
         }
     }
 
-
     db_fim_transacao();
 
     $oGerarRALIC = new GerarRALIC();
     $oGerarRALIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarRALIC->gerarDados();
-
 
   }
 
