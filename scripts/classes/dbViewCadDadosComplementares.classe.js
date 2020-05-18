@@ -1494,7 +1494,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oCboGrupoBemPub.addItem(8, 'Definição do bem público da assistência social');
     me.oCboGrupoBemPub.addItem(10, 'Definição do bem público da saúde');
     me.oCboGrupoBemPub.addItem(12, 'Definição do bem público da educação');
-    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de saúde');
+    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de cultura');
     me.oCboGrupoBemPub.addItem(15, 'Definição do bem público de urbanismo');
     me.oCboGrupoBemPub.addItem(16, 'Definição do bem público de habitação');
     me.oCboGrupoBemPub.addItem(17, 'Definição do bem público de saneamento');
