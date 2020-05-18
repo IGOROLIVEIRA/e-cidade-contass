@@ -232,7 +232,7 @@ db_select("pc31_renunrecurso",$x,true,$db_opcao);
 	  * que é utilizado na listagem dos fornecedores lançados.
 	  *
 	  * */
-	 $sCampos = "pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome,(CASE WHEN l205_datacred IS NOT NULL THEN 'SIM'
+	 $sCampos = "DISTINCT pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome,(CASE WHEN l205_datacred IS NOT NULL THEN 'SIM'
        ELSE 'Não' END) AS ed18_i_credenciamento";
 	 $cliframe_alterar_excluir->sql     = $clpcorcamforne->sql_query_credenciados(null,$sCampos,"",$sWhere);
 	 $cliframe_alterar_excluir->campos  ="pc21_orcamforne,pc21_numcgm,z01_nome,ed18_i_credenciamento";
