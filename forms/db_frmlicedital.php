@@ -446,4 +446,13 @@ $db_botao = true;
     }
 
 
+    let elemento = document.getElementById('links');
+    elemento.addEventListener('keyup', (e) => {
+        let valor = e.target.value;
+
+        if(valor.includes(';')){
+            document.getElementById('links').value = valor.replace(/;/g, ',');
+            alert('Caractere ponto e vírugla não é permitido e será substituído por vírgula.');
+        }
+    });
 </script>
