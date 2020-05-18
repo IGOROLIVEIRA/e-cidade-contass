@@ -78,9 +78,11 @@ if(isset($excluir)){
   </head>
 <body bgcolor="#CCCCCC">
 <?php
-if (db_getsession("DB_id_usuario") != 1) {
+$sContass = explode(".",db_getsession("DB_login"));
 
-  echo "<br><center><br><H2>Essa rotina apenas poder√° ser usada pelo usuario dbseller</h2></center>";
+if ($sContass[1] != 'contass') {
+
+  echo "<br><center><br><H2>Essa rotina apenas pode ser usada por usu·rios da contass</h2></center>";
 } else {
   ?>
 
