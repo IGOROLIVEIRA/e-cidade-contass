@@ -158,7 +158,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
     /*
      * selecionar informacoes registro 10
      */
-    $sSql = "select * from convconvenios where c206_datacadastro >= '{$this->sDataInicial}' and c206_datacadastro <= '{$this->sDataFinal}' and c206_instit = " . db_getsession("DB_instit");
+    $sSql = "select * from convconvenios inner join orctiporec on o15_codigo = c206_tipocadastro where c206_datacadastro >= '{$this->sDataInicial}' and c206_datacadastro <= '{$this->sDataFinal}' and c206_instit = " . db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -174,7 +174,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
       $clconv10->si92_objetoconvenio = $oDados10->c206_objetoconvenio;
       $clconv10->si92_datainiciovigencia = $oDados10->c206_datainiciovigencia;
       $clconv10->si92_datafinalvigencia = $oDados10->c206_datafinalvigencia;
-      $clconv10->si92_codfontrecursos = $oDados10->c206_tipocadastro;
+      $clconv10->si92_codfontrecursos = $oDados10->o15_codtri;
       $clconv10->si92_vlconvenio = $oDados10->c206_vlconvenio;
       $clconv10->si92_vlcontrapartida = $oDados10->c206_vlcontrapartida;
       $clconv10->si92_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
