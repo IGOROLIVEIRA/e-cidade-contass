@@ -217,8 +217,8 @@ class cl_aoc142020
                                 $this->si42_sequencial 
                                ,$this->si42_tiporegistro 
                                ,$this->si42_codreduzidodecreto 
-                               ,$this->si42_origemrecalteracao
-                               ,$this->si42_codorigem 
+                               ,'$this->si42_origemrecalteracao'
+                               ,$this->si42_codorigem
                                ,'$this->si42_codorgao' 
                                ,'$this->si42_codunidadesub' 
                                ,'$this->si42_codfuncao' 

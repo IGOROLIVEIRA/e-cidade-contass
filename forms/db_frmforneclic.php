@@ -56,6 +56,7 @@ if(isset($db_opcaoal)){
      $pc21_orcamforne = "";
      $pc21_numcgm = "";
      $z01_nome = "";
+     $pc31_nomeretira = "";
    }
 }
 ?>
