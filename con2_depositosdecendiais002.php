@@ -641,7 +641,7 @@ ob_start();
                 <td class="s14 bdleft"></td>
                 <td class="s14"></td>
                 <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSESTEduc,$fTotalIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc,$fTotalTribMunEduc)),"f") ?></td>
-                <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude)),"f")?></td>
+                <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude,$fTotalTribMunSaude)),"f")?></td>
               </tr>
             </tbody>
           </table>
@@ -1060,7 +1060,7 @@ ob_start();
               <td class="s14 bdleft"></td>
               <td class="s14"></td>
               <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSESTEduc,$fTotalIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc,$fTotalTribMunEduc)),"f") ?></td>
-              <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude)),"f")?></td>
+              <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude,$fTotalTribMunSaude)),"f")?></td>
             </tr>
           </tbody>
         </table>

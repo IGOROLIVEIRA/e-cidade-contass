@@ -376,7 +376,7 @@ function js_verificadados(){
     }
   }
 
-  if(document.form1.r30_proc1.value == "" || (iAnoCompetenciaPagamentoGozo1 < parseInt(document.form1.r30_per1i_ano.value)) || (iMesCompetenciaPagamentoGozo1 > 12 || iMesCompetenciaPagamentoGozo1 < 1)) {
+  if(document.form1.r30_proc1.value == "" || (iMesCompetenciaPagamentoGozo1 > 12 || iMesCompetenciaPagamentoGozo1 < 1)) {
     alert("Informe corretamente a data de pagamento do período de gozo inicial.");
     document.form1.r30_proc1.focus();
     retorno = false;
@@ -689,7 +689,7 @@ function js_montaselect(ndias){
     document.form1.r30_tip1.options[4].setAttribute('data-ferias', '20');
     document.form1.r30_tip1.options[5].setAttribute('data-ferias', '15');
     document.form1.r30_tip1.options[6].setAttribute('data-ferias', '10');
-  } else if (ndias == 30 && typeof(document.form1.r30_tip1.options) !== 'undefined') {
+  } else if (typeof(document.form1.r30_tip1.options) !== 'undefined') {
 
     document.form1.r30_tip1.options[0] = new Option('01 - '+ndias+' dias férias', '01');
     document.form1.r30_tip1.options[1] = new Option('02 - '+ndias+' dias abono', '02');
