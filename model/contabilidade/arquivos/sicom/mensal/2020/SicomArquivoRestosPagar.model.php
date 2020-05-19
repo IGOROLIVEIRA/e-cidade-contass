@@ -475,7 +475,11 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
         $clrsp21->si116_tiporegistro = 21;
         $clrsp21->si116_codreduzidomov = $oDados20->codreduzidomov;
-        $clrsp21->si116_codfontrecursos = $oDados20->codfontrecursos;
+        if (in_array($oDados20->codfontrecursos, $this->aFontesEncerradas) && $oDados20->tipomovimento == 1) {
+            $clrsp21->si116_codfontrecursos = substr($oDados20->codfontrecursos, 0, 1).'59';
+        } else {
+            $clrsp21->si116_codfontrecursos = $oDados20->codfontrecursos;
+        }
         $clrsp21->si116_vlmovimentacaofonte = $oDados20->vlmovimentacao;
         $clrsp21->si116_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clrsp21->si116_instit = db_getsession("DB_instit");

@@ -1701,14 +1701,14 @@ function js_toogleRegRepasse(opcao) {
 
 function js_verificaEmendaParlamentar() {
 
-    aFontes = ['122', '123', '124', '142', '222', '223', '224', '242'];
+    aFontes = ['146', '155', '159', '246', '255', '259'];
 
     if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {
 
         if (aFontes.indexOf($('recurso').value) != -1) {
-            document.getElementById("k81_emparlamentar").options[3].selected = true;
-        } else {
             document.getElementById("k81_emparlamentar").options[0].selected = true;
+        } else {
+            document.getElementById("k81_emparlamentar").options[3].selected = true;
         }
 
         if ($('iEmParlamentarAux').value != 0) {

@@ -257,42 +257,37 @@ class GerarDISPENSA extends GerarAM
           }
 
         }
+      }
 
-        for ($iCont8 = 0; $iCont8 < pg_num_rows($rsDISPENSA18); $iCont8++) {
+      for ($iCont8 = 0; $iCont8 < pg_num_rows($rsDISPENSA18); $iCont8++) {
 
-          $aDISPENSA18 = pg_fetch_array($rsDISPENSA18, $iCont8);
+        $aDISPENSA18 = pg_fetch_array($rsDISPENSA18, $iCont8);
 
-          if ($aDISPENSA10['si74_sequencial'] == $aDISPENSA18['si82_reg10']) {
+        $aCSVDISPENSA18['si82_tiporegistro']                        = $this->padLeftZero($aDISPENSA18['si82_tiporegistro'], 2);
+        $aCSVDISPENSA18['si82_codorgaoresp']                        = $this->padLeftZero($aDISPENSA18['si82_codorgaoresp'], 2);
+        $aCSVDISPENSA18['si82_codunidadesubresp']                   = $this->padLeftZero($aDISPENSA18['si82_codunidadesubresp'], 5);
+        $aCSVDISPENSA18['si82_exercicioprocesso']                   = $this->padLeftZero($aDISPENSA18['si82_exercicioprocesso'], 4);
+        $aCSVDISPENSA18['si82_nroprocesso']                         = substr($aDISPENSA18['si82_nroprocesso'], 0, 12);
+        $aCSVDISPENSA18['si82_tipoprocesso']                        = $this->padLeftZero($aDISPENSA18['si82_tipoprocesso'], 1);
+        $aCSVDISPENSA18['si82_tipodocumento']                       = $this->padLeftZero($aDISPENSA18['si82_tipodocumento'], 1);
+        $aCSVDISPENSA18['si82_nrodocumento']                        = substr($aDISPENSA18['si82_nrodocumento'], 0, 14);
+        $aCSVDISPENSA18['si82_datacredenciamento']                  = $this->sicomDate($aDISPENSA18['si82_datacredenciamento']);
+        $aCSVDISPENSA18['si82_nrolote']                             = $aDISPENSA18['si82_nrolote'] == '0' ? ' ' : substr($aDISPENSA18['si82_nrolote'], 0, 4);
+        $aCSVDISPENSA18['si82_coditem']                             = $this->padLeftZero($aDISPENSA18['si82_coditem'], 15);
+        $aCSVDISPENSA18['si82_nroinscricaoestadual']                = substr($aDISPENSA18['si82_nroinscricaoestadual'], 0, 30);
+        $aCSVDISPENSA18['si82_ufinscricaoestadual']                 = strlen($aDISPENSA18['si82_ufinscricaoestadual']) < 2 ? ' ' : substr($aDISPENSA18['si82_ufinscricaoestadual'], 0, 2);
+        $aCSVDISPENSA18['si82_nrocertidaoregularidadeinss']         = substr($aDISPENSA18['si82_nrocertidaoregularidadeinss'], 0, 30);
+        $aCSVDISPENSA18['si82_dataemissaocertidaoregularidadeinss'] = $this->sicomDate($aDISPENSA18['si82_dataemissaocertidaoregularidadeinss']);
+        $aCSVDISPENSA18['si82_dtvalidadecertidaoregularidadeinss']  = $this->sicomDate($aDISPENSA18['si82_dtvalidadecertidaoregularidadeinss']);
+        $aCSVDISPENSA18['si82_nrocertidaoregularidadefgts']         = substr($aDISPENSA18['si82_nrocertidaoregularidadefgts'], 0, 30);
+        $aCSVDISPENSA18['si82_dtemissaocertidaoregularidadefgts']   = $this->sicomDate($aDISPENSA18['si82_dtemissaocertidaoregularidadefgts']);
+        $aCSVDISPENSA18['si82_dtvalidadecertidaoregularidadefgts']  = $this->sicomDate($aDISPENSA18['si82_dtvalidadecertidaoregularidadefgts']);
+        $aCSVDISPENSA18['si82_nrocndt']                             = substr($aDISPENSA18['si82_nrocndt'], 0, 30);
+        $aCSVDISPENSA18['si82_dtemissaocndt']                       = $this->sicomDate($aDISPENSA18['si82_dtemissaocndt']);
+        $aCSVDISPENSA18['si82_dtvalidadecndt']                      = $this->sicomDate($aDISPENSA18['si82_dtvalidadecndt']);
 
-            $aCSVDISPENSA18['si82_tiporegistro']                        = $this->padLeftZero($aDISPENSA18['si82_tiporegistro'], 2);
-            $aCSVDISPENSA18['si82_codorgaoresp']                        = $this->padLeftZero($aDISPENSA18['si82_codorgaoresp'], 2);
-            $aCSVDISPENSA18['si82_codunidadesubresp']                   = $this->padLeftZero($aDISPENSA18['si82_codunidadesubresp'], 5);
-            $aCSVDISPENSA18['si82_exercicioprocesso']                   = $this->padLeftZero($aDISPENSA18['si82_exercicioprocesso'], 4);
-            $aCSVDISPENSA18['si82_nroprocesso']                         = substr($aDISPENSA18['si82_nroprocesso'], 0, 12);
-            $aCSVDISPENSA18['si82_tipoprocesso']                        = $this->padLeftZero($aDISPENSA18['si82_tipoprocesso'], 1);
-            $aCSVDISPENSA18['si82_tipodocumento']                       = $this->padLeftZero($aDISPENSA18['si82_tipodocumento'], 1);
-            $aCSVDISPENSA18['si82_nrodocumento']                        = substr($aDISPENSA18['si82_nrodocumento'], 0, 14);
-            $aCSVDISPENSA18['si82_datacredenciamento']                  = $this->sicomDate($aDISPENSA18['si82_datacredenciamento']);
-            $aCSVDISPENSA18['si82_nrolote']                             = $aDISPENSA18['si82_nrolote'] == '0' ? ' ' : substr($aDISPENSA18['si82_nrolote'], 0, 4);
-            $aCSVDISPENSA18['si82_coditem']                             = $this->padLeftZero($aDISPENSA18['si82_coditem'], 15);
-            $aCSVDISPENSA18['si82_nroinscricaoestadual']                = substr($aDISPENSA18['si82_nroinscricaoestadual'], 0, 30);
-            $aCSVDISPENSA18['si82_ufinscricaoestadual']                 = strlen($aDISPENSA18['si82_ufinscricaoestadual']) < 2 ? ' ' : substr($aDISPENSA18['si82_ufinscricaoestadual'], 0, 2);
-            $aCSVDISPENSA18['si82_nrocertidaoregularidadeinss']         = substr($aDISPENSA18['si82_nrocertidaoregularidadeinss'], 0, 30);
-            $aCSVDISPENSA18['si82_dataemissaocertidaoregularidadeinss'] = $this->sicomDate($aDISPENSA18['si82_dataemissaocertidaoregularidadeinss']);
-            $aCSVDISPENSA18['si82_dtvalidadecertidaoregularidadeinss']  = $this->sicomDate($aDISPENSA18['si82_dtvalidadecertidaoregularidadeinss']);
-            $aCSVDISPENSA18['si82_nrocertidaoregularidadefgts']         = substr($aDISPENSA18['si82_nrocertidaoregularidadefgts'], 0, 30);
-            $aCSVDISPENSA18['si82_dtemissaocertidaoregularidadefgts']   = $this->sicomDate($aDISPENSA18['si82_dtemissaocertidaoregularidadefgts']);
-            $aCSVDISPENSA18['si82_dtvalidadecertidaoregularidadefgts']  = $this->sicomDate($aDISPENSA18['si82_dtvalidadecertidaoregularidadefgts']);
-            $aCSVDISPENSA18['si82_nrocndt']                             = substr($aDISPENSA18['si82_nrocndt'], 0, 30);
-            $aCSVDISPENSA18['si82_dtemissaocndt']                       = $this->sicomDate($aDISPENSA18['si82_dtemissaocndt']);
-            $aCSVDISPENSA18['si82_dtvalidadecndt']                      = $this->sicomDate($aDISPENSA18['si82_dtvalidadecndt']);
-
-
-            $this->sLinha = $aCSVDISPENSA18;
-            $this->adicionaLinha();
-          }
-
-        }
+        $this->sLinha = $aCSVDISPENSA18;
+        $this->adicionaLinha();
 
       }
 

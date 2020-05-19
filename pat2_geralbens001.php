@@ -378,6 +378,7 @@ if ($clcfpatric->numrows > 0) {
         </table>
     </fieldset>
     <input type="button" value="Emitir relatório" onClick="js_emite();">
+    <input type="button" value="Exportar CSV" onClick="js_emite(true);">
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
@@ -458,7 +459,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     }
   }
 
-  function js_emite() {
+  function js_emite(csv=false) {
     var query = "";
     var data_inicial = "";
     var data_final = "";
@@ -593,7 +594,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
       query += '&nomeFornecedor='+encodeURI(document.getElementById('z01_nomefornecedor').value);
     }
 
-    jan = window.open('pat2_geralbens002.php?' + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+    let arquivoRelatorio = !csv ? 'pat2_geralbens002.php?' : 'pat2_geralbens003.php?';
+    jan = window.open( arquivoRelatorio + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
     jan.moveTo(0, 0);
   }
       //Reescrevendo a função de busca do iframe lança unidades
