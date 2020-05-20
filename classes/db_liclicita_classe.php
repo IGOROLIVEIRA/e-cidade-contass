@@ -2336,11 +2336,11 @@ class cl_liclicita
     $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
     $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
     $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
-    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
-    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
-    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
-    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
-    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
+//    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
+//    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+//    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+//    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
+//    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($l20_codigo != null) {
