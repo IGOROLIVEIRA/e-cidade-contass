@@ -542,7 +542,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                   $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
               }
 
-              if ($oTotalMov->sinalfinal == 'D' && $oTotalMov->saldo_anterior != 0) {
+              if ($oTotalMov->sinalanterior == 'D' && $oTotalMov->saldo_anterior != 0) {
 
                   $sHash21a = $oContaAgrupada->si95_codctb . $iFonte2 . '01';
 
