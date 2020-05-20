@@ -1283,15 +1283,16 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
                 $dispensa18->si82_codunidadesubresp = $oDados18->codunidadesubresp;
                 $dispensa18->si82_exercicioprocesso = $oDados18->exerciciolicitacao;
                 $dispensa18->si82_nroprocesso = $oDados18->nroprocessolicitatorio;
-                if ($oDados18->tipoprocesso == "101") {
-                  $dispensa18->si82_tipoprocesso = 1;
-                } else if($oDados18->tipoprocesso == "100"){
-                  $dispensa18->si82_tipoprocesso = 2;
-                } else if($oDados18->tipoprocesso == "102"){
-                  $dispensa18->si82_tipoprocesso = 3;
-                } else if ($oDados18->tipoprocesso == "103"){
-                  $dispensa18->si82_tipoprocesso = 4;
-                }
+//                if ($oDados18->tipoprocesso == "101") {
+//                  $dispensa18->si82_tipoprocesso = 1;
+//                } else if($oDados18->tipoprocesso == "100"){
+//                  $dispensa18->si82_tipoprocesso = 2;
+//                } else if($oDados18->tipoprocesso == "102"){
+//                  $dispensa18->si82_tipoprocesso = 3;
+//                } else if ($oDados18->tipoprocesso == "103"){
+//                  $dispensa18->si82_tipoprocesso = 4;
+//                }
+                $dispensa18->si82_tipoprocesso = $oDados18->tipoprocesso;
                 $dispensa18->si82_tipodocumento = $oDados18->tipodocumento;
                 $dispensa18->si82_nrodocumento = $oDados18->nrodocumento;
                 $dispensa18->si82_datacredenciamento = $oDados18->datacredenciamento;

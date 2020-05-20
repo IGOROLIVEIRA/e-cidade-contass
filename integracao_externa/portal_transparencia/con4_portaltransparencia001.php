@@ -2470,7 +2470,7 @@ try {
     $sSqlServidores .= "       left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes";
     $sSqlServidores .= "       and rh56_princ  = 't'                                 ";
     $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
-    $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
+    $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} AND rh01_sicom = 1";
     $sSqlServidores .= " AND
 
   ((
