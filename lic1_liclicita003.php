@@ -81,8 +81,8 @@ if(isset($excluir)){
 	/*
 	 * @todo Verificar se apenas os licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
 	 * */
-//	$sqlerro = $status == 1 ? false : true;
-//	$erro_msg = $sqlerro ? 'Licitação com o status atual não pode ser excluída.' : '';
+	$sqlerro = $status == 1 ? false : true;
+	$erro_msg = $sqlerro ? 'Licitação com o status atual não pode ser excluída.' : '';
 
 	if(!$sqlerro) {
 	    $sqlAnexos = $cleditaldocumentos->sql_query('','l48_caminho', '', 'l48_liclicita = '.$l20_codigo);
