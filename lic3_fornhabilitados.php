@@ -57,28 +57,20 @@ $sFuncaoJS = isset($oGet->funcao_js) ? $oGet->funcao_js : "";
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
   <style type="text/css">
-
     .valor {
       background-color: #FFF;
     }
   </style>
 </head>
 <body bgcolor="#cccccc" onload="">
-<center>
-  <form name="form1" method="post">
     <div style="display: table; float:left; margin-left:10%;">
       <fieldset>
         <legend><b>Fornecedores Habilitados</b></legend>
 
         <?
-        db_lovrot($sql, 15, "()", "", $sFuncaoJS);
+        db_lovrot(@$sql, 15, "", "", $sFuncaoJS);
         ?>
       </fieldset>
     </div>
-  </form>
-</center>
 </body>
 </html>
-<script>
-
-</script>
