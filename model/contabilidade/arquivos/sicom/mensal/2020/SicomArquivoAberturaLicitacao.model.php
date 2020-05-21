@@ -293,7 +293,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_critdesempate AS criterioDesempate,
        liclicita.l20_destexclusiva AS destinacaoExclusiva,
        liclicita.l20_subcontratacao AS subcontratacao,
-       liclicita.l20_limitcontratacao AS limiteContratacao
+       liclicita.l20_limitcontratacao AS limiteContratacao,
+       liclicita.l20_nroedital,
+       liclicita.l20_exercicioedital
      FROM liclicita
      INNER JOIN homologacaoadjudica ON (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
      INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
@@ -328,6 +330,8 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 			$claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
 			$claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
 			$claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
+			$claberlic10->si46_nroedital = $oDados10->l20_nroedital;
+            $claberlic10->si46_exercicioedital = $oDados10->l20_exercicioedital;
 			$claberlic10->si46_descontotabela = $oDados10->criterioadjudicacao;
 			$claberlic10->si46_destinacaoexclusiva = $oDados10->destinacaoexclusiva;
 			$claberlic10->si46_dtabertura = $oDados10->dtabertura;
