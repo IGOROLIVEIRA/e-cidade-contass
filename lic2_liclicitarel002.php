@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -94,7 +94,7 @@ if ($situac != '') {
 }
 
 $sWhere        .= $sAnd." l20_instit = ".db_getsession("DB_instit");
-$sSqlLicLicita  = $clliclicita->sql_query(null,"*","l20_codtipocom,l20_numero,l20_anousu",$sWhere);
+$sSqlLicLicita  = $clliclicita->sql_query_relatorio(null,"*","l20_codtipocom,l20_numero,l20_anousu",$sWhere);
 
 $result         = $clliclicita->sql_record($sSqlLicLicita);
 $numrows        = $clliclicita->numrows;
@@ -109,9 +109,9 @@ $head2 = "Relatório de Licitação";
 $head3 = @$info;
 $head4 = @$info1;
 $head5 = @$info2;
-$pdf   = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf   = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $total = 0;
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
@@ -126,20 +126,20 @@ $oInfoLog    = array();
 for ($i = 0; $i < $numrows; $i++) {
 
   db_fieldsmemory($result,$i);
-  
+
   if (empty($l20_procadmin)) {
-  
+
     $oDAOLiclicitaproc    = db_utils::getDao("liclicitaproc");
     $sSqlProcessoSistema  = $oDAOLiclicitaproc->sql_query(null,"*", null, "l34_liclicita = {$l20_codigo}");
     $rsProcessoSistema    = $oDAOLiclicitaproc->sql_record($sSqlProcessoSistema);
-    
+
     if ($oDAOLiclicitaproc->numrows == 1) {
-  
+
       $oLiclicitaproc = db_utils::fieldsMemory($rsProcessoSistema, 0);
       $l20_procadmin  = substr($oLiclicitaproc->p58_numero ."/". $oLiclicitaproc->p58_ano . " - " . $oLiclicitaproc->p51_descr , 0, 120);
     }
   }
-  
+
   $oLicitacao = new licitacao($l20_codigo);
   if ($l20_licsituacao == 3) {
     $oInfoLog = $oLicitacao->getInfoLog();
@@ -180,19 +180,19 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->setfont('arial','',7);
   $pdf->cell(30,$alt,db_formatar($l20_dtpublic,'d'),0,0,"L",0);
 
-  $pdf->setfont('arial','b',8); 
-  $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0); 
+  $pdf->setfont('arial','b',8);
+  $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0);
   $pdf->setfont('arial','',7);
   $pdf->cell(30,$alt,db_formatar($l20_dataaber,'d'),0,0,"L",0);
 
-  $pdf->setfont('arial','b',8); 
-  $pdf->cell(60,$alt,'Hora Abertura :',0,0,"R",0); 
+  $pdf->setfont('arial','b',8);
+  $pdf->cell(60,$alt,'Hora Abertura :',0,0,"R",0);
   $pdf->setfont('arial','',7);
   $pdf->cell(30,$alt,$l20_horaaber,0,1,"L",0);
 
 
-  $pdf->setfont('arial','b',8); 
-  $pdf->cell(30,$alt,'Situação :',0,0,"R",0); 
+  $pdf->setfont('arial','b',8);
+  $pdf->cell(30,$alt,'Situação :',0,0,"R",0);
   $pdf->setfont('arial','',7);
   $pdf->cell(30,$alt,$l08_descr,0,0,"L",0);
 
@@ -200,7 +200,7 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->cell(30,$alt,'Usuário :',0,0,"R",0);
   $pdf->setfont('arial','',7);
   $pdf->cell(60,$alt,$l20_id_usucria.' - '.$nome,0,1,"L",0);
-  
+
   $pdf->setfont('arial', 'b', 8);
   $pdf->cell(30, $alt, 'Proc. Administrativo:', 0, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
@@ -210,7 +210,7 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->cell(30,$alt,'Objeto :',0,0,"R",0);
   $pdf->setfont('arial','b',8);
   $pdf->multicell(150,$alt,$l20_objeto,0,"L",0);
-  
+
   $result_sec=$clliclicitem->sql_record($clliclicitem->sql_query_orc(null,"distinct o40_descr",null,"l21_codliclicita = $l20_codigo"));
   if ($l20_licsituacao == 3) {
 
@@ -218,44 +218,44 @@ for ($i = 0; $i < $numrows; $i++) {
   }
   if ($clliclicitem->numrows>0) {
 
-    $pdf->setfont('arial','b',8);  	
-    $pdf->cell(30,$alt,'Secretaria(s) :',0,0,"R",0); 
+    $pdf->setfont('arial','b',8);
+    $pdf->cell(30,$alt,'Secretaria(s) :',0,0,"R",0);
     $pdf->setfont('arial','',7);
     for ($z = 0; $z < $clliclicitem->numrows; $z++) {
 
       if ($l20_licsituacao != 3 ) {
         db_fieldsmemory($result_sec,$z);
       } else {
-        $o40_descr = utf8_decode($oInfoLog->secretarias->secretaria[$i]); 	    
+        $o40_descr = utf8_decode($oInfoLog->secretarias->secretaria[$i]);
       }
       if ($z != 0) {
         $pdf->cell(30,$alt,"",0,0,"R",0);
-      }  
+      }
       $pdf->cell(150,$alt,$o40_descr,0,1,"L",0);
-    }  	
+    }
   }
-  $pdf->cell(190,$alt,'','T',1,"L",0); 
-  $result_dataaut=$clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct e54_emiss,e54_autori","e54_autori","l20_codigo=$l20_codigo"));  
+  $pdf->cell(190,$alt,'','T',1,"L",0);
+  $result_dataaut=$clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct e54_emiss,e54_autori","e54_autori","l20_codigo=$l20_codigo"));
   if ($clempautitem->numrows>0) {
 
-    db_fieldsmemory($result_dataaut,0);	
-    $pdf->setfont('arial','b',8); 
-    $pdf->cell(30,$alt,'Data Adjudicação :',0,0,"R",0); 
+    db_fieldsmemory($result_dataaut,0);
+    $pdf->setfont('arial','b',8);
+    $pdf->cell(30,$alt,'Data Adjudicação :',0,0,"R",0);
     $pdf->setfont('arial','',7);
-    $pdf->cell(60,$alt,db_formatar($e54_emiss,'d'),0,1,"L",0);  	
+    $pdf->cell(60,$alt,db_formatar($e54_emiss,'d'),0,1,"L",0);
   }
   $result_orcam     = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_adjudicacao(null, null, "distinct z01_numcgm,z01_nome,pcorcam.pc20_dtate,pcorcam.pc20_hrate", "z01_nome", "l20_codigo=$l20_codigo and pc24_pontuacao=1 and pc10_instit=".db_getsession("DB_instit")));
-  $numrows_orcam    = $clpcorcamjulg->numrows;  	
+  $numrows_orcam    = $clpcorcamjulg->numrows;
   $result_valorcam  = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_adjudicacao(null, null, "sum(pc23_valor)as valor_adj", "", "l20_codigo=$l20_codigo and pc24_pontuacao=1 and pc10_instit=".db_getsession("DB_instit")));
   $numrows_valorcam = $clpcorcamjulg->numrows;
   if ($numrows_orcam > 0) {
 
     db_fieldsmemory($result_valorcam,0);
-    $pdf->setfont('arial','b',8); 
-    $pdf->cell(30,$alt,'Valor Adjudicado :',0,0,"R",0); 
+    $pdf->setfont('arial','b',8);
+    $pdf->cell(30,$alt,'Valor Adjudicado :',0,0,"R",0);
     $pdf->setfont('arial','',7);
     $pdf->cell(60,$alt,db_formatar($valor_adj,'f'),0,0,"L",0);
-    $pdf->setfont('arial','b',8); 
+    $pdf->setfont('arial','b',8);
     $pdf->cell(30,$alt,'Empresa(s) Vencedora(s) :',0,0,"R",0);
     $pdf->setfont('arial','',7);
     for ($z = 0; $z < $numrows_orcam; $z++) {
@@ -263,14 +263,14 @@ for ($i = 0; $i < $numrows; $i++) {
       db_fieldsmemory($result_orcam,$z);
       if ($z != 0) {
         $pdf->cell(30,$alt,"",0,0,"L",0);;
-      }  		
+      }
       $pdf->cell(60,$alt,$z01_nome,0,1,"L",0);
 
     }
     $pdf->cell(190,$alt,'','T',1,"L",0);
-  } else {  	
+  } else {
     $pdf->cell(190,$alt,'ADJUDICAÇÃO  NÃO REALIZADA','TB',1,"L",0);
-  } 
+  }
   if ($mostra == 's') {
 
     $troca = 1;
@@ -321,7 +321,7 @@ for ($i = 0; $i < $numrows; $i++) {
 
     $result_itens = $clliclicitem->sql_record($sSql);
     if ($l20_licsituacao == 3) {
-      $clliclicitem->numrows = count($oInfoLog->item); 
+      $clliclicitem->numrows = count($oInfoLog->item);
     }
     $aItens = array();
     if ($clliclicitem->numrows > 0) {
@@ -418,13 +418,13 @@ for ($i = 0; $i < $numrows; $i++) {
 
     $result_dot = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null,"distinct fc_estruturaldotacao(pc13_anousu,pc13_coddot) as estrutural ",null,"l21_codliclicita=$l20_codigo"));
     if ($l20_licsituacao == 3) {
-      $clliclicitem->numrows = count($oInfoLog->elementos); 
+      $clliclicitem->numrows = count($oInfoLog->elementos);
     }
     if ($clliclicitem->numrows > 0) {
 
       for($w = 0; $w < $clliclicitem->numrows; $w++) {
 
-        if ($l20_licsituacao != 3) { 
+        if ($l20_licsituacao != 3) {
           db_fieldsmemory($result_dot,$w);
         } else {
           $estrutural  = utf8_decode($oInfoLog->elementos->elemento[$w]);
@@ -433,10 +433,10 @@ for ($i = 0; $i < $numrows; $i++) {
 
           $pdf->setfont('arial','b',8);
           $pdf->cell(80,$alt,'Estrutural',1,1,"C",1);
-          $p     = 0; 
+          $p     = 0;
           $troca = 0;
         }
-        $pdf->setfont('arial','',7);  		
+        $pdf->setfont('arial','',7);
         $pdf->cell(80,$alt,$estrutural,0,1,"C",$p);
         if ($p == 0) {
           $p = 1;
@@ -445,14 +445,14 @@ for ($i = 0; $i < $numrows; $i++) {
         }
         $total++;
       }
-      $pdf->cell(80,$alt,'Total de Registros: '.$total,'T',1,"R",0); 	
+      $pdf->cell(80,$alt,'Total de Registros: '.$total,'T',1,"R",0);
       $pdf->ln(3);
 
     }
   }
   if ($mostraAndam) {
 
-    $rsAndam = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query('','*',"l11_data,l11_sequencial","l11_liclicita = $l20_codigo ")); 
+    $rsAndam = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query('','*',"l11_data,l11_sequencial","l11_liclicita = $l20_codigo "));
     if ($clliclicitasituacao->numrows > 0) {
 
       $pdf->setfont('arial','b',8);
