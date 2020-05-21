@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -49,11 +49,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.callBackFunction = function () {
 
     }
+
     this.sUrlRpc = 'con4_endereco.RPC.php';
 
-//  var iWidth = document.width / 1.7;
     var iWidth = 790;
-//var iWheigth = window.innerHeight / 1.5;
     var iWheigth = 460;
 
     this.oWindowEndereco = new windowAux('wndEndereco' + me.sId, 'Dados complementares', iWidth, iWheigth);
@@ -534,7 +533,30 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oTxtCep.setMaxLength(8);
     me.oTxtCep.show($('ctnCodigoCep' + sId));
 
-    /**/
+    if(incluir){
+        let oParam = new Object();
+        oParam.exec = 'getCodigoObra';
+        oParam.licitacao = codLicitacao;
+        var oAjax = new Ajax.Request(
+            me.sUrlRpc,
+            {
+                parameters: 'json=' + Object.toJSON(oParam),
+                method: 'post',
+                onComplete: retornoCodigoObra
+            }
+        );
+    }
+
+    function retornoCodigoObra(oAjax){
+        let oRetorno = eval('(' + oAjax.responseText + ')');
+
+        if(oRetorno.status == 1){
+            me.setCodigoObra(oRetorno.obra);
+            $('txtCodigoObra'+sId).value = oRetorno.obra;
+            $('txtCodigoObra'+sId).setAttribute('class', 'readonly');
+            $('txtCodigoObra'+sId).setAttribute('disabled', 'disabled');
+        }
+    }
 
     /**
      *Retorna o Código da Obra
@@ -550,6 +572,22 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
      */
     this.setCodigoObra = function (iCodigoObra) {
         this.iCodigoObra = iCodigoObra;
+    }
+
+    /**
+     *Retorna o Sequencial de cadastro dos dados complementares
+     *@return {integer} iSequencial
+     */
+    this.getSequencial = function () {
+        return this.iSequencial;
+    }
+
+    /**
+     *Retorna o Sequencial de cadastro dos dados complementares
+     *@return {integer} iSequencial
+     */
+    this.setSequencial = function (iSequencial) {
+        this.iSequencial = iSequencial;
     }
 
     this.changeValorObra = (e) => {
@@ -1456,7 +1494,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oCboGrupoBemPub.addItem(8, 'Definição do bem público da assistência social');
     me.oCboGrupoBemPub.addItem(10, 'Definição do bem público da saúde');
     me.oCboGrupoBemPub.addItem(12, 'Definição do bem público da educação');
-    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de saúde');
+    me.oCboGrupoBemPub.addItem(13, 'Definição do bem público de cultura');
     me.oCboGrupoBemPub.addItem(15, 'Definição do bem público de urbanismo');
     me.oCboGrupoBemPub.addItem(16, 'Definição do bem público de habitação');
     me.oCboGrupoBemPub.addItem(17, 'Definição do bem público de saneamento');
@@ -3464,8 +3502,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 $('txtCodigoIbge' + sId).value = '';
                 me.setCodigoIbge('');
                 $('txtLogradouro' + sId).value = '';
-                me.setCodigoObra('');
-                $('txtCodigoObra' + sId).value = '';
                 me.setLogradouro('');
                 $('txtDistrito' + sId).value = '';
                 me.setDistrito('');
@@ -3780,6 +3816,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         oEndereco.bdi = me.getBdi();
         oEndereco.licitacao = me.getLicitacao();
         oEndereco.descrBairro = $('txtDescrBairro' + sId).value;
+        oEndereco.sequencial = me.getSequencial();
 
         oDados = new Object();
         oDados.exec = 'salvarDadosComplementares';
@@ -3938,7 +3975,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.preencheCampos = function (codObra) {
         var oPesquisa = new Object();
         oPesquisa.exec = 'findDadosObra';
-        oPesquisa.iCodigoObra = codObra;
+        oPesquisa.iSequencial = codObra;
 
         var msgDiv = "Aguarde carregando lista de estados.";
         js_divCarregando(msgDiv, 'msgBox');
@@ -4001,8 +4038,37 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' ');
         $('txtDescrAtividadeServicoEsp' + sId).value = decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' ');
+        me.setSequencial(dadoscomplementares.sequencial);
+
+        let params = eval('('+oAjax.request.parameters.json+')');
+        me.checkFirstRegister(params.iSequencial);
 
     }
 
+    this.checkFirstRegister = function(sequencial){
+        var oPesquisa = new Object();
+        oPesquisa.exec = 'isFirstRegister';
+        oPesquisa.iCodigo = $('txtCodigoObra'+sId).value;
+        oPesquisa.iSequencial = sequencial;
+
+        var oAjax = new Ajax.Request(
+            me.sUrlRpc,
+            {
+                asynchronous: false,
+                parameters: 'json=' + Object.toJSON(oPesquisa),
+                method: 'post',
+                onComplete: me.returnCheckRegister
+            }
+        );
+    }
+
+    this.returnCheckRegister = function(oAjax){
+        let response = eval('('+oAjax.responseText+')');
+
+        if(response.status == 2){
+            $('txtCodigoObra'+sId).setAttribute('class', 'readonly');
+            $('txtCodigoObra'+sId).setAttribute('disabled', 'disabled');
+        }
+    }
 }
 

@@ -42,6 +42,7 @@ include("classes/db_liclicitasituacao_classe.php");
 include("classes/db_liclancedital_classe.php");
 include("classes/db_editaldocumento_classe.php");
 include("classes/db_obrasdadoscomplementares_classe.php");
+include("classes/db_obrascodigos_classe.php");
 include("classes/db_cflicita_classe.php");
 include("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
@@ -62,6 +63,8 @@ $clliccomissaocgm    = new cl_liccomissaocgm;
 $clliclancedital     = new cl_liclancedital;
 $cleditaldocumentos  = new cl_editaldocumento;
 $clobrasdadoscompl   = new cl_obrasdadoscomplementares;
+$clobrascodigos      = new cl_obrascodigos;
+
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -75,20 +78,49 @@ if(isset($excluir)){
 	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial');
 	$rsSql = $clliclicita->sql_record($sSql);
 	$status = db_utils::fieldsMemory($rsSql, 0)->l20_cadinicial;
-	$sqlerro = $status == 2 ? true : false;
+	/*
+	 * Apenas as licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
+	 * */
+	$sqlerro = $status == 1 ? false : true;
+	$erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
-	if(!$sqlerro){
-	    $cleditaldocumentos->excluir('', 'l48_liclicita = '.$l20_codigo);
-		if ($cleditaldocumentos->erro_status == 0){
-        	$sqlerro  = true;
-			$erro_msg = $cleditaldocumentos->erro_msg;
+	if(!$sqlerro) {
+	    $sqlAnexos = $cleditaldocumentos->sql_query('','l48_caminho', '', 'l48_liclicita = '.$l20_codigo);
+	    $rsAnexos = $cleditaldocumentos->sql_record($sqlAnexos);
+
+	    if($cleditaldocumentos->numrows){
+            $aCaminho = explode('/', db_utils::fieldsMemory($rsAnexos, 0)->l48_caminho);
+            array_pop($aCaminho);
+            $caminhoPasta = join('/', $aCaminho).'/';
+            system('rm '.$caminhoPasta.' -R ');
+
+            $cleditaldocumentos->excluir('', 'l48_liclicita = ' . $l20_codigo);
+            if ($cleditaldocumentos->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $cleditaldocumentos->erro_msg;
+            }
         }
-		$clobrasdadoscompl->excluir('', 'db150_liclicita = '.$l20_codigo);
+	}
+
+	if(!$sqlerro) {
+		$sqlCodigo = $clobrascodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = ' . $l20_codigo);
+		$rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
+		$codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
+
+		$clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
 		if ($clobrasdadoscompl->erro_status == 0){
 			$sqlerro  = true;
 			$erro_msg = $clobrasdadoscompl->erro_msg;
 		}
 
+		$clobrascodigos->excluir($codigoObra);
+		if($clobrascodigos->erro_status == 0){
+			$sqlerro  = true;
+			$erro_msg = $clobrascodigos->erro_msg;
+        }
+	}
+
+	if(!$sqlerro){
 		$clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
 		if ($clliclancedital->erro_status == 0){
 			$sqlerro  = true;
