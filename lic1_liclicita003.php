@@ -79,10 +79,10 @@ if(isset($excluir)){
 	$rsSql = $clliclicita->sql_record($sSql);
 	$status = db_utils::fieldsMemory($rsSql, 0)->l20_cadinicial;
 	/*
-	 * @todo Verificar se apenas os licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
+	 * Apenas as licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
 	 * */
 	$sqlerro = $status == 1 ? false : true;
-	$erro_msg = $sqlerro ? 'Licitação com o status atual não pode ser excluída.' : '';
+	$erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
 	if(!$sqlerro) {
 	    $sqlAnexos = $cleditaldocumentos->sql_query('','l48_caminho', '', 'l48_liclicita = '.$l20_codigo);
