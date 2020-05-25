@@ -1097,8 +1097,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        */
 
       if (in_array($oAcordoPosicao->getTipo(), array(4, 9, 10, 11, 14))) {
-        /*if ($oDados20->ac26_sequencial == 320){
-        echo '<pre>';var_dump($oAcordoPosicao->getItens());die;}*/
         foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
           if ($oAcordoItem->getQuantiAditada() > 0 || $oAcordoItem->getValorAditado() > 0) {
 
@@ -1129,16 +1127,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $iTipoAlteraoItem = 2;
               }
             }
-            /*else {
-                $iTipoAlteraoItem = $oAcordoItem->getCodigoPosicaoTipo();
-            }*/
 
             $clcontratos21->si88_tiporegistro = 21;
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
             $clcontratos21->si88_coditem = $iCodItem  ;
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
-            //$clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidadeAditivada($oDados20->ac26_numero);
             $sqlServico = "
                           select pc01_servico, ac20_servicoquantidade
                             from acordoitem
@@ -1170,6 +1164,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
+            if($oDados10->ac02_acordonatureza == "1" || $oDados10->ac02_acordonatureza == "7"){
+              $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+            }else{
+              $clcontratos21->si88_tipomaterial = "";
+            }
             if($oDadosItensObra->obr06_tabela == "1"){
               $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
               $clcontratos21->si88_coditemsimcro = null;
@@ -1184,12 +1183,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
             $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_codigotabela;
-
             $clcontratos21->incluir(null);
+
             if ($clcontratos21->erro_status == 0) {
               throw new Exception($clcontratos21->erro_msg);
             }
-
           }
         }
       }

@@ -1108,9 +1108,9 @@ switch($oParam->exec) {
       $oContrato = $_SESSION["oContrato"];
       $oPosicao  = $oContrato->getUltimaPosicao();
       $aItens    = $oPosicao->getItens();
-      foreach ($aItens as $oItem) {
+        foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+          if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }
@@ -1155,7 +1155,7 @@ switch($oParam->exec) {
       $aItens    = $oPosicao->getItens();
       foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+        if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }
