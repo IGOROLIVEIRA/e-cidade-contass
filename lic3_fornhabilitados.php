@@ -68,7 +68,7 @@ $sFuncaoJS = isset($oGet->funcao_js) ? $oGet->funcao_js : "";
         <legend><b>Fornecedores Habilitados</b></legend>
 
         <?
-        db_lovrot(@$sql, 15, "", "", $sFuncaoJS);
+        db_lovrot($sql, 15, "()", "", $sFuncaoJS);
         ?>
       </fieldset>
     </div>
