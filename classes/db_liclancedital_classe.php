@@ -112,6 +112,8 @@ class cl_liclancedital
   function incluir($l47_sequencial)
   {
     $this->atualizacampos();
+    $sQuery = db_query('SELECT l03_pctipocompratribunal FROM liclicita JOIN cflicita ON l03_codigo = l20_codtipocom WHERE l20_codigo = '.$this->l47_liclicita);
+    $tipoTribunal = db_utils::fieldsMemory($sQuery, 0)->l03_pctipocompratribunal;
 
     if ($l47_sequencial == "" || $l47_sequencial == null) {
       $result = db_query("select nextval('liclancedital_l47_sequencial_seq')");
@@ -147,7 +149,7 @@ class cl_liclancedital
       return false;
     }
 
-    if (!$this->l47_origemrecurso || $this->l47_origemrecurso == null) {
+    if ((!$this->l47_origemrecurso || $this->l47_origemrecurso == null) && in_array($tipoTribunal, array(48, 49, 50, 52, 53, 54))) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql = "Verifique a origem do recurso";
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -225,6 +227,9 @@ class cl_liclancedital
   function alterar($l47_sequencial = null)
   {
     $this->atualizacampos();
+    $sQuery = db_query('SELECT l03_pctipocompratribunal FROM liclicita JOIN cflicita ON l03_codigo = l20_codtipocom WHERE l20_codigo = '.$this->l47_liclicita);
+    $tipoTribunal = db_utils::fieldsMemory($sQuery, 0)->l03_pctipocompratribunal;
+
     $virgula = " ";
     $sql = " update liclancedital set ";
     if (trim($this->l47_linkpub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_linkpub"])) {
@@ -232,8 +237,7 @@ class cl_liclancedital
       $virgula = ",";
     }
 
-
-    if (trim($this->l47_origemrecurso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) {
+    if ((trim($this->l47_origemrecurso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) && in_array($tipoTribunal, array(48, 49, 50, 52, 53, 54))) {
         $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
         $virgula = ",";
     }else{
