@@ -106,7 +106,7 @@ if (isset($incluir) && isset($licitacao)) {
                 }
 
                 if(in_array($tipo_tribunal, array(100, 101, 102, 103, 106))){
-					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'dp'));
+					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'td'));
                 }elseif(in_array($tipo_tribunal, array(48, 49, 50, 52, 53, 54))){
 					$tiposCadastrados = array_intersect($aSelecionados, array('mc', 'po', 'cr', 'cb', 'ed'));
                 }
