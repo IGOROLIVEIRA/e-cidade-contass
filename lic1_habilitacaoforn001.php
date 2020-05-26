@@ -36,35 +36,38 @@ if(isset($incluir) || isset($alterar)){
   $rsCgm = $clcgm->sql_record($sqlCgm);
   $cgm = db_utils::fieldsMemory($rsCgm, 0);
 
-  if(strlen($cgm->z01_cgccpf) == 14){
+//    if(strlen($cgm->z01_cgccpf) == 14) {
+//
+//        if ($modalid == '49' || $modalid == '50' || $modalid == '53' || $modalid == '103') {
+//            if ($l206_datavalidadefgts == '')
+//                $erro_msg = 'Campo Data de Validade FGTS não informado';
+//            if ($l206_dataemissaofgts == '')
+//                $erro_msg = 'Campo Data de Emissão FGTS não informado';
+//            if ($l206_numcertidaofgts == "")
+//                $erro_msg = 'Campo Número de Certidão FGTS não informado';
+//            if ($l206_datavalidadeinss == "")
+//                $erro_msg = 'Campo Data de Validade INSS não informado';
+//            if ($l206_dataemissaoinss == "")
+//                $erro_msg = 'Campo Data de Emissão INSS não informado';
+//            if ($l206_numcertidaoinss == "")
+//                $erro_msg = 'Campo Número de Certidão INSS não informado';
+//            if ($dthabilitacao == false)
+//                $erro_msg = 'Campo Data de Habilitação não informado';
+//            if ($dthabilitacao != false) {
+//                if ($dthabilitacao < $dtabertura)
+//                    $erro_msg = 'Data da habilitação deve ser igual ou maior que a data da abertura!';
+//            }
+//        }
+//    }else{
 
-    if($modalid == '100' || $modalid == '101' || $modalid == '102' || $modalid == '103'){
-        if($l206_datavalidadefgts == '')
-          $erro_msg = 'Campo Data de Validade FGTS não informado';
-        if($l206_dataemissaofgts == '')
-          $erro_msg = 'Campo Data de Emissão FGTS não informado';
-        if($l206_numcertidaofgts  == "")
-          $erro_msg = 'Campo Número de Certidão FGTS não informado';
-        if($l206_datavalidadeinss == "")
-          $erro_msg = 'Campo Data de Validade INSS não informado';
-        if($l206_dataemissaoinss == "")
-          $erro_msg = 'Campo Data de Emissão INSS não informado';
-        if($l206_numcertidaoinss == "")
-          $erro_msg = 'Campo Número de Certidão INSS não informado';
-        if($dthabilitacao == false)
-          $erro_msg = 'Campo Data de Habilitação não informado';
-        if($dthabilitacao != false){
-          if($dthabilitacao < $dtabertura)
-            $erro_msg = 'Data da habilitação deve ser igual ou maior que a data da abertura!';
-        }
-    }
+//    }
+    //    if($modalid == '48' || $modalid == '52' || $modalid == '53' || $modalid == '51'){
+    //
+    //    }
 
-    if($modalid == '48' || $modalid == '52' || $modalid == '53' || $modalid == '51'){
-        if($dthabilitacao == false){
-          $erro_msg = 'Campo Data de Habilitação não informado';
-        }
+    if($dthabilitacao == false){
+        $erro_msg = 'Campo Data de Habilitação não informado';
     }
-  }
 
   if($erro_msg){
     $sqlerro = true;
