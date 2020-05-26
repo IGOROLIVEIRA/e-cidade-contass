@@ -37,8 +37,7 @@ class gerarCADOBRAS extends GerarAM
      *
      * Registros 10
      */
-    if(pg_num_rows($rscadobras102020) == 0 && pg_num_rows($rscadobras202020) == 0 && pg_num_rows($rscadobras212020) == 0 && pg_num_rows($rscadobras302020) ==
-        0 ){
+    if(pg_num_rows($rscadobras102020) == 0 && pg_num_rows($rscadobras202020) == 0 && pg_num_rows($rscadobras212020) == 0 && pg_num_rows($rscadobras302020) == 0 ){
       $aCSV['tiporegistro'] = '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
@@ -48,7 +47,7 @@ class gerarCADOBRAS extends GerarAM
             $aCADORBRAS10 = pg_fetch_array($rscadobras102020, $iCont);
 
             $aCSVCADOBRAS10['si198_tiporegistro'] = $aCADORBRAS10['si198_tiporegistro'];
-            $aCSVCADOBRAS10['si198_codorgaoresp'] = $aCADORBRAS10['si198_codorgaoresp'];
+            $aCSVCADOBRAS10['si198_codorgaoresp'] = str_pad($aCADORBRAS10['si198_codorgaoresp'],3,"0",STR_PAD_LEFT);
             $aCSVCADOBRAS10['si198_codobra'] = $aCADORBRAS10['si198_codobra'];
             $aCSVCADOBRAS10['si198_tiporesponsavel'] = $aCADORBRAS10['si198_tiporesponsavel'];
             $aCSVCADOBRAS10['si198_nrodocumento'] = $aCADORBRAS10['si198_nrodocumento'];
