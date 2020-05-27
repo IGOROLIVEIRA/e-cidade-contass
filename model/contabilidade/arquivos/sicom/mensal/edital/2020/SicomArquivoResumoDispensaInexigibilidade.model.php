@@ -510,7 +510,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						$clredispi12->si185_nroprocesso = $oResult12->nroprocesso;
 						$clredispi12->si185_codobralocal = $oResult12->codobralocal;
 						$clredispi12->si185_logradouro = $oResult12->logradouro;
-						$clredispi12->si185_numero = $oResult12->numero;
+						$clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
 						$clredispi12->si185_bairro = $oResult12->bairro;
 						$clredispi12->si185_cidade = $oResult12->cidade;
 						$clredispi12->si185_cep = $oResult12->cep;
@@ -523,7 +523,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						$clredispi12->si185_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 						$clredispi12->si185_reg10 = $clredispi10->si183_sequencial;// chave estrangeira
 						$clredispi12->si185_instit = db_getsession("DB_instit");
-
 						$clredispi12->incluir(null);
 						if ($clredispi12->erro_status == 0) {
 							throw new Exception($clredispi12->erro_msg);

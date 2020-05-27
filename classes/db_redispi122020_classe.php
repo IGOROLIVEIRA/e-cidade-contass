@@ -192,6 +192,10 @@ class cl_redispi122020
       $this->si185_cep = 0;
     }
 
+    if($this->si185_numero == null){
+      $this->si185_numero = 'null';
+    }
+
     $sql = "insert into redispi122020(
                                        si185_sequencial 
                                       ,si185_tiporegistro 
