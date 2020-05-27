@@ -366,6 +366,7 @@ $cllicobras->rotulo->label();
       document.form1.obr05_numregistro.value = '';
       document.form1.obr05_numartourrt.value = '';
       document.form1.obr05_vinculoprofissional.value = 0;
+      document.form1.obr05_dtcadastrores.value = '';
 
     }else{
       alert(oRetorno.message.urlDecode());
@@ -432,7 +433,7 @@ $cllicobras->rotulo->label();
     document.form1.obr05_numregistro.value = oRetorno.dados[0].obr05_numregistro;
     document.form1.obr05_numartourrt.value = oRetorno.dados[0].obr05_numartourrt;
     document.form1.obr05_vinculoprofissional.value = oRetorno.dados[0].obr05_vinculoprofissional;
-
+    document.form1.obr05_dtcadastrores.value = js_formatar(oRetorno.dados[0].obr05_dtcadastrores,'d');
   }
 
   function js_excluir(iCodigoResp) {
@@ -462,7 +463,18 @@ $cllicobras->rotulo->label();
     }else{
       alert(oRetorno.message.urlDecode());
     }
-    js_removeObj("msgbox");
+
+      document.form1.obr05_sequencial.value = '';
+      document.form1.obr05_responsavel.value = '';
+      document.form1.obr05_tiporesponsavel.value = 0;
+      document.form1.z01_nome.value = '';
+      document.form1.obr05_tiporegistro.value = 0;
+      document.form1.obr05_numregistro.value = '';
+      document.form1.obr05_numartourrt.value = '';
+      document.form1.obr05_vinculoprofissional.value = 0;
+      document.form1.obr05_dtcadastrores.value = '';
+
+      js_removeObj("msgbox");
 
     js_CarregaResponsaveis()
   }
