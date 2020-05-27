@@ -469,6 +469,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						   obrasdadoscomplementares.db150_numero AS numero,
 						   obrasdadoscomplementares.db150_bairro AS bairro,
 						   cadendermunicipio.db72_descricao AS cidade,
+						   obrasdadoscomplementares.db150_distrito AS distrito,
 						   obrasdadoscomplementares.db150_cep AS cep,
 						   obrasdadoscomplementares.db150_grauslatitude AS grauslatitude,
 						   obrasdadoscomplementares.db150_minutolatitude AS minutolatitude,
@@ -513,6 +514,7 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
 						$clredispi12->si185_numero = !$oResult12->numero ? 0 : $oResult12->numero;
 						$clredispi12->si185_bairro = $oResult12->bairro;
 						$clredispi12->si185_cidade = $oResult12->cidade;
+						$clredispi12->si185_distrito = $oResult12->distrito;
 						$clredispi12->si185_cep = $oResult12->cep;
 						$clredispi12->si185_graulatitude = $oResult12->grauslatitude;
 						$clredispi12->si185_minutolatitude = $oResult12->minutolatitude;
@@ -535,7 +537,6 @@ class SicomArquivoResumoDispensaInexigibilidade extends SicomArquivoBase impleme
     }
 
     db_fim_transacao();
-
     $oGerarREDISPI = new GerarREDISPI();
     $oGerarREDISPI->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarREDISPI->gerarDados();
