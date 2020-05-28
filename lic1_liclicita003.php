@@ -104,21 +104,19 @@ if(isset($excluir)){
 
 	if(!$sqlerro) {
 		$sqlCodigo = $clobrascodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = ' . $l20_codigo);
-		if($clobrascodigos->numrows){
-            $rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
-            $codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
+		$rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
+		$codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
 
-            $clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
-            if ($clobrasdadoscompl->erro_status == 0){
-                $sqlerro  = true;
-                $erro_msg = $clobrasdadoscompl->erro_msg;
-            }
+		$clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
+		if ($clobrasdadoscompl->erro_status == 0){
+			$sqlerro  = true;
+			$erro_msg = $clobrasdadoscompl->erro_msg;
+		}
 
-            $clobrascodigos->excluir($codigoObra);
-            if($clobrascodigos->erro_status == 0){
-                $sqlerro  = true;
-                $erro_msg = $clobrascodigos->erro_msg;
-            }
+		$clobrascodigos->excluir($codigoObra);
+		if($clobrascodigos->erro_status == 0){
+			$sqlerro  = true;
+			$erro_msg = $clobrascodigos->erro_msg;
         }
 	}
 
