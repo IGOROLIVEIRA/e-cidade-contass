@@ -308,7 +308,7 @@ class cl_liclancedital
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alterao efetuada com Sucesso\\n";
+        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
 //        $this->erro_sql .= "Valores : " . $this->l47_sequencial;
         $this->erro_msg = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -339,7 +339,7 @@ class cl_liclancedital
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql = "liclancedital nao Exclu?do. Exclus?o Abortada.\\n";
+      $this->erro_sql = "liclancedital nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : " . $l20_codigo;
       $this->erro_msg = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -349,7 +349,7 @@ class cl_liclancedital
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "liclancedital nao Encontrado. Exclus?o n?o Efetuada.\\n";
+        $this->erro_sql = "liclancedital nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
         $this->erro_msg = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -358,7 +358,7 @@ class cl_liclancedital
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclus?o efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
         $this->erro_msg = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
