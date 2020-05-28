@@ -107,26 +107,29 @@ if(isset($excluir)){
 		$rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
 		$codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
 
-		$clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
-		if ($clobrasdadoscompl->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clobrasdadoscompl->erro_msg;
-		}
+		if($clobrascodigos->numrows){
+            $clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
+            if ($clobrasdadoscompl->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clobrasdadoscompl->erro_msg;
+            }
 
-		$clobrascodigos->excluir($codigoObra);
-		if($clobrascodigos->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clobrascodigos->erro_msg;
+            $clobrascodigos->excluir($codigoObra);
+            if($clobrascodigos->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clobrascodigos->erro_msg;
+            }
+        }
+
+		if(!$sqlerro){
+            $clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
+            if ($clliclancedital->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clliclancedital->erro_msg;
+            }
         }
 	}
 
-	if(!$sqlerro){
-		$clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
-		if ($clliclancedital->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clliclancedital->erro_msg;
-		}
-	}
 
   $clliclicitaweb->sql_record($clliclicitaweb->sql_query_file(null,"*",null,"l29_liclicita=$l20_codigo"));
 	if ($clliclicitaweb->numrows > 0){
