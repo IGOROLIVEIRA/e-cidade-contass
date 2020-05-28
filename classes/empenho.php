@@ -232,6 +232,11 @@ class empenho {
         $codteste = "39";
       }
 
+      $lMaterialPermanente = $oEmpenhoFinanceiro->isMaterialPermanente();
+      if($lMaterialPermanente) {
+          $codteste = "39";
+      }
+
     } else {
 
       $codteste = "3";
@@ -465,6 +470,11 @@ class empenho {
         $lPossuiControleEmLiqudacao = self::possuiLancamentoDeControle($numemp, $oEmpenhoFinanceiro->getAnoUso(), array(200,208, 210));
         if ($lPossuiControleEmLiqudacao ) {
           $documento = 39;
+        }
+
+        $lMaterialPermanente = $oEmpenhoFinanceiro->isMaterialPermanente();
+        if($lMaterialPermanente) {
+            $documento = 39;
         }
 
       }

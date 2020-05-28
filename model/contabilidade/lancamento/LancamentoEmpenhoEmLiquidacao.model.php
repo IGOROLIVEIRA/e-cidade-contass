@@ -128,7 +128,7 @@ class LancamentoEmpenhoEmLiquidacao {
       } else {
         $oEventoContabil = $oEventoContabilRP;
       }
-    } elseif ($oEmpenhoFinanceiro->isRestoAPagar($iAnoUsu) && $oEmpenhoFinanceiro->isMaterialPermanente()) {
+    } elseif ($oEmpenhoFinanceiro->getAnoUso() < $iAnoUsu && $oEmpenhoFinanceiro->isMaterialPermanente()) {
 
       $oEventoContabilRP = new EventoContabil(214, $iAnoUsu);
 

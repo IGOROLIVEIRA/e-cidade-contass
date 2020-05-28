@@ -219,7 +219,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
    * em ano diferente do ano da emissao do empenho.
    */
 
-  if ( $oEmpenhoFinanceiro->isMaterialPermanente() && $oEmpenhoFinanceiro->isRestoAPagar(db_getsession("DB_anousu")) ) {
+  if ( $oEmpenhoFinanceiro->isMaterialPermanente() && $oEmpenhoFinanceiro->getAnoUso() < db_getsession("DB_anousu") ) {
     if ($iCodigoDocumento == 208) {
       $iCodigoDocumento = 214;
     } elseif($iCodigoDocumento == 209) {

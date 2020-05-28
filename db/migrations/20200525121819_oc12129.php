@@ -12,6 +12,8 @@ class Oc12129 extends PostgresMigration
         BEGIN;
         SELECT fc_startsession();
 
+        UPDATE conhistdoc SET c53_descr = 'LIQUIDACAO RP MATERIAL ALMOX/PERMANENTE' WHERE c53_coddoc = 39;
+
         -- Inserindo o documento para cadastros das regras a seguir.
         INSERT INTO conhistdoc VALUES
         (214, 'REG. DE ENTRADA DE MP VIA RP', 200),
