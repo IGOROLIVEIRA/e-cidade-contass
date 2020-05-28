@@ -103,7 +103,7 @@ class GerarRSP extends GerarAM
         $aCSVRSP10['si112_codreduzidorsp']    = substr($aRSP10['si112_codreduzidorsp'], 0, 15);
         $aCSVRSP10['si112_codorgao']          = $this->padLeftZero($aRSP10['si112_codorgao'], 2);
         $aCSVRSP10['si112_codunidadesub']     = $this->padLeftZero($aRSP10['si112_codunidadesub'], 5);
-        if($aRSP10['si112_exercicioempenho'] < 2013){
+        if($aRSP10['si112_exercicioempenho'] == 2012){
           $aCSVRSP10['si112_codunidadesuborig'] = $this->padLeftZero( substr($aRSP10['si112_codunidadesuborig'], 0, 5), 5);
         }else{
           $aCSVRSP10['si112_codunidadesuborig'] = strcasecmp($aRSP10['si112_codunidadesuborig']) <= 5 ? $this->padLeftZero($aRSP10['si112_codunidadesuborig'], 5)
@@ -170,7 +170,7 @@ class GerarRSP extends GerarAM
         $aCSVRSP20['si115_codreduzidomov']              = substr($aRSP20['si115_codreduzidomov'], 0, 15);
         $aCSVRSP20['si115_codorgao']                    = $this->padLeftZero($aRSP20['si115_codorgao'], 2);
         $aCSVRSP20['si115_codunidadesub']               = $this->padLeftZero($aRSP20['si115_codunidadesub'], 5);
-        if($aRSP20['si115_exercicioempenho'] < 2013){
+        if($aRSP20['si115_exercicioempenho'] == 2012){
             $aCSVRSP20['si115_codunidadesuborig'] = $this->padLeftZero( substr($aRSP20['si115_codunidadesuborig'], 0, 5), 5);
         }else{
             $aCSVRSP20['si115_codunidadesuborig'] = strcasecmp($aRSP20['si115_codunidadesuborig']) <= 5 ? $this->padLeftZero($aRSP20['si115_codunidadesuborig'], 5)
