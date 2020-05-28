@@ -168,15 +168,21 @@ if(isset($incluir)){
     $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
 
     if ($clliclicita->numrows > 0) {
-
-        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
-    and l31_tipo::int in (1,2,3,4,5,6,7)"));
-        if ($clliccomissaocgm->numrows == 7) {
-            $script = "<script>parent.document.formaba.liclicitem.disabled=false;
-      </script>";
-            echo $script;
+		if($l20_naturezaobjeto == 1) {
+			$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+                    and l31_tipo::int in (1,2,3,4,5,6,7,10)"));
+			if ($clliccomissaocgm->numrows == 8) {
+				$script = "<script>parent.document.formaba.liclicitem.disabled=false;</script>";
+				echo $script;
+			}
+		}else{
+            $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+            and l31_tipo::int in (1,2,3,4,5,6,7)"));
+            if ($clliccomissaocgm->numrows == 7) {
+                $script = "<script>parent.document.formaba.liclicitem.disabled=false;</script>";
+                echo $script;
+            }
         }
-
     }else {
         if ($l20_naturezaobjeto == 6) {
 
