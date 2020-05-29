@@ -109,7 +109,6 @@ class GerarJULGLIC extends GerarAM
 			$aCSVJULGLIC30['si62_nrodocumento']           = substr($aJULGLIC30['si62_nrodocumento'], 0, 14);
 			$aCSVJULGLIC30['si62_nrolote']                = !$aJULGLIC30['si62_nrolote'] ? '' : substr($aJULGLIC30['si62_nrolote'], 0, 4);
 			$aCSVJULGLIC30['si62_coditem']                = substr($aJULGLIC30['si62_coditem'], 0, 15);
-			$aCSVJULGLIC30['si62_perctaxaadm']            = substr($aJULGLIC30['si62_perctaxaadm'], 0, 15);
 			$aCSVJULGLIC30['si62_perctaxaadm']           = $this->sicomNumberReal($aJULGLIC30['si62_perctaxaadm'], 2);
 
 			$this->sLinha = $aCSVJULGLIC30;
