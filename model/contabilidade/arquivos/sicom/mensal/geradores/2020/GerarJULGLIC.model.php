@@ -29,8 +29,11 @@ class GerarJULGLIC extends GerarAM
     $sSql2 = "select * from julglic202020 where si61_mes = " . $this->iMes . " and si61_instit=" . db_getsession("DB_instit");
     $rsJULGLIC20 = db_query($sSql2);
 
-    $sSql3 = "select * from julglic402020 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
-    $rsJULGLIC40 = db_query($sSql3);
+  	$sSql3 = "select * from julglic302020 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
+	$rsJULGLIC30 = db_query($sSql3);
+
+    $sSql4 = "select * from julglic402020 where si62_mes = " . $this->iMes . " and si62_instit=" . db_getsession("DB_instit");
+    $rsJULGLIC40 = db_query($sSql4);
 
     if (pg_num_rows($rsJULGLIC10) == 0 && pg_num_rows($rsJULGLIC20) == 0 && pg_num_rows($rsJULGLIC40) == 0) {
 
@@ -89,11 +92,36 @@ class GerarJULGLIC extends GerarAM
 
       }
 
+		/**
+		 *
+		 * Registros 20
+		 */
+		for ($iCont3 = 0; $iCont3 < pg_num_rows($rsJULGLIC30); $iCont3++) {
+
+			$aJULGLIC30 = pg_fetch_array($rsJULGLIC30, $iCont2);
+
+			$aCSVJULGLIC30['si62_tiporegistro']           = $this->padLeftZero($aJULGLIC30['si62_tiporegistro'], 2);
+			$aCSVJULGLIC30['si62_codorgao']               = $this->padLeftZero($aJULGLIC30['si62_codorgao'], 2);
+			$aCSVJULGLIC30['si62_codunidadesub']          = $this->padLeftZero($aJULGLIC30['si62_codunidadesub'], 5);
+			$aCSVJULGLIC30['si62_exerciciolicitacao']     = $this->padLeftZero($aJULGLIC30['si62_exerciciolicitacao'], 4);
+			$aCSVJULGLIC30['si62_nroprocessolicitatorio'] = substr($aJULGLIC30['si62_nroprocessolicitatorio'], 0, 12);
+			$aCSVJULGLIC30['si62_tipodocumento']          = $this->padLeftZero($aJULGLIC30['si62_tipodocumento'], 1);
+			$aCSVJULGLIC30['si62_nrodocumento']           = substr($aJULGLIC30['si62_nrodocumento'], 0, 14);
+			$aCSVJULGLIC30['si62_nrolote']                = !$aJULGLIC30['si62_nrolote'] ? '' : substr($aJULGLIC30['si62_nrolote'], 0, 4);
+			$aCSVJULGLIC30['si62_coditem']                = substr($aJULGLIC30['si62_coditem'], 0, 15);
+			$aCSVJULGLIC30['si62_perctaxaadm']            = substr($aJULGLIC30['si62_perctaxaadm'], 0, 15);
+			$aCSVJULGLIC30['si62_perctaxaadm']           = $this->sicomNumberReal($aJULGLIC30['si62_perctaxaadm'], 2);
+
+			$this->sLinha = $aCSVJULGLIC30;
+			$this->adicionaLinha();
+
+		}
+
       /**
        *
        * Registros 40
        */
-      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsJULGLIC40); $iCont3++) {
+      for ($iCont4 = 0; $iCont4 < pg_num_rows($rsJULGLIC40); $iCont4++) {
 
         $aJULGLIC40 = pg_fetch_array($rsJULGLIC40, $iCont3);
 
