@@ -212,6 +212,20 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $iCodigoGrupo       = $oDadosEstoqueGrupo->m65_sequencial;
 
   $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oParametros->iNumeroEmpenho);
+
+  /**
+   * OC12129
+   * Verificacoes para documento de controle de liquidacao de materiais permanentes com entrada do bem realizada
+   * em ano diferente do ano da emissao do empenho.
+   */
+
+  if ( $oEmpenhoFinanceiro->isMaterialPermanente() && $oEmpenhoFinanceiro->getAnoUso() < db_getsession("DB_anousu") ) {
+    if ($iCodigoDocumento == 208) {
+      $iCodigoDocumento = 214;
+    } elseif($iCodigoDocumento == 209) {
+      $iCodigoDocumento = 215;
+    }
+  }
   $aItensEmpenho = $oEmpenhoFinanceiro->getItens();
 
   $oEventoContabil = new EventoContabil($iCodigoDocumento, db_getsession("DB_anousu"));
