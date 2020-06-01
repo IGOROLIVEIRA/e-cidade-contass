@@ -120,9 +120,9 @@ class GerarHOMOLIC extends GerarAM
        *
        * Registros 40
        */
-      for ($iCont3 = 0; $iCont3 < pg_num_rows($rsHOMOLIC40); $iCont3++) {
+      for ($iCont4 = 0; $iCont4 < pg_num_rows($rsHOMOLIC40); $iCont4++) {
 
-        $aHOMOLIC40 = pg_fetch_array($rsHOMOLIC40, $iCont3);
+        $aHOMOLIC40 = pg_fetch_array($rsHOMOLIC40, $iCont4);
 
         $aCSVHOMOLIC40['si65_tiporegistro']           = $this->padLeftZero($aHOMOLIC40['si65_tiporegistro'], 2);
         $aCSVHOMOLIC40['si65_codorgao']               = $this->padLeftZero($aHOMOLIC40['si65_codorgao'], 2);

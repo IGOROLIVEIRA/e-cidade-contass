@@ -98,7 +98,7 @@ class GerarJULGLIC extends GerarAM
 		 */
 		for ($iCont3 = 0; $iCont3 < pg_num_rows($rsJULGLIC30); $iCont3++) {
 
-			$aJULGLIC30 = pg_fetch_array($rsJULGLIC30, $iCont2);
+			$aJULGLIC30 = pg_fetch_array($rsJULGLIC30, $iCont3);
 
 			$aCSVJULGLIC30['si62_tiporegistro']           = $this->padLeftZero($aJULGLIC30['si62_tiporegistro'], 2);
 			$aCSVJULGLIC30['si62_codorgao']               = $this->padLeftZero($aJULGLIC30['si62_codorgao'], 2);

@@ -545,7 +545,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 			if(!$aDadosAgrupados40[$sHash40]) {
 				$oDados40 = new stdClass();
 
-				$oDados40->si62_tiporegistro = 40;
+				$oDados40->si62_tiporegistro = $oResult40->tiporegistro;
 				$oDados40->si62_codorgao = $oResult40->codorgaoresp;
 				$oDados40->si62_codunidadesub = $oResult40->codunidadesubresp;
 				$oDados40->si62_exerciciolicitacao = $oResult40->exerciciolicitacao;
