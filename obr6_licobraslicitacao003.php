@@ -3,17 +3,18 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_licobraslicitacao_classe.php");
+include("classes/db_pctipocompratribunal_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobraslicitacao = new cl_licobraslicitacao;
+$clpctipocompratribunal = new cl_pctipocompratribunal;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $cllicobraslicitacao->excluir($oid);
+  $cllicobraslicitacao->excluir($obr07_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
@@ -30,15 +31,17 @@ if(isset($excluir)){
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+    #obr07_objeto{
+        width: 510px;
+        height: 70px;
+    }
+    #formulariolicitacao{
+        margin-left: 30%;
+        margin-top: 5%;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 

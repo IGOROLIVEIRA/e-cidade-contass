@@ -30,9 +30,11 @@ if(isset($incluir)){
       throw new Exception ("Nenhuma licitação informada!");
     }
 
-    if($datahomologacao == null){
-      throw new Exception ("Usuário: Licitação não homologada! Inclusão Abortada!");
-    }
+    if($obr01_licitacaosistema != "2"){
+        if($datahomologacao == null){
+            throw new Exception ("Usuário: Licitação não homologada! Inclusão Abortada!");
+        }
+      }
 
     if($obr01_numeroobra == null || $obr01_numeroobra == "0"){
       throw new Exception ("Nº Obra não informado!");
@@ -50,6 +52,7 @@ if(isset($incluir)){
     $cllicobras->obr01_numeroobra          = $obr01_numeroobra;
     $cllicobras->obr01_linkobra            = $obr01_linkobra;
     $cllicobras->obr01_instit              = db_getsession('DB_instit');
+    $cllicobras->obr01_licitacaosistema       = $obr01_licitacaosistema;
     $cllicobras->incluir();
 
     if($cllicobras->erro_status == 0){
@@ -83,8 +86,8 @@ if(isset($incluir)){
 </head>
 <style>
   #l20_objeto{
-    width: 711px;
-    height: 55px;
+    width: 622px;
+    height: 58px;
   }
   #obr01_linkobra{
     width: 617px;
@@ -108,8 +111,11 @@ if(isset($incluir)){
   #tipocompra{
     width: 263px;
   }
-  #obr05_numartourrt{
-    background-color:#E6E4F1;
+  #obr05_numartourrt {
+      background-color: #E6E4F1;
+  }
+  #obr01_licitacaosistema{
+      width: 90px;
   }
 </style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

@@ -2,7 +2,7 @@
 //MODULO: Obras
 $cllicobraslicitacao->rotulo->label();
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" id="formulariolicitacao">
     <fieldset>
         <legend>Licitação</legend>
         <table border="0">
@@ -13,7 +13,7 @@ $cllicobraslicitacao->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('obr07_sequencial',11,$Iobr07_sequencial,true,'text',$db_opcao,"")
+                    db_input('obr07_sequencial',11,$Iobr07_sequencial,true,'text',3,"")
                     ?>
                 </td>
             </tr>
@@ -43,7 +43,7 @@ $cllicobraslicitacao->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_textarea('obr07_objeto',0,0,$Iobr07_objeto,true,'text',$db_opcao,"")
+                    db_textarea('obr07_objeto',0,0,$Iobr07_objeto,true,'text',$db_opcao,"","","",'1000')
                     ?>
                 </td>
             </tr>
@@ -53,17 +53,8 @@ $cllicobraslicitacao->rotulo->label();
                 </td>
                 <td>
                     <?
-                    db_input('obr07_tipoprocesso',11,$Iobr07_tipoprocesso,true,'text',$db_opcao,"")
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap title="<?=@$Tobr07_instit?>">
-                    <?=@$Lobr07_instit?>
-                </td>
-                <td>
-                    <?
-                    db_input('obr07_instit',11,$Iobr07_instit,true,'text',$db_opcao,"")
+                    $result = $clpctipocompratribunal->sql_record($clpctipocompratribunal->sql_query(null,"l44_sequencial,l44_descricao",null,"l44_uf = 'MG'"));
+                    db_selectrecord('obr07_tipoprocesso',$result,true,2,"","","","0","");
                     ?>
                 </td>
             </tr>

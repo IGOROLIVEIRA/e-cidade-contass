@@ -72,7 +72,8 @@ if(isset($alterar)){
   }
 }else if(isset($chavepesquisa)){
   $db_opcao = 2;
-  $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
+  $campos = "obr01_sequencial,obr01_licitacaosistema,obr01_licitacao,obr01_linkobra,obr01_numeroobra,l20_edital,l03_descr,l20_numero,l20_objeto";
+  $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null,$campos,null,"obr01_sequencial=$chavepesquisa"));
   db_fieldsmemory($result,0);
   $db_botao = true;
 }
