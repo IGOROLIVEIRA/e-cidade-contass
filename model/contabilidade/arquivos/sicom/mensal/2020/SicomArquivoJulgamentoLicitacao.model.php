@@ -453,7 +453,8 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
 			$oResult30 = db_utils::fieldsMemory($rsResult30, $iCont30);
-			$sHash30 = $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio . $oResult30->nrodocumento . $oResult30->nrolote . $oResult30->coditem;
+			$sHash30 = '30' . $oResult30->codorgaoresp . $oResult30->codunidadesubresp . $oResult30->exerciciolicitacao . $oResult30->nroprocessolicitatorio.
+				$oResult30->tipodocumento.$oResult30->nrodocumento.$oResult30->nrolote.$oResult30->coditem;
 
 			if (!$aDadosAgrupados30[$sHash30]) {
 				if ($oResult30->criterioadjudicacao == 2) {
@@ -535,19 +536,40 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 		$rsResult40 = db_query($sSql);
 
+		$aDadosAgrupados40 = array();
 		for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
+			$oResult40 = db_utils::fieldsMemory($rsResult40, $iCont40);
+			$sHash40 = '40' . $oResult40->codorgaoresp . $oResult40->codunidadesubresp . $oResult40->exerciciolicitacao . $oResult40->nroprocessolicitatorio.
+				$oResult40->dtjulgamento;
 
+			if(!$aDadosAgrupados40[$sHash40]) {
+				$oDados40 = new stdClass();
+
+				$oDados40->si62_tiporegistro = 40;
+				$oDados40->si62_codorgao = $oResult40->codorgaoresp;
+				$oDados40->si62_codunidadesub = $oResult40->codunidadesubresp;
+				$oDados40->si62_exerciciolicitacao = $oResult40->exerciciolicitacao;
+				$oDados40->si62_nroprocessolicitatorio = $oResult40->nroprocessolicitatorio;
+				$oDados40->si62_dtjulgamento = $oResult40->dtjulgamento;
+				$oDados40->si62_presencalicitantes = $oResult40->presencalicitantes;
+				$oDados40->si62_renunciarecurso = $oResult40->renunciarecurso;
+				$oDados40->si62_instit = db_getsession("DB_instit");
+				$oDados40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+				$aDadosAgrupados40[$sHash40] = $oDados40;
+			}
+		}
+
+		foreach ($aDadosAgrupados40 as $oDados40){
 			$cljulglic40 = new cl_julglic402020();
-			$oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
-			$cljulglic40->si62_tiporegistro = 40;
-			$cljulglic40->si62_codorgao = $oDados40->codorgaoresp;
-			$cljulglic40->si62_codunidadesub = $oDados40->codunidadesubresp;
-			$cljulglic40->si62_exerciciolicitacao = $oDados40->exerciciolicitacao;
-			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->nroprocessolicitatorio;
-			$cljulglic40->si62_dtjulgamento = $oDados40->dtjulgamento;
-			$cljulglic40->si62_presencalicitantes = $oDados40->presencalicitantes;
-			$cljulglic40->si62_renunciarecurso = $oDados40->renunciarecurso;
+			$cljulglic40->si62_tiporegistro = $oDados40->si62_tiporegistro;
+			$cljulglic40->si62_codorgao = $oDados40->si62_codorgao;
+			$cljulglic40->si62_codunidadesub = $oDados40->si62_codunidadesub;
+			$cljulglic40->si62_exerciciolicitacao = $oDados40->si62_exerciciolicitacao;
+			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->si62_nroprocessolicitatorio;
+			$cljulglic40->si62_dtjulgamento = $oDados40->si62_dtjulgamento;
+			$cljulglic40->si62_presencalicitantes = $oDados40->si62_presencalicitantes;
+			$cljulglic40->si62_renunciarecurso = $oDados40->si62_renunciarecurso;
 			$cljulglic40->si62_instit = db_getsession("DB_instit");
 			$cljulglic40->si62_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
