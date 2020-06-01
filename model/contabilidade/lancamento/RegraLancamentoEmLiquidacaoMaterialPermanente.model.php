@@ -65,7 +65,7 @@ class RegraLancamentoEmLiquidacaoMaterialPermanente implements IRegraLancamentoC
 
       if ( $oLancamentoEventoContabil->getOrdem() == 1 ) {
 
-        if ( $iCodigoDocumento == 209 ) {
+        if ( $iCodigoDocumento == 209 || $iCodigoDocumento == 215) {
           $oRegraLancamentoContabil->setContaCredito($iContaClassificacao);
         } else {
           $oRegraLancamentoContabil->setContaDebito($iContaClassificacao);

@@ -412,88 +412,130 @@ switch ($oParam->exec) {
 
   break;
 
-  case 'salvarDadosComplementares':
+    case 'salvarDadosComplementares':
 
-    db_inicio_transacao();
-    try {
+        db_inicio_transacao();
+            try {
 
-        $oEndereco = new obrasDadosComplementares(null);
-        $oEndereco->setEstado($oParam->endereco->codigoEstado);
-        $oEndereco->setPais($oParam->endereco->codigoPais);
-        $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
-        $oEndereco->setBairro($oParam->endereco->descrBairro);
-        $oEndereco->setNumero($oParam->endereco->numero);
-        $oEndereco->setCep($oParam->endereco->cep);
-        $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
-        $oEndereco->setDistrito($oParam->endereco->distrito);
-        $oEndereco->setLogradouro($oParam->endereco->logradouro);
-        $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
-        $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
-        $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
-        $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
-        $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
-        $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
-        $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
-        $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
-        $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
-        $oEndereco->setDescrAtividadeServico($oParam->endereco->descrAtividadeServico);
-        $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
-        $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
-        $oEndereco->setGrupoBemPublico(intval($oParam->endereco->grupoBemPub));
-        $oEndereco->setSubGrupoBemPublico(intval($oParam->endereco->subGrupoBemPub));
-        $oEndereco->setBdi($oParam->endereco->bdi);
-        $oEndereco->setLicita($oParam->endereco->licitacao);
+                $oEndereco = new obrasDadosComplementares(null);
+                $oEndereco->setEstado($oParam->endereco->codigoEstado);
+                $oEndereco->setPais($oParam->endereco->codigoPais);
+                $oEndereco->setMunicipio($oParam->endereco->codigoMunicipio);
+                $oEndereco->setBairro($oParam->endereco->descrBairro);
+                $oEndereco->setNumero($oParam->endereco->numero);
+                $oEndereco->setCep($oParam->endereco->cep);
+                $oEndereco->setCodigoObra($oParam->endereco->codigoObra);
+                $oEndereco->setDistrito($oParam->endereco->distrito);
+                $oEndereco->setLogradouro($oParam->endereco->logradouro);
+                $oEndereco->setGrausLatitude($oParam->endereco->grausLatitude);
+                $oEndereco->setMinutoLatitude($oParam->endereco->minutoLatitude);
+                $oEndereco->setSegundoLatitude($oParam->endereco->segundoLatitude);
+                $oEndereco->setGrausLongitude($oParam->endereco->grausLongitude);
+                $oEndereco->setMinutoLongitude($oParam->endereco->minutoLongitude);
+                $oEndereco->setSegundoLongitude($oParam->endereco->segundoLongitude);
+                $oEndereco->setClasseObjeto($oParam->endereco->classeObjeto);
+                $oEndereco->setAtividadeObra($oParam->endereco->atividadeObra);
+                $oEndereco->setAtividadeServico($oParam->endereco->atividadeServico);
+                $oEndereco->setDescrAtividadeServico($oParam->endereco->descrAtividadeServico);
+                $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
+                $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
+                $oEndereco->setGrupoBemPublico(intval($oParam->endereco->grupoBemPub));
+                $oEndereco->setSubGrupoBemPublico(intval($oParam->endereco->subGrupoBemPub));
+                $oEndereco->setBdi($oParam->endereco->bdi);
+                $oEndereco->setLicita($oParam->endereco->licitacao);
+                $oEndereco->setSequencial($oParam->endereco->sequencial);
 
-        $oEndereco->salvaDadosComplementares($oParam->acao);
-        db_fim_transacao(false);
+                $oEndereco->salvaDadosComplementares($oParam->acao);
+                db_fim_transacao(false);
 
-    }catch (Exception $erro){
-      db_fim_transacao(true);
-      $oRetorno->message  = urlencode($erro->getMessage());
-      $oRetorno->status   = 2;
-    }
-
-    echo $oJson->encode($oRetorno);
-  break;
-
-  case 'findDadosObra' :
-    if($oParam->iCodigoObra){
-      $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iCodigoObra);
-    }
-    $oRetorno->status = 1;
-    echo $oJson->encode($oRetorno);
-  break;
-
-  case 'findDadosObraLicitacao' :
-    try{
-      if($oParam->codLicitacao){
-        $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao);
-      }
-      $oRetorno->status = 1;
-    }catch (Exception $error){
-      $oRetorno->message = $error;
-      $oRetorno->status = 2;
-    }
-
-    echo json_encode($oRetorno);
+            }catch (Exception $erro){
+                db_fim_transacao(true);
+                $oRetorno->message  = urlencode($erro->getMessage());
+                $oRetorno->status   = 2;
+            }
+        echo $oJson->encode($oRetorno);
     break;
 
-  case 'excluiDadosObra':
-    db_inicio_transacao();
-    try{
-      if($oParam->codObra){
-        $clObras = new cl_obrasdadoscomplementares();
-        $clObras->excluir('', 'db150_codobra = '.$oParam->codObra);
-        $oRetorno->message = urlencode($clObras->erro_sql);
-      }
-      db_fim_transacao(false);
-    }catch(Exception $erro){
-      db_fim_transacao(true);
-      $oRetorno->message  = urlencode($erro->getMessage());
-      $oRetorno->status   = 2;
-    }
+    case 'findDadosObra' :
+        $oRetorno->dadoscomplementares = obrasDadosComplementares::findObraByCodigo($oParam->iSequencial, $oParam->licitacao);
+        $oRetorno->status = 1;
+        echo $oJson->encode($oRetorno);
+    break;
 
-    echo $oJson->encode($oRetorno);
+    case 'findDadosObraLicitacao' :
+        try{
+            if($oParam->codLicitacao){
+                $oRetorno->dadoscomplementares = obrasDadosComplementares::findObrasByLicitacao($oParam->codLicitacao);
+            }
+            $oRetorno->status = 1;
+        }catch (Exception $error){
+            $oRetorno->message = $error;
+            $oRetorno->status = 2;
+        }
+
+        echo json_encode($oRetorno);
+    break;
+
+    case 'excluiDadosObra':
+        db_inicio_transacao();
+        try{
+            if($oParam->sequencial){
+                if(obrasDadosComplementares::isLastRegister($oParam->sequencial, $oParam->licitacao)){
+                    throw new Exception("Primeiro Registro não pode ser excluído.\n\nRemova os demais registros para excluí-lo.\n\n");
+                }else{
+                    $clObras = new cl_obrasdadoscomplementares();
+                    $sSql = $clObras->sql_query_completo('','db150_sequencial','', 'db151_liclicita = '.$oParam->licitacao);
+                    $rsSql = $clObras->sql_record($sSql);
+                    $iLinhas = $clObras->numrows;
+
+                    $clObras->excluir('', 'db150_sequencial = '.$oParam->sequencial);
+                    $msg = urlencode($clObras->erro_msg);
+
+                    if($iLinhas == 1) {
+                        $oObrasCodigos = db_utils::getDao('obrascodigos');
+                        $oObrasCodigos->excluir('', 'db151_liclicita = ' . $oParam->licitacao);
+                    }
+                }
+            }
+            $oRetorno->message = $msg;
+            db_fim_transacao(false);
+        }catch(Exception $erro){
+            db_fim_transacao(true);
+            $oRetorno->message  = urlencode($erro->getMessage());
+            $oRetorno->status   = 2;
+        }
+
+        echo $oJson->encode($oRetorno);
+    break;
+
+    case 'getCodigoObra':
+        $clObrasCodigos = new cl_obrascodigos();
+        $sSql = $clObrasCodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = '.$oParam->licitacao);
+        $rsSql = $clObrasCodigos->sql_record($sSql);
+
+        if($clObrasCodigos->numrows){
+            $codigoObra = db_utils::fieldsMemory($rsSql, 0)->db151_codigoobra;
+            $oRetorno->obra = $codigoObra;
+            $oRetorno->status = 1;
+        }else{
+            $oRetorno->status = 2;
+        }
+
+        echo $oJson->encode($oRetorno);
+    break;
+
+    case 'isFirstRegister':
+        $clObras = db_utils::getDao('obrasdadoscomplementares');
+        $sSql = $clObras->sql_query_completo('', 'min(db150_sequencial) as minimo','','db151_codigoobra = '.$oParam->iCodigo);
+        $rsSql = $clObras->sql_record($sSql);
+        $iCodigo = db_utils::fieldsMemory($rsSql, 0)->minimo;
+
+        if($iCodigo == $oParam->iSequencial){
+            $oRetorno->status = 1;
+        }else{
+            $oRetorno->status = 2;
+        }
+        echo $oJson->encode($oRetorno);
     break;
 }
 ?>

@@ -933,6 +933,13 @@ class EmpenhoFinanceiro {
   }
 
   /**
+   * Verfica se empenho e do grupo de Despesas com Material Permanente
+   * @return boolean
+   */
+  public function isMaterialPermanente() {
+      return $this->verificaGrupoDoDesdobramento(9);
+  }
+  /**
    * @return int
    */
   public function getTipoLicitacao() {
