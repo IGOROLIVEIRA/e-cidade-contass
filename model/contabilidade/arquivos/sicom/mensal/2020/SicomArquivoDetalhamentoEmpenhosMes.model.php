@@ -300,9 +300,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         CASE
         WHEN l20_codigo IS NULL THEN NULL
         WHEN l03_pctipocompratribunal NOT IN (100, 101, 102, 103) THEN NULL
-        WHEN l03_pctipocompratribunal = 100 THEN 2
         WHEN l03_pctipocompratribunal = 101 THEN 1
-        ELSE 3
+        WHEN l03_pctipocompratribunal = 100 THEN 2
+        WHEN l03_pctipocompratribunal = 102 THEN 3
+        WHEN l03_pctipocompratribunal = 103 THEN 4
         END AS tipoprocesso,
         o.z01_cgccpf AS ordenador,
         e60_numemp AS numemp,
