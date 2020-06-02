@@ -450,3 +450,13 @@ cmpirapora:
     environment: production
     only:
         - master
+        
+pmlagoadospatos:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@pmlagoadospatos "cd /var/www/e-cidade-git && git checkout composer.lock && git pull origin master "'
+        - 'ssh -p22 contass@pmlagoadospatos "cd /var/www/e-cidade-git && php deploy_git.php && ./updatedb/update.sh "'
+    environment: production
+    only:
+        - master
