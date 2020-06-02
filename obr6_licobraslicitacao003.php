@@ -4,18 +4,30 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_pctipocompratribunal_classe.php");
+include("classes/db_licobras_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobraslicitacao = new cl_licobraslicitacao;
 $clpctipocompratribunal = new cl_pctipocompratribunal;
+$cllicobras = new cl_licobras;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
-  db_inicio_transacao();
-  $db_opcao = 3;
-  $cllicobraslicitacao->excluir($obr07_sequencial);
-  db_fim_transacao();
+try {
+    db_inicio_transacao();
+
+    $rsLicobras = $cllicobras->sql_record($cllicobras->sql_query(null,"*",null,"obr01_licitacao = $obr07_sequencial"));
+    if(pg_num_rows($rsLicobras) > 0){
+        throw new Exception("Licitação vinculada a uma obra!");
+    }
+
+    $db_opcao = 3;
+    $cllicobraslicitacao->excluir($obr07_sequencial);
+    db_fim_transacao();
+}catch (Exception $eErro){
+    db_msgbox($eErro->getMessage());
+}
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $result = $cllicobraslicitacao->sql_record($cllicobraslicitacao->sql_query($chavepesquisa)); 
