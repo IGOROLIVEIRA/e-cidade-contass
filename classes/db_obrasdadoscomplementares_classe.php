@@ -393,10 +393,10 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_bairro = '$this->db150_bairro' ";
 			$virgula = ",";
 		}
-		if (trim($this->db150_numero) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
-			$sql .= $virgula . " db150_numero = $this->db150_numero ";
-			$virgula = ",";
-		}
+//		if (trim($this->db150_numero) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
+		$sql .= $virgula . " db150_numero = ".(!$this->db150_numero ? 'null' : $this->db150_numero);
+		$virgula = ",";
+//		}
 		if (trim($this->db150_logradouro) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_logradouro"])) {
 			$sql .= $virgula . " db150_logradouro = '$this->db150_logradouro' ";
 			$virgula = ",";
