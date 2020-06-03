@@ -648,7 +648,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $oContrato11->si84_coditemsimcro = null;
               $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_codigotabela;
+            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $aDadosAgrupados[$sHash] = $oContrato11;
 
           } else {
