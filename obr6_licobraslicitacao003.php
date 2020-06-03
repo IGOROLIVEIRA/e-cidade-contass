@@ -18,8 +18,9 @@ try {
     db_inicio_transacao();
 
     $rsLicobras = $cllicobras->sql_record($cllicobras->sql_query(null,"*",null,"obr01_licitacao = $obr07_sequencial"));
+    db_fieldsmemory($rsLicobras,0);
     if(pg_num_rows($rsLicobras) > 0){
-        throw new Exception("Licitação vinculada a uma obra!");
+        throw new Exception("Licitação vinculada a obra número $obr01_numeroobra!");
     }
 
     $db_opcao = 3;

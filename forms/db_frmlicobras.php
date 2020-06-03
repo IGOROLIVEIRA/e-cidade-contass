@@ -194,7 +194,7 @@ $cllicobras->rotulo->label();
 <script>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_licobraspesquisa','func_licobras.php?pesquisa=true&funcao_js=parent.js_preenchepesquisa|obr01_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_licobraspesquisa','func_licobras.php?pesquisa=true&pesquisa=true&funcao_js=parent.js_preenchepesquisa|obr01_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_licobraspesquisa.hide();
@@ -288,7 +288,7 @@ $cllicobras->rotulo->label();
     db_iframe_licobras.hide();
   }
 
-  function js_preencheLicitacao2(descrcompra,objeto,numero,erro) {
+  function js_preencheLicitacao2(objeto,numero,descrcompra,erro) {
     document.form1.l03_descr.value = descrcompra;
     document.form1.l20_numero.value = numero;
     document.form1.l20_objeto.value = objeto;
