@@ -377,6 +377,31 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
             foreach ($oDados10->Reg11 as $aDados11) {
                 foreach ($aDados11 as $oDados11) {
+
+                    if($oDados11->si26_nroconvenio == '' || $oDados11->si26_nroconvenio == null) {
+
+                        $sSqlConvRec = "    SELECT
+                                                c206_nroconvenio,   
+                                                c206_dataassinatura
+                                            FROM conlancamrec
+                                                LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
+                                                LEFT JOIN corplacaixa 		ON (k82_id, k82_data, k82_autent) = (c86_id, c86_data, c86_autent)
+                                                LEFT JOIN placaixarec 		ON k81_seqpla = k82_seqpla
+                                                LEFT JOIN convconvenios 	ON c206_sequencial = k81_convenio
+                                            WHERE c74_codrec = {$oDados10->si25_codreceita}
+                                                AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' 
+                                                AND k81_convenio IS NOT NULL";
+
+                        $rsConvRec  = db_query($sSqlConvRec);
+                        $oConv      = db_utils::fieldsMemory($rsConvRec, 0);
+                        $sNroConv   = $oConv->c206_nroconvenio;
+                        $dtAssinat  = $oConv->c206_dataassinatura;
+
+                    } else {
+                        $sNroConv   = $oDados11->si26_nroconvenio;
+                        $dtAssinat  = $oDados11->si26_dataassinatura;
+                    }
+
                     if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '') &&
                         ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
@@ -389,8 +414,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_codfonteestornada = '100';
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
-                        $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
-                        $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
+                        $clarc21->si32_nroconvenio = $sNroConv;
+                        $clarc21->si32_dataassinatura = $dtAssinat;
                         $clarc21->si32_vlestornadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
@@ -433,8 +458,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212020
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
-                        $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
-                        $clarc21->si32_dataassinatura = $oDados11->si26_dataassinatura;
+                        $clarc21->si32_nroconvenio = $sNroConv;
+                        $clarc21->si32_dataassinatura = $dtAssinat;
                         $clarc21->si32_vlestornadofonte = abs($oDados11->si26_vlarrecadadofonte);
                         $clarc21->si32_mes = intval($oDados11->si26_mes);
                         $clarc21->si32_instit = db_getsession("DB_instit");
