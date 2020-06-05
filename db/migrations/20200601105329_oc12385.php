@@ -73,7 +73,6 @@ class Oc12385 extends AbstractMigration
             obr07_instit	 		 int8 NOT NULL 
             );
             
-            
             -- Criando  sequences
             CREATE SEQUENCE licobraslicitacao_obr07_sequencial_seq
             INCREMENT 1
@@ -86,16 +85,16 @@ class Oc12385 extends AbstractMigration
             
             --inserindo menu cadastro
             INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Licitação Obras','Licitação Obras','',1,1,'Licitação Obras','t');
-            INSERT INTO db_menu VALUES(29,(select max(id_item) from db_itensmenu),2,4001223);
+            INSERT INTO db_menu VALUES(29,(select max(id_item) from db_itensmenu),2,(select id_item from db_modulos where nome_modulo like '%Obras%'));
             
             INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusão','Inclusão','obr6_licobraslicitacao001.php',1,1,'Inclusão','t');
-            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),1,4001223);
+            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),1,(select id_item from db_modulos where nome_modulo like '%Obras%'));
             
             INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','obr6_licobraslicitacao002.php',1,1,'Alteração','t');
-            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),2,4001223);
+            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),2,(select id_item from db_modulos where nome_modulo like '%Obras%'));
             
             INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','obr6_licobraslicitacao003.php',1,1,'Exclusão','t');
-            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),3,4001223);
+            INSERT INTO db_menu VALUES((select id_item from db_itensmenu where help like'%Licitação Obras%'),(select max(id_item) from db_itensmenu),3,(select id_item from db_modulos where nome_modulo like '%Obras%'));
             
             -- adicionando campo tipo de licitacao na tabela licobras
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'obr01_licitacaosistema','int8','Licitação do Sistema','','Licitação do Sistema',11,false, false, false,0,'int8','Licitação do Sistema');
