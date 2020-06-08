@@ -288,8 +288,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               inner join liclicita on l20_codigo = obr01_licitacao
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-              WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtiniciomedicao)=  " . db_getsession("DB_anousu") . "
-                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtiniciomedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtentregamedicao)=  " . db_getsession("DB_anousu") . "
+                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtentregamedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);die();
 
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
