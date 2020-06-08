@@ -465,6 +465,7 @@ if($x->consultarDataDoSistema == true){
         oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo','', 10);
         oTxtCodigoAcordo.addEvent("onChange",";js_pesquisaac16_sequencial(false);");
         oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
+        oTxtCodigoAcordo.setReadOnly(true);
 
         oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo','', 50);
         oTxtDescricaoAcordo.show($('ctnTxtDescricaoAcordo'));
