@@ -245,7 +245,6 @@ class cl_redispi102020
                                ,$this->si183_mes 
                                ,$this->si183_instit 
                       )";
-
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("

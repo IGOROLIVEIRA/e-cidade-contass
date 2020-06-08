@@ -62,11 +62,14 @@ $pdf->Ln(12);
 $pdf->SetFont('Arial','',12);
 $pdf->MultiCell(0,4,"Objeto: {$oLicitacao->getObjeto()}",0,"C",0);
 $pdf->Ln(7);
-$pdf->MultiCell(0,4,"Comissão:",0,"C",0);
-$pdf->Ln();
-$pdf->SetFont('Arial','',8);
-foreach($oLicitacao->getComissao() as $oMembro) {
-    $pdf->MultiCell(0, 4, "{$oMembro->z01_nome} - {$oMembro->l46_tipo}", 0, "C", 0);
+$arrayDispensa = array(100,101,102);
+if(!in_array($oLicitacao->iTipoCompraTribunal, $arrayDispensa)){
+    $pdf->MultiCell(0,4,"Comissão:",0,"C",0);
+    $pdf->Ln();
+    $pdf->SetFont('Arial','',8);
+    foreach($oLicitacao->getComissao() as $oMembro) {
+        $pdf->MultiCell(0, 4, "{$oMembro->z01_nome} - {$oMembro->l46_tipo}", 0, "C", 0);
+    }
 }
 $pdf->Output();
 ?>

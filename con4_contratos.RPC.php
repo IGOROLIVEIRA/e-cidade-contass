@@ -1046,6 +1046,10 @@ switch($oParam->exec) {
         $oItemContrato->setIContratado($iContratado);
         $oItemContrato->setIQtdcontratada($oParam->material->nQuantidade);
 
+        $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($iLicitacao);
+
+        $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
+
         if (count($oItemContrato->getDotacoes()) == 1) {
 
           $aDotacao =  $oItemContrato->getDotacoes();
@@ -1108,9 +1112,9 @@ switch($oParam->exec) {
       $oContrato = $_SESSION["oContrato"];
       $oPosicao  = $oContrato->getUltimaPosicao();
       $aItens    = $oPosicao->getItens();
-      foreach ($aItens as $oItem) {
+        foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+          if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }
@@ -1155,7 +1159,7 @@ switch($oParam->exec) {
       $aItens    = $oPosicao->getItens();
       foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+        if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }

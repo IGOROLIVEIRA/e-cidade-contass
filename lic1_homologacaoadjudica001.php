@@ -41,15 +41,21 @@ if(isset($incluir)){
     }
 
     //Verifica itens obra
-  $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
-  foreach ($aPcmater as $item){
-    $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null,"*",null,"obr06_pcmater = $item->pc16_codmater"));
-    if(pg_num_rows($rsverifica) == 0){
-      echo
-      "<script>alert('Itens obras não cadastrados')</script>";
-      db_redireciona('lic1_homologacaoadjudica001.php');
+    $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
+    $aPcmaterverificado = array();
+
+    foreach ($aPcmater as $item){
+        $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null,"*",null,"obr06_pcmater = $item->pc16_codmater"));
+        if(pg_num_rows($rsverifica) <= 0){
+            $aPcmaterverificado[] = $item->pc16_codmater;
+        }
     }
-  }
+    $itens = implode(",",$aPcmaterverificado);
+
+    if($itens != null){
+        db_msgbox("Itens obras não cadastrados. Codigos:".$itens);
+        db_redireciona('lic1_homologacaoadjudica001.php');
+    }
 
 //  /**
 //   * Verificar Encerramento Periodo Contabil

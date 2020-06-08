@@ -130,6 +130,7 @@ switch($oParam->exec) {
       $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
       $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
       $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
       $cllicobrasresponsaveis->alterar($obr05_sequencial);
 
       if ($cllicobrasresponsaveis->erro_status == 0) {
