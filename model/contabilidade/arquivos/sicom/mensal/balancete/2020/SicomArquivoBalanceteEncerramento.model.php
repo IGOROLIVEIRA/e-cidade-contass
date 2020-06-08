@@ -1890,7 +1890,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                  INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
                                                  LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
                                              WHERE c61_anousu = ".db_getsession('DB_anousu')." 
-                                                AND c61_reduz = si96_codctb) AS estrut_reduz,
+                                                AND c61_reduz = si96_codctb LIMIT 1) AS estrut_reduz,
                                              (SELECT    
                                                 CASE
                                                     WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
@@ -1900,7 +1900,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
                                                 LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
                                              WHERE c61_anousu = ".db_getsession('DB_anousu')."
-                                                AND c61_codtce = si96_codctb) AS estrut_tce,
+                                                AND c61_codtce = si96_codctb LIMIT 1) AS estrut_tce,
                                              si96_codfontrecursos AS codfontrecursos,
                                              si96_vlsaldofinalfonte AS saldofinalctb,
                                              CASE
