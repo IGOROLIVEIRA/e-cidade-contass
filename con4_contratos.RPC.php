@@ -601,6 +601,7 @@ switch($oParam->exec) {
         $oContrato->setGrupo($oParam->contrato->iGrupo);
         $oContrato->setSituacao(1);
         $oContrato->setInstit(db_getsession("DB_instit"));
+        $oContrato->setLei($oParam->contrato->iLei);
         $oContrato->setLei($oParam->contrato->sLei);
         $oContrato->setNumero($oParam->contrato->iNumero);
         $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
