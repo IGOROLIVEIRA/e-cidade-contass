@@ -350,7 +350,7 @@ class cl_contratos102020 {
                                ,'$this->si83_formafornecimento'
                                ,'$this->si83_formapagamento'
                                ,$this->si83_unidadedemedidaprazoexex
-                               ,$this->si83_prazoexecucao
+                               ,".($this->si83_prazoexecucao == "null" || $this->si83_prazoexecucao == ""?"null":"'".$this->si83_prazoexecucao."'")."
                                ,'$this->si83_multarescisoria'
                                ,'$this->si83_multainadimplemento'
                                ,$this->si83_garantia

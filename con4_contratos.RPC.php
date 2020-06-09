@@ -1047,6 +1047,10 @@ switch($oParam->exec) {
         $oItemContrato->setIContratado($iContratado);
         $oItemContrato->setIQtdcontratada($oParam->material->nQuantidade);
 
+        $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($iLicitacao);
+
+        $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
+
         if (count($oItemContrato->getDotacoes()) == 1) {
 
           $aDotacao =  $oItemContrato->getDotacoes();

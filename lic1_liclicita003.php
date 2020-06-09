@@ -45,6 +45,7 @@ include("classes/db_obrasdadoscomplementares_classe.php");
 include("classes/db_obrascodigos_classe.php");
 include("classes/db_cflicita_classe.php");
 include("classes/db_liccomissaocgm_classe.php");
+include("classes/db_licobras_classe.php");
 require_once("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -64,7 +65,7 @@ $clliclancedital     = new cl_liclancedital;
 $cleditaldocumentos  = new cl_editaldocumento;
 $clobrasdadoscompl   = new cl_obrasdadoscomplementares;
 $clobrascodigos      = new cl_obrascodigos;
-
+$cllicobras          = new cl_licobras;
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -107,26 +108,29 @@ if(isset($excluir)){
 		$rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
 		$codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
 
-		$clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
-		if ($clobrasdadoscompl->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clobrasdadoscompl->erro_msg;
-		}
+		if($clobrascodigos->numrows){
+            $clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
+            if ($clobrasdadoscompl->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clobrasdadoscompl->erro_msg;
+            }
 
-		$clobrascodigos->excluir($codigoObra);
-		if($clobrascodigos->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clobrascodigos->erro_msg;
+            $clobrascodigos->excluir($codigoObra);
+            if($clobrascodigos->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clobrascodigos->erro_msg;
+            }
+        }
+
+		if(!$sqlerro){
+            $clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
+            if ($clliclancedital->erro_status == 0){
+                $sqlerro  = true;
+                $erro_msg = $clliclancedital->erro_msg;
+            }
         }
 	}
 
-	if(!$sqlerro){
-		$clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
-		if ($clliclancedital->erro_status == 0){
-			$sqlerro  = true;
-			$erro_msg = $clliclancedital->erro_msg;
-		}
-	}
 
   $clliclicitaweb->sql_record($clliclicitaweb->sql_query_file(null,"*",null,"l29_liclicita=$l20_codigo"));
 	if ($clliclicitaweb->numrows > 0){
@@ -228,8 +232,21 @@ if(isset($excluir)){
             $sqlerro  = true;
         }
     }
-  
-  if ($sqlerro==false){
+
+    try {
+
+        $rsLicobras = $cllicobras->sql_record($cllicobras->sql_query(null,"*",null,"obr01_licitacao = $l20_codigo"));
+        if(pg_num_rows($rsLicobras) > 0){
+            throw new Exception("Licitação vinculada a uma obra!");
+            $sqlerro  = true;
+        }
+
+    }catch (Exception $eErro){
+        db_msgbox($eErro->getMessage());
+    }
+
+
+    if ($sqlerro==false){
     $clliclicita->excluir($l20_codigo);
     $erro_msg = $clliclicita->erro_msg;
     if ($clliclicita->erro_status==0){
