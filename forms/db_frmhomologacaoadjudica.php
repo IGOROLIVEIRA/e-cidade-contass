@@ -263,6 +263,12 @@ $clrotulo->label("l20_codigo");
 </form>
 <script>
     document.getElementById('processar').disabled = true;
+
+    /* Validação para não inserir códigos de licitações do tipo Dispensa */
+    let element = document.getElementById('l202_licitacao');
+    element.addEventListener('keyup', (e) => {
+        document.getElementById('processar').disabled = !(iLicitacao == e.target.value);
+    });
   <?php
   /**
    * ValidaFornecedor:
@@ -289,6 +295,8 @@ $clrotulo->label("l20_codigo");
         }
     }
     function js_mostraliclicita(chave,erro){
+        iLicitacao = document.form1.l202_licitacao.value;
+
         document.form1.pc50_descr.value = chave;
         if(erro==true){
             document.form1.l202_licitacao.focus();
@@ -303,6 +311,8 @@ $clrotulo->label("l20_codigo");
    * Solicitado por danilo@contass e deborah@contass
    */
     function js_mostraliclicita1(chave1,chave2,chave3){
+        iLicitacao = chave1;
+
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
         document.getElementById('processar').disabled = false;
