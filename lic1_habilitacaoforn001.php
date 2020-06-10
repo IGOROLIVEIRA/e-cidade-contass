@@ -65,7 +65,7 @@ if(isset($incluir) || isset($alterar)){
     //
     //    }
 
-    if($dthabilitacao == false){
+    if($dthabilitacao == false || $dthabilitacao == "" ){
         $erro_msg = 'Campo Data de Habilitação não informado';
     }
 
