@@ -314,7 +314,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         END AS tipodocumento,
         cgm.z01_cgccpf AS nrodocumento,
         orcunidade.o41_subunidade AS subunidade,
-        homologacaoadjudica.l202_datahomologacao AS datahomologacao,
+        (select l202_datahomologacao from homologacaoadjudica where l20_codigo = l202_licitacao order by l202_datahomologacao desc limit 1) AS datahomologacao,
         ac16_deptoresponsavel,
         2 as si106_despdecconvenioconge,
         NULL as si106_nroconvenioconge,
