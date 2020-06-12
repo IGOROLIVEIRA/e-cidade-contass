@@ -835,6 +835,10 @@ class cl_empagetipo {
     if(substr($iFonteEmpenho, 1, 2) == '60') {
       $sSql .= " and e83_descr like '%FEP' ";
     }
+    /* OC12503 Verificação adicionada para permitir utilização do recurso 161/261 na fonte 100 */
+    if(substr($iFonteEmpenho, 1, 2) == '61') {
+        $sSql .= " or e83_descr ilike '%fpm%' ";
+    }
     if ($lVinculadas) {
 
       $sSql .= " or e83_conta in ";
