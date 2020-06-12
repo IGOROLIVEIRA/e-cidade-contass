@@ -267,7 +267,7 @@ $clrotulo->label("l20_codigo");
     /* Validação para não inserir códigos de licitações do tipo Dispensa */
     let element = document.getElementById('l202_licitacao');
     element.addEventListener('keyup', (e) => {
-        document.getElementById('processar').disabled = !(iLicitacao == e.target.value);
+        document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
     });
   <?php
   /**
@@ -295,13 +295,14 @@ $clrotulo->label("l20_codigo");
         }
     }
     function js_mostraliclicita(chave,erro){
-        iLicitacao = document.form1.l202_licitacao.value;
 
         document.form1.pc50_descr.value = chave;
         if(erro==true){
+            iLicitacao = '';
             document.form1.l202_licitacao.focus();
             document.form1.l202_licitacao.value = '';
         }else{
+            iLicitacao = document.form1.l202_licitacao.value;
             document.getElementById('processar').disabled = false;
         }
     }
