@@ -2615,7 +2615,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                *
                */
 
-              if($oContas10->nregobrig == 'x'){
+              if($oContas10->nregobrig == 25){
 
                 foreach ($oContas10->contas as $oReduz) {
 
