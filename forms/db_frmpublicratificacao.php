@@ -514,6 +514,7 @@ $clliclicita->rotulo->label();
             excluirhomologacao({
                 exec: 'excluirHomo',
                 licitacao: document.getElementById('l20_codigo').value,
+                ratificacao: document.form1.l20_dtpubratificacao.value
             }, oretornoexclusao);
         } catch(e) {
             alert(e.toString());
@@ -535,8 +536,9 @@ $clliclicita->rotulo->label();
 
     function oretornoexclusao(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        if (oRetornoitens.status != 1) {
-            alert(oRetornoitens);
+
+        if (oRetornoitens.status == 2) {
+            alert(oRetornoitens.message.urlDecode());
         } else if (oRetornoitens.erro == false) {
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
