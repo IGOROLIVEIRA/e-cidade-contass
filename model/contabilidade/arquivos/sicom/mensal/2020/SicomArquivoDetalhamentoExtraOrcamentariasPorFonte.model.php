@@ -574,12 +574,13 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 			$cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
 			$cExt->si165_totalcreditos         = $oExt20->si165_totalcreditos;
-			$cExt->si165_vlsaldoatualfonte     = abs($oExt20->si165_vlsaldoatualfonte);
 
-			if ($oExt20->si165_codfontrecursos == '159') {
-			    $verificaNatSaldoAtual = $oExt20->si165_vlsaldoatualfonte;
+			if (substr($oExt20->si165_codfontrecursos, 1, 2) == '59') {
+                $cExt->si165_vlsaldoatualfonte  = ($oExt20->si165_totaldebitos - abs($oExt20->si165_totalcreditos));
+			    $verificaNatSaldoAtual          = $oExt20->si165_vlsaldoatualfonte;
             } else {
-                $verificaNatSaldoAtual = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
+                $cExt->si165_vlsaldoatualfonte  = abs($oExt20->si165_vlsaldoatualfonte);
+                $verificaNatSaldoAtual          = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
             }
 
 			if ($verificaNatSaldoAtual < 0) {
