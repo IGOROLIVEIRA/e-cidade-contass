@@ -201,7 +201,7 @@ try {
 
 	  for ($iContRenuncia = 0; $iContRenuncia < pg_num_rows($rsSqlRecDeduRenuncia); $iContRenuncia++){
 
-	      $oDeduRenuncia = db_utils::fieldsMemory($rsSqlRecDeduRenuncia, $iContDedu);
+	      $oDeduRenuncia = db_utils::fieldsMemory($rsSqlRecDeduRenuncia, $iContRenuncia);
 
 	      $vlrDeduRenuncia = $oDeduRenuncia->o70_valor * -1;
 
@@ -221,7 +221,7 @@ try {
 
 	  for ($iContOutrasDedu = 0; $iContOutrasDedu < pg_num_rows($rsSqlDemaisDeduRec); $iContOutrasDedu++){
 
-	      $oDeduDemaisRec = db_utils::fieldsMemory($rsSqlDemaisDeduRec, $iContDedu);
+	      $oDeduDemaisRec = db_utils::fieldsMemory($rsSqlDemaisDeduRec, $iContOutrasDedu);
 
 	      $vlrDeduDemaisRec = $oDeduDemaisRec->o70_valor * -1;
 
