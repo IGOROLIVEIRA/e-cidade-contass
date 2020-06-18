@@ -409,28 +409,32 @@ class cl_licobrasmedicao {
      if (trim($this->obr03_outrostiposmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_outrostiposmedicao"])) {
        $sql  .= $virgula." obr03_outrostiposmedicao = '$this->obr03_outrostiposmedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_outrostiposmedicao) == null ) {
-         $this->erro_sql = " Campo Outros tipos de Medição não informado.";
-         $this->erro_campo = "obr03_outrostiposmedicao";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
+         if($this->obr03_tipomedicao == "9"){
+             if (trim($this->obr03_outrostiposmedicao) == null ) {
+                 $this->erro_sql = " Campo Outros tipos de Medição não informado.";
+                 $this->erro_campo = "obr03_outrostiposmedicao";
+                 $this->erro_banco = "";
+                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                 $this->erro_status = "0";
+                 return false;
+             }
+         }
      }
      if (trim($this->obr03_descmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_descmedicao"])) {
        $sql  .= $virgula." obr03_descmedicao = '$this->obr03_descmedicao' ";
        $virgula = ",";
-       if (trim($this->obr03_descmedicao) == null ) {
-         $this->erro_sql = " Campo Desc. Medição não informado.";
-         $this->erro_campo = "obr03_descmedicao";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
+         if($this->obr03_tipomedicao == "9"){
+             if (trim($this->obr03_descmedicao) == null ) {
+                 $this->erro_sql = " Campo Desc. Medição não informado.";
+                 $this->erro_campo = "obr03_descmedicao";
+                 $this->erro_banco = "";
+                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                 $this->erro_status = "0";
+                 return false;
+             }
+         }
      }
      if (trim($this->obr03_dtfimmedicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr03_dtfimmedicao_dia"] !="") ) {
        $sql  .= $virgula." obr03_dtfimmedicao = '$this->obr03_dtfimmedicao' ";

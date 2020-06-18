@@ -40,6 +40,9 @@ if(isset($incluir)){
         db_redireciona('lic1_homologacaoadjudica001.php');
     }
 
+    $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
+    $l20_naturezaobjeto  = db_utils::fieldsMemory($result, 0)->l20_naturezaobjeto;
+
     //Verifica itens obra
     $aPcmater = $clliclicita->getPcmaterObras($l202_licitacao);
     $aPcmaterverificado = array();
@@ -51,10 +54,12 @@ if(isset($incluir)){
         }
     }
     $itens = implode(",",$aPcmaterverificado);
-
-    if($itens != null){
-        db_msgbox("Itens obras não cadastrados. Codigos:".$itens);
-        db_redireciona('lic1_homologacaoadjudica001.php');
+//var_dump($l20_naturezaobjeto);exit;
+    if($l20_naturezaobjeto == "1"){
+        if($itens != null){
+            db_msgbox("Itens obras não cadastrados. Codigos:".$itens);
+            db_redireciona('lic1_homologacaoadjudica001.php');
+        }
     }
 
 //  /**
@@ -179,72 +184,66 @@ if(isset($incluir)){
             db_redireciona('lic1_homologacaoadjudica001.php');
           }
 
-        }else{
+                }else{
 
-        echo
-        "<script>alert('Data da Homologação é menor que a data do parecer')</script>";
-        db_redireciona('lic1_homologacaoadjudica001.php');
+                    echo
+                    "<script>alert('Data da Homologação é menor que a data do parecer')</script>";
+                    db_redireciona('lic1_homologacaoadjudica001.php');
+
+                }
+
+            }
+
+        }else if($parecer < 1 || empty($parecer)){
+
+            echo
+            "<script>alert('Falta Cadastro do Parecer')</script>";
+
+            db_redireciona('lic1_homologacaoadjudica001.php');
 
         }
 
-      }
-
-    }else if($parecer < 1 || empty($parecer)){
-
-      echo
-        "<script>alert('Falta Cadastro do Parecer')</script>";
-
-      db_redireciona('lic1_homologacaoadjudica001.php');
-
     }
-
-  }else if($clhomologacaoadjudica->verificaPrecoReferencia($l202_licitacao) < 1){
-
-    echo
-        "<script>alert('Falta Preco Referencia')</script>";
-
-    db_redireciona('lic1_homologacaoadjudica001.php');
-  }
 
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
- <center>
-  <fieldset style=" margin-top: 30px; width: 500px; height: 400px;">
-  <legend>Homologacao Adjudicacao</legend>
-	<?
-	include("forms/db_frmhomologacaoadjudica.php");
-	?>
+<center>
+    <fieldset style=" margin-top: 30px; width: 500px; height: 400px;">
+        <legend>Homologacao Adjudicacao</legend>
+        <?
+        include("forms/db_frmhomologacaoadjudica.php");
+        ?>
     </fieldset>
-  </center>
+</center>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
 <script>
-js_tabulacaoforms("form1","l202_licitacao",true,1,"l202_licitacao",true);
+    js_tabulacaoforms("form1","l202_licitacao",true,1,"l202_licitacao",true);
 </script>
 <?
 if(isset($incluir)){
-  if($clhomologacaoadjudica->erro_status=="0"){
-    $clhomologacaoadjudica->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clhomologacaoadjudica->erro_campo!=""){
-      echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".focus();</script>";
+    if($clhomologacaoadjudica->erro_status=="0"){
+        $clhomologacaoadjudica->erro(true,false);
+        $db_botao=true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if($clhomologacaoadjudica->erro_campo!=""){
+            echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".focus();</script>";
+        }
+    }else{
+        $clhomologacaoadjudica->erro(true,true);
     }
-  }else{
-    $clhomologacaoadjudica->erro(true,true);
-  }
 }
 ?>
