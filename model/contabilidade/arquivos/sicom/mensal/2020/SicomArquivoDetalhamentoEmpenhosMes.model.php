@@ -282,7 +282,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         END),3,0)
         END AS unidadesub
         FROM db_departorg
-        JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
+        LEFT JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = 1
         JOIN orcunidade u ON db01_orgao=u.o41_orgao AND db01_unidade=u.o41_unidade AND db01_anousu = u.o41_anousu
         JOIN orcorgao o ON o.o40_orgao = u.o41_orgao AND o.o40_anousu = u.o41_anousu
         WHERE db01_coddepto = l20_codepartamento
