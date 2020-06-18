@@ -185,7 +185,6 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 exerciciolicitacao,
                 nroProcessoLicitatorio,
                 tipoCadastradoLicitacao,
-                dscCadastroLicitatorio,
                 codmodalidadelicitacao,
                 naturezaprocedimento,
                 nroedital,
@@ -196,17 +195,17 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 naturezaobjeto,
                 objeto,
                 regimeexecucaoobras,
-                sum(bdi) as bdi,
+                bdi,
                 origemrecurso,
                 dscorigemrecurso,
                 sum(vlcontratacao) as vlContratacao
 FROM
-    (SELECT DISTINCT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
+    (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
                           WHEN pc80_criterioadjudicacao = 1 THEN round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
                           WHEN pc80_criterioadjudicacao = 2 THEN round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
                       END) AS mediapercentual,
-                     (sum(pc23_vlrun)/count(pc23_orcamforne)) AS vlContratacao,
+                     ((sum(pc23_vlrun)/count(pc23_orcamforne)) * pc23_quant) AS vlContratacao,
                      si01_datacotacao,
 
          (SELECT CASE
@@ -243,8 +242,7 @@ FROM
           LIMIT 1) AS codUnidadeSubResp,
                      liclicita.l20_anousu AS exercicioLicitacao,
                      liclicita.l20_edital AS nroProcessoLicitatorio,
-                     '1' AS tipoCadastradoLicitacao,
-                     '' AS dscCadastroLicitatorio,
+                     1 AS tipoCadastradoLicitacao,
                      pctipocompratribunal.l44_codigotribunal AS codModalidadeLicitacao,
                      liclicita.l20_tipnaturezaproced AS naturezaProcedimento,
                      liclicita.l20_nroedital AS nroEdital,
@@ -311,17 +309,22 @@ FROM
               l20_naturezaobjeto,
               l20_objeto,
               l20_regimexecucao,
-              db150_bdi,
+              bdi,
               pc01_codmater,
               l47_origemrecurso,
               l47_descrecurso,
-              si01_datacotacao) AS query
+              si01_datacotacao,
+              pc23_quant) AS query
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
-         tipoCadastradoLicitacao, dscCadastroLicitatorio, codmodalidadelicitacao, naturezaprocedimento, nroedital,
-         exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, regimeexecucaoobras,
-         origemrecurso, dscorigemrecurso ORDER BY nroprocessolicitatorio
+         tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
+         exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
+         origemrecurso, dscorigemrecurso
+         
+ORDER BY nroprocessolicitatorio
+
                   ";
-	  $rsResult10 = db_query($sSql);
+//	print_r($sSql);
+    $rsResult10 = db_query($sSql);
 
     /**
      * registro 10
@@ -339,7 +342,7 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
       $clralic10->si180_exerciciolicitacao = $oDados10->exerciciolicitacao;
       $clralic10->si180_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
       $clralic10->si180_tipocadastradolicitacao = $oDados10->tipocadastradolicitacao;
-      $clralic10->si180_dsccadastrolicitatorio = $oDados10->dsccadastrolicitatorio;
+      $clralic10->si180_dsccadastrolicitatorio = '';
       $clralic10->si180_codmodalidadelicitacao = $oDados10->codmodalidadelicitacao;
       $clralic10->si180_naturezaprocedimento = $oDados10->naturezaprocedimento;
       $clralic10->si180_nroedital = $oDados10->nroedital;
