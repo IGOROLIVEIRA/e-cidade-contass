@@ -352,8 +352,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                             $cExt20->si165_codfontrecursos       = $oExtRecursoTCE;
                             $cExt20->si165_vlsaldoanteriorfonte  = $saldoanterior;
                             $cExt20->si165_natsaldoanteriorfonte = $saldoanterior > 0 ? 'D' : 'C';
-                            $cExt20->si165_totaldebitos          = $saldoanterior < 0 ? $saldoanterior : 0;
-                            $cExt20->si165_totalcreditos         = $saldoanterior > 0 ? $saldoanterior : 0;
+                            $cExt20->si165_totaldebitos          = $saldoanterior < 0 ? abs($saldoanterior) : 0;
+                            $cExt20->si165_totalcreditos         = $saldoanterior > 0 ? abs($saldoanterior) : 0;
                             $cExt20->si165_vlsaldoatualfonte     = 0;
                             $cExt20->si165_natsaldoatualfonte    = $saldoanterior > 0 ? 'D' : 'C';
                             $cExt20->si165_mes                   = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -364,8 +364,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         }else{
 
                             $aExt20[$Hash20]->si165_vlsaldoanteriorfonte  += $saldoanterior;
-                            $aExt20[$Hash20]->si165_totaldebitos          += $saldoanterior < 0 ? $saldoanterior : 0;
-                            $aExt20[$Hash20]->si165_totalcreditos         += $saldoanterior > 0 ? $saldoanterior : 0;
+                            $aExt20[$Hash20]->si165_totaldebitos          += $saldoanterior < 0 ? abs($saldoanterior) : 0;
+                            $aExt20[$Hash20]->si165_totalcreditos         += $saldoanterior > 0 ? abs($saldoanterior) : 0;
                         }
 
                     }
@@ -384,8 +384,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         $cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte;
 
 						if ($bFonteEncerrada && $bCorrecaoFonte) {
-                            $cExt20->si165_totaldebitos = $saldoanterior > 0 ? $saldoanterior : $saldodebito;
-                            $cExt20->si165_totalcreditos = $saldoanterior < 0 ? $saldoanterior : $saldocredito;
+                            $cExt20->si165_totaldebitos = $saldoanterior > 0 ? abs($saldoanterior) : $saldodebito;
+                            $cExt20->si165_totalcreditos = $saldoanterior < 0 ? abs($saldoanterior) : $saldocredito;
                         } else {
                             $cExt20->si165_totaldebitos = $saldodebito;
                             $cExt20->si165_totalcreditos = $saldocredito;
@@ -403,8 +403,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						$aExt20[$Hash20]->si165_vlsaldoanteriorfonte  += ($bFonteEncerrada && $bCorrecaoFonte) ? 0 : $saldoanterior;
 						$aExt20[$Hash20]->si165_vlsaldoatualfonte     += $saldofinal;
                         if ($bFonteEncerrada && $bCorrecaoFonte) {
-                            $aExt20[$Hash20]->si165_totaldebitos += $saldoanterior > 0 ? $saldoanterior : $saldodebito;
-                            $aExt20[$Hash20]->si165_totalcreditos += $saldoanterior < 0 ? $saldoanterior : $saldocredito;
+                            $aExt20[$Hash20]->si165_totaldebitos += $saldoanterior > 0 ? abs($saldoanterior) : $saldodebito;
+                            $aExt20[$Hash20]->si165_totalcreditos += $saldoanterior < 0 ? abs($saldoanterior) : $saldocredito;
                         } else {
                             $aExt20[$Hash20]->si165_totaldebitos += $saldodebito;
                             $aExt20[$Hash20]->si165_totalcreditos += $saldocredito;
@@ -574,12 +574,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
 			$cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
 			$cExt->si165_totalcreditos         = $oExt20->si165_totalcreditos;
-
+			$cExt->si165_vlsaldoatualfonte     = abs($oExt20->si165_vlsaldoatualfonte);
 			if (substr($oExt20->si165_codfontrecursos, 1, 2) == '59') {
-                $cExt->si165_vlsaldoatualfonte  = ($oExt20->si165_totaldebitos - abs($oExt20->si165_totalcreditos));
 			    $verificaNatSaldoAtual          = $oExt20->si165_vlsaldoatualfonte;
             } else {
-                $cExt->si165_vlsaldoatualfonte  = abs($oExt20->si165_vlsaldoatualfonte);
                 $verificaNatSaldoAtual          = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
             }
 
