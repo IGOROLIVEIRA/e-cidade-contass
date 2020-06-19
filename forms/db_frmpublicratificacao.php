@@ -450,8 +450,9 @@ $clliclicita->rotulo->label();
 
     function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
-        if (response.status != 1) {
-            alert(urlDecode(response.message));
+
+        if (response.status == 2) {
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
