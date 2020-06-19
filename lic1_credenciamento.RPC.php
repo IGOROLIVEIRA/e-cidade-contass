@@ -135,7 +135,15 @@ try{
 
         case 'salvarHomo':
 
-            /**
+        	$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
+        	/**
              * busco o codtipocom
              */
 
@@ -302,6 +310,14 @@ try{
 
         case 'alterarHomo':
 
+			$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+				throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
             /**
              * busco sequencial da homologação
              */
@@ -376,6 +392,18 @@ try{
 
         case 'excluirHomo':
             db_inicio_transacao();
+
+            /*
+             * Verifica o período de encerramento patrimonial
+             * */
+
+            $sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+            $rsSql = db_query($sSql);
+            $datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+            if($datapat >= join('-',array_reverse(explode('/', $oParam->ratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			}
 
             /**
              * busco sequencial da homologação
