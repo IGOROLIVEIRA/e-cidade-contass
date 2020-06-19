@@ -1917,6 +1917,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                             ELSE c61_codtce = codctb 
                                           END
                                         INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                                    WHERE c60_codsis = 6
                                     ORDER BY c61_reduz";
 
                 $rsCtb = db_query($sSqlCtb) or die($sSqlCtb);
