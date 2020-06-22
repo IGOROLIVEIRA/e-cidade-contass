@@ -8,6 +8,7 @@
     <campo campo="q71_estrutural"   label="estrut_cnae"  />
     <campo campo="q71_descr"        label="desc_cnae"    />
     <campo campo="q136_valor"       label="aliq"         />
+    <campo campo="q136_exercicio"                                  label="exercicio" />
     <campo campo="q136_valor_reduzido" label="aliq_reduz"   />
     <campo campo="db121_estrutural" label="estrutural"   />
   </campos>
