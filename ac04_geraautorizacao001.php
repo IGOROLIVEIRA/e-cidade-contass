@@ -478,6 +478,7 @@ if($x->consultarDataDoSistema == true){
 
         oGridItens = new DBGrid('oGridItens');
         oGridItens.nameInstance = "oGridItens";
+        oGridItens.hasTotalValue = true;
         oGridItens.setCheckbox(0);
         //oGridItens.allowSelectColumns(true);
         oGridItens.setCellWidth(new Array('10%', '40%',  "15%", "15%","15%", "15%", "15%","15%"));
@@ -834,6 +835,9 @@ if($x->consultarDataDoSistema == true){
         });
 
         oGridItens.renderRows();
+
+        js_changeTotal();
+
         aDadosHintGrid.each(function(oHint, id) {
             var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
             oDBHint.setText(oHint.sText);
@@ -947,6 +951,7 @@ if($x->consultarDataDoSistema == true){
         // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
         $("valoritem"+iSeq).value = js_formatar(value.toFixed(2),'f',2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
+        js_somaItens();
     }
 
     /**
@@ -979,6 +984,7 @@ if($x->consultarDataDoSistema == true){
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
         }
+        js_somaItens();
         //js_salvarInfoDotacoes(iLinha, lVerificaDot);
     }
 
@@ -1626,6 +1632,40 @@ if($x->consultarDataDoSistema == true){
 
     js_main();
     $('e54_resumo').style.width='100%';
+
+    /**
+     * Lança evento em todos os selects
+     */
+
+    function js_changeTotal(){
+        let listItens = document.getElementsByClassName('linhagrid checkbox');
+        for(let count = 0; count < listItens.length; count++){
+            listItens[count].addEventListener('change', event => {
+                js_somaItens();
+            });
+        }
+    }
+
+    function js_somaItens(){
+        let totalGeral = 0;
+        for(let count = 0; count < oGridItens.aRows.length; count++){
+
+            let valor = parseFloat(document.getElementById(`valoritem${count}`).value.replace(/\./g, '').replace(/,/g, '.'));
+
+            if(oGridItens.aRows[count].isSelected){
+                totalGeral += valor;
+            }
+
+            if(totalGeral > 0){
+                document.getElementById('oGridItenstotalValue').innerText = js_formatar(totalGeral, 'f');
+            }else{
+                document.getElementById('oGridItenstotalValue').innerText = '0.00';
+            }
+
+        }
+
+    }
+
 </script>
 <?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
