@@ -9,6 +9,24 @@ class cl_scripts {
   }
 
    // funcões
+  function alteraDocumento ($lancamento,$proximodoc, $anteriordoc){
+    // echo "update conlancamdoc set c71_coddoc=$proximodoc where c71_codlan = '$lancamento'";exit;/
+    $result = db_query("update conlancamdoc set c71_coddoc=$proximodoc where c71_codlan = '$lancamento'");
+
+    if($result===false){
+       echo @pg_last_error();exit;
+     }
+ 
+     $this->erro_msg = "";
+     $this->erro_msg = "Alteração efetuada com Sucesso\\n Aviso: é necessário realizar o reprocessamento do lançamento no Módulo Contabilidade - Procedimentos - Utilitários da Contabilidade - Processa Lançamentos";
+ 
+     $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+     $seq   = pg_result($resmanut,0,0);
+     $result = db_query("insert into db_manut_log values($seq,'Alt Documento: ".$anteriordoc." para ".$proximodoc." no lançamento ". $lancamento ."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     
+     return true;
+  }
+
   function excluiEmpenho ($seq_emp){ 
 
     $ano    = db_getsession('DB_anousu');
@@ -584,7 +602,7 @@ class cl_scripts {
      
      return true;
  
-} 
+    } 
 
 }
 ?>
