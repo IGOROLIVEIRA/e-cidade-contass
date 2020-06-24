@@ -760,7 +760,7 @@ class cl_condataconf {
             $datahomo = implode("-",array_reverse(explode("/",$datahomo)));
         }
 
-        if ($datahomo <= $c99_datapat) {
+        if ((isset($datahomo) && isset($c99_datapat)) && $datahomo <= $c99_datapat) {
             $this->erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
             return false;
         }

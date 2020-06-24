@@ -56,7 +56,7 @@ $db_opcao             = 1;
 $oGet                 = db_utils::postMemory($_GET);
 $sTitulo              = 'Movimentação Patrimonial';
 $aCodigoDocumentos    = array(
-    204, 205, 206, 207, 208, 210, 211, 212, 213,
+    204, 205, 206, 207, 208, 210, 211, 212, 213, 214, 215,
     400, 401, 402, 403, 404,
     700, 701, 702, 703, 704
   );
@@ -192,6 +192,8 @@ function js_mostraCampos(){
     case "211" :
     case "212" :
     case "213" :
+    case "214" :
+    case "215" :
 
       $('filtroEmpenho').style.display = 'table-row';
       $('filtroNota').style.display = 'table-row';

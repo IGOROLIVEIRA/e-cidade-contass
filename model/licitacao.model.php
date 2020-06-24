@@ -96,18 +96,17 @@ class licitacao {
             $this->iCodLicitacao = $iCodLicitacao;
 
             $oDaoLicitacao = db_utils::getDao("liclicita");
-            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query_file($iCodLicitacao);
+            $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query($iCodLicitacao);
             $rsBuscaLicitacao   = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
-            /**
-             * @todo está invertido o edital e o numero da licitação??
-             */
+
             $oDadoLicitacao = db_utils::fieldsMemory($rsBuscaLicitacao, 0);
-            $this->iNumeroEdital     = $oDadoLicitacao->l20_numero     ;
-            $this->iCodigoSituacao   = $oDadoLicitacao->l20_licsituacao;
-            $this->iNumeroLicitacal  = $oDadoLicitacao->l20_edital     ;
-            $this->iAno              = $oDadoLicitacao->l20_anousu;
-            $this->iCodigoModalidade = $oDadoLicitacao->l20_codtipocom;
-            $this->sObjeto           = $oDadoLicitacao->l20_objeto;
+            $this->iNumeroEdital      = $oDadoLicitacao->l20_numero     ;
+            $this->iCodigoSituacao    = $oDadoLicitacao->l20_licsituacao;
+            $this->iNumeroLicitacal   = $oDadoLicitacao->l20_edital     ;
+            $this->iAno               = $oDadoLicitacao->l20_anousu;
+            $this->iCodigoModalidade  = $oDadoLicitacao->l20_codtipocom;
+            $this->sObjeto            = $oDadoLicitacao->l20_objeto;
+            $this->iTipoCompraTribunal= $oDadoLicitacao->l44_sequencial;
             unset($oDadoLicitacao);
         }
         $this->oDaoLicita  = db_utils::getDao("liclicita");

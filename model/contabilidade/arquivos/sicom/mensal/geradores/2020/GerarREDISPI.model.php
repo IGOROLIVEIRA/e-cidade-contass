@@ -115,17 +115,17 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_nroprocesso']                 = trim($aREDISPI12['si185_nroprocesso']);
                         $aCSVREDISPI12['si185_codobralocal']                = $aREDISPI12['si185_codobralocal'];
                         $aCSVREDISPI12['si185_logradouro']                  = $aREDISPI12['si185_logradouro'];
-                        $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'];
+                        $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'] ? $aREDISPI12['si185_numero'] : '';
                         $aCSVREDISPI12['si185_bairro']                      = $aREDISPI12['si185_bairro'];
                         $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
+                        $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
                         $aCSVREDISPI12['si185_graulatitude']                = $aREDISPI12['si185_graulatitude'];
                         $aCSVREDISPI12['si185_minutolatitude']              = $aREDISPI12['si185_minutolatitude'];
-                        $aCSVREDISPI12['si185_segundolatitude']             = $aREDISPI12['si185_segundolatitude'];
+                        $aCSVREDISPI12['si185_segundolatitude']             = $this->sicomNumberReal($aREDISPI12['si185_segundolatitude'], 2);
                         $aCSVREDISPI12['si185_graulongitude']               = $aREDISPI12['si185_graulongitude'];
                         $aCSVREDISPI12['si185_minutolongitude']             = $aREDISPI12['si185_minutolongitude'];
-                        $aCSVREDISPI12['si185_segundolongitude']            = $aREDISPI12['si185_segundolongitude'];
-
+                        $aCSVREDISPI12['si185_segundolongitude']            = $this->sicomNumberReal($aREDISPI12['si185_segundolongitude'], 2);
 
                         $this->sLinha = $aCSVREDISPI12;
                         $this->adicionaLinha();

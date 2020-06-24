@@ -144,24 +144,26 @@ class cl_cadobras212020 {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si200_descoutrosparalisacao == null ) {
-      $this->erro_sql = " Campo desc outros paralisacao não informado.";
-      $this->erro_campo = "si200_descoutrosparalisacao";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
+    if($this->si200_motivoparalisacap == "99"){
+        if ($this->si200_descoutrosparalisacao == null ) {
+            $this->erro_sql = " Campo desc outros paralisacao não informado.";
+            $this->erro_campo = "si200_descoutrosparalisacao";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
     }
-    if ($this->si200_dtretomada == null ) {
-      $this->erro_sql = " Campo dtretomada não informado.";
-      $this->erro_campo = "si200_dtretomada_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if ($this->si200_dtretomada == null ) {
+//      $this->erro_sql = " Campo dtretomada não informado.";
+//      $this->erro_campo = "si200_dtretomada_dia";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if ($this->si200_mes == null ) {
       $this->erro_sql = " Campo Mes não informado.";
       $this->erro_campo = "si200_mes";
@@ -195,7 +197,7 @@ class cl_cadobras212020 {
                 values (
                                 $this->si200_sequencial
                                ,$this->si200_tiporegistro
-                               ,$this->si200_codorgaoresp
+                               ,".($this->si200_codorgaoresp == "null" || $this->si200_codorgaoresp == ""?"null":"'".$this->si200_codorgaoresp."'")."
                                ,$this->si200_codobra
                                ,".($this->si200_dtparalisacao == "null" || $this->si200_dtparalisacao == ""?"null":"'".$this->si200_dtparalisacao."'")."
                                ,$this->si200_motivoparalisacap

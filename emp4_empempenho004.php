@@ -666,6 +666,14 @@ if(isset($incluir)) {
                 $erro_msg = "Usuário: Esta autorização de empenho ainda não recebeu o Atesto do Controle Interno. Aguarde a liberação para emissão do empenho!";
             }
 
+            $sSqlDataAutEmp = "select e54_emiss from empautoriza where e54_autori = {$e54_autori} limit 1";
+
+            if(pg_num_rows(db_query($sSqlDataAutEmp))) {
+                if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+                    $sqlerro = true;
+                    $erro_msg = "Não é permitido emitir empenho cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataAutEmp), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").";
+                }
+            }
 
             if($sqlerro == false) {
 

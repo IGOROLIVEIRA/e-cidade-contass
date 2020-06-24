@@ -95,7 +95,7 @@ class GerarAOC extends GerarAM
                         $aCSVAOC12['si40_dataleialteracao']   = $this->sicomDate($aAOC12['si40_dataleialteracao']);
                         $aCSVAOC12['si40_tpleiorigdecreto']   = substr($aAOC12['si40_tpleiorigdecreto'], 0, 4);
                         $aCSVAOC12['si40_tipoleialteracao']   = $aAOC12['si40_tipoleialteracao'] == 0 ? ' ' : $aAOC12['si40_tipoleialteracao'];
-                        $aCSVAOC12['si40_valorabertolei']     = $this->sicomNumberReal($aAOC12['si40_valorabertolei'], 2);
+                        $aCSVAOC12['si40_valorabertolei']     = $aAOC12['si40_valorabertolei'] == '' ? ' ' : $this->sicomNumberReal($aAOC12['si40_valorabertolei'], 2);
 
                         $this->sLinha = $aCSVAOC12;
                         $this->adicionaLinha();

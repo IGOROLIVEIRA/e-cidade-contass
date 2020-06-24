@@ -189,12 +189,6 @@ switch ($oParam->exec){
 
         try {
 
-            // if (empty($oParam->dotacoes)) {
-            //     throw new Exception("Selecione pelo menos uma dotação", 1);
-            // }
-          //   if (empty($oParam->projetos)) {
-          //     throw new Exception("Selecione pelo menos um projeto", 1);
-          // }
             if (empty($oParam->entes)) {
                 throw new Exception("Erro ao processar os entes: nenhum ente encontrado", 1);
             }
@@ -210,44 +204,12 @@ switch ($oParam->exec){
                 $aEntes[$oEnte->id] = $oEnte->percentual;
             }
 
-            //$sProjetos = implode(', ', $oParam->projetos);
-            //if (intval($oParam->mes) < 12) {
             $aClassificacao = $oConLancamDoc->classificacao($oParam->mes);
 
             $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
 
             $aRetornoFinal = $aPercenteAplicado;
 
-            // }else {
-
-            //   $aClassificacaoDezembro = $oConLancamDoc->classificacaoAteDezembro($sDotacoes);
-
-            //   $aPercenteAplicadoDezmb = $oConLancamDoc->aplicaPercentDotacoes($aClassificacaoDezembro, $aEntes);
-
-            //   foreach ($aPercenteAplicadoDezmb as $nIdEnte => $oInfoEnte) {
-
-            //     foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
-
-            //       if (!isset($aRetornoFinal[$nIdEnte])) {
-            //         $aRetornoFinal[$nIdEnte] = $oInfoEnte;
-            //       }
-
-            //       if (isset($aRetornoFinal[$nIdEnte]->dotacoes[$sHash])) {
-
-            //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorempenhado  += $oDotacao->valorempenhado ;
-            //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorliquidado  += $oDotacao->valorliquidado;
-            //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorpago       += $oDotacao->valorpago;
-
-            //       } else {
-            //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]= $oDotacao;
-            //       }
-
-            //     }
-
-            //   }
-
-            //} // mês 12
-            //print_r($aRetornoFinal);
             $oDespesaRateioConsorcio  = new cl_despesarateioconsorcio();
             $sWhereExcluir = ''
                 . ' c217_mes = ' . intval($oParam->mes)

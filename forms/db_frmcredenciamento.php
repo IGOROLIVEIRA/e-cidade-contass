@@ -268,7 +268,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 
     function retornoAjax(res) {
         var response = JSON.parse(res.responseText);
-        console.log(response);
+
         if (response.status != 1) {
             alert(response.message.urlDecode());
         } else if (response.erro == false) {
@@ -279,6 +279,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
             BuscarCredenciamento(document.getElementById("l205_fornecedor").value);
             getCredenciamento()
         }
+        atualizaAbaFornecedor();
     }
 
     /*buscar credenciamento*/
@@ -340,6 +341,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
         } catch(e) {
             alert(e.toString());
         }
+        atualizaAbaFornecedor();
         return false;
     }
 
@@ -442,5 +444,9 @@ $cliframe_seleciona = new cl_iframe_seleciona;
           }
         });
       }
+    }
+
+    function atualizaAbaFornecedor(){
+        top.corpo.iframe_db_forn.location.href='lic1_fornec002.php?chavepesquisa=<?= $l20_codigo?>';
     }
 </script>

@@ -122,7 +122,15 @@ switch($oParam->exec) {
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();
 
-      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao from cadobras302020 where si201_mes = $oParam->mesReferencia";
+//      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao
+// from cadobras302020 where si201_mes = $oParam->mesReferencia and si201_tipomedicao in(1,3,4,5)";
+      $sql = "SELECT si201_codobra,
+                       si201_tipomedicao,
+                       si201_nummedicao
+                FROM cadobras302020
+                INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
+                INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
+                WHERE si201_mes = $oParam->mesReferencia";
       $rsRegistro30 = db_query($sql);
 
       $arquivosgerados = array();

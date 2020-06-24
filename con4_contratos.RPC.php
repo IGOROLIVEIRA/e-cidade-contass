@@ -601,6 +601,7 @@ switch($oParam->exec) {
         $oContrato->setGrupo($oParam->contrato->iGrupo);
         $oContrato->setSituacao(1);
         $oContrato->setInstit(db_getsession("DB_instit"));
+        $oContrato->setLei($oParam->contrato->iLei);
         $oContrato->setLei($oParam->contrato->sLei);
         $oContrato->setNumero($oParam->contrato->iNumero);
         $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
@@ -664,86 +665,86 @@ switch($oParam->exec) {
          *
          *  buscamos possiveis vinculos existentes entre o contrato e empenhos
          */
-        if ($oParam->contrato->iOrigem != 6) {
-
-          $sSqlEmpenhosVinculados = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, "e100_acordo = {$iContrato}");
-          $rsEmpenhosVinculados   = $oDaoEmpEmpenhoContrato->sql_record($sSqlEmpenhosVinculados);
-
-          if ($oDaoEmpEmpenhoContrato->numrows > 0) {
-
-            for ($iEmpEmpenhoContrato = 0; $iEmpEmpenhoContrato < $oDaoEmpEmpenhoContrato->numrows; $iEmpEmpenhoContrato++) {
-
-              $oValoresEmpEmpenhoContrato = db_utils::fieldsMemory($rsEmpenhosVinculados, $iEmpEmpenhoContrato);
-
-              //trazemos os empempitem para deletar da acordoempempitem
-              $sSqlEmpEmpItem = $oDaoEmpEmpitem->sql_query_file(null, null, "e62_sequencial", null, "e62_numemp = {$oDaoEmpEmpenhoContrato->e100_numemp}");
-              $rsEmpEmpItem   = $oDaoEmpEmpitem->sql_record($sSqlEmpEmpItem);
-              if ($oDaoEmpEmpitem->numrows > 0) {
-
-                for($iEmpEmpitem = 0; $iEmpEmpitem < $oDaoEmpEmpitem->numrows; $iEmpEmpitem++){
-
-                  $oValorEmpEmpitem = db_utils::fieldsMemory($rsEmpEmpItem, $iEmpEmpitem);
-                  $oDaoAcordoEmpEmpitem->excluir(null, "ac44_empempitem = {$oValorEmpEmpitem->e62_sequencial}");
-                  if ($oDaoAcordoEmpEmpitem->erro_status == 0) {
-
-                    //throw new Exception(" [ 8 ] - ERRO - Desvinculando itens - " . $oDaoAcordoEmpEmpitem->erro_msg);
-                    $oErro->erro_msg = $oDaoAcordoEmpEmpitem->erro_msg;
-                    throw new Exception($sCaminhoMensagens."acordo_empempitem_excluir", $oErro);
-                  }
-                }
-              }
-
-              /*
-               * trazemos os acordoposicao para deletar da acordoitem
-               * depois da acordoposicao
-               */
-              $sSqlAcordoPosicao = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", null, "ac26_acordo = {$iContrato}");
-              $rsAcordoPosicao   = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
-              if ($oDaoAcordoPosicao->numrows > 0) {
-
-                for($iAcordoPosicao = 0; $iAcordoPosicao < $oDaoAcordoPosicao->numrows; $iAcordoPosicao++){
-
-                  $oValorAcordoPosicao = db_utils::fieldsMemory($rsAcordoPosicao, $iAcordoPosicao);
-                  $oDaoAcordoItem->excluir(null, "ac20_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
-                  if ($oDaoAcordoItem->erro_status == 0) {
-
-                    $oErro->erro_msg = $oDaoAcordoItem->erro_msg;
-                    throw new Exception(_M($sCaminhoMensagens."acordo_item_excluir", $oErro));
-                  }
-
-                  $oDaoAcordoVigencia->excluir(null, "ac18_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
-                  if ($oDaoAcordoVigencia->erro_status == 0) {
-
-                    $oErro->erro_msg = $oDaoAcordoVigencia->erro_msg;
-                    throw new Exception(_M($sCaminhoMensagens."acordo_vigencia_excluir", $oErro));
-
-                  }
-
-                  $oDaoAcordoPosicaoPeriodo->excluir(null, "ac36_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
-                  if($oDaoAcordoPosicaoPeriodo->erro_status == 0){
-
-                    $oErro->erro_msg = $oDaoAcordoPosicaoPeriodo->erro_msg;
-                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao_periodo_excluir", $oErro));
-                  }
-
-                  $oDaoAcordoPosicao->excluir($oValorAcordoPosicao->ac26_sequencial);
-                  if ($oDaoAcordoPosicao->erro_status == 0) {
-
-                    $oErro->erro_msg = $oDaoAcordoPosicao->erro_msg;
-                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao", $oErro));
-                  }
-                }
-              }
-            }
-
-            $oDaoEmpEmpenhoContrato->excluir(null, "e100_acordo = {$iContrato}");
-            if ($oDaoEmpEmpenhoContrato->erro_status == 0) {
-
-              $oErro->erro_msg = $oDaoEmpEmpenhoContrato->erro_msg;
-              throw new Exception(_M($sCaminhoMensagens."empempenho_contrato_excluir", $oErro));
-            }
-          }
-        }
+//        if ($oParam->contrato->iOrigem != 6) {
+//
+//          $sSqlEmpenhosVinculados = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, "e100_acordo = {$iContrato}");
+//          $rsEmpenhosVinculados   = $oDaoEmpEmpenhoContrato->sql_record($sSqlEmpenhosVinculados);
+//
+//          if ($oDaoEmpEmpenhoContrato->numrows > 0) {
+//
+//            for ($iEmpEmpenhoContrato = 0; $iEmpEmpenhoContrato < $oDaoEmpEmpenhoContrato->numrows; $iEmpEmpenhoContrato++) {
+//
+//              $oValoresEmpEmpenhoContrato = db_utils::fieldsMemory($rsEmpenhosVinculados, $iEmpEmpenhoContrato);
+//
+//              //trazemos os empempitem para deletar da acordoempempitem
+//              $sSqlEmpEmpItem = $oDaoEmpEmpitem->sql_query_file(null, null, "e62_sequencial", null, "e62_numemp = {$oDaoEmpEmpenhoContrato->e100_numemp}");
+//              $rsEmpEmpItem   = $oDaoEmpEmpitem->sql_record($sSqlEmpEmpItem);
+//              if ($oDaoEmpEmpitem->numrows > 0) {
+//
+//                for($iEmpEmpitem = 0; $iEmpEmpitem < $oDaoEmpEmpitem->numrows; $iEmpEmpitem++){
+//
+//                  $oValorEmpEmpitem = db_utils::fieldsMemory($rsEmpEmpItem, $iEmpEmpitem);
+//                  $oDaoAcordoEmpEmpitem->excluir(null, "ac44_empempitem = {$oValorEmpEmpitem->e62_sequencial}");
+//                  if ($oDaoAcordoEmpEmpitem->erro_status == 0) {
+//
+//                    //throw new Exception(" [ 8 ] - ERRO - Desvinculando itens - " . $oDaoAcordoEmpEmpitem->erro_msg);
+//                    $oErro->erro_msg = $oDaoAcordoEmpEmpitem->erro_msg;
+//                    throw new Exception($sCaminhoMensagens."acordo_empempitem_excluir", $oErro);
+//                  }
+//                }
+//              }
+//
+//              /*
+//               * trazemos os acordoposicao para deletar da acordoitem
+//               * depois da acordoposicao
+//               */
+//              $sSqlAcordoPosicao = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", null, "ac26_acordo = {$iContrato}");
+//              $rsAcordoPosicao   = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
+//              if ($oDaoAcordoPosicao->numrows > 0) {
+//
+//                for($iAcordoPosicao = 0; $iAcordoPosicao < $oDaoAcordoPosicao->numrows; $iAcordoPosicao++){
+//
+//                  $oValorAcordoPosicao = db_utils::fieldsMemory($rsAcordoPosicao, $iAcordoPosicao);
+//                  $oDaoAcordoItem->excluir(null, "ac20_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+//                  if ($oDaoAcordoItem->erro_status == 0) {
+//
+//                    $oErro->erro_msg = $oDaoAcordoItem->erro_msg;
+//                    throw new Exception(_M($sCaminhoMensagens."acordo_item_excluir", $oErro));
+//                  }
+//
+//                  $oDaoAcordoVigencia->excluir(null, "ac18_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+//                  if ($oDaoAcordoVigencia->erro_status == 0) {
+//
+//                    $oErro->erro_msg = $oDaoAcordoVigencia->erro_msg;
+//                    throw new Exception(_M($sCaminhoMensagens."acordo_vigencia_excluir", $oErro));
+//
+//                  }
+//
+//                  $oDaoAcordoPosicaoPeriodo->excluir(null, "ac36_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+//                  if($oDaoAcordoPosicaoPeriodo->erro_status == 0){
+//
+//                    $oErro->erro_msg = $oDaoAcordoPosicaoPeriodo->erro_msg;
+//                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao_periodo_excluir", $oErro));
+//                  }
+//
+//                  $oDaoAcordoPosicao->excluir($oValorAcordoPosicao->ac26_sequencial);
+//                  if ($oDaoAcordoPosicao->erro_status == 0) {
+//
+//                    $oErro->erro_msg = $oDaoAcordoPosicao->erro_msg;
+//                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao", $oErro));
+//                  }
+//                }
+//              }
+//            }
+//
+//            $oDaoEmpEmpenhoContrato->excluir(null, "e100_acordo = {$iContrato}");
+//            if ($oDaoEmpEmpenhoContrato->erro_status == 0) {
+//
+//              $oErro->erro_msg = $oDaoEmpEmpenhoContrato->erro_msg;
+//              throw new Exception(_M($sCaminhoMensagens."empempenho_contrato_excluir", $oErro));
+//            }
+//          }
+//        }
 
         db_fim_transacao(false);
         $_SESSION["oContrato"]     = $oContrato;
@@ -1046,6 +1047,10 @@ switch($oParam->exec) {
         $oItemContrato->setIContratado($iContratado);
         $oItemContrato->setIQtdcontratada($oParam->material->nQuantidade);
 
+        $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($iLicitacao);
+
+        $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
+
         if (count($oItemContrato->getDotacoes()) == 1) {
 
           $aDotacao =  $oItemContrato->getDotacoes();
@@ -1108,9 +1113,9 @@ switch($oParam->exec) {
       $oContrato = $_SESSION["oContrato"];
       $oPosicao  = $oContrato->getUltimaPosicao();
       $aItens    = $oPosicao->getItens();
-      foreach ($aItens as $oItem) {
+        foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+          if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }
@@ -1155,7 +1160,7 @@ switch($oParam->exec) {
       $aItens    = $oPosicao->getItens();
       foreach ($aItens as $oItem) {
 
-        if ($oParam->iCodigoItem ==  $oItem->getCodigo()) {
+        if ($oParam->iCodigoItem ==  $oItem->getMaterial()->getMaterial()) {
           $oItemContrato = $oItem;
           break;
         }

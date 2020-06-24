@@ -450,8 +450,9 @@ $clliclicita->rotulo->label();
 
     function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
-        if (response.status != 1) {
-            alert(urlDecode(response.message));
+
+        if (response.status == 2) {
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
@@ -514,6 +515,7 @@ $clliclicita->rotulo->label();
             excluirhomologacao({
                 exec: 'excluirHomo',
                 licitacao: document.getElementById('l20_codigo').value,
+                ratificacao: document.form1.l20_dtpubratificacao.value
             }, oretornoexclusao);
         } catch(e) {
             alert(e.toString());
@@ -535,8 +537,9 @@ $clliclicita->rotulo->label();
 
     function oretornoexclusao(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        if (oRetornoitens.status != 1) {
-            alert(oRetornoitens);
+
+        if (oRetornoitens.status == 2) {
+            alert(oRetornoitens.message.urlDecode());
         } else if (oRetornoitens.erro == false) {
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";

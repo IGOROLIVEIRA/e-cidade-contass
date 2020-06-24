@@ -215,7 +215,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             $oDados10 = new stdClass();
                             $oDados10->si25_tiporegistro = 10;
-                            $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
+                            $oDados10->si25_codreceita = $oDadosRec->o70_codrec.$sRegRepasse.$sEmParlamentar;
                             $oDados10->si25_codorgao = $sCodOrgaoTce;
                             $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
                             $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
