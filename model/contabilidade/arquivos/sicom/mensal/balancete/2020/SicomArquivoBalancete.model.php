@@ -2113,7 +2113,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 }
 
                                 $aContasReg10[$reg10Hash]->si177_totaldebitos += $oReg18Saldo->saldoanterior >= 0 ? $oReg18Saldo->saldoanterior : abs($oReg18Saldo->saldoanterior);
-                                $aContasReg10[$reg10Hash]->si177_totalcreditos += $oReg18Saldo->saldoanterior >= 0 ? ($oReg18Saldo->creditos * -1) + $oReg18Saldo->saldoanterior : 0;
+                                $aContasReg10[$reg10Hash]->si177_totalcreditos += $oReg18Saldo->saldoanterior >= 0 ? $oReg18Saldo->saldoanterior : 0;
 
                             }
 
