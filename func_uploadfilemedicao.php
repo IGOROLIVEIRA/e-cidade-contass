@@ -53,8 +53,8 @@ if(isset($uploadfile)) {
 
   $extensao = strtolower(substr($nomearq,-4));
 
-  if($extensao == "jpeg"){
-    $novo_nome = md5(time()).".".$extensao;
+  if($extensao == ".pdf"){
+    $novo_nome = md5(time()).$extensao;
   }else{
     $novo_nome = md5(time()).$extensao;
   }
@@ -67,8 +67,9 @@ if(isset($uploadfile)) {
   // Seta o nome do arquivo destino do upload
   $arquivoDocument = "$diretorio"."$novo_nome";
 
-  if($extensao != ".png" && $extensao != "jpeg" && $extensao != ".jpg" ){
-    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo JPEG ou PNG");
+
+  if($extensao != ".pdf"){
+    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo PDF");
     unlink($nometmp);
     $lFail = true;
     return false;
@@ -82,8 +83,6 @@ if(isset($uploadfile)) {
 
   // Faz um upload do arquivo para o local especificado
   if(  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome)) {
-//    echo $medicao;exit;
-
 
     $href = $arquivoDocument;
 

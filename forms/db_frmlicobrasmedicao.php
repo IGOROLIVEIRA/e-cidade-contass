@@ -387,7 +387,10 @@ $cllicobrasmedicao->rotulo->label();
     var oRetorno = eval('('+oAjax.responseText+")");
 
     if (oRetorno.status == 2) {
-      alert(oRetorno.message);
+      alert("ja existe Anexo Salvo");
+        $('uploadfile').value     = '';
+        $('namefile').value       = '';
+        $("obr04_legenda").value  = "";
     }else {
       alert("Anexo Salvo com Sucesso !");
       $('uploadfile').value     = '';
