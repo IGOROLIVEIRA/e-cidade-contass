@@ -343,6 +343,11 @@ $clliclicita->rotulo->label();
     function js_IHomologacao() {
         let itens = getItensMarcados();
 
+        if (document.getElementById('l20_dtpubratificacao').value == '') {
+            alert('Data de Ratificação não informada.');
+            return false;
+        }
+
         if (itens.length < 1) {
             alert('Selecione pelo menos um item da lista.');
             return false;
@@ -406,6 +411,11 @@ $clliclicita->rotulo->label();
 
         if (itens.length < 1) {
             alert('Selecione pelo menos um item da lista.');
+            return false;
+        }
+
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Data de Ratificação não informada.');
             return false;
         }
 
@@ -511,6 +521,12 @@ $clliclicita->rotulo->label();
      *
      */
     function js_EHomologacao() {
+
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Data de Ratificação não informada.');
+            return false;
+        }
+
         try {
             excluirhomologacao({
                 exec: 'excluirHomo',

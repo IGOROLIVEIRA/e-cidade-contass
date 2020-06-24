@@ -126,7 +126,7 @@ $clrotulo->label("l20_codigo");
     <table>
       <?php
       /**
-       * Na fase de homologa√ß√£o s√≥ podem ser listados itens que possuem fornecedores ganhadores.
+       * Na fase de homologaÁ„o sÛ podem ser listados itens que possuem fornecedores ganhadores.
        * @see OC 3714
        */
       $sWhere = " liclicitem.l21_codliclicita = {$l202_licitacao} and pc24_pontuacao = 1 ";
@@ -262,18 +262,31 @@ $clrotulo->label("l20_codigo");
   </center>
 </form>
 <script>
-    document.getElementById('processar').disabled = true;
 
-    /* Valida√ß√£o para n√£o inserir c√≥digos de licita√ß√µes do tipo Dispensa */
+    if(<?= $db_opcao ?> == 2){
+        iLicitacao = document.form1.l202_licitacao.value;
+    }
+
+    if(document.getElementById('processar')){
+        document.getElementById('processar').disabled = true;
+    }
+
+    /* ValidaÁ„o para n„o inserir cÛdigos de licitaÁıes do tipo Dispensa */
     let element = document.getElementById('l202_licitacao');
     element.addEventListener('keyup', (e) => {
-        document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
+
+        if(document.getElementById('db_opcao')){
+            document.getElementById('db_opcao').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
     });
   <?php
   /**
    * ValidaFornecedor:
-   * Quando for passado por URL o parametro validafornecedor, s√≥ ir√° retornar licita√ß√µes que possuem fornecedores habilitados.
-   * @see ocorr√™ncia 2278
+   * Quando for passado por URL o parametro validafornecedor, sÛ ir· retornar licitaÁıes que possuem fornecedores habilitados.
+   * @see ocorrÍncia 2278
    */
   ?>
     function js_pesquisal202_licitacao(mostra){
@@ -307,7 +320,7 @@ $clrotulo->label("l20_codigo");
         }
     }
   /**
-   * Fun√ß√£o alterada para receber o parametro da numera√ß√£o da modalidade.
+   * FunÁ„o alterada para receber o parametro da numeraÁ„o da modalidade.
    * Acrescentado o parametro chave3 que recebe o l20_numero vindo da linha 263.
    * Solicitado por danilo@contass e deborah@contass
    */
@@ -316,7 +329,11 @@ $clrotulo->label("l20_codigo");
 
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
-        document.getElementById('processar').disabled = false;
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = false;
+        }else{
+            document.getElementById('db_opcao').disabled = false;
+        }
         db_iframe_liclicita.hide();
     }
   function js_pesquisa(homologacao=false){
