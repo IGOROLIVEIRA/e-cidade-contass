@@ -99,13 +99,17 @@ $sWhereContratos = " and 1 = 1 ";
       if (isset($tipo) && trim($tipo)!=""){
            $dbwhere   = "l08_altera is true and";
       }
-      $situacao = 1;
+            if(!$situacao){
+                $situacao = 1;
+            }
+
 			if (isset($situacao) && trim($situacao) != '') {
 
              $dbwhere .= "l20_licsituacao = $situacao and l200_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."'
              and l11_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."' and ";
 
 			}
+
 			$sWhereModalidade = "";
 
 			if (isset($iModalidadeLicitacao) && !empty($iModalidadeLicitacao)) {

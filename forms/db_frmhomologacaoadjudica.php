@@ -291,19 +291,28 @@ $clrotulo->label("l20_codigo");
   ?>
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
+
         if(mostra==true){
-            if(opcao){
+            if(opcao == '1'){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
             }else{
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
             }
         }else{
             if(document.form1.l202_licitacao.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                if(opcao == '1'){
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }else{
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';
-                document.getElementById('processar').disabled = true;
+                if(document.getElementById('processar')){
+                    document.getElementById('processar').disabled = true;
+                }else{
+                    document.getElementById('db_opcao').disabled = true;
+                }
             }
         }
     }
@@ -316,7 +325,11 @@ $clrotulo->label("l20_codigo");
             document.form1.l202_licitacao.value = '';
         }else{
             iLicitacao = document.form1.l202_licitacao.value;
-            document.getElementById('processar').disabled = false;
+            if(document.getElementById('processar')){
+                document.getElementById('processar').disabled = false;
+            }else{
+                document.getElementById('db_opcao').disabled = false;
+            }
         }
     }
   /**
