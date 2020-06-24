@@ -344,7 +344,7 @@ $clliclicita->rotulo->label();
         let itens = getItensMarcados();
 
         if (document.getElementById('l20_dtpubratificacao').value == '') {
-            alert('Data de Ratificação não informada.');
+            alert('Campo Data Publicação Termo de Ratificação não informado');
             return false;
         }
 
@@ -415,7 +415,7 @@ $clliclicita->rotulo->label();
         }
 
         if(document.getElementById('l20_dtpubratificacao').value == ''){
-            alert('Data de Ratificação não informada.');
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
             return false;
         }
 
@@ -523,7 +523,7 @@ $clliclicita->rotulo->label();
     function js_EHomologacao() {
 
         if(document.getElementById('l20_dtpubratificacao').value == ''){
-            alert('Data de Ratificação não informada.');
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
             return false;
         }
 
