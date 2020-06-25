@@ -88,9 +88,9 @@ class GerarRALIC extends GerarAM
                         $aCSVRALIC11['si181_classeobjeto']                    = $aRALIC11['si181_classeobjeto'];
                         $aCSVRALIC11['si181_tipoatividadeobra']               = !trim($aRALIC11['si181_tipoatividadeobra']) ? '' : $this->padLeftZero($aRALIC11['si181_tipoatividadeobra'], 2);
                         $aCSVRALIC11['si181_tipoatividadeservico']            = !trim($aRALIC11['si181_tipoatividadeservico']) ? '' : $this->padLeftZero($aRALIC11['si181_tipoatividadeservico'], 2);
-                        $aCSVRALIC11['si181_dscatividadeservico']             = $aRALIC11['si181_dscatividadeservico'];
+                        $aCSVRALIC11['si181_dscatividadeservico']             = utf8_decode($aRALIC11['si181_dscatividadeservico']);
                         $aCSVRALIC11['si181_tipoatividadeservespecializado']  = !trim($aRALIC11['si181_tipoatividadeservespecializado']) ? '' : $this->padLeftZero($aRALIC11['si181_tipoatividadeservespecializado'], 2);
-                        $aCSVRALIC11['si181_dscatividadeservespecializado']   = $aRALIC11['si181_dscatividadeservespecializado'];
+                        $aCSVRALIC11['si181_dscatividadeservespecializado']   = utf8_decode($aRALIC11['si181_dscatividadeservespecializado']);
                         $aCSVRALIC11['si181_codfuncao']                       = $this->padLeftZero(intval($aRALIC11['si181_codfuncao']), 2);
                         $aCSVRALIC11['si181_codsubfuncao']                    = $this->padLeftZero(intval($aRALIC11['si181_codsubfuncao']), 3);
                         $aCSVRALIC11['si181_codbempublico']                   = $this->padLeftZero($aRALIC11['si181_codbempublico'], 4);
@@ -110,11 +110,11 @@ class GerarRALIC extends GerarAM
 							$aCSVRALIC12['si182_exercicioprocesso']           = $this->padLeftZero($aRALIC12['si182_exercicioprocesso'], 4);
 							$aCSVRALIC12['si182_nroprocessolicitatorio']      = $aRALIC12['si182_nroprocessolicitatorio'];
 							$aCSVRALIC12['si182_codobralocal']                = $aRALIC12['si182_codobralocal'];
-							$aCSVRALIC12['si182_logradouro']                  = $aRALIC12['si182_logradouro'];
+							$aCSVRALIC12['si182_logradouro']                  = utf8_decode($aRALIC12['si182_logradouro']);
 							$aCSVRALIC12['si182_numero']                      = !$aRALIC12['si182_numero'] ? '' : $aRALIC12['si182_numero'];
-							$aCSVRALIC12['si182_bairro']                      = $aRALIC12['si182_bairro'];
-							$aCSVRALIC12['si182_distrito']                    = $aRALIC12['si182_distrito'];
-							$aCSVRALIC12['si182_municipio']                   = $aRALIC12['si182_municipio'];
+							$aCSVRALIC12['si182_bairro']                      = utf8_decode($aRALIC12['si182_bairro']);
+							$aCSVRALIC12['si182_distrito']                    = utf8_decode($aRALIC12['si182_distrito']);
+							$aCSVRALIC12['si182_municipio']                   = utf8_decode($aRALIC12['si182_municipio']);
 							$aCSVRALIC12['si182_cep']                         = $aRALIC12['si182_cep'];
 							$aCSVRALIC12['si182_graulatitude']                = $aRALIC12['si182_graulatitude'];
 							$aCSVRALIC12['si182_minutolatitude']              = $aRALIC12['si182_minutolatitude'];
