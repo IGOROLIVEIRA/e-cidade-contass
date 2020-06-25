@@ -431,6 +431,7 @@ if($x->consultarDataDoSistema == true){
                 oTxtCodigoAcordo.setValue('');
             }
         }
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
     }
 
     /**
@@ -489,11 +490,14 @@ if($x->consultarDataDoSistema == true){
         //oGridItens.aHeaders[8].lDisplayed = false;
         oGridItens.setHeight(160);
         oGridItens.show($('ctnGridItens'));
+        let total = oGridItens.sum(5);
         $('btnPesquisarPosicoes').onclick = js_pesquisarPosicoesContrato;
         iTipoAcordo = 0;
     }
 
     function js_pesquisarPosicoesContrato() {
+
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
 
         if (oTxtCodigoAcordo.getValue() == "") {
 
@@ -598,6 +602,8 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_getItensPosicao(iCodigo, iLinha) {
+
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
 
         oGridPosicoes.aRows.each(function(oLinha, id) {
             oLinha.select(false);
@@ -1647,24 +1653,13 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_somaItens(){
-        let totalGeral = 0;
-        for(let count = 0; count < oGridItens.aRows.length; count++){
-
-            let valor = parseFloat(document.getElementById(`valoritem${count}`).value.replace(/\./g, '').replace(/,/g, '.'));
-
-            if(oGridItens.aRows[count].isSelected){
-                totalGeral += valor;
-            }
-
-            if(totalGeral > 0){
-                document.getElementById('oGridItenstotalValue').innerText = js_formatar(totalGeral, 'f');
-            }else{
-                document.getElementById('oGridItenstotalValue').innerText = '0.00';
-            }
-
-        }
-
+        document.getElementById('oGridItenstotalValue').innerText = js_formatar(oGridItens.sum(7), 'f');
     }
+
+    /* Soma todos os itens da lista */
+    document.getElementById('oGridItensSelectAll').addEventListener('click', event => {
+        js_somaItens();
+    })
 
 </script>
 <?php
