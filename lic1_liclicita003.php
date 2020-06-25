@@ -76,13 +76,15 @@ if(isset($excluir)){
   
   db_inicio_transacao();
 
-	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial');
+	$sSql = $clliclicita->sql_query_file($l20_codigo, 'l20_cadinicial, l20_anousu');
 	$rsSql = $clliclicita->sql_record($sSql);
-	$status = db_utils::fieldsMemory($rsSql, 0)->l20_cadinicial;
+	$oLicitacao = db_utils::fieldsMemory($rsSql, 0);
+	$status = $oLicitacao->l20_cadinicial;
+	$anousu = $oLicitacao->l20_anousu;
 	/*
 	 * Apenas as licitações com o l20_cadinicial = 1 (PENDENTES) serão excluídas...
 	 * */
-	$sqlerro = $status == 1 ? false : true;
+	$sqlerro = $status == 1 || (!$status && $anousu < 2020) ? false : true;
 	$erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
 	if(!$sqlerro) {
