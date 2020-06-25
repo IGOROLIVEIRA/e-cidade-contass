@@ -261,7 +261,7 @@ function js_gerarRelatorio(){
         return false;
       }
     } else {
-      alert('Informe uma Date de Início e Data de Fim!');
+      alert('Informe uma Data de Início e Data de Fim!');
       return false;
     }
   }
