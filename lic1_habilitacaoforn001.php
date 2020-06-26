@@ -22,37 +22,52 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
 }
 
 if(isset($incluir) || isset($alterar)){
-  $sqlLicitacao = $clliclicita->sql_query($l206_licitacao,'distinct l20_codtipocom', null, null);
+  $sqlLicitacao = $clliclicita->sql_query($l206_licitacao,'distinct l44_sequencial', null, null);
   $rsLicitacao = $clliclicita->sql_record($sqlLicitacao);
   $modalidade = db_utils::fieldsMemory($rsLicitacao, 0);
-  $modalid = $modalidade->l20_codtipocom;
-
+  $modalid = $modalidade->l44_sequencial;
+  $sqlAbertura = $clliclicita->sql_query(null,"l20_datacria",null,"l20_codigo = $l206_licitacao");
+  $rsAbertura = $clliclicita->sql_record($sqlAbertura);
+  $data = db_utils::fieldsMemory($rsAbertura,0);
+  $dtaberturaform = implode("/",(array_reverse(explode("-",$data->l20_datacria))));
+  $dtabertura = DateTime::createFromFormat('d/m/Y',  $dtaberturaform);
+  $dthabilitacao = DateTime::createFromFormat('d/m/Y',  $l206_datahab);
   $sqlCgm = $clcgm->sql_query($l206_fornecedor, 'distinct z01_cgccpf', null, null);
   $rsCgm = $clcgm->sql_record($sqlCgm);
   $cgm = db_utils::fieldsMemory($rsCgm, 0);
 
-  if(strlen($cgm->z01_cgccpf) == 14){
-    if($modalid == '9' || $modalid == '11' || $modalid == '8' || $modalid == '10'){
-        if($l206_datavalidadefgts == '')
-          $erro_msg = 'Campo Data de Validade FGTS não informado';
-        if($l206_dataemissaofgts == '')
-          $erro_msg = 'Campo Data de Emissão FGTS não informado';
-        if($l206_numcertidaofgts  == "")
-          $erro_msg = 'Campo Número de Certidão FGTS não informado';
-        if($l206_datavalidadeinss == '')
-          $erro_msg = 'Campo Data de Validade INSS não informado';
-        if($l206_dataemissaoinss == "")
-          $erro_msg = 'Campo Data de Emissão INSS não informado';
-        if($l206_numcertidaoinss == "")
-          $erro_msg = 'Campo Número de Certidão INSS não informado';
-    }
+//    if(strlen($cgm->z01_cgccpf) == 14) {
+//
+//        if ($modalid == '49' || $modalid == '50' || $modalid == '53' || $modalid == '103') {
+//            if ($l206_datavalidadefgts == '')
+//                $erro_msg = 'Campo Data de Validade FGTS não informado';
+//            if ($l206_dataemissaofgts == '')
+//                $erro_msg = 'Campo Data de Emissão FGTS não informado';
+//            if ($l206_numcertidaofgts == "")
+//                $erro_msg = 'Campo Número de Certidão FGTS não informado';
+//            if ($l206_datavalidadeinss == "")
+//                $erro_msg = 'Campo Data de Validade INSS não informado';
+//            if ($l206_dataemissaoinss == "")
+//                $erro_msg = 'Campo Data de Emissão INSS não informado';
+//            if ($l206_numcertidaoinss == "")
+//                $erro_msg = 'Campo Número de Certidão INSS não informado';
+//            if ($dthabilitacao == false)
+//                $erro_msg = 'Campo Data de Habilitação não informado';
+//            if ($dthabilitacao != false) {
+//                if ($dthabilitacao < $dtabertura)
+//                    $erro_msg = 'Data da habilitação deve ser igual ou maior que a data da abertura!';
+//            }
+//        }
+//    }else{
 
-    if($modalid == '6' || $modalid == '5' || $modalid == '1' || $modalid == '4'){
-        if($l206_datahab_dia == ""){
-          $erro_msg = 'Campo Data de Habilitação não informado';
-        }
+//    }
+    //    if($modalid == '48' || $modalid == '52' || $modalid == '53' || $modalid == '51'){
+    //
+    //    }
+
+    if($dthabilitacao == false || $dthabilitacao == "" ){
+        $erro_msg = 'Campo Data de Habilitação não informado';
     }
-  }
 
   if($erro_msg){
     $sqlerro = true;
