@@ -126,7 +126,7 @@ $clrotulo->label("l20_codigo");
     <table>
       <?php
       /**
-       * Na fase de homologa√ß√£o s√≥ podem ser listados itens que possuem fornecedores ganhadores.
+       * Na fase de homologaÁ„o sÛ podem ser listados itens que possuem fornecedores ganhadores.
        * @see OC 3714
        */
       $sWhere = " liclicitem.l21_codliclicita = {$l202_licitacao} and pc24_pontuacao = 1 ";
@@ -262,35 +262,57 @@ $clrotulo->label("l20_codigo");
   </center>
 </form>
 <script>
-    document.getElementById('processar').disabled = true;
 
-    /* Valida√ß√£o para n√£o inserir c√≥digos de licita√ß√µes do tipo Dispensa */
+    if(<?= $db_opcao ?> == 2){
+        iLicitacao = document.form1.l202_licitacao.value;
+    }
+
+    if(document.getElementById('processar')){
+        document.getElementById('processar').disabled = true;
+    }
+
+    /* ValidaÁ„o para n„o inserir cÛdigos de licitaÁıes do tipo Dispensa */
     let element = document.getElementById('l202_licitacao');
     element.addEventListener('keyup', (e) => {
-        document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
+
+        if(document.getElementById('db_opcao')){
+            document.getElementById('db_opcao').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
     });
   <?php
   /**
    * ValidaFornecedor:
-   * Quando for passado por URL o parametro validafornecedor, s√≥ ir√° retornar licita√ß√µes que possuem fornecedores habilitados.
-   * @see ocorr√™ncia 2278
+   * Quando for passado por URL o parametro validafornecedor, sÛ ir· retornar licitaÁıes que possuem fornecedores habilitados.
+   * @see ocorrÍncia 2278
    */
   ?>
     function js_pesquisal202_licitacao(mostra){
         let opcao = "<?= $db_opcao?>";
+
         if(mostra==true){
-            if(opcao){
+            if(opcao == '1'){
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
             }else{
                 js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
             }
         }else{
             if(document.form1.l202_licitacao.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                if(opcao == '1'){
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }else{
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';
-                document.getElementById('processar').disabled = true;
+                if(document.getElementById('processar')){
+                    document.getElementById('processar').disabled = true;
+                }else{
+                    document.getElementById('db_opcao').disabled = true;
+                }
             }
         }
     }
@@ -303,11 +325,15 @@ $clrotulo->label("l20_codigo");
             document.form1.l202_licitacao.value = '';
         }else{
             iLicitacao = document.form1.l202_licitacao.value;
-            document.getElementById('processar').disabled = false;
+            if(document.getElementById('processar')){
+                document.getElementById('processar').disabled = false;
+            }else{
+                document.getElementById('db_opcao').disabled = false;
+            }
         }
     }
   /**
-   * Fun√ß√£o alterada para receber o parametro da numera√ß√£o da modalidade.
+   * FunÁ„o alterada para receber o parametro da numeraÁ„o da modalidade.
    * Acrescentado o parametro chave3 que recebe o l20_numero vindo da linha 263.
    * Solicitado por danilo@contass e deborah@contass
    */
@@ -316,7 +342,11 @@ $clrotulo->label("l20_codigo");
 
         document.form1.l202_licitacao.value = chave1;
         document.form1.pc50_descr.value = chave2+' '+chave3;
-        document.getElementById('processar').disabled = false;
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = false;
+        }else{
+            document.getElementById('db_opcao').disabled = false;
+        }
         db_iframe_liclicita.hide();
     }
   function js_pesquisa(homologacao=false){
