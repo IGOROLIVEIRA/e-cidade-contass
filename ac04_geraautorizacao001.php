@@ -490,7 +490,6 @@ if($x->consultarDataDoSistema == true){
         //oGridItens.aHeaders[8].lDisplayed = false;
         oGridItens.setHeight(160);
         oGridItens.show($('ctnGridItens'));
-        let total = oGridItens.sum(5);
         $('btnPesquisarPosicoes').onclick = js_pesquisarPosicoesContrato;
         iTipoAcordo = 0;
     }
