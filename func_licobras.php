@@ -101,7 +101,8 @@ $cllicobras = new cl_licobras;
                      l20_edital,
                      l03_descr,
                      l20_numero,
-                     l20_objeto";
+                     l20_objeto,
+                     obr01_dtlancamento";
           if(isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial)!="") ){
               $sql = $cllicobras->sql_query_pesquisa($chave_obr01_sequencial,$campos,null,null);
           }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
@@ -149,7 +150,8 @@ $cllicobras = new cl_licobras;
                      l20_edital,
                      l03_descr,
                      l20_numero,
-                     l20_objeto";
+                     l20_objeto,
+                     obr01_dtlancamento";
                 $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null,$campos,null,"obr01_sequencial = $pesquisa_chave"));
             }else{
                 $result = $cllicobras->sql_record($cllicobras->sql_query($pesquisa_chave));

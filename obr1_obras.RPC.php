@@ -73,22 +73,22 @@ switch($oParam->exec) {
   case 'alterarAnexo':
 
       $cllicobrasanexos = new cl_licobrasanexo();
-      $rsAnexo =  $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_licobrasmedicao = $oParam->codmedicao"));
-      if(pg_num_rows($rsAnexo) < 1){
+//      $rsAnexo =  $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_licobrasmedicao = $oParam->codmedicao"));
+//      if(pg_num_rows($rsAnexo) < 1){
           $ultimoregistro = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"max(obr04_sequencial) as obr04_sequencial",null,""));
           db_fieldsmemory($ultimoregistro,0);
           $cllicobrasanexos->obr04_legenda = $oParam->legenda;
           $cllicobrasanexos->alterar($obr04_sequencial);
-      }else{
-       $oRetorno->status = 2;
-       $rsAnexo =  $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"obr04_sequencial,obr04_codimagem",null,"obr04_legenda like '%foto sem legenda%'"));
-       db_fieldsmemory($rsAnexo,0);
-       $cllicobrasanexos->excluir($obr04_sequencial);
-       $arquivo = "imagens/obras/".$obr04_codimagem;
-       if(unlink($arquivo)){
-           echo "apagou";
-       };
-      }
+//      }else{
+//       $oRetorno->status = 2;
+//       $rsAnexo =  $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"obr04_sequencial,obr04_codimagem",null,"obr04_legenda like '%foto sem legenda%'"));
+//       db_fieldsmemory($rsAnexo,0);
+//       $cllicobrasanexos->excluir($obr04_sequencial);
+//       $arquivo = "imagens/obras/".$obr04_codimagem;
+//       if(unlink($arquivo)){
+//           echo "apagou";
+//       };
+//      }
 
     break;
 

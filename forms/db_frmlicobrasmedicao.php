@@ -6,7 +6,7 @@ $cllicobrasmedicao->rotulo->label();
   <legend>Medição da Obra</legend>
   <form name="form1" method="post" action="">
     <table border="0" style="margin-left: -4%;">
-      <tr style="display: none">
+      <tr style="">
         <td nowrap title="<?=@$Tobr03_sequencial?>">
           <input name="oid" type="hidden" value="<?=@$oid?>">
           <?=@$Lobr03_sequencial?>
@@ -340,7 +340,7 @@ $cllicobrasmedicao->rotulo->label();
     js_removeObj("msgbox");
     var oRetorno = eval('('+oAjax.responseText+")");
     oGridDocumento.clearAll(true);
-
+console.log(oRetorno);
     if (oRetorno.dados.length == 0) {
       return false;
     }
