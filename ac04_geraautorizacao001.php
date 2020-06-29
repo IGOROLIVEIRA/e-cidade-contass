@@ -1516,6 +1516,15 @@ if($x->consultarDataDoSistema == true){
 
         setInformacoesAutorizacao();
 
+        if(oRetorno.sTipoorigem == '2'){
+            $('e54_numerl').setAttribute('readOnly',true);
+            $('e54_numerl').setAttribute('disabled',true);
+            $('e54_numerl').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+            $('e54_nummodalidade').setAttribute('readOnly',true);
+            $('e54_nummodalidade').setAttribute('disabled',true);
+            $('e54_nummodalidade').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+        }
+
     }
 
     function setInformacoesAutorizacao() {
