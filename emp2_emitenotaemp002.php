@@ -603,6 +603,10 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $pdf1->descr_modalidade = '';
     }
 
+    $sSql = " SELECT ac16_sequencial, ac16_anousu from empempenhocontrato JOIN acordo ON ac16_sequencial = e100_acordo where e100_numemp = ".$e60_numemp;
+    $rsAcordo = db_query($sSql);
+    $oAcordo = db_utils::fieldsMemory($rsAcordo, 0);
+
 //    if (isset($resumo_lic)&&$resumo_lic!=""){
 //        if (isset($e54_resumo) && trim($e54_resumo) != ""){
 //            $pdf1->resumo     = trim($e54_resumo);//trim($sResumo);
@@ -669,6 +673,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->tipos            = $tipos;
     $pdf1->numero           = $z01_numero;
     $pdf1->marca            = 'e55_marca';
+    $pdf1->acordo           = $oAcordo->ac16_sequencial;
+    $pdf1->anoacordo        = $oAcordo->ac16_anousu;
 
     $sql  = "select c61_codcon
               from conplanoreduz
