@@ -183,6 +183,8 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             }
           }
 
+          $campos = 'DISTINCT '.$campos;
+
           /**
            * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
            */
