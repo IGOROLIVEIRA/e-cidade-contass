@@ -171,6 +171,9 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
             if (file_exists("funcoes/db_func_acordo.php")) {
                 require_once("funcoes/db_func_acordo.php");
+
+                /* Pega os campos do arquivo e adiciona o DISTINCT */
+				$campos = 'DISTINCT '.$campos;
             } else {
                 $campos  = "distinct acordo.ac16_sequencial, ";
                 $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
@@ -183,7 +186,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             }
           }
 
-          $campos = 'DISTINCT '.$campos;
 
           /**
            * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
