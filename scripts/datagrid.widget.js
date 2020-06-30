@@ -165,6 +165,12 @@ function DBGrid(sName) {
     this.iHeaderLineModel = 0;
 
     /**
+     * Totalizador do valor dos itens marcados
+     * @type {boolean}
+     */
+    this.hasTotalValue = false;
+
+    /**
      * Guarda o tamanho inical da grid.
      */
     this.gridContainerWidth = null;
@@ -511,6 +517,10 @@ function DBGrid(sName) {
         sGrid    += "<td colspan='"+(this.aHeaders.length+2)+"'><div style='border:1px inset white;height:100%;padding:2px'>";
         sGrid    += "<span> Total de Registros:</span><span style='color:blue;padding:3px' id='"+this.sName+"numrows'>0</span>";
         sGrid    += "<span style='border-left:1px inset #eeeee2' id='"+this.sName+"status'>&nbsp;</span>&nbsp;";
+        if (this.hasTotalValue){
+            sGrid    += "<span style='padding-left: 58%'> Valor Total:</span><span style='color:#000;padding:3px' id='"+this.sName+"totalValue'>0.00</span>";
+        }
+
         sGrid    += "</div></td></tr>";
         sGrid    += "</table>"; //  FECHA TABLE "table_footer"
         sGrid    += "</div>";   //  FECHA DIV "footer-container"

@@ -79,12 +79,13 @@ if (isset($oPost->sDepartsResponsavel) && !empty($oPost->sDepartsResponsavel)) {
 	$sAnd    = " and ";
 }
 
+$sDataInicio = $oPost->ac16_datainicio;
+$sDataFim    = $oPost->ac16_datafim;
+
 if (isset($oPost->ac16_datainicio) && isset($oPost->ac16_datafim)) {
 	
   if (!empty($oPost->ac16_datainicio) && !empty($oPost->ac16_datafim)) {
   	
-  	$sDataInicio = $oPost->ac16_datainicio;
-  	$sDataFim    = $oPost->ac16_datafim;
   	$dtIni       = implode("-",array_reverse(explode("/",$sDataInicio)));
   	$dtFim       = implode("-",array_reverse(explode("/",$sDataFim)));
   	
@@ -157,7 +158,15 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
   $aDadosAcordo[] = $oDadosAcordo;
 }
 $head2 = "Acordo: {$sAcordo}";
-$head4 = "Data de Início: {$sDataInicio}  Data de Fim: {$sDataFim}";
+
+if($oPost->ac16_datainicio != ''){
+	$head4 = "Data de Início: {$sDataInicio} ";
+}
+
+if($oPost->ac16_datafim != ''){
+	$head4 .= " Data Fim: {$sDataFim}";
+}
+
 $head6 = "Ordem: {$sOrdemDescricao}";
 
 $oPdf  = new PDF(); 

@@ -27,7 +27,7 @@ class cl_ralic112020
   var $si181_classeobjeto = 0;
   var $si181_tipoatividadeobra = 0;
   var $si181_tipoatividadeservico = null;
-  var $si181_dsctividadeservico = '';
+  var $si181_dscatividadeservico = '';
   var $si181_tipoatividadeservespecializado = 0;
   var $si181_dscatividadeservespecializado = '';
   var $si181_codfuncao = '';
@@ -221,7 +221,7 @@ class cl_ralic112020
                                ,$this->si181_classeobjeto
                                ,$this->si181_tipoatividadeobra
                                ,$this->si181_tipoatividadeservico 
-                               ,'$this->si181_dsctividadeservico'
+                               ,'$this->si181_dscatividadeservico'
                                ,$this->si181_tipoatividadeservespecializado
                                ,'$this->si181_dscatividadeservespecializado'
                                ,'$this->si181_codfuncao'

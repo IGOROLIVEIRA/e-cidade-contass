@@ -463,6 +463,14 @@ class cl_scripts {
                      (SELECT e60_numemp
                       FROM w_empenhos));
 
+    DELETE FROM autprotpagordem
+    WHERE p107_codord IN
+        (SELECT e50_codord
+         FROM pagordem
+         WHERE e50_numemp IN
+             (SELECT e60_numemp
+              FROM w_empenhos));
+
     DELETE FROM pagordem
     WHERE e50_codord IN
         (SELECT e50_codord
