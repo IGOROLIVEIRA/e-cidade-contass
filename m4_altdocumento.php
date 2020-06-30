@@ -68,20 +68,6 @@ if(isset($alterar)){
     AND c70_anousu = '$ano'"
   );
 
-  // echo pg_num_rows($rsVerify2).' - '.pg_num_rows($rsVerify) .' '."SELECT 1
-  //   FROM conlancam 
-  //   JOIN conlancamdoc on c71_codlan = c70_codlan
-  //   JOIN conlancaminstit on c02_codlan = c70_codlan
-  //   JOIN condataconf ON (c99_anousu,
-  //                        c99_instit) = (c70_anousu,
-  //                                       c02_instit)
-  //   WHERE c70_codlan = $c70_codlan
-  //   AND c99_data is not null
-  //   AND c99_instit = $instit
-  //   AND c70_anousu = '$ano'";
-
-
-
   if(pg_num_rows($rsVerify2) == 0){
     
     db_inicio_transacao();
@@ -111,11 +97,8 @@ if(isset($alterar)){
 <?php
   db_app::load("scripts.js, prototype.js");
   db_app::load("estilos.css, grid.style.css");
-  // db_app::load("widgets/windowAux.widget.js");
-  // db_app::load("widgets/dbmessageBoard.widget.js");
-  // db_app::load("classes/infoLancamentoContabil.classe.js");
 ?>
-<!-- <script language="JavaScript" type="text/javascript" src="scripts/widgets/datagrid/plugins/DBHint.plugin.js"></script> -->
+
 </head>
 <body bgcolor="#cccccc" style='margin-top: 30px'>
   <center>
