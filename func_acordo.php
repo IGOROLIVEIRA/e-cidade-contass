@@ -223,21 +223,18 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             if (file_exists("funcoes/db_func_acordo.php") == true) {
 
               $campos  = "distinct acordo.ac16_sequencial, ";
-              $campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END ac16_numeroacordo, ";
+              $campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END dl_Nº_Acordo, ";
               $campos .= "ac17_descricao as dl_Situação, ";
               $campos .= "acordo.ac16_contratado, ";
               $campos .= "cgm.z01_nome, ";
               $campos .= "acordo.ac16_resumoobjeto::text, ";
-              $campos .= "acordo.ac16_origem::text, ";
-              //$campos .= "codigo, ";
-              //$campos .= "nomeinst, ";
-              //$campos .= "acordo.ac16_numero, ";
+              $campos .= "acordo.ac16_valor, ";
               $campos .= "acordo.ac16_dataassinatura, ";
               $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
               $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
-              $campos .= "ac28_descricao as dl_Origem,";
-              $campos .= "acordo.ac16_coddepto, ";
-              $campos .= "descrdepto ";
+              $campos .= "CASE WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras' WHEN acordo.ac16_origem = 2 THEN 'Licitação' ELSE 'Manual' END ac16_origem, ";
+              $campos .= "db_depart.descrdepto as dl_Dpto_de_Inclusao, ";
+              $campos .= "responsavel.descrdepto as dl_Dpto_Responsavel";
 
             } else {
               $campos = "acordo.*";
@@ -277,7 +274,6 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           if (isset($chave_ac16_sequencial)) {
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
-          
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {

@@ -1306,6 +1306,7 @@ class cl_acordo {
         $sql .= " from acordo ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = acordo.ac16_contratado";
         $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
         $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
@@ -1488,6 +1489,7 @@ class cl_acordo {
         $sql .= " from acordo ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = acordo.ac16_contratado";
         $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
         $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
         $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
         $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
