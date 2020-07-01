@@ -4026,9 +4026,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('cboAtividadeServico' + sId).disabled = dadoscomplementares.atividadeservico > 0 ? false : true;
         $('cboAtividadeServico' + sId).value = dadoscomplementares.atividadeservico;
         me.setAtividadeServico(dadoscomplementares.atividadeservico);
+        document.getElementById('trAtividadeServico'+sId).style.display = (me.getAtividadeServico() == '99') ? '' : 'none';
         $('cboAtividadeServicoEsp' + sId).disabled = dadoscomplementares.atividadeservicoesp > 0 ? false : true;
         $('cboAtividadeServicoEsp' + sId).value = dadoscomplementares.atividadeservicoesp;
         me.setAtividadeServicoEspecializado(dadoscomplementares.atividadeservicoesp);
+        document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
@@ -4036,8 +4038,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
         $('txtDescrBairro' + sId).value = decodeURI(dadoscomplementares.bairro).replace(/\+/g, ' ');
         $('txtCep' + sId).value = dadoscomplementares.cep;
-        $('txtDescrAtividadeServico' + sId).value = decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' ');
-        $('txtDescrAtividadeServicoEsp' + sId).value = decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' ');
+        $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' '));
+        $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' '));
         me.setSequencial(dadoscomplementares.sequencial);
 
         let params = eval('('+oAjax.request.parameters.json+')');
