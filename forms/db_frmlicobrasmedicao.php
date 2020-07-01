@@ -340,7 +340,7 @@ $cllicobrasmedicao->rotulo->label();
     js_removeObj("msgbox");
     var oRetorno = eval('('+oAjax.responseText+")");
     oGridDocumento.clearAll(true);
-console.log(oRetorno);
+
     if (oRetorno.dados.length == 0) {
       return false;
     }

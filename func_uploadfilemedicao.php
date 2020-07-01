@@ -75,13 +75,14 @@ if(isset($uploadfile)) {
     $lFail = true;
     return false;
   }
+
   $sqlanexo = $cllicobrasanexo->sql_query(null,"*",null,"obr04_licobrasmedicao = $medicao");
   $rsAnexo = $cllicobrasanexo->sql_record($sqlanexo);
+  db_fieldsmemory($rsAnexo);
   if(pg_num_rows($rsAnexo) > 0){
       db_msgbox("Já existe anexo para esta Medição.");
       unlink($nometmp);
-      $lFail = true;
-      return false;
+      db_redireciona("obr1_licobrasmedicao002.php?chavepesquisa=$obr04_licobrasmedicao");
   }else{
       $cllicobrasanexo = new cl_licobrasanexo();
       $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
