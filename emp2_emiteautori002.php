@@ -480,10 +480,9 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
         $pdf1->descr_modalidade = '';
     }
 
-    $licitacao = explode('/', $pdf1->edital_licitacao);
-    $sSql = 'SELECT ac16_numero, ac16_anousu FROM acordo where ac16_licitacao = 
-			(SELECT l20_codigo from liclicita where l20_edital = '.$licitacao[0].' AND l20_anousu = '.$licitacao[1].')';
+    $sSql = "SELECT ac16_numero, ac16_anousu FROM acordo where ac16_numeroprocesso like '%".$pdf1->edital_licitacao."'";
     $rsSql = db_query($sSql);
+
     $oAcordo = db_utils::fieldsMemory($rsSql, 0);
 
     $pdf1->acordo = $oAcordo->ac16_numero;
