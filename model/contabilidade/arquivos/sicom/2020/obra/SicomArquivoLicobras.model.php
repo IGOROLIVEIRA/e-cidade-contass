@@ -125,8 +125,9 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
 	              AND l03_pctipocompratribunal not in (100,101)
-                AND DATE_PART('YEAR',licobras.obr01_dtinicioatividades)= " . db_getsession("DB_anousu") . "
-                AND DATE_PART('MONTH',licobras.obr01_dtinicioatividades)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
+                AND DATE_PART('YEAR',licobras.obr01_dtlancamento)  = " . db_getsession("DB_anousu") . "
+                AND DATE_PART('MONTH',licobras.obr01_dtlancamento) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult10 = db_query($sql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -169,8 +170,9 @@ class SicomArquivoLicobras extends SicomArquivoBase implements iPadArquivoBaseCS
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             WHERE l20_naturezaobjeto = 1
 	              AND l03_pctipocompratribunal not in (100,101)
-                AND DATE_PART('YEAR',licobras.obr01_dtinicioatividades)= " . db_getsession("DB_anousu") . "
-                AND DATE_PART('MONTH',licobras.obr01_dtinicioatividades)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+	              AND si09_tipoinstit in (50,51,52,53,54,55,56,57,58)
+                AND DATE_PART('YEAR',licobras.obr01_dtlancamento)= " . db_getsession("DB_anousu") . "
+                AND DATE_PART('MONTH',licobras.obr01_dtlancamento)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult20 = db_query($sql);
 
     if(pg_num_rows($rsResult20) > 0) {

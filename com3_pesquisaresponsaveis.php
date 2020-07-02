@@ -60,19 +60,33 @@ db_fieldsmemory($result, 0);
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <!-- <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script> -->
     <link href="estilos.css" rel="stylesheet" type="text/css">
-    <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
+    <!-- <link href="estilos/tab.style.css" rel="stylesheet" type="text/css"> -->
     <style type="text/css">
 
   .valor {
     background-color: #FFF;
   }
+  .bordas{
+    border: 2px solid #cccccc;
+    border-top-color: #999999;
+    border-right-color: #999999;
+    border-left-color: #999999;
+    border-bottom-color: #999999;
+    background-color: #999999;
+}
+.bordas_corp{
+    border: 1px solid #cccccc;
+    border-top-color: #999999;
+    border-right-color: #999999;
+    border-left-color: #999999;
+    border-bottom-color: #999999;
+    background-color: #cccccc;
+}
 </style>
   </head>
   <body bgcolor="#cccccc" onload="">
-    <center>
-      <form name="form1" method="post">
         <div style="display: table; float:left; margin-left:10%;">
           <fieldset>
             <legend><b>Responsáveis pela Licitação</b></legend>
@@ -179,14 +193,9 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
 
 
             }
-           db_lovrot($sql, 15, "()", "");
+           db_lovrot(@$sql,15,"","","");
           ?>
           </fieldset>
         </div>
-      </form>
-    </center>
   </body>
 </html>
-<script>
-
-</script>

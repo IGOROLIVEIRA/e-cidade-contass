@@ -42,14 +42,13 @@ try{
             $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento",null,null));
             db_fieldsmemory($rsLimiteCred,0)->l20_dtlimitecredenciamento;
             $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
-
           foreach ($oParam->itens as $item){
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
                 $dtHabilitacaoforne = (implode("/",(array_reverse(explode("-",$l206_datahab)))));
 
                 $clcredenciamento->l205_fornecedor = $item->l205_fornecedor;
-                $clcredenciamento->l205_datacred = $item->l205_datacred;
+                $clcredenciamento->l205_datacred = $item->l205_datacreditem;
                 $clcredenciamento->l205_item = $item->l205_item;
                 $clcredenciamento->l205_licitacao = $item->l205_licitacao;
                 $clcredenciamento->l205_datacreditem = $item->l205_datacreditem == "" || $item->l205_datacreditem == null ? $item->l205_datacred : $item->l205_datacreditem;
@@ -57,7 +56,9 @@ try{
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
                 db_fieldsmemory($rsItem,0)->l205_sequencial;
 
-                if($item->l205_datacred < $dtHabilitacaoforne){
+
+                if($item->l205_datacreditem < $dtHabilitacaoforne){
+
                    throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
                 }
 
@@ -135,7 +136,15 @@ try{
 
         case 'salvarHomo':
 
-            /**
+        	$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
+        	/**
              * busco o codtipocom
              */
 
@@ -302,6 +311,14 @@ try{
 
         case 'alterarHomo':
 
+			$sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+			$rsSql = db_query($sSql);
+			$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+			if($datapat >= join('-',array_reverse(explode('/', $oParam->l20_dtpubratificacao)))){
+				throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			};
+
             /**
              * busco sequencial da homologação
              */
@@ -376,6 +393,18 @@ try{
 
         case 'excluirHomo':
             db_inicio_transacao();
+
+            /*
+             * Verifica o período de encerramento patrimonial
+             * */
+
+            $sSql = 'SELECT c99_datapat FROM condataconf WHERE c99_anousu = '.db_getsession('DB_anousu').' and c99_instit = '.db_getsession('DB_instit');
+            $rsSql = db_query($sSql);
+            $datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
+
+            if($datapat >= join('-',array_reverse(explode('/', $oParam->ratificacao)))){
+            	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+			}
 
             /**
              * busco sequencial da homologação

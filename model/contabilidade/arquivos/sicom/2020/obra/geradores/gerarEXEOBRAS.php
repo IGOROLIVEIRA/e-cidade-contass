@@ -40,7 +40,7 @@ class gerarEXEOBRAS extends GerarAM
 
         $aEXEOBRAS10 = pg_fetch_array($rsexeobras102020, $iCont);
 
-        $aCSVEXEOBRAS10['si197_tiporegistro'] = str_pad($aEXEOBRAS10['si197_tiporegistro'], 2, "0", STR_PAD_LEFT);
+        $aCSVEXEOBRAS10['si197_tiporegistro'] = $aEXEOBRAS10['si197_tiporegistro'];
         $aCSVEXEOBRAS10['si197_codorgao'] = str_pad($aEXEOBRAS10['si197_codorgao'], 3, "0", STR_PAD_LEFT);
         $aCSVEXEOBRAS10['si197_codunidadesub'] = substr($aEXEOBRAS10['si197_codunidadesub'], 0, 8);
         $aCSVEXEOBRAS10['si197_nrocontrato'] = $aEXEOBRAS10['si197_nrocontrato'];

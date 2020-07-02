@@ -58,10 +58,10 @@ if(isset($incluir)){
     }
 
     if($obr03_nummedicao != null){
-      $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao"));
+      $resultMedicao = $cllicobrasmedicao->sql_record($cllicobrasmedicao->sql_query_file(null,"*",null,"obr03_nummedicao = $obr03_nummedicao and obr03_seqobra = $obr03_seqobra"));
 
       if(pg_num_rows($resultMedicao) > 0){
-        throw new Exception("Usuário: Numero da Medição ja utilizado.");
+        throw new Exception("Usuário: Numero da Medição já utilizado.");
       }
     }
 

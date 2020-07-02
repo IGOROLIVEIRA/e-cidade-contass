@@ -113,6 +113,8 @@ class RegraLancamentoContabilFactory {
     ,211 => "RegraLancamentoEmLiquidacaoMaterialConsumo"
     ,212 => "RegraLancamentoEmLiquidacaoMaterialConsumo"
     ,213 => "RegraLancamentoEmLiquidacaoMaterialConsumo"
+    ,214 => "RegraLancamentoEmLiquidacaoMaterialPermanente"
+    ,215 => "RegraLancamentoEmLiquidacaoMaterialPermanente"
     ,300 => "RegraLancamentoProvisaoFerias"
     ,301 => "RegraLancamentoProvisaoFerias"
     ,302 => "RegraLancamentoProvisaoDecimoTerceiro"

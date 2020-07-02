@@ -22,7 +22,7 @@ if(isset($alterar)){
   $data = (implode("/",(array_reverse(explode("-",$l202_datahomologacao)))));
 
   $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
-  $datainicioatividades = DateTime::createFromFormat('d/m/Y', $obr01_dtinicioatividades);
+  $datalancamento = DateTime::createFromFormat('d/m/Y', $obr01_dtlancamento);
   $dtlancamentoobra = DateTime::createFromFormat('d/m/Y', $obr01_dtlancamento);
 
   try {
@@ -30,7 +30,7 @@ if(isset($alterar)){
     /**
      * validação com sicom
      */
-    if(!empty($datainicioatividades)){
+    if(!empty($datalancamento)){
       $anousu = db_getsession('DB_anousu');
       $instituicao = db_getsession('DB_instit');
       $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
@@ -38,14 +38,14 @@ if(isset($alterar)){
       $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
       $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-      if ($datainicioatividades <= $dtencerramento) {
+      if ($datalancamento <= $dtencerramento) {
         throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       }
     }
 
     if($datahomologacao != null){
-      if($datainicioatividades < $datahomologacao){
-        throw new Exception ("Usuário: Campo Data de Inicio das atividades maior que data de Homologação da Licitação.");
+      if($datalancamento < $datahomologacao){
+        throw new Exception ("Usuário: Campo Data de lançamento deve ser maior ou igual a data de Homologação da Licitação.");
       }
 
     }
@@ -72,7 +72,8 @@ if(isset($alterar)){
   }
 }else if(isset($chavepesquisa)){
   $db_opcao = 2;
-  $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
+  $campos = "obr01_sequencial,obr01_licitacaosistema,obr01_licitacao,obr01_linkobra,obr01_numeroobra,l20_edital,l03_descr,l20_numero,l20_objeto,obr01_dtlancamento";
+  $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null,$campos,null,"obr01_sequencial=$chavepesquisa"));
   db_fieldsmemory($result,0);
   $db_botao = true;
 }

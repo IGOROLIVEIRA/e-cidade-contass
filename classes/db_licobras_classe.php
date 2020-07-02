@@ -24,11 +24,8 @@ class cl_licobras {
   public $obr01_dtlancamento = null;
   public $obr01_numeroobra = 0;
   public $obr01_linkobra = null;
-//  public $obr01_dtinicioatividades_dia = null;
-//  public $obr01_dtinicioatividades_mes = null;
-//  public $obr01_dtinicioatividades_ano = null;
-//  public $obr01_dtinicioatividades = null;
   public $obr01_instit = 0;
+  public $obr01_licitacaosistema = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  obr01_sequencial = int4 = Sequencial
@@ -38,6 +35,7 @@ class cl_licobras {
                  obr01_linkobra = text = Link da Obra
                  obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra
                  obr01_instit = int4 = Instituição
+                 obr01_licitacaosistema = int4 = Tipo de licitacao
                  ";
 
   //funcao construtor da classe
@@ -72,16 +70,8 @@ class cl_licobras {
       }
       $this->obr01_numeroobra = ($this->obr01_numeroobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_numeroobra"]:$this->obr01_numeroobra);
       $this->obr01_linkobra = ($this->obr01_linkobra == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"]:$this->obr01_linkobra);
-//      if ($this->obr01_dtinicioatividades == "") {
-//        $this->obr01_dtinicioatividades_dia = ($this->obr01_dtinicioatividades_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]:$this->obr01_dtinicioatividades_dia);
-//        $this->obr01_dtinicioatividades_mes = ($this->obr01_dtinicioatividades_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_mes"]:$this->obr01_dtinicioatividades_mes);
-//        $this->obr01_dtinicioatividades_ano = ($this->obr01_dtinicioatividades_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_ano"]:$this->obr01_dtinicioatividades_ano);
-//        if ($this->obr01_dtinicioatividades_dia != "") {
-//          $this->obr01_dtinicioatividades = $this->obr01_dtinicioatividades_ano."-".$this->obr01_dtinicioatividades_mes."-".$this->obr01_dtinicioatividades_dia;
-//        }
-//      }
       $this->obr01_instit = ($this->obr01_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_instit"]:$this->obr01_instit);
-    } else {
+      $this->obr01_licitacaosistema = ($this->obr01_licitacaosistema == ""?@$GLOBALS["HTTP_POST_VARS"]["obr01_licitacaosistema"]:$this->obr01_licitacaosistema);
     }
   }
 
@@ -137,18 +127,19 @@ class cl_licobras {
       $this->erro_status = "0";
       return false;
     }
-//    if ($this->obr01_dtinicioatividades == null ) {
-//      $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//      $this->erro_campo = "obr01_dtinicioatividades_dia";
-//      $this->erro_banco = "";
-//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//      $this->erro_status = "0";
-//      return false;
-//    }
     if ($this->obr01_instit == null ) {
       $this->erro_sql = " Campo Instituição não informado.";
       $this->erro_campo = "obr01_instit";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->obr01_licitacaosistema == null ) {
+      $this->erro_sql = " Campo Instituição não informado.";
+      $this->erro_campo = "obr01_licitacaosistema";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -163,6 +154,7 @@ class cl_licobras {
                                       ,obr01_linkobra
                                       ,obr01_dtinicioatividades
                                       ,obr01_instit
+                                      ,obr01_licitacaosistema
                        )
                 values (
                                 $this->obr01_sequencial
@@ -172,6 +164,7 @@ class cl_licobras {
                                ,'$this->obr01_linkobra'
                                ,".($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == ""?"null":"'".$this->obr01_dtinicioatividades."'")."
                                ,$this->obr01_instit
+                               ,$this->obr01_licitacaosistema
                       )";
     $result = db_query($sql);
     if ($result==false) {
@@ -288,33 +281,6 @@ class cl_licobras {
         return false;
       }
     }
-//    if (trim($this->obr01_dtinicioatividades)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"] !="") ) {
-//      $sql  .= $virgula." obr01_dtinicioatividades = '$this->obr01_dtinicioatividades' ";
-//      $virgula = ",";
-//      if (trim($this->obr01_dtinicioatividades) == null ) {
-//        $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//        $this->erro_campo = "obr01_dtinicioatividades_dia";
-//        $this->erro_banco = "";
-//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//        $this->erro_status = "0";
-//        return false;
-//      }
-//    }     else{
-//      if (isset($GLOBALS["HTTP_POST_VARS"]["obr01_dtinicioatividades_dia"])) {
-//        $sql  .= $virgula." obr01_dtinicioatividades = null ";
-//        $virgula = ",";
-//        if (trim($this->obr01_dtinicioatividades) == null ) {
-//          $this->erro_sql = " Campo Data Inicio das Ativ. do Eng na Obra não informado.";
-//          $this->erro_campo = "obr01_dtinicioatividades_dia";
-//          $this->erro_banco = "";
-//          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//          $this->erro_status = "0";
-//          return false;
-//        }
-//      }
-//    }
     if (trim($this->obr01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_instit"])) {
       $sql  .= $virgula." obr01_instit = $this->obr01_instit ";
       $virgula = ",";
@@ -439,8 +405,9 @@ class cl_licobras {
       $sql .= $campos;
     }
     $sql .= " from licobras ";
-    $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
-    $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+    $sql .= " left  join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+    $sql .= " left  join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+    $sql .= " left  join licobraslicitacao ON obr07_sequencial = obr01_licitacao ";
     $sql2 = "";
     if ($dbwhere=="") {
       if ( $obr01_sequencial != "" && $obr01_sequencial != null) {
@@ -461,6 +428,64 @@ class cl_licobras {
     }
     return $sql;
   }
+
+    function sql_query_pesquisa ( $obr01_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {
+        $sql = "select ";
+        if ($campos != "*" ) {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from licobras ";
+        $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+        $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+        if ($dbwhere=="") {
+            if ( $obr01_sequencial != "" && $obr01_sequencial != null) {
+                $sql .= " where obr01_sequencial = $obr01_sequencial";
+            }
+        } else if ($dbwhere != "") {
+            $sql .= " where $dbwhere";
+        }
+        $sql .= "UNION ";
+        $sql .= "select ";
+        $sql .= "obr01_sequencial,
+                 obr01_licitacaosistema,
+                 obr01_licitacao,
+                 obr01_linkobra,
+                 obr01_numeroobra,
+                 obr07_processo AS l20_edital,
+                 pctipocompratribunal.l44_descricao AS l03_descr,
+                 NULL AS l20_numero,
+                 obr07_objeto AS l20_objeto,
+                 obr01_dtlancamento";
+        $sql .= " from licobras ";
+        $sql .= " inner join licobraslicitacao on obr07_sequencial = obr01_licitacao ";
+        $sql .= " inner join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
+        $sql2 = "";
+        if ($dbwhere=="") {
+            if ( $obr01_sequencial != "" && $obr01_sequencial != null) {
+                $sql2 = " where obr01_sequencial = $obr01_sequencial";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null ) {
+            $sql .= " order by ";
+            $campos_sql = explode("#", $ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++) {
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 
   // funcao do sql
   function sql_query_file ( $obr01_sequencial = null,$campos="*",$ordem=null,$dbwhere="") {

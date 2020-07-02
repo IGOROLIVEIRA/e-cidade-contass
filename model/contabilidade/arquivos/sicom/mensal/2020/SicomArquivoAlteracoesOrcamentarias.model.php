@@ -203,7 +203,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 o46_codlei AS codreduzidodecreto,
                 o39_numero AS nrodecreto,
                 (CASE
-                WHEN o46_tiposup IN (1002, 1004, 1005, 1006, 1007, 1008, 1009, 1010) THEN 2
+                WHEN o46_tiposup IN (1002, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012) THEN 2
                 WHEN o46_tiposup IN (1001, 1003) THEN 1
                 WHEN o46_tiposup = 1012 THEN 6
                 WHEN o46_tiposup = 1013 THEN 7
@@ -301,8 +301,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         $claoc12->si40_tiporegistro = 12;
                         $claoc12->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
 
-                        
-                        
+                        if ($oDados11->tipodecretoalteracao == 2) {
+                            $oDados12->o138_altpercsuplementacao = "LAO";
+                        }
                         
                         $claoc12->si40_nroleialteracao  = substr($oDados12->nroleialteracao, 0, 6);
                         $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
@@ -335,8 +336,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 o46_codlei as codreduzidodecreto,
                 (case when o46_tiposup = 1001 or o46_tiposup = 1006 then 3
                 when o46_tiposup = 1002 then 4
-                when o46_tiposup = 1003 then 1
-                when o46_tiposup in (1004,1005,1007,1008,1009,1010) then 2
+                when o46_tiposup in (1003, 1008) then 1
+                when o46_tiposup in (1004,1005,1007,1009,1010) then 2
                 else 98
                 end
                 ) as tipoDecretoAlteracao,
@@ -383,8 +384,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 CASE
                 WHEN o46_tiposup = 1001 OR o46_tiposup = 1006 THEN 3
                 WHEN o46_tiposup = 1002 THEN 4
-                WHEN o46_tiposup = 1003 THEN 1
-                WHEN o46_tiposup IN (1004, 1005, 1007, 1008, 1009, 1010) THEN 2
+                WHEN o46_tiposup IN (1003, 1008) THEN 1
+                WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010) THEN 2
                 ELSE 98
                 END AS tipoDecretoAlteracao,
                 si09_codorgaotce AS codOrgao,

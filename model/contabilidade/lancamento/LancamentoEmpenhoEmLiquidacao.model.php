@@ -64,7 +64,7 @@ class LancamentoEmpenhoEmLiquidacao {
     /**
      * Material permanente
      */
-    if (in_array($iCodigoDocumentoExecutar, array(208, 209))) {
+    if (in_array($iCodigoDocumentoExecutar, array(208, 209, 214, 215))) {
 
       $oLancamentoAuxiliarEmLiquidacao = new LancamentoAuxiliarEmLiquidacaoMaterialPermanente();
       $oLancamentoAuxiliarEmLiquidacao->setClassificacao($oStdDadosLancamento->oClassificacao);
@@ -128,6 +128,16 @@ class LancamentoEmpenhoEmLiquidacao {
       } else {
         $oEventoContabil = $oEventoContabilRP;
       }
+    } elseif ($oEmpenhoFinanceiro->getAnoUso() < $iAnoUsu && $oEmpenhoFinanceiro->isMaterialPermanente()) {
+
+      $oEventoContabilRP = new EventoContabil(214, $iAnoUsu);
+
+      if ($oEventoContabil->estorno()) {
+        $oEventoContabil = $oEventoContabilRP->getEventoInverso();
+      } else {
+        $oEventoContabil = $oEventoContabilRP;
+      }
+
     }
 
     return self::executarLancamentoContabil($oEventoContabil, $oStdDadosLancamento);

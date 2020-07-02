@@ -228,7 +228,7 @@ $cllicobrasituacao->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobrasituacao',
-        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
+        'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
     }else{
 
@@ -236,7 +236,7 @@ $cllicobrasituacao->rotulo->label();
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_licobrasituacao',
-          'func_licobras.php?pesquisa_chave='+
+          'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr02_seqobra.value+'&funcao_js=parent.js_preencheObra2',
           'Pesquisa',false);
       }else{
