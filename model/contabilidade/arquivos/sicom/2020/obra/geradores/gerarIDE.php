@@ -61,7 +61,6 @@ class GerarIDE extends GerarAM
         $aIDE['si11_mesreferencia'] = str_pad($aIDE['si11_mesreferencia'], 2, "0", STR_PAD_LEFT);
         $aIDE['si11_datageracao'] = implode("", array_reverse(explode("-", $aIDE['si11_datageracao'])));
         $aIDE['si11_codcontroleremessa'] = substr($aIDE['si11_codcontroleremessa'], 0, 20);
-        $aIDE['si11_codcontroleremessa2'] = substr($aIDE['si11_codcontroleremessa2'], 0, 20);
 
         $this->sLinha = $aIDE;
         $this->adicionaLinha();

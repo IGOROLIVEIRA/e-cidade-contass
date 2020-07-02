@@ -3,9 +3,79 @@
 class cl_scripts { 
 
   var $erro_msg   = null;
+  var $erro       = false;
 
   function cl_scripts() { 
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+  }
+
+   // funcões
+  function alteraDocumento ($lancamento,$proximodoc, $anteriordoc){
+
+
+    if(!in_array($anteriordoc, array('160','161','162','163','100'))){
+        $this->erro_msg = "Se o documento $anteriordoc não pode ser alterado, só é permitido aterar os documentos 160,161,162,163,100";
+        $this->erro = true;
+        return false;
+    }
+
+    
+      if($anteriordoc == '160'){
+    if(!in_array($proximodoc, array('150','130'))){
+        $this->erro_msg = 'Se o lançamento contábil for do documento 160, o sistema permitirá alterar para os documentos 150 e 130';
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if($anteriordoc == '161'){
+    if(!in_array($proximodoc, array('151','120'))){
+        $this->erro_msg = 'Se o lançamento contábil for do documento 161, o sistema permitirá alterar para os documentos 151 e 120';
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if($anteriordoc == '162'){
+    if(!in_array($proximodoc, array('152','131'))){
+        $this->erro_msg = 'Se o lançamento contábil for do documento 162, o sistema permitirá alterar para os documentos 152 e 131';
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if($anteriordoc == '163'){
+    if(!in_array($proximodoc, array('153','121'))){
+        $this->erro_msg = 'Se o lançamento contábil for do documento 163, o sistema permitirá alterar para os documentos 153 e 121';
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if($anteriordoc == '100'){
+    if(!in_array($proximodoc, array('101','115','116','122','123','124','125','126','127','418','419'))){
+        $this->erro_msg = 'Se o lançamento contábil for do documento 100, o sistema permitirá alterar para os documentos 101,115,116,122,123,124,125,126,127,418 e 419';
+        $this->erro = true;
+        return false;
+    }
+  }
+     
+    $result = db_query("update conlancamdoc set c71_coddoc=$proximodoc where c71_codlan = '$lancamento'");
+
+    if($result===false){
+       $this->erro_msg = @pg_last_error();
+       $this->erro = true;
+       return false;
+    }
+ 
+     $this->erro_msg = "";
+     $this->erro_msg = "Alteração efetuada com Sucesso\\n Aviso: é necessário realizar o reprocessamento do lançamento no Módulo Contabilidade - Procedimentos - Utilitários da Contabilidade - Processa Lançamentos";
+ 
+     $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
+     $seq   = pg_result($resmanut,0,0);
+     $result = db_query("insert into db_manut_log values($seq,'Alt Documento: ".$anteriordoc." para ".$proximodoc." no lançamento ". $lancamento ."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     
+     return true;
   }
 
   function excluiEmpenho ($seq_emp){ 

@@ -182,14 +182,12 @@ switch($oParam->exec) {
       }
       system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-//echo "<pre>"; print_r($arquivosgerados);exit;
+
       if($arquivosgerados[0] != null){
 
         foreach ($arquivosgerados as $arq) {
           $aListaArquivospdf .= " ".$arq;
-          if (file_exists("$arq")){
             $oEscritorPDF->adicionarArquivo("$arq", "$arq");
-          }
         }
         $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
 

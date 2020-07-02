@@ -470,11 +470,11 @@ class cl_histbem {
      $sql .= " from histbem ";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = histbem.t56_depart";
      $sql .= "      inner join bens  on  bens.t52_bem = histbem.t56_codbem";
-     $sql .= "      inner join situabens  on  situabens.t70_situac = histbem.t56_situac";
+     $sql .= "      left join situabens  on  situabens.t70_situac = histbem.t56_situac";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = bens.t52_numcgm";
      $sql .= "      inner join db_depart a  on  a.coddepto = bens.t52_depart";
      $sql .= "      inner join clabens  on  clabens.t64_codcla = bens.t52_codcla";
-     $sql .= "      inner join histbemtrans on t97_histbem = t56_histbem";
+     $sql .= "      left join histbemtrans on t97_histbem = t56_histbem";
      $sql2 = "";
      if($dbwhere==""){
        if($t56_histbem!=null ){
@@ -510,7 +510,7 @@ class cl_histbem {
      $sql .= " from histbem ";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = histbem.t56_depart";
      $sql .= "      inner join bens  on  bens.t52_bem = histbem.t56_codbem";
-     $sql .= "      inner join situabens  on  situabens.t70_situac = histbem.t56_situac";
+     $sql .= "      left join situabens  on  situabens.t70_situac = histbem.t56_situac";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = bens.t52_numcgm";
      $sql .= "      inner join db_depart a  on  a.coddepto = bens.t52_depart";
      $sql .= "      inner join clabens  on  clabens.t64_codcla = bens.t52_codcla";
