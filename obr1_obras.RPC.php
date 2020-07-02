@@ -72,11 +72,17 @@ switch($oParam->exec) {
 
   case 'alterarAnexo':
 
-    $cllicobrasanexos = new cl_licobrasanexo();
-    $ultimoregistro = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"max(obr04_sequencial) as obr04_sequencial",null,""));
-    db_fieldsmemory($ultimoregistro,0);
-    $cllicobrasanexos->obr04_legenda = $oParam->legenda;
-    $cllicobrasanexos->alterar($obr04_sequencial);
+      $cllicobrasanexos = new cl_licobrasanexo();
+      $rsAnexo =  $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_licobrasmedicao = $oParam->codmedicao and obr04_legenda like '%foto sem legenda%'"));
+      if(pg_num_rows($rsAnexo) == 1){
+          $ultimoregistro = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"max(obr04_sequencial) as obr04_sequencial",null,""));
+          db_fieldsmemory($ultimoregistro,0);
+          $cllicobrasanexos->obr04_legenda = $oParam->legenda;
+          $cllicobrasanexos->alterar($obr04_sequencial);
+      }else{
+          $oRetorno->status = 2;
+          $oRetorno->message = "Erro ! Arquivo nao excluido contate o Suporte.";
+      }
 
     break;
 
