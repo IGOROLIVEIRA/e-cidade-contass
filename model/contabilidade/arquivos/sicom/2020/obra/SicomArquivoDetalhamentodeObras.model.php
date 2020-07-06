@@ -286,7 +286,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras302020->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;
       $clcadobras302020->si201_valormedicao = $oDados30->obr03_vlrmedicao;
       $clcadobras302020->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
+//      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
       $clcadobras302020->si201_instit = db_getsession("DB_instit");
       $clcadobras302020->incluir(null);
 
