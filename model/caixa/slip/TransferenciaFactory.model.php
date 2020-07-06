@@ -85,7 +85,9 @@ class TransferenciaFactory {
     	case 11:
     	case 12:
     	case 13:
-    	case 14:
+      case 14:
+      case 15:
+      case 16:
     	  
         require_once("model/caixa/slip/DepositoDiversos.model.php");
         $oDepositoDiversos = new DepositoDiversos($iCodigoSlip);

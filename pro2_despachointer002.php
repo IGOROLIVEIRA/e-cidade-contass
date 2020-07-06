@@ -47,21 +47,6 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $sTipoDespacho       = "Despacho";
 
-$result_procandamint = $clprocandamint->sql_record($clprocandamint->sql_query_sim($codprocandamint));
-
-//echo $clprocandamint->sql_query_sim($codprocandamint);exit;
-
-if ( $clprocandamint->numrows > 0 ) {
-  db_fieldsmemory($result_procandamint, 0);
-    $oNumeroProcesso = db_utils::fieldsMemory($result_procandamint, 0);
-    $data = $oNumeroProcesso->p78_data;
-    $hora = $oNumeroProcesso->p78_hora;
-    $usuarios = $oNumeroProcesso->nome;
-    $despacho      = $p78_despacho;
-  $sTipoDespacho = $p100_descricao;
-
-}
-
 $public        = "Não";
 if ( $p78_publico == 't' ) {
   $public = "Sim";
@@ -84,9 +69,9 @@ if ( $clprotprocesso->numrows > 0 ) {
 }
 $head2 = "PROCESSO N° $sNumeroProcesso";
 $head3 = "INCLUSÃO DE ".mb_strtoupper($sTipoDespacho);
-$head4 = "Data: ".implode("/",(array_reverse(explode("-",$data))));
-$head5 = "Hora: ".$hora;
-$head6 = "Usuário: ".$usuarios;
+$head4 = "Data: ".implode("/",(array_reverse(explode("-",$dataand))));
+$head5 = "Hora: ".$horaand;
+$head6 = "Usuário: ".utf8_decode($usuario);
 $head7 = "Público: ".@$public;
 
 $pdf = new PDF();
