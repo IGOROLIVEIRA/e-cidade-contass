@@ -227,6 +227,7 @@ if ($modelo == 1) {
 
         $troca = 1;
         $total_unit = 0;
+        $total_tot = 0;
         $total_percentualdesconto = 0;
         $total_percentualdescontotaxa = 0;
         $iContOrcamento = 0;
@@ -288,6 +289,7 @@ if ($modelo == 1) {
 
             $pdf->cell(20, $alt, number_format($pc23_valor,2,',','.'), 1, 1, "R", 0);
             $total_unit  += $pc23_vlrun;
+            $total_tot   += $pc23_valor;
             $total_percentualdesconto += $pc23_percentualdesconto;
             $total_percentualdescontotaxa += $pc23_perctaxadesctabela;
 
@@ -323,11 +325,7 @@ if ($modelo == 1) {
                 $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
                 $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
                 $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-//            } else {
-//                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
-//                $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
-//                $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-//            }
+
         }else{
             $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
 
@@ -338,12 +336,8 @@ if ($modelo == 1) {
                 $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4), 0, 0, "R", 0);
             }
             /*FIM - OC3770*/
-
-            //if ($quant_casas == 2) {
-                $pdf->cell(20, $alt, number_format(($total_unit / $iContOrcamento) * $quant,2), 0, 1, "R", 0);
-//            } else {
-//                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, 2, ',', '.'), 0, 1, "R", 0);
-//            }
+            $total_media_unitario = $total_tot / $iContOrcamento;
+            $pdf->cell(20, $alt, number_format($total_media_unitario,2), 0, 1, "R", 0);
 
             $pdf->cell(279, $alt, '', '', 1, "L", 0);
                 $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
