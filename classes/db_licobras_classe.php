@@ -461,7 +461,8 @@ class cl_licobras {
                  obr07_processo AS l20_edital,
                  pctipocompratribunal.l44_descricao AS l03_descr,
                  NULL AS l20_numero,
-                 obr07_objeto AS l20_objeto";
+                 obr07_objeto AS l20_objeto,
+                 obr01_dtlancamento";
         $sql .= " from licobras ";
         $sql .= " inner join licobraslicitacao on obr07_sequencial = obr01_licitacao ";
         $sql .= " inner join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";

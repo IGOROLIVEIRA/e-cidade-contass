@@ -3066,27 +3066,33 @@ class Acordo
                 $oNovoItem->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oItem->resumo)));
                 $oNovoItem->setUnidade($oItem->unidade);
                 $oNovoItem->setTipoControle(AcordoItem::CONTROLE_DIVISAO_QUANTIDADE);
+                if($oItem->controlaServico == "true"){
+                    $oNovoItem->setServicoQuantidade(true);
+                }else{
+                    $oNovoItem->setServicoQuantidade(false);
+                }
 
                 if (!empty($oItem->aPeriodos)) {
                     $oNovoItem->setPeriodos($oItem->aPeriodos);
                 }
             }
-            if (in_array($iTipoAditamento, array(
-                    4,
-                    7
-                )) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem)) {
-                /**
-                 * Verifica se houve alteração de quantidade/valor
-                 */
-                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
-                    $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
-                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_ACRESCIMOITEM);
-                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario < $oItemContrato->getValorUnitario()) {
-                    $aTiposAlteracao[] = AcordoPosicao::TIPO_DECRESCIMOITEM;
-                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_DECRESCIMOITEM);
-                }
-
-            }
+            //removido OC12680
+//            if (in_array($iTipoAditamento, array(
+//                    4,
+//                    7
+//                )) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem)) {
+//                /**
+//                 * Verifica se houve alteração de quantidade/valor
+//                 */
+//                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
+//                    $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
+//                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_ACRESCIMOITEM);
+//                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario < $oItemContrato->getValorUnitario()) {
+//                    $aTiposAlteracao[] = AcordoPosicao::TIPO_DECRESCIMOITEM;
+//                    $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_DECRESCIMOITEM);
+//                }
+//
+//            }
             $oNovoItem->setQuantidade((float) $oItem->quantidade);
             $oNovoItem->setValorAditado((float) $oItem->valoraditado); //OC5304
             $oNovoItem->setQuantiAditada((float) $oItem->quantiaditada); //OC5304

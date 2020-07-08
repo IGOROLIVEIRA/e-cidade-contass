@@ -66,6 +66,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     }
     $this->objpdf->text($xcol + 2, $xlin + 43, 'Processo');
     $this->objpdf->text($xcol + 46, $xlin + 43, 'Nº da Modalidade');
+    if($this->acordo != ''){
+        $this->objpdf->text($xcol + 2, $xlin + 46.5, 'Acordo');
+    }
     $this->objpdf->text($xcol + 2, $xlin + 50, 'Tipo de Compra');
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 2, $xlin + 47, 'Prazo Entrega');
@@ -99,6 +102,11 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
     $this->objpdf->text($xcol + 17, $xlin + 43, ':  ' . $this->edital_licitacao);
     $this->objpdf->text($xcol + 70, $xlin + 43, ': ' . $this->modalidade);
+
+    if($this->acordo && $this->anoacordo){
+        $this->objpdf->text($xcol + 17, $xlin + 46.5, ':  ' . $this->acordo.'/'.$this->anoacordo);
+    }
+
     $this->objpdf->text($xcol + 24, $xlin + 50, ':  ' . $this->descr_tipocompra);
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 22, $xlin + 47, ':  ' . $this->prazo_ent);

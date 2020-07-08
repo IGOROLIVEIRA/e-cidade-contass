@@ -6,7 +6,7 @@ $cllicobrasmedicao->rotulo->label();
   <legend>Medição da Obra</legend>
   <form name="form1" method="post" action="">
     <table border="0" style="margin-left: -4%;">
-      <tr style="display: none">
+      <tr style="">
         <td nowrap title="<?=@$Tobr03_sequencial?>">
           <input name="oid" type="hidden" value="<?=@$oid?>">
           <?=@$Lobr03_sequencial?>
@@ -387,7 +387,10 @@ $cllicobrasmedicao->rotulo->label();
     var oRetorno = eval('('+oAjax.responseText+")");
 
     if (oRetorno.status == 2) {
-      alert(oRetorno.message);
+      alert("ja existe Anexo Salvo");
+        $('uploadfile').value     = '';
+        $('namefile').value       = '';
+        $("obr04_legenda").value  = "";
     }else {
       alert("Anexo Salvo com Sucesso !");
       $('uploadfile').value     = '';
