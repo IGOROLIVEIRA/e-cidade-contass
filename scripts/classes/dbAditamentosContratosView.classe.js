@@ -950,7 +950,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.valor          = oItem.valor;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
-            // oItemAdicionar.controlaServico = oItem.
+            oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
 
             // console.log('Qtde anterior: ', oItem.qtdeanterior);
@@ -997,6 +997,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[13].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
                 oItemAdicionar.servico = oItem.servico;
+                oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
                 var qtanter = oSelecionados[iIndice].aCells[3].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
