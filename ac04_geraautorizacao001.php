@@ -726,7 +726,7 @@ if($x->consultarDataDoSistema == true){
 
                 if (oItem.dotacoes.length == 1) {
 
-                    oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
+                    oDotItem.quantidade -= oDotItem.executado/oItem.valorunitario;
                     oDotItem.quantdot = oDotItem.quantidade;
 
                 } else {
@@ -749,7 +749,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[1] = oItem.material.urlDecode();
 
             // Quantidade
-            aLinha[2] = js_formatar(oItem.quantidade, 'f',iCasasDecimais);
+            aLinha[2] = oItem.quantidade;
 
             // Valor unitário
             aLinha[3] = oItem.valorunitario;
@@ -1064,7 +1064,7 @@ if($x->consultarDataDoSistema == true){
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
 
                 oDotacao.valorexecutar = nValue;
-                var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",iCasasDecimais));
+                var nQuant = oGridDotacoes.aRows[iDot].aCells[2].getValue();
                 oDotacao.quantidade = nQuant;
             });
             oGridItens.aRows[iLinha].select(true);
@@ -1097,7 +1097,7 @@ if($x->consultarDataDoSistema == true){
             if(tipo == 2) {
                 aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "',1)");
             }else{
-                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDotacao.quantidade + "')");
+                aLinha[2] = eval("quantdot" + iDot + " = new DBTextField('quantdot" + iDot + "','quantdot" + iDot + "','" + oDadosItem.aCells[6].getValue() + "')");
             }
             aLinha[2].addStyle("text-align","right");
             aLinha[2].addStyle("height","100%");
@@ -1158,7 +1158,7 @@ if($x->consultarDataDoSistema == true){
             if (aItensPosicao[iLinha].dotacoes.length >= 1 && lAjustaDot==false) {
 
                 var nQuantDot  = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
-                aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit*nQuantDot,iCasasDecimais);
+                aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = nValorUnit*nQuantDot;
                 return;
 
             }
@@ -1200,7 +1200,7 @@ if($x->consultarDataDoSistema == true){
             }else{
                 var nNovaQuantDot = 1;
             }
-            oGridDotacoes.aRows[iDot].aCells[2].content.setValue(js_round(nNovaQuantDot,iCasasDecimais));
+            oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nNovaQuantDot);
             $("quantdot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[2].getValue();
         }
     }
@@ -1215,7 +1215,7 @@ if($x->consultarDataDoSistema == true){
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())).toFixed(2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant*Number(oDadosItem.aCells[4].getValue())));
             $("valordot"+iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f",2);
         }
     }
@@ -1347,9 +1347,9 @@ if($x->consultarDataDoSistema == true){
                     aLinha    = new Array();
                     aLinha[0] = oItem.codigo;
                     aLinha[1] = sImg+oItem.descricao.urlDecode();
-                    aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
-                    aLinha[3] = js_formatar(oItem.valorunitario, "f",iCasasDecimais);
-                    aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
+                    aLinha[2] = oItem.quantidade;
+                    aLinha[3] = js_formatar(oItem.valorunitario, "f",4);
+                    aLinha[4] = js_formatar(oItem.valor, "f",2);
                     oGridAutorizacoes.addRow(aLinha);
                     iLinha++;
                 });
