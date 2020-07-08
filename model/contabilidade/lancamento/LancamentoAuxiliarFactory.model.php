@@ -61,6 +61,8 @@ class LancamentoAuxiliarFactory {
       case "161":
       case "162":
       case "163":
+      case "164":
+      case "165":
         return LancamentoAuxiliarSlip::getInstance($iLancamento);
       break;
 

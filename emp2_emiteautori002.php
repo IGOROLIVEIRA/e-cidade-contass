@@ -189,6 +189,7 @@ $sqlmater = "
 	  order by e54_autori
 	  ";
 $result = db_query($sqlmater);
+
 $newResult = $result;
 if (pg_numrows($result)==0){
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado ! ");
@@ -478,6 +479,14 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
         $pdf1->descr_tipocompra = $pc50_descr;
         $pdf1->descr_modalidade = '';
     }
+
+    $sSql = "SELECT ac16_numero, ac16_anousu FROM acordo where ac16_numeroprocesso like '%".$pdf1->edital_licitacao."'";
+    $rsSql = db_query($sSql);
+
+    $oAcordo = db_utils::fieldsMemory($rsSql, 0);
+
+    $pdf1->acordo = $oAcordo->ac16_numero;
+    $pdf1->anoacordo = $oAcordo->ac16_anousu;
 
     if (isset($resumo_lic)&&$resumo_lic!=""){
         if (isset($e54_resumo) && trim($e54_resumo) != ""){
