@@ -45,7 +45,7 @@ $sTitulo              = null;
 $db_opcao             = 1;
 $oGet                 = db_utils::postMemory($_GET);
 $sTitulo              = 'Operações Extra-Orçamentárias';
-$aCodigoDocumentos    = array( 120, 130, 140, 150, 151, 160, 161, 121, 131, 141, 152, 153, 162, 163);
+$aCodigoDocumentos    = array( 120, 130, 140, 150, 151, 160, 161, 121, 131, 141, 152, 153, 162, 163, 164, 165);
 
 $sDocumentos = implode(', ', $aCodigoDocumentos);
 

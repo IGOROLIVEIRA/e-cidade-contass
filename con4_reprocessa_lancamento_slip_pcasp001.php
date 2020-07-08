@@ -220,6 +220,10 @@ if (isset($_POST["processar"])) {
 
               $iTipoVerificar = 14;
               break;
+
+            case 15:
+              $iTipoVerificar = 16;
+              break;
          }
        }
 
