@@ -134,7 +134,7 @@ function js_verquant(nome,val,max,param){
     if(verpos==1){
       vltot = new Number(valpos*val);
       /*
-       *    Função js_roundDecimal() substituída pela toFixed()
+       *    Função js_roundDecimal() substituída pela toFixed() 
        */
       eval("document.form1.valor_"+param+".value='"+js_roundDecimal(vltot,2)+"'");
     }else if(verpos==2){
@@ -158,22 +158,25 @@ function js_calcvaltot(valor,param,nome){
       dec = 2;
     }
     quant = eval("document.form1.qtde_"+param+".value");
+
     valortotal = new Number(eval("document.form1.valor_"+param+".value"));
-
-    if(quant!=''){
-
-      if(valor == "")
-        valor = 0;
+    //$("valor_"+param).value = 9;
+    if(valor!='' && quant!=''){
       valor = new Number(valor);
       quant = new Number(quant);
-      valor2 = valor.toFixed(4);
-      valortotal = new Number(quant*valor2);
+      valortotal = new Number(quant*valor);
+      document.getElementById("valor_"+param).value = valortotal;
     }
+    if(valor==""){
+      valor = 0;
+    }
+    /*
+     *    Função js_roundDecimal() substituída pela toFixed() 
+     */
+      document.getElementById("valor_"+param).value = js_roundDecimal(valortotal,2);
 
-    eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
-    eval("document.form1."+nome+".value='"+valor.toFixed(<?=$numdec?>)+"'");
-    if(valortotal==0){
-      eval("document.form1."+nome+".value='0'");
+      if(valortotal==0){
+      eval("document.form1."+nome+".value='0.00'");
     }
   }else{
     eval("document.form1.vlrun_"+param+".value=''");
@@ -625,7 +628,7 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
        echo "
           </td>
     <td align='center'  class='$class' width='15%'>";
-    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
+    db_input("valor_$pc22_orcamitem",10,$Ipc23_valor,true,'text',($pc01_taxa == 'f') ? 1 : 3,"onchange=\"js_calcvalunit(this.value,$pc22_orcamitem,this.name);js_passacampo(this.name,this.name.substr(0,6));js_somavalor();js_calcvaltot(this.value,$pc22_orcamitem,this.name);\" $disabled");
         echo"
           </td>
         </tr>";

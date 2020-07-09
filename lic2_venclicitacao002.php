@@ -76,9 +76,9 @@ $head2 = "Vencedores da Licitação";
 $head3 = @$info;
 $head4 = @$info1;
 $head5 = @$info2;
-$pdf   = new PDF();
-$pdf->Open();
-$pdf->AliasNbPages();
+$pdf   = new PDF(); 
+$pdf->Open(); 
+$pdf->AliasNbPages(); 
 $total = 0;
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
@@ -93,25 +93,25 @@ $oInfoLog    = array();
 for ($i = 0; $i < $numrows; $i++) {
 
   db_fieldsmemory($result,$i);
-
+  
   if (empty($l20_procadmin)) {
-
+  
     $oDAOLiclicitaproc    = db_utils::getDao("liclicitaproc");
     $sSqlProcessoSistema  = $oDAOLiclicitaproc->sql_query(null,"*", null, "l34_liclicita = {$l20_codigo}");
     $rsProcessoSistema    = $oDAOLiclicitaproc->sql_record($sSqlProcessoSistema);
-
+    
     if ($oDAOLiclicitaproc->numrows == 1) {
-
+  
       $oLiclicitaproc = db_utils::fieldsMemory($rsProcessoSistema, 0);
       $l20_procadmin  = substr($oLiclicitaproc->p58_numero ."/". $oLiclicitaproc->p58_ano . " - " . $oLiclicitaproc->p51_descr , 0, 120);
     }
   }
-
+  
   $oLicitacao = new licitacao($l20_codigo);
   /**
    * itens da autorização para pegar fornecedor e saldo dos itens
    */
-
+  
   if ($l20_licsituacao == 3) {
     $oInfoLog = $oLicitacao->getInfoLog();
   }
@@ -141,11 +141,11 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->setfont('arial','',7);
   $pdf->cell(60,$alt,$l20_codtipocom.' - '.$l03_descr,0,1,"L",0);
 
-  $pdf->setfont('arial','b',8);
-  $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0);
+  $pdf->setfont('arial','b',8); 
+  $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0); 
   $pdf->setfont('arial','',7);
   $pdf->cell(30,$alt,db_formatar($l20_dataaber,'d'),0,0,"L",0);
-
+  
   $pdf->setfont('arial','b',8);
   $pdf->cell(30,$alt,'Número :',0,0,"R",0);
   $pdf->setfont('arial','',7);
@@ -155,21 +155,21 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->cell(30,$alt,'Objeto :',0,0,"R",0);
   $pdf->setfont('arial','b',8);
   $pdf->multicell(150,$alt,$l20_objeto,0,"L",0);
-
+  
   $result_sec=$clliclicitem->sql_record($clliclicitem->sql_query_orc(null,"distinct o40_descr",null,"l21_codliclicita = $l20_codigo"));
 
-  $pdf->cell(190,$alt,'','T',1,"L",0);
-  $result_dataaut=$clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct e54_emiss,e54_autori","e54_autori","l20_codigo=$l20_codigo"));
+  $pdf->cell(190,$alt,'','T',1,"L",0); 
+  $result_dataaut=$clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct e54_emiss,e54_autori","e54_autori","l20_codigo=$l20_codigo"));  
 
   $result_orcam     = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_gerautlic(null, null, "distinct z01_numcgm,z01_nome,pcorcam.pc20_dtate,pcorcam.pc20_hrate", "z01_nome", "l20_codigo=$l20_codigo and pc24_pontuacao=1 and pc10_instit=".db_getsession("DB_instit")));
-  $numrows_orcam    = $clpcorcamjulg->numrows;
+  $numrows_orcam    = $clpcorcamjulg->numrows;  	
   $result_valorcam  = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_gerautlic(null, null, "sum(pc23_valor)as valor_adj", "", "l20_codigo=$l20_codigo and pc24_pontuacao=1 and pc10_instit=".db_getsession("DB_instit")));
   $numrows_valorcam = $clpcorcamjulg->numrows;
-
-
+  
+  
 
     $troca        = 1;
-
+    
       $sSql = "select
                  liclicitem.l21_ordem,
                  pcmater.pc01_codmater,
@@ -198,20 +198,20 @@ for ($i = 0; $i < $numrows; $i++) {
                       left  join solicitemunid    on solicitem.pc11_codigo          = solicitemunid.pc17_codigo
                       left  join matunid          on solicitemunid.pc17_unid        = matunid.m61_codmatunid
                       inner join cgm              on pcorcamforne.pc21_numcgm       = cgm.z01_numcgm
-                 where liclicita.l20_codigo = {$l20_codigo} and pc24_pontuacao = 1
+                 where liclicita.l20_codigo = {$l20_codigo} and pc24_pontuacao = 1 
                  order by cgm.z01_numcgm,liclicitem.l21_ordem";
-
+      
     $result_itens = $clliclicitem->sql_record($sSql);
     //db_criatabela($result_itens);exit;
     if ($l20_licsituacao == 3) {
-      $clliclicitem->numrows = count($oInfoLog->item);
+      $clliclicitem->numrows = count($oInfoLog->item); 
     }
     if ($clliclicitem->numrows > 0) {
     	$muda_fornecedor = '';
       for ($w = 0; $w < $clliclicitem->numrows; $w++) {
 
         db_fieldsmemory($result_itens,$w);
-
+        
         if ($muda_fornecedor != $fornecedor) {
         	$troca = 1;
           if ($muda_fornecedor != '') {
@@ -219,15 +219,15 @@ for ($i = 0; $i < $numrows; $i++) {
             $pdf->cell(20,$alt,'','T',0,"C",0);
             $pdf->cell(20,$alt,'','T',0,"C",0);
             $pdf->cell(20,$alt,db_formatar($valortot,"f"),'T',1,"C",0);
-
+            
             $total = 0;
-            $quantotal = 0;
+            $quantotal = 0; 
             $valorunitot = 0;
             $valortot = 0;
           }
         	$muda_fornecedor = $fornecedor;
         }
-
+          
         if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ) {
 
           if ($pdf->gety() > $pdf->h - 30) {
@@ -235,7 +235,7 @@ for ($i = 0; $i < $numrows; $i++) {
           }
           $pdf->setfont('arial','b',8);
           $pdf->cell(190,$alt,"",0,1,"L",0);
-          $pdf->cell(190,$alt,"Fornecedor: $fornecedor",0,1,"L",0);
+          $pdf->cell(190,$alt,"Fornecedor: $fornecedor",0,1,"L",0); 
           $pdf->cell(10,$alt,"Item",1,0,"C",1);
           $pdf->cell(90,$alt,'Descrição Material',1,0,"C",1);
           $pdf->cell(30,$alt,'Unidade',1,0,"C",1);
@@ -245,31 +245,31 @@ for ($i = 0; $i < $numrows; $i++) {
           $troca = 0;
           $p     = 0;
         }
-        $pdf->setfont('arial','',7);
+        $pdf->setfont('arial','',7);  		
         $pdf->cell(10,$alt,$l21_ordem,0,0,"C",$p);
         $pdf->cell(90,$alt,ucfirst(strtolower(substr($pc01_descrmater,0,70))),0,0,"L",$p);
         $pdf->cell(30,$alt,$m61_descr,0,0,"L",$p);
         $pdf->cell(20,$alt,$pc11_quant,0,0,"C",$p);
-        $pdf->cell(20,$alt,$pc11_vlrun,0,0,0,"C",$p);
+        $pdf->cell(20,$alt,db_formatar($pc11_vlrun,"f"),0,0,"C",$p);
         $pdf->cell(20,$alt,db_formatar(($pc11_quant*$pc11_vlrun),"f"),0,1,"C",$p);
-
+       
         $total++;
-        //$quantotal += $pc11_quant;
+        //$quantotal += $pc11_quant; 
         //$valorunitot += $pc11_vlrun;
         $valortot += $pc11_vlrun * $pc11_quant;
-
+                
       }
       $pdf->cell(130,$alt,'Total: ','T',0,"L",0);
       $pdf->cell(20,$alt,'','T',0,"C",0);
       $pdf->cell(20,$alt,'','T',0,"C",0);
       $pdf->cell(20,$alt,db_formatar($valortot, "f"),'T',1,"C",0);
-
+      
     }
     $total = 0;
-    $quantotal = 0;
+    $quantotal = 0; 
     $valorunitot = 0;
     $valortot = 0;
-
+  
 }
 $pdf->Output();
 ?>

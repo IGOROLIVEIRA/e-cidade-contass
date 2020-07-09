@@ -1256,6 +1256,9 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
+        } else {
+            $sql .= $virgula . " l20_dtpubratificacao = null";
+            $virgula = ",";
         }
 
         if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {

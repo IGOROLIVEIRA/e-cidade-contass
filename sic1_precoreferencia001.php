@@ -62,7 +62,7 @@ if (isset($incluir)) {
             $sFuncao = "min";
         }
 
-        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+        $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),$quant_casas) as valor,
                     round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                     round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                       from pcproc
