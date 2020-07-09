@@ -88,14 +88,14 @@ if(isset($opcao) && $opcao=="alterar"){
 function js_calcula(origem) {
   obj   = document.form1;
   quant = new Number(obj.e55_quant.value);
-  uni   = new Number(obj.e55_vluni.value).toFixed(4);
+  uni   = new Number(obj.e55_vluni.value);
   tot   = new Number(obj.e55_vltot.value).toFixed(2);
 
   conQt = 'false';
 
   if (document.querySelector('#lControlaQuantidade')){
     conQt = obj.lControlaQuantidade.value;
-  }
+  } 
 
   if (conQt == 'true') {
     t = new Number(uni * quant);
@@ -140,10 +140,6 @@ function js_calcula(origem) {
     }
   }
 
-}
-function js_arredondarvlrun(value) {
-  console.log('teste');
-  document.form1.e55_vluni.value = js_formatar(value,'f',4);
 }
 
 function js_verificaControlaQuantidade(lControla) {
@@ -326,7 +322,7 @@ function js_troca(codele) {
             }
             $e55_vluni=$e55_vlrun;
           }
-          db_input('e55_vluni',10,$Ie55_vltot,true,'text',1,"onchange=\"js_calcula('uni');js_arredondarvlrun(this.value)\"");
+          db_input('e55_vluni',10,$Ie55_vltot,true,'text',1,"onchange=\"js_calcula('uni');\"");
         ?>
         <?=@$Le55_vltot?>
         <?
