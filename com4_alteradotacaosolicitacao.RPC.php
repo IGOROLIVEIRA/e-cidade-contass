@@ -33,6 +33,8 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("std/db_stdClass.php");
 require_once("model/itemSolicitacao.model.php");
+require_once("model/Acordo.model.php");
+require_once("model/AcordoItem.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/empenho/AutorizacaoEmpenho.model.php");
 require_once("classes/solicitacaocompras.model.php");
@@ -242,6 +244,33 @@ switch($oParam->exec) {
 		}
 		break;
 
+	case "alteraDotacoesAcordo":
+
+		try {
+			db_inicio_transacao();
+
+			$iAcordo = $oParam->iCodigoAcordo;
+
+			$oAcordo = new Acordo($iAcordo);
+
+			if(count($oAcordo->getAutorizacoes())){
+				throw new Exception('Acordo já autorizado!');
+			}
+
+			$aItens = $oParam->aItens;
+
+			foreach ($oParam->aItens as $oItem) {
+				$oAcordoItem = AcordoItem::alterarDotacao($oItem->iCodigoDotacaoItem, $oItem->iCodigoDotacao, $oItem->iAnoDotacao, $iAcordo, $oItem->iCodigoItem);
+			}
+
+			db_fim_transacao(false);
+
+		} catch (Exception $eErro) {
+
+			$oRetorno->status = 2;
+			$oRetorno->message = urlencode($eErro->getMessage());
+		}
+		break;
 
 	case 'getAcordoDotacoes':
 
@@ -254,7 +283,6 @@ switch($oParam->exec) {
 				 ac20_acordoposicao = (SELECT max(ac26_sequencial)
 										 FROM acordoposicao
 										 WHERE ac26_acordo = $oParam->iCodigoAcordo)";
-
 		$rsDotacoes = db_query($sql);
 
 		if (pg_num_rows($rsDotacoes) == 0) {

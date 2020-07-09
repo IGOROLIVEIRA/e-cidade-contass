@@ -544,6 +544,63 @@ class AcordoItem {
     }
   }
 
+	/**
+	 * Realiza a alteração de uma determinada dotação por outra.
+	 *
+	 * @param integer $iCodigoDotacaoItem Código da dotação do item pcdotac.pc13_sequencial;
+	 * @param integer $iCodigoDotacao     Codigo da Dotação no ano
+	 * @param integer $iAnoDotacao        Ano da Dotação;
+	 * @throws Exception
+	 */
+	public function alterarDotacao($iCodigoDotacaoItem, $iCodigoDotacao, $iAnoDotacao, $iCodigo, $iCodigoItem) {
+
+		$iAnoSessao = db_getsession("DB_anousu");
+
+		if (empty($iCodigoDotacao)) {
+			throw new Exception("ERRO [ 0 ] - Dotação não Informada.");
+		}
+
+		if (empty($iAnoDotacao)) {
+			$iAnoDotacao = $iAnoSessao;
+		}
+
+		if ($iAnoDotacao != $iAnoSessao) {
+			throw new Exception("Dotacao {$iCodigoDotacao}/{$iAnoDotacao} deve ser uma dotação do Exercício");
+		}
+
+		/* Remove a dotação do item */
+		$oItemAcordo = db_utils::getDao('acordoitemdotacao');
+		$oItemAcordo->excluir('', "o58_coddot = $iCodigoDotacaoItem AND o58_anousu = ($iAnoSessao - 1)");
+
+		$sSqlVlr = " SELECT ac20_sequencial,
+                      ac20_valorunitario,
+                      ac20_valortotal
+               FROM acordoposicao
+               JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+               WHERE ac20_acordoposicao =
+                    (SELECT max(ac26_sequencial)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $iCodigo) and ac20_sequencial = ".$iCodigoItem;
+		$rsItem = db_query($sSqlVlr);
+
+		$oItem = db_utils::fieldsMemory($rsItem, 0);
+
+		/*
+		 * Insere a nova dotação do item
+		 * */
+
+		$sInsert = "INSERT INTO acordoitemdotacao
+						VALUES (
+						(select nextval('acordoitemdotacao_ac22_sequencial_seq')), ".$iCodigoDotacao.",
+						".$iAnoSessao.",
+						".$oItem->ac20_sequencial.",
+						".$oItem->ac20_valorunitario.",
+						".$oItem->ac20_valortotal.")";
+
+		$insert = db_query($sInsert);
+		db_criatabela($insert);
+
+	}
   /**
    * Busca o código do período da previsão
    * @return integer

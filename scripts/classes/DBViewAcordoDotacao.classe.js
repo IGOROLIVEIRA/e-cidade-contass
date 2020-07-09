@@ -324,7 +324,6 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
 
     /* Exibe a tr referente a dotação selecionada */
     this.showItensLine = (iDotacao = null, showAll = false) => {
-
         if(!iDotacao){
             let aLinhas = document.getElementsByClassName('tr__conteudo');
 
@@ -356,7 +355,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
 
         sDotacaoAtual = sDotacao;
         iIndiceItemAtual = iIndiceItem;
-        var sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.alteraDotacaoItem|o58_coddot';
+        let sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.alteraDotacaoItem|o58_coddot';
 
         js_OpenJanelaIframe('',
             'db_iframe_alterarDotacao',
@@ -371,7 +370,6 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
      * @param {integer} iCodigoDotacao Código da dotação
      */
     this.alteraDotacaoItem = (iCodigoDotacao) => {
-
         if (me.aDotacoes[sDotacaoAtual]) {
 
             if (me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual]) {
@@ -385,7 +383,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
         delete sDotacaoAtual;
         delete iIndiceItemAtual;
         db_iframe_alterarDotacao.hide();
-        me.renderizaLinhasGrid();
+        me.renderizaLinhasGrid(iCodigoDotacao);
     }
 
     /**
@@ -396,7 +394,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
         let oRowsSelecionadas = oGridDotacoes.getSelection();
 
         let oParam = new Object();
-        oParam.exec = 'alteraDotacoes';
+        oParam.exec = 'alteraDotacoesAcordo';
         oParam.iCodigoAcordo = me.iCodigoAcordo;
         oParam.aItens = new Array();
 
