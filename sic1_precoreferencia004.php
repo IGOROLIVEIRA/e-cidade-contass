@@ -103,7 +103,7 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa 
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
 // die($sSql);
 $rsResult = db_query($sSql) or die(pg_last_error());
@@ -271,8 +271,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    $lTotal = round($oResult->si02_vlprecoreferencia,2) * $oResult->pc11_quant;
-
+    if($quant_casas){
+        $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
+    }
     // if($quant_casas == 2){
     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
     // }
@@ -288,17 +289,17 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
         if($oResult->mediapercentual == 0){
             $oDadosDaLinha->mediapercentual = "";
         }else{
-            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,4)."%";
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = "-";
         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }else{
-        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
+        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         if($oResult->mediapercentual == 0){
             $oDadosDaLinha->mediapercentual = "-";
         }else{
-            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,4)."%";
+            $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual ,2)."%";
         }
         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
@@ -310,7 +311,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
           <td class="item-text">{$oDadosDaLinha->item}</td>
           <td class="item-text-descicao">{$oDadosDaLinha->descricao}</td>
           <td class="item-text">{$oDadosDaLinha->mediapercentual}</td>
-          <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>
+          <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>          
           <td class="item-text">{$oDadosDaLinha->quantidade}</td>
           <td class="item-text">{$oDadosDaLinha->unidadeDeMedida}</td>
           <td class="item-text">{$oDadosDaLinha->total}</td>
@@ -380,7 +381,7 @@ if($oLinha!=null || trim($oLinha)!=""){
     echo <<<HTML
             <div class="linha-vertical">
                 <strong>{$oLinha}</strong>
-            </div>
+            </div>   
 
 HTML;
 
