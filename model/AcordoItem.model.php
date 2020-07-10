@@ -569,37 +569,38 @@ class AcordoItem {
 		}
 
 		/* Remove a dotação do item */
-		$oItemAcordo = db_utils::getDao('acordoitemdotacao');
-		$oItemAcordo->excluir('', "o58_coddot = $iCodigoDotacaoItem AND o58_anousu = ($iAnoSessao - 1)");
+		$oItemAcordoDotacao = db_utils::getDao('acordoitemdotacao');
+
+		$oItemAcordoDotacao->excluir('', "ac22_coddot = $iCodigoDotacaoItem AND ac22_anousu = ($iAnoSessao - 1)");
 
 		$sSqlVlr = " SELECT ac20_sequencial,
                       ac20_valorunitario,
-                      ac20_valortotal
+                      ac20_quantidade
                FROM acordoposicao
                JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
                WHERE ac20_acordoposicao =
                     (SELECT max(ac26_sequencial)
                      FROM acordoposicao
                      WHERE ac26_acordo = $iCodigo) and ac20_sequencial = ".$iCodigoItem;
-		$rsItem = db_query($sSqlVlr);
 
+		$rsItem = db_query($sSqlVlr);
 		$oItem = db_utils::fieldsMemory($rsItem, 0);
 
 		/*
 		 * Insere a nova dotação do item
 		 * */
 
-		$sInsert = "INSERT INTO acordoitemdotacao
-						VALUES (
-						(select nextval('acordoitemdotacao_ac22_sequencial_seq')), ".$iCodigoDotacao.",
-						".$iAnoSessao.",
-						".$oItem->ac20_sequencial.",
-						".$oItem->ac20_valorunitario.",
-						".$oItem->ac20_valortotal.")";
+		$oItemAcordoDotacao->ac22_coddot = $iCodigoDotacao;
+		$oItemAcordoDotacao->ac22_anousu = $iAnoSessao;
+		$oItemAcordoDotacao->ac22_acordoitem = $oItem->ac20_sequencial;
+		$oItemAcordoDotacao->ac22_valor = $oItem->ac20_valorunitario;
+		$oItemAcordoDotacao->ac22_quantidade = $oItem->ac20_quantidade;
 
-		$insert = db_query($sInsert);
-		db_criatabela($insert);
+		$oItemAcordoDotacao->incluir();
 
+		if($oItemAcordoDotacao->erro_status == '0'){
+			throw new Exception($oItemAcordoDotacao->erro_msg);
+		}
 	}
   /**
    * Busca o código do período da previsão

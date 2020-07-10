@@ -282,11 +282,12 @@ switch($oParam->exec) {
 				WHERE ac26_acordo = $oParam->iCodigoAcordo AND
 				 ac20_acordoposicao = (SELECT max(ac26_sequencial)
 										 FROM acordoposicao
-										 WHERE ac26_acordo = $oParam->iCodigoAcordo)";
+										 WHERE ac26_acordo = $oParam->iCodigoAcordo) and ac22_anousu = '".(db_getsession('DB_anousu') - 1)."'";
+
 		$rsDotacoes = db_query($sql);
 
 		if (pg_num_rows($rsDotacoes) == 0) {
-			$oRetorno->message = "Não existe dotações para este Acordo.";
+			$oRetorno->message = urlencode("Não existe dotações para este Acordo.");
 			$oRetorno->status = 2;
 		} else {
 
@@ -311,16 +312,6 @@ switch($oParam->exec) {
 								ac20_acordoposicao ,
 								ac20_valortotal,
 								o56_elemento
-								--ac16_numero ||'/'|| ac16_anousu AS contrato,
-								--ac26_acordo,
-								--ac22_sequencial ,
-								--ac22_anousu ,
-								--ac16_sequencial,
-								--ac22_acordoitem ,
-								--z01_nome,
-								--ac27_descricao,
-								--ac26_data,
-								-- ac16_dataassinatura
 							FROM orcdotacao
 							JOIN acordoitemdotacao ON ac22_coddot=o58_coddot
 							JOIN acordoitem ON ac22_acordoitem = ac20_sequencial
@@ -330,21 +321,19 @@ switch($oParam->exec) {
 							JOIN acordo ON ac26_acordo = ac16_sequencial
 							JOIN cgm ON ac16_contratado = z01_numcgm
 							JOIN pcmater ON ac20_pcmater = pc01_codmater
-							JOIN solicitempcmater on pc16_codmater = pc01_codmater
-							JOIN solicitem on pc11_codigo = pc16_solicitem
 							WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial)
 															FROM acordoposicao
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
 															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
 															AND ac22_coddot = '" . $oDotacaoAcordo->ac22_coddot . "' 
-															AND o58_anousu = '".(db_getsession("DB_anousu") - 1)."' 
-															-- AND ac22_anousu = '".db_getsession("DB_anousu")."'
+															AND ac22_anousu = '".(db_getsession("DB_anousu") - 1)."'
+															AND o56_anousu = '".(db_getsession("DB_anousu") - 1)."' 
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 				$rsResultItens = db_query($sSqlItens);
 
 				if (pg_num_rows($rsResultItens) == 0) {
-					$oRetorno->message = "Não existe itens para este Acordo.";
+					$oRetorno->message = urlencode("Não existe itens para este Acordo.");
 					$oRetorno->status = 2;
 				} else {
 
@@ -360,7 +349,7 @@ switch($oParam->exec) {
 
 						$oDotacao->iDotacao = $aItens->ac22_coddot;
 
-						$oDotacao->iAnoDotacao = $aItens->o58_anousu;
+						$oDotacao->iAnoDotacao = $aItens->ac22_anousu;
 						$oDotacao->sElemento = $sElemento;
 						$oDotacao->lAutorizado = "false";
 
@@ -378,7 +367,7 @@ switch($oParam->exec) {
 						$oItem->iDotacao = $aItens->ac22_coddot;
 						$oItem->nValor = $aItens->ac20_valortotal;
 						$oItem->nQuantidade = $aItens->ac20_quantidade;
-						$oItem->iAnoDotacao = $aItens->o58_anousu;
+						$oItem->iAnoDotacao = $aItens->ac22_anousu;
 
 						$oItem->iDotacaoSequencial = $aItens->ac22_coddot;
 						$oItem->iCodigoItem = $aItens->ac20_sequencial;
@@ -388,25 +377,7 @@ switch($oParam->exec) {
 
 						if (!isset($aItensDotacao[$iCodigoDotacao])) {
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
-						}//else {
-							//echo 'Dotação: ', $oDotacao;
-//							array_push($aItensDotacao[$iCodigoDotacao] , $oDotacao);
-//						}
-
-						/*
-						 * enquanto percorre os itens,
-						 * verificamos se eles possuem autorização
-						 * se possuir não será exibido
-						 */
-
-//						if (!AutorizacaoEmpenho::verificaItemAutorizado($aItens->pc11_codigo, $aItens->ac22_coddot, $oParam->iCodigoSolicitacao)) {
-							/*
-							 * caso o elemento seja vazio, significa que a solicitação nao tem dotação
-							 * logo, buscamos o elemento baseado no item
-							 */
-
-//						}
-
+						}
 					}
 
 				}

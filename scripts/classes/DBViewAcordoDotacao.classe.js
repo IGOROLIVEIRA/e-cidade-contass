@@ -103,11 +103,15 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
 
         js_removeObj('msgBox');
         let oRetorno = eval("(" + oAjax.responseText + ")");
-        me.iAnoSessao = oRetorno.iAnoSessao;
-        me.aDotacoes = oRetorno.aDotacoes;
-        me.renderizaLinhasGrid();
-        me.setPropertyImg();
 
+        if(oRetorno.status == 2){
+            alert(oRetorno.message.urlDecode());
+        }else{
+            me.iAnoSessao = oRetorno.iAnoSessao;
+            me.aDotacoes = oRetorno.aDotacoes;
+            me.renderizaLinhasGrid();
+            me.setPropertyImg();
+        }
     }
 
     /* Função utilizada para manusear a imagem da seta */
@@ -177,7 +181,6 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
 
             if (oDotacao.lAutorizado == 'false') {
                 aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' type='button' value='Alterar'`;
-                // aRowDotacao[4] += " onclick="+sNomeFuncaoAlteraDotacao+" />";
                 aRowDotacao[4] += "       onclick=\""+sNomeFuncaoAlteraDotacao+"\" />";
             } else {
                 aRowDotacao[4] = `<input id='btnAlteraDotacao${iCodigoDotacao}' onclick='alert(\"Essa Dotação Possui Itens Já Autorizados.\")'`;
@@ -370,6 +373,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
      * @param {integer} iCodigoDotacao Código da dotação
      */
     this.alteraDotacaoItem = (iCodigoDotacao) => {
+
         if (me.aDotacoes[sDotacaoAtual]) {
 
             if (me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual]) {

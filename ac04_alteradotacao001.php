@@ -116,7 +116,6 @@ $clrotulo->label("ac16_resumoobjeto");
         oViewSolicitacaoDotacao = new DBViewAcordoDotacao(document.getElementById('ac16_sequencial').value, "oViewSolicitacaoDotacao");
         oViewSolicitacaoDotacao.getDotacoes();
         oViewSolicitacaoDotacao.onBeforeSave();
-        /* js_pesquisarSolicitacoes */
     }
 
 </script>
