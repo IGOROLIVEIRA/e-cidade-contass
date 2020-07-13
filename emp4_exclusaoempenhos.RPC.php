@@ -382,32 +382,62 @@
                 DELETE
                 FROM empautidot
                 WHERE e56_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautitempcprocitem
                 WHERE e73_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM acordoitemexecutadoempautitem
+                WHERE ac19_autori IN
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautitem
                 WHERE e55_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empempaut
                 WHERE e61_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empauthist
                 WHERE e57_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM acordoempautoriza
+                WHERE ac45_empautoriza IN
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM protempautoriza
+                WHERE p102_autorizacao IN
+                (SELECT e61_autori
+                FROM autoriza);
+
+                DELETE
+                FROM empautorizaprocesso
+                WHERE e150_empautoriza IN
+                (SELECT e61_autori
+                FROM autoriza);
 
                 DELETE
                 FROM empautoriza
                 WHERE e54_autori IN
-                (SELECT e61_autori FROM autoriza);
+                (SELECT e61_autori
+                FROM autoriza);
 
                 -- # RETORNA A DATA AO FINAL DAS EXCLUSÕES
 
