@@ -254,7 +254,7 @@ switch($oParam->exec) {
 			$oAcordo = new Acordo($iAcordo);
 
 			if(count($oAcordo->getAutorizacoes())){
-				throw new Exception('Acordo já autorizado!');
+				throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
 			}
 
 			$aItens = $oParam->aItens;
@@ -274,6 +274,8 @@ switch($oParam->exec) {
 
 	case 'getAcordoDotacoes':
 
+		$iAnoUltimaDotacao = db_getsession('DB_anousu');
+		$sWhere = " and ac22_anousu = '".$iAnoUltimaDotacao."'";
 		$sql = "
 				 SELECT DISTINCT ac22_coddot, ac22_anousu
 					FROM acordoposicao
@@ -282,9 +284,15 @@ switch($oParam->exec) {
 				WHERE ac26_acordo = $oParam->iCodigoAcordo AND
 				 ac20_acordoposicao = (SELECT max(ac26_sequencial)
 										 FROM acordoposicao
-										 WHERE ac26_acordo = $oParam->iCodigoAcordo) and ac22_anousu = '".(db_getsession('DB_anousu') - 1)."'";
+										 WHERE ac26_acordo = $oParam->iCodigoAcordo) " . $sWhere;
 
 		$rsDotacoes = db_query($sql);
+
+		if(!pg_num_rows($rsDotacoes)){
+			$iAnoUltimaDotacao = db_getsession('DB_anousu') - 1;
+			$sWhere = " and ac22_anousu = '".$iAnoUltimaDotacao."'";
+			$rsDotacoes = db_query($sql . $sWhere);
+		}
 
 		if (pg_num_rows($rsDotacoes) == 0) {
 			$oRetorno->message = urlencode("Não existe dotações para este Acordo.");
@@ -326,8 +334,8 @@ switch($oParam->exec) {
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
 															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
 															AND ac22_coddot = '" . $oDotacaoAcordo->ac22_coddot . "' 
-															AND ac22_anousu = '".(db_getsession("DB_anousu") - 1)."'
-															AND o56_anousu = '".(db_getsession("DB_anousu") - 1)."' 
+															AND ac22_anousu = '".$iAnoUltimaDotacao."'
+															AND o56_anousu = '".$iAnoUltimaDotacao."' 
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 				$rsResultItens = db_query($sSqlItens);
