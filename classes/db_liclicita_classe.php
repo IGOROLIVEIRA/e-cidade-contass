@@ -2485,6 +2485,8 @@ class cl_liclicita
         $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
         $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
         $sql .= "       inner join licpregao on l45_sequencial = l20_equipepregao";
+        $sql .= "       inner join liccomissaocgm on l31_licitacao = l20_codigo";
+        $sql .= "       inner join cgm cgmrepresentante on cgmrepresentante.z01_numcgm = l31_numcgm";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {
