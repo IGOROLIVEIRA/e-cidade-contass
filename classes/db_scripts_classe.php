@@ -1,5 +1,5 @@
 <?
-//CLASSE DA ENTIDADE
+
 class cl_scripts { 
 
   var $erro_msg   = null;
@@ -19,8 +19,7 @@ class cl_scripts {
         return false;
     }
   }
-
-  if(in_array($anteriordoc, array('201''209','211','213','215'))){
+  if(in_array($anteriordoc, array('201','209','211','213','215'))){
     if(!in_array($proximodoc, array('201','209','211','213','215'))){
         $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 209, 211, 213 e 215";
         $this->erro = true;
@@ -29,7 +28,7 @@ class cl_scripts {
   }
 
   if(in_array($anteriordoc, array('39','3','23','202','204','206'))){
-    if(!in_array($proximodoc, array('39','3','23','202','204','206')){
+    if(!in_array($proximodoc, array('39','3','23','202','204','206'))){
         $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 39, 3, 23, 202, 204, 206";
         $this->erro = true;
         return false;
