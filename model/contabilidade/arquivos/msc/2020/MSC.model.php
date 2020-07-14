@@ -808,6 +808,7 @@ class MSC {
                                  c60_identificadorfinanceiro,o15_codstn,
                                  CASE
                                      WHEN substr(c19_estrutural,2,1) = '9' THEN substr(c19_estrutural,4,8)
+                                     WHEN c212_mscestrut IS NOT NULL THEN c212_mscestrut
                                      ELSE substr(c19_estrutural,2,8)
                                  END AS natreceita,
                                  fc_saldocontacorrente($iAno,c19_sequencial,100,$iMes,codigo)/*,
@@ -841,6 +842,8 @@ class MSC {
                                  ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
                              LEFT JOIN orctiporec 
                                  ON c19_orctiporec = o15_codigo
+                             LEFT JOIN natdespmsc 
+                                 ON (substr(c19_estrutural,2,8), p.c60_anousu) = (c212_natdespestrut, c212_anousu)
                          WHERE {$this->getTipoMatriz()} c60_infcompmsc = 6 AND c62_anousu = ".$iAno." AND r.c61_reduz IS NOT NULL 
                          /*GROUP BY estrut, db21_tipoinstit, o15_codtri, c61_reduz, c61_codcon, c61_codigo, c61_instit, c60_identificadorfinanceiro, o15_codstn, natreceita, c19_sequencial, db_config.codigo, p.c60_estrut, fc_saldocontacorrente, k81_emparlamentar*/
                          ORDER BY p.c60_estrut

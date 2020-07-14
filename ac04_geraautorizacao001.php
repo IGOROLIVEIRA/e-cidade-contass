@@ -431,6 +431,7 @@ if($x->consultarDataDoSistema == true){
                 oTxtCodigoAcordo.setValue('');
             }
         }
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
     }
 
     /**
@@ -465,6 +466,7 @@ if($x->consultarDataDoSistema == true){
         oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo','', 10);
         oTxtCodigoAcordo.addEvent("onChange",";js_pesquisaac16_sequencial(false);");
         oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
+        oTxtCodigoAcordo.setReadOnly(true);
 
         oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo','', 50);
         oTxtDescricaoAcordo.show($('ctnTxtDescricaoAcordo'));
@@ -477,6 +479,7 @@ if($x->consultarDataDoSistema == true){
 
         oGridItens = new DBGrid('oGridItens');
         oGridItens.nameInstance = "oGridItens";
+        oGridItens.hasTotalValue = true;
         oGridItens.setCheckbox(0);
         //oGridItens.allowSelectColumns(true);
         oGridItens.setCellWidth(new Array('10%', '40%',  "15%", "15%","15%", "15%", "15%","15%"));
@@ -492,6 +495,8 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_pesquisarPosicoesContrato() {
+
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
 
         if (oTxtCodigoAcordo.getValue() == "") {
 
@@ -596,6 +601,8 @@ if($x->consultarDataDoSistema == true){
     }
 
     function js_getItensPosicao(iCodigo, iLinha) {
+
+        document.getElementById('oGridItenstotalValue').innerText = '0,00';
 
         oGridPosicoes.aRows.each(function(oLinha, id) {
             oLinha.select(false);
@@ -833,6 +840,9 @@ if($x->consultarDataDoSistema == true){
         });
 
         oGridItens.renderRows();
+
+        js_changeTotal();
+
         aDadosHintGrid.each(function(oHint, id) {
             var oDBHint    = eval("oDBHint_"+id+" = new DBHint('oDBHint_"+id+"')");
             oDBHint.setText(oHint.sText);
@@ -946,6 +956,7 @@ if($x->consultarDataDoSistema == true){
         // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
         $("valoritem"+iSeq).value = js_formatar(value.toFixed(2),'f',2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
+        js_somaItens();
     }
 
     /**
@@ -978,6 +989,7 @@ if($x->consultarDataDoSistema == true){
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f",2);
         }
+        js_somaItens();
         //js_salvarInfoDotacoes(iLinha, lVerificaDot);
     }
 
@@ -1515,6 +1527,15 @@ if($x->consultarDataDoSistema == true){
 
         setInformacoesAutorizacao();
 
+        if(oRetorno.sTipoorigem == '2'){
+            $('e54_numerl').setAttribute('readOnly',true);
+            $('e54_numerl').setAttribute('disabled',true);
+            $('e54_numerl').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+            $('e54_nummodalidade').setAttribute('readOnly',true);
+            $('e54_nummodalidade').setAttribute('disabled',true);
+            $('e54_nummodalidade').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+        }
+
     }
 
     function setInformacoesAutorizacao() {
@@ -1625,6 +1646,29 @@ if($x->consultarDataDoSistema == true){
 
     js_main();
     $('e54_resumo').style.width='100%';
+
+    /**
+     * Lança evento em todos os selects
+     */
+
+    function js_changeTotal(){
+        let listItens = document.getElementsByClassName('linhagrid checkbox');
+        for(let count = 0; count < listItens.length; count++){
+            listItens[count].addEventListener('change', event => {
+                js_somaItens();
+            });
+        }
+    }
+
+    function js_somaItens(){
+        document.getElementById('oGridItenstotalValue').innerText = js_formatar(oGridItens.sum(7), 'f');
+    }
+
+    /* Soma todos os itens da lista */
+    document.getElementById('oGridItensSelectAll').addEventListener('click', event => {
+        js_somaItens();
+    })
+
 </script>
 <?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));

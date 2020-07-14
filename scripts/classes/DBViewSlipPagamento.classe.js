@@ -172,6 +172,25 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
       me.sParamContaDebito     = "getContaEventoContabil";
 
     break;
+
+    /**
+      * Reconhecimento de perdas
+      */
+    case 15: // Inclusão
+    case 16: // Estorno
+
+      me.iTipoInclusao      = 15;
+      me.lContaDebito       = true;
+      me.sTipoTransferencia = "Reconhecimento de Perdas";
+
+      me.sPesquisaContaCredito  = "Saltes";
+      me.sPesquisaContaDebito   = "EventoContabil";
+      
+      me.sParamContaCredito     = "getContasSaltes";
+      me.sParamContaDebito      = "getContaEventoContabil";
+
+    break;
+    
   }
 
   me.oTxtCodigoSlip                          = new DBTextField('oTxtCodigoSlip', me.sNomeInstancia+'.oTxtCodigoSlip', '', me.iTamanhoCampo);

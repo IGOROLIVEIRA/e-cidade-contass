@@ -220,8 +220,12 @@ if(isset($alterar)){
     /**
      * Verificar Encerramento Periodo Patrimonial
      */
-
-    $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+    if(in_array($modalidade_tribunal, array(100, 101, 102, 103))){
+		$dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+    }else{
+        $sSql = db_query($clhomologacao->sql_query_file('',"l202_datahomologacao",'','l202_licitacao = '.$l20_codigo));
+		$dtpubratificacao = db_utils::fieldsMemory($sSql, 0)->l202_datahomologacao;
+    }
 
     if (!empty($dtpubratificacao)) {
         $clcondataconf = new cl_condataconf;

@@ -44,7 +44,7 @@ class gerarLICOBRAS extends GerarAM
         $alICOBRAS10 = pg_fetch_array($rslicobras102020, $iCont);
 
         $aCSVLICOBRAS10['si195_tiporegistro'] = str_pad($alICOBRAS10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
-        $aCSVLICOBRAS10['si195_codorgaoresp'] = substr($alICOBRAS10['si195_codorgaoresp'], 0, 2);
+        $aCSVLICOBRAS10['si195_codorgaoresp'] = str_pad($alICOBRAS10['si195_codorgaoresp'], 3, "0",STR_PAD_LEFT);
         $aCSVLICOBRAS10['si195_codunidadesubrespestadual'] = $alICOBRAS10['si195_codunidadesubrespestadual'];
         $aCSVLICOBRAS10['si195_exerciciolicitacao'] = $alICOBRAS10['si195_exerciciolicitacao'];
         $aCSVLICOBRAS10['si195_nroprocessolicitatorio'] = $alICOBRAS10['si195_nroprocessolicitatorio'];
@@ -73,7 +73,7 @@ class gerarLICOBRAS extends GerarAM
         $aLICOBRAS20 = pg_fetch_array($rslicobras202020, $iCont);
 
         $aCSVLICOBRAS20['si196_tiporegistro'] = str_pad($aLICOBRAS20['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
-        $aCSVLICOBRAS20['si196_codorgaoresp'] = substr($aLICOBRAS20['si196_codorgaoresp'], 0, 2);
+        $aCSVLICOBRAS20['si196_codorgaoresp'] = str_pad($aLICOBRAS20['si196_codorgaoresp'], 3, "0",STR_PAD_LEFT);
         $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
         $aCSVLICOBRAS20['si196_codunidadesubrespestadual'] = $aLICOBRAS20['si196_codunidadesubrespestadual'];
         $aCSVLICOBRAS20['si196_exerciciolicitacao'] = $aLICOBRAS20['si196_exerciciolicitacao'];

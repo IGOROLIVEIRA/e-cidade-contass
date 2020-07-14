@@ -553,8 +553,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           $clcontratos10->si83_nroprocesso = $oDados10->numeroproc;
           $clcontratos10->si83_exercicioprocesso = substr($oDados10->anoproc, 0, 4);
         }else{
-          $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
-          $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
+          $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3, 5)) ? $oDados10->l20_edital : ' ';
+          $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3, 5)) ? $oDados10->l20_anousu : ' ';
         }
       }else{
         $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
@@ -648,7 +648,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $oContrato11->si84_coditemsimcro = null;
               $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_codigotabela;
+            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $aDadosAgrupados[$sHash] = $oContrato11;
 
           } else {

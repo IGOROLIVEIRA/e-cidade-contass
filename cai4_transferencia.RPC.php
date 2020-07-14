@@ -819,7 +819,12 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
   	case 13:
   	case 14:
   	  $iCodigoDocumento = 161;
-	  break;
+    break;
+    
+    case 15:
+    case 16:
+      $iCodigoDocumento = 164;
+    break;
   }
 
   return $iCodigoDocumento;
