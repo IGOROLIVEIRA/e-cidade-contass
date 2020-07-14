@@ -534,12 +534,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   }
 
   function validarCamposAcordo(iCodigoAcordo, sResumoObjeto, lErro) {
-
     if (lErro) {
 
       oGridItens.clearAll(true);
-      oInputCodigoacordo.value = "";
-      oInputResumoObjeto.value = iCodigoAcordo;
+      oInputResumoObjeto.value = sResumoObjeto;
       $('percentual').value = '';
       return false;
     }

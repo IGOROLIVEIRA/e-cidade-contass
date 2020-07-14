@@ -169,20 +169,23 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
           if (isset($campos) == false) {
 
-            if (file_exists("funcoes/db_func_acordo.php") == true) {
+            if (file_exists("funcoes/db_func_acordo.php")) {
+                require_once("funcoes/db_func_acordo.php");
 
-              $campos  = "distinct acordo.ac16_sequencial, ";
-              $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
-              $campos .= "ac16_dataassinatura, ";
-              $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
-              $campos .= "acordo.ac16_valor,";
-              $campos .= "acordo.ac16_datainicio, ";
-              $campos .= "acordo.ac16_datafim,ac16_resumoobjeto";
-
+                /* Pega os campos do arquivo e adiciona o DISTINCT */
+				$campos = 'DISTINCT '.$campos;
             } else {
-              $campos = "acordo.*";
+                $campos  = "distinct acordo.ac16_sequencial, ";
+                $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
+                $campos .= "ac16_dataassinatura, ";
+                $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
+                $campos .= "acordo.ac16_valor,";
+                $campos .= "acordo.ac16_datainicio, ";
+                $campos .= "acordo.ac16_datafim,ac16_resumoobjeto";
+//              $campos = "acordo.*";
             }
           }
+
 
           /**
            * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
