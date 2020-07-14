@@ -171,7 +171,13 @@ $db_botao = true;
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
 	<?
-	include("forms/db_frmcondataconf.php");
+    if (db_getsession("DB_login") == 'dbseller') {
+
+        echo "<br><center><br><H2>Esta rotina não pode ser acessada pelo usuário dbseller.</h2></center>";
+    } else {
+      
+	   include("forms/db_frmcondataconf.php");
+    }      
 	?>
     </center>
 	</td>
