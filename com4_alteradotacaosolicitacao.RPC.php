@@ -274,25 +274,17 @@ switch($oParam->exec) {
 
 	case 'getAcordoDotacoes':
 
-		$iAnoUltimaDotacao = db_getsession('DB_anousu');
-		$sWhere = " and ac22_anousu = '".$iAnoUltimaDotacao."'";
 		$sql = "
 				 SELECT DISTINCT ac22_coddot, ac22_anousu
 					FROM acordoposicao
-				INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
-				INNER JOIN acordoitemdotacao ON ac22_acordoitem = ac20_sequencial
-				WHERE ac26_acordo = $oParam->iCodigoAcordo AND
-				 ac20_acordoposicao = (SELECT max(ac26_sequencial)
-										 FROM acordoposicao
-										 WHERE ac26_acordo = $oParam->iCodigoAcordo) " . $sWhere;
+					INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+					INNER JOIN acordoitemdotacao ON ac22_acordoitem = ac20_sequencial
+					WHERE ac26_acordo = $oParam->iCodigoAcordo AND
+					 ac20_acordoposicao = (SELECT max(ac26_sequencial)
+											 FROM acordoposicao
+											 WHERE ac26_acordo = $oParam->iCodigoAcordo) ";
 
 		$rsDotacoes = db_query($sql);
-
-		if(!pg_num_rows($rsDotacoes)){
-			$iAnoUltimaDotacao = db_getsession('DB_anousu') - 1;
-			$sWhere = " and ac22_anousu = '".$iAnoUltimaDotacao."'";
-			$rsDotacoes = db_query($sql . $sWhere);
-		}
 
 		if (pg_num_rows($rsDotacoes) == 0) {
 			$oRetorno->message = urlencode("Não existe dotações para este Acordo.");
@@ -304,6 +296,7 @@ switch($oParam->exec) {
 			for ($count = 0; $count < pg_num_rows($rsDotacoes); $count++) {
 
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
+				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot . $oDotacaoAcordo->ac22_anousu;
 
 				$sSqlItens = "SELECT DISTINCT
 								ac20_pcmater,
@@ -312,10 +305,8 @@ switch($oParam->exec) {
 								ac22_coddot ,
 								ac22_valor ,
 								ac20_quantidade,
-								o58_anousu,
 								ac20_sequencial ,
 								ac22_anousu,
-								o58_valor,
 								ac22_quantidade ,
 								ac20_acordoposicao ,
 								ac20_valortotal,
@@ -334,8 +325,7 @@ switch($oParam->exec) {
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
 															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
 															AND ac22_coddot = '" . $oDotacaoAcordo->ac22_coddot . "' 
-															AND ac22_anousu = '".$iAnoUltimaDotacao."'
-															AND o56_anousu = '".$iAnoUltimaDotacao."' 
+															AND ac22_anousu = '" . $oDotacaoAcordo->ac22_anousu . "' 
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 				$rsResultItens = db_query($sSqlItens);
@@ -350,8 +340,6 @@ switch($oParam->exec) {
 
 					for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 						$aItens = db_utils::fieldsMemory($rsResultItens, $i);
-
-						$iCodigoDotacao = $aItens->ac22_coddot;
 
 						$sElemento = substr($aItens->o56_elemento, 0, 7);
 
