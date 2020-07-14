@@ -56,15 +56,15 @@ if (trim($oGet->ac16_contratado) != "") {
 $sAnd = $sWhere != "" ? " and " : "";
 if (trim($oGet->deptos_inclusao) != "") {
     $sWhere .= "{$sAnd} ac16_coddepto in ({$oGet->deptos_inclusao})";
-	$sCampos .= ", descrdepto as dl_Dep_Inclusão";
+	$sCampos .= ", db_depart.descrdepto as dl_Dpto_de_Inclusao";
 }else{
-	$sCampos .= ", descrdepto as dl_Departamento";
+	$sCampos .= ", db_depart.descrdepto as dl_Departamento";
 }
 
 $sAnd = $sWhere != "" ? " and " : "";
 if (trim($oGet->deptos_responsavel) != ''){
     $sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oGet->deptos_responsavel})";
-    $sCampos .= ", dpt.z01_nome as dl_Dep_Responsável";
+    $sCampos .= ", dpt.z01_nome as dl_Depto_Responsavel";
 }
 
 $sCampos .= ", cgm.z01_nome";
