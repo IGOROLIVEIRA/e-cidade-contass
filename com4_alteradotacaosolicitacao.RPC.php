@@ -296,7 +296,7 @@ switch($oParam->exec) {
 			for ($count = 0; $count < pg_num_rows($rsDotacoes); $count++) {
 
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
-				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot . $oDotacaoAcordo->ac22_anousu;
+				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot;// . $oDotacaoAcordo->ac22_anousu;
 
 				$sSqlItens = "SELECT DISTINCT
 								ac20_pcmater,
@@ -371,9 +371,11 @@ switch($oParam->exec) {
 						$oItem->sElemento = $aItens->o56_elemento;
 						$oDotacao->aItens[] = $oItem;
 
-						if (!isset($aItensDotacao[$iCodigoDotacao])) {
+//						if (!isset($aItensDotacao[$iCodigoDotacao])) {
+//							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
+//						}else{
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
-						}
+//						}
 					}
 
 				}
