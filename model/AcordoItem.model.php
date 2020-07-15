@@ -571,7 +571,7 @@ class AcordoItem {
 		/* Remove a dotação do item */
 		$oItemAcordoDotacao = db_utils::getDao('acordoitemdotacao');
 
-		$oItemAcordoDotacao->excluir('', "ac22_coddot = $iCodigoDotacaoItem AND ac22_anousu = ($iAnoSessao - 1)");
+		$oItemAcordoDotacao->excluir('', "ac22_coddot = $iCodigoDotacaoItem AND ac22_acordoitem = $iCodigoItem AND ac22_anousu = $iAnoDotacao");
 
 		$sSqlVlr = " SELECT ac20_sequencial,
                       ac20_valorunitario,

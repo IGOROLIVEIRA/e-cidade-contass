@@ -275,7 +275,7 @@ switch($oParam->exec) {
 	case 'getAcordoDotacoes':
 
 		$sql = "
-				 SELECT DISTINCT ac22_coddot, ac22_anousu
+				 SELECT DISTINCT ac22_coddot, ac22_anousu, ac20_pcmater
 					FROM acordoposicao
 					INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
 					INNER JOIN acordoitemdotacao ON ac22_acordoitem = ac20_sequencial
@@ -296,7 +296,7 @@ switch($oParam->exec) {
 			for ($count = 0; $count < pg_num_rows($rsDotacoes); $count++) {
 
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
-				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot;// . $oDotacaoAcordo->ac22_anousu;
+				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot . $oDotacaoAcordo->ac22_anousu;
 
 				$sSqlItens = "SELECT DISTINCT
 								ac20_pcmater,
@@ -325,7 +325,7 @@ switch($oParam->exec) {
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
 															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
 															AND ac22_coddot = '" . $oDotacaoAcordo->ac22_coddot . "' 
-															AND ac22_anousu = '" . $oDotacaoAcordo->ac22_anousu . "' 
+															--AND ac22_anousu = '" . $oDotacaoAcordo->ac22_anousu . "' 
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 				$rsResultItens = db_query($sSqlItens);
@@ -371,11 +371,10 @@ switch($oParam->exec) {
 						$oItem->sElemento = $aItens->o56_elemento;
 						$oDotacao->aItens[] = $oItem;
 
-//						if (!isset($aItensDotacao[$iCodigoDotacao])) {
-//							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
-//						}else{
+						if (!isset($aItensDotacao[$iCodigoDotacao])) {
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
-//						}
+						}
+
 					}
 
 				}
