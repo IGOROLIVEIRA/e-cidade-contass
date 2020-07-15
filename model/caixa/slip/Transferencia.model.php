@@ -370,6 +370,16 @@ abstract class Transferencia {
       case 14:
         $iCodigoDocumento = 163;
         break;
+      
+      /**
+       * Reconhecimento de perdas
+       */
+      case 15:
+        $iCodigoDocumento = 164;
+      break;
+      case 16:
+        $iCodigoDocumento = 165;
+      break;
     }
     return $iCodigoDocumento;
   }

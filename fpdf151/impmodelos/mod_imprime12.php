@@ -35,21 +35,27 @@
 	$this->objpdf->text($xcol+2,$xlin+7,'Órgão');
 	$this->objpdf->text($xcol+2,$xlin+11,'Unidade');
 	$this->objpdf->text($xcol+2,$xlin+15,'Função');
-	
-	$this->objpdf->text($xcol+2,$xlin+22,'Proj/Ativ');
-	$this->objpdf->text($xcol+2,$xlin+30,'Rubrica');
-	$this->objpdf->text($xcol+2,$xlin+42,'Recurso');
+	$this->objpdf->text($xcol+2,$xlin+19,'Subfunção');
+	$this->objpdf->text($xcol+2,$xlin+23,'Programa');
+	$this->objpdf->text($xcol+2,$xlin+27,'Proj/Ativ');
+	$this->objpdf->text($xcol+2,$xlin+31,'Rubrica');
+	$this->objpdf->text($xcol+2,$xlin+40,'Recurso');
+	$this->objpdf->text($xcol+2,$xlin+44,'Reduzido');
+
 	$this->objpdf->text($xcol+2,$xlin+48,'Licitação');
 	
 	$this->objpdf->Setfont('Arial','',8);
 	$this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.$this->descr_orgao);
 	$this->objpdf->text($xcol+17,$xlin+11,':  '.db_formatar($this->unidade,'unidade').' - '.$this->descr_unidade);
 	$this->objpdf->text($xcol+17,$xlin+15,':  '.db_formatar($this->funcao,'funcao').' - '.$this->descr_funcao);
-	$this->objpdf->text($xcol+17,$xlin+22,':  '.db_formatar($this->projativ,'projativ').' - '.$this->descr_projativ);
-	$this->objpdf->text($xcol+17,$xlin+30,':  '.db_formatar($this->sintetico,'elemento'));
-	$this->objpdf->setxy($xcol+18,$xlin+31);
+	$this->objpdf->text($xcol+17,$xlin+19,':  '.db_formatar($this->subfuncao,'subfuncao').' - '.$this->descr_subfuncao);
+	$this->objpdf->text($xcol+17,$xlin+23,':  '.db_formatar($this->programa,'programa').' - '.$this->descr_programa);
+	$this->objpdf->text($xcol+17,$xlin+27,':  '.db_formatar($this->projativ,'projativ').' - '.$this->descr_projativ);
+	$this->objpdf->text($xcol+17,$xlin+31,':  '.db_formatar($this->sintetico,'elemento'));
+	$this->objpdf->setxy($xcol+18,$xlin+32);
 	$this->objpdf->multicell(90,3,$this->descr_sintetico,0,"L");
-	$this->objpdf->text($xcol+17,$xlin+42,':  '.$this->recurso.' - '.$this->descr_recurso);
+	$this->objpdf->text($xcol+17,$xlin+40,':  '.$this->recurso.' - '.$this->descr_recurso);
+	$this->objpdf->text($xcol+17,$xlin+44,':  '.$this->coddot);
 	$this->objpdf->text($xcol+17,$xlin+48,':  '.$this->descr_licitacao);
 	
         //// retangulo dos dados do credor
@@ -117,11 +123,21 @@
 	
 	/// monta os dados para itens do empenho
   $this->objpdf->SetWidths(array(15,137,25,25));
-	$this->objpdf->SetAligns(array('C','L','R','R'));
+  $this->objpdf->SetAligns(array('C','L','R','R'));
 	
-	$this->objpdf->setleftmargin(4);
-	$this->objpdf->sety($xlin+62);
-	$this->objpdf->Setfont('Arial','',7);
+  $this->objpdf->setleftmargin(4);
+  $this->objpdf->sety($xlin+62);
+
+  $this->objpdf->Setfont('Arial', 'B', 7);
+	  	
+  $this->objpdf->cell(15, 4, '', 0, 0, "C", 0);
+	      
+  $sElemento   = pg_result($this->recorddositens, $ii, $this->analitico);
+  $sElemento   = db_formatar($sElemento, 'elemento');
+  $sResumoItem = pg_result($this->recorddositens, $ii, $this->descr_analitico);
+	      
+  $this->objpdf->cell(137, 4, "{$sElemento} - {$sResumoItem}", 0, 1, "L", 0);
+
   $ele                    = 0;
   $xtotal                 = 0;
   $retorna_obs            = 0;
@@ -137,26 +153,13 @@
 	  db_fieldsmemory($this->recorddositens, $ii);
 	  
 	  if ($retorna_obs == 0) {
-	    
-	    $this->objpdf->Setfont('Arial', 'B', 7);
-	  
-	    if ($ele != pg_result($this->recorddositens, $ii, $this->analitico)) {
-	      
-	      $this->objpdf->cell(15, 4, '', 0, 0, "C", 0);
-	      
-	      $sElemento   = pg_result($this->recorddositens, $ii, $this->analitico);
-	      $sElemento   = db_formatar($sElemento, 'elemento');
-	      $sResumoItem = pg_result($this->recorddositens, $ii, $this->descr_analitico);
-	      
-	      $this->objpdf->cell(137, 4, "{$sElemento} - {$sResumoItem}", 0, 1, "L", 0);
-	    }
 	  
 	    $xtotal       += pg_result($this->recorddositens, $ii, $this->valoritem);
 	    $quantitem     = pg_result($this->recorddositens, $ii, 'e37_qtd');
-	    $descricaoitem = "\n".pg_result($this->recorddositens, $ii, 'pc01_descrmater');
+	    $descricaoitem = pg_result($this->recorddositens, $ii, 'pc01_descrmater');
 	    
-	    $obsitem       = "OBS.: " . pg_result($this->recorddositens, $ii, 'e60_resumo');
-	    $obsitem      .= "\n".'SOLICITAÇÃO: '.pg_result($this->recorddositens,$ii,$this->Snumero) . "\n\n";
+	    // $obsitem       = "OBS.: " . pg_result($this->recorddositens, $ii, 'e60_resumo');
+	    // $obsitem      .= "\n".'SOLICITAÇÃO: '.pg_result($this->recorddositens,$ii,$this->Snumero) . "\n\n";
 	    
 	    $valoritemuni            = db_formatar(pg_result($this->recorddositens, $ii, 'e62_vlrun'), 'v', " ", $this->casadec);
 	    $valoritemtot            = pg_result($this->recorddositens, $ii, 'e37_vlranu');
@@ -207,14 +210,14 @@
 	      }
 	    }
 	    // Insere quebra no ponto informado
-	    $descricaoitem = substr($descricaoitem,0,$iLimitString)."\n".substr($descricaoitem,$iLimitString,strlen($descricaoitem));
+	    //$descricaoitem = substr($descricaoitem,0,$iLimitString)."".substr($descricaoitem,$iLimitString,strlen($descricaoitem));
 	  }
 	  $this->objpdf->Setfont('Arial', '', 7);
 	  $descricaoitemimprime = $this->objpdf->Row_multicell(array($quantitem    , 
-	                                                             $descricaoitem." \n".$obsitem,
+	                                                             $descricaoitem,
 	                                                             $valoritemuni, 
 	                                                             $valoritemtot),
-                                                      	  3,
+                                                      	  3.5,
                                                       	  false,
                                                       	  5,
                                                       	  0,
@@ -224,7 +227,7 @@
                                                       	  $set_altura_row
 	                                                       );
 	  
-	  $descricaoitemimprime = str_replace('\\n', '\n', $descricaoitemimprime);
+	  //$descricaoitemimprime = str_replace('\\n', '\n', $descricaoitemimprime);
 	  
 	  if ( trim($descricaoitemimprime) != "" && $iTotalLinhas > 1 ) {
 	    

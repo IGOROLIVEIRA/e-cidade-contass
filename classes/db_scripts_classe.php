@@ -1,5 +1,5 @@
 <?
-//CLASSE DA ENTIDADE
+
 class cl_scripts { 
 
   var $erro_msg   = null;
@@ -12,49 +12,73 @@ class cl_scripts {
    // funcões
   function alteraDocumento ($lancamento,$proximodoc, $anteriordoc){
 
-
-    if(!in_array($anteriordoc, array('160','161','162','163','100'))){
-        $this->erro_msg = "Se o documento $anteriordoc não pode ser alterado, só é permitido aterar os documentos 160,161,162,163,100";
+  if(in_array($anteriordoc, array('200','208','210','212','214'))){
+    if(!in_array($proximodoc, array('200','208','210','212','214'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 200, 208, 210, 212, 214";
         $this->erro = true;
         return false;
     }
+  }
+  if(in_array($anteriordoc, array('201','209','211','213','215'))){
+    if(!in_array($proximodoc, array('201','209','211','213','215'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 209, 211, 213 e 215";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+  if(in_array($anteriordoc, array('39','3','23','202','204','206'))){
+    if(!in_array($proximodoc, array('39','3','23','202','204','206'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 39, 3, 23, 202, 204, 206";
+        $this->erro = true;
+        return false;
+    }
+  }
+
+    if(in_array($anteriordoc, array('40','4','24','203','205','207'))){
+    if(!in_array($proximodoc, array('40','4','24','203','205','207'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 39, 4, 24, 203, 205 e 207";
+        $this->erro = true;
+        return false;
+    }
+  }
 
     
-      if($anteriordoc == '160'){
-    if(!in_array($proximodoc, array('150','130'))){
-        $this->erro_msg = 'Se o lançamento contábil for do documento 160, o sistema permitirá alterar para os documentos 150 e 130';
+  if(in_array($anteriordoc, array('160','150','130'))){
+    if(!in_array($proximodoc, array('160','150','130'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 160, 150 e 130";
         $this->erro = true;
         return false;
     }
   }
 
-  if($anteriordoc == '161'){
-    if(!in_array($proximodoc, array('151','120'))){
-        $this->erro_msg = 'Se o lançamento contábil for do documento 161, o sistema permitirá alterar para os documentos 151 e 120';
+  if(in_array($anteriordoc, array('161','151','120'))){
+    if(!in_array($proximodoc, array('161','151','120'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 161, 151 e 120";
         $this->erro = true;
         return false;
     }
   }
 
-  if($anteriordoc == '162'){
-    if(!in_array($proximodoc, array('152','131'))){
-        $this->erro_msg = 'Se o lançamento contábil for do documento 162, o sistema permitirá alterar para os documentos 152 e 131';
+  if(in_array($anteriordoc, array('162','152','131'))){
+    if(!in_array($proximodoc, array('162','152','131'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 152 e 131";
         $this->erro = true;
         return false;
     }
   }
 
-  if($anteriordoc == '163'){
-    if(!in_array($proximodoc, array('153','121'))){
-        $this->erro_msg = 'Se o lançamento contábil for do documento 163, o sistema permitirá alterar para os documentos 153 e 121';
+  if(in_array($anteriordoc, array('163','153','121'))){
+    if(!in_array($proximodoc, array('163','153','121'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 163, 153 e 121";
         $this->erro = true;
         return false;
     }
   }
 
-  if($anteriordoc == '100'){
-    if(!in_array($proximodoc, array('101','115','116','122','123','124','125','126','127','418','419'))){
-        $this->erro_msg = 'Se o lançamento contábil for do documento 100, o sistema permitirá alterar para os documentos 101,115,116,122,123,124,125,126,127,418 e 419';
+  if(in_array($anteriordoc, array('100','101','115','116','122','123','124','125','126','127','418','419'))){
+    if(!in_array($proximodoc, array('100','101','115','116','122','123','124','125','126','127','418','419'))){
+        $this->erro_msg = "Se o lançamento contábil for do documento $anteriordoc, o sistema permitirá alterar para os documentos 100,101,115,116,122,123,124,125,126,127,418 e 419";
         $this->erro = true;
         return false;
     }
