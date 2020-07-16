@@ -42,7 +42,7 @@ class Oc12187 extends AbstractMigration
               
              /*adicionando novo padrao ao relatorio paragrafo 2*/
              UPDATE db_paragrafopadrao
-                SET db61_texto = \'O Sr(a) #$z01_nome#, CPF no #$z01_cgccpf#, nos usos da suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR o Processo Licitatório nº #$l20_edital#/#$l20_anousu#, Pregão Presencial nº #$l20_numero#/#$l20_anousu#, cujo objeto é a #$l20_objeto#, no valor total de R$ #$totallicitacao# conforme fornecedor(es), item(ns) e valor(es) relacionado(s):\'
+                SET db61_texto = \'O Sr(a) #$z01_nome#, CPF no #$z01_cgccpf#, nos usos da suas atribuições legais e nos termos da legislação em vigor, resolve HOMOLOGAR o Processo Licitatório nº #$l20_edital#/#$l20_anousu#, #$l44_descricao# nº #$l20_numero#/#$l20_anousu#, cujo objeto é a #$l20_objeto#, no valor total de R$ #$totallicitacao# conforme fornecedor(es), item(ns) e valor(es) relacionado(s):\'
                 WHERE db61_codparag =
                         (SELECT db61_codparag
                          FROM db_documentopadrao

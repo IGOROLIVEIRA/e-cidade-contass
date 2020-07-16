@@ -71,7 +71,7 @@ $oLibDocumento = new libdocumento(1703,null);
 if ( $oLibDocumento->lErro ){
    die($oLibDocumento->sMsgErro);
 }
-$campos = "l20_codigo,l20_edital,l20_anousu,l20_numero,l20_datacria,l20_objeto,cgmrepresentante.z01_nome AS nome,cgmrepresentante.z01_cgccpf AS cpf";
+$campos = "l20_codigo,l20_edital,l20_anousu,l20_numero,l20_datacria,l20_objeto,cgmrepresentante.z01_nome AS nome,cgmrepresentante.z01_cgccpf AS cpf,l44_descricao";
 $rsLicitacao   = $clliclicita->sql_record( $clliclicita->sql_query_equipepregao(null,$campos,"l20_codigo","l20_codigo=$l20_codigo and l31_tipo = '6' and l20_instit = $dbinstit"));
 
 if ($clliclicita->numrows == 0){
@@ -80,17 +80,17 @@ if ($clliclicita->numrows == 0){
 }
 db_fieldsmemory($rsLicitacao,0);
   $head3 = "HOMOLOGAÇÃO DO PROCESSO ";
-  $head4 = "PROCESSO LICITATORIO : $l20_edital/".substr($l20_anousu,0,4);
+  $head4 = strtoupper($l44_descricao)." : $l20_edital/".substr($l20_anousu,0,4);
   $head5 = "SEQUENCIAL: $l20_codigo";
   $oPDF->addpage();
   $oPDF->setfont('arial','b',12);
   $oPDF->ln();
-  $oPDF->cell(0,8,"HOMOLOGAÇAO DE PROCESSO",0,1,"C",0);
+  $oPDF->cell(0,5,"HOMOLOGAÇÃO DE PROCESSO",0,1,"C",0);
   $oPDF->setfont('arial','b',10);
-  $oPDF->cell(0,8,"PROCESSO LICITATORIO Nº : $l20_edital/".substr($l20_anousu,0,4),0,1,"C",0);
-  $oPDF->cell(0,8,"PREGÃO PRESENCIAL Nº : $l20_numero/".substr($l20_anousu,0,4),0,1,"C",0);
+  $oPDF->cell(0,5,"PROCESSO LICITATÓRIO Nº : $l20_edital/".substr($l20_anousu,0,4),0,1,"C",0);
+  $oPDF->cell(0,5,strtoupper($l44_descricao)." Nº : $l20_numero/".substr($l20_anousu,0,4),0,1,"C",0);
   $oPDF->setfont('arial','',8);
-
+  $oPDF->ln(2);
 $olicitacao = db_utils::fieldsMemory($rsLicitacao,0);
 
 $result_orc=$clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo,"pc22_codorc as orcamento"));
@@ -119,7 +119,8 @@ $oLibDocumento->l20_codigo    = $olicitacao->l20_codigo;
 $oLibDocumento->l20_objeto    = $olicitacao->l20_objeto;
 $oLibDocumento->z01_cgccpf    = $olicitacao->cpf;
 $oLibDocumento->z01_nome      = $olicitacao->nome;
-$oLibDocumento->l20_anousu      = $olicitacao->l20_anousu;
+$oLibDocumento->l20_anousu    = $olicitacao->l20_anousu;
+$oLibDocumento->l44_descricao = strtoupper($olicitacao->l44_descricao);
 $oLibDocumento->totallicitacao= db_formatar($totallicitacao,"f");
 
 $sSqlDbConfig = $cldbconfig->sql_query(null, "*", null, "codigo = {$dbinstit}");
@@ -146,6 +147,7 @@ if ($clliclicita->numrows == 0) {
 }
 db_fieldsmemory($result_orc,0);
 $result_forne=$clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"*",null,"pc21_codorc=$orcamento"));
+//db_criatabela($result_forne);exit;
 $numrows_forne=$clpcorcamforne->numrows;
 
 $oPDF->SetFillColor(235);
@@ -179,7 +181,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                 }
                 $oPDF->setfont("arial","b",9);
                 $z01_nomeant = $z01_nome;
-                $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
+                $oPDF->cell(80,$alt,substr($z01_nome,0,40)." - ".$z01_cgccpf,0,1,"L",0);
                 $oPDF->cell(25,$alt,"Quantidade",0,0,"R",0);
                 $oPDF->cell(35,$alt,"Valor Unitário",0,0,"R",0);
                 $oPDF->cell(120,$alt,"Valor Total Unitário",0,1,"R",0);
