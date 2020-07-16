@@ -552,26 +552,26 @@ class AcordoItem {
 	 * @param integer $iAnoDotacao        Ano da Dotação;
 	 * @throws Exception
 	 */
-	public function alterarDotacao($iCodigoDotacaoItem, $iCodigoDotacao, $iAnoDotacao, $iCodigo, $iCodigoItem) {
+	public function alterarDotacao($oItem) {
 
 		$iAnoSessao = db_getsession("DB_anousu");
 
-		if (empty($iCodigoDotacao)) {
+		if (empty($oItem->iCodigoDotacao)) {
 			throw new Exception("ERRO [ 0 ] - Dotação não Informada.");
 		}
 
-		if (empty($iAnoDotacao)) {
-			$iAnoDotacao = $iAnoSessao;
+		if (empty($oItem->iAnoDotacao)) {
+			$oItem->iAnoDotacao = $iAnoSessao;
 		}
 
-		if ($iAnoDotacao != $iAnoSessao) {
-			throw new Exception("Dotacao {$iCodigoDotacao}/{$iAnoDotacao} deve ser uma dotação do Exercício");
+		if ($oItem->iAnoDotacao > $iAnoSessao) {
+			throw new Exception("Dotacao {$oItem->iCodigoDotacao}/{$oItem->iAnoDotacao} deve ser uma dotação do Exercício");
 		}
 
 		/* Remove a dotação do item */
 		$oItemAcordoDotacao = db_utils::getDao('acordoitemdotacao');
 
-		$oItemAcordoDotacao->excluir('', "ac22_coddot = $iCodigoDotacaoItem AND ac22_acordoitem = $iCodigoItem AND ac22_anousu = $iAnoDotacao");
+		$oItemAcordoDotacao->excluir('', "ac22_coddot = $oItem->iCodigoDotacaoItem AND ac22_acordoitem = $oItem->iCodigoItem AND ac22_anousu = $oItem->iAnoDotAnterior");
 
 		$sSqlVlr = " SELECT ac20_sequencial,
                       ac20_valorunitario,
@@ -581,20 +581,20 @@ class AcordoItem {
                WHERE ac20_acordoposicao =
                     (SELECT max(ac26_sequencial)
                      FROM acordoposicao
-                     WHERE ac26_acordo = $iCodigo) and ac20_sequencial = ".$iCodigoItem;
+                     WHERE ac26_acordo = $oItem->iAcordo) and ac20_sequencial = ".$oItem->iCodigoItem;
 
 		$rsItem = db_query($sSqlVlr);
-		$oItem = db_utils::fieldsMemory($rsItem, 0);
+		$oNewItem = db_utils::fieldsMemory($rsItem, 0);
 
 		/*
 		 * Insere a nova dotação do item
 		 * */
 
-		$oItemAcordoDotacao->ac22_coddot = $iCodigoDotacao;
+		$oItemAcordoDotacao->ac22_coddot = $oItem->iCodigoDotacao;
 		$oItemAcordoDotacao->ac22_anousu = $iAnoSessao;
-		$oItemAcordoDotacao->ac22_acordoitem = $oItem->ac20_sequencial;
-		$oItemAcordoDotacao->ac22_valor = $oItem->ac20_valorunitario;
-		$oItemAcordoDotacao->ac22_quantidade = $oItem->ac20_quantidade;
+		$oItemAcordoDotacao->ac22_acordoitem = $oNewItem->ac20_sequencial;
+		$oItemAcordoDotacao->ac22_valor = $oNewItem->ac20_valorunitario;
+		$oItemAcordoDotacao->ac22_quantidade = $oNewItem->ac20_quantidade;
 
 		$oItemAcordoDotacao->incluir();
 

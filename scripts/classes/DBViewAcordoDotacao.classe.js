@@ -10,11 +10,11 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
     var me = this;
     this.iCodigoAcordo = iCodigoAcordo;
     this.sNameInstance = sNameInstance;
-    this.sUrlRPC = 'com4_alteradotacaosolicitacao.RPC.php';
+    this.sUrlRPC = 'com4_alteradotacaoacordo.RPC.php';
     this.aDotacoes = new Array();
     this.iAnoSessao = '';
     this.oWindow = new windowAux('wndAlteracaoSolicitacoes',
-        "Alteração das Dotações da Solicitacao " + me.iCodigoAcordo,
+        "Alteração das Dotações do Acordo " + me.iCodigoAcordo,
         800,
         450
     );
@@ -205,7 +205,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
                 }
 
                 let sNomeFuncaoAlteraDotacaoItem = me.sNameInstance + ".pesquisaDotacaoItem('";
-                sNomeFuncaoAlteraDotacaoItem += oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "')";
+                sNomeFuncaoAlteraDotacaoItem += oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "',"+oDotacao.iAnoDotacao+")";
                 let sFunctionToogleLinha = me.sNameInstance + ".toogleLinhaItem('" + iCodigoDotacao + "'," + iIndice + ")";
                 aRowItem = new Array();
                 let sChecked = '';
@@ -354,9 +354,9 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
     /**
      * Abre janela para alterar a Dotação de um item especifico;
      */
-    this.pesquisaDotacaoItem = (sDotacao, iIndiceItem, sElemento) => {
-
+    this.pesquisaDotacaoItem = (sDotacao, iIndiceItem, sElemento, iAnoDot) => {
         sDotacaoAtual = sDotacao;
+        iAnoDotAtual = iAnoDot;
         iIndiceItemAtual = iIndiceItem;
         let sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.alteraDotacaoItem|o58_coddot';
 
@@ -373,21 +373,23 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
      * @param {integer} iCodigoDotacao Código da dotação
      */
     this.alteraDotacaoItem = (iCodigoDotacao) => {
+        let keyDotAnterior = sDotacaoAtual+iAnoDotAtual;
 
-        if (me.aDotacoes[sDotacaoAtual]) {
+        if (me.aDotacoes[keyDotAnterior]) {
 
-            if (me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual]) {
+            if (me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual]) {
 
-                me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual].iDotacao = iCodigoDotacao;
-                me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual].iAnoDotacao = me.iAnoSessao;
-                me.aDotacoes[sDotacaoAtual].aItens[iIndiceItemAtual].lAlterado = true;
+                me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iDotacao = iCodigoDotacao;
+                me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iAnoDotacao = me.iAnoSessao;
+                me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].lAlterado = true;
             }
         }
 
         delete sDotacaoAtual;
         delete iIndiceItemAtual;
+        delete iAnoDotAtual;
         db_iframe_alterarDotacao.hide();
-        me.renderizaLinhasGrid(iCodigoDotacao);
+        me.renderizaLinhasGrid(keyDotAnterior);
     }
 
     /**
@@ -411,7 +413,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
 
             oDotacao.aItens.each( (oItem, iIndice) => {
 
-                var oItemAlterar = new Object();
+                let oItemAlterar = new Object();
 
                 if (oItem.lAlterado) {
 
@@ -419,6 +421,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
                     oItemAlterar.iCodigoItem = oItem.iCodigoItem;
                     oItemAlterar.iCodigoDotacao = oItem.iDotacao;
                     oItemAlterar.iAnoDotacao = oItem.iAnoDotacao;
+                    oItemAlterar.iAnoDotAnterior = me.aDotacoes[iCodigoDotacao].iAnoDotacao;
                     oParam.aItens.push(oItemAlterar);
                 }
             });
