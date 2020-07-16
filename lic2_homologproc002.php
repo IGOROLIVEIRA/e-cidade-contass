@@ -119,6 +119,7 @@ $oLibDocumento->l20_codigo    = $olicitacao->l20_codigo;
 $oLibDocumento->l20_objeto    = $olicitacao->l20_objeto;
 $oLibDocumento->z01_cgccpf    = $olicitacao->cpf;
 $oLibDocumento->z01_nome      = $olicitacao->nome;
+$oLibDocumento->l20_anousu      = $olicitacao->l20_anousu;
 $oLibDocumento->totallicitacao= db_formatar($totallicitacao,"f");
 
 $sSqlDbConfig = $cldbconfig->sql_query(null, "*", null, "codigo = {$dbinstit}");
