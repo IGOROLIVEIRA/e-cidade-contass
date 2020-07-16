@@ -37,7 +37,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
 
 $oGet                = db_utils::postMemory($_GET);
 
-$campos = "l202_sequencial,l202_licitacao,
+$campos = "distinct l202_sequencial,l202_licitacao,
       	   l20_edital,
       	   l20_anousu,
       	l202_datahomologacao,l202_dataadjudicacao";
