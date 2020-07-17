@@ -919,7 +919,9 @@ abstract class Transferencia {
 
     $this->excluirVinculoComProcesso();
 
-    if ($sSqlBuscaLancamento->k17_situacao == 4) {
+    $result = db_utils::fieldsMemory($res = db_query($sSqlBuscaLancamento),0);
+
+    if ($result->k17_situacao == 4) {
 
       $iCodSlip = $this->getCodigoSlip();
 
@@ -929,19 +931,21 @@ abstract class Transferencia {
         throw new BusinessException("financeiro.caixa.Transferencia.exclusao_anulacao_slip");
       }
 
-      $oDaoExcluirSlip = new cl_slip();
-      $oDaoExcluirSlip->excluir($this->getCodigoSlip());
-      if ($oDaoExcluirSlip->erro_status == "0") {
-        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia");
-      }
       if ($this->atualizaSaldos($iCodSlip)) {
-        return true;
+          
+          $oDaoExcluirSlip = new cl_slip();
+          $oDaoExcluirSlip->excluir($this->getCodigoSlip());
+          if ($oDaoExcluirSlip->erro_status == "0") {
+            throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia_1");
+          }
+          return true;
       }
+
     } else {
       $oDaoExcluirSlip = new cl_slip();
       $oDaoExcluirSlip->excluir($this->getCodigoSlip());
       if ($oDaoExcluirSlip->erro_status == "0") {
-        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia");
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia_2");
       }
       return true;
     }
@@ -951,9 +955,8 @@ abstract class Transferencia {
 
   $clTransferencia = new cl_conlancamslip();
   $sSqlSlip = $clTransferencia->sql_query_lancamento_slip(null, "date_part('y', k17_data) as ano, k17_instit", null, "c84_slip = $iCodSlip and k17_situacao in (1, 4)");
-  $sql = "select fc_removeslip($iCodSlip, $sSqlSlip->ano, $sSqlSlip->k17_instit)";
-
-  db_query($sql);
+  $resultSlip = db_utils::fieldsMemory($result = db_query($sSqlSlip),0);
+  $sql = "select fc_removeslip($iCodSlip, $resultSlip->ano, $resultSlip->k17_instit)";
 
   $rsResultFcRemoveSlip = db_query($sql);
 
