@@ -22,6 +22,7 @@ if($oPost->atualizar){
 		$dataBuscada = db_utils::fieldsMemory($rsSql, 0)->l47_dataenvio;
 
 		$dataFormatada = join('-', array_reverse(explode('/', $oPost->data_envio)));
+
 		if($dataFormatada >= $dataBuscada){
 			$clliclancedital->l47_dataenviosicom = $dataFormatada;
 
@@ -106,35 +107,3 @@ if($oPost->atualizar){
 </table>
 </body>
 </html>
-
-<script>
-
-    // let elementoTela = parent.document.getElementById('Jandb_iframe_dataenvio');
-    // elementoTela.addEventListener('drag', (e) => {
-    //     console.log('Evento: ', e);
-    //     e.preventDefault();
-    // });
-
-    function js_posiciona(){
-        setTimeout(() => {
-            // let elemento = document.getElementById('Jandb_iframe_dataenvio');
-            // elemento.ondrag = (event) => {
-            //     console.log('Enter in drag', event);
-            //     event.preventDefault();
-            // }
-            //
-            // elemento.ondragstart = (event) => {
-            //     console.log('Inicio do drag', event);
-            //     event.preventDefault();
-            // }
-            //
-            // elemento.onclick = (e) => {
-            //     console.log('Evento no click: ', e);
-            // }
-        }, 200);
-    }
-
-    function js_termina(valor){
-        console.log('Valor do elemento');
-    }
-</script>
