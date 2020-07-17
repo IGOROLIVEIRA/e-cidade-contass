@@ -100,7 +100,6 @@ switch($oParam->exec) {
 			for ($count = 0; $count < pg_num_rows($rsDotacoes); $count++) {
 
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
-				$iCodigoDotacao = $oDotacaoAcordo->ac22_coddot . $oDotacaoAcordo->ac22_anousu;
 
 				$sSqlItens = "SELECT DISTINCT
 								ac20_pcmater,
@@ -129,7 +128,7 @@ switch($oParam->exec) {
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
 															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
 															AND ac22_coddot = '" . $oDotacaoAcordo->ac22_coddot . "' 
-															--AND ac22_anousu = '" . $oDotacaoAcordo->ac22_anousu . "' 
+															AND ac22_anousu = '" . $oDotacaoAcordo->ac22_anousu . "' 
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 				$rsResultItens = db_query($sSqlItens);
@@ -141,9 +140,9 @@ switch($oParam->exec) {
 
 					$oDotacao = new stdClass();
 					$oDotacao->aItens = array();
-
 					for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 						$aItens = db_utils::fieldsMemory($rsResultItens, $i);
+						$iCodigoDotacao = $aItens->ac22_coddot . $aItens->ac22_anousu;
 
 						$sElemento = substr($aItens->o56_elemento, 0, 7);
 

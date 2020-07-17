@@ -166,7 +166,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
              * Nome da função que ira mostrar o saldo da dotação
              */
             let sNomeFuncaoDotacao = me.sNameInstance + `.mostrarDadosDotacao(${oDotacao.iDotacao},${oDotacao.iAnoDotacao})`;
-            let sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoGrupo('${iCodigoDotacao}', '${oDotacao.sElemento}')`;
+            let sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoGrupo('${iCodigoDotacao}', '${oDotacao.sElemento}', '${oDotacao.iAnoDotacao}')`;
             let sNomeFuncaoMarcarTodos = me.sNameInstance + `.marcaTodosItens('${iCodigoDotacao}')`;
             let sNomeFuncaoHide = me.sNameInstance + `.controlArrow('${iCodigoDotacao}')`;
 
@@ -276,9 +276,10 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
     /**
      * Abre janela para alterar a Dotação do grupo de itens
      */
-    this.pesquisaDotacaoGrupo = (sDotacao, sElemento) => {
+    this.pesquisaDotacaoGrupo = (sDotacao, sElemento, iAnoDot) => {
 
         sDotacaoAtual = sDotacao;
+        iAnoDotGrupo = iAnoDot;
 
         let sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.alteraDotacaoGrupo|o58_coddot';
 
@@ -295,8 +296,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
      * @param {integer} Código da Nova Dotação
      */
     this.alteraDotacaoGrupo = (iCodigoDotacao) => {
-
-        let iCodDotAnterior =  me.aDotacoes[sDotacaoAtual].iDotacao;
+        let keyDotAnterior = sDotacaoAtual;
 
         if (me.aDotacoes[sDotacaoAtual]) {
 
@@ -308,13 +308,15 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
                 oItem.iDotacao = iCodigoDotacao;
                 oItem.iAnoDotacao = me.iAnoSessao;
                 oItem.lAlterado = true;
+                oItem.iAnoDotAnterior = iAnoDotGrupo;
                 me.marcaLinhaItem(oItem.iLinhaNaGrid);
 
             });
         }
         delete sDotacaoAtual;
+        delete iAnoDotGrupo;
         db_iframe_alterarDotacao.hide();
-        me.renderizaLinhasGrid(iCodDotAnterior);
+        me.renderizaLinhasGrid(keyDotAnterior);
     }
 
     /* Seta as classes nas TRs para manipulação da exibição/ocultação das linhas */
@@ -382,6 +384,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iDotacao = iCodigoDotacao;
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iAnoDotacao = me.iAnoSessao;
                 me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].lAlterado = true;
+                me.aDotacoes[keyDotAnterior].aItens[iIndiceItemAtual].iAnoDotAnterior = iAnoDotAtual;
             }
         }
 
@@ -421,7 +424,7 @@ DBViewAcordoDotacao = function(iCodigoAcordo, sNameInstance) {
                     oItemAlterar.iCodigoItem = oItem.iCodigoItem;
                     oItemAlterar.iCodigoDotacao = oItem.iDotacao;
                     oItemAlterar.iAnoDotacao = oItem.iAnoDotacao;
-                    oItemAlterar.iAnoDotAnterior = me.aDotacoes[iCodigoDotacao].iAnoDotacao;
+                    oItemAlterar.iAnoDotAnterior = oItem.iAnoDotAnterior;
                     oParam.aItens.push(oItemAlterar);
                 }
             });
