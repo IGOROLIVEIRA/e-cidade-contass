@@ -56,13 +56,14 @@ switch($oParam->exec) {
 			$iAcordo = $oParam->iCodigoAcordo;
 			$oAcordo = new Acordo($iAcordo);
 
-			if(count($oAcordo->getAutorizacoes())){
-				throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
-			}
-
 			$aItens = $oParam->aItens;
 
 			foreach ($oParam->aItens as $oItem) {
+
+				if(count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))){
+					throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
+				}
+
 				$oItem->iAcordo = $iAcordo;
 				$oAcordoItem = AcordoItem::alterarDotacao($oItem);
 			}
