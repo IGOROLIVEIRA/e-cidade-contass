@@ -169,13 +169,23 @@ $db_botao = true;
                       </fieldset>
                     </td>
                   </tr>
-                <tr>
+
+                  <tr>
+                  <?php if(!$dataenviosicom): ?>
                   <td nowrap title="Data de Envio">
-                    <b>Data de envio:</b>
+                    <b>Data de Envio:</b>
                   </td>
                   <td>
                     <?= db_inputdata("data_referencia", '', '', '',true,'text',1);?>
                   </td>
+                  <?php else:?>
+                  <td nowrap title="Data de Reenvio">
+                      <b>Data de Reenvio:</b>
+                  </td>
+                  <td>
+                      <?= db_inputdata("data_reenvio", '', '', '',true,'text',1);?>
+                  </td>
+                  <?php endif;?>
                 </tr>
               </table>
             </fieldset>
@@ -187,7 +197,7 @@ $db_botao = true;
   <input name="<?=($db_opcao==1?'incluir':($db_opcao==2||$db_opcao==22?'alterar':'excluir'))?>" type="submit" id="db_opcao"
          value="<?=($db_opcao==1?'Incluir':($db_opcao==2||$db_opcao==22?'Alterar':'Excluir'))?>"
     <?=($db_botao==false?'disabled':'') ?>  onClick="js_salvarEdital();">
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa(<?= $dataenviosicom ?>);" >
 </form>
 
 <script>
@@ -207,18 +217,25 @@ $db_botao = true;
         js_mostraDescricao(e.target.value);
     });
 
-    function js_pesquisa(){
-        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?edital=1&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo','Pesquisa',true,"0");
+    function js_pesquisa(dataenviosicom=false){
+        if(!dataenviosicom){
+            js_OpenJanelaIframe('','db_iframe_liclicita','func_edital.php?aguardando_envio=true&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|Status','Pesquisa',true,"0");
+        }
+        // else{
+        //     js_OpenJanelaIframe('','db_iframe_liclicita','func_edital.php?dataenviosicom=true&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|Status','Pesquisa',true,"0");
+        // }
     }
-    function js_preenchepesquisa(nroedital, codigo){
-        js_buscaDadosLicitacao(codigo);
-        db_iframe_liclicita.hide();
+    function js_preenchepesquisa(nroedital, codigo, status){
+        if(status.trim() != 'AGUARDANDO ENVIO' && status.trim() != 'AGUARDANDO REENVIO'){
+            js_buscaDadosLicitacao(codigo);
+            db_iframe_liclicita.hide();
+        }
     }
 
     function js_buscaDadosLicitacao(valor){
         var oParam = new Object();
         oParam.exec = 'findDadosLicitacao';
-        oParam.iCodigoLicitacao = valor;
+        oParam.iCodigoLicitacao = parseInt(valor);
         var oAjax = new Ajax.Request(
             'lic4_licitacao.RPC.php',
             { parameters: 'json='+Object.toJSON(oParam),
@@ -233,12 +250,17 @@ $db_botao = true;
         var oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
 
-        if(dadoslicitacao.l20_cadinicial == '1'){
-            document.location.href="lic4_editalinclusao.php?licitacao="+dadoslicitacao.l20_codigo;
-            return;
-        }else{
-            document.location.href="lic4_editalalteracao.php?licitacao="+dadoslicitacao.l20_codigo;
-            return;
+        switch (dadoslicitacao.l20_cadinicial) {
+            case '1':
+                document.location.href="lic4_editalinclusao.php?licitacao="+dadoslicitacao.l20_codigo;
+                break;
+            case '2':
+                document.location.href="lic4_editalalteracao.php?licitacao="+dadoslicitacao.l20_codigo;
+                break;
+            case '3':
+            case '4':
+                document.location.href="lic4_editalretificacao001.php?licitacao="+dadoslicitacao.l20_codigo+"&dataenviosicom=true";
+                break;
         }
     }
 
@@ -444,7 +466,6 @@ $db_botao = true;
         }
 
     }
-
 
     let elemento = document.getElementById('links');
     elemento.addEventListener('keyup', (e) => {

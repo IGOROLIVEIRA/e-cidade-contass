@@ -241,3 +241,9 @@ if (!trim($licitacao)) {
 }
 ?>
 
+<script>
+    function retornoEnvio(){
+        db_iframe_liclicita.hide();
+        js_pesquisa();
+    }
+</script>
