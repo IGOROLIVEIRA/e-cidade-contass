@@ -268,8 +268,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     $clcvc10->si146_tpveiculo = $oDados10->tpveiculo;
                     $clcvc10->si146_subtipoveiculo = $oDados10->subtipoveiculo;
                     $clcvc10->si146_descveiculo = $this->removeCaracteres($oDados10->descveiculo);
-                    $clcvc10->si146_marca = $oDados10->marca;
-                    $clcvc10->si146_modelo = $oDados10->modelo;
+                    $clcvc10->si146_marca = $this->removeCaracteres($oDados10->marca);
+                    $clcvc10->si146_modelo = $this->removeCaracteres($oDados10->modelo);
                     $clcvc10->si146_ano = $oDados10->ano;
                     $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                     $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
@@ -546,7 +546,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_qtdeutilizada = $oResult20->qtdeutilizada;
                 $oDados20->si147_vlgasto = $oResult20->vlgasto;
                 if(in_array( $oResult20->tipogasto , array(8,9,99))){
-                    $oDados20->si147_dscpecasservicos = substr($oResult20->dscpecasservicos, 0, 49);
+                    $oDados20->si147_dscpecasservicos = $this->removeCaracteres(substr($oResult20->dscpecasservicos, 0, 49));
                 }else{
                     $oDados20->si147_dscpecasservicos = " ";
                 }
@@ -781,7 +781,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 if($oDados40->tipobaixa == 99){
-                    $clcvc40->si149_descbaixa = $oDados40->descbaixa;
+                    $clcvc40->si149_descbaixa = $this->removeCaracteres($oDados40->descbaixa);
                 }else{
                     $clcvc40->si149_descbaixa = " ";
                 }
