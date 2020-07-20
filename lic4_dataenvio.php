@@ -16,15 +16,16 @@ $error = false;
 
 if($oPost->atualizar){
 	if($oPost->data_envio){
-		$sSql = $clliclancedital->sql_query(null, 'l47_sequencial as codigo, l47_dataenvio', '', 'l47_liclicita = '.$oGet->codigo);
+		$sSql = $clliclancedital->sql_query(null, 'liclancedital.*', '', 'l47_liclicita = '.$oGet->codigo);
 		$rsSql = $clliclancedital->sql_record($sSql);
-		$codigo = db_utils::fieldsMemory($rsSql, 0)->codigo;
-		$dataBuscada = db_utils::fieldsMemory($rsSql, 0)->l47_dataenvio;
+		$oEdital = db_utils::fieldsMemory($rsSql, 0);
+		$codigo = $oEdital->l47_sequencial;
+		$dataBuscada = $oEdital->l47_dataenvio;
 
 		$dataFormatada = join('-', array_reverse(explode('/', $oPost->data_envio)));
 
 		if($dataFormatada >= $dataBuscada){
-			$clliclancedital->l47_dataenviosicom = $dataFormatada;
+			$clliclancedital->l47_dataenvio = $dataFormatada;
 
 			// Altera o status de AGUARDANDO ENVIO para ENVIADO...
 			$clliclicita->l20_codigo = $oGet->codigo;
@@ -32,8 +33,17 @@ if($oPost->atualizar){
 			$clliclicita->alterar($oGet->codigo);
 
 			if($clliclicita->numrows_alterar){
-				$clliclancedital->alterar($codigo);
-				$msg = 'Data de Envio cadastrada com sucesso!';
+			    $clliclancedital->l47_sequencial = $oEdital->l47_sequencial;
+			    $clliclancedital->l47_linkpub = $oEdital->l47_linkpub;
+			    $clliclancedital->l47_origemrecurso = $oEdital->l47_origemrecurso;
+			    $clliclancedital->l47_descrecurso = $oEdital->l47_descrecurso;
+			    $clliclancedital->alterar($codigo);
+				if($clliclancedital->erro_status == '0'){
+					$error = true;
+					$msg = $clliclancedital->erro_sql;
+                }else{
+				    $msg = 'Data de Envio cadastrada com sucesso!';
+                }
 			}else{
 				$error = true;
 				$msg = $clliclicita->erro_sql;
@@ -89,7 +99,7 @@ if($oPost->atualizar){
 						</td>
 						<td width="96%" align="left" nowrap>
 							<?
-							db_inputdata_position('data_envio',$data_envio_dia,$data_envio_mes,$data_envio_ano,true,'text',1,"","","","", "js_posiciona();", '', '', 'parent');
+							db_inputdata_position('data_envio',$data_envio_dia,$data_envio_mes,$data_envio_ano,true,'text',1,"","","","", "", '', '', 'parent');
 							?>
 						</td>
 					</tr>

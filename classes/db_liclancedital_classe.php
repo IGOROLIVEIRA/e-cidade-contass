@@ -51,10 +51,6 @@ class cl_liclancedital
 	var $l47_dataenvio_mes = null;
 	var $l47_dataenvio_ano = null;
 	var $l47_dataenvio = null;
-	var $l47_datareenvio = null;
-	var $l47_datareenvio_dia = null;
-	var $l47_datareenvio_mes = null;
-	var $l47_datareenvio_ano = null;
 	var $l47_liclicita = null;
 
 	// cria propriedade com as variaveis do arquivo
@@ -64,7 +60,6 @@ class cl_liclancedital
                  l47_origemrecurso = int8 = Origem do recurso
                  l47_descrecurso = varchar(250) = Descrição do recurso
                  l47_dataenvio = date = Data envio
-                 l47_datareenvio = date = Data envio SICOM
                  l47_liclicita = int4 = Número da licitação
                   ";
 
@@ -107,14 +102,14 @@ class cl_liclancedital
 				}
 			}
 
-			if ($this->l47_datareenvio == "") {
-				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-				if ($this->l47_datareenvio != "") {
-					$this->l47_datareenvio = $this->l47_datareenvio . "-" . $this->l47_datareenvio . "-" . $this->l47_datareenvio;
-				}
-			}
+//			if ($this->l47_datareenvio == "") {
+//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
+//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
+//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
+//				if ($this->l47_datareenvio != "") {
+//					$this->l47_datareenvio = $this->l47_datareenvio . "-" . $this->l47_datareenvio . "-" . $this->l47_datareenvio;
+//				}
+//			}
 
 		} else {
 			$this->l47_sequencial = ($this->l47_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_sequencial"] : $this->l47_sequencial);
@@ -196,7 +191,6 @@ class cl_liclancedital
                          ,l47_descrecurso
                          ,l47_dataenvio
                          ,l47_liclicita
-                         ,l47_datareenvio
                 )
                 values (
                  $this->l47_sequencial
@@ -205,8 +199,7 @@ class cl_liclancedital
                 ,'$this->l47_descrecurso'
                 ," . ($this->l47_dataenvio == "null" || $this->l47_dataenvio == "" ? "null" : "'" . $this->l47_dataenvio . "'") . "
                 ,$this->l47_liclicita
-                ," . ($this->l47_datareenvio == "null" || $this->l47_datareenvio == "" ? "null" : "'" . $this->l47_datareenvio . "'") . "
-                      )";
+                )";
 
 		$result = db_query($sql);
 		if ($result == false) {
@@ -240,8 +233,8 @@ class cl_liclancedital
 	function alterar($l47_sequencial = null)
 	{
 		$this->atualizacampos();
-		$sql = db_query('SELECT l20_cadinicial from liclicita where l20_codigo = '.$this->l47_liclicita);
-		$statusLicitacao = db_utils::fieldsMemory($sql, 0)->l20_cadinicial;
+//		$sql = db_query('SELECT l20_cadinicial from liclicita where l20_codigo = '.$this->l47_liclicita);
+//		$statusLicitacao = db_utils::fieldsMemory($sql, 0)->l20_cadinicial;
 
 		$virgula = " ";
 		$sql = " update liclancedital set ";
@@ -250,26 +243,23 @@ class cl_liclancedital
 			$virgula = ",";
 		}
 
-//		if (!$this->l47_datareenvio || $this->l47_datareenvio == null) {
-			if (trim($this->l47_origemrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"])) {
-				$sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
-				$virgula = ",";
-			}
-			else {
-				$this->erro_sql = " Campo Origem Recurso não Informado.";
-				$this->erro_campo = "l47_origemrecurso";
-				$this->erro_banco = "";
-				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-				$this->erro_status = "0";
-				return false;
-			}
+		if (trim($this->l47_origemrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"])) {
+			$sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
+			$virgula = ",";
+		}else {
+			$this->erro_sql = " Campo Origem Recurso não Informado.";
+			$this->erro_campo = "l47_origemrecurso";
+			$this->erro_banco = "";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
 
-			if (trim($this->l47_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"]) && !isset($this->l47_datareenvio)) {
+			if (trim($this->l47_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
 				$sql .= $virgula . " l47_dataenvio = '$this->l47_dataenvio' ";
 				$virgula = ",";
 			} else {
-				if(!$this->l47_datareenvio && $statusLicitacao == 2){
 					$this->erro_sql = " Campo Data Envio não Informado.";
 					$this->erro_campo = "l47_dataenvio";
 					$this->erro_banco = "";
@@ -277,35 +267,6 @@ class cl_liclancedital
 					$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 					$this->erro_status = "0";
 					return false;
-				}
-			}
-
-			if(!trim($this->l47_datareenvio) && $statusLicitacao == 3){
-				$this->erro_sql = " Campo Data Reenvio não Informado.";
-				$this->erro_campo = "l47_datareenvio";
-				$this->erro_banco = "";
-				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-				$this->erro_status = "0";
-				return false;
-			}else{
-				if($this->l47_datareenvio){
-					$sSql = 'SELECT l47_dataenvio FROM liclancedital WHERE l47_liclicita = '.$this->l47_liclicita;
-					$rsSql = pg_query($sSql);
-					$iEnvio = db_utils::fieldsMemory($rsSql, 0)->l47_dataenvio;
-
-					if($iEnvio > $this->l47_datareenvio){
-						$this->erro_sql = " Campo Data Reenvio menor que a Data de Envio.";
-						$this->erro_campo = "l47_datareenvio";
-						$this->erro_banco = "";
-						$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-						$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-						$this->erro_status = "0";
-						return false;
-					}
-
-					$sql .= $virgula . " l47_datareenvio = ".(isset($this->l47_datareenvio) != null ? "'".$this->l47_datareenvio."'" : 'null');
-				}
 			}
 
 			if (!trim($this->l47_origemrecurso)) {
@@ -321,13 +282,13 @@ class cl_liclancedital
 					$sql .= $virgula . " l47_descrecurso = '$this->l47_descrecurso' ";
 				}
 			}
-//		}
 
 		$sql .= " where ";
 
 		if ($l47_sequencial != null) {
 			$sql .= " l47_sequencial = $l47_sequencial";
 		}
+
 		$result = db_query($sql);
 
 		if ($result == false) {

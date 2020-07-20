@@ -57,6 +57,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <?php if(!$oGet->pendentes):?>
     <tr>
         <td height="63" align="center" valign="top">
             <table width="35%" border="0" align="center" cellspacing="0">
@@ -115,7 +116,7 @@ $iAnoSessao = db_getsession("DB_anousu");
             </table>
         </td>
     </tr>
-
+    <?php endif;?>
     <tr>
         <td align="center" valign="top">
             <?
@@ -123,8 +124,17 @@ $iAnoSessao = db_getsession("DB_anousu");
             if(!isset($pesquisa_chave)){
 
                 $sWhere = '';
-                if($aguardando_envio){
+                if($pendentes){
                   $sWhere = ' AND liclicita.l20_cadinicial = 1';
+                }
+                if($aguardando_envio){
+					$sWhere = $sWhere ? ' AND '.$sWhere : '';
+					$sWhere .= " liclancedital.l47_datareenvio IS NULL AND liclicita.l20_cadinicial in (1,2) ";
+				}
+
+                if($dataenviosicom){
+					$sWhere = $sWhere ? ' AND '.$sWhere : '';
+                    $sWhere .= " liclicita.l20_cadinicial in (3, 4) ";
                 }
 
                 $sql = "
@@ -140,14 +150,12 @@ $iAnoSessao = db_getsession("DB_anousu");
                         (CASE 
                         WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
                           THEN liclicita.l20_dtpublic
-                        WHEN pc50_pctipocompratribunal in (100, 101, 102, 106) and liclicita.l20_datacria is not null 
+                        WHEN pc50_pctipocompratribunal in (100, 101, 102, 103, 106) and liclicita.l20_datacria is not null 
                           THEN liclicita.l20_datacria
                         WHEN liclancedital.l47_dataenvio is not null
                           THEN liclancedital.l47_dataenvio
                         END) as dl_Data_Referencia,
-                        (CASE WHEN liclicita.l20_cadinicial = 1 or liclicita.l20_cadinicial is null THEN 'PENDENTE'
-                            WHEN liclicita.l20_cadinicial = 2 THEN 'AGUARDANDO ENVIO'
-                        END) as status
+                        l10_descr as status
                     FROM liclicita
                     INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
                     INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
@@ -167,14 +175,17 @@ $iAnoSessao = db_getsession("DB_anousu");
                     LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
                     LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
                     LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
+                    INNER JOIN editalsituacao on editalsituacao.l10_sequencial = liclicita.l20_cadinicial 
                     WHERE l20_instit = ".db_getsession('DB_instit')."
-                       AND EXTRACT (YEAR from l20_dtpublic) >= 2020 AND liclicita.l20_naturezaobjeto in (1, 7)
+                       AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                       AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                       WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                       AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                       END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto  = 1
                        AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
-                       AND l47_dataenviosicom is null
                     ORDER BY l20_codigo";
-				//$sWhere
-                $aRepassa = array();
 
+                $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
             }
             ?>
@@ -193,14 +204,17 @@ if(!isset($pesquisa_chave)){
 ?>
 <script>
     let aTr = document.querySelectorAll('td.DBLovrotRegistrosRetornados');
-    let pendentes = "<?=$oGet->aguardando_envio?>";
+    let pendentes = "<?=$oGet->pendentes?>";
+    let dataenvio = "<?=$oGet->dataenviosicom?>";
+
     for(let count=0;count<aTr.length;count++){
         let idCampo = parseInt(aTr[count].id.replace('I', ''));
         let format = idCampo.toString().includes('01') ? idCampo.toString().replace('01', '1') : idCampo;
         let idCampoInicial = format == 10 ? '00' : parseInt(format.toString().substr(0, format.toString().length - 1)) - 1;
 
         if(aTr[count].cellIndex == 10){
-            if(aTr[count].innerText.replace(/\./g, '').trim() == 'AGUARDANDO ENVIO'){
+            let status = aTr[count].innerText.replace(/\./g, '').trim();
+            if( status == 'AGUARDANDO ENVIO' || status == 'AGUARDANDO REENVIO'){
                 if(idCampoInicial == '00'){
                     for(let count = 0; count<=10; count++){
                         let campo = document.getElementById(`I0${count}`);
@@ -229,7 +243,11 @@ if(!isset($pesquisa_chave)){
                 let codigoLicitacao = document.getElementById(`I${idCampoInicial}`).innerText.trim();
                 document.getElementById(`${aTr[count].id}`).bgColor = 'red';
                 document.getElementById(`${aTr[count].id}`).onclick = (e) => {
-                    js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
+                    if(status == 'AGUARDANDO REENVIO'){
+                        js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}&reenvio=true`,'Data de Reenvio - SICOM',true, null, 550, 250, 180);
+                    }else if(status == 'AGUARDANDO ENVIO'){
+                        js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
+                    }
                 }
             }else{
                 /* Trecho que exibe as licitações pendentes no módulo Licitação */
@@ -248,6 +266,11 @@ if(!isset($pesquisa_chave)){
                 }
             }
         }
+    }
+
+    function retornoEnvio(){
+        db_iframe_dataenvio.hide();
+        parent.retornoEnvio();
     }
 
 </script>

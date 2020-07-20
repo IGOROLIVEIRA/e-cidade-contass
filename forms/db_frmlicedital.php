@@ -178,13 +178,6 @@ $db_botao = true;
                   <td>
                     <?= db_inputdata("data_referencia", '', '', '',true,'text',1);?>
                   </td>
-                  <?php else:?>
-                  <td nowrap title="Data de Reenvio">
-                      <b>Data de Reenvio:</b>
-                  </td>
-                  <td>
-                      <?= db_inputdata("data_reenvio", '', '', '',true,'text',1);?>
-                  </td>
                   <?php endif;?>
                 </tr>
               </table>
@@ -219,14 +212,11 @@ $db_botao = true;
 
     function js_pesquisa(dataenviosicom=false){
         if(!dataenviosicom){
-            js_OpenJanelaIframe('','db_iframe_liclicita','func_edital.php?aguardando_envio=true&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|Status','Pesquisa',true,"0");
+            js_OpenJanelaIframe('','db_iframe_liclicita','func_edital.php?funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|Status','Pesquisa',true,"0");
         }
-        // else{
-        //     js_OpenJanelaIframe('','db_iframe_liclicita','func_edital.php?dataenviosicom=true&funcao_js=parent.js_preenchepesquisa|l20_nroedital|l20_codigo|Status','Pesquisa',true,"0");
-        // }
     }
     function js_preenchepesquisa(nroedital, codigo, status){
-        if(status.trim() != 'AGUARDANDO ENVIO' && status.trim() != 'AGUARDANDO REENVIO'){
+        if(status.trim() != 'AGUARDANDO ENVIO'){
             js_buscaDadosLicitacao(codigo);
             db_iframe_liclicita.hide();
         }
@@ -255,11 +245,8 @@ $db_botao = true;
                 document.location.href="lic4_editalinclusao.php?licitacao="+dadoslicitacao.l20_codigo;
                 break;
             case '2':
-                document.location.href="lic4_editalalteracao.php?licitacao="+dadoslicitacao.l20_codigo;
-                break;
             case '3':
-            case '4':
-                document.location.href="lic4_editalretificacao001.php?licitacao="+dadoslicitacao.l20_codigo+"&dataenviosicom=true";
+                document.location.href="lic4_editalalteracao.php?licitacao="+dadoslicitacao.l20_codigo;
                 break;
         }
     }
