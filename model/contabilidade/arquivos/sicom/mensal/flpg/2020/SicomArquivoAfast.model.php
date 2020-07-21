@@ -116,7 +116,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
                            WHEN r45_situac in (6,3,8) THEN 
-                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit")." LIMIT 1)
                            ELSE 99
                        END AS si199_tipoafastamento
             FROM afasta
@@ -231,7 +231,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
                            WHEN r45_situac in (6,3,8) THEN 
-                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit")." LIMIT 1)
                            ELSE 99
                        END AS si199_tipoafastamento,
 
@@ -404,7 +404,7 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
                            WHEN r45_situac = 2 OR r45_situac = 7 OR TRIM(r45_codafa) = 'X' THEN 3
                            WHEN TRIM(r45_codafa) = 'W' THEN 4
                            WHEN r45_situac in (6,3,8) THEN 
-                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit").")
+                           (SELECT DISTINCT r33_tipoafastamentosicom FROM inssirf WHERE r33_codtab = rh02_tbprev+2 AND r33_mesusu = {$iMes} AND r33_anousu = ".db_getsession("DB_anousu")." AND r33_instit = ".db_getsession("DB_instit")." LIMIT 1)
                            ELSE 99
                        END AS si199_tipoafastamento,
                        r45_dtlanc as datalancamento,
