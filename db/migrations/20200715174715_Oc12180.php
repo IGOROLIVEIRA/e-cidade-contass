@@ -94,6 +94,21 @@ class Oc12180 extends AbstractMigration
                     DELETE FROM conlancamcorrente
                     WHERE c86_conlancam IN (SELECT UNNEST(nConlancam));
                     
+                    DELETE FROM cornump 
+                    WHERE cornump.k12_id IN (SELECT UNNEST(nIdCorrente))
+                      AND cornump.k12_data IN (SELECT UNNEST(nDateCorrente))
+                      AND cornump.k12_autent IN (SELECT UNNEST(nAutent));
+                     
+                   	DELETE FROM corplacaixa
+                    WHERE corplacaixa.k82_id IN (SELECT UNNEST(nIdCorrente))
+                      AND corplacaixa.k82_data IN (SELECT UNNEST(nDateCorrente))
+                      AND corplacaixa.k82_autent IN (SELECT UNNEST(nAutent));
+                     
+                   	DELETE FROM corhist
+                    WHERE corhist.k12_id IN (SELECT UNNEST(nIdCorrente))
+                      AND corhist.k12_data IN (SELECT UNNEST(nDateCorrente))
+                      AND corhist.k12_autent IN (SELECT UNNEST(nAutent));
+                    
                     DELETE FROM corrente
                     WHERE corrente.k12_id IN (SELECT UNNEST(nIdCorrente))
                       AND corrente.k12_data IN (SELECT UNNEST(nDateCorrente))
