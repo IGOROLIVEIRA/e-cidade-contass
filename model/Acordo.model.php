@@ -2689,7 +2689,7 @@ class Acordo
      * @param integer [$iAutoriza] codigo da Autorizacao
      * @return array
      */
-    public function getAutorizacoes($iAutoriza = '')
+    public function getAutorizacoes($iAutoriza = '', $iCheckedYear = '')
     {
 
         $sSqlAutorizacoes = "select  e54_autori as codigo,";
@@ -2708,6 +2708,10 @@ class Acordo
         $sSqlAutorizacoes .= "        left join empempaut on e61_autori = e54_autori ";
         $sSqlAutorizacoes .= "        left join empempenho on e61_numemp = e60_numemp ";
         $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+
+        if($iCheckedYear != ''){
+			$sSqlAutorizacoes .= " AND extract(YEAR FROM e54_emiss) = {$iCheckedYear} ";
+		}
 
         if ($iAutoriza != '') {
             $sSqlAutorizacoes .= " and e54_autori = {$iAutoriza}";
@@ -2739,7 +2743,13 @@ class Acordo
         $sSqlAutorizacoes .= "        left join empempaut      on e60_numemp  = e61_numemp ";
         $sSqlAutorizacoes .= "        inner join empautoriza   on e54_autori  = e61_autori ";
         $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+
+		if($iCheckedYear != ''){
+			$sSqlAutorizacoes .= " AND extract(YEAR FROM e54_emiss) = {$iCheckedYear} ";
+		}
+
         $sSqlAutorizacoes .= "  order by codigo";
+
         $rsAutorizacoes = db_query($sSqlAutorizacoes);
 
         return db_utils::getCollectionByRecord($rsAutorizacoes);
