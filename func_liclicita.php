@@ -313,62 +313,6 @@ $sWhereContratos = " and 1 = 1 ";
           ";
                 }
 
-                if (isset($edital) && $edital == true) {
-                    $sWhere = '';
-                    if($aguardando_envio){
-                      $sWhere = ' AND liclicita.l20_cadinicial = 1';
-                    }
-
-                    $sql = "
-                      SELECT DISTINCT liclicita.l20_codigo,
-                            liclicita.l20_edital,
-                            liclicita.l20_nroedital,
-                            liclicita.l20_anousu,
-                            pctipocompra.pc50_descr,
-                            liclicita.l20_numero,
-                            pctipocompra.pc50_pctipocompratribunal,
-                            liclicita.l20_objeto,
-                            liclicita.l20_naturezaobjeto dl_Natureza_objeto,
-                            (CASE
-                            WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null
-                              THEN liclicita.l20_dtpublic
-                            WHEN pc50_pctipocompratribunal in (100, 101, 102, 103, 106) and liclicita.l20_datacria is not null
-                              THEN liclicita.l20_datacria
-                            WHEN liclancedital.l47_dataenvio is not null
-                              THEN liclancedital.l47_dataenvio
-                            END) as dl_Data_Referencia,
-                            (CASE WHEN liclicita.l20_cadinicial = 1 or liclicita.l20_cadinicial is null THEN 'PENDENTE'
-                                WHEN liclicita.l20_cadinicial = 2 THEN 'AGUARDANDO ENVIO'
-                            END) as status
-                        FROM liclicita
-                        INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
-                        INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
-                        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-                        INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal
-                        INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
-                        INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao
-                        INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm
-                        INNER JOIN db_config AS dbconfig ON dbconfig.codigo = cflicita.l03_instit
-                        INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
-                        INNER JOIN bairro ON bairro.j13_codi = liclocal.l26_bairro
-                        INNER JOIN ruas ON ruas.j14_codigo = liclocal.l26_lograd
-                        LEFT JOIN liclicitaproc ON liclicitaproc.l34_liclicita = liclicita.l20_codigo
-                        LEFT JOIN protprocesso ON protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
-                        LEFT JOIN liclicitem ON liclicita.l20_codigo = l21_codliclicita
-                        LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
-                        LEFT JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-                        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-                        LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
-                        WHERE l20_instit = ".db_getsession('DB_instit')."
-                           AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
-                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
-                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
-                                END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto = 1
-                            AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
-                        ORDER BY l20_codigo
-          ";
-                }
                 $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
