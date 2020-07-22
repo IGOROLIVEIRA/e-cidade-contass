@@ -102,15 +102,6 @@ class cl_liclancedital
 				}
 			}
 
-//			if ($this->l47_datareenvio == "") {
-//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-//				$this->l47_datareenvio = ($this->l47_datareenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_datareenvio"] : $this->l47_datareenvio);
-//				if ($this->l47_datareenvio != "") {
-//					$this->l47_datareenvio = $this->l47_datareenvio . "-" . $this->l47_datareenvio . "-" . $this->l47_datareenvio;
-//				}
-//			}
-
 		} else {
 			$this->l47_sequencial = ($this->l47_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_sequencial"] : $this->l47_sequencial);
 		}
@@ -120,6 +111,12 @@ class cl_liclancedital
 	function incluir($l47_sequencial)
 	{
 		$this->atualizacampos();
+
+		$sql = db_query('SELECT l03_pctipocompratribunal
+							FROM liclicita
+							INNER JOIN cflicita ON l03_codigo = l20_codtipocom
+							WHERE l20_codigo =  '.$this->l47_liclicita);
+		$iTribunal = db_utils::fieldsMemory($sql, 0)->l03_pctipocompratribunal;
 
 		if ($l47_sequencial == "" || $l47_sequencial == null) {
 			$result = db_query("select nextval('liclancedital_l47_sequencial_seq')");
@@ -164,13 +161,17 @@ class cl_liclancedital
 			return false;
 		}
 
-		if (!$this->l47_origemrecurso || $this->l47_origemrecurso == null) {
+		if ((!$this->l47_origemrecurso || $this->l47_origemrecurso == null) && !in_array($iTribunal, array(100, 101, 102, 103))) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
 			$this->erro_sql = "Verifique a origem do recurso";
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
 			return false;
+		}else{
+			if(in_array($iTribunal, array(100, 101, 102, 103))){
+				$this->l47_origemrecurso = 'null';
+			}
 		}
 
 		if ($this->l47_origemrecurso == 9) {
@@ -233,8 +234,11 @@ class cl_liclancedital
 	function alterar($l47_sequencial = null)
 	{
 		$this->atualizacampos();
-//		$sql = db_query('SELECT l20_cadinicial from liclicita where l20_codigo = '.$this->l47_liclicita);
-//		$statusLicitacao = db_utils::fieldsMemory($sql, 0)->l20_cadinicial;
+		$sql = db_query('SELECT l03_pctipocompratribunal
+							FROM liclicita
+							INNER JOIN cflicita ON l03_codigo = l20_codtipocom
+							WHERE l20_codigo =  '.$this->l47_liclicita);
+		$iTribunal = db_utils::fieldsMemory($sql, 0)->l03_pctipocompratribunal;
 
 		$virgula = " ";
 		$sql = " update liclancedital set ";
@@ -312,7 +316,7 @@ class cl_liclancedital
 				return true;
 			} else {
 				$this->erro_banco = "";
-				$this->erro_sql = "Alteração efetuada com Sucesso\\n";
+				$this->erro_sql = "Alteração efetuada com sucesso\\n";
 //        $this->erro_sql .= "Valores : " . $this->l47_sequencial;
 				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

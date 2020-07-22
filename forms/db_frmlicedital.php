@@ -72,7 +72,7 @@ $db_botao = true;
             <fieldset style="border:0px;">
 
               <table border="0">
-                  <? if(!in_array($tipo_tribunal, array(100, 101, 102, 103, 106))): ?>
+                  <? if(!in_array($tipo_tribunal, array(100, 101, 102, 103, 104, 106))): ?>
                 <tr>
                   <td title="Edital">
                     <b>Edital:</b>
@@ -108,7 +108,9 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
-                  <tr>
+
+                <?php if(!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))):?>
+                  <tr style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
                       <td nowrap title="Origem do recurso">
                           <b>Origem do recurso:</b>
                       </td>
@@ -119,6 +121,8 @@ $db_botao = true;
 						  ?>
                       </td>
                   </tr>
+                <?php endif;?>
+
                   <tr id="tr_desc_recurso">
                       <td class="label-textarea" nowrap title="Descrição do recurso">
                           <b>Descrição do Recurso:</b>
@@ -129,16 +133,18 @@ $db_botao = true;
 						  ?>
                       </td>
                   </tr>
-               <tr>
-                  <td class="label-textarea" nowrap title="Links da publicação">
-                    <b>Links da publicação:</b>
-                  </td>
-                  <td>
-                    <?
-                    db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
-                    ?>
-                  </td>
-                </tr>
+                  <?php if (!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))):?>
+                   <tr>
+                      <td class="label-textarea" nowrap title="Links da publicação">
+                        <b>Links da publicação:</b>
+                      </td>
+                      <td>
+                        <?
+                        db_textarea('links',4,56,'',true,'text',1, '', '', '', 200);
+                        ?>
+                      </td>
+                    </tr>
+                  <?php endif;?>
 
                   <tr id="td_obras" style="display: <?= $natureza_objeto == 1 || $natureza_objeto == 7 ? '' : 'none' ?>;">
                     <td colspan="3">
@@ -206,9 +212,11 @@ $db_botao = true;
 
     js_mostraDescricao(origem_rec);
 
-    document.getElementById('origem_recurso').addEventListener('change', (e)=> {
-        js_mostraDescricao(e.target.value);
-    });
+    if(document.getElementById('origem_recurso')){
+        document.getElementById('origem_recurso').addEventListener('change', (e)=> {
+            js_mostraDescricao(e.target.value);
+        });
+    }
 
     function js_pesquisa(dataenviosicom=false){
         if(!dataenviosicom){
@@ -223,10 +231,10 @@ $db_botao = true;
     }
 
     function js_buscaDadosLicitacao(valor){
-        var oParam = new Object();
+        let oParam = new Object();
         oParam.exec = 'findDadosLicitacao';
         oParam.iCodigoLicitacao = parseInt(valor);
-        var oAjax = new Ajax.Request(
+        let oAjax = new Ajax.Request(
             'lic4_licitacao.RPC.php',
             { parameters: 'json='+Object.toJSON(oParam),
                 method: 'post',
@@ -237,7 +245,7 @@ $db_botao = true;
     }
 
     function js_retornoDadosLicitacao(oAjax){
-        var oRetorno = eval('('+oAjax.responseText+')');
+        let oRetorno = eval('('+oAjax.responseText+')');
         let dadoslicitacao = oRetorno.dadosLicitacao;
 
         switch (dadoslicitacao.l20_cadinicial) {
@@ -272,7 +280,7 @@ $db_botao = true;
     }
 
     function js_lancaDadosCompCallBack(){
-        var oEndereco = new Object();
+        let oEndereco = new Object();
         oEndereco.exec = 'findDadosObra';
         oEndereco.licitacao = codigoLicitacao;
         // oEndereco.sequencial = $F('idObra');
@@ -280,13 +288,13 @@ $db_botao = true;
 
         function js_retornoDadosObra(oAjax) {
             js_removeObj('msgBox');
-            var oRetorno = eval('('+oAjax.responseText+')');
+            let oRetorno = eval('('+oAjax.responseText+')');
 
-            var sExpReg  = new RegExp('\\\\n','g');
+            let sExpReg  = new RegExp('\\\\n','g');
 
             if (oRetorno.dadoscomplementares == false) {
 
-                var strMessageUsuario = "Falha ao ler os dados complementares cadastrado! ";
+                let strMessageUsuario = "Falha ao ler os dados complementares cadastrado! ";
                 js_messageBox(strMessageUsuario,'');
                 return false;
             } else {
@@ -296,12 +304,12 @@ $db_botao = true;
     }
 
     function js_AjaxCgm(oSend,jsRetorno) {
-        var msgDiv = "Aguarde ...";
+        let msgDiv = "Aguarde ...";
         js_divCarregando(msgDiv,'msgBox');
 
-        var sUrlRpc = "con4_endereco.RPC.php";
+        let sUrlRpc = "con4_endereco.RPC.php";
 
-        var oAjax = new Ajax.Request(
+        let oAjax = new Ajax.Request(
             sUrlRpc,
             { parameters: 'json='+Object.toJSON(oSend),
                 method: 'post',
@@ -313,8 +321,8 @@ $db_botao = true;
 
     function js_PreencheObra(aDados) {
 
-        var iNumDados = aDados.length;
-        for (var iInd=0; iInd < iNumDados; iInd++) {
+        let iNumDados = aDados.length;
+        for (let iInd=0; iInd < iNumDados; iInd++) {
             let sEndereco = "";
             sEndereco += "Sequencial: "+aDados[iInd].sequencial.urlDecode()+", ";
             sEndereco += "Obra: "+aDados[iInd].codigoobra.urlDecode()+", ";
@@ -371,12 +379,12 @@ $db_botao = true;
 
     function js_buscaDadosComplementares() {
         oDBGrid.clearAll(true);
-        var sUrlRpc = "con4_endereco.RPC.php";
+        let sUrlRpc = "con4_endereco.RPC.php";
         let oParam = new Object();
         oParam.exec = 'findDadosObraLicitacao';
         oParam.codLicitacao = codigoLicitacao;
 
-        var oAjax = new Ajax.Request(
+        let oAjax = new Ajax.Request(
             sUrlRpc,
             { parameters: 'json='+Object.toJSON(oParam),
                 asynchronous:false,
@@ -387,7 +395,7 @@ $db_botao = true;
     }
 
     function js_retornoDados(oAjax){
-        var oRetorno    = eval("("+oAjax.responseText+")");
+        let oRetorno    = eval("("+oAjax.responseText+")");
         oRetorno.dadoscomplementares.forEach((dado) => {
             let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
@@ -417,13 +425,13 @@ $db_botao = true;
         let resposta = window.confirm('Deseja excluir o endereço do código da obra '+valor+'?');
 
         if(resposta){
-            var sUrlRpc = "con4_endereco.RPC.php";
+            let sUrlRpc = "con4_endereco.RPC.php";
             let oParam = new Object();
             oParam.exec = 'excluiDadosObra';
             oParam.sequencial = valor;
             oParam.licitacao = codigoLicitacao;
 
-            var oAjax = new Ajax.Request(
+            let oAjax = new Ajax.Request(
                 sUrlRpc,
                 { parameters: 'json='+Object.toJSON(oParam),
                     method: 'post',

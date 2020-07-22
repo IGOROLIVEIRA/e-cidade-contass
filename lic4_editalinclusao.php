@@ -230,7 +230,7 @@ if (isset($incluir)) {
 echo "<script>";
 echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "parent.iframe_editais.js_buscaDadosComplementares();";
-echo "parent.iframe_documentos.js_getDocumento();";
+//echo "parent.iframe_documentos.js_getDocumento();";
 echo "</script>";
 
 

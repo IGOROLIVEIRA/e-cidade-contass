@@ -117,8 +117,8 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI12['si185_logradouro']                  = $aREDISPI12['si185_logradouro'];
                         $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'] ? $aREDISPI12['si185_numero'] : '';
                         $aCSVREDISPI12['si185_bairro']                      = $aREDISPI12['si185_bairro'];
-                        $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
                         $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
+                        $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
                         $aCSVREDISPI12['si185_graulatitude']                = $aREDISPI12['si185_graulatitude'];
                         $aCSVREDISPI12['si185_minutolatitude']              = $aREDISPI12['si185_minutolatitude'];

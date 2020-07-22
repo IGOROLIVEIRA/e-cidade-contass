@@ -57,7 +57,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <?php if(!$oGet->pendentes && !$oGet->page_modules):?>
+    <?php if(!$oGet->pendentes && !$oGet->module_licitacao):?>
     <tr>
         <td height="63" align="center" valign="top">
             <table width="35%" border="0" align="center" cellspacing="0">
@@ -206,22 +206,32 @@ if(!isset($pesquisa_chave)){
     let aTr = document.querySelectorAll('td.DBLovrotRegistrosRetornados');
     let pendentes = "<?=$oGet->pendentes?>";
     let dataenvio = "<?=$oGet->dataenviosicom?>";
-    let page_modules = ("<?=$oGet->page_modules?>" == 'true');
+    let module_licitacao = ("<?=$oGet->module_licitacao?>" == 'true');
 
     for(let count=0;count<aTr.length;count++){
+
         let idCampo = parseInt(aTr[count].id.replace('I', ''));
         let format = idCampo.toString().includes('01') ? idCampo.toString().replace('01', '1') : idCampo;
         let idCampoInicial = format == 10 ? '00' : parseInt(format.toString().substr(0, format.toString().length - 1)) - 1;
 
         if(aTr[count].cellIndex == 10){
+
             let status = aTr[count].innerText.replace(/\./g, '').trim();
+
             if( status == 'AGUARDANDO ENVIO'){
                 if(idCampoInicial == '00'){
                     for(let count = 0; count<=10; count++){
                         let campo = document.getElementById(`I0${count}`);
                         campo.bgColor = 'red';
-                        if(!page_modules){
+
+                        /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
+                        if(!module_licitacao){
+                                /*
+                                * Adiciona o evento de click a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
+                                * */
+
                             campo.onclick = (e) => {
+
                                 // 1209 -> posição onde começa a última célula do registro contendo o status da licitação.
                                 if(e.clientX < 1209){
                                     parent.js_buscaDadosLicitacao(codigoLicitacao);
@@ -236,7 +246,12 @@ if(!isset($pesquisa_chave)){
                     for(let count = 0; count<10; count++){
                         let campo = document.getElementById(`I${idCampoInicial+count}`);
                         campo.bgColor = 'red';
-                        if(!page_modules){
+
+                        /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
+                        if(!module_licitacao){
+                                /*
+                                * Adiciona o evento de click a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
+                                * */
                             campo.onclick = (e) => {
                                 // 1209 -> posição onde começa a última célula do registro contendo o status da licitação.
                                 if(e.clientX < 1209){
@@ -249,9 +264,11 @@ if(!isset($pesquisa_chave)){
                         }
                     }
                 }
+
                 let codigoLicitacao = document.getElementById(`I${idCampoInicial}`).innerText.trim();
                 document.getElementById(`${aTr[count].id}`).bgColor = 'red';
-                if(!page_modules){
+
+                if(!module_licitacao){
                     document.getElementById(`${aTr[count].id}`).onclick = (e) => {
                         if(status == 'AGUARDANDO ENVIO'){
                             js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
@@ -261,15 +278,21 @@ if(!isset($pesquisa_chave)){
                     document.getElementById(`${aTr[count].id}`).style.pointerEvents = 'none';
                 }
             }else{
+
                 /* Trecho que exibe as licitações pendentes no módulo Licitação */
-                if(pendentes || page_modules){
+                if(pendentes || module_licitacao){
+
                     if(idCampoInicial == '00'){
+
                         for(let count = 0; count<=10; count++){
                             let campo = document.getElementById(`I0${count}`);
                             campo.style.pointerEvents = 'none';
                         }
+
                     }else {
+
                         for (let count = 0; count <= 10; count++) {
+
                             let campo = '';
                             if(count < 10){
                                 campo = `I${idCampoInicial + count}`;

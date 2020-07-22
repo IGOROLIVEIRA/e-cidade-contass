@@ -485,7 +485,7 @@ $sNome             = pg_result($rsUsuarioLogado,0,1);
       <hr style="color:#000; size: 25px;">
       <td>
           <h2>Editais pendentes de envio</h2>
-          <iframe frameborder="0"  width="100%" id="licitacoes" name="licitacaoes" src="func_edital.php?aguardando_envio=true&page_modules=true" scrolling="auto"></iframe>
+          <iframe frameborder="0"  width="100%" id="licitacoes" name="licitacaoes" src="func_edital.php?aguardando_envio=true&module_licitacao=true" scrolling="auto"></iframe>
       </td>
   </tr>
   <?php endif; ?>
