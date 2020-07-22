@@ -383,7 +383,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						     join orctiporec on o15_codigo  = c61_codigo
 						left join infocomplementaresinstit on k17_instit = si09_instit
 						 where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-						   and k17_debito = {$nExtras} and k17_situacao = 2
+						   and k17_debito = {$nExtras} and k17_situacao IN (2,4)
 						   and c71_coddoc in (151,161,120);
 						
 						";
@@ -427,7 +427,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									left join infocomplementaresinstit on k17_instit = si09_instit
 									left join cgm c on c.z01_numcgm = si09_gestor
 									 where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-									   and slip.k17_codigo = {$oExt30Geral->codigo} and slip.k17_situacao = 2
+									   and slip.k17_codigo = {$oExt30Geral->codigo} and slip.k17_situacao IN (2,4)
 									   and c71_coddoc in (120,151,161) ";
 
 
