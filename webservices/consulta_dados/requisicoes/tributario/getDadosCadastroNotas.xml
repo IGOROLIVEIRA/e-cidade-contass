@@ -3,7 +3,7 @@
   <campos>
     <campo campo="case when length(z01_cgccpf) = 11 then 'Fisica' when length(z01_cgccpf) = 14 then 'Juridico' else 'Indefinido' end " label="tipo"               />
     <campo campo="z01_cgccpf"                                                                                                          label="cgccpf"             />
-    <campo campo="case when z01_nomecomple is not null then z01_nomecomple else z01_nome end "                                         label="nome"               />
+    <campo campo="case when (z01_nomecomple is null or BTRIM(z01_nomecomple) = '') then z01_nome else z01_nomecomple end "                    label="nome"               />
     <campo campo="z01_nomefanta"                                                                                                       label="nome_fanta"         />
     <campo campo="z01_ident"                                                                                                           label="identidade"         />
     <campo campo="z01_incest"                                                                                                          label="inscr_est"          />
