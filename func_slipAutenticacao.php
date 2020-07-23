@@ -120,7 +120,7 @@ $where_instit = " and k17_situacao in (1 , 2) and k152_sequencial in (3, 4, 7, 8
 
 if (isset($lAltera) && $lAltera == 1) {
 	
-  $where_instit = " and k17_situacao in (1) and k17_instit = ".db_getsession("DB_instit");
+  $where_instit = " and k17_situacao in (1, 4) and k17_instit = ".db_getsession("DB_instit");
 }
 
 $campos = " distinct ".$campos;
