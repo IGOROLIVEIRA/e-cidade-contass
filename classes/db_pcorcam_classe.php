@@ -1072,5 +1072,48 @@ function sql_query_valor_item_julgado_processocompra($pc20_codorc=null,$campos="
      }
      return $sql;
   }
+
+    function sql_query_pcorcam_itemsol($pc20_codorc=null,$campos="*",$ordem=null,$dbwhere="") {
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from pcorcam ";
+        $sql .= " INNER JOIN pcorcamitem ON pc22_codorc = pc20_codorc ";
+        $sql .= " INNER JOIN pcorcamitemproc ON pc31_orcamitem = pc22_orcamitem ";
+        $sql .= " INNER JOIN pcprocitem ON pc81_codprocitem = pc31_pcprocitem ";
+        $sql .= " INNER JOIN solicitem ON pc11_codigo = pc81_solicitem ";
+        $sql .= " INNER JOIN solicitemunid ON pc17_codigo = pc11_codigo ";
+        $sql .= " INNER JOIN matunid ON m61_codmatunid = pc17_unid ";
+        $sql .= " INNER JOIN solicitempcmater ON pc16_solicitem = pc11_codigo ";
+        $sql .= " INNER JOIN pcmater ON pc01_codmater = pc16_codmater ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($pc20_codorc!=null ){
+                $sql2 .= " where pcorcam.pc20_codorc = $pc20_codorc ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
 }
 ?>
