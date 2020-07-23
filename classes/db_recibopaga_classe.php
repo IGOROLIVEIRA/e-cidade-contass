@@ -769,6 +769,28 @@ class cl_recibopaga {
     return $sSql;
     
   }
+
+    /**
+     * Retorna o somatório de todas as receitas por recibo
+     *
+     * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
+     * @since 2020-07-14
+     * @param int $iNumpreRecibo
+     * @return stdClass[]
+     */
+  public function getTotalPorReceita($iNumpreRecibo)
+  {
+      $sSql = "
+              select
+                   k00_receit,
+                   sum(k00_valor) as soma
+              from recibopaga
+              where k00_numnov = {$iNumpreRecibo}
+              group by k00_receit
+      ";
+
+      return db_utils::getCollectionByRecord($this->sql_record($sSql));
+    }
    
    
    
