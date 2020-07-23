@@ -2797,7 +2797,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             $obalancete10->si177_totaldebitos = number_format(abs($oDado10->si177_totaldebitos), 2, '.', '');
             $obalancete10->si177_totalcreditos = number_format(abs($oDado10->si177_totalcreditos), 2, '.', '');
             $obalancete10->si177_saldofinal = number_format(abs($oDado10->si177_saldofinal), 2, '.', '');
-            $obalancete10->si177_naturezasaldofinal = $oDado10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : ($oDado10->si177_saldofinal > 0 ? 'D' : 'C');
+            $obalancete10->si177_naturezasaldofinal = $obalancete10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : ($oDado10->si177_saldofinal > 0 ? 'D' : 'C');
             $obalancete10->si177_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $obalancete10->si177_instit = db_getsession("DB_instit");
 

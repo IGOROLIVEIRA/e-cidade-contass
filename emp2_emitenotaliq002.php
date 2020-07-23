@@ -243,10 +243,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
 	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
 		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-		   inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
+		   left join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
 		                             orcelemento.o56_anousu = empempenho.e60_anousu
 
-		   inner join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
+		   left join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
 		   			 and orcelemento.o56_codele = empelemento.e64_codele
 
 		   where pagordemele.e53_codord = {$e50_codord} ";
