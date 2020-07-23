@@ -162,7 +162,7 @@ var sUrlRpc = 'emp4_exclusaoempenhos.RPC.php';
 
 function js_pesquisae60_numemp(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?emperro=1&funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_anousu','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?emperro=1&pegaAnousu&funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_anousu','Pesquisa',true);
   } else {
      if (document.form1.e60_numemp.value != '') {
         js_OpenJanelaIframe('','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&pegaAnousu&funcao_js=parent.js_mostraempempenho&empempenho','Pesquisa',false);
