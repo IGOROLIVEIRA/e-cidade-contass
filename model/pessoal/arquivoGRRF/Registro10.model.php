@@ -48,12 +48,12 @@ class Registro10 extends RegistroBase {
         $aLinha['inscricaoEmpresa'] = $this->formatarCampo($this->oConfig->cgc, 14);
         $aLinha['zeros'] = $this->preencherCampo('0', 36);
         $aLinha['nomeEmpresaRazaoSocial'] = $this->formatarCampo($this->oConfig->nomeinst, 40);
-        $aLinha['logradouro'] = $this->formatarCampo("{$this->oConfig->ender}, {$this->oConfig->numero}", 50);
+        $aLinha['logradouro'] = $this->formatarCampo("{$this->oConfig->ender} {$this->oConfig->numero}", 50);
         $aLinha['bairro'] = $this->formatarCampo($this->oConfig->bairro, 20);
         $aLinha['cep'] = $this->formatarCampo($this->oConfig->cep, 8);
         $aLinha['cidade'] = $this->formatarCampo($this->oConfig->munic, 20);
         $aLinha['uf'] = $this->formatarCampo($this->oConfig->uf, 2);
-        $aLinha['telefone'] = $this->formatarCampo($this->oDadosAdicionais->fone, 12);
+        $aLinha['telefone'] = $this->formatarCampo($this->oDadosAdicionais->fone, 12, true);
         $aLinha['cnaeFiscal'] = $this->formatarCampo($this->oDadosAdicionais->cnae, 7);
         $aLinha['simples'] = "1";
         $aLinha['fpass'] = $this->formatarCampo($fpass, 3);

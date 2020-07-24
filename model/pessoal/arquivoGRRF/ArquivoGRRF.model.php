@@ -71,7 +71,7 @@ class ArquivoGRRF {
             $oRegistro10 = new Registro10($oDados, $oConfig);
             $this->adicionaLinha($oRegistro10->gerarRegistro());
 
-            $oRegistro40 = new Registro40($oDados);
+            $oRegistro40 = new Registro40($oDados, $oConfig);
             $this->adicionaLinha($oRegistro40->gerarRegistro());
 
             $oRegistro90 = new Registro90($oDados);

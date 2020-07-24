@@ -47,13 +47,13 @@ class Registro00 extends RegistroBase {
         $aLinha['inscricaoResponsavel'] = $this->formatarCampo($this->oConfig->cgc, 14);
         $aLinha['nomeResponsavel'] = $this->formatarCampo($this->oConfig->nomeinst, 30);
         $aLinha['nomePessoaContato'] = $this->formatarCampo($this->oDadosAdicionais->contato, 20);
-        $aLinha['logradouro'] = $this->formatarCampo("{$this->oConfig->ender}, {$this->oConfig->numero}", 50);
+        $aLinha['logradouro'] = $this->formatarCampo("{$this->oConfig->ender} {$this->oConfig->numero}", 50);
         $aLinha['bairro'] = $this->formatarCampo($this->oConfig->bairro, 20);
         $aLinha['cep'] = $this->formatarCampo($this->oConfig->cep, 8);
         $aLinha['cidade'] = $this->formatarCampo($this->oConfig->munic, 20);
         $aLinha['uf'] = $this->formatarCampo($this->oConfig->uf, 2);
-        $aLinha['telefoneContato'] = $this->formatarCampo($this->oDadosAdicionais->fone, 12);
-        $aLinha['email'] = $this->formatarCampo($this->oConfig->email, 60);
+        $aLinha['telefoneContato'] = $this->formatarCampo($this->oDadosAdicionais->fone, 12, true);
+        $aLinha['email'] = $this->completarCampo($this->oConfig->email, 60);
         $aLinha['dataRecolhimentoGRRF'] = $this->formatarData($this->oDadosAdicionais->dtrecfgts);
         $aLinha['brancosFinal'] = $this->preencherCampo(' ', 60);
         $aLinha['finalLinha'] = "*";

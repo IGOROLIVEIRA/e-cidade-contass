@@ -86,13 +86,13 @@ class Registro40 extends RegistroBase {
             $aLinha['dataAdmissao'] = $this->formatarDataBanco($oDados->rh01_admiss);
             $aLinha['categoriaTrabalhador'] = $this->formatarCampo($oDados->h13_tpcont, 2);
             $aLinha['nomeTrabalhador'] = $this->formatarCampo($oDados->z01_nome, 70);
-            $aLinha['numeroCTPS'] = $this->formatarCampo($oDados->rh16_ctps_n, 7);
-            $aLinha['serieCTPS'] = $this->formatarCampo($oDados->rh16_ctps_s, 5);
-            $aLinha['sexo'] = $this->formatarCampo($oDados->rh01_sexo, 1);
+            $aLinha['numeroCTPS'] = $this->formatarCampo($oDados->rh16_ctps_n, 7, true);
+            $aLinha['serieCTPS'] = $this->formatarCampo($oDados->rh16_ctps_s, 5, true);
+            $aLinha['sexo'] = $this->formatarCampo(($oDados->rh01_sexo == 'M' ? 1 : $oDados->rh01_sexo == 'F' ? 2 : ' '), 1);
             $aLinha['grauInstrucao'] = $this->formatarCampo($oDados->rh01_instru, 2, true);
             $aLinha['dataNascimento'] = $this->formatarDataBanco($oDados->rh01_nasc);
             $aLinha['horasSemana'] = $this->formatarCampo($oDados->rh02_hrssem, 2);
-            $aLinha['cbo'] = $this->formatarCampo($oDados->rh37_cbo, 6);
+            $aLinha['cbo'] = $this->formatarCampo(substr($oDados->rh37_cbo, 0, 4), 6, true);
             $aLinha['dataOpcao'] = $this->formatarDataBanco($oDados->rh15_data);
             $aLinha['codigoMovimentacao'] = $this->formatarCampo($oDados->r59_movsef, 2);
             $aLinha['dataMovimentacao'] = $this->formatarDataBanco($oDados->rh05_recis);

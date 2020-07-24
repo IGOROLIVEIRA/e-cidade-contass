@@ -83,8 +83,18 @@ abstract class RegistroBase implements IRegistroBase {
     protected function formatarCampo($sValor, $iTamanho, $lLeft = false)
     {
         if ($lLeft) {
-            return substr(str_pad($sValor, $iTamanho, "0", STR_PAD_LEFT), 0, $iTamanho);
+            return substr(str_pad($this->removeCaracteres($sValor), $iTamanho, "0", STR_PAD_LEFT), 0, $iTamanho);
         }
+        return substr(str_pad($this->removeCaracteres($sValor), $iTamanho, " ", STR_PAD_RIGHT), 0, $iTamanho);
+    }
+
+    /**
+     * @param string $sValor
+     * @param integer $iTamanho
+     * @param Boolean $lLeft
+     */
+    protected function completarCampo($sValor, $iTamanho)
+    {
         return substr(str_pad($sValor, $iTamanho, " ", STR_PAD_RIGHT), 0, $iTamanho);
     }
 
@@ -112,4 +122,26 @@ abstract class RegistroBase implements IRegistroBase {
     {
         return str_pad(implode("", array_reverse(explode("-", $data))), 8, " ", STR_PAD_RIGHT);
     }
+
+    /**
+     * @param string $data
+     */
+    protected function removeCaracteres($data) {
+
+    /**
+     * matriz de entrada
+     */
+    $what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
+    'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
+    'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'",".");
+
+    /**
+     * matriz de saida
+     */
+    $by   = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
+    'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
+    'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," "," ");
+
+    return iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $data));
+  }
 }
