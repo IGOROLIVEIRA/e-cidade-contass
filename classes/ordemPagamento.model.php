@@ -1663,11 +1663,8 @@ class ordemPagamento {
 
       if ($this->iAnoUsu == $oEmpenho->e60_anousu) {
 
-        if (substr($oEmpenho->o56_elemento, 0, 2) == '33') {
-          $iCodDoc = '4'; // despesa corrente
-        } else if (substr($oEmpenho->o56_elemento, 0, 2) == '34') {
-            $iCodDoc = '24'; //estorno de despesa capital
-        }
+        $iCodDoc = 25;
+
         /**
          * Verificamos se o empenho eh prestacao de contas
          * Se usar o documento de estorno: 413 - ESTORNO DE LIQUIDACAO SUPRIMENTO DE FUNDOS
@@ -1691,12 +1688,6 @@ class ordemPagamento {
 
               case 7 :
                 $iCodDoc = 203;
-                break;
-              case 8 :
-                $iCodDoc = 205;
-                break;
-              case 9 :
-                $iCodDoc = 207;
                 break;
               default:
                 $iCodDoc = $iCodDoc;
