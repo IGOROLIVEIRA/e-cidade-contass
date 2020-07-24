@@ -75,13 +75,27 @@ for ($xins = 0; $xins < pg_numrows($resultinst); $xins ++) {
 }
 $head5 = "INSTITUIÇÕES : ".$descr_inst;
 
-$pdf = new PDF();
-$pdf->Open();
-$pdf->AliasNbPages();
-// $pdf->AddPage("L");
-$pdf->SetFillColor(235);
-$pdf->SetFont('Arial', '', 9);
-$alt = 4;
+// $pdf = new PDF();
+// $pdf->Open();
+// $pdf->AliasNbPages();
+// // $pdf->AddPage("L");
+// $pdf->SetFillColor(235);
+// $pdf->SetFont('Arial', '', 9);
+// $alt = 4;
+
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf = new PDF();
+	$pdf->Open();
+	$pdf->AliasNbPages();
+	// $pdf->AddPage("L");
+	$pdf->SetFillColor(235);
+	$pdf->SetFont('Arial', '', 9);
+	$alt = 4;
+} else {
+	$file = fopen("tmp/suplementacao.csv", "w+");
+	
+}
+
 
 $imprimecabec = false;
 
@@ -239,29 +253,35 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		$codsup = $o47_codsup;
 	}
 	$dotant = "";
-
+	if($formato == 2){
+			fwrite($file, "\"SUPL\",\"DT.PROC\",\"PROJ\",\"LEI\",\"DECRETO\",\"TIPO\",\"DOTACAO\",\"RECURSO\",\"SUPLEMENTADO\",\"REDUZIDO\"\n");
+	}
 	for ($i = 0; $i < $rows; $i ++) {
 		db_fieldsmemory($res, $i);
 
-		if ($pagina == 1 || $pdf->getY() > 170 or $imprimecabec == true) {
-			$pagina = 0;
-			if ($imprimecabec == false) {
-				$pdf->AddPage("L");
+		if($formato == 1) { // 1 = PDF 2 = CSV
+
+			if ($pagina == 1 || $pdf->getY() > 170 or $imprimecabec == true) {
+				$pagina = 0;
+				if ($imprimecabec == false) {
+					$pdf->AddPage("L");
+				}
+				$imprimecabec = false;
+				$pdf->setX(3);
+				$pdf->Cell(288,$alt, ($tiporel == 0?"CRÉDITOS ADICIONAIS":"REMANEJAMENTOS AUTORIZADOS PELA LOA"), 1, 1, "C", '1');
+				$pdf->setX(3);
+				$pdf->Cell(15, $alt, "SUPL.", 0, 0, "C", '0');
+				$pdf->Cell(15, $alt, "DT.PROC", 0, 0, "C", '0');
+				$pdf->Cell(15, $alt, "PROJ.", 0, 0, "C", '0');
+				$pdf->Cell(62, $alt, "LEI", 0, 0, "C", '0');
+				$pdf->Cell(16, $alt, "DECRETO", 0, 0, "C", '0');
+				$pdf->Cell(70, $alt, "TIPO", 0, 0, "C", '0');
+				$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
+				$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
+				$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
+				$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
 			}
-			$imprimecabec = false;
-			$pdf->setX(3);
-			$pdf->Cell(288,$alt, ($tiporel == 0?"CRÉDITOS ADICIONAIS":"REMANEJAMENTOS AUTORIZADOS PELA LOA"), 1, 1, "C", '1');
-			$pdf->setX(3);
-			$pdf->Cell(15, $alt, "SUPL.", 0, 0, "C", '0');
-			$pdf->Cell(15, $alt, "DT.PROC", 0, 0, "C", '0');
-			$pdf->Cell(15, $alt, "PROJ.", 0, 0, "C", '0');
-			$pdf->Cell(62, $alt, "LEI", 0, 0, "C", '0');
-			$pdf->Cell(16, $alt, "DECRETO", 0, 0, "C", '0');
-			$pdf->Cell(70, $alt, "TIPO", 0, 0, "C", '0');
-			$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
-			$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
-			$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
-			$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
+
 		}
 		if ($codsup != $o47_codsup) {
 
@@ -315,6 +335,9 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 				for ($xx = 0; $xx < pg_num_rows($ress); $xx++) {
 
 				   $oReceita = db_utils::fieldsMemory($ress, $xx);
+
+				   if($formato == 1) { // 1 = PDF 2 = CSV
+
 					 $pdf->setX(3);
 					 $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
 					 $pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
@@ -323,21 +346,32 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 					 $pdf->Cell(25, $alt, '', 0, 0, "R", '0');
 					 $pdf->Cell(25, $alt, db_formatar($oReceita->o85_valor, 'f'), 0, 1, "R", '0');
 
+				   }else{
+				   	 $valor = db_formatar($oReceita->o85_valor, 'f');
+				   	 fwrite($file, "\"\",\"Receita\",\"{$oReceita->o57_descr}\",\"{$oReceita->o85_codrec}\",\"\",\"{ $valor }\"\n");
+				   }	
+
 					 $codsup_reduzido += $oReceita->o85_valor;
 					 $tot_rec += $oReceita->o85_valor;
 
 			 }
-			 $pdf->setX(3);
-			 $pdf->Cell(15, $alt, "TOTAL", "TB", 0, "R", '0');
-			 $pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(15, $alt, "", "TB", 0, "R", '0');
-			 $pdf->Cell(62, $alt, "", "TB", 0, "L", 'L');
-			 $pdf->Cell(16, $alt, "", "TB", 0, "L", 'L');
-			 $pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
-			 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+			 if($formato == 1) { // 1 = PDF 2 = CSV
+				 $pdf->setX(3);
+				 $pdf->Cell(15, $alt, "TOTAL", "TB", 0, "R", '0');
+				 $pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
+				 $pdf->Cell(15, $alt, "", "TB", 0, "R", '0');
+				 $pdf->Cell(62, $alt, "", "TB", 0, "L", 'L');
+				 $pdf->Cell(16, $alt, "", "TB", 0, "L", 'L');
+				 $pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
+				 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+				 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+				 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
+				 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+			 }else{
+			 	//  $suplementado = db_formatar($codsup_suplementado, 'f');
+				 // $reduzido     = db_formatar($codsup_reduzido, 'f');
+				 fwrite($file, "\"TOTAL\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"".db_formatar($codsup_suplementado, 'f')."\",\"".db_formatar($codsup_reduzido, 'f')."\"\n");
+			 }
 			 $codsup = $o47_codsup;
 
 			 $codsup_suplementado = 0;
@@ -346,26 +380,40 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 
       if ($imprime_motivo == 's') {
         $oMotivo = db_utils::fieldsMemory($mot,$xx);
-        $pdf->setX(3);
-        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
-        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
-        $pdf->Ln();$pdf->Ln();$pdf->Ln();
+        if($formato == 1) { // 1 = PDF 2 = CSV
+	        $pdf->setX(3);
+	        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+	        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+	        $pdf->Ln();$pdf->Ln();$pdf->Ln();
+    	}else{
+    		fwrite($file, "\"\",\"Motivo\",\"{$oMotivo->o47_motivo}\"\n");
+    	}
       }
 
 
 		}
-    $pdf->Ln(1);
-		$pdf->setX(3);
-		$pdf->Cell(15, $alt, "$o47_codsup", 0, 0, "C", '0');
-		$pdf->Cell(15, $alt, db_formatar($o49_data, "d"), 0, 0, "C", '0');
-		$pdf->Cell(15, $alt, "$o39_codproj", 0, 0, "C", '0');
-		$pdf->Cell(62, $alt, "$lei", 0, 0, "L", 'L');
-		$pdf->Cell(16, $alt, substr("$decreto",0,8), 0, 0, "C", 'L');
-		$pdf->Cell(70, $alt, substr($o48_descr, 0, 37), 0, 0, "L", '0');
-		$pdf->Cell(20, $alt, "$o47_coddot", 0, 0, "C", '0');
-		$pdf->Cell(20, $alt, "$o58_codigo", 0, 0, "C", '0');
-		$pdf->Cell(25, $alt, db_formatar($suplementado, 'f'), 0, 0, "R", '0');
-		$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
+
+		if($formato == 1) { // 1 = PDF 2 = CSV
+	    	$pdf->Ln(1);
+			$pdf->setX(3);
+			$pdf->Cell(15, $alt, "$o47_codsup", 0, 0, "C", '0');
+			$pdf->Cell(15, $alt, db_formatar($o49_data, "d"), 0, 0, "C", '0');
+			$pdf->Cell(15, $alt, "$o39_codproj", 0, 0, "C", '0');
+			$pdf->Cell(62, $alt, "$lei", 0, 0, "L", 'L');
+			$pdf->Cell(16, $alt, substr("$decreto",0,8), 0, 0, "C", 'L');
+			$pdf->Cell(70, $alt, substr($o48_descr, 0, 37), 0, 0, "L", '0');
+			$pdf->Cell(20, $alt, "$o47_coddot", 0, 0, "C", '0');
+			$pdf->Cell(20, $alt, "$o58_codigo", 0, 0, "C", '0');
+			$pdf->Cell(25, $alt, db_formatar($suplementado, 'f'), 0, 0, "R", '0');
+			$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
+		}else{
+			$o49_data     = db_formatar($o49_data, "d");
+			$decreto      = substr("$decreto",0,8);
+			$o48_descr    = substr($o48_descr, 0, 37); 
+			// $suplementado = db_formatar($suplementado, 'f');
+			// $reduzido     = db_formatar($reduzido, 'f');
+			fwrite($file, "\"{$o47_codsup}\",\"{$o49_data}\",\"{$o39_codproj}\",\"{$lei}\",\"{$decreto}\",\"{$o48_descr}\",\"{$o47_coddot}\",\"{$o58_codigo}\",\"".db_formatar($suplementado, 'f')."\",\"".db_formatar($reduzido, 'f')."\"\n");
+		}
 		$codsup_suplementado += $suplementado;
 		$codsup_reduzido += $reduzido;
 		$codsup_receita += $receita;
@@ -387,8 +435,9 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 
 
 	}
-
-	$pdf->setX(3);
+	if($formato == 1) { // 1 = PDF 2 = CSV
+		$pdf->setX(3);
+	}
 
   $sSqlReceitasOrcamento  = "select  o85_codsup,";
   $sSqlReceitasOrcamento .= "        o85_codrec,";
@@ -440,50 +489,67 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 	for ($xx = 0; $xx < pg_num_rows($ress); $xx++) {
 
 	  $oReceita = db_utils::fieldsMemory($ress,$xx);
+	  if($formato == 1) { // 1 = PDF 2 = CSV
 		$pdf->setX(3);
- 	  $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
-	  $pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
+ 	  	$pdf->Cell(18, $alt, "", 0, 0, "R", '0');
+	  	$pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
 		$pdf->Cell(90, $alt, "$oReceita->o57_descr", 0, 0, "L", '0');
 		$pdf->Cell(20, $alt, "$oReceita->o85_codrec", 0, 0, "C", '0');
 		$pdf->Cell(25, $alt, '', 0, 0, "R", '0');
 		$pdf->Cell(25, $alt, db_formatar($oReceita->o85_valor, 'f'), 0, 1, "R", '0');
+	  }else{
+	  	$valor = db_formatar($oReceita->o85_valor, 'f');
+	  	fwrite($file, "\"\",\"Receita\",\"{$oReceita->o57_descr}\",\"{$oReceita->o85_codrec}\",\"{$valor}\"\n");
+	  }
 
 		$codsup_reduzido += $oReceita->o85_valor;
 		$tot_rec         += $oReceita->o85_valor;
 
 	}
-
-	$pdf->setX(3);
-	$pdf->Cell(15, $alt, "TOTAL", "TB", 0, "R", '0');
-	$pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(15, $alt, "", "TB", 0, "R", '0');
-	$pdf->Cell(62, $alt, "", "TB", 0, "L", 'L');
-	$pdf->Cell(16, $alt, "", "TB", 0, "L", 'L');
-	$pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
-	$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 0, "R", '0');
-	//$pdf->Cell(30, $alt, db_formatar($codsup_receita, 'f'), "TB", 1, "R", '0');
+	if($formato == 1) { // 1 = PDF 2 = CSV
+		$pdf->setX(3);
+		$pdf->Cell(15, $alt, "TOTAL", "TB", 0, "R", '0');
+		$pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(15, $alt, "", "TB", 0, "R", '0');
+		$pdf->Cell(62, $alt, "", "TB", 0, "L", 'L');
+		$pdf->Cell(16, $alt, "", "TB", 0, "L", 'L');
+		$pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
+		$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 0, "R", '0');
+		//$pdf->Cell(30, $alt, db_formatar($codsup_receita, 'f'), "TB", 1, "R", '0');
+	}else{
+		// $suplementado = db_formatar($codsup_suplementado, 'f');
+		// $reduzido     = db_formatar($codsup_reduzido, 'f');
+		fwrite($file, "\"TOTAL\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"".db_formatar($codsup_suplementado, 'f')."\",\"".db_formatar($codsup_reduzido, 'f')."\"\n");
+	}
 
   /*OC2785*/
   if ($imprime_motivo == 's') {
     $oMotivo = db_utils::fieldsMemory($mot,$xx);
-    //$pdf->Ln(4);
-    $pdf->Ln();
-    $pdf->setX(3);
-    $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
-    $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+    if($formato == 1) { // 1 = PDF 2 = CSV
+	    //$pdf->Ln(4);
+	    $pdf->Ln();
+	    $pdf->setX(3);
+	    $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+	    $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+    }else{
+    	fwrite($file, "\"\",\"Motivo\",\"{$oMotivo->o47_motivo}\"\n");
+    }
   }
 
-  if($imprime_motivo == 's'){
-    $pdf->Ln(7);
-  }
-  else {
-    $pdf->Ln(4);
+  if($formato == 1) { // 1 = PDF 2 = CSV
+	  if($imprime_motivo == 's'){
+	    $pdf->Ln(7);
+	  }
+	  else {
+	    $pdf->Ln(4);
+	  }
   }
 
-  $pdf->Ln();
+  if($formato == 1) { // 1 = PDF 2 = CSV
+  	$pdf->Ln();
 	$pdf->setX(3);
 	$pdf->Cell(15, $alt, "GERAL", "TB", 0, "R", '0');
 	$pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
@@ -495,20 +561,37 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 	$pdf->Cell(25, $alt, db_formatar($tot_sup, 'f'), "TB", 0, "R", '0');
 	$pdf->Cell(25, $alt, db_formatar($tot_red, 'f'), "TB", 1, "R", '0');
-  /*OC2785*/
-  if($imprime_motivo == 's'){
-    $pdf->Ln();$pdf->Ln();
-  } else {
-      $pdf->Ln(5);
+  }else{
+  	$tot_sup = db_formatar($tot_sup, 'f');
+  	$tot_red = db_formatar($tot_red, 'f');
+  	fwrite($file, "\"GERAL\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"{$tot_sup}\",\"{$tot_red}\"\n");
+  }
+  if($formato == 1) { // 1 = PDF 2 = CSV
+	  /*OC2785*/
+	  if($imprime_motivo == 's'){
+	    $pdf->Ln();$pdf->Ln();
+	  } else {
+	      $pdf->Ln(5);
+	  }
   }
 
+  if($formato == 1) { // 1 = PDF 2 = CSV
 	$pdf->setX(3);
 	$sTexto = "Total utilizado no limite autorizado pela LOA para créditos suplementares: ";
 	$pdf->Cell(150, $alt, "Total da previsão adicional da receita: ".trim(db_formatar($tot_rec, 'f')), 0, 1, "L");
 	$pdf->setX(3);
-	if ($tiporel == 0) {
-  	$pdf->Cell(150, $alt, $sTexto.trim(db_formatar($nTotalUtilizado, 'f')), 0, 1, "L");
-	}
+  }else{
+  	$tot_rec = trim(db_formatar($tot_rec, 'f'));
+  	$nTotalUtilizado = trim(db_formatar($nTotalUtilizado, 'f'));
+  	fwrite($file, "\"Total utilizado no limite autorizado pela LOA para créditos suplementares: {$nTotalUtilizado} \"\n\"Total da previsão adicional da receita: {$tot_rec} \"\n");
+  }
+  if ($tiporel == 0) {
+  	if($formato == 1) { // 1 = PDF 2 = CSV
+  		$pdf->Cell(150, $alt, $sTexto.trim(db_formatar($nTotalUtilizado, 'f')), 0, 1, "L");
+  	}
+  }
+
+
 
 
   /*OC2785*/
@@ -606,40 +689,48 @@ if ($rows > 0 ) {
   $codsup = $o47_codsup;
 
 	$dotant = "";
-
-	$pdf->setX(3);
-	$pdf->Cell(258, $alt, "RETIFICAÇÕES", 1, 1, "C", '1');
-	$pdf->setX(3);
-	$pdf->Cell(18, $alt, "COD.SUP", 0, 0, "R", '0');
-	$pdf->Cell(20, $alt, "DT.PROC", 0, 0, "C", '0');
-	$pdf->Cell(20, $alt, "PROJETO", 0, 0, "R", '0');
-	$pdf->Cell(30, $alt, "LEI", 0, 0, "L", '0');
-	$pdf->Cell(30, $alt, "DECRETO", 0, 0, "L", '0');
-	$pdf->Cell(70, $alt, "TIPO", 0, 0, "L", '0');
-	$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
-	$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
-	$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
-	$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
+	if($formato == 1) { // 1 = PDF 2 = CSV
+		$pdf->setX(3);
+		$pdf->Cell(258, $alt, "RETIFICAÇÕES", 1, 1, "C", '1');
+		$pdf->setX(3);
+		$pdf->Cell(18, $alt, "COD.SUP", 0, 0, "R", '0');
+		$pdf->Cell(20, $alt, "DT.PROC", 0, 0, "C", '0');
+		$pdf->Cell(20, $alt, "PROJETO", 0, 0, "R", '0');
+		$pdf->Cell(30, $alt, "LEI", 0, 0, "L", '0');
+		$pdf->Cell(30, $alt, "DECRETO", 0, 0, "L", '0');
+		$pdf->Cell(70, $alt, "TIPO", 0, 0, "L", '0');
+		$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
+		$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
+		$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
+		$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
+	}else{
+		fwrite($file, "\"RETIFICAÇÕES\",\"COD.SUP\",\"DT.PROC\",\"PROJETO\",\"LEI\",\"DECRETO\",\"TIPO\",\"DOTACAO\",\"RECURSO\",\"SUPLEMENTADO\",\"REDUZIDO\"\n");
+	}
 
 	for ($i = 0; $i < $rows; $i ++) {
 		db_fieldsmemory($res, $i);
 
 		if ($pagina == 1 || $pdf->getY() > 170) {
 			$pagina = 0;
-			$pdf->AddPage("L");
-			$pdf->setX(3);
-			$pdf->Cell(258, $alt, "RETIFICAÇÕES", 1, 1, "C", '1');
-			$pdf->setX(3);
-			$pdf->Cell(18, $alt, "COD.SUP", 0, 0, "R", '0');
-			$pdf->Cell(20, $alt, "DT.PROC", 0, 0, "C", '0');
-			$pdf->Cell(20, $alt, "PROJETO", 0, 0, "R", '0');
-			$pdf->Cell(30, $alt, "LEI", 0, 0, "L", '0');
-			$pdf->Cell(30, $alt, "DECRETO", 0, 0, "L", '0');
-			$pdf->Cell(70, $alt, "TIPO", 0, 0, "L", '0');
-			$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
-			$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
-			$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
-			$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
+
+			if($formato == 1) { // 1 = PDF 2 = CSV
+				$pdf->AddPage("L");
+				$pdf->setX(3);
+				$pdf->Cell(258, $alt, "RETIFICAÇÕES", 1, 1, "C", '1');
+				$pdf->setX(3);
+				$pdf->Cell(18, $alt, "COD.SUP", 0, 0, "R", '0');
+				$pdf->Cell(20, $alt, "DT.PROC", 0, 0, "C", '0');
+				$pdf->Cell(20, $alt, "PROJETO", 0, 0, "R", '0');
+				$pdf->Cell(30, $alt, "LEI", 0, 0, "L", '0');
+				$pdf->Cell(30, $alt, "DECRETO", 0, 0, "L", '0');
+				$pdf->Cell(70, $alt, "TIPO", 0, 0, "L", '0');
+				$pdf->Cell(20, $alt, "DOTACAO", 0, 0, "C", '0');
+				$pdf->Cell(20, $alt, "RECURSO", 0, 0, "C", '0');
+				$pdf->Cell(25, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
+				$pdf->Cell(25, $alt, "REDUZIDO", 0, 1, "R", '0');
+			}else{
+				fwrite($file, "\"RETIFICAÇÕES\",\"COD.SUP\",\"DT.PROC\",\"PROJETO\",\"LEI\",\"DECRETO\",\"TIPO\",\"DOTACAO\",\"RECURSO\",\"SUPLEMENTADO\",\"REDUZIDO\"\n");			
+			}
 		}
 		if ($codsup != $o47_codsup) {
 
@@ -680,18 +771,24 @@ if ($rows > 0 ) {
 					 $tot_rec += $o85_valor;
 
 			 }
-			 $pdf->setX(3);
-			 $pdf->Cell(18, $alt, "TOTAL", "TB", 0, "R", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "R", '0');
-			 $pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
-			 $pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
-			 $pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(20, $alt, $o47_motivo, "TB", 0, "C", '0');
-			 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
-			 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
-			 $pdf->Ln();
+			 if($formato == 1) { // 1 = PDF 2 = CSV
+				 $pdf->setX(3);
+				 $pdf->Cell(18, $alt, "TOTAL", "TB", 0, "R", '0');
+				 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+				 $pdf->Cell(20, $alt, "", "TB", 0, "R", '0');
+				 $pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
+				 $pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
+				 $pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
+				 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+				 $pdf->Cell(20, $alt, $o47_motivo, "TB", 0, "C", '0');
+				 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
+				 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+				 $pdf->Ln();
+			 }else{
+			 	 // $suplementado = db_formatar($codsup_suplementado, 'f');
+			 	 // $reduzido     = db_formatar($codsup_reduzido, 'f');
+			 	 fwrite($file, "\"TOTAL\",\"\",\"\",\"\",\"\",\"\",\"\",\"{$o47_motivo}\",\"".db_formatar($codsup_suplementado, 'f')."\",\"".db_formatar($codsup_reduzido, 'f')."\"\n");
+			 }
 			 $codsup = $o47_codsup;
 
 			 $codsup_suplementado = 0;
@@ -701,25 +798,38 @@ if ($rows > 0 ) {
       /*OC2785*/
       if ($imprime_motivo == 's') {
         $oMotivo = db_utils::fieldsMemory($mot,$xx);
-        $pdf->setX(3);
-        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
-        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
-        $pdf->Ln();$pdf->Ln();
+        if($formato == 1) { // 1 = PDF 2 = CSV
+	        $pdf->setX(3);
+	        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+	        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+	        $pdf->Ln();$pdf->Ln();
+    	}else{
+    		fwrite($file, "\"\",\"Motivo\",\"{$oMotivo->o47_motivo}\"\n");
+    	}
       }
 
 
 		}
-		$pdf->setX(3);
-		$pdf->Cell(18, $alt, "$o47_codsup", 0, 0, "C", '0');
-		$pdf->Cell(20, $alt, db_formatar($o49_data, "d"), 0, 0, "C", '0');
-		$pdf->Cell(20, $alt, "$o39_codproj", 0, 0, "C", '0');
-		$pdf->Cell(30, $alt, "$lei", 0, 0, "L", 'L');
-		$pdf->Cell(30, $alt, "$decreto", 0, 0, "L", 'L');
-		$pdf->Cell(70, $alt, substr($o48_descr, 0, 37), 0, 0, "L", '0');
-		$pdf->Cell(20, $alt, "$o47_coddot", 0, 0, "C", '0');
-		$pdf->Cell(20, $alt, "$o58_codigo", 0, 0, "C", '0');
-		$pdf->Cell(25, $alt, db_formatar($suplementado, 'f'), 0, 0, "R", '0');
-		$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
+
+		if($formato == 1) { // 1 = PDF 2 = CSV
+			$pdf->setX(3);
+			$pdf->Cell(18, $alt, "$o47_codsup", 0, 0, "C", '0');
+			$pdf->Cell(20, $alt, db_formatar($o49_data, "d"), 0, 0, "C", '0');
+			$pdf->Cell(20, $alt, "$o39_codproj", 0, 0, "C", '0');
+			$pdf->Cell(30, $alt, "$lei", 0, 0, "L", 'L');
+			$pdf->Cell(30, $alt, "$decreto", 0, 0, "L", 'L');
+			$pdf->Cell(70, $alt, substr($o48_descr, 0, 37), 0, 0, "L", '0');
+			$pdf->Cell(20, $alt, "$o47_coddot", 0, 0, "C", '0');
+			$pdf->Cell(20, $alt, "$o58_codigo", 0, 0, "C", '0');
+			$pdf->Cell(25, $alt, db_formatar($suplementado, 'f'), 0, 0, "R", '0');
+			$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
+		}else{
+			$o49_data     = db_formatar($o49_data, "d");
+			$o48_descr    = substr($o48_descr, 0, 37);
+			$suplementado = db_formatar($suplementado, 'f'); 
+			$reduzido     = db_formatar($reduzido, 'f');
+			fwrite($file, "\"{$o47_codsup}\",\"{$o49_data}\",\"{$o39_codproj}\",\"{$lei}\",\"{$decreto}\",\"{$o48_descr}\",\"{$o47_coddot}\",\"{$o58_codigo}\",\"".db_formatar($suplementado, 'f')."\",\"".db_formatar($reduzido, 'f')."\"\n");
+		}
 		$codsup_suplementado += $suplementado;
 		$codsup_reduzido += $reduzido;
 		$codsup_receita += $receita;
@@ -739,8 +849,9 @@ if ($rows > 0 ) {
 
 
 	}
-
-	$pdf->setX(3);
+	if($formato == 1) { // 1 = PDF 2 = CSV
+		$pdf->setX(3);
+	}
 		 $sql = "select  o85_codsup,o85_codrec,o85_anousu,o85_valor ,o57_descr
 			from orcsuplemrec
 
@@ -757,65 +868,89 @@ if ($rows > 0 ) {
 
    for($xx=0;$xx<pg_numrows($ress);$xx++){
   	 db_fieldsmemory($ress,$xx);
-  				 $pdf->setX(3);
-
-
-  	$pdf->Cell(18, $alt, "", 0, 0, "R", '0');
-  	$pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
-  	$pdf->Cell(90, $alt, "$o57_descr", 0, 0, "L", '0');
-  	$pdf->Cell(20, $alt, "$o85_codrec", 0, 0, "C", '0');
-  	$pdf->Cell(25, $alt, '', 0, 0, "R", '0');
-  	$pdf->Cell(25, $alt, db_formatar($o85_valor, 'f'), 0, 1, "R", '0');
-
+  				 
+  	if($formato == 1) { // 1 = PDF 2 = CSV
+  		$pdf->setX(3);
+	  	$pdf->Cell(18, $alt, "", 0, 0, "R", '0');
+	  	$pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
+	  	$pdf->Cell(90, $alt, "$o57_descr", 0, 0, "L", '0');
+	  	$pdf->Cell(20, $alt, "$o85_codrec", 0, 0, "C", '0');
+	  	$pdf->Cell(25, $alt, '', 0, 0, "R", '0');
+	  	$pdf->Cell(25, $alt, db_formatar($o85_valor, 'f'), 0, 1, "R", '0');
+  	}else{
+  		$valor = db_formatar($o85_valor, 'f');
+  		fwrite($file, "\"\",\"Receita\",\"{$o57_descr}\",\"{$o85_codrec}\",\"\",\"{$decreto}\"\n");
+  	}
   	$codsup_reduzido += $o85_valor;
   	$tot_rec += $o85_valor;
 
 	}
-  $pdf->Ln();
-	$pdf->setX(3);
-	$pdf->Cell(18, $alt, "TOTAL ", "0", 0, "R", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "R", '0');
-	$pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
-	$pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
-	$pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-	$pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
-	$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+
+	if($formato == 1) { // 1 = PDF 2 = CSV
+	  	$pdf->Ln();
+		$pdf->setX(3);
+		$pdf->Cell(18, $alt, "TOTAL ", "0", 0, "R", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "R", '0');
+		$pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
+		$pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
+		$pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+		$pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
+		$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+	}else{
+		// $suplementado = db_formatar($codsup_suplementado, 'f');
+		// $reduzido     = db_formatar($codsup_reduzido, 'f');
+		fwrite($file, "\"TOTAL\",\"\",\"\",\"\",\"\",\"\",\"\",\"{$o47_motivo}\",\"".db_formatar($codsup_suplementado, 'f')."\",\"".db_formatar($codsup_reduzido, 'f')."\"\n");
+	}
 
 }
 
-$pdf->SetFont('Arial', 'b', 9);
-
-$pdf->Cell(180,10, "T O T A L    P O R    T I P O    D E    S U P L E M E N T A Ç Ã O", 1, 1, "C", '1');
-$pdf->ln(5);
-
-$pdf->Cell(80, $alt, "DESCRICAO", 0, 0, "L", '0');
-$pdf->Cell(50, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
-$pdf->Cell(50, $alt, "REDUZIDO", 0, 0, "R", '0');
-$pdf->ln();
-$pdf->SetFont('Arial', '', 9);
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->SetFont('Arial', 'b', 9);
+	$pdf->Cell(180,10, "T O T A L    P O R    T I P O    D E    S U P L E M E N T A Ç Ã O", 1, 1, "C", '1');
+	$pdf->ln(5);
+}else{
+	fwrite($file, "\"T O T A L    P O R    T I P O    D E    S U P L E M E N T A Ç Ã O\"\n");
+}
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->Cell(80, $alt, "DESCRICAO", 0, 0, "L", '0');
+	$pdf->Cell(50, $alt, "SUPLEMENTADO", 0, 0, "R", '0');
+	$pdf->Cell(50, $alt, "REDUZIDO", 0, 0, "R", '0');
+	$pdf->ln();
+	$pdf->SetFont('Arial', '', 9);
+}else{
+	fwrite($file, "\"DESCRICAO\",\"SUPLEMENTADO\",\"REDUZIDO\"\n");
+}
 
 $total_sup = 0;
 $total_red = 0;
 
 foreach($array_totais as $a => $b) {
-
-  $pdf->Cell(80, $alt, $a, 0, 0, "L", '0');
-  $pdf->Cell(50, $alt, db_formatar($b[0], 'f'), 0, 0, "R", '0');
-  $pdf->Cell(50, $alt, db_formatar($b[1], 'f'), 0, 0, "R", '0');
-  $total_sup += $b[0];
-  $total_red += $b[1];
-  $pdf->ln();
+  if($formato == 1) { // 1 = PDF 2 = CSV
+	  $pdf->Cell(80, $alt, $a, 0, 0, "L", '0');
+	  $pdf->Cell(50, $alt, db_formatar($b[0], 'f'), 0, 0, "R", '0');
+	  $pdf->Cell(50, $alt, db_formatar($b[1], 'f'), 0, 0, "R", '0');
+	  $total_sup += $b[0];
+	  $total_red += $b[1];
+	  $pdf->ln();
+  }else{
+  	  $total_sup += $b[0];
+	  $total_red += $b[1];
+  	  fwrite($file, "\"{$a}\",\"".db_formatar($b[0], 'f')."\",\"".db_formatar($b[1], 'f')."\"\n");
+  }
 
 }
-
-$pdf->SetFont('Arial', 'b', 9);
-$pdf->Cell(80, $alt, "", 0, 0, "L", '0');
-$pdf->Cell(50, $alt, db_formatar($total_sup, 'f'), 0, 0, "R", '0');
-$pdf->Cell(50, $alt, db_formatar($total_red, 'f'), 0, 0, "R", '0');
-$pdf->SetFont('Arial', '', 9);
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->SetFont('Arial', 'b', 9);
+	$pdf->Cell(80, $alt, "", 0, 0, "L", '0');
+	$pdf->Cell(50, $alt, db_formatar($total_sup, 'f'), 0, 0, "R", '0');
+	$pdf->Cell(50, $alt, db_formatar($total_red, 'f'), 0, 0, "R", '0');
+	$pdf->SetFont('Arial', '', 9);
+}else{
+  	fwrite($file, "\"\",\"".db_formatar($total_sup, 'f')."\",\"".db_formatar($total_red, 'f')."\"\n");
+}
 
 /*OC2785*/
 
@@ -861,31 +996,45 @@ $percentualUtilizado = ($valorutilizado*100)/$nValorOrcamento;
 $percentualLoa = round($nPercentualLoa,2);
 $percentualUtiliz = round($percentualUtilizado,4);
 
-$pdf->ln();
-$pdf->setX(10);
-$pdf->SetFont('Arial', 'b', 9);
-$pdf->Cell(80, $alt, "TOTAL DO ORÇAMENTO: ", '','', "L", '0');
-$pdf->SetFont('Arial', '', 10);
-$pdf->setX(49);
-$pdf->Cell(0, $alt, db_formatar($nValorOrcamento,'f') , '', '', "", '');
-$pdf->ln();
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->ln();
+	$pdf->setX(10);
+	$pdf->SetFont('Arial', 'b', 9);
+	$pdf->Cell(80, $alt, "TOTAL DO ORÇAMENTO: ", '','', "L", '0');
+	$pdf->SetFont('Arial', '', 10);
+	$pdf->setX(49);
+	$pdf->Cell(0, $alt, db_formatar($nValorOrcamento,'f') , '', '', "", '');
+	$pdf->ln();
+}else{
+	$nValorOrcamento = db_formatar($nValorOrcamento,'f');
+	fwrite($file, "\"TOTAL DO ORÇAMENTO:\",\"{$nValorOrcamento}\"\n");
+}
 
-$pdf->SetFont('Arial', 'b', 9);
-$pdf->Cell(80, $alt, "PERCENTUAL PERMITIDO: ", 0, 0, "L", '0');
-$pdf->SetFont('Arial', '', 10);
-$pdf->setX(53);
-$pdf->Cell(0, $alt, $percentualLoa."%", '', '', "", '');
-$pdf->ln();
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->SetFont('Arial', 'b', 9);
+	$pdf->Cell(80, $alt, "PERCENTUAL PERMITIDO: ", 0, 0, "L", '0');
+	$pdf->SetFont('Arial', '', 10);
+	$pdf->setX(53);
+	$pdf->Cell(0, $alt, $percentualLoa."%", '', '', "", '');
+	$pdf->ln();
+}else{
+	$nValorOrcamento = db_formatar($nValorOrcamento,'f');
+	fwrite($file, "\"PERCENTUAL PERMITIDO: \",\"{$percentualLoa}%\"\n");
+}
 
-$pdf->SetFont('Arial', 'b', 9);
-$pdf->Cell(80, $alt, "PERCENTUAL JÁ MOVIMENTADO: ", 0, 0, "L", '0');
-$pdf->SetFont('Arial', '', 10);
-$pdf->setX(64);
-$pdf->Cell(0, $alt, $percentualUtiliz."%", '', '', "", '');
-$pdf->ln();
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->SetFont('Arial', 'b', 9);
+	$pdf->Cell(80, $alt, "PERCENTUAL JÁ MOVIMENTADO: ", 0, 0, "L", '0');
+	$pdf->SetFont('Arial', '', 10);
+	$pdf->setX(64);
+	$pdf->Cell(0, $alt, $percentualUtiliz."%", '', '', "", '');
+	$pdf->ln();
+}else{
+	fwrite($file, "\"PERCENTUAL JÁ MOVIMENTADO: \",\"{$percentualUtiliz}%\"\n");
+}
 
 //-- imprime parametros
-if ($imprime_filtro == 's') {
+if ($imprime_filtro == 's' && $formato == 1) {
 	if (($pdf->getY() + 44) > 170) {
 		$pdf->AddPage("L");
 	} else {
@@ -895,7 +1044,7 @@ if ($imprime_filtro == 's') {
 	$parametros = $clselorcdotacao->getParametros();
 	$pdf->multicell(270, $alt, $parametros, 1, 1, "R", '0');
 }
-if ($imprime_filtro == 'n') {
+if ($imprime_filtro == 'n' && $formato == 1) {
     if (($pdf->getY() + 44) > 170)  {
           $pdf->AddPage("L");
   }
@@ -912,22 +1061,41 @@ $ass_sec  = $classinatura->assinatura(1002,$sec);
 $ass_tes  = $classinatura->assinatura(1004,$tes);
 $ass_cont = $classinatura->assinatura(1005,$cont);
 //echo $ass_pref;
-$largura = ( $pdf->w ) / 2;
-$pdf->ln(10);
-$pos = $pdf->gety();
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$largura = ( $pdf->w ) / 2;
+	$pdf->ln(10);
+	$pos = $pdf->gety();
 
 
-$pdf->multicell($largura,4,$ass_pref,0,"C",0,0);
-$pdf->setxy($largura,$pos);
-$pdf->multicell($largura,4,ucwords($ass_sec),0,"C",0,0);
-$pdf->Ln(10);
-$pos = $pdf->gety();
-$pdf->multicell($largura,4,$ass_cont,0,"C",0,0);
-$pdf->setxy($largura,$pos);
-// $pdf->multicell($largura,2,$ass_controle,0,"C",0,0);
+	$pdf->multicell($largura,4,$ass_pref,0,"C",0,0);
+	$pdf->setxy($largura,$pos);
+	$pdf->multicell($largura,4,ucwords($ass_sec),0,"C",0,0);
+}else{
+	fwrite($file, "\"{$ass_pref}\"\n");
+	$ass_sec = ucwords($ass_sec);
+	fwrite($file, "\"{$ass_sec}\"\n");
+}
 
-// --------------------------
+if($formato == 1) { // 1 = PDF 2 = CSV
+	$pdf->Ln(10);
 
-$pdf->output();
+	$pos = $pdf->gety();
+	$pdf->multicell($largura,4,$ass_cont,0,"C",0,0);
+	$pdf->setxy($largura,$pos);
+	// $pdf->multicell($largura,2,$ass_controle,0,"C",0,0);
+
+	// --------------------------
+	$pdf->output();
+}else{
+	fwrite($file, "\"{$ass_cont}\"\n");
+
+	fclose($file);
+	// $nomearqdados = 'tmp/suplementacao.csv';
+
+    echo "<script language='javascript' type='text/javascript'>
+          document.location.href = 'tmp/suplementacao.csv';
+        </script>";
+	exit();
+}
 
 ?>

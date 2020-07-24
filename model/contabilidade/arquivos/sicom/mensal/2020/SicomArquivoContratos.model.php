@@ -1182,7 +1182,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_coditemsimcro = null;
               $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_codigotabela;
+            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $clcontratos21->incluir(null);
 
             if ($clcontratos21->erro_status == 0) {
