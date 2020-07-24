@@ -6,7 +6,7 @@
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
  *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
  *  publicada pela Free Software Foundation; tanto a versao 2 da      
  *  Licenca como (a seu criterio) qualquer versao mais nova.          
  *                                                                    
@@ -25,5 +25,13 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct liclicita.l20_codigo,liclicita.l20_edital,l20_anousu,pctipocompra.pc50_descr,liclicita.l20_numero,liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,liclicita.l20_dtpublic as dl_Data_Publicação_DO,liclicita.l20_horaaber,liclicita.l20_local,liclicita.l20_objeto";
+$campos = "distinct liclicita.l20_codigo,
+					liclicita.l20_edital,
+					l20_anousu,
+					pctipocompra.pc50_descr,
+					liclicita.l20_numero,
+					liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+					liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
+					liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+					liclicita.l20_objeto";
 ?>

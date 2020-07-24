@@ -234,9 +234,10 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
-                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-                $campos .= ", l03_codcom as tipcom";
-                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+//                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+//                $campos .= ", l03_codcom as tipcom";
+//                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                $campos .= ', l08_descr as dl_Situação';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){

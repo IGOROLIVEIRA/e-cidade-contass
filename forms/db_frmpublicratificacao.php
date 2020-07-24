@@ -194,15 +194,20 @@ $clliclicita->rotulo->label();
 
     function js_pesquisa(ratificacao=false){
         if(ratificacao) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }else {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }
     }
 
-    function js_preenchepesquisa(chave,tipocompratribunal){
+    function js_preenchepesquisa(chave){
+        js_findTipos(chave);
+    }
+
+    function js_retornoConsulta(chave, tipocompratribunal){
         db_iframe_publicratificacao.hide();
         let db_opcao = <?= $db_opcao?>;
+
         if(db_opcao === 33 || db_opcao === 3){
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
         }else if(db_opcao === 22 || db_opcao === 2){
@@ -560,5 +565,25 @@ $clliclicita->rotulo->label();
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
         }
+    }
+
+    function js_findTipos(licitacao){
+        let request = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method:'post',
+            exec: 'findTipos',
+            asynchronous: false,
+            parameters:'json=' + JSON.stringify({
+                exec: 'findTipos',
+                iLicitacao: licitacao
+            }),
+            onComplete: (res) => {
+                js_onCompleteTipo(licitacao, res);
+            }
+        });
+    }
+
+    function js_onCompleteTipo(licitacao, response){
+        let oTipos = JSON.parse(response.responseText);
+        js_retornoConsulta(licitacao, oTipos.dadosLicitacao.l03_pctipocompratribunal);
     }
 </script>
