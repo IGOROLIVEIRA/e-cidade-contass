@@ -320,7 +320,7 @@ try {
 	$oRetorno->sMsg    = urlencode(str_replace("\\n","\n",$eException->getMessage()));
 	
 	if ( db_utils::inTransaction() ) {
-		db_inicio_transacao(true);
+		db_fim_transacao(true);
 	}
 	
 }

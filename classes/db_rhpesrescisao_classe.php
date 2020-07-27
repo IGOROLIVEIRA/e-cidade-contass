@@ -754,5 +754,92 @@ class cl_rhpesrescisao {
      }
      return $sql;
   }
+
+  function sql_servidor_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere=""){ 
+      $sql = "select ";
+      if($campos != "*" ){
+          $campos_sql = split("#",$campos);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+          }
+      }else{
+          $sql .= $campos;
+      }
+      $sql .= " from rhpesrescisao ";
+      $sql .= "      inner join rhpessoalmov  on  rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes";
+      $sql .= "      inner join rhpessoal on  rhpessoalmov.rh02_regist = rhpessoal.rh01_regist";
+      $sql .= "      inner join cgm  on  rhpessoal.rh01_numcgm = cgm.z01_numcgm ";
+                                         
+      $sql2 = "";
+      if($dbwhere==""){
+          if($rh05_seqpes!=null ){
+              $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes "; 
+          } 
+      }else if($dbwhere != ""){
+          $sql2 = " where $dbwhere";
+      }
+      $sql .= $sql2;
+      if($ordem != null ){
+          $sql .= " order by ";
+          $campos_sql = split("#",$ordem);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+          }
+      }
+      return $sql;
+  }
+
+  function sql_dados_rescisao ( $rh05_seqpes=null,$campos="*",$ordem=null,$dbwhere="") { 
+      $sql = "select ";
+      if($campos != "*" ){
+          $campos_sql = split("#",$campos);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+          }
+      }else{
+          $sql .= $campos;
+      }
+      $sql .= " FROM rhpessoal ";
+      $sql .= " JOIN rhpessoalmov ON rhpessoal.rh01_regist = rhpessoalmov.rh02_regist ";
+      $sql .= " JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm ";
+      $sql .= " LEFT JOIN rhpesdoc ON rhpessoal.rh01_regist = rhpesdoc.rh16_regist ";
+      $sql .= " LEFT JOIN tpcontra ON rhpessoalmov.rh02_tpcont = tpcontra.h13_codigo ";
+      $sql .= " LEFT JOIN rhregime ON rhregime.rh30_codreg = rhpessoalmov.rh02_codreg ";
+      $sql .= " LEFT JOIN rhfuncao ON (rhpessoal.rh01_funcao, rhpessoal.rh01_instit) = (rhfuncao.rh37_funcao, rhfuncao.rh37_instit) ";
+      $sql .= " LEFT JOIN rhpesfgts ON rhpessoal.rh01_regist = rhpesfgts.rh15_regist ";
+      $sql .= " LEFT JOIN rhpesrescisao ON rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes ";
+      $sql .= " LEFT JOIN rescisao ON rescisao.r59_anousu  = rhpessoalmov.rh02_anousu  ";
+      $sql .= "          AND rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu  ";
+      $sql .= "          AND rescisao.r59_regime = rhregime.rh30_regime  ";
+      $sql .= "          AND rescisao.r59_causa  = rhpesrescisao.rh05_causa ";
+      $sql .= "          AND rescisao.r59_caub   = rhpesrescisao.rh05_caub::char(2) ";
+      $sql .= "          AND rescisao.r59_instit = rhpessoalmov.rh02_instit ";
+                                         
+      $sql2 = "";
+      if($dbwhere==""){
+          if($rh05_seqpes!=null ){
+              $sql2 .= " where rhpesrescisao.rh05_seqpes = $rh05_seqpes "; 
+          } 
+      }else if($dbwhere != ""){
+          $sql2 = " where $dbwhere";
+      }
+      $sql .= $sql2;
+      if($ordem != null ){
+          $sql .= " order by ";
+          $campos_sql = split("#",$ordem);
+          $virgula = "";
+          for($i=0;$i<sizeof($campos_sql);$i++){
+              $sql .= $virgula.$campos_sql[$i];
+              $virgula = ",";
+          }
+      }
+      return $sql;
+  }
 }
 ?>
