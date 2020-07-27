@@ -1,8 +1,6 @@
 <?php
-//require_once('OLEwriter.php');
-//require_once('BIFFwriter.php');
-require_once("Worksheet.php");
-require_once("Workbook.php");
+//ini_set('display_errors', 'on');
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -11,128 +9,194 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_libsys.php");
 require_once("std/db_stdClass.php");
 require_once("classes/db_pcorcam_classe.php");
+include("libs/PHPExcel/Classes/PHPExcel.php");
+$oGet        = db_utils::postMemory($_GET);
+$clpcorcam   = new cl_pcorcam();
+$objPHPExcel = new PHPExcel;
+$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc",null,"pc20_codorc = $pc22_codorc"));
+db_fieldsmemory($result_fornecedores,0);
 
-$oGet = db_utils::postMemory($_GET);
-$clpcorcam = new cl_pcorcam();
+//Inicio
+$sheet = $objPHPExcel->getActiveSheet();
 
-function HeaderingExcel($filename) {
-    header("Content-type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=$filename" );
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-    header("Pragma: public");
-}
+$styleTitulo = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'fill' => array(
+        'type' => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
+        'rotation' => 90,
+        'startcolor' => array(
+            'argb' => 'FFA0A0A0',
+        ),
+        'endcolor' => array(
+            'argb' => 'FFFFFFFF',
+        ),
+    ),
+    'font' => array(
+        'size' => 12,
+        'bold' => true,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    ),
+);
+$styleTitulo1 = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+        'bold' => true,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+    ),
+);
+$styleResTitulo1 = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+    ),
+);
+$styleItens2 = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'fill' => array(
+        'type' => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
+        'rotation' => 90,
+        'startcolor' => array(
+            'argb' => 'FFA0A0A0',
+        ),
+        'endcolor' => array(
+            'argb' => 'FFFFFFFF',
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    ),
+);
+$styleItens = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+    ),
+);
 
-// HTTP headers
-HeaderingExcel('test.xls');
+//Iniciando planilha
+$sheet->setCellValue('A1','Orcamento de Processo de Compra Numero: '.$pc81_codproc.' do Processo de Compra');
+$sheet->getStyle('A1:K1')->applyFromArray($styleTitulo);
+$sheet->mergeCells('A1:K1');
+$sheet->setCellValue('E2',$pc22_codorc);
+$sheet->setCellValue('A2','Codigo do Orcamento:');
+$sheet->mergeCells('A2:D2');
+$sheet->mergeCells('E2:k2');
+$sheet->setCellValue('A3','Codigo do Orcamento do Fornecedor:');
+$sheet->mergeCells('A3:D3');
+$sheet->mergeCells('E3:K3');
+$sheet->setCellValue('A4','CPF / CNPJ:');
+$sheet->mergeCells('A4:D4');
+$sheet->mergeCells('E4:K4');
+$sheet->setCellValue('A5','Nome / Razao Social:');
+$sheet->mergeCells('A5:D5');
+$sheet->mergeCells('E5:K5');
+//cabeçalho
+$sheet->getStyle('A2:A5')->applyFromArray($styleTitulo1);
+//resposta cabeçalho
+$sheet->getStyle('E2:K5')->applyFromArray($styleResTitulo1);
 
-// Creating a workbook
-$workbook = new Workbook("-");
+$sheet->setCellValue('A6','Cod. Item');
+$sheet->setCellValue('B6','Seq. Item');
+$sheet->setCellValue('C6','Servico Material');
+$sheet->mergeCells('C6:F6');
+$sheet->setCellValue('G6','UN');
+$sheet->setCellValue('H6','Qtde');
+$sheet->setCellValue('I6','Valor Unit.');
+$sheet->setCellValue('J6','Valor Total');
+$sheet->setCellValue('K6','Marca');
+$sheet->getStyle('A6:K6')->applyFromArray($styleItens2);
 
-// Creating the first worksheet
-$worksheet1 =& $workbook->add_worksheet('Planilha1');
-
-// Format for the headings
-$formatot =& $workbook->add_format();
-$formatot->set_size(14);
-$formatot->set_align('center');
-$formatot->set_color('Gray');
-$formatot->set_pattern();
-$formatot->set_fg_color('gray');
-$formatot->set_bold();
-$formatot->set_border(1);
-
-//$worksheet1->set_column(0, 8,10,0,'');
-$worksheet1->set_row(0, 20);
-$worksheet1->merge_cells(0, 0,0,7);
-$worksheet1->write_string(0, 0,'Orçamento de Processo de Compra Nº do Processo de Compra',$formatot);
-$worksheet1->set_row(1,15);
-
-$formatot =& $workbook->add_format();
-$formatot->set_size(12);
-$formatot->set_pattern();
-$formatot->set_fg_color('white');
-$formatot->set_bold();
-$formatot->set_border(1);
-
-$worksheet1->set_column(0,0,10);
-$worksheet1->set_column(1,1,10);
-$worksheet1->set_column(2,2,50);
-$worksheet1->set_column(3,3,20);
-$worksheet1->set_column(4,4,10);
-$worksheet1->set_column(5,5,20);
-$worksheet1->set_column(6,6,20);
-$worksheet1->set_column(7,7,10);
-
-//orcamento
-$worksheet1->merge_cells(1, 0,1,2);
-$worksheet1->write_string(1, 0,'Código do Orçamento:',$formatot);
-$worksheet1->merge_cells(1, 3,1,7);
-$worksheet1->write_string(1, 3,'',$formatot);
-$worksheet1->write_string(1, 7,'',$formatot);
-$worksheet1->write_string(2, 3,'',$formatot);
-$worksheet1->write_string(2, 7,'',$formatot);
-$worksheet1->write_string(3, 3,'',$formatot);
-$worksheet1->write_string(3, 7,'',$formatot);
-$worksheet1->write_string(4, 3,'',$formatot);
-$worksheet1->write_string(4, 7,'',$formatot);
-
-$worksheet1->merge_cells(2, 0,2,2);
-$worksheet1->write_string(2, 0,'Código do Orçamento do Fornecedor:',$formatot);
-$worksheet1->merge_cells(2, 3,2,7);
-
-$worksheet1->merge_cells(3, 0,3,2);
-$worksheet1->write_string(3, 0,'CPF / CNPJ:',$formatot);
-$worksheet1->merge_cells(3, 3,3,7);
-
-$worksheet1->merge_cells(4, 0,4,2);
-$worksheet1->write_string(4, 0,'Nome / Razão Social:',$formatot);
-$worksheet1->merge_cells(4, 3,4,7);
-
-$formatotCabecalho =& $workbook->add_format();
-$formatotCabecalho->set_size(12);
-$formatotCabecalho->set_pattern();
-$formatotCabecalho->set_fg_color('silver');
-$formatotCabecalho->set_align('center');
-$formatotCabecalho->set_border(1);
-
-$worksheet1->write_string(5, 0,'Cód. Item',$formatotCabecalho);
-$worksheet1->write_string(5, 1,'Seq. Item',$formatotCabecalho);
-$worksheet1->write_string(5, 2,'Serviço / Material',$formatotCabecalho);
-$worksheet1->write_string(5, 3,'UN',$formatotCabecalho);
-$worksheet1->write_string(5, 4,'Qtde',$formatotCabecalho);
-$worksheet1->write_string(5, 5,'Valor Unit.',$formatotCabecalho);
-$worksheet1->write_string(5, 6,'Valor Total',$formatotCabecalho);
-$worksheet1->write_string(5, 7,'Marca',$formatotCabecalho);
+//cria protecao na planilha
+//senha para alteração
+$sheet->getProtection()->setPassword('PHPExcel');
+$sheet->getProtection()->setSheet(true);
+$sheet->getProtection()->setSort(true);
+$sheet->getProtection()->setInsertRows(true);
+$sheet->getProtection()->setFormatCells(true);
+$sheet->getStyle('E4')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
 $result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc"));
 $numrows_itens = $clpcorcam->numrows;
 
-$formatoitem =& $workbook->add_format();
-$formatoitem->set_size(11);
-$formatoitem->set_border(1);
-
 for ($i = 0; $i < $numrows_itens; $i ++){
     db_fieldsmemory($result_itens, $i);
-    $row = $i + 6;
-
-    //somando 7 pois a linha 6 e o titulo da tabela sendo a linha 1 o primeiro item
-    $rowformula = $i + 7;
-
-    //fazendo a formula para multiplicacao
-    $quantidade = "E".$rowformula;
-    $vlrUnitario= "F".$rowformula;
-    $formula = '=('.$quantidade.'*'.$vlrUnitario.')';
-    $worksheet1->write_string($row, 0,$pc01_codmater,$formatoitem);
-    $worksheet1->write_string($row, 1,$pc11_seq,$formatoitem);
-    $worksheet1->write_string($row, 2,$pc01_descrmater,$formatoitem);
-    $worksheet1->write_string($row, 3,$m61_abrev,$formatoitem);
-    $worksheet1->write_string($row, 4,$pc11_quant,$formatoitem);
-    $worksheet1->write_number($row, 5,'',$formatoitem);
-    $worksheet1->write_formula($row, 6,$formula,$formatoitem);
-    $worksheet1->write_string($row, 7,'',$formatoitem);
-
+    $numrow = $i + 7;
+    $collA = 'A'.$numrow;
+    $collB = 'B'.$numrow;
+    $collC = 'C'.$numrow;
+    $collF = 'F'.$numrow;
+    $collG = 'G'.$numrow;
+    $collH = 'H'.$numrow;
+    $collI = 'I'.$numrow;
+    $collJ = 'J'.$numrow;
+    $collK = 'K'.$numrow;
+    $sheet->mergeCells($collC.':'.$collF);
+    $sheet->setCellValue($collA,$pc01_codmater);
+    $sheet->setCellValue($collB,$pc11_seq);
+    $sheet->setCellValue($collC,$pc01_descrmater);
+    $sheet->setCellValue($collG,$m61_abrev);
+    $sheet->setCellValue($collH,$pc11_quant);
+    //formatacao na cell valor unitario
+    $sheet->getStyle($collI)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+    //formula multiplicacao
+    $sheet->setCellValue($collJ,'='.$collH.'*'.$collI);
+    //formatando os itens
+    $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
+    //libera celulas para alteracao
+    $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+    $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 }
-$workbook->close();
-?> 
+
+
+
+    header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header("Content-Disposition: attachment; filename=teste.xlsx" );
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
+    header("Pragma: public");
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+
+?>
