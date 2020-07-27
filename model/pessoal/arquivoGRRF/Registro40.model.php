@@ -41,7 +41,7 @@ class Registro40 extends RegistroBase {
 	{
 		$oDaoRhpesrescisao = db_utils::getDao('rhpesrescisao');
         $sCampos  = "DISTINCT rh16_pis,rh01_admiss,h13_tpcont,z01_nome,rh16_ctps_n,rh16_ctps_s,rh01_sexo,rh01_instru,rh01_nasc,rh02_hrssem,rh37_cbo,";
-        $sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf";
+        $sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf,rh01_regist";
         $sOrdem = "rh16_pis,rh01_admiss,h13_tpcont";
 
         $sDataCompIni = "{$this->iAnoFolha}-{$this->iMesFolha}-01";
@@ -74,8 +74,13 @@ class Registro40 extends RegistroBase {
             throw new Exception("Não foram encontrados servidores com rescisão em {$this->iMesFolha}/{$this->iAnoFolha}");
         }
         $aLinhas = array();
+
         for ($iCont=0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) { 
+            $oDaoRhpPessoalMov = db_utils::getDao('rhpessoalmov');
             $oDados = db_utils::fieldsMemory($rsDados, $iCont);
+
+            $rsSalarioMesRescisao = db_query($oDaoRhpPessoalMov->sql_valores_servidor($oDados->rh01_regist, $this->iAnoFolha, $this->iMesFolha, "R991"));
+            $rsSalarioMesAnterior = db_query($oDaoRhpPessoalMov->sql_valores_servidor($oDados->rh01_regist, $this->iAnoFolha, $this->iMesFolha-1, "R991"));
             $aLinha = array();
             $aLinha['tipoRegistro'] = "40";
             $aLinha['tipoInscricaoEmpresa'] = "1";
@@ -102,8 +107,8 @@ class Registro40 extends RegistroBase {
             $aLinha['reposicaoVaga'] = "N";
             $aLinha['dataHomologacaoDissidioColetivo'] = $this->preencherCampo(" ", 8);
             $aLinha['valorDissidio'] = $this->preencherCampo("0", 15);
-            $aLinha['remuneracaoMesAnterior'] = $this->preencherCampo("0", 15);
-            $aLinha['remuneracaoMesRescisao'] = $this->preencherCampo("0", 15);
+            $aLinha['remuneracaoMesAnterior'] = $this->formatarValor(db_utils::fieldsMemory($rsSalarioMesAnterior)->salario, 15);
+            $aLinha['remuneracaoMesRescisao'] = $this->formatarValor(db_utils::fieldsMemory($rsSalarioMesRescisao)->salario, 15);
             $aLinha['avisoPrevioIndenizado'] = $this->preencherCampo("0", 15);
             $aLinha['indicativoPensaoAlimenticia'] = "N";
             $aLinha['percentualPensaoAlimenticia'] = $this->preencherCampo("0", 5);

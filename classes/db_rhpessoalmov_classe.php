@@ -2522,4 +2522,25 @@ class cl_rhpessoalmov {
         return $sSql;
     }
 
+    /**
+     * Retorna valores de todas as tabelas relacionadas a valores de servidores
+     * @param integer $regist 
+     * @param integer $anousu
+     * @param integer $mesusu
+     * @param string $rubrica
+     * @return float $valor
+     */
+    public function sql_valores_servidor($regist, $anousu, $mesusu, $rubrica) {
+        $tabelas = array("r14" => "gerfsal",
+        "r48" => "gerfcom",
+        "r20" => "gerfres",
+        "r35" => "gerfs13");
+        
+        $aSql = array();
+        foreach ($tabelas as $key => $tabela) {
+            $aSql[] = " SELECT {$key}_valor AS valor FROM {$tabela} WHERE {$key}_anousu = {$anousu} AND {$key}_mesusu = {$mesusu} AND {$key}_regist = {$regist} AND {$key}_rubric = '{$rubrica}'";
+        }
+        return "SELECT SUM(valor) AS salario FROM (".implode(" UNION ", $aSql).") AS tabelas_salario";
+    }
+
 }
