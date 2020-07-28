@@ -432,7 +432,7 @@ abstract class Transferencia {
    * @param array $aPagamentos
    */
   private function setPagamentos($aPagamentos) {
-//  	$this->oSlip->setPagamentos($aPagamentos);
+//      $this->oSlip->setPagamentos($aPagamentos);
   }
 
   /**
@@ -874,10 +874,17 @@ abstract class Transferencia {
   public function excluir() {
 
     /**
-     * Não é permitido excluir uma autenticação em que já tenha ocorrido alguma autenticação
+     * OC 12180
+     * Exclusão de Slips anulados ou não autenticados.
      */
     if ($this->possuiAutenticacao()) {
-      throw new BusinessException(_M("financeiro.caixa.Transferencia.exclusao_transferencia_autenticacao"));
+            $oDaoLancamento      = new cl_conlancamslip();
+            $sSqlBuscaLancamento = $oDaoLancamento->sql_query_lancamento_slip(null, "*", null, "c84_slip = {$this->getCodigoSlip()} and k17_situacao in (1, 4)");
+            $rsBuscaLancamento   = $oDaoLancamento->sql_record($sSqlBuscaLancamento);
+            if ($oDaoLancamento->numrows = 0) {
+                throw new BusinessException(_M("financeiro.caixa.Transferencia.exclusao_transferencia_autenticacao"));
+            }
+
     }
 
     $oDaoExcluirSlip = new cl_slipconcarpeculiar();
@@ -912,13 +919,57 @@ abstract class Transferencia {
 
     $this->excluirVinculoComProcesso();
 
-    $oDaoExcluirSlip = new cl_slip();
-    $oDaoExcluirSlip->excluir($this->getCodigoSlip());
-    if ($oDaoExcluirSlip->erro_status == "0") {
-      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia");
+    $result = db_utils::fieldsMemory($res = db_query($sSqlBuscaLancamento),0);
+
+    if ($result->k17_situacao == 4) {
+
+      $iCodSlip = $this->getCodigoSlip();
+
+      $oDaoExcluirSlip = new cl_slipanul();
+      $oDaoExcluirSlip->excluir($this->getCodigoSlip());
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_anulacao_slip");
+      }
+
+      if ($this->atualizaSaldos($iCodSlip)) {
+          
+          $oDaoExcluirSlip = new cl_slip();
+          $oDaoExcluirSlip->excluir($this->getCodigoSlip());
+          if ($oDaoExcluirSlip->erro_status == "0") {
+            throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia_1");
+          }
+          return true;
+      }
+
+    } else {
+      $oDaoExcluirSlip = new cl_slip();
+      $oDaoExcluirSlip->excluir($this->getCodigoSlip());
+      if ($oDaoExcluirSlip->erro_status == "0") {
+        throw new BusinessException("financeiro.caixa.Transferencia.exclusao_transferencia_2");
+      }
+      return true;
     }
-    return true;
   }
+
+  public function atualizaSaldos($iCodSlip) {
+
+  $clTransferencia = new cl_conlancamslip();
+  $sSqlSlip = $clTransferencia->sql_query_lancamento_slip(null, "date_part('y', k17_data) as ano, k17_instit", null, "c84_slip = $iCodSlip and k17_situacao in (1, 4)");
+  $resultSlip = db_utils::fieldsMemory($result = db_query($sSqlSlip),0);
+  $sql = "select fc_removeslip($iCodSlip, $resultSlip->ano, $resultSlip->k17_instit)";
+
+  $rsResultFcRemoveSlip = db_query($sql);
+
+  $sRetorno = db_utils::fieldsMemory($rsResultFcRemoveSlip, 0);
+
+  if($sRetorno == 1) {
+    return true;
+  } else {
+    throw new BusinessException("financeiro.caixa.Transferencia.exclusao_function_db");
+    return false;
+  }
+
+}
 
   /**
    * @param $sProcesso

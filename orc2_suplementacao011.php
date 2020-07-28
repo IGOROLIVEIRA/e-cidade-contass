@@ -181,6 +181,16 @@ function js_inverte(){
      </td>
    </tr>
 
+   <tr>
+      <td colspan="1"><b>Formato: </b></td>
+      <td>
+         <select name=formato>
+           <option value="1"> PDF  </option>
+           <option value="2"> CSV </option>
+        </select>
+     </td>
+   </tr>
+
   <tr>
       <td><b>Imprime Filtro: </b></td>
       <td>

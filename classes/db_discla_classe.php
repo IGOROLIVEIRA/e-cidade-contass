@@ -490,7 +490,7 @@ class cl_discla {
      $sql .= "      inner join disarq  on  disarq.codret = discla.codret";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
-     $sql .= "      inner join db_config  on  db_config.codigo = disarq.instit";
+     $sql .= "      inner join db_config b  on  b.codigo = disarq.instit";
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = disarq.id_usuario";
      $sql .= "      inner join saltes  on  saltes.k13_conta = disarq.k00_conta";
      $sql2 = "";
