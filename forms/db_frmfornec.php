@@ -106,7 +106,6 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3);
       if(isset($pc21_codorc) && trim($pc21_codorc)!=""){
         echo "<input name='gerabranco'    type='submit' id='gerabranco'    value='Gerar em branco' onclick='js_gerarel(true);' ".($db_botao==false?"disabled":"").">&nbsp;";
         echo "<input name='xlsbranco'     type='submit' id='xlsbranco'     value='xls em Branco'   onclick='js_gerarxlsbranco();' ".($db_botao==false?"disabled":"").">&nbsp;";
-        echo "<input name='exportarxls'   type='submit' id='exportarxls'    value='Exportar xls' onclick='###' ".($db_botao==false?"disabled":"").">&nbsp;";
       }
       $result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_file(null,"pc22_codorc","","pc22_codorc=".@$pc21_codorc));
       if($clpcorcamitem->numrows>0){
