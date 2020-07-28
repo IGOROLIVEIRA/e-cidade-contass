@@ -100,6 +100,16 @@ if (isset($_POST["processar"])) {
   $oData   = new DBDate($_POST["sData"]);
   $sData   = $oData->convertTo(DBDate::DATA_EN);
 
+  $oDaoConDataConf              = new cl_condataconf();
+  $sWhereValidaFechamContabil   = " c99_data >= '{$sData}' and c99_instit  = " . db_getsession('DB_instit');
+  $sSqlValidaFechamentoContabil = $oDaoConDataConf->sql_query(null, null, '*', null, $sWhereValidaFechamContabil);
+  $rsValidaFechamentoContabil   = $oDaoConDataConf->sql_record($sSqlValidaFechamentoContabil);
+
+  if ($oDaoConDataConf->numrows > 0) {
+    db_msgbox('Data de encerramento da contabilidade é posterior a data de reprocessamento');
+    db_redireciona("con4_reprocessa_lancamento_receita_pcasp001.php");
+  }
+
   $oDataFinal = new DBDate($_POST["sDataFinal"]);
   $sDataFinal = $oDataFinal->convertTo(DBDate::DATA_EN);
 
@@ -486,8 +496,8 @@ unset($_SESSION["DB_desativar_account"]);
            </td>
            <td>
              <select name='reprocessar_saldo_contabil' style="width: 100%">
-               <option value='n' selected>Não</option>
-               <option value='s'>Sim</option>
+               <option value='n'>Não</option>
+               <option value='s' selected>Sim</option>
              </select>
            </td>
          </tr>
@@ -498,8 +508,8 @@ unset($_SESSION["DB_desativar_account"]);
            </td>
            <td>
              <select name='reprocessar_descontos_tesouraria' style="width: 100%">
-               <option value='n' selected>Não</option>
-               <option value='s'>Sim</option>
+               <option value='n'>Não</option>
+               <option value='s' selected>Sim</option>
              </select>
            </td>
          </tr>
