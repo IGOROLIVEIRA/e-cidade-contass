@@ -189,11 +189,36 @@ class AutenticacaoBaixaBanco {
       if ($lArrecadaDesconto) {
 
         $oReceitaDeducao              = new ReceitaContabil($oDadoSqlGeral->k02_codrec,$this->iAnoUsu);
-        $sEstruturalContaDeducao      = substr($oReceitaDeducao->getContaOrcamento()->getEstrutural(), 1, 14);
-        $sEstruturalContaArrecadacao  = "4{$sEstruturalContaDeducao}";
-        $oContaPlano                  = ContaOrcamento::getContaPorEstrutural($sEstruturalContaArrecadacao, $this->iAnoUsu);
-        $oReceitaContabil             = $oContaPlano->getReceitaContabil();
-        $lDesconto                    = false;
+
+        $sSqlRec   = " select c21_congrupo from conplanoorcamentogrupo " ;
+        $sSqlRec  .= " inner join conplanoorcamento on c60_codcon = c21_codcon " ;
+        $sSqlRec  .= "   and c21_anousu = c60_anousu where c60_estrut = '".$oReceitaDeducao->getContaOrcamento()->getEstrutural() ."' " ;
+        $sSqlRec  .= "   and c60_anousu = $this->iAnoUsu " ;
+        $rsRec = db_query($sSqlRec);
+
+        $oDadosRec = db_utils::fieldsMemory($rsRec, 0)->c21_congrupo;
+
+        /**
+         * Quando realiza uma renúncia ou desconto, considera o estrutural da receita principal para fazer o lançamento.
+         */
+        if($oDadosRec == 9000 || $oDadosRec == 25003){
+          
+          $sEstruturalContaDeducao      = substr($oReceitaDeducao->getContaOrcamento()->getEstrutural(), 3, 14);
+          $sEstruturalContaArrecadacao  = "4{$sEstruturalContaDeducao}00";
+          $oContaPlano                  = ContaOrcamento::getContaPorEstrutural($sEstruturalContaArrecadacao, $this->iAnoUsu);
+          $oReceitaContabil             = $oContaPlano->getReceitaContabil();
+          $lDesconto                    = false;
+
+        } else {
+
+          $sEstruturalContaDeducao      = substr($oReceitaDeducao->getContaOrcamento()->getEstrutural(), 1, 14);
+          $sEstruturalContaArrecadacao  = "4{$sEstruturalContaDeducao}";
+          $oContaPlano                  = ContaOrcamento::getContaPorEstrutural($sEstruturalContaArrecadacao, $this->iAnoUsu);
+          $oReceitaContabil             = $oContaPlano->getReceitaContabil();
+          $lDesconto                    = false;
+
+        }
+
       }
       $oReceitaContabil->processaLancamentosReceita(abs($oDadoSqlGeral->total_receita),
                                                     $oDadoSqlGeral->k12_id,
