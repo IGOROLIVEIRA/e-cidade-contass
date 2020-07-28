@@ -135,6 +135,23 @@
     }
 
   }
+
+    public static function setHistoricoCgm($cgm, $datacad){
+
+   		try{
+			$oDaoHistorico = db_utils::getDao('historicocgm');
+			$oDaoHistorico->z09_numcgm = $cgm;
+			$oDaoHistorico->z09_datacadastro = $datacad;
+			$oDaoHistorico->z09_usuario = db_getsession('DB_id_usuario');
+			$oDaoHistorico->incluir();
+			if($oDaoHistorico->erro_status == '0'){
+				throw new Exception($oDaoHistorico->erro_msg);
+			}
+		}catch(Exception $e){
+			throw new Exception($e->getMessage());
+		}
+   	}
+
 }
 
 ?>

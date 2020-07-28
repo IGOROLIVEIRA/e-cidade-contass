@@ -465,8 +465,7 @@ switch ($oParam->exec) {
 
                     $oCgm->save();
                     if ($oParam->action == "incluir") {
-
-                        $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
+                    	$oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
                     } else if ($oParam->action == "alterar") {
 
                         $oRetorno->message = urlencode("usuario:\\n\\n Cgm alterado com sucesso (".$oCgm->getCodigo().")\\n\\n");
@@ -523,7 +522,7 @@ switch ($oParam->exec) {
                 }
             }
 
-            //Aqui manipula cgm Pessoa Jurídica
+		    //Aqui manipula cgm Pessoa Jurídica
         } else if ($oParam->lPessoaFisica == false) {
 
             $sqlErro = false;
@@ -736,6 +735,7 @@ switch ($oParam->exec) {
             $oRetorno->z01_numcgm = $oCgm->getCodigo();
         }
 
+		CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
         echo $oJson->encode($oRetorno);
         break;
 
@@ -1005,4 +1005,31 @@ switch ($oParam->exec) {
         }
         echo $oJson->encode($oRetorno);
         break ;
+
+	case 'getDataCadCGM':
+		try{
+			$oCgm  = db_utils::getDao('cgm');
+			$oHistoricoCgm  = db_utils::getDao('historicocgm');
+
+			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'max(z09_datacadastro) as z09_datacadastro','','z09_numcgm = '.$oParam->numcgm);
+			$rsSqlHistorico = $oHistoricoCgm->sql_record($sSqlHistorico);
+			$data_cadastro = db_utils::fieldsMemory($rsSqlHistorico, 0)->z09_datacadastro;
+
+			if(!$data_cadastro){
+				$sSql  = $oCgm->sql_query_file($oParam->numcgm, 'z01_cadast');
+				$rsSql = $oCgm->sql_record($sSql);
+				$data_cadastro = db_utils::fieldsMemory($rsSql, 0)->z01_cadast;
+				$data_cadastro = $data_cadastro ? $data_cadastro : '2019-12-31';
+			}
+
+			$oRetorno->z09_cadastro = $data_cadastro;
+			$oRetorno->status = 1;
+
+		}catch(Exception $exception){
+
+			$oRetorno->status = 2;
+			$oRetorno->message = urlencode($eErro->getMessage());
+		}
+		echo $oJson->encode($oRetorno);
+		break;
 }
