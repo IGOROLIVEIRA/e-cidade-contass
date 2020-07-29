@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once("fpdf151/pdf.php");
+require_once("fpdf151/fpdf.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -182,7 +182,7 @@ $rsDBConfig   = $oDaoDbConfig->sql_record($oDaoDbConfig->sql_query_file(db_getse
 $oConfig = db_utils::fieldsMemory($rsDBConfig, 0);
 
 
-$oPdf = new PDF();
+$oPdf = new FPDF();
 $oPdf->open();
 $oPdf->SetFillColor(190);
 $oPdf->SetAutoPageBreak('on',0);
@@ -195,7 +195,7 @@ for($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 	$oPdf->AddPage();
 	$oPdf->SetFont('arial','b',9);
-	$oPdf->cell(192,5,"TERMO DE RESCISÃO DO CONTRATO DE TRABALHO",0,1,"C",1);
+	$oPdf->cell(192,5,"TERMO DE QUITAÇÃO DE RESCISÃO DO CONTRATO DE TRABALHO",0,1,"C",1);
 	$oPdf->cell(192,$altLabel,"",0,1,"C",0);
 
 	//CABECALHO

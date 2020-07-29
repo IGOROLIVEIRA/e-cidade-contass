@@ -52,7 +52,7 @@ db_postmemory($HTTP_POST_VARS);
 <table align="center" style="padding-top: 25px;">
 <tr><td>
 <fieldset>
-<legend><strong>Termos de Rescisões</strong></legend>
+<legend><strong>Termos de Rescisão Novo</strong></legend>
 <table>
   <?
   if(!isset($tipo)){

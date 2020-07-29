@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once("fpdf151/pdf.php");
+require_once("fpdf151/fpdf.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -144,7 +144,7 @@ if (trim($sel) != "") {
 $oDaoRhpesrescisao = db_utils::getDao('rhpesrescisao');
 $sCampos  = "DISTINCT rh16_pis,rh01_admiss,h13_tpcont,z01_nome,z01_ender,z01_bairro,z01_munic,z01_uf,z01_mae,rh16_ctps_n,rh16_ctps_s,rh16_ctps_uf,";
 $sCampos .= "rh01_sexo,rh01_instru,rh01_nasc,rh02_hrssem,rh37_cbo,rh30_regime,rh30_descr,rh116_codigo,rh116_cnpj,rh116_descricao,";
-$sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf,rh115_descricao,rh115_sigla,h13_descr,h13_codigo";
+$sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf,rh115_descricao,rh115_sigla,h13_descr,h13_codigo,rh01_regist";
 $sOrdem = "rh16_pis,rh01_admiss,h13_tpcont";
 
 $sDataCompIni = "{$ano}-{$mes}-01";
@@ -187,7 +187,7 @@ $rsCfpess = $oDaoCfpess->sql_record($oDaoCfpess->sql_query_file($ano,$mes,db_get
 $oCfpess = db_utils::fieldsMemory($rsCfpess, 0);
 
 
-$oPdf = new PDF();
+$oPdf = new FPDF();
 $oPdf->open();
 $oPdf->SetFillColor(190);
 $oPdf->SetAutoPageBreak('on',0);
@@ -198,10 +198,13 @@ $altField = 5;
 for($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+    $oDaoRhPessoalMov = db_utils::getDao('rhpessoalmov');
+    $rsSalMesAnterior = db_query($oDaoRhPessoalMov->sql_valores_servidor($oResult->rh01_regist, $ano, $mes-1, 'R991'));
+
     $oPdf->AddPage();
     $oPdf->SetFont('arial','b',9);
     $oPdf->cell(192,5,"TERMO DE RESCISÃO DO CONTRATO DE TRABALHO",0,1,"C",1);
-    $oPdf->cell(192,$altLabel,"",0,1,"C",0);
+    $oPdf->cell(192,2,"",0,1,"C",0);
 
     //CABECALHO
     addHeader($oPdf, "IIDENTIFICAÇÃO DO EMPREGADOR");
@@ -356,7 +359,7 @@ for($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
 
     //LINHA
     $oDados->label = "23 Remuneração Mês Ant.";
-    $oDados->value = "";
+    $oDados->value = db_formatar(db_utils::fieldsMemory($rsSalMesAnterior, 0)->salario, 'f');
     $oDados->size = 40;
     $oDados->ln = false;
     addField($oPdf, $oDados);
@@ -510,7 +513,7 @@ for($iCont = 0; $iCont < $oDaoRhpesrescisao->numrows; $iCont++) {
     $oPdf->cell(30,$alt,"",1,1,"L",1);
 
     //TABELA
-    $oPdf->AddPage();
+    // $oPdf->AddPage();
     $oPdf->SetFont('arial','b',7);
     $oPdf->cell(192,4,"DEDUÇÕES",1,1,"L",0);
     $oPdf->cell(34,4,"Rubrica",1,0,"L",0);
