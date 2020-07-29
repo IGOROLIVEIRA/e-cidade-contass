@@ -251,13 +251,15 @@ class cl_liclancedital
 			$sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
 			$virgula = ",";
 		}else {
-			$this->erro_sql = " Campo Origem Recurso não Informado.";
-			$this->erro_campo = "l47_origemrecurso";
-			$this->erro_banco = "";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
+			if(!in_array($iTribunal, array(100, 101, 102, 103))){
+				$this->erro_sql = " Campo Origem Recurso não Informado.";
+				$this->erro_campo = "l47_origemrecurso";
+				$this->erro_banco = "";
+				$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+				$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+				$this->erro_status = "0";
+				return false;
+			}
 		}
 
 			if (trim($this->l47_dataenvio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
