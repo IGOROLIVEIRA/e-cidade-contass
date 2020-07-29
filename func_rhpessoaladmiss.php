@@ -187,7 +187,7 @@ if(!isset($pesquisa_chave)){
 		    x.rh02_seqpes as db_rh02_seqpes,
 		    x.rh02_codreg as db_rh02_codreg,
                     rh14_matipe as db_rh14_matipe,
-		    rh14_dtvinc as db_rh14_dtvinc
+		    rh14_dtvinc as db_rh14_dtvinc,rh30_regime
                    ";
         $clgersubsql->subsqlano = "anousu";
         $clgersubsql->subsqlmes = "mesusu";
@@ -203,6 +203,7 @@ if(!isset($pesquisa_chave)){
   	if(isset($sql) && trim($sql) != ""){
             //echo $testarescisao;
             $clgersubsql->subsql = $sql;
+            $clgersubsql->usar_atv = true;
   	  $sql = $clgersubsql->gerador_sql("", $anofolha, $mesfolha, "x.rh01_regist", null, $campos2);
       
             db_lovrot($sql,15,"()","",(isset($testarescisao) && !isset($valor_testa_rescisao) ? "js_recebe_click|rh01_regist" : $funcao_js),"","NoMe",$repassa);
@@ -226,7 +227,7 @@ if(!isset($pesquisa_chave)){
                  db_msgbox($msgRetorno);
               }
 	    }
-            echo "<script>".$funcao_js."('$z01_nome','$rh01_admiss','$rh02_seqpes','$r30_proc1','$r30_proc2','$r30_per1f','$r30_per2f','$rh02_codreg','$rh14_matipe','$rh14_dtvinc',false,'$temresci');</script>";
+            echo "<script>".$funcao_js."('$z01_nome','$rh01_admiss','$rh02_seqpes','$r30_proc1','$r30_proc2','$r30_per1f','$r30_per2f','$rh02_codreg','$rh14_matipe','$rh14_dtvinc','$rh30_regime',false,'$temresci');</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','','','','','','','','',true);</script>";
           }
