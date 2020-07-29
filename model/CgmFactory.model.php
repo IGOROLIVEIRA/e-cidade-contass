@@ -137,13 +137,13 @@
   }
 
     public static function setHistoricoCgm($cgm, $datacad){
-
-   		try{
+		try{
 			$oDaoHistorico = db_utils::getDao('historicocgm');
 			$oDaoHistorico->z09_numcgm = $cgm;
 			$oDaoHistorico->z09_datacadastro = $datacad;
 			$oDaoHistorico->z09_usuario = db_getsession('DB_id_usuario');
 			$oDaoHistorico->incluir();
+
 			if($oDaoHistorico->erro_status == '0'){
 				throw new Exception($oDaoHistorico->erro_msg);
 			}

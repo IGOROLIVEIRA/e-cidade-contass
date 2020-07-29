@@ -172,15 +172,6 @@ class cl_historicocgm
         	$this->z09_dataservidor = date('Y-m-d');
         }
 
-		if ($this->z09_motivo == "" || $this->z09_motivo == null) {
-			$this->erro_banco = str_replace("\n", "", @pg_last_error());
-			$this->erro_sql = "Informe o motivo da alteração.";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
-		}
-
 		$sql = "insert into historicocgm(
 						  z09_sequencial
                          ,z09_numcgm

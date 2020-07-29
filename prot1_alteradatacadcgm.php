@@ -54,17 +54,25 @@ if (isset($oPost->incluir)) {
     }
 
 	if(!$error){
-        $cl_historicocgm->z09_motivo        = $oPost->z09_motivo;
-        $cl_historicocgm->z09_usuario       = db_getsession('DB_id_usuario');
-        $cl_historicocgm->z09_numcgm        = $oPost->z09_numcgm;
-        $cl_historicocgm->z09_datacadastro  = $oPost->z09_datacadastro;
-        $cl_historicocgm->incluir();
 
-        if($cl_historicocgm->erro_status == '0'){
-            $error = true;
-            $erro_msg = $cl_historicocgm->erro_msg;
-        }else{
-            $erro_msg = $cl_historicocgm->erro_msg;
+	    if($oPost->z09_motivo == '' || $oPost->z09_motivo == null){
+			$error = true;
+			$erro_msg = 'Informe o motivo da alteração';
+        }
+
+	    if(!$error){
+            $cl_historicocgm->z09_motivo        = $oPost->z09_motivo;
+            $cl_historicocgm->z09_usuario       = db_getsession('DB_id_usuario');
+            $cl_historicocgm->z09_numcgm        = $oPost->z09_numcgm;
+            $cl_historicocgm->z09_datacadastro  = $oPost->z09_datacadastro;
+            $cl_historicocgm->incluir();
+
+            if($cl_historicocgm->erro_status == '0'){
+                $error = true;
+                $erro_msg = $cl_historicocgm->erro_msg;
+            }else{
+                $erro_msg = $cl_historicocgm->erro_msg;
+            }
         }
     }
 
