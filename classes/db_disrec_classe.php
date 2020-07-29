@@ -434,6 +434,10 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     $sql .= "                                              and empprestarecibo.e170_numpar = arreidret.k00_numpar";
     $sql .= "                          inner join disrec    on arreidret.idret = disrec.idret";
     $sql .= "                    where disrec.codcla = corcla.k12_codcla limit 1)";
+    $sql .= "       and not exists (select 1 ";
+    $sql .= "                         from disrec_desconto_integral ";
+    $sql .= "                         where codcla = corcla.k12_codcla ";
+    $sql .= "                           and k00_receit = cornump.k12_receit limit 1)";
 
     $sql2 = "";
     if($dbwhere==""){

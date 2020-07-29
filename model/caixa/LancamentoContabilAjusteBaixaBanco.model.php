@@ -183,7 +183,10 @@ class LancamentoContabilAjusteBaixaBanco {
         $rsRec = db_query($sSqlRec);
         $oDadosRec = db_utils::fieldsMemory($rsRec, 0)->c21_congrupo;
 
-        if($oDadosRec == 9000){ // quando for realizada uma renuncia de receita pega-se a receita principal para fazer o lancamento
+        /**
+         * Quando realiza uma renúncia ou desconto, considera o estrutural da receita principal para fazer o lançamento.
+         */
+        if($oDadosRec == 9000 || $oDadosRec == 25003){
             $sEstruturalContaDeducao      = substr($oReceitaDeducao->getContaOrcamento()->getEstrutural(), 3, 14);
             $sEstruturalContaArrecadacao = "4{$sEstruturalContaDeducao}00";
             $oContaPlano = ContaOrcamento::getContaPorEstrutural($sEstruturalContaArrecadacao, $this->iAnoUsu);
