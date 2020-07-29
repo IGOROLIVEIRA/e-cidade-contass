@@ -192,6 +192,17 @@ $clrotulo->label("rh02_codreg");
             </td>
           </tr>
 
+          <tr>
+            <td nowrap title="<?php echo $Trh05_saldofgts?>">
+              <?php db_ancora(@$Lrh05_saldofgts,"",3); ?>
+            </td>
+            <td>
+              <?php db_input('rh05_saldofgts',10, $Irh05_saldofgts, true, 'text', $db_opcao); ?>
+            </td>
+            <td colspan="2" id="caixa_de_texto">
+            </td>
+          </tr>
+
         </table>
       </fieldset>
     </td>
@@ -417,7 +428,7 @@ function js_mostrarescisao1(chave1,chave2,chave3,chave4,chave5,chave6){
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh30_regime&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   }else{
      if(document.form1.rh01_regist.value != ''){ 
         js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
@@ -440,12 +451,14 @@ function js_pesquisarh01_regist(mostra){
        document.form1.rh05_aviso_ano.value  = '';
        document.form1.rh05_aviso.value  = '';
        document.form1.rh05_mremun.value     = ''; 
+       document.form1.rh02_seqpes.value = '';
+       document.form1.rh02_codreg.value = '';
        document.form1.rh05_taviso.options[0].selected = true;
        js_disabdata(document.form1.rh05_taviso.value);
      }
   }
 }
-function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,erro,temresci){
+function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,erro,temresci){
   document.form1.z01_nome.value = chave;
   if(erro==true||temresci=='s'){ 
 		if (temresci=='s'){
@@ -481,8 +494,9 @@ function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chav
       alert("Se funcionário vinculado ao IPE, informe nova situação (Cadastro de IPE).");
     }
   }
+  js_verifica_saldo_fgts(chave11);
 }
-function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11){
+function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,chave12){
   document.form1.rh01_regist.value = chave1;
   document.form1.z01_nome.value = chave2;
   document.form1.rh01_admiss_ano.value = chave3.substring(0,4);
@@ -509,6 +523,16 @@ function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,ch
     alert("Se funcionário vinculado ao IPE, informe nova situação (Cadastro de IPE).");
   }
   db_iframe_rhpessoal.hide();
+  js_verifica_saldo_fgts(chave12);
+}
+function js_verifica_saldo_fgts(regime) {
+  if (regime == 2) {
+    document.form1.rh05_saldofgts.readOnly  = false;
+    document.form1.rh05_saldofgts.style.backgroundColor='';
+  } else {
+    document.form1.rh05_saldofgts.readOnly  = true;
+    document.form1.rh05_saldofgts.style.backgroundColor='#DEB887';
+  }
 }
 js_disabdata("<?=($rh05_taviso)?>");
 </script>

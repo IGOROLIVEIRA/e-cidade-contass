@@ -240,6 +240,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
   public function gerarDados()
   {
 
+//ini_set('display_errors', 'On');
+//
+//error_reporting(E_ALL);
+
     $clcontratos10 = new cl_contratos102020();
     $clcontratos11 = new cl_contratos112020();
     $clcontratos12 = new cl_contratos122020();
@@ -813,7 +817,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
                 $rsDados = db_query($sSql);
               }
-              if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && $oDados12->getNumero() != '') {
+
+              //echo '<pre>'; var_dump($oDados12);
+              if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && !self::ORIGEM_LICITACAO && $oDados12->getNumero() != '') {
                 $sSql = "SELECT distinct on (o58_coddot)
                         o58_coddot,
                         CASE WHEN o40_codtri = '0'
@@ -1182,7 +1188,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_coditemsimcro = null;
               $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_codigotabela;
+            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $clcontratos21->incluir(null);
 
             if ($clcontratos21->erro_status == 0) {

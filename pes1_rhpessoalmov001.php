@@ -716,7 +716,7 @@ if(isset($limparbanco) && $limparbanco == true){
 }
 
 if(isset($limparrecis) && $limparrecis == true){
-  unset($rh05_recis_dia,$rh05_recis_mes,$rh05_recis_ano,$rh05_causa,$rh05_caub,$r59_descr,$rh05_aviso_dia,$rh05_aviso_mes,$rh05_aviso_ano,$r59_descr1,$rh05_taviso);
+  unset($rh05_recis_dia,$rh05_recis_mes,$rh05_recis_ano,$rh05_causa,$rh05_caub,$r59_descr,$rh05_aviso_dia,$rh05_aviso_mes,$rh05_aviso_ano,$r59_descr1,$rh05_taviso,$rh05_saldofgts);
 }
 
 if ( !isset($rh30_vinculo) ) {

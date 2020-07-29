@@ -274,17 +274,30 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
     $oReceitaTotalCorrenteLiquida->linhatotalizadora = false;
 
     /**
-     * Transferências Obrigatórias da União.
+     * Transferências Obrigatórias da União - Emendas Individuais.
      */
-    $oTransferenciasObrigatoriasDaUniao = new stdClass();
-    $oTransferenciasObrigatoriasDaUniao->quadrodescricao   = '(-) Transferências Obrigatórias da União Relativas às Emendas Individuais (V) (§13º, art. 166 da CF)';
-    $oTransferenciasObrigatoriasDaUniao->exercicio         = 0;
-    $oTransferenciasObrigatoriasDaUniao->inscritas         = 0;
-    $oTransferenciasObrigatoriasDaUniao->linhas            = array();
-    $oTransferenciasObrigatoriasDaUniao->colunameses       = array();
-    $oTransferenciasObrigatoriasDaUniao->valorapurado      = 0;
-    $oTransferenciasObrigatoriasDaUniao->percentuallimite  = 0;
-    $oTransferenciasObrigatoriasDaUniao->linhatotalizadora = false;
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais = new stdClass();
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->quadrodescricao   = '(-) Transferências Obrigatórias da União relativas às Emendas Individuais (art. 166-A, §1º, da CF) (V)';
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->exercicio         = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->inscritas         = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->linhas            = array();
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->colunameses       = array();
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->valorapurado      = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->percentuallimite  = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->linhatotalizadora = false;
+
+        /**
+     * Transferências Obrigatórias da União - Emendas de Bancada.
+     */
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada = new stdClass();
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->quadrodescricao   = '(-) Transferências Obrigatórias da União relativas às Emendas de Bancada (art. 166, § 16, da CF) (VI)';
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->exercicio         = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->inscritas         = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->linhas            = array();
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->colunameses       = array();
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->valorapurado      = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->percentuallimite  = 0;
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->linhatotalizadora = false;
 
     /**
      * Receita corrente líquida ajustada.
@@ -353,6 +366,8 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
      * Percorremos as linhas cadastradas no relatorio, e adicionamos os valores cadastrados manualmente.
      */
     $aLinhasRelatorio = $this->oRelatorioLegal->getLinhasCompleto();
+    // echo '<pre>';
+    // print_r($aLinhasRelatorio);exit;
 
     $iQtdLinha = 7;
 
@@ -651,12 +666,47 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
     $aValoresColunasLinhas = $aLinhasRelatorio[14]->getValoresColunas(null, null,
                                                                      $this->getInstituicoes(),
                                                                      $this->iAnoUsu);
+
     foreach($aValoresColunasLinhas as $oValor) {
 
       if (isset($oValor->colunas[0]->o117_valor)) {
         $nTotalRCL += $oValor->colunas[0]->o117_valor;
       }
     }
+
+    /**
+     * Passando valor manual emendas individuais 
+     */
+    $aLinhasRelatorio[15]->setPeriodo($this->iCodigoPeriodo);
+    $aValoresColunasLinhas = $aLinhasRelatorio[15]->getValoresColunas(null, null,
+                                                                     $this->getInstituicoes(),
+                                                                     $this->iAnoUsu);
+
+    foreach($aValoresColunasLinhas as $oValor) {
+
+      if (isset($oValor->colunas[0]->o117_valor)) {
+        $nTotalTransfEmendIndi += $oValor->colunas[0]->o117_valor;
+      }
+    }
+
+    $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->valorapurado = $nTotalTransfEmendIndi;
+
+    /**
+     * Passando valor manual emendas de bancada  
+     */
+    $aLinhasRelatorio[16]->setPeriodo($this->iCodigoPeriodo);
+    $aValoresColunasLinhas = $aLinhasRelatorio[16]->getValoresColunas(null, null,
+                                                                     $this->getInstituicoes(),
+                                                                     $this->iAnoUsu);
+
+    foreach($aValoresColunasLinhas as $oValor) {
+
+      if (isset($oValor->colunas[0]->o117_valor)) {
+        $nTotalTransfEmendBancada += $oValor->colunas[0]->o117_valor;
+      }
+    }
+
+    $oTransferenciasObrigatoriasDaUniaoEmendasBancada->valorapurado = $nTotalTransfEmendBancada;
 
     if ($nTotalRCL == 0) {
       /**
@@ -725,23 +775,24 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
      *  Cálculo da Receita corrente líquida ajustada
      */
     $oReceitaCorrenteLiquidaAjustada->valorapurado =  $oReceitaTotalCorrenteLiquida->valorapurado -
-                                                      $oTransferenciasObrigatoriasDaUniao->valorapurado;
+                                                      $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais->valorapurado - $oTransferenciasObrigatoriasDaUniaoEmendasBancada->valorapurado;
 
     /**
      * Monta Object para retorno com todos os dados por quadro informado.
      */
-    $oRetorno                                     = new stdClass();
-    $oRetorno->quadrodespesabruta                 = $oDespesaBruta;
-    $oRetorno->quadrodespesanaocomputadas         = $oDespesaNaoComputada;
-    $oRetorno->quadrodespesaliquida               = $oDespesaLiquida;
-    $oRetorno->quadrodespesatotalcompessoal       = $oDespesaTotalComPessoal;
-    $oRetorno->quadroreceitatotalcorrenteliquida  = $oReceitaTotalCorrenteLiquida;
-    $oRetorno->quadrotransferenciasobrigatorias   = $oTransferenciasObrigatoriasDaUniao;
-    $oRetorno->quadroreceitacorrenteliquidaajust  = $oReceitaCorrenteLiquidaAjustada;
-    $oRetorno->quadrodespesatotalcompessoalsemrcl = $oDespesaTotalComPessoalSemRCL;
-    $oRetorno->quadrolimitemaximo                 = $oLimiteMaximo;
-    $oRetorno->quadrolimiteprudencial             = $oLimitePrudencial;
-    $oRetorno->quadrolimitealerta                 = $oLimiteAlerta;
+    $oRetorno                                                     = new stdClass();
+    $oRetorno->quadrodespesabruta                                 = $oDespesaBruta;
+    $oRetorno->quadrodespesanaocomputadas                         = $oDespesaNaoComputada;
+    $oRetorno->quadrodespesaliquida                               = $oDespesaLiquida;
+    $oRetorno->quadrodespesatotalcompessoal                       = $oDespesaTotalComPessoal;
+    $oRetorno->quadroreceitatotalcorrenteliquida                  = $oReceitaTotalCorrenteLiquida;
+    $oRetorno->quadrotransferenciasobrigatoriasemendasindividuais = $oTransferenciasObrigatoriasDaUniaoEmendasIndividuais;
+    $oRetorno->quadrotransferenciasobrigatoriasemendasbancada     = $oTransferenciasObrigatoriasDaUniaoEmendasBancada;
+    $oRetorno->quadroreceitacorrenteliquidaajust                  = $oReceitaCorrenteLiquidaAjustada;
+    $oRetorno->quadrodespesatotalcompessoalsemrcl                 = $oDespesaTotalComPessoalSemRCL;
+    $oRetorno->quadrolimitemaximo                                 = $oLimiteMaximo;
+    $oRetorno->quadrolimiteprudencial                         = $oLimitePrudencial;
+    $oRetorno->quadrolimitealerta                        = $oLimiteAlerta;
 
     unset($aLinhasRelatorio);
 
