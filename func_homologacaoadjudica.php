@@ -60,6 +60,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
         distinct l202_sequencial,l202_licitacao, 
         pctipocompra.pc50_descr,
         liclicita.l20_numero,
+        l20_nroedital,
       	l20_edital,
       	l20_anousu,
       	l202_datahomologacao,l202_dataadjudicacao";
