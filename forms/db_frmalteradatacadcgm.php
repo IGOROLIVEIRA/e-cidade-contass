@@ -133,6 +133,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         novaString = novaString.replace(/[òóôöõ]/g, "o");
         novaString = novaString.replace(/[ÚÛ?ÜÚ]/g, "U");
         novaString = novaString.replace(/[ùúûü?]/g, "u");
+        novaString = novaString.replace(/[ç]/g, "c");
+        novaString = novaString.replace(/[Ç]/g, "C");
         let stringFinal = novaString.replace(/[^a-z0-9 ]/gi,'');
         document.form1.z09_motivo.value = stringFinal.toUpperCase();
     }
