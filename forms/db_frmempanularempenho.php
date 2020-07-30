@@ -155,6 +155,7 @@ if (empty ($e60_numemp)) {
                                                                                     id='mtodositens' onclick='js_marca()'>
                                                         <a onclick='js_marca("mtodositens","chkmarca","tr")' style='cursor:pointer'>M</a></b></th>
                                                     <th class='table_header'>Sequência</th>
+                                                    <th class='table_header'>Cod. Item</th>
                                                     <th class='table_header'>Item</th>
                                                     <th class='table_header'>Vlr Unitário</th>
                                                     <th class='table_header'>Quantidade</th>
@@ -192,6 +193,7 @@ if (empty ($e60_numemp)) {
                                                 <tr>
                                                     <th class='table_header'>&nbsp;</th>
                                                     <th class='table_header'>Sequência</th>
+                                                    <th class='table_header'>Cod. Item</th>
                                                     <th class='table_header'>Item</th>
                                                     <th class='table_header'>Quantidade solicitada</th>
                                                     <th class='table_header'>Valor Solicitado</th>
@@ -285,10 +287,10 @@ if (empty ($e60_numemp)) {
         } else {
             lDisabled = "disabled";
         }
-        //console.log(obj.data);
+        
         if (obj.numnotas > 0){
             for (var i = 0; i < obj.data.length;i++){
-
+                console.log(obj.e60_numemp);
 
                 sClassName = "normal"
                 if (lDisabled == "disabled") {
@@ -340,6 +342,11 @@ if (empty ($e60_numemp)) {
                 saida += "    class='chkmarca' name='chk"+obj.data[i].e62_sequen+"' id='chkmarca"+obj.data[i].e62_sequen+"'";
                 saida += "    value='"+obj.data[i].e62_sequen+"' style='height:12px'></td>";
                 saida += "<td class='linhagrid' style='text-align:right'>"+obj.data[i].e62_sequen+"</td>";
+
+
+                saida += "<td class='linhagrid' style='text-align:right'>"+obj.data[i].e62_item+"</td>";
+
+
                 saida += "<td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
                 saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 3)+"</td>";
                 saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
@@ -401,6 +408,7 @@ if (empty ($e60_numemp)) {
         //grid dos itens solicitados para anular
         saida                 = '';
         if (obj.itensAnulados.length > 0){
+            //console.log(obj.itensAnulados);
             for (var i = 0; i < obj.itensAnulados.length;i++){
 
                 descrmater = obj.itensAnulados[i].pc01_descrmater.replace(/\+/g," ");
@@ -413,6 +421,17 @@ if (empty ($e60_numemp)) {
                 saida += "    name ='chkanulado"+obj.itensAnulados[i].e62_sequen+"' id='chkmarcaanulado"+obj.itensAnulados[i].e62_sequen+"'";
                 saida += "    value='"+obj.itensAnulados[i].e62_sequen+"' style='height:12px'></td>";
                 saida += "  <td class='linhagrid' style='text-align:right'>"+obj.itensAnulados[i].e62_sequen+"</td>";
+
+
+
+
+                saida += "  <td class='linhagrid' style='text-align:right'>"+obj.itensAnulados[i].e62_item+"</td>";
+
+                
+
+
+
+
                 saida += "  <td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
                 saida += "  <td class='linhagrid' id='qtdsolic"+obj.itensAnulados[i].e62_sequen+"' style='text-align:right'>"+obj.itensAnulados[i].e36_qtdanu+"</td>";
                 saida += "  <td class='linhagrid' id='vlrsolic"+obj.itensAnulados[i].e62_sequen+"' style='text-align:right'>"+obj.itensAnulados[i].e36_vrlanu+"</td>";
