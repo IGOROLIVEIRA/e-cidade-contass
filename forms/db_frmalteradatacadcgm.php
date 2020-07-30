@@ -70,7 +70,7 @@ $clcgm->rotulo->label();
                             </td>
                             <td align="left">
 								<?php
-								db_textarea('z09_motivo', 3, 56, 'z09_motivo', true, 'text', $db_opcao, "")
+								db_textarea('z09_motivo', 3, 56, 'z09_motivo', true, 'text', $db_opcao, "onKeyUp='js_changeMotivo(this.value);'")
 								?>
                             </td>
                         </tr>
@@ -119,6 +119,22 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         document.form1.z01_nome.value = '';
         document.form1.z09_datacadastro.value = '';
         document.form1.z09_motivo.value = '';
+    }
+
+    function js_changeMotivo(motivo){
+        let novaString = '';
+        novaString = motivo.replace(/[ÀÁÂÃÄÅ]/g, "A");
+        novaString = novaString.replace(/[àáâãäå]/g, "a");
+        novaString = novaString.replace(/[ÈÉÊË?]/g, "E");
+        novaString = novaString.replace(/[èéêë?]/g, "e");
+        novaString = novaString.replace(/[ÌÍÎÏ?]/g, "I");
+        novaString = novaString.replace(/[ìíîïî]/g, "i");
+        novaString = novaString.replace(/[ÒÔÕÖÓÕ]/g, "O");
+        novaString = novaString.replace(/[òóôöõ]/g, "o");
+        novaString = novaString.replace(/[ÚÛ?ÜÚ]/g, "U");
+        novaString = novaString.replace(/[ùúûü?]/g, "u");
+        let stringFinal = novaString.replace(/[^a-z0-9 ]/gi,'');
+        document.form1.z09_motivo.value = stringFinal.toUpperCase();
     }
 
 </script>
