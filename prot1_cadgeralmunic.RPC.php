@@ -1011,7 +1011,7 @@ switch ($oParam->exec) {
 			$oCgm  = db_utils::getDao('cgm');
 			$oHistoricoCgm  = db_utils::getDao('historicocgm');
 
-			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'max(z09_datacadastro) as z09_datacadastro','','z09_numcgm = '.$oParam->numcgm);
+			$sSqlHistorico  = $oHistoricoCgm->sql_query_file('', 'z09_datacadastro','z09_sequencial DESC limit 1','z09_numcgm = '.$oParam->numcgm);
 			$rsSqlHistorico = $oHistoricoCgm->sql_record($sSqlHistorico);
 			$data_cadastro = db_utils::fieldsMemory($rsSqlHistorico, 0)->z09_datacadastro;
 
