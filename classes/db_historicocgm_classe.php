@@ -58,6 +58,7 @@ class cl_historicocgm
 	var $z09_dataservidor = null;
 
 	var $z09_numcgm = null;
+	var $z09_horaalt = null;
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -67,6 +68,7 @@ class cl_historicocgm
                  z09_datacadastro = date = Data cadastro
                  z09_dataservidor = date = Data do servidor
                  z09_numcgm = int4 = Número do CGM
+                 z09_horaalt varchar(5) = Hora da alteração do CGM
                   ";
 
 	//funcao construtor da classe
@@ -172,6 +174,10 @@ class cl_historicocgm
         	$this->z09_dataservidor = date('Y-m-d');
         }
 
+        if($this->z09_horaalt == '' || $this->z09_horaalt == null){
+			$this->z09_horaalt = db_hora();
+		}
+
 		$sql = "insert into historicocgm(
 						  z09_sequencial
                          ,z09_numcgm
@@ -179,6 +185,7 @@ class cl_historicocgm
                          ,z09_usuario
                          ,z09_datacadastro
                          ,z09_dataservidor
+                         ,z09_horaalt
                 )
                 values (
                 		  $this->z09_sequencial
@@ -187,6 +194,7 @@ class cl_historicocgm
                         ,$this->z09_usuario
                         ,'$this->z09_datacadastro'
                         ,'$this->z09_dataservidor' 
+                        ,'$this->z09_horaalt' 
                 )";
 
 		$result = db_query($sql);
@@ -241,6 +249,11 @@ class cl_historicocgm
 
 		if ($this->z09_dataservidor != "" || !isset($GLOBALS["HTTP_POST_VARS"]["z09_dataservidor"])) {
 			$sql .= $virgula . " z09_dataservidor = '$this->z09_dataservidor' ";
+			$virgula = ",";
+		}
+
+		if ($this->z09_horaalt != "" || !isset($GLOBALS["HTTP_POST_VARS"]["z09_horaalt"])) {
+			$sql .= $virgula . " z09_horaalt = '$this->z09_horaalt' ";
 			$virgula = ",";
 		}
 

@@ -12,6 +12,7 @@ class Oc12849 extends AbstractMigration
 					z09_usuario INTEGER NOT NULL,
 					z09_datacadastro DATE,
 					z09_dataservidor DATE NOT NULL DEFAULT CURRENT_DATE,
+					z09_horaalt varchar(5),
 					z09_motivo TEXT,
 					PRIMARY KEY(z09_sequencial)
 				);

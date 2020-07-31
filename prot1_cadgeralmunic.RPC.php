@@ -735,7 +735,9 @@ switch ($oParam->exec) {
             $oRetorno->z01_numcgm = $oCgm->getCodigo();
         }
 
-		CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
+		if($oParam->action == "incluir"){
+			CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
+		}
         echo $oJson->encode($oRetorno);
         break;
 
