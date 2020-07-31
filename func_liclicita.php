@@ -234,6 +234,18 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
+                if($dispensas){
+					$campos = "distinct liclicita.l20_codigo,
+					                    liclicita.l20_edital,
+                                        l20_anousu,
+                                        pctipocompra.pc50_descr,
+                                        liclicita.l20_numero,
+                                        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
+                                        liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+                                        liclicita.l20_objeto";
+                }
+
 //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
 //                $campos .= ", l03_codcom as tipcom";
 //                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
