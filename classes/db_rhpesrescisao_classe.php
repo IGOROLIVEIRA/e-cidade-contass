@@ -183,6 +183,10 @@ class cl_rhpesrescisao {
      if($this->rh05_13salarioavos == null ){ 
        $this->rh05_13salarioavos = "0";
      }
+     if(empty($this->rh05_saldofgts)) {
+      $this->rh05_saldofgts = 0;
+    }
+
        $this->rh05_seqpes = $rh05_seqpes; 
      if(($this->rh05_seqpes == null) || ($this->rh05_seqpes == "") ){ 
        $this->erro_sql = " Campo rh05_seqpes nao declarado.";
