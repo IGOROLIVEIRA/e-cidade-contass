@@ -15,7 +15,8 @@ $oGet        = db_utils::postMemory($_GET);
 //var_dump($oGet);exit;
 $clpcorcam   = new cl_pcorcam();
 $objPHPExcel = new PHPExcel;
-$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf",null,"pc20_codorc = $pc22_codorc"));
+$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+//db_criatabela($result_fornecedores);exit;
 db_fieldsmemory($result_fornecedores,0);
 
 //Inicio
@@ -161,7 +162,7 @@ $sheet->getProtection()->setFormatCells(true);
 //$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
-$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc"));
+$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcam->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){
@@ -193,10 +194,10 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 }
 
-
+$nomefile = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
 
 header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment; filename=teste.xlsx" );
+header("Content-Disposition: attachment; filename=$nomefile" );
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
 header("Pragma: public");

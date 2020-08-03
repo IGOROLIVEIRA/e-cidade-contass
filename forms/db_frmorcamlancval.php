@@ -397,14 +397,14 @@ $clrotulo = new rotulocampo;
     #tdcontrol{
         width: 11%;
     }
-    #dias_validade,#dias_prazo,#pc20_codorc,#Exportarxlsforne{
+    #dias_validade,#dias_prazo,#pc20_codorc,#Exportarxlsforne,#importar{
         width: 91px;
     }
-    #importar{
+    #uploadfile{
         height: 25px;
     }
 </style>
-<form name="form1" method="post">
+<form name="form1" method="post" action="" enctype="multipart/form-data">
     <center>
         <table border="0" style="width: 100%">
             <tr>
@@ -515,18 +515,27 @@ $clrotulo = new rotulocampo;
                                     <input name='' type='button' id='Exportarxlsforne' value='Exportar xls'  onclick='js_gerarxlsfornecedor()'>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <b>Importar xls:</b>
-                                </td>
-                                <td>
-                                    <input name='' type='file' id='importar' value='Valores unitários'  onclick='###'>
-                                    <br><br>
-                                </td>
-                            </tr>
                         </table>
+                        </form>
+                        <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
+                            <table>
+                                <tr>
+                                    <td style="width: 143px">
+                                        <b>Importar xls:</b>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        db_input("uploadfile",30,0,true,"file",1);
+                                        db_input("namefile",30,0,true,"hidden",1);
+                                        ?>
+                                        <input name ='' type='button' id="Processar" onclick="js_importxlsfornecedor()" value="Processar">
+                                        <br><br>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <div id='anexo' style='display:none'></div>
                     </fieldset>
-
                     <table style="width: 100%">
                         <?
                         echo
@@ -567,7 +576,6 @@ $clrotulo = new rotulocampo;
             </tr>
         </table>
     </center>
-</form>
 <script>
     function js_gerarxlsfornecedor() {
         let codorcamento = document.getElementById('pc20_codorc').value;
@@ -576,5 +584,58 @@ $clrotulo = new rotulocampo;
         query += 'pc22_codorc='+codorcamento;
         query += '&pc21_orcamforne='+codorcamforne;
         const jan = window.open('com2_gerarxlsfornecedor.php?'+query);
+    }
+
+    /***
+     * ROTINA PARA SALVAR ANEXO
+     */
+
+    function js_salvarAnexo() {
+        let iFrame = document.createElement("iframe");
+        iFrame.src = 'func_uploadfilexls.php?clone=form2&pc20_codorc='+$F('pc20_codorc')+'&pc21_orcamforne='+$F('pc21_orcamforne');
+        iFrame.id  = 'uploadIframe';
+        $('anexo').appendChild(iFrame);
+    }
+
+    $('uploadfile').observe("change",js_salvarAnexo);
+
+
+
+    /***
+     * ROTINA PARA CARREGAR VALORES DA PLANILHA ANEXADA
+     */
+    function js_importxlsfornecedor() {
+        var oParam                    = new Object();
+        oParam.exec                   = 'importar';
+        oParam.pc20_codorc            = $F('pc20_codorc');
+        oParam.pc21_orcamforne        = $F('pc21_orcamforne');
+        js_divCarregando('Aguarde... Carregando Foto','msgbox');
+        var oAjax         = new Ajax.Request(
+            'com2_xlsfronecedor.RPC.php',
+            { parameters: 'json='+Object.toJSON(oParam),
+                asynchronous:false,
+                method: 'post',
+                onComplete : js_retornoimportarxls
+            });
+    }
+
+    function js_retornoimportarxls(oAjax) {
+        js_removeObj("msgbox");
+        var oRetorno = eval('('+oAjax.responseText+")");
+        if (oRetorno.status == 2) {
+            alert(oRetorno.message.urlDecode());
+        }else{
+            oRetorno.itens.forEach(function (oItem, iSeq) {
+                var vlrunitem   = 'vlrun_'+oItem.item;
+                var obsitem     = 'obs_'+oItem.item;
+                var vlritem     = 'valor_'+oItem.item;
+                var vlrplanilha = oItem.valorunitario;
+                var vlrtotalitem = oItem.quantidade * oItem.valorunitario;
+
+                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlrunitem+".value = '"+ vlrplanilha.toFixed(4) +"'");
+                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
+                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
+            })
+        }
     }
 </script>
