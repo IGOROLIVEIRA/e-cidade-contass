@@ -554,7 +554,7 @@ $clrotulo = new rotulocampo;
                                     
                                 <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."'  ".($db_botao==false?"disabled":"")." onclick='return js_buscarcod();'>
                                 <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"com1_selorc001.php?sol=$sol\"'>
-                                <input name='importar' type='button' id='importar' value='Valores unitários'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
+                                <input name='importar' type='button' id='importar' value='Valores Unit.'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
                                 <input name='zerar'  type='button' id='zerar' value='Zerar valores'  onclick='elementos.js_importar(false);elementos.js_somavalor();'>";
                                 if($voltar==true){
                                     echo  " <input name='trocar' type='button' id='trocar' value='Julgar orçamento'  onclick='document.location.href=\"com1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&sol=$sol\"'>";
