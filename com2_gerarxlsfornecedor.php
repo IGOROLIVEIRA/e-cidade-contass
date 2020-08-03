@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors', 'on');
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -11,12 +9,9 @@ require_once("std/db_stdClass.php");
 require_once("classes/db_pcorcam_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 $oGet        = db_utils::postMemory($_GET);
-//echo "<pre>";
-//var_dump($oGet);exit;
 $clpcorcam   = new cl_pcorcam();
 $objPHPExcel = new PHPExcel;
-$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
-//db_criatabela($result_fornecedores);exit;
+$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 db_fieldsmemory($result_fornecedores,0);
 
 //Inicio
@@ -146,7 +141,11 @@ $sheet->setCellValue('C6','Servico Material');
 $sheet->mergeCells('C6:F6');
 $sheet->setCellValue('G6','UN');
 $sheet->setCellValue('H6','Qtde');
-$sheet->setCellValue('I6','Valor Unit.');
+if($pc80_criterioadjudicacao == 3){
+    $sheet->setCellValue('I6','Valor Unit.');
+}else{
+    $sheet->setCellValue('I6','Taxa/Tabela %');
+}
 $sheet->setCellValue('J6','Valor Total');
 $sheet->setCellValue('K6','Marca');
 $sheet->getStyle('A6:K6')->applyFromArray($styleItens2);
@@ -183,15 +182,24 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     $sheet->setCellValue($collC,$pc01_descrmater);
     $sheet->setCellValue($collG,$m61_abrev);
     $sheet->setCellValue($collH,$pc11_quant);
-    //formatacao na cell valor unitario
-    $sheet->getStyle($collI)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
-    //formula multiplicacao
-    $sheet->setCellValue($collJ,'='.$collH.'*'.$collI);
-    //formatando os itens
-    $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
-    //libera celulas para alteracao
-    $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-    $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+    if($pc80_criterioadjudicacao == 3) {
+        //formatacao na cell valor unitario
+        $sheet->getStyle($collI)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+        //formula multiplicacao
+        $sheet->setCellValue($collJ,'='.$collH.'*'.$collI);
+        //formatando os itens
+        $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
+        //libera celulas para alteracao
+        $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+    }else{
+        //formatando os itens
+        $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
+        //libera celulas para alteracao
+        $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collJ)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+    }
 }
 
 $nomefile = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";

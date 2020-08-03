@@ -1089,6 +1089,7 @@ function sql_query_valor_item_julgado_processocompra($pc20_codorc=null,$campos="
         $sql .= " INNER JOIN pcorcamitem ON pc22_codorc = pc20_codorc ";
         $sql .= " INNER JOIN pcorcamitemproc ON pc31_orcamitem = pc22_orcamitem ";
         $sql .= " INNER JOIN pcprocitem ON pc81_codprocitem = pc31_pcprocitem ";
+        $sql .= " INNER JOIN pcproc ON pc81_codproc = pc80_codproc ";
         $sql .= " INNER JOIN solicitem ON pc11_codigo = pc81_solicitem ";
         $sql .= " INNER JOIN solicitemunid ON pc17_codigo = pc11_codigo ";
         $sql .= " INNER JOIN matunid ON m61_codmatunid = pc17_unid ";
