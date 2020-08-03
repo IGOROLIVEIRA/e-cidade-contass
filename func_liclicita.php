@@ -335,7 +335,9 @@ $sWhereContratos = " and 1 = 1 ";
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
                             liclicita.l20_edital,
-                            liclicita.l20_nroedital,
+                            (CASE WHEN l20_nroedital IS NULL THEN '-'
+                                ELSE l20_nroedital::varchar
+                            END) as l20_nroedital,
                             liclicita.l20_anousu,
                             pctipocompra.pc50_descr,
                             liclicita.l20_numero,

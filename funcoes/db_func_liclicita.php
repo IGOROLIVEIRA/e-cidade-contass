@@ -30,7 +30,9 @@ $campos = "distinct liclicita.l20_codigo,
 					l20_anousu,
 					pctipocompra.pc50_descr,
 					liclicita.l20_numero,
-					liclicita.l20_nroedital,
+					(CASE WHEN l20_nroedital IS NULL THEN '-'
+						ELSE l20_nroedital::varchar
+					END) as l20_nroedital,
 					liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
 					liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
 					liclicita.l20_dtpublic as dl_Data_Publicação_DO,

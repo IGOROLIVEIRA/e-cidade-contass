@@ -42,7 +42,10 @@ $clparecerlicitacao = new cl_parecerlicitacao;
            }else{
            $campos = "l200_sequencial,l20_codigo, l200_licitacao,(select l20_edital::varchar||'/'||l20_anousu::varchar from liclicita where l20_codigo=l200_licitacao) as l20_edital,
                         liclicita.l20_numero,
-					    liclicita.l20_nroedital,
+					    (CASE 
+                            WHEN liclicita.l20_nroedital IS NULL THEN '-'
+                            ELSE liclicita.l20_nroedital::varchar
+                        END) as l20_nroedital,
                         l03_descr as dl_Modalidade,
                         l200_exercicio,
                         l200_data,
