@@ -8,10 +8,10 @@ class Oc12849 extends AbstractMigration
 		$sql = "
 				CREATE TABLE historicocgm(
 					z09_sequencial integer NOT NULL,
-					z09_numcgm INTEGER NOT NULL,
-					z09_usuario INTEGER NOT NULL,
+					z09_numcgm INTEGER,
+					z09_usuario INTEGER,
 					z09_datacadastro DATE,
-					z09_dataservidor DATE NOT NULL DEFAULT CURRENT_DATE,
+					z09_dataservidor DATE DEFAULT NULL,
 					z09_horaalt varchar(5),
 					z09_motivo TEXT,
 					PRIMARY KEY(z09_sequencial)
