@@ -47,7 +47,7 @@ class Oc12836 extends PostgresMigration
 
             INSERT INTO conplanoreduz VALUES ((SELECT MAX(c60_codcon) FROM conplano), 2020, (SELECT MAX(c61_reduz)+1 FROM conplanoreduz), r.inst, 1, 0, null);
 
-            INSERT INTO conplanoexe VALUES(2020, (SELECT c61_reduz FROM conplanoreduz INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu WHERE c60_estrut = '491110000000000' AND c61_instit = r.inst AND c61_anousu = 2020 LIMIT 1), 100, 0, 0);
+            INSERT INTO conplanoexe VALUES(2020, (SELECT c61_reduz FROM conplanoreduz INNER JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu WHERE c60_estrut = '491110100000000' AND c61_instit = r.inst AND c61_anousu = 2020 LIMIT 1), 100, 0, 0);
 
             INSERT INTO contrans
                 SELECT nextval('contabilidade.contrans_c45_seqtrans_seq'),
