@@ -331,7 +331,6 @@ switch ($oParam->exec) {
 
         $sqlErro = false;
         $clcondataconf = new cl_condataconf;
-
         $oRetorno->action     = $oParam->action;
 
         db_inicio_transacao();
@@ -454,9 +453,10 @@ switch ($oParam->exec) {
                 $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat && $c99_datapat != '') {
                     $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     $sqlErro  = true;
+					exit();
                 }
             }
 
@@ -464,6 +464,7 @@ switch ($oParam->exec) {
                 try {
 
                     $oCgm->save();
+
                     if ($oParam->action == "incluir") {
                     	$oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
                     } else if ($oParam->action == "alterar") {
@@ -512,6 +513,7 @@ switch ($oParam->exec) {
                             "ov02_sequencial = ".$oParam->cidadao->ov02_sequencial." and
                                         ov02_seq = ".$oParam->cidadao->ov02_seq
                         );
+
                         if ($oDaoCidado->erro_status == 0) {
 
                             $oRetorno->status = 2;
@@ -627,8 +629,7 @@ switch ($oParam->exec) {
 
             if (!$sqlErro) {
                 try {
-
-                    $oCgm->save();
+					$oCgm->save();
                     if ($oParam->action == "incluir") {
 
                         $oRetorno->message = urlencode("usuario:\\n\\n Cgm incluído com sucesso (".$oCgm->getCodigo().")\\n\\n");
@@ -694,8 +695,7 @@ switch ($oParam->exec) {
         }
 
         if (!$sqlErro) {
-
-            /*----------------------------Processa Tipo Empresa--------------------------------------------------*/
+			/*----------------------------Processa Tipo Empresa--------------------------------------------------*/
             /**
              * Verifica se existe resgistro na cgmendereco se existir deleta
              */
@@ -726,20 +726,22 @@ switch ($oParam->exec) {
 
             }
 
+
             /* ----------------------------Fim do Processo Tipo Empresa--------------------------------------------------*/
         }
         db_fim_transacao($sqlErro);
 
         if (!$sqlErro) {
-
             $oRetorno->z01_numcgm = $oCgm->getCodigo();
         }
 
 		if($oParam->action == "incluir"){
 			CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
 		}
-        echo $oJson->encode($oRetorno);
-        break;
+
+		echo $oJson->encode($oRetorno);
+
+		break;
 
     case 'findEnderecoByCodigo' :
 
