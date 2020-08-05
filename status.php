@@ -97,7 +97,7 @@ vz
   <tr>
     <td width="533" align="left" valign="middle" class="tab" id="st" ></td>
     <!--<td width="10" align="left" valign="middle" class="tab" id="log" onmouseover="js_mostra_log(true)" onmouseout="js_mostra_log(false)" ><strong>Logs</strong></td>-->
-    <td>
+    <td class="tab" width="30" valign="middle" align="left">
           <span id="status">Status </span>
           <span id="tag"></span>
     </td>
