@@ -41,15 +41,27 @@ $clparecerlicitacao = new cl_parecerlicitacao;
              include("funcoes/db_func_parecerlicitacao.php");
            }else{
            $campos = "l200_sequencial,l20_codigo, l200_licitacao,(select l20_edital::varchar||'/'||l20_anousu::varchar from liclicita where l20_codigo=l200_licitacao) as l20_edital,
-l03_descr as dl_Modalidade,
-l20_objeto,
-l200_exercicio,
-l200_data,
-l200_tipoparecer,
-z01_nome ";
+                        liclicita.l20_numero,
+					    (CASE 
+                            WHEN liclicita.l20_nroedital IS NULL THEN '-'
+                            ELSE liclicita.l20_nroedital::varchar
+                        END) as l20_nroedital,
+                        l03_descr as dl_Modalidade,
+                        l200_exercicio,
+                        l200_data,
+                        (CASE 
+                            WHEN l200_tipoparecer = 1 THEN 'Técnico'
+                            WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
+                            WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
+                            ELSE 						   'Juridico - Outros'
+                        END) as l200_tipoparecer,
+                        z01_nome,
+                        l20_objeto,
+                        l08_descr as dl_Situação
+                        ";
            }
         }
-	         $sql = $clparecerlicitacao->sql_query('',$campos,'', 'codigo = '.db_getsession('DB_instit'));
+         $sql = $clparecerlicitacao->sql_query('',$campos,'', 'codigo = '.db_getsession('DB_instit'));
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
