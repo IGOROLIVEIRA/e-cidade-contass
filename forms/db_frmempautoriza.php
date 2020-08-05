@@ -430,6 +430,8 @@ db_app::load("DBFormCache.js");
     }
     var db_opcao = <?php echo $db_opcao; ?>;
 
+    js_mostrarancora();
+
     var oDBFormCache = new DBFormCache('oDBFormCache', 'db_frmempautoriza.php');
 
     oDBFormCache.setElements( new Array (
@@ -809,7 +811,7 @@ db_app::load("DBFormCache.js");
     function js_pesquisa_liclicita(mostra){
         if(mostra==true){
 
-            js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_numero|l20_edital|tipcom|l20_objeto|l20_anousu|tipocomtribunal',
+            js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_numero|l20_edital|l20_objeto|l20_anousu',
                 'Pesquisa Licitações',true);
         }else{
 
@@ -826,14 +828,19 @@ db_app::load("DBFormCache.js");
     /**
      * funcao para preencher licitacao  da ancora
      */
-    function js_preencheLicitacao(codigo,modalidade,processo,tipcom,l20_objeto,ano,tipocomtribunal)
-    {
-        document.form1.e54_nummodalidade.value = modalidade;
-        document.form1.e54_numerl.value = processo+'/'+ano;
+    function js_preencheLicitacao(codigo,modalidade,processo,l20_objeto,ano) {
+        js_buscaTipos({codigo, modalidade, processo, l20_objeto, ano});
+    }
+
+    function js_retornoTipos(oTipos, dadosLicitacao){
+        let tipcom = oTipos.l03_codcom;
+        let tipocomtribunal = oTipos.l03_pctipocompratribunal;
+        document.form1.e54_nummodalidade.value = dadosLicitacao.modalidade;
+        document.form1.e54_numerl.value = dadosLicitacao.processo+'/'+dadosLicitacao.ano;
         document.form1.e54_codcom.value = tipcom;
         document.form1.e54_codcomdescr.value = tipcom;
-        document.form1.e54_codlicitacao.value = codigo;
-        document.form1.l20_objeto.value = l20_objeto;
+        document.form1.e54_codlicitacao.value = dadosLicitacao.codigo;
+        document.form1.l20_objeto.value = dadosLicitacao.l20_objeto;
         if(tipocomtribunal == 101 || tipocomtribunal == 102 || tipocomtribunal == 103 || tipocomtribunal == 104){
             document.form1.e54_tipoorigem.value = 3;
         }else {
@@ -1141,6 +1148,26 @@ db_app::load("DBFormCache.js");
         if (er.test(campo.value)) {
             campo.value = "";
         }
+    }
+
+    function js_buscaTipos(licitacao){
+        let oParam        = new Object();
+        oParam.exec  = 'findTipos';
+        oParam.iLicitacao = licitacao.codigo;
+        let oAjax = new Ajax.Request ('lic4_licitacao.RPC.php',
+            {
+                method: 'post',
+                parameters:'json='+Object.toJSON(oParam),
+                onComplete: (res) => {
+                    onCompleteTipos(res, licitacao)
+                }
+            });
+    }
+
+    function onCompleteTipos(response, aDadosLicitacao){
+        let oRetorno = JSON.parse(response.responseText);
+        let oTiposRetornados = oRetorno.dadosLicitacao;
+        js_retornoTipos(oTiposRetornados, aDadosLicitacao);
     }
 
     js_reloadautoriza();

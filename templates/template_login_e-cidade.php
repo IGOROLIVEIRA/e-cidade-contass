@@ -40,6 +40,7 @@
     <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/jquery-2.1.1.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/jquery-ui-1.10.4.custom.min.js"></script>
+
   </head>
 
   <body class="<?php echo $sClassAtiva;?>">
@@ -92,13 +93,15 @@
           <input name="btnlogar" id="btnlogar" type="button" value="Entrar"/>
         </div>
 
-        <div class="link-acesso">
-          <?php echo ($lMostraLinkPrimeiroAcesso ? '<a href="primeiroAcesso.php">Primeiro acesso</a>' : ''); ?>
+        <div id="status-versao">
+          <span id="status">Sistema </span>
+          <span id="tag"></span>
         </div>
 
         <span id="testaLogin"></span>
 
         <img class="logo-db" src="imagens/files.proper/contass.png" style="width: 345px; height: 120px;">
+
 
       <!-- <div class="social-midia">
           <p><a href="http://www.dbseller.com.br">www.dbseller.com.br</a><br/>Porto Alegre RS/Brasil</p>

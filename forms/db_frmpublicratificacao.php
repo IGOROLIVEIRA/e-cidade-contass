@@ -194,15 +194,20 @@ $clliclicita->rotulo->label();
 
     function js_pesquisa(ratificacao=false){
         if(ratificacao) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }else {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }
     }
 
-    function js_preenchepesquisa(chave,tipocompratribunal){
+    function js_preenchepesquisa(chave){
+        js_findTipos(chave);
+    }
+
+    function js_retornoConsulta(chave, tipocompratribunal){
         db_iframe_publicratificacao.hide();
         let db_opcao = <?= $db_opcao?>;
+
         if(db_opcao === 33 || db_opcao === 3){
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
         }else if(db_opcao === 22 || db_opcao === 2){
@@ -249,16 +254,16 @@ $clliclicita->rotulo->label();
         let opcao = <?=$db_opcao?>;
         if(mostra==true){
             if(opcao == 1){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
             }else{
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
             }
         }else{
             if(document.form1.l20_codigo.value != ''){
                 if(opcao == 1){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
                 }else{
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
                 }
             }else{
                 document.form1.l20_codigo.value = '';
@@ -560,5 +565,25 @@ $clliclicita->rotulo->label();
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
         }
+    }
+
+    function js_findTipos(licitacao){
+        let request = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method:'post',
+            exec: 'findTipos',
+            asynchronous: false,
+            parameters:'json=' + JSON.stringify({
+                exec: 'findTipos',
+                iLicitacao: licitacao
+            }),
+            onComplete: (res) => {
+                js_onCompleteTipo(licitacao, res);
+            }
+        });
+    }
+
+    function js_onCompleteTipo(licitacao, response){
+        let oTipos = JSON.parse(response.responseText);
+        js_retornoConsulta(licitacao, oTipos.dadosLicitacao.l03_pctipocompratribunal);
     }
 </script>

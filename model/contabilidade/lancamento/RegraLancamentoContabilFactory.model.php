@@ -51,6 +51,7 @@ class RegraLancamentoContabilFactory {
     ,4   => "RegraLancamentoLiquidacaoEmpenho"
     ,23  => "RegraLancamentoLiquidacaoEmpenho"
     ,24  => "RegraLancamentoLiquidacaoEmpenho"
+    ,25  => "RegraLancamentoLiquidacaoEmpenho"
     ,33  => "RegraLancamentoLiquidacaoEmpenho"
     ,34  => "RegraLancamentoLiquidacaoEmpenho"
     ,39  => "RegraLancamentoControle"

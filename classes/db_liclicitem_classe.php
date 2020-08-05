@@ -527,6 +527,7 @@ class cl_liclicitem {
      $sql .= "      inner join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
      $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
      $sql .= "      left  join liclicita            on liclicita.l20_codigo                = liclicitem.l21_codliclicita";
+     $sql .= "      left  join licsituacao 			on l08_sequencial 					   = l20_licsituacao";
      $sql .= "      left  join cflicita             on cflicita.l03_codigo                 = liclicita.l20_codtipocom";
      $sql .= "      left  join pctipocompra         on pctipocompra.pc50_codcom            = cflicita.l03_codcom";
      $sql .= "      left  join solicitemunid        on solicitemunid.pc17_codigo           = solicitem.pc11_codigo";
