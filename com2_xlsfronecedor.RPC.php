@@ -81,10 +81,10 @@ switch($oParam->exec) {
                             $objItensPlanilha->quantidade    =  $cell;
                         }
                         if($keyCel == 9){
-                            $objItensPlanilha->valorunitario =  $cell;
+                            $objItensPlanilha->valorunitario =  $cell == null ? 0 : $cell;
                         }
                         if($keyCel == 11){
-                            $objItensPlanilha->marca         =  $cell;
+                            $objItensPlanilha->marca         =  $cell == null ? '' : $cell;
                         }
                     }
                     $arrayItensPlanilha[] = $objItensPlanilha;
@@ -170,9 +170,8 @@ switch($oParam->exec) {
             }
 
             //apago o arquivo se ocorreu tudo certo
-//            if($erro == false){
-                unlink($arquivo);
-//            }
+
+            unlink($arquivo);
 
             $oRetorno->itens = $arrayItensPlanilha;
         }
