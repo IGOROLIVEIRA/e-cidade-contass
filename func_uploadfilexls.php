@@ -11,6 +11,7 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 require_once("classes/db_pcorcam_classe.php");
+require_once("classes/db_pcorcamitem_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -40,12 +41,19 @@ if(isset($uploadfile)) {
         return false;
     }
 
-    $clpcorcam   = new cl_pcorcam();
-    $result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc81_codproc",null,"pc20_codorc = $pc20_codorc  AND pc21_orcamforne = $pc21_orcamforne"));
-    db_fieldsmemory($result_fornecedores,0);
+    if($licitacao == "true"){
+        $clpcorcamitem   = new cl_pcorcamitem();
+        $result_fornecedores = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"DISTINCT pc81_codproc",null,"pc20_codorc = $pc20_codorc  AND pc21_orcamforne = $pc21_orcamforne"));
+        db_fieldsmemory($result_fornecedores,0);
+        $nomepadrao = "licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
+    }else{
+        $clpcorcam   = new cl_pcorcam();
+        $result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc81_codproc",null,"pc20_codorc = $pc20_codorc  AND pc21_orcamforne = $pc21_orcamforne"));
+        db_fieldsmemory($result_fornecedores,0);
+        $nomepadrao = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
+    }
 
-    $nomepadrao = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
-
+    //verificose o arquivo anexado e padrao do ecidade pelo nome
     if($nomearq != $nomepadrao){
         db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do padrão e-cidade");
         unlink($nometmp);

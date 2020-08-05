@@ -8,10 +8,13 @@ require_once("libs/db_libsys.php");
 require_once("std/db_stdClass.php");
 require_once("classes/db_pcorcam_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
+require_once("classes/db_pcorcamitem_classe.php");
+
 $oGet        = db_utils::postMemory($_GET);
 $clpcorcam   = new cl_pcorcam();
+$clpcorcamitem   = new cl_pcorcamitem();
 $objPHPExcel = new PHPExcel;
-$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,pc80_criterioadjudicacao",null,"pc20_codorc = $pc22_codorc limit 1"));
+$result_fornecedores = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 db_fieldsmemory($result_fornecedores,0);
 
 //Inicio
@@ -119,12 +122,15 @@ $sheet->setCellValue('A2','Codigo do Orcamento:');
 $sheet->mergeCells('A2:D2');
 $sheet->mergeCells('E2:k2');
 $sheet->setCellValue('A3','Codigo do Orcamento do Fornecedor:');
+$sheet->setCellValue('E3',$pc21_orcamforne);
 $sheet->mergeCells('A3:D3');
 $sheet->mergeCells('E3:K3');
 $sheet->setCellValue('A4','CPF / CNPJ:');
+$sheet->setCellValue('E4',$z01_cgccpf);
 $sheet->mergeCells('A4:D4');
 $sheet->mergeCells('E4:K4');
 $sheet->setCellValue('A5','Nome / Razao Social:');
+$sheet->setCellValue('E5',$z01_nome);
 $sheet->mergeCells('A5:D5');
 $sheet->mergeCells('E5:K5');
 //cabeçalho
@@ -154,12 +160,12 @@ $sheet->getProtection()->setSheet(true);
 $sheet->getProtection()->setSort(true);
 $sheet->getProtection()->setInsertRows(true);
 $sheet->getProtection()->setFormatCells(true);
-$sheet->getStyle('E4')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+//$sheet->getStyle('E4')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+//$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
-$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc"));
-$numrows_itens = $clpcorcam->numrows;
+$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$numrows_itens = $clpcorcamitem->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){
     db_fieldsmemory($result_itens, $i);
@@ -199,16 +205,15 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     }
 }
 
-$nomefile = "prc_".$pc81_codproc.db_getsession('DB_instit')."xlsx";
+$nomefile = "licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
 
+header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment; filename=$nomefile" );
+header("Expires: 0");
+header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
+header("Pragma: public");
 
-    header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment; filename=$nomefile" );
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-    header("Pragma: public");
-
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
-    $objWriter->save('php://output');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+$objWriter->save('php://output');
 
 ?>
