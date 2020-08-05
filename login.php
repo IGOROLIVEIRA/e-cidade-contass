@@ -31,6 +31,7 @@ require_once("libs/smtp.class.php");
 $oSkin = new SkinService();
 $oSkin->setCookie();
 echo('<h3 style="color:white">Recomenda-se utilizar o Mozila FireFox Versão 66.0 para garantia da plena execução do sistema</h3>');
+
 /**
  * Busca preferencias para verificar qual class
  * de imagem de fundo será utilizada
@@ -166,6 +167,40 @@ if ( $lValidaLogin ) {
 
 ?>
 <script type="text/javascript">
+
+  window.onload = status_sistema;
+
+  function status_sistema() {
+    fetch("http://gitlab.contassconsultoria.com.br/api/v4/projects/14/jobs?access_token=No2Nke8Z6R9StpX8Ntru")
+    .then( resp => resp.json())
+    .then( data => {
+      var client = data.filter( (elem, i, data) => {
+       if(elem.name == window.location.hostname.split('.')[0])
+          return data;
+      });
+    if(client[0] != undefined){
+      // console.log(client[0].status);
+      // console.log(client[0].name);
+      if(client[0].status == 'success'){
+        document.getElementById("tag").innerHTML = 'atualizado';
+        document.getElementById("tag").style.background = 'green';
+      }
+      if(client[0].status == 'failed'){
+        document.getElementById("tag").innerHTML = 'desatualizado';
+        document.getElementById("tag").style.background = 'red';
+      }
+      if(client[0].status == 'pending'){
+        document.getElementById("tag").innerHTML = 'atualizando';
+        document.getElementById("tag").style.background = 'orange';
+      }
+    }
+    else
+      console.log('Cliente não encontrado');
+    })
+  }
+
+  window.setInterval(status_sistema, 5000);
+
   function js_logaComTeclaEnter(evt) {
 
     var evt = (evt) ? evt : (window.event) ? window.event : "";
