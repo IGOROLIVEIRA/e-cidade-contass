@@ -203,8 +203,8 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 o46_codlei AS codreduzidodecreto,
                 o39_numero AS nrodecreto,
                 (CASE
-                WHEN o46_tiposup IN (1002, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1012) THEN 2
-                WHEN o46_tiposup IN (1001, 1003) THEN 1
+                WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
+                WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005) THEN 1
                 WHEN o46_tiposup = 1012 THEN 6
                 WHEN o46_tiposup = 1013 THEN 7
                 WHEN o46_tiposup = 1016 THEN 8
