@@ -293,7 +293,6 @@ function js_validarecis(){
       }else if(anoatual > anorecis){
         alert("ALERTA: Data da rescisão com ano anterior ao atual.");
       }else if(anomesatual < anomesrecis){
-        alert("anomesatual :  "+anomesatual+"  anomesrecis : "+anomesrecis);
         alert("ALERTA: Data da rescisão posterior ao ano / mês atual..");
       }
     }

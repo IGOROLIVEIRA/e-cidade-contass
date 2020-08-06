@@ -156,6 +156,16 @@ $clrotulo->label("rh02_codreg");
               db_input('rh05_mremun',6,$Irh05_mremun,true,'text',3,"")
               ?>
             </td>
+            <td nowrap title="<?=@$Trh05_saldofgts?>" align="right">
+              <?
+              db_ancora(@$Lrh05_saldofgts,"",3);
+              ?>
+            </td>
+            <td>
+              <?
+              db_input('rh05_saldofgts',6,$Irh05_saldofgts,true,'text',3,"")
+              ?>
+            </td>
           </tr>
         </table>
       </fieldset>
@@ -168,7 +178,7 @@ $clrotulo->label("rh02_codreg");
   </tr>
 </table> 
 <script>
-function js_faltas(registro){
+function js_faltas(){
   qry = 'opcao=dadosrescis';
   qry+= '&seqpes='+document.form1.rh02_seqpes.value;
   js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
@@ -190,9 +200,11 @@ function js_pesquisarh01_regist(mostra){
         js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?testarescisao=af&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
+       document.form1.rh01_admiss.value = '';
        document.form1.rh01_admiss_dia.value = '';
        document.form1.rh01_admiss_mes.value = '';
        document.form1.rh01_admiss_ano.value = '';
+       document.form1.rh05_recis.value  = '';
        document.form1.rh05_recis_dia.value  = '';
        document.form1.rh05_recis_mes.value  = '';
        document.form1.rh05_recis_ano.value  = '';
@@ -201,10 +213,12 @@ function js_pesquisarh01_regist(mostra){
        document.form1.rh05_caub.value       = '';
        document.form1.r59_descr1.value      = '';
        document.form1.taviso.value          = '';
+       document.form1.rh05_aviso.value  = '';
        document.form1.rh05_aviso_dia.value  = '';
        document.form1.rh05_aviso_mes.value  = '';
        document.form1.rh05_aviso_ano.value  = '';
        document.form1.rh05_mremun.value     = ''; 
+       document.form1.rh05_saldofgts.value  = ''; 
      }
   }
 }
@@ -227,12 +241,13 @@ function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chav
     if(chave4 == subpes || chave5 == subpes){
       alert("ALERTA: Funcionário tem pagamento de férias no mês.");
     }
+    document.form1.rh01_admiss.value = chave2.substring(8,10)+'/'+chave2.substring(5,7)+'/'+chave2.substring(0,4);
     document.form1.rh01_admiss_ano.value = chave2.substring(0,4);
     document.form1.rh01_admiss_mes.value = chave2.substring(5,7);
     document.form1.rh01_admiss_dia.value = chave2.substring(8,10);
     document.form1.rh02_seqpes.value = chave3;
     document.form1.rh02_codreg.value = chave8;
-    js_faltas(chave);
+    js_faltas();
   }
 }
 function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,chave12,chave13){
@@ -252,12 +267,13 @@ function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,ch
     }
     document.form1.rh01_regist.value = chave1;
     document.form1.z01_nome.value = chave2;
+    document.form1.rh01_admiss.value = chave3.substring(8,10)+'/'+chave3.substring(5,7)+'/'+chave3.substring(0,4);
     document.form1.rh01_admiss_ano.value = chave3.substring(0,4);
     document.form1.rh01_admiss_mes.value = chave3.substring(5,7);
     document.form1.rh01_admiss_dia.value = chave3.substring(8,10);
     document.form1.rh02_seqpes.value = chave4;
     document.form1.rh02_codreg.value = chave9;
-    js_faltas(chave1);
+    js_faltas();
     db_iframe_rhpessoal.hide();
   }
 }

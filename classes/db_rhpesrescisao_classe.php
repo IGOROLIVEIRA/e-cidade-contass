@@ -61,6 +61,7 @@ class cl_rhpesrescisao {
    var $rh05_feriasavos = 0; 
    var $rh05_feriasvencidas = 0; 
    var $rh05_13salarioavos = 0; 
+   var $rh05_saldofgts = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh05_seqpes = int4 = Sequência 
@@ -76,6 +77,7 @@ class cl_rhpesrescisao {
                  rh05_feriasavos = int4 = Avos de férias 
                  rh05_feriasvencidas = int4 = Férias vencidas 
                  rh05_13salarioavos = int4 = Avos de 13º salário 
+                 rh05_saldofgts = float8 = Saldo FGTS
                  ";
    //funcao construtor da classe 
    function cl_rhpesrescisao() { 
@@ -122,6 +124,7 @@ class cl_rhpesrescisao {
        $this->rh05_feriasavos = ($this->rh05_feriasavos == ""?@$GLOBALS["HTTP_POST_VARS"]["rh05_feriasavos"]:$this->rh05_feriasavos);
        $this->rh05_feriasvencidas = ($this->rh05_feriasvencidas == ""?@$GLOBALS["HTTP_POST_VARS"]["rh05_feriasvencidas"]:$this->rh05_feriasvencidas);
        $this->rh05_13salarioavos = ($this->rh05_13salarioavos == ""?@$GLOBALS["HTTP_POST_VARS"]["rh05_13salarioavos"]:$this->rh05_13salarioavos);
+       $this->rh05_saldofgts = ($this->rh05_saldofgts == ""?@$GLOBALS["HTTP_POST_VARS"]["rh05_saldofgts"]:$this->rh05_saldofgts);
      }else{
        $this->rh05_seqpes = ($this->rh05_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh05_seqpes"]:$this->rh05_seqpes);
      }
@@ -180,6 +183,10 @@ class cl_rhpesrescisao {
      if($this->rh05_13salarioavos == null ){ 
        $this->rh05_13salarioavos = "0";
      }
+     if(empty($this->rh05_saldofgts)) {
+      $this->rh05_saldofgts = 0;
+    }
+
        $this->rh05_seqpes = $rh05_seqpes; 
      if(($this->rh05_seqpes == null) || ($this->rh05_seqpes == "") ){ 
        $this->erro_sql = " Campo rh05_seqpes nao declarado.";
@@ -203,6 +210,7 @@ class cl_rhpesrescisao {
                                       ,rh05_feriasavos 
                                       ,rh05_feriasvencidas 
                                       ,rh05_13salarioavos 
+                                      ,rh05_saldofgts 
                        )
                 values (
                                 $this->rh05_seqpes 
@@ -218,6 +226,7 @@ class cl_rhpesrescisao {
                                ,$this->rh05_feriasavos 
                                ,$this->rh05_feriasvencidas 
                                ,$this->rh05_13salarioavos 
+                               ,$this->rh05_saldofgts 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -393,6 +402,13 @@ class cl_rhpesrescisao {
            $this->rh05_13salarioavos = "0" ; 
         } 
        $sql  .= $virgula." rh05_13salarioavos = $this->rh05_13salarioavos ";
+       $virgula = ",";
+     }
+     if(trim($this->rh05_saldofgts)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh05_saldofgts"])){ 
+        if(trim($this->rh05_saldofgts)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh05_saldofgts"])){ 
+           $this->rh05_saldofgts = "0" ; 
+        } 
+       $sql  .= $virgula." rh05_saldofgts = $this->rh05_saldofgts ";
        $virgula = ",";
      }
      $sql .= " where ";

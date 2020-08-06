@@ -41,7 +41,7 @@ class Registro40 extends RegistroBase {
 	{
 		$oDaoRhpesrescisao = db_utils::getDao('rhpesrescisao');
         $sCampos  = "DISTINCT rh16_pis,rh01_admiss,h13_tpcont,z01_nome,rh16_ctps_n,rh16_ctps_s,rh01_sexo,rh01_instru,rh01_nasc,rh02_hrssem,rh37_cbo,";
-        $sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf,rh01_regist";
+        $sCampos .= "rh15_data,r59_movsef,rh05_recis,r59_codsaq,rh05_taviso,rh05_aviso,z01_cgccpf,rh01_regist, rh05_saldofgts";
         $sOrdem = "rh16_pis,rh01_admiss,h13_tpcont";
 
         $sDataCompIni = "{$this->iAnoFolha}-{$this->iMesFolha}-01";
@@ -117,7 +117,7 @@ class Registro40 extends RegistroBase {
             $aLinha['bancoTrabalhador'] = $this->preencherCampo("0", 3);
             $aLinha['agenciaTrabalhador'] = $this->preencherCampo("0", 4);
             $aLinha['contaTrabalhador'] = $this->preencherCampo("0", 13);
-            $aLinha['saldoFinsRescisorios'] = $this->preencherCampo("0", 15);
+            $aLinha['saldoFinsRescisorios'] = $this->formatarValor($oDados->rh05_saldofgts, 15);
             $aLinha['brancos'] = $this->preencherCampo(' ', 39);
             $aLinha['finalLinha'] = "*";
             $aLinhas[] = implode("", $aLinha);
