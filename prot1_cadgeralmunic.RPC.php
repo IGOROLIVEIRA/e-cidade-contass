@@ -456,7 +456,6 @@ switch ($oParam->exec) {
                 if ($oParam->pessoa->z01_ultalt <= $c99_datapat && $c99_datapat != '') {
                     $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     $sqlErro  = true;
-					exit();
                 }
             }
 
@@ -621,7 +620,7 @@ switch ($oParam->exec) {
                 $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-                if ($oParam->pessoa->z01_ultalt <= $c99_datapat) {
+                if ($oParam->pessoa->z01_ultalt <= $c99_datapat && $c99_datapat != '') {
                     $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                     $sqlErro  = true;
                 }
@@ -726,7 +725,6 @@ switch ($oParam->exec) {
 
             }
 
-
             /* ----------------------------Fim do Processo Tipo Empresa--------------------------------------------------*/
         }
         db_fim_transacao($sqlErro);
@@ -735,7 +733,7 @@ switch ($oParam->exec) {
             $oRetorno->z01_numcgm = $oCgm->getCodigo();
         }
 
-		if($oParam->action == "incluir"){
+		if($oParam->action == "incluir" && !$sqlErro){
 			CgmFactory::setHistoricoCgm($oCgm->getCodigo(), $oCgm->getCadastro());
 		}
 
