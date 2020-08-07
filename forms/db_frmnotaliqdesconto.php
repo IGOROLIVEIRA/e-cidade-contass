@@ -125,7 +125,6 @@ $db_opcao_inf=1;
     js_limpa();
     db_iframe_empempenho.hide();
     js_consultaEmpenho(chave);
-    verificaPagamentoEmpenho(chave);
   }
 
 
@@ -533,7 +532,7 @@ $db_opcao_inf=1;
 
     // nValorOP = (valorOP - desconto - valorRetenções)
     // Erro para o caso do (nValorOP - nTotalADescontar) < 0
-    if ((nValorOP - nTotalADescontar) <= 0) {
+    if ( (nRetencoes > 0) && ((nValorOP - nTotalADescontar) <= 0) ) {
       alert("O valor do desconto deixa a OP negativa, por causa dos valores retidos.\n\nValor de retenções: R$ "+js_formatar(nRetencoes, 'f', 2));
       lErro = true;
       return false;
@@ -773,27 +772,6 @@ $db_opcao_inf=1;
     $('frmDesconto').reset();
   }
   js_pesquisa();
-
-
-
-
-  function verificaPagamentoEmpenho(iEmpenho) {
-
-    new AjaxRequest(
-      'emp4_notaliquidacao.php',
-      {exec : 'verificarPagamento', codigo_empenho : iEmpenho},
-      function (oRetorno, lErro) {
-
-        var oBotaoConfirmar = $('btnConfirmar');
-        oBotaoConfirmar.disabled = false;
-        if (!oRetorno.possuiPagamento) {
-
-          oBotaoConfirmar.disabled = true;
-          alert("É necessário ter ao menos um pagamento para executar o desconto do empenho.");
-        }
-      }
-    ).execute();
-  }
 
 
 </script>

@@ -8246,7 +8246,7 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
               } else {
                 $r30_proc = "r30_proc2";
                 $r30_peri = "r30_per2i";
-                $r30_peri = "r30_per2f";
+                $r30_perf = "r30_per2f";
               }
               $mes_gozo = substr("#". $cadferia[0][$r30_peri],1,4 )."/".substr("#". $cadferia[0][$r30_peri],6,2);
 
