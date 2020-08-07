@@ -118,7 +118,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    e60_emiss,
                    e60_anousu,
                    e60_numemp,
-                   e60_datasentenca,
+                   e50_compdesp,
                    lpad((CASE
                              WHEN o40_codtri = '0'
                                   OR NULL THEN o40_orgao::varchar
@@ -268,7 +268,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosDetalhamento->si121_instit = db_getsession("DB_instit");
         $oDadosDetalhamento->o56_elemento = $oDetalhamento->o56_elemento;
-        $oDadosDetalhamento->e60_datasentenca = $oDetalhamento->e60_datasentenca;
+        $oDadosDetalhamento->e50_compdesp = $oDetalhamento->e50_compdesp;
 
         $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
 
@@ -335,32 +335,16 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         throw new Exception($oDados11->erro_msg);
       }
 
-      if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319092') {
+      $aMatrizCompDesp = array('3319092', '3319192', '3319592', '3319692');
 
+      if (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizCompDesp)) {
+          
         $oDados12 = new cl_alq122020();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
-        $oDados12->si123_mescompetencia = 12;
-        $oDados12->si123_exerciciocompetencia = db_getsession("DB_anousu") - 1;
-        $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
-        $oDados12->si123_mes = $oDados10->si121_mes;
-        $oDados12->si123_instit = db_getsession("DB_instit");
-        $oDados12->incluir(null);
-        if ($oDados12->erro_status == 0) {
-          throw new Exception($oDados12->erro_msg);
-        }
-
-      }
-
-      if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319091') {
-        
-        $oDados12 = new cl_alq122020();
-        $oDados12->si123_tiporegistro = 12;
-        $oDados12->si123_reg10 = $oDados10->si121_sequencial;
-        $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
-        $oDados12->si123_mescompetencia = substr($oDadosAgrupados->e60_datasentenca, 5, 2);
-        $oDados12->si123_exerciciocompetencia = substr($oDadosAgrupados->e60_datasentenca, 0, 4);
+        $oDados12->si123_mescompetencia = substr($oDadosAgrupados->e50_compdesp, 5, 2);
+        $oDados12->si123_exerciciocompetencia = substr($oDadosAgrupados->e50_compdesp, 0, 4);
         $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
         $oDados12->si123_mes = $oDados10->si121_mes;
         $oDados12->si123_instit = db_getsession("DB_instit");

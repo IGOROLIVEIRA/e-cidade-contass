@@ -169,6 +169,11 @@ switch ($objJson->method) {
 
   $lValidaNotasEmpenho = false;
 
+  $oDaoElementos        = db_utils::getDao('orcelemento');
+  $sWhereEmpenho        = " e60_numemp =  {$objJson->iEmpenho}";
+  $sSqlBuscaElemento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,7) AS o56_elemento", null, $sWhereEmpenho);
+  $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);  
+
   $oDaoPatriInst    = db_utils::getDao('cfpatriinstituicao');
   $sWherePatriInst  = " t59_instituicao = " . db_getsession('DB_instit');
   $sSqlPatriInst    = $oDaoPatriInst->sql_query_file(null, "t59_dataimplanatacaodepreciacao", null, $sWherePatriInst);
@@ -274,6 +279,7 @@ switch ($objJson->method) {
       else {
         // echo $objEmpenho->empenho2Json('',$item);
         $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+        $oEmpenho->sEstrutural = db_utils::fieldsMemory($rsBuscaElemento, 0)->o56_elemento;
         $oGrupoElemento->iGrupo = "";
         $oGrupoElemento->sGrupo = "";
         $oEmpenho->oGrupoElemento = $oGrupoElemento;
@@ -306,7 +312,7 @@ switch ($objJson->method) {
       }
 
       $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);//addslashes(stripslashes(utf8_decode()))
-      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico);
+      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp);
       $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
       if ($oRetorno !== false) {
 
@@ -373,7 +379,8 @@ switch ($objJson->method) {
       $objJson->oInfoNota,
       $objJson->e69_notafiscaleletronica,
       $objJson->e69_chaveacesso,
-      $objJson->e69_nfserie
+      $objJson->e69_nfserie,
+      $objJson->e50_compdesp
     );
 
     if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
@@ -740,6 +747,9 @@ switch ($objJson->method) {
     break;
 
     default:
+    // $objJson->method
+    die('metodo utilizado: '.$method);
     echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico);
+    // echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico, $objJson->e50_compdesp);
     break;
   }
