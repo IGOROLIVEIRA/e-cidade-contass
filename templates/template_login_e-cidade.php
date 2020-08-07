@@ -93,11 +93,6 @@
           <input name="btnlogar" id="btnlogar" type="button" value="Entrar"/>
         </div>
 
-        <!-- <div id="status-versao">
-          <span id="status">Sistema </span>
-          <span id="tag"></span>
-        </div> -->
-
         <span id="testaLogin"></span>
 
         <img class="logo-db" src="imagens/files.proper/contass.png" style="width: 345px; height: 120px;">
