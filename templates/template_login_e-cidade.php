@@ -31,6 +31,8 @@
     <title>e-Cidade</title>
     <meta charset="iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
 
     <link href="imagens/ecidade/favicon.png" rel="icon"  type="image/png" />
     <link href="estilos/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
@@ -91,11 +93,6 @@
           </div>
 
           <input name="btnlogar" id="btnlogar" type="button" value="Entrar"/>
-        </div>
-
-        <div id="status-versao">
-          <span id="status">Sistema </span>
-          <span id="tag"></span>
         </div>
 
         <span id="testaLogin"></span>
@@ -233,6 +230,6 @@
       });
     }
   })
-
+  
   </script>
 </html>
