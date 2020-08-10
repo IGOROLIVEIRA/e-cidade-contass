@@ -185,20 +185,29 @@ $clliclicita->rotulo->label();
         <?php else :?>
             <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_EHomologacao()" >
         <?php endif;?>
-        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa(<?= $db_opcao == 1 ? false : true ?>);" >
     </div>
 </form>
 
 <script>
     js_verificatipoproc();
 
-    function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=false&funcao_js=parent.js_preenchepesquisa|l20_codigo|tipocomtribunal','Pesquisa',true);
+    function js_pesquisa(ratificacao=false){
+        if(ratificacao) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
+        }else {
+            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
+        }
     }
 
-    function js_preenchepesquisa(chave,tipocompratribunal){
+    function js_preenchepesquisa(chave){
+        js_findTipos(chave);
+    }
+
+    function js_retornoConsulta(chave, tipocompratribunal){
         db_iframe_publicratificacao.hide();
         let db_opcao = <?= $db_opcao?>;
+
         if(db_opcao === 33 || db_opcao === 3){
             window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+tipocompratribunal;
         }else if(db_opcao === 22 || db_opcao === 2){
@@ -242,22 +251,34 @@ $clliclicita->rotulo->label();
      *
      */
     function js_pesquisaLicitacao(mostra){
+        let opcao = <?=$db_opcao?>;
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
+            if(opcao == 1){
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
+            }else{
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
+            }
         }else{
             if(document.form1.l20_codigo.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                if(opcao == 1){
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                }else{
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+                }
             }else{
                 document.form1.l20_codigo.value = '';
             }
         }
     }
-    function js_mostraliclicita(chave,chave2,erro){
-        window.location.href = "lic1_publicratificacao001.php?l20_codigo="+document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
+    function js_mostraliclicita(chave,erro, chave2){
+        document.form1.l20_objeto.value = chave;
         if(erro==true){
             document.form1.l20_codigo.focus();
             document.form1.l20_codigo.value = '';
+        }else{
+            window.location.href = "lic1_publicratificacao001.php?l20_codigo="+document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
         }
+
     }
 
     function js_mostraliclicita1(chave1,chave2,chave3){
@@ -327,6 +348,11 @@ $clliclicita->rotulo->label();
     function js_IHomologacao() {
         let itens = getItensMarcados();
 
+        if (document.getElementById('l20_dtpubratificacao').value == '') {
+            alert('Campo Data Publicação Termo de Ratificação não informado');
+            return false;
+        }
+
         if (itens.length < 1) {
             alert('Selecione pelo menos um item da lista.');
             return false;
@@ -393,6 +419,11 @@ $clliclicita->rotulo->label();
             return false;
         }
 
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
+            return false;
+        }
+
         var itensEnviar = [];
 
         try {
@@ -434,8 +465,9 @@ $clliclicita->rotulo->label();
 
     function oRetornoAjax(res) {
         var response = JSON.parse(res.responseText);
-        if (response.status != 1) {
-            alert(urlDecode(response.message));
+
+        if (response.status == 2) {
+            alert(response.message.urlDecode());
         } else if (response.erro == false) {
             alert('Salvo com sucesso!');
             window.location.href = "lic1_publicratificacao001.php";
@@ -494,10 +526,17 @@ $clliclicita->rotulo->label();
      *
      */
     function js_EHomologacao() {
+
+        if(document.getElementById('l20_dtpubratificacao').value == ''){
+            alert('Campo Data Publicação Termo de Ratificação não informado.');
+            return false;
+        }
+
         try {
             excluirhomologacao({
                 exec: 'excluirHomo',
                 licitacao: document.getElementById('l20_codigo').value,
+                ratificacao: document.form1.l20_dtpubratificacao.value
             }, oretornoexclusao);
         } catch(e) {
             alert(e.toString());
@@ -519,11 +558,32 @@ $clliclicita->rotulo->label();
 
     function oretornoexclusao(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        if (oRetornoitens.status != 1) {
-            alert(oRetornoitens);
+
+        if (oRetornoitens.status == 2) {
+            alert(oRetornoitens.message.urlDecode());
         } else if (oRetornoitens.erro == false) {
             alert('Homologação excluida com sucesso !');
             window.location.href = "lic1_publicratificacao003.php";
         }
+    }
+
+    function js_findTipos(licitacao){
+        let request = new Ajax.Request('lic4_licitacao.RPC.php', {
+            method:'post',
+            exec: 'findTipos',
+            asynchronous: false,
+            parameters:'json=' + JSON.stringify({
+                exec: 'findTipos',
+                iLicitacao: licitacao
+            }),
+            onComplete: (res) => {
+                js_onCompleteTipo(licitacao, res);
+            }
+        });
+    }
+
+    function js_onCompleteTipo(licitacao, response){
+        let oTipos = JSON.parse(response.responseText);
+        js_retornoConsulta(licitacao, oTipos.dadosLicitacao.l03_pctipocompratribunal);
     }
 </script>

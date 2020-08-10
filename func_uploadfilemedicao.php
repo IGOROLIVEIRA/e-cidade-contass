@@ -38,6 +38,7 @@ require_once("classes/db_licobrasanexo_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrotulo = new rotulocampo;
+$cllicobrasanexo = new cl_licobrasanexo();
 
 $lFail    = false;
 if(isset($uploadfile)) {
@@ -53,8 +54,8 @@ if(isset($uploadfile)) {
 
   $extensao = strtolower(substr($nomearq,-4));
 
-  if($extensao == "jpeg"){
-    $novo_nome = md5(time()).".".$extensao;
+  if($extensao == ".pdf"){
+    $novo_nome = md5(time()).$extensao;
   }else{
     $novo_nome = md5(time()).$extensao;
   }
@@ -67,23 +68,31 @@ if(isset($uploadfile)) {
   // Seta o nome do arquivo destino do upload
   $arquivoDocument = "$diretorio"."$novo_nome";
 
-  if($extensao != ".png" && $extensao != "jpeg" && $extensao != ".jpg" ){
-    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo JPEG ou PNG");
+
+  if($extensao != ".pdf"){
+    db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo PDF");
     unlink($nometmp);
     $lFail = true;
     return false;
   }
 
-  $cllicobrasanexo = new cl_licobrasanexo();
-  $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
-  $cllicobrasanexo->obr04_codimagem       = $novo_nome;
-  $cllicobrasanexo->obr04_legenda         = "foto sem legenda";
-  $cllicobrasanexo->incluir();
+  $sqlanexo = $cllicobrasanexo->sql_query(null,"*",null,"obr04_licobrasmedicao = $medicao");
+  $rsAnexo = $cllicobrasanexo->sql_record($sqlanexo);
+  db_fieldsmemory($rsAnexo);
+  if(pg_num_rows($rsAnexo) > 0){
+      db_msgbox("Já existe anexo para esta Medição.");
+      unlink($nometmp);
+      db_redireciona("obr1_licobrasmedicao002.php?chavepesquisa=$obr04_licobrasmedicao");
+  }else{
+      $cllicobrasanexo = new cl_licobrasanexo();
+      $cllicobrasanexo->obr04_licobrasmedicao = $medicao;
+      $cllicobrasanexo->obr04_codimagem       = $novo_nome;
+      $cllicobrasanexo->obr04_legenda         = "foto sem legenda";
+      $cllicobrasanexo->incluir();
+  }
 
   // Faz um upload do arquivo para o local especificado
   if(  move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$diretorio.$novo_nome)) {
-//    echo $medicao;exit;
-
 
     $href = $arquivoDocument;
 

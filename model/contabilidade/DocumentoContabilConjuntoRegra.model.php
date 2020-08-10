@@ -47,7 +47,7 @@ class DocumentoContabilConjuntoRegra {
 	public function __construct($iCodigoDocumento) {
 		
 		$oDaoHistDocRegra = db_utils::getDao('conhistdocregra');
-		$sSqlBuscaRegra   = $oDaoHistDocRegra->sql_query(null, "*", null, "c53_tipo = {$iCodigoDocumento}");
+		$sSqlBuscaRegra   = $oDaoHistDocRegra->sql_query(null, "*", "c92_sequencial", "c53_tipo = {$iCodigoDocumento}");
 		$rsBuscaRegras    = $oDaoHistDocRegra->sql_record($sSqlBuscaRegra);
 		$iLinhasRegras    = $oDaoHistDocRegra->numrows;
 		if ($iLinhasRegras > 0) {

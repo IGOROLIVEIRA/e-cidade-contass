@@ -119,7 +119,7 @@ db_fieldsmemory($resultUsuario,0);
       <table class="center">
         <tr>
           <td nowrap title="<?=@$Te60_numemp?>">
-            <? db_ancora('Empenho',"js_pesquisae60_numemp(true);",$db_opcao); ?>
+            <? db_ancora('Seq. Empenho',"js_pesquisae60_numemp(true);",$db_opcao); ?>
           </td>
           <td>
             <?php
@@ -162,7 +162,7 @@ var sUrlRpc = 'emp4_exclusaoempenhos.RPC.php';
 
 function js_pesquisae60_numemp(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?emperro=1&funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_anousu','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?emperro=1&pegaAnousu&funcao_js=parent.js_mostraempempenho2|e60_numemp|z01_nome|e60_anousu','Pesquisa',true);
   } else {
      if (document.form1.e60_numemp.value != '') {
         js_OpenJanelaIframe('','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&pegaAnousu&funcao_js=parent.js_mostraempempenho&empempenho','Pesquisa',false);
@@ -173,6 +173,7 @@ function js_pesquisae60_numemp(mostra){
 }
 
 function js_mostraempempenho(chave1, chave2, erro) {
+
   document.form1.z01_nome.value = chave1;
   document.form1.e60_anousu.value = chave2;
 
@@ -181,6 +182,20 @@ function js_mostraempempenho(chave1, chave2, erro) {
     document.form1.e60_numemp.value = '';
     return;
   }
+  js_divCarregando('Aguarde', 'div_aguarde');
+  var oParametro          = new Object();
+      oParametro.exec     = 'getVerify';
+      oParametro.iEmpenho = document.form1.e60_numemp.value;
+      oParametro.iNome    = chave1;
+  
+  var oDadosRequisicao            = new Object();
+      oDadosRequisicao.method     = 'post';
+      oDadosRequisicao.parameters = 'json='+Object.toJSON(oParametro);
+      oDadosRequisicao.onComplete = mensagem2;
+      //alert(mensagem);
+  
+  new Ajax.Request( sUrlRpc, oDadosRequisicao );
+
 }
 
 function js_mostraempempenho2(chave1,chave2,chave3) {
@@ -302,6 +317,24 @@ function mensagem(oResponse) {
   }
   else {
     alert(oRetorno.message);
+  }
+}
+
+function mensagem2(oResponse) {
+  js_removeObj('div_aguarde');
+  var oRetorno = JSON.parse(oResponse.responseText);
+  if (oRetorno.status == 1) {
+    alert('Exclusão realizada com sucesso!');
+    limpar();
+    return;
+  }
+  else {
+    alert(oRetorno.message);
+    document.form1.e60_numemp.value = '';
+    document.form1.z01_nome.value = '';
+    document.form1.e60_anousu.value = '';
+
+    return;
   }
 }
 

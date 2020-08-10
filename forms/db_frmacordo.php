@@ -82,27 +82,34 @@ db_app::load("dbtextFieldData.widget.js");
 
 ?>
 <style>
-    .fieldsetinterno {
-        border: 0px;
-        border-top: 2px groove white;
-        border-bottom: 2px groove white;
+    #ac16_formapagamento{
+        width: 407px;
+        height: 43px;
     }
 
-    td {
-        white-space: nowrap
+    #ac16_origem, #ac16_tipoorigem, #ac16_lei {
+        width: 410px;
     }
 
-    .table-vigencia td {
-        width: 8%;
-        white-space: nowrap
+    #l20_objeto, #ac02_descricao, #nomecontratado, #descrdepto, #ac08_descricao, #si06_objetoadesao, #z01_nome{
+        width: 315px;
     }
 
-    #ac02_descricao, #nomecontratado, #descrdepto, #ac08_descricao {
-        width: 75%;
+    #ac16_numeroprocesso, #ac26_emergencial, #ac16_periodocomercial, #tipodispenca{
+        width: 90px;
     }
 
-    #ac16_objeto {
-        width: 100%;
+    #ac16_tipounidtempo, #ac16_tipounidtempoperiodo{
+        width: 49px;
+    }
+
+    #ac16_formafornecimento {
+        width: 406px;
+    }
+
+    #ac16_objeto{
+        width: 564px;
+        height: 66px;
     }
 </style>
 <form name="form1" method="post" action="<?= $db_action ?>">
@@ -175,7 +182,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                         );
                                                     }
                                                     db_select('ac16_origem', $aValores, true, $db_opcao,
-                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();' style='width:100%;'");
+                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();js_verificaorigem();");
 
                                                     ?>
                                                 </td>
@@ -198,28 +205,28 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","");
 
                                                     ?>
                                                 </td>
                                             </tr>
-                                          <?if($db_opcao == 1):?>
-                                          <tr id="credenciamento" style="display: none">
-                                            <td>
-                                              <strong>Credenciamento/Chamada Pública:</strong>
-                                            </td>
-                                            <td>
-                                              <?
-                                              $aValores = array(
-                                                0 => 'Selecione',
-                                                1 => '1 - Sim',
-                                                2 => '2 - Não'
-                                              );
-                                              db_select('tipodispenca', $aValores, true, $db_opcao,"","");
-                                              ?>
-                                            </td>
-                                          </tr>
-                                          <?endif; ?>
+                                            <?if($db_opcao == 1):?>
+                                                <tr id="credenciamento" style="display: none">
+                                                    <td>
+                                                        <strong>Credenciamento/Chamada Pública:</strong>
+                                                    </td>
+                                                    <td>
+                                                        <?
+                                                        $aValores = array(
+                                                            0 => 'Selecione',
+                                                            1 => '1 - Sim',
+                                                            2 => '2 - Não'
+                                                        );
+                                                        db_select('tipodispenca', $aValores, true, $db_opcao,"","");
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                            <?endif; ?>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
                                                 <td nowrap title="<?@$Tac16_licoutroorgao?>">
                                                     <?=
@@ -338,7 +345,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <?
 
                                                     db_select('ac16_lei', $aLeis, true, $db_opcao,
-                                                        " style='width:100%;'");
+                                                        "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -372,7 +379,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     $aEmergencial = array("f" => "Não", "t" => "Sim");
-                                                    db_select("ac26_emergencial", $aEmergencial, true, $db_opcao, "style='width:100%'");
+                                                    db_select("ac26_emergencial", $aEmergencial, true, $db_opcao, "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -389,8 +396,8 @@ db_app::load("dbtextFieldData.widget.js");
                                                         $iCampo = 3;
                                                     }
 
-                                                    $aDivisaoPeriodos = array("true" => "SIM", "false" => "NÃO");
-                                                    db_select("ac16_periodocomercial", $aDivisaoPeriodos, true, $db_opcao, "style='width:100%' {$sDisabled}");
+                                                    $aDivisaoPeriodos = array("true" => "Sim", "false" => "Não");
+                                                    db_select("ac16_periodocomercial", $aDivisaoPeriodos, true, $db_opcao, "{$sDisabled}");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -1093,12 +1100,12 @@ db_app::load("dbtextFieldData.widget.js");
              * sendo assim o programa não pode chamar a nova numeração
              *
 
-            if (!oGet.chavepesquisa) {
-                oContrato.getNumeroAcordo();
-            }*/
+             if (!oGet.chavepesquisa) {
+             oContrato.getNumeroAcordo();
+             }*/
 
         }
-      js_verificaNatureza(chave1);
+        js_verificaNatureza(chave1);
     }
 
     function js_getNumeroAcordo(){
@@ -1122,9 +1129,9 @@ db_app::load("dbtextFieldData.widget.js");
          * sendo assim o programa não pode chamar a nova numeração
          *
 
-        if (!oGet.chavepesquisa) {
-            oContrato.getNumeroAcordo();
-        }*/
+         if (!oGet.chavepesquisa) {
+         oContrato.getNumeroAcordo();
+         }*/
 
         db_iframe_acordogrupo.hide();
     }
@@ -1132,15 +1139,15 @@ db_app::load("dbtextFieldData.widget.js");
     function js_verificaNatureza(codnat) {
 
         if(codnat == "1"){
-          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
         }else if(codnat == "2"){
-          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
         }else if(codnat == "3"){
-          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
         }else if(codnat == "7"){
-          $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
+            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
         }else{
-          $('ac16_qtdperiodo').style.backgroundColor = "#E6E4F1";
+            $('ac16_qtdperiodo').style.backgroundColor = "#E6E4F1";
         }
     }
 
@@ -1162,9 +1169,9 @@ db_app::load("dbtextFieldData.widget.js");
 
         db_iframe_acordo.hide();
         <?
-          if($db_opcao!=1){
+        if($db_opcao!=1){
             echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-          }
+        }
         ?>
 
     }
@@ -1198,29 +1205,29 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-          js_OpenJanelaIframe(
-            'top.corpo.iframe_acordo',
-            'db_iframe_contratado',
-            'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-            'Pesquisa',
-            true,
-            '0',
-            '1'
-          );
+            js_OpenJanelaIframe(
+                'top.corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'Pesquisa',
+                true,
+                '0',
+                '1'
+            );
 
         } else {
 
             if ($('ac16_contratado').value != '') {
 
-              js_OpenJanelaIframe(
-                'top.corpo.iframe_acordo',
-                'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-                'Pesquisa',
-                false,
-                '0',
-                '1'
-              );
+                js_OpenJanelaIframe(
+                    'top.corpo.iframe_acordo',
+                    'db_iframe_contratado',
+                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                    'Pesquisa',
+                    false,
+                    '0',
+                    '1'
+                );
 
             } else {
                 $('nomecontratado').value = '';
@@ -1379,7 +1386,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         db_iframe_comissao.hide();
     }
-
+    js_pesquisaac50_descricao(false);
     function js_pesquisaac50_descricao(mostra) {
 
         if (mostra == true) {
@@ -1410,7 +1417,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_mostraacordocategoria(chave1, chave2) {
 
-        $('ac50_descricao').value = chave1;
+        $('ac02_descricao').value = chave1;
         $('ac50_sequencial').focus();
 
         db_iframe_acordocategoria.hide();
@@ -1441,11 +1448,11 @@ db_app::load("dbtextFieldData.widget.js");
 
     $('db_opcao').onclick = oContrato.saveContrato;
     <?
-      if ($db_opcao == 2) {
+    if ($db_opcao == 2) {
         echo "\noContrato.getContrato({$chavepesquisa});\n";
-      } else {
-          echo "\njs_somardias();\n";
-      }
+    } else {
+        echo "\njs_somardias();\n";
+    }
     ?>
 
     $('ac16_valor').observe("change", function () {
@@ -1497,9 +1504,9 @@ db_app::load("dbtextFieldData.widget.js");
         }
 
         if(iOrigem == 1){
-          document.getElementById('tradesaoregpreco').style.display = "none";
-          document.getElementById('trLicitacao').style.display = "";
-          document.getElementById('trlicoutroorgao').style.display = "none";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
         if(iTipoOrigem == 4 && iOrigem == 1){
@@ -1518,9 +1525,9 @@ db_app::load("dbtextFieldData.widget.js");
         }
 
         if(iTipoOrigem == 3){
-          document.getElementById('credenciamento').style.display = "";
+            document.getElementById('credenciamento').style.display = "";
         }else{
-          document.getElementById('credenciamento').style.display = "none";
+            document.getElementById('credenciamento').style.display = "none";
         }
 
     }

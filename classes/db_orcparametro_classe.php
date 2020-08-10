@@ -259,8 +259,8 @@ class cl_orcparametro {
                                ,$this->o50_estruturarecurso
                                ,$this->o50_estruturacp
                                ,'$this->o50_motivosuplementacao'
-                               ,'$this->o50_controlafote1017'
-                               ,'$this->o50_controlafote10011006'
+                               ,".($this->o50_controlafote1017 == "null" || $this->o50_controlafote1017 == ""?"null":"'".$this->o50_controlafote1017."'")."
+                               ,".($this->o50_controlafote10011006 == "null" || $this->o50_controlafote10011006 == ""?"null":"'".$this->o50_controlafote10011006."'")."
                       )";
         $result = db_query($sql);
         if($result==false){

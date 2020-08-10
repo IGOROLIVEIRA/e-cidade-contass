@@ -78,7 +78,7 @@ $sql = "
         ( 
         select 
                ".$sigla."regist as regist,
-       	       z01_nome,
+       	       z01_nome,z01_cgccpf,
                round(sum(case when ".$sigla."rubric in (select r09_rubric 
 	                                      from basesr 
 					      where r09_base = '$base1' 
@@ -109,7 +109,7 @@ $sql = "
        	  and ".$sigla."mesusu = $mes
           $wherepes
   	  and ".$sigla."instit = ".db_getsession("DB_instit")."
-	group by ".$sigla."regist, z01_nome
+	group by ".$sigla."regist, z01_nome, z01_cgccpf
         $xordem 
         ) as x
         where 1 = 1 $where_margem
@@ -169,11 +169,12 @@ for($x = 0; $x < pg_numrows($result);$x++){
         $pdf->setfont('arial','b',8);
         $pdf->cell(15,$alt,'MATRIC.',1,0,"C",1);
         $pdf->cell(60,$alt,'NOME',1,0,"C",1);
-        $pdf->cell(25,$alt,'REMUNERAÇÃO',1,0,"C",1);
+        $pdf->cell(19,$alt,'CPF',1,0,"C",1);
+        $pdf->cell(20,$alt,'REMUNER.',1,0,"C",1);
         $pdf->cell(22,$alt,'DESC.OBRIG.',1,0,"C",1);
-        $pdf->cell(22,$alt,'DISPONÍVEL',1,0,"C",1);
-        $pdf->cell(25,$alt,'COMPROMETIDO',1,0,"C",1);
-        $pdf->cell(22,$alt,'MARGEM',1,1,"C",1);
+        $pdf->cell(20,$alt,'DISPONÍVEL',1,0,"C",1);
+        $pdf->cell(19,$alt,'COMPRO.',1,0,"C",1);
+        $pdf->cell(18,$alt,'MARGEM',1,1,"C",1);
       $troca = 0;
       $pre = 1;
    }
@@ -184,12 +185,13 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->setfont('arial','',7);
    $pdf->cell(15,$alt,$regist,0,0,"C",$pre);
    $pdf->cell(60,$alt,$z01_nome,0,0,"L",$pre);
-   $pdf->cell(25,$alt,db_formatar($remuneracao,'f'),0,0,"C",$pre);
-   $pdf->cell(22,$alt,db_formatar($desc_obrigatorios,'f'),0,0,"C",$pre);
+   $pdf->cell(19,$alt,db_formatar($z01_cgccpf,'cpf'),0,0,"C",$pre);
+   $pdf->cell(20,$alt,db_formatar($remuneracao,'f'),0,0,"R",$pre);
+   $pdf->cell(22,$alt,db_formatar($desc_obrigatorios,'f'),0,0,"R",$pre);
    $disponivel = ($remuneracao - $desc_obrigatorios)/100*$perc;
-   $pdf->cell(22,$alt,db_formatar($disponivel,'f'),0,0,"C",$pre);
-   $pdf->cell(25,$alt,db_formatar($comprometido,'f'),0,0,"C",$pre);
-   $pdf->cell(22,$alt,db_formatar($disponivel - $comprometido,'f'),0,1,"C",$pre);
+   $pdf->cell(20,$alt,db_formatar($disponivel,'f'),0,0,"R",$pre);
+   $pdf->cell(19,$alt,db_formatar($comprometido,'f'),0,0,"R",$pre);
+   $pdf->cell(18,$alt,db_formatar($disponivel - $comprometido,'f'),0,1,"R",$pre);
    $t_valor += $valor;
    $t_quant += $quant;
    $t_func  += 1;

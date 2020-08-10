@@ -116,9 +116,9 @@ $clrotulo->label("l20_codigo");
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" onclick="js_submit()" id="db_opcao" value="<?=($db_opcao==1?"Homologar":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
     <? } ?>
   <? }else{ ?>
-    <input name="processar" type="button" id="processar" value="Processar" onclick="js_processa()">
+    <input name="processar" type="button" id="processar" value="Processar" onclick="js_processa()" disabled>
   <? } ?>
-  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+  <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa(<?=$db_opcao == 1 ? false : true ?>);" >
   <? if($db_opcao == 1 and !empty($l202_licitacao)){ ?>
     <input name="novo" type="button" id="novo" value="Novo" onclick="location.href='lic1_homologacaoadjudica001.php'" >
   <? } ?>
@@ -126,7 +126,7 @@ $clrotulo->label("l20_codigo");
     <table>
       <?php
       /**
-       * Na fase de homologaÃ§Ã£o sÃ³ podem ser listados itens que possuem fornecedores ganhadores.
+       * Na fase de homologação só podem ser listados itens que possuem fornecedores ganhadores.
        * @see OC 3714
        */
       $sWhere = " liclicitem.l21_codliclicita = {$l202_licitacao} and pc24_pontuacao = 1 ";
@@ -262,43 +262,99 @@ $clrotulo->label("l20_codigo");
   </center>
 </form>
 <script>
+
+    if(<?= $db_opcao ?> == 2){
+        iLicitacao = document.form1.l202_licitacao.value;
+    }
+
+    if(document.getElementById('processar')){
+        document.getElementById('processar').disabled = true;
+    }
+
+    /* Validação para não inserir códigos de licitações do tipo Dispensa */
+    let element = document.getElementById('l202_licitacao');
+    element.addEventListener('keyup', (e) => {
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
+
+        if(document.getElementById('db_opcao')){
+            document.getElementById('db_opcao').disabled = !(iLicitacao == e.target.value && iLicitacao != '');
+        }
+    });
   <?php
   /**
    * ValidaFornecedor:
-   * Quando for passado por URL o parametro validafornecedor, sÃ³ irÃ¡ retornar licitaÃ§Ãµes que possuem fornecedores habilitados.
-   * @see ocorrÃªncia 2278
+   * Quando for passado por URL o parametro validafornecedor, só irá retornar licitações que possuem fornecedores habilitados.
+   * @see ocorrência 2278
    */
   ?>
-  function js_pesquisal202_licitacao(mostra){
-    if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
-    }else{
-      if(document.form1.l202_licitacao.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
-      }else{
-        document.form1.l20_codigo.value = '';
-      }
+    function js_pesquisal202_licitacao(mostra){
+        let opcao = "<?= $db_opcao?>";
+
+        if(mostra==true){
+            if(opcao == '1'){
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
+            }else{
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
+            }
+        }else{
+            if(document.form1.l202_licitacao.value != ''){
+                if(opcao == '1'){
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }else{
+                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
+                }
+            }else{
+                document.form1.l202_licitacao.value = '';
+                document.form1.pc50_descr.value = '';
+                if(document.getElementById('processar')){
+                    document.getElementById('processar').disabled = true;
+                }else{
+                    document.getElementById('db_opcao').disabled = true;
+                }
+            }
+        }
     }
-  }
-  function js_mostraliclicita(chave,erro){
-    document.form1.pc50_descr.value = chave;
-    if(erro==true){
-      document.form1.l202_licitacao.focus();
-      document.form1.l202_licitacao.value = '';
+    function js_mostraliclicita(chave,erro){
+
+        document.form1.pc50_descr.value = chave;
+        if(erro==true){
+            iLicitacao = '';
+            document.form1.l202_licitacao.focus();
+            document.form1.l202_licitacao.value = '';
+        }else{
+            iLicitacao = document.form1.l202_licitacao.value;
+            if(document.getElementById('processar')){
+                document.getElementById('processar').disabled = false;
+            }else{
+                document.getElementById('db_opcao').disabled = false;
+            }
+        }
     }
-  }
   /**
-   * FunÃ§Ã£o alterada para receber o parametro da numeraÃ§Ã£o da modalidade.
+   * Função alterada para receber o parametro da numeração da modalidade.
    * Acrescentado o parametro chave3 que recebe o l20_numero vindo da linha 263.
    * Solicitado por danilo@contass e deborah@contass
    */
-  function js_mostraliclicita1(chave1,chave2,chave3){
-    document.form1.l202_licitacao.value = chave1;
-    document.form1.pc50_descr.value = chave2+' '+chave3;
-    db_iframe_liclicita.hide();
-  }
-  function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+    function js_mostraliclicita1(chave1,chave2,chave3){
+        iLicitacao = chave1;
+
+        document.form1.l202_licitacao.value = chave1;
+        document.form1.pc50_descr.value = chave2+' '+chave3;
+        if(document.getElementById('processar')){
+            document.getElementById('processar').disabled = false;
+        }else{
+            document.getElementById('db_opcao').disabled = false;
+        }
+        db_iframe_liclicita.hide();
+    }
+  function js_pesquisa(homologacao=false){
+        if(!homologacao){
+            js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=1&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+        }else{
+            js_OpenJanelaIframe('top.corpo','db_iframe_homologacaoadjudica','func_homologacaoadjudica.php?validadispensa=true&situacao=10&funcao_js=parent.js_preenchepesquisa|l202_sequencial','Pesquisa',true);
+        }
   }
   function js_preenchepesquisa(chave){
     db_iframe_homologacaoadjudica.hide();

@@ -232,6 +232,11 @@ class empenho {
         $codteste = "39";
       }
 
+      $lMaterialPermanente = $oEmpenhoFinanceiro->isMaterialPermanente();
+      if($lMaterialPermanente) {
+          $codteste = "39";
+      }
+
     } else {
 
       $codteste = "3";
@@ -465,6 +470,11 @@ class empenho {
         $lPossuiControleEmLiqudacao = self::possuiLancamentoDeControle($numemp, $oEmpenhoFinanceiro->getAnoUso(), array(200,208, 210));
         if ($lPossuiControleEmLiqudacao ) {
           $documento = 39;
+        }
+
+        $lMaterialPermanente = $oEmpenhoFinanceiro->isMaterialPermanente();
+        if($lMaterialPermanente) {
+            $documento = 39;
         }
 
       }
@@ -1607,6 +1617,7 @@ class empenho {
                 "pc01_descrmater"   => urlencode($objNotas->pc01_descrmater),
                 "e62_sequen"        => $objNotas->e62_sequen,
                 "e62_sequencial"    => $objNotas->e62_sequencial,
+                "e62_item"          => $objNotas->e62_item,
                 "saldo"             => $objNotas->saldo,
                 "e62_vlrun"         => $objNotas->e62_vlrun,
                 "pc01_fraciona"     => $objNotas->pc01_fraciona,
@@ -1947,6 +1958,7 @@ class empenho {
     $sqlItensEmpenho .= "       pc01_fraciona,";
     $sqlItensEmpenho .= "       riseqitem as e62_sequen,";
     $sqlItensEmpenho .= "       ricoditem as e62_sequencial,";
+    $sqlItensEmpenho .= "       (select e62_item from empempitem where e62_sequencial = ricoditem) as e62_item,";
     $sqlItensEmpenho .= "       rnsaldoitem as saldo, ";
     $sqlItensEmpenho .= "       rnvalorini as e62_vltot, ";
     $sqlItensEmpenho .= "       rnsaldovalor as saldovalor, ";

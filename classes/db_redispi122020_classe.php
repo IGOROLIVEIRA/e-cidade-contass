@@ -29,6 +29,7 @@ class cl_redispi122020
   var $si185_numero  = 0;
   var $si185_bairro  = '';
   var $si185_cidade  = '';
+  var $si185_distrito  = '';
   var $si185_cep  = '';
   var $si185_graulatitude  = 0;
   var $si185_minutolatitude  = 0;
@@ -52,6 +53,7 @@ class cl_redispi122020
                  si185_numero  = int4 = Número 
                  si185_bairro  = varchar(100) = Nome do Bairro;
                  si185_cidade  = varchar(100) = Nome da cidade;
+                 si185_distrito  = varchar(100) = Distrito;
                  si185_cep  = int4 = Número do CEP;
                  si185_graulatitude = int4 = Coordenada em Graus Latitude;
                  si185_minutolatitude  = int4 = Coordenada em Minuto da Latitude;
@@ -99,6 +101,7 @@ class cl_redispi122020
       $this->si185_numero = ($this->si185_numero == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_numero"] : $this->si185_numero);
       $this->si185_bairro = ($this->si185_bairro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_bairro"] : $this->si185_bairro);
       $this->si185_cidade = ($this->si185_cidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_cidade"] : $this->si185_cidade);
+      $this->si185_distrito = ($this->si185_distrito == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_distrito"] : $this->si185_distrito);
       $this->si185_cep = ($this->si185_cep == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_cep"] : $this->si185_cep);
       $this->si185_graulatitude = ($this->si185_graulatitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_graulatitude"] : $this->si185_graulatitude);
       $this->si185_minutolatitude = ($this->si185_minutolatitude == "" ? @$GLOBALS["HTTP_POST_VARS"]["si185_minutolatitude"] : $this->si185_minutolatitude);
@@ -192,6 +195,10 @@ class cl_redispi122020
       $this->si185_cep = 0;
     }
 
+    if($this->si185_numero == null){
+      $this->si185_numero = 'null';
+    }
+
     $sql = "insert into redispi122020(
                                        si185_sequencial 
                                       ,si185_tiporegistro 
@@ -205,6 +212,7 @@ class cl_redispi122020
                                       ,si185_numero 
                                       ,si185_bairro 
                                       ,si185_cidade 
+                                      ,si185_distrito 
                                       ,si185_cep 
                                       ,si185_graulatitude 
                                       ,si185_minutolatitude 
@@ -229,6 +237,7 @@ class cl_redispi122020
                                ,$this->si185_numero 
                                ,'$this->si185_bairro' 
                                ,'$this->si185_cidade' 
+                               ,'$this->si185_distrito' 
                                ,$this->si185_cep 
                                ,$this->si185_graulatitude 
                                ,$this->si185_minutolatitude 

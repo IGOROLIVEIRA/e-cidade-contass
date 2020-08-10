@@ -51,7 +51,7 @@ class GerarREDISPI extends GerarAM
                 $aREDISPI10 = pg_fetch_array($rsREDISPI10, $iCont);
 
                 $aCSVREDISPI10['si183_tiporegistro']                          = $this->padLeftZero($aREDISPI10['si183_tiporegistro'], 2);
-                $aCSVREDISPI10['si183_codorgaoresp']                          = $this->padLeftZero($aREDISPI10['si183_codorgaoresp'], 2);
+                $aCSVREDISPI10['si183_codorgaoresp']                          = $this->padLeftZero($aREDISPI10['si183_codorgaoresp'], 3);
                 $aCSVREDISPI10['si183_codunidadesubresp']                     = $this->padLeftZero($aREDISPI10['si183_codunidadesubresp'], 5);
                 $aCSVREDISPI10['si183_codunidadesubrespestadual']             = !intval($aREDISPI10['si183_codunidadesubrespestadual']) ? '' : $this->padLeftZero($aREDISPI10['si183_codunidadesubrespestadual'], 5);
                 $aCSVREDISPI10['si183_exercicioprocesso']                     = $this->padLeftZero($aREDISPI10['si183_exercicioprocesso'], 4);
@@ -78,7 +78,7 @@ class GerarREDISPI extends GerarAM
                     if ($aREDISPI10['si183_sequencial'] == $aREDISPI11['si184_reg10']) {
 
                         $aCSVREDISPI11['si184_tiporegistro']                    = $this->padLeftZero($aREDISPI11['si184_tiporegistro'], 2);
-                        $aCSVREDISPI11['si184_codorgaoresp']                    = $this->padLeftZero($aREDISPI11['si184_codorgaoresp'], 2);
+                        $aCSVREDISPI11['si184_codorgaoresp']                    = $this->padLeftZero($aREDISPI11['si184_codorgaoresp'], 3);
                         $aCSVREDISPI11['si184_codunidadesubresp']               = $this->padLeftZero($aREDISPI11['si184_codunidadesubresp'], 5);
                         $aCSVREDISPI11['si184_codunidadesubrespestadual']       = !$aREDISPI11['si184_codunidadesubrespestadual'] ? '' : $this->padLeftZero($aREDISPI11['si184_codunidadesubrespestadual'], 5);
                         $aCSVREDISPI11['si184_exercicioprocesso']               = $this->padLeftZero($aREDISPI11['si184_exercicioprocesso'], 4);
@@ -86,8 +86,8 @@ class GerarREDISPI extends GerarAM
                         $aCSVREDISPI11['si184_codobralocal']                    = substr($aREDISPI11['si184_codobralocal'], 0, 12);
                         $aCSVREDISPI11['si184_tipoprocesso']                    = substr($aREDISPI11['si184_tipoprocesso'], 0, 12);
                         $aCSVREDISPI11['si184_classeobjeto']                    = substr($aREDISPI11['si184_classeobjeto'], 0, 12);
-                        $aCSVREDISPI11['si184_tipoatividadeobra']               = $aREDISPI11['si184_tipoatividadeobra'] == 0 ? '' : substr($aREDISPI11['si184_tipoatividadeobra'], 0, 12);
-                        $aCSVREDISPI11['si184_tipoatividadeservico']            = !$aREDISPI11['si184_tipoatividadeservico'] ? '' : $aREDISPI11['si184_tipoatividadeservico'];
+                        $aCSVREDISPI11['si184_tipoatividadeobra']               = $aREDISPI11['si184_tipoatividadeobra'] == 0 ? '' : $this->padLeftZero($aREDISPI11['si184_tipoatividadeobra'], 2);
+                        $aCSVREDISPI11['si184_tipoatividadeservico']            = !$aREDISPI11['si184_tipoatividadeservico'] ? '' : $this->padLeftZero($aREDISPI11['si184_tipoatividadeservico'], 2);
                         $aCSVREDISPI11['si184_dscatividadeservico']             = substr($aREDISPI11['si184_dscatividadeservico'], 0, 12);
                         $aCSVREDISPI11['si184_tipoatividadeservespecializado']  = !$aREDISPI11['si184_tipoatividadeservespecializado'] ? '' : $this->padLeftZero($aREDISPI11['si184_tipoatividadeservespecializado'], 2);
                         $aCSVREDISPI11['si184_dscatividadeservespecializado']   = substr($aREDISPI11['si184_dscatividadeservespecializado'], 0, 12);
@@ -108,24 +108,24 @@ class GerarREDISPI extends GerarAM
                     if ($aREDISPI10['si183_sequencial'] == $aREDISPI12['si185_reg10']) {
 
                         $aCSVREDISPI12['si185_tiporegistro']                = $this->padLeftZero($aREDISPI12['si185_tiporegistro'], 2);
-                        $aCSVREDISPI12['si185_codorgaoresp']                = $this->padLeftZero(intval($aREDISPI12['si185_codorgaoresp']), 2);
+                        $aCSVREDISPI12['si185_codorgaoresp']                = $this->padLeftZero(intval($aREDISPI12['si185_codorgaoresp']), 3);
                         $aCSVREDISPI12['si185_codunidadesubresp']           = $this->padLeftZero($aREDISPI12['si185_codunidadesubresp'], 5);
                         $aCSVREDISPI12['si185_codunidadesubrespestadual']   = !$aREDISPI12['si185_codunidadesubrespestadual'] ? '' : $this->padLeftZero($aREDISPI12['si185_codunidadesubrespestadual'], 5);
                         $aCSVREDISPI12['si185_exercicioprocesso']           = $this->padLeftZero($aREDISPI12['si185_exercicioprocesso'], 4);
                         $aCSVREDISPI12['si185_nroprocesso']                 = trim($aREDISPI12['si185_nroprocesso']);
                         $aCSVREDISPI12['si185_codobralocal']                = $aREDISPI12['si185_codobralocal'];
                         $aCSVREDISPI12['si185_logradouro']                  = $aREDISPI12['si185_logradouro'];
-                        $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'];
+                        $aCSVREDISPI12['si185_numero']                      = $aREDISPI12['si185_numero'] ? $aREDISPI12['si185_numero'] : '';
                         $aCSVREDISPI12['si185_bairro']                      = $aREDISPI12['si185_bairro'];
                         $aCSVREDISPI12['si185_cidade']                      = $aREDISPI12['si185_cidade'];
+                        $aCSVREDISPI12['si185_distrito']                    = $aREDISPI12['si185_distrito'];
                         $aCSVREDISPI12['si185_cep']                         = $aREDISPI12['si185_cep'];
                         $aCSVREDISPI12['si185_graulatitude']                = $aREDISPI12['si185_graulatitude'];
                         $aCSVREDISPI12['si185_minutolatitude']              = $aREDISPI12['si185_minutolatitude'];
-                        $aCSVREDISPI12['si185_segundolatitude']             = $aREDISPI12['si185_segundolatitude'];
+                        $aCSVREDISPI12['si185_segundolatitude']             = $this->sicomNumberReal($aREDISPI12['si185_segundolatitude'], 2);
                         $aCSVREDISPI12['si185_graulongitude']               = $aREDISPI12['si185_graulongitude'];
                         $aCSVREDISPI12['si185_minutolongitude']             = $aREDISPI12['si185_minutolongitude'];
-                        $aCSVREDISPI12['si185_segundolongitude']            = $aREDISPI12['si185_segundolongitude'];
-
+                        $aCSVREDISPI12['si185_segundolongitude']            = $this->sicomNumberReal($aREDISPI12['si185_segundolongitude'], 2);
 
                         $this->sLinha = $aCSVREDISPI12;
                         $this->adicionaLinha();

@@ -297,6 +297,7 @@ contrato = function () {
         var iLicitacao                = $F('ac16_licitacao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
+        var iLei                      = $F('ac16_lei');
 
         if (iOrigem == "0") {
 
@@ -444,6 +445,7 @@ contrato = function () {
         oParam.contrato.iLicitacao                = iLicitacao;
         oParam.contrato.iAdesaoregpreco           = iAdesaoregpreco;
         oParam.contrato.iLicoutroorgao            = iLicoutroorgao;
+        oParam.contrato.iLei                      = iLei;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,

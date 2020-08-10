@@ -355,6 +355,7 @@ if($opcao == "avos"){
             parent.document.form1.rh05_aviso.value = '".$rh05_aviso_dia."'+'/'+'".$rh05_aviso_mes."'+'/'+'".$rh05_aviso_ano."';
 
       	    parent.document.form1.rh05_mremun.value    = '".$rh05_mremun."';
+            parent.document.form1.rh05_saldofgts.value = '".$rh05_saldofgts."';
 	  </script>
 	 ";
   }

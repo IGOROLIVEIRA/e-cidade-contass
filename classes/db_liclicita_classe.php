@@ -1256,9 +1256,6 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
-        } else {
-            $sql .= $virgula . " l20_dtpubratificacao = null";
-            $virgula = ",";
         }
 
         if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
@@ -2310,6 +2307,69 @@ class cl_liclicita
         return $sql;
     }
 
+  function sql_query_relatorio($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from liclicita ";
+    $sql .= "      inner join db_config         on db_config.codigo = liclicita.l20_instit";
+    $sql .= "      inner join db_usuarios       on db_usuarios.id_usuario = liclicita.l20_id_usucria";
+    $sql .= "      inner join cflicita          on cflicita.l03_codigo = liclicita.l20_codtipocom";
+    $sql .= "      inner join pctipocompratribunal on pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal";
+    $sql .= "      inner join liclocal          on liclocal.l26_codigo = liclicita.l20_liclocal";
+    $sql .= "      inner join liccomissao       on liccomissao.l30_codigo = liclicita.l20_liccomissao";
+    $sql .= "      inner join licsituacao       on licsituacao.l08_sequencial = liclicita.l20_licsituacao";
+    $sql .= "      inner join cgm               on  cgm.z01_numcgm = db_config.numcgm";
+    $sql .= "      inner join db_config as dbconfig on  dbconfig.codigo = cflicita.l03_instit";
+    $sql .= "      inner join pctipocompra      on pctipocompra.pc50_codcom = cflicita.l03_codcom";
+    $sql .= "      inner join bairro            on bairro.j13_codi = liclocal.l26_bairro";
+    $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
+//    $sql .= "      left join homologacaoadjudica on l202_licitacao = l20_codigo";
+//    $sql .= "      left join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
+//    $sql .= "      left join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+//    $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
+//    $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($l20_codigo != null) {
+        $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($groupby != null) {
+      $sql .= " group by ";
+      $campos_sql = split("#", $groupby);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $groupby;
+    }
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
     function sql_query_edital($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
     {
         $sql = "select ";
@@ -2422,6 +2482,8 @@ class cl_liclicita
         $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
         $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
         $sql .= "       inner join licpregao on l45_sequencial = l20_equipepregao";
+        $sql .= "       inner join liccomissaocgm on l31_licitacao = l20_codigo";
+        $sql .= "       inner join cgm cgmrepresentante on cgmrepresentante.z01_numcgm = l31_numcgm";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {

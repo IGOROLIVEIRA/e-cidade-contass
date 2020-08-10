@@ -37,7 +37,7 @@ $clhomologacaoadjudica = new cl_homologacaoadjudica;
 
 $oGet                = db_utils::postMemory($_GET);
 
-$campos = "l202_sequencial,l202_licitacao,
+$campos = "distinct l202_sequencial,l202_licitacao,
       	   l20_edital,
       	   l20_anousu,
       	l202_datahomologacao,l202_dataadjudicacao";
@@ -54,20 +54,13 @@ $sql = $clhomologacaoadjudica->sql_query('',$campos,"","l202_licitacao = $l20_co
     <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor="#cccccc" onload="">
-    <center>
-      <form name="form1" method="post">
         <div style="display: table; float:left; margin-left:10%;">
           <fieldset>
             <legend><b>Homologação da Licitação</b></legend>
           <?
-           db_lovrot($sql, 1, "()", "");
+           db_lovrot(@$sql, 15, "", "");
           ?>
           </fieldset>
         </div>
-      </form>
-    </center>
   </body>
 </html>
-<script>
-
-</script>

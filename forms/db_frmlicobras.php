@@ -21,6 +21,19 @@ $cllicobras->rotulo->label();
             ?>
           </td>
         </tr>
+          <tr>
+              <td>
+                  <strong>Licitação do Sistema:</strong>
+              </td>
+              <td>
+                  <?
+                  $aValores = array(0 => 'Selecione',
+                      1 => 'Sim',
+                      2 => 'Não');
+                  db_select('obr01_licitacaosistema', $aValores, true, $db_opcao," onchange=''");
+                  ?>
+              </td>
+          </tr>
         <tr>
           <td nowrap title="<?=@$Tobr01_licitacao?>">
             <?
@@ -33,7 +46,7 @@ $cllicobras->rotulo->label();
             ?>
             <strong>Modalidade:</strong>
             <?
-            db_input('tipocompra',20,'',true,'text',3,"")
+            db_input('l03_descr',20,'',true,'text',3,"")
             ?>
             <strong>Nº:</strong>
             <?
@@ -181,7 +194,7 @@ $cllicobras->rotulo->label();
 <script>
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_licobraspesquisa','func_licobras.php?funcao_js=parent.js_preenchepesquisa|obr01_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_licobraspesquisa','func_licobras.php?pesquisa=true&pesquisa=true&funcao_js=parent.js_preenchepesquisa|obr01_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_licobraspesquisa.hide();
@@ -211,24 +224,56 @@ $cllicobras->rotulo->label();
    * funcao para retornar licitacao
    */
   function js_pesquisa_liclicita(mostra){
-    if(mostra==true){
 
-      js_OpenJanelaIframe('top.corpo',
-        'db_iframe_licobras',
-        'func_liclicita.php?situacao=10&obras=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto|l20_numero|pc50_descr',
-        'Pesquisa Licitações',true);
+    let licitacaosistema = document.getElementById('obr01_licitacaosistema').value;
+    let db_opcao = <?= $db_opcao?>;
+
+    if(licitacaosistema == '0' && db_opcao == '1'){
+        alert("selecione o tipo de licitacao.");
+        return;
+    }
+//console.log(licitacaosistema);
+    if(licitacaosistema == 1){
+
+        if(mostra==true){
+
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_licobras',
+                'func_liclicita.php?situacao=10&obras=true&licitacaosistema='+licitacaosistema+'&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto|l20_numero|pc50_descr',
+                'Pesquisa Licitações',true);
+        }else{
+
+            if(document.form1.obr01_licitacao.value != ''){
+
+                js_OpenJanelaIframe('top.corpo',
+                    'db_iframe_licobras',
+                    'func_liclicita.php?situacao=10&obras=true&licitacaosistema='+licitacaosistema+'&pesquisa_chave='+
+                    document.form1.obr01_licitacao.value+'&funcao_js=parent.js_preencheLicitacao2',
+                    'Pesquisa',false);
+            }else{
+                document.form1.obr01_licitacao.value = '';
+            }
+        }
     }else{
+        if(mostra==true){
 
-      if(document.form1.obr01_licitacao.value != ''){
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_licobraslicitacao',
+                'func_licobraslicitacao?licitacaosistema='+licitacaosistema+'&funcao_js=parent.js_preencheLicitacaoanterior|obr07_sequencial|obr07_objeto|l44_descricao',
+                'Pesquisa Licitações',true);
+        }else{
 
-        js_OpenJanelaIframe('top.corpo',
-          'db_iframe_licobras',
-          'func_liclicita.php?situacao=10&obras=true&pesquisa_chave='+
-          document.form1.obr01_licitacao.value+'&funcao_js=parent.js_preencheLicitacao2',
-          'Pesquisa',false);
-      }else{
-        document.form1.obr01_licitacao.value = '';
-      }
+            if(document.form1.obr01_licitacao.value != ''){
+
+                js_OpenJanelaIframe('top.corpo',
+                    'db_iframe_licobraslicitacao',
+                    'func_licobraslicitacao?licitacaosistema='+licitacaosistema+'&pesquisa_chave='+
+                    document.form1.obr01_licitacao.value+'&funcao_js=parent.js_preencheLicitacaoanterior2',
+                    'Pesquisa',false);
+            }else{
+                document.form1.obr01_licitacao.value = '';
+            }
+        }
     }
   }
   /**
@@ -237,24 +282,44 @@ $cllicobras->rotulo->label();
   function js_preencheLicitacao(codigo,objeto,numero,descrcompra)
   {
     document.form1.obr01_licitacao.value = codigo;
-    document.form1.tipocompra.value = descrcompra;
+    document.form1.l03_descr.value = descrcompra;
     document.form1.l20_numero.value = numero;
     document.form1.l20_objeto.value = objeto;
     db_iframe_licobras.hide();
   }
 
   function js_preencheLicitacao2(objeto,numero,descrcompra,erro) {
-    document.form1.tipocompra.value = descrcompra;
+    document.form1.l03_descr.value = descrcompra;
     document.form1.l20_numero.value = numero;
     document.form1.l20_objeto.value = objeto;
 
     if(erro==true){
       alert("Nenhuma licitação encontrada.");
       document.form1.z01_nome.focus();
-      document.form1.tipocompra.value = "";
+      document.form1.l03_descr.value = "";
       document.form1.l20_numero.value = "";
       document.form1.l20_objeto.value = "";
     }
+  }
+
+  function js_preencheLicitacaoanterior(codigo,objeto,descrcompra) {
+      document.form1.obr01_licitacao.value = codigo;
+      document.form1.l03_descr.value = descrcompra;
+//      document.form1.l20_numero.value = numero;
+      document.form1.l20_objeto.value = objeto;
+      db_iframe_licobraslicitacao.hide();
+  }
+
+  function js_preencheLicitacaoanterior2(descrcompra,objeto,numero,erro) {
+      document.form1.l03_descr.value = descrcompra;
+      document.form1.l20_objeto.value = objeto;
+      document.form1.l20_numero.value = numero;
+
+      if(erro==true){
+          alert("Nenhuma licitação encontrada.");
+          document.form1.obr01_licitacao.focus();
+          document.form1.l03_descr.value = "";
+      }
   }
 
   /**
@@ -366,6 +431,7 @@ $cllicobras->rotulo->label();
       document.form1.obr05_numregistro.value = '';
       document.form1.obr05_numartourrt.value = '';
       document.form1.obr05_vinculoprofissional.value = 0;
+      document.form1.obr05_dtcadastrores.value = '';
 
     }else{
       alert(oRetorno.message.urlDecode());
@@ -432,7 +498,7 @@ $cllicobras->rotulo->label();
     document.form1.obr05_numregistro.value = oRetorno.dados[0].obr05_numregistro;
     document.form1.obr05_numartourrt.value = oRetorno.dados[0].obr05_numartourrt;
     document.form1.obr05_vinculoprofissional.value = oRetorno.dados[0].obr05_vinculoprofissional;
-
+    document.form1.obr05_dtcadastrores.value = js_formatar(oRetorno.dados[0].obr05_dtcadastrores,'d');
   }
 
   function js_excluir(iCodigoResp) {
@@ -462,7 +528,18 @@ $cllicobras->rotulo->label();
     }else{
       alert(oRetorno.message.urlDecode());
     }
-    js_removeObj("msgbox");
+
+      document.form1.obr05_sequencial.value = '';
+      document.form1.obr05_responsavel.value = '';
+      document.form1.obr05_tiporesponsavel.value = 0;
+      document.form1.z01_nome.value = '';
+      document.form1.obr05_tiporegistro.value = 0;
+      document.form1.obr05_numregistro.value = '';
+      document.form1.obr05_numartourrt.value = '';
+      document.form1.obr05_vinculoprofissional.value = 0;
+      document.form1.obr05_dtcadastrores.value = '';
+
+      js_removeObj("msgbox");
 
     js_CarregaResponsaveis()
   }

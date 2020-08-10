@@ -240,6 +240,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
   public function gerarDados()
   {
 
+//ini_set('display_errors', 'On');
+//
+//error_reporting(E_ALL);
+
     $clcontratos10 = new cl_contratos102020();
     $clcontratos11 = new cl_contratos112020();
     $clcontratos12 = new cl_contratos122020();
@@ -466,7 +470,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
       }
 
-      if($oDados10->ac16_origem == self::ORIGEM_MANUAL && $oDados10->departmanual != null) {
+      if(($oDados10->ac16_origem == self::ORIGEM_MANUAL || $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS)&& $oDados10->departmanual != null) {
+
         $sSqlManual = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
                      CASE WHEN o41_codtri = '0'
@@ -511,6 +516,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $oDados10->l20_codepartamento = $oDados10->departmanual;
       }
 
+      /*
+       * verifica se o contrato e de origem processo de compra e tipo origem licitação por ser registro de preço
+       *
+       */
+
+      if($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS && in_array($oDados10->contdeclicitacao, array(2, 3))) {
+         $oDados10->l20_edital = $oDados10->editalmanual;
+         $oDados10->l20_anousu = $oDados10->anousumanual;
+         $oDados10->l20_naturezaobjeto = $oDados10->naturezamanual;
+         $oDados10->l20_codigo = $oDados10->codlicmanual;
+         $oDados10->l20_codepartamento = $oDados10->departmanual;
+         $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
+      }
+
       $clcontratos10->si83_tiporegistro = 10;
       $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial;
       $clcontratos10->si83_codorgao = $sCodorgao;
@@ -526,6 +545,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
       }elseif ($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
         $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
+      }elseif ($oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS){
+          $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
       }else{
         $clcontratos10->si83_codunidadesubresp = $oDados10->codunidadesubresp;
       }
@@ -536,8 +557,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           $clcontratos10->si83_nroprocesso = $oDados10->numeroproc;
           $clcontratos10->si83_exercicioprocesso = substr($oDados10->anoproc, 0, 4);
         }else{
-          $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
-          $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
+          $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3, 5)) ? $oDados10->l20_edital : ' ';
+          $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3, 5)) ? $oDados10->l20_anousu : ' ';
         }
       }else{
         $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
@@ -631,7 +652,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $oContrato11->si84_coditemsimcro = null;
               $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_codigotabela;
+            $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $aDadosAgrupados[$sHash] = $oContrato11;
 
           } else {
@@ -796,7 +817,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                where liclicitem.l21_codliclicita = " . $oDados10->l20_codigo;
                 $rsDados = db_query($sSql);
               }
-              if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && $oDados12->getNumero() != '') {
+
+              //echo '<pre>'; var_dump($oDados12);
+              if (($oDados10->l20_codigo == '' || pg_num_rows($rsDados) == 0) && !self::ORIGEM_LICITACAO && $oDados12->getNumero() != '') {
                 $sSql = "SELECT distinct on (o58_coddot)
                         o58_coddot,
                         CASE WHEN o40_codtri = '0'
@@ -1080,8 +1103,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        */
 
       if (in_array($oAcordoPosicao->getTipo(), array(4, 9, 10, 11, 14))) {
-        /*if ($oDados20->ac26_sequencial == 320){
-        echo '<pre>';var_dump($oAcordoPosicao->getItens());die;}*/
         foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
           if ($oAcordoItem->getQuantiAditada() > 0 || $oAcordoItem->getValorAditado() > 0) {
 
@@ -1112,16 +1133,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $iTipoAlteraoItem = 2;
               }
             }
-            /*else {
-                $iTipoAlteraoItem = $oAcordoItem->getCodigoPosicaoTipo();
-            }*/
 
             $clcontratos21->si88_tiporegistro = 21;
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
             $clcontratos21->si88_coditem = $iCodItem  ;
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
-            //$clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidadeAditivada($oDados20->ac26_numero);
             $sqlServico = "
                           select pc01_servico, ac20_servicoquantidade
                             from acordoitem
@@ -1153,6 +1170,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
+            if($oDados10->ac02_acordonatureza == "1" || $oDados10->ac02_acordonatureza == "7"){
+              $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+            }else{
+              $clcontratos21->si88_tipomaterial = "";
+            }
             if($oDadosItensObra->obr06_tabela == "1"){
               $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
               $clcontratos21->si88_coditemsimcro = null;
@@ -1166,13 +1188,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_coditemsimcro = null;
               $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
             }
-            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_codigotabela;
-
+            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
             $clcontratos21->incluir(null);
+
             if ($clcontratos21->erro_status == 0) {
               throw new Exception($clcontratos21->erro_msg);
             }
-
           }
         }
       }

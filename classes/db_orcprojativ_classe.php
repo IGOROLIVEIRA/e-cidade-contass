@@ -256,7 +256,7 @@ class cl_orcprojativ {
                                ,$this->o55_orcproduto
                                ,$this->o55_tipoensino
                                ,$this->o55_tipopasta
-                               ,$this->o55_rateio
+                               ,".($this->o55_rateio == "null" || $this->o55_rateio == ""?"null":"'".$this->o55_rateio."'")."
                       )";
      $result = db_query($sql);
      if($result==false){

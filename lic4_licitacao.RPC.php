@@ -757,10 +757,35 @@ switch ($oParam->exec) {
                  END) AS data_Referencia
     ";
 
-    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', $campos, '', 'l20_codigo = '.$oParam->iCodigoLicitacao. ' and EXTRACT(YEAR FROM l20_dtpublic) >= 2020');
+    $sWhere = "
+    	AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                                     AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
+                                     WHEN pc50_pctipocompratribunal IN (100, 101, 102, 106) 
+                                     AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
+                                END) >= 2020;
+    ";
+    $sSqlLicEdital = $oDaoLicEdital->sql_query_edital('', " DISTINCT $campos ", '', 'l20_codigo = '.$oParam->iCodigoLicitacao. $sWhere);
     $rsLicEdital = $oDaoLicEdital->sql_record($sSqlLicEdital);
     $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
     $oRetorno->dadosLicitacao = $oDados;
     break;
+
+	case 'findTipos':
+		$sSql = "
+			SELECT DISTINCT l03_pctipocompratribunal,
+                			l03_codcom
+					FROM liclicita
+					INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+					INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+					WHERE liclicita.l20_codigo = $oParam->iLicitacao
+		";
+
+		$oDaoLicitacao = db_utils::getDao('liclicita');
+		$rsSql = $oDaoLicitacao->sql_record($sSql);
+		$oDados = db_utils::fieldsMemory($rsSql, 0);
+		$oRetorno->dadosLicitacao = $oDados;
+	break;
+
 }
 echo $oJson->encode($oRetorno);

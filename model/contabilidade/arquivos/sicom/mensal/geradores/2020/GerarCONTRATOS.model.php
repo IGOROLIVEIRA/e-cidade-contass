@@ -113,11 +113,11 @@ class GerarCONTRATOS extends GerarAM {
               $aCSVCONTRATOS11['si84_tiporegistro']          =   str_pad($aCONTRATOS11['si84_tiporegistro'], 2, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS11['si84_codcontrato']           =   substr($aCONTRATOS11['si84_codcontrato'], 0, 15);
               $aCSVCONTRATOS11['si84_coditem']               =   substr($aCONTRATOS11['si84_coditem'], 0, 15);
-              $aCSVCONTRATOS11['si84_tipomaterial']          =   $aCONTRATOS11['si84_tipomaterial'];
+              $aCSVCONTRATOS11['si84_tipomaterial']          =   $aCONTRATOS11['si84_tipomaterial'] == 0 ? ' ' : $aCONTRATOS11['si84_tipomaterial'];
               $aCSVCONTRATOS11['si84_coditemsinapi']         =   $aCONTRATOS11['si84_coditemsinapi'];
               $aCSVCONTRATOS11['si84_coditemsimcro']         =   $aCONTRATOS11['si84_coditemsimcro'];
               $aCSVCONTRATOS11['si84_descoutrosmateriais']   =   $aCONTRATOS11['si84_descoutrosmateriais'];
-              $aCSVCONTRATOS11['si84_itemplanilha']          =   $aCONTRATOS11['si84_itemplanilha'];
+              $aCSVCONTRATOS11['si84_itemplanilha']          =   $aCONTRATOS11['si84_itemplanilha'] == 0 ? ' ' : $aCONTRATOS11['si84_itemplanilha'];
               $aCSVCONTRATOS11['si84_quantidadeitem']        =   number_format($aCONTRATOS11['si84_quantidadeitem'], 4, ",", "");
               $aCSVCONTRATOS11['si84_valorunitarioitem']     =   number_format($aCONTRATOS11['si84_valorunitarioitem'], 4, ",", "");
 
@@ -239,11 +239,11 @@ class GerarCONTRATOS extends GerarAM {
               $aCSVCONTRATOS21['si88_tiporegistro']         =  str_pad($aCONTRATOS21['si88_tiporegistro'], 2, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS21['si88_codaditivo']           =  substr($aCONTRATOS21['si88_codaditivo'], 0, 15);
               $aCSVCONTRATOS21['si88_coditem']              =  substr($aCONTRATOS21['si88_coditem'], 0, 15);
-              $aCSVCONTRATOS21['si88_tipomaterial']          =   $aCONTRATOS21['si88_tipomaterial'];
-              $aCSVCONTRATOS21['si88_coditemsinapi']         =   $aCONTRATOS21['si88_coditemsinapi'];
-              $aCSVCONTRATOS21['si88_coditemsimcro']         =   $aCONTRATOS21['si88_coditemsimcro'];
-              $aCSVCONTRATOS21['si88_descoutrosmateriais']   =   $aCONTRATOS21['si88_descoutrosmateriais'];
-              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha'];
+              $aCSVCONTRATOS21['si88_tipomaterial']          =  $aCONTRATOS21['si88_tipomaterial']          == "0" ? '' : $aCONTRATOS21['si88_tipomaterial'];
+              $aCSVCONTRATOS21['si88_coditemsinapi']         =   $aCONTRATOS21['si88_coditemsinapi']        == "0" ? '' : $aCONTRATOS21['si88_coditemsinapi'];
+              $aCSVCONTRATOS21['si88_coditemsimcro']         =   $aCONTRATOS21['si88_coditemsimcro']        == "0" ? '' : $aCONTRATOS21['si88_coditemsimcro'];
+              $aCSVCONTRATOS21['si88_descoutrosmateriais']   =   $aCONTRATOS21['si88_descoutrosmateriais']  == "0" ? '' : $aCONTRATOS21['si88_descoutrosmateriais'];
+              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha']         == "0" ? '' : $aCONTRATOS21['si88_itemplanilha'];
               $aCSVCONTRATOS21['si88_tipoalteracaoitem']    =  str_pad($aCONTRATOS21['si88_tipoalteracaoitem'], 1, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS21['si88_quantacrescdecresc']   =  number_format($aCONTRATOS21['si88_quantacrescdecresc'], 4, ",", "");
               $aCSVCONTRATOS21['si88_valorunitarioitem']    =  number_format($aCONTRATOS21['si88_valorunitarioitem'], 4, ",", "");

@@ -111,7 +111,7 @@ $oGet = db_utils::postMemory($_GET);
       * Codcli do cadastro de clientes do SIGAT
       * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
       */
-     if($oInstit->getCodigoCliente() == 58) {
+     if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA) {
        $sSqlIntegracaoJMS = "UPDATE disbanco
                               SET k00_numpre = debitos_jms.k00_numpre,
                                   k00_numpar = debitos_jms.k00_numpar

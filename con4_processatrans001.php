@@ -193,6 +193,8 @@ if (isset ($processar)) {
       throw new Exception('Nenhum lançamento encontrado.');
     }
 
+
+
     for ($i = 0; $i < $numrows; $i ++) {
 
       flush();
@@ -353,7 +355,7 @@ if (isset ($processar)) {
         if ($debug) {
           echo "<br><br>Código do documento: {$c53_coddoc}<br><br>";
         }
-        
+
         switch ($c53_coddoc) {
 
           case 1   : //EMPENHAR
@@ -389,6 +391,7 @@ if (isset ($processar)) {
           case 502 : //LIQUIDAÇÃO DE PRECATÓRIOS
 
           case 4   : //estornar liquidação
+          case 25  : // Estorno de liquidacao - documento criado OC12836
           case 85  : //ESTORNO DE LIQ DE EMP DE PASSIVO SEM SUP ORÇAMENT
           case 203 : //ESTORNO DE LIQUIDACAO DE DESPESA COM SERVIÇOS
           case 205 : //ESTORNO DE LIQ. DESPESA MATERIAL DE CONSUMO
@@ -855,7 +858,14 @@ if (isset ($processar)) {
         /**
          * Usuario dbseller, salva log do reprocessamento
          */
-        if (db_getsession('DB_login') == 'dbseller') {
+
+        /**
+         * OC12145
+         * Verificar se o usuario é contass e administrador e liberar menu
+         *
+         */
+        $sContass = explode(".",db_getsession("DB_login"));
+        if (db_getsession('DB_login') == 'dbseller' || ($sContass[1] == 'contass') && db_getsession("DB_administrador") == 1 ) {
           $sLogReprocessamento .= "\n" . str_repeat('-', 120) . "\n$sErroMensagem\n" . str_repeat('-', 120) . "\n";
         }
       }

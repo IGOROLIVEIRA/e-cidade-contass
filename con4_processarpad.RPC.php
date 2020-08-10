@@ -122,7 +122,15 @@ switch($oParam->exec) {
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
       echo pg_last_error();
 
-      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao from cadobras302020 where si201_mes = $oParam->mesReferencia";
+//      $sql = "select si201_codobra,si201_tipomedicao,si201_nummedicao
+// from cadobras302020 where si201_mes = $oParam->mesReferencia and si201_tipomedicao in(1,3,4,5)";
+      $sql = "SELECT si201_codobra,
+                       si201_tipomedicao,
+                       si201_nummedicao
+                FROM cadobras302020
+                INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
+                INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
+                WHERE si201_mes = $oParam->mesReferencia";
       $rsRegistro30 = db_query($sql);
 
       $arquivosgerados = array();
@@ -174,14 +182,12 @@ switch($oParam->exec) {
       }
       system("rm -f OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
       system("bin/zip -q OBRA_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-//echo "<pre>"; print_r($arquivosgerados);exit;
+
       if($arquivosgerados[0] != null){
 
         foreach ($arquivosgerados as $arq) {
           $aListaArquivospdf .= " ".$arq;
-          if (file_exists("$arq")){
             $oEscritorPDF->adicionarArquivo("$arq", "$arq");
-          }
         }
         $oEscritorPDF->zip("FOTO_MEDICAO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
 
@@ -1019,6 +1025,7 @@ case "processarBalancete" :
 									ELSE l20_exercicioedital
 							END )AS exercicio,
 						   pctipocompratribunal.l44_sequencial AS tipo_tribunal,
+						   pctipocompratribunal.l44_codigotribunal AS tipoProcesso,
 						       (SELECT CASE
 									WHEN o41_subunidade != 0
 										 OR NOT NULL THEN lpad((CASE
@@ -1072,7 +1079,15 @@ case "processarBalancete" :
 
 				for ($cont = 0; $cont < pg_num_rows($rsAnexos); $cont++) {
 					$oAnexo = db_utils::fieldsMemory($rsAnexos, $cont);
-					$novoNome = in_array($oAnexo->tipo_tribunal, array(100, 101, 102, 103)) ? 'DISPENSA_' : 'EDITAL_';
+
+					if(in_array($oAnexo->tipo_tribunal, array(100, 101, 102, 103, 106))){
+						$novoNome = 'DISPENSA_';
+						$tipoProcesso = '_'.$oAnexo->tipoprocesso;
+					}else{
+						$novoNome = 'EDITAL_';
+						$tipoProcesso = '';
+					}
+
 					switch ($oAnexo->tipo) {
 						case 'mc':
 							$novoNome .= 'MINUTA_CONTRATO_';
@@ -1094,7 +1109,7 @@ case "processarBalancete" :
 					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
 					$extensao = explode('.', $nomeArq);
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
-					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}.$extensao[1]";
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$extensao[1]";
 					$aListaAnexos .= $novoNome . ' ';
 					system("cp {$oAnexo->caminho} ./{$novoNome}");
 				}

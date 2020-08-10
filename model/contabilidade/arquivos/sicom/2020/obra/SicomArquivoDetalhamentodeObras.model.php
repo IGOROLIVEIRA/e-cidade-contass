@@ -63,7 +63,6 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
 
   public function gerarPDFobra($iCodMedicao)
   {
-    define('FPDF_FONTPATH','fpdf151/font/');
 
     $sql = "select *,infocomplementaresinstit.si09_codorgaotce AS si197_codorgao from licobrasmedicao
             inner join licobras on obr03_seqobra = obr01_sequencial
@@ -74,45 +73,17 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
             where obr03_sequencial = $iCodMedicao";
     $rsMedicao = db_query($sql);
 
-    $aDadosAgrupados = array();
-    $oMedicao = new stdClass();
     for ($iContMed = 0; $iContMed < pg_numrows($rsMedicao); $iContMed++) {
       $aMedicao = db_utils::fieldsMemory($rsMedicao, $iContMed);
       $sOrgao  = str_pad($aMedicao->si197_codorgao, 2,"0",STR_PAD_LEFT);
-      $sHash = $aMedicao->obr03_sequencial;
-        $oMedicao->nomearq = 'FOTO_MEDICAO' ."_" . $sOrgao . "_" . $aMedicao->obr01_numeroobra . "_" . $aMedicao->obr03_tipomedicao . "_" . $aMedicao->obr03_nummedicao . ".pdf";
-        $extencao = substr($aMedicao->obr04_codimagem, 33, 36);
-        if ($extencao == "jpg") {
-          $type = 'JPG';
-        } elseif ($extencao == "png") {
-          $type = 'PNG';
-        }
-        $oMedicao->anexos[$aMedicao->obr04_sequencial]->file = 'imagens/obras/' . $aMedicao->obr04_codimagem;
-        $oMedicao->anexos[$aMedicao->obr04_sequencial]->legenda = $aMedicao->obr04_legenda;
-        $oMedicao->anexos[$aMedicao->obr04_sequencial]->type = $type;
+      $nomearq = 'FOTO_MEDICAO' ."_" . $sOrgao . "_" . $aMedicao->obr01_numeroobra . "_" . $aMedicao->obr03_tipomedicao . "_" . $aMedicao->obr03_nummedicao . ".pdf";
 
-        $aDadosAgrupados[$sHash] = $oMedicao;
+      $arq_origem = "imagens/obras/".$aMedicao->obr04_codimagem;
+      $arq_destino = $nomearq;
+
+      copy($arq_origem,$arq_destino);
     }
 
-    foreach ($aDadosAgrupados as $aMed){
-      $pdf = new FPDF();
-      $pdf->open();
-      foreach ($aMed->anexos as $anexo){
-        $pdf->addpage();
-        $pdf->Image($anexo->file,10,10,190,150,$anexo->type);
-        $pdf->ln(155);
-        $pdf->SetFont('Arial','B',12);
-        $pdf->Cell(190,10,$anexo->legenda,0,1,"C",0);
-        $nomearq = $aMed->nomearq;
-        $arquivo = $nomearq;
-      }
-      if( file_exists( $arquivo ) ){
-        unlink( $arquivo );
-      }
-      $pdf->Output($arquivo,false,true);
-    }
-
-//    unset($pdf);
   }
 
   public function gerarDados()
@@ -288,8 +259,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               inner join liclicita on l20_codigo = obr01_licitacao
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-              WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtiniciomedicao)=  " . db_getsession("DB_anousu") . "
-                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtiniciomedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+              WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtentregamedicao)=  " . db_getsession("DB_anousu") . "
+                  AND DATE_PART('MONTH',licobrasmedicao.obr03_dtentregamedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);die();
 
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
@@ -315,7 +286,7 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras302020->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;
       $clcadobras302020->si201_valormedicao = $oDados30->obr03_vlrmedicao;
       $clcadobras302020->si201_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
+//      $clcadobras302020->si201_pdf = 'FOTO_MEDICAO' . $oDados30->si197_codorgao . "_" . $oDados30->obr03_seqobra . "_" . $oDados30->obr03_tipomedicao . "_" . $oDados30->obr03_nummedicao . ".pdf";
       $clcadobras302020->si201_instit = db_getsession("DB_instit");
       $clcadobras302020->incluir(null);
 

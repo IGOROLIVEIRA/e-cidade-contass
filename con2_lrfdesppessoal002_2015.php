@@ -73,7 +73,8 @@ $aDadosAnexoIRGF->quadroreceitatotalcorrenteliquida  = $aDadosAnexoIRGFIntermedi
 
 if((int)$iCodigoRelatorio == 166){
 
-  $aDadosAnexoIRGF->quadrotransferenciasobrigatorias   = $aDadosAnexoIRGFIntermediario->quadrotransferenciasobrigatorias;
+  $aDadosAnexoIRGF->quadrotransferenciasobrigatoriasemendasindividuais   = $aDadosAnexoIRGFIntermediario->quadrotransferenciasobrigatoriasemendasindividuais;
+  $aDadosAnexoIRGF->quadrotransferenciasobrigatoriasemendasbancada   = $aDadosAnexoIRGFIntermediario->quadrotransferenciasobrigatoriasemendasbancada;
   $aDadosAnexoIRGF->quadroreceitacorrenteliquidaajust  = $aDadosAnexoIRGFIntermediario->quadroreceitacorrenteliquidaajust;
 
 }
@@ -514,7 +515,8 @@ if ($oGet->emissao == 1) {
 
         if ($sIndice == 'quadroreceitatotalcorrenteliquida' ||
             $sIndice == 'quadroreceitacorrenteliquidaajust' ||
-            $sIndice == 'quadrotransferenciasobrigatorias') {
+            $sIndice == 'quadrotransferenciasobrigatoriasemendasindividuais' ||
+            $sIndice == 'quadrotransferenciasobrigatoriasemendasbancada') {
 
           $sAlinhamento     = "C";
           $sValorPercentual = "-";

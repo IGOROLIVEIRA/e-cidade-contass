@@ -429,14 +429,7 @@ ini_set('error_reporting', '0');
             $just = "JUSTIFICATIVA: ".trim($just);
         }
 
-        if((isset ($servico) && (trim($servico) == "f" || trim($servico) == "")) || !isset ($servico)){
-            $unid = trim(substr($unid, 0, 10));
-            if($susaquant == "t"){
-                $unid .= " \n$quantunid UNIDADES\n";
-            }
-        } else {
-            $unid = "SERVIÇO";
-        }
+        $unid = trim(substr($unid, 0, 10));
 
         $distanciar = 0;
         if((isset ($prazo) && trim($prazo) == "")&&(isset ($pgto) && trim($pgto) == "")&&

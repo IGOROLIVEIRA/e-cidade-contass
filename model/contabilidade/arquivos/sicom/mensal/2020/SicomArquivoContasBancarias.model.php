@@ -542,7 +542,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                   $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
               }
 
-              if ($oTotalMov->sinalfinal == 'D' && $oTotalMov->saldo_anterior != 0) {
+              if ($oTotalMov->sinalanterior == 'D' && $oTotalMov->saldo_anterior != 0) {
 
                   $sHash21a = $oContaAgrupada->si95_codctb . $iFonte2 . '01';
 
@@ -692,14 +692,14 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                                        AND c80_codord = (SELECT c80_codord FROM conlancamord
                                                                          WHERE c80_codlan=c69_codlan
                                                                          LIMIT 1)) >= 0 THEN 8
-                                         WHEN c71_coddoc IN (151, 161)
+                                         WHEN c71_coddoc IN (151, 161, 163)
                                               AND (SELECT k17_situacao FROM slip
                                                    JOIN conlancamslip ON k17_codigo = c84_slip
                                                    JOIN conlancamdoc ON c71_codlan = c84_conlancam
                                                    WHERE c71_codlan=c69_codlan
-                                                       AND c71_coddoc IN (151, 161)
-                                                   LIMIT 1) = 2 THEN 8
-                                         WHEN c71_coddoc IN (131, 152, 163) THEN 10
+                                                       AND c71_coddoc IN (151, 161, 163)
+                                                   LIMIT 1) in (2, 4) THEN 8
+                                         WHEN c71_coddoc IN (131, 152, 162) THEN 10
                                          WHEN c71_coddoc IN (120)
                                               AND (SELECT k17_situacao FROM slip
                                                    JOIN conlancamslip ON k17_codigo = c84_slip
@@ -731,7 +731,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                      END AS fontemovimento,
                                      CASE
                                          WHEN c72_complem ILIKE 'Referente%'
-                                              AND c71_coddoc IN (5, 35, 37) THEN 1
+                                              AND c71_coddoc IN (5,35,37,6,36,38) THEN 1
                                          ELSE 0
                                      END AS retencao
                              FROM conlancamdoc
@@ -771,8 +771,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                              AND substr(o57_fonte,0,3) = '49' THEN 16
                                         WHEN c71_coddoc = 100 AND substr(o57_fonte,2,4) = '1321' AND bancodebito.c63_tipoconta IN (2, 3) THEN 4
                                         WHEN c71_coddoc = 100 THEN 1
-                                        WHEN c71_coddoc IN (6, 36, 38, 162) THEN 17
-                                        WHEN c71_coddoc IN (153) THEN 10
+                                        WHEN c71_coddoc IN (6,36,38,121,153,163) THEN 17
+                                        WHEN c71_coddoc IN (131,152,162) THEN 10
                                         WHEN c71_coddoc IN (130) THEN 12
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
                                         WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
@@ -799,7 +799,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                     END AS fontemovimento,
                                     CASE
                                         WHEN c72_complem ILIKE 'Referente%'
-                                             AND c71_coddoc IN (5, 35, 37) THEN 1
+                                             AND c71_coddoc IN (5,35,37,6,36,38) THEN 1
                                         ELSE 0
                                     END AS retencao
                              FROM conlancamdoc
@@ -825,15 +825,6 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                         WHERE fontemovimento::integer = $iFonte";
 
           $rsMovi21 = db_query($sSqlReg21);
-          //db_criatabela($rsMovi21);
-          //echo $sSqlReg21."<br>";
-
-
-            /*echo $nConta."<br>";
-            if($nConta==4362){
-    //db_criatabela($rsMovi21);
-  }
-  //echo pg_last_error();*/
 
 
             if (pg_num_rows($rsMovi21) != 0) {

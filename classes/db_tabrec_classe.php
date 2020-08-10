@@ -1115,7 +1115,7 @@ class cl_tabrec {
   	  }
   	} else {
   		$sql .= "        from tabrec ";
-  	  $sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
+  	  //$sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
   	}
   	$sql2 = "";
   	if($dbwhere==""){

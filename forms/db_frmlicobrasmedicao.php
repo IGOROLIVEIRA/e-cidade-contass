@@ -6,7 +6,7 @@ $cllicobrasmedicao->rotulo->label();
   <legend>Medição da Obra</legend>
   <form name="form1" method="post" action="">
     <table border="0" style="margin-left: -4%;">
-      <tr style="display: none">
+      <tr style="">
         <td nowrap title="<?=@$Tobr03_sequencial?>">
           <input name="oid" type="hidden" value="<?=@$oid?>">
           <?=@$Lobr03_sequencial?>
@@ -251,7 +251,7 @@ $cllicobrasmedicao->rotulo->label();
 
       js_OpenJanelaIframe('top.corpo',
         'db_iframe_licobrasituacao',
-        'func_licobras.php?funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
+        'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
     }else{
 
@@ -259,7 +259,7 @@ $cllicobrasmedicao->rotulo->label();
 
         js_OpenJanelaIframe('top.corpo',
           'db_iframe_licobrasituacao',
-          'func_licobras.php?pesquisa_chave='+
+          'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr03_seqobra.value+'&funcao_js=parent.js_preencheObra2',
           'Pesquisa',false);
       }else{
@@ -387,7 +387,10 @@ $cllicobrasmedicao->rotulo->label();
     var oRetorno = eval('('+oAjax.responseText+")");
 
     if (oRetorno.status == 2) {
-      alert(oRetorno.message);
+      alert("ja existe Anexo Salvo");
+        $('uploadfile').value     = '';
+        $('namefile').value       = '';
+        $("obr04_legenda").value  = "";
     }else {
       alert("Anexo Salvo com Sucesso !");
       $('uploadfile').value     = '';

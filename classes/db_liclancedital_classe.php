@@ -60,7 +60,7 @@ class cl_liclancedital
                  l47_sequencial = int8 = Sequencial
                  l47_linkpub = varchar(200) = Link da publicação
                  l47_origemrecurso = int8 = Origem do recurso
-                 l47_descrecurso = varchar(250) = Descrição do recurso
+                 l47_descrecurso = varchar(250) = Descrio do recurso
                  l47_dataenvio = date = Data envio
                  l47_liclicita = int4 = Número da licitação
                   ";
@@ -112,6 +112,8 @@ class cl_liclancedital
   function incluir($l47_sequencial)
   {
     $this->atualizacampos();
+    $sQuery = db_query('SELECT l03_pctipocompratribunal FROM liclicita JOIN cflicita ON l03_codigo = l20_codtipocom WHERE l20_codigo = '.$this->l47_liclicita);
+    $tipoTribunal = db_utils::fieldsMemory($sQuery, 0)->l03_pctipocompratribunal;
 
     if ($l47_sequencial == "" || $l47_sequencial == null) {
       $result = db_query("select nextval('liclancedital_l47_sequencial_seq')");
@@ -127,7 +129,7 @@ class cl_liclancedital
     } else {
       $result = db_query("select last_value from liclancedital_l47_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $l47_sequencial)) {
-        $this->erro_sql = " Campo l47_sequencial maior que último número da sequencia.";
+        $this->erro_sql = " Campo l47_sequencial maior que ltimo número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -147,6 +149,15 @@ class cl_liclancedital
       return false;
     }
 
+    if ((!$this->l47_origemrecurso || $this->l47_origemrecurso == null) && in_array($tipoTribunal, array(48, 49, 50, 52, 53, 54))) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql = "Verifique a origem do recurso";
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if ($this->l47_dataenvio == "" || $this->l47_dataenvio == null) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql = "Verifique a data de envio";
@@ -156,17 +167,8 @@ class cl_liclancedital
       return false;
     }
 
-    if (!$this->l47_origemrecurso || $this->l47_origemrecurso == null) {
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql = "Verifique a origem do recurso";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
     if ($this->l47_origemrecurso  == 9 ) {
-      if(!$this->l47_descrecurso  == null || trim($this->l47_descrecurso)  == ''){
+      if($this->l47_descrecurso  == null || trim($this->l47_descrecurso)  == ''){
           $this->erro_banco = str_replace("\n", "", @pg_last_error());
           $this->erro_sql = "Verifique a descrição da origem do recurso";
           $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -225,6 +227,9 @@ class cl_liclancedital
   function alterar($l47_sequencial = null)
   {
     $this->atualizacampos();
+    $sQuery = db_query('SELECT l03_pctipocompratribunal FROM liclicita JOIN cflicita ON l03_codigo = l20_codtipocom WHERE l20_codigo = '.$this->l47_liclicita);
+    $tipoTribunal = db_utils::fieldsMemory($sQuery, 0)->l03_pctipocompratribunal;
+
     $virgula = " ";
     $sql = " update liclancedital set ";
     if (trim($this->l47_linkpub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->l47_linkpub"])) {
@@ -232,18 +237,19 @@ class cl_liclancedital
       $virgula = ",";
     }
 
-
-    if (trim($this->l47_origemrecurso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) {
+    if ((trim($this->l47_origemrecurso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_origemrecurso"]))) {
         $sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
         $virgula = ",";
     }else{
-        $this->erro_sql = " Campo Origem Recurso não Informado.";
-        $this->erro_campo = "l47_origemrecurso";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
+          if(in_array($tipoTribunal, array(48, 49, 50, 52, 53, 54))){
+              $this->erro_sql = " Campo Origem Recurso não Informado.";
+              $this->erro_campo = "l47_origemrecurso";
+              $this->erro_banco = "";
+              $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+              $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+              $this->erro_status = "0";
+              return false;
+          }
     }
 
     if ($this->l47_dataenvio != "" || !isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenvio"])) {
@@ -333,7 +339,7 @@ class cl_liclancedital
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql = "liclancedital nao Exclu?do. Exclus?o Abortada.\\n";
+      $this->erro_sql = "liclancedital nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : " . $l20_codigo;
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -343,7 +349,7 @@ class cl_liclancedital
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "liclancedital nao Encontrado. Exclus?o n?o Efetuada.\\n";
+        $this->erro_sql = "liclancedital nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -352,7 +358,7 @@ class cl_liclancedital
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclus?o efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $l47_sequencial;
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

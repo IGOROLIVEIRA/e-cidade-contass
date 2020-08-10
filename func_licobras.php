@@ -87,23 +87,51 @@ $cllicobras = new cl_licobras;
            if(file_exists("funcoes/db_func_licobras.php")==true){
              include("funcoes/db_func_licobras.php");
            }else{
-           $campos = "licobras.oid,licobras.*";
+           $campos = "";
            }
         }
       $ordem = "obr01_sequencial desc";
-      if(isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial)!="") ){
-        $sql = $cllicobras->sql_query($chave_obr01_sequencial,$campos,null,null);
-      }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
-        $sql = $cllicobras->sql_query(null,$campos,null,"obr01_numeroobra = $chave_obr01_numeroobra");
-      }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-        $sql = $cllicobras->sql_query(null,$campos,null,"l20_edital = $chave_l20_edital");
-      }else if(isset($chave_l20_objeto) && (trim($chave_l20_objeto)!="")){
-        $sql = $cllicobras->sql_query(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%'");
-      }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
-        $sql = $cllicobras->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
+
+      if($pesquisa == "true"){
+          $campos = "obr01_sequencial,
+                     obr01_licitacaosistema,
+                     obr01_licitacao,
+                     obr01_linkobra,
+                     obr01_numeroobra,
+                     l20_edital,
+                     l03_descr,
+                     l20_numero,
+                     l20_objeto,
+                     obr01_dtlancamento";
+          if(isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial)!="") ){
+              $sql = $cllicobras->sql_query_pesquisa($chave_obr01_sequencial,$campos,null,null);
+          }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
+              $sql = $cllicobras->sql_query_pesquisa(null,$campos,null,"obr01_numeroobra = $chave_obr01_numeroobra");
+          }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
+              $sql = $cllicobras->sql_query_pesquisa(null,$campos,null,"l20_edital = $chave_l20_edital");
+          }else if(isset($chave_l20_objeto) && (trim($chave_l20_objeto)!="")){
+              $sql = $cllicobras->sql_query_pesquisa(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%'");
+          }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
+              $sql = $cllicobras->sql_query_pesquisa(null,$campos,null,"l20_anousu = $chave_l20_anousu");
+          }else{
+              $sql = $cllicobras->sql_query_pesquisa(null,$campos,$ordem,null);
+          }
       }else{
-        $sql = $cllicobras->sql_query(null,$campos,$ordem,null);
+          if(isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial)!="") ){
+              $sql = $cllicobras->sql_query($chave_obr01_sequencial,$campos,null,null);
+          }else if(isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra)!="")){
+              $sql = $cllicobras->sql_query(null,$campos,null,"obr01_numeroobra = $chave_obr01_numeroobra");
+          }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
+              $sql = $cllicobras->sql_query(null,$campos,null,"l20_edital = $chave_l20_edital");
+          }else if(isset($chave_l20_objeto) && (trim($chave_l20_objeto)!="")){
+              $sql = $cllicobras->sql_query(null,$campos,null,"l20_objeto like '%$chave_l20_objeto%'");
+          }else if(isset($chave_l20_anousu) && (trim($chave_l20_anousu)!="")){
+              $sql = $cllicobras->sql_query(null,$campos,null,"l20_anousu = $chave_l20_anousu");
+          }else{
+              $sql = $cllicobras->sql_query(null,$campos,$ordem,null);
+          }
       }
+
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
@@ -113,7 +141,21 @@ $cllicobras = new cl_licobras;
         echo '</div>';
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $cllicobras->sql_record($cllicobras->sql_query($pesquisa_chave));
+            if($pesquisa == "true"){
+                $campos = "obr01_sequencial,
+                     obr01_licitacaosistema,
+                     obr01_licitacao,
+                     obr01_linkobra,    
+                     obr01_numeroobra,
+                     l20_edital,
+                     l03_descr,
+                     l20_numero,
+                     l20_objeto,
+                     obr01_dtlancamento";
+                $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null,$campos,null,"obr01_sequencial = $pesquisa_chave"));
+            }else{
+                $result = $cllicobras->sql_record($cllicobras->sql_query($pesquisa_chave));
+            }
           if($cllicobras->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$l20_edital','$l03_descr','$l20_numero','$obr01_numeroobra',false);</script>";

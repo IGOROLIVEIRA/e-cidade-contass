@@ -253,30 +253,30 @@ class cl_iderp202020 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
+    //  $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+    //  if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+    //    && ($lSessaoDesativarAccount === false))) {
 
-       $resaco = $this->sql_record($this->sql_query_file($this->si181_sequencial  ));
-       if (($resaco!=false)||($this->numrows!=0)) {
+    //    $resaco = $this->sql_record($this->sql_query_file($this->si181_sequencial  ));
+    //    if (($resaco!=false)||($this->numrows!=0)) {
 
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,2011899,'$this->si181_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011899,'','".AddSlashes(pg_result($resaco,0,'si181_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011865,'','".AddSlashes(pg_result($resaco,0,'si181_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011866,'','".AddSlashes(pg_result($resaco,0,'si181_codorgao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011867,'','".AddSlashes(pg_result($resaco,0,'si181_codfontrecursos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011868,'','".AddSlashes(pg_result($resaco,0,'si181_vlcaixabruta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011869,'','".AddSlashes(pg_result($resaco,0,'si181_vlrspexerciciosanteriores'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011870,'','".AddSlashes(pg_result($resaco,0,'si181_vlrestituiveisrecolher'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011872,'','".AddSlashes(pg_result($resaco,0,'si181_vlrestituiveisativofinanceiro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011910,'','".AddSlashes(pg_result($resaco,0,'si181_vlsaldodispcaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011903,'','".AddSlashes(pg_result($resaco,0,'si181_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010194,2011907,'','".AddSlashes(pg_result($resaco,0,'si181_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-    }
+    //      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+    //      $acount = pg_result($resac,0,0);
+    //      $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+    //      $resac = db_query("insert into db_acountkey values($acount,2011899,'$this->si181_sequencial','I')");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011899,'','".AddSlashes(pg_result($resaco,0,'si181_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011865,'','".AddSlashes(pg_result($resaco,0,'si181_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011866,'','".AddSlashes(pg_result($resaco,0,'si181_codorgao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011867,'','".AddSlashes(pg_result($resaco,0,'si181_codfontrecursos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011868,'','".AddSlashes(pg_result($resaco,0,'si181_vlcaixabruta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011869,'','".AddSlashes(pg_result($resaco,0,'si181_vlrspexerciciosanteriores'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011870,'','".AddSlashes(pg_result($resaco,0,'si181_vlrestituiveisrecolher'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011872,'','".AddSlashes(pg_result($resaco,0,'si181_vlrestituiveisativofinanceiro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011910,'','".AddSlashes(pg_result($resaco,0,'si181_vlsaldodispcaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011903,'','".AddSlashes(pg_result($resaco,0,'si181_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //      $resac = db_query("insert into db_acount values($acount,1010194,2011907,'','".AddSlashes(pg_result($resaco,0,'si181_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+    //    }
+    // }
     return true;
   }
 
