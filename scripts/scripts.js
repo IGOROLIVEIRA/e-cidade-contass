@@ -1,38 +1,5 @@
 // JavaScript Document
 
-  window.onload = status_sistema;
-
-  function status_sistema() {
-    fetch("http://gitlab.contassconsultoria.com.br/api/v4/projects/14/jobs?access_token=No2Nke8Z6R9StpX8Ntru")
-    .then( resp => resp.json())
-    .then( data => {
-      var client = data.filter( (elem, i, data) => {
-       if(elem.name == window.location.hostname.split('.')[0])
-          return data;
-      });
-    if(client[0] != undefined){
-      console.log(client[0].status);
-      console.log(client[0].name);
-      if(client[0].status == 'success'){
-        top.bstatus.document.getElementById("tag").innerHTML = 'atualizado';
-        top.bstatus.document.getElementById("tag").style.background = 'green';
-      }
-      if(client[0].status == 'failed'){
-        top.bstatus.document.getElementById("tag").innerHTML = 'desatualizado';
-        top.bstatus.document.getElementById("tag").style.background = 'red';
-      }
-      if(client[0].status == 'pending'){
-        top.bstatus.document.getElementById("tag").innerHTML = 'atualizando';
-        top.bstatus.document.getElementById("tag").style.background = 'orange';
-      }
-    }
-    else
-      console.log('Cliente não encontrado');
-    })
-  }
-
-  window.setInterval(status_sistema, 5000);
-
 var menu_ordem_geral = 10000;
 
 // Array de Escopo Global para armazenar valores dos INPUTs
