@@ -138,6 +138,11 @@ $sAnd   = "";
 		  $sWhere .= " {$sAnd} ac16_acordosituacao = 1 ";
 		  $sAnd    = " AND ";
       }
+
+	  if ($oGet->assinados == 'true'){
+		  $sWhere .= " {$sAnd} ac16_dataassinatura IS NOT NULL ";
+		  $sAnd    = " AND ";
+	  }
       
       if (!isset($pesquisa_chave)) {
       	
