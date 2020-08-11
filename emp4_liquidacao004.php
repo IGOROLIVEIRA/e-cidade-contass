@@ -747,9 +747,6 @@ switch ($objJson->method) {
     break;
 
     default:
-    // $objJson->method
-    die('metodo utilizado: '.$method);
     echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico);
-    // echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico, $objJson->e50_compdesp);
     break;
   }
