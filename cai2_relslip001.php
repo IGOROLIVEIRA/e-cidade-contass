@@ -94,6 +94,7 @@ function js_emite(){
   qry+= '&codconta='+document.form1.c61_reduz.value;
   qry+= '&tiposlip='+document.form1.tiposlip.value;
   qry+= '&movimento='+document.form1.movimento.value;
+  qry+= '&agrupar='+document.form1.agrupar.value;
   jan = window.open('cai2_relslip002.php?'+qry,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -239,6 +240,22 @@ function js_emite(){
                             <script>
                                 document.getElementById('k145_numeroprocesso').style.width='99.7%';
                             </script>
+                        </tr>
+                        <tr>
+                            <td align="left" nowrap title="Agrupar Por" >
+                                <strong>Agrupar Por:&nbsp;&nbsp;</strong>
+                            </td>
+                            <td colspan='2'>
+                                <? $aAgrupar = array(
+                                        "0"=>"Selecione",
+                                        "1"=>"Credor",
+                                        "2"=>"Conta Débito",
+                                        "3"=>"Conta Crédito");
+                                db_select("agrupar",$aAgrupar,true,2); ?>
+                                <script>
+                                    document.getElementById('agrupar').style.width='50%';
+                                </script>
+                            </td>
                         </tr>
                         <? $aux = new cl_arquivo_auxiliar;
                            $aux->cabecalho = "<strong>Credor</strong>";
