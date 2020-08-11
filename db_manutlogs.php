@@ -27,9 +27,6 @@ require_once("dbforms/db_funcoes.php");
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
-    #fieldsetLogs{
-        width: 50%;
-    }
     #table,#description{
         width: 254px;
     }
