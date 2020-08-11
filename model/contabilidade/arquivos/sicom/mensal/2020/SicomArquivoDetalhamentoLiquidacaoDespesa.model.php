@@ -95,6 +95,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    e60_numemp,
                    e60_codemp,
                    e60_emiss,
+                   e60_datasentenca,
                    e50_compdesp,
                    lpad((CASE
                              WHEN o40_codtri = '0'
@@ -314,6 +315,21 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         throw new Exception($cllqd12->erro_msg);
         }
 
+      } elseif (substr($oDados10->o56_elemento, 0, 7) == '3319091') {
+        
+        $cllqd12 = new cl_lqd122020();
+        $cllqd12->si120_tiporegistro = 12;
+        $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
+        $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;
+        $cllqd12->si120_mescompetencia = substr($oDados10->si118_dtsentenca, 5, 2);
+        $cllqd12->si120_exerciciocompetencia = substr($oDados10->si118_dtsentenca, 0, 4);
+        $cllqd12->si120_vldspexerant = $oDados10->si118_vlliquidado;
+        $cllqd12->si120_mes = $oDados10->si118_mes;
+        $cllqd12->si120_instit = db_getsession("DB_instit");
+        $cllqd12->incluir(null);
+        if ($cllqd12->erro_status == 0) {
+          throw new Exception($cllqd12->erro_msg);
+        }
       }
 
 
