@@ -133,6 +133,11 @@ $sAnd   = "";
         $sWhere .= "{$sAnd} not exists (select 1 from acordoempautoriza where ac45_acordo = ac16_sequencial) ";
         $sAnd    = " and ";
       }
+
+      if ($oGet->ativos == 'true'){
+		  $sWhere .= " {$sAnd} ac16_acordosituacao = 1 ";
+		  $sAnd    = " AND ";
+      }
       
       if (!isset($pesquisa_chave)) {
       	
@@ -188,7 +193,7 @@ $sAnd   = "";
           $repassa = array("chave_ac10_sequencial"=>$chave_ac10_sequencial,
                            "chave_ac10_sequencial"=>$chave_ac10_sequencial);
         }
-        
+
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       } else {
       	
