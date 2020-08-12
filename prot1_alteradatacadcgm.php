@@ -48,9 +48,16 @@ if (isset($oPost->incluir)) {
 	$rsSql = db_query($sSql);
 	$datapat = db_utils::fieldsMemory($rsSql, 0)->c99_datapat;
 
-	if($datapat >= join('-', array_reverse(explode('/', $oPost->z09_datacadastro)))){
+	$dataCadastro = join('-', array_reverse(explode('/', $oPost->z09_datacadastro)));
+
+	if($datapat >= $dataCadastro){
 	    $error = true;
 	    $erro_msg = 'O período patrimonial encontra-se encerrado. Altere a Data de Cadastro do CGM para uma data posterior ou solicite a abertura do período.';
+    }
+
+	if(db_getsession('DB_datausu') < $dataCadastro){
+		$error = true;
+		$erro_msg = 'Não é possível realizar alteração para data futura.';
     }
 
 	if(!$error){
