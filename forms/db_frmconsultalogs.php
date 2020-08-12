@@ -13,6 +13,7 @@
                         $aValores = array(
                             0 => 'Selecione',
                             889 => 'empempenho',
+                            863 => 'pcorcamval'
                             );
                         db_select('tabela', $aValores, true, $db_opcao,"onchange=''");
                     ?>
