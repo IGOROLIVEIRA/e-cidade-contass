@@ -693,8 +693,12 @@ class cl_acordo {
                 return false;
             }
         }
+
         if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
             $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
+            $virgula = ",";
+        }else{
+            $sql  .= $virgula." ac16_dataassinatura = null ";
             $virgula = ",";
         }
 
