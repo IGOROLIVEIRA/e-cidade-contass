@@ -51,13 +51,13 @@ $clmatestoqueitemoc = new cl_matestoqueitemoc;
 $oDaoEmpParam       = db_utils::getDao("empparametro");
 $rsParam            = $oDaoEmpParam->sql_record($oDaoEmpParam->sql_query(db_getsession("DB_anousu")));
 $sDisplay           = 'none';
-if ($oDaoEmpParam->numrows > 0) {
-
-  $oParam           = db_utils::fieldsMemory($rsParam, 0);
-  if ( $oParam->e30_notaliquidacao != '') {
-    $sDisplay = '';
-  }
-}
+//if ($oDaoEmpParam->numrows > 0) {
+//
+//  $oParam           = db_utils::fieldsMemory($rsParam, 0);
+//  if ( $oParam->e30_notaliquidacao != '') {
+//    $sDisplay = '';
+//  }
+//}
 ?>
 <html>
 <head>
