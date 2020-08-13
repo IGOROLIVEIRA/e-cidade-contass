@@ -199,7 +199,7 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     }
 }
 
-$nomefile = "prc_".$pc81_codproc.db_getsession('DB_instit')."xlsx";
+$nomefile = "prc_".$pc81_codproc.'_'.db_getsession('DB_instit').".xlsx";
 
 
     header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

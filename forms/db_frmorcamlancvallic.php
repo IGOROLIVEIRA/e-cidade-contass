@@ -330,6 +330,18 @@ $clrotulo = new rotulocampo;
                                                 <?db_inputdata("pc21_prazoent",@$pc21_prazoent_dia,@$pc21_prazoent_mes,@$pc21_prazoent_ano,true,"text",$db_opcao); ?>
                                             </td>
                                         </tr>
+                                        <tr style="display: none">
+                                           <td>
+                                               <?php
+                                                    $aValores = array(
+                                                        0 => 'Select',
+                                                        1 => 'Não',
+                                                        2 => 'Sim'
+                                                    );
+                                                    db_select('importado', $aValores, true, $db_opcao,"onchange=''");
+                                                ?>
+                                           </td>
+                                        </tr>
                                         <tr>
                                             <td>
                                                 <b>Exportar xls:</b>
@@ -377,7 +389,7 @@ $clrotulo = new rotulocampo;
                         </td>
                     </tr>\n
                     <tr>
-                        <td colspan='2' align='center'
+                        <td colspan='2' align='center'>
                         <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."' ".($db_botao==false?"disabled":"")." onclick='return  js_buscarcod();'>
                         <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"lic1_lancavallic001.php\"'>
                         <input name='importar' type='button' id='importar' value='Valores unitários'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
@@ -387,7 +399,9 @@ $clrotulo = new rotulocampo;
                         <input name='cancdescla' type='button' id='cancdescla' value='Cancelar desclassificacao de itens' onClick='elementos.js_cancdescla($pc20_codorc,$l20_codigo);'>\n";
                     if($voltar==true){
                         echo "
-                        <input name='trocar' type='button' id='trocar' value='Julgar licitação' onclick='document.location.href=\"lic1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&pc21_orcamforne=$pc21_orcamforne&l20_codigo=$l20_codigo\"'>";
+                        <input name='trocar' type='button' id='trocar' value='Julgar licitação' onclick='document.location.href=\"lic1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&pc21_orcamforne=$pc21_orcamforne&l20_codigo=$l20_codigo\"'>
+                        </td>
+                    </tr>";
                     }
                     }else{
                         echo "  
@@ -428,6 +442,10 @@ $clrotulo = new rotulocampo;
         </table>
     </center>
 <script>
+    function resetInport() {
+        document.getElementById('importado').value = 1;
+    }
+
     function js_gerarxlsfornecedor() {
         let codorcamento = document.getElementById('pc20_codorc').value;
         let codorcamforne = document.getElementById('pc21_orcamforne').value;
@@ -473,6 +491,9 @@ $clrotulo = new rotulocampo;
         if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
         }else{
+            var btnincluir = document.getElementById('db_opcao');
+            var importado = document.getElementById('importado');
+
             oRetorno.itens.forEach(function (oItem, iSeq) {
                 var vlrunitem   = 'vlrun_'+oItem.item;
                 var obsitem     = 'obs_'+oItem.item;
@@ -484,6 +505,12 @@ $clrotulo = new rotulocampo;
                 eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
                 eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
             })
+            //setando importado para orçamento;
+            importado.value = 2;
+            //incluindo de forma automatica
+            btnincluir.click();
         }
     }
+        resetInport();
+
 </script>

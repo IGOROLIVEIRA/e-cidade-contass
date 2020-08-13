@@ -207,7 +207,7 @@ if(isset($alterar) || isset($incluir)){
 
         $clpcorcamval->pc23_validmin  = $validmin;
         $clpcorcamval->pc23_vlrun     = $valorunit;
-
+        $clpcorcamval->importado      = $importado;
         $clpcorcamval->incluir($pc21_orcamforne,$orcamitem);
 
         $erro_msg = $clpcorcamval->erro_msg;

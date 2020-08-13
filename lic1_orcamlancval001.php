@@ -312,7 +312,8 @@ if (isset($alterar) || isset($incluir)) {
               $clpcorcamval->pc23_valor      = $orcamval;
               $clpcorcamval->pc23_quant      = $orcamqtd;
               $clpcorcamval->pc23_obs        = $orcammrk;
-                $clpcorcamval->pc23_vlrun    = $valorunit;
+              $clpcorcamval->pc23_vlrun      = $valorunit;
+              $clpcorcamval->importado       = $importado;
               /*OC3770*/
                 if (isset($pc80_criterioadjudicacao) && trim($pc80_criterioadjudicacao) == 1) {
                   $clpcorcamval->pc23_perctaxadesctabela = $valperc;

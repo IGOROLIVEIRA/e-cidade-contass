@@ -507,6 +507,18 @@ $clrotulo = new rotulocampo;
                                     ?>
                                 </td>
                             </tr>
+                            <tr style="display: none">
+                                <td>
+                                    <?php
+                                        $aValores = array(
+                                            0 => 'Select',
+                                            1 => 'Não',
+                                            2 => 'Sim'
+                                        );
+                                        db_select('importado', $aValores, true, $db_opcao,"onchange=''");
+                                    ?>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
                                     <b>Exportar xls:</b>
@@ -577,6 +589,10 @@ $clrotulo = new rotulocampo;
         </table>
     </center>
 <script>
+    function resetInport() {
+        document.getElementById('importado').value = 1;
+    }
+
     function js_gerarxlsfornecedor() {
         let codorcamento = document.getElementById('pc20_codorc').value;
         let codorcamforne = document.getElementById('pc21_orcamforne').value;
@@ -625,6 +641,8 @@ $clrotulo = new rotulocampo;
         if (oRetorno.status == 2) {
             alert(oRetorno.message.urlDecode());
         }else{
+            var btnincluir = document.getElementById('db_opcao');
+            var importado = document.getElementById('importado');
             oRetorno.itens.forEach(function (oItem, iSeq) {
                 var vlrunitem   = 'vlrun_'+oItem.item;
                 var obsitem     = 'obs_'+oItem.item;
@@ -636,6 +654,12 @@ $clrotulo = new rotulocampo;
                 eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
                 eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
             })
+            //setando importado para orçamento;
+            importado.value = 2;
+            //incluindo de forma automatica
+            btnincluir.click();
         }
     }
+
+    resetInport();
 </script>
