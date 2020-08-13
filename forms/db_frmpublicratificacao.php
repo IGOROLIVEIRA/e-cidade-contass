@@ -100,12 +100,20 @@ $clliclicita->rotulo->label();
         $sCampos  = "DISTINCT pc81_codprocitem,pc11_seq,pc11_codigo,pc11_quant,pc11_vlrun,m61_descr,pc01_codmater,pc01_descrmater,pc11_resum";
         $sOrdem   = "pc11_seq";
         $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
-//        var_dump($l20_tipoprocesso);
+
+        $sSqlTipo = 'SELECT l03_pctipocompratribunal
+                        FROM liclicita
+                        JOIN cflicita ON l20_codtipocom = l03_codigo WHERE l20_codigo = '.$l20_codigo;
+
+        $rsTipo = db_query($sSqlTipo);
+        $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal;
+
         if($l20_tipoprocesso != "103" && $l20_tipoprocesso != "102"){
             $sWhere  .= "and pc24_pontuacao = 1";
         }
+
         $sSqlItemLicitacao = $clhomologacaoadjudica->sql_query_itens(null, $sCampos, $sOrdem, $sWhere);
-//        die($sSqlItemLicitacao);
+
         $sResultitens = $clhomologacaoadjudica->sql_record($sSqlItemLicitacao);
         $aItensLicitacao = db_utils::getCollectionByRecord($sResultitens);
         $numrows = $clhomologacaoadjudica->numrows;
