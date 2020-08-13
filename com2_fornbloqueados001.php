@@ -34,6 +34,11 @@ db_postmemory($HTTP_POST_VARS);
 ?>
 
 <html>
+<style>
+    #tipo_fornecedor{
+        width: 100%;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 <center>
   <fieldset style="width: 43%;margin-top: 5%">
@@ -55,6 +60,17 @@ db_postmemory($HTTP_POST_VARS);
 
           </td>
         </tr>
+          <tr >
+              <td align="left" nowrap title="Período" >
+                  <strong>Filtrar por:&nbsp;&nbsp;</strong>
+              </td>
+              <td>
+                  <?php
+                  $aTiposFornecedor = array("t" => "Todos", "a" => "Ativos", "i" => "Inativos");
+                  db_select("tipo_fornecedor", $aTiposFornecedor, true, $db_opcao);
+                  ?>
+			  </td>
+          </tr>
         <tr>
           <td >&nbsp;</td>
           <td >&nbsp;</td>
@@ -90,7 +106,8 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <script>
   function js_emite(){
-    jan = window.open('com2_fornbloqueados002.php?data_ini='+document.form1.data_ini.value+'&data_fim='+document.form1.data_fim.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan = window.open('com2_fornbloqueados002.php?data_ini='+document.form1.data_ini.value+'&data_fim='+document.form1.data_fim.value+
+        '&tipo_fornecedor='+document.form1.tipo_fornecedor.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
   }
 </script>

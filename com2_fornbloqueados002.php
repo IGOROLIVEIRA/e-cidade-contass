@@ -40,6 +40,18 @@ pc60_databloqueio_fim is not null ";
     $head5 = "Período: não informado";
   }
 }
+
+switch ($tipo_fornecedor){
+    case 't':
+        $where .= " AND (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
+        break;
+    case 'a':
+        $where .= " AND pc60_bloqueado = 't'";
+        break;
+    case 'i':
+		$where .= " AND pc60_bloqueado = 'f'";
+		break;
+}
 $head4 = "";
 $head6 = "";
 $mPDF  = new Relatorio('', 'A4'); //RELATORIO LANDSCAPE, PARA PORTRAIT, DEIXE SOMENTE A4
