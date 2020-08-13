@@ -59,6 +59,8 @@ $clrotulo->label("rh01_reajusteparidade");
 $clrotulo->label("rh03_padraoprev");
 $clrotulo->label("r02_descrprev");
 
+const REGIME_CLT = 2;
+
 if(isset($db_opcaoal)){
 
     $db_opcao=33;
@@ -751,9 +753,18 @@ if(isset($db_opcaoal)){
                                     <td title="<?php echo $Trh05_codigoseguranca; ?>">
                                         <?php echo $Lrh05_codigoseguranca; ?>
                                     </td>
-                                    <td colspan="3">
+                                    <td>
                                         <?php db_input('rh05_codigoseguranca', 10, $Irh05_codigoseguranca, true, 'text', $db_opcao); ?>
                                     </td>
+
+                                    <?php if($rh30_regime == REGIME_CLT) { ?>
+                                    <td title="<?php echo $Trh05_saldofgts; ?>" align="right">
+                                        <?php echo $Lrh05_saldofgts; ?>
+                                    </td>
+                                    <td>
+                                        <?php db_input('rh05_saldofgts', 10, $Irh05_saldofgts, true, 'text', $db_opcao); ?>
+                                    </td>
+                                    <?php } ?>
                                 </tr>
 
                                 <tr>

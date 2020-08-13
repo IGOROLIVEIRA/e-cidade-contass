@@ -201,7 +201,7 @@ teste-pmsaofrancisco:
 
 # ----------------------------------- AMBIENTES DE PRODUÇÃO -------------------------------------
 
-cmbh:
+cmbhecid:
     stage: deploy
     script:
         - 'ssh-add <(echo "$STAGING_PRIVATE_KEY")'

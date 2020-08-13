@@ -196,7 +196,8 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
-                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+//                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+				$campos .= ', l08_descr as dl_SituaÁ„o';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratos(null," " . $campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -246,7 +247,7 @@ $sWhereContratos = " and 1 = 1 ";
                             db_fieldsmemory($result,0);
                             echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
                         }else{
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n√£o Encontrado',true);</script>";
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n„o Encontrado',true);</script>";
                         }
                     } else {
                         $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
@@ -259,7 +260,7 @@ $sWhereContratos = " and 1 = 1 ";
 
                         } else {
 
-                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n√£o Encontrado',true);</script>";
+                            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n„o Encontrado',true);</script>";
                         }
                     }
 
