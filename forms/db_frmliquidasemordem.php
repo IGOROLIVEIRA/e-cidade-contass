@@ -141,6 +141,12 @@ if (USE_PCASP) {
             <td><?db_input('e69_numnota', 13, '', true, 'text', 1); ?></td>
             <td nowrap><b>Data da Nota:</b></td>
             <td><?db_inputData('e69_dtnota', '', '','', true, 'text', 1); ?></td>
+            <!-- OC 12746 -->
+            <td nowrap id="competDespLabel" style="display: none"><b>Competência da Despesa: </b></td>
+            <td style="display: none" id="competDespInput">
+               <?db_inputData('e50_compdesp', '', '', '', true, 'text', 1); ?>
+               <input type="hidden" name="sEstrutElemento" id="sEstrutElemento"/>
+            </td>
           </tr>
 
           <tr>
@@ -564,13 +570,26 @@ function js_saida(oAjax) {
     $('saldodis').value    = obj.saldo_dis;
     $('e69_numnota').value = '';
     $('e69_dtnota').value  = '<?=$db_data;?>';
+    $('sEstrutElemento').value = obj.sEstrutural;
     saida = '';
     $('dados').innerHTML   = '';
     iTotItens = 0;
+    estrutural             = obj.sEstrutural;
+    $('e50_compdesp').value = '';
 
     var lBloquearItens = false;
     if (obj.e60_vlremp == obj.e60_vlrpag) {
       lBloquearItens = true;
+    }
+
+    aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
+        
+    if (aMatrizEntrada.indexOf(estrutural) !== -1) {
+        document.getElementById('competDespLabel').style.display = "table-cell";
+        document.getElementById('competDespInput').style.display = "table-cell";
+    } else {
+        document.getElementById('competDespLabel').style.display = "none";
+        document.getElementById('competDespInput').style.display = "none";
     }
 
     if (obj.numnotas > 0){
@@ -882,6 +901,18 @@ function js_liquidar(metodo) {
        iTipoDocumentoFiscal = 4;
      }
 
+    aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
+       
+    if (aMatrizEntrada.indexOf($F('sEstrutElemento')) !== -1) {
+    
+        if ($F('e50_compdesp') == ''){
+            alert('Campo Competência da Despesa deve ser informado.');
+            $('e50_compdesp').focus();
+            $('pesquisar').disabled = false;
+            $('confirmar').disabled = false;
+            return false;
+        }
+    }
 
     /* Extensao [CotaMensalLiquidacao] - Parte 4 */
 
@@ -917,6 +948,7 @@ function js_liquidar(metodo) {
          oParam.cgm = $F('e60_numcgm');
          oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
          oParam.verificaChave = 1;
+         oParam.e50_compdesp = $F('e50_compdesp');
          
 
      var oInfoNota                      = new Object();

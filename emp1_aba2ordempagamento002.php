@@ -44,11 +44,13 @@ $clrotulo->label("e60_codemp");
 $clrotulo->label("e60_numemp");
 $clrotulo->label("e50_codord");
 $clrotulo->label("e50_obs");
+// $clrotulo->label("e50_compdesp");
 
 $clpagordem->rotulo->label("e60_codemp");
 $clpagordem->rotulo->label("e60_numemp");
 $clpagordem->rotulo->label("e50_codord");
 $clpagordem->rotulo->label("e50_obs");
+// $clpagordem->rotulo->label("e50_compdesp");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
