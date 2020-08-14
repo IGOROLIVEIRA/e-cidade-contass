@@ -73,8 +73,8 @@ class GerarCONTRATOS extends GerarAM {
         $aCSVCONTRATOS10['si83_exerciciocontrato']            =   str_pad($aCONTRATOS10['si83_exerciciocontrato'], 4, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS10['si83_dataassinatura']               =   implode("", array_reverse(explode("-", $aCONTRATOS10['si83_dataassinatura'])));
         $aCSVCONTRATOS10['si83_contdeclicitacao']             =   str_pad($aCONTRATOS10['si83_contdeclicitacao'], 1, "0", STR_PAD_LEFT);
-        $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : $aCONTRATOS10['si83_codorgaoresp'];
-        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   $aCONTRATOS10['si83_codunidadesubresp'];
+        $aCSVCONTRATOS10['si83_codorgaoresp']                 =   $aCONTRATOS10['si83_codorgaoresp'] == 0 ? ' ' : str_pad($aCONTRATOS10['si83_codorgaoresp'], 2, '0', STR_PAD_LEFT);
+        $aCSVCONTRATOS10['si83_codunidadesubresp']            =   str_pad($aCONTRATOS10['si83_codunidadesubresp'], 5, '0', STR_PAD_LEFT);
         $aCSVCONTRATOS10['si83_nroprocesso']                  =   substr($aCONTRATOS10['si83_nroprocesso'], 0, 12);
         $aCSVCONTRATOS10['si83_exercicioprocesso']            =   $aCONTRATOS10['si83_exercicioprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_exercicioprocesso'];
         $aCSVCONTRATOS10['si83_tipoprocesso']                 =   $aCONTRATOS10['si83_tipoprocesso'] == 0 ? ' ' : $aCONTRATOS10['si83_tipoprocesso'];

@@ -117,7 +117,9 @@ switch ($oParam->exec) {
         $oReceitaPlanilha = new ReceitaPlanilha();
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar($oReceitas->iCaracteriscaPeculiar));
         $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($iNumeroCgm));
-        $oReceitaPlanilha->setContaTesouraria(new contaTesouraria($oReceitas->iContaTesouraria));
+        $oContaTesouraria = new contaTesouraria($oReceitas->iContaTesouraria);
+        $oContaTesouraria->validaContaPorDataMovimento($dtArrecadacao);
+        $oReceitaPlanilha->setContaTesouraria($oContaTesouraria);
         $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceitas->dtRecebimento));
         $oReceitaPlanilha->setInscricao($iInscricao);
         $oReceitaPlanilha->setMatricula($iMatricula);
