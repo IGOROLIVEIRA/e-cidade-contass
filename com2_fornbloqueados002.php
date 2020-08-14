@@ -35,8 +35,8 @@ if($data_ini != "" && $data_fim != ""){
     $where = "pc60_databloqueio_fim <= '{$dataFinal}'";
     $head5 = "Período: até {$data_fim}";
   }else{
-    $where = " pc60_bloqueado = 't' or pc60_databloqueio_ini is not null or
-pc60_databloqueio_fim is not null ";
+    $where = " (pc60_databloqueio_ini is not null or
+pc60_databloqueio_fim is not null) ";
     $head5 = "Período: não informado";
   }
 }
