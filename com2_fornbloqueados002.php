@@ -46,10 +46,10 @@ switch ($tipo_fornecedor){
         $where .= " AND (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
         break;
     case 'a':
-        $where .= " AND pc60_bloqueado = 't'";
+        $where .= " AND pc60_bloqueado = 'f'";
         break;
     case 'i':
-		$where .= " AND pc60_bloqueado = 'f'";
+		$where .= " AND pc60_bloqueado = 't'";
 		break;
 }
 $head4 = "";
