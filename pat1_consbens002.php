@@ -131,15 +131,19 @@ if ($oBem->getCedente() != null) {
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
 <style type='text/css'>
-.valores {background-color:#FFFFFF}
+    .valores {
+        background-color:#FFFFFF
+    }
+
     table{
         width: 100%;
     }
-    tr:first-child td:last-child{
+
+    tr:first-child td:nth-last-of-type(1){
         text-align: center;
     }
 
-    tr:first-child td:last-child img{
+    tr:first-child td:nth-last-of-type(1) img{
         width: 166px;
         height: 166px;
         border: 0;
@@ -204,6 +208,7 @@ if ($oBem->getCedente() != null) {
             <?else: ?>
                 <p style="color:red;"><b>Nenhuma imagem principal selecionada.</b></p>
             <?endif;?>
+            <p><b>Quantidade:</b> <?=count($oBem->getFotos());?> Fotos.</p>
         </td>
       </tr>
 
