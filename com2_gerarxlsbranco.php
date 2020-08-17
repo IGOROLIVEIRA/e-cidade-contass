@@ -198,6 +198,39 @@ for ($i = 0; $i < $numrows_itens; $i ++){
         $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }
 }
+$styleTotal = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+    ),
+);
+
+//ultima linha itens
+$lastCell = 'J'.($numrows_itens + 6);
+
+//linha texto valor total
+$totalCellH = 'H'.($numrows_itens + 7);
+$totalCellI = 'I'.($numrows_itens + 7);
+
+//linha valor total
+$totalCellJ = 'J'.($numrows_itens + 7);
+$totalCellK = 'K'.($numrows_itens + 7);
+
+$sheet->getStyle($totalCellI.':'.$totalCellJ)->applyFromArray($styleTotal);
+
+$sheet->setCellValue($totalCellI,'Valor Total:');
+
+//valor Total
+$sheet->setCellValue($totalCellJ,'=SUM(J7:'.$lastCell.')');
+$sheet->getStyle($totalCellJ)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 $nomefile = "prc_".$pc81_codproc.'_'.db_getsession('DB_instit').".xlsx";
 
