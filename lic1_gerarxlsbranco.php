@@ -156,6 +156,7 @@ $sheet->getProtection()->setSheet(true);
 $sheet->getProtection()->setSort(true);
 $sheet->getProtection()->setInsertRows(true);
 $sheet->getProtection()->setFormatCells(true);
+$sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 $sheet->getStyle('E4')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 $sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 

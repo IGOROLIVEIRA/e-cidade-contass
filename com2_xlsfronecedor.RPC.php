@@ -52,19 +52,18 @@ switch($oParam->exec) {
                 }
             }
             //valido cgccpf do fornecedor
-
             if($z01_cgccpf != $dataArr[4][5]){
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha difetente do CPF/CNPJ do fornecedor.");
+                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[4][5]." difetente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
                 $erro = true;
             }
             //valido codigo do orcamento do fornecedor
 
-            if($pc21_orcamforne != $dataArr[3][5]){
-                $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
-                $erro = true;
-            }
+//            if($pc21_orcamforne != $dataArr[3][5]){
+//                $oRetorno->status = 2;
+//                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
+//                $erro = true;
+//            }
 
             $arrayItensPlanilha = array();
             foreach ($dataArr as $keyRow => $Row){
@@ -133,16 +132,16 @@ switch($oParam->exec) {
 
             if($z01_cgccpf != $dataArr[4][5]){
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha difetente do CPF/CNPJ do fornecedor.");
+                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[4][5]." difetente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
                 $erro = true;
             }
             //valido codigo do orcamento do fornecedor
 
-            if($pc21_orcamforne != $dataArr[3][5]){
-                $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
-                $erro = true;
-            }
+//            if($pc21_orcamforne != $dataArr[3][5]){
+//                $oRetorno->status = 2;
+//                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
+//                $erro = true;
+//            }
 
             $arrayItensPlanilha = array();
             foreach ($dataArr as $keyRow => $Row){
