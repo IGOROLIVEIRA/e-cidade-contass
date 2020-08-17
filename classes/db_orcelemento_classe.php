@@ -1054,6 +1054,55 @@ class cl_orcelemento {
      return $sql;
   }
 
+  /**
+   * OC 12746
+   * Método criado para encontrar estruturais da despesa a partir do empenho.
+   *
+   * @param [type] $anousu
+   * @param string $campos
+   * @param [type] $ordem
+   * @param string $dbwhere
+   * @return void
+   */
+  function sql_query_estrut_empenho($anousu = null, $campos="*", $ordem=null, $dbwhere=""){
+
+    $sql = "SELECT ";
+    if($campos != "*" ) {
+
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+
+    $sql .= " FROM orcelemento ";
+    $sql .= " INNER JOIN empelemento ON o56_codele = e64_codele ";
+    $sql .= " INNER JOIN empempenho ON (e64_numemp, e60_anousu)  = (e60_numemp, o56_anousu) ";
+
+    $sql2 = "";
+    if($dbwhere != "") {
+      $sql2 = " WHERE $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ) {
+
+      $sql .= " ORDER BY ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
 
   function sql_query_plano_contas_execucao($anousu, $campos="*",$ordem=null,$dbwhere=""){
 
