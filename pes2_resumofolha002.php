@@ -248,7 +248,7 @@ try {
   $sCampos         .= "{$sCampoCondicaoTipoRelatorio}   as agrupador_codigo,     ";
   $sCampos         .= "{$sCampoEstruturalTipoRelatorio} as agrupador_estrutural, ";
   $sCampos         .= "{$sCampoDescricaoTipoRelatorio}  as agrupador_descricao   ";
-  $sAgrupamento     = "rh01_regist, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
+  $sAgrupamento     = "rh01_regist,rh02_anousu,rh02_mesusu, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
   $sAgrupamento     = $oParametros->iTipoRelatorio == TIPO_RELATORIO_GERAL ? "" : $sAgrupamento;
 
   $sSqlServidores   = $oDaoRhPessoalMov->sql_query_baseServidores($oParametros->iMes,
