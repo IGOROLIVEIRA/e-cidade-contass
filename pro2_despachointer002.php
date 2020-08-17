@@ -49,14 +49,12 @@ $sTipoDespacho       = "Despacho";
 
 $result_procandamint = $clprocandamint->sql_record($clprocandamint->sql_query_sim($codprocandamint));
 
-//echo $clprocandamint->sql_query_sim($codprocandamint);exit;
-
 if ( $clprocandamint->numrows > 0 ) {
   db_fieldsmemory($result_procandamint, 0);
     $oNumeroProcesso = db_utils::fieldsMemory($result_procandamint, 0);
-    $data = $oNumeroProcesso->p78_data;
-    $hora = $oNumeroProcesso->p78_hora;
-    //$usuarios = $oNumeroProcesso->nome;
+    $dataand = $oNumeroProcesso->p78_data;
+    $horaand = $oNumeroProcesso->p78_hora;
+    $usuario = $oNumeroProcesso->nome;
     $despacho      = $p78_despacho;
   $sTipoDespacho = $p100_descricao;
 
