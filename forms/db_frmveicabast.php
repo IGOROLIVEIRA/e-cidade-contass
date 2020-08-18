@@ -110,7 +110,7 @@ db_app::load("estilos.css");
               </td>
               <td>
                 <?
-                db_input('ve73_veicretirada', 10, $Ive73_veicretirada, true, 'text', $db_opcao, " onchange='js_pesquisave73_veicretirada(false);'")
+                db_input('ve73_veicretirada', 10, $Ive73_veicretirada, true, 'text', 3, " onchange='js_pesquisave73_veicretirada(false);'")
                 ?>
               </td>
             </tr>
