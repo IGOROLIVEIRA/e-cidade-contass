@@ -233,7 +233,7 @@ $sheet->getStyle($totalCellI.':'.$totalCellJ)->applyFromArray($styleTotal);
 $sheet->setCellValue($totalCellI,'Valor Total:');
 
 //valor Total
-$sheet->setCellValue($totalCellJ,'=SUM(J7:'.$lastCell.')');
+$sheet->setCellValue($totalCellJ,'=SUMA(J7:'.$lastCell.')');
 $sheet->getStyle($totalCellJ)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 $nomefile = "prc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
 
