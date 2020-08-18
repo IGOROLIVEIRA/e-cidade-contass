@@ -42,6 +42,18 @@ require_once("libs/db_app.utils.php");
   font-size: 12px;
   color: #000000;
 }
+
+#status {
+  margin-top: -20px;
+  font-weight: bold;
+}
+
+#tag {
+    padding: 5px;
+    color: white;
+    border-radius: 15%;
+    display: inline-block;
+}
 -->
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -75,7 +87,7 @@ function js_mostra_log(tipo){
 </script>
 <?php db_app::load("scripts.js, strings.js, prototype.js, estilos.css"); 
 
-
+vz
 
 ?>
 </head>
@@ -85,6 +97,10 @@ function js_mostra_log(tipo){
   <tr>
     <td width="533" align="left" valign="middle" class="tab" id="st" ></td>
     <!--<td width="10" align="left" valign="middle" class="tab" id="log" onmouseover="js_mostra_log(true)" onmouseout="js_mostra_log(false)" ><strong>Logs</strong></td>-->
+    <!-- <td width="150"  align="left" valign="middle" class="tab>
+          <span id="status">Status </span>
+          <span id="tag"></span>
+    </td> -->
     <td width="30"  align="left" valign="middle" class="tab" ><strong>Data:&nbsp</strong></td>
     <td width="80"  align="center" valign="middle" class="tab" id="dtatual" style="color:red; font-weight: bold; "></td>
     <td width="60"  align="left" valign="middle" class="tab" ><strong>Exercício:&nbsp</strong></td>
@@ -117,6 +133,7 @@ function js_mostra_log(tipo){
 ?>
 
 <script>  
+
   $("dtatual").observe("click", function() {
 
      js_OpenJanelaIframe( "top.corpo", 

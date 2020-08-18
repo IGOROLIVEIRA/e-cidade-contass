@@ -92,7 +92,7 @@ $db_botao = true;
                   </td>
                   <td>
                     <?
-                    db_input('edital',10,'',true,'text',3,"onchange='';");
+                    db_input('edital',10,'',true,'text',3,"");
                     db_input('objeto',45,'',true,'text',3,"");
                     ?>
                   </td>
@@ -103,7 +103,7 @@ $db_botao = true;
                   </td>
                   <td>
                     <?
-                    db_input('tipo_tribunal',10,'',true,'text',3,"onchange='';");
+                    db_input('tipo_tribunal',10,'',true,'text',3,"");
                     db_input('descr_tribunal',45,'',true,'text',3,"");
                     ?>
                   </td>

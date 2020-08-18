@@ -107,11 +107,11 @@ try {
 			  
 				$sWhere      .= "and k00_numpar = (case when exists (select 1 
                                                                     from recibo 
-                                                              where k00_numpre =  8438925
+                                                              where k00_numpre =  {$oParametros->iNumpre}
                                                               union
                                                               select 1 
                                                                 from recibopaga 
-                                                               where k00_numnov = 8438925)
+                                                               where k00_numnov = {$oParametros->iNumpre})
                                                      then 0
                                                 else {$oParametros->iNumpar}
 								                       		 END

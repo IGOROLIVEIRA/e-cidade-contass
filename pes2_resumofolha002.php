@@ -244,11 +244,11 @@ try {
   $oDaoRhPessoalMov = db_utils::getDao("rhpessoalmov");
   $iInstituicao     = db_getsession('DB_instit');
   $sWhere           = implode(' and ', $aWhere);
-  $sCampos          = "distinct rh01_regist,                                     ";
+  $sCampos          = "distinct rh01_regist,rh02_anousu,rh02_mesusu,             ";
   $sCampos         .= "{$sCampoCondicaoTipoRelatorio}   as agrupador_codigo,     ";
   $sCampos         .= "{$sCampoEstruturalTipoRelatorio} as agrupador_estrutural, ";
   $sCampos         .= "{$sCampoDescricaoTipoRelatorio}  as agrupador_descricao   ";
-  $sAgrupamento     = "rh01_regist, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
+  $sAgrupamento     = "rh01_regist,rh02_anousu,rh02_mesusu, {$sCampoCondicaoTipoRelatorio}, {$sCampoDescricaoTipoRelatorio}, {$sCampoEstruturalTipoRelatorio}";
   $sAgrupamento     = $oParametros->iTipoRelatorio == TIPO_RELATORIO_GERAL ? "" : $sAgrupamento;
 
   $sSqlServidores   = $oDaoRhPessoalMov->sql_query_baseServidores($oParametros->iMes,
@@ -257,7 +257,10 @@ try {
                                                                   $sCampos,
                                                                   $sWhere,
                                                                   "agrupador_codigo",
-                                                                  $sAgrupamento);
+                                                                  $sAgrupamento,
+                                                                  $oParametros->iMesFinal,
+                                                                  $oParametros->iAnoFinal
+                                                                );
   $rsServidores = db_query($sSqlServidores);
 
   if ( !$rsServidores ) {
@@ -284,7 +287,7 @@ try {
       continue;
     }
 
-    $oServidor = ServidorRepository::getInstanciaByCodigo( $oDadosPesquisados->rh01_regist, $oParametros->iAno, $oParametros->iMes);
+    $oServidor = ServidorRepository::getInstanciaByCodigo( $oDadosPesquisados->rh01_regist, $oDadosPesquisados->rh02_anousu, $oDadosPesquisados->rh02_mesusu);
     /**
      * descricao do agrupador
      */
@@ -374,6 +377,9 @@ try {
 
   $head1 = "RESUMO DA FOLHA DE PAGAMENTO ";
   $head5 = "PERÍODO : {$oParametros->iMes} / {$oParametros->iAno}";
+  if (!empty($oParametros->iMesFinal)) {
+    $head5 .= " à {$oParametros->iMesFinal} / {$oParametros->iAnoFinal}";
+  }
   $head6 = "VINCULO : {$sTituloVinculo}";
   $head7 = "TIPO FOLHA : {$sTipoFolhas}";
 

@@ -54,6 +54,7 @@ class empenho {
   private $sCamposNotas     = "";
   private $lEncode          = false;
   private $iCodigoMovimento = null;
+  public  $iCompDesp        = null;
   public $sMsgErro = '';
   function empenho() {
 
@@ -104,6 +105,10 @@ class empenho {
     }
   }
 
+  function setCompDesp($iCompDesp){
+      $this->iCompDesp = $iCompDesp;
+  }
+
   function getRecriarSaldo(){
 
     return $this->lRecriarReserva;
@@ -131,7 +136,8 @@ class empenho {
     return $this->lEncode;
   }
 
-  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='') {
+
+  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='') {    
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
       $this->erro_status = '0';
@@ -376,7 +382,7 @@ class empenho {
     if ($sHistoricoOrdem == "") {
       $sHistoricoOrdem = $historico;
     }
-    $this->lancaOP($numemp, $codele, $codnota, $valor, null, $sHistoricoOrdem);
+    $this->lancaOP($numemp, $codele, $codnota, $valor, null, $sHistoricoOrdem, $iCompDesp);
 
 
     if ($this->erro_status != '0') {
@@ -1104,7 +1110,7 @@ class empenho {
    *  gera registros como se fosse ordem de pagamento (OP)
    *
    */
-  private function lancaOP($numemp = "", $codele = "", $codnota = "", $valor = "", $retencoes = "", $historico) {
+  private function lancaOP($numemp = "", $codele = "", $codnota = "", $valor = "", $retencoes = "", $historico, $iCompDesp = '') {
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
       $this->erro_status = '0';
@@ -1125,6 +1131,7 @@ class empenho {
     $clpagordem->e50_id_usuario = db_getsession("DB_id_usuario");
     $clpagordem->e50_hora       = date("H:m", db_getsession("DB_datausu"));
     $clpagordem->e50_anousu     = $this->anousu;
+    $clpagordem->e50_compdesp   = $iCompDesp;
     $clpagordem->incluir($clpagordem->e50_codord);
     if ($clpagordem->erro_status == 0) {
 
@@ -1617,6 +1624,7 @@ class empenho {
                 "pc01_descrmater"   => urlencode($objNotas->pc01_descrmater),
                 "e62_sequen"        => $objNotas->e62_sequen,
                 "e62_sequencial"    => $objNotas->e62_sequencial,
+                "e62_item"          => $objNotas->e62_item,
                 "saldo"             => $objNotas->saldo,
                 "e62_vlrun"         => $objNotas->e62_vlrun,
                 "pc01_fraciona"     => $objNotas->pc01_fraciona,
@@ -1647,7 +1655,7 @@ class empenho {
    * @param string [historico] historico do procedimento
    * @return boolean;
    */
-  function liquidarAjax($iEmpenho,$aNotas, $sHistorico = ''){
+  function liquidarAjax($iEmpenho,$aNotas, $sHistorico = '', $iCompDesp = ''){
 
     (boolean)$this->lSqlErro = false;
     (string) $this->sMsgErro = false;
@@ -1702,7 +1710,7 @@ class empenho {
         //trata string
         $sHistorico = addslashes(stripslashes($sHistorico));
 
-        $this->liquidar($iEmpenho, $objEmpElem->e64_codele, $objNota->e69_codnota, $objNota->e70_valor, $sHistorico);
+        $this->liquidar($iEmpenho, $objEmpElem->e64_codele, $objNota->e69_codnota, $objNota->e70_valor, $sHistorico, '', $iCompDesp);
         if ($this->erro_status == "0"){
 
           $this->lSqlErro = true;
@@ -1957,6 +1965,7 @@ class empenho {
     $sqlItensEmpenho .= "       pc01_fraciona,";
     $sqlItensEmpenho .= "       riseqitem as e62_sequen,";
     $sqlItensEmpenho .= "       ricoditem as e62_sequencial,";
+    $sqlItensEmpenho .= "       (select e62_item from empempitem where e62_sequencial = ricoditem) as e62_item,";
     $sqlItensEmpenho .= "       rnsaldoitem as saldo, ";
     $sqlItensEmpenho .= "       rnvalorini as e62_vltot, ";
     $sqlItensEmpenho .= "       rnsaldovalor as saldovalor, ";
@@ -1981,7 +1990,7 @@ class empenho {
    *  @return recordset;
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
-                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null){
+                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null, $iCompDesp = ''){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2310,7 +2319,7 @@ class empenho {
     }
     if ($lLiquidar && !$this->lSqlErro){
 
-      $this->liquidar($this->numemp, $objEmpElem->e64_codele, $objEmpNota->e69_codnota, $nTotal,$sHistorico);
+      $this->liquidar($this->numemp, $objEmpElem->e64_codele, $objEmpNota->e69_codnota, $nTotal,$sHistorico, '', $iCompDesp);
       if ($this->erro_status == "0"){
 
         $this->lSqlErro = true;

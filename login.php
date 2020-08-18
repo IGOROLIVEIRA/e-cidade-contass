@@ -31,6 +31,7 @@ require_once("libs/smtp.class.php");
 $oSkin = new SkinService();
 $oSkin->setCookie();
 echo('<h3 style="color:white">Recomenda-se utilizar o Mozila FireFox Versão 66.0 para garantia da plena execução do sistema</h3>');
+
 /**
  * Busca preferencias para verificar qual class
  * de imagem de fundo será utilizada
@@ -166,6 +167,7 @@ if ( $lValidaLogin ) {
 
 ?>
 <script type="text/javascript">
+
   function js_logaComTeclaEnter(evt) {
 
     var evt = (evt) ? evt : (window.event) ? window.event : "";

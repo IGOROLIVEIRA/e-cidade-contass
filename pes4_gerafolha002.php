@@ -247,7 +247,7 @@ db_selectmax("carregarubricas","select * from rhrubricas where rh27_instit = $DB
       
 for($Icarregar=0;$Icarregar<count($carregarubricas);$Icarregar++){
 
-  $r10_pd = db_boolean( $carregarubricas[$Icarregar]["rh27_pd"] );
+  $r10_pd = $carregarubricas[$Icarregar]["rh27_pd"];
   $formula = $carregarubricas[$Icarregar]["rh27_form"];
   
   if( db_empty($formula)){

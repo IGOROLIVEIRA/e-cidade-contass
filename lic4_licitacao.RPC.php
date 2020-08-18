@@ -769,5 +769,23 @@ switch ($oParam->exec) {
     $oDados = db_utils::fieldsMemory($rsLicEdital, 0);
     $oRetorno->dadosLicitacao = $oDados;
     break;
+
+	case 'findTipos':
+		$sSql = "
+			SELECT DISTINCT l03_pctipocompratribunal,
+                			l03_codcom
+					FROM liclicita
+					INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+					INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+					INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+					WHERE liclicita.l20_codigo = $oParam->iLicitacao
+		";
+
+		$oDaoLicitacao = db_utils::getDao('liclicita');
+		$rsSql = $oDaoLicitacao->sql_record($sSql);
+		$oDados = db_utils::fieldsMemory($rsSql, 0);
+		$oRetorno->dadosLicitacao = $oDados;
+	break;
+
 }
 echo $oJson->encode($oRetorno);

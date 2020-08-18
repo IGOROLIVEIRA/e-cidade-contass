@@ -575,6 +575,7 @@ class lancamentoContabil {
 
       //restos a pagar.;
       case 4  :
+      case 25 : // Estorno de liquidacao - documento criado OC12836
       case 85 : // Estorno de Liquidacao Passivo
       case 307: // ESTORNO DA LIQUIDACAO DA PROVISAO DE FERIAS
       case 311: // ESTORNO DA LIQUIDACAO DA PROVISAO DE 13º SALARIO
