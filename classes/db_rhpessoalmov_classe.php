@@ -1546,7 +1546,7 @@ class cl_rhpessoalmov {
 
     }
 
-    function sql_query_baseServidores( $iMesFolha, $iAnoFolha, $iInstituicao, $sCampos = "", $sWhere = "", $sOrdem = "", $sAgrupamento = ""  ) {
+    function sql_query_baseServidores( $iMesFolha, $iAnoFolha, $iInstituicao, $sCampos = "", $sWhere = "", $sOrdem = "", $sAgrupamento = "", $iMesFinal = NULL, $iAnoFinal = NULL  ) {
 
         if ( empty($sCampos) ) {
             $sCampos = "*";
@@ -1594,9 +1594,12 @@ class cl_rhpessoalmov {
         $sSQLBase.= "                  ) as rhipe           on rh01_regist                   = rhipe.rh62_regist                    \n";
         $sSQLBase.= "       left  join rhinstrucao          on rhinstrucao.rh21_instru       = rhpessoal.rh01_instru                \n";
         $sSQLBase.= "       left  join rhestcivil           on rhestcivil.rh08_estciv        = rhpessoal.rh01_estciv                \n";
-
-        $sSQLBase.= " where rh02_anousu = $iAnoFolha                                                                                \n";
-        $sSQLBase.= "   and rh02_mesusu = $iMesFolha                                                                                \n";
+        if (empty($iMesFinal)) {
+            $sSQLBase.= " where rh02_anousu = $iAnoFolha                                                                                \n";
+            $sSQLBase.= "   and rh02_mesusu = $iMesFolha                                                                                \n";
+        } else {
+            $sSQLBase.= " where fc_anousu_mesusu(rh02_anousu,rh02_mesusu) between fc_anousu_mesusu($iAnoFolha, $iMesFolha) and fc_anousu_mesusu($iAnoFinal, $iMesFinal)  \n";
+        }
         $sSQLBase.= "   and rh02_instit = $iInstituicao                                                                             \n";
         if ( !empty($sWhere) ) {
             $sSQLBase.= "   and {$sWhere}                                                                                             \n";

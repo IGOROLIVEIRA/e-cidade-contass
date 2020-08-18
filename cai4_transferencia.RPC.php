@@ -156,6 +156,19 @@ switch ($oParam->exec) {
         $iCodigoSlip = $oParam->k17_codigo;
       }
 
+      if ( in_array($oParam->iCodigoTipoOperacao, array(5, 7, 11)) ) {
+          
+          $oContaTesouraria = new contaTesouraria($oParam->k17_debito);
+          $oContaTesouraria->validaContaPorDataMovimento(date("Y-m-d",db_getsession("DB_datausu")), 1);
+
+          if ($oParam->iCodigoTipoOperacao == 5) {
+
+              $oContaTesouraria = new contaTesouraria($oParam->k17_credito);
+              $oContaTesouraria->validaContaPorDataMovimento(date("Y-m-d",db_getsession("DB_datausu")), 2);              
+
+          }
+      }
+
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $iCodigoSlip);
       $oTransferencia->setContaDebito($oParam->k17_debito);
       $oTransferencia->setContaCredito($oParam->k17_credito);
