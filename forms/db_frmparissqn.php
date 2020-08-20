@@ -450,6 +450,19 @@ fieldset fieldset table tr td:first-child {
 				  ?>
 				</td>
 			</tr>
+		<tr id="tipodebitonotaavulsa">
+			<td>
+				<?
+				db_ancora(@$Lq60_tipo_notaavulsa,"js_pesquisaq60_tipo_notaavulsa(true);",$db_opcao);
+				?>
+			</td>
+			<td>
+				<?
+				db_input('q60_tipo_notaavulsa', 10, $Iq60_tipo_notaavulsa, true, 'text', $db_opcao, " onchange='js_pesquisaq60_tipo_notaavulsa(false);'");
+				db_input('k00_descr_notaavulsa', 40, $Ik00_descr, true, 'text', 3, '');
+				?>
+			</td>
+		</tr>
 		</table>
   </fieldset>
 
@@ -705,6 +718,19 @@ function js_pesquisaq60_tipo(mostra){
   }
 }
 
+function js_pesquisaq60_tipo_notaavulsa(mostra){
+
+	if(mostra==true){
+		js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo_notaavulsa1|k00_tipo|k00_descr','Pesquisa',true);
+	}else{
+		if(document.form1.q60_tipo_notaavulsa.value != ''){
+			js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.q60_tipo_notaavulsa.value+'&funcao_js=parent.js_mostraarretipo_notaavulsa','Pesquisa',false);
+		}else{
+			document.form1.k00_descr_notaavulsa.value = '';
+		}
+	}
+}
+
 function js_mostraarretipo(chave,erro){
 
   document.form1.k00_descr.value = chave;
@@ -719,6 +745,22 @@ function js_mostraarretipo1(chave1,chave2){
   document.form1.q60_tipo.value  = chave1;
   document.form1.k00_descr.value = chave2;
   db_iframe_arretipo.hide();
+}
+
+function js_mostraarretipo_notaavulsa(chave,erro){
+
+	document.form1.k00_descr_notaavulsa.value = chave;
+	if(erro==true){
+		document.form1.q60_tipo_notaavulsa.focus();
+		document.form1.q60_tipo_notaavulsa.value = '';
+	}
+}
+
+function js_mostraarretipo_notaavulsa1(chave1,chave2){
+
+	document.form1.q60_tipo_notaavulsa.value  = chave1;
+	document.form1.k00_descr_notaavulsa.value = chave2;
+	db_iframe_arretipo.hide();
 }
 
 function js_pesquisaq60_templatealvara(mostra){
@@ -1106,6 +1148,12 @@ var oDbHintDataImplantacaoMei = new DBHint('oDbHintDataImplantacaoMei');
     oDbHintDataImplantacaoMei.setShowEvents(aEventoShow);
     oDbHintDataImplantacaoMei.setHideEvents(aEventoHide);
     oDbHintDataImplantacaoMei.make($('dataimplantacaomei'));
+
+var oDbHintTipoDebitoNotaAvulsa = new DBHint('oDbHintTipoDebitoNotaAvulsa');
+	oDbHintDataImplantacaoMei.setText('Podera informar qual o tipo de débito que será lançado o valor calculado no cálculo de ISSQN da Nota Avulsa. ');
+	oDbHintDataImplantacaoMei.setShowEvents(aEventoShow);
+	oDbHintDataImplantacaoMei.setHideEvents(aEventoHide);
+	oDbHintDataImplantacaoMei.make($('tipodebitonotaavulsa'));
 /**
  * Fim hints
  */
