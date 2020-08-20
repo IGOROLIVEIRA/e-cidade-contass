@@ -75,9 +75,9 @@ if (isset($post->reemite)) {
             $oRecibo = db_utils::fieldsMemory($rsRecibo, 0);
             if (db_strtotime(date("Y-m-d", db_getsession("DB_datausu"))) <= db_strtotime($oRecibo->k00_dtvenc)) {
 
-                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
-                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=&tipo_debito=" . $oPar->q60_tipo;
-                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo_notaavulsa . "&ver_inscr=" . $oNumpre->q02_inscr;
+                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=&tipo_debito=" . $oPar->q60_tipo_notaavulsa;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo_notaavulsa . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
                 $url .= "&totregistros=1&reemite_recibo=1&k03_numpre=" . $oNumpre->q52_numnov . "&k03_numnov=" . $oNumpre->q52_numnov . "&k00_histtxt=";
 
                 echo "<script>\n";
@@ -87,9 +87,9 @@ if (isset($post->reemite)) {
 
             } else {
 
-                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
-                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
-                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo_notaavulsa . "&ver_inscr=" . $oNumpre->q02_inscr;
+                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo_notaavulsa;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo_notaavulsa . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
                 $url .= "&totregistros=1";
                 echo "<script>\n";
                 echo "if (confirm('O recibo está vencido.\\nReeemitir Recibo?')){\n";
@@ -100,9 +100,9 @@ if (isset($post->reemite)) {
 
         } else {
 
-            $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
-            $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
-            $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+            $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo_notaavulsa . "&ver_inscr=" . $oNumpre->q02_inscr;
+            $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo_notaavulsa;
+            $url .= "&k03_tipo=" . $oPar->q60_tipo_notaavulsa . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
             $url .= "&totregistros=1";
             echo "<script>\n";
             echo "if (confirm(' Nâo Ha recibo lancado para essa nota.\\nGerar Recibo?')){\n";
