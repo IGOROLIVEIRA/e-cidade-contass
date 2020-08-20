@@ -129,6 +129,9 @@ $sheet->mergeCells('A5:D5');
 $sheet->mergeCells('E5:K5');
 //cabeçalho
 $sheet->getStyle('A2:A5')->applyFromArray($styleTitulo1);
+$sheet->getStyle('B2:B5')->applyFromArray($styleTitulo1);
+$sheet->getStyle('C2:C5')->applyFromArray($styleTitulo1);
+$sheet->getStyle('D2:D5')->applyFromArray($styleTitulo1);
 //resposta cabeçalho
 $sheet->getStyle('E2:K5')->applyFromArray($styleResTitulo1);
 
@@ -229,8 +232,9 @@ $sheet->getStyle($totalCellI.':'.$totalCellJ)->applyFromArray($styleTotal);
 
 $sheet->setCellValue($totalCellI,'Valor Total:');
 
+$formula = '=(SUM(J7:'.$lastCell.'))';
 //valor Total
-$sheet->setCellValue($totalCellJ,'=SUMA(J7:'.$lastCell.')');
+$sheet->setCellValue($totalCellJ,$formula);
 $sheet->getStyle($totalCellJ)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 $nomefile = "prc_".$pc81_codproc.'_'.db_getsession('DB_instit').".xlsx";
