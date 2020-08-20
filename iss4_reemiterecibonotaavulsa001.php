@@ -48,15 +48,6 @@ $clparissqn             = new cl_parissqn;
 $rsPar                  = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
 $oPar                   = db_utils::fieldsMemory($rsPar,0);
 
-/**
- * Em Pmpirapora o tipo de débito para a nota avulsa tem que ser diferente do da NFSe devido à taxa de expediente.
- * @todo criar um parametro para guardar o tipo de debito para nota avulsa.
- */
-$oInstit = new Instituicao(db_getsession('DB_instit'));
-if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-    $oPar->q60_tipo = 61;
-}
-
 if (isset($post->reemite)) {
 
     $rsNumpre = $clissnotaavulsanumpre->sql_record($clissnotaavulsanumpre->sql_query(null, "*", null,
