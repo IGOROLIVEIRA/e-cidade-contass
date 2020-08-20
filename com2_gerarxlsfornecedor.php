@@ -155,7 +155,7 @@ $sheet->getStyle('A6:K6')->applyFromArray($styleItens2);
 
 //cria protecao na planilha
 //senha para alteração
-$sheet->getProtection()->setPassword('1234');
+$sheet->getProtection()->setPassword('PHPExcel');
 $sheet->getProtection()->setSheet(true);
 $sheet->getProtection()->setSort(true);
 $sheet->getProtection()->setInsertRows(true);

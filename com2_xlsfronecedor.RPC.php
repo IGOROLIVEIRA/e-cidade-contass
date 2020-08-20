@@ -94,7 +94,7 @@ switch($oParam->exec) {
             if($erro == false){
                 unlink($arquivo);
             }
-
+            $arrayItens = array_pop($arrayItensPlanilha);
             $oRetorno->itens = $arrayItensPlanilha;
         }
         break;
@@ -171,6 +171,7 @@ switch($oParam->exec) {
             //apago o arquivo se ocorreu tudo certo
 
             unlink($arquivo);
+            $arrayItens = array_pop($arrayItensPlanilha);
 
             $oRetorno->itens = $arrayItensPlanilha;
         }

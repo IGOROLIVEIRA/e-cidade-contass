@@ -656,6 +656,7 @@ $clrotulo = new rotulocampo;
             })
             //setando importado para orçamento;
             importado.value = 2;
+
             //incluindo de forma automatica
             btnincluir.click();
         }
