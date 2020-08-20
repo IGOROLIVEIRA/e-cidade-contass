@@ -11,6 +11,21 @@ include("libs/PHPExcel/Classes/PHPExcel.php");
 $oGet        = db_utils::postMemory($_GET);
 $clpcorcam   = new cl_pcorcam();
 $objPHPExcel = new PHPExcel;
+
+/**
+ * matriz de entrada
+ */
+$what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
+    'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
+    'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'");
+
+/**
+ * matriz de saida
+ */
+$by   = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
+    'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
+    'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
+
 $result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,pc80_criterioadjudicacao",null,"pc20_codorc = $pc22_codorc limit 1"));
 db_fieldsmemory($result_fornecedores,0);
 
@@ -180,7 +195,7 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     $sheet->mergeCells($collC.':'.$collF);
     $sheet->setCellValue($collA,$pc01_codmater);
     $sheet->setCellValue($collB,$pc11_seq);
-    $sheet->setCellValue($collC,$pc01_descrmater);
+    $sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $pc01_descrmater)));
     $sheet->setCellValue($collG,$m61_abrev);
     $sheet->setCellValue($collH,$pc11_quant);
     if($pc80_criterioadjudicacao == 3) {
