@@ -255,8 +255,8 @@ $formula = '=(SUM(J7:'.$lastCell.'))';
 //valor Total
 $sheet->setCellValue($totalCellJ,$formula);
 $sheet->getStyle($totalCellJ)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
-$nomefile = "licprc_".$pc81_codproc.db_getsession('DB_instit')."xlsx";
 
+$nomefile = "licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
 
 header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header("Content-Disposition: attachment; filename=$nomefile" );
