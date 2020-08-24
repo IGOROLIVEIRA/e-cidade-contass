@@ -66,6 +66,7 @@ switch($oParam->exec) {
 //            }
 
             $arrayItensPlanilha = array();
+
             foreach ($dataArr as $keyRow => $Row){
 
                 if($keyRow >= 7){
@@ -82,7 +83,7 @@ switch($oParam->exec) {
                         if($keyCel == 9){
                             $objItensPlanilha->valorunitario =  $cell == null ? 0 : $cell;
                         }
-                        if($keyCel == 11){
+                        if($keyCel == 12){
                             $objItensPlanilha->marca         =  $cell == null ? '' : $cell;
                         }
                     }
@@ -160,7 +161,7 @@ switch($oParam->exec) {
                         if($keyCel == 9){
                             $objItensPlanilha->valorunitario =  $cell == null ? 0 : $cell;
                         }
-                        if($keyCel == 11){
+                        if($keyCel == 12){
                             $objItensPlanilha->marca         =  $cell == null ? '' : $cell;
                         }
                     }

@@ -130,31 +130,31 @@ $styleItens = array(
 
 //Iniciando planilha
 $sheet->setCellValue('A1','Orcamento de Processo de Compra Numero: '.$pc81_codproc.' do Processo de Compra');
-$sheet->getStyle('A1:K1')->applyFromArray($styleTitulo);
-$sheet->mergeCells('A1:K1');
+$sheet->getStyle('A1:M1')->applyFromArray($styleTitulo);
+$sheet->mergeCells('A1:M1');
 $sheet->setCellValue('E2',$pc22_codorc);
 $sheet->setCellValue('A2','Codigo do Orcamento:');
 $sheet->mergeCells('A2:D2');
-$sheet->mergeCells('E2:k2');
+$sheet->mergeCells('E2:M2');
 $sheet->setCellValue('A3','Codigo do Orcamento do Fornecedor:');
 $sheet->setCellValue('E3',$pc21_orcamforne);
 $sheet->mergeCells('A3:D3');
-$sheet->mergeCells('E3:K3');
+$sheet->mergeCells('E3:M3');
 $sheet->setCellValue('A4','CPF / CNPJ:');
 $sheet->setCellValue('E4',$z01_cgccpf);
 $sheet->mergeCells('A4:D4');
-$sheet->mergeCells('E4:K4');
+$sheet->mergeCells('E4:M4');
 $sheet->setCellValue('A5','Nome / Razao Social:');
 $sheet->setCellValue('E5',$z01_nome);
 $sheet->mergeCells('A5:D5');
-$sheet->mergeCells('E5:K5');
+$sheet->mergeCells('E5:M5');
 //cabeçalho
 $sheet->getStyle('A2:A5')->applyFromArray($styleTitulo1);
 $sheet->getStyle('B2:B5')->applyFromArray($styleTitulo1);
 $sheet->getStyle('C2:C5')->applyFromArray($styleTitulo1);
 $sheet->getStyle('D2:D5')->applyFromArray($styleTitulo1);
 //resposta cabeçalho
-$sheet->getStyle('E2:K5')->applyFromArray($styleResTitulo1);
+$sheet->getStyle('E2:M5')->applyFromArray($styleResTitulo1);
 
 $sheet->setCellValue('A6','Cod. Item');
 $sheet->setCellValue('B6','Seq. Item');
@@ -167,9 +167,12 @@ if($pc80_criterioadjudicacao == 3){
 }else{
     $sheet->setCellValue('I6','Taxa/Tabela %');
 }
+$sheet->mergeCells('J6:K6');
 $sheet->setCellValue('J6','Valor Total');
-$sheet->setCellValue('K6','Marca');
-$sheet->getStyle('A6:K6')->applyFromArray($styleItens2);
+
+$sheet->mergeCells('L6:M6');
+$sheet->setCellValue('L6','Marca');
+$sheet->getStyle('A6:M6')->applyFromArray($styleItens2);
 
 //cria protecao na planilha
 //senha para alteração
@@ -198,29 +201,37 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     $collI = 'I'.$numrow;
     $collJ = 'J'.$numrow;
     $collK = 'K'.$numrow;
+    $collL = 'L'.$numrow;
+    $collM = 'M'.$numrow;
     $sheet->mergeCells($collC.':'.$collF);
     $sheet->setCellValue($collA,$pc01_codmater);
     $sheet->setCellValue($collB,$pc11_seq);
     $sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $pc01_descrmater)));
+    $sheet->getStyle($collC)->getAlignment()->setWrapText(false);
     $sheet->setCellValue($collG,$m61_abrev);
     $sheet->setCellValue($collH,$pc11_quant);
+
+    //merge das cells marca e vlr total
+    $sheet->mergeCells($collJ.':'.$collK);
+    $sheet->mergeCells($collL.':'.$collM);
+
     if($pc80_criterioadjudicacao == 3) {
         //formatacao na cell valor unitario
         $sheet->getStyle($collI)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+
         //formula multiplicacao
         $sheet->setCellValue($collJ,'='.$collH.'*'.$collI);
         //formatando os itens
-        $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
+        $sheet->getStyle($collA.':'.$collM)->applyFromArray($styleItens);
         //libera celulas para alteracao
         $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-        $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collL)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }else{
         //formatando os itens
         $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
         //libera celulas para alteracao
-        $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
         $sheet->getStyle($collJ)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-        $sheet->getStyle($collK)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collL)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }
 }
 $styleTotal = array(
@@ -232,6 +243,7 @@ $styleTotal = array(
     ),
     'font' => array(
         'size' => 10,
+        'bold' => true,
     ),
     'alignment' => array(
         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
@@ -244,14 +256,17 @@ $lastCell = 'J'.($numrows_itens + 6);
 //linha texto valor total
 $totalCellH = 'H'.($numrows_itens + 7);
 $totalCellI = 'I'.($numrows_itens + 7);
+$totalCellG = 'G'.($numrows_itens + 7);
 
 //linha valor total
 $totalCellJ = 'J'.($numrows_itens + 7);
 $totalCellK = 'K'.($numrows_itens + 7);
+$sheet->mergeCells($totalCellJ.':'.$totalCellK);
+$sheet->mergeCells($totalCellH.':'.$totalCellI);
 
-$sheet->getStyle($totalCellI.':'.$totalCellJ)->applyFromArray($styleTotal);
+$sheet->getStyle($totalCellH.':'.$totalCellK)->applyFromArray($styleTotal);
 
-$sheet->setCellValue($totalCellI,'Valor Total:');
+$sheet->setCellValue($totalCellH,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, 'Valor Orçamento').':'));
 
 $formula = '=(SUM(J7:'.$lastCell.'))';
 //valor Total
