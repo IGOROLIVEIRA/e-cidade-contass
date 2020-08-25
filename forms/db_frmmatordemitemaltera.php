@@ -474,31 +474,15 @@ $clrotulo->label("e62_descr");
         let valor_total = document.getElementById('valor_total');
         let total_itens = document.getElementById('total_de_itens');
 
-        // if(document.getElementById(`valor_${sequencia}`).value.includes(',')){
-        //     vlr_unitario = document.getElementById(`valor_${sequencia}`).value.replace(/\./g, '').replace(/\,/g, '.');
-        // }else{
-        //     vlr_unitario = document.getElementById(`valor_${sequencia}`).value.replace(/\,/g, '.');
-        // }
-
         if (obj.checked) {
 
             if (idTr.className === 'marcado') {
-            //     iQuantidade.addEventListener('change', (event, ui) => {
-            //         let temp = parseFloat(valor_total.innerText) + parseFloat(vlr_anterior);
-            //         valor_total.innerText = formataValor + --(temp);
-            //     });
                 return;
             }
 
             total_itens.innerText = parseInt(total_itens.innerText, 10) + 1;
             idTr.className = 'marcado';
 
-            // let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
-
-            // let temp = document.getElementById(`vltotal_${sequencia}`).value.replace(/\./g, '').replace(/\,/g, '.');//parseFloat(total_rodape) + parseFloat(vlr_unitario) * parseFloat(qtd_anterior);
-            // let resultado = js_formatar(Number(temp), 'f');
-
-            // valor_total.innerText = resultado;
         } else {
 
             if (idTr.className === 'marcado') {
@@ -510,7 +494,6 @@ $clrotulo->label("e62_descr");
                 let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
                 let temp = parseFloat(total_rodape) - Number(vlr_anterior.replace(',', '.')) * parseFloat(qtd_anterior);
 
-                // valor_total.innerText = js_formatar(temp.toFixed(2), 'f');
             }
         }
         js_somaItens();
@@ -566,11 +549,6 @@ $clrotulo->label("e62_descr");
             }
 
             novo_valor = novo_valor.replace(/\s/g, '');
-
-            // console.log('Valor total: ', valor_total);
-            // console.log('Novo valor: ', novo_valor);
-            // console.log('Novo valor 2: ', Number(novo_valor));
-            // console.log('Novo valor 3: ', js_formatar(Number(novo_valor), 'f'));
 
             if(Number(novo_valor) > Number(valor_total)){
                 message = 'Valor inserido maior que o valor do item no Empenho!';
@@ -660,13 +638,11 @@ $clrotulo->label("e62_descr");
             }else if(valorLinha.includes(',')){
                 valorLinha = valorLinha.replace(',','.');
             }
-            console.log('Valor da linha gerado ate aqui: ', valorLinha);
 
             if(aItens[i].checked){
                 valor_total += Number(valorLinha);
             }
 
-            console.log('Total gerado: ', valor_total);
             document.getElementById('valor_total').innerText = js_formatar(valor_total, 'f');
         }
     }

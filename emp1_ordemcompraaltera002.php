@@ -151,7 +151,7 @@ if (isset($dados->altera)) {
 
     if (isset($dados->altera)){
 		$oRetorno           = new stdClass();
-		$oRetorno->message  = $erro_msg;
+		$oRetorno->message  = urlencode($erro_msg);
 		$oRetorno->codordem = $dados->m51_codordem;
 		$oRetorno->erro     = $sqlerro;
 		echo $oJson->encode($oRetorno);
