@@ -61,9 +61,11 @@ if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
 
 db_inicio_transacao();
 if(isset($alterar)){
-
+    $aEmpenho = explode("/",$e60_codemp);
+    $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
+    $rsElementDesp = db_query($sSql);
     $sqlerro=false;
-    $clpagordem->alterar($e50_codord);
+    $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
     if($clpagordem->erro_status == 0) {
         $sqlerro=true;
     }
