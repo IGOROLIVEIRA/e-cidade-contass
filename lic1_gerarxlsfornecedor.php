@@ -127,58 +127,55 @@ $styleItens = array(
         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
     ),
 );
-
 //Iniciando planilha
 $sheet->setCellValue('A1','Orcamento de Processo de Compra Numero: '.$pc81_codproc.' do Processo de Compra');
-$sheet->getStyle('A1:M1')->applyFromArray($styleTitulo);
-$sheet->mergeCells('A1:M1');
-$sheet->setCellValue('E2',$pc22_codorc);
 $sheet->setCellValue('A2','Codigo do Orcamento:');
-$sheet->mergeCells('A2:D2');
-$sheet->mergeCells('E2:M2');
 $sheet->setCellValue('A3','Objeto:');
-$sheet->mergeCells('A3:D3');
-$sheet->mergeCells('E3:M3');
 $sheet->setCellValue('A4','Codigo do Orcamento do Fornecedor:');
-$sheet->setCellValue('E4',$pc21_orcamforne);
-$sheet->mergeCells('A4:D4');
-$sheet->mergeCells('E4:M4');
 $sheet->setCellValue('A5','CPF / CNPJ:');
-$sheet->setCellValue('E5',$z01_cgccpf);
-$sheet->mergeCells('A5:D5');
-$sheet->mergeCells('E5:M5');
 $sheet->setCellValue('A6','Nome / Razao Social:');
+$sheet->setCellValue('E2',$pc22_codorc);
+$sheet->setCellValue('E4',$pc21_orcamforne);
+$sheet->setCellValue('E5',$z01_cgccpf);
 $sheet->setCellValue('E6',$z01_nome);
-$sheet->mergeCells('A6:D6');
-$sheet->mergeCells('E6:M6');
 $sheet->setCellValue('E3',iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $l20_objeto)));
-
+//merge das cells
+$sheet->mergeCells('A1:S1');
+$sheet->mergeCells('A2:D2');
+$sheet->mergeCells('A3:D3');
+$sheet->mergeCells('A4:D4');
+$sheet->mergeCells('A5:D5');
+$sheet->mergeCells('A6:D6');
+$sheet->mergeCells('E2:S2');
+$sheet->mergeCells('E3:S3');
+$sheet->mergeCells('E4:S4');
+$sheet->mergeCells('E5:S5');
+$sheet->mergeCells('E6:S6');
 //cabeçalho
+$sheet->getStyle('A1:S1')->applyFromArray($styleTitulo);
 $sheet->getStyle('A2:A6')->applyFromArray($styleTitulo1);
 $sheet->getStyle('B2:B6')->applyFromArray($styleTitulo1);
 $sheet->getStyle('C2:C6')->applyFromArray($styleTitulo1);
 $sheet->getStyle('D2:D6')->applyFromArray($styleTitulo1);
 //resposta cabeçalho
-$sheet->getStyle('E2:M6')->applyFromArray($styleResTitulo1);
-
+$sheet->getStyle('E2:S6')->applyFromArray($styleResTitulo1);
+//itens
 $sheet->setCellValue('A7','Cod. Item');
 $sheet->setCellValue('B7','Seq. Item');
 $sheet->setCellValue('C7','Servico Material');
-$sheet->mergeCells('C7:F7');
-$sheet->setCellValue('G7','UN');
-$sheet->setCellValue('H7','Qtde');
+$sheet->setCellValue('M7','UN');
+$sheet->setCellValue('N7','Qtde');
 if($pc80_criterioadjudicacao == 3){
-    $sheet->setCellValue('I7','Valor Unit.');
+    $sheet->setCellValue('O7','Valor Unit.');
 }else{
-    $sheet->setCellValue('I7','Taxa/Tabela %');
+    $sheet->setCellValue('O7','Taxa/Tabela %');
 }
-$sheet->mergeCells('J7:K7');
-$sheet->setCellValue('J7','Valor Total');
-
-$sheet->mergeCells('L7:M7');
-$sheet->setCellValue('L7','Marca');
-$sheet->getStyle('A7:M7')->applyFromArray($styleItens2);
-
+$sheet->setCellValue('P7','Valor Total');
+$sheet->setCellValue('R7','Marca');
+$sheet->mergeCells('C7:L7');
+$sheet->mergeCells('P7:Q7');
+$sheet->mergeCells('R7:S7');
+$sheet->getStyle('A7:S7')->applyFromArray($styleItens2);
 //cria protecao na planilha
 //senha para alteração
 $sheet->getProtection()->setPassword('PHPExcel');
@@ -187,11 +184,10 @@ $sheet->getProtection()->setSort(true);
 $sheet->getProtection()->setInsertRows(true);
 $sheet->getProtection()->setFormatCells(true);
 $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-//$sheet->getStyle('E4')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-//$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
-$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant,l20_objeto",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcamitem->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){
@@ -208,35 +204,42 @@ for ($i = 0; $i < $numrows_itens; $i ++){
     $collK = 'K'.$numrow;
     $collL = 'L'.$numrow;
     $collM = 'M'.$numrow;
-    $sheet->mergeCells($collC.':'.$collF);
+    $collN = 'N'.$numrow;
+    $collO = 'O'.$numrow;
+    $collP = 'P'.$numrow;
+    $collQ = 'Q'.$numrow;
+    $collR = 'R'.$numrow;
+    $collS = 'S'.$numrow;
+    $pc01_descrmater = $pc01_descrmater.'-'.$pc01_complmater;
     $sheet->setCellValue($collA,$pc01_codmater);
     $sheet->setCellValue($collB,$pc11_seq);
     $sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $pc01_descrmater)));
     $sheet->getStyle($collC)->getAlignment()->setWrapText(false);
-    $sheet->setCellValue($collG,$m61_abrev);
-    $sheet->setCellValue($collH,$pc11_quant);
+    $sheet->setCellValue($collM,$m61_abrev);
+    $sheet->setCellValue($collN,$pc11_quant);
 
-    //merge das cells marca e vlr total
-    $sheet->mergeCells($collJ.':'.$collK);
-    $sheet->mergeCells($collL.':'.$collM);
+    //merge das cells
+    $sheet->mergeCells($collC.':'.$collL);
+    $sheet->mergeCells($collP.':'.$collQ);
+    $sheet->mergeCells($collR.':'.$collS);
 
     if($pc80_criterioadjudicacao == 3) {
         //formatacao na cell valor unitario
-        $sheet->getStyle($collI)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
-
+        $sheet->getStyle($collO)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
         //formula multiplicacao
-        $sheet->setCellValue($collJ,'='.$collH.'*'.$collI);
+        $sheet->setCellValue($collP,'='.$collN.'*'.$collO);
         //formatando os itens
-        $sheet->getStyle($collA.':'.$collM)->applyFromArray($styleItens);
+        $sheet->getStyle($collA.':'.$collS)->applyFromArray($styleItens);
         //libera celulas para alteracao
-        $sheet->getStyle($collI)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-        $sheet->getStyle($collL)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collO)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collR)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }else{
         //formatando os itens
-        $sheet->getStyle($collA.':'.$collK)->applyFromArray($styleItens);
+        $sheet->getStyle($collA.':'.$collS)->applyFromArray($styleItens);
         //libera celulas para alteracao
-        $sheet->getStyle($collJ)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-        $sheet->getStyle($collL)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collO)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collP)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle($collR)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }
 }
 $styleTotal = array(
@@ -256,27 +259,27 @@ $styleTotal = array(
 );
 
 //ultima linha itens
-$lastCell = 'J'.($numrows_itens + 7);
+$lastCell = 'P'.($numrows_itens + 7);
 
 //linha texto valor total
-$totalCellH = 'H'.($numrows_itens + 8);
-$totalCellI = 'I'.($numrows_itens + 8);
+$totalCellN = 'N'.($numrows_itens + 8);
+$totalCellO = 'O'.($numrows_itens + 8);
 $totalCellG = 'G'.($numrows_itens + 8);
 
 //linha valor total
-$totalCellJ = 'J'.($numrows_itens + 8);
-$totalCellK = 'K'.($numrows_itens + 8);
-$sheet->mergeCells($totalCellJ.':'.$totalCellK);
-$sheet->mergeCells($totalCellH.':'.$totalCellI);
+$totalCellP = 'P'.($numrows_itens + 8);
+$totalCellQ = 'Q'.($numrows_itens + 8);
+$sheet->mergeCells($totalCellP.':'.$totalCellQ);
+$sheet->mergeCells($totalCellN.':'.$totalCellO);
 
-$sheet->getStyle($totalCellH.':'.$totalCellK)->applyFromArray($styleTotal);
+$sheet->getStyle($totalCellN.':'.$totalCellQ)->applyFromArray($styleTotal);
 
-$sheet->setCellValue($totalCellH,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, 'Valor Orçamento').':'));
+$sheet->setCellValue($totalCellN,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, 'Valor Orçamento').':'));
 
-$formula = '=(SUM(J7:'.$lastCell.'))';
+$formula = '=(SUM(P7:'.$lastCell.'))';
 //valor Total
-$sheet->setCellValue($totalCellJ,$formula);
-$sheet->getStyle($totalCellJ)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+$sheet->setCellValue($totalCellP,$formula);
+$sheet->getStyle($totalCellO)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
 
 $nomefile = "licprc_".$pc81_codproc."_".db_getsession('DB_instit')."."."xlsx";
 

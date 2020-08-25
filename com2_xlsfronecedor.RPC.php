@@ -19,6 +19,17 @@ $oParam           = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oErro             = new stdClass();
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
+
+/**
+ * matriz de entrada
+ */
+$what = array( ',','-','/',chr(13),chr(10),"'");
+
+/**
+ * matriz de saida
+ */
+$by   = array( '','','');
+
 switch($oParam->exec) {
 
     case 'importar':
@@ -51,25 +62,18 @@ switch($oParam->exec) {
                     $dataArr[$rowIndex][$colIndex] = $val;
                 }
             }
+
             //valido cgccpf do fornecedor
-            if($z01_cgccpf != $dataArr[4][5]){
+            if($z01_cgccpf != iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $dataArr[5][5]))){
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[4][5]." diferente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
+                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[5][5]." diferente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
                 $erro = true;
             }
-            //valido codigo do orcamento do fornecedor
-
-//            if($pc21_orcamforne != $dataArr[3][5]){
-//                $oRetorno->status = 2;
-//                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
-//                $erro = true;
-//            }
-
             $arrayItensPlanilha = array();
 
             foreach ($dataArr as $keyRow => $Row){
 
-                if($keyRow >= 7){
+                if($keyRow >= 8){
                     $objItensPlanilha = new stdClass();
                     foreach ($Row as $keyCel => $cell){
                         if($keyCel == 1){
@@ -77,13 +81,13 @@ switch($oParam->exec) {
                             $rsOrcamitem = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"pc22_orcamitem",null,"pc20_codorc = $oParam->pc20_codorc AND pc21_orcamforne = $oParam->pc21_orcamforne AND pc01_codmater = $cell"));
                             $objItensPlanilha->item =  db_utils::fieldsMemory($rsOrcamitem, 0)->pc22_orcamitem;
                         }
-                        if($keyCel == 8){
+                        if($keyCel == 14){
                             $objItensPlanilha->quantidade    =  $cell;
                         }
-                        if($keyCel == 9){
+                        if($keyCel == 15){
                             $objItensPlanilha->valorunitario =  $cell == null ? 0 : $cell;
                         }
-                        if($keyCel == 12){
+                        if($keyCel == 18){
                             $objItensPlanilha->marca         =  $cell == null ? '' : $cell;
                         }
                     }
@@ -130,24 +134,16 @@ switch($oParam->exec) {
                 }
             }
             //valido cgccpf do fornecedor
-
-            if($z01_cgccpf != $dataArr[4][5]){
+            if($z01_cgccpf != iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $dataArr[5][5]))){
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[4][5]." diferente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
+                $oRetorno->message = urlencode("Erro ! CPF/CNPJ da planilha:".$dataArr[5][5]." diferente do CPF/CNPJ do fornecedor:".$z01_cgccpf.".");
                 $erro = true;
             }
-            //valido codigo do orcamento do fornecedor
-
-//            if($pc21_orcamforne != $dataArr[3][5]){
-//                $oRetorno->status = 2;
-//                $oRetorno->message = urlencode("Erro ! Fornecedor da planilha diferente do fornecedor do orçamento.");
-//                $erro = true;
-//            }
 
             $arrayItensPlanilha = array();
             foreach ($dataArr as $keyRow => $Row){
 
-                if($keyRow >= 7){
+                if($keyRow >= 8){
                     $objItensPlanilha = new stdClass();
                     foreach ($Row as $keyCel => $cell){
                         if($keyCel == 1){
@@ -155,13 +151,13 @@ switch($oParam->exec) {
                             $rsOrcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_orcamitem",null,"pc20_codorc = $oParam->pc20_codorc AND pc21_orcamforne = $oParam->pc21_orcamforne AND pc01_codmater = $cell"));
                             $objItensPlanilha->item =  db_utils::fieldsMemory($rsOrcamitem, 0)->pc22_orcamitem;
                         }
-                        if($keyCel == 8){
+                        if($keyCel == 14){
                             $objItensPlanilha->quantidade    =  $cell;
                         }
-                        if($keyCel == 9){
+                        if($keyCel == 15){
                             $objItensPlanilha->valorunitario =  $cell == null ? 0 : $cell;
                         }
-                        if($keyCel == 12){
+                        if($keyCel == 18){
                             $objItensPlanilha->marca         =  $cell == null ? '' : $cell;
                         }
                     }
@@ -170,8 +166,9 @@ switch($oParam->exec) {
             }
 
             //apago o arquivo se ocorreu tudo certo
-
-            unlink($arquivo);
+            if($erro == false) {
+                unlink($arquivo);
+            }
             $arrayItens = array_pop($arrayItensPlanilha);
 
             $oRetorno->itens = $arrayItensPlanilha;
