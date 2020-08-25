@@ -28,18 +28,23 @@
 require_once("../libs/db_stdlib.php");
 require_once("../libs/db_conecta.php");
 include_once("../libs/db_sessoes.php");
+require_once("../std/label/rotulocampo.php");
+require_once("../std/label/RotuloCampoDB.php");
+require_once("../std/label/RotuloDB.php");
+require_once("../std/label/rotulo.php");
 include_once("../libs/db_usuariosonline.php");
 include_once("../classes/db_matordem_classe.php");
 include_once("../classes/db_matordemitem_classe.php");
 include_once("../classes/db_matestoqueitemoc_classe.php");
 include_once("../dbforms/db_funcoes.php");
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
-$clmatordemitem     = new cl_matordemitem;
+$clmatordemitem = new cl_matordemitem;
 $clmatestoqueitemoc = new cl_matestoqueitemoc;
-$clmatordem         = new cl_matordem;
-$clrotulo           = new rotulocampo;
+$clmatordem = new cl_matordem;
+$clrotulo = new rotulocampo;
 
 $clmatordemitem->rotulo->label();
 $clmatordem->rotulo->label();
@@ -49,243 +54,632 @@ $clrotulo->label("e60_numemp");
 $clrotulo->label("e60_codemp");
 $clrotulo->label("pc01_descrmater");
 $clrotulo->label("e62_descr");
+
 ?>
+
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="../scripts/scripts.js"></script>
-<link href="../estilos.css" rel="stylesheet" type="text/css">
-<link href="../estilos/grid.style.css" rel="stylesheet" type="text/css">
-<script>
-</script>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="../scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../scripts/strings.js"></script>
+    <link href="../estilos.css" rel="stylesheet" type="text/css">
+    <link href="../estilos/grid.style.css" rel="stylesheet" type="text/css">
 
-<style>
-<?$cor="#999999"?>
-.bordas{
-         border: 2px solid #cccccc;
-         border-top-color: <?=$cor?>;
-         border-right-color: <?=$cor?>;
-         border-bottom-color: <?=$cor?>;
-         background-color: #999999;
-}
-<?$cor="999999"?>
-.bordas_corp{
-         border: 1px solid #cccccc;
-         border-right-color: <?=$cor?>;
-         border-bottom-color: <?=$cor?>;
-       }
-</style>
+    <style>
+        <?$cor="#999999"?>
+        .bordas {
+            border: 2px solid #cccccc;
+            border-top-color: <?=$cor?>;
+            border-right-color: <?=$cor?>;
+            border-bottom-color: <?=$cor?>;
+            background-color: #999999;
+        }
+
+        <?$cor="999999"?>
+        .bordas_corp {
+            border: 1px solid #cccccc;
+            border-right-color: <?=$cor?>;
+            border-bottom-color: <?=$cor?>;
+        }
+
+        .input__static{
+            text-align: center;
+            background: none;
+            border: none;
+            color: #000;
+            width: 55px;
+        }
+    </style>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"> 
-<table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-  <tr> 
-    <td  align="left" valign="top" bgcolor="#CCCCCC"> 
-    	<form name='form1'>
-    		<center>
-  				<fieldset> 
-						<legend>
-							<b>Itens</b>
-						</legend>
-						<table style='border:2px inset white' width='100%' cellspacing='0'>   
-							 <?
-								
-								if (isset ($m51_codordem) && $m51_codordem != "") {
 
-									$result = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*", "", "m52_codordem=$m51_codordem"));
-									$numrows = $clmatordemitem->numrows;
-									
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table border="0" cellspacing="0" cellpadding="0" width='100%'>
+    <tr>
+        <td align="left" valign="top" bgcolor="#CCCCCC">
+            <form name='form1'>
+                <center>
+                    <fieldset>
+                        <legend>
+                            <b>Itens</b>
+                        </legend>
+                        <table style='border:2px inset white' width='100%' cellspacing='0'>
+							<?
 
-									if ($numrows > 0) {
-										
-										echo "   <tr class='bordas'>";
-										echo "     <td class='table_header' align='center'><small><b>$RLe60_codemp		 	</b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLe60_numemp		 	</b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLe62_item  		  </b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLpc01_descrmater </b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLm52_sequen		  </b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLe62_descr			  </b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>$RLm52_quant			  </b></small></td>";
-										echo "     <td class='table_header' align='center'><small><b>Valor						  </b></small></td>";
-										echo "   </tr>";
-										echo " <tbody id='dados' style='height:150;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>";
+							if (isset ($m51_codordem) && $m51_codordem != "") {
+
+								$result = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*", "", "m52_codordem=$m51_codordem"));
+								$numrows = $clmatordemitem->numrows;
+
+								if ($numrows > 0) {
+
+									echo "   <tr class='bordas'>";
+									echo "     <td class='table_header' title='Marca/desmarca todos' align='center'>";
+									echo "        <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca(false)'>";
+                                    echo "            <a onclick='js_marca(true)' style='cursor:pointer'><b>M</b></a>";
+                                    echo "     </td>";
+									echo "     <td class='table_header' align='center'><small><b>Seq.</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>N. Empenho</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Seq. Empenho</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Cod. Item</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Item</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Unid.</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Quantidade</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Vlr. Uni.</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Valor Total</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Quantidade</b></small></td>";
+									echo "     <td class='table_header' align='center'><small><b>Valor</b></small></td>";
+									echo "   </tr>";
+									echo " <tbody id='dados' style='height:150;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>";
+
+								} else {
+
+                                    echo " <tr>";
+                                    echo "	<b>Nenhum registro encontrado...</b>";
+									echo " </tr>";
+
+								}
+
+								for ($i = 0; $i < $numrows; $i++) {
+									db_fieldsmemory($result, $i);
+									$sSqlEntrada = $clmatestoqueitemoc->sql_query_completo(null, null, "*", null,
+										"m73_codmatordemitem=$m52_codlanc and m73_cancelado is false");
+									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
+									echo 'Serviço: '.$pc01_servico;
+									echo 'Serviço quant...'. $e62_servicoquantidade;
+									if ($clmatestoqueitemoc->numrows == 0) {
+										echo "<tr id='tr_$e62_sequencial'>
+                                                    <td class='linhagrid' title='Inverte a marcação' align='center'>
+                                                        <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
+                                                            name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
+                                                    </td>	    
+                                                    <td	class='linhagrid' align='center'>
+                                                        <small>
+                                                            <input id ='sequen_".$i."' class ='input__static' value='".$m52_sequen."' disabled></input>
+                                                        </small>
+                                                    </td>
+													<td	class='linhagrid' align='center'>
+													    <small>";
+													        db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 1, '', "codemp_$i");
+													    echo "</small>
+                                                    </td>
+													<td	class='linhagrid' align='center'>
+													    <small>
+													        <input id ='numemp_".$i."' class='input__static' value='".$m52_numemp."' disabled></input>
+													    </small>
+                                                    </td>		    
+													<td	class='linhagrid' nowrap align='left' title='$pc01_descrmater'>
+													    <small>
+													        <input id ='coditem_".$i."' class ='input__static' value='".$e62_item."' disabled></input>
+													    </small>
+                                                    </td>
+													<td	class='linhagrid' align='center'>
+													    <small>$pc01_descrmater</small>
+                                                    </td>
+                                                    
+													<td	class='linhagrid' nowrap align='left' title='$m61_abrev'>
+													    <small>" .(isset($m61_abrev) ? $m61_abrev : '-'). "</small>
+                                                    </td>";
+
+										/**
+										 * Caso for um material
+										 * Caso for um serviço e este serviço ser controlado por quantidade
+										 *
+										 *
+										 * Alterados todos inputs dentro do for dos itens
+										 * que tratam valores para db_opcao = 3, não mais permitindo alterações
+										 * de valores, dendo que para altera devera ser anulado na rotina de anulação
+										 * e incluidos os itens novamente.
+										 *
+										 */
+
+										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
+
+											$quant = $m52_quant;
+
+											$quantidade = "quant_" . "$i";
+											$$quantidade = $m52_quant;
+
+											$qtde = "qtde_$i";
+											$$qtde = $$quantidade;
+
+											$valor = "valor_$i";
+											$$valor = db_formatar($m52_vlruni, 'f');
+
+											$valor_total = "vltotal_". "$i";
+											$$valor_total = db_formatar($e62_vltot, 'f');
+
+										   /**
+                                           * Caso for um material
+                                           * Caso for um serviço e este serviço ser controlado por quantidade
+                                           *
+                                           *
+                                           * Alterados todos inputs dentro do for dos itens
+                                           * que tratam valores para db_opcao = 3, não mais permitindo alterações
+                                           * de valores, dendo que para altera devera ser anulado na rotina de anulação
+                                           * e incluidos os itens novamente.
+                                           *
+                                           */
+										    $valoruni = $m52_valor / $m52_quant;
+
+											echo " 	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											echo "          <input id='$quantidade' class='input__static' value=' ". $$quantidade . "' disabled />";
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("valor_$i", 15, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											echo "          <input id='$valor_total' class='input__static' value=' ". $$valor_total . "' disabled />";
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("qtde_$i", 15, 0, true, 'text', 1, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("vltotal_$i", 15, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 </td>";
+											echo " </tr>";
+
+										} else if ($pc01_servico == 't') {
+
+											$quantidade = "quant_" . "$i";
+											$$quantidade = $m52_quant;
+
+											$qtde = "qtde_" . "$i";
+											$$qtde = $m52_quant;
+
+											$valor = "valor_$i";
+											$$valor = db_formatar($m52_vlruni, 'f');
+
+                                            $valor_total = "valortotal_$i";
+                                            $$valor_total = str_replace('/\s/g', '', db_formatar($e62_vltot, 'f'));
+
+                                            $vltotal = "vltotal_$i";
+                                            $$vltotal = db_formatar($m52_valor, 'f');
+
+											echo "   <td class='linhagrid' align='center'>";
+											echo "      <input id='$quantidade' class='input__static' value='".$$quantidade."' disabled />";
+											echo "	 </td>";
+											echo "   <td class='linhagrid' align='center'>";
+											echo "		 <small>".db_input("valor_$i", 6, 0, true, 'text', 3)."</small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "          <input id='$valor_total' class='input__static' value='".$$valor_total."' disabled />";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+                                            db_input("qtde_$i", 8, 0, true, 'text', 3);
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+                                            db_input("vltotal_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
+                                            echo "   </td>";
+											echo " </tr>";
+										}
 
 									} else {
-										
-										echo " <tr>";
-										echo "	<b>Nenhum registro encontrado...</b>";
-										echo " </tr>";
-									
-									}
+									    echo "<tr id='tr_$e62_sequencial'>";
+										echo "
+										        <td class='linhagrid' title='Inverte a marca??o' align='center'>
+                                                    <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
+                                                        name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
+                                                </td>";
+										echo "    <td class='linhagrid' align='center'>
+ 	                                                <small>$e62_sequen</small>
+                                                  </td>";
+										echo " 	 <td class='linhagrid' align='center'>
+ 	                                                <small>";
+										                db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 1);
+                                        echo"       </small>
+                                                 </td>";
+										echo "   <td class='linhagrid' align='center'>
+                                                    <small>$m52_numemp</small>
+                                                 </td>";
+										echo "   <td class='linhagrid' nowrap align='left' title='$e62_item'>
+                                                    <small>$e62_item</small>
+                                                 </td>";
+										echo "   <td class='linhagrid' align='center' title='$pc01_descrmater'>
+                                                    <small>$pc01_descrmater</small>
+                                                 </td>";
+										echo "   <td class='linhagrid' nowrap align='left' title='$m61_abrev'>
+                                                    <small>" .(isset($m61_abrev) ? $m61_abrev : '-'). "&nbsp;</small>
+                                                 </td>";
 
-									for ($i = 0; $i < $numrows; $i ++) {
-										db_fieldsmemory($result, $i);
-									  $sSqlEntrada = $clmatestoqueitemoc->sql_query(null, null, "*", null,
-									                      "m73_codmatordemitem=$m52_codlanc and m73_cancelado is false");
-										$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
-										if ($clmatestoqueitemoc->numrows == 0) {
-											echo "<tr>	    
-															 <td	class='linhagrid' 			 align='center'											  ><small>$e60_codemp															 </small></td>
-															 <td	class='linhagrid' 			 align='center'												><small>$m52_numemp															 </small></td>
-															 <td	class='linhagrid' 			 align='center'												><small>$e62_item																 </small></td>		    
-															 <td	class='linhagrid' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater, 0, 20)."&nbsp;</small></td>
-															 <td	class='linhagrid' 			 align='center'												><small>$m52_sequen															 </small></td>
-															 <td	class='linhagrid' nowrap align='left' title='$e62_descr'			><small>".substr($e62_descr, 0, 20)."&nbsp;			 </small></td>";
+										/**
+										 * Caso for um material
+										 * Caso for um serviço e este serviço ser controlado por quantidade
+										 */
+										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
 
-                      /**
-                       * Caso for um materail
-                       * Caso for um serviço e este serviço ser controlado por quantidade
-                       * 
-                       * 
-                       * Alterados todos inputs dentro do for dos itens
-                       * que tratam valores para db_opcao = 3, não mais permitindo alterações
-                       * de valores, dendo que para altera devera ser anulado na rotina de anulação
-                       * e incluidos os itens novamente.
-                       * 
-                       */
-										  if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
-												
-												$quant 			 = $m52_quant;
-												$quantidade  = "quant_$e60_numemp"."_"."$e62_sequen"."_"."$i";
-												$$quantidade = $m52_quant;
-												$valor 			 = "valor_$i";
-												$$valor 		 = db_formatar($m52_valor, 'f');
-												$valoruni 	 = $m52_valor / $m52_quant;
-												
-												echo " 	 <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																			 db_input("quant_$e60_numemp"."_"."$e62_sequen"."_"."$i", 6, 0, true, 'text', 3, "onchange='js_verifica($quant,this.value,this.name,$valoruni);'");
-												echo "		 </small>";
-												echo "	 </td>";
-												echo "	 <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																			 db_input("valor_$i", 15, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "	 </td>";
-												echo " </tr>";
-											
+											db_fieldsmemory($result2, 0);
 
-											} else if ($pc01_servico == 't') {
+											$quantidade = "quant_$i";
+											$$quantidade = $m52_quant;// - $m71_quant;
+                                            echo 'Quantidade pega: ', $m52_quant;
 
-												$quantidade  = "quant_$e60_numemp"."_"."$e62_sequen"."_"."$i";
-												$$quantidade = $m52_quant;
-												$valor 			 = "valor_$i";
-												$$valor 		 = db_formatar($m52_valor, 'f');
-												$valoruni 	 = $m52_valor / $m52_quant;
-												
-												echo "   <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																		 db_input("quant_$e60_numemp"."_"."$e62_sequen"."_"."$i", 6, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "	 </td>";
-												echo "   <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																		 db_input("valor_$i", 6, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "	 </td>";
-												echo " </tr>";
-											}
-										
-										} else {
-												echo " <tr>";
-												echo " 	 <td class='linhagrid'				align='center'>												<small>$e60_codemp														  </small></td>";
-												echo " 	 <td class='linhagrid'				align='center'>												<small>$m52_numemp														  </small></td>";
-												echo "   <td class='linhagrid'				align='center'>												<small>$e62_item															  </small></td>";
-												echo "   <td class='linhagrid' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater, 0, 20)."&nbsp;</small></td>";
-												echo "   <td class='linhagrid' 			  align='center'>												<small>$m52_sequen														  </small></td>";
-												echo "   <td class='linhagrid' nowrap align='left' title='$e62_descr'>			<small>".substr($e62_descr, 0, 20)."&nbsp;			</small></td>";
-											
-                      /**
-                       * Caso for um materail
-                       * Caso for um serviço e este serviço ser controlado por quantidade
-                       */
-											if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
+											$qtde = "qtde_" . "$i";
+											$$qtde = $$quantidade;
 
-												db_fieldsmemory($result2, 0);
-												$quant 			 = $m52_quant - $m71_quant;
-												$quantidade  = "quant_$e60_numemp"."_"."$e62_sequen"."_"."$i";
-												$$quantidade = $m52_quant - $m71_quant;
-												$valor 			 = "valor_$i";
-												$vlr 				 = $m52_valor - $m71_valor;
-												$$valor 		 = db_formatar($vlr, 'f');
-												$valoruni 	 = $m52_valor / $m52_quant;
+											$valor = "valor_$i";
+											$$valor = db_formatar($m52_vlruni, 'f');
 
-												echo "   <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																		 db_input("quant_$e60_numemp"."_"."$e62_sequen"."_"."$i", 6, 0, true, 'text', 3, "onchange='js_verifica($quant,this.value,this.name,$valoruni);'");
-												echo "		 </small>";
-												echo "	 </td>";
-												echo "   <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																		 db_input("valor_$i", 15, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "   </td>";
-												echo " </tr>";
-											
-											} else if ($pc01_servico == 't') {
+											$valor_total = "valortotal_". "$i";
+											$$valor_total = db_formatar($e62_vltot, 'f');
 
-											    db_fieldsmemory($result2, 0);
-												$quantidade  = "quant_$e60_numemp"."_"."$e62_sequen"."_"."$i";
-												$$quantidade = $m52_quant -@ $m71_quant;
-												$valor 			 = "valor_$i";
-												$vlr 				 = $m52_valor - @$m71_valor;
-												$$valor 		 = db_formatar($vlr, 'f');
-												$valoruni 	 = $m52_valor / $m52_quant;
+											$vltotal = "vltotal_". "$i";
+											$$vltotal = db_formatar($m52_valor, 'f');
 
-												echo "	 <td class='linhagrid' align='center'>";
-												echo "		 <small>";
-																			db_input("quant_$e60_numemp"."_"."$e62_sequen"."_"."$i", 6, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "	 </td>";
-												echo "	 <td class='linhagrid' align='center'>
-																	 <small>";
-																		 db_input("valor_$i", 6, 0, true, 'text', 3);
-												echo "		 </small>";
-												echo "	 </td>";
-												echo " </tr>";
-											}
+											echo "   <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+                                            echo "          <input id='$quantidade' class='input__static' value=' ". $$quantidade . "' disabled />";
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "   <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+                                                            db_input("valor_$i", 8, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											echo "          <input id='$valor_total' class='input__static' value='". $$valor_total ."' disabled />";
+                                            echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("qtde_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("vltotal_$i", 8, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "   </td>";
+											echo " </tr>";
+
+										} else if ($pc01_servico == 't') {
+
+											$quantidade = "quant_$i";
+											$$quantidade = $m52_quant;// - $m71_quant;
+
+											$qtde = "qtde_" . "$i";
+											$$qtde = $$quantidade;
+
+											$valor = "valor_$i";
+											$$valor = db_formatar($m52_vlruni, 'f');
+
+											$valortotal = "valortotal_". "$i";
+											$$valortotal = db_formatar($e62_vltot, 'f');
+
+											$vltotal = "vltotal_". "$i";
+											$$vltotal = db_formatar($m52_valor, 'f');
+
+//											db_fieldsmemory($result2, 0);
+//											$quantidade = "quant_$e60_numemp" . "_" . "$e62_sequen" . "_" . "$i";
+//											$$quantidade = $m52_quant - @ $m71_quant;
+//											$valor = "valor_$i";
+//											$vlr = $m52_valor - @$m71_valor;
+//											$$valor = db_formatar($vlr, 'f');
+//											$valoruni = $m52_valor / $m52_quant;
+
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("quant_$i", 6, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>
+														<small>";
+											                db_input("valor_$i", 6, 0, true, 'text', 3);
+											echo "		</small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("valortotal_$i", 8, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("qtde_$i", 10, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "	 </td>";
+											echo "	 <td class='linhagrid' align='center'>";
+											echo "		 <small>";
+											                db_input("vltotal_$i", 8, 0, true, 'text', 3);
+											echo "		 </small>";
+											echo "   </td>";
+											echo " </tr>";
 										}
 									}
 								}
-							?> 
-                            <tr style='height:auto'><td>&nbsp;</td></tr>   
- 							</table>
-  					</fieldset> 
-    			</form> 
-    		</center>
-    	</td>
-  	</tr>
- 		<tr>
-    	<td nowrap title="<?=@$Tm51_valortotal?>"><?=$Lm51_valortotal?>&nbsp;&nbsp;
-				<?  
-    	  	db_input("m51_valortotal",10,"",true,"text",3); 
-				?>
-			</td>
- 		</tr>
-	</table>
+							}
+							?>
+
+                            <? if($numrows > 0):?>
+
+                            <tr>
+                                <td colspan="12">
+                                    <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
+                                        <div style="float: left; width: 50%; text-align: left">
+                                            <b>Total de Registros: </b><span id="total_de_itens">0</span>
+                                        </div>
+                                        <div style="float: left; width: 50%; text-align: right">
+                                            <b>Valor total: </b><span id="valor_total">0.00</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?endif;?>
+                        </table>
+                    </fieldset>
+            </form>
+            </center>
+        </td>
+    </tr>
+</table>
 <script>
-function js_verifica(max,quan,nome,valoruni){
-   
-   if (max<quan){
-   
-   alert("Informe uma quantidade valida!!");
-   eval("document.form1."+nome+".value='';");
-   eval("document.form1."+nome+".focus();");
-   }else{
-   i=nome.split("_");
-   pos=i[3];
-   quant=new Number(quan);
-   valor=new Number(valoruni);
-   valortot=quant*valor;
-   
-   eval("document.form1.valor_"+pos+".value=valortot.toFixed(2)");
-   
-   }
- 
+
+    function js_pesquisaEmpenho(iNumEmp){
+        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
+    }
+
+    function js_verifica(max, quan, nome, valoruni) {
+
+        if (max < quan) {
+            alert("Informe uma quantidade valida!!");
+            eval("document.form1." + nome + ".value='';");
+            eval("document.form1." + nome + ".focus();");
+        } else {
+            i = nome.split("_");
+            pos = i[3];
+            quant = new Number(quan);
+            valor = new Number(valoruni);
+            valortot = quant * valor;
+
+            eval("document.form1.valor_" + pos + ".value=valortot.toFixed(2)");
+
+        }
+
+    }
+
+    function js_marcaLinha(obj, sequencia) {
+
+        let vlr_anterior = document.getElementById(`valor_${sequencia}`).value;
+        let qtd_anterior = 0;
+
+        let iQuantidade = document.getElementById(`quant_${sequencia}`).value;
+
+        if (iQuantidade) {
+            qtd_anterior = iQuantidade.replace(/\,/g, '.');
+        }
+
+        let idTr = document.getElementById(`tr_${obj.value}`);
+        let valor_total = document.getElementById('valor_total');
+        let total_itens = document.getElementById('total_de_itens');
+
+        // if(document.getElementById(`valor_${sequencia}`).value.includes(',')){
+        //     vlr_unitario = document.getElementById(`valor_${sequencia}`).value.replace(/\./g, '').replace(/\,/g, '.');
+        // }else{
+        //     vlr_unitario = document.getElementById(`valor_${sequencia}`).value.replace(/\,/g, '.');
+        // }
+
+        if (obj.checked) {
+
+            if (idTr.className === 'marcado') {
+            //     iQuantidade.addEventListener('change', (event, ui) => {
+            //         let temp = parseFloat(valor_total.innerText) + parseFloat(vlr_anterior);
+            //         valor_total.innerText = formataValor + --(temp);
+            //     });
+                return;
+            }
+
+            total_itens.innerText = parseInt(total_itens.innerText, 10) + 1;
+            idTr.className = 'marcado';
+
+            // let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
+
+            // let temp = document.getElementById(`vltotal_${sequencia}`).value.replace(/\./g, '').replace(/\,/g, '.');//parseFloat(total_rodape) + parseFloat(vlr_unitario) * parseFloat(qtd_anterior);
+            // let resultado = js_formatar(Number(temp), 'f');
+
+            // valor_total.innerText = resultado;
+        } else {
+
+            if (idTr.className === 'marcado') {
+                idTr.className = 'normal';
+
+                total_de_itens.innerText = parseInt(total_de_itens.innerText, 10) >= 1 ?
+                    parseInt(total_de_itens.innerText, 10) - 1 : 0;
+
+                let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
+                let temp = parseFloat(total_rodape) - Number(vlr_anterior.replace(',', '.')) * parseFloat(qtd_anterior);
+
+                // valor_total.innerText = js_formatar(temp.toFixed(2), 'f');
+            }
+        }
+        js_somaItens();
+    }
+
+    function js_marca(val){
+        obj = document.getElementById('mtodos');
+
+        if(obj.checked) {
+            obj.checked = false;
+        } else {
+            obj.checked = true;
+        }
+        itens = js_getElementbyClass(form1,'itensEmpenho');
+
+        for (let i = 0; i < itens.length; i++){
+            if (itens[i].disabled == false){
+                if (obj.checked == true){
+                    itens[i].checked=true;
+                    js_marcaLinha(itens[i], i);
+                }else{
+                    itens[i].checked=false;
+                    js_marcaLinha(itens[i], i);
+                }
+            }
+        }
+    }
+
+    function js_validaValor(item, tipo='v'){
+
+        let indexLinha = item.id.split('_')[1];
+        let message = '';
+        let fieldTotal = document.getElementById(`vltotal_${indexLinha}`);
+        let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
+
+        if(tipo == 'v'){
+            let valor_total = document.getElementById(`valortotal_${indexLinha}`).value;
+            let quantidade = document.getElementById(`quant_${indexLinha}`).value;
+            let novo_valor = 0;
+
+            if(valor_total.includes(',') && valor_total.includes('.')){
+                valor_total = valor_total.replace(/\./g, '').replace(/\,/g, '.');
+            }else{
+                valor_total = valor_total.replace(/\,/g, '.');
+            }
+
+            valor_total = valor_total.replace(/\s/g, '');
+
+            if(item.value.includes(',')){
+                novo_valor = item.value.replace(/\./g, '').replace(/\,/g, '.');
+            }else{
+                novo_valor = item.value.replace(/\,/g, '.');
+            }
+
+            novo_valor = novo_valor.replace(/\s/g, '');
+
+            // console.log('Valor total: ', valor_total);
+            // console.log('Novo valor: ', novo_valor);
+            // console.log('Novo valor 2: ', Number(novo_valor));
+            // console.log('Novo valor 3: ', js_formatar(Number(novo_valor), 'f'));
+
+            if(Number(novo_valor) > Number(valor_total)){
+                message = 'Valor inserido maior que o valor do item no Empenho!';
+                item.value = js_formatar(valor_total, 'f');
+            }else{
+                // nova_quantidade = !Number.isNaN(Number(nova_quantidade)) ? nova_quantidade : document.getElementById(`quant_${indexLinha}`).value;
+                document.getElementById(`vltotal_${indexLinha}`).innerText = js_formatar(Number(novo_valor), 'f');
+
+                let valor_unitario = document.getElementById(`valor_${indexLinha}`).value;
+                fieldTotal.value = js_formatar(Number(novo_valor), 'f');
+            }
+
+        }else{
+            let qtde_total = document.getElementById(`quant_${indexLinha}`).value;
+            let nova_quantidade = 0;
+
+            if(item.value.includes(',')){
+                nova_quantidade = item.value.replace(/\.\s/g, '').replace(/\,/g, '.');
+            }else{
+                nova_quantidade = item.value.replace(/\,/g, '.');
+            }
+
+            if(parseFloat(nova_quantidade) > parseFloat(qtde_total)){
+                message = 'Quantidade inserida maior que o valor do item no Empenho!';
+
+                let valor_unitario = document.getElementById(`valor_${indexLinha}`).value;
+                fieldTotal.value = js_formatar((parseFloat(qtde_total) * parseFloat(valor_unitario)), 'f');
+                item.value = js_formatar(qtde_total, 'f');
+            }else{
+
+                nova_quantidade = !Number.isNaN(Number(nova_quantidade)) ? 0 : document.getElementById(`quant_${indexLinha}`).value;
+
+                let valor_unitario = Number(document.getElementById(`valor_${indexLinha}`).value.replace(/\,/g, '.'));
+                fieldTotal.value = js_formatar((parseFloat(nova_quantidade) * valor_unitario), 'f');
+                temp = parseFloat(total_rodape) - valor_unitario * parseFloat(nova_quantidade);
+
+            }
+
+        }
+
+        if(message){
+            alert(message);
+        }
+
+        js_somaItens();
+    }
+
+    function js_limitaCaracteres(obj){
+        let novo_valor = 0;
+
+        if(obj.value.includes(',')){
+            let aValores = obj.value.split(',');
+
+            if(aValores[1].length > 4){
+                aValores[1] = aValores[1].slice(0, -1);
+            }
+
+            let valor_final = aValores.join(',');
+
+            document.getElementById(obj.id).value = js_formatar(valor_final, 'f');
+            return;
+
+        }
+
+        if(obj.value.includes(',') && obj.value.includes('.')){
+            novo_valor = obj.value.replace('.', '').replace(',', '.');
+        }
+
+        let regex = /[0-9\.\,]+$/;
+
+        if(!obj.value.match(regex)){
+            novo_valor = obj.value.slice(0, -1);
+            document.getElementById(obj.id).value = novo_valor;
+        }
+
+    }
+
+    function js_somaItens(){
+        let aItens = js_getElementbyClass(form1,'itensEmpenho');
+        let valor_total = 0;
+
+        for(let i = 0; i < aItens.length; i++){
+
+            let valorLinha = document.getElementById(`vltotal_${i}`).value;
+            if(valorLinha.includes(',') && valorLinha.includes('.')){
+                valorLinha = valorLinha.replace('.', '').replace(',','.');
+            }else if(valorLinha.includes(',')){
+                valorLinha = valorLinha.replace(',','.');
+            }
+            console.log('Valor da linha gerado ate aqui: ', valorLinha);
+
+            if(aItens[i].checked){
+                valor_total += Number(valorLinha);
+            }
+
+            console.log('Total gerado: ', valor_total);
+            document.getElementById('valor_total').innerText = js_formatar(valor_total, 'f');
+        }
+    }
 
 
-}
 </script>
 </body>
 </html>
