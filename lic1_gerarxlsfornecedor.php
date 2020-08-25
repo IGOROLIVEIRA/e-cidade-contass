@@ -29,7 +29,7 @@ $by   = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','
     'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
     'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
 
-$result_fornecedores = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_fornecedores = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao,l20_objeto",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 db_fieldsmemory($result_fornecedores,0);
 
 //Inicio
@@ -136,43 +136,48 @@ $sheet->setCellValue('E2',$pc22_codorc);
 $sheet->setCellValue('A2','Codigo do Orcamento:');
 $sheet->mergeCells('A2:D2');
 $sheet->mergeCells('E2:M2');
-$sheet->setCellValue('A3','Codigo do Orcamento do Fornecedor:');
-$sheet->setCellValue('E3',$pc21_orcamforne);
+$sheet->setCellValue('A3','Objeto:');
 $sheet->mergeCells('A3:D3');
 $sheet->mergeCells('E3:M3');
-$sheet->setCellValue('A4','CPF / CNPJ:');
-$sheet->setCellValue('E4',$z01_cgccpf);
+$sheet->setCellValue('A4','Codigo do Orcamento do Fornecedor:');
+$sheet->setCellValue('E4',$pc21_orcamforne);
 $sheet->mergeCells('A4:D4');
 $sheet->mergeCells('E4:M4');
-$sheet->setCellValue('A5','Nome / Razao Social:');
-$sheet->setCellValue('E5',$z01_nome);
+$sheet->setCellValue('A5','CPF / CNPJ:');
+$sheet->setCellValue('E5',$z01_cgccpf);
 $sheet->mergeCells('A5:D5');
 $sheet->mergeCells('E5:M5');
+$sheet->setCellValue('A6','Nome / Razao Social:');
+$sheet->setCellValue('E6',$z01_nome);
+$sheet->mergeCells('A6:D6');
+$sheet->mergeCells('E6:M6');
+$sheet->setCellValue('E3',iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $l20_objeto)));
+
 //cabeçalho
-$sheet->getStyle('A2:A5')->applyFromArray($styleTitulo1);
-$sheet->getStyle('B2:B5')->applyFromArray($styleTitulo1);
-$sheet->getStyle('C2:C5')->applyFromArray($styleTitulo1);
-$sheet->getStyle('D2:D5')->applyFromArray($styleTitulo1);
+$sheet->getStyle('A2:A6')->applyFromArray($styleTitulo1);
+$sheet->getStyle('B2:B6')->applyFromArray($styleTitulo1);
+$sheet->getStyle('C2:C6')->applyFromArray($styleTitulo1);
+$sheet->getStyle('D2:D6')->applyFromArray($styleTitulo1);
 //resposta cabeçalho
-$sheet->getStyle('E2:M5')->applyFromArray($styleResTitulo1);
+$sheet->getStyle('E2:M6')->applyFromArray($styleResTitulo1);
 
-$sheet->setCellValue('A6','Cod. Item');
-$sheet->setCellValue('B6','Seq. Item');
-$sheet->setCellValue('C6','Servico Material');
-$sheet->mergeCells('C6:F6');
-$sheet->setCellValue('G6','UN');
-$sheet->setCellValue('H6','Qtde');
+$sheet->setCellValue('A7','Cod. Item');
+$sheet->setCellValue('B7','Seq. Item');
+$sheet->setCellValue('C7','Servico Material');
+$sheet->mergeCells('C7:F7');
+$sheet->setCellValue('G7','UN');
+$sheet->setCellValue('H7','Qtde');
 if($pc80_criterioadjudicacao == 3){
-    $sheet->setCellValue('I6','Valor Unit.');
+    $sheet->setCellValue('I7','Valor Unit.');
 }else{
-    $sheet->setCellValue('I6','Taxa/Tabela %');
+    $sheet->setCellValue('I7','Taxa/Tabela %');
 }
-$sheet->mergeCells('J6:K6');
-$sheet->setCellValue('J6','Valor Total');
+$sheet->mergeCells('J7:K7');
+$sheet->setCellValue('J7','Valor Total');
 
-$sheet->mergeCells('L6:M6');
-$sheet->setCellValue('L6','Marca');
-$sheet->getStyle('A6:M6')->applyFromArray($styleItens2);
+$sheet->mergeCells('L7:M7');
+$sheet->setCellValue('L7','Marca');
+$sheet->getStyle('A7:M7')->applyFromArray($styleItens2);
 
 //cria protecao na planilha
 //senha para alteração
@@ -186,12 +191,12 @@ $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFo
 //$sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
-$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,m61_abrev,pc11_quant,l20_objeto",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcamitem->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){
     db_fieldsmemory($result_itens, $i);
-    $numrow = $i + 7;
+    $numrow = $i + 8;
     $collA = 'A'.$numrow;
     $collB = 'B'.$numrow;
     $collC = 'C'.$numrow;
@@ -251,16 +256,16 @@ $styleTotal = array(
 );
 
 //ultima linha itens
-$lastCell = 'J'.($numrows_itens + 6);
+$lastCell = 'J'.($numrows_itens + 7);
 
 //linha texto valor total
-$totalCellH = 'H'.($numrows_itens + 7);
-$totalCellI = 'I'.($numrows_itens + 7);
-$totalCellG = 'G'.($numrows_itens + 7);
+$totalCellH = 'H'.($numrows_itens + 8);
+$totalCellI = 'I'.($numrows_itens + 8);
+$totalCellG = 'G'.($numrows_itens + 8);
 
 //linha valor total
-$totalCellJ = 'J'.($numrows_itens + 7);
-$totalCellK = 'K'.($numrows_itens + 7);
+$totalCellJ = 'J'.($numrows_itens + 8);
+$totalCellK = 'K'.($numrows_itens + 8);
 $sheet->mergeCells($totalCellJ.':'.$totalCellK);
 $sheet->mergeCells($totalCellH.':'.$totalCellI);
 
