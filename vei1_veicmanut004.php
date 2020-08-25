@@ -134,7 +134,7 @@ if (isset($incluir)) {
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } else if (!empty($ve62_medida1) && $medida < $ve62_medida1) {
-      var_dump($ve62_medida1); exit;
+
       db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
@@ -167,16 +167,6 @@ if (isset($incluir)) {
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     }
-//    /**
-//     * Verificar Encerramento Periodo Contabil
-//     */
-//    if (!empty($ve62_dtmanut)) {
-//      $clcondataconf = new cl_condataconf;
-//      if (!$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
-//        $sqlerro  = true;
-//        $erro_msg=$clcondataconf->erro_msg;
-//      }
-//    }
 
     /**
      * Verificar Encerramento Periodo Patrimonial
