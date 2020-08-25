@@ -146,8 +146,8 @@ $clrotulo->label("e62_descr");
 									$sSqlEntrada = $clmatestoqueitemoc->sql_query_completo(null, null, "*", null,
 										"m73_codmatordemitem=$m52_codlanc and m73_cancelado is false");
 									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
-									echo 'Serviço: '.$pc01_servico;
-									echo 'Serviço quant...'. $e62_servicoquantidade;
+//									echo 'Serviço: '.$pc01_servico;
+//									echo 'Serviço quant...'. $e62_servicoquantidade;
 									if ($clmatestoqueitemoc->numrows == 0) {
 										echo "<tr id='tr_$e62_sequencial'>
                                                     <td class='linhagrid' title='Inverte a marcação' align='center'>
@@ -380,14 +380,6 @@ $clrotulo->label("e62_descr");
 											$vltotal = "vltotal_". "$i";
 											$$vltotal = db_formatar($m52_valor, 'f');
 
-//											db_fieldsmemory($result2, 0);
-//											$quantidade = "quant_$e60_numemp" . "_" . "$e62_sequen" . "_" . "$i";
-//											$$quantidade = $m52_quant - @ $m71_quant;
-//											$valor = "valor_$i";
-//											$vlr = $m52_valor - @$m71_valor;
-//											$$valor = db_formatar($vlr, 'f');
-//											$valoruni = $m52_valor / $m52_quant;
-
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
 											                db_input("quant_$i", 6, 0, true, 'text', 3);
@@ -410,7 +402,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("vltotal_$i", 8, 0, true, 'text', 3);
+											db_input("vltotal_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
 											echo "		 </small>";
 											echo "   </td>";
 											echo " </tr>";

@@ -137,6 +137,7 @@ if (isset($dados->altera)) {
 				$clmatordemitem->m52_sequen   = $sequen;
 				$clmatordemitem->m52_quant    = $quantidade;
 				$clmatordemitem->m52_valor    = $valor_item;
+//				var_dump($clmatordemitem);
 				$clmatordemitem->alterar($m52_codlanc);
 
 				if ($clmatordemitem->erro_status == 0) {

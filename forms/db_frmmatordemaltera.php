@@ -217,7 +217,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 <td>
 									<?
 									db_input('coddepto', 6, $Im51_depto, true, 'text', 3);
-									db_input('descrdepto', 36, $Idescrdepto, true, 'text', 3);
+									db_input('coddeptodescr', 36, $Idescrdepto, true, 'text', 3);
 									$depart = "false";
 									db_input('depart', 35, $Idescrdepto, true, 'hidden', 3);
 									?>
@@ -285,7 +285,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 											db_ancora(@$Lcoddepto, "js_coddepto(true);", 1); ?></td>
                                         <td><?
 											db_input('coddepto', 6, $Icoddepto, true, 'text', 1, " onchange='js_coddepto(false);'");
-											db_input('descrdepto', 35, $Idescrdepto, true, 'text', 3, ''); ?>
+											db_input('coddeptodescr', 35, $Idescrdepto, true, 'text', 3, ''); ?>
                                         </td>
 										<?
 									}
@@ -295,7 +295,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 										db_ancora(@$Lcoddepto, "js_coddepto(true);", 1); ?></td>
                                     <td><?
 										db_input('coddepto', 6, $Icoddepto, true, 'text', 1, " onchange='js_coddepto(false);'");
-										db_input('descrdepto', 35, $Idescrdepto, true, 'text', 3, ''); ?>
+										db_input('coddeptodescr', 35, $Idescrdepto, true, 'text', 3, ''); ?>
                                     </td>
 								<?
 								} ?>
@@ -306,7 +306,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 <td colspan='3' align='left'>
 									<?
 									$obs = $m51_obs;
-									db_textarea("obs", "", "90", $Im51_obs, true, 'text', 1);
+									db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1);
 									?>
                                 </td>
 								<?
@@ -400,7 +400,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         oParam.m51_codordem  = body.m51_codordem.value;
         oParam.coddepto      = body.coddepto.value;
         oParam.coddeptodescr = body.coddeptodescr.value;
-        oParam.obs           = body.obs.value;
+        oParam.obs           = body.m51_obs.value;
         oParam.itens         = aItens;
         oParam.altera        = true;
 
