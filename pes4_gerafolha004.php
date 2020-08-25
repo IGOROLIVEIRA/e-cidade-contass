@@ -5502,7 +5502,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
         if ($db_debug == true) { echo "[gerfsal] Inicio --> Grava no Gerfsal o arredondamento do mes anterior<br>"; }
 
-        if (!db_empty($pessoal[$Ipessoal]["r01_arredn"])) {
+        if (!db_empty($pessoal[$Ipessoal]["r01_arredn"]) && round($pessoal[$Ipessoal]["r01_arredn"], 2) > 0) {
           $tot_desc += $pessoal[$Ipessoal]["r01_arredn"];
           if ($db_debug == true) { echo "[gerfsal] 16 - tot_desc: $tot_desc<br>"; }
           $gerou_rubrica_calculo = true;
@@ -10575,7 +10575,7 @@ function calcula_r928 ($r110_regist,$r110_lotac,$opcao_geral){
       $tot_liq += $arredn;
       if ($db_debug == true) { echo "[calcula_r928] Total Liquido: $tot_liq<br>"; }
      }else{
-      $arredn = $tot_desc - $tot_prov;
+      $arredn = round($tot_desc - $tot_prov, 2);
       $r01_rubric = "R928";
      }
      if ($db_debug == true) { echo "[calcula_r928] diferença entre provento e desconto".$arredn."<br>"; }

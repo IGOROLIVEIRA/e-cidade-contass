@@ -234,6 +234,15 @@ $oRotuloSaltes->label();
                             ?>
                           </td>
                         </tr>
+                        <tr>
+                          <td><b>Prestação de Contas:</b></td>
+                          <td>
+                            <?php
+                            $aPrestacaoConta = array(1 => "Não", 2 => "Sim");
+                            db_select("iPrestacaoConta", $aPrestacaoConta, true, 1);
+                            ?>
+                          </td>
+                        </tr>
                       </table>
                     </fieldset>
                   </td>
@@ -316,7 +325,7 @@ $oRotuloSaltes->label();
       var map = window.open("", name, windowfeature);
       if (map) {
           mapForm.submit();
-      } 
+      }
     }
 
     filtra_despesa = parent.iframe_filtro.js_atualiza_variavel_retorno();
@@ -333,6 +342,7 @@ $oRotuloSaltes->label();
     dados['lQuebraRecurso']              = $F('lQuebraRecurso');
     dados['iListaEmpenho']               = $F('iListaEmpenho');
     dados['iTipoBaixa']                  = $F('iTipoBaixa');
+    dados['iPrestacaoConta']             = $F('iPrestacaoConta');
     dados['filtra_despesa']              = filtra_despesa;
 
     var name = new Date().getTime();
