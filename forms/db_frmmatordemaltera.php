@@ -132,7 +132,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 <td nowrap>
 									<? db_input('z01_email', 40, $Iz01_email, true, 'text', 3) ?>
                                     <input name="Alterar CGM" type="button" id="alterarcgm" value="Alterar CGM"
-                                           onclick="js_AlteraCGM(document.form1.e60_numcgm.value);" <?= $sDisable ?>>
+                                           onclick="js_AlteraCGM(document.form1.m51_numcgm.value);" <?= $sDisable ?>>
                                 </td>
                             </tr>
                             <tr>
@@ -357,6 +357,10 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 	?>
 </form>
 <script>
+    function js_AlteraCGM(cgm) {
+        js_OpenJanelaIframe('','db_iframe_altcgm','prot1_cadcgm002.php?chavepesquisa='+cgm+'&testanome=true&autoc=true','Altera Cgm',true);
+    }
+
     function js_buscavalores() {
         obj = itens.document.form1;
 
