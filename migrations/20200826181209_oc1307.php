@@ -27,11 +27,9 @@ class Oc1307 extends AbstractMigration
      */
     public function up()
     {
-        $sql = <<<SQL
-
-        BEGIN;
+        $sql = 
         
-        SELECT fc_startsession();
+        "SELECT fc_startsession();
 
         INSERT INTO db_estruturavalor
         VALUES (NEXTVAL('db_estruturavalor_db121_sequencial_seq'),
@@ -155,12 +153,8 @@ class Oc1307 extends AbstractMigration
             2,
             NULL,
             (SELECT max(db121_sequencial) FROM db_estruturavalor WHERE db121_estrutural = '265'),
-            29900000);
-
-        COMMIT;
+            29900000);";
         
-        SQL;
-
         $this->execute($sql);
 
     }
