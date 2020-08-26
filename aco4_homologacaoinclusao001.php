@@ -98,7 +98,7 @@ fieldset table td:first-child {
 		        <td colspan="3">
 		          <fieldset id="fieldsetobservacao" class="fieldsetinterno">
 		            <legend>
-		              <b>Observação</b>
+		              <b>Observao</b>
 		            </legend>
 		              <?
 		                db_textarea('ac10_obs',5,64,$Iac10_obs,true,'text',$db_opcao,"");
@@ -128,7 +128,7 @@ $('ac16_sequencial').style.width   = "100%";
 $('ac16_resumoobjeto').style.width = "100%";
 
 var sUrl = 'con4_contratosmovimento.RPC.php';
-let numeroAcordo = '';
+numeroAcordo = '';
 /**
  * Pesquisa acordos
  */
@@ -196,11 +196,11 @@ function js_homologarContrato() {
 
   if ($('ac16_sequencial').value == '') {
 
-    alert('Acordo não informado!');
+    alert('Acordo no informado!');
     return false;
   }
 
-  js_divCarregando('Aguarde incluindo finalização...','msgBoxHomologacaoContrato');
+  js_divCarregando('Aguarde incluindo finalizao...','msgBoxHomologacaoContrato');
 
   var oParam        = new Object();
   oParam.exec       = "homologarContrato";
