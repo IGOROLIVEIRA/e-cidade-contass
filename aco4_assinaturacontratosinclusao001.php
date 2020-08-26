@@ -326,6 +326,11 @@ function js_mostraacordo1(chave1,chave2,chave3) {
 
 function js_checaValor(){
 
+    if(document.getElementById('ac16_veiculodivulgacao').value.replace(/\s/g, '') == ''){
+        alert('Campo Veículo de Divulgação está vazio!');
+        return;
+    }
+
   var oParam = new Object();
   oParam.sequencial = $('ac16_sequencial').value;
   var sUrl = 'aco4_assinaturacontratosinclusao001.php';
