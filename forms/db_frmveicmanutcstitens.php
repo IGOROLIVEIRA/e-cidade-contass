@@ -288,7 +288,7 @@ $sHora = db_hora();
                                 </td>
                                 <td>
                                     <?
-                                    db_input('ve65_veicretirada', 10, $Ive65_veicretirada, true, 'text', $db_opcao,
+                                    db_input('ve65_veicretirada', 10, $Ive65_veicretirada, true, 'text', 3,
                                         " onchange='js_pesquisave65_veicretirada(false);'");
                                     db_input('ve60_codigo', 10, $Ive60_codigo, true, 'hidden', 3, '')
                                     ?>

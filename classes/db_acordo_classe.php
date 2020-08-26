@@ -480,6 +480,11 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
+
+        if(($this->ac16_tipocadastro == null) || ($this->ac16_tipocadastro == "") ){
+            $this->ac16_tipocadastro = 1;
+        }
+
         $sql = "insert into acordo(
       ac16_sequencial
      ,ac16_acordosituacao
