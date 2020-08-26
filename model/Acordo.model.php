@@ -2288,9 +2288,8 @@ class Acordo
             foreach ($aItens as $oItem) {
 
                 if (isset($aItensEmpempItem[$oItem->ac20_pcmater])) {
-                    $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->nQtde;
-                    $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->nVlrTotal;
-
+                    $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->quantidade;
+                    $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->vlrtot;
                     /**
                      * incluirmos na tabela acordoitemexecutado
                      */
