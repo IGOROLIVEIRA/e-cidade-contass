@@ -219,7 +219,7 @@ fieldset table td:first-child {
                   </td>
                   <td align="left" colspan="2">
                       <?
-                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao, '', '', '', '', 50);
                       ?>
                   </td>
 
