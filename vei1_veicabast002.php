@@ -77,73 +77,91 @@ if (isset($ve60_datasaida) && $ve60_datasaida != "") {
 
 if(isset($alterar)){
 
-$medida     = $ve70_medida;
-$dataabast  = implode("-",array_reverse(explode("/",$ve70_dtabast)));
-$databanco  = "'".$ve70_dtabast_ano."-".$ve70_dtabast_mes."-".$ve70_dtabast_dia."'";
+    $medida     = $ve70_medida;
+    $oDataAbast = new DBDate($ve70_dtabast);
+    $passa=false;
+    $horaabast = $ve70_hora;
+    $retirada = $ve73_veicretirada;
+    $datahoraAbastecimento = strtotime($oDataAbast->getDate()." ".$ve70_hora);
+    $dataabast = $oDataAbast->getDate();
 
-//último abastecimento
-$result_abast=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo","ve70_dtabast desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null "));
-
- if ($clveicabast->numrows>0 ){
-        $oAbast=db_utils::fieldsMemory($result_abast,0);
-        $ve70_medida  = $oAbast->ve70_medida;
-       }
-
-
-//verifica se a última medida é zero
-$result_abast=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_codigo desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null"));
-if ($clveicabast->numrows>0 ){
-        $oAbast=db_utils::fieldsMemory($result_abast,0);
-        $ve70_medida0 = $oAbast->ve70_medida;
-        $ve70_codigo0 = $oAbast->ve70codigo;
-
-       }
-
-//abastecimento anterior
-$result_abast1=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_dtabast desc limit 1","ve70_veiculos=$ve70_veiculos and ve70_dtabast <= $databanco and ve74_codigo is null"));
-if ($clveicabast->numrows>0 ){
-     $oAbast1=db_utils::fieldsMemory($result_abast1,0);
-     $ve70_codigo1  = $oAbast1->ve70codigo;
-     $ve70_medida1  = $oAbast1->ve70_medida;
-     $ve70_dtabast1 = $oAbast1->ve70_dtabast;
-   }
-
-//abastecimento posterior
-$result_abast3=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_codigo asc limit 1","ve70_veiculos=$ve70_veiculos and  ve70_dtabast >= $databanco and ve74_codigo is null"));
-
-if ($clveicabast->numrows>0 ){
-    $oAbast3=db_utils::fieldsMemory($result_abast3,0);
-    $ve70_codigo3  = $oAbast3->ve70codigo;
-    $ve70_medida3  = $oAbast3->ve70_medida;
-    $ve70_dtabast3 = $oAbast3->ve70_dtabast;
-  }
-
-if (isset($ve70_dtabast3) && $ve70_dtabast3!=0){
-$dataabast     = db_strtotime($dataabast);
-$ve70_dtabast1 = db_strtotime($ve70_dtabast1);
-$ve70_dtabast3 = db_strtotime($ve70_dtabast3);
-
-   if ($dataabast < $ve70_dtabast1 || $dataabast > $ve70_dtabast3 ){
-       $sqlerro=true;
-       db_msgbox("Data inválida ");
-       $erro_msg="Não foi possível alterar.";
-
-   }elseif ($dataabast < $ve70_dtabast1){
-      $sqlerro=true;
-      db_msgbox("Data inválida ");
-      $erro_msg="Não foi possível alterar.";
-   }elseif (($dataabast > $ve70_dtabast1 && $medida < $ve70_medida1))
-         {
-      $sqlerro=true;
-      db_msgbox("Medida inválida");
-      $erro_msg="Não foi possível alterar.";
+    if (isset($ve70_medida) and $ve70_medida==0) {
+        $medidazero=true;
+    } else {
+        $medidazero=false;
     }
-}elseif ($medida < $ve70_medida){
-         $sqlerro=true;
-         db_msgbox("Medida inválida");
-         $erro_msg="Não foi possível alterar.";
+    /*
+     * verifica retirada e devolução vinculados ao abastecimento
+     */
+    $result_retirada=$clveicabast->sql_record($clveicabast->sql_query_retirada(null,"ve60_codigo,ve60_medidasaida,ve61_medidadevol,to_timestamp(ve60_datasaida||' '||ve60_horasaida::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrretirada,to_timestamp(ve61_datadevol||' '||ve61_horadevol::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrdevolucao",null,"ve60_codigo=$retirada"));
+    if (pg_num_rows($result_retirada)>0){
+        $oRetirada = db_utils::fieldsMemory($result_retirada,0);
+        $ve60_medidasaida = $oRetirada->ve60_medidasaida;
+        $datahoraRetirada = $oRetirada->datahrretirada;
+        $ve61_medidadevol = $oRetirada->ve61_medidadevol;
+        $datahoraDevolucao = $oRetirada->datahrdevolucao;
+    }
 
-}
+    /*
+     * verifica abastecimentos anterior ao que o usuario deseja incluir
+     */
+    $result_abast1=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_codigo,ve60_medidasaida,ve60_datasaida,ve61_medidadevol,ve61_datadevol,ve61_horadevol,ve60_horasaida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast",null,"ve60_codigo = $retirada) as x WHERE ve70_dtabast < to_timestamp('{$oDataAbast->getDate()}'||' '||'$horaabast'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP LIMIT 1;"));
+    if (pg_num_rows($result_abast1)>0 ) {
+        $oAbast1       = db_utils::fieldsMemory($result_abast1,0);
+        $ve70_medida1  = $oAbast1->ve70_medida;
+        $ve70_datahora1 = $oAbast1->ve70_dtabast;
+    }
+
+    /*
+     * verifica abastecimentos posterior ao que o usuario deseja incluir
+     */
+    $result_abast3=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_codigo,ve60_medidasaida,ve60_datasaida,ve61_medidadevol,ve61_datadevol,ve61_horadevol,ve60_horasaida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast","","ve70_veiculos=$ve70_veiculos and ve60_codigo = $retirada) as x WHERE ve70_dtabast > to_timestamp('{$oDataAbast->getDate()}'||' '||'$horaabast'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP ORDER BY ve70_medida asc LIMIT 1;"));
+    if (pg_num_rows($result_abast3)>0 ) {
+        $oAbast3       = db_utils::fieldsMemory($result_abast3,0);
+        $ve70_medida3  = $oAbast3->ve70_medida;
+        $ve70_datahora3 = $oAbast3->ve70_dtabast;
+    }
+
+    if (!empty($ve70_datahora1) && $datahoraAbastecimento < strtotime($ve70_datahora1)){
+        db_msgbox("Data ou Hora menor que abastecimento anterior.");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($ve70_datahora3) && $datahoraAbastecimento > strtotime($ve70_datahora3)){
+        db_msgbox("Data ou Hora maior que abastecimento posterior.");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($ve70_medida1) && $medida < $ve70_medida1){
+        db_msgbox("Medida de Abastecimento menor que Medida de abastecimento anterior");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($ve70_medida3) && $medida > $ve70_medida3){
+        db_msgbox("Medida de Abastecimento maior que Medida de abastecimento posterior");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($datahoraRetirada) && $datahoraAbastecimento < strtotime($datahoraRetirada)){
+        db_msgbox("Data ou Hora do Abastecimento menor que da Retirada");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($datahoraDevolucao) && $datahoraAbastecimento > strtotime($datahoraDevolucao)){
+        db_msgbox("Data ou Hora do Abastecimento maior que da Devolucao");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($ve60_medidasaida) && $medida < $ve60_medidasaida){
+        db_msgbox("Medida de Abastecimento menor que Medida de Retirada");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+    else if (!empty($ve61_medidadevol) && $medida > $ve61_medidadevol){
+        db_msgbox("Medida de Abastecimento maior que Medida de Devolucao");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
 
 if ($ve70_vlrun == '' || $ve70_vlrun == 0){
   db_msgbox("Informar o valor do litro.");
@@ -182,19 +200,6 @@ if( (isset($proximamedida) && $proximamedida > 0) && $proximamedida < $medida){
  $erro_msg = "Medida informada maior que a proxima medida {$proximamedida}! Verique!";
  $clveicabast->erro_campo = "ve70_medida";
 }
-
-///**
-// * Verificar Encerramento Periodo Contabil
-// */
-//$dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve70_codigo,"ve70_dtabast")),0)->ve70_dtabast;
-//if (!empty($dtabast)) {
-//  $clcondataconf = new cl_condataconf;
-//  if (!$clcondataconf->verificaPeriodoContabil($dtabast) || !$clcondataconf->verificaPeriodoContabil($dataabast)) {
-//    db_msgbox($clcondataconf->erro_msg);
-//    $sqlerro  = true;
-//    $erro_msg="Não foi possível alterar.";
-//  }
-//}
 
 /**
  * Verificar Encerramento Periodo Patrimonial

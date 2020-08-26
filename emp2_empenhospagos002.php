@@ -81,7 +81,7 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial, todo.e60_coddot ";
+                               todo.k106_sequencial, todo.e60_coddot, todo.e60_resumo ";
         $aOrderBy[] = "ORDER BY k12_data,
                                 e60_numcgm,
                                 tipo,
@@ -105,7 +105,7 @@ if ($oPost->sTipoOrdem == "empenho") {
                                todo.k12_data,
                                todo.o15_codtri,
                                todo.k13_descr,
-                               todo.k106_sequencial,todo.e60_coddot ";
+                               todo.k106_sequencial,todo.e60_coddot, todo.e60_resumo ";
         $aOrderBy[] = "ORDER BY k12_data,
                          e60_numcgm,
                          o15_codtri,
@@ -224,7 +224,7 @@ $sSqlBuscaEmpenhos .= "            CASE                                         
 $sSqlBuscaEmpenhos .= "                WHEN e60_anousu < {$iAnoUsoSessao} THEN 'RP'                                                          												";
 $sSqlBuscaEmpenhos .= "                ELSE 'Emp'                                                          																					";
 $sSqlBuscaEmpenhos .= "            END AS tipo,                                                          																					";
-$sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot                                                          																				";
+$sSqlBuscaEmpenhos .= "            k106_sequencial, e60_coddot, e60_resumo                                                          																				";
 $sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empelemento ON e60_numemp = e64_numemp                                                      					";
@@ -256,7 +256,7 @@ $sSqlBuscaEmpenhos .= "                  credito AS k13_conta,                  
 $sSqlBuscaEmpenhos .= "                  o15_codtri,                                                          																				";
 $sSqlBuscaEmpenhos .= "                  descr_credito AS k13_descr,                                                          																";
 $sSqlBuscaEmpenhos .= "                  tipo,                                                           																					";
-$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial, 0 as e60_coddot                                                          																		";
+$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial, 0 as e60_coddot , '' as e60_resumo                                                         																		";
 $sSqlBuscaEmpenhos .= "     FROM                                                          																									";
 $sSqlBuscaEmpenhos .= "         (SELECT k12_id,                                                          																					";
 $sSqlBuscaEmpenhos .= "                 k12_autent,                                                          																				";
@@ -486,10 +486,15 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->tipo, 0, 1, "C", 0);
     $oPdf->sety($iYlinha + 1);
 
+    if($oPost->iPrestacaoConta==2) {
+      $oPdf->cell(240, $iAltura, "Histórico: " . $oDadoEmpenho->e60_resumo, 0, 0, "L", 0);
+      $oPdf->sety($iYlinha + 6);
+    }
+
     $total_nadata += $oDadoEmpenho->k12_valor;
     $count_dados += 1;
   }
-  $total_geral += $total_nadata;
+  $total_geral += $total_nadata;$oPdf->sety($iYlinha + 1);
   $oPdf->setfont('arial', 'B', 7);
   $oPdf->cell(226, 4, "SubTotal :", 1, 0, "R", 1);
   $oPdf->cell(20, 4, db_formatar($total_nadata, 'f'), 1, 0, "R", 1);

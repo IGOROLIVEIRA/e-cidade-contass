@@ -251,7 +251,7 @@ class cl_pagordem {
      return true;
    } 
    // funcao para alteracao
-   function alterar ($e50_codord=null) { 
+   function alterar ($e50_codord=null,$o56_elemento=null) { 
       $this->atualizacampos();
      $sql = " update pagordem set ";
      $virgula = "";
@@ -367,7 +367,7 @@ class cl_pagordem {
        if(isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"])){ 
          $sql  .= $virgula." e50_compdesp = null ";
          $virgula = ",";
-         if(trim($this->e50_compdesp) == null ){ 
+         if(trim($this->e50_compdesp) == null && in_array(substr($o56_elemento,0,7),array("3319092","3319192","3319592","3319692"))){ 
            $this->erro_sql = " Campo Competência da Despesa nao Informado.";
            $this->erro_campo = "e50_compdesp_dia";
            $this->erro_banco = "";

@@ -44,6 +44,7 @@ class cl_parissqn {
    // cria publiciaveis do arquivo
    public $q60_receit = 0;
    public $q60_tipo = 0;
+    public $q60_tipo_notaavulsa = 0;
    public $q60_aliq = 0;
    public $q60_aliq_reduzida = 0;
    public $q60_codvencpublic = 0;
@@ -81,6 +82,7 @@ class cl_parissqn {
    public $campos = "
                  q60_receit = int4 = Receita
                  q60_tipo = int4 = tipo de débito
+                 q60_tipo_notaavulsa = int4 = tipo de débito nota avulsa
                  q60_aliq = float8 = Aliquota padrão
                  q60_aliq_reduzida = int8 = Alíquotas reduzidas
                  q60_codvenc_incentivo = int4 = Código do vencimento com incentivo
@@ -131,6 +133,7 @@ class cl_parissqn {
      if($exclusao==false){
        $this->q60_receit = ($this->q60_receit == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_receit"]:$this->q60_receit);
        $this->q60_tipo = ($this->q60_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_tipo"]:$this->q60_tipo);
+       $this->q60_tipo_notaavulsa = ($this->q60_tipo_notaavulsa == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_tipo_notaavulsa"]:$this->q60_tipo_notaavulsa);
        $this->q60_aliq = ($this->q60_aliq == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq"]:$this->q60_aliq);
        $this->q60_aliq_reduzida = ($this->q60_aliq_reduzida == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq_reduzida"]:$this->q60_aliq_reduzida);
        $this->q60_codvencvar = ($this->q60_codvencvar == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_codvencvar"]:$this->q60_codvencvar);
@@ -186,6 +189,15 @@ class cl_parissqn {
      if($this->q60_tipo == null ){
        $this->erro_sql = " Campo tipo de débito não informado.";
        $this->erro_campo = "q60_tipo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->q60_tipo_notaavulsa == null ){
+       $this->erro_sql = " Campo tipo de débito da nota avulsa não informado.";
+       $this->erro_campo = "q60_tipo_notaavulsa";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -406,6 +418,7 @@ class cl_parissqn {
      $sql = "insert into parissqn(
                                        q60_receit
                                       ,q60_tipo
+                                      ,q60_tipo_notaavulsa
                                       ,q60_aliq
                                       ,q60_aliq_reduzida
                                       ,q60_codvencvar
@@ -440,6 +453,7 @@ class cl_parissqn {
                 values (
                                 $this->q60_receit
                                ,$this->q60_tipo
+                               ,$this->q60_tipo_notaavulsa
                                ,$this->q60_aliq
                                ,$this->q60_aliq_reduzida
                                ,$this->q60_codvencvar
@@ -520,6 +534,19 @@ class cl_parissqn {
        if(trim($this->q60_tipo) == null ){
          $this->erro_sql = " Campo tipo de débito não informado.";
          $this->erro_campo = "q60_tipo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->q60_tipo_notaavulsa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_tipo_notaavulsa"])){
+       $sql  .= $virgula." q60_tipo_notaavulsa = $this->q60_tipo_notaavulsa ";
+       $virgula = ",";
+       if(trim($this->q60_tipo_notaavulsa) == null ){
+         $this->erro_sql = " Campo tipo de débito da nota avulsa não informado.";
+         $this->erro_campo = "q60_tipo_notaavulsa";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1048,6 +1075,19 @@ class cl_parissqn {
        if(trim($this->q60_tipo) == null ){
          $this->erro_sql = " Campo tipo de debito nao Informado.";
          $this->erro_campo = "q60_tipo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->q60_tipo_notaavulsa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_tipo_notaavulsa"])){
+       $sql  .= $virgula." q60_tipo_notaavulsa = $this->q60_tipo_notaavulsa ";
+       $virgula = ",";
+       if(trim($this->q60_tipo_notaavulsa) == null ){
+         $this->erro_sql = " Campo tipo de debito da nota avulsa nao Informado.";
+         $this->erro_campo = "q60_tipo_notaavulsa";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
