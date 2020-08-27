@@ -45,6 +45,7 @@ require_once("model/AcordoRescisao.model.php");
 require_once("model/AcordoAnulacao.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoItem.model.php");
+require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
 require_once("std/DBDate.php");
@@ -173,6 +174,18 @@ switch($oParam->exec) {
 
         if (!$oAssinatura->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
+        }
+
+        if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1" || $oAcordo->getNaturezaAcordo($oParam->acordo) == "7"){
+            if($oAcordo->getObras($oParam->acordo) == null){
+                $iLicitacao = $oAcordo->getLicitacao();
+                $oLicitacao = new licitacao($iLicitacao);
+                $iAnousu     = $oLicitacao->getAno();
+                $iModalidade = $oLicitacao->getNumeroLicitacao();
+                $oModalidade = $oLicitacao->getModalidade();
+                $sDescricaoMod = $oModalidade->getDescricao();
+                throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. $sDescricaoMod Nº $iModalidade/$iAnousu");
+            }
         }
 
         if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {
