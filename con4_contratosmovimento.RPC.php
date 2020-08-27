@@ -177,7 +177,7 @@ switch($oParam->exec) {
         }
 
           if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1" || $oAcordo->getNaturezaAcordo($oParam->acordo) == "7"){
-              ini_set('display_errors','on');
+//              ini_set('display_errors','on');
               if($oAcordo->getObras($oParam->acordo) == null){
                 $iLicitacao = $oAcordo->getLicitacao();
                 $oLicitacao = new licitacao($iLicitacao);
