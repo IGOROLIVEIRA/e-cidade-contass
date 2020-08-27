@@ -176,15 +176,17 @@ switch($oParam->exec) {
           $lAcordoValido = false;
         }
 
-        if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1" || $oAcordo->getNaturezaAcordo($oParam->acordo) == "7"){
-            if($oAcordo->getObras($oParam->acordo) == null){
+          if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1" || $oAcordo->getNaturezaAcordo($oParam->acordo) == "7"){
+              ini_set('display_errors','on');
+              if($oAcordo->getObras($oParam->acordo) == null){
                 $iLicitacao = $oAcordo->getLicitacao();
                 $oLicitacao = new licitacao($iLicitacao);
                 $iAnousu     = $oLicitacao->getAno();
                 $iModalidade = $oLicitacao->getNumeroLicitacao();
+                $iProcesso   = $oLicitacao->getEdital();
                 $oModalidade = $oLicitacao->getModalidade();
                 $sDescricaoMod = $oModalidade->getDescricao();
-                throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. $sDescricaoMod Nº $iModalidade/$iAnousu");
+                throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. Solicitar cadastro no módulo Obras para o processo Nº $iProcesso/$iAnousu $sDescricaoMod Nº $iModalidade/$iAnousu");
             }
         }
 
