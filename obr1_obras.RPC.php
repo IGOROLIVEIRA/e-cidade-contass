@@ -119,7 +119,7 @@ switch($oParam->exec) {
       }
 
       if($datainicioatividades < $dtLancObra){
-          throw new Exception("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Lançamento da Obra.");
+          throw new Exception("Usuário: Campo Data de início das atividades deve ser igual ou maior do que a data de lançamento da obra.");
       }
 
       /**
