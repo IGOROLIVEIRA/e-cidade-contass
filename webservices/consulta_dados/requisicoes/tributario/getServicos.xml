@@ -11,6 +11,8 @@
     <campo campo="q136_exercicio"                                  label="exercicio" />
     <campo campo="q136_valor_reduzido" label="aliq_reduz"   />
     <campo campo="db121_estrutural" label="estrutural"   />
+    <campo campo="db121_descricao" label="descr_item_servico"   />
+    <campo campo="q136_tipotributacao" label="tipo_tributacao"   />
   </campos>
   <from tabela="ativid"/>
   <juncoes>

@@ -5,7 +5,6 @@
     <campo campo="q03_descr"        label="atividade"         />
     <campo campo="q03_deducao"     label="deducao"            />
     <campo campo="q03_tributacao_municipio" label="tributacao_municipio" />
-    <campo campo= "case when q136_tipotributacao = 1 then true else false end"    label="tributacao_fixada"           />
     <campo campo="q71_estrutural"   label="estrut_cnae"       />
     <campo campo="q71_descr"        label="desc_cnae"         />
     <campo campo="db121_estrutural" label="cod_item_servico"  />
@@ -15,7 +14,7 @@
     <campo campo="case when q136_localpagamento = 1 then 'Sede Prestador'
                         when q136_localpagamento = 2 then 'Sede tomador'
                         when q136_localpagamento = 3 then 'Local de prestação do serviço' end"
-                                                                                  label="local_pgto"                     />
+           label="local_pgto"                     />
     <campo campo="case when q136_tipotributacao = 3 then 't' else 'f' end"                     label="tributacao_nao_incide" />
     <campo campo="q136_exercicio"                                  label="exercicio" />
   </campos>
@@ -30,9 +29,8 @@
     <join tipo="inner"   tabela="issconfiguracaogruposervico"     condicao="q126_sequencial        = q136_issgruposervico" />
   </juncoes>
   <filtros>
-    <filtro label="atividade" condicao="q03_ativ = '$atividade'" obrigatorio="false"/>
-    <filtro label="servico" condicao="q136_sequencial = '$servico'" obrigatorio="false"/>
     <filtro label="exercicio"   condicao = "q136_exercicio = '$exercicio'" obrigatorio="true"                           />
+    <filtro label="servico" condicao="q136_sequencial = '$servico'" obrigatorio="true"/>
   </filtros>
   <agrupamento campos="" />
   <ordenacao   campos="q03_ativ" />
