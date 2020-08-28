@@ -983,7 +983,7 @@ db_app::load("estilos.css");
         js_pesquisa_ultimamedida();
 
       };
-
+      js_pesquisa_ultimamedida();
       js_formataHora();
       js_pesquisae60_codemp(false);
 
