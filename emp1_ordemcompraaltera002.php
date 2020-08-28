@@ -64,21 +64,29 @@ if (isset($dados->altera)) {
 	$valor_total = 0;
 	$sqlerro = false;
 
-    for ($count = 0; $count < sizeof($dados->itens); $count++){
-        $objeto = $dados->itens[$count];
+	$sqlItens = 'select * from matordem inner join matordemitem on m52_codordem = matordem.m51_codordem where m51_codordem = ' . $dados->m51_codordem. ' order by m52_sequen';
+	$rsItens  = db_query($sqlItens);
+	$itensAcordo = db_utils::getCollectionByRecord($rsItens);
 
-        if (!$sqlerro){
-            $numemp = $objeto->numemp;
-            $quantidade = $objeto->quantidade;
-            $valor   = $objeto->valortotal;
+    for ($count = 0; $count < sizeof($itensAcordo); $count++){
 
+		$objeto = $itensAcordo[$count];
+
+        if($objeto->m52_sequen == $dados->itens[$count]->sequen){
+            if(floatval($dados->itens[$count]->valortotal) != $objeto->m52_valor){
+                $objeto->m52_valor = $dados->itens[$count]->valortotal;
+            }
         }
 
-        $vl_soma_item = $valor;
-        $valor_formatado = str_replace('.', '', $vl_soma_item);
-        $valor_formatado = str_replace(',', '.', $valor_formatado);
+        if(strpos($objeto->m52_valor, '.') && strpos($objeto->m52_valor, ',')){
+		    $objeto->m52_valor = str_replace('.', '', $objeto->m52_valor);
+        }
 
-        $valor_total += $valor_formatado;
+		if(strpos($objeto->m52_valor, ',')){
+			$objeto->m52_valor = str_replace(',', '.', $objeto->m52_valor);
+		}
+
+        $valor_total += $objeto->m52_valor;
 
     }
 
@@ -137,7 +145,6 @@ if (isset($dados->altera)) {
 				$clmatordemitem->m52_sequen   = $sequen;
 				$clmatordemitem->m52_quant    = $quantidade;
 				$clmatordemitem->m52_valor    = $valor_item;
-//				var_dump($clmatordemitem);
 				$clmatordemitem->alterar($m52_codlanc);
 
 				if ($clmatordemitem->erro_status == 0) {

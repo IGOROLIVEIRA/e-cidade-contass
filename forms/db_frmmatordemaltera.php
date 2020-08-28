@@ -365,36 +365,48 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         obj = itens.document.form1;
 
         let aItens = [];
+
         let objeto = {};
+        let elementChecked = false;
 
         for (let count = 0; count < obj.elements.length; count++) {
 
-            if(itens.document.getElementById(`codemp_${count}`)){
-                objeto = {};
-                objeto.codemp = itens.document.getElementById(`codemp_${count}`).innerText;
+            if(obj.elements[count].id.includes('chk')){
+                if(itens.document.getElementById(`${obj.elements[count].id}`).checked){
+                    elementChecked = true;
+                }else{
+                    elementChecked = false;
+                }
             }
 
-            if (obj.elements[count].id.includes("qtde")) {
-                objeto.quantidade = obj.elements[count].value;
-            }
+            if(elementChecked){
+                if (obj.elements[count].id.includes('sequen_')) {
+                    objeto = {};
+                    objeto.sequen = obj.elements[count].value.replace(/\s/g, '');
+                }
 
-            if (obj.elements[count].id.includes('vltotal')) {
-                objeto.valortotal = obj.elements[count].value.replace(/\s/g, '');
-            }
+                if (obj.elements[count].id.includes('numemp_')) {
+                    objeto.numemp = obj.elements[count].value.replace(/\s/g, '');
+                }
 
-            if (obj.elements[count].id.includes('coditem')) {
-                objeto.coditem = obj.elements[count].value.replace(/\s/g, '');
-            }
+                if (obj.elements[count].id.includes('coditem_')) {
+                    objeto.coditem = obj.elements[count].value.replace(/\s/g, '');
+                }
 
-            if (obj.elements[count].id.includes('sequen')) {
-                objeto.sequen = obj.elements[count].value.replace(/\s/g, '');
-            }
+                if (obj.elements[count].id.includes("qtde_")) {
+                    objeto.quantidade = obj.elements[count].value;
+                }
 
-            if (obj.elements[count].id.include('numemp')){
-                objeto.numemp = obj.elements[count].value.replace(/\s/g, '');
-                aItens.push(objeto);
-            }
+                if (obj.elements[count].id.includes('vltotal_')) {
+                    objeto.valortotal = obj.elements[count].value.replace(/\s/g, '');
+                }
 
+                if(Object.keys(objeto).length == 5){
+                    if(!aItens.includes(objeto)){
+                        aItens.push(objeto);
+                    }
+                }
+            }
         }
 
         let oParam                 = new Object();
@@ -445,7 +457,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
     function js_retornoDados(oAjax){
         let response = eval("("+oAjax.responseText+")");
-        alert(response.message.urlDecode());
+        alert(`${response.message.urlDecode()}`);
 
         if(!response.erro){
             let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
