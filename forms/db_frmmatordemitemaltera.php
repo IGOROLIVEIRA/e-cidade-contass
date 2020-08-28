@@ -141,15 +141,27 @@ $clrotulo->label("e62_descr");
 
 								}
 
+
 								for ($i = 0; $i < $numrows; $i++) {
 									db_fieldsmemory($result, $i);
 									$sSqlEntrada = $clmatestoqueitemoc->sql_query_completo(null, null, "*", null,
 										"m73_codmatordemitem=$m52_codlanc and m73_cancelado is false");
+
 									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
-//									echo 'Serviço: '.$pc01_servico;
-//									echo 'Serviço quant...'. $e62_servicoquantidade;
+
+
+                                    if(pg_num_rows($result2)){
+                                        $sChecked = 'checked';
+                                        $disabled = 'disabled';
+                                        $opcao = 3;
+                                    }else{
+                                        $opcao = 1;
+                                    }
+
+                                    $marcaLinha = $opcao == 1 ? '' : 'marcado';
+
 									if ($clmatestoqueitemoc->numrows == 0) {
-										echo "<tr id='tr_$e62_sequencial'>
+										echo "<tr id='tr_$e62_sequencial' class='$marcaLinha'>
                                                     <td class='linhagrid' title='Inverte a marcação' align='center'>
                                                         <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
                                                             name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
@@ -161,7 +173,7 @@ $clrotulo->label("e62_descr");
                                                     </td>
 													<td	class='linhagrid' align='center'>
 													    <small>";
-													        db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 1, '', "codemp_$i");
+													        db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", $opcao, '', "codemp_$i");
 													    echo "</small>
                                                     </td>
 													<td	class='linhagrid' align='center'>
@@ -199,16 +211,19 @@ $clrotulo->label("e62_descr");
 											$quant = $m52_quant;
 
 											$quantidade = "quant_" . "$i";
-											$$quantidade = $m52_quant;
+											$$quantidade = $e62_quant;
 
 											$qtde = "qtde_$i";
-											$$qtde = $$quantidade;
+											$$qtde = trim($m52_quant);
 
 											$valor = "valor_$i";
-											$$valor = db_formatar($m52_vlruni, 'f');
+											$$valor = trim(db_formatar($m52_vlruni, 'f'));
 
-											$valor_total = "vltotal_". "$i";
-											$$valor_total = db_formatar($e62_vltot, 'f');
+											$valor_total = "vltotalemp_". "$i";
+											$$valor_total = trim(db_formatar($e62_vltot, 'f'));
+
+											$vltotal = "vltotal_". "$i";
+											$$vltotal = trim(db_formatar($m52_valor, 'f'));
 
 										   /**
                                            * Caso for um material
@@ -230,17 +245,17 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("valor_$i", 15, 0, true, 'text', 3);
+											                db_input("valor_$i", 10, 0, true, 'text', 3);
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											echo "          <input id='$valor_total' class='input__static' value=' ". $$valor_total . "' disabled />";
+											echo "          <input id='$valor_total' class='input__static' value='".trim($$valor_total)."' disabled />";
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("qtde_$i", 15, 0, true, 'text', 1, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
+											                db_input("qtde_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
@@ -252,20 +267,20 @@ $clrotulo->label("e62_descr");
 
 										} else if ($pc01_servico == 't') {
 
-											$quantidade = "quant_" . "$i";
-											$$quantidade = $m52_quant;
+										    $quantidade = "quant_" . "$i";
+											$$quantidade = trim($m52_quant);
 
 											$qtde = "qtde_" . "$i";
 											$$qtde = $m52_quant;
 
 											$valor = "valor_$i";
-											$$valor = db_formatar($m52_vlruni, 'f');
+											$$valor = trim(db_formatar($m52_vlruni, 'f'));
 
                                             $valor_total = "valortotal_$i";
-                                            $$valor_total = str_replace('/\s/g', '', db_formatar($e62_vltot, 'f'));
+                                            $$valor_total = trim(str_replace('/\s/g', '', db_formatar($e62_vltot, 'f')));
 
                                             $vltotal = "vltotal_$i";
-                                            $$vltotal = db_formatar($m52_valor, 'f');
+                                            $$vltotal = trim(db_formatar($m52_valor, 'f'));
 
 											echo "   <td class='linhagrid' align='center'>";
 											echo "      <input id='$quantidade' class='input__static' value='".$$quantidade."' disabled />";
@@ -280,24 +295,24 @@ $clrotulo->label("e62_descr");
                                             db_input("qtde_$i", 8, 0, true, 'text', 3);
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
-                                            db_input("vltotal_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
+                                            db_input("vltotal_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
                                             echo "   </td>";
 											echo " </tr>";
 										}
 
 									} else {
-									    echo "<tr id='tr_$e62_sequencial'>";
-										echo "
-										        <td class='linhagrid' title='Inverte a marca??o' align='center'>
+									    echo "<tr id='tr_$e62_sequencial' class='$marcaLinha'>";
+									    echo "
+										        <td class='linhagrid' title='Inverte a marcação' align='center'>
                                                     <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
                                                         name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
                                                 </td>";
 										echo "    <td class='linhagrid' align='center'>
  	                                                <small>$e62_sequen</small>
                                                   </td>";
-										echo " 	 <td class='linhagrid' align='center'>
+										echo " 	 <td class='linhagrid' align='center' $disabled>
  	                                                <small>";
-										                db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 1);
+										                db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 3);
                                         echo"       </small>
                                                  </td>";
 										echo "   <td class='linhagrid' align='center'>
@@ -310,20 +325,20 @@ $clrotulo->label("e62_descr");
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
 										echo "   <td class='linhagrid' nowrap align='left' title='$m61_abrev'>
-                                                    <small>" .(isset($m61_abrev) ? $m61_abrev : '-'). "&nbsp;</small>
+                                                    <small>" .(isset($m61_abrev) != '' ? $m61_abrev : '-'). "&nbsp;</small>
                                                  </td>";
 
 										/**
 										 * Caso for um material
 										 * Caso for um serviço e este serviço ser controlado por quantidade
 										 */
+
 										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
 
 											db_fieldsmemory($result2, 0);
 
 											$quantidade = "quant_$i";
 											$$quantidade = $m52_quant;// - $m71_quant;
-                                            echo 'Quantidade pega: ', $m52_quant;
 
 											$qtde = "qtde_" . "$i";
 											$$qtde = $$quantidade;
@@ -344,7 +359,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "   <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-                                                            db_input("valor_$i", 8, 0, true, 'text', 3);
+                                                            db_input("valor_$i", 10, 0, true, 'text', 3);
 											echo "		 </small>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
@@ -353,7 +368,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("qtde_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
+											                db_input("qtde_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"q\");'onkeyup='js_limitaCaracteres(this)';");
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
@@ -366,19 +381,19 @@ $clrotulo->label("e62_descr");
 										} else if ($pc01_servico == 't') {
 
 											$quantidade = "quant_$i";
-											$$quantidade = $m52_quant;// - $m71_quant;
+											$$quantidade = trim($m52_quant);
 
 											$qtde = "qtde_" . "$i";
-											$$qtde = $$quantidade;
+											$$qtde = trim($$quantidade);
 
 											$valor = "valor_$i";
-											$$valor = db_formatar($m52_vlruni, 'f');
+											$$valor = trim(db_formatar($m52_vlruni, 'f'));
 
 											$valortotal = "valortotal_". "$i";
-											$$valortotal = db_formatar($e62_vltot, 'f');
+											$$valortotal = trim(db_formatar($e62_vltot, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = db_formatar($m52_valor, 'f');
+											$$vltotal = trim(db_formatar($m52_valor, 'f'));
 
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
@@ -402,7 +417,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											db_input("vltotal_$i", 8, 0, true, 'text', 1, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
+											                db_input("vltotal_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
 											echo "		 </small>";
 											echo "   </td>";
 											echo " </tr>";
@@ -416,7 +431,7 @@ $clrotulo->label("e62_descr");
 
                             <tr>
                                 <td colspan="12">
-                                    <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
+                                    <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;+">
                                         <div style="float: left; width: 50%; text-align: left">
                                             <b>Total de Registros: </b><span id="total_de_itens">0</span>
                                         </div>
@@ -525,6 +540,12 @@ $clrotulo->label("e62_descr");
     function js_validaValor(item, tipo='v'){
 
         let indexLinha = item.id.split('_')[1];
+
+        if(Number(item.value) < 0){
+            alert('Não é permitido a inserção de números negativos');
+            document.getElementById(item.id).value = 0;
+        }
+
         let message = '';
         let fieldTotal = document.getElementById(`vltotal_${indexLinha}`);
         let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
@@ -578,8 +599,6 @@ $clrotulo->label("e62_descr");
                 fieldTotal.value = js_formatar((parseFloat(qtde_total) * parseFloat(valor_unitario)), 'f');
                 item.value = js_formatar(qtde_total, 'f');
             }else{
-
-                nova_quantidade = !Number.isNaN(Number(nova_quantidade)) ? 0 : document.getElementById(`quant_${indexLinha}`).value;
 
                 let valor_unitario = Number(document.getElementById(`valor_${indexLinha}`).value.replace(/\,/g, '.'));
                 fieldTotal.value = js_formatar((parseFloat(nova_quantidade) * valor_unitario), 'f');
