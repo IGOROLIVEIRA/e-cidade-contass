@@ -219,7 +219,7 @@ fieldset table td:first-child {
                   </td>
                   <td align="left" colspan="2">
                       <?
-                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao, '', '', '', '', 50);
                       ?>
                   </td>
 
@@ -269,7 +269,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
+    let sUrl = 'func_acordo.php?semvigencia=true&assinatura=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -279,7 +279,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
     if ($('ac16_sequencial').value != '') {
 
-      var sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
+      let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&assinatura=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo';
 
       js_OpenJanelaIframe('top.corpo',
@@ -325,6 +325,11 @@ function js_mostraacordo1(chave1,chave2,chave3) {
  */
 
 function js_checaValor(){
+
+    if(document.getElementById('ac16_veiculodivulgacao').value.replace(/\s/g, '') == ''){
+        alert('Campo Veículo de Divulgação está vazio!');
+        return;
+    }
 
   var oParam = new Object();
   oParam.sequencial = $('ac16_sequencial').value;

@@ -86,6 +86,8 @@ class AcordoHomologacao extends AcordoMovimentacao {
       $oAcordoMovimentacao             = db_utils::fieldsMemory($rsSqlAcordoMovimentacao, 0);
       $oDaoAcordo->ac16_sequencial     = $oAcordoMovimentacao->ac10_acordo;
       $oDaoAcordo->ac16_acordosituacao = $oAcordoMovimentacao->ac09_acordosituacao;
+		$rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oAcordoMovimentacao->ac10_acordo);
+		$oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory( $rsDataAssinatura, 0)->ac16_dataassinatura;
       $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
       if ($oDaoAcordo->erro_status == 0) {
         throw new Exception($oDaoAcordo->erro_msg);

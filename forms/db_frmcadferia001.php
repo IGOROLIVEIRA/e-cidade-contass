@@ -719,7 +719,7 @@ if(isset($dbopcao) && $dbopcao == true){
 
   if(erro == 0){
   
-    if(document.form1.r30_per1i_dia && $F('direitoferias') == 1){
+    if(typeof(document.form1.r30_per1i) != 'undefined' && document.form1.r30_per1i_dia && $F('direitoferias') == 1){
     
       if (document.form1.mtipo.value != 13 && (document.form1.r30_per1i_dia.value == "" || document.form1.r30_per1i_mes.value == "" || document.form1.r30_per1i_ano.value == "") ) {
           
@@ -772,7 +772,7 @@ if(isset($dbopcao) && $dbopcao == true){
     * Verificamos se o periodo de gozo de ferias é o mesmo periodo de dias selecionado na opção Forma de pgto:
     *  
     */
-    if (erro == 0 && $F('direitoferias') == 1) {
+    if (typeof(document.form1.r30_per1i) != 'undefined' && erro == 0 && $F('direitoferias') == 1) {
     
      /*
        01=>01 - 30 dias ferias
