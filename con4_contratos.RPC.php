@@ -594,7 +594,15 @@ switch($oParam->exec) {
         $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
         $oContrato = new Acordo($oParam->contrato->iCodigo);
         $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
-        $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+
+        if(!$oParam->contrato->dtAssinatura && $oParam->contrato->iCodigo){
+        	$sSql = 'SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oParam->contrato->iCodigo;
+        	$rsSql = db_query($sSql);
+        	$dataAssinatura = db_utils::fieldsMemory($rsSql, 0)->ac16_dataassinatura;
+        	$oContrato->setDataAssinatura($dataAssinatura ? $dataAssinatura : '');
+		}else{
+        	$oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+		}
         $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
         $oContrato->setDataInicial($oParam->contrato->dtInicio);
         $oContrato->setDataFinal($oParam->contrato->dtTermino);

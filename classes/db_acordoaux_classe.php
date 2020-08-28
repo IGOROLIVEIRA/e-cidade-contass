@@ -99,6 +99,7 @@ class cl_acordoaux {
     var $ac16_semvigencia = 't';
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
+    var $ac16_tipocadastro = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac16_sequencial = int4 = Acordo
@@ -138,6 +139,7 @@ class cl_acordoaux {
                  ac16_semvigencia = bool = Contrato criado sem vigência
                  ac16_licoutroorgao = int8 = licitacao de outros orgaos
                  ac16_adesaoregpreco = int8 = adesao de registro de precos
+                 ac16_tipocadastro   = int8 = tipo de cadastro
                  ";
    //funcao construtor da classe
    function cl_acordoaux() {
@@ -230,6 +232,7 @@ class cl_acordoaux {
          $this->ac16_valorrescisao = ($this->ac16_valorrescisao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"]:$this->ac16_valorrescisao);
          $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
          $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
+         $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"]:$this->ac16_tipocadastro);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -453,6 +456,9 @@ class cl_acordoaux {
        $this->erro_status = "0";
        return false;
      }
+       if(($this->ac16_tipocadastro == null) || ($this->ac16_tipocadastro == "") ){
+           $this->ac16_tipocadastro = 1;
+       }
      $sql = "insert into acordo(
                                        ac16_sequencial
                                       ,ac16_acordosituacao
@@ -490,6 +496,7 @@ class cl_acordoaux {
                                       ,ac16_semvigencia
                                       ,ac16_licoutroorgao
                                       ,ac16_adesaoregpreco
+                                      ,ac16_tipocadastro
                        )
                 values (
                                 $this->ac16_sequencial
@@ -528,6 +535,7 @@ class cl_acordoaux {
                                ,'t'
                                ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
                                ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
+                               ,$this->ac16_tipocadastro
                       )";
      $result = db_query($sql);
      if($result==false){
