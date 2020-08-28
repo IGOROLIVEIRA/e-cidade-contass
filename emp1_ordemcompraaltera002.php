@@ -90,7 +90,6 @@ if (isset($dados->altera)) {
 
     }
 
-	$prazoentrega = $m51_prazoent;
 	$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
 
 	db_fieldsmemory($result_ordem, 0);
