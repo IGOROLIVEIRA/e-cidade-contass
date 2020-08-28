@@ -89,17 +89,107 @@ if(isset($chavepesquisa)){
 }
 if(isset($alterar)){
   db_inicio_transacao();
-//  /**
-//   * Verificar Encerramento Periodo Contabil
-//   */
-//  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
-//  if (!empty($dtmanut)) {
-//    $clcondataconf = new cl_condataconf;
-//    if (!$clcondataconf->verificaPeriodoContabil($dtmanut) || !$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
-//      $sqlerro  = true;
-//      $erro_msg=$clcondataconf->erro_msg;
-//    }
-//  }
+    $medida = $ve62_medida;
+    $horaManutencao = $ve62_hora;
+    $oDataManutencao = new DBDate($ve62_dtmanut);
+    $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
+    $dataManutencao = $oDataManutencao->getDate();
+    /*
+     * verifica retirada e devolução vinculados a manutencão
+     */
+    $result_retirada = $clveicabast->sql_record($clveicabast->sql_query_retirada(null, "ve60_codigo,ve60_medidasaida,ve61_medidadevol,to_timestamp(ve60_datasaida||' '||ve60_horasaida::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrretirada,to_timestamp(ve61_datadevol||' '||ve61_horadevol::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrdevolucao", null, "ve60_codigo=$ve65_veicretirada"));
+    if (pg_num_rows($result_retirada) > 0) {
+        $oRetirada = db_utils::fieldsMemory($result_retirada, 0);
+        $ve60_medidasaida = $oRetirada->ve60_medidasaida;
+        $ve61_medidadevol = $oRetirada->ve61_medidadevol;
+        $datahoraRetirada = $oRetirada->datahrretirada;
+        $datahoraDevolucao = $oRetirada->datahrdevolucao;
+    }
+    /*
+     * verifica manutencao anterior
+     */
+    $result_manutencao1 = $clveicmanut->sql_record($clveicmanut->sql_query_manutencao(null, "ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut","ve62_dtmanut desc limit 1;select * from (select ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut from veicmanut where ve62_veiculos=$ve65_veicretirada ) AS x WHERE ve62_dtmanut < to_timestamp('2017-11-01'||' '||'11:00'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP order by ve62_dtmanut desc limit 1;", "where ve62_veiculos=$ve62_veiculos ) AS x WHERE ve62_dtmanut < to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP "));
+    if (pg_num_rows($result_manutencao1) > 0) {
+        $oManut1 = db_utils::fieldsMemory($result_manutencao1, 0);
+        $ve62_medida1 = $oManut1->ve62_medida;
+        $ve62_datahora1 = $oManut1->ve62_dtmanut;
+    }
+    /*
+     * verifica manutencao posterior
+     */
+    $result_manutencao3 = $clveicmanut->sql_record($clveicmanut->sql_query_manutencao(null, "ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut", null, "where ve62_veiculos=$ve62_veiculos ) AS x WHERE ve62_dtmanut > to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP LIMIT 1;"));
+    if (pg_num_rows($result_manutencao3) > 0) {
+        $oManut3 = db_utils::fieldsMemory($result_manutencao3, 0);
+        $ve62_medida3 = $oManut3->ve62_medida;
+        $ve62_datahora3 = $oManut3->ve62_dtmanut;
+    }
+    /*
+     * verifica abastecimento anterior
+     */
+    $result_abast1 = $clveicabast->sql_record($clveicabast->sql_query_file_anula(null, "ve70_medida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast", "ve70_medida DESC LIMIT 1;", "ve60_codigo = $ve65_veicretirada) as x WHERE ve70_dtabast < to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP"));
+    if (pg_num_rows($result_abast1) > 0) {
+        $oAbast1 = db_utils::fieldsMemory($result_abast1, 0);
+        $ve70_medida1 = $oAbast1->ve70_medida;
+        $ve70_datahora1 = $oAbast1->ve70_dtabast;
+    }
+    /*
+     * verifica abastecimento posterior
+     */
+    $result_abast3 = $clveicabast->sql_record($clveicabast->sql_query_file_anula(null, "ve70_medida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast", "ve70_medida ASC LIMIT 1;", "ve60_codigo = $ve65_veicretirada) as x WHERE ve70_dtabast > to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP"));
+    if (pg_num_rows($result_abast3) > 0) {
+        $oAbast3 = db_utils::fieldsMemory($result_abast3, 0);
+        $ve70_medida3 = $oAbast3->ve70_medida;
+        $ve70_datahora3 = $oAbast3->ve70_dtabast;
+    }
+    if (!empty($ve62_datahora1) && $datahoraManutencao < strtotime($ve62_datahora1)) {
+        db_msgbox("Data ou Hora da manutenção menor que manutenção anterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } elseif (!empty($ve62_datahora3) && $datahoraManutencao > strtotime($ve62_datahora3)) {
+        db_msgbox("Data ou Hora da manutencao maior que manutencao posterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } elseif (!empty($ve70_datahora1) && $datahoraManutencao < strtotime($ve70_datahora1)) {
+        db_msgbox("Data ou Hora da manutencao menor que abastecimento anterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } elseif (!empty($ve70_datahora3) && $datahoraManutencao > strtotime($ve70_datahora3)) {
+        db_msgbox("Data ou Hora da Manutencao maior que abastecimento posterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve62_medida1) && $medida < $ve62_medida1) {
+        db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve62_medida3) && $medida > $ve62_medida3) {
+        db_msgbox("Medida de manutenção maior que Medida de manutenção posterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve70_medida1) && $medida < $ve70_medida1) {
+        db_msgbox("Medida de manutenção menor que Medida de abastecimento anterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve70_medida3) && $medida > $ve70_medida3) {
+        db_msgbox("Medida de manutenção maior que Medida de abastecimento posterior.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($datahoraRetirada) && $datahoraManutencao < strtotime($datahoraRetirada)) {
+        db_msgbox("Data ou Hora da manutenção menor que da Retirada.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($datahoraDevolucao) && $datahoraManutencao > strtotime($datahoraDevolucao)) {
+        db_msgbox("Data ou Hora da manutenção maior que da Devolucao.");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve60_medidasaida) && $medida < $ve60_medidasaida) {
+        db_msgbox("Medida de manutenção menor que Medida de Retirada");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    } else if (!empty($ve61_medidadevol) && $medida > $ve61_medidadevol) {
+        db_msgbox("Medida de manutenção maior que Medida de Devolucao");
+        $sqlerro = true;
+        $erro_msg = "Não foi possível incluir.";
+    }
 
   /**
    * Verificar Encerramento Periodo Patrimonial
