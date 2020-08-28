@@ -1013,7 +1013,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 quantidadeaditada.ac20_quantidadeaditada AS quantidadeaditada,
                 ac26_acordoposicaotipo,
                 ac26_vigenciaalterada,
-                ac26_data
+                ac26_data,
+                ac02_acordonatureza
       FROM acordoposicaoaditamento
       INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
       INNER JOIN
@@ -1026,6 +1027,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               ac20_quantidadeaditada
       FROM acordoitem) quantidadeaditada ON quantidadeaditada.ac20_acordoposicao = ac26_sequencial
       INNER JOIN acordo ON ac26_acordo = ac16_sequencial
+      INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
       WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
@@ -1177,10 +1179,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
             $rsItems = db_query($sqlItemobra);
             $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
-
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
-            if($oDados10->ac02_acordonatureza == "1" || $oDados10->ac02_acordonatureza == "7"){
+            if($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7"){
               $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
             }else{
               $clcontratos21->si88_tipomaterial = "";
