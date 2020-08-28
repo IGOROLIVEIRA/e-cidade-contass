@@ -222,9 +222,11 @@ for ($i = 0; $i < $numrows_itens; $i ++){
 
     if($pc80_criterioadjudicacao == 3) {
         //formatacao na cell valor unitario
-        $sheet->getStyle($collO)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+        //http://apigen.juzna.cz/doc/ouardisoft/PHPExcel/class-PHPExcel_Style_NumberFormat.html
+        $sheet->getStyle($collO)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
         //formula multiplicacao
         $sheet->setCellValue($collP,'='.$collN.'*'.$collO);
+        $sheet->getStyle($collP)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
         //formatando os itens
         $sheet->getStyle($collA.':'.$collS)->applyFromArray($styleItens);
         //libera celulas para alteracao
@@ -276,7 +278,7 @@ $sheet->setCellValue($totalCellN,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace
 $formula = '=(SUM(P7:'.$lastCell.'))';
 //valor Total
 $sheet->setCellValue($totalCellP,$formula);
-$sheet->getStyle($totalCellO)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
+$sheet->getStyle($totalCellP)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
 
 $nomefile = "prc_".$pc81_codproc.'_'.db_getsession('DB_instit').".xlsx";
 
