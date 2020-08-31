@@ -1194,7 +1194,7 @@ function js_calculaValorTotal() {
     alert(_M('patrimonial.patrimonio.db_frm_bensnovo.residual_maior_que_aquisicao'));
     $("vlResidual").value = "" ;
     $("vlAquisicao").focus();
-    return false;svn
+    return false;
   } else {
 
     $("vlTotalDepreciavel").value = (vlAquisicao - vlResidual).toFixed(2);
@@ -1207,8 +1207,10 @@ function js_liberarAbas() {
   var iCodigoBem                               = $F('t52_bem');
   parent.document.formaba.bensimoveis.disabled = false;
   parent.document.formaba.bensmater.disabled   = false;
+  parent.document.formaba.bensfotos.disabled   = false;
   top.corpo.iframe_bensimoveis.location.href   = 'pat1_bensimoveis001.php?db_opcaoal=22&t54_codbem='+iCodigoBem;
   top.corpo.iframe_bensmater.location.href     = 'pat1_bensmater001.php?db_opcaoal=22&t53_codbem='+iCodigoBem;
+  top.corpo.iframe_bensfotos.location.href     = 'pat1_cadgeralfotos001.php?db_opcaoal=22&t52_codbem='+iCodigoBem;
 }
 
 function js_controlaDadosFinanceiros(lBloquear) {
