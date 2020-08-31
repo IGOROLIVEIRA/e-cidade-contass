@@ -284,6 +284,16 @@ class GeracaoGuiaPrestadorWebService {
         $oPlanilha->valor_imposto = 0;
         $oPlanilha->valor_servico = 0;
 
+        /**
+         * Quando é nota avulsa, existe apenas uma nota por guia.
+         * Portanto, colocamos o numero da nota e sua competencia
+         * na descrição da guia para facilitar a rastreamento da mesma.
+         */
+        if($this->sTipoDebito == self::TIPO_DEBITO_VARIAVEL_AVULSO) {
+          $oPlanilha->numeroNotaAvulsa = $oNotaPlanilha->getNumeroNota();
+          $oPlanilha->dataNotaAvulsa = $oNotaPlanilha->getDataNota()->getDate('d/m/Y');
+        }
+
         $aListaPlanilhas[$oNotaPlanilha->getCodigoPlanilha()] = $oPlanilha;
       }
 
@@ -324,7 +334,7 @@ class GeracaoGuiaPrestadorWebService {
               $sTipoDebito = ' - NFS-e';
               break;
         case self::TIPO_DEBITO_VARIAVEL_AVULSO:
-              $sTipoDebito = ' - NFS-e Avulsa';
+              $sTipoDebito = ' - NFS-e Avulsa #'.$oPlanilha->numeroNotaAvulsa.' de '.$oPlanilha->dataNotaAvulsa;
               break;
         default:
               $sTipoDebito = ' - DMS';
