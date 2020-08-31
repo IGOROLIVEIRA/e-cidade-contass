@@ -13,6 +13,7 @@ require_once("classes/db_licobrasmedicao_classe.php");
 require_once("classes/db_licobrasanexo_classe.php");
 require_once("classes/db_licobrasresponsaveis_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
+require_once("classes/db_licobras_classe.php");
 include("classes/db_condataconf_classe.php");
 
 
@@ -91,6 +92,7 @@ switch($oParam->exec) {
     $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
     $clhomologacaoadjudica = new cl_homologacaoadjudica();
     $clcondataconf = new cl_condataconf;
+    $cllicobras = new cl_licobras();
 
     $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $oParam->licitacao"));
     db_fieldsmemory($resulthomologacao,0);
@@ -98,16 +100,26 @@ switch($oParam->exec) {
     $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
     $datainicioatividades = DateTime::createFromFormat('d/m/Y', $oParam->obr05_dtcadastrores);
 
-      $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
-      $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
-      $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
-      db_fieldsmemory($resultresp,0);
+    $rsObra = $cllicobras->sql_record($cllicobras->sql_query($oParam->obr05_seqobra));
+    db_fieldsmemory($rsObra,0);
+    $dtObra = (implode("/",(array_reverse(explode("-",$obr01_dtlancamento)))));
+    $dtLancObra = DateTime::createFromFormat('d/m/Y', $dtObra);
+
+    $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
+    $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
+    $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+    db_fieldsmemory($resultresp,0);
 
     try{
+
       if($datahomologacao != null){
         if($datainicioatividades < $datahomologacao){
           throw new Exception("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Homologação da Licitação.");
         }
+      }
+
+      if($datainicioatividades < $dtLancObra){
+          throw new Exception("Usuário: Campo Data de início das atividades deve ser igual ou maior do que a data de lançamento da obra.");
       }
 
       /**
@@ -125,56 +137,56 @@ switch($oParam->exec) {
           throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         }
       }
+
+      if(pg_num_rows($resultresp) > 0){
+          $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+          $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+          $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+          $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+          $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+          $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+          $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+          $cllicobrasresponsaveis->alterar($obr05_sequencial);
+
+          if ($cllicobrasresponsaveis->erro_status == 0) {
+              $erro = $cllicobrasresponsaveis->erro_msg;
+              $oRetorno->message = urlencode($erro);
+              $oRetorno->status = 2;
+          } else {
+              $oRetorno->status = 1;
+              $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
+          }
+
+      }else {
+          $cllicobrasresponsaveis->obr05_seqobra = $oParam->obr05_seqobra;
+          $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+          $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+          $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+          $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+          if($oParam->obr05_numartourrt == ""){
+              $cllicobrasresponsaveis->obr05_numartourrt =  NULL;
+          }else{
+              $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+          }
+          $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+          $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+          $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
+          $cllicobrasresponsaveis->incluir();
+
+          if ($cllicobrasresponsaveis->erro_status == 0) {
+              $erro = $cllicobrasresponsaveis->erro_msg;
+              $oRetorno->message = urlencode($erro);
+              $oRetorno->status = 2;
+          } else {
+              $oRetorno->status = 1;
+              $oRetorno->message = urlencode("Responsável salvo com sucesso.");
+          }
+      }
     }catch (Exception $eErro){
+      $oRetorno->status = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
     }
 
-    if(pg_num_rows($resultresp) > 0){
-      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
-      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
-      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
-      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
-      $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
-      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
-      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
-      $cllicobrasresponsaveis->alterar($obr05_sequencial);
-
-      if ($cllicobrasresponsaveis->erro_status == 0) {
-        $erro = $cllicobrasresponsaveis->erro_msg;
-        $oRetorno->message = urlencode($erro);
-        $oRetorno->status = 2;
-
-      } else {
-        $oRetorno->status = 1;
-        $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
-      }
-
-    }else {
-
-      $cllicobrasresponsaveis->obr05_seqobra = $oParam->obr05_seqobra;
-      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
-      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
-      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
-      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
-      if($oParam->obr05_numartourrt == ""){
-        $cllicobrasresponsaveis->obr05_numartourrt =  NULL;
-      }else{
-        $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
-      }
-      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
-      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
-      $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
-      $cllicobrasresponsaveis->incluir();
-
-      if ($cllicobrasresponsaveis->erro_status == 0) {
-        $erro = $cllicobrasresponsaveis->erro_msg;
-        $oRetorno->message = urlencode($erro);
-        $oRetorno->status = 2;
-      } else {
-        $oRetorno->status = 1;
-        $oRetorno->message = urlencode("Responsável salvo com sucesso.");
-      }
-    }
     break;
 
   case 'getResponsaveis':
