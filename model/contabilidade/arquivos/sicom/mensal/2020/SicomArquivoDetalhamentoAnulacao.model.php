@@ -269,6 +269,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_instit = db_getsession("DB_instit");
         $oDadosDetalhamento->o56_elemento = $oDetalhamento->o56_elemento;
         $oDadosDetalhamento->e50_compdesp = $oDetalhamento->e50_compdesp;
+        $oDadosDetalhamento->e60_datasentenca = $oDetalhamento->e60_datasentenca;
 
         $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
 
@@ -336,6 +337,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       }
 
       $aMatrizCompDesp = array('3319092', '3319192', '3319592', '3319692');
+      $aMatrizDespSentenca = array('3319091', '3319191','3319591','3319691');
 
       if (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizCompDesp)) {
           
@@ -353,7 +355,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
           throw new Exception($oDados12->erro_msg);
         }
 
-      } elseif (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319091') {
+      } elseif (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
         
         $oDados12 = new cl_alq122020();
         $oDados12->si123_tiporegistro = 12;

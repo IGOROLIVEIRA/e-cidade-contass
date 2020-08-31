@@ -4025,4 +4025,29 @@ class Acordo
 
         return $this;
     }
+
+    function getObras($iAcordo)
+    {
+        $sCampo          = "*";
+        $sSql            = "SELECT $sCampo
+                              FROM acordo
+                              INNER JOIN liclicita ON l20_codigo = ac16_licitacao
+                              INNER JOIN licobras ON obr01_licitacao = l20_codigo
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsObras = db_query($sSql);
+        $obra = db_utils::fieldsMemory($rsObras, 0)->obr01_sequencial;
+        return $obra;
+    }
+
+    function getNaturezaAcordo($iAcordo)
+    {
+        $sSql            = "SELECT ac02_acordonatureza
+                              FROM acordo
+                            INNER JOIN acordogrupo on ac16_acordogrupo = ac02_sequencial
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsNatureza = db_query($sSql);
+        $sNatureza = db_utils::fieldsMemory($rsNatureza, 0)->ac02_acordonatureza;
+        return $sNatureza;
+    }
+
 }

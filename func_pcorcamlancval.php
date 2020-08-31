@@ -243,6 +243,13 @@ if (isset($datafinal)){
         $where_sol .= "            )                                                                                                     ";
       }
 
+      if($validaprecoreferencia == "true"){
+        $where_sol .= "AND NOT EXISTS (";
+        $where_sol .= "SELECT 1";
+        $where_sol .= "FROM precoreferencia ";
+        $where_sol .= "WHERE si01_processocompra = pcproc.pc80_codproc)";
+      }
+
       $campos = " distinct ".$campos;
       if(isset($rel) && $rel=="true"){
         if(isset($sol) && $sol=='true'){
