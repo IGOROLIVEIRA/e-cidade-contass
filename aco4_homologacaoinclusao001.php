@@ -85,7 +85,7 @@ fieldset table td:first-child {
 	          <td align="left">
 	            <?
                 db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
-                         $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
+                         $db_opcao," onchange='js_pesquisaac16_sequencial(false);'onkeyup='bloqueiaCampo(this.value);'");
               ?>
 	          </td>
 	          <td align="left">
@@ -98,7 +98,7 @@ fieldset table td:first-child {
 		        <td colspan="3">
 		          <fieldset id="fieldsetobservacao" class="fieldsetinterno">
 		            <legend>
-		              <b>Observação</b>
+		              <b>Observao</b>
 		            </legend>
 		              <?
 		                db_textarea('ac10_obs',5,64,$Iac10_obs,true,'text',$db_opcao,"");
@@ -115,7 +115,7 @@ fieldset table td:first-child {
   </tr>
   <tr>
     <td align="center">
-      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_homologarContrato();">
+      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_homologarContrato();" disabled>
     </td>
   </tr>
 </table>
@@ -128,36 +128,36 @@ $('ac16_sequencial').style.width   = "100%";
 $('ac16_resumoobjeto').style.width = "100%";
 
 var sUrl = 'con4_contratosmovimento.RPC.php';
-
+numeroAcordo = '';
 /**
  * Pesquisa acordos
  */
 function js_pesquisaac16_sequencial(lMostrar) {
+    document.getElementById('incluir').disabled = true;
+    if (lMostrar == true) {
 
-  if (lMostrar == true) {
+        var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
+        js_OpenJanelaIframe('top.corpo',
+                            'db_iframe_acordo',
+                            sUrl,
+                            'Pesquisar Acordo',
+                            true);
+    } else {
 
-    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
-    js_OpenJanelaIframe('top.corpo',
-                        'db_iframe_acordo',
-                        sUrl,
-                        'Pesquisar Acordo',
-                        true);
-  } else {
+        if ($('ac16_sequencial').value != '') {
 
-    if ($('ac16_sequencial').value != '') {
+            let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
+                     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=1&iTipo=2';
 
-      var sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
-                 '&funcao_js=parent.js_mostraacordo&iTipoFiltro=1&iTipo=2';
-
-      js_OpenJanelaIframe('top.corpo',
-                          'db_iframe_acordo',
-                          sUrl,
-                          'Pesquisar Acordo',
-                          false);
-     } else {
-       $('ac16_sequencial').value = '';
-     }
-  }
+            js_OpenJanelaIframe('top.corpo',
+                              'db_iframe_acordo',
+                              sUrl,
+                              'Pesquisar Acordo',
+                              false);
+        } else {
+            $('ac16_sequencial').value = '';
+        }
+    }
 }
 
 /**
@@ -166,14 +166,14 @@ function js_pesquisaac16_sequencial(lMostrar) {
 function js_mostraacordo(chave1,chave2,erro) {
 
   if (erro == true) {
-
     $('ac16_sequencial').value   = '';
     $('ac16_resumoobjeto').value = chave1;
     $('ac16_sequencial').focus();
   } else {
-
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
+    numeroAcordo = chave1;
+      document.getElementById('incluir').disabled = false;
   }
 }
 
@@ -184,6 +184,8 @@ function js_mostraacordo1(chave1,chave2) {
 
   $('ac16_sequencial').value    = chave1;
   $('ac16_resumoobjeto').value  = chave2;
+    numeroAcordo =  chave1;
+    document.getElementById('incluir').disabled = false;
   db_iframe_acordo.hide();
 }
 
@@ -194,11 +196,11 @@ function js_homologarContrato() {
 
   if ($('ac16_sequencial').value == '') {
 
-    alert('Acordo não informado!');
+    alert('Acordo no informado!');
     return false;
   }
 
-  js_divCarregando('Aguarde incluindo finalização...','msgBoxHomologacaoContrato');
+  js_divCarregando('Aguarde incluindo finalizao...','msgBoxHomologacaoContrato');
 
   var oParam        = new Object();
   oParam.exec       = "homologarContrato";
@@ -235,6 +237,14 @@ function js_retornoDadosHomologacao(oAjax) {
     alert("Finalizado com Sucesso.");
     return true;
   }
+}
+
+function bloqueiaCampo(valor = ''){
+    if((numeroAcordo == valor) && valor != ''){
+        document.getElementById('incluir').disabled = false;
+        return;
+    }
+    document.getElementById('incluir').disabled = true;
 }
 </script>
 </html>

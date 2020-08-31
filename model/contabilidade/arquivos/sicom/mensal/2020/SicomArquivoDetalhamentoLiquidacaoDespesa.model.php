@@ -225,6 +225,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $oDadosLiquidacao->si118_cpfliquidante = str_pad($oLiquidante->z01_cgccpf, 11, "0", STR_PAD_LEFT);
         $oDadosLiquidacao->si118_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosLiquidacao->o56_elemento = $oLiquidacao->o56_elemento;
+        $oDadosLiquidacao->e60_datasentenca = $oLiquidacao->e60_datasentenca;
         $oDadosLiquidacao->Reg11 = array();
 
 
@@ -297,6 +298,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       }
 
       $aMatrizCompDesp = array('3319092', '3319192', '3319592', '3319692');
+      $aMatrizDespSentenca = array('3319091', '3319191','3319591','3319691');
 
       if (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizCompDesp)) {
             
@@ -315,14 +317,14 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         throw new Exception($cllqd12->erro_msg);
         }
 
-      } elseif (substr($oDados10->o56_elemento, 0, 7) == '3319091') {
+      } elseif (in_array(substr($oDados10->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
         
         $cllqd12 = new cl_lqd122020();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
         $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;
-        $cllqd12->si120_mescompetencia = substr($oDados10->si118_dtsentenca, 5, 2);
-        $cllqd12->si120_exerciciocompetencia = substr($oDados10->si118_dtsentenca, 0, 4);
+        $cllqd12->si120_mescompetencia = substr($oDados10->e60_datasentenca, 5, 2);
+        $cllqd12->si120_exerciciocompetencia = substr($oDados10->e60_datasentenca, 0, 4);
         $cllqd12->si120_vldspexerant = $oDados10->si118_vlliquidado;
         $cllqd12->si120_mes = $oDados10->si118_mes;
         $cllqd12->si120_instit = db_getsession("DB_instit");
