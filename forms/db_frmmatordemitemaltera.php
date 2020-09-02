@@ -162,7 +162,8 @@ $clrotulo->label("e62_descr");
 										"m52_numemp = $e62_numemp and m52_sequen = $e62_sequen and m73_cancelado is false");
 									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
 
-                                    if(!strcmp(strtolower(trim($oOrdem->m51_obs)), strtolower('ordem de compra automatica'))){
+									$compareObs = strcmp(strtolower(trim($oOrdem->m51_obs)), strtolower('ordem de compra automatica'));
+                                    if(!$compareObs || pg_num_rows($result2)){
                                         $sChecked = 'checked';
                                         $disabled = 'disabled';
                                         $opcao = 3;
