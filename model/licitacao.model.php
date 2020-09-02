@@ -100,9 +100,9 @@ class licitacao {
             $rsBuscaLicitacao   = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
 
             $oDadoLicitacao = db_utils::fieldsMemory($rsBuscaLicitacao, 0);
-            $this->iNumeroEdital      = $oDadoLicitacao->l20_numero     ;
+            $this->iNumeroEdital      = $oDadoLicitacao->l20_edital     ;
             $this->iCodigoSituacao    = $oDadoLicitacao->l20_licsituacao;
-            $this->iNumeroLicitacal   = $oDadoLicitacao->l20_edital     ;
+            $this->iNumeroLicitacal   = $oDadoLicitacao->l20_numero;
             $this->iAno               = $oDadoLicitacao->l20_anousu;
             $this->iCodigoModalidade  = $oDadoLicitacao->l20_codtipocom;
             $this->sObjeto            = $oDadoLicitacao->l20_objeto;

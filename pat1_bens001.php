@@ -34,77 +34,79 @@ require_once("dbforms/db_funcoes.php");
 require_once("dbforms/db_classesgenericas.php");
 require_once("libs/db_utils.php");
 
-$oGet               = db_utils::postMemory($_GET);
+$oGet = db_utils::postMemory($_GET);
 $iCodigoEmpNotaItem = "";
 if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
-  
-  $iCodigoEmpNotaItem = "?iCodigoEmpNotaItem={$oGet->iCodigoEmpNotaItem}";
+
+	$iCodigoEmpNotaItem = "?iCodigoEmpNotaItem={$oGet->iCodigoEmpNotaItem}";
 }
 
-$lFormNovo          = false;
+$lFormNovo = false;
 $sInicioDepreciacao = null;
-$oDaoCfPatri        = db_utils::getDao("cfpatriinstituicao");
-$sSqlPatri          = $oDaoCfPatri->sql_query_file(null, 
-                                                    "t59_dataimplanatacaodepreciacao", 
-                                                    null, "t59_instituicao = ".db_getsession("DB_instit")
-                                                  );
-$rsPatri            = $oDaoCfPatri->sql_record($sSqlPatri);
+$oDaoCfPatri = db_utils::getDao("cfpatriinstituicao");
+$sSqlPatri = $oDaoCfPatri->sql_query_file(null,
+	"t59_dataimplanatacaodepreciacao",
+	null, "t59_instituicao = " . db_getsession("DB_instit")
+);
+$rsPatri = $oDaoCfPatri->sql_record($sSqlPatri);
 if ($oDaoCfPatri->numrows > 0) {
-  $sInicioDepreciacao = db_utils::fieldsMemory($rsPatri, 0)->t59_dataimplanatacaodepreciacao;
+	$sInicioDepreciacao = db_utils::fieldsMemory($rsPatri, 0)->t59_dataimplanatacaodepreciacao;
 }
 if (!empty($sInicioDepreciacao)) {
-  $lFormNovo      = true;
+	$lFormNovo = true;
 }
-$clcriaabas     = new cl_criaabas;
-$db_opcao       = 1;
+$clcriaabas = new cl_criaabas;
+$db_opcao = 1;
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
-  db_app::load("scripts.js, prototype.js, strings.js, DBToogle.widget.js, dbmessageBoard.widget.js, widgets/messageboard.widget.js");
-  db_app::load("estilos.css, grid.style.css, classes/DBViewNotasPendentes.classe.js, widgets/windowAux.widget.js, datagrid.widget.js");
-?>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+	<?
+	db_app::load("scripts.js, prototype.js, strings.js, DBToogle.widget.js, dbmessageBoard.widget.js, widgets/messageboard.widget.js");
+	db_app::load("estilos.css, grid.style.css, classes/DBViewNotasPendentes.classe.js, widgets/windowAux.widget.js, datagrid.widget.js");
+	?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <div style="margin-top: 18px;"></div>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-     <?
-  	   $clcriaabas->identifica = array("bens"        => "Cadastro de bens",
-  	                                   "bensimoveis" => "Dados do imóvel",
-  	                                   "bensmater"=>"Dados do material"
-  	                                  );
-  	   
-  	   $clcriaabas->sizecampo  = array("bens"        => "20",
-  	                                   "bensimoveis" => "20",
-  	                                   "bensmater"   => "20");
-  	   
-  	   $clcriaabas->title      =  array("bens"        => "Cadastrar bens",
-  	                                    "bensimoveis" => "Ativar bem como imóvel",
-  	                                    "bensmater"   => "Ativar bem como material"
-  	                                   );
-   	   
-       if ($lFormNovo) {
-         $clcriaabas->src = array("bens"=>"pat1_bensnovo004.php".$iCodigoEmpNotaItem);
-//          $clcriaabas->src = array("bens"=>"pat1_bens004.php");
-       } else {
-  	     $clcriaabas->src = array("bens"=>"pat1_bens004.php");
-       }
-  	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true","bensbaix"=>"true"); 
-  	   $clcriaabas->cria_abas(); 
-	 ?> 
-	 </td>
-      </tr>
-    </table>
-    <form name="form1">
-    </form>
-	<? 
-	  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-	?>
-  </body>
- 
+    <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+			<?
+			$clcriaabas->identifica = array("bens" => "Cadastro de bens",
+				"bensimoveis" => "Dados do imóvel",
+				"bensmater" => "Dados do material",
+				"bensfotos" => "Fotos"
+			);
+
+			$clcriaabas->sizecampo = array("bens" => "20",
+				"bensimoveis" => "20",
+				"bensmater" => "20",
+				"bensfotos" => "20");
+
+			$clcriaabas->title = array("bens" => "Cadastrar bens",
+				"bensimoveis" => "Ativar bem como imóvel",
+				"bensmater" => "Ativar bem como material",
+				"bensfotos" => "Fotos"
+			);
+
+			if ($lFormNovo) {
+				$clcriaabas->src = array("bens" => "pat1_bensnovo004.php" . $iCodigoEmpNotaItem);
+			} else {
+				$clcriaabas->src = array("bens" => "pat1_bens004.php");
+			}
+			$clcriaabas->disabled = array("bensimoveis" => "true", "bensmater" => "true", "bensbaix" => "true", "bensfotos" => "true");
+			$clcriaabas->cria_abas();
+			?>
+        </td>
+    </tr>
+</table>
+<form name="form1">
+</form>
+<?
+db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+?>
+</body>
+
 </html>
