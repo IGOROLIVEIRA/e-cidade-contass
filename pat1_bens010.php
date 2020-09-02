@@ -10,8 +10,8 @@ require_once("libs/db_utils.php");
 $lFormNovo          = false;
 $sInicioDepreciacao = null;
 $oDaoCfPatri        = db_utils::getDao("cfpatriinstituicao");
-$sSqlPatri          = $oDaoCfPatri->sql_query_file(null, 
-                                                    "t59_dataimplanatacaodepreciacao", 
+$sSqlPatri          = $oDaoCfPatri->sql_query_file(null,
+                                                    "t59_dataimplanatacaodepreciacao",
                                                     null, "t59_instituicao = ".db_getsession("DB_instit")
                                                   );
 $rsPatri            = $oDaoCfPatri->sql_record($sSqlPatri);
@@ -35,7 +35,7 @@ $db_opcao       = 33;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -43,32 +43,34 @@ $db_opcao       = 33;
   </tr>
 </table>
 <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
      <?
 	   $clcriaabas->identifica = array("bens"        => "Cadastro de bens",
 	                                   "bensimoveis" => "Dados do imóvel",
-	                                   "bensmater"   => "Dados do material"
+	                                   "bensmater"   => "Dados do material",
+                                     "bensfotos" => "Fotos"
 	                                   );
 	   if ($lFormNovo){
 	     $clcriaabas->src = array("bens"=>"pat1_bens006.php");
 	   } else {
 	     $clcriaabas->src = array("bens"=>"pat1_bens006.php");
-	   } 
+	   }
      $clcriaabas->title      =  array("bens"        => "Cadastrar bens",
                                       "bensimoveis" => "Ativar bem como imóvel",
-                                      "bensmater"   => "Ativar bem como material"
+                                      "bensmater"   => "Ativar bem como material",
+                                      "bensfotos"   => "Fotos"
                                       );
-     $clcriaabas->sizecampo  = array("bens"=>"20","bensimoveis"=>"20","bensmater"=>"20");
-	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true"); 
-	   $clcriaabas->cria_abas(); 
-       ?> 
+     $clcriaabas->sizecampo  = array("bens"=>"20","bensimoveis"=>"20","bensmater"=>"20","bensfotos"=>"20");
+	   $clcriaabas->disabled   =  array("bensimoveis"=>"true","bensmater"=>"true","bensfotos"=>"true");
+	   $clcriaabas->cria_abas();
+       ?>
        </td>
     </tr>
   </table>
   <form name="form1">
   </form>
-      <? 
+      <?
 	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
       ?>
   </body>

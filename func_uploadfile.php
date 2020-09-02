@@ -34,6 +34,7 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrotulo = new rotulocampo;
 $lFail    = false;
+
 if(isset($uploadfile)) {
   
   // Nome do novo arquivo
@@ -44,19 +45,30 @@ if(isset($uploadfile)) {
 
   // Seta o nome do arquivo destino do upload
   $arquivofoto = "tmp/$nomearq";
-  
-  
+
   // Faz um upload do arquivo para o local especificado
   if(copy($nometmp,$arquivofoto)){
-    
+
     $sMimeType  = strtolower(mime_content_type($arquivofoto));
-    if ($sMimeType != 'image/jpeg') {
-      
-      db_msgbox('Arquivo deve ser uma imagem JPG');
-      unlink($arquivofoto);
-      $href   = '';
-      $lFail  = true;  
-    } else if (filesize($arquivofoto) > 100000) {
+
+    if ($sMimeType) {
+        if(isset($formats) && $formats == 3){
+            if ($sMimeType != 'image/jpeg' && $sMimeType != 'image/png') {
+                db_msgbox('Arquivo deve ser uma imagem JPG, JPEG ou PNG');
+                unlink($arquivofoto);
+                $href   = '';
+                $lFail  = true;
+            }
+        }else{
+            if($sMimeType != 'image/jpeg'){
+                db_msgbox('Arquivo deve ser uma imagem JPG');
+                unlink($arquivofoto);
+                $href   = '';
+                $lFail  = true;
+            }
+        }
+    }
+    if (filesize($arquivofoto) > 100000) {
       
       db_msgbox("Arquivo com Tamanho inválido");
       $href   = '';

@@ -89,6 +89,13 @@ if (isset($incluir)) {
   } else {
     $medidazero=false;
   }
+
+    if($retirada == "" || $retirada == null){
+        db_msgbox("Campo: Retirada não informado");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+
     /*
      * verifica retirada e devolução vinculados ao abastecimento
      */
