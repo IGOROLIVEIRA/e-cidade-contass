@@ -333,6 +333,7 @@ function cadastro_164 (){
 		$condicaoaux = " and r90_regist = ".db_sqlformat( $matric );
 		global $pontofx;
 		db_selectmax("pontofx", "select * from pontofx ".bb_condicaosubpes("r90_").$condicaoaux );
+		$diasAviso = getQuantidadeDiasAviso($r01_recis,$pessoal[0]["r01_admiss"]);
 		for($Ipontofx=0;$Ipontofx<count($pontofx);$Ipontofx++){
 			$condicaoaux = " where rh27_instit = ". db_getsession("DB_instit") ." and rh27_rubric = ".db_sqlformat( $pontofx[$Ipontofx]["r90_rubric"] );
 
@@ -340,7 +341,7 @@ function cadastro_164 (){
 				$matriz2[1] = $pontofx[$Ipontofx]["r90_regist"];
 				$matriz2[2] = db_str(db_val($pontofx[$Ipontofx]["r90_rubric"])+6000,4);
 				$matriz2[3] = round((db_empty($pontofx[$Ipontofx]["r90_valor"])?0:($pontofx[$Ipontofx]["r90_valor"]/30)*$nres),2);
-				$matriz2[4] = round((db_empty($pontofx[$Ipontofx]["r90_quant"])?0:($pontofx[$Ipontofx]["r90_quant"]/30)*$nres),2);
+				$matriz2[4] = $diasAviso;
 				$matriz2[5] = $lotacaoatual;
 				$matriz2[6] = "R";
 				$matriz2[7] = db_val( db_substr( $subpes,1,4 ) );
@@ -350,9 +351,15 @@ function cadastro_164 (){
 				db_insert( "pontofr", $matriz1, $matriz2 );
 			}
 		}
+		$diasAvos = getDiasAvos($r01_recis, $diasAviso);
+		$matriz_aviso = $matriz2;
+		$matriz_aviso[3] = 0;
+		$matriz_aviso[4] = $diasAvos;
+		insertRubricasEspeciaisAviso($matriz1, $matriz_aviso, $cfpess);
+
 	}
 	
-	$datafim = date("Y-m-d",db_mktime($r01_recis)+(($r01_taviso == 2 ?($nres*86400) : 0 )));
+	$datafim = date("Y-m-d",db_mktime($r01_recis));
 	
 	// Tem 13 salario Proporcional
 	if( db_boolean($rescisao[0]["r59_13sal"]) && $cfpess[0]["r11_mes13"] >= db_month( $r01_recis )){
@@ -369,7 +376,7 @@ function cadastro_164 (){
 	// Paga ferias vencidas ou Paga ferias Proporcionais
 	if( db_boolean($rescisao[0]["r59_fvenc"]) || db_boolean($rescisao[0]["r59_fprop"])){
 			
-		$datarescisao = date("Y-m-d",db_mktime($r01_recis) + (( $r01_taviso == 2? $nres: 0 )*86400));
+		$datarescisao = date("Y-m-d",db_mktime($r01_recis) );
 		$tipoferias = " ";
 		$dias_diferenca_ferias = 0;
 		$condicaoaux =  " and r30_regist = ".db_sqlformat( $matric );
@@ -642,6 +649,7 @@ require_once("libs/db_libpessoal.php");
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("pes4_avaliaferiasrescisao.php");
+require_once("pes4_avisoprevioindenizadorescisao.php");
 require_once("classes/db_rhpesrescisao_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
