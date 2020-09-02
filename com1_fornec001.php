@@ -193,6 +193,11 @@ if (isset($incluir)) {
     db_app::load("estilos.css, grid.style.css");
     ?>
 </head>
+<style>
+    #db_opcao, #exportarxls, #xlsbranco {
+        width: 110px;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
