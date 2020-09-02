@@ -68,7 +68,7 @@ if (isset($dados->altera)) {
 	$rsItens  = db_query($sqlItens);
 	$itensAcordo = db_utils::getCollectionByRecord($rsItens);
 
-    for ($count = 0; $count < sizeof($itensAcordo); $count++){
+	for ($count = 0; $count < sizeof($itensAcordo); $count++){
 
 		$objeto = $itensAcordo[$count];
 
@@ -94,7 +94,7 @@ if (isset($dados->altera)) {
 
 	db_fieldsmemory($result_ordem, 0);
 
-	if (!$sqlerro) {
+	if (!$sqlerro && count($dados->itens)) {
 
 		$clmatordem->m51_codordem   = $m51_codordem;
 		$clmatordem->m51_data       = $m51_data;
@@ -105,11 +105,14 @@ if (isset($dados->altera)) {
 		$clmatordem->m51_prazoent   = $dados->m51_prazoent;
 		$clmatordem->alterar($m51_codordem);
 
-		$erro_msg = $clmatordem->erro_msg;
+		$erro_msg = 'Ordem de Compra alterada com sucesso!';
 		if ($clmatordem->erro_status == 0) {
 			$sqlerro = true;
 		}
-	}
+	}else{
+	    $sqlerro = true;
+	    $erro_msg = 'Ordem de Compra não pode ser alterada!';
+    }
 
 	for ($count = 0; $count < sizeof($dados->itens); $count++) {
 	    if (!$sqlerro) {
