@@ -15,7 +15,7 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
     foreach ($oPosicoes as $iP => $oPosicao){
 
         $aEmpenhamentosPosicao = $oAcordo->getAutorizacoesEntreDatas($ac16_datainicio,$ac16_datafim,$oPosicao->getCodigo());
-
+        $sQtdAempenhar = 0;
 
         foreach ($aEmpenhamentosPosicao as $iE => $oEmp){
             $iQtdAnulada = 0;
@@ -25,7 +25,6 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
             $iQtdEmOrdemAnulado = 0;
             $iVlrEmOrdemAnulado = 0;
             $iVlrGerarOC = 0;
-            $sQtdAempenhar = 0;
             $aItensEmpenho = $oExecucaoDeContratos->consultarItensEmpenho((int)$oEmp->codigoempenho);
             foreach ($aItensEmpenho as $iI => $oItem) {
                 $iNumItens += count($oEmp->codigoempenho);
@@ -33,7 +32,7 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 //Bloco de pre-renderizacao
                 $sQtdContratadaPosicao = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_quantidade;
                 $sVlrUnitarioPosicao   = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_valorunitario;
-                $sQtdEmpenhada = $oItem->quantidade;
+                $sQtdEmpenhada =+ $oItem->quantidade;
 
 
                 //Itens Anulados
@@ -43,16 +42,25 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $sQtdAnulada      = empty($iQtdAnulada)?"0":(string)$iQtdAnulada;
 
                 foreach($oExecucaoDeContratos->quantidadeTotalEmOrdensDeCompra((int)$oEmp->codigoempenho,(int)$oItem->codigo_material) as $oOrdem){
+                    $iQtdEmOrdem += $oOrdem->quantidade - $oOrdem->quantidadeAnulada;
 
-                    $iQtdEmOrdem += $oOrdem->quantidade;
-                    $iVlrEmOrdem += $oOrdem->valor;
-                    $iQtdEmOrdemAnulado += $oOrdem->quantidadeAnulada;
-                    $iVlrEmOrdemAnulado = $iQtdEmOrdemAnulado * $oOrdem->valor;
+                    if($oOrdem->quantidadeAnulada > 0){
+                        $iQtdEmOrdemAnulado += $oOrdem->quantidadeAnulada;
+                        $iVlrEmOrdemAnulado = $oOrdem->quantidadeAnulada * $oOrdem->valor;
+                        $iVlrEmOrdem = $oOrdem->valor - $iVlrEmOrdemAnulado;
+
+                    }else{
+                        $iVlrEmOrdem = $oOrdem->valor;
+                    }
+                    $iVlrGerarOC = $oOrdem->valor - $iVlrEmOrdem - $iVlrEmOrdemAnulado;
                 };
 
-                $iVlrEmOrdemReal = $iVlrEmOrdem - $iVlrEmOrdemAnulado;
-                $iVlrGerarOC = $oEmp->e54_valor - $iVlrEmOrdemReal;
-                $sQtdAempenhar = $sQtdContratadaPosicao - $sQtdEmpenhada + $iQtdAnulada;
+                $sQtdEmOrdem      = empty($iQtdEmOrdem)?"0":(string)$iQtdEmOrdem;
+                $sQtdEmpenhada = $sQtdEmpenhada - $iQtdAnulada;
+                $sQtdAempenhar = $sQtdContratadaPosicao - $sQtdEmpenhada;
+
+                $sQtdEmpenhada      = empty($sQtdEmpenhada)?"0":(string)$sQtdEmpenhada;
+
                 // Verifica se a posição de escrita está próxima do fim da página.
                 if ($oPdf->GetY() > 190) {
                     $oPdf->AddPage('L');
@@ -80,12 +88,13 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $oPdf->Cell(18 ,$iAlt,'R$ '.number_format($sVlrUnitarioPosicao,2,',','.'),'TBR',0,'C','');
                 $oPdf->Cell(25 ,$iAlt,$sQtdEmpenhada,'TBR',0,'C','');
                 $oPdf->Cell(20 ,$iAlt,$sQtdAnulada,'TBR',0,'C','');
-                $oPdf->Cell(20 ,$iAlt,$iQtdEmOrdem,'TBR',0,'C','');
-                $oPdf->Cell(21 ,$iAlt,'R$ '.number_format($iVlrEmOrdemReal,2,',','.'),'TBR',0,'C','');
+                $oPdf->Cell(20 ,$iAlt,$sQtdEmOrdem,'TBR',0,'C','');
+                $oPdf->Cell(21 ,$iAlt,'R$ '.number_format($iVlrEmOrdem,2,',','.'),'TBR',0,'C','');
                 $oPdf->Cell(26 ,$iAlt,'R$ '.number_format($iVlrGerarOC,2,',','.'),'TBR',0,'C','');
                 $oPdf->Cell(22 ,$iAlt,empty($sQtdAempenhar)?"0":(string)$sQtdAempenhar,'TBR',0,'C','');
                 $oPdf->Ln();
             }
+//        exit;
         }
     }
     $oExecucaoDeContratos->imprimeFinalizacao($oPdf,$iFonte,$iAlt,$aMateriais,$comprim=null,$iNumItens);
