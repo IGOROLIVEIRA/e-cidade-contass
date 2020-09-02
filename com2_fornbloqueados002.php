@@ -20,7 +20,7 @@ if($data_ini != "" && $data_fim != ""){
   $dataInicial = $dataInicial->getDate();
   $dataFinal = new DBDate($data_fim);
   $dataFinal = $dataFinal->getDate();
-  $where = "pc60_databloqueio_ini >= '{$dataInicial}' AND pc60_databloqueio_ini <= '{$dataFinal}'";
+  $where = "pc60_databloqueio_ini >= '{$dataInicial}' AND pc60_databloqueio_fim <= '{$dataFinal}'";
   $head5 = "Período: de {$data_ini} a {$data_fim}";
 }else{
   if($data_ini!=""){
@@ -35,21 +35,25 @@ if($data_ini != "" && $data_fim != ""){
     $where = "pc60_databloqueio_fim <= '{$dataFinal}'";
     $head5 = "Período: até {$data_fim}";
   }else{
-    $where = " (pc60_databloqueio_ini is not null or
-pc60_databloqueio_fim is not null) ";
     $head5 = "Período: não informado";
   }
 }
 
+$where .= isset($where) ? ' AND ' : ' ';
+$orderBy = 'z01_nome asc ';
+
 switch ($tipo_fornecedor){
     case 't':
-        $where .= " AND (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
+        $where .= " (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
         break;
     case 'a':
-        $where .= " AND pc60_bloqueado = 'f'";
+        $where .= " pc60_bloqueado = 'f'";
         break;
     case 'i':
-		$where .= " AND pc60_bloqueado = 't'";
+        if(!isset($where)){
+           $orderBy .=  ', pc60_databloqueio_ini ';
+        }
+		$where .= " pc60_bloqueado = 't'";
 		break;
 }
 $head4 = "";
@@ -62,9 +66,9 @@ $mPDF->addInfo($head5, 5);
 $mPDF->addInfo($head6, 6);
 db_inicio_transacao();
 try {
-  /*CONULTA*/
+  /*CONSULTA*/
 
-  $sSql        = $oForne->sql_query(null,"*",'z01_nome asc', $where);
+  $sSql        = $oForne->sql_query(null,"*",$orderBy . ' limit 1000 ', $where);
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
   /*TRATAMENTO DE ERRO*/
