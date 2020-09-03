@@ -21,6 +21,7 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
 
     // Percorre todas as posições de um acordo
     foreach ($aPosicoes as $iKp => $oPosicao) {
+        $iNumItens++;
 
         $aEmpenhos = ExecucaoDeContratos::empenhosDeUmaPosicao($oPosicao->getCodigo(),$ac16_datainicio,$ac16_datafim);
 
@@ -99,7 +100,6 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
                     };
 
                     $dQtdOrdemDeCompra += isset($iQtdEmOrdem) ? (double)$iQtdEmOrdem : 0;
-                    $dVlrOrdemDeCompra = $iVlrEmOrdem;
                     $dValorUnitarioProvisorio = (double)$oItem->valor_unitario;
                 }
 
@@ -121,6 +121,8 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
             $sQtdEmpenhada         = empty($iQtdEmpenhada) ? "0" : (string)$iQtdEmpenhada;
             $sQtdAnulada           = empty($dQtdAnulada) ? "0" : (string)$dQtdAnulada;
             $sQtdEmOrdemdeCompra   = empty($dQtdOrdemDeCompra) ? "0" : (string)$dQtdOrdemDeCompra;
+            $dVlrOrdemDeCompra     = $dQtdOrdemDeCompra * $dValorUnitario;
+            $sQtdAgerarOC          = $sQtdEmpenhada - $dQtdOrdemDeCompra - $dQtdAnulada;
             $sVlrEmOrdemdeCompra   = isset($dVlrOrdemDeCompra) && $dVlrOrdemDeCompra !== '-' ? 'R$'.number_format((double)$dVlrOrdemDeCompra,2,',','.') : '-';
             $dVlrAgerarOrdem       = $dVlrTotalEmpenhado - $dVlrOrdemDeCompra;
             $sVlrAgerarOrdem       = isset($dVlrAgerarOrdem) && $dVlrAgerarOrdem !== '-' ? 'R$'.number_format((double)$dVlrAgerarOrdem,2,',','.') : '-';
@@ -157,7 +159,8 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
                 'qtdanulada'                => $sQtdAnulada,
                 'qtdemordemdecompra'        => $sQtdEmOrdemdeCompra,
                 'vlremordemdecompra'        => $sVlrEmOrdemdeCompra,
-                'qtdagerarordemdecompra'    => $sVlrAgerarOrdem,
+                'qtdagerarordemdecompra'    => $sQtdAgerarOC,
+                'vlragerarordemdecompra'    => $sVlrAgerarOrdem,
                 'qtdaempenhar'              => $sQtdAempenhar,
             );
 
@@ -187,19 +190,18 @@ function execucaoDeContratosQuebraPorAditivo($aMateriais,$iFonte,$iAlt,$iAcordo,
             }
             $oPdf->SetFont('Arial','',$iFonte-1);
 
-            $oPdf->Cell(18  ,$iAlt, $aLinha['coditem'],        'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(13  ,$iAlt, $aLinha['coditem'],        'TBRL',0,'C',$iCorFundo);
             $oPdf->Cell(83  ,$iAlt, $aLinha['descricaoitem'],  'TBRL',0,'C',$iCorFundo);
-            $oPdf->Cell(25  ,$iAlt, $aLinha['qtdcontratada'],  'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdcontratada'],  'TBRL',0,'C',$iCorFundo);
             $oPdf->Cell(18  ,$iAlt, $aLinha['valorunitario'],  'TBRL',0,'C',$iCorFundo);
             $oPdf->Cell(25  ,$iAlt, $aLinha['qtdempenhada'],   'TBRL',0,'C',$iCorFundo);
             $oPdf->Cell(20  ,$iAlt, $aLinha['qtdanulada'],     'TBRL',0,'C',$iCorFundo);
             $oPdf->Cell(20  ,$iAlt, $aLinha['qtdemordemdecompra'],  'TBRL',0,'C',$iCorFundo);
-            $oPdf->Cell(21  ,$iAlt, $aLinha['vlremordemdecompra'],'TBRL',0,'C',$iCorFundo);
-            $oPdf->Cell(26  ,$iAlt, $aLinha['qtdagerarordemdecompra'],'TBRL',0,'C',$iCorFundo);
-            $oPdf->Cell(22  ,$iAlt, $aLinha['qtdaempenhar'],   'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['vlremordemdecompra'],'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(20  ,$iAlt, $aLinha['qtdagerarordemdecompra'],'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(26  ,$iAlt, $aLinha['vlragerarordemdecompra'],'TBRL',0,'C',$iCorFundo);
+            $oPdf->Cell(15  ,$iAlt, $aLinha['qtdaempenhar'],   'TBRL',0,'C',$iCorFundo);
             $oPdf->Ln();
-
-            $iNumItens++;
 
         }
 
