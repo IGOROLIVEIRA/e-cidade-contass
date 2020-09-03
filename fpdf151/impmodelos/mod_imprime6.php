@@ -333,7 +333,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
 
         if ($pagina > 1){
-            $iLinhasRestantesItem = (int) ((($this->objpdf->h - 35) - $this->objpdf->GetY()) / 3);
+            $iLinhasRestantesItem = (int) ((($this->objpdf->h - 20) - $this->objpdf->GetY()) / 3);
         } else{
             $iLinhasRestantesItem = (int) ((($this->objpdf->h - 122) - $this->objpdf->GetY()) / 3);
         }
@@ -510,6 +510,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
               $this->objpdf->Setfont('Arial', '', 6);
               $descricaoitem = substr($descricaoitemInteira,$CaracteresPermitidos, strlen($descricaoitemInteira));
               $descricaoitemimprime = $this->objpdf->Row_multicell(array(), 3, false, 5, 0, true, true, 1, $set_altura_row);
+              //var_dump($descricaoitem);
             }
 
             $descricaoitemimprime = str_replace('\\n', '\n', $descricaoitemimprime);
