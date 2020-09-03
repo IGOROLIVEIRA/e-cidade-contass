@@ -212,7 +212,7 @@ function gera_13_salario($datafim,$sigla="r19" )
   if (db_day($datafim ) < bcdiv(ndias(db_str(db_month($datafim),2,0,"0")."/".db_str(db_year($datafim),4,0,"0")),2,0)) {
     $nm13-=1;
     if ($nm13 < 0) {
-      $mn13 = 0;
+      $nm13 = 0;
     }
   }
   $ultimo_mes = $nm13;
