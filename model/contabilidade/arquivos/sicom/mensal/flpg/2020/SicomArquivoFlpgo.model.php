@@ -591,7 +591,8 @@ WHERE (r59_anousu,
        WHEN r14_pd = 1 THEN 'D'
        WHEN r14_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
-       r14_valor AS si196_vlrremuneracaodetalhada
+       r14_valor AS si196_vlrremuneracaodetalhada,
+       '' as tpp
        FROM rhpessoal
        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
        AND rhpessoalmov.rh02_anousu = ".db_getsession("DB_anousu")."
@@ -635,7 +636,7 @@ WHERE (r59_anousu,
        INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r14_pd in (1))
-       group by 1,2,3,4,5,6,7
+       group by 1,2,3,4,5,6,7,8
 
        UNION
 
@@ -652,7 +653,8 @@ WHERE (r59_anousu,
        WHEN r48_pd = 1 THEN 'D'
        WHEN r48_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
-       r48_valor AS si196_vlrremuneracaodetalhada
+       r48_valor AS si196_vlrremuneracaodetalhada,
+       '' as tpp
        FROM rhpessoal
        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
        AND rhpessoalmov.rh02_anousu = ".db_getsession("DB_anousu")."
@@ -696,7 +698,7 @@ WHERE (r59_anousu,
        INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r48_pd in (1))
-       group by 1,2,3,4,5,6,7
+       group by 1,2,3,4,5,6,7,8
 
        UNION
 
@@ -712,7 +714,8 @@ WHERE (r59_anousu,
        WHEN r35_pd = 1 THEN 'D'
        WHEN r35_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
-       r35_valor AS si196_vlrremuneracaodetalhada
+       r35_valor AS si196_vlrremuneracaodetalhada,
+       '' as tpp
        FROM rhpessoal
        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
        AND rhpessoalmov.rh02_anousu = ".db_getsession("DB_anousu")."
@@ -756,7 +759,7 @@ WHERE (r59_anousu,
        INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r35_pd in (1))
-       group by 1,2,3,4,5,6,7
+       group by 1,2,3,4,5,6,7,8
 
        UNION
 
@@ -772,7 +775,8 @@ WHERE (r59_anousu,
        WHEN r20_pd = 1 THEN 'D'
        WHEN r20_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
-       r20_valor AS si196_vlrremuneracaodetalhada
+       r20_valor AS si196_vlrremuneracaodetalhada,
+       r20_tpp as tpp
        FROM rhpessoal
        INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
        AND rhpessoalmov.rh02_anousu = ".db_getsession("DB_anousu")."
@@ -816,7 +820,7 @@ WHERE (r59_anousu,
        INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r20_pd in (1))
-       group by 1,2,3,4,5,6,7 ) as x ";
+       group by 1,2,3,4,5,6,7,8 ) as x ";
 
        if($aTiposPagamento[$iContEx]['tipo'] == 4) {
          $sSql2 .= " Where x.tipo = 'gerfs13' ";
@@ -831,8 +835,8 @@ WHERE (r59_anousu,
        $sSql2 .= " group by x.tipo, x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_desctiporemuneracao,x.si196_natsaldodetalhe ";
 
        $rsResult11 = db_query($sSql2);
-				//echo $sSql2;
-				//db_criatabela($rsResult11);exit;
+       //echo $sSql2;
+       //db_criatabela($rsResult11);exit;
 
        for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
