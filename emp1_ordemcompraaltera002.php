@@ -108,6 +108,7 @@ if (isset($dados->altera)) {
 		$erro_msg = 'Ordem de Compra alterada com sucesso!';
 		if ($clmatordem->erro_status == 0) {
 			$sqlerro = true;
+			$erro_msg = $clmatordem->erro_msg;
 		}
 	}else{
 	    $sqlerro = true;
