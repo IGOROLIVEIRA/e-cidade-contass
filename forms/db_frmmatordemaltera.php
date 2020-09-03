@@ -316,7 +316,10 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                             <tr>
                                 <td colspan='4' align='center'>
 									<?
-									if ($m51_codordem != "") {
+									$observacao = preg_replace('/[^A-Z a-z]/', '', $m51_obs);
+									$descrAutomatica = strlen($observacao) == 25 ? 'ordem de compra automtica' : 'ordem de compra automatica';
+
+									if ($m51_codordem != "" && strcmp(strtolower($observacao), $descrAutomatica)) {
 										?>
                                         <input name="altera" type="button" value="Alterar" onclick="js_buscavalores();">
 									<? } else {
@@ -457,15 +460,18 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
     function js_retornoDados(oAjax){
         let response = eval("("+oAjax.responseText+")");
-        alert(`${response.message.urlDecode()}`);
 
         if(!response.erro){
+            alert(`${response.message.urlDecode()}`);
             let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
             if(confirmation){
                 jan = window.open('emp2_ordemcompra002.php?cods='+response.codordem, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
                 jan.moveTo(0,0);
             }
         }else{
+            if(response.message){
+                alert(`${response.message.urlDecode()}`);
+            }
             return;
         }
     }
