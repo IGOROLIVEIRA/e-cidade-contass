@@ -191,8 +191,8 @@ if ($oDaoOrdemAuxiliar->numrows > 0) {
                 $oPdf->cell(18, 4,db_formatar($oMovimento->e43_valor-$oMovimento->vlrretencao,"f"),0,1,"R",$iPreencher);
 
                 $subgrupo = $oMovimento->e50_obs;
-                if (strlen($subgrupo) > 115) {
-                    $aSubgrupo = quebrar_texto($subgrupo,115);
+                if (strlen($subgrupo) > 112) {
+                    $aSubgrupo = quebrar_texto($subgrupo,112);
                     $alt_novo = count($aSubgrupo);
                 } else {
                     $alt_novo = 4;
