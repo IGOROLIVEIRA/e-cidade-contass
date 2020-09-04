@@ -112,7 +112,7 @@ db_app::load("estilos.css, grid.style.css");
         </tr>
       </table>
     </fieldset>
-    <input type='button' value='Excluir Aditamentos' onclick="js_processarExclusaoPosicao();" style="margin-top: 10px;">
+    <input type='button' value='Excluir Apostilamento' onclick="js_processarExclusaoPosicao();" style="margin-top: 10px;">
   </center>
 </body>
 </html>
