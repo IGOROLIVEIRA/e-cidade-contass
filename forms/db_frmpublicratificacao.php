@@ -72,7 +72,6 @@ $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal
                 </td>
                 <td>
                     <?
-                    //db_input('l20_veicdivulgacao',50, $Il20_veicdivulgacao, true, 'text', $db_opcao, '', '', '', '', 50);
                     db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff",50);
                     ?>
                 </td>
