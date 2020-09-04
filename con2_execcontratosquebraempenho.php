@@ -18,7 +18,6 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
         $sQtdAempenhar = 0;
 
         foreach ($aEmpenhamentosPosicao as $iE => $oEmp){
-            $iQtdEmOrdem = 0;
             $iVlrEmOrdemReal = 0;
             $iQtdEmOrdemAnulado = 0;
             $iVlrEmOrdemAnulado = 0;
@@ -29,9 +28,11 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
             }
 
             foreach ($aItensEmpenho as $iI => $oItem) {
+                $iQtdEmOrdem = 0;
                 $iQtdAnulada = 0;
                 $iVlrEmOrdem = 0;
-
+                $iQtdAgerarOC = 0;
+                $sQtdEmpenhada = 0;
                 //Bloco de pre-renderizacao
                 $sQtdContratadaPosicao = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_quantidade;
                 $sVlrUnitarioPosicao   = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_valorunitario;
