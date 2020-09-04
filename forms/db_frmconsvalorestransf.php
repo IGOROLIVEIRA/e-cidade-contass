@@ -115,9 +115,20 @@ db_select('c201_enviourelatorios',$x,true,$db_opcao,"");
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";
-	 $cliframe_alterar_excluir->iframe_alterar_excluir(1);
+   $cliframe_alterar_excluir->iframe_alterar_excluir(1); 
     ?>
     </td>
+   </tr>
+   <tr>
+   <td nowrap title="Código da fonte de recursos" align="left" colspan="2">
+      <b>Total de Valores Transferidos: </b>
+      <?
+          $sqlTotValTransf  = $clconsvalorestransf->sql_query_file(null,"sum(c201_valortransf) as total",null,"c201_consconsorcios=$c201_consconsorcios and c201_anousu = ".db_getsession("DB_anousu"));
+          $rsTotValTransf   = db_query($sqlTotValTransf);
+          $totalValTransf   = db_formatar(db_utils::fieldsMemory($rsTotValTransf,0)->total, 'f');
+          db_input('totalValTransf',11,'totalValTransf',true,'text',3,"");
+      ?>
+      </td>
    </tr>
  </table>
  </fieldset>
