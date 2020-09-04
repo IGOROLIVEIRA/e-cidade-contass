@@ -18,10 +18,6 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
         $sQtdAempenhar = 0;
 
         foreach ($aEmpenhamentosPosicao as $iE => $oEmp){
-            $iVlrEmOrdemReal = 0;
-            $iQtdEmOrdemAnulado = 0;
-            $iVlrEmOrdemAnulado = 0;
-            $iVlrGerarOC = 0;
             $aItensEmpenho = $oExecucaoDeContratos->consultarItensEmpenho((int)$oEmp->codigoempenho);
             if($oEmp->codigoempenho != ""){
                 $iNumItens += count($oEmp->codigoempenho);
@@ -33,6 +29,11 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $iVlrEmOrdem = 0;
                 $iQtdAgerarOC = 0;
                 $sQtdEmpenhada = 0;
+                $iQtdEmOrdemAnulado = 0;
+                $iVlrEmOrdemAnulado = 0;
+                $iVlrEmOrdemReal = 0;
+                $iVlrGerarOC = 0;
+
                 //Bloco de pre-renderizacao
                 $sQtdContratadaPosicao = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_quantidade;
                 $sVlrUnitarioPosicao   = $oExecucaoDeContratos->getItensContratoPosicao($oAcordo->getCodigo(), $oItem->codigo_material,$oPosicao->getCodigo())->ac20_valorunitario;
@@ -48,17 +49,16 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
 
                 foreach($oExecucaoDeContratos->quantidadeTotalEmOrdensDeCompra((int)$oEmp->codigoempenho,(int)$oItem->codigo_material) as $oOrdem){
 
-                    $iQtdEmOrdem = $oOrdem->quantidade;
-
                     if($oOrdem->quantidadeAnulada > 0){
+                        $iQtdEmOrdem = $oOrdem->quantidade - $oOrdem->quantidadeAnulada;
                         $iQtdEmOrdemAnulado = $oOrdem->quantidadeAnulada;
-                        $iVlrEmOrdemAnulado = $oOrdem->quantidadeAnulada * $oOrdem->valor;
-                        $iVlrEmOrdem = ($oOrdem->valor * $oOrdem->quantidadeAnulada) - $iVlrEmOrdemAnulado;
-
+                        $iVlrEmOrdemAnulado = $oOrdem->quantidadeAnulada * $sVlrUnitarioPosicao;
+                        $iVlrEmOrdem = ($sVlrUnitarioPosicao * $oOrdem->quantidade) - $iVlrEmOrdemAnulado;
+                        $iVlrOrdem = $oOrdem->quantidadeAnulada * $oOrdem->valor;
                     }else{
+                        $iQtdEmOrdem = $oOrdem->quantidade;
                         $iVlrEmOrdem = $oOrdem->valor;
                     }
-
                 };
 
                 $sQtdEmOrdem      = empty($iQtdEmOrdem)?"0":(string)$iQtdEmOrdem;
@@ -68,7 +68,6 @@ function execucaoDeContratosQuebraPorEmpenho($aMateriais,$iFonte,$iAlt,$iAcordo,
                 $iQtdAgerarOC = $sQtdEmpenhada - $sQtdEmOrdem;
                 $iVlrEmpenhadoReal = $sQtdEmpenhadaReal * (float)$sVlrUnitarioPosicao;
                 $iVlrEmpenhadoAnulado = $iQtdAnulada * $sVlrUnitarioPosicao;
-                //valor a gerar OC vlrEmpenhado - vlrAnulado - vlremOC
                 if($sQtdEmpenhada > 0){
                     $iVlrGerarOC = $iVlrEmpenhadoReal - $iVlrEmpenhadoAnulado - $iVlrEmOrdem;
                 }
