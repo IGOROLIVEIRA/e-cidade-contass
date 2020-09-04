@@ -157,6 +157,9 @@ class cl_cfpess {
   var $r11_suplementar = 'f';
   var $r11_rubricasubstituicaoatual = null; 
   var $r11_rubricasubstituicaoanterior = null; 
+  var $r11_avisoprevio13 = null; 
+  var $r11_avisoprevioferias = null; 
+  var $r11_avisoprevio13ferias = null; 
 
   /**
    * Cria propriedade com as variáveis do arquivo.
@@ -251,6 +254,9 @@ class cl_cfpess {
     r11_suplementar = bool = Suplementar 
     r11_rubricasubstituicaoatual = varchar(4) = Exercício atual 
     r11_rubricasubstituicaoanterior = varchar(4) = Exercício anterior 
+    r11_avisoprevio13 = varchar(4) = Aviso Prévio 13
+    r11_avisoprevioferias = varchar(4) = Aviso Prévio Férias
+    r11_avisoprevio13ferias = varchar(4) = Aviso Prévio 1/3 Férias
   ";
 
   /**
@@ -407,6 +413,9 @@ class cl_cfpess {
        $this->r11_suplementar = ($this->r11_suplementar == "f"?@$GLOBALS["HTTP_POST_VARS"]["r11_suplementar"]:$this->r11_suplementar);
        $this->r11_rubricasubstituicaoatual = ($this->r11_rubricasubstituicaoatual == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_rubricasubstituicaoatual"]:$this->r11_rubricasubstituicaoatual);
        $this->r11_rubricasubstituicaoanterior = ($this->r11_rubricasubstituicaoanterior == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_rubricasubstituicaoanterior"]:$this->r11_rubricasubstituicaoanterior);
+       $this->r11_avisoprevio13 = ($this->r11_avisoprevio13 == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13"]:$this->r11_avisoprevio13);
+       $this->r11_avisoprevioferias = ($this->r11_avisoprevioferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevioferias"]:$this->r11_avisoprevioferias);
+       $this->r11_avisoprevio13ferias = ($this->r11_avisoprevio13ferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13ferias"]:$this->r11_avisoprevio13ferias);
      }else{
        $this->r11_instit = ($this->r11_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_instit"]:$this->r11_instit);
        $this->r11_anousu = ($this->r11_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_anousu"]:$this->r11_anousu);
@@ -728,6 +737,9 @@ class cl_cfpess {
                                       ,r11_suplementar 
                                       ,r11_rubricasubstituicaoatual 
                                       ,r11_rubricasubstituicaoanterior 
+                                      ,r11_avisoprevio13
+                                      ,r11_avisoprevioferias 
+                                      ,r11_avisoprevio13ferias
                        )
                 values (
                                 $this->r11_instit 
@@ -819,6 +831,9 @@ class cl_cfpess {
                                ,'$this->r11_suplementar' 
                                ,'$this->r11_rubricasubstituicaoatual' 
                                ,'$this->r11_rubricasubstituicaoanterior' 
+                               ,'$this->r11_avisoprevio13' 
+                               ,'$this->r11_avisoprevioferias' 
+                               ,'$this->r11_avisoprevio13ferias' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -1513,6 +1528,18 @@ class cl_cfpess {
      }
      if(trim($this->r11_rubricasubstituicaoanterior)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_rubricasubstituicaoanterior"])){ 
        $sql  .= $virgula." r11_rubricasubstituicaoanterior = '$this->r11_rubricasubstituicaoanterior' ";
+       $virgula = ",";
+     }
+     if(trim($this->r11_avisoprevio13)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13"])){ 
+       $sql  .= $virgula." r11_avisoprevio13 = '$this->r11_avisoprevio13' ";
+       $virgula = ",";
+     }
+     if(trim($this->r11_avisoprevioferias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_avisoprevioferias"])){ 
+       $sql  .= $virgula." r11_avisoprevioferias = '$this->r11_avisoprevioferias' ";
+       $virgula = ",";
+     }
+     if(trim($this->r11_avisoprevio13ferias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13ferias"])){ 
+       $sql  .= $virgula." r11_avisoprevio13ferias = '$this->r11_avisoprevio13ferias' ";
        $virgula = ",";
      }
      $sql .= " where ";

@@ -3399,8 +3399,8 @@ class empenho {
 
             $oEmpAnuladoItem->e37_empempitem = $aItens[$iInd]->iCodItem;
             $oEmpAnuladoItem->e37_empanulado = $iCodAnu;
-            $oEmpAnuladoItem->e37_vlranu     = $aItens[$iInd]->nVlrTotal;
-            $oEmpAnuladoItem->e37_qtd        = $aItens[$iInd]->nQtde;
+            $oEmpAnuladoItem->e37_vlranu     = $aItens[$iInd]->vlrtot;
+            $oEmpAnuladoItem->e37_qtd        = $aItens[$iInd]->quantidade;
             $oEmpAnuladoItem->incluir(null);
             if ($oEmpAnuladoItem->erro_status == 0) {
 

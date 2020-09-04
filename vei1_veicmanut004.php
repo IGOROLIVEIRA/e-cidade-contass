@@ -70,6 +70,14 @@ if (isset($incluir)) {
   $oDataManutencao = new DBDate($ve62_dtmanut);
   $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
   $dataManutencao = $oDataManutencao->getDate();
+  $retirada = $ve65_veicretirada;
+
+    if($retirada == "" || $retirada == null){
+        db_msgbox("Campo: Retirada não informado");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+
     /*
      * verifica retirada e devolução vinculados a manutencão
      */
