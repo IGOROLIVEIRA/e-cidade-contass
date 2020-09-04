@@ -465,7 +465,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             alert(`${response.message.urlDecode()}`);
             let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
             if(confirmation){
-                jan = window.open('emp2_ordemcompra002.php?cods='+response.codordem, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
+                jan = window.open('emp2_ordemcompraalteracao002.php?iOrdem='+response.codordem, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
                 jan.moveTo(0,0);
             }
         }else{

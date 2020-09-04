@@ -112,7 +112,6 @@ $clrotulo->label("e62_descr");
 
 							if (isset ($m51_codordem) && $m51_codordem != "") {
 
-							    $sSql = $clempempitem->sql_query('', '', '', '', 'm52_codordem = ' . $m51_codordem);
 							    $resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*", "", "m52_codordem=$m51_codordem"));
                                 $oOrdem = db_utils::fieldsMemory($resultItem, 0);
 
