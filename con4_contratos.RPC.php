@@ -577,8 +577,11 @@ switch($oParam->exec) {
           $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
           $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
 
+          $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = '.$oParam->contrato->iGrupo);
+          $iNaturezaAcordo = db_utils::fieldsMemory($rsSql, 0)->ac02_acordonatureza;
+
           if(in_array($oParam->contrato->iTipoOrigem, array(2, 3))){
-			  if($iNatureza != $oParam->contrato->iGrupo){
+			  if($iNatureza != $iNaturezaAcordo){
 		  	      throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
 			  }
 		  }
