@@ -80,12 +80,11 @@ if ($clpcparam->numrows > 0) {
 }
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*", "m52_codlanc limit 1", 'm51_codordem = ' . $iOrdem));
+$resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*",
+	"m52_codlanc", 'm51_codordem = ' . $iOrdem.' and m52_sequen in ('.$itens.')'));
 db_fieldsmemory($resultItem, 0);
 
-$sSqlItens = $clempempitem->sql_query($m52_numemp, '', '*', '', '', true);
-$result = $clempempitem->sql_record($sSqlItens);
-$num_rows = $clempempitem->numrows;
+$num_rows = $clmatordemitem->numrows;
 
 $pdf = new scpdf();
 $pdf->Open();
@@ -144,7 +143,7 @@ $pdf1->compl = $z01_compl;
 $pdf1->contato = $z01_telcon;
 $pdf1->telef_cont = $z01_telef;
 $pdf1->telef_fax = $z01_fax;
-$pdf1->recorddositens = $result;
+$pdf1->recorddositens = $resultItem;
 $pdf1->linhasdositens = $num_rows;
 $pdf1->emissao = $datahj;
 $pdf1->obs = $m51_obs;
@@ -171,7 +170,7 @@ if ($clempparametro->numrows > 0) {
 }
 $pdf1->numdec = $e30_numdec;
 $pdf1->valoritem = 'm52_valor';
-$pdf1->vlrunitem = 'e62_vlrun'	;
+$pdf1->vlrunitem = 'm52_vlruni'	;
 $pdf1->descricaoitem = 'pc01_descrmater';
 $pdf1->codmater = 'pc01_codmater';
 $pdf1->observacaoitem = 'e62_descr';

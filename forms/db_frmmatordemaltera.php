@@ -368,6 +368,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         obj = itens.document.form1;
 
         let aItens = [];
+        aItensImpressao = [];
 
         let objeto = {};
         let elementChecked = false;
@@ -386,6 +387,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                 if (obj.elements[count].id.includes('sequen_')) {
                     objeto = {};
                     objeto.sequen = obj.elements[count].value.replace(/\s/g, '');
+                    aItensImpressao.push(objeto.sequen);
                 }
 
                 if (obj.elements[count].id.includes('numemp_')) {
@@ -431,6 +433,24 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         )
     }
 
+    function js_retornoDados(oAjax){
+        let response = eval("("+oAjax.responseText+")");
+
+        if(!response.erro){
+            alert(`${response.message.urlDecode()}`);
+            let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
+            if(confirmation){
+                jan = window.open('emp2_ordemcompraalteracao002.php?iOrdem='+response.codordem+'&itens='+aItensImpressao.join(','), '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
+                jan.moveTo(0,0);
+            }
+        }else{
+            if(response.message){
+                alert(`${response.message.urlDecode()}`);
+            }
+            return;
+        }
+    }
+
     function js_coddepto(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto', 'Pesquisa', true);
@@ -455,24 +475,6 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         if (erro == true) {
             document.form1.coddepto.focus();
             document.form1.coddepto.value = '';
-        }
-    }
-
-    function js_retornoDados(oAjax){
-        let response = eval("("+oAjax.responseText+")");
-
-        if(!response.erro){
-            alert(`${response.message.urlDecode()}`);
-            let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
-            if(confirmation){
-                jan = window.open('emp2_ordemcompraalteracao002.php?iOrdem='+response.codordem, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
-                jan.moveTo(0,0);
-            }
-        }else{
-            if(response.message){
-                alert(`${response.message.urlDecode()}`);
-            }
-            return;
         }
     }
 
