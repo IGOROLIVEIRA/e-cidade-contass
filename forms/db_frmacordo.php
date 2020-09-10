@@ -1417,7 +1417,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_mostraacordocategoria(chave1, chave2) {
 
-        $('ac02_descricao').value = chave1;
+        $('ac50_descricao').value = chave1;
         $('ac50_sequencial').focus();
 
         db_iframe_acordocategoria.hide();

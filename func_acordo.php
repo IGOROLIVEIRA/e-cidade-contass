@@ -195,8 +195,8 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             }
           }
 
-          if (isset($lHomologados) && $lHomologados == true && $pc01_liberaautorizacao <> 't') {
-            //$sWhere .= " and (ac16_acordosituacao = 4)";
+          if (isset($Homologados)) {
+            $sWhere .= " and ac16_acordosituacao = 4";
           }
 
           if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
@@ -274,6 +274,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
           if (isset($chave_ac16_sequencial)) {
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
+
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {

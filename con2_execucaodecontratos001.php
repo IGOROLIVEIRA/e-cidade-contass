@@ -167,12 +167,12 @@ $oRotulo->label("ac16_resumoobjeto");
   function js_acordo(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('','db_iframe_acordo',
-        'func_acordo.php?lDepartamento=true&funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto',
+        'func_acordo.php?lDepartamento=true&Homologados=true&funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto',
         'Pesquisa',true,0);
     } else {
       if($F('ac16_sequencial').trim() != ''){
         js_OpenJanelaIframe('','db_iframe_depart',
-          'func_acordo.php?lDepartamento=true&pesquisa_chave='+$F('ac16_sequencial')+'&funcao_js=parent.js_mostraAcordo'+
+          'func_acordo.php?lDepartamento=true&Homologados=true&pesquisa_chave='+$F('ac16_sequencial')+'&funcao_js=parent.js_mostraAcordo'+
           '&descricao=true',
           'Pesquisa',false,0);
       } else {

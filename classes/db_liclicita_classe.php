@@ -1471,7 +1471,6 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($tribunal != 50) {
                 if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
                     $sql .= $virgula . " l20_recdocumentacao = null ";
                     $virgula = ",";
@@ -1487,7 +1486,6 @@ class cl_liclicita
                     $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                     $virgula = ",";
                 }
-            }
         }
 
         if (trim($this->l20_dataaber != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
