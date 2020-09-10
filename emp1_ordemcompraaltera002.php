@@ -127,33 +127,26 @@ if (isset($dados->altera)) {
                 " m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen = $sequen "));
 			db_fieldsmemory($result_item, 0);
 
-			if ($quantidade == 0 || $valor_item == 0) {
-				$clmatordemitem->excluir(null, "m52_codlanc = $m52_codlanc");
-				$erroex = $clmatordemitem->erro_msg;
-				if ($clmatordemitem->erro_status == 0) {
-					$sqlerro = true;
-				}
-			} else {
-				if (strpos(trim($valor_item), ',') != "") {
-					$valor_item = str_replace('.', '', $valor_item);
-					$valor_item = str_replace(',', '.', $valor_item);
-				}
-				if (strpos(trim($quantidade), ',') != "") {
-					$quantidade = str_replace('.', '', $quantidade);
-					$quantidade = str_replace(',', '.', $quantidade);
-				}
-				$clmatordemitem->m52_codlanc  = $m52_codlanc;
-				$clmatordemitem->m52_codordem = $dados->m51_codordem;
-				$clmatordemitem->m52_numemp   = $numemp;
-				$clmatordemitem->m52_sequen   = $sequen;
-				$clmatordemitem->m52_quant    = $quantidade;
-				$clmatordemitem->m52_valor    = $valor_item;
-				$clmatordemitem->alterar($m52_codlanc);
+            if (strpos(trim($valor_item), ',') != "") {
+                $valor_item = str_replace('.', '', $valor_item);
+                $valor_item = str_replace(',', '.', $valor_item);
+            }
+            if (strpos(trim($quantidade), ',') != "") {
+                $quantidade = str_replace('.', '', $quantidade);
+                $quantidade = str_replace(',', '.', $quantidade);
+            }
+            $clmatordemitem->m52_codlanc  = $m52_codlanc;
+            $clmatordemitem->m52_codordem = $dados->m51_codordem;
+            $clmatordemitem->m52_numemp   = $numemp;
+            $clmatordemitem->m52_sequen   = $sequen;
+            $clmatordemitem->m52_quant    = $quantidade;
+            $clmatordemitem->m52_valor    = $valor_item;
+            $clmatordemitem->alterar($m52_codlanc);
 
-				if ($clmatordemitem->erro_status == 0) {
-					$sqlerro = true;
-				}
-			}
+            if ($clmatordemitem->erro_status == 0) {
+                $sqlerro = true;
+            }
+
 		}
 	}
 

@@ -112,12 +112,11 @@ $clrotulo->label("e62_descr");
 
 							if (isset ($m51_codordem) && $m51_codordem != "") {
 
-							    $resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*", "", "m52_codordem=$m51_codordem"));
-                                $oOrdem = db_utils::fieldsMemory($resultItem, 0);
+								$resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query(null, "*", "", "m52_codordem=$m51_codordem"));
 
-								$sSqlItens = $clempempitem->sql_query($oOrdem->e62_numemp, '', '*', '', '');
-								$result = $clempempitem->sql_record($sSqlItens);
-
+							    $iNumEmpenho = db_utils::fieldsMemory($resultItem, 0)->m52_numemp;
+								$sSql = $clempempitem->sql_query('', '', '*', '', 'e62_numemp = ' . $iNumEmpenho);
+								$rsSql = $clempempitem->sql_record($sSql);
 								$numrows = $clempempitem->numrows;
 
 								if ($numrows > 0) {
@@ -150,29 +149,67 @@ $clrotulo->label("e62_descr");
 								}
 
 								for ($i = 0; $i < $numrows; $i++) {
-									db_fieldsmemory($result, $i);
 
-									$sSqlMatItens = $clmatordemitem->sql_query('','*','', 'e62_item = '.$e62_item. ' and e62_numemp = '.$e62_numemp);
-									$rsMatItens = $clmatordemitem->sql_record($sSqlMatItens);
+								    db_fieldsmemory($rsSql, $i);
 
-									$oItem = db_utils::fieldsMemory($rsMatItens, 0);
+                                    $sqlItem = $clmatordemitem->sql_query_anulado('', 'm52_codordem, m52_quant, m52_valor, m53_codordem',
+                                        '','m52_numemp = '. $e62_numemp .' and m52_sequen = '. $e62_sequen);
+                                    $rsItem = $clmatordemitem->sql_record($sqlItem);
+                                    $valorLancado = $quantLancada = 0;
 
-                                    $sSqlEntrada = $clmatestoqueitemoc->sql_query(null, null, "*", null,
-										"m52_numemp = $e62_numemp and m52_sequen = $e62_sequen and m73_cancelado is false");
+									$libera_registro = false;
+                                    for ($count=0; $count < pg_num_rows($rsItem); $count++){
+									    $oItem = db_utils::fieldsMemory($rsItem, $count);
+
+									    $valorLancado += floatval($oItem->m52_valor);
+                                        $quantLancada += floatval($oItem->m52_quant);
+
+                                        if($oItem->m53_codordem){
+											$valorLancado -= floatval($oItem->m52_valor);
+											$quantLancada -= floatval($oItem->m52_quant);
+                                        }
+
+										if($oItem->m52_codordem == $m51_codordem){
+                                            $libera_registro = true;
+                                        }
+                                    }
+
+									$marcaLinha = $opcao == 1 ? '' : 'marcado';
+
+									if(($quantLancada == $e62_quant && $valorLancado == $e62_vltot) && !$libera_registro){
+										$disabled = 'disabled';
+										$marcaLinha = 'marcado';
+										$opcao = 3;
+                                    }else{
+										$disabled = '';
+										$marcaLinha = '';
+										$opcao = 1;
+                                    }
+
+									$sSqlEntrada = $clmatestoqueitemoc->sql_query(null, null, "*", null,
+										'm52_numemp = '. $e62_numemp .' and m52_sequen = '. $e62_sequen .
+                                        'and m52_codordem = '. $m51_codordem. 'and m73_cancelado is false');
+
 									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
 
-									$compareObs = strcmp(strtolower(trim($oOrdem->m51_obs)), strtolower('ordem de compra automatica'));
+									$ordemAutomatica = false;
+									$obsOrdem = db_utils::fieldsMemory($resultItem, 0)->m51_obs;
+									$compareObs = strcmp(strtolower(trim($obsOrdem)), strtolower('ordem de compra automatica'));
                                     if(!$compareObs || pg_num_rows($result2)){
                                         $sChecked = 'checked';
                                         $disabled = 'disabled';
                                         $opcao = 3;
-                                    }else{
-                                        $opcao = 1;
+                                        $ordemAutomatica = true;
                                     }
 
-                                    $marcaLinha = $opcao == 1 ? '' : 'marcado';
+									$sqlItem = $clmatordemitem->sql_query('', '*', '',
+                                        'm52_numemp = '. $e62_numemp .' and m52_sequen = '. $e62_sequen .
+                                        ' and m52_codordem = '.$m51_codordem);
+									$rsItem = $clmatordemitem->sql_record($sqlItem);
 
-									if ($clmatestoqueitemoc->numrows == 0) {
+                                    $oItemOrdem = db_utils::fieldsMemory($rsItem, 0);
+
+                                    if ($clmatestoqueitemoc->numrows == 0) {
                                         
 										echo "<tr id='tr_$e62_sequencial' class='$marcaLinha'>
                                                     <td class='linhagrid' title='Inverte a marcação' align='center'>
@@ -186,7 +223,7 @@ $clrotulo->label("e62_descr");
                                                     </td>
 													<td	class='linhagrid' align='center'>
 													    <small>";
-													        db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_codemp);", $opcao, '', "codemp_$i");
+										                    db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", $opcao, '', "codemp_$i");
 													    echo "</small>
                                                     </td>
 													<td	class='linhagrid' align='center'>
@@ -221,22 +258,42 @@ $clrotulo->label("e62_descr");
 
 										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
 
-											$quant = $m52_quant;
-
 											$quantidade = "quant_" . "$i";
-											$$quantidade = $e62_quant;
+
+											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
+
+											if(!$$quantidade){
+											    $$quantidade = $quantLancada;
+                                            }
+
+											if($ordemAutomatica){
+												$$quantidade = $e62_quant;
+											}
 
 											$qtde = "qtde_$i";
-											$$qtde = isset($oItem->m52_quant) ? trim($oItem->m52_quant) : 0;
+
+											if($oItemOrdem->m52_quant){
+											    $$qtde = $oItemOrdem->m52_quant;
+                                            }else{
+											    if(!($e62_quant - $quantLancada)){
+											        $$qtde = $e62_quant;
+                                                }else{
+													$$qtde = $oItemOrdem->m52_quant;
+                                                }
+                                            }
+
+											$$qtde = !$$qtde ? 0 : $$qtde;
 
 											$valor = "valor_$i";
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
 											$valor_total = "vltotalemp_". "$i";
-											$$valor_total = trim(db_formatar($e62_vltot, 'f'));
+											$valor_restante = $e62_vlrun * $$quantidade;
+
+											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = trim(db_formatar($oItem->m52_valor, 'f'));
+											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
 
 										   /**
                                            * Caso for um material
@@ -279,20 +336,42 @@ $clrotulo->label("e62_descr");
 
 										} else if ($pc01_servico == 't') {
 
-										    $quantidade = "quant_" . "$i";
-											$$quantidade = trim($oItem->m52_quant);
+											$quantidade = "quant_" . "$i";
 
-											$qtde = "qtde_" . "$i";
-											$$qtde = $oItem->m52_quant;
+											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
+
+											if(!$$quantidade){
+												$$quantidade = $quantLancada;
+											}
+
+											if($ordemAutomatica){
+											    $$quantidade = $e62_quant;
+                                            }
+
+											$qtde = "qtde_$i";
+
+											if($oItemOrdem->m52_quant){
+												$$qtde = $oItemOrdem->m52_quant;
+											}else{
+												if(!($e62_quant - $quantLancada)){
+													$$qtde = $e62_quant;
+												}else{
+													$$qtde = $oItemOrdem->m52_quant;
+												}
+											}
+
+											$$qtde = !$$qtde ? 0 : $$qtde;
 
 											$valor = "valor_$i";
-											$$valor = trim(db_formatar($oItem->m52_vlruni, 'f'));
+											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
-                                            $valor_total = "valortotal_$i";
-                                            $$valor_total = trim(str_replace('/\s/g', '', db_formatar($e62_vltot, 'f')));
+											$valor_total = "vltotalemp_". "$i";
+											$valor_restante = $e62_vlrun * $$quantidade;
 
-                                            $vltotal = "vltotal_$i";
-                                            $$vltotal = trim(db_formatar($oItem->m52_valor, 'f'));
+											$$valor_total = trim(db_formatar($valor_restante, 'f'));
+
+											$vltotal = "vltotal_". "$i";
+											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
 
 											echo "   <td class='linhagrid' align='center'>";
 											echo "      <input id='$quantidade' class='input__static' value='".$$quantidade."' disabled />";
@@ -325,7 +404,7 @@ $clrotulo->label("e62_descr");
                                                   </td>";
 										echo " 	 <td class='linhagrid' align='center' $disabled>
  	                                                <small>";
-										                db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_codemp);", 1);
+										                db_ancora($e60_codemp, "js_pesquisaEmpenho($e60_numemp);", 1);
                                         echo"       </small>
                                                  </td>";
 										echo "   <td class='linhagrid' align='center'>
@@ -351,20 +430,42 @@ $clrotulo->label("e62_descr");
 										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
 
 
-											$quantidade = "quant_$i";
-											$$quantidade = $m52_quant;// - $m71_quant;
+											$quantidade = "quant_" . "$i";
 
-											$qtde = "qtde_" . "$i";
-											$$qtde = $$quantidade;
+											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
+
+											if(!$$quantidade){
+												$$quantidade = $quantLancada;
+											}
+
+											if($ordemAutomatica){
+												$$quantidade = $e62_quant;
+											}
+
+											$qtde = "qtde_$i";
+
+											if($oItemOrdem->m52_quant){
+												$$qtde = $oItemOrdem->m52_quant;
+											}else{
+												if(!($e62_quant - $quantLancada)){
+													$$qtde = $e62_quant;
+												}else{
+													$$qtde = $oItemOrdem->m52_quant;
+												}
+											}
+
+											$$qtde = !$$qtde ? 0 : $$qtde;
 
 											$valor = "valor_$i";
-											$$valor = db_formatar($m52_vlruni, 'f');
+											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
-											$valor_total = "valortotal_". "$i";
-											$$valor_total = trim(db_formatar($e62_vltot, 'f'));
+											$valor_total = "vltotalemp_". "$i";
+											$valor_restante = $e62_vlrun * $$quantidade;
+
+											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = trim(db_formatar($m52_valor, 'f'));
+											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
 
 											echo "   <td class='linhagrid' align='center'>";
 											echo "		 <small>";
@@ -395,20 +496,42 @@ $clrotulo->label("e62_descr");
 										} else if ($pc01_servico == 't') {
 
 
-											$quantidade = "quant_$i";
-											$$quantidade = trim($m52_quant);
+											$quantidade = "quant_" . "$i";
 
-											$qtde = "qtde_" . "$i";
-											$$qtde = trim($$quantidade);
+											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
+
+											if(!$$quantidade){
+												$$quantidade = $quantLancada;
+											}
+
+											if($ordemAutomatica){
+												$$quantidade = $e62_quant;
+											}
+
+											$qtde = "qtde_$i";
+
+											if($oItemOrdem->m52_quant){
+												$$qtde = $oItemOrdem->m52_quant;
+											}else{
+												if(!($e62_quant - $quantLancada)){
+													$$qtde = $e62_quant;
+												}else{
+													$$qtde = $oItemOrdem->m52_quant;
+												}
+											}
+
+											$$qtde = !$$qtde ? 0 : $$qtde;
 
 											$valor = "valor_$i";
-											$$valor = trim(db_formatar($oItem->m52_vlruni, 'f'));
+											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
-											$valortotal = "valortotal_". "$i";
-											$$valortotal = trim(db_formatar($e62_vltot, 'f'));
+											$valor_total = "vltotalemp_". "$i";
+											$valor_restante = $e62_vlrun * $$quantidade;
+
+											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = trim(db_formatar($m52_valor, 'f'));
+											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
 
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
@@ -611,7 +734,7 @@ $clrotulo->label("e62_descr");
                 message = 'Quantidade inserida maior que o valor do item no Empenho!';
 
                 let valor_unitario = document.getElementById(`valor_${indexLinha}`).value;
-                fieldTotal.value = js_formatar((parseFloat(qtde_total) * parseFloat(valor_unitario)), 'f');
+                fieldTotal.value = js_formatar((parseFloat(qtde_total.replace(',', '.')) * parseFloat(valor_unitario.replace(',', '.'))), 'f');
                 item.value = js_formatar(qtde_total, 'f');
             }else{
 
