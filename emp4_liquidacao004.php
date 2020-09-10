@@ -172,7 +172,7 @@ switch ($objJson->method) {
   $oDaoElementos        = db_utils::getDao('orcelemento');
   $sWhereEmpenho        = " e60_numemp =  {$objJson->iEmpenho}";
   $sSqlBuscaElemento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,7) AS o56_elemento", null, $sWhereEmpenho);
-  $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);
+  $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);  
 
   $oDaoPatriInst    = db_utils::getDao('cfpatriinstituicao');
   $sWherePatriInst  = " t59_instituicao = " . db_getsession('DB_instit');
@@ -389,7 +389,7 @@ switch ($objJson->method) {
         11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
         23 => "CE", 24 => "RN", 25 => "PB", 26 => "PE", 27 => "AL", 28 => "SE", 29 => "BA", 31 => "MG", 32 => "ES",
         33 => "RJ", 35 => "SP", 41 => "PR", 42 => "SC", 43 => "RS", 50 => "MS", 51 => "MT", 52 => "GO", 53 => "DF"
-
+      
       );
 
       $ufKey   = substr($objJson->e69_chaveacesso,0,2);
@@ -470,26 +470,20 @@ switch ($objJson->method) {
 
     case "anularEmpenho":
 
-    $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
+    $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
+    $objEmpenho->anularEmpenho($objJson->itensAnulados,
+      $objJson->nValor,
+      $objJson->sMotivo,
+      $objJson->aSolicitacoes,
+      $objJson->iTipoAnulacao);
     if ($objEmpenho->lSqlErro) {
+
       $nMensagem = urlencode($objEmpenho->sErroMsg);
       $iStatus = 2;
-    }else {
-      $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
-      $objEmpenho->anularEmpenho($objJson->itensAnulados,
-        $objJson->nValor,
-        $objJson->sMotivo,
-        $objJson->aSolicitacoes,
-        $objJson->iTipoAnulacao);
-      if ($objEmpenho->lSqlErro) {
 
-        $nMensagem = urlencode($objEmpenho->sErroMsg);
-        $iStatus = 2;
-
-      } else {
-        $nMensagem = '';
-        $iStatus = 1;
-      }
+    }else{
+      $nMensagem = '';
+      $iStatus = 1;
     }
     /**
     *ALTERAÇÃO DA ROTINA DE ANULAÇÃO DE EMPENHO
@@ -584,7 +578,6 @@ switch ($objJson->method) {
     }
     */
     echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
-
     break;
 
     case "getDadosRP":
@@ -601,26 +594,18 @@ switch ($objJson->method) {
 
     try {
 
-      $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
-      if ($objEmpenho->lSqlErro) {
-        $sMensagem = urlencode($objEmpenho->sErroMsg);
-        $iStatus = 2;
-      }else {
-
-        db_inicio_transacao();
-        $objEmpenho->estornarRP(
-          $objJson->iTipo,
-          $objJson->aNotas,
-          $objJson->sValorEstornar,
-          $objJson->sMotivo,
-          $objJson->aItens,
-          $objJson->tipoAnulacao
+      db_inicio_transacao();
+      $objEmpenho->estornarRP(
+        $objJson->iTipo,
+        $objJson->aNotas,
+        $objJson->sValorEstornar,
+        $objJson->sMotivo,
+        $objJson->aItens,
+        $objJson->tipoAnulacao
         );
-        db_fim_transacao(false);
-        $iStatus = 1;
-        $sMensagem = "Empenho estornado com sucesso";
-
-      }
+      db_fim_transacao(false);
+      $iStatus = 1;
+      $sMensagem = "Empenho estornado com sucesso";
 
     } catch (Exception $e) {
 
