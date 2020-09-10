@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -5995,8 +5995,7 @@ class empenho {
       $aWhere = array(
         "c75_numemp = {$iSequencialEmpenho}",
         "c70_data > '{$iData}'",
-        "c53_tipo = {$iDocumento}",
-        "c53_coddoc <> 25"
+        "c53_tipo = {$iDocumento}"
       );
 
       $sOrdem = " c70_codlan desc limit 1 ";
