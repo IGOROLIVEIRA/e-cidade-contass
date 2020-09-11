@@ -287,7 +287,7 @@ if (empty ($e60_numemp)) {
         } else {
             lDisabled = "disabled";
         }
-        
+
         if (obj.numnotas > 0){
             for (var i = 0; i < obj.data.length;i++){
                 console.log(obj.e60_numemp);
@@ -348,7 +348,7 @@ if (empty ($e60_numemp)) {
 
 
                 saida += "<td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
-                saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 3)+"</td>";
+                saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 4)+"</td>";
                 saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
                 saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
 
@@ -427,7 +427,7 @@ if (empty ($e60_numemp)) {
 
                 saida += "  <td class='linhagrid' style='text-align:right'>"+obj.itensAnulados[i].e62_item+"</td>";
 
-                
+
 
 
 
