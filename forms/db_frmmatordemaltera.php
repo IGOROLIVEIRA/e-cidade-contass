@@ -402,11 +402,15 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                     objeto.quantidade = obj.elements[count].value;
                 }
 
+                if (obj.elements[count].id.includes('valor_')) {
+                    objeto.valorunitario = obj.elements[count].value.replace(/\s/g, '');
+                }
+
                 if (obj.elements[count].id.includes('vltotal_')) {
                     objeto.valortotal = obj.elements[count].value.replace(/\s/g, '');
                 }
 
-                if(Object.keys(objeto).length == 5){
+                if(Object.keys(objeto).length == 6){
                     if(!aItens.includes(objeto)){
                         aItens.push(objeto);
                     }

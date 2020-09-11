@@ -66,6 +66,7 @@ if (isset($dados->altera)) {
 
 	$sqlItens = 'select * from matordem inner join matordemitem on m52_codordem = matordem.m51_codordem where m51_codordem = ' . $dados->m51_codordem. ' order by m52_sequen';
 	$rsItens  = db_query($sqlItens);
+
 	$itensAcordo = db_utils::getCollectionByRecord($rsItens);
 
 	for ($count = 0; $count < sizeof($itensAcordo); $count++){
@@ -91,7 +92,6 @@ if (isset($dados->altera)) {
     }
 
 	$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
-
 	db_fieldsmemory($result_ordem, 0);
 
 	if (!$sqlerro && count($dados->itens)) {
@@ -122,31 +122,52 @@ if (isset($dados->altera)) {
 			$quantidade = $objeto->quantidade;
 			$sequen = $objeto->sequen;
 			$valor_item = $objeto->valortotal;
+			$valor_unitario = $objeto->valorunitario;
 
 			$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "*", null,
                 " m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen = $sequen "));
-			db_fieldsmemory($result_item, 0);
 
-            if (strpos(trim($valor_item), ',') != "") {
-                $valor_item = str_replace('.', '', $valor_item);
-                $valor_item = str_replace(',', '.', $valor_item);
-            }
-            if (strpos(trim($quantidade), ',') != "") {
-                $quantidade = str_replace('.', '', $quantidade);
-                $quantidade = str_replace(',', '.', $quantidade);
-            }
-            $clmatordemitem->m52_codlanc  = $m52_codlanc;
-            $clmatordemitem->m52_codordem = $dados->m51_codordem;
-            $clmatordemitem->m52_numemp   = $numemp;
-            $clmatordemitem->m52_sequen   = $sequen;
-            $clmatordemitem->m52_quant    = $quantidade;
-            $clmatordemitem->m52_valor    = $valor_item;
-            $clmatordemitem->alterar($m52_codlanc);
+			if (strpos(trim($valor_item), ',') != "") {
+				$valor_item = str_replace('.', '', $valor_item);
+				$valor_item = str_replace(',', '.', $valor_item);
+			}
+			if (strpos(trim($quantidade), ',') != "") {
+				$quantidade = str_replace('.', '', $quantidade);
+				$quantidade = str_replace(',', '.', $quantidade);
+			}
+			if (strpos(trim($valor_unitario), ',') != "") {
+				$valor_unitario = str_replace('.', '', $valor_unitario);
+				$valor_unitario = str_replace(',', '.', $valor_unitario);
+			}
 
-            if ($clmatordemitem->erro_status == 0) {
-                $sqlerro = true;
-            }
+			if(!pg_num_rows($result_item)){
+			    $clmatordemitem->m52_codordem  = $dados->m51_codordem;
+				$clmatordemitem->m52_numemp    = $numemp;
+				$clmatordemitem->m52_sequen    = $sequen;
+				$clmatordemitem->m52_quant     = $quantidade;
+				$clmatordemitem->m52_valor     = $valor_item;
+				$clmatordemitem->m52_vlruni    = $valor_unitario;
 
+				$clmatordemitem->incluir(null);
+
+				if ($clmatordemitem->erro_status == 0) {
+					$sqlerro = true;
+				}
+            }else{
+                db_fieldsmemory($result_item, 0);
+
+                $clmatordemitem->m52_codlanc  = $m52_codlanc;
+                $clmatordemitem->m52_codordem = $dados->m51_codordem;
+                $clmatordemitem->m52_numemp   = $numemp;
+                $clmatordemitem->m52_sequen   = $sequen;
+                $clmatordemitem->m52_quant    = $quantidade;
+                $clmatordemitem->m52_valor    = $valor_item;
+                $clmatordemitem->alterar($m52_codlanc);
+
+                if ($clmatordemitem->erro_status == 0) {
+                    $sqlerro = true;
+                }
+            }
 		}
 	}
 

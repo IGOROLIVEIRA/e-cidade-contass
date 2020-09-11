@@ -338,11 +338,7 @@ $clrotulo->label("e62_descr");
 
 											$quantidade = "quant_" . "$i";
 
-											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
-
-											if(!$$quantidade){
-												$$quantidade = $quantLancada;
-											}
+											$$quantidade = $e62_quant;
 
 											if($ordemAutomatica){
 											    $$quantidade = $e62_quant;
@@ -350,17 +346,7 @@ $clrotulo->label("e62_descr");
 
 											$qtde = "qtde_$i";
 
-											if($oItemOrdem->m52_quant){
-												$$qtde = $oItemOrdem->m52_quant;
-											}else{
-												if(!($e62_quant - $quantLancada)){
-													$$qtde = $e62_quant;
-												}else{
-													$$qtde = $oItemOrdem->m52_quant;
-												}
-											}
-
-											$$qtde = !$$qtde ? 0 : $$qtde;
+											$$qtde = $e62_quant;
 
 											$valor = "valor_$i";
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
@@ -377,16 +363,16 @@ $clrotulo->label("e62_descr");
 											echo "      <input id='$quantidade' class='input__static' value='".$$quantidade."' disabled />";
 											echo "	 </td>";
 											echo "   <td class='linhagrid' align='center'>";
-											echo "		 <small>".db_input("valor_$i", 6, 0, true, 'text', 3)."</small>";
+											echo "		 <small>".db_input("valor_$i", 10, 0, true, 'text', 3)."</small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "          <input id='$valor_total' class='input__static' value='".$$valor_total."' disabled />";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
-                                            db_input("qtde_$i", 8, 0, true, 'text', 3);
+                                            db_input("qtde_$i", 10, 0, true, 'text', 3);
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
-                                            db_input("vltotal_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
+                                            db_input("vltotal_$i", 15, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
                                             echo "   </td>";
 											echo " </tr>";
 										}
@@ -488,7 +474,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("vltotal_$i", 8, 0, true, 'text', 3);
+											                db_input("vltotal_$i", 15, 0, true, 'text', 3);
 											echo "		 </small>";
 											echo "   </td>";
 											echo " </tr>";
@@ -498,27 +484,14 @@ $clrotulo->label("e62_descr");
 
 											$quantidade = "quant_" . "$i";
 
-											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
-
-											if(!$$quantidade){
-												$$quantidade = $quantLancada;
-											}
+											$$quantidade = $e62_quant;
 
 											if($ordemAutomatica){
 												$$quantidade = $e62_quant;
 											}
 
 											$qtde = "qtde_$i";
-
-											if($oItemOrdem->m52_quant){
-												$$qtde = $oItemOrdem->m52_quant;
-											}else{
-												if(!($e62_quant - $quantLancada)){
-													$$qtde = $e62_quant;
-												}else{
-													$$qtde = $oItemOrdem->m52_quant;
-												}
-											}
+											$$qtde = $e62_quant;
 
 											$$qtde = !$$qtde ? 0 : $$qtde;
 
@@ -555,7 +528,7 @@ $clrotulo->label("e62_descr");
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("vltotal_$i", 10, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
+											                db_input("vltotal_$i", 15, 0, true, 'text', $opcao, "onchange='js_validaValor(this, \"v\");'onkeyup='js_limitaCaracteres(this)';");
 											echo "		 </small>";
 											echo "   </td>";
 											echo " </tr>";
@@ -689,7 +662,7 @@ $clrotulo->label("e62_descr");
         let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
 
         if(tipo == 'v'){
-            let valor_total = document.getElementById(`valortotal_${indexLinha}`).value;
+            let valor_total = document.getElementById(`vltotal_${indexLinha}`).value;
             let quantidade = document.getElementById(`quant_${indexLinha}`).value;
             let novo_valor = 0;
 
