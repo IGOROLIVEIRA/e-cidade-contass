@@ -65,26 +65,6 @@ $cldb_config->rotulo->label("nomeinst");
       }
     }
 
-    // function js_marcatodos(){
-    //
-    //   obj = document.form1;
-    //
-    //   obj.db_selinstit.value = "";
-    //
-    //   for(i = 0; i < obj.length; i++) {
-    //
-    //     if(obj.elements[i].name != "marcardesmarcar") {
-    //
-    //       if (obj.marcardesmarcar.checked == true) {
-    //         obj.elements[i].checked = true;
-    //       } else {
-    //         obj.elements[i].checked = false;
-    //       }
-    //     }
-    //   }
-    //   js_marca();
-    // }
-
 variavel = 1;
 function js_emite(){
  // pega dados da func_selorcdotacao_aba.php
