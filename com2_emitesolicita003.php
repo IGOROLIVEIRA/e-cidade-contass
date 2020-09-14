@@ -74,7 +74,8 @@ db_fieldsmemory($resultpref,0);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 // die($clpcparam->sql_query_file(null,"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
-$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
+$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),
+	"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac,pc30_emitedpsolicitante"));
 db_fieldsmemory($result_pcparam,0);
 
 // die($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_numdec"));
@@ -171,7 +172,7 @@ if($pc30_permsemdotac=='f') {
 
 $where_solicita .= $and." pc10_correto='t' ";
 
-$sCampos  = "pc10_numero, pc67_sequencial, pc10_data, pc10_resumo, pc12_vlrap, descrdepto, coddepto, nomeresponsavel, pc50_descr, pc10_login, nome,";
+$sCampos  = "pc10_numero, pc67_sequencial, pc10_data, pc10_resumo, pc12_vlrap, descrdepto, coddepto, nomeresponsavel, emailresponsavel, pc50_descr, pc10_login, nome,";
 $sCampos .= "pc10_solicitacaotipo,";
 $sCampos .= "(select pc52_sequencial";
 $sCampos .= "   from solicitacaotipo inner join solicita st2 on pc52_sequencial = pc10_solicitacaotipo";
@@ -375,7 +376,12 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
 	$pdf1->enderpref  = $ender;
 	$pdf1->municpref  = $munic;
 	$pdf1->telefpref  = $telef;
-	$pdf1->emailpref  = $email;
+
+	if($pc30_emitedpsolicitante == 't'){
+		$pdf1->emailpref  = $emailresponsavel;
+	}else{
+		$pdf1->emailpref  = $email;
+	}
 	$pdf1->emissao    = date("Y-m-d",db_getsession("DB_datausu"));
 	$pdf1->cgcpref    = $cgc;
 	$sec  = "______________________________"."\n"."Secretaria da Fazenda";
