@@ -253,7 +253,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_nroprocessolicitatorio = $oDados10->si06_numeroprc;
       $regadesao10->si67_codmodalidadelicitacao = $oDados10->si06_modalidade;
       $regadesao10->si67_nroedital = $oDados10->si06_edital;
-      $regadesao10->si67_exercicioedital = $oDados10->si06_exercicioedital;
+      $regadesao10->si67_exercicioedital = $oDados10->exerciciolicitacao;
       $regadesao10->si67_dtataregpreco = $oDados10->si06_dataata;
       $regadesao10->si67_dtvalidade = $oDados10->si06_datavalidade;
       $regadesao10->si67_naturezaprocedimento = $oDados10->si06_orgarparticipante;
