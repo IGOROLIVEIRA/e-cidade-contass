@@ -55,9 +55,6 @@ include("libs/db_sql.php");
 
 db_postmemory($HTTP_POST_VARS);
 
-
-//print_r($_POST);exit;
-
 $clselorcdotacao = new cl_selorcdotacao();
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 $instits= $clselorcdotacao->getInstit();
