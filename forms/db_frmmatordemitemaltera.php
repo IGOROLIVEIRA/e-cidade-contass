@@ -158,6 +158,7 @@ $clrotulo->label("e62_descr");
                                     $valorLancado = $quantLancada = 0;
 
 									$libera_registro = false;
+									$ordemPrincipal  = '';
                                     for ($count=0; $count < pg_num_rows($rsItem); $count++){
 									    $oItem = db_utils::fieldsMemory($rsItem, $count);
 
@@ -172,11 +173,18 @@ $clrotulo->label("e62_descr");
 										if($oItem->m52_codordem == $m51_codordem){
                                             $libera_registro = true;
                                         }
+
                                     }
 
 									$marcaLinha = $opcao == 1 ? '' : 'marcado';
 
-									if(($quantLancada == $e62_quant && $valorLancado == $e62_vltot) && !$libera_registro){
+									$sqlItem = $clmatordemitem->sql_query_anulado('', 'm52_codordem, m52_quant, m52_valor',
+										'','m52_numemp = '. $e62_numemp .' and m52_sequen = '. $e62_sequen.
+                                        ' and m52_codordem = '.$m51_codordem);
+									$rsItem = $clmatordemitem->sql_record($sqlItem);
+									$oItemValores = db_utils::fieldsMemory($rsItem, 0);
+
+                                    if(($quantLancada == $e62_quant && $valorLancado == $e62_vltot) && !$libera_registro){
 										$disabled = 'disabled';
 										$marcaLinha = 'marcado';
 										$opcao = 3;
@@ -184,6 +192,16 @@ $clrotulo->label("e62_descr");
 										$disabled = '';
 										$marcaLinha = '';
 										$opcao = 1;
+                                    }
+
+									if($pc01_servico == 't' && $e62_servicoquantidade == 'f' && floatval($oItemValores->m52_valor) == floatval($e62_vltot)){
+										$disabled = '';
+										$marcaLinha = '';
+										$opcao = 1;
+									}elseif((floatval($e62_vltot) - floatval($valorLancado)) == 0 && !$oItemValores->m52_valor){
+										$disabled = 'disabled';
+										$marcaLinha = 'marcado';
+										$opcao = 3;
                                     }
 
 									$sSqlEntrada = $clmatestoqueitemoc->sql_query(null, null, "*", null,
@@ -336,7 +354,7 @@ $clrotulo->label("e62_descr");
 
 										} else if ($pc01_servico == 't') {
 
-											$quantidade = "quant_" . "$i";
+										    $quantidade = "quant_" . "$i";
 
 											$$quantidade = $e62_quant;
 
@@ -352,12 +370,25 @@ $clrotulo->label("e62_descr");
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
 											$valor_total = "vltotalemp_". "$i";
-											$valor_restante = $e62_vlrun * $$quantidade;
+
+											if(!($e62_vltot - $valorLancado)){
+											    $valor_restante = $oItemValores->m52_valor;
+                                            }else{
+												$valor_restante = $e62_vltot - $valorLancado + $oItemValores->m52_valor;
+                                            }
+
+											if(!$valor_restante){
+											    $valor_restante = $e62_vltot;
+                                            }
 
 											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
+											if($oItemValores->m52_valor){
+											    $$vltotal = trim(db_formatar($oItemValores->m52_valor, 'f'));
+                                            }else{
+											    $$vltotal = trim(db_formatar(0, 'f'));
+                                            }
 
 											echo "   <td class='linhagrid' align='center'>";
 											echo "      <input id='$quantidade' class='input__static' value='".$$quantidade."' disabled />";
@@ -499,12 +530,25 @@ $clrotulo->label("e62_descr");
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
 
 											$valor_total = "vltotalemp_". "$i";
-											$valor_restante = $e62_vlrun * $$quantidade;
+
+											if(!($e62_vltot - $valorLancado)){
+												$valor_restante = $oItemValores->m52_valor;
+											}else{
+												$valor_restante = $e62_vltot - $valorLancado + $oItemValores->m52_valor;
+											}
+
+											if(!$valor_restante){
+												$valor_restante = $e62_vltot;
+											}
 
 											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
-											$$vltotal = trim(db_formatar($e62_vlrun * $$qtde, 'f'));
+											if($oItemValores->m52_valor){
+												$$vltotal = trim(db_formatar($oItemValores->m52_valor, 'f'));
+											}else{
+												$$vltotal = trim(db_formatar(0, 'f'));
+											}
 
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
@@ -662,8 +706,7 @@ $clrotulo->label("e62_descr");
         let total_rodape = valor_total.innerText.replace(/\./g, '').replace(/\,/g, '.');
 
         if(tipo == 'v'){
-            let valor_total = document.getElementById(`vltotal_${indexLinha}`).value;
-            let quantidade = document.getElementById(`quant_${indexLinha}`).value;
+            let valor_total = document.getElementById(`vltotalemp_${indexLinha}`).value;
             let novo_valor = 0;
 
             if(valor_total.includes(',') && valor_total.includes('.')){
