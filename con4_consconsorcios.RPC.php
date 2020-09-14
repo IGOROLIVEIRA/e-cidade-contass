@@ -104,8 +104,9 @@ try {
                 $sqlerro = $retorno->sqlerro;
 
                 if(!$sqlerro) {
-                    $oRetorno->sMensagem = "Dados incluídos com sucesso.";
-                    $oRetorno->oItem = $oParam->oItem;
+                    $oRetorno->sMensagem    = "Dados incluídos com sucesso.";
+                    $oRetorno->oItem        = $oParam->oItem;
+                    $oRetorno->iMes         = $oParam->oItem->c202_mescompetencia;
                 } else {
                     throw new Exception($retorno->sMensagem, null);
                 }
@@ -144,6 +145,38 @@ try {
 
         break;
 
+        case "salvarMesReferencia":
+
+            for($iMes = 1; $iMes <= 12; $iMes++) {
+                
+                $clconsexecucaoorc  = new cl_consexecucaoorc;
+                $sSqlWhere          = " c202_consconsorcios         = {$oParam->c202_consconsorcios} 
+                                        and c202_anousu             = {$iAnoUsu} 
+                                        and c202_mescompetencia     = {$iMes}";                  
+                
+                $sSqlExecOrc    = $clconsexecucaoorc->sql_query_file(null, "*", null, $sSqlWhere);
+                $rsResult       = db_query($sSqlExecOrc);
+
+                for($i = 0; $i < pg_num_rows($rsResult); $i++) {
+
+                    $clconsexecucaoorc = new cl_consexecucaoorc;
+                    $c202_sequencial   = db_utils::fieldsMemory($rsResult, $i)->c202_sequencial;                                       
+                    $clconsexecucaoorc->c202_sequencial = db_utils::fieldsMemory($rsResult, $i)->c202_sequencial;
+                    $clconsexecucaoorc->c202_mesreferenciasicom = $oParam->aMeses[$iMes];
+
+                    $clconsexecucaoorc->alterar($c202_sequencial);
+
+                    if($clconsexecucaoorc->erro_status == "0") {
+                        throw new Exception("Erro ao atualizar registros. ".$clconsexecucaoorc->erro_sql, null);
+                    }
+
+                }
+                
+            }
+
+            $oRetorno->sMensagem    = "Registros atualizados com sucesso.";
+
+        break;
 
     }
 
@@ -170,6 +203,7 @@ function novoExercOrc($oItem, $iAnoUsu) {
     $clconsexecucaoorc  = new cl_consexecucaoorc;
     $clconsexecucaoorc->c202_consconsorcios     = $oItem->c202_consconsorcios;
     $clconsexecucaoorc->c202_mescompetencia     = $oItem->c202_mescompetencia;
+    $clconsexecucaoorc->c202_mesreferenciasicom = $oItem->c202_mescompetencia;
     $clconsexecucaoorc->c202_funcao             = $oItem->c202_funcao;
     $clconsexecucaoorc->c202_subfuncao          = $oItem->c202_subfuncao;
     $clconsexecucaoorc->c202_elemento           = $oItem->c202_elemento;

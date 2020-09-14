@@ -95,7 +95,7 @@ db_select('c202_mescompetencia',$x,true,1,"onchange='js_buscaInformacaoPorMes(th
 ?>
     </td>
   </tr>
-<tr>
+  <tr>
     <td nowrap title="<?=@$To58_funcao?>">
        <?
        db_ancora(@$Lo58_funcao,"js_pesquisao58_funcao(true);",$db_opcao);
@@ -312,6 +312,8 @@ function js_pesquisao58_subfuncao(mostra){
           alert(oRetorno.sMensagem.urlDecode());
           js_buscaInformacaoPorMes(oRetorno.iMes, 1);
 
+      } else {
+          alert(oRetorno.sMensagem.urlDecode());
       }
 
   }
@@ -593,32 +595,8 @@ function js_pesquisao58_subfuncao(mostra){
           alert(oRetorno.sMensagem.urlDecode());
           
           iItem = parseInt(document.form1.iNumItensGrid.value);
-          
-          js_adicionaLinhaTabela(oRetorno.oItem, iItem, 1);          
-          document.form1.iNumItensGrid.value = iItem+1;
           document.form1.c202_elemento.value = '';
-
-          if(iItem == 0) {
-              
-              var oTotalizador = new Object();
-              oTotalizador.iTotEmpMes         = 0;
-              oTotalizador.iTotEmpAnuMes      = 0;
-              oTotalizador.iTotLiqMes         = 0;
-              oTotalizador.iTotLiqAnuMes      = 0;
-              oTotalizador.iTotPagMes         = 0;
-              oTotalizador.iTotPagAnuMes      = 0;
-              oTotalizador.iTotEmpAteMes      = 0;
-              oTotalizador.iTotEmpAnuAteMes   = 0;
-              oTotalizador.iTotLiqAteMes      = 0;
-              oTotalizador.iTotLiqAnulAteMes  = 0;
-              oTotalizador.iTotPagAteMes      = 0;
-              oTotalizador.iTotPagAnuAteMes   = 0;
-              
-              js_adicionaLinhaTotalizador(oTotalizador, true); 
-
-          } else {
-              js_adicionaLinhaTotalizador(null, false);
-          }
+          js_buscaInformacaoPorMes(oRetorno.iMes, 1);
 
       } else {
           alert(oRetorno.sMensagem.urlDecode());

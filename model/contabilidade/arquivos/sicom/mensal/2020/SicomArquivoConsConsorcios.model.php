@@ -179,13 +179,22 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       }
 
     }
-
-    $sSql = "select si09_codorgaotce, z01_cgccpf, consexecucaoorc.* from consexecucaoorc
-		join consconsorcios on c202_consconsorcios = c200_sequencial
-		join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
-		join infocomplementaresinstit on codigo = si09_instit
-		where c202_anousu = " . db_getsession("DB_anousu") . " and c202_mescompetencia  = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-		and c200_instit = " . db_getsession("DB_instit");
+    $sSql = " select * from(
+              select *,
+                (select c201_enviourelatorios 
+                from consvalorestransf
+                where c201_consconsorcios = c202_consconsorcios
+                  and c201_anousu = c202_anousu
+                  and c201_codfontrecursos = c202_codfontrecursos 
+                  limit 1) as c201_enviourelatorios
+                  from
+                  (select si09_codorgaotce, z01_cgccpf, consexecucaoorc.* 
+                    from consexecucaoorc
+                      join consconsorcios on c202_consconsorcios = c200_sequencial
+                      join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
+                      join infocomplementaresinstit on codigo = si09_instit
+                    where c202_anousu = " . db_getsession("DB_anousu") . " and c202_mesreferenciasicom  = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                    and c200_instit = " . db_getsession("DB_instit") .") as x) as xx where c201_enviourelatorios = 't'";
     $rsResult30 = db_query($sSql);//db_criatabela($rsResult30);
     /**
      * registro 30
@@ -197,6 +206,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 
       $clconsor30->si18_tiporegistro = 30;
       $clconsor30->si18_cnpjconsorcio = $oDados30->z01_cgccpf;
+      $clconsor30->si18_mesreferencia = $oDados30->c202_mescompetencia;
       $clconsor30->si18_codfuncao = $oDados30->c202_funcao;
       $clconsor30->si18_codsubfuncao = $oDados30->c202_subfuncao;
       $clconsor30->si18_naturezadespesa = substr($oDados30->c202_elemento, 0, 6);

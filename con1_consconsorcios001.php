@@ -30,11 +30,11 @@ $db_opcao = 1;
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
      <?
 	     $clcriaabas->identifica = array("consconsorcios"=>"Consórcio","consvalorestransf"=>"Valores Transferidos","consexecucaoorc"=>"Execução Orçamentária",
-	     "consdispcaixaano"=>"Disponibilidade de Caixa 31/12","consretiradaexclusao"=>"Retirada/ Exclusão"); 
+	     "consdispcaixaano"=>"Disponibilidade de Caixa 31/12","consretiradaexclusao"=>"Retirada/ Exclusão","consmesreferencia"=>"Mês Referência SICOM"); 
 	     $clcriaabas->src = array("consconsorcios"=>"con1_consconsorcios004.php");
 	     $clcriaabas->sizecampo = array("consconsorcios"=>"10","consvalorestransf"=>"20","consexecucaoorc"=>"20",
-	     "consdispcaixaano"=>"25","consretiradaexclusao"=>"20");
-	     $clcriaabas->disabled   =  array("consvalorestransf"=>"true","consexecucaoorc"=>"true","consdispcaixaano"=>"true","consretiradaexclusao"=>"true"); 
+	     "consdispcaixaano"=>"25","consretiradaexclusao"=>"20","consmesreferencia"=>"20");
+	     $clcriaabas->disabled   =  array("consvalorestransf"=>"true","consexecucaoorc"=>"true","consdispcaixaano"=>"true","consretiradaexclusao"=>"true","consmesreferencia"=>"true"); 
 	     $clcriaabas->cria_abas(); 
      ?> 
     </td>
