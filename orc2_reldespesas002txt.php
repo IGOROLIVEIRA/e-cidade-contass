@@ -55,6 +55,9 @@ include("libs/db_sql.php");
 
 db_postmemory($HTTP_POST_VARS);
 
+
+//print_r($_POST);exit;
+
 $clselorcdotacao = new cl_selorcdotacao();
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 $instits= $clselorcdotacao->getInstit();
@@ -69,7 +72,7 @@ if (!isset($instits) && trim(@$instits)==""){
 $head1 = "DEMONSTRATIVO DA DESPESA";
 $head3 = "EXERCÍCIO: ".db_getsession("DB_anousu");
 
-$resultinst = db_query("select codigo,nomeinst from db_config where codigo in $instits");
+$resultinst = db_query("select codigo,nomeinst from db_config where codigo in (".str_ireplace('-', ',', $db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
 for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
@@ -79,8 +82,8 @@ for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
 }
 $head5 = "INSTITUIÇÕES : ".$descr_inst;
 
-$sele_work = $clselorcdotacao->getDados()." and w.o58_instit in $instits ";
-
+$sele_work = $clselorcdotacao->getDados()." and w.o58_instit in (".str_ireplace('-', ',', $db_selinstit).")";
+//echo $sele_work;exit;
 if (substr($nivel,1,1) == 'A'){
   $completo = false;
   $nivela = substr($nivel,0,1);
