@@ -247,8 +247,7 @@ if (isset($pc30_instit) && $pc30_instit !="") {
                             </td>
                             <td>
 							    <?
-								    $x = array( "f"=>"Não",
-									            "t"=>"Sim");
+								    $x = array( "f"=>"NÃO", "t"=>"SIM");
                                     db_select('pc30_emitedpsolicitante',$x,true,$db_opcao,"");
                                 ?>
                             </td>
@@ -303,7 +302,7 @@ if (isset($pc30_instit) && $pc30_instit !="") {
                                     </td>
                                     <td>
 										<?
-										$x = array('f'=>'Não','t'=>'Sim');
+										$x = array('f'=>'NÃO','t'=>'SIM');
 										db_select('pc30_emitedpcompras',$x,true,$db_opcao,"");
 										?>
                                     </td>
