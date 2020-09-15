@@ -9,8 +9,11 @@ include("dbforms/db_funcoes.php");
 include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
-$clcflicita          = new cl_cflicita;
+
+$clcflicita        = new cl_cflicita;
 $cladesaoregprecos = new cl_adesaoregprecos;
+$clitensregpreco   = new cl_itensregpreco;
+
 $db_opcao = 1;
 $db_botao = true;
 
@@ -112,6 +115,20 @@ if(isset($alterar)){
   if ($sqlerro == false) {
      $cladesaoregprecos->alterar($si06_sequencial);
   }
+
+    if($si06_processoporlote == 2){
+        $sSqlItens = $clitensregpreco->sql_query(null, "itensregpreco.*", null, "si07_sequencialadesao = {$si06_sequencial}");
+        $rsItens   = $clitensregpreco->sql_record($sSqlItens);
+
+        for($count = 0; $count < pg_num_rows($rsItens); $count++){
+            $oItem = db_utils::fieldsMemory($rsItens, $count);
+
+            $clitensregpreco->si07_descricaolote = '';
+            $clitensregpreco->si07_numerolote    = '';
+            $clitensregpreco->si07_sequencialadesao = $si06_sequencial;
+            $clitensregpreco->alterar($oItem->si07_sequencial);
+        }
+    }
   db_fim_transacao();
   $_SESSION["codigoAdesao"] = $si06_sequencial;
   echo "<script>
