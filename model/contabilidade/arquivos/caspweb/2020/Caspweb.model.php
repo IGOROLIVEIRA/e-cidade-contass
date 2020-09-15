@@ -87,7 +87,10 @@ class Caspweb {
                                         exercicio,
                                         mes,
                                         contacontabil,
-                                        indsuperavit,
+                                        CASE 
+                                            WHEN contacontabil = '21892980400000000' THEN 'P' 
+                                            ELSE indsuperavit 
+                                        END AS indsuperavit,
                                         codbanco, 
                                         codagencia, 
                                         codconta,
