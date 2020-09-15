@@ -95,7 +95,14 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     $clparec10 = new cl_parec102020();
     $clparec11 = new cl_parec112020();
 
-    $db_filtro = "o70_instit = " . db_getsession("DB_instit");
+    $sSqlInst = "SELECT codigo FROM db_config";
+    $rsInst   = db_query($sSqlInst);
+
+    for($iCont = 0; $iCont < pg_num_rows($rsInst); $iCont++) {
+        $aInstit[] = db_utils::fieldsMemory($rsInst, $iCont)->codigo;
+    }
+    
+    $db_filtro = "o70_instit in (".implode(',', $aInstit).")";
     $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
     $sSql = "SELECT * FROM infocomplementaresinstit WHERE si09_tipoinstit != 2 and si09_instit = " . db_getsession("DB_instit");
     $rsPref = db_query($sSql);
