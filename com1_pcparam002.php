@@ -91,31 +91,34 @@ if (!$lSqlErro) {
 
 		if (!$lSqlErro) {
 			
-	    db_inicio_transacao();
-	   
-		  $clpcparam->pc30_notificaemail = 'false';
-      if (isset($pc30_notificaemail)) {
-        $clpcparam->pc30_notificaemail = 'true';  
-      }
-      
-      $clpcparam->pc30_notificacarta = 'false';
-      if (isset($pc30_notificacarta)) {
-        $clpcparam->pc30_notificacarta = 'true'; 
-      }
-	   
-		 if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
-		 	 if ($pc30_diasdebitosvencidos == null) {
-	       $clpcparam->pc30_diasdebitosvencidos = '0';
-	     }
-       $clpcparam->pc30_permitirgerarnotifdebitos = 'false'; 
-     }
-      
-	   $clpcparam->alterar($pc30_instit);	  
-	   if ($clpcparam->erro_status == 0) {
-	  	  $lSqlErro = true;
-	   }
-	  
-	   db_fim_transacao($lSqlErro);
+            db_inicio_transacao();
+
+            $clpcparam->pc30_notificaemail = 'false';
+            if (isset($pc30_notificaemail)) {
+                $clpcparam->pc30_notificaemail = 'true';
+            }
+
+            $clpcparam->pc30_notificacarta = 'false';
+            if (isset($pc30_notificacarta)) {
+                $clpcparam->pc30_notificacarta = 'true';
+            }
+
+            if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
+                if ($pc30_diasdebitosvencidos == null) {
+                    $clpcparam->pc30_diasdebitosvencidos = '0';
+                }
+                $clpcparam->pc30_permitirgerarnotifdebitos = 'false';
+            }
+
+            $clpcparam->pc30_emitedpsolicitante = $pc30_emitedpsolicitante == 't' ? 'true' : 'false';
+            $clpcparam->pc30_emitedpcompras     = $pc30_emitedpcompras == 't' ? 'true' : 'false';
+
+            $clpcparam->alterar($pc30_instit);
+            if ($clpcparam->erro_status == 0) {
+                $lSqlErro = true;
+            }
+
+            db_fim_transacao($lSqlErro);
 		}
 	   
 	} else {

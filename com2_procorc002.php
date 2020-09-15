@@ -121,6 +121,11 @@ if (@pg_numrows($resparag) > 0){
      $pdf1->declaracao = "";
 }
 
+if($oParam->pc30_emitedpcompras == 't'){
+    $rsDepart = db_query('SELECT emailresponsavel from db_depart where coddepto = 12');
+    $emailDpt12 = db_utils::fieldsMemory($rsDepart, 0)->emailresponsavel;
+}
+
 for($i=0;$i<$numrows_pcorcamforne;$i++){
   if (isset($branco)&&$branco==true){
   }else{
@@ -128,7 +133,7 @@ for($i=0;$i<$numrows_pcorcamforne;$i++){
   }
   db_fieldsmemory($result_itens,0);
 
-  $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query($pc80_codproc,"distinct pc80_codproc,descrdepto,coddepto,pc80_data,pc80_resumo,fonedepto,emaildepto,faxdepto,ramaldepto"));
+    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query($pc80_codproc,"distinct pc80_codproc,descrdepto,coddepto,pc80_data,pc80_resumo,fonedepto,emaildepto,faxdepto,ramaldepto"));
   if($clpcproc->numrows > 0){
     db_fieldsmemory($result_pcproc,0);
   }
@@ -226,7 +231,12 @@ for($i=0;$i<$numrows_pcorcamforne;$i++){
 //  $pdf1->Stipcom= $pc50_descr;
   $pdf1->Sresumo        = @$pc80_resumo;
   $pdf1->telefpref      = @$telef;
-  $pdf1->emailpref      = @$email;
+
+  if($oParam->pc30_emitedpcompras == 't'){
+      $pdf1->emailpref  = $emailDpt12;
+  }else{
+    $pdf1->emailpref      = @$email;
+  }
   $pdf1->cgcpref        = @$cgc;
   $pdf1->faxpref        = @$fax;
 
