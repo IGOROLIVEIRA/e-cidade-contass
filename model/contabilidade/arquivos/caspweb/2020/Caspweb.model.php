@@ -124,7 +124,7 @@ class Caspweb {
                                             ELSE substr(c63_agencia, 1, 7)
                                         END AS codagencia, 
                                         CASE 
-                                            WHEN c63_conta = '2' OR c63_conta = '001' THEN '06000002-2'
+                                            WHEN ltrim(c63_conta,'0') = '2' OR c63_conta = '001' THEN '06000002-2'
                                             ELSE substr(c63_conta, 1, 15) 
                                         END AS codconta,
                                         CASE 
