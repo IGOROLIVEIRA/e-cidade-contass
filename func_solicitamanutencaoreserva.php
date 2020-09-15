@@ -110,6 +110,8 @@ $clsolicita->rotulo->label("pc10_data");
         $where_depart .= " and not exists(select 1 from solicitaanulada where pc67_solicita = pc10_numero)";
       }
 
+      $joinDotacoes = $dotacoes == 'true' ? true : false;
+
       if (!isset($pesquisa_chave)) {
         if (isset($campos)==false) {
           if (file_exists("funcoes/db_func_solicita.php")==true) {
@@ -121,16 +123,16 @@ $clsolicita->rotulo->label("pc10_data");
 
         $campos = " distinct ".$campos;
         if (isset($chave_pc10_numero) && (trim($chave_pc10_numero)!="") ) {
-          $sql = $clsolicita->sql_query(null,$campos,"pc10_numero desc "," pc10_numero=$chave_pc10_numero $where_depart ");
+          $sql = $clsolicita->sql_query(null,$campos,"pc10_numero desc "," pc10_numero=$chave_pc10_numero $where_depart ", $joinDotacoes);
         } else if (isset($chave_pc10_data) && (trim($chave_pc10_data)!="") ) {
-          $sql = $clsolicita->sql_query("",$campos,"pc10_numero desc "," pc10_data like '$chave_pc10_data%' $where_depart ");
+          $sql = $clsolicita->sql_query("",$campos,"pc10_numero desc "," pc10_data like '$chave_pc10_data%' $where_depart ", $joinDotacoes);
         } else {
-          $sql = $clsolicita->sql_query("",$campos,"pc10_numero desc "," 1=1 $where_depart");
+          $sql = $clsolicita->sql_query("",$campos,"pc10_numero desc "," 1=1 $where_depart", $joinDotacoes);
         }
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",array(),false);
       } else {
         if ($pesquisa_chave!=null && $pesquisa_chave!="") {
-          $result = $clsolicita->sql_record($clsolicita->sql_query(null,"distinct *",""," pc10_numero=$pesquisa_chave $where_depart "));
+          $result = $clsolicita->sql_record($clsolicita->sql_query(null,"distinct *",""," pc10_numero=$pesquisa_chave $where_depart ", $joinDotacoes));
           if ($clsolicita->numrows!=0) {
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$pc10_data',false);</script>";
