@@ -780,7 +780,7 @@ ob_start();
                     db_fim_transacao();
                     $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
                   ?>
-                  <td class="s20 bdleft" colspan="9">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                  <td class="s20 bdleft" colspan="9">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
                   <td class="s21"><?php echo db_formatar($iRestosAPagar,"f");?></td>
                 </tr>
                 <tr style='height:20px;'>
@@ -1177,7 +1177,7 @@ ob_start();
                         db_fim_transacao();
                         $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
                       ?>
-                      <td class="s20 bdleft" colspan="9">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                      <td class="s20 bdleft" colspan="9">05 - Restos a pagar pagos inscritos sem disponibilidade - (Consulta 932.736/2015)</td>
                       <td class="s21"><?php echo db_formatar($iRestosAPagar,"f");?></td>
                     </tr>
                     <tr style='height:20px;'>
