@@ -81,7 +81,7 @@ if ($clpcparam->numrows > 0) {
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*",
-	"m52_codlanc", 'm51_codordem = ' . $iOrdem.' and m52_sequen in ('.$itens.')'));
+	"m52_sequen ASC", 'm51_codordem = ' . $iOrdem.' and m52_sequen in ('.$itens.')'));
 db_fieldsmemory($resultItem, 0);
 
 $num_rows = $clmatordemitem->numrows;
