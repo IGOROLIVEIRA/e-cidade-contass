@@ -482,6 +482,28 @@ contratoaux = function () {
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
 
+        /* Novas validações para atender o SICOM */
+
+        if(iOrigem == '3') {
+            if (iTipoOrigem == '2' && !iLicitacao) {
+                alert('Informe uma Licitação.');
+                $('ac16_licitacao').focus();
+                return false;
+            }
+
+            if(iTipoOrigem == '4' && !iAdesaoregpreco){
+                alert('Informe uma Adesão de Registro de Preço.');
+                $('ac16_adesaoregpreco').focus();
+                return false;
+            }
+
+            if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
+                alert('Informe uma Licitação por Outro Órgão.');
+                $('ac16_licoutroorgao').focus();
+                return false;
+            }
+        }
+
         if (iOrigem == "0") {
 
             alert('Informe a origem do acordo.');
