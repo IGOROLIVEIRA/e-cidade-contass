@@ -442,6 +442,8 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
         if(!response.erro){
             alert(`${response.message.urlDecode()}`);
+            itens.document.location.href = "forms/db_frmmatordemitemaltera.php?m51_codordem=<?= $m51_codordem ?>";
+
             let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');
             if(confirmation){
                 jan = window.open('emp2_ordemcompraalteracao002.php?iOrdem='+response.codordem+'&itens='+aItensImpressao.join(','), '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');
