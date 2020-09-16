@@ -446,7 +446,6 @@ $clrotulo->label("e62_descr");
 
 										if ($pc01_servico == 'f' || ($pc01_servico == "t" && $e62_servicoquantidade == "t")) {
 
-
 											$quantidade = "quant_" . "$i";
 
 											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
@@ -464,14 +463,11 @@ $clrotulo->label("e62_descr");
 											if($oItemOrdem->m52_quant){
 												$$qtde = $oItemOrdem->m52_quant;
 											}else{
-												if(!($e62_quant - $quantLancada)){
-													$$qtde = $e62_quant;
-												}else{
-													$$qtde = $oItemOrdem->m52_quant;
-												}
+                                                $$qtde = $oItemOrdem->m52_quant;
 											}
 
 											$$qtde = !$$qtde ? 0 : $$qtde;
+                                            $$qtde = trim(db_formatar($$qtde, 'f'));
 
 											$valor = "valor_$i";
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
@@ -512,19 +508,21 @@ $clrotulo->label("e62_descr");
 
 										} else if ($pc01_servico == 't') {
 
-
 											$quantidade = "quant_" . "$i";
 
-											$$quantidade = $e62_quant;
+											$$quantidade = $e62_quant - $quantLancada + $oItemOrdem->m52_quant;
+
+											if(!$$quantidade){
+												$$quantidade = $quantLancada;
+											}
 
 											if($ordemAutomatica){
 												$$quantidade = $e62_quant;
 											}
 
 											$qtde = "qtde_$i";
-											$$qtde = $e62_quant;
-
-											$$qtde = !$$qtde ? 0 : $$qtde;
+											$$qtde = !$$quantidade ? 0 : $$quantidade;
+                                            $$qtde = trim(db_formatar($$qtde, 'f'));
 
 											$valor = "valor_$i";
 											$$valor = trim(db_formatar($e62_vlrun, 'f'));
