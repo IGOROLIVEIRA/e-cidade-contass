@@ -91,6 +91,17 @@ if (isset($dados->altera)) {
 
     }
 
+	/*
+	 * Sequenciais que irão sofreer alteração
+	 *
+	 * */
+	$sItens = '';
+	for($i=0;$i<sizeof($dados->itens);$i++){
+	    $sItens .= $dados->itens[$i]->sequen . ',';
+    }
+
+	$sItens = substr($sItens, 0, strlen($sItens) - 1);
+
 	$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
 	db_fieldsmemory($result_ordem, 0);
 
@@ -116,43 +127,40 @@ if (isset($dados->altera)) {
     }
 
 	for ($count = 0; $count < sizeof($dados->itens); $count++) {
-	    if (!$sqlerro) {
-			$objeto = $dados->itens[$count];
-			$numemp = $objeto->numemp;
-			$quantidade = $objeto->quantidade;
-			$sequen = $objeto->sequen;
-			$valor_item = $objeto->valortotal;
-			$valor_unitario = $objeto->valorunitario;
 
-			$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "*", null,
-                " m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen = $sequen "));
+		$objeto = $dados->itens[$count];
+		$numemp = $objeto->numemp;
+		$quantidade = $objeto->quantidade;
+		$sequen = $objeto->sequen;
+		$valor_item = $objeto->valortotal;
+		$valor_unitario = $objeto->valorunitario;
 
-			if (strpos(trim($valor_item), ',') != "") {
-				$valor_item = str_replace('.', '', $valor_item);
-				$valor_item = str_replace(',', '.', $valor_item);
-			}
-			if (strpos(trim($quantidade), ',') != "") {
-				$quantidade = str_replace('.', '', $quantidade);
-				$quantidade = str_replace(',', '.', $quantidade);
-			}
-			if (strpos(trim($valor_unitario), ',') != "") {
-				$valor_unitario = str_replace('.', '', $valor_unitario);
-				$valor_unitario = str_replace(',', '.', $valor_unitario);
-			}
+        if (strpos(trim($valor_item), ',') != "") {
+            $valor_item = str_replace('.', '', $valor_item);
+            $valor_item = str_replace(',', '.', $valor_item);
+        }
 
-			if(!pg_num_rows($result_item)){
-			    $clmatordemitem->m52_codordem  = $dados->m51_codordem;
-				$clmatordemitem->m52_numemp    = $numemp;
-				$clmatordemitem->m52_sequen    = $sequen;
-				$clmatordemitem->m52_quant     = $quantidade;
-				$clmatordemitem->m52_valor     = $valor_item;
-				$clmatordemitem->m52_vlruni    = $valor_unitario;
+        if (strpos(trim($quantidade), ',') != "") {
+            $quantidade = str_replace('.', '', $quantidade);
+            $quantidade = str_replace(',', '.', $quantidade);
+        }
 
-				$clmatordemitem->incluir(null);
+        if (strpos(trim($valor_unitario), ',') != "") {
+            $valor_unitario = str_replace('.', '', $valor_unitario);
+            $valor_unitario = str_replace(',', '.', $valor_unitario);
+        }
 
-				if ($clmatordemitem->erro_status == 0) {
-					$sqlerro = true;
-				}
+		$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "*", null,
+			" m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen = $sequen "));
+
+		if(pg_num_rows($result_item)){
+
+		    if($quantidade == 0 || $valor_item == 0){
+                $clmatordemitem->excluir($oItem->m52_codlanc);
+                if($clmatordemitem->erro_status == 0){
+                    $sqlerro = true;
+                    $erro_msg = $clmatordemitem->erro_msg;
+                }
             }else{
                 db_fieldsmemory($result_item, 0);
 
@@ -167,10 +175,38 @@ if (isset($dados->altera)) {
 
                 if ($clmatordemitem->erro_status == 0) {
                     $sqlerro = true;
+                    $erro_msg = $clmatordemitem->erro_msg;
                 }
             }
-		}
-	}
+        }else{
+            $clmatordemitem->m52_codordem  = $dados->m51_codordem;
+            $clmatordemitem->m52_numemp    = $numemp;
+            $clmatordemitem->m52_sequen    = $sequen;
+            $clmatordemitem->m52_quant     = $quantidade;
+            $clmatordemitem->m52_valor     = $valor_item;
+            $clmatordemitem->m52_vlruni    = $valor_unitario;
+
+            $clmatordemitem->incluir(null);
+
+            if ($clmatordemitem->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clmatordemitem->erro_msg;
+            }
+        }
+    }
+
+	/*
+	 * Exclusão dos itens que não foram marcados na tela e automaticamente serão excluídos da Ordem de Compra...
+	 *
+	 * */
+
+	$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "m52_codlanc", null,
+		" m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen not in ($sItens) "));
+
+	for($contador=0; $contador < pg_num_rows($result_item); $contador++){
+	    $iCodLanc = db_utils::fieldsMemory($result_item, 0)->m52_codlanc;
+	    $clmatordemitem->excluir($iCodLanc);
+    }
 
 	db_fim_transacao($sqlerro);
 
