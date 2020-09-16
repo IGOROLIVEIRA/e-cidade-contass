@@ -240,7 +240,19 @@ if (isset($pc30_instit) && $pc30_instit !="") {
                           ?>
                           </td>
                         </tr>
-							        </table>
+
+                        <tr>
+                            <td nowrap>
+							    <strong>Emitir email DP solicitante:</strong>
+                            </td>
+                            <td>
+							    <?
+								    $x = array( "f"=>"NÃO", "t"=>"SIM");
+                                    db_select('pc30_emitedpsolicitante',$x,true,$db_opcao,"");
+                                ?>
+                            </td>
+                        </tr>
+                            </table>
 							        </fieldset>
                     </td>
                   </tr>
@@ -284,7 +296,18 @@ if (isset($pc30_instit) && $pc30_instit !="") {
 		                        ?>
 		                        </td>
 		                      </tr>
-		                    </table>
+                                <tr>
+                                    <td nowrap >
+                                        <strong>Emitir email DP Compras: </strong>
+                                    </td>
+                                    <td>
+										<?
+										$x = array('f'=>'NÃO','t'=>'SIM');
+										db_select('pc30_emitedpcompras',$x,true,$db_opcao,"");
+										?>
+                                    </td>
+                                </tr>
+                            </table>
 		                  </fieldset>
                     </td>
                   </tr>
