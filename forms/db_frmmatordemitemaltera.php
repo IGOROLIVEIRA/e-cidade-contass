@@ -205,8 +205,7 @@ $clrotulo->label("e62_descr");
                                     }
 
 									$sSqlEntrada = $clmatestoqueitemoc->sql_query(null, null, "*", null,
-										'm52_numemp = '. $e62_numemp .' and m52_sequen = '. $e62_sequen .
-                                        'and m52_codordem = '. $m51_codordem. 'and m73_cancelado is false');
+										'm52_numemp = '. $e62_numemp .' and m52_codordem = '. $m51_codordem. 'and m73_cancelado is false');
 
 									$result2 = $clmatestoqueitemoc->sql_record($sSqlEntrada);
 
@@ -216,6 +215,7 @@ $clrotulo->label("e62_descr");
                                     if(!$compareObs || pg_num_rows($result2)){
                                         $sChecked = 'checked';
                                         $disabled = 'disabled';
+                                        $marcaLinha = 'marcado';
                                         $opcao = 3;
                                         $ordemAutomatica = true;
                                     }
@@ -541,6 +541,10 @@ $clrotulo->label("e62_descr");
 												$valor_restante = $e62_vltot;
 											}
 
+											if(!$valor_restante){
+											    $valor_restante = db_formatar(0, 'f');
+                                            }
+
 											$$valor_total = trim(db_formatar($valor_restante, 'f'));
 
 											$vltotal = "vltotal_". "$i";
@@ -552,17 +556,17 @@ $clrotulo->label("e62_descr");
 
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("quant_$i", 6, 0, true, 'text', 3);
+											echo "          <input id='$quantidade' class='input__static' value=' ". $$quantidade . "' disabled />";
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>
 														<small>";
-											                db_input("valor_$i", 6, 0, true, 'text', 3);
+											                db_input("valor_$i", 10, 0, true, 'text', 3);
 											echo "		</small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
 											echo "		 <small>";
-											                db_input("valortotal_$i", 8, 0, true, 'text', 3);
+											echo "          <input id='$valor_total' class='input__static' value='". $$valor_total ."' disabled />";
 											echo "		 </small>";
 											echo "	 </td>";
 											echo "	 <td class='linhagrid' align='center'>";
