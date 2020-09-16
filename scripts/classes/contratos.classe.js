@@ -3,6 +3,24 @@ contrato = function () {
     me = this;
     this.verificaLicitacoes = function () {
 
+        let negation = '';
+        let tipoCompras = '';
+        let iOrigem = $('ac16_origem').value;
+        let iTipoOrigem = $('ac16_tipoorigem').value;
+
+        if( iOrigem == '2'){
+            if(iTipoOrigem == '2'){
+                negation = ' not ';
+                tipoCompras = '100, 101, 102, 103';
+            }
+
+            if(iTipoOrigem == '3'){
+                negation = '';
+                tipoCompras = $('tipodispenca').value == '2' ? '100, 101' : $('tipodispenca').value == '1' ? '102, 103' : '';
+            }
+
+        }
+
         var sFuncao = '';
         if ($F('ac16_origem') == 2) {
             sFuncao = 'getLicitacoesContratado';
@@ -18,6 +36,8 @@ contrato = function () {
         oParam.iContrato   = $F('ac16_sequencial');
         oParam.iTipoOrigem = $F('ac16_tipoorigem');
         oParam.credenciamento = $F('tipodispenca');
+        oParam.addNegation    = negation;
+        oParam.tipoCompras = tipoCompras;
         js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,

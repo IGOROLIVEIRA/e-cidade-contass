@@ -434,13 +434,13 @@ switch($oParam->exec) {
 
     break;
 
-  case "getLicitacoesContratado":
-
-    if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
-      $aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true);
-    }else{
-      $aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true);
-    }
+	case "getLicitacoesContratado":
+  		$filtro = $oParam->addNegation . ' in (' . $oParam->tipoCompras . ')';
+    	if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
+      		$aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true, $filtro);
+    	}else{
+      		$aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true, $filtro);
+    	}
 
     $aItensDevolver = array();
     foreach ($aItens as $oStdDadosLicitacao) {

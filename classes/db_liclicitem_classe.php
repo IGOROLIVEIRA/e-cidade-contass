@@ -708,7 +708,7 @@ class cl_liclicitem {
      return $sql;
   }
 
-function sql_query_soljulg ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+function sql_query_soljulg ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere="", $filtros=''){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -741,6 +741,9 @@ function sql_query_soljulg ( $l21_codigo=null,$campos="*",$ordem=null,$dbwhere="
      $sql .= "      left  join solicitemele  on  solicitemele.pc18_solicitem = solicitem.pc11_codigo";
      $sql .= "      left  join acordoliclicitem  on  l21_codigo = ac24_liclicitem";
 
+     if($filtros){
+		 $sql .= "      left join cflicita on l03_codigo = l20_codtipocom";
+	 }
      $sql2 = "";
      if($dbwhere==""){
        if($l21_codigo!=null ){
