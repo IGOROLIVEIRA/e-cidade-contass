@@ -466,5 +466,56 @@ class cl_matestoqueitemoc {
      }
      return $sql;
   }
+	function sql_query_completo ( $m73_codmatestoqueitem=null, $m73_codmatordemitem=null, $campos="*", $ordem=null, $dbwhere=""){
+		$sql = "select ";
+		if($campos != "*" ){
+			$campos_sql = split("#",$campos);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}else{
+			$sql .= $campos;
+		}
+		$sql .= "	from matestoqueitemoc ";
+		$sql .= "   	INNER JOIN matordemitem  		ON  matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem ";
+		$sql .= "		INNER JOIN empempitem ON empempitem.e62_numemp = matordemitem.m52_numemp AND empempitem.e62_sequen = matordemitem.m52_sequen ";
+		$sql .= "      	INNER JOIN matestoqueitem  		ON  matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem ";
+		$sql .= "		INNER JOIN matestoqueitemunid 	ON  matestoqueitemunid.m75_codmatestoqueitem = matestoqueitem.m71_codlanc ";
+		$sql .= "		INNER JOIN matunid 				ON  m61_codmatunid = matestoqueitemunid.m75_codmatunid ";
+		$sql .= "      	INNER JOIN matordem  			ON  matordem.m51_codordem = matordemitem.m52_codordem ";
+		$sql .= "		INNER JOIN orcelemento ON orcelemento.o56_codele = empempitem.e62_codele AND orcelemento.o56_anousu = ".db_getsession('DB_anousu');
+		$sql .= "  		INNER JOIN pcmater ON pcmater.pc01_codmater = empempitem.e62_item ";
+		$sql .= "      	INNER JOIN matestoque  as a 	ON  a.m70_codigo = matestoqueitem.m71_codmatestoque ";
+		$sql2 = "";
+		if($dbwhere==""){
+			if($m73_codmatestoqueitem!=null ){
+				$sql2 .= " where matestoqueitemoc.m73_codmatestoqueitem = $m73_codmatestoqueitem ";
+			}
+			if($m73_codmatordemitem!=null ){
+				if($sql2!=""){
+					$sql2 .= " and ";
+				}else{
+					$sql2 .= " where ";
+				}
+				$sql2 .= " matestoqueitemoc.m73_codmatordemitem = $m73_codmatordemitem ";
+			}
+		}else if($dbwhere != ""){
+			$sql2 = " where $dbwhere";
+		}
+		$sql .= $sql2;
+		if($ordem != null ){
+			$sql .= " order by ";
+			$campos_sql = split("#",$ordem);
+			$virgula = "";
+			for($i=0;$i<sizeof($campos_sql);$i++){
+				$sql .= $virgula.$campos_sql[$i];
+				$virgula = ",";
+			}
+		}
+		return $sql;
+	}
+
 }
 ?>

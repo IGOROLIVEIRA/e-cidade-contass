@@ -31,8 +31,8 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
-
-require("libs/db_utils.php");
+require_once("libs/JSON.php");
+require_once("libs/db_utils.php");
 include("classes/db_cgm_classe.php");
 include("classes/db_db_depart_classe.php");
 include("classes/db_db_almoxdepto_classe.php");
@@ -43,121 +43,181 @@ include("classes/db_matordemitem_classe.php");
 include("classes/db_empempenho_classe.php");
 include("classes/db_matestoqueitemoc_classe.php");
 
+$clcgm						= new cl_cgm;
 $clmatordem					= new cl_matordem;
 $clmatparam					= new cl_matparam;
-$cldb_almoxdepto		= new cl_db_almoxdepto;
-$clmatordemanu			= new cl_matordemanu;
-$clmatordemitem			= new cl_matordemitem;
-$clempempenho				= new cl_empempenho;
-$clcgm							= new cl_cgm;
 $cldbdepart 				= new cl_db_depart;
-$clmatestoqueitemoc = new cl_matestoqueitemoc;
+$clempempenho				= new cl_empempenho;
+$clmatordemanu			    = new cl_matordemanu;
+$clmatordemitem			    = new cl_matordemitem;
+$cldb_almoxdepto		    = new cl_db_almoxdepto;
+$clmatestoqueitemoc         = new cl_matestoqueitemoc;
+$oJson                      = new services_json();
+
+$dados = $oJson->decode(str_replace("\\","",$json));
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
-if (isset($altera)){
-  db_inicio_transacao();
-  $valor_total=0;
-  $sqlerro = false;
-  $dados=split("quant_","$valores");
-  $valordoitem=split("valor_","$val");
-  for ($i=1;$i<sizeof($dados);$i++){
-    if ($sqlerro==false){
-      $numero=split("_",$dados[$i]);
-      $numemp=$numero[0];
-      $sequen=$numero[1];
-      $quanti=$numero[3];
-      $vlsoitem=split("_",$valordoitem[$i]);
-      $vl_soma_item=$vlsoitem[1];
-      if(strpos(trim($vl_soma_item),',')!=""){
-	        $vl_soma_item=str_replace('.','',$vl_soma_item);
-	        $vl_soma_item=str_replace(',','.',$vl_soma_item);
-      }
-      $valor = "";
-      for($x=0; $x < strlen($vl_soma_item); $x++){
-           if(is_numeric($vl_soma_item[$x])||$vl_soma_item[$x]=="."){
-               $valor .= $vl_soma_item[$x];
-           }
-      }
+if (isset($dados->altera)) {
+	db_inicio_transacao();
+	$valor_total = 0;
+	$sqlerro = false;
 
-      $vl_soma_item = $valor*1;
-      $valor_total += $vl_soma_item;
-   }
-}
+	$sqlItens = 'select * from matordem inner join matordemitem on m52_codordem = matordem.m51_codordem where m51_codordem = ' . $dados->m51_codordem. ' order by m52_sequen';
+	$rsItens  = db_query($sqlItens);
 
-$prazoentrega=$m51_prazoent;
-$result_ordem=$clmatordem->sql_record($clmatordem->sql_query_file("","*","","m51_codordem=$m51_codordem"));
+	$itensAcordo = db_utils::getCollectionByRecord($rsItens);
 
-db_fieldsmemory($result_ordem,0);
+	for ($count = 0; $count < sizeof($itensAcordo); $count++){
 
- $coddepto1=$coddepto;
- $obs1=$obs;
+		$objeto = $itensAcordo[$count];
 
+        if($objeto->m52_sequen == $dados->itens[$count]->sequen){
+            if(floatval($dados->itens[$count]->valortotal) != $objeto->m52_valor){
+                $objeto->m52_valor = $dados->itens[$count]->valortotal;
+            }
+        }
 
-if ($sqlerro==false){
-  if (strpos(trim($valor_total),',')!=""){
-	 $valor_total=str_replace('.','',$valor_total);
-	 $valor_total=str_replace(',','.',$valor_total);
-  }
-  $clmatordem->m51_codordem = $m51_codordem;
-  $clmatordem->m51_data = $m51_data;
-  $clmatordem->m51_depto = $coddepto1;
-  $clmatordem->m51_numcgm = $m51_numcgm;
-  $clmatordem->m51_obs = $obs1;
-  $clmatordem->m51_valortotal = $valor_total;
-  $clmatordem->m51_prazoent = $prazoentrega;
-  $clmatordem->alterar($m51_codordem);
-  $erro_msg = $clmatordem->erro_msg;
-  if($clmatordem->erro_status==0){
-    $sqlerro=true;
-  }
-}
+        if(strpos($objeto->m52_valor, '.') && strpos($objeto->m52_valor, ',')){
+		    $objeto->m52_valor = str_replace('.', '', $objeto->m52_valor);
+        }
 
-for ($i=1;$i<sizeof($dados);$i++){
-  if ($sqlerro==false){
-    $numero=split("_",$dados[$i]);
-    $numemp=$numero[0];
-    $sequen=$numero[1];
-    $quanti=$numero[3];
-    $vlsoitem=split("_",$valordoitem[$i]);
-    $vl_soma_item=$vlsoitem[1];
+		if(strpos($objeto->m52_valor, ',')){
+			$objeto->m52_valor = str_replace(',', '.', $objeto->m52_valor);
+		}
 
-    $result_item=$clmatordemitem->sql_record($clmatordemitem->sql_query_file(null,"*",null,"m52_codordem = $m51_codordem and  m52_numemp = $numemp and m52_sequen = $sequen "));
-    db_fieldsmemory($result_item,0);
+        $valor_total += $objeto->m52_valor;
 
-    if ($quanti == 0 || str_replace(',','.', str_replace('.', '', $vl_soma_item)) == 0){
-      $clmatordemitem->excluir(null,"m52_codlanc=$m52_codlanc");
-      $erroex = $clmatordemitem->erro_msg;
-      if ($clmatordemitem->erro_status==0){
-        $sqlerro=true;
-      }
-   }else{
-   	if (strpos(trim($vl_soma_item),',')!=""){
-	    $vl_soma_item=str_replace('.','',$vl_soma_item);
-	    $vl_soma_item=str_replace(',','.',$vl_soma_item);
-	}
-	if (strpos(trim($quanti),',')!=""){
-	    $quanti=str_replace('.','',$quanti);
-	    $quanti=str_replace(',','.',$quanti);
-	}
-    $clmatordemitem->m52_codlanc = $m52_codlanc;
-    $clmatordemitem->m52_codordem = $m51_codordem;
-    $clmatordemitem->m52_numemp = $numemp;
-    $clmatordemitem->m52_sequen = $sequen;
-    $clmatordemitem->m52_quant = $quanti;
-    $clmatordemitem->m52_valor = $vl_soma_item;
-    $clmatordemitem->alterar($m52_codlanc);
-     $erro = $clmatordemitem->erro_msg;
-    if ($clmatordemitem->erro_status==0){
-      $sqlerro=true;
     }
-    }
-  }
-  }
 
-//  $sqlerro = true;
-  db_fim_transacao($sqlerro);
+	/*
+	 * Sequenciais que irão sofreer alteração
+	 *
+	 * */
+	$sItens = '';
+	for($i=0;$i<sizeof($dados->itens);$i++){
+	    $sItens .= $dados->itens[$i]->sequen . ',';
+    }
+
+	$sItens = substr($sItens, 0, strlen($sItens) - 1);
+
+	$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
+	db_fieldsmemory($result_ordem, 0);
+
+	if (!$sqlerro && count($dados->itens)) {
+
+		$clmatordem->m51_codordem   = $m51_codordem;
+		$clmatordem->m51_data       = $m51_data;
+        $clmatordem->m51_depto      = $coddepto;
+		$clmatordem->m51_numcgm     = $m51_numcgm;
+		$clmatordem->m51_obs        = $dados->obs;
+		$clmatordem->m51_valortotal = $valor_total;
+		$clmatordem->m51_prazoent   = $dados->m51_prazoent;
+		$clmatordem->alterar($m51_codordem);
+
+		$erro_msg = 'Ordem de Compra alterada com sucesso!';
+		if ($clmatordem->erro_status == 0) {
+			$sqlerro = true;
+			$erro_msg = $clmatordem->erro_msg;
+		}
+	}else{
+	    $sqlerro = true;
+	    $erro_msg = 'Ordem de Compra não pode ser alterada!';
+    }
+
+	for ($count = 0; $count < sizeof($dados->itens); $count++) {
+
+		$objeto = $dados->itens[$count];
+		$numemp = $objeto->numemp;
+		$quantidade = $objeto->quantidade;
+		$sequen = $objeto->sequen;
+		$valor_item = $objeto->valortotal;
+		$valor_unitario = $objeto->valorunitario;
+
+        if (strpos(trim($valor_item), ',') != "") {
+            $valor_item = str_replace('.', '', $valor_item);
+            $valor_item = str_replace(',', '.', $valor_item);
+        }
+
+        if (strpos(trim($quantidade), ',') != "") {
+            $quantidade = str_replace('.', '', $quantidade);
+            $quantidade = str_replace(',', '.', $quantidade);
+        }
+
+        if (strpos(trim($valor_unitario), ',') != "") {
+            $valor_unitario = str_replace('.', '', $valor_unitario);
+            $valor_unitario = str_replace(',', '.', $valor_unitario);
+        }
+
+		$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "*", null,
+			" m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen = $sequen "));
+
+		if(pg_num_rows($result_item)){
+
+		    if($quantidade == 0 || $valor_item == 0){
+                $clmatordemitem->excluir($oItem->m52_codlanc);
+                if($clmatordemitem->erro_status == 0){
+                    $sqlerro = true;
+                    $erro_msg = $clmatordemitem->erro_msg;
+                }
+            }else{
+                db_fieldsmemory($result_item, 0);
+
+                $clmatordemitem->m52_codlanc  = $m52_codlanc;
+                $clmatordemitem->m52_codordem = $dados->m51_codordem;
+                $clmatordemitem->m52_numemp   = $numemp;
+                $clmatordemitem->m52_sequen   = $sequen;
+                $clmatordemitem->m52_quant    = $quantidade;
+                $clmatordemitem->m52_valor    = $valor_item;
+                $clmatordemitem->m52_vlruni   = $valor_unitario;
+                $clmatordemitem->alterar($m52_codlanc);
+
+                if ($clmatordemitem->erro_status == 0) {
+                    $sqlerro = true;
+                    $erro_msg = $clmatordemitem->erro_msg;
+                }
+            }
+        }else{
+            $clmatordemitem->m52_codordem  = $dados->m51_codordem;
+            $clmatordemitem->m52_numemp    = $numemp;
+            $clmatordemitem->m52_sequen    = $sequen;
+            $clmatordemitem->m52_quant     = $quantidade;
+            $clmatordemitem->m52_valor     = $valor_item;
+            $clmatordemitem->m52_vlruni    = $valor_unitario;
+
+            $clmatordemitem->incluir(null);
+
+            if ($clmatordemitem->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clmatordemitem->erro_msg;
+            }
+        }
+    }
+
+	/*
+	 * Exclusão dos itens que não foram marcados na tela e automaticamente serão excluídos da Ordem de Compra...
+	 *
+	 * */
+
+	$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "m52_codlanc", null,
+		" m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen not in ($sItens) "));
+
+	for($contador=0; $contador < pg_num_rows($result_item); $contador++){
+	    $iCodLanc = db_utils::fieldsMemory($result_item, 0)->m52_codlanc;
+	    $clmatordemitem->excluir($iCodLanc);
+    }
+
+	db_fim_transacao($sqlerro);
+
+    if (isset($dados->altera)){
+		$oRetorno           = new stdClass();
+		$oRetorno->message  = urlencode($erro_msg);
+		$oRetorno->codordem = $dados->m51_codordem;
+		$oRetorno->erro     = $sqlerro;
+		echo $oJson->encode($oRetorno);
+	    die();
+    }
 }
 
 ?>
@@ -167,6 +227,8 @@ for ($i=1;$i<sizeof($dados);$i++){
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
@@ -191,15 +253,22 @@ for ($i=1;$i<sizeof($dados);$i++){
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <?
-if (isset($altera)){
-    db_msgbox($erro_msg);
-    if($clmatordem->erro_campo!=""){
-      echo "<script> document.form1.".$clmatordem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clmatordem->erro_campo.".focus();</script>";
-    }else{
-      echo"<script>top.corpo.location.href='emp1_ordemcompraaltera001.php';</script>";
-    }
-}
+//if (isset($dados->altera)){
+//    db_msgbox($erro_msg);
+//    echo "<script>";
+//    if($clmatordem->erro_campo!=""){
+//      echo "document.form1.".$clmatordem->erro_campo.".style.backgroundColor='#99A9AE';";
+//      echo "document.form1.".$clmatordem->erro_campo.".focus();";
+//    }else{
+//        echo "let confirmation = window.confirm('Deseja imprimir a Ordem de Compra?');";
+//        echo "if(confirmation){";
+//        echo "      jan = window.open('emp2_ordemcompra002.php?cods=$m51_codordem', '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1, location=0');";
+//        echo "      jan.moveTo(0,0);";
+//        echo "}";
+//        echo "top.corpo.location.href='emp1_ordemcompraaltera001.php';";
+//    }
+//	echo "</script>";
+//}
 ?>
 </body>
 </html>

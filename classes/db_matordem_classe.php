@@ -334,10 +334,14 @@ class cl_matordem {
          return false;
        }
      }
+
      if(trim($this->m51_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m51_obs"])){ 
        $sql  .= $virgula." m51_obs = '$this->m51_obs' ";
        $virgula = ",";
-     }
+     }else{
+		 $sql  .= $virgula." m51_obs = null ";
+		 $virgula = ",";
+	 }
      if(trim($this->m51_valortotal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m51_valortotal"])){ 
        $sql  .= $virgula." m51_valortotal = $this->m51_valortotal ";
        $virgula = ",";
