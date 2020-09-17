@@ -180,20 +180,6 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap>
-                                                    <?
-                                                    db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
-                                                        "onchange='js_pesquisa_liclicita(false)'");
-                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
-                                                    ?>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_tipoorigem ?>">
                                                     <?= @$Lac16_tipoorigem ?>
@@ -215,6 +201,20 @@ db_app::load("dbtextFieldData.widget.js");
                                                     db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
 
                                                     ?>
+                                                </td>
+                                            </tr>
+                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                                                <td nowrap>
+													<?
+													db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
+													?>
+                                                </td>
+                                                <td>
+													<?
+													db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
+														"onchange='js_pesquisa_liclicita(false)'");
+													db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
+													?>
                                                 </td>
                                             </tr>
                                             <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
