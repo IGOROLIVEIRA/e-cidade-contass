@@ -76,7 +76,7 @@ $db_opcao = 1;
                   <b><?=str_replace(":","", @$Lac12_texto)?></b>
                 </legend>
                <?
-               db_textarea('ac12_texto',5, 0, $Iac12_texto,true,'text',$db_opcao,"style='width:100%'");
+               db_textarea('ac12_texto',5, 0, $Iac12_texto,true,'text',$db_opcao,"style='width:100%'","","",100);
                ?>
                </fieldset>
             </td>
