@@ -435,7 +435,9 @@ switch($oParam->exec) {
     break;
 
 	case "getLicitacoesContratado":
-  		$filtro = $oParam->addNegation . ' in (' . $oParam->tipoCompras . ')';
+		if($oParam->tipoCompras){
+  			$filtro = $oParam->addNegation . ' in (' . $oParam->tipoCompras . ')';
+		}
     	if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
       		$aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true);
     	}else{

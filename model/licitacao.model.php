@@ -757,7 +757,8 @@ class licitacao {
             null,
             $sCampos,
             "l20_codigo",
-            $sWhere
+            $sWhere,
+			true
         );
 
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
