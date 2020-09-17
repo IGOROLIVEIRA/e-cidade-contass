@@ -197,7 +197,7 @@ db_input('k11_aut2',20,$Ik11_aut2,true,'text',$db_opcao,"")
     </td>
     <td> 
 <?
-$x = array('1'=>'Autentica e Imprime','2'=>'Autentica e não Imprime','3'=>'Não Autentica e Não Imprime (Somente Empenho)');
+$x = array('2'=>'Autentica e não Imprime','1'=>'Autentica e Imprime','3'=>'Não Autentica e Não Imprime (Somente Empenho)');
 db_select('k11_tipautent',$x,true,$db_opcao,"");
 ?>
     </td>

@@ -805,7 +805,7 @@ class cl_adesaoregprecos {
      if(trim($this->si06_edital)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])){
        $sql  .= $virgula." si06_edital = $this->si06_edital ";
        $virgula = ",";
-       if(trim($this->si06_edital) == null ){
+       if(!trim($this->si06_edital)){
          $this->erro_sql = " Campo Edital não Informado.";
          $this->erro_campo = "si06_edital";
          $this->erro_banco = "";

@@ -152,9 +152,9 @@ $clrotulo->label('z01_nome');
           $result = $clmatordem->sql_record($clmatordem->sql_query_numemp("","*","m51_codordem","m53_codordem is null and m51_codordem=$pesquisa_chave and $where_instit"));
           if($clmatordem->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$m51_data',false);</script>";
+            echo "<script>".$funcao_js."('$m51_codordem',false);</script>";
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado', true);</script>";
           }
         }else{
 	       echo "<script>".$funcao_js."('',false);</script>";

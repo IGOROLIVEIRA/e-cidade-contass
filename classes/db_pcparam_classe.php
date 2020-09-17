@@ -85,7 +85,9 @@ class cl_pcparam {
    var $pc30_notificacarta = 'f'; 
    var $pc30_permitirgerarnotifdebitos = 'f'; 
    var $pc30_consultarelatoriodepartamento = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $pc30_emitedpsolicitante = false;
+   var $pc30_emitedpcompras = false;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc30_instit = int4 = Codigo da instituicao 
                  pc30_horas = varchar(5) = Hora padrão 
@@ -130,6 +132,8 @@ class cl_pcparam {
                  pc30_notificacarta = bool = Envia Carta na Notificação 
                  pc30_permitirgerarnotifdebitos = bool = Permitir Gerar Notificação de Débitos 
                  pc30_consultarelatoriodepartamento = int4 = Consulta por 
+                 pc30_emitedpsolicitante = bool = Emite Email DP Solicitante 
+                 pc30_emitedpcompras = bool = Emite Email DP Compras 
                  ";
    //funcao construtor da classe 
    function cl_pcparam() { 
@@ -192,6 +196,8 @@ class cl_pcparam {
        $this->pc30_notificacarta = ($this->pc30_notificacarta == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc30_notificacarta"]:$this->pc30_notificacarta);
        $this->pc30_permitirgerarnotifdebitos = ($this->pc30_permitirgerarnotifdebitos == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc30_permitirgerarnotifdebitos"]:$this->pc30_permitirgerarnotifdebitos);
        $this->pc30_consultarelatoriodepartamento = ($this->pc30_consultarelatoriodepartamento == ""?@$GLOBALS["HTTP_POST_VARS"]["pc30_consultarelatoriodepartamento"]:$this->pc30_consultarelatoriodepartamento);
+       $this->pc30_emitedpsolicitante = ($this->pc30_emitedpsolicitante == ""?@$GLOBALS["HTTP_POST_VARS"]["pc30_emitedpsolicitante"]:$this->pc30_emitedpsolicitante);
+       $this->pc30_emitedpcompras = ($this->pc30_emitedpcompras == ""?@$GLOBALS["HTTP_POST_VARS"]["pc30_emitedpcompras"]:$this->pc30_emitedpcompras);
      }else{
        $this->pc30_instit = ($this->pc30_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["pc30_instit"]:$this->pc30_instit);
      }
@@ -1217,6 +1223,13 @@ class cl_pcparam {
          return false;
        }
      }
+	   if(trim($this->pc30_emitedpsolicitante)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc30_emitedpsolicitante"])){
+		   $sql  .= $virgula." pc30_emitedpsolicitante = '$this->pc30_emitedpsolicitante' ";
+		   $virgula = ",";
+	   }
+	   if(trim($this->pc30_emitedpcompras)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc30_emitedpcompras"])){
+		   $sql  .= $virgula." pc30_emitedpcompras = '$this->pc30_emitedpcompras' ";
+	   }
      $sql .= " where ";
      if($pc30_instit!=null){
        $sql .= " pc30_instit = $this->pc30_instit";

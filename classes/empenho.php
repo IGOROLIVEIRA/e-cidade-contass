@@ -1,6 +1,6 @@
 <?php
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -137,7 +137,7 @@ class empenho {
   }
 
 
-  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='') {    
+  function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='') {
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
       $this->erro_status = '0';
@@ -5985,5 +5985,38 @@ class empenho {
     }
 
     return db_utils::fieldsMemory($rsBuscaDocumento, 0 )->c53_coddoc;
+  }
+
+  public function buscaUltimoDocumentoExecutadoDoc($iSequencialEmpenho,$iDocumento, $iData) {
+
+    try{
+
+      $oRetorno          = new stdClass();
+      $aWhere = array(
+        "c75_numemp = {$iSequencialEmpenho}",
+        "c70_data > '{$iData}'",
+        "c53_tipo = {$iDocumento}",
+        "c53_coddoc <> 25"
+      );
+
+      $sOrdem = " c70_codlan desc limit 1 ";
+      $sWhere = implode(" and ", $aWhere);
+      $oDaoConlancam      = new cl_conlancamemp();
+      $sSqlBuscaDocumento = $oDaoConlancam->sql_query_documentos(null, "conhistdoc.*,conlancam.c70_data", $sOrdem, $sWhere);
+
+      $rsBuscaDocumento   = $oDaoConlancam->sql_record($sSqlBuscaDocumento);
+
+      if ($oDaoConlancam->numrows > 0) {
+        throw new Exception("A data da anulação do empenho deve ser igual ou posterior a última data de anulação de liquidação");
+      }
+      $this->lSqlErro = false;
+      return db_utils::fieldsMemory($rsBuscaDocumento, 0 )->c53_coddoc;
+
+    }catch (Exception $eErro) {
+      $this->lSqlErro = true;
+      $this->erro_status = '2';
+      $this->sErroMsg    = $eErro->getMessage();
+      return true;
+    }
   }
 }

@@ -160,6 +160,20 @@ switch($oParam->exec) {
 
       try {
 
+          $clAcordoItem = new cl_acordoitem;
+          $sSqlSomaItens = $clAcordoItem->sql_query('', 'sum(ac20_valortotal) as soma', '', 'ac16_sequencial = '.$oParam->acordo);
+          $rsSomaItens = $clAcordoItem->sql_record($sSqlSomaItens);
+          $iSoma = db_utils::fieldsMemory($rsSomaItens, 0)->soma;
+
+          $clAcordo = new cl_acordo;
+          $sSqlAcordo = $clAcordo->sql_query('', 'ac16_valor', '', 'ac16_sequencial = '.$oParam->acordo);
+          $rsAcordo   = $clAcordo->sql_record($sSqlAcordo);
+          $iTotalAcordo = db_utils::fieldsMemory($rsAcordo, 0)->ac16_valor;
+
+          if(floatval($iSoma) != floatval($iTotalAcordo)){
+              throw new Exception("Gentileza conferir o valor total do contrato!");
+          }
+
         $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
         $oDataPublicacao = new DBDate($oParam->dtpublicacao);
 

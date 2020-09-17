@@ -537,7 +537,7 @@ class cl_solicita {
      return $result;
    }
    // funcao do sql
-   function sql_query ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere="",$joinDotac=false){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -564,6 +564,11 @@ class cl_solicita {
      $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
      $sql .= "      left  join solicitacaotipo      on solicita.pc10_solicitacaotipo       = solicitacaotipo.pc52_sequencial";
      $sql2 = "";
+
+     if($joinDotac){
+       $sql .= "    inner join pcdotac on pcdotac.pc13_codigo = solicitem.pc11_codigo";
+     }
+
      if($dbwhere==""){
        if($pc10_numero!=null ){
          $sql2 .= " where solicita.pc10_numero = $pc10_numero ";

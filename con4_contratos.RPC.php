@@ -573,6 +573,19 @@ switch($oParam->exec) {
             $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
           }
 
+          $oLicitacao = db_utils::getDao('liclicita');
+          $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
+          $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
+
+          $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = '.$oParam->contrato->iGrupo);
+          $iNaturezaAcordo = db_utils::fieldsMemory($rsSql, 0)->ac02_acordonatureza;
+
+          if(in_array($oParam->contrato->iTipoOrigem, array(2, 3))){
+			  if($iNatureza != $iNaturezaAcordo){
+		  	      throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
+			  }
+		  }
+
       if ($lAcordoValido) {
 
         $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
