@@ -485,7 +485,7 @@ contratoaux = function () {
         /* Novas validações para atender o SICOM */
 
         if(iOrigem == '3') {
-            if (iTipoOrigem == '2' && !iLicitacao) {
+            if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
                 alert('Informe uma Licitação.');
                 $('ac16_licitacao').focus();
                 return false;
