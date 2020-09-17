@@ -759,7 +759,7 @@ class licitacao {
             "l20_codigo",
             $sWhere
         );
-        print_r($sSqlLicitacoes);
+
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
 
@@ -772,7 +772,7 @@ class licitacao {
      * @return stdClass[]
      * OC8339
      */
-    public function getLicByFornecedorCredenciamento($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false, $filtro=''){
+    public function getLicByFornecedorCredenciamento($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false){
 
         $oDaoLicilicitem = db_utils::getDao("liclicitem");
         $sWhere          = '';
@@ -798,10 +798,6 @@ class licitacao {
         $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";
         $sCampos        .= ", l20_numero as numero_exercicio, l20_datacria as data";
         $sCampos        .= ", l20_edital as edital";// campo adicionado para atender novas demandas do sicom 2014
-
-		if($filtro){
-			$sWhere .= " AND l03_pctipocompratribunal {$filtro}";
-		}
 
         $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulgCredenciamento(
             null,
