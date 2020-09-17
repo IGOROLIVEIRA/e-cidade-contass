@@ -71,10 +71,7 @@ try {
   $sSql        = $oForne->sql_query(null,"*",$orderBy . ' limit 1000 ', $where);
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
-  /*TRATAMENTO DE ERRO*/
-  if(pg_num_rows($rsSql) == 0) {
-    db_redireciona("db_erros.php?fechar=true&db_erro=Não forão encontrados registros.");
-  }
+
   if(!$rsSql) {
     throw new DBException('Erro ao Executar Query' . pg_last_error());
   }
@@ -99,8 +96,22 @@ ob_start();
   <div class="content">
     <table id="table" style=" width:100%; border-collapse: collapse; font-size:10px;">
 
-
       <?php
+
+      if(!pg_num_rows($rsSql)):
+          ?>
+          <tr>
+              <td>
+                  <br/><br/>
+                  <b>
+                  Em consulta realizada para o período de <?=$data_ini?> a <?=$data_fim ?>, o sistema verificou que não há fornecedores com impedimentos vigentes no referido período.
+                  </b>
+                  <br/><br/><br/>
+              </td>
+          </tr>
+
+      <?php endif;
+
       foreach($rsResultado as $oRegistro):
         ?>
       <tr>

@@ -66,7 +66,7 @@ db_postmemory($HTTP_POST_VARS);
               </td>
               <td>
                   <?php
-                  $aTiposFornecedor = array("t" => "Todos", "a" => "Ativos", "i" => "Inativos");
+                  $aTiposFornecedor = array("t" => "Todos", "a" => "Impedimentos não vigentes", "i" => "Impedimentos vigentes");
                   db_select("tipo_fornecedor", $aTiposFornecedor, true, $db_opcao);
                   ?>
 			  </td>
