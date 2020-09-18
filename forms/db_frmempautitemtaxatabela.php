@@ -533,7 +533,7 @@ function js_troca(codele) {
 function js_cancelar(){
   var opcao = document.createElement("input");
   opcao.setAttribute("type","hidden");
-  opcao.setAttribujs_consultate("name","novo");
+  opcao.setAttribute("name","novo");
   opcao.setAttribute("value","true");
   document.form1.appendChild(opcao);
   document.form1.submit();
