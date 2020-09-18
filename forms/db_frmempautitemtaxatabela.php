@@ -545,7 +545,7 @@ function js_pesquisae55_item(mostra){
     js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
      }else{
        document.form1.pc01_descrmater.value = '';
        document.form1.submit();
