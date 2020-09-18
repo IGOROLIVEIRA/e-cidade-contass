@@ -209,7 +209,7 @@ ob_start();
             font-weight: bold;
         }
 
-        .item-text-descicao {
+        .item-text-descricao {
             border: 1px solid #000000;
             text-align: justify;
         }
@@ -241,6 +241,7 @@ if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
 
     <table class="table">
         <tr class="">
+            <td class="item-menu item-menu-color">SEQ</td>
             <td class="item-menu item-menu-color">ITEM</td>
             <td class="item-menu item-menu-color">DESCRIÇÃO DO ITEM</td>
             <td class="item-menu item-menu-color"><strong>TAXA/TABELA</strong></td>
@@ -254,6 +255,7 @@ HTML;
     echo <<<HTML
   <div class="table" autosize="1">
     <div class="tr bg_eb">
+      <div class="th col-item align-center">SEQ</div>
       <div class="th col-item align-center">ITEM</div>
       <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
       <div class="th col-valor_un align-right">VALOR UN</div>
@@ -281,7 +283,8 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $nTotalItens += $lTotal;
     $oDadosDaLinha = new stdClass();
-    $oDadosDaLinha->item = $iCont + 1;
+    $oDadosDaLinha->seq = $iCont + 1;
+    $oDadosDaLinha->item = $oResult->pc01_codmater;
     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
     if($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t"){
         $oDadosDaLinha->valorUnitario = "-";
@@ -308,8 +311,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     if($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1){ //OC8365
         echo <<<HTML
         <tr class="">
+          <td class="item-text">{$oDadosDaLinha->seq}</td>
           <td class="item-text">{$oDadosDaLinha->item}</td>
-          <td class="item-text-descicao">{$oDadosDaLinha->descricao}</td>
+          <td class="item-text-descricao">{$oDadosDaLinha->descricao}</td>
           <td class="item-text">{$oDadosDaLinha->mediapercentual}</td>
           <td class="item-text">{$oDadosDaLinha->valorUnitario}</td>          
           <td class="item-text">{$oDadosDaLinha->quantidade}</td>
@@ -321,6 +325,9 @@ HTML;
     }else{
         echo <<<HTML
          <div class="tr row">
+          <div class="td col-item align-center">
+            {$oDadosDaLinha->seq}
+          </div>
           <div class="td col-item align-center">
             {$oDadosDaLinha->item}
           </div>
