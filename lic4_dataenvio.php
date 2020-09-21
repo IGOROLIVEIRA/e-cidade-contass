@@ -26,7 +26,6 @@ if($oPost->atualizar){
 
 		if($dataFormatada >= $dataBuscada){
 			$clliclancedital->l47_dataenvio = $dataFormatada;
-
 			// Altera o status de AGUARDANDO ENVIO para ENVIADO...
 			$clliclicita->l20_codigo = $oGet->codigo;
 			$clliclicita->l20_cadinicial = 3;
@@ -37,6 +36,7 @@ if($oPost->atualizar){
 			    $clliclancedital->l47_linkpub = $oEdital->l47_linkpub;
 			    $clliclancedital->l47_origemrecurso = $oEdital->l47_origemrecurso;
 			    $clliclancedital->l47_descrecurso = $oEdital->l47_descrecurso;
+			    $clliclancedital->l47_liclicita = $oEdital->l47_liclicita;
 			    $clliclancedital->alterar($codigo);
 				if($clliclancedital->erro_status == '0'){
 					$error = true;
@@ -57,13 +57,13 @@ if($oPost->atualizar){
 		$error = true;
 		$msg = 'Informe a data de Envio!';
 	}
+
+	echo "<script>";
+	echo "alert('".$msg."');";
+
 	if($error){
-		echo "<script>";
-		echo "alert('".$msg."');";
 		echo "</script>";
 	}else{
-		echo "<script>";
-		echo "alert('".$msg."');";
 		echo "parent.db_iframe_dataenvio.hide();";
 		echo "parent.parent.js_pesquisa();";
 		echo "</script>";

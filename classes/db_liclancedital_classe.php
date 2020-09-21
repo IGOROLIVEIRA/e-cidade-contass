@@ -251,7 +251,7 @@ class cl_liclancedital
 			$sql .= $virgula . " l47_origemrecurso = $this->l47_origemrecurso ";
 			$virgula = ",";
 		}else {
-			if(!in_array($iTribunal, array(100, 101, 102, 103))){
+			if(!in_array($iTribunal, array('100', '101', '102', '103'))){
 				$this->erro_sql = " Campo Origem Recurso não Informado.";
 				$this->erro_campo = "l47_origemrecurso";
 				$this->erro_banco = "";
