@@ -112,14 +112,97 @@ if (isset ($consultando) || isset ($incluir) || isset ($alterar)) {
                         AND pcmater.pc01_codmater NOT IN (SELECT pc94_codmater FROM pctabela)
     ";
 
-    $sqlItens = $clliclicitem->sql_query_portal_transparencia('', 'pc23_quant, pc23_vlrun', '', $sWhere);
-    $rsItem = db_query($sqlItens);
 
-    if(pg_num_rows($rsItem)){
-        $oItem = db_utils::fieldsmemory($rsItem,0);
-        $e55_quant = $oItem->pc23_quant;
-        $e55_vluni = $oItem->pc23_vlrun;
+    if(isset($e55_item) && isset($e55_autori)){
+		$sqlItens = "
+    
+     SELECT * FROM (
+              SELECT DISTINCT pcmater.pc01_codmater,
+                              pc23_quant,
+                              pc23_vlrun,
+                              pc23_valor,
+                              z01_numcgm,
+                              'itemtabela' as tipoitem,
+                              pctabela.pc94_sequencial
+              FROM liclicitem
+              LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+              LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+              LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+              LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+              LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+              LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+              LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+              LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+              LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+              LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+              LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+              LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+              LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+              LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+              LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                          AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+              LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+              LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+              LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+              LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
+              LEFT JOIN pctabelaitem ON pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
+              LEFT JOIN pcmater ON pcmater.pc01_codmater = pctabelaitem.pc95_codmater
+              LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
+              INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                          AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+              WHERE l20_codigo = (SELECT e54_codlicitacao
+                                            FROM empautoriza WHERE e54_autori = {$e55_autori}) AND pc24_pontuacao=1
+              UNION
+              SELECT DISTINCT pcmater.pc01_codmater,
+                      pc23_quant,
+                      pc23_vlrun,
+                      pc23_valor,
+                      z01_numcgm,
+                      'naoitem' as tipoitem,
+                      0 as pc94_sequencial
+            FROM liclicitem
+            LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+            LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+            LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+            LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+            LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+            LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+            LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+            LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+            LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+            LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+            LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+            LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+            LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+            LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+            LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+            AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+            LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+            LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+            LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+            LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
+            LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+            AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
+            WHERE l20_codigo = (SELECT e54_codlicitacao
+                                        FROM empautoriza WHERE e54_autori = {$e55_autori})
+                AND pc24_pontuacao=1 AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
+                AND pcmater.pc01_codmater NOT IN (select pc94_codmater from pctabela)
+            ) fornecedores
+            WHERE fornecedores.z01_numcgm = {$z01_numcgm} ORDER BY fornecedores.pc01_codmater";
+
+		$rsItem = db_query($sqlItens);
+
+		if(pg_num_rows($rsItem)){
+			$oItem = db_utils::fieldsmemory($rsItem,0);
+			$e55_quant = $oItem->pc23_quant;
+			$e55_vluni = $oItem->pc23_vlrun;
+			$tipoItem  = $oItem->tipoitem;
+			$valorTotal = $oItem->pc23_valor;
+			$sequencialItem = $oItem->pc94_sequencial;
+			$consultaValores = true;
+		}
     }
+
 
 }
 

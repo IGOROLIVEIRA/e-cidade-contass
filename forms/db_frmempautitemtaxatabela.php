@@ -78,6 +78,7 @@ if(isset($opcao) && $opcao=="alterar"){
       $pc01_descrmater  ="";
     }
 }
+
 ?>
 
 <script type="text/javascript" src="scripts/scripts.js"></script>
@@ -476,6 +477,20 @@ function js_troca(codele) {
   </form>
     <script>
 
+        flag_consulta = "<?= $consultaValores ?>";
+        if(flag_consulta){
+            var params = {
+                exec: 'verificaSaldoCriterio',
+                e55_item: document.form1.e55_item.value,
+                e55_autori: document.form1.e55_autori.value,
+                tipoitem: "<?=$tipoItem?>",
+                pc94_sequencial: "<?= $sequencialItem?>",
+                total: "<?=$valorTotal?>"
+            };
+
+            js_consultaValores(params);
+        }
+
 
   function js_verificar() {
 
@@ -560,8 +575,8 @@ function js_mostrapcmater(chave,erro,codele){
     document.form1.submit();
   } else {
       document.form1.pc07_codele.value = codele;
-      js_consulta();
       document.form1.e55_quant.focus();
+      js_consulta();
   }
 }
 
@@ -580,18 +595,24 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
     e55_item: chave1,
     e55_autori: document.form1.e55_autori.value,
     tipoitem: chave8,
-    pc94_sequencial: chave9
+    pc94_sequencial: chave9,
+    total: chave5
   };
 
-  novoAjax(params, function(e) {
-    let totitens = JSON.parse(e.responseText).itens;
-    document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
-    document.form1.disponivel.value = new Number(chave5 - totitens[0].totalitens) > 0 ? new Number(chave5 - totitens[0].totalitens) : "0";
-
-    js_consulta();
-    document.form1.e55_quant.focus();
-  });
+    js_consultaValores(params);
 }
+    function js_consultaValores(params){
+        novoAjax(params, (e) => {
+            let totitens = JSON.parse(e.responseText).itens;
+            document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
+            document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
+
+            if(!flag_consulta){
+                js_consulta();
+            }
+            document.form1.e55_quant.focus();
+        });
+    }
 
 function novoAjax(params, onComplete) {
 
