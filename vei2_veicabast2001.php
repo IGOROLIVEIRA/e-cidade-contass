@@ -200,6 +200,11 @@ function js_mostraveiccadcomb1(chave1,chave2){
 </script>  
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+<style>
+    .fieldset__abastecimento {
+        margin: 20px 300px;
+    }
+</style>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
   <tr>
@@ -210,7 +215,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
   </tr>
 </table>
 
-<fieldset>
+<fieldset class="fieldset__abastecimento">
     <legend>Abastecimento</legend>
   <table  align="center" border="0">
     <form name="form1" method="post" action="">
