@@ -445,6 +445,12 @@ if (isset ($consultando)) {
   }
 } else {
   echo "<script>document.form1.e55_item.focus();</script>";
+	echo "<script>";
+	echo "document.form1.e55_quant.value = '';";
+	echo "document.form1.e55_vluni.value = '';";
+	echo "document.form1.utilizado.value = '';";
+	echo "document.form1.disponivel.value = '';";
+	echo "</script>";
 }
 ?>
 <script>
