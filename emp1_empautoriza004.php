@@ -163,6 +163,16 @@ if (isset($incluir)) {
             }
         }
 
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm}");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+
+        $e54_emiss   = date("Y-m-d",db_getsession("DB_datausu"));
+
+        if($e54_emiss < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
+
     }
 
   db_inicio_transacao();

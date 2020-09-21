@@ -12,12 +12,24 @@ $cldividaconsolidada = new cl_dividaconsolidada;
 $clcgm               = new cl_cgm;
 $db_opcao = 22;
 $db_botao = false;
+$sqlerro==false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $cldividaconsolidada->si167_numcgm = $z01_numcgm;
-  $cldividaconsolidada->si167_justificativacancelamento = $si167_justificativacancelamento;
-  $cldividaconsolidada->alterar($si167_sequencial);
+  $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$z01_numcgm}");
+  db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+  $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
+  if($sqlerro==false){
+     if($si167_dtassinatura < $z09_datacadastro){
+        db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+        $sqlerro = true;
+     }
+  }
+  if($sqlerro==false) {
+    $cldividaconsolidada->si167_numcgm = $z01_numcgm;
+    $cldividaconsolidada->si167_justificativacancelamento = $si167_justificativacancelamento;
+    $cldividaconsolidada->alterar($si167_sequencial);
+  }
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;

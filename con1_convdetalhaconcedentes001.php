@@ -36,6 +36,17 @@ if(isset($incluir)){
       $erro_msg = "Campo Descrição do Concedente é obrigatório!";
       $sqlerro=true;
     }
+
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'");
+    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+
+    $dtcadastro   = date("Y-m-d",db_getsession("DB_datausu"));
+
+    if($dtcadastro < $z09_datacadastro){
+        $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+        $sqlerro = true;
+    }
+
     if ($sqlerro==false) {
       $clconvdetalhaconcedentes->incluir($c207_sequencial);
       $erro_msg = $clconvdetalhaconcedentes->erro_msg;
@@ -48,6 +59,16 @@ if(isset($incluir)){
   }
 }else if(isset($alterar)){
   if($sqlerro==false){
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'");
+    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+
+    $dtcadastro   = date("Y-m-d",db_getsession("DB_datausu"));
+
+    if($dtcadastro < $z09_datacadastro){
+       $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+       $sqlerro = true;
+    }
+
     db_inicio_transacao();
     $clconvdetalhaconcedentes->alterar($c207_sequencial);
     $erro_msg = $clconvdetalhaconcedentes->erro_msg;
