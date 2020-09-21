@@ -111,13 +111,23 @@ $aTHs = array(
 
   'Desdobramento',
   'Empenhado no mês',
+  'Vlr. Emp. no mês a liquidar',
+  'Vlr. Emp. no mês em liquidação',
   'Empenhado até mês',
   'Liquidado no mês',
   'Liquidado até mês',
   'Saldo de empenhos',
+  'Saldo de Empenhos a liquidar',
+  'Saldo Empenho em liquidação',
   'Pago no mês',
   'Pago até mês',
-  'Saldo Líquido de Emp.'
+  'Saldo Líquido de Emp',
+  // 'Vlr. Emp. do mês',
+  // 'Vlr. anulado de Emp. do mês',
+  // 'Vlr. anulado de Emp. de outros meses',
+  // 'Vlr. Emp. no mês a liquidar (2)',
+  // 'Vlr. Liquidado de Emp. do mês',
+  // 'Vlr. Emp. a liquidar até mês'
 
 // Empenhado no mês
 // Empenhado até mês
@@ -159,6 +169,14 @@ $totgeralsaldoemp = 0;
 $totgeralpago = 0;
 $totgeralpagoa = 0;
 $totgeralsaldoliqemp = 0;
+$totgeralempdomes = 0;
+$totgeralestornadoempdomes = 0;
+$totgeralestornadooutrosmeses = 0;
+$totgeralempdomesliquidar = 0;
+$totgeralempdomesemliquidacao = 0;
+$totgeralliquidadoempdomes = 0;
+$totgeralempliquidara = 0;
+$totgeralempemliquidacaoa = 0;
 
 //Total Geral
 $totgeralempenhadogeral = 0;
@@ -169,6 +187,14 @@ $totgeralsaldoempgeral = 0;
 $totgeralpagogeral = 0;
 $totgeralpagoageral = 0;
 $totgeralsaldoliqempgeral = 0;
+$totgeralempdomesgeral = 0;
+$totgeralestornadoempdomesgeral = 0;
+$totgeralestornadooutrosmesesgeral = 0;
+$totgeralempdomesliquidargeral = 0;
+$totgeralempdomesemliquidacaogeral = 0;
+$totgeralliquidadoempdomesgeral = 0;
+$totgeralempliquidarageral = 0;
+$totgeralempemliquidacaoageral = 0;
 
 $quebra_unidade = 'N';
 $nivela = 1;
@@ -252,14 +278,22 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
 
 
   // dados da linha
-  $totgeralempenhado    = 0;
-  $totgeralempenhadoa   = 0;
-  $totgeralliquidado    = 0;
-  $totgeralliquidadoa   = 0;
-  $totgeralsaldoemp     = 0;
-  $totgeralpago         = 0;
-  $totgeralpagoa        = 0;
-  $totgeralsaldoliqemp  = 0;
+  $totgeralempenhado            = 0;
+  $totgeralempenhadoa           = 0;
+  $totgeralliquidado            = 0;
+  $totgeralliquidadoa           = 0;
+  $totgeralsaldoemp             = 0;
+  $totgeralpago                 = 0;
+  $totgeralpagoa                = 0;
+  $totgeralsaldoliqemp          = 0;
+  $totgeralempdomes             = 0;
+  $totgeralestornadoempdomes    = 0;
+  $totgeralestornadooutrosmeses = 0;
+  $totgeralempdomesliquidar     = 0;
+  $totgeralempdomesemliquidacao = 0;
+  $totgeralliquidadoempdomes    = 0;
+  $totgeralempliquidara         = 0;
+  $totgeralempemliquidacaoa     = 0;
 
 
   // desdobramentos
@@ -268,8 +302,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     /**
      * Despesas no mes
      */
-    $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
-
+    $resDepsMes = db_query($cldesdobramento->sql_liquidacao($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql_liquidacao($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
     $aDadosAgrupados = array();
 
     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsMes); $contDesp++) {
@@ -298,6 +331,18 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
         $oDespesas->pagamento_estornado = $oDadosMes->pagamento_estornado;
         $oDespesas->empenho_rpestornado = $oDadosMes->empenho_rpestornado;
         $oDespesas->empenho_rpestornadoa = 0;
+        $oDespesas->estornado_mes_origem = $oDadosMes->estornado_mes_origem;
+        $oDespesas->estornado_mes_diferente = $oDadosMes->estornado_mes_diferente;
+        $oDespesas->em_liquidacao_mes_origem = $oDadosMes->em_liquidacao_mes_origem;
+        $oDespesas->liquidado_mes_origem = $oDadosMes->liquidado_mes_origem;        
+        $oDespesas->liquidado_estornado_mes_origem = $oDadosMes->liquidado_estornado_mes_origem;
+        $oDespesas->liquidacao_mes_origem = $oDadosMes->liquidacao_mes_origem;
+        $oDespesas->estorno_em_liquidacao_mes_origem = $oDadosMes->estorno_em_liquidacao_mes_origem;
+        $oDespesas->estorno_liquidacao_mes_origem = $oDadosMes->estorno_liquidacao_mes_origem;        
+        $oDespesas->em_liquidacaoa = 0;
+        $oDespesas->liquidacaoa = 0;
+        $oDespesas->estorno_em_liquidacaoa = 0;
+        $oDespesas->estorno_liquidacaoa = 0;
         $aDadosAgrupados[$sHash] = $oDespesas;
 
       }
@@ -306,7 +351,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     /**
      * Despesas até o mes
      */
-    $resDepsAteMes = db_query($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
+    $resDepsAteMes = db_query($cldesdobramento->sql_em_liquidacao_ate_mes($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql_em_liquidacao_ate_mes($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
 
     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsAteMes); $contDesp++) {
       $oDadosAteMes = db_utils::fieldsMemory($resDepsAteMes, $contDesp);
@@ -321,7 +366,10 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
         $aDadosAgrupados[$sHash]->liquidado_estornadoa = $oDadosAteMes->liquidado_estornadoa;
         $aDadosAgrupados[$sHash]->pagamentoa = $oDadosAteMes->pagamentoa;
         $aDadosAgrupados[$sHash]->pagamento_estornadoa = $oDadosAteMes->pagamento_estornadoa;
-
+        $aDadosAgrupados[$sHash]->em_liquidacaoa = $oDadosAteMes->em_liquidacaoa;
+        $aDadosAgrupados[$sHash]->liquidacaoa = $oDadosAteMes->liquidacaoa;
+        $aDadosAgrupados[$sHash]->estorno_em_liquidacaoa = $oDadosAteMes->estorno_em_liquidacaoa;
+        $aDadosAgrupados[$sHash]->estorno_liquidacaoa = $oDadosAteMes->estorno_liquidacaoa;
       } else {
 
         $oDespesas = new stdClass();
@@ -343,6 +391,10 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
         $oDespesas->pagamento_estornadoa = $oDadosAteMes->pagamento_estornadoa;
         $oDespesas->empenho_rpestornado = $oDadosAteMes->empenho_rpestornado;
         $oDespesas->empenho_rpestornadoa = $oDadosAteMes->empenho_rpestornadoa;
+        $oDespesas->em_liquidacaoa = $oDadosAteMes->em_liquidacaoa;
+        $oDespesas->liquidacaoa = $oDadosAteMes->liquidacaoa;
+        $oDespesas->estorno_em_liquidacaoa = $oDadosAteMes->estorno_em_liquidacaoa;
+        $oDespesas->estorno_liquidacaoa = $oDadosAteMes->estorno_liquidacaoa;
         $aDadosAgrupados[$sHash] = $oDespesas;
 
       }
@@ -361,26 +413,57 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
       // recurso
       $aLinha[] = $sColunaRecurso;
 
+      $empenhadoNoMes         = ($objElementos->empenhado - $objElementos->empenhado_estornado - $objElementos->empenho_rpestornado);
+      $empenhadoAteMes        = ($objElementos->empenhadoa - $objElementos->empenhado_estornadoa - $objElementos->empenho_rpestornadoa);
+      $liquidadoNoMes         = ($objElementos->liquidado - $objElementos->liquidado_estornado);
+      $liquidadoAteMes        = ($objElementos->liquidadoa - $objElementos->liquidado_estornadoa);
+      $saldoEmpenho           = ($objElementos->empenhadoa - $objElementos->empenhado_estornadoa);
+      $pagoMes                = ($objElementos->pagamento - $objElementos->pagamento_estornado);
+      $pagoAteMes             = ($objElementos->pagamentoa - $objElementos->pagamento_estornadoa);
+      $empenhadoLiquidacaoa   = ($objElementos->em_liquidacaoa - $objElementos->liquidacaoa + $objElementos->estorno_liquidacaoa - $objElementos->estorno_em_liquidacaoa);
+      $empenhadoLiquidara     = ($empenhadoAteMes - $liquidadoAteMes - $empenhadoLiquidacaoa);
+      $empenhadoLiquidacao    = ($objElementos->em_liquidacao_mes_origem - $objElementos->liquidacao_mes_origem + $objElementos->estorno_liquidacao_mes_origem - $objElementos->estorno_em_liquidacao_mes_origem); 
+      $empenhadoLiquidadoMes  = ($objElementos->liquidado_mes_origem - $objElementos->liquidado_estornado_mes_origem);
+      $empenhadoLiquidar      = ($objElementos->empenhado - $objElementos->estornado_mes_origem - $empenhadoLiquidacao - $empenhadoLiquidadoMes);
+
       // informações
       $aLinha[] = substr($objElementos->o56_elemento." - ".$objElementos->o56_descr, 0, 40);
-      $aLinha[] = trim(db_formatar($objElementos->empenhado - $objElementos->empenhado_estornado - $objElementos->empenho_rpestornado, 'f'));
-      $aLinha[] = trim(db_formatar($objElementos->empenhadoa - $objElementos->empenhado_estornadoa - $objElementos->empenho_rpestornadoa, 'f'));
-      $aLinha[] = trim(db_formatar($objElementos->liquidado - $objElementos->liquidado_estornado, 'f'));
-      $aLinha[] = trim(db_formatar($objElementos->liquidadoa - $objElementos->liquidado_estornadoa, 'f'));
-      $aLinha[] = trim(db_formatar(($objElementos->empenhadoa - $objElementos->empenhado_estornadoa) - ($objElementos->liquidadoa - $objElementos->liquidado_estornadoa), 'f'));
-      $aLinha[] = trim(db_formatar($objElementos->pagamento - $objElementos->pagamento_estornado, 'f'));
-      $aLinha[] = trim(db_formatar($objElementos->pagamentoa - $objElementos->pagamento_estornadoa, 'f'));
-      $aLinha[] = trim(db_formatar(($objElementos->liquidadoa - $objElementos->liquidado_estornadoa) - ($objElementos->pagamentoa - $objElementos->pagamento_estornadoa), 'f'));
+      $aLinha[] = trim(db_formatar($empenhadoNoMes, 'f'));
+      $aLinha[] = trim(db_formatar($empenhadoNoMes, 'f'));
+      $aLinha[] = trim(db_formatar($empenhadoLiquidacao, 'f'));      
+      $aLinha[] = trim(db_formatar($empenhadoAteMes, 'f'));
+      $aLinha[] = trim(db_formatar($liquidadoNoMes, 'f'));
+      $aLinha[] = trim(db_formatar($liquidadoAteMes, 'f'));
+      $aLinha[] = trim(db_formatar($saldoEmpenho - $liquidadoAteMes, 'f'));
+      $aLinha[] = trim(db_formatar($saldoEmpenho - $liquidadoAteMes, 'f'));
+      $aLinha[] = trim(db_formatar($empenhadoLiquidacaoa, 'f'));   
+      $aLinha[] = trim(db_formatar($pagoMes, 'f'));
+      $aLinha[] = trim(db_formatar($pagoAteMes, 'f'));
+      $aLinha[] = trim(db_formatar($liquidadoAteMes - $pagoAteMes, 'f'));
+      // $aLinha[] = trim(db_formatar($objElementos->empenhado, 'f'));
+      // $aLinha[] = trim(db_formatar($objElementos->estornado_mes_origem, 'f'));
+      // $aLinha[] = trim(db_formatar($objElementos->estornado_mes_diferente, 'f'));
+      // $aLinha[] = trim(db_formatar($empenhadoLiquidar, 'f'));
+      // $aLinha[] = trim(db_formatar($empenhadoLiquidadoMes, 'f'));
+      // $aLinha[] = trim(db_formatar($empenhadoLiquidara, 'f'));  
 
       //Totalizadores
-      $totgeralempenhado    += $objElementos->empenhado - $objElementos->empenhado_estornado - $objElementos->empenho_rpestornado;
-      $totgeralempenhadoa   += $objElementos->empenhadoa - $objElementos->empenhado_estornadoa - $objElementos->empenho_rpestornadoa;
-      $totgeralliquidado    += $objElementos->liquidado - $objElementos->liquidado_estornado;
-      $totgeralliquidadoa   += $objElementos->liquidadoa - $objElementos->liquidado_estornadoa;
-      $totgeralsaldoemp     += (($objElementos->empenhadoa - $objElementos->empenhado_estornadoa) - ($objElementos->liquidadoa - $objElementos->liquidado_estornadoa));
-      $totgeralpago         += $objElementos->pagamento - $objElementos->pagamento_estornado;
-      $totgeralpagoa        += $objElementos->pagamentoa - $objElementos->pagamento_estornadoa;
-      $totgeralsaldoliqemp  += (($objElementos->liquidadoa - $objElementos->liquidado_estornadoa) - ($objElementos->pagamentoa - $objElementos->pagamento_estornadoa));
+      $totgeralempenhado              += $empenhadoNoMes;
+      $totgeralempenhadoa             += $empenhadoAteMes;
+      $totgeralliquidado              += $liquidadoNoMes;
+      $totgeralliquidadoa             += $liquidadoAteMes;
+      $totgeralsaldoemp               += ($saldoEmpenho - $liquidadoAteMes);
+      $totgeralpago                   += $pagoMes;
+      $totgeralpagoa                  += $pagoAteMes;
+      $totgeralsaldoliqemp            += ($liquidadoAteMes - $pagoAteMes);
+      $totgeralempdomes               += $objElementos->empenhado;
+      $totgeralestornadoempdomes      += $objElementos->estornado_mes_origem;
+      $totgeralestornadooutrosmeses   += $objElementos->estornado_mes_diferente;
+      $totgeralempdomesliquidar       += $empenhadoLiquidar;
+      $totgeralempdomesemliquidacao   += $empenhadoLiquidacao;
+      $totgeralliquidadoempdomes      += $empenhadoLiquidadoMes;
+      $totgeralempliquidara           += $empenhadoLiquidara;
+      $totgeralempemliquidacaoa       += $empenhadoLiquidacaoa;
 
       /////////////////////////////;
       fputs($fp, imprimeLinhaCSV($aLinha));
@@ -396,23 +479,41 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
   $aSubtotal[] = ''; // coluna do recurso
   $aSubtotal[] = 'SUBTOTAL ';
   $aSubtotal[] = trim(db_formatar($totgeralempenhado, 'f'));
+  $aSubtotal[] = trim(db_formatar($totgeralempenhado, 'f'));
+  $aSubtotal[] = trim(db_formatar($totgeralempdomesemliquidacao, 'f'));  
   $aSubtotal[] = trim(db_formatar($totgeralempenhadoa, 'f'));
   $aSubtotal[] = trim(db_formatar($totgeralliquidado, 'f'));
   $aSubtotal[] = trim(db_formatar($totgeralliquidadoa, 'f'));
   $aSubtotal[] = trim(db_formatar($totgeralsaldoemp, 'f'));
+  $aSubtotal[] = trim(db_formatar($totgeralsaldoemp, 'f'));
+  $aSubtotal[] = trim(db_formatar($totgeralempemliquidacaoa, 'f'));  
   $aSubtotal[] = trim(db_formatar($totgeralpago, 'f'));
   $aSubtotal[] = trim(db_formatar($totgeralpagoa, 'f'));
   $aSubtotal[] = trim(db_formatar($totgeralsaldoliqemp, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralempdomes, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralestornadoempdomes, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralestornadooutrosmeses, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralempdomesliquidar, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralliquidadoempdomes, 'f'));
+  // $aSubtotal[] = trim(db_formatar($totgeralempliquidara, 'f'));
 
   //Total Geral
-  $totgeralempenhadogeral   += $totgeralempenhado;
-  $totgeralempenhadoageral  += $totgeralempenhadoa;
-  $totgeralliquidadogeral   += $totgeralliquidado;
-  $totgeralliquidadoageral  += $totgeralliquidadoa;
-  $totgeralsaldoempgeral    += $totgeralsaldoemp;
-  $totgeralpagogeral        += $totgeralpago;
-  $totgeralpagoageral       += $totgeralpagoa;
-  $totgeralsaldoliqempgeral += $totgeralsaldoliqemp;
+  $totgeralempenhadogeral             += $totgeralempenhado;
+  $totgeralempenhadoageral            += $totgeralempenhadoa;
+  $totgeralliquidadogeral             += $totgeralliquidado;
+  $totgeralliquidadoageral            += $totgeralliquidadoa;
+  $totgeralsaldoempgeral              += $totgeralsaldoemp;
+  $totgeralpagogeral                  += $totgeralpago;
+  $totgeralpagoageral                 += $totgeralpagoa;
+  $totgeralsaldoliqempgeral           += $totgeralsaldoliqemp;
+  $totgeralempdomesgeral              += $totgeralempdomes;
+  $totgeralestornadoempdomesgeral     += $totgeralestornadoempdomes;
+  $totgeralestornadooutrosmesesgeral  += $totgeralestornadooutrosmeses;
+  $totgeralempdomesliquidargeral      += $totgeralempdomesliquidar;
+  $totgeralempdomesemliquidacaogeral  += $totgeralempdomesemliquidacao;
+  $totgeralliquidadoempdomesgeral     += $totgeralliquidadoempdomes;
+  $totgeralempliquidarageral          += $totgeralempliquidara;
+  $totgeralempemliquidacaoageral      += $totgeralempemliquidacaoa; 
 
   ////////////////////////////////;
   fputs($fp, imprimeLinhaCSV($aSubtotal));
@@ -427,13 +528,23 @@ fputs($fp, implode(';', array(
   '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
   'TOTAL GERAL',
   trim(db_formatar($totgeralempenhadogeral, 'f')),
+  trim(db_formatar($totgeralempenhadogeral, 'f')),
+  trim(db_formatar($totgeralempdomesemliquidacaogeral, 'f')),
   trim(db_formatar($totgeralempenhadoageral, 'f')),
   trim(db_formatar($totgeralliquidadogeral, 'f')),
   trim(db_formatar($totgeralliquidadoageral, 'f')),
   trim(db_formatar($totgeralsaldoempgeral, 'f')),
+  trim(db_formatar($totgeralsaldoempgeral, 'f')),
+  trim(db_formatar($totgeralempemliquidacaoageral, 'f')),
   trim(db_formatar($totgeralpagogeral, 'f')),
   trim(db_formatar($totgeralpagoageral, 'f')),
-  trim(db_formatar($totgeralsaldoliqempgeral, 'f'))
+  trim(db_formatar($totgeralsaldoliqempgeral, 'f')),
+  // trim(db_formatar($totgeralempdomesgeral, 'f')),
+  // trim(db_formatar($totgeralestornadoempdomesgeral, 'f')),
+  // trim(db_formatar($totgeralestornadooutrosmesesgeral, 'f')),
+  // trim(db_formatar($totgeralempdomesliquidargeral, 'f')),
+  // trim(db_formatar($totgeralliquidadoempdomesgeral, 'f')),
+  // trim(db_formatar($totgeralempliquidarageral, 'f'))   
 )));
 ////////////////////////////////;
 
