@@ -223,6 +223,11 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
             }
 
+			if($enviada == 'true'){
+				$dbwhere .= " (case when l20_naturezaobjeto = 1 and l20_cadinicial in (1, 2) then false
+                                      else true end) AND ";
+            }
+
 			if(!isset($pesquisa_chave)){
 
                 if(isset($campos)==false){
@@ -386,7 +391,6 @@ $sWhereContratos = " and 1 = 1 ";
                 }
                 $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
-
 
             } else {
 
