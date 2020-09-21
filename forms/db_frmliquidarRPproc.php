@@ -520,7 +520,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
                         var nValorItem = new Number($F('vlrtot' + value));
                         var nQtdItem   = new Number($F('qtdesol' + value));
                         nTotalItens   += nValorItem;
-                        sJsonItens    += sVirg+"{'iCodItem':" + value + ",'nVlrTotal':" + nValorItem + ",'nQtde':"+nQtdItem+"}";
+                        sJsonItens    += sVirg+"{'iCodItem':" + value + ",'vlrtot':" + nValorItem + ",'quantidade':"+nQtdItem+"}";
                         sVirg = ',';
                     }
                 }

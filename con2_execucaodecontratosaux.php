@@ -48,7 +48,7 @@ class ExecucaoDeContratos{
         $oPdf->ln();
 
         // 4ª linha
-        $oPdf->cell(90,$iAlt,'Virgência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal(),0);
+        $oPdf->cell(90,$iAlt,'Vigência Atual: '. $oAcordo->getDataInicial().' a '. $oAcordo->getDataFinal(),0);
         $oPdf->Cell(50 ,$iAlt,'Valor do Contrato Original: R$ '.number_format($oAcordo->getValorContrato(),2,',','.'));
         $oPdf->Ln();
 
@@ -100,16 +100,17 @@ class ExecucaoDeContratos{
             $oPdf->Ln();
         }
 
-        $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
+        $oPdf->Cell(13 ,$iAlt,'Cód. Item',1,0,'C',1);
         $oPdf->Cell(83,$iAlt,'Descrição Item',1,0,'C',1);
-        $oPdf->Cell(25,$iAlt,'Qt. Contratada',1,0,'C',1);
+        $oPdf->Cell(20,$iAlt,'Qt. Contratada',1,0,'C',1);
         $oPdf->Cell(18 ,$iAlt,'Valor. Unit.',1,0,'C',1);
         $oPdf->Cell(25 ,$iAlt,'Qt. Empenhada',1,0,'C',1);
         $oPdf->Cell(20 ,$iAlt,'Qt. Anulada',1,0,'C',1);
         $oPdf->Cell(20 ,$iAlt,'Qtd. em OC',1,0,'C',1);
-        $oPdf->Cell(21 ,$iAlt,'Valor em OC',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Valor em OC',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Qtd. a gerar OC',1,0,'C',1);
         $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
-        $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
+        $oPdf->Cell(15 ,$iAlt,'A empenhar',1,0,'C',1);
         $oPdf->Ln();
 
     }
@@ -159,16 +160,17 @@ class ExecucaoDeContratos{
         $oPdf->Cell(50 ,$iAlt,"Total do Empenho: R$ ".number_format($sTotalEmp,2,',','.'),0,0,'L',0);
         $oPdf->Ln();
 
-        $oPdf->Cell(18 ,$iAlt,'Cód. Item',1,0,'C',1);
-        $oPdf->Cell(83 ,$iAlt,'Descrição Item',1,0,'C',1);
-        $oPdf->Cell(25 ,$iAlt,'Qt. Contratada',1,0,'C',1);
+        $oPdf->Cell(13 ,$iAlt,'Cód. Item',1,0,'C',1);
+        $oPdf->Cell(83,$iAlt,'Descrição Item',1,0,'C',1);
+        $oPdf->Cell(20,$iAlt,'Qt. Contratada',1,0,'C',1);
         $oPdf->Cell(18 ,$iAlt,'Valor. Unit.',1,0,'C',1);
         $oPdf->Cell(25 ,$iAlt,'Qt. Empenhada',1,0,'C',1);
         $oPdf->Cell(20 ,$iAlt,'Qt. Anulada',1,0,'C',1);
         $oPdf->Cell(20 ,$iAlt,'Qtd. em OC',1,0,'C',1);
-        $oPdf->Cell(21 ,$iAlt,'Valor em OC',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Valor em OC',1,0,'C',1);
+        $oPdf->Cell(20 ,$iAlt,'Qtd. a gerar OC',1,0,'C',1);
         $oPdf->Cell(26 ,$iAlt,'Valor a gerar OC',1,0,'C',1);
-        $oPdf->Cell(22 ,$iAlt,'A empenhar',1,0,'C',1);
+        $oPdf->Cell(15 ,$iAlt,'A empenhar',1,0,'C',1);
         $oPdf->Ln();
     }
 

@@ -70,6 +70,14 @@ if (isset($incluir)) {
   $oDataManutencao = new DBDate($ve62_dtmanut);
   $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
   $dataManutencao = $oDataManutencao->getDate();
+  $retirada = $ve65_veicretirada;
+
+    if($retirada == "" || $retirada == null){
+        db_msgbox("Campo: Retirada não informado");
+        $sqlerro=true;
+        $erro_msg="Não foi possível incluir.";
+    }
+
     /*
      * verifica retirada e devolução vinculados a manutencão
      */
@@ -134,7 +142,7 @@ if (isset($incluir)) {
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     } else if (!empty($ve62_medida1) && $medida < $ve62_medida1) {
-      var_dump($ve62_medida1); exit;
+
       db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
@@ -167,16 +175,6 @@ if (isset($incluir)) {
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
     }
-//    /**
-//     * Verificar Encerramento Periodo Contabil
-//     */
-//    if (!empty($ve62_dtmanut)) {
-//      $clcondataconf = new cl_condataconf;
-//      if (!$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
-//        $sqlerro  = true;
-//        $erro_msg=$clcondataconf->erro_msg;
-//      }
-//    }
 
     /**
      * Verificar Encerramento Periodo Patrimonial

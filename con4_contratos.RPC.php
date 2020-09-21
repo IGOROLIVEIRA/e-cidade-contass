@@ -573,6 +573,19 @@ switch($oParam->exec) {
             $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
           }
 
+          $oLicitacao = db_utils::getDao('liclicita');
+          $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
+          $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
+
+          $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = '.$oParam->contrato->iGrupo);
+          $iNaturezaAcordo = db_utils::fieldsMemory($rsSql, 0)->ac02_acordonatureza;
+
+          if(in_array($oParam->contrato->iTipoOrigem, array(2, 3))){
+			  if($iNatureza != $iNaturezaAcordo){
+		  	      throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
+			  }
+		  }
+
       if ($lAcordoValido) {
 
         $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
@@ -594,7 +607,15 @@ switch($oParam->exec) {
         $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
         $oContrato = new Acordo($oParam->contrato->iCodigo);
         $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
-        $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+
+        if(!$oParam->contrato->dtAssinatura && $oParam->contrato->iCodigo){
+        	$sSql = 'SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oParam->contrato->iCodigo;
+        	$rsSql = db_query($sSql);
+        	$dataAssinatura = db_utils::fieldsMemory($rsSql, 0)->ac16_dataassinatura;
+        	$oContrato->setDataAssinatura($dataAssinatura ? $dataAssinatura : '');
+		}else{
+        	$oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+		}
         $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
         $oContrato->setDataInicial($oParam->contrato->dtInicio);
         $oContrato->setDataFinal($oParam->contrato->dtTermino);

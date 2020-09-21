@@ -45,6 +45,7 @@ require_once("model/AcordoRescisao.model.php");
 require_once("model/AcordoAnulacao.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoItem.model.php");
+require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
 require_once("std/DBDate.php");
@@ -159,6 +160,20 @@ switch($oParam->exec) {
 
       try {
 
+          $clAcordoItem = new cl_acordoitem;
+          $sSqlSomaItens = $clAcordoItem->sql_query('', 'sum(ac20_valortotal) as soma', '', 'ac16_sequencial = '.$oParam->acordo);
+          $rsSomaItens = $clAcordoItem->sql_record($sSqlSomaItens);
+          $iSoma = db_utils::fieldsMemory($rsSomaItens, 0)->soma;
+
+          $clAcordo = new cl_acordo;
+          $sSqlAcordo = $clAcordo->sql_query('', 'ac16_valor', '', 'ac16_sequencial = '.$oParam->acordo);
+          $rsAcordo   = $clAcordo->sql_record($sSqlAcordo);
+          $iTotalAcordo = db_utils::fieldsMemory($rsAcordo, 0)->ac16_valor;
+
+          if(floatval($iSoma) != floatval($iTotalAcordo)){
+              throw new Exception("Gentileza conferir o valor total do contrato!");
+          }
+
         $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
         $oDataPublicacao = new DBDate($oParam->dtpublicacao);
 
@@ -173,6 +188,19 @@ switch($oParam->exec) {
 
         if (!$oAssinatura->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
+        }
+
+          if($oAcordo->getNaturezaAcordo($oParam->acordo) == "1"){
+              if($oAcordo->getObras($oParam->acordo) == null){
+                $iLicitacao = $oAcordo->getLicitacao();
+                $oLicitacao = new licitacao($iLicitacao);
+                $iAnousu     = $oLicitacao->getAno();
+                $iModalidade = $oLicitacao->getNumeroLicitacao();
+                $iProcesso   = $oLicitacao->getEdital();
+                $oModalidade = $oLicitacao->getModalidade();
+                $sDescricaoMod = $oModalidade->getDescricao();
+                throw new Exception("Contrato de Natureza OBRAS E SERVIÇOS DE ENGENHARIA, sem Obra informada. Solicitar cadastro no módulo Obras para o processo Nº $iProcesso/$iAnousu $sDescricaoMod Nº $iModalidade/$iAnousu");
+            }
         }
 
         if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {

@@ -87,6 +87,8 @@ class cl_iframe_seleciona {
    // Opcao para mostrar total de registro da consulta
    var $posicao_totalizador = "A";
    // Onde vai ficar o totalizador - A - Acima e B - Abaixo
+   var $aligntdtext = "left";
+   // Alinhamento do texto da td
    function iframe_seleciona($db_opcao){
          $arquivo = tempnam ("/tmp", "iframe");
          $arquivo.=".php";
@@ -2107,7 +2109,7 @@ class cl_formulario_rel_pes {
     global $$Tncampo, $$Incampo, $$Lncampo, $$Idcampo;
     echo "
           <tr>
-            <td align='left' nowrap title='".$$Tncampo."' >
+            <td align=\"".$this->aligntdtext."\" nowrap title='".$$Tncampo."' >
          ";
          db_ancora(@$$Lncampo, "js_geraform_pesquisa".$tabela."(true,1);", 1);
     echo "
@@ -2130,7 +2132,7 @@ class cl_formulario_rel_pes {
     global $$Tncampo, $$Incampo, $$Lncampo;
     echo "
           <tr>
-            <td align='left' nowrap title='".$campo4."' ><b>
+            <td align=\"".$this->aligntdtext."\" nowrap title='".$campo4."' ><b>
          ";
          db_ancora($campo4, "js_geraform_pesquisa".$tabela."(true,1);", 1);
     echo "
@@ -2161,7 +2163,7 @@ class cl_formulario_rel_pes {
     if(count($arraydados) > 1){
       echo "
             <tr>
-              <td align='left' nowrap title='".$titleimp."' >
+              <td align=\"".$this->aligntdtext."\" nowrap title='".$titleimp."' >
                 <strong>".$labelimp."</strong>
               </td>
               <td align='left'>

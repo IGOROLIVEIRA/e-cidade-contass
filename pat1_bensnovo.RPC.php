@@ -46,6 +46,7 @@ db_app::import("Dotacao");
 db_app::import("patrimonio.*");
 db_app::import("configuracao.Instituicao");
 db_app::import("CgmFactory");
+db_app::import("Bem");
 
 db_app::import("contabilidade.*");
 db_app::import('contabilidade.planoconta.ContaPlano');
@@ -377,7 +378,6 @@ switch ($oParam->exec){
       $oBem->setObservacao( addslashes(db_stdClass::normalizeStringJson($oParam->obser)));
       $oBem->setInstituicao(db_getsession("DB_instit"));
       $oBem->setCodigoItemNota($oParam->iCodigoItemNota);
-
       $oBem->salvar();
       db_fim_transacao(false);
       $oRetorno->dados->t52_bem = $oBem->getCodigoBem();
@@ -543,6 +543,119 @@ switch ($oParam->exec){
     }
 
     break;
+
+    case 'adicionarFoto':
+        try{
+            if(isset($oParam->iLote) && $oParam->iLote != ''){
+                $oDaoBemLote  = db_utils::getDao('benslote');
+                $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.$oParam->iLote);
+                $rsBemLote = $oDaoBemLote->sql_record($sql);
+
+                if($oDaoBemLote->numrows > 0){
+                    for($cont=0;$cont<$oDaoBemLote->numrows;$cont++){
+                        $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
+                        $oBem = new Bem($codigoBem);
+                        db_inicio_transacao();
+                        $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
+                        db_fim_transacao(false);
+                    }
+                    unlink($oParam->arquivo);
+                  $oRetorno->status = 1;
+                }
+
+            }elseif (isset($oParam->iPlaca) && $oParam->iPlaca != ''){
+              $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
+              $rsBemPlaca = db_query($sql);
+              $oDaoBemLote  = db_utils::getDao('benslote');
+              $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
+              $rsBemLote = $oDaoBemLote->sql_record($sql);
+
+              if(pg_num_rows($rsBemLote) > 0){
+                for($cont=0;$cont<pg_num_rows($rsBemLote);$cont++){
+                  $codigoBem = db_utils::fieldsMemory($rsBemLote, $cont)->t52_bem;
+                  $oBem = new Bem($codigoBem);
+                  db_inicio_transacao();
+                  $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
+                  db_fim_transacao(false);
+                }
+                unlink($oParam->arquivo);
+                $oRetorno->status = 1;
+              }
+            }
+            else{
+                $oBem = new Bem($oParam->iBem);
+                db_inicio_transacao();
+                $oBem->adicionarFoto($oParam->arquivo, $oParam->principal, $oParam->ativa);
+                $oRetorno->status = 1;
+                unlink($oParam->arquivo);
+                db_fim_transacao(false);
+            }
+        }catch (Exception $eErro){
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+
+        break;
+
+    case 'getFotos':
+        if(isset($oParam->iBem) && $oParam->iBem ){
+          $codigoBem = $oParam->iBem;
+        }
+        elseif(isset($oParam->iLote) && $oParam->iLote){
+          $oDaoBemLote  = db_utils::getDao('benslote');
+          $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.$oParam->iLote);
+          $rsBemLote = $oDaoBemLote->sql_record($sql);
+          $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
+        }else{
+          $sql = 'select t43_codlote from bensplaca join benslote on t43_bem = t41_bem where t41_placaseq = '.$oParam->iPlaca;
+          $rsBemPlaca = db_query($sql);
+          $oDaoBemLote  = db_utils::getDao('benslote');
+          $sql = $oDaoBemLote->sql_query('', 't52_bem', 't52_bem','t43_codlote = '.db_utils::fieldsMemory($rsBemPlaca, 0)->t43_codlote);
+          $rsBemLote = $oDaoBemLote->sql_record($sql);
+          $codigoBem = db_utils::fieldsMemory($rsBemLote, 0)->t52_bem;
+        }
+
+        $oBem   = new Bem($codigoBem);
+        $aFotos = $oBem->getFotos();
+        $oRetorno->itens = $aFotos;
+
+        break;
+
+    case 'excluirFoto':
+
+        $oBem = new Bem($oParam->iBem);
+        try {
+
+            db_inicio_transacao();
+            $oBem->excluirFoto($oParam->iFoto);
+            $oRetorno->status = 1;
+
+            db_fim_transacao(false);
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break ;
+
+    case 'alterarFoto':
+
+        $oBem = new Bem($oParam->iBem);
+        try {
+
+            db_inicio_transacao();
+            $oBem->alterarFoto($oParam->iFoto, $oParam->lPrincipal, $oParam->lAtiva);
+            $oRetorno->status = 1;
+            db_fim_transacao(false);
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break ;
 }
 
 /**

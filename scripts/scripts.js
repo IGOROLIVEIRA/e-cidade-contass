@@ -3021,7 +3021,7 @@ function js_divCarregando(mensagem,id, lBloqueia){
                      +'        '+mensagem+''
                      +'      </td> '
                      +'      <td > '
-                     +'        <img src="imagens/files/loading.gif" /> '
+                     +'        <img src="imagens/files/loading.gif" height="25" width="25"/> '
                      +'      </td> '
                      +'    </tr> '
                      +' </table> ';

@@ -2584,7 +2584,7 @@ function gerfres($opcao_geral=null,$opcao_tipo=1){
   // globais de outras funcoes
 
   global $quais_diversos,$tot_prov, $tot_desc,$carregarubricas_geral;
-  global $anousu, $mesusu, $DB_instit;
+  global $anousu, $mesusu, $DB_instit, $db_debug;
 
   global $campos_pessoal, $r110_regisi, $subpes,$chamada_geral,$chamada_geral_arquivo,$pessoal,$Ipessoal,$transacao,$cfpess;
 
@@ -2806,7 +2806,35 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
    $r110_regist = $pontofr[0]["r19_regist"];
    $r110_lotac  = $pontofr[0]["r19_lotac"];
 
+   $total_rubrica6000 = 0;
+   $dias_avos = 0;
+   $matriz_rubrica6000 = array();
+   $arrValoresAviso = array();
    for($Ipontofr=0;$Ipontofr< count($pontofr) ;$Ipontofr++){
+
+      if (in_array($pontofr[$Ipontofr]["r19_rubric"], array($cfpess[0]["r11_avisoprevio13"],
+                                                            $cfpess[0]["r11_avisoprevioferias"],
+                                                            $cfpess[0]["r11_avisoprevio13ferias"]))) {
+        $dias_avos = $pontofr[$Ipontofr]["r19_quant"];
+        switch ($pontofr[$Ipontofr]["r19_rubric"]) {
+          case $cfpess[0]["r11_avisoprevio13"]:
+            $arrValoresAviso["r11_avisoprevio13"]["r19_valor"] = $pontofr[$Ipontofr]["r19_valor"];
+            $arrValoresAviso["r11_avisoprevio13"]["r19_quant"] = $pontofr[$Ipontofr]["r19_quant"];
+            break;
+          case $cfpess[0]["r11_avisoprevioferias"]:
+            $arrValoresAviso["r11_avisoprevioferias"]["r19_valor"] = $pontofr[$Ipontofr]["r19_valor"];
+            $arrValoresAviso["r11_avisoprevioferias"]["r19_quant"] = $pontofr[$Ipontofr]["r19_quant"];
+            break;
+          case $cfpess[0]["r11_avisoprevio13ferias"]:
+            $arrValoresAviso["r11_avisoprevio13ferias"]["r19_valor"] = $pontofr[$Ipontofr]["r19_valor"];
+            $arrValoresAviso["r11_avisoprevio13ferias"]["r19_quant"] = $pontofr[$Ipontofr]["r90_quant"];
+            break;
+          
+          default:
+            break;
+        }
+        continue;
+      }
 
       $r20_quant   = $pontofr[$Ipontofr]["r19_quant"];
       $r20_form    = $pontofr[$Ipontofr]["r19_rubric"];
@@ -2822,7 +2850,11 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
       $r07_form = calc_rubrica($pontofr[$Ipontofr]["r19_rubric"],"pontofr","r19","r20",$recno_110,false);
 
       if( db_empty($r07_form) || (!db_empty($r07_form) && !db_empty($pontofr[$Ipontofr]["r19_valor"]))){
-         $r20_valor = $pontofr[$Ipontofr]["r19_valor"];
+         if (intval($pontofr[$Ipontofr]["r19_rubric"]) > 6000) {
+           $r20_valor = $pontofr[$Ipontofr]["r19_valor"]/30*$pontofr[$Ipontofr]["r19_quant"];
+         } else {
+           $r20_valor = $pontofr[$Ipontofr]["r19_valor"];
+         }
       }else{
          $cod_erro  = 0;
          $r01_form = '$r07_form  = '.$r07_form.";";
@@ -2887,6 +2919,15 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
 
          db_insert( $chamada_geral_arquivo,$matriz1, $matriz2 );
 
+      }
+
+      if (intval($pontofr[$Ipontofr]["r19_rubric"]) > 6000) {
+        if (!empty($r07_form)) {
+          $total_rubrica6000 += $r07_form;
+        } else {
+          $total_rubrica6000 += $pontofr[$Ipontofr]["r19_valor"]/30;
+        }
+        $matriz_rubrica6000 = $matriz2;
       }
    }
 
@@ -2956,6 +2997,11 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
       }
    }
 //echo "<BR> 22230 passou aqui !!!";
+   if($total_rubrica6000 > 0) {
+     $matriz_rubrica6000[4] = round(($total_rubrica6000*$dias_avos),2);
+     $matriz_rubrica6000[5] = $dias_avos;
+     insertRubricasEspeciaisAviso($matriz1, $matriz_rubrica6000, $cfpess, $arrValoresAviso);
+   }
  }
 //echo "<BR> 22231 passou aqui !!!";
 
@@ -5502,7 +5548,7 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
         if ($db_debug == true) { echo "[gerfsal] Inicio --> Grava no Gerfsal o arredondamento do mes anterior<br>"; }
 
-        if (!db_empty($pessoal[$Ipessoal]["r01_arredn"])) {
+        if (!db_empty($pessoal[$Ipessoal]["r01_arredn"]) && round($pessoal[$Ipessoal]["r01_arredn"], 2) > 0) {
           $tot_desc += $pessoal[$Ipessoal]["r01_arredn"];
           if ($db_debug == true) { echo "[gerfsal] 16 - tot_desc: $tot_desc<br>"; }
           $gerou_rubrica_calculo = true;
@@ -10575,7 +10621,7 @@ function calcula_r928 ($r110_regist,$r110_lotac,$opcao_geral){
       $tot_liq += $arredn;
       if ($db_debug == true) { echo "[calcula_r928] Total Liquido: $tot_liq<br>"; }
      }else{
-      $arredn = $tot_desc - $tot_prov;
+      $arredn = round($tot_desc - $tot_prov, 2);
       $r01_rubric = "R928";
      }
      if ($db_debug == true) { echo "[calcula_r928] diferença entre provento e desconto".$arredn."<br>"; }
@@ -14312,5 +14358,35 @@ function arredondarValor($valor) {
   return $valor;
 }
 
+function insertRubricasEspeciaisAviso($matriz1, $matriz2, $cfpess, $arrValoresAviso) {
+  
+  if (!empty($cfpess[0]["r11_avisoprevio13"]) || !empty($cfpess[0]["r11_avisoprevioferias"]) || !empty($cfpess[0]["r11_avisoprevio13ferias"])) {
+    $matriz_especifica = $matriz2;
+    $matriz_especifica[2] = $cfpess[0]["r11_avisoprevio13"];
+    if (!empty($arrValoresAviso["r11_avisoprevio13"]) && $arrValoresAviso["r11_avisoprevio13"]["r19_valor"] > 0) {
+      $matriz_especifica[4] = round($arrValoresAviso["r11_avisoprevio13"]["r19_valor"],2);
+      $matriz_especifica[5] = round($arrValoresAviso["r11_avisoprevio13"]["r19_quant"],2);
+    }
+    db_insert( "gerfres",$matriz1, $matriz_especifica );
 
+    $matriz_especifica = $matriz2;
+    $matriz_especifica[2] = $cfpess[0]["r11_avisoprevioferias"];
+    if (!empty($arrValoresAviso["r11_avisoprevioferias"]) && $arrValoresAviso["r11_avisoprevioferias"]["r19_valor"] > 0) {
+      $matriz_especifica[4] = round($arrValoresAviso["r11_avisoprevioferias"]["r19_valor"],2);
+      $matriz_especifica[5] = round($arrValoresAviso["r11_avisoprevioferias"]["r19_quant"],2);
+    }
+    db_insert( "gerfres",$matriz1, $matriz_especifica );
+    
+    $matriz_especifica = $matriz2;
+    $matriz_especifica[2] = $cfpess[0]["r11_avisoprevio13ferias"];
+    $matriz_especifica[4] = round(($matriz_especifica[4]/3),2);
+    $matriz_especifica[5] = 1;
+    if (!empty($arrValoresAviso["r11_avisoprevio13ferias"]) && $arrValoresAviso["r11_avisoprevio13ferias"]["r19_valor"] > 0) {
+      $matriz_especifica[4] = round($arrValoresAviso["r11_avisoprevio13ferias"]["r19_valor"],2);
+      $matriz_especifica[5] = round($arrValoresAviso["r11_avisoprevio13ferias"]["r19_quant"],2);
+    }
+    db_insert( "gerfres",$matriz1, $matriz_especifica );
+  }
+
+}
 ?>

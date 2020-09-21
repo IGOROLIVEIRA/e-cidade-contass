@@ -546,7 +546,7 @@ class cl_empempitem {
      return $result;
    }
    // funcao do sql
-   function sql_query ( $e62_numemp=null,$e62_sequen=null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query ( $e62_numemp=null,$e62_sequen=null,$campos="*",$ordem=null,$dbwhere="",$joinmatordem=false){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -570,6 +570,11 @@ class cl_empempitem {
      $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
      $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
      $sql .= "      left  join concarpeculiar  on  concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar";
+
+     if($joinmatordem){
+     	$sql .= ' LEFT JOIN matordemitem ON m52_numemp = e62_numemp AND m52_sequen = e62_sequen ';
+	 }
+
      $sql2 = "";
      if($dbwhere==""){
        if($e62_numemp!=null ){

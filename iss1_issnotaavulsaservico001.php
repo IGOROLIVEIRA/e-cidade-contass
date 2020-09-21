@@ -68,19 +68,6 @@ $emitenota              = true;
 $rsPar                  = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
 $oPar                   = db_utils::fieldsMemory($rsPar,0);
 
-/**
- * Em Pmpirapora o tipo de débito para a nota avulsa tem que ser diferente do da NFSe devido à taxa de expediente.
- * @todo criar um parametro para guardar o tipo de debito para nota avulsa.
- */
-$oInstit = new Instituicao(db_getsession('DB_instit'));
-switch ($oInstit->getCodigoCliente()){
-    case Instituicao::COD_CLI_PMPIRAPORA:
-        $oPar->q60_tipo = 61;
-        break;
-    case Instituicao::COD_CLI_PMLUISLANDIA:
-        $oPar->q60_tipo = 38;
-        break;
-}
 if(isset($post->alterar) || isset($post->excluir) || isset($post->incluir)){
   $sqlerro = false;
   /*
@@ -196,7 +183,7 @@ if (isset($post->recibo)) {
             $clarrecad->k00_numcgm = $oNot->q02_numcgm;
             $clarrecad->k00_valor = str_replace(",", ".", str_replace(".", "", $post->vlrrectotal));
             $clarrecad->k00_receit = $oPar->q60_receit;
-            $clarrecad->k00_tipo = $oPar->q60_tipo;
+            $clarrecad->k00_tipo = $oPar->q60_tipo_notaavulsa;
             $clarrecad->k00_dtoper = $oNot->q51_dtemiss;
             $clarrecad->k00_dtvenc = $dataPagto;
             $clarrecad->k00_numtot = 1;
@@ -277,9 +264,9 @@ if (isset($post->recibo)) {
                 $obs .= "Valor serviço: R$ " . trim(db_formatar($oObs->tvlrtotal, "f")) . "\n";
                 session_register("DB_obsrecibo", $obs);
                 db_putsession("DB_obsrecibo", $obs);
-                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNum->k03_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNot->q02_inscr;
-                $url .= "&numcgm=" . $oNot->q02_numcgm . "&emrec=t&CHECK10=" . $oNum->k03_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
-                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNot->q02_numcgm;
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNum->k03_numpre . "&tipo=" . $oPar->q60_tipo_notaavulsa . "&ver_inscr=" . $oNot->q02_inscr;
+                $url .= "&numcgm=" . $oNot->q02_numcgm . "&emrec=t&CHECK10=" . $oNum->k03_numpre . "P1&tipo_debito=" . $oPar->q60_tipo_notaavulsa;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo_notaavulsa . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNot->q02_numcgm;
                 $url .= "&totregistros=1&k03_numnov=" . $oNumnov->k03_numnov . "&loteador=";
                 echo "<script>\n";
 
