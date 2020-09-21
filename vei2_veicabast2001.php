@@ -96,6 +96,7 @@ function js_emite(){
 
   query += "&idCentral="+obj.idCentral.value;
   query += "&situacao="+obj.situacao.value;
+  query += "&exibir_cupom="+obj.cupom.value;
 
   var jan = window.open('vei2_veicabast2002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -209,6 +210,8 @@ function js_mostraveiccadcomb1(chave1,chave2){
   </tr>
 </table>
 
+<fieldset>
+    <legend>Abastecimento</legend>
   <table  align="center" border="0">
     <form name="form1" method="post" action="">
       <tr>
@@ -226,7 +229,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
          </td>
       </tr>
       <tr>
-      	<td align="right"><b>Central de Veículo:</b></td>
+      	<td align="right"><b>Central:</b></td>
       	<td>
       		<?php 
       			$rsQueryCentral = pg_query($clveiccadcentral->sql_query(null," ve36_sequencial as id,descrdepto as depto",null,""));
@@ -304,7 +307,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
          </td>
       </tr>
       <tr>
-         <td nowrap align="right" title="Situação"><b>Situação do Abastecimento:</b></td>
+         <td nowrap align="right" title="Situação"><b>Situação:</b></td>
          <td>
          <?
             $y = array("0"=>"Todos os abastecimentos","1"=>"Somente Ativos", "2"=>"Somente Anulados");
@@ -312,6 +315,15 @@ function js_mostraveiccadcomb1(chave1,chave2){
          ?>
          </td>
       </tr>
+        <tr>
+            <td nowrap align="right" title="Exibir Cupom"><b>Exibir Cupom:</b></td>
+            <td>
+				<?
+				$cupom = array("0" => "Não", "1" => "Sim");
+				db_select("cupom", $cupom, true, 4);
+				?>
+            </td>
+        </tr>
       <tr>
         <td height="50" colspan="2" align = "center"> 
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
@@ -319,6 +331,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
       </tr>
   </form>
     </table>
+</fieldset>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
