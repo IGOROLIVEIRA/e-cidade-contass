@@ -101,7 +101,7 @@ function js_limpa(){
            $campos = "orcfontes.*";
            }
         }
-        $campos .= ", fc_conplano_grupo(o57_anousu,substring(o57_fonte,1,1)||'%','9000') as deducao, o70_codigo, o15_descr";
+        $campos .= ", fc_conplano_grupo(o57_anousu,substring(o57_fonte,1,1)||'%','9000') as deducao, c61_codigo, o15_descr";
         if(isset($chave_o57_codfon) && (trim($chave_o57_codfon)!="") ){
 	         $sql = $clorcfontes->sql_query_previsao(null,null,$campos,"o57_codfon",$dbwhere." and o57_codfon = $chave_o57_codfon");
 
