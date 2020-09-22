@@ -33,7 +33,6 @@ require_once("libs/JSON.php");
 require_once("libs/db_usuariosonline.php");
 require_once("libs/db_utils.php");
 require_once("classes/db_empautitem_classe.php");
-require_once("classes/db_liclicitem_classe.php");
 require_once("classes/db_pcmater_classe.php");
 require_once("classes/db_pcmaterele_classe.php");
 require_once("classes/db_orcparametro_classe.php");
@@ -48,7 +47,6 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //solicitemunid
 $clsolicitemunid     = new cl_solicitemunid;
 $clmatunid           = new cl_matunid;
-$clliclicitem        = new cl_liclicitem;
 
 $clempautitem = new cl_empautitem;
 $clpcmater = new cl_pcmater;
