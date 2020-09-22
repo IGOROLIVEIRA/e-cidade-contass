@@ -77,6 +77,30 @@ if(isset($incluir)){
     }
     //FIM OC 7037
 
+    if($sqlerro==false){
+
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l31_numcgm}");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+
+        if($dtsession < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
+
+        /**
+         * controle de encerramento peri. Patrimonial
+         */
+        $clcondataconf = new cl_condataconf;
+        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+        db_fieldsmemory($resultControle,0);
+
+        if($dtsession <= $c99_datapat){
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+            $sqlerro = true;
+        }
+    }
+
 	if($sqlerro==false){
         db_inicio_transacao();
         $clliccomissaocgm->l31_licitacao = $l31_licitacao;
