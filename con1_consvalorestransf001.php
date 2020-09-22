@@ -45,11 +45,34 @@ if(isset($incluir)){echo $c201_sequencial;
 }else if(isset($excluir)){
   if($sqlerro==false){
     db_inicio_transacao();
-    $clconsvalorestransf->excluir($c201_sequencial);
-    $erro_msg = $clconsvalorestransf->erro_msg;
-    if($clconsvalorestransf->erro_status==0){
-      $sqlerro=true;
+
+    require_once("classes/db_consexecucaoorc_classe.php");
+    $iAnoUsu            = db_getsession('DB_anousu');
+    $clconsexecucaoorc  = new cl_consexecucaoorc;
+    $sSqlWhere          = " c202_consconsorcios = {$c201_consconsorcios} 
+                            and c202_mescompetencia = {$c201_mescompetencia} 
+                            and c202_anousu = {$iAnoUsu} 
+                            and (c202_valorempenhado <> 0
+                                or c202_valorempenhadoanu <> 0
+                                or c202_valorliquidado <> 0
+                                or c202_valorliquidadoanu <> 0
+                                or c202_valorpago <> 0
+                                or c202_valorpagoanu <> 0)";
+    $sSqlExecOrc        = $clconsexecucaoorc->sql_query_file(null, "*", null, $sSqlWhere);
+    $rsResult           = db_query($sSqlExecOrc);
+
+    if (pg_num_rows($rsResult) > 0) {
+        $erro_msg = "Há informações salvas na aba execução orçamentária referentes ao mês em questão. \n\nSerá necessário primeiro excluir as informações da aba execução orçamentária.";
+        $sqlerro=true;
+    } else {
+        
+        $clconsvalorestransf->excluir($c201_sequencial);
+        $erro_msg = $clconsvalorestransf->erro_msg;
+        if($clconsvalorestransf->erro_status==0){
+          $sqlerro=true;
+        }
     }
+
     db_fim_transacao($sqlerro);
   }
 }else if(isset($opcao)){

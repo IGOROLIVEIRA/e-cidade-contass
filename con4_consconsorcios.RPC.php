@@ -207,12 +207,12 @@ function novoExercOrc($oItem, $iAnoUsu) {
     $clconsexecucaoorc->c202_funcao             = $oItem->c202_funcao;
     $clconsexecucaoorc->c202_subfuncao          = $oItem->c202_subfuncao;
     $clconsexecucaoorc->c202_elemento           = $oItem->c202_elemento;
-    $clconsexecucaoorc->c202_valorempenhado     = '0';
-    $clconsexecucaoorc->c202_valorempenhadoanu  = '0';
-    $clconsexecucaoorc->c202_valorliquidado     = '0';
-    $clconsexecucaoorc->c202_valorliquidadoanu  = '0';
-    $clconsexecucaoorc->c202_valorpago          = '0';
-    $clconsexecucaoorc->c202_valorpagoanu       = '0';
+    $clconsexecucaoorc->c202_valorempenhado     = ($oItem->c202_valorempenhado > 0) ? $oItem->c202_valorempenhado : '0';
+    $clconsexecucaoorc->c202_valorempenhadoanu  = ($oItem->c202_valorempenhadoanu > 0) ? $oItem->c202_valorempenhadoanu : '0';
+    $clconsexecucaoorc->c202_valorliquidado     = ($oItem->c202_valorliquidado > 0) ? $oItem->c202_valorliquidado : '0';
+    $clconsexecucaoorc->c202_valorliquidadoanu  = ($oItem->c202_valorliquidadoanu > 0) ? $oItem->c202_valorliquidadoanu : '0';
+    $clconsexecucaoorc->c202_valorpago          = ($oItem->c202_valorpago > 0) ? $oItem->c202_valorpago : '0';
+    $clconsexecucaoorc->c202_valorpagoanu       = ($oItem->c202_valorpagoanu > 0) ? $oItem->c202_valorpagoanu : '0';
     $clconsexecucaoorc->c202_codfontrecursos    = $oItem->c202_codfontrecursos;
     $clconsexecucaoorc->c202_anousu             = $iAnoUsu;
 
