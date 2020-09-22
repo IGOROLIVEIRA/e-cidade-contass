@@ -51,6 +51,10 @@ class cl_liclancedital
 	var $l47_dataenvio_mes = null;
 	var $l47_dataenvio_ano = null;
 	var $l47_dataenvio = null;
+	var $l47_dataenviosicom_dia = null;
+	var $l47_dataenviosicom_mes = null;
+	var $l47_dataenviosicom_ano = null;
+	var $l47_dataenviosicom = null;
 	var $l47_liclicita = null;
 
 	// cria propriedade com as variaveis do arquivo
@@ -60,6 +64,7 @@ class cl_liclancedital
                  l47_origemrecurso = int8 = Origem do recurso
                  l47_descrecurso = varchar(250) = Descrição do recurso
                  l47_dataenvio = date = Data envio
+                 l47_dataenviosicom = date = Data de Envio Sicom
                  l47_liclicita = int4 = Número da licitação
                   ";
 
@@ -92,6 +97,7 @@ class cl_liclancedital
 			$this->l47_descrecurso = ($this->l47_descrecurso == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->l47_descrecurso"] : $this->l47_descrecurso);
 			$this->l47_liclicita = ($this->l47_liclicita == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->l47_liclicita"] : $this->l47_liclicita);
 			$this->l47_dataenvio = ($this->l47_dataenvio == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->l47_dataenvio"] : $this->l47_dataenvio);
+			$this->l47_dataenviosicom = ($this->l47_dataenviosicom == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->l47_dataenviosicom"] : $this->l47_dataenviosicom);
 
 			if ($this->l47_dataenvio == "") {
 				$this->l47_dataenvio_dia = ($this->l47_dataenvio_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_dataenvio_dia"] : $this->l47_dataenvio_dia);
@@ -99,6 +105,15 @@ class cl_liclancedital
 				$this->l47_dataenvio_ano = ($this->l47_dataenvio_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_dataenvio_ano"] : $this->l47_dataenvio_ano);
 				if ($this->l47_dataenvio_dia != "") {
 					$this->l47_dataenvio = $this->l47_dataenvio_ano . "-" . $this->l47_dataenvio_mes . "-" . $this->l47_dataenvio_dia;
+				}
+			}
+
+			if ($this->l47_dataenviosicom == "") {
+				$this->l47_dataenviosicom_dia = ($this->l47_dataenviosicom_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom_dia"] : $this->l47_dataenviosicom_dia);
+				$this->l47_dataenviosicom_mes = ($this->l47_dataenviosicom_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom_mes"] : $this->l47_dataenviosicom_mes);
+				$this->l47_dataenviosicom_ano = ($this->l47_dataenviosicom_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom_ano"] : $this->l47_dataenviosicom_ano);
+				if ($this->l47_dataenviosicom_dia != "") {
+					$this->l47_dataenviosicom = $this->l47_dataenviosicom_ano . "-" . $this->l47_dataenviosicom_mes . "-" . $this->l47_dataenviosicom_dia;
 				}
 			}
 
@@ -274,6 +289,19 @@ class cl_liclancedital
 					$this->erro_status = "0";
 					return false;
 			}
+
+		if (trim($this->l47_dataenviosicom) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom"])) {
+			$sql .= $virgula . " l47_dataenviosicom = '$this->l47_dataenviosicom' ";
+			$virgula = ",";
+		} else {
+			$this->erro_sql = " Campo Data Envio não Informado.";
+			$this->erro_campo = "l47_dataenviosicom";
+			$this->erro_banco = "";
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
+		}
 
 			if (!trim($this->l47_origemrecurso)) {
 				if (trim($this->l47_descrecurso) == null && $this->l47_origemrecurso == 9) {

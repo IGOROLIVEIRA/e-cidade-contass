@@ -25,7 +25,8 @@ if($oPost->atualizar){
 		$dataFormatada = join('-', array_reverse(explode('/', $oPost->data_envio)));
 
 		if($dataFormatada >= $dataBuscada){
-			$clliclancedital->l47_dataenvio = $dataFormatada;
+			$clliclancedital->l47_dataenviosicom = $dataFormatada;
+			$clliclancedital->l47_dataenvio = $oEdital->l47_dataenvio;
 			// Altera o status de AGUARDANDO ENVIO para ENVIADO...
 			$clliclicita->l20_codigo = $oGet->codigo;
 			$clliclicita->l20_cadinicial = 3;
@@ -60,7 +61,6 @@ if($oPost->atualizar){
 
 	echo "<script>";
 	echo "alert('".$msg."');";
-
 	if($error){
 		echo "</script>";
 	}else{
