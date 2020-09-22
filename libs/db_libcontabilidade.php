@@ -5824,7 +5824,8 @@ class cl_estrutura_sistema {
                               o56_descr,
                               e60_numemp,
                               liquidado,
-                              e50_compdesp
+                              e50_compdesp,
+                              e50_codord
                       FROM work_dotacao
                       INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
                       INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu

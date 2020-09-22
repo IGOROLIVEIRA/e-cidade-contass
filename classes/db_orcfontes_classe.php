@@ -500,6 +500,7 @@ class cl_orcfontes {
      $sql .= "       left join orcreceita on orcreceita.o70_anousu  = conplano.c60_anousu ";
      $sql .= "                            and orcreceita.o70_codfon = conplano.c60_codcon ";
      $sql .= "                            and orcreceita.o70_instit = ".db_getsession("DB_instit");
+     $sql .= "      left join orctiporec on o70_codigo = o15_codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($o57_codfon!=null ){
