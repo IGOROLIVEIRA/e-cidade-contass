@@ -25,6 +25,37 @@ class Oc12770 extends AbstractMigration
 						
 				ALTER TABLE liclicita ADD CONSTRAINT liclicita_editalsituacao_fk
 					FOREIGN KEY (l20_cadinicial) REFERENCES editalsituacao (l10_sequencial) MATCH FULL;
+					
+				-- Preenche os registros que não tenham o campo l47_dataenviosicom preenchidos
+				
+				create temp table datasSicom(
+					sequencial serial,
+					licitacao integer not null,
+					dataPega date not null
+				);
+				
+				insert into datasSicom(licitacao, dataPega) (select l47_liclicita, l47_dataenvio from liclancedital);	
+					
+				CREATE OR REPLACE FUNCTION getAllDatas() RETURNS SETOF datasSicom AS
+				$$
+				DECLARE
+					r datasSicom%rowtype;
+				BEGIN
+					FOR r IN SELECT * FROM datasSicom
+					LOOP
+				
+						UPDATE liclancedital SET l47_dataenviosicom = r.dataPega WHERE l47_liclicita = r.licitacao AND l47_dataenviosicom IS NULL;
+				
+						RETURN NEXT r;
+				
+					END LOOP;
+					RETURN;
+				END
+				$$
+				LANGUAGE plpgsql;
+				
+				select * from getAllDatas();
+				DROP FUNCTION getAllDatas();					
 		";
 		$this->execute($sql);
     }
