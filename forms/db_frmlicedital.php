@@ -110,7 +110,7 @@ $db_botao = true;
                 </tr>
 
                 <?php if(!in_array($tipo_tribunal, array(100, 101, 102, 103, 104))):?>
-                  <tr style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
+                  <tr style="display: <?= in_array($natureza_objeto, array(1, 7)) ? '' : 'none' ?>;">
                       <td nowrap title="Origem do recurso">
                           <b>Origem do recurso:</b>
                       </td>
@@ -146,7 +146,7 @@ $db_botao = true;
                     </tr>
                   <?php endif;?>
 
-                  <tr id="td_obras" style="display: <?= $natureza_objeto == 1 || $natureza_objeto == 7 ? '' : 'none' ?>;">
+                  <tr id="td_obras" style="display: <?= in_array($natureza_objeto, array(1, 7)) ? '' : 'none' ?>;">
                     <td colspan="3">
                       <fieldset>
                         <legend>Obras e Serviços</legend>

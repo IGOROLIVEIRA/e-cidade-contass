@@ -87,7 +87,7 @@ if(isset($alterar)){
 	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
 	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
-    if($natureza_objeto == 1){
+    if(in_array($natureza_objeto, array(1, 7))){
 		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
 		$aSelecionados = array();
 		foreach ($aTipos as $tipo){
