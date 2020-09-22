@@ -131,14 +131,15 @@ class cl_obrascodigos {
 		if($result==false){
 			$this->erro_banco = str_replace("\n","",@pg_last_error());
 			if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-				$this->erro_sql   = "Situações da Licitação ($this->db151_codigoobra) nao Incluído. Inclusao Abortada.";
+				$this->erro_sql   = "Obra de código ($this->db151_codigoobra) nao Incluído. Inclusao Abortada.";
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_banco = "Situações da Licitação já Cadastrado";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_banco = "Código da Obra já Cadastrado";
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 			}else{
-				$this->erro_sql   = "Situações da Licitação ($this->db151_codigoobra) nao Incluído. Inclusao Abortada.";
+				$this->erro_sql   = "Obra de código ($this->db151_codigoobra) nao Incluído. Inclusao Abortada.";
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_banco = "Código da Obra já Cadastrado";
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 			}
 			$this->erro_status = "0";
 			$this->numrows_incluir= 0;
@@ -148,7 +149,7 @@ class cl_obrascodigos {
 		$this->erro_sql = "Inclusao efetuada com Sucesso\\n";
 		$this->erro_sql .= "Valores : ".$this->db151_codigoobra;
 		$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-		$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+		$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 		$this->erro_status = "1";
 		$this->numrows_incluir= pg_affected_rows($result);
 		return true;
@@ -166,7 +167,7 @@ class cl_obrascodigos {
 				$this->erro_campo = "db151_codigoobra";
 				$this->erro_banco = "";
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 				$this->erro_status = "0";
 				return false;
 			}
@@ -179,7 +180,7 @@ class cl_obrascodigos {
 				$this->erro_campo = "db151_liclicita";
 				$this->erro_banco = "";
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 				$this->erro_status = "0";
 				return false;
 			}
@@ -200,7 +201,7 @@ class cl_obrascodigos {
 			$this->erro_sql   = "Obras Código não Alterado. Alteracao Abortada.\\n";
 			$this->erro_sql .= "Valores : ".$this->db151_codigoobra;
 			$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 			$this->erro_status = "0";
 			$this->numrows_alterar = 0;
 			return false;
@@ -210,7 +211,7 @@ class cl_obrascodigos {
 				$this->erro_sql = "Obras Código não foi Alterado. Alteracao Executada.\\n";
 				$this->erro_sql .= "Valores : ".$this->db151_codigoobra;
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 				$this->erro_status = "1";
 				$this->numrows_alterar = 0;
 				return true;
@@ -219,7 +220,7 @@ class cl_obrascodigos {
 				$this->erro_sql = "Alteração efetuada com Sucesso\\n";
 				$this->erro_sql .= "Valores : ".$this->db151_codigoobra;
 				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "\\n ".$this->erro_banco." \\n"));
 				$this->erro_status = "1";
 				$this->numrows_alterar = pg_affected_rows($result);
 				return true;
