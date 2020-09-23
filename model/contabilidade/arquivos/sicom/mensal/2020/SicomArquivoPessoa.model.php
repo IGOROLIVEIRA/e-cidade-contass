@@ -77,8 +77,6 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
             }
         }
 
-//    if ($this->sDataFinal['5'] . $this->sDataFinal['6'] != 01) {
-
         $sSql = "select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
                  z01_nome,
                  z01_ultalt,
@@ -92,47 +90,38 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
            AND z01_cgccpf NOT IN
    (SELECT si12_nrodocumento
     FROM pessoa102020
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf)
- AND z01_cgccpf NOT IN
-    (SELECT si12_nrodocumento
-     FROM pessoa102019
-     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-     WHERE (z01_ultalt IS NULL))
-AND z01_cgccpf NOT IN
-    (SELECT si12_nrodocumento
-     FROM pessoa102018
-     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-     WHERE (z01_ultalt IS NULL) ) 
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102017
     inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102016
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102015
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )
- AND z01_cgccpf NOT IN
-   (SELECT si12_nrodocumento
-    FROM pessoa102014
-    inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
-    WHERE (z01_ultalt IS NULL) )";
-
-//    } else {
-//      $sSql = "select z01_cgccpf,
-//           z01_nome,
-//           z01_ultalt,
-//           z01_obs,
-//           z01_cadast
-//          from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-//          and (z01_cgccpf != '' and z01_cgccpf is not null)";
-//    }
+    WHERE si12_tipocadastro != 1)
+         AND z01_cgccpf NOT IN
+            (SELECT si12_nrodocumento
+             FROM pessoa102019
+             inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+             WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1)
+         AND z01_cgccpf NOT IN
+            (SELECT si12_nrodocumento
+             FROM pessoa102018
+             inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+             WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1) 
+         AND z01_cgccpf NOT IN
+           (SELECT si12_nrodocumento
+            FROM pessoa102017
+            inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+            WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1)
+         AND z01_cgccpf NOT IN
+           (SELECT si12_nrodocumento
+            FROM pessoa102016
+            inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+            WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1)
+         AND z01_cgccpf NOT IN
+           (SELECT si12_nrodocumento
+            FROM pessoa102015
+            inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+            WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1)
+         AND z01_cgccpf NOT IN
+           (SELECT si12_nrodocumento
+            FROM pessoa102014
+            inner JOIN cgm ON si12_nrodocumento = z01_cgccpf
+            WHERE (z01_ultalt IS NULL) AND si12_tipocadastro != 1)";
 
         $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
         $aPessoas = array();
@@ -186,9 +175,6 @@ AND z01_cgccpf NOT IN
                 $sTipoCadastro = 2;
                 $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
             }
-            /*else {
-              continue;
-            }*/
 
             $aHash = $oDados->z01_cgccpf;
 
@@ -209,8 +195,6 @@ AND z01_cgccpf NOT IN
                 }
                 $aPessoas[$aHash] = $clpessoa;
             }
-
-
         }
         db_fim_transacao();
 
