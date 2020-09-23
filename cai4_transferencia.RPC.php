@@ -153,7 +153,7 @@ switch ($oParam->exec) {
     try {
 
       $cl_historicocgm = new cl_historicocgm();
-      $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"order by z09_sequencial desc","z09_numcgm = $oParam->iCGM"));
+      $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"z09_sequencial desc","z09_numcgm = $oParam->iCGM"));
       db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
       $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
       if($dtlancamento < $z09_datacadastro){

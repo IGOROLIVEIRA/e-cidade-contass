@@ -47,7 +47,6 @@ require_once 'model/configuracao/InstituicaoRepository.model.php';
 require_once 'model/caixa/PlanilhaArrecadacao.model.php';
 require_once 'model/caixa/ReceitaPlanilha.model.php';
 require_once 'model/caixa/AutenticacaoPlanilha.model.php';
-require_once 'classes/db_historicocgm_classe.php';
 
 db_app::import("exceptions.*");
 db_app::import("configuracao.Instituicao");
@@ -101,16 +100,6 @@ switch ($oParam->exec) {
 
     db_inicio_transacao();
     try {
-
-      $cl_historicocgm = new cl_historicocgm();
-      foreach ($oParam->aReceitas as $rec) {
-          $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"order by z09_sequencial desc","z09_numcgm = $rec->iCgm"));
-          db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-          $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
-          if($rec->dtRecebimento < $z09_datacadastro){
-              throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
-          }
-      }
 
       $oPlanilhaArrecadacao = new PlanilhaArrecadacao();
       $dtArrecadacao = date('Y-m-d', db_getsession('DB_datausu'));
@@ -286,16 +275,6 @@ switch ($oParam->exec) {
 
     db_inicio_transacao();
     try {
-
-      $cl_historicocgm = new cl_historicocgm();
-      foreach ($oParam->aReceitas as $rec) {
-        $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',null,"z09_numcgm = $rec->iCgm"));
-        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-        $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
-        if($rec->dtRecebimento < $z09_datacadastro){
-          throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
-        }
-      }
 
       $oPlanilhaArrecadacao = new PlanilhaArrecadacao($oParam->iCodigoPlanilha);
       $oPlanilhaArrecadacao->excluirReceitas();
