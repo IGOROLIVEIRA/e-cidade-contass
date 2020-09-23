@@ -171,7 +171,7 @@ switch($oParam->exec) {
 
         $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm}");
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
         $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
         $dtcadastro = $oAcordo->getDataInicial();
@@ -204,7 +204,7 @@ switch($oParam->exec) {
 
         $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm}");
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
         $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
         $dtcadastro = $oAcordo->getDataInicial();
@@ -592,7 +592,7 @@ switch($oParam->exec) {
           }
 
           if($lAcordoValido) {
-              $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado}");
+              $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} order by z09_sequencial desc");
               db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
               $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
 

@@ -112,7 +112,7 @@ if (isset($incluir)) {
 
     if($sqlerro==false){
 
-        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$pc21_numcgm}");
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$pc21_numcgm} order by z09_sequencial desc");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
         $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
 
@@ -136,7 +136,7 @@ if (isset($incluir)) {
 
     //VERIFICA CPF E CNPJ ZERADOS OC 7037
     if ($sqlerro==false) {
-        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm}");
+        $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm} ");
         db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
         if (strlen($z01_cgccpf) == 14) {
