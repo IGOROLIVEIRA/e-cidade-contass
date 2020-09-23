@@ -3782,11 +3782,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
-        if (!$F('txtBdi' + sId)) {
-            alert('Campo BDI é obrigatório!\n\n');
-            return false;
-        }
-
         if (!$F('txtLogradouro' + sId)) {
             alert('Campo Logradouro é obrigatório!\n\n');
             return false;
