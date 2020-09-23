@@ -266,7 +266,7 @@ $db_botao = true;
     }
 
     function js_exibeDadosCompl(idObra = null, incluir = true){
-        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, codigoLicitacao);
+        oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir, codigoLicitacao, "<?=$natureza_objeto?>");
         oDadosComplementares.setObjetoRetorno($('idObra'));
         oDadosComplementares.setLicitacao(codigoLicitacao);
         if(idObra){

@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -46,6 +46,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iBdi = '';
     this.iLicitacao = '';
     this.acao = incluir;
+    this.iNaturezaObjeto = iNaturezaObjeto;
     this.callBackFunction = function () {
 
     }
@@ -2429,6 +2430,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
+    if(me.iNaturezaObjeto == '7'){
+        $('txtBdi'+sId).setAttribute('class', 'readonly');
+        $('txtBdi'+sId).setAttribute('disabled', 'disabled');
+    }
+
     $('ctnBdi' + sId).observe('change', me.changeBdi);
     $('ctnBdi' + sId).observe('keyup',() => {
         me.js_formataValor($('txtBdi' + sId), 4);
