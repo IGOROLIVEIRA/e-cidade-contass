@@ -104,7 +104,7 @@ switch ($oParam->exec) {
 
       $cl_historicocgm = new cl_historicocgm();
       foreach ($oParam->aReceitas as $rec) {
-          $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',null,"z09_numcgm = $rec->iCgm"));
+          $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"order by z09_sequencial desc","z09_numcgm = $rec->iCgm"));
           db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
           $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
           if($rec->dtRecebimento < $z09_datacadastro){

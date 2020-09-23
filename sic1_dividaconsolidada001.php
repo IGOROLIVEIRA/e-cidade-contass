@@ -15,7 +15,7 @@ $sqlerro==false;
 if(isset($incluir)) {
   db_inicio_transacao();
 
-  $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$z01_numcgm}");
+  $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$z01_numcgm} order by z09_sequencial desc");
   db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
     $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
     if($sqlerro==false){

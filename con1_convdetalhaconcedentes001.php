@@ -37,7 +37,7 @@ if(isset($incluir)){
       $sqlerro=true;
     }
 
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'");
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'order by z09_sequencial desc");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
     $dtcadastro   = date("Y-m-d",db_getsession("DB_datausu"));
