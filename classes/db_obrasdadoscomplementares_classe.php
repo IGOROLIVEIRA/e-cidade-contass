@@ -249,6 +249,11 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
+
+		if(!$this->db150_bdi){
+			$this->db150_bdi = 'null';
+		}
+
 		if(!$this->db150_numero){
 			$this->db150_numero = 'null';
 		}
@@ -455,6 +460,7 @@ class cl_obrasdadoscomplementares
 		if ($db150_sequencial != null) {
 			$sql .= " db150_sequencial = $db150_sequencial";
 		}
+;
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
