@@ -124,7 +124,7 @@ $sWhereContratos = " and 1 = 1 ";
         $sWhereContratos .= " and ac24_sequencial is null ";
       }
 
-      $sWhereContratos .= " and (case when l20_naturezaobjeto = 1 and l20_cadinicial in (1, 2) then false
+      $sWhereContratos .= " and (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
                                       else true end) ";
 
       /**

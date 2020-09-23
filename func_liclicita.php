@@ -224,7 +224,7 @@ $sWhereContratos = " and 1 = 1 ";
             }
 
 			if($enviada == 'true'){
-				$dbwhere .= " (case when l20_naturezaobjeto = 1 and l20_cadinicial in (1, 2) then false
+				$dbwhere .= " (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
                                       else true end) AND ";
             }
 
