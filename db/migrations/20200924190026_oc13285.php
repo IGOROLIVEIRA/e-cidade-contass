@@ -34,10 +34,4 @@ class Oc13285 extends AbstractMigration
 
   }
 
-  public function down()
-  {
-    $sql = "ALTER TABLE public.aoc102020 ALTER COLUMN si38_nrodecreto TYPE varchar(8) USING si38_nrodecreto::varchar;
-            ALTER TABLE public.aoc112020 ALTER COLUMN si39_nrodecreto TYPE varchar(8) USING si39_nrodecreto::varchar;";
-    $this->execute($sql);
-  }
 }
