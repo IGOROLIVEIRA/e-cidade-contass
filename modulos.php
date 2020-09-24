@@ -469,6 +469,10 @@ $sNome             = pg_result($rsUsuarioLogado,0,1);
 	 <iframe frameborder="1"  height="100%" width="100%" id="db_estoqponto" name="db_estoqponto" src="mat2_estoqponto.php?coddepto=<?=$coddepto?>" scrolling="auto"></iframe>
   <?
   }
+  
+  if ($nomemod == "Controle Interno") { ?>
+    <iframe frameborder="1"  height="100%" width="100%" id="db_ordemcomprapendente" name="db_ordemcomprapendente" src="cin4_ordcomppendente.php" scrolling="auto"></iframe>  
+  <? }
   ?>
   </td>
   </tr>
