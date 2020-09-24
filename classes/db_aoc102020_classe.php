@@ -29,13 +29,13 @@ class cl_aoc102020
   var $si38_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si38_sequencial = int8 = sequencial 
-                 si38_tiporegistro = int8 = Tipo do  registro 
-                 si38_codorgao = varchar(2) = Código do órgão 
-                 si38_nrodecreto = int8 = Número do Decreto 
-                 si38_datadecreto = date = Data do Decreto 
-                 si38_mes = int8 = Mês 
-                 si38_instit = int8 = Instituição 
+                 si38_sequencial = int8 = sequencial
+                 si38_tiporegistro = int8 = Tipo do  registro
+                 si38_codorgao = varchar(2) = Código do órgão
+                 si38_nrodecreto = int8 = Número do Decreto
+                 si38_datadecreto = date = Data do Decreto
+                 si38_mes = int8 = Mês
+                 si38_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -157,22 +157,22 @@ class cl_aoc102020
       return false;
     }
     $sql = "insert into aoc102020(
-                                       si38_sequencial 
-                                      ,si38_tiporegistro 
-                                      ,si38_codorgao 
-                                      ,si38_nrodecreto 
-                                      ,si38_datadecreto 
-                                      ,si38_mes 
-                                      ,si38_instit 
+                                       si38_sequencial
+                                      ,si38_tiporegistro
+                                      ,si38_codorgao
+                                      ,si38_nrodecreto
+                                      ,si38_datadecreto
+                                      ,si38_mes
+                                      ,si38_instit
                        )
                 values (
-                                $this->si38_sequencial 
-                               ,$this->si38_tiporegistro 
-                               ,'$this->si38_codorgao' 
-                               ,$this->si38_nrodecreto 
+                                $this->si38_sequencial
+                               ,$this->si38_tiporegistro
+                               ,'$this->si38_codorgao'
+                               ,'$this->si38_nrodecreto'
                                ," . ($this->si38_datadecreto == "null" || $this->si38_datadecreto == "" ? "null" : "'" . $this->si38_datadecreto . "'") . "
-                               ,$this->si38_mes 
-                               ,$this->si38_instit 
+                               ,$this->si38_mes
+                               ,$this->si38_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

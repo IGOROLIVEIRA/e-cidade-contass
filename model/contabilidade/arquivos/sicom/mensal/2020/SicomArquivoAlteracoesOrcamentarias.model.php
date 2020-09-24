@@ -250,7 +250,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 /**
                  * registro 12
                  */
-                
+
                 if ($oDados11->tipodecretoalteracao != 4) {
 
                     if ($oDados10->tipodecreto == 1) {
@@ -277,7 +277,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     $rsResult12 = db_query($sSql);
                 //db_criatabela($rsResult12);echo $sSql;
 
-                    
+
 
                     for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
@@ -304,14 +304,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         if ($oDados11->tipodecretoalteracao == 2) {
                             $oDados12->o138_altpercsuplementacao = "LAO";
                         }
-                        
+
                         $claoc12->si40_nroleialteracao  = substr($oDados12->nroleialteracao, 0, 6);
                         $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
                         $claoc12->si40_tpleiorigdecreto = $oDados12->o138_altpercsuplementacao;
                         $claoc12->si40_tipoleialteracao = $oDados12->o138_altpercsuplementacao == "LAO" ? $si40_tipoleialteracao : 0;
                         $claoc12->si40_valorabertolei   = $oDados11->valoraberto;
 
-                        
+
 
 
                         $claoc12->si40_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -389,7 +389,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 ELSE 98
                 END AS tipoDecretoAlteracao,
                 si09_codorgaotce AS codOrgao,
-                substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
+                lpad(substr(o58_programa,length(o58_programa::varchar) -1,2),2,'0')||lpad(substr(o58_projativ,length(o58_projativ::varchar) -1,2),3,'0')||	sum(substr(o56_elemento,1,2)::int + substr(o56_elemento,3,2)::int + substr(o56_elemento,5,2)::int + substr(o56_elemento,7,2)::int) ||o15_codtri||o47_codsup AS codorigem,
                 o47_codsup,
                 CASE
                 WHEN o41_subunidade != 0
@@ -430,11 +430,13 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                 JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
                 LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
                 WHERE o46_codlei IN ({$oDados10->codigovinc})
+                group by o46_codsup,o47_valor,o46_codlei,o46_tiposup,si09_codorgaotce,o58_programa,o58_projativ,o56_elemento,o47_codsup,o41_subunidade,o40_codtri,o40_orgao,o41_codtri,o41_unidade,o58_funcao,o58_subfuncao,
+                o58_programa,o58_projativ,o15_codtri
                 ORDER BY o46_codsup";
 
                           // echo $oDados10->codigovinc;
                           // echo $sSql;
-                
+
                 $rsResult = db_query($sSql);
 
                 $rsResult14 = db_query("
@@ -454,7 +456,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     subunidade
                     FROM
                     ($sSql) reg14
-                    GROUP BY codorgao, codunidadesub, codfuncao, codsubfuncao, codprograma, idacao, idsubacao, tiporegistro, codreduzidodecreto, 
+                    GROUP BY codorgao, codunidadesub, codfuncao, codsubfuncao, codprograma, idacao, idsubacao, tiporegistro, codreduzidodecreto,
                     tipodecretoalteracao, naturezadespesa, codfontrecursos, subunidade");
 
                 $aDadosAgrupados14 = array();
