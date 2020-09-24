@@ -293,14 +293,6 @@ class cl_liclancedital
 		if (trim($this->l47_dataenviosicom) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_dataenviosicom"])) {
 			$sql .= $virgula . " l47_dataenviosicom = '$this->l47_dataenviosicom' ";
 			$virgula = ",";
-		} else {
-			$this->erro_sql = " Campo Data Envio não Informado.";
-			$this->erro_campo = "l47_dataenviosicom";
-			$this->erro_banco = "";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
 		}
 
 			if (!trim($this->l47_origemrecurso)) {

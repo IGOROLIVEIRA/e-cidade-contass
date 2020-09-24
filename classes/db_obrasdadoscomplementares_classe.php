@@ -218,13 +218,15 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
-		if ($this->db150_subgrupobempublico == null) {
+		if ($this->db150_subgrupobempublico == null && $this->db150_grupobempublico != '99') {
 			$this->erro_sql = " Campo Sub Grupo Bem Público nao declarado.";
 			$this->erro_banco = "Campo db150_subgrupobempublico nao declarado.";
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
 			return false;
+		}else{
+			$this->db150_subgrupobempublico = 'null';
 		}
 
 		if ($this->db150_descratividadeservico == null) {

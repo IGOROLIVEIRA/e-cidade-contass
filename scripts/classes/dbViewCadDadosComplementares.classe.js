@@ -1477,6 +1477,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     this.changeSubGrupoBemPub = (e) => {
         me.setSubGrupoBemPublico(e.target.value);
+        $('cboSubGrupoBemPub'+sId).disabled = false;
     }
 
     me.oCboSubGrupoBemPub = new DBComboBox('cboSubGrupoBemPub' + sId, 'cboSubGrupoBemPub' + sId);
@@ -4034,6 +4035,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
+        if(me.getGrupoBemPublico() == '99'){
+            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+            $('cboSubGrupoBemPub'+sId).disabled = true;
+            me.oCboSubGrupoBemPub.show();
+        }
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);

@@ -212,13 +212,14 @@ if(!isset($pesquisa_chave)){
 
         let idCampo = parseInt(aTr[count].id.replace('I', ''));
         let format = idCampo.toString().includes('01') ? idCampo.toString().replace('01', '1') : idCampo;
-        let idCampoInicial = format == 10 ? '00' : parseInt(format.toString().substr(0, format.toString().length - 1)) - 1;
+        let idCampoInicial = format == 10 ? '00' : idCampo == 1010 ? 100 : parseInt(format.toString().substr(0, format.toString().length - 1)) - 1;
 
         if(aTr[count].cellIndex == 10){
 
             let status = aTr[count].innerText.replace(/\./g, '').trim();
 
             if( status == 'AGUARDANDO ENVIO'){
+
                 if(idCampoInicial == '00'){
                     for(let count = 0; count<=10; count++){
                         let campo = document.getElementById(`I0${count}`);
@@ -250,7 +251,7 @@ if(!isset($pesquisa_chave)){
                         /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
                         if(!module_licitacao){
                                 /*
-                                * Adiciona o evento de click a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
+                                * Adiciona o evento para retornar os dados a todas as células anteriores à célula que contenha o status da licitação como 'AGUARDANDO ENVIO'
                                 * */
                             campo.onclick = (e) => {
                                 // 1209 -> posição onde começa a última célula do registro contendo o status da licitação.

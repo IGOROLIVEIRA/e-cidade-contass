@@ -87,7 +87,7 @@ if(isset($alterar)){
 	$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
 	$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
 
-    if(in_array($natureza_objeto, array(1, 7))){
+    if($natureza_objeto == 1){
 		$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
 		$aSelecionados = array();
 		foreach ($aTipos as $tipo){
@@ -120,7 +120,7 @@ if(isset($alterar)){
 		}
 
 	}else{
-        if(!$cleditaldocumento->numrows){
+        if(!$cleditaldocumento->numrows && !$sqlerro){
 			$sqlerro = true;
 			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
 		}
