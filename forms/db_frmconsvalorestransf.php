@@ -111,7 +111,7 @@ db_select('c201_enviourelatorios',$x,true,$db_opcao,"");
 	 $chavepri= array("c201_sequencial"=>@$c201_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
 	 $cliframe_alterar_excluir->sql     = $clconsvalorestransf->sql_query_file(null,"*",null,"c201_consconsorcios=$c201_consconsorcios and c201_anousu = ".db_getsession("DB_anousu"));
-	 $cliframe_alterar_excluir->campos  ="c201_sequencial,c201_consconsorcios,c201_mescompetencia,c201_valortransf,c201_enviourelatorios";
+	 $cliframe_alterar_excluir->campos  ="c201_consconsorcios,c201_mescompetencia,c201_codfontrecursos,c201_valortransf,c201_enviourelatorios";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";

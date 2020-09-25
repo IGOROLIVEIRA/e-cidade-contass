@@ -3,6 +3,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+include("libs/db_utils.php");
 include("classes/db_consvalorestransf_classe.php");
 include("classes/db_consconsorcios_classe.php");
 include("dbforms/db_funcoes.php");
@@ -12,6 +13,7 @@ $clconsvalorestransf = new cl_consvalorestransf;
 $clconsconsorcios = new cl_consconsorcios;
 $db_opcao = 22;
 $db_botao = false;
+$iAnoUsu  = db_getsession('DB_anousu');
 if(isset($alterar) || isset($excluir) || isset($incluir)){
   $sqlerro = false;
   /*
@@ -25,10 +27,41 @@ $clconsvalorestransf->c201_enviourelatorios = $c201_enviourelatorios;
 if(isset($incluir)){echo $c201_sequencial;
   if($sqlerro==false){
     db_inicio_transacao();
-    $clconsvalorestransf->incluir($c201_sequencial);
-    $erro_msg = $clconsvalorestransf->erro_msg;
-    if($clconsvalorestransf->erro_status==0){
-      $sqlerro=true;
+    
+    $sWhere       = "c201_mescompetencia = {$c201_mescompetencia}  and c201_anousu = {$iAnoUsu} and c201_consconsorcios = {$c201_consconsorcios}";
+    $sSqlVerifica = $clconsvalorestransf->sql_query_file(null, "*", null, $sWhere);
+    $rsVerifica   = $clconsvalorestransf->sql_record($sSqlVerifica);
+
+    if ($clconsvalorestransf->numrows > 0) {
+
+        for ($i = 0; $i < $clconsvalorestransf->numrows; $i++) {
+            
+            $oVerifica = db_utils::fieldsMemory($rsVerifica, $i);
+
+            if ($oVerifica->c201_codfontrecursos == $c201_codfontrecursos) {
+                
+                $erro_msg = "Já existe lançamentos para mês e fonte informados.";         
+                $sqlerro  = true; 
+                break; 
+
+            } elseif ($oVerifica->c201_enviourelatorios != $c201_enviourelatorios) {
+
+                $erro_msg = "Campo Enviou Relatórios diferente do informado anteriormente para o mês."; 
+                $sqlerro  = true;
+                break;
+            }
+        }
+
+    }
+
+    if (!$sqlerro) {
+
+        $clconsvalorestransf->incluir();
+        $erro_msg = $clconsvalorestransf->erro_msg;
+        if($clconsvalorestransf->erro_status==0){
+            $sqlerro = true;
+        }
+
     }
     db_fim_transacao($sqlerro);
   }
@@ -47,7 +80,6 @@ if(isset($incluir)){echo $c201_sequencial;
     db_inicio_transacao();
 
     require_once("classes/db_consexecucaoorc_classe.php");
-    $iAnoUsu            = db_getsession('DB_anousu');
     $clconsexecucaoorc  = new cl_consexecucaoorc;
     $sSqlWhere          = " c202_consconsorcios = {$c201_consconsorcios} 
                             and c202_mescompetencia = {$c201_mescompetencia} 
