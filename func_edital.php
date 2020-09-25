@@ -246,6 +246,11 @@ if(!isset($pesquisa_chave)){
                 }else{
                     for(let count = 0; count<10; count++){
                         let campo = document.getElementById(`I${idCampoInicial+count}`);
+
+                        if(idCampo == 1110 && count == 0){
+                            document.querySelector('tr:nth-child(14)').firstChild.bgColor = 'red';
+                        }
+
                         campo.bgColor = 'red';
 
                         /*Verifica se não está na tela inicial do módulo Licitação. Caso esteja, cancela o evento de click*/
