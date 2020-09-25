@@ -39,6 +39,7 @@ $clmatordem     = new cl_matordem;
 $clempparametro = new cl_empparametro;
 $iAnoUsu        = db_getsession("DB_anousu");
 $dtDataUsu      = date("Y-m-d", db_getsession("DB_datausu"));
+$iInstit        = db_getsession('DB_instit');
 
 $sSqlEmpParam   = $clempparametro->sql_query_file ($iAnoUsu,$campos="e30_prazoentordcompra",null,"");
 $rsEmpParam     = $clempparametro->sql_record($sSqlEmpParam);
@@ -48,8 +49,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                                 fornecedor as dl_fornecedor,
                                 empenho as dl_empenho,
                                 m51_data,
-                                -- 'PENDENTE A '||('2020-08-20'::date - m51_data::date)||' DIAS' as dl_observacao
-                                'ENTRADA PENDENTE SUPERIOR A '||{$iDiasPrazo}||' DIAS' as dl_observacao
+                                (('{$dtDataUsu}'::date - m51_data::date)||' DIAS')::varchar as dl_entrada_com_pendencia_de
                         FROM
                             (SELECT m51_codordem,
                                     z01_nome as fornecedor,
@@ -62,7 +62,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                                         m51_codordem,
                                         m52_codlanc,
                                         z01_nome,
-                                        e60_codemp||'/'||e60_anousu AS empenho,
+                                        (e60_codemp||'/'||e60_anousu)::varchar AS empenho,
                                         m51_data,
                                         m51_valortotal
                                     FROM matordem
@@ -75,6 +75,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                                         WHERE e60_anousu = {$iAnoUsu}
                                             AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
                                             AND m53_codordem IS NULL
+                                            AND e60_instit = {$iInstit}
                                     ) as x
                                 INNER JOIN matestoqueitemoc ON m52_codlanc = m73_codmatordemitem
                                 INNER JOIN matestoqueitem ON m71_codlanc = m73_codmatestoqueitem
@@ -83,7 +84,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                             ) AS xx
                         WHERE m51_valortotal > valorlancado 
                             AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}'
-                        ORDER BY m51_codordem";
+                        ORDER BY m51_data";
 
 $rsResultOrdemPendente = $clmatordem->sql_record($sSqlOrdemPendente);
 ?>
