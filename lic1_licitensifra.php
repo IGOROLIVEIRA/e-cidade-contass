@@ -314,7 +314,7 @@ if (!empty($chaves) && isset($chaves)){
       $nroedital = db_utils::fieldsMemory($rsSql, 0)->l20_nroedital;
       $sequencial = db_utils::fieldsMemory($rsSql, 0)->l47_sequencial;
 
-      if(intval($natureza_objeto) == 1 && $licitacao && !$sequencial){
+      if(in_array(intval($natureza_objeto), array(1, 7)) && $licitacao && !$sequencial){
         echo"<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
       }
     }else{

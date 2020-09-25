@@ -326,6 +326,9 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     $oGerarPAREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarPAREC->gerarDados();
 
+    //Exclui tabela temporária para não inteferir na geração de outros arquivos
+    db_query("drop table if exists work_receita");
+
   }
   
 }

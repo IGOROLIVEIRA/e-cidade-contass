@@ -253,7 +253,7 @@ FROM
                      liclicita.l20_naturezaobjeto AS naturezaObjeto,
                      liclicita.l20_objeto AS Objeto,
                      CASE
-                         WHEN liclicita.l20_naturezaobjeto = '1' THEN liclicita.l20_regimexecucao
+                         WHEN liclicita.l20_naturezaobjeto in ('1', '7') THEN liclicita.l20_regimexecucao
                          ELSE 0
                      END AS regimeExecucaoObras,
                      obrasdadoscomplementares.db150_bdi AS bdi,
@@ -323,7 +323,6 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
 ORDER BY nroprocessolicitatorio
 
                   ";
-//	print_r($sSql);
     $rsResult10 = db_query($sSql);
 
     /**

@@ -3,6 +3,24 @@ contrato = function () {
     me = this;
     this.verificaLicitacoes = function () {
 
+        let negation = '';
+        let tipoCompras = '';
+        let iOrigem = $('ac16_origem').value;
+        let iTipoOrigem = $('ac16_tipoorigem').value;
+
+        if( iOrigem == '2'){
+            if(iTipoOrigem == '2'){
+                negation = ' not ';
+                tipoCompras = '100, 101, 102, 103';
+            }
+
+            if(iTipoOrigem == '3'){
+                negation = '';
+                tipoCompras = $('tipodispenca').value == '2' ? '100, 101' : $('tipodispenca').value == '1' ? '102, 103' : '';
+            }
+
+        }
+
         var sFuncao = '';
         if ($F('ac16_origem') == 2) {
             sFuncao = 'getLicitacoesContratado';
@@ -18,6 +36,8 @@ contrato = function () {
         oParam.iContrato   = $F('ac16_sequencial');
         oParam.iTipoOrigem = $F('ac16_tipoorigem');
         oParam.credenciamento = $F('tipodispenca');
+        oParam.addNegation    = negation;
+        oParam.tipoCompras = tipoCompras;
         js_divCarregando("Aguarde, carregando as licitações...", "msgBox");
         var oAjax   = new Ajax.Request(
             sURL,
@@ -298,6 +318,28 @@ contrato = function () {
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iLei                      = $F('ac16_lei');
+
+        /* Novas validações para atender o SICOM */
+
+        if(iOrigem == '3') {
+            if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
+                alert('Informe uma Licitação.');
+                $('ac16_licitacao').focus();
+                return false;
+            }
+
+            if(iTipoOrigem == '4' && !iAdesaoregpreco){
+                alert('Informe uma Adesão de Registro de Preço.');
+                $('ac16_adesaoregpreco').focus();
+                return false;
+            }
+
+            if(['5', '6', '7', '8', '9'].includes(iTipoOrigem) && !iLicoutroorgao){
+                alert('Informe uma Licitação por Outro Órgão.');
+                $('ac16_licoutroorgao').focus();
+                return false;
+            }
+        }
 
         if (iOrigem == "0") {
 

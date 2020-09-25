@@ -218,22 +218,17 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
-		if ($this->db150_subgrupobempublico == null) {
+		if ($this->db150_subgrupobempublico == null && $this->db150_grupobempublico != '99') {
 			$this->erro_sql = " Campo Sub Grupo Bem Público nao declarado.";
 			$this->erro_banco = "Campo db150_subgrupobempublico nao declarado.";
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
 			return false;
+		}else{
+			$this->db150_subgrupobempublico = 'null';
 		}
-		if ($this->db150_bdi == null) {
-			$this->erro_sql = " Campo BDI nao declarado.";
-			$this->erro_banco = "Campo db150_bdi nao declarado.";
-			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-			$this->erro_status = "0";
-			return false;
-		}
+
 		if ($this->db150_descratividadeservico == null) {
 			$this->db150_descratividadeservico = '';
 		}
@@ -256,6 +251,11 @@ class cl_obrasdadoscomplementares
 			$this->erro_status = "0";
 			return false;
 		}
+
+		if(!$this->db150_bdi){
+			$this->db150_bdi = 'null';
+		}
+
 		if(!$this->db150_numero){
 			$this->db150_numero = 'null';
 		}
@@ -452,6 +452,8 @@ class cl_obrasdadoscomplementares
 		}
 		if (trim($this->db150_bdi) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_bdi"])) {
 			$sql .= $virgula . " db150_bdi = $this->db150_bdi ";
+		}else{
+			$sql .= $virgula . " db150_bdi = null ";
 		}
 		if (trim($this->db150_cep) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_cep"])) {
 			$sql .= $virgula . " db150_cep = $this->db150_cep ";
@@ -460,6 +462,7 @@ class cl_obrasdadoscomplementares
 		if ($db150_sequencial != null) {
 			$sql .= " db150_sequencial = $db150_sequencial";
 		}
+;
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());

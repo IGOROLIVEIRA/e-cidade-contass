@@ -78,6 +78,7 @@ if(isset($opcao) && $opcao=="alterar"){
       $pc01_descrmater  ="";
     }
 }
+
 ?>
 
 <script type="text/javascript" src="scripts/scripts.js"></script>
@@ -476,6 +477,20 @@ function js_troca(codele) {
   </form>
     <script>
 
+        flag_consulta = "<?= $consultaValores ?>";
+        if(flag_consulta){
+            var params = {
+                exec: 'verificaSaldoCriterio',
+                e55_item: document.form1.e55_item.value,
+                e55_autori: document.form1.e55_autori.value,
+                tipoitem: "<?=$tipoItem?>",
+                pc94_sequencial: "<?= $sequencialItem?>",
+                total: "<?=$valorTotal?>"
+            };
+
+            js_consultaValores(params);
+        }
+
 
   function js_verificar() {
 
@@ -533,7 +548,7 @@ function js_troca(codele) {
 function js_cancelar(){
   var opcao = document.createElement("input");
   opcao.setAttribute("type","hidden");
-  opcao.setAttribujs_consultate("name","novo");
+  opcao.setAttribute("name","novo");
   opcao.setAttribute("value","true");
   document.form1.appendChild(opcao);
   document.form1.submit();
@@ -545,7 +560,7 @@ function js_pesquisae55_item(mostra){
     js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
      }else{
        document.form1.pc01_descrmater.value = '';
        document.form1.submit();
@@ -560,8 +575,8 @@ function js_mostrapcmater(chave,erro,codele){
     document.form1.submit();
   } else {
       document.form1.pc07_codele.value = codele;
-      js_consulta();
       document.form1.e55_quant.focus();
+      js_consulta();
   }
 }
 
@@ -569,8 +584,8 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
   document.form1.e55_item.value        = chave1;
   document.form1.pc01_descrmater.value = chave2;
   document.form1.pc07_codele.value     = codele;
-  document.form1.e55_quant.value = "";
-  document.form1.e55_vluni.value = "";
+  document.form1.e55_quant.value = chave3;
+  document.form1.e55_vluni.value = chave5;
   chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
   document.form1.pc80_criterioadjudicacao.value  = chave6;
   document.form1.totalad.value = chave5;
@@ -580,18 +595,24 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
     e55_item: chave1,
     e55_autori: document.form1.e55_autori.value,
     tipoitem: chave8,
-    pc94_sequencial: chave9
+    pc94_sequencial: chave9,
+    total: chave5
   };
 
-  novoAjax(params, function(e) {
-    let totitens = JSON.parse(e.responseText).itens;
-    document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
-    document.form1.disponivel.value = new Number(chave5 - totitens[0].totalitens) > 0 ? new Number(chave5 - totitens[0].totalitens) : "0";
-
-    js_consulta();
-    document.form1.e55_quant.focus();
-  });
+    js_consultaValores(params);
 }
+    function js_consultaValores(params){
+        novoAjax(params, (e) => {
+            let totitens = JSON.parse(e.responseText).itens;
+            document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
+            document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
+
+            if(!flag_consulta){
+                js_consulta();
+            }
+            document.form1.e55_quant.focus();
+        });
+    }
 
 function novoAjax(params, onComplete) {
 

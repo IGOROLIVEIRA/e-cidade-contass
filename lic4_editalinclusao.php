@@ -83,6 +83,10 @@ if (isset($incluir) && isset($licitacao)) {
             $erro_msg = 'Campo Link da publicação é obrigatório';
         }
 
+		/* Verifica se tem documentos anexos a licitação */
+		$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
+		$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
+
 		if(!$sqlerro){
 		    if($natureza_objeto == 1){
 
@@ -95,11 +99,7 @@ if (isset($incluir) && isset($licitacao)) {
                     $erro_msg = 'Nenhum dado complementar cadastrado, verifique!';
                 }
 
-				/* Verifica se tem documentos anexos a licitação */
-				$sSqlDocumentos = $cleditaldocumento->sql_query(null, 'l48_tipo', null, ' l48_liclicita = '.$licitacao);
-				$rsDocumentos = $cleditaldocumento->sql_record($sSqlDocumentos);
-
-                $aTipos = db_utils::getCollectionByRecord($rsDocumentos);
+				$aTipos = db_utils::getCollectionByRecord($rsDocumentos);
                 $aSelecionados = array();
                 foreach ($aTipos as $tipo){
                     $aSelecionados[] = $tipo->l48_tipo;
@@ -124,7 +124,7 @@ if (isset($incluir) && isset($licitacao)) {
                 }
 
             }else{
-                if(!$cleditaldocumento->numrows){
+                if(!$cleditaldocumento->numrows && !$sqlerro){
                     $sqlerro = true;
                     $erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
                 }
@@ -230,7 +230,7 @@ if (isset($incluir)) {
 echo "<script>";
 echo "parent.iframe_documentos.location.href='lic4_editaldocumentos.php?l20_codigo=$licitacao&natureza_objeto=$natureza_objeto&cod_tribunal=$tipo_tribunal';";
 echo "parent.iframe_editais.js_buscaDadosComplementares();";
-echo "parent.iframe_documentos.js_getDocumento();";
+//echo "parent.iframe_documentos.js_getDocumento();";
 echo "</script>";
 
 
@@ -241,3 +241,9 @@ if (!trim($licitacao)) {
 }
 ?>
 
+<script>
+    function retornoEnvio(){
+        db_iframe_liclicita.hide();
+        js_pesquisa();
+    }
+</script>
