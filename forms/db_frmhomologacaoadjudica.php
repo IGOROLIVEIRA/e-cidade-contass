@@ -293,18 +293,12 @@ $clrotulo->label("l20_codigo");
         let opcao = "<?= $db_opcao?>";
 
         if(mostra==true){
-            if(opcao == '1'){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
-            }else{
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
-            }
+            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
+                '&funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
         }else{
             if(document.form1.l202_licitacao.value != ''){
-                if(opcao == '1'){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=1&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
-                }else{
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao=10&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
-                }
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+(opcao == '1' ? '1' : '10')+
+                '&pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
             }else{
                 document.form1.l202_licitacao.value = '';
                 document.form1.pc50_descr.value = '';

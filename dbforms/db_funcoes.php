@@ -1140,6 +1140,85 @@ function db_inputdata($nome, $dia = "", $mes = "", $ano = "", $dbcadastro = true
 /*************************************/
 
 //////////////////////////////////////
+function db_inputdata_position($nome, $dia = "", $mes = "", $ano = "", $dbcadastro = true, $dbtype = 'text', $db_opcao = 3, $js_script = "", $nomevar = "", $bgcolor = "",$shutdown_function="none",$onclickBT="", $onfocus="", $jsRetornoCal="", $position=""){
+	//#00#//db_inputdata_position
+	//#10#//Função para montar um objeto tipo data. Serão três objetos input na tela mais um objeto input tipo button para
+	//#10#//acessar o calendário do sistema
+	//#15#//db_inputdata($nome,$dia="",$mes="",$ano="",$dbcadastro=true,$dbtype='text',$db_opcao=3,$js_script="",$nomevar="",$bgcolor="",$shutdown_funcion="none",$onclickBT="",$onfocus"");
+	//#20#//Nome            : Nome do campo da documentacao do sistema ou do arquivo
+	//#20#//Dia             : Valor para o objeto |db_input| do dia
+	//#20#//Mês             : Valor para o objeto |db_input| do mês
+	//#20#//Ano             : Valor para o objeto |db_input| do ano
+	//#20#//Cadastro        : True se cadastro ou false se nao cadastro Padrão: true
+	//#20#//Type            : Tipo a ser incluido para a data Padrão: text
+	//#20#//Opcao           : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
+	//#20#//Script          : JAVASCRIPT  a ser executado juntamento com o objeto, indicando os métodos
+	//#20#//Nome Secundário : Nome do input que será gerado, assumindo somente as características do campo Nome
+	//#20#//Cor Background  : Cor de fundo da tela, no caso de *db_opcao*=3 será "#DEB887"
+	//#20#//shutdown_funcion : função que será executada apos o retorno do calendário
+	//#20#//onclickBT       : Função que será executada ao clicar no botão que abre o calendário
+	//#20#//onfocus         : Função que será executada ao focar os campos
+	//#20#//position        : Posição do elemento na tela. Padrão: ''
+	//#99#//Quando o parâmetro Opção for de alteração (Opcao = 22) ou exclusão (Opção = 33) o sistema
+	//#99#//colocará a sem acesso ao calendário
+	//#99#//Para *db_opcao* 3 e 5 o sistema colocará sem o calendário e com readonly
+	//#99#//
+	//#99#//Os três input gerados para a data terão o nome do campo acrescido do [Nome]_dia, [Nome]_mes e
+	//#99#//[Nome]_ano os quais serão acessados pela classe com estes nome.
+	//#99#//
+	//#99#//O sistema gerá para a primeira data incluída um formulário, um objeto de JanelaIframe do nosso
+	//#99#//sistema para que sejá mostrado o calendário.
+
+	global $DataJavaScript;
+
+	if ($db_opcao == 3 || $db_opcao == 22 || $db_opcao == 33) {
+		$bgcolor = "style='background-color:#DEB887'";
+	}
+
+	if ($bgcolor == "") {
+		$bgcolor = @$GLOBALS['N'.$nome];
+	}
+
+
+	if(isset($dia) && $dia != "" && isset($mes) && $mes != '' && isset($ano) && $ano != ""){
+		$diamesano = $dia."/".$mes."/".$ano;
+		$anomesdia = $ano."/".$mes."/".$dia;
+	}
+
+	$sButtonType = "button";
+	?>
+
+    <input name="<?=($nomevar==""?$nome:$nomevar).""?>" <?=$bgcolor?>   type="<?=$dbtype?>" id="<?=($nomevar==""?$nome:$nomevar).""?>" <?=($db_opcao==3 || $db_opcao==33 || $db_opcao==22 ?'readonly':($db_opcao==5?'disabled':''))?> value="<?=@$diamesano?>" size="10" maxlength="10" autocomplete="off" onBlur='js_validaDbData(this);' onKeyUp="return js_mascaraData(this,event)"  onFocus="js_validaEntrada(this);" onpaste="return false" ondrop="return false" <?=$js_script?> >
+    <input name="<?=($nomevar==""?$nome:$nomevar)."_dia"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_dia"?>" value="<?=@$dia?>" size="2"  maxlength="2" >
+    <input name="<?=($nomevar==""?$nome:$nomevar)."_mes"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_mes"?>" value="<?=@$mes?>" size="2"  maxlength="2" >
+    <input name="<?=($nomevar==""?$nome:$nomevar)."_ano"?>"   type="hidden" title="" id="<?=($nomevar==""?$nome:$nomevar)."_ano"?>" value="<?=@$ano?>" size="4"  maxlength="4" >
+	<?
+	if (($db_opcao < 3) || ($db_opcao == 4)) {
+		?>
+        <script>
+            var PosMouseY, PosMoudeX;
+
+            function js_comparaDatas<?=($nomevar==""?$nome:$nomevar).""?>(dia,mes,ano){
+                var objData        = document.getElementById('<?=($nomevar==""?$nome:$nomevar).""?>');
+                objData.value      = dia+"/"+mes+'/'+ano;
+				<?=$jsRetornoCal?>
+            }
+
+        </script>
+		<?
+		if (isset($dbtype) && strtolower($dbtype) == strtolower('hidden')) {
+			$sButtonType = "hidden";
+		}
+
+		?>
+
+        <input value="D" type="<?=$sButtonType?>" id="dtjs_<?=($nomevar==""?$nome:$nomevar)?>" name="dtjs_<?=($nomevar==""?$nome:$nomevar)?>" onclick="<?=$onclickBT?>pegaPosMouse(event);show_calendar_position('<?=($nomevar==""?$nome:$nomevar)?>','<?=$shutdown_function?>', '<?=$position?>')"  >
+		<?
+
+	}
+
+}
+//////////////////////////////////////
 function db_data($nome, $dia = "", $mes = "", $ano = "") {
 	global $DataJavaScript;
 	if (!isset ($DataJavaScript)) {
