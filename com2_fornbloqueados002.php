@@ -12,50 +12,92 @@ require_once("classes/db_pcforne_classe.php");
 
 $oForne = new cl_pcforne;
 db_postmemory($HTTP_GET_VARS);
-
 $head1 = "";
 $head3 = "FORNECEDORES BLOQUEADOS";
-if($data_ini != "" && $data_fim != ""){
-  $dataInicial = new DBDate($data_ini);
-  $dataInicial = $dataInicial->getDate();
-  $dataFinal = new DBDate($data_fim);
-  $dataFinal = $dataFinal->getDate();
-  $where = "pc60_databloqueio_ini >= '{$dataInicial}' AND pc60_databloqueio_fim <= '{$dataFinal}'";
-  $head5 = "Período: de {$data_ini} a {$data_fim}";
-}else{
-  if($data_ini!=""){
-    $dataInicial = new DBDate($data_ini);
-    $dataInicial = $dataInicial->getDate();
-    $where = "pc60_databloqueio_ini >= '{$dataInicial}'";
-    $head5 = "Período: a partir de {$data_ini}";
-  }
-  if($data_fim!=""){
-    $dataFinal = new DBDate($data_fim);
-    $dataFinal = $dataFinal->getDate();
-    $where = "pc60_databloqueio_fim <= '{$dataFinal}'";
-    $head5 = "Período: até {$data_fim}";
-  }else{
-    $head5 = "Período: não informado";
-  }
+$where = '';
+
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+
+if($data_ini){
+	$dataInicial = new DBDate($data_ini);
+	$dataInicial = $dataInicial->getDate();
+	$head5 = "Período: a partir de {$data_ini}";
 }
 
-$where .= isset($where) ? ' AND ' : ' ';
-$orderBy = 'z01_nome asc ';
+if($data_fim){
+	$dataFinal = new DBDate($data_fim);
+	$dataFinal = $dataFinal->getDate();
+	$head5 = "Período: até {$data_fim}";
+}
+
+if(!$data_ini && !$data_fim){
+	$head5 = "Período: não informado";
+}elseif($data_ini && $data_fim){
+	$head5 = "Período: de {$data_ini} a {$data_fim}";
+}
 
 switch ($tipo_fornecedor){
-    case 't':
-        $where .= " (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
-        break;
-    case 'a':
-        $where .= " pc60_bloqueado = 'f'";
-        break;
-    case 'i':
-        if(!isset($where)){
-           $orderBy .=  ', pc60_databloqueio_ini ';
+	case 't':
+
+	    if($data_ini && $data_fim){
+	        $where = " CASE WHEN pc60_databloqueio_ini IS NOT NULL or pc60_databloqueio_fim IS NOT NULL 
+	                            THEN ";
         }
+
+	    if($data_ini){
+			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
+        }
+
+	    if($data_fim){
+	        $where = $where ? $where . " AND " : $where;
+			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
+        }
+
+	    if($data_ini && $data_fim){
+            $where .= " ELSE pc60_dtlanc >= '{$dataInicial}' AND pc60_dtlanc <= '{$dataFinal}'
+	                   END ";
+        }
+
+	    if($data_ini || $data_fim){
+	        $where = $where ? $where . " AND " : $where;
+        }
+
+
+		$where .= " (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
+		break;
+
+	case 'a':
+		$where .= " pc60_bloqueado = 'f'";
+		break;
+
+	case 'i':
+
+		if($data_ini && $data_fim){
+			$where = " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
+			$where .= " AND '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
+		}
+
+		if($data_ini){
+			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
+		}
+
+		if($data_fim){
+			$where = $where ? $where . " AND " : $where;
+			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
+		}
+
+		$where = $where ? $where . " AND " : $where;
+
+		if(!isset($where)){
+			$orderBy .=  ', pc60_databloqueio_ini ';
+		}
 		$where .= " pc60_bloqueado = 't'";
 		break;
 }
+
+$orderBy .= 'z01_nome asc ';
+
 $head4 = "";
 $head6 = "";
 $mPDF  = new Relatorio('', 'A4'); //RELATORIO LANDSCAPE, PARA PORTRAIT, DEIXE SOMENTE A4
@@ -68,7 +110,7 @@ db_inicio_transacao();
 try {
   /*CONSULTA*/
 
-  $sSql        = $oForne->sql_query(null,"*",$orderBy . ' limit 1000 ', $where);
+  $sSql        = $oForne->sql_query(null,"*",$orderBy . ' limit 500 ', $where);
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
 
@@ -104,7 +146,21 @@ ob_start();
               <td>
                   <br/><br/>
                   <b>
-                  Em consulta realizada para o período de <?=$data_ini?> a <?=$data_fim ?>, o sistema verificou que não há fornecedores com impedimentos vigentes no referido período.
+                      <?php
+                      if($data_ini && $data_fim){
+                            $trecho_complementar = " para o período de $data_ini a =$data_fim";
+                      }
+
+                      if($data_ini && !$data_fim){
+                          $trecho_complementar = " a partir do período inicial de $data_ini";
+                      }
+
+					  if(!$data_ini && $data_fim){
+						  $trecho_complementar = " até o período final de $data_fim";
+					  }
+
+                      ?>
+                    Em consulta realizada <?= $trecho_complementar ?>, o sistema verificou que não há fornecedores com impedimentos vigentes no referido período.
                   </b>
                   <br/><br/><br/>
               </td>
