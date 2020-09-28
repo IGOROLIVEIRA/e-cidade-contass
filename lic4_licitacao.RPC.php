@@ -600,65 +600,15 @@ switch ($oParam->exec) {
 
     		$erro = false;
 
-			$target_dir = "anexos/";
-			if(!is_dir($target_dir)){
-				mkdir($target_dir, 0775);
-			}
-
-			$nometmp = $oParam->arquivo;
-
-			// Nome do arquivo temporário gerado no /tmp
-			$path = pathinfo($oParam->arquivo);
-			$filename = md5(time());
-			$ext = $path['extension'];
-
-			$anexo = db_utils::getDao('db_config');
-			$sSqlCliente = $anexo->sql_query(null, 'munic', null, "codigo = ".db_getsession('DB_instit'));
-			$rsSqlCliente = $anexo->sql_record($sSqlCliente);
-			$nomeCliente = strtolower(db_utils::fieldsMemory($rsSqlCliente, 0)->munic);
-			$nomePasta = str_replace(' ', '', $nomeCliente);
-
-			/* Verifica se já existe diretório para a instituição corrente */
-			if(!is_dir($target_dir.$nomePasta)){
-				mkdir($target_dir.$nomePasta, 0775);
-			}
-			$target_dir .= $nomePasta.'/';
-
-			/* Verifica se já existe diretório para a instituição corrente */
-			if(!is_dir($target_dir.'instit_'.db_getsession('DB_instit'))){
-				mkdir($target_dir.'instit_'.db_getsession('DB_instit'), 0775);
-			}
-			$target_dir .= 'instit_'.db_getsession('DB_instit').'/';
-
-			/* Verifica se já existe diretório para o ano corrente */
-			if(!is_dir($target_dir.'/'.db_getsession('DB_anousu'))){
-				mkdir($target_dir.'/'.db_getsession('DB_anousu'), 0775);
-			}
-
-			$target_dir .= db_getsession('DB_anousu').'/';
-
-			/* Verifica se já existe diretório para a licitação corrente */
-			if(!is_dir($target_dir.'/'.$oParam->licitacao)){
-				mkdir($target_dir.'/'.$oParam->licitacao, 0775);
-			}
-			$target_dir .= $oParam->licitacao.'/';
-			// Seta o nome do arquivo destino do upload
-			$arquivoDocument = $target_dir.$filename.".".$ext;
-
-			// Move o arquivo da tmp para o local especificado
-			if(!copy($nometmp, $arquivoDocument)){
-				$erro = true;
-			}
-			unlink($nometmp);
+			$nometmp = explode('/', $oParam->arquivo);
 
 			if(!$erro){
 				$oEdital = new EditalDocumento;
 				$oEdital->setCodigo('');
 				$oEdital->setTipo($oParam->tipo);
-				$nome = explode('/', $nometmp);
 				$oEdital->setLicLicita($oParam->licitacao);
-				$oEdital->setNomeArquivo($nome[1]);
-				$oEdital->setCaminho($arquivoDocument);
+				$oEdital->setNomeArquivo($nometmp[1]);
+				$oEdital->setArquivo($oParam->arquivo);
 				$oEdital->salvar();
 				$oRetorno->message = 'Anexo cadastrado com sucesso!';
 			}
@@ -692,8 +642,7 @@ switch ($oParam->exec) {
 	case "excluirDocumento":
 		try {
 			$oEdital          = new EditalDocumento($oParam->codigoDocumento);
-			unlink($oEdital->getCaminho());
-       		$oEdital->remover();
+			$oEdital->remover();
        		$oRetorno->message = 'Documento removido com sucesso!';
 
     	} catch (Exception $oErro) {
@@ -705,9 +654,10 @@ switch ($oParam->exec) {
 
 	case "downloadDocumento":
 		$oDocumento = new EditalDocumento($oParam->iCodigoDocumento);
-	    $sNomeArquivo = $oDocumento->getNomeArquivo();
-		file_put_contents( $sNomeArquivo, file_get_contents($oDocumento->getCaminho()));
-		ini_set('display_errors', 1);
+	    $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
+	    db_inicio_transacao();
+	    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
+	    db_fim_transacao();
 		$oRetorno->nomearquivo = $sNomeArquivo;
     break;
 
