@@ -109,7 +109,7 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
 if (isset($impmater)) {
 
     $sCampos        = "pc01_descrmater,pc01_complmater,pc01_codsubgrupo,pc01_ativo,pc01_conversao,";
-    $sCampos       .= "pc03_codgrupo as pc01_codgrupo,pc01_libaut,pc01_servico";
+    $sCampos       .= "pc03_codgrupo as pc01_codgrupo,pc01_libaut,pc01_servico,pc01_obras";
     $sSqlPcMater    = $clpcmater->sql_query($impmater, $sCampos, null, "");
     $result_pcmater = $clpcmater->sql_record($sSqlPcMater);
     if($clpcmater->numrows>0){
