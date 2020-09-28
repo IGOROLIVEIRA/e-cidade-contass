@@ -78,11 +78,11 @@ switch ($tipo_fornecedor){
 			$where .= " AND '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
 		}
 
-		if($data_ini){
+		if($data_ini && !$data_fim){
 			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
 		}
 
-		if($data_fim){
+		if(!$data_ini && $data_fim){
 			$where = $where ? $where . " AND " : $where;
 			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
 		}
