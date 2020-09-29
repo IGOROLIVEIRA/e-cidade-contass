@@ -40,9 +40,13 @@ $sOrder     = "";
 $agrupa     = false;
 
 if (isset($lFiltro) && $lFiltro == "t") {
-    $sWhere .= " WHERE m51_valortotal > valorlancado AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}' ";
+    $sWhere .= " WHERE m51_valortotal::numeric > valorlancado::numeric AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}' ";
 } else {
-    $sWhere .= " WHERE m51_valortotal > valorlancado ";
+    $sWhere .= " WHERE m51_valortotal::numeric > valorlancado::numeric ";
+}
+
+if (isset($iCgm) && $iCgm != null) {
+    $sWhere .= " AND z01_numcgm = {$iCgm}";
 }
 
 if (isset($lQuebra) && $lQuebra == "t") {
@@ -57,7 +61,9 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                 fornecedor,
                                 empenho,
                                 m51_data as data_emissao,
-                                ('{$dtDataUsu}'::date - m51_data::date)||' DIAS' as dias_atraso
+                                ('{$dtDataUsu}'::date - m51_data::date)||' DIAS' as dias_atraso,
+                                m51_valortotal,
+                                valorlancado
                         FROM
                             (SELECT m51_codordem,
                                     z01_numcgm,
@@ -65,7 +71,14 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                     empenho,
                                     m51_data,
                                     m51_valortotal,
-                                    sum(m71_valor) as valorlancado
+                                    coalesce((SELECT sum(m71_valor)
+                                                FROM matestoqueitemoc
+                                                    INNER JOIN matordemitem ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
+                                                    INNER JOIN matestoqueitem ON matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem
+                                                    INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+                                                    INNER JOIN matestoque AS a ON a.m70_codigo = matestoqueitem.m71_codmatestoque
+                                                WHERE m52_codordem = x.m51_codordem
+                                                        AND m73_cancelado IS FALSE),0) AS valorlancado
                                 FROM 
                                     (SELECT DISTINCT
                                         m51_codordem,
@@ -76,20 +89,17 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                         m51_data,
                                         m51_valortotal
                                     FROM matordem
-                                        INNER JOIN matordemitem ON  matordemitem.m52_codordem = matordem.m51_codordem
-                                        LEFT  JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
-                                        LEFT  JOIN empnota ON empnota.e69_codnota = empnotaord.m72_codnota
-                                        INNER JOIN empempenho ON empempenho.e60_numemp = empnota.e69_numemp AND empempenho.e60_anousu = empnota.e69_anousu
+                                        INNER JOIN matordemitem ON matordemitem.m52_codordem = matordem.m51_codordem
+                                        LEFT JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
+                                        LEFT JOIN empnota ON empnota.e69_codnota = empnotaord.m72_codnota
+                                        LEFT JOIN empempenho ON empempenho.e60_numemp = matordemitem.m52_numemp
                                         INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
-                                        LEFT  JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
+                                        LEFT JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
                                         WHERE e60_anousu = {$iAnoUsu}
                                             AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
                                             AND m53_codordem IS NULL
                                             AND e60_instit = {$iInstit}
                                     ) as x
-                                INNER JOIN matestoqueitemoc ON m52_codlanc = m73_codmatordemitem
-                                INNER JOIN matestoqueitem ON m71_codlanc = m73_codmatestoqueitem
-                                WHERE m73_cancelado IS FALSE
                                 GROUP BY 1, 2, 3, 4, 5, 6
                             ) AS xx
                         {$sWhere}
@@ -101,7 +111,7 @@ if ($clmatordem->numrows == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não há ordens de compra pendentes de entrada');
 } 
 
-$head3 = "Controle de Ordens de Compra";
+$head3 = "Ordens de Compra Pendentes";
 
 $pdf = new PDF();
 $pdf->Open();
@@ -124,11 +134,13 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
         if (!$agrupa) {
         
             $pdf->setfont('arial','b',9);
-            $pdf->cell(47,$alt,"Código da Ordem",0,0,"C",1);
-            $pdf->cell(47,$alt,"Data de Emissão",0,0,"C",1);
-            $pdf->cell(46,$alt,"Empenho",0,0,"C",1);
-            $pdf->cell(70,$alt,"Fornecedor",0,0,"C",1);
-            $pdf->cell(70,$alt,"Entrada com pendência de:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Código da Ordem",0,0,"C",1);
+            $pdf->cell(30,$alt,"Data de Emissão",0,0,"C",1);
+            $pdf->cell(30,$alt,"Empenho",0,0,"C",1);
+            $pdf->cell(80,$alt,"Fornecedor",0,0,"C",1);
+            $pdf->cell(50,$alt,"Entrada pendente há:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Valor da OC:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Valor Pendente:",0,0,"C",1);
             $pdf->Ln();
 
         }
@@ -144,28 +156,32 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
 
     if ($agrupa && $repete != $cgm) {
         $pdf->setfont('arial','',9);
-        $pdf->cell(280,$alt+4,$fornecedor,0,0,"L",0);
+        $pdf->cell(280,$alt+4,$cgm.' - '.$fornecedor,0,0,"L",0);
         $pdf->ln();
 
         if ($agrupa) {
             
             $pdf->setfont('arial','b',9);
-            $pdf->cell(47,$alt,"Código da Ordem",0,0,"C",1);
-            $pdf->cell(47,$alt,"Data de Emissão",0,0,"C",1);
-            $pdf->cell(46,$alt,"Empenho",0,0,"C",1);
-            $pdf->cell(70,$alt,"Fornecedor",0,0,"C",1);
-            $pdf->cell(70,$alt,"Entrada com pendência de:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Código da Ordem",0,0,"C",1);
+            $pdf->cell(30,$alt,"Data de Emissão",0,0,"C",1);
+            $pdf->cell(30,$alt,"Empenho",0,0,"C",1);
+            $pdf->cell(80,$alt,"Fornecedor",0,0,"C",1);
+            $pdf->cell(50,$alt,"Entrada pendente há:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Valor da OC:",0,0,"C",1);
+            $pdf->cell(30,$alt,"Valor Pendente:",0,0,"C",1);
             $pdf->Ln();
         
         }
     }
     
     $pdf->setfont('arial','',8);
-    $pdf->cell(47,$alt,$cod_ordem,0,0,"C",$prenc);
-    $pdf->cell(47,$alt,$data_emissao,0,0,"C",$prenc);
-    $pdf->cell(46,$alt,$empenho,0,0,"C",$prenc);
-    $pdf->cell(70,$alt,$fornecedor,0,0,"C",$prenc);
-    $pdf->cell(70,$alt,$dias_atraso,0,0,"C",$prenc);
+    $pdf->cell(30,$alt,$cod_ordem,0,0,"C",$prenc);
+    $pdf->cell(30,$alt,db_formatar($data_emissao,'d'),0,0,"C",$prenc);
+    $pdf->cell(30,$alt,$empenho,0,0,"C",$prenc);
+    $pdf->cell(80,$alt,$cgm.' - '.$fornecedor,0,0,"L",$prenc);
+    $pdf->cell(50,$alt,$dias_atraso,0,0,"C",$prenc);
+    $pdf->cell(30,$alt,db_formatar($m51_valortotal,'f'),0,0,"C",$prenc);
+    $pdf->cell(30,$alt,db_formatar(($m51_valortotal-$valorlancado),'f'),0,0,"C",$prenc);
     $pdf->Ln();
 
     if ($agrupa) {

@@ -49,14 +49,21 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                                 fornecedor as dl_fornecedor,
                                 empenho as dl_empenho,
                                 m51_data,
-                                (('{$dtDataUsu}'::date - m51_data::date)||' DIAS')::varchar as dl_entrada_com_pendencia_de
+                                (('{$dtDataUsu}'::date - m51_data::date)||' DIAS')::varchar as dl_entrada_pendente_ha
                         FROM
                             (SELECT m51_codordem,
                                     z01_nome as fornecedor,
                                     empenho,
                                     m51_data,
                                     m51_valortotal,
-                                    sum(m71_valor) as valorlancado
+                                    coalesce((SELECT sum(m71_valor)
+                                                FROM matestoqueitemoc
+                                                    INNER JOIN matordemitem ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
+                                                    INNER JOIN matestoqueitem ON matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem
+                                                    INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+                                                    INNER JOIN matestoque AS a ON a.m70_codigo = matestoqueitem.m71_codmatestoque
+                                                WHERE m52_codordem = x.m51_codordem
+                                                        AND m73_cancelado IS FALSE),0) AS valorlancado
                                 FROM 
                                     (SELECT DISTINCT
                                         m51_codordem,
@@ -66,23 +73,20 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem,
                                         m51_data,
                                         m51_valortotal
                                     FROM matordem
-                                        INNER JOIN matordemitem ON  matordemitem.m52_codordem = matordem.m51_codordem
-                                        LEFT  JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
-                                        LEFT  JOIN empnota ON empnota.e69_codnota = empnotaord.m72_codnota
-                                        INNER JOIN empempenho ON empempenho.e60_numemp = empnota.e69_numemp AND empempenho.e60_anousu = empnota.e69_anousu
+                                        INNER JOIN matordemitem ON matordemitem.m52_codordem = matordem.m51_codordem
+                                        LEFT JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
+                                        LEFT JOIN empnota ON empnota.e69_codnota = empnotaord.m72_codnota
+                                        LEFT JOIN empempenho ON empempenho.e60_numemp = matordemitem.m52_numemp
                                         INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
-                                        LEFT  JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
-                                        WHERE e60_anousu = {$iAnoUsu}
-                                            AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
-                                            AND m53_codordem IS NULL
-                                            AND e60_instit = {$iInstit}
+                                        LEFT JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
+                                    WHERE e60_anousu = {$iAnoUsu}
+                                        AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
+                                        AND m53_codordem IS NULL
+                                        AND e60_instit = {$iInstit}
                                     ) as x
-                                INNER JOIN matestoqueitemoc ON m52_codlanc = m73_codmatordemitem
-                                INNER JOIN matestoqueitem ON m71_codlanc = m73_codmatestoqueitem
-                                WHERE m73_cancelado IS FALSE
-                                GROUP BY 1, 2, 3, 4, 5
+                                GROUP BY 1, 2, 3, 4, 5, 6
                             ) AS xx
-                        WHERE m51_valortotal > valorlancado 
+                        WHERE m51_valortotal::numeric > valorlancado::numeric 
                             AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}'
                         ORDER BY m51_data";
 
@@ -92,6 +96,11 @@ $rsResultOrdemPendente = $clmatordem->sql_record($sSqlOrdemPendente);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style>
+.DBLovrotRegistrosRetornados {
+    text-align: center;
+}
+</style>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
 </head>
@@ -103,7 +112,7 @@ if ($clmatordem->numrows == 0) {
     echo "<h2>NÃO HÁ ORDENS DE COMPRA PENDENTES DE ENTRADA</h2>";
 } else {
     echo "<h2><div style='color: red;'>AVISO DE ORDENS DE COMPRA PENDENTES DE ENTRADA</div></h2>";
-    db_lovrot($sSqlOrdemPendente, 30, "", "", "", "", "NoMe", "", false); 
+    db_lovrot($sSqlOrdemPendente, 10, "", "", "", "", "NoMe", "", false); 
 }
 
 ?>

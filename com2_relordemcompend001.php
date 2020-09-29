@@ -72,6 +72,18 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                             
                             <table align="left" border="0" class="table-campos">
                                 <tr>
+                                    <td  align="left" nowrap title="<?=$Tz01_numcgm?>">
+                                        <?db_ancora("Fornecedor","js_pesquisa_cgm(true);",1);?>
+                                    </td>
+                                    <td align="left" nowrap>
+                                        <?
+                                        db_input("m51_numcgm",10,$Iz01_numcgm,true,"text",4,"onchange='js_pesquisa_cgm(false);'");
+                                        db_input("z01_nome",38,"",true,"text",3);
+                                        ?>
+
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td nowrap>
                                         <b>Filtrar por:</b>
                                     </td>
@@ -115,15 +127,51 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
     </body>
 </html>
 <script>
+
+    function js_pesquisa_cgm(mostra){
+        
+        if(mostra==true){
+            js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
+        }else{
+            if(document.form1.m51_numcgm.value != ''){
+                js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.m51_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+            }else{
+                document.form1.z01_nome.value = '';
+            }
+        }
+        
+    }
+        
+    function js_mostracgm(chave,erro){
+
+        document.form1.z01_nome.value = chave;
+        
+        if(erro==true){
+            document.form1.z01_nome.value = '';
+            document.form1.m51_numcgm.focus();
+        }
+    
+    }
+    
+    function js_mostracgm1(chave1,chave2){
+        
+        document.form1.m51_numcgm.value = chave1;
+        document.form1.z01_nome.value = chave2;
+        db_iframe_cgm.hide();
+        
+    }
+    
     function js_emite() {
 
         var lFiltro = $("lFiltro").value;
         var lQuebra = $("lQuebra").value;
+        var iCgm    = $("m51_numcgm").value;
         var sQuery  = '';
 
         sQuery += '?lFiltro='+lFiltro;
         sQuery += '&iDiasPrazo='+<?= $iDiasPrazo ?>;
         sQuery += '&lQuebra='+lQuebra;
+        sQuery += '&iCgm='+iCgm;
 
         sUrl = 'com2_relordemcompend002.php';
 
