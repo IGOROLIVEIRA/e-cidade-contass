@@ -130,6 +130,39 @@ $clorcorgao->rotulo->label();
 $clempelemento->rotulo->label();
 $clrotulo = new rotulocampo;
 
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo,$lCor='') {
+  $pos_x = $oPdf->x;
+  $pos_y = $oPdf->y;
+  $oPdf->cell($iTamCampo, $iTam, "", 0, 0, 'L', $lCor);
+  $oPdf->x = $pos_x;
+  $oPdf->y = $pos_y;
+  foreach ($aTexto as $sProcedimento) {
+    $sProcedimento=ltrim($sProcedimento);
+    $oPdf->cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 'L', $lCor);
+    $oPdf->x=$pos_x;
+  }
+  $oPdf->x = $pos_x+$iTamCampo;
+  $oPdf->y = $pos_y;
+}
+
+function quebrar_texto($texto,$tamanho){
+
+  $aTexto = explode(" ", $texto);
+  $string_atual = "";
+  foreach ($aTexto as $word) {
+    $string_ant = $string_atual;
+    $string_atual .= " ".$word;
+    if (strlen($string_atual) > $tamanho) {
+      $aTextoNovo[] = $string_ant;
+      $string_ant   = "";
+      $string_atual = $word;
+    }
+  }
+  $aTextoNovo[] = $string_atual;
+  return $aTextoNovo;
+
+}
+
 $tipo = "a"; // sempre analitico
 
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
@@ -1083,7 +1116,8 @@ if ($tipo == "a" or 1 == 1) {
                         $pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
                     }
                 } else {
-                    $pdf->Cell(62, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                    //strtoupper($RLe60_coddot)
+                    $pdf->Cell(62, $tam, 'DOTA플O', 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
                 }
                 //$pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
@@ -1104,10 +1138,10 @@ if ($tipo == "a" or 1 == 1) {
                 if ($mostraritem == "m") {
                     $pdf->Cell(40, $tam, "", 0, 0, "C", 0);
                     $pdf->Cell(20, $tam, "ITEM", 1, 0, "C", 1);
-                    $pdf->Cell(75, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
+                    $pdf->Cell(150, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
                     $pdf->Cell(20, $tam, "QUANTIDADE", 1, 0, "C", 1);
-                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 0, "C", 1);
-                    $pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
+                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 1, "C", 1);
+                    //$pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
                 }
             } else if ($tipo == "a" and $sememp == "s" and ( $agrupar == "oo" || $agrupar == 'gest' )) {
 
@@ -1134,10 +1168,10 @@ if ($tipo == "a" or 1 == 1) {
 
                     $pdf->Cell(40, $tam, "", 0, 0, "C", 0);
                     $pdf->Cell(20, $tam, "ITEM", 1, 0, "C", 1);
-                    $pdf->Cell(75, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
+                    $pdf->Cell(150, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
                     $pdf->Cell(20, $tam, "QUANTIDADE", 1, 0, "C", 1);
-                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 0, "C", 1);
-                    $pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
+                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 1, "C", 1);
+                    //$pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
 
                 }
 
@@ -1776,6 +1810,7 @@ if ($tipo == "a" or 1 == 1) {
             }
 
             if ($mostraritem == "m") {
+
                 $dbwhere = "e62_numemp = $e60_numemp ";
                 if ($listaitem != "" or $listasub != "") {
                     if ($listaitem != ""){
@@ -1790,14 +1825,23 @@ if ($tipo == "a" or 1 == 1) {
                 $rows_item = $clempempitem->numrows;
                 for ($item = 0; $item < $rows_item; $item ++) {
                     db_fieldsmemory($resitem, $item, true);
-                    $preenche = ($item % 2 == 0 ? 0 : 1);
+                    //$preenche = ($item % 2 == 0 ? 0 : 1);
+                    $preenche = 1;
                     $pdf->Cell(40, $tam, "", $iBorda, 0, "R", $preenche);
                     $pdf->Cell(20, $tam, "$e62_item", $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(75, $tam, "$pc01_descrmater", $iBorda, 0, "L", $preenche);
+                    //$pdf->Cell(75, $tam, $descrmatersub, $iBorda, 0, "L", $preenche);
+                    $aDescrmater = quebrar_texto($pc01_descrmater,150);
+                    $iTamFixo = 5;
+                    $iTam = $iTamFixo*(count($aDescrmater));
+                    if (strlen($pc01_descrmater) > 150) {
+                      multiCell($pdf, $aDescrmater, $iTamFixo, $iTam, 150,$preenche);
+                    } else {
+                      $pdf->Cell(150, $tam, $pc01_descrmater, $iBorda, 0, "L", $preenche);
+                    }
                     $pdf->Cell(20, $tam, db_formatar($e62_quant, 'f'), $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(20, $tam, db_formatar($e62_vltot, 'f'), $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(80, $tam, substr($e62_descr, 0, 100), $iBorda, 1, "L", $preenche);
-                    $pdf->Cell(20, $tam, "", 0, 1, "R", $preenche);
+                    $pdf->Cell(20, $tam, db_formatar($e62_vltot, 'f'), $iBorda, 1, "R", $preenche);
+                    //$pdf->Cell(80, $tam, substr($e62_descr, 0, 100), $iBorda, 0, "L", $preenche);
+                    //$pdf->Cell(20, $tam, "", 0, 1, "R", 0);
 
                 }
             }

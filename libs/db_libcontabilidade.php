@@ -5642,8 +5642,12 @@ class cl_estrutura_sistema {
             $sql .= $campos;
         }
         $sql .= " from work_dotacao ";
-        $sql .= " inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu ";
-        $sql .= " inner join empempenho on o58_coddot = e60_coddot and o58_anousu = e60_anousu ";
+        $sql .= " inner join orcelemento  on o58_codele = o56_codele and o58_anousu = o56_anousu ";
+        $sql .= " inner join empempenho   on o58_coddot = e60_coddot and o58_anousu = e60_anousu ";
+        $sql .= " inner join conlancamemp on e60_numemp = c75_numemp ";
+        $sql .= " inner join conlancam    on c75_codlan = c70_codlan ";
+        $sql .= " inner join conlancamdoc on c71_codlan = c70_codlan ";
+        $sql .= " inner join conhistdoc   on c53_coddoc = c71_coddoc ";
         $sql2 = "";
         if($dbwhere==""){
             if($o58_elemento!=null ){
@@ -5662,7 +5666,7 @@ class cl_estrutura_sistema {
                 $virgula = ",";
             }
         }
-
+        // echo $sql.'<br>';
         return db_utils::getColectionByRecord(db_query($sql));
 
     }
@@ -5756,6 +5760,82 @@ class cl_estrutura_sistema {
 
           return db_utils::getColectionByRecord(db_query($sql));
 
+    }
+
+    /**
+     * Busca valor arrecado decorrente de emenda parlamentar (k81_emparlamentar in (1,2))
+     * @param $dtIni
+     * @param $dtFim
+     * @param $instit
+     * @return array|stdClass[]
+     */
+    function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $instit) {
+
+        $sql = "SELECT SUM( 
+                        CASE 
+                            WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8 
+                            WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                        ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR
+                FROM CONLANCAMREC
+                    INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
+                    INNER JOIN CONLANCAMDOC ON C71_CODLAN = C74_CODLAN
+                    INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
+                    INNER JOIN CONLANCAMCORRENTE ON C86_CONLANCAM = C74_CODLAN
+                    INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
+                    INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
+                    INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
+                WHERE CORRENTE.K12_INSTIT = {$instit} AND C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
+        
+        return db_utils::getColectionByRecord(db_query($sql));
+
+    }
+
+    function getDespesaExercAnterior($dtIni, $instit, $sElemento) {
+
+          $sql = "SELECT 
+                    o58_elemento,
+                    o56_descr,
+                    SUM (CASE
+                        WHEN e50_compdesp IS NOT NULL THEN liquidado_compdesp
+                        ELSE liquidado
+                    END) AS liquidado
+                    FROM
+                    (SELECT  
+                            o58_elemento,
+                          o56_descr,
+                          liquidado,
+                          e50_compdesp,
+                          (SELECT SUM(
+                              CASE
+                                  WHEN C53_TIPO = 20 THEN ROUND(C70_VALOR,2)::FLOAT8 
+                                  WHEN C53_TIPO = 21 THEN ROUND(C70_VALOR*-1,2)::FLOAT8 
+                              ELSE 0::FLOAT8 END) AS liquidado_compdesp
+                              FROM pagordem 
+                                INNER JOIN conlancamord ON c80_codord = e50_codord
+                                INNER JOIN conlancamemp ON c80_codlan = c75_codlan
+                                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                                INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+                                INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                              WHERE e50_numemp = e60_numemp 
+                                AND e50_compdesp < '{$dtIni}'
+                                AND e50_codord = x.e50_codord) as liquidado_compdesp                    
+                    FROM
+                      (SELECT o58_elemento,
+                              o56_descr,
+                              e60_numemp,
+                              liquidado,
+                              e50_compdesp,
+                              e50_codord
+                      FROM work_dotacao
+                      INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+                      INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu
+                      INNER JOIN pagordem ON e50_numemp = e60_numemp
+                      WHERE o58_elemento LIKE '{$sElemento}'
+                          AND o58_instit = 1 
+                          AND (e60_datasentenca < '{$dtIni}' OR e50_compdesp < '{$dtIni}')) AS x) as xx GROUP BY 1, 2";
+        
+        return db_utils::getColectionByRecord(db_query($sql));
+        
     }
 
     /**

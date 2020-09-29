@@ -2090,6 +2090,21 @@ function show_calendar(obj,shutdown_function) {
 
 }
 
+function show_calendar_position(obj,shutdown_function,position='') {
+//#01#//show_calendar
+//#10#//Funcão para mostrar o calendário do sistema
+//#20#// shutdown_function: função ao ser executada no final da execução do calendário
+//#15#//show_calendar()
+
+  if(PosMouseY >= 270)
+    PosMouseY = 270;
+  if(PosMouseX >= 600)
+    PosMouseX = 600;
+
+  js_OpenJanelaIframe(position,'iframe_data_'+obj,'func_calendario_position.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function,'Calendário',true,PosMouseY,PosMouseX+600,200,230);
+
+}
+
 function showCalendarioSaudeTodosDias(obj,shutdown_function, especmed) {
 
   if(PosMouseY >= 270) {

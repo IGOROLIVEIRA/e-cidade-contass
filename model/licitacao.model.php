@@ -723,7 +723,7 @@ class licitacao {
      * @param boolean $lValidaHomologacao valida homologadas
      * @return array
      */
-    static function getLicitacoesByFornecedor($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false) {
+    static function getLicitacoesByFornecedor($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false, $filtro = '') {
 
         $oDaoLicilicitem = db_utils::getDao("liclicitem");
         $sWhere          = '';
@@ -749,12 +749,18 @@ class licitacao {
         $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";
         $sCampos        .= ", pc21_numcgm as cgm, l20_numero as numero_exercicio, l20_datacria as data";
         $sCampos        .= ", l20_edital as edital";// campo adicionado para atender novas demandas do sicom 2014
+		$sWhere = "pc21_numcgm = {$iFornecedor} and ac24_sequencial is null {$sWhere}";
+		if($filtro){
+			$sWhere .= " AND l03_pctipocompratribunal {$filtro}";
+		}
         $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulg(
             null,
             $sCampos,
             "l20_codigo",
-            "pc21_numcgm = {$iFornecedor} and ac24_sequencial is null {$sWhere}"
+            $sWhere,
+			true
         );
+
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
 
@@ -793,6 +799,7 @@ class licitacao {
         $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";
         $sCampos        .= ", l20_numero as numero_exercicio, l20_datacria as data";
         $sCampos        .= ", l20_edital as edital";// campo adicionado para atender novas demandas do sicom 2014
+
         $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulgCredenciamento(
             null,
             $sCampos,
