@@ -20,7 +20,10 @@ if(isset($alterar)){
   db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
   $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
   if($sqlerro==false){
-     if($si167_dtassinatura < $z09_datacadastro){
+      $dtassinatura = DateTime::createFromFormat('d/m/Y', $si167_dtassinatura);
+      $dtcadastrocgm =   DateTime::createFromFormat('d/m/Y', $z09_datacadastro);
+
+      if($dtassinatura < $dtcadastrocgm){
         db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
         $sqlerro = true;
      }

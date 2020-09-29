@@ -37,12 +37,13 @@ if(isset($incluir)){
       $sqlerro=true;
     }
 
+    $result_convenio = $clconvconvenios->sql_record($clconvconvenios->sql_query_file($c207_codconvenio));
+    db_fieldsmemory($result_convenio,0)->c206_datacadastro;
+
     $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'order by z09_sequencial desc");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
-    $dtcadastro   = date("Y-m-d",db_getsession("DB_datausu"));
-
-    if($dtcadastro < $z09_datacadastro){
+    if($c206_datacadastro < $z09_datacadastro){
         $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
         $sqlerro = true;
     }
@@ -58,25 +59,27 @@ if(isset($incluir)){
     db_fim_transacao($sqlerro);
   }
 }else if(isset($alterar)){
-  if($sqlerro==false){
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'");
+    db_inicio_transacao();
+    $result_convenio = $clconvconvenios->sql_record($clconvconvenios->sql_query_file($c207_codconvenio));
+    db_fieldsmemory($result_convenio,0)->c206_datacadastro;
+
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm inner join cgm on z01_numcgm = z09_numcgm where z01_cgccpf = '{$c207_nrodocumento}'order by z09_sequencial desc");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
-    $dtcadastro   = date("Y-m-d",db_getsession("DB_datausu"));
-
-    if($dtcadastro < $z09_datacadastro){
+    if($c206_datacadastro < $z09_datacadastro){
        $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
        $sqlerro = true;
     }
 
-    db_inicio_transacao();
-    $clconvdetalhaconcedentes->alterar($c207_sequencial);
-    $erro_msg = $clconvdetalhaconcedentes->erro_msg;
-    if($clconvdetalhaconcedentes->erro_status==0){
-      $sqlerro=true;
+    if($sqlerro==false){
+
+        $clconvdetalhaconcedentes->alterar($c207_sequencial);
+        $erro_msg = $clconvdetalhaconcedentes->erro_msg;
+        if($clconvdetalhaconcedentes->erro_status==0){
+            $sqlerro=true;
+        }
     }
     db_fim_transacao($sqlerro);
-  }
 }else if(isset($excluir)){
   if($sqlerro==false){
     db_inicio_transacao();
