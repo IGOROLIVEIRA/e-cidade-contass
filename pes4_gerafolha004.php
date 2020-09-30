@@ -12042,9 +12042,10 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
       }
     }
 
-    if ($db_debug == true) { echo "[calc_irf] 32 - Chamando a função grava_gerf() <br>"; }
-    grava_gerf($area);
-
+    if(!($pessoal[$Ipessoal]["rh02_portadormolestia"] == 't' && in_array($r20_rubr, array('R913','R915','R914')))) {
+      if ($db_debug == true) { echo "[calc_irf] 32 - Chamando a função grava_gerf() <br>"; }
+      grava_gerf($area);
+    }
     if( ($area == "pontof13" || $area == "pontoprovf13" ) && $mesusu < $cfpess[0]["r11_mes13"]){
         // controle p/ nao calc prev e irf no adto do 13o salario (04/04/96)
         $base_irf = 0;
