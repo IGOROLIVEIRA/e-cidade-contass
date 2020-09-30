@@ -1089,8 +1089,11 @@ class cl_rhrubricas {
      return $sql;
   }
 
-  function rubricasAtivasNaBase($sBase, $iAnofolha, $iMesFolha, $iInstituicao){
-    $sSql = "SELECT distinct r09_base, r09_rubric, rh27_rubric, rh27_descr
+  function rubricasAtivasNaBase($sBase, $iAnofolha, $iMesFolha, $iInstituicao, $sCampos = null){
+    if (empty($sCampos)) {
+      $sCampos = "distinct r09_base, r09_rubric, rh27_rubric, rh27_descr";
+    }
+    $sSql = "SELECT {$sCampos}
             FROM rhrubricas 
 					  LEFT OUTER JOIN basesr ON rh27_rubric = r09_rubric 
             AND r09_base = '".$sBase."'

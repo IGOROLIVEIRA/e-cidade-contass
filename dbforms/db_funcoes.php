@@ -351,7 +351,7 @@ function db_ancora($nome, $js_script, $db_opcao, $style = "", $varnome="") {
 }
 /*************************************/
 
-function db_multiploselect($valueobj,$descrobj, $objnsel="", $objsel="", $recordnsel, $recordsel, $nlinhas=10, $width=250, $descrnsel="", $descrsel="", $ordenarselect=true, $jsincluir=""){
+function db_multiploselect($valueobj,$descrobj, $objnsel="", $objsel="", $recordnsel, $recordsel, $nlinhas=10, $width=250, $descrnsel="", $descrsel="", $ordenarselect=true, $jsincluir="", $jsnomeunico = ""){
   // Função para montar dois objetos select multiple na tela, recebendo dados de recordset distintos. Selects para seleção em que ficam passando as informações de um para o outro.
 	// valueobj   : Campo que será o value dos objetos.
 	// descrobj   : Campo que será a descrição nos objetos.
@@ -385,7 +385,7 @@ function db_multiploselect($valueobj,$descrobj, $objnsel="", $objsel="", $record
             <Legend align="left">
               <b><?=$descrnsel?></b>
             </Legend>
-            <select name="<?=$objnsel?>[]" id="<?=$objnsel?>" size="<?=$nlinhas?>" style="width:<?=$width?>px" multiple onDblClick="js_db_multiploselect_incluir_item(this,document.form1.<?=$objsel?>);">
+            <select name="<?=$objnsel?>[]" id="<?=$objnsel?>" size="<?=$nlinhas?>" style="width:<?=$width?>px" multiple onDblClick="js_db_multiploselect_incluir_item<?=$jsnomeunico?>(this,document.form1.<?=$objsel?>);">
 	          <?
 	          if(gettype($recordnsel) == "resource"){
 	          	$numrows_recnsel = pg_numrows($recordnsel);
@@ -412,16 +412,16 @@ function db_multiploselect($valueobj,$descrobj, $objnsel="", $objsel="", $record
         <td width='10%' align='center'>
           <table>
             <tr>
-              <td align='center'><input type='button' name='selecionD' title='Enviar selecionados para direita' value='&nbsp;>&nbsp;' onclick='js_db_multiploselect_incluir_item(document.form1.<?=$objnsel?>,document.form1.<?=$objsel?>);'></td>
+              <td align='center'><input type='button' name='selecionD' title='Enviar selecionados para direita' value='&nbsp;>&nbsp;' onclick='js_db_multiploselect_incluir_item<?=$jsnomeunico?>(document.form1.<?=$objnsel?>,document.form1.<?=$objsel?>);'></td>
             </tr>
             <tr>
-              <td align='center'><input type='button' name='seltodosD' title='Enviar todos para direita' value='>>' onclick='js_db_multiposelect_incluir_todos(document.form1.<?=$objnsel?>,document.form1.<?=$objsel?>);'></td>
+              <td align='center'><input type='button' name='seltodosD' title='Enviar todos para direita' value='>>' onclick='js_db_multiposelect_incluir_todos<?=$jsnomeunico?>(document.form1.<?=$objnsel?>,document.form1.<?=$objsel?>);'></td>
             </tr>
             <tr>
-              <td align='center'><input type='button' name='selecionE' title='Enviar selecionados para esquerda' value='&nbsp;<&nbsp;' onclick='js_db_multiploselect_incluir_item(document.form1.<?=$objsel?>,document.form1.<?=$objnsel?>);'></td>
+              <td align='center'><input type='button' name='selecionE' title='Enviar selecionados para esquerda' value='&nbsp;<&nbsp;' onclick='js_db_multiploselect_incluir_item<?=$jsnomeunico?>(document.form1.<?=$objsel?>,document.form1.<?=$objnsel?>);'></td>
             </tr>
             <tr>
-              <td align='center'><input type='button' name='seltodosE' title='Enviar todos para esquerda' value='<<' onclick='js_db_multiposelect_incluir_todos(document.form1.<?=$objsel?>,document.form1.<?=$objnsel?>);'></td>
+              <td align='center'><input type='button' name='seltodosE' title='Enviar todos para esquerda' value='<<' onclick='js_db_multiposelect_incluir_todos<?=$jsnomeunico?>(document.form1.<?=$objsel?>,document.form1.<?=$objnsel?>);'></td>
             </tr>
           </table>
         </td>
@@ -430,7 +430,7 @@ function db_multiploselect($valueobj,$descrobj, $objnsel="", $objsel="", $record
             <Legend align="left">
               <b><?=$descrsel?></b>
             </Legend>
-            <select name="<?=$objsel?>[]" id="<?=$objsel?>" size="<?=$nlinhas?>" style="width:<?=$width?>px" multiple onDblClick="js_db_multiploselect_incluir_item(this,document.form1.<?=$objnsel?>);">
+            <select name="<?=$objsel?>[]" id="<?=$objsel?>" size="<?=$nlinhas?>" style="width:<?=$width?>px" multiple onDblClick="js_db_multiploselect_incluir_item<?=$jsnomeunico?>(this,document.form1.<?=$objnsel?>);">
 	          <?
 	          if(gettype($recordsel) == "resource"){
 	          	$numrows_recsel = pg_numrows($recordsel);
@@ -551,12 +551,12 @@ function js_db_multiploselect_retornacampos(){
 // Função para incluir todos os elementos do SELECT MULTIPLE escolhido no outro
 // Esta função selecionará todos os elementos do SELECT e chamará a função js_db_multiploselect_incluir_item para enviar os itens
 // para o SELECT desejado. Quando retornar da função js_db_multiploselect_incluir_item, ela limpará o select remetente
-function js_db_multiposelect_incluir_todos(obj1,obj2){
+function js_db_multiposelect_incluir_todos<?=$jsnomeunico?>(obj1,obj2){
   for(i=0;i<obj1.length;i++){
     obj1.options[i].selected = true;
   }
   linhasoption = obj2.length;
-  js_db_multiploselect_incluir_item(obj1,obj2);
+  js_db_multiploselect_incluir_item<?=$jsnomeunico?>(obj1,obj2);
   obj1.length = 0;
   if(linhasoption == 0){
     for(i=0;i<obj2.length;i++){
@@ -566,7 +566,7 @@ function js_db_multiposelect_incluir_todos(obj1,obj2){
 }
 
 // Esta função serve para passar os itens de um SELECT para o outro.
-function js_db_multiploselect_incluir_item(obj1,obj2){
+function js_db_multiploselect_incluir_item<?=$jsnomeunico?>(obj1,obj2){
   var erro = 0;
 
   // Tirar o foco de todos os itens do select RECEPTOR
