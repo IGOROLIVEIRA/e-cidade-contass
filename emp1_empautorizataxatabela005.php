@@ -236,6 +236,7 @@ if(isset($alterar) && !$sqlerro ){
 else if(isset($chavepesquisa)) {
   $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
+  $e54_numerll = $e54_numerl;
   if($e54_login != db_getsession("DB_id_usuario")) {
 
     $result = $cldb_depusu->sql_record($cldb_depusu->sql_query_file(db_getsession("DB_id_usuario"),$e54_depto,'coddepto as cod02'));
