@@ -34,14 +34,10 @@ if(isset($alterar)){
         $sqlerro = true;
     }
     if($sqlerro==false) {
-
         $clconsconsorcios->c200_instit = db_getsession("DB_instit");
         $clconsconsorcios->alterar($c200_sequencial);
+        $erro_msg = $clconsconsorcios->erro_msg;
     }
-    if($clconsconsorcios->erro_status==0){
-        $sqlerro=true;
-    }
-    $erro_msg = $clconsconsorcios->erro_msg;
     db_fim_transacao($sqlerro);
     $db_opcao = 2;
     $db_botao = true;

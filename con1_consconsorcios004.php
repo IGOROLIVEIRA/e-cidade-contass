@@ -38,15 +38,12 @@ if(isset($incluir)){
         }
         if($sqlerro==false){
             $clconsconsorcios->incluir($c200_sequencial);
+            $erro_msg = $clconsconsorcios->erro_msg;
         }
     } else {
-        $clconsconsorcios->erro_status=0;
-        $clconsconsorcios->erro_msg = "CNPJ já incluso";
+        $erro_msg = "CNPJ já incluso";
+        $sqlerro = true;
     }
-    if($clconsconsorcios->erro_status==0){
-        $sqlerro=true;
-    }
-    $erro_msg = $clconsconsorcios->erro_msg;
     db_fim_transacao($sqlerro);
     $c200_sequencial= $clconsconsorcios->c200_sequencial;
     $db_opcao = 1;
