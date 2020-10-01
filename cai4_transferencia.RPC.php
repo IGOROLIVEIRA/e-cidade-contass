@@ -152,12 +152,16 @@ switch ($oParam->exec) {
     db_inicio_transacao();
     try {
 
-      $cl_historicocgm = new cl_historicocgm();
-      $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"z09_sequencial desc","z09_numcgm = $oParam->iCGM"));
-      db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
-      $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
-      if($dtlancamento < $z09_datacadastro){
-        throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+      if ($oParam->iCGM != "") {
+
+        $cl_historicocgm = new cl_historicocgm();
+        $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro',"z09_sequencial desc","z09_numcgm = $oParam->iCGM"));
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
+        if($dtlancamento < $z09_datacadastro){
+          throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+        }
+
       }
 
       $iCodigoSlip = null;
@@ -842,7 +846,7 @@ function getDocumentoPorTipoInclusao($iTipoOperacao) {
   	case 14:
   	  $iCodigoDocumento = 161;
     break;
-    
+
     case 15:
     case 16:
       $iCodigoDocumento = 164;
