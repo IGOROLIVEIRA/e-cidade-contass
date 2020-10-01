@@ -3109,6 +3109,24 @@ try {
 
         // ****************************************************************************************************************//
 
+        // DAR PERMISSÕES PARA O USUÁRIO TRANSPARÊNCIA EM PMPIRAPORA ******************************************************//
+        $sSqlInstitCgc  = " SELECT cgc FROM db_config WHERE prefeitura='t' ";
+        $rsInstitCgc    = db_query($connOrigem, $sSqlInstitCgc);
+
+        if (pg_num_rows($rsInstitCgc) > 0 && db_utils::fieldsMemory($rsInstitCgc, 0)->cgc == "23539463000121") {
+
+            $sSqlPermissao = "GRANT USAGE ON SCHEMA cms TO transparencia;GRANT SELECT ON cms.configuracoes TO transparencia;GRANT SELECT ON cms.menus TO transparencia;GRANT SELECT ON cms.users TO transparencia;GRANT SELECT ON cms.visitantes TO transparencia;
+
+            GRANT USAGE ON SCHEMA transparencia TO transparencia;
+
+            GRANT SELECT ON transparencia.acordo_aditamento_itens TO transparencia;GRANT SELECT ON transparencia.acordo_aditamentos TO transparencia;GRANT SELECT ON transparencia.acordo_documentos TO transparencia;GRANT SELECT ON transparencia.acordo_empenhos TO transparencia;GRANT SELECT ON transparencia.acordos TO transparencia;GRANT SELECT ON transparencia.assentamentos TO transparencia;GRANT SELECT ON transparencia.database_version TO transparencia;GRANT SELECT ON transparencia.database_version_sql TO transparencia;GRANT SELECT ON transparencia.dotacoes TO transparencia;GRANT SELECT ON transparencia.empenhos TO transparencia;GRANT SELECT ON transparencia.empenhos_itens TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes_exercicios TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes_tipos TO transparencia;GRANT SELECT ON transparencia.empenhos_processos TO transparencia;GRANT SELECT ON transparencia.folha_pagamento TO transparencia;GRANT SELECT ON transparencia.funcoes TO transparencia;GRANT SELECT ON transparencia.glossarios TO transparencia;GRANT SELECT ON transparencia.glossarios_tipos TO transparencia;GRANT SELECT ON transparencia.importacoes TO transparencia;GRANT SELECT ON transparencia.instituicoes TO transparencia;GRANT SELECT ON transparencia.licitacoes TO transparencia;GRANT SELECT ON transparencia.licitacoes_documentos TO transparencia;GRANT SELECT ON transparencia.licitacoes_itens TO transparencia;GRANT SELECT ON transparencia.orgaos TO transparencia;GRANT SELECT ON transparencia.paginaprincipalitens TO transparencia;GRANT SELECT ON transparencia.pessoas TO transparencia;GRANT SELECT ON transparencia.planocontas TO transparencia;GRANT SELECT ON transparencia.programas TO transparencia;GRANT SELECT ON transparencia.projetos TO transparencia;GRANT SELECT ON transparencia.receitas TO transparencia;GRANT SELECT ON transparencia.receitas_movimentacoes TO transparencia;GRANT SELECT ON transparencia.recursos TO transparencia;GRANT SELECT ON transparencia.repasses TO transparencia;GRANT SELECT ON transparencia.requisitantes TO transparencia;GRANT SELECT ON transparencia.resumos_tipos TO transparencia;GRANT SELECT ON transparencia.servidor_movimentacoes TO transparencia;GRANT SELECT ON transparencia.servidores TO transparencia;GRANT SELECT ON transparencia.subfuncoes TO transparencia;GRANT SELECT ON transparencia.unidades TO transparencia;GRANT SELECT ON transparencia.visitantes TO transparencia;";
+            $rsPermissao = db_query($connDestino, $sSqlPermissao);
+
+            if ( !$rsPermissao ) {
+                throw new Exception("ERRO-0: Erro ao dar permissão ao usuário transparência! ".pg_last_error());
+            }
+        }
+
     }
 
 } catch (Exception $eException) {
