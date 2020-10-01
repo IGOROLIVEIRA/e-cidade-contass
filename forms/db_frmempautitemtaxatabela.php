@@ -322,7 +322,7 @@ function js_troca(codele) {
               $e55_vlrun = number_format($e55_vltot / $e55_quant,2,".","");
             }
           }
-          db_input('e55_vluni',10,$Ie55_vluni,true,'text',1,"onchange=\"js_calcula('uni');\"");
+          db_input('e55_vluni',10,$Ie55_vluni,true,'text',1,"onchange=\"js_calcula('uni');\"onkeyup=\"js_removeVirgula(this.value);\"");
         ?>
         <?=@$Le55_vltot?>
         <?
@@ -634,6 +634,17 @@ function js_preenchepesquisa(chave,chave1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
   }
   ?>
+}
+
+function js_removeVirgula(valor){
+    let valor_unitario = '';
+    if(valor.includes('.') && valor.includes(',')){
+        document.form1.e55_vluni.value = valor.replace(',', '');
+    }
+
+    if(valor.includes(',') && !valor.includes('.')){
+        document.form1.e55_vluni.value = valor.replace(',', '.');
+    }
 }
 
 <?

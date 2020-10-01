@@ -306,6 +306,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1, 20, 123))) 
             LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
             LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
             LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+            LEFT JOIN pctabela ON pctabela.pc94_codmater = pcmater.pc01_codmater
             LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
             LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
             AND orcelemento.o56_anousu = " . db_getsession('DB_anousu') . "
