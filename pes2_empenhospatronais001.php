@@ -31,13 +31,58 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_rhrubricas_classe.php");
+include("classes/db_relempenhospatronais_classe.php");
 $clrhrubricas = new cl_rhrubricas;
+$clrelempenhospatronais = new cl_relempenhospatronais;
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
 $clrotulo->label('DBtxt27');
 $clrotulo->label('DBtxt28');
 db_postmemory($HTTP_POST_VARS);
+
+const SALARIO_FAMILIA = "salarioFamilia";
+const SALARIO_MATERNIDADE = "salarioMaternidade";
+
+$result = $clrhrubricas->sql_record($clrhrubricas->rubricasAtivasNaBase('B995', db_anofolha(), db_mesfolha(), db_getsession("DB_instit"), "rhrubricas.rh27_rubric,
+           rhrubricas.rh27_descr,
+           rhrubricas.rh27_presta,
+           case
+             when rhrubricas.rh27_pd = 1 then 'PROVENTO'
+             when rhrubricas.rh27_pd = 2 then 'DESCONTO'
+             else 'BASE'
+           end as rh27_pd,
+           rhrubricas.rh27_form,
+           rhrubricas.rh27_limdat,
+           case
+              when trim(rh27_form)='' then 'f'
+              else 't'
+           end as DB_formula,
+           rh27_tipo as DB_rh27_tipo,
+           rh27_obs", "rh27_rubric asc" ));
+ $aBases = db_utils::getColectionByRecord($result);
+ 
+ $result = $clrelempenhospatronais->sql_record($clrelempenhospatronais->sql_query_file(null, "*", null, "rh170_tipo = '".SALARIO_FAMILIA."' AND rh170_usuario = ".db_getsession("DB_id_usuario")." AND rh170_instit = ".db_getsession("DB_instit")));
+ $aResultSalarioFamilia = db_utils::getColectionByRecord($result);
+
+ $bases = array();
+ $aSalarioFamilia = array();
+
+ foreach ($aBases as $b) {
+   $bases[$b->rh27_rubric] = $b->rh27_rubric.' | ';
+   $bases[$b->rh27_rubric] .= $b->rh27_descr;
+   $bases[$b->rh27_rubric] .= ' | '.$b->rh27_pd;
+ }
+ foreach ($aResultSalarioFamilia as $b) {
+   $aSalarioFamilia[$b->rh170_rubric] = $bases[$b->rh170_rubric];
+ }
+
+ $result = $clrelempenhospatronais->sql_record($clrelempenhospatronais->sql_query_file(null, "*", null, "rh170_tipo = '".SALARIO_MATERNIDADE."' AND rh170_usuario = ".db_getsession("DB_id_usuario")." AND rh170_instit = ".db_getsession("DB_instit")));
+ $aResultSalarioMaternidade = db_utils::getColectionByRecord($result);
+ $aSalarioMaternidade = array();
+ foreach ($aResultSalarioMaternidade as $b) {
+   $aSalarioMaternidade[$b->rh170_rubric] = $bases[$b->rh170_rubric];
+ }
 ?>
 
 <html>
@@ -66,8 +111,28 @@ function js_emite(){
     alert('Você deve selecionar pelo menos 1 item!');
     return;
   }
+  if(document.form1.aSalarioFamilia.length == 0 ){
+    alert('Você deve selecionar pelo menos 1 item de Salário Família!');
+    return;
+  }
+  if(document.form1.aSalarioMaternidade.length == 0 ){
+    alert('Você deve selecionar pelo menos 1 item de Salário Maternidade!');
+    return;
+  }
   for(var i=0; i<document.form1.sselecionados.length; i++){
     selecionados+= virgula_ssel + document.form1.sselecionados.options[i].value;
+    virgula_ssel = ",";
+  }
+  salarioFamilia = "";
+  virgula_ssel = "";
+  for(var i=0; i<document.form1.aSalarioFamilia.length; i++){
+    salarioFamilia+= virgula_ssel + document.form1.aSalarioFamilia.options[i].value;
+    virgula_ssel = ",";
+  }
+  salarioMaternidade = "";
+  virgula_ssel = "";
+  for(var i=0; i<document.form1.aSalarioMaternidade.length; i++){
+    salarioMaternidade+= virgula_ssel + document.form1.aSalarioMaternidade.options[i].value;
     virgula_ssel = ",";
   }
   qry  = "?ano="+document.form1.DBtxt23.value;
@@ -75,15 +140,8 @@ function js_emite(){
   qry += "&perc_extra="+document.form1.perc_extra.value;
   qry += "&salario="+document.form1.salario.value;
   qry += "&selec="+ selecionados;
-  if(document.form1.R918 && document.form1.R918.checked){
-    qry+= "&R918=true";
-  }
-  if(document.form1.R919 && document.form1.R919.checked){
-    qry+= "&R919=true";
-  }
-  if(document.form1.R920 && document.form1.R920.checked){
-    qry+= "&R920=true";
-  }
+  qry += "&salarioFamilia="+ salarioFamilia;
+  qry += "&salarioMaternidade="+ salarioMaternidade;
   jan = window.open('pes2_empenhospatronais002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -158,30 +216,50 @@ function js_emite(){
          ?>
         </td>
       </tr>
-  <tr>
-    <td colspan="2" align = "center">
-      <fieldset>
-        <legend><b>Salário família para dedução</b></legend>
-          <table>
-            <?
-            $result_dados_rubricas = $clrhrubricas->sql_record($clrhrubricas->sql_query_file(null,db_getsession('DB_instit'),"rh27_rubric, rh27_descr","rh27_rubric"," rh27_rubric in ('R918','R919','R920') and rh27_instit = ".db_getsession('DB_instit')));
-            if($clrhrubricas->numrows > 0){
-              for($i=0; $i<$clrhrubricas->numrows; $i++){
-                db_fieldsmemory($result_dados_rubricas, $i);
-                echo "
-                      <tr>
-                        <td>
-                          <input type='checkbox' name='".$rh27_rubric."' value='".$rh27_rubric."'>".$rh27_rubric." - ".$rh27_descr."
-                        </td>
-                      </tr>
-                     ";
-              }
-            }
-	    ?>
-	  </table>
-      </fieldset>
-    </td>
-  </tr>
+      <tr>
+        <td colspan="2" align = "center">
+          <fieldset>
+            <legend><b>Salário Família para dedução</b></legend>
+              <table>
+               <tr>
+                <td width="5%" align="right"><b>Buscar:</b></td>
+                <td width="60%"><input type="text" id="buscaSalarioFamilia" onkeyup="buscaMultiselect('basesSalarioFamilia');" placeholder="Digite um nome"></td>
+                <td width="5%" align="right"><b>Buscar:</b></td>
+                <td width="60%"><input type="text" id="buscabasesSalarioFamilia" onkeyup="buscaMultiselect('aSalarioFamilia');" placeholder="Digite um nome"></td>
+
+              </tr>
+              <tr>
+               <td colspan=4>
+
+                 <?php db_multiploselect('codigo','descricao', "basesSalarioFamilia", "aSalarioFamilia", $bases, $aSalarioFamilia,10,400,"Disponíveis","Selecionados",true,  "Verifica('basesSalarioMaternidade','aSalarioFamilia');VerificaBases('basesSalarioFamilia','basesSalarioMaternidade');", "_familia"); ?>
+               </td>
+             </tr>
+          </table>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" align = "center">
+          <fieldset>
+            <legend><b>Salário Maternidade para dedução</b></legend>
+              <table>
+               <tr>
+                <td width="5%" align="right"><b>Buscar:</b></td>
+                <td width="60%"><input type="text" id="buscaSalarioMaternidade" onkeyup="buscaMultiselect('basesSalarioMaternidade');" placeholder="Digite um nome"></td>
+                <td width="5%" align="right"><b>Buscar:</b></td>
+                <td width="60%"><input type="text" id="buscabasesSalarioMaternidade" onkeyup="buscaMultiselect('aSalarioMaternidade');" placeholder="Digite um nome"></td>
+
+              </tr>
+              <tr>
+               <td colspan=4>
+
+                 <?php db_multiploselect('codigo','descricao', "basesSalarioMaternidade", "aSalarioMaternidade", $bases, $aSalarioMaternidade,10,400,"Disponíveis","Selecionados",true,  "Verifica('basesSalarioFamilia','aSalarioMaternidade');VerificaBases('basesSalarioMaternidade','basesSalarioFamilia');", "_maternidade"); ?>
+               </td>
+             </tr>
+          </table>
+          </fieldset>
+        </td>
+      </tr>
       <tr>
         <td >&nbsp;</td>
         <td >&nbsp;</td>
@@ -194,6 +272,80 @@ function js_emite(){
 
   </form>
     </table>
+
+  <script>
+    function buscaMultiselect(combobox) {
+
+
+      var input, filter, bases, options, i, texto;
+      if (combobox == 'basesSalarioFamilia'){
+
+        input = document.getElementById('buscaSalarioFamilia');
+        filter = input.value.toUpperCase();
+        bases = document.getElementById("basesSalarioFamilia");
+
+      } else if (combobox == 'aSalarioFamilia') {
+
+        input = document.getElementById('buscabasesSalarioFamilia');
+        filter = input.value.toUpperCase();
+        bases = document.getElementById("aSalarioFamilia");
+
+      } else if (combobox == 'basesSalarioMaternidade'){
+
+        input = document.getElementById('buscaSalarioMaternidade');
+        filter = input.value.toUpperCase();
+        bases = document.getElementById("basesSalarioMaternidade");
+
+      } else {
+
+        input = document.getElementById('buscabasesSalarioMaternidade');
+        filter = input.value.toUpperCase();
+        bases = document.getElementById("aSalarioMaternidade");
+
+      }
+      options = bases.getElementsByTagName('option');
+      for (i = 0; i < options.length; i++) {
+        texto = options[i].innerHTML.toUpperCase();
+        if (texto.indexOf(filter) > -1) {
+          options[i].style.display = "";
+        } else {
+          options[i].style.display = "none";
+        }
+      }
+    }
+
+    function Verifica(bases,selecionados) {
+
+      var arrBases = document.getElementById(bases);
+      var arrSelecionados = document.getElementById(selecionados);
+
+      for (let i = 0; i < arrSelecionados.options.length; i++) {
+        for (let iCont = 0; iCont < arrBases.options.length; iCont++) {
+          if (arrSelecionados.options[i].value == arrBases.options[iCont].value) {
+            // console.log(arrBases.options[iCont].value);
+            arrBases.options[iCont] = null;
+            break;
+          }
+        }
+      }
+
+    }
+
+    function VerificaBases(bases1, bases2) {
+
+      let arrBases1 = document.getElementById(bases1);
+      let arrBases2 = document.getElementById(bases2);
+      for (let i = 0; i < arrBases1.options.length; i++) {
+        arrBases2.options[i] = new Option(arrBases1.options[i].text,arrBases1.options[i].value)
+      }
+
+    }
+    Verifica("basesSalarioFamilia","aSalarioFamilia");
+    Verifica("basesSalarioMaternidade","aSalarioMaternidade");
+
+    Verifica("basesSalarioMaternidade","aSalarioFamilia");
+    Verifica("basesSalarioFamilia","aSalarioMaternidade");
+  </script>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>

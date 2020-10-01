@@ -49,28 +49,28 @@ class cl_rsp202020
   var $si115_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si115_sequencial = int8 = sequencial 
-                 si115_tiporegistro = int8 = Tipo do  registro 
-                 si115_codreduzidomov = int8 = Código Identificador da Movimentação 
-                 si115_codorgao = varchar(2) = Código do órgão 
-                 si115_codunidadesub = varchar(8) = Código da unidade 
-                 si115_nroempenho = int8 = Número do  empenho 
-                 si115_exercicioempenho = int8 = Exercício do  empenho 
-                 si115_dtempenho = date = Data do empenho 
-                 si115_tiporestospagar = int8 = Tipo de Restos a  Pagar 
-                 si115_tipomovimento = int8 = Tipo de Movimentação dos Restos a Pagar 
-                 si115_dtmovimentacao = date = Data da  Movimentação 
-                 si115_dotorig = varchar(21) = Despesa inscrita  em Restos a  Pagar 
-                 si115_vlmovimentacao = float8 = Valor da  Movimentação 
-                 si115_codorgaoencampatribuic = varchar(2) = Código do órgão responsável restos 
-                 si115_codunidadesubencampatribuic = varchar(8) = Código da  unidade 
-                 si115_justificativa = varchar(500) = justificativa para o  Cancelamento 
-                 si115_atocancelamento = varchar(20) = Ato que autorizou  o cancelamento 
-                 si115_dataatocancelamento = date = Data do ato que autorizou o cancelamento 
-                 si115_mes = int8 = Mês 
-                 si115_instit = int8 = Instituição 
+                 si115_sequencial = int8 = sequencial
+                 si115_tiporegistro = int8 = Tipo do  registro
+                 si115_codreduzidomov = int8 = Código Identificador da Movimentação
+                 si115_codorgao = varchar(2) = Código do órgão
+                 si115_codunidadesub = varchar(8) = Código da unidade
+                 si115_nroempenho = int8 = Número do  empenho
+                 si115_exercicioempenho = int8 = Exercício do  empenho
+                 si115_dtempenho = date = Data do empenho
+                 si115_tiporestospagar = int8 = Tipo de Restos a  Pagar
+                 si115_tipomovimento = int8 = Tipo de Movimentação dos Restos a Pagar
+                 si115_dtmovimentacao = date = Data da  Movimentação
+                 si115_dotorig = varchar(21) = Despesa inscrita  em Restos a  Pagar
+                 si115_vlmovimentacao = float8 = Valor da  Movimentação
+                 si115_codorgaoencampatribuic = varchar(2) = Código do órgão responsável restos
+                 si115_codunidadesubencampatribuic = varchar(8) = Código da  unidade
+                 si115_justificativa = varchar(500) = justificativa para o  Cancelamento
+                 si115_atocancelamento = varchar(20) = Ato que autorizou  o cancelamento
+                 si115_dataatocancelamento = date = Data do ato que autorizou o cancelamento
+                 si115_mes = int8 = Mês
+                 si115_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_rsp202020()
   {
@@ -78,7 +78,7 @@ class cl_rsp202020
     $this->rotulo = new rotulo("rsp202020");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -89,7 +89,7 @@ class cl_rsp202020
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -140,7 +140,7 @@ class cl_rsp202020
       $this->si115_sequencial = ($this->si115_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si115_sequencial"] : $this->si115_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si115_sequencial)
   {
@@ -152,7 +152,7 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si115_codreduzidomov == null) {
@@ -189,7 +189,7 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si115_instit == null) {
@@ -199,7 +199,7 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si115_sequencial == "" || $si115_sequencial == null) {
@@ -211,7 +211,7 @@ class cl_rsp202020
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si115_sequencial = pg_result($result, 0, 0);
@@ -223,7 +223,7 @@ class cl_rsp202020
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si115_sequencial = $si115_sequencial;
@@ -235,54 +235,54 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into rsp202020(
-                                       si115_sequencial 
-                                      ,si115_tiporegistro 
-                                      ,si115_codreduzidomov 
-                                      ,si115_codorgao 
+                                       si115_sequencial
+                                      ,si115_tiporegistro
+                                      ,si115_codreduzidomov
+                                      ,si115_codorgao
                                       ,si115_codunidadesub
                                       ,si115_codunidadesuborig
-                                      ,si115_nroempenho 
-                                      ,si115_exercicioempenho 
-                                      ,si115_dtempenho 
-                                      ,si115_tiporestospagar 
-                                      ,si115_tipomovimento 
-                                      ,si115_dtmovimentacao 
-                                      ,si115_dotorig 
-                                      ,si115_vlmovimentacao 
-                                      ,si115_codorgaoencampatribuic 
-                                      ,si115_codunidadesubencampatribuic 
-                                      ,si115_justificativa 
-                                      ,si115_atocancelamento 
-                                      ,si115_dataatocancelamento 
-                                      ,si115_mes 
-                                      ,si115_instit 
+                                      ,si115_nroempenho
+                                      ,si115_exercicioempenho
+                                      ,si115_dtempenho
+                                      ,si115_tiporestospagar
+                                      ,si115_tipomovimento
+                                      ,si115_dtmovimentacao
+                                      ,si115_dotorig
+                                      ,si115_vlmovimentacao
+                                      ,si115_codorgaoencampatribuic
+                                      ,si115_codunidadesubencampatribuic
+                                      ,si115_justificativa
+                                      ,si115_atocancelamento
+                                      ,si115_dataatocancelamento
+                                      ,si115_mes
+                                      ,si115_instit
                        )
                 values (
-                                $this->si115_sequencial 
-                               ,$this->si115_tiporegistro 
-                               ,$this->si115_codreduzidomov 
-                               ,'$this->si115_codorgao' 
+                                $this->si115_sequencial
+                               ,$this->si115_tiporegistro
+                               ,$this->si115_codreduzidomov
+                               ,'$this->si115_codorgao'
                                ,'$this->si115_codunidadesub'
                                ,'$this->si115_codunidadesuborig'
-                               ,$this->si115_nroempenho 
-                               ,$this->si115_exercicioempenho 
-                               ," . ($this->si115_dtempenho == "null" || $this->si115_dtempenho == "" ? "null" : "'" . $this->si115_dtempenho . "'") . " 
-                               ,$this->si115_tiporestospagar 
-                               ,$this->si115_tipomovimento 
-                               ," . ($this->si115_dtmovimentacao == "null" || $this->si115_dtmovimentacao == "" ? "null" : "'" . $this->si115_dtmovimentacao . "'") . " 
-                               ,'$this->si115_dotorig' 
-                               ,$this->si115_vlmovimentacao 
-                               ,'$this->si115_codorgaoencampatribuic' 
-                               ,'$this->si115_codunidadesubencampatribuic' 
-                               ,'$this->si115_justificativa' 
-                               ,'$this->si115_atocancelamento' 
-                               ," . ($this->si115_dataatocancelamento == "null" || $this->si115_dataatocancelamento == "" ? "null" : "'" . $this->si115_dataatocancelamento . "'") . " 
-                               ,$this->si115_mes 
-                               ,$this->si115_instit 
+                               ,$this->si115_nroempenho
+                               ,$this->si115_exercicioempenho
+                               ," . ($this->si115_dtempenho == "null" || $this->si115_dtempenho == "" ? "null" : "'" . $this->si115_dtempenho . "'") . "
+                               ,$this->si115_tiporestospagar
+                               ,$this->si115_tipomovimento
+                               ," . ($this->si115_dtmovimentacao == "null" || $this->si115_dtmovimentacao == "" ? "null" : "'" . $this->si115_dtmovimentacao . "'") . "
+                               ,'$this->si115_dotorig'
+                               ,$this->si115_vlmovimentacao
+                               ,'$this->si115_codorgaoencampatribuic'
+                               ,'$this->si115_codunidadesubencampatribuic'
+                               ,'$this->si115_justificativa'
+                               ,'$this->si115_atocancelamento'
+                               ," . ($this->si115_dataatocancelamento == "null" || $this->si115_dataatocancelamento == "" ? "null" : "'" . $this->si115_dataatocancelamento . "'") . "
+                               ,$this->si115_mes
+                               ,$this->si115_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -300,7 +300,7 @@ class cl_rsp202020
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -337,10 +337,10 @@ class cl_rsp202020
       $resac = db_query("insert into db_acount values($acount,2010344,2010770,'','" . AddSlashes(pg_result($resaco, 0, 'si115_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010344,2011628,'','" . AddSlashes(pg_result($resaco, 0, 'si115_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si115_sequencial = null)
   {
@@ -364,7 +364,7 @@ class cl_rsp202020
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -475,7 +475,7 @@ class cl_rsp202020
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -489,7 +489,7 @@ class cl_rsp202020
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -576,7 +576,7 @@ class cl_rsp202020
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -587,7 +587,7 @@ class cl_rsp202020
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -597,12 +597,12 @@ class cl_rsp202020
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si115_sequencial = null, $dbwhere = null)
   {
@@ -662,7 +662,7 @@ class cl_rsp202020
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -673,7 +673,7 @@ class cl_rsp202020
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -683,12 +683,12 @@ class cl_rsp202020
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -701,7 +701,7 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -711,13 +711,13 @@ class cl_rsp202020
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si115_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -753,10 +753,10 @@ class cl_rsp202020
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si115_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -792,7 +792,7 @@ class cl_rsp202020
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

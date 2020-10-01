@@ -55,7 +55,7 @@ if (isset($oPost->incluir)) {
 	    $erro_msg = 'O período patrimonial encontra-se encerrado. Altere a Data de Cadastro do CGM para uma data posterior ou solicite a abertura do período.';
     }
 
-	if(date("Y-m-d", db_getsession('DB_datausu')) < $dataCadastro){
+	if($dataCadastro > date("Y-m-d", db_getsession('DB_datausu'))){
 		$error = true;
 		$erro_msg = 'Não é possível realizar alteração para data futura.';
     }
