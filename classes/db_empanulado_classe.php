@@ -55,6 +55,8 @@ class cl_empanulado {
    /*OC4401*/
    var $e94_id_usuario = 0;
    /*FIM - OC4401*/
+   var $e94_ato = null;
+   var $e94_dataato = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e94_codanu = int4 = Código anulação
@@ -65,6 +67,8 @@ class cl_empanulado {
                  e94_motivo = text = Motivo
                  e94_empanuladotipo = int4 = Tipo da Anulacao
                  e94_id_usuario = int4 = Código da anulação
+                 e94_ato = text = Ato que autorizou o cancelamento
+                 e94_dataato = date = Data do ato
                  ";
    //funcao construtor da classe
    function cl_empanulado() {
@@ -98,6 +102,8 @@ class cl_empanulado {
        }
        $this->e94_motivo = ($this->e94_motivo == ""?@$GLOBALS["HTTP_POST_VARS"]["e94_motivo"]:$this->e94_motivo);
        $this->e94_empanuladotipo = ($this->e94_empanuladotipo == ""?@$GLOBALS["HTTP_POST_VARS"]["e94_empanuladotipo"]:$this->e94_empanuladotipo);
+       $this->e94_ato = ($this->e94_ato == ""?@$GLOBALS["HTTP_POST_VARS"]["e94_ato"]:$this->e94_ato);
+       $this->e94_dataato = ($this->e94_dataato == ""?@$GLOBALS["HTTP_POST_VARS"]["e94_dataato"]:$this->e94_dataato);
      }else{
        $this->e94_codanu = ($this->e94_codanu == ""?@$GLOBALS["HTTP_POST_VARS"]["e94_codanu"]:$this->e94_codanu);
      }
@@ -203,6 +209,8 @@ class cl_empanulado {
                                       ,e94_motivo
                                       ,e94_empanuladotipo
                                       ,e94_id_usuario
+                                      ,e94_ato
+                                      ,e94_dataato
                        )
                 values (
                                 $this->e94_codanu
@@ -213,6 +221,8 @@ class cl_empanulado {
                                ,'$this->e94_motivo'
                                ,$this->e94_empanuladotipo
                                ,$this->e94_id_usuario
+                               ,".($this->e94_ato == "null" || $this->e94_ato == ""?"null":"'".$this->e94_ato."'")."
+                               ,".($this->e94_dataato == "null" || $this->e94_dataato == ""?"null":"'".$this->e94_dataato."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -351,6 +361,14 @@ class cl_empanulado {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->e94_motivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e94_motivo"])){
+       $sql  .= $virgula." e94_ato = '$this->e94_ato' ";
+       $virgula = ",";
+     }
+     if(trim($this->e94_motivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e94_motivo"])){
+       $sql  .= $virgula." e94_dataato = '$this->e94_dataato' ";
+       $virgula = ",";
      }
      if(trim($this->e94_empanuladotipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e94_empanuladotipo"])){
         if(trim($this->e94_empanuladotipo)=="" && isset($GLOBALS["HTTP_POST_VARS"]["e94_empanuladotipo"])){
