@@ -601,13 +601,14 @@ switch ($oParam->exec) {
     		$erro = false;
 
 			$nometmp = explode('/', $oParam->arquivo);
+			$novoNome = strlen($nometmp[1]) > 100 ? substr($nometmp[1],0,100) : $nometmp[1];
 
 			if(!$erro){
 				$oEdital = new EditalDocumento;
 				$oEdital->setCodigo('');
 				$oEdital->setTipo($oParam->tipo);
 				$oEdital->setLicLicita($oParam->licitacao);
-				$oEdital->setNomeArquivo($nometmp[1]);
+				$oEdital->setNomeArquivo($novoNome);
 				$oEdital->setArquivo($oParam->arquivo);
 				$oEdital->salvar();
 				$oRetorno->message = 'Anexo cadastrado com sucesso!';
