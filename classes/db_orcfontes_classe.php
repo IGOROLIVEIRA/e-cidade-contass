@@ -497,9 +497,9 @@ class cl_orcfontes {
      $sql .= "      inner join consistema      on consistema.c52_codsis = conplano.c60_codsis";
      $sql .= "      inner join conclass   as a on a.c51_codcla = conplano.c60_codcla";
      $sql .= "      inner join consistema as b on b.c52_codsis = conplano.c60_codsis";
-     $sql .= "       left join orcreceita on orcreceita.o70_anousu  = conplano.c60_anousu ";
-     $sql .= "                            and orcreceita.o70_codfon = conplano.c60_codcon ";
-     $sql .= "                            and orcreceita.o70_instit = ".db_getsession("DB_instit");
+     $sql .= "      left join conplanoorcamentoanalitica on conplanoorcamento.c60_codcon = conplanoorcamentoanalitica.c61_codcon ";
+     $sql .= "      and conplanoorcamento.c60_anousu = conplanoorcamentoanalitica.c61_anousu ";
+     $sql .= "      left join orctiporec on c61_codigo = o15_codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($o57_codfon!=null ){

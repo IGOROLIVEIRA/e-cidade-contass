@@ -316,7 +316,19 @@ function js_mostraacordo(chave1,chave2,chave3,erro) {
 function js_mostraacordo1(chave1,chave2,chave3) {
   $('ac16_sequencial').value    = chave1;
   $('ac16_resumoobjeto').value  = chave2;
-  $('ac16_origem').value = chave3;
+  let origem = '';
+  switch(chave3.toLowerCase()){
+      case 'manual':
+          origem = 3;
+          break;
+      case 'processo de compras':
+          origem = 1;
+          break;
+      case 'licitação':
+          origem = 2;
+          break;
+  }
+  $('ac16_origem').value = origem;
   db_iframe_acordo.hide();
 }
 
@@ -349,7 +361,7 @@ function js_assinarContrato(obj) {
     var origem = $('ac16_origem').value;
 
     if(origem == '3'){
-        if(valorAcordo != valorDotado){
+        if((valorAcordo != valorDotado) || (!valorAcordo && !valorDotado)){
             alert('Existem itens sem dotações, realize as alterações e tente novamente');
             return;
         }

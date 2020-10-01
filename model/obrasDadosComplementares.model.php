@@ -619,6 +619,10 @@ class obrasDadosComplementares
 	}
 
 	public function preencheObjeto($inclusao){
+
+		$sSqlNatureza = db_query('SELECT l20_naturezaobjeto as natureza from liclicita where l20_codigo = '.$this->getLicita());
+		$iNatureza = db_utils::fieldsMemory($sSqlNatureza, 0)->natureza;
+
 		$oDaoObras = db_utils::getDao('obrasdadoscomplementares');
 		$oDaoObras->db150_codobra = $this->getCodigoObra();
 		$oDaoObras->db150_pais = $this->getPais();
@@ -642,6 +646,11 @@ class obrasDadosComplementares
 		$oDaoObras->db150_descratividadeservico = $this->getDescrAtividadeServico();
 		$oDaoObras->db150_atividadeservicoesp = $this->getAtividadeServicoEsp();
 		$oDaoObras->db150_descratividadeservicoesp = $this->getDescrAtividadeServicoEsp();
+
+		if(!$this->getBdi() && $iNatureza == '1'){
+			throw new Exception('Campo BDI não informado!');
+		}
+
 		$oDaoObras->db150_bdi = $this->getBdi();
 		$oDaoObras->db150_cep = $this->getCep();
 

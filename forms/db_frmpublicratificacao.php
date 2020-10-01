@@ -261,20 +261,16 @@ $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal
     function js_pesquisaLicitacao(mostra){
         let opcao = <?=$db_opcao?>;
         if(mostra==true){
-            if(opcao == 1){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-            }else{
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&dispensas=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-            }
+            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+(opcao == '1' ? '&situacao=1&ratificacao=false' : '')+
+            '+&dispensas=true&enviada=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
         }else{
             if(document.form1.l20_codigo.value != ''){
-                if(opcao == 1){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&situacao=1&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-                }else{
-                    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-                }
+                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+
+                    (opcao == '1' ? '&situacao=1' : '')+
+                    '&enviada=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
             }else{
                 document.form1.l20_codigo.value = '';
+                js_limpaCampos();
             }
         }
     }
@@ -593,5 +589,11 @@ $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal
     function js_onCompleteTipo(licitacao, response){
         let oTipos = JSON.parse(response.responseText);
         js_retornoConsulta(licitacao, oTipos.dadosLicitacao.l03_pctipocompratribunal);
+    }
+
+    function js_limpaCampos(){
+        document.getElementById('l20_tipoprocesso_select_descr').value = '';
+        document.getElementById('l20_objeto').value = '';
+        document.getElementsByName("aItonsMarcados").value = '';
     }
 </script>
