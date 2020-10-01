@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -89,7 +89,7 @@ if($liq == 'true'){
     $xtipo .= ',';
     $virg = ',';
   }
-  $xtipo .= '20,21'; 
+  $xtipo .= '20,21';
   $tem_outro = true;
   $xxtipo = $xxtipo.$virg.' LIQUIDADO';
 }
@@ -99,7 +99,7 @@ if($pag == 'true'){
     $virg = ',';
   }
   $xtipo .= '30,31';
-  $xxtipo = $xxtipo.$virg.'PAGO';  
+  $xxtipo = $xxtipo.$virg.'PAGO';
 }
 $xtipo .= ')';
 //echo 'tem outro'.$tem_outro;
@@ -122,7 +122,7 @@ if(isset($o50_estrutdespesa) && $o50_estrutdespesa!=""){
        case 2://funcao
     	$o52_funcao = $matriz[$i];
     	break;
-       case 3://subfuncao	
+       case 3://subfuncao
     	$o53_subfuncao = $matriz[$i];
     	break;
        case 4://programa
@@ -131,7 +131,7 @@ if(isset($o50_estrutdespesa) && $o50_estrutdespesa!=""){
        case 5://projativ
     	$o55_projativ = $matriz[$i];
     	break;
-       case 6://elemento de despesa	
+       case 6://elemento de despesa
     	$o56_elemento = $matriz[$i];
     	break;
        case 7://tipo de  recurso
@@ -140,9 +140,9 @@ if(isset($o50_estrutdespesa) && $o50_estrutdespesa!=""){
        case 8://contra recurso
     	$o61_codigo = $matriz[$i];
     	break;
-     } 
+     }
    }
-} 
+}
 
    if(!empty($o40_orgao)){
      $filtro .= " and o58_orgao = $o40_orgao ";
@@ -176,7 +176,7 @@ if(isset($o50_estrutdespesa) && $o50_estrutdespesa!=""){
      $filtro .= " and o58_coddot = $o58_coddot ";
    }
 
-//$dataini  = '2005-06-01'; 
+//$dataini  = '2005-06-01';
 //$datafin  = '2005-06-03';
 $dataesp2    = '2005-05-30';
 $mostralan   = "m";  // mostra lancamentos
@@ -212,7 +212,7 @@ $head3 = $xxtipo;
 $head5 = 'PERÍODO : '.db_formatar($dataini,'d').' A '.db_formatar($datafin,'d');
 
 if($rp == 'n'){
- $xtipo .= ' and e60_numemp not in (select e91_numemp from empresto where e91_anousu = '.db_getsession("DB_anousu").') '; 
+ $xtipo .= ' and e60_numemp not in (select e91_numemp from empresto where e91_anousu = '.db_getsession("DB_anousu").') ';
 }
 
 $sqlperiodo = "
@@ -243,42 +243,42 @@ select 	empempenho.e60_numemp::integer as e60_numemp,
 	o15_descr,
 	fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural,
 	e60_codcom,
-	pc50_descr, 
+	pc50_descr,
 	c70_valor,
 	c70_data,
   c70_codlan,
 	c53_tipo,
 	c53_descr,
 	e91_numemp
-  from  empempenho 
+  from  empempenho
         inner join conlancamemp 	on c75_numemp = empempenho.e60_numemp
-        inner join conlancam		on c70_codlan = c75_codlan 
+        inner join conlancam		on c70_codlan = c75_codlan
         inner join conlancamdoc 	on c71_codlan = c70_codlan
-        inner join conhistdoc 		on c53_coddoc = c71_coddoc 
-	inner join cgm 			on cgm.z01_numcgm 		= empempenho.e60_numcgm 
-	inner join db_config 		on db_config.codigo 		= empempenho.e60_instit 
-	inner join orcdotacao 		on orcdotacao.o58_anousu 	= empempenho.e60_anousu 
-					and orcdotacao.o58_coddot = empempenho.e60_coddot 
-	inner join emptipo 		on emptipo.e41_codtipo 		= empempenho.e60_codtipo 
-	inner join db_config as a 	on a.codigo 			= orcdotacao.o58_instit 
-	inner join orctiporec 		on orctiporec.o15_codigo 	= orcdotacao.o58_codigo 
-	inner join orcfuncao 		on orcfuncao.o52_funcao 	= orcdotacao.o58_funcao 
-	inner join orcsubfuncao 	on orcsubfuncao.o53_subfuncao 	= orcdotacao.o58_subfuncao 
-	inner join orcprograma 		on orcprograma.o54_anousu 	= orcdotacao.o58_anousu 
-					and orcprograma.o54_programa = orcdotacao.o58_programa 
-	inner join orcelemento 		on orcelemento.o56_codele 	= orcdotacao.o58_codele 
+        inner join conhistdoc 		on c53_coddoc = c71_coddoc
+	inner join cgm 			on cgm.z01_numcgm 		= empempenho.e60_numcgm
+	inner join db_config 		on db_config.codigo 		= empempenho.e60_instit
+	inner join orcdotacao 		on orcdotacao.o58_anousu 	= empempenho.e60_anousu
+					and orcdotacao.o58_coddot = empempenho.e60_coddot
+	inner join emptipo 		on emptipo.e41_codtipo 		= empempenho.e60_codtipo
+	inner join db_config as a 	on a.codigo 			= orcdotacao.o58_instit
+	inner join orctiporec 		on orctiporec.o15_codigo 	= orcdotacao.o58_codigo
+	inner join orcfuncao 		on orcfuncao.o52_funcao 	= orcdotacao.o58_funcao
+	inner join orcsubfuncao 	on orcsubfuncao.o53_subfuncao 	= orcdotacao.o58_subfuncao
+	inner join orcprograma 		on orcprograma.o54_anousu 	= orcdotacao.o58_anousu
+					and orcprograma.o54_programa = orcdotacao.o58_programa
+	inner join orcelemento 		on orcelemento.o56_codele 	= orcdotacao.o58_codele
 	                               and orcelemento.o56_anousu       = orcdotacao.o58_anousu
-	inner join orcprojativ 		on orcprojativ.o55_anousu 	= orcdotacao.o58_anousu 
-					and orcprojativ.o55_projativ = orcdotacao.o58_projativ 
-	inner join orcorgao 		on orcorgao.o40_anousu 		= orcdotacao.o58_anousu 
-					and orcorgao.o40_orgao = orcdotacao.o58_orgao 
-	inner join orcunidade 		on orcunidade.o41_anousu 	= orcdotacao.o58_anousu 
-					and orcunidade.o41_orgao = orcdotacao.o58_orgao 
-					and orcunidade.o41_unidade = orcdotacao.o58_unidade 
-	left join  empemphist 		on empemphist.e63_numemp = empempenho.e60_numemp 
-	left join  emphist 		on emphist.e40_codhist = empemphist.e63_codhist 
+	inner join orcprojativ 		on orcprojativ.o55_anousu 	= orcdotacao.o58_anousu
+					and orcprojativ.o55_projativ = orcdotacao.o58_projativ
+	inner join orcorgao 		on orcorgao.o40_anousu 		= orcdotacao.o58_anousu
+					and orcorgao.o40_orgao = orcdotacao.o58_orgao
+	inner join orcunidade 		on orcunidade.o41_anousu 	= orcdotacao.o58_anousu
+					and orcunidade.o41_orgao = orcdotacao.o58_orgao
+					and orcunidade.o41_unidade = orcdotacao.o58_unidade
+	left join  empemphist 		on empemphist.e63_numemp = empempenho.e60_numemp
+	left join  emphist 		on emphist.e40_codhist = empemphist.e63_codhist
 	inner join pctipocompra 	on pctipocompra.pc50_codcom = empempenho.e60_codcom
-	left join empresto		on e60_numemp = e91_numemp 
+	left join empresto		on e60_numemp = e91_numemp
 					and ".db_getsession("DB_anousu")." = e91_anousu
 where $xtipo $where_credor
   and c70_data between '$dataini' and '$datafin'
@@ -290,7 +290,7 @@ order by $xordem
 //     echo $sqlperiodo;exit;
      $res=$clempempenho->sql_record($sqlperiodo);
 //db_criatabela($res);
-     $rows=$clempempenho->numrows; 
+     $rows=$clempempenho->numrows;
 if($rows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Verifique os dados escolhidos! Não foi retornado nenhum resultado.');
 }
@@ -313,16 +313,16 @@ $total_liq      = 0;
 $total_pag      = 0;
 
 for ($x = 0; $x < $rows; $x++) {
-	
+
   db_fieldsmemory($res, $x);
-  // testa novapagina 
+  // testa novapagina
   if (( $pdf->gety() > $pdf->h - 40) || $x == 0){
      $troca = 0;
-     $pdf->addpage(); 
-     $pdf->SetFont('Arial','B',7);	 
-    
+     $pdf->addpage();
+     $pdf->SetFont('Arial','B',7);
+
      $pdf->Cell(15,$tam,"EMP",1,0,"C",1);
-     $pdf->Cell(15,$tam,"DT.EMP.",1,0,"C",1);	 
+     $pdf->Cell(15,$tam,"DT.EMP.",1,0,"C",1);
      $pdf->Cell(55,$tam,"DOTAÇÃO",1,0,"C",1);
      $pdf->Cell(15,$tam,"DT.MOV.",1,0,"C",1);
      $pdf->Cell(40,$tam,"TIP0",1,0,"C",1);
@@ -345,12 +345,12 @@ for ($x = 0; $x < $rows; $x++) {
     $pre = 0;
   else
     $pre = 0;
-  $pdf->SetFont('Arial','',7);	 
+  $pdf->SetFont('Arial','',7);
   $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
-  $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);	 
+  $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
   $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
   $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
-  $pdf->Cell(40,$tam,$c53_descr,0,0,"C",$pre);
+  $pdf->Cell(40,$tam,substr($c53_descr,0,10),0,0,"C",$pre);
   $pdf->Cell(20,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
   if($c53_tipo == 20 || $c53_tipo == 21){
      $pdf->Cell(0,$tam,((($e60_vlremp - $e60_vlranu) == $c70_valor)?'TOTAL':'PARCIAL'),0,1,"C",$pre);
@@ -379,7 +379,7 @@ for ($x = 0; $x < $rows; $x++) {
         $pdf->multicell(0,$tam,substr($e62_descr,0,70),0,"L",$preenche);
       }
   }
-  $pdf->cell(0,1,'',"B",1,"C",0);																																    
+  $pdf->cell(0,1,'',"B",1,"C",0);
   if($c53_tipo == 10 || $c53_tipo == 11){
     if($c53_tipo == 10){
       $total_emp += $c70_valor;
