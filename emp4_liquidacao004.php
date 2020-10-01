@@ -602,6 +602,7 @@ switch ($objJson->method) {
     try {
 
       $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
+
       if ($objEmpenho->lSqlErro) {
         $sMensagem = urlencode($objEmpenho->sErroMsg);
         $iStatus = 2;
@@ -614,7 +615,9 @@ switch ($objJson->method) {
           $objJson->sValorEstornar,
           $objJson->sMotivo,
           $objJson->aItens,
-          $objJson->tipoAnulacao
+          $objJson->tipoAnulacao,
+          $objJson->sAto,
+          $objJson->dDataAto
         );
         db_fim_transacao(false);
         $iStatus = 1;

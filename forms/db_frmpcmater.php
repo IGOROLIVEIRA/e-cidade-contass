@@ -43,7 +43,7 @@ function js_executaIframe(val) {
   pcmater0011.location.href = 'com1_pcmater0011.php?db_opcao='+opc+'&codigomater='+mat+'&codsubgrupo='+val+'&codele='+ele;
 }
 </script>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" onsubmit="return js_check()">
 <input type="hidden" name="codeles" value=<?=@$coluna?> >
 <center>
 <fieldset>
@@ -305,6 +305,15 @@ function js_executaIframe(val) {
   ?>
 </form>
 <script>
+
+  function js_check() {
+    if(document.form1.pc01_obras.value == 0) {
+      alert('Campo Material Utilizado em Obras/serviços? não informado.');
+      document.form1.pc01_obras.focus();
+      return false;
+    }
+    return true
+  }
 
   /**
  * limitar caracteres de textarea

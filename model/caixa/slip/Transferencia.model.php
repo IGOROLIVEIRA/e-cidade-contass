@@ -917,6 +917,18 @@ abstract class Transferencia {
       throw new BusinessException("financeiro.caixa.Transferencia.exclusao_agenda");
     }
 
+    $oDaoExcluirSlip = new cl_protslip();
+    $oDaoExcluirSlip->excluir(null, "p106_slip = {$this->getCodigoSlip()}");
+    if ($oDaoExcluirSlip->erro_status == "0") {
+      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_protocolo");
+    }
+
+    $oDaoExcluirSlip = new cl_sliptipooperacaovinculo();
+    $oDaoExcluirSlip->excluir(null, "k153_slip = {$this->getCodigoSlip()}");
+    if ($oDaoExcluirSlip->erro_status == "0") {
+      throw new BusinessException("financeiro.caixa.Transferencia.exclusao_operacaovinculo");
+    }
+
     $this->excluirVinculoComProcesso();
 
     $result = db_utils::fieldsMemory($res = db_query($sSqlBuscaLancamento),0);
