@@ -41,6 +41,8 @@ class HotfixEditaisAnexos extends AbstractMigration
 				FROM setArquivo();
 
 				ALTER TABLE editaldocumentos DROP COLUMN l48_caminho;
+				
+				ALTER TABLE ralic112020 ALTER COLUMN si181_codbempublico DROP NOT NULL;
 
 				DROP FUNCTION setArquivo();
 		";
