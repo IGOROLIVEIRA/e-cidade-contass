@@ -649,6 +649,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }else{
                     $oContrato11->si84_coditem = null;
                 }
+            }else{
+                $oContrato11->si84_coditem = $iCodItem;
             }
             $oContrato11->si84_quantidadeitem = $oItens->getQuantidade();
             $oContrato11->si84_valorunitarioitem = $oItens->getValorUnitario();
@@ -1167,6 +1169,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }else{
                     $clcontratos21->si88_coditem = null;
                 }
+            }else{
+                $clcontratos21->si88_coditem = $iCodItem;
             }
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
             $sqlServico = "
