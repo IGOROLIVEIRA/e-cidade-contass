@@ -56,8 +56,10 @@ try{
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
                 db_fieldsmemory($rsItem,0)->l205_sequencial;
 
+              $dtcred = DateTime::createFromFormat('d/m/Y', $item->l205_datacreditem);
+              $dthabilitacao = DateTime::createFromFormat('d/m/Y', $dtHabilitacaoforne);
 
-                if($item->l205_datacreditem < $dtHabilitacaoforne){
+              if($dtcred < $dthabilitacao){
 
                    throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
                 }
