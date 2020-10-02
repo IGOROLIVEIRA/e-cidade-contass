@@ -4017,6 +4017,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         js_removeObj('msgBox');
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
+        me.setSequencial(dadoscomplementares.sequencial);
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
         $('txtLogradouro' + sId).value = decodeURI(dadoscomplementares.logradouro).replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
@@ -4055,11 +4056,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
-        if(me.getGrupoBemPublico() == '99'){
-            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
-            $('cboSubGrupoBemPub'+sId).disabled = true;
-            me.oCboSubGrupoBemPub.show();
-        }
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
@@ -4067,8 +4063,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' '));
         $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' '));
-        me.setSequencial(dadoscomplementares.sequencial);
 
+        if(me.getGrupoBemPublico() == '99'){
+            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+            $('cboSubGrupoBemPub'+sId).disabled = true;
+            me.oCboSubGrupoBemPub.show();
+        }
         let params = eval('('+oAjax.request.parameters.json+')');
         me.checkFirstRegister(params.iSequencial);
 
