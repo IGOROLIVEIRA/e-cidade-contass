@@ -643,7 +643,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oContrato11->si84_tiporegistro = 11;
             $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
             $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
-            $oContrato11->si84_coditem = $iCodItem;
+            if ($oDados10->ac02_acordonatureza == "1"){
+                if($oDadosItensObra->obr06_tabela == "3"){
+                    $oContrato11->si84_coditem = $iCodItem;
+                }else{
+                    $oContrato11->si84_coditem = null;
+                }
+            }
             $oContrato11->si84_quantidadeitem = $oItens->getQuantidade();
             $oContrato11->si84_valorunitarioitem = $oItens->getValorUnitario();
             $oContrato11->si84_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1145,11 +1151,23 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $iTipoAlteraoItem = 2;
               }
             }
+            /**
+             * busca itens obra;
+             */
+            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+            $rsItems = db_query($sqlItemobra);
+            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
 
             $clcontratos21->si88_tiporegistro = 21;
             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
-            $clcontratos21->si88_coditem = $iCodItem  ;
+            if($oDados20->ac02_acordonatureza == "1"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "3"){
+                    $clcontratos21->si88_coditem = $iCodItem;
+                }else{
+                    $clcontratos21->si88_coditem = null;
+                }
+            }
             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
             $sqlServico = "
                           select pc01_servico, ac20_servicoquantidade
@@ -1173,12 +1191,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
               $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantiAditada();
             }
 
-            /**
-             * busca itens obra;
-             */
-            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
-            $rsItems = db_query($sqlItemobra);
-            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos21->si88_instit = db_getsession("DB_instit");
             if($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7"){
