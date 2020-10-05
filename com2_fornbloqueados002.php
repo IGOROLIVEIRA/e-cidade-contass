@@ -40,11 +40,6 @@ if(!$data_ini && !$data_fim){
 switch ($tipo_fornecedor){
 	case 't':
 
-	    if($data_ini && $data_fim){
-	        $where = " CASE WHEN pc60_databloqueio_ini IS NOT NULL or pc60_databloqueio_fim IS NOT NULL 
-	                            THEN ";
-        }
-
 	    if($data_ini){
 			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
         }
@@ -54,40 +49,37 @@ switch ($tipo_fornecedor){
 			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
         }
 
-	    if($data_ini && $data_fim){
-            $where .= " ELSE pc60_dtlanc >= '{$dataInicial}' AND pc60_dtlanc <= '{$dataFinal}'
-	                   END ";
-        }
-
-	    if($data_ini || $data_fim){
-	        $where = $where ? $where . " AND " : $where;
-        }
-
-
-		$where .= " (pc60_bloqueado = 't' or pc60_bloqueado = 'f')";
+	    $where = $where ? $where . ' AND ' : '';
+		$where .= " pc60_bloqueado = 't'";
 		break;
 
 	case 'a':
+
+	    if($data_ini){
+			$where .= " '{$dataInicial}' > pc60_databloqueio_ini OR '{$dataInicial}' < pc60_databloqueio_fim ";
+        }
+
+	    if($data_fim){
+			$where = $where ? $where . '     OR ' : '';
+	        $where .= " '{$dataFinal}' > pc60_databloqueio_ini OR '{$dataFinal}' < pc60_databloqueio_fim";
+        }
+
+	    $where = $where ? "(" . $where . ') AND ' : '';
 		$where .= " pc60_bloqueado = 'f'";
 		break;
 
 	case 'i':
 
-		if($data_ini && $data_fim){
-			$where = " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
-			$where .= " AND '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
-		}
+	    if($data_ini){
+			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
+        }
 
-		if($data_ini && !$data_fim){
-			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
-		}
-
-		if(!$data_ini && $data_fim){
-			$where = $where ? $where . " AND " : $where;
+	    if($data_fim){
+			$where = $where ? $where . ' OR ' : $where;
 			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
-		}
+        }
 
-		$where = $where ? $where . " AND " : $where;
+		$where = $where ? " (".$where.") " . " AND " : $where;
 
 		if(!isset($where)){
 			$orderBy .=  ', pc60_databloqueio_ini ';
