@@ -287,10 +287,10 @@ function js_cancelar(){
 }
 function js_pesquisapc21_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('','func_nome','func_pcforne.php?funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('','func_nome','func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.pc21_numcgm.value != ''){
-        js_OpenJanelaIframe('','func_nome','func_pcforne.php?pesquisa_chave='+document.form1.pc21_numcgm.value+'&iParam=true&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('','func_nome','func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave='+document.form1.pc21_numcgm.value+'&iParam=true&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
