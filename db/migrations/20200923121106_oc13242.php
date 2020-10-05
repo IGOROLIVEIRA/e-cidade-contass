@@ -58,6 +58,16 @@ class Oc13242 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
 
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Material') AND descricao = 'Conferência'), 
+            (SELECT max(id_item) FROM db_itensmenu WHERE descricao = 'Ordens de Compra Pendentes'), 
+            (SELECT CASE
+                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Material') AND descricao = 'Conferência')) = 0 THEN 1 
+                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Material') AND descricao = 'Conferência')) 
+            END), 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Material')
+        );
+
         COMMIT;
 
 SQL;

@@ -50,18 +50,18 @@ if (isset($iCgm) && $iCgm != null) {
 }
 
 if (isset($iCodDepto) && $iCodDepto != null) {
-    $sWhere .= " AND deptorigem = {$iCodDepto} ";
+    $sWhere .= " AND deptodestino = {$iCodDepto} ";
 }
 
 if (isset($lQuebraForne) && isset($lQuebraDepart) && $lQuebraForne == "t" && $lQuebraDepart == "t") {
-    $sOrder .= " ORDER BY fornecedor, deptorigem, m51_data";
+    $sOrder .= " ORDER BY fornecedor, deptodestino, m51_data";
     $agrupaForne = true;
     $agrupaDepto = true;
 } elseif (isset($lQuebraForne) && $lQuebraForne == "t") {
     $sOrder .= " ORDER BY fornecedor, m51_data";
     $agrupaForne = true;
 } elseif (isset($lQuebraDepart) && $lQuebraDepart == "t") {
-    $sOrder .= " ORDER BY deptorigem, m51_data";
+    $sOrder .= " ORDER BY deptodestino, m51_data";
     $agrupaDepto = true;
 } else {
     $sOrder .= " ORDER BY m51_data ";
@@ -72,8 +72,8 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                 fornecedor,
                                 empenho,
                                 m51_data as data_emissao,
-                                deptorigem,
-                                descdeporigem,  
+                                deptodestino,
+                                descdeptodestino,  
                                 ('{$dtDataUsu}'::date - m51_data::date)||' DIAS' as dias_atraso,
                                 m51_valortotal,
                                 valorlancado
@@ -84,8 +84,8 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                     empenho,
                                     m51_data,
                                     m51_valortotal,
-                                    deptorigem,
-          	                        descdeporigem,
+                                    deptodestino,
+                                    descdeptodestino,
                                     coalesce((SELECT sum(m71_valor)
                                                 FROM matestoqueitemoc
                                                     INNER JOIN matordemitem ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
@@ -103,8 +103,8 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                         (e60_codemp||'/'||e60_anousu)::varchar AS empenho,
                                         m51_data,
                                         m51_valortotal,
-                                        m51_deptoorigem as deptorigem,     
-                                        deptoorigem.descrdepto as descdeporigem   
+                                        m51_depto as deptodestino,     
+                                        descrdepto as descdeptodestino  
                                     FROM matordem
                                         INNER JOIN matordemitem ON matordemitem.m52_codordem = matordem.m51_codordem
                                         LEFT JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
@@ -112,7 +112,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                         LEFT JOIN empempenho ON empempenho.e60_numemp = matordemitem.m52_numemp
                                         INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
                                         LEFT JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
-                                        LEFT JOIN db_depart deptoorigem ON matordem.m51_deptoorigem = deptoorigem.coddepto
+                                        LEFT JOIN db_depart ON matordem.m51_depto = coddepto
                                         WHERE e60_anousu = {$iAnoUsu}
                                             AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
                                             AND m53_codordem IS NULL
@@ -129,7 +129,7 @@ if ($clmatordem->numrows == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não há ordens de compra pendentes de entrada');
 } 
 
-$head3 = "Ordens de Compra Pendentes";
+$head3 = "Ordens de Compra Pendentes de Entrada";
 
 $pdf = new PDF();
 $pdf->Open();
@@ -178,10 +178,10 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
 
         }
 
-        if ($repeteDepto != $deptorigem) {
+        if ($repeteDepto != $deptodestino) {
             
             $pdf->setfont('arial','',9);
-            $pdf->cell(280,$alt+4,$deptorigem.' - '.$descdeporigem,0,0,"L",0);
+            $pdf->cell(280,$alt+4,$deptodestino.' - '.$descdeptodestino,0,0,"L",0);
             $pdf->ln();
 
             imprimeCabecalho($pdf, $alt);
@@ -198,10 +198,10 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
             
         imprimeCabecalho($pdf, $alt);
     
-    } elseif ($agrupaDepto && $repeteDepto != $deptorigem) {
+    } elseif ($agrupaDepto && $repeteDepto != $deptodestino) {
         
         $pdf->setfont('arial','',9);
-        $pdf->cell(280,$alt+4,$deptorigem.' - '.$descdeporigem,0,0,"L",0);
+        $pdf->cell(280,$alt+4,$deptodestino.' - '.$descdeptodestino,0,0,"L",0);
         $pdf->ln();
 
         imprimeCabecalho($pdf, $alt);
@@ -209,11 +209,11 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
     }
     
     $pdf->setfont('arial','',8);
-    $pdf->cell(28,$alt,$cod_ordem,0,0,"C",$prenc);
+    $pdf->cell(15,$alt,$cod_ordem,0,0,"C",$prenc);
     $pdf->cell(28,$alt,db_formatar($data_emissao,'d'),0,0,"C",$prenc);
     $pdf->cell(20,$alt,$empenho,0,0,"C",$prenc);
     $pdf->cell(83,$alt,$cgm.' - '.$fornecedor,0,0,"L",$prenc);
-    $pdf->cell(36,$alt,substr($deptorigem.' - '.$descdeporigem,0,20),0,0,"L",$prenc);
+    $pdf->cell(49,$alt,substr($deptodestino.' - '.$descdeptodestino,0,33),0,0,"L",$prenc);
     $pdf->cell(35,$alt,$dias_atraso,0,0,"C",$prenc);
     $pdf->cell(25,$alt,db_formatar($m51_valortotal,'f'),0,0,"C",$prenc);
     $pdf->cell(25,$alt,db_formatar(($m51_valortotal-$valorlancado),'f'),0,0,"C",$prenc);
@@ -224,7 +224,7 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
     }
 
     if ($agrupaDepto) {
-        $repeteDepto = $deptorigem;
+        $repeteDepto = $deptodestino;
     }
 
 }
@@ -234,11 +234,11 @@ $pdf->Output();
 function imprimeCabecalho($pdf, $alt) {
     
     $pdf->setfont('arial','b',9);
-    $pdf->cell(28,$alt,"Código da Ordem",      0,0,"C",1);
+    $pdf->cell(15,$alt,"Ordem",      0,0,"C",1);
     $pdf->cell(28,$alt,"Data de Emissão",      0,0,"C",1);
     $pdf->cell(20,$alt,"Empenho",              0,0,"C",1);
     $pdf->cell(83,$alt,"Fornecedor",           0,0,"C",1);
-    $pdf->cell(36,$alt,"Departamento",         0,0,"C",1);
+    $pdf->cell(49,$alt,"Departamento",         0,0,"C",1);
     $pdf->cell(35,$alt,"Entrada pendente há:", 0,0,"C",1);
     $pdf->cell(25,$alt,"Valor da OC:",         0,0,"C",1);
     $pdf->cell(25,$alt,"Valor Pendente:",      0,0,"C",1);

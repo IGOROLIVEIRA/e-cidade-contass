@@ -73,7 +73,7 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                             <table align="left" border="0" class="table-campos">
                                 <tr>
                                     <td  align="left" nowrap title="<?=$Tz01_numcgm?>">
-                                        <?db_ancora("Fornecedor","js_pesquisa_cgm(true);",1);?>
+                                        <?db_ancora("Fornecedor:","js_pesquisa_cgm(true);",1);?>
                                     </td>
                                     <td align="left" nowrap>
                                         <?
@@ -85,7 +85,7 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                                 </tr>
                                 <tr>
                                     <td align="left" nowrap title="Departamento">
-                                        <? db_ancora('Departamento',"js_pesquisa_departamento(true);",1); ?>
+                                        <? db_ancora('Departamento:',"js_pesquisa_departamento(true);",1); ?>
                                     </td>
                                     <td>
                                     <?
@@ -98,7 +98,7 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                                         <b>Filtrar por:</b>
                                     </td>
                                     <td>
-                                        <select name="lFiltro" id="lFiltro">
+                                        <select name="lFiltro" id="lFiltro" style="width: 365px;">
                                             <option value="t">Pendentes há mais de <?= $iDiasPrazo ?> dias</option>
                                             <option value="f">Todas</option>
                                         </select>
