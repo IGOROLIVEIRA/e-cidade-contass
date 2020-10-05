@@ -13,6 +13,7 @@ include("classes/db_credenciamento_classe.php");
 include("classes/db_habilitacaoforn_classe.php");
 include("classes/db_parecerlicitacao_classe.php");
 include("classes/db_licitemobra_classe.php");
+include("classes/db_acordo_classe.php");
 
 $cllicitemobra         = new cl_licitemobra;
 $clcredenciamento      = new cl_credenciamento;
@@ -23,6 +24,7 @@ $clliclicita           = new cl_liclicita;
 $clliclicitasituacao   = new cl_liclicitasituacao;
 $clhabilitacaoforn     = new cl_habilitacaoforn();
 $clparecerlicitacao    = new cl_parecerlicitacao();
+$clacordo              = new cl_acordo();
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -39,9 +41,10 @@ try{
 
         case 'SalvarCred':
 
-            $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento",null,null));
-            db_fieldsmemory($rsLimiteCred,0)->l20_dtlimitecredenciamento;
+            $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento,l20_datacria",null,null));
+            db_fieldsmemory($rsLimiteCred,0);
             $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
+            $dtCriacaoProcAdm = (implode("/",(array_reverse(explode("-",$l20_datacria)))));
           foreach ($oParam->itens as $item){
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
@@ -66,6 +69,10 @@ try{
                   if($item->l205_datacred > $dtLimitecredenciamento){
                     throw new Exception ("Usuário: Campo Data Credenciamento maior que data Limite de Credenciamento");
                   }
+                }
+
+                if($item->l205_datacred < $dtCriacaoProcAdm){
+                    throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
                 }
 
                 if ($rsItem == 0) {
@@ -320,6 +327,22 @@ try{
 			};
 
             /**
+             * verifico tipo de compra da licitacao
+             */
+            $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($oParam->licitacao));
+            db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
+
+            if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101") {
+
+                /**
+                 * verifica se existe acordo para bloquear alteração
+                 */
+                $rsAcordos = $clacordo->sql_record($clacordo->sql_queryLicitacoesVinculadas(null, "*", null, "and l20_codigo= $oParam->licitacao"));
+                if (pg_num_rows($rsAcordos) >= 1) {
+                    throw new Exception('Existe contratos cadastrados para essa Licitação não e possível Alterar.');
+                }
+            }
+            /**
              * busco sequencial da homologação
              */
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"l203_homologaadjudicacao",null,"l202_licitacao = $oParam->licitacao"));
@@ -337,10 +360,11 @@ try{
             /**
              * alterando a data de homologação e adjundicação
              */
-
-            $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->l20_dtpubratificacao;
-            $clhomologacaoadjudica->l202_datahomologacao = $oParam->l20_dtpubratificacao;
-            $clhomologacaoadjudica->alterar($l203_homologaadjudicacao);
+            if($sqlerro == false){
+                $clhomologacaoadjudica->l202_dataadjudicacao = $oParam->l20_dtpubratificacao;
+                $clhomologacaoadjudica->l202_datahomologacao = $oParam->l20_dtpubratificacao;
+                $clhomologacaoadjudica->alterar($l203_homologaadjudicacao);
+            }
 
             if ($clhomologacaoadjudica->erro_status == "0") {
                 $erro_msg = $clhomologacaoadjudica->erro_msg;
@@ -379,8 +403,6 @@ try{
             $clliclicita->l20_dtpubratificacao = $oParam->l20_dtpubratificacao;
             $clliclicita->l20_dtlimitecredenciamento = $oParam->l20_dtlimitecredenciamento;
             $clliclicita->l20_veicdivulgacao = $oParam->l20_veicdivulgacao;
-//            $clliclicita->l20_justificativa = $oParam->l20_justificativa;
-//            $clliclicita->l20_razao = $oParam->l20_razao;
             $clliclicita->alterar($oParam->licitacao,null,null);
 
             if ($clliclicita->erro_status == "0") {
@@ -406,6 +428,21 @@ try{
             	throw new Exception('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
 			}
 
+            /**
+             * verifico tipo de compra da licitacao
+             */
+            $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($oParam->licitacao));
+            db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
+
+            if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101" || $l03_pctipocompratribunal == "102" || $l03_pctipocompratribunal == "103"){
+                /**
+                 * verifica se existe acordo para bloquear exclusão
+                 */
+                $rsAcordos = $clacordo->sql_record($clacordo->sql_queryLicitacoesVinculadas(null, "*", null, "and l20_codigo= $oParam->licitacao"));
+                if (pg_num_rows($rsAcordos) >= 1) {
+                    throw new Exception('Existe contratos cadastrados para essa Licitação não e possível excluir.');
+                }
+            }
             /**
              * busco sequencial da homologação
              */

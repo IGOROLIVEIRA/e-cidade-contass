@@ -67,7 +67,7 @@ db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
 	 }
    $result = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
    
-   db_selectrecord("l206_fornecedor",$result,true,$db_opcao);
+   db_selectrecord("l206_fornecedor",$result,true,$db_opcao,"","","","","js_verificaforn()");
 
 //db_input('l206_fornecedor',10,$Il206_fornecedor,true,'text',$db_opcao," onchange='js_pesquisal206_fornecedor(false);'")
 ?>
@@ -281,5 +281,85 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function js_verificaforn() {
+    let fornecedor = document.getElementById('l206_fornecedor').value;
+    let licitacao  = document.getElementById('l206_licitacao').value;
+    var oParam        = new Object();
+    oParam.exec       = 'verificaforn';
+    oParam.fornecedor = fornecedor;
+    oParam.l20_codigo = licitacao;
+    js_divCarregando('Aguarde... verificando fornecedor','msgbox');
+    var oAjax         = new Ajax.Request(
+        'lic1_habilitacaoforn.RPC.php',
+        { parameters: 'json='+Object.toJSON(oParam),
+            asynchronous:false,
+            method: 'post',
+            onComplete : js_retornoVerificaforn
+        });
+}
+
+function js_retornoVerificaforn(oAjax) {
+    js_removeObj("msgbox");
+    var oRetorno = eval('('+oAjax.responseText+")");
+    if(oRetorno.liberarhabilitacao === false){
+        //bloqueia os campos
+
+        document.getElementById('l206_numcertidaoinss').disabled = true;
+        document.getElementById('l206_numcertidaoinss').style.background = '#DEB887';
+
+        document.getElementById('l206_dataemissaoinss').disabled = true;
+        document.getElementById('l206_dataemissaoinss').style.background = '#DEB887';
+
+        document.getElementById('l206_datavalidadeinss').disabled = true;
+        document.getElementById('l206_datavalidadeinss').style.background = '#DEB887';
+
+        document.getElementById('l206_numcertidaofgts').disabled = true;
+        document.getElementById('l206_numcertidaofgts').style.background = '#DEB887';
+
+        document.getElementById('l206_dataemissaofgts').disabled = true;
+        document.getElementById('l206_dataemissaofgts').style.background = '#DEB887';
+
+        document.getElementById('l206_datavalidadefgts').disabled = true;
+        document.getElementById('l206_datavalidadefgts').style.background = '#DEB887';
+
+        document.getElementById('l206_numcertidaocndt').disabled = true;
+        document.getElementById('l206_numcertidaocndt').style.background = '#DEB887';
+
+        document.getElementById('l206_dataemissaocndt').disabled = true;
+        document.getElementById('l206_dataemissaocndt').style.background = '#DEB887';
+
+        document.getElementById('l206_dataemissaocndt').disabled = true;
+        document.getElementById('l206_datavalidadecndt').style.background = '#DEB887';
+    }else{
+
+        document.getElementById('l206_numcertidaoinss').disabled = false;
+        document.getElementById('l206_numcertidaoinss').style.background = '#ffffff';
+
+        document.getElementById('l206_dataemissaoinss').disabled = false;
+        document.getElementById('l206_dataemissaoinss').style.background = '#ffffff';
+
+        document.getElementById('l206_datavalidadeinss').disabled = false;
+        document.getElementById('l206_datavalidadeinss').style.background = '#ffffff';
+
+        document.getElementById('l206_numcertidaofgts').disabled = false;
+        document.getElementById('l206_numcertidaofgts').style.background = '#ffffff';
+
+        document.getElementById('l206_dataemissaofgts').disabled = false;
+        document.getElementById('l206_dataemissaofgts').style.background = '#ffffff';
+
+        document.getElementById('l206_datavalidadefgts').disabled = false;
+        document.getElementById('l206_datavalidadefgts').style.background = '#ffffff';
+
+        document.getElementById('l206_numcertidaocndt').disabled = false;
+        document.getElementById('l206_numcertidaocndt').style.background = '#ffffff';
+
+        document.getElementById('l206_dataemissaocndt').disabled = false;
+        document.getElementById('l206_dataemissaocndt').style.background = '#ffffff';
+
+        document.getElementById('l206_dataemissaocndt').disabled = false;
+        document.getElementById('l206_datavalidadecndt').style.background = '#ffffff';
+    }
 }
 </script>
