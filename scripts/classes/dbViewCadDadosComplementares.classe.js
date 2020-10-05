@@ -2518,6 +2518,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtMinutoLatitude'+sId).value = '';
+        }
         me.setMinutosLatitude(event.target.value);
     }
 
@@ -2547,6 +2550,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeSegundoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtSegundoLatitude'+sId).value = '';
+        }
         me.setSegundosLatitude(event.target.value);
     }
 
@@ -2623,9 +2629,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLongitude = (event) => {
-        if(me.checaValor(event.target.value)){
-            me.setMinutoLongitude(event.target.value);
-        }else{
+        if(!me.checaValor(event.target.value)){
             $('txtMinutoLongitude'+sId).value = '';
         }
         me.setMinutoLongitude(event.target.value);
@@ -2666,11 +2670,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeSegundoLongitude = (event) => {
-        if(me.checaValor(event.target.value)){
-            me.setSegundosLongitude(event.target.value);
-        }else{
+        if(!me.checaValor(event.target.value)){
             $('txtSegundoLongitude'+sId).value = '';
         }
+        me.setSegundosLongitude(event.target.value);
+
     }
 
     me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
