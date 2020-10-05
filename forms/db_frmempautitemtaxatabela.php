@@ -321,9 +321,8 @@ function js_troca(codele) {
             if(!isset($e55_vlrun)){
               $e55_vlrun = number_format($e55_vltot / $e55_quant,2,".","");
             }
-            $e55_vluni=$e55_vlrun;
           }
-          db_input('e55_vluni',10,$Ie55_vltot,true,'text',1,"onchange=\"js_calcula('uni');\"");
+          db_input('e55_vluni',10,$Ie55_vluni,true,'text',1,"onchange=\"js_calcula('uni');\"onkeyup=\"js_removeVirgula(this.value);\"");
         ?>
         <?=@$Le55_vltot?>
         <?
@@ -477,21 +476,6 @@ function js_troca(codele) {
   </form>
     <script>
 
-        flag_consulta = "<?= $consultaValores ?>";
-        if(flag_consulta){
-            var params = {
-                exec: 'verificaSaldoCriterio',
-                e55_item: document.form1.e55_item.value,
-                e55_autori: document.form1.e55_autori.value,
-                tipoitem: "<?=$tipoItem?>",
-                pc94_sequencial: "<?= $sequencialItem?>",
-                total: "<?=$valorTotal?>"
-            };
-
-            js_consultaValores(params);
-        }
-
-
   function js_verificar() {
 
     let qt    =  new Number(document.form1.e55_quant.value);
@@ -560,23 +544,40 @@ function js_pesquisae55_item(mostra){
     js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?<?php echo "criterioadjudicacao=true&z01_numcgm=$z01_numcgm&" ?>iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele|pc23_quant|pc23_vlrun|pc23_valor|pc80_criterioadjudicacao|pc01_servico|tipoitem|pc94_sequencial",'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?pesquisa=true&z01_numcgm=<?=$z01_numcgm?>&iCodigoAutorizacao="+$F('e55_autori')+"&pesquisa_chave="+document.form1.e55_item.value+"&funcao_js=parent.js_mostrapcmater",'Pesquisa',false);
      }else{
        document.form1.pc01_descrmater.value = '';
        document.form1.submit();
      }
   }
 }
-function js_mostrapcmater(chave,erro,codele){
+function js_mostrapcmater(chave,erro,codele,quant,vluni,tipoitem,total,sequencial){
   document.form1.pc01_descrmater.value = chave;
+  let opcao = "<?= $opcao ?>";
+
   if(erro==true){
     document.form1.e55_item.focus();
     document.form1.e55_item.value = '';
+    document.form1.pc01_descrmater.value = '';
+    document.form1.e55_quant.value = '';
     document.form1.submit();
   } else {
       document.form1.pc07_codele.value = codele;
+      document.form1.pc01_descrmater.value = chave;
+      document.form1.e55_quant.value = quant;
+      document.form1.totalad.value = total;
       document.form1.e55_quant.focus();
-      js_consulta();
+
+      var params = {
+          exec: 'verificaSaldoCriterio',
+          e55_item: document.form1.e55_item.value,
+          e55_autori: document.form1.e55_autori.value,
+          tipoitem: tipoitem,
+          pc94_sequencial: sequencial,
+          total: total
+      };
+
+      js_consultaValores(params);
   }
 }
 
@@ -585,7 +586,7 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
   document.form1.pc01_descrmater.value = chave2;
   document.form1.pc07_codele.value     = codele;
   document.form1.e55_quant.value = chave3;
-  document.form1.e55_vluni.value = chave5;
+  document.form1.e55_vluni.value = '';
   chave7 == 't' ? document.form1.e55_vltot.value = chave5 : "";
   document.form1.pc80_criterioadjudicacao.value  = chave6;
   document.form1.totalad.value = chave5;
@@ -607,9 +608,8 @@ function js_mostrapcmater1(chave1,chave2,codele,chave3,chave4,chave5,chave6,chav
             document.form1.utilizado.value  = totitens[0].totalitens > 0 ? totitens[0].totalitens : "0" ;
             document.form1.disponivel.value = new Number(params.total - totitens[0].totalitens) > 0 ? new Number(params.total - totitens[0].totalitens) : "0";
 
-            if(!flag_consulta){
-                js_consulta();
-            }
+            js_consulta();
+
             document.form1.e55_quant.focus();
         });
     }
@@ -634,6 +634,17 @@ function js_preenchepesquisa(chave,chave1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
   }
   ?>
+}
+
+function js_removeVirgula(valor){
+    let valor_unitario = '';
+    if(valor.includes('.') && valor.includes(',')){
+        document.form1.e55_vluni.value = valor.replace(',', '');
+    }
+
+    if(valor.includes(',') && !valor.includes('.')){
+        document.form1.e55_vluni.value = valor.replace(',', '.');
+    }
 }
 
 <?

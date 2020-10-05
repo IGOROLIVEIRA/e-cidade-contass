@@ -1,4 +1,4 @@
-DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao) {
+DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, incluir, codLicitacao, iNaturezaObjeto) {
     var me = this;
 
     this.iCodigoPais = '';
@@ -46,6 +46,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.iBdi = '';
     this.iLicitacao = '';
     this.acao = incluir;
+    this.iNaturezaObjeto = iNaturezaObjeto;
     this.callBackFunction = function () {
 
     }
@@ -1476,6 +1477,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
     this.changeSubGrupoBemPub = (e) => {
         me.setSubGrupoBemPublico(e.target.value);
+        $('cboSubGrupoBemPub'+sId).disabled = false;
     }
 
     me.oCboSubGrupoBemPub = new DBComboBox('cboSubGrupoBemPub' + sId, 'cboSubGrupoBemPub' + sId);
@@ -2429,6 +2431,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
+    if(me.iNaturezaObjeto == '7'){
+        $('txtBdi'+sId).setAttribute('class', 'readonly');
+        $('txtBdi'+sId).setAttribute('disabled', 'disabled');
+    }
+
     $('ctnBdi' + sId).observe('change', me.changeBdi);
     $('ctnBdi' + sId).observe('keyup',() => {
         me.js_formataValor($('txtBdi' + sId), 4);
@@ -3782,11 +3789,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             return false;
         }
 
-        if (!$F('txtBdi' + sId)) {
-            alert('Campo BDI é obrigatório!\n\n');
-            return false;
-        }
-
         if (!$F('txtLogradouro' + sId)) {
             alert('Campo Logradouro é obrigatório!\n\n');
             return false;
@@ -4033,6 +4035,11 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
+        if(me.getGrupoBemPublico() == '99'){
+            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+            $('cboSubGrupoBemPub'+sId).disabled = true;
+            me.oCboSubGrupoBemPub.show();
+        }
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);

@@ -2583,6 +2583,7 @@ class cl_liclicita
         $sql .= "       left join protprocesso          on protprocesso.p58_codproc    = liclicitaproc.l34_protprocesso";
         $sql .= "       left join liclicitem            on liclicita.l20_codigo        = l21_codliclicita ";
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
+        $sql .= "       left join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -2637,6 +2638,7 @@ class cl_liclicita
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
         $sql .= "      inner join parecerlicitacao     on parecerlicitacao.l200_licitacao     = liclicita.l20_codigo ";
         $sql .= "      inner join liclicitasituacao     on liclicitasituacao.l11_liclicita     = liclicita.l20_codigo ";
+        $sql .= "      left  join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -3505,7 +3507,7 @@ class cl_liclicita
                   inner join solicitem on pc11_codigo = pc81_solicitem
                   inner join solicitempcmater on pc16_solicitem = pc11_codigo
                   inner join pcmater on pc01_codmater = pc16_codmater
-                  where l21_codliclicita = $liclicita and pc01_obras = 't'";
+                  where l21_codliclicita = $liclicita";
         $rsResult = db_query($sql);
         $aItensPcmater = array();
         for ($icont = 0; $icont < pg_num_rows($rsResult); $icont++) {

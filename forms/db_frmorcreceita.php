@@ -134,7 +134,7 @@ db_input('o70_codrec',6,$Io70_codrec,true,'text',3)
   <tr>
     <td nowrap title="<?=@$To70_codfon?>">
        <?
-       db_ancora(@$Lo70_codfon,"js_pesquisao70_codfon(true);",$db_opcao);
+       db_ancora('Estrutural da Receita',"js_pesquisao70_codfon(true);",$db_opcao);
        ?>
     </td>
     <td colspan='2'>
@@ -348,7 +348,7 @@ function js_mostraconcarpeculiar1(chave1,chave2){
 }
 function js_pesquisao70_codfon(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|o70_codigo|o15_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
   }else{
     fonte=document.form1.o50_estrutreceita.value;
     while(fonte.search(/\./)!='-1'){
@@ -441,7 +441,7 @@ if(isset($negado)){
    document.form1.o50_estrutreceita.value='';
    document.form1.o57_descr.value='';
    alert('Selecione o último nível!');\n
-   js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?chave_o57_fonte=$codigo&funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|o70_codigo|o15_descr','Pesquisa',true);
+   js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?chave_o57_fonte=$codigo&funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
   ";
 }
 ?>

@@ -40,6 +40,7 @@ require_once("model/contabilidade/planoconta/SubSistemaConta.model.php");
 require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 require_once("model/contabilidade/planoconta/ClassificacaoConta.model.php");
 require_once("model/contabilidade/planoconta/ContaCorrente.model.php");
+require_once 'classes/db_historicocgm_classe.php';
 
 $oJson = new services_json();
 $oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -60,6 +61,16 @@ switch ($oParam->exec) {
 
 
         try {
+
+            $cl_historicocgm = new cl_historicocgm();
+            $result_dtcadcgm = $cl_historicocgm->sql_record($cl_historicocgm->sql_query_file(null,'z09_datacadastro','z09_sequencial desc',"z09_numcgm = $oParam->iCgmPessoa"));
+
+            db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+            $dtlancamento = date("Y-m-d",db_getsession("DB_datausu"));
+
+            if($dtlancamento < $z09_datacadastro){
+                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+            }
 
             db_inicio_transacao();
             $iAno = null;
