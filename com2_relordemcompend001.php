@@ -84,6 +84,16 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td align="left" nowrap title="Departamento">
+                                        <? db_ancora('Departamento',"js_pesquisa_departamento(true);",1); ?>
+                                    </td>
+                                    <td>
+                                    <?
+                                    db_input('coddepto',10,'',true,'text',4," onchange='js_pesquisa_departamento(false);'","");
+                                    db_input('descrdepto',38, '', true, 'text', 3,"","");
+                                    ?>
+                                </tr>
+                                <tr>
                                     <td nowrap>
                                         <b>Filtrar por:</b>
                                     </td>
@@ -99,7 +109,18 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                                         <b>Quebra por fornecedor:</b>
                                     </td>
                                     <td>
-                                        <select name="lQuebra" id="lQuebra">
+                                        <select name="lQuebraForne" id="lQuebraForne">
+                                            <option value="t">SIM</option>
+                                            <option value="f" selected>NÃO</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap>
+                                        <b>Quebra por departamento:</b>
+                                    </td>
+                                    <td>
+                                        <select name="lQuebraDepart" id="lQuebraDepart">
                                             <option value="t">SIM</option>
                                             <option value="f" selected>NÃO</option>
                                         </select>
@@ -128,50 +149,89 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
 </html>
 <script>
 
-    function js_pesquisa_cgm(mostra){
+    function js_pesquisa_cgm(mostra) {
         
-        if(mostra==true){
+        if (mostra==true) {
             js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
-        }else{
-            if(document.form1.m51_numcgm.value != ''){
+        } else {
+            if (document.form1.m51_numcgm.value != '') {
                 js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.m51_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
-            }else{
+            } else {
                 document.form1.z01_nome.value = '';
             }
         }
         
     }
         
-    function js_mostracgm(chave,erro){
+    function js_mostracgm(chave,erro) {
 
         document.form1.z01_nome.value = chave;
         
-        if(erro==true){
+        if (erro == true) {
             document.form1.z01_nome.value = '';
             document.form1.m51_numcgm.focus();
         }
     
     }
     
-    function js_mostracgm1(chave1,chave2){
+    function js_mostracgm1(chave1,chave2) {
         
         document.form1.m51_numcgm.value = chave1;
         document.form1.z01_nome.value = chave2;
         db_iframe_cgm.hide();
         
     }
+
+    function js_pesquisa_departamento(mostra) {
+        
+        if (mostra==true) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepart|coddepto|descrdepto','Pesquisa',true);
+        } else {
+            if (document.form1.coddepto.value != '') {
+                js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart1','Pesquisa',false);
+            } else {
+                document.form1.coddepto.value = '';
+                document.form1.descrdepto.value = '';
+            }
+        }
+    }
+
+    function js_mostradepart1(chave1, erro) {
+    
+        document.form1.descrdepto.value = chave1;
+        
+        if (erro==true) {
+            
+            document.form1.coddepto.focus();
+            document.form1.coddepto.value = '';
+            return;
+
+        }
+
+    }
+
+    function js_mostradepart(chave1,chave2) {
+  
+        document.form1.coddepto.value = chave1;
+        document.form1.descrdepto.value = chave2;
+        db_iframe_departamento.hide();  
+    }
     
     function js_emite() {
 
-        var lFiltro = $("lFiltro").value;
-        var lQuebra = $("lQuebra").value;
-        var iCgm    = $("m51_numcgm").value;
-        var sQuery  = '';
+        var lFiltro         = $("lFiltro").value;
+        var iCgm            = $("m51_numcgm").value;
+        var iCodDepto       = $("coddepto").value;
+        var lQuebraForne    = $("lQuebraForne").value;
+        var lQuebraDepart   = $("lQuebraDepart").value;
+        var sQuery          = '';
 
         sQuery += '?lFiltro='+lFiltro;
         sQuery += '&iDiasPrazo='+<?= $iDiasPrazo ?>;
-        sQuery += '&lQuebra='+lQuebra;
+        sQuery += '&lQuebraForne='+lQuebraForne;
+        sQuery += '&lQuebraDepart='+lQuebraDepart;
         sQuery += '&iCgm='+iCgm;
+        sQuery += '&iCodDepto='+iCodDepto;
 
         sUrl = 'com2_relordemcompend002.php';
 
