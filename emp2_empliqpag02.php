@@ -325,8 +325,8 @@ for ($x = 0; $x < $rows; $x++) {
      $pdf->Cell(15,$tam,"DT.EMP.",1,0,"C",1);
      $pdf->Cell(55,$tam,"DOTAÇÃO",1,0,"C",1);
      $pdf->Cell(15,$tam,"DT.MOV.",1,0,"C",1);
-     $pdf->Cell(40,$tam,"TIP0",1,0,"C",1);
-     $pdf->Cell(20,$tam,"VALOR",1,0,"C",1);
+     $pdf->Cell(50,$tam,"TIP0",1,0,"C",1);
+     $pdf->Cell(14,$tam,"VALOR",1,0,"C",1);
      $pdf->Cell(0,$tam,'TOTAL/PARCIAL',1,1,"C",1);
      $pdf->cell(15,$tam,"CREDOR ",1,0,"C",1);
      $pdf->cell(0,$tam,"NOME",1,1,"C",1);
@@ -350,8 +350,8 @@ for ($x = 0; $x < $rows; $x++) {
   $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
   $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
   $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
-  $pdf->Cell(40,$tam,substr($c53_descr,0,10),0,0,"C",$pre);
-  $pdf->Cell(20,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
+  $pdf->Cell(29,$tam,substr($c53_descr,0,30),0,0,"L",$pre);
+  $pdf->Cell(52,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
   if($c53_tipo == 20 || $c53_tipo == 21){
      $pdf->Cell(0,$tam,((($e60_vlremp - $e60_vlranu) == $c70_valor)?'TOTAL':'PARCIAL'),0,1,"C",$pre);
   }else{
