@@ -49,6 +49,7 @@ if(isset($incluir)){
 
     foreach ($aPcmater as $item){
         $rsverifica = $cllicitemobra->sql_record($cllicitemobra->sql_query(null,"*",null,"obr06_pcmater = $item->pc16_codmater"));
+
         if(pg_num_rows($rsverifica) <= 0){
             $aPcmaterverificado[] = $item->pc16_codmater;
         }
@@ -56,7 +57,7 @@ if(isset($incluir)){
     $itens = implode(",",$aPcmaterverificado);
 
     if($l20_naturezaobjeto == "1"){
-        if($itens != null){
+        if($itens != null || $itens != ""){
             db_msgbox("Itens obras não cadastrados. Codigos:".$itens);
             db_redireciona('lic1_homologacaoadjudica001.php');
         }

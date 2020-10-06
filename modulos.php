@@ -148,7 +148,15 @@ function js_atualizacao_versao(){
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-
+<style>
+    table:nth-child(2){
+        height: 2%;
+    }
+    h2{
+        color: red;
+        text-align: center;
+    }
+</style>
 <body class="body-default">
 
 <form name="form1" method="post">
@@ -472,6 +480,15 @@ $sNome             = pg_result($rsUsuarioLogado,0,1);
   ?>
   </td>
   </tr>
+  <?php if($modulo == 381):?>
+  <tr>
+      <hr style="color:#000; size: 25px;">
+      <td>
+          <h2>Editais pendentes de envio</h2>
+          <iframe frameborder="0"  width="100%" id="licitacoes" name="licitacaoes" src="func_edital.php?aguardando_envio=true&module_licitacao=true" scrolling="auto"></iframe>
+      </td>
+  </tr>
+  <?php endif; ?>
   </table>
   </center>
   </form>

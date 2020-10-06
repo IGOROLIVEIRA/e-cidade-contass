@@ -96,8 +96,7 @@ $db_opcao = 1;
                 case 102:
                 case 103:
                 case 106:
-                  if($natureza_objeto != 1){
-                    $aTipos[] = 'Selecione';
+                  if($natureza_objeto != 1 || $natureza_objeto == 7){
                     $aTipos['td'] = 'Termo de Dispensa';
                   }else{
                     $aTipos[] = 'Selecione';
@@ -111,8 +110,7 @@ $db_opcao = 1;
                   break;
 
                 default:
-                  if($natureza_objeto != 1){
-                    $aTipos[] = 'Selecione';
+                  if($natureza_objeto != 1 || $natureza_objeto == 7){
                     $aTipos['ed'] = 'Edital';
                   }else{
                     $aTipos[] = 'Selecione';

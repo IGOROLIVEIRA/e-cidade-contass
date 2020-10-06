@@ -440,7 +440,11 @@ switch ($oParam->exec) {
                 $oEndereco->setAtividadeServicoEsp($oParam->endereco->atividadeServicoEsp);
                 $oEndereco->setDescrAtividadeServicoEsp($oParam->endereco->descrAtividadeServicoEsp);
                 $oEndereco->setGrupoBemPublico(intval($oParam->endereco->grupoBemPub));
-                $oEndereco->setSubGrupoBemPublico(intval($oParam->endereco->subGrupoBemPub));
+                if($oParam->endereco->grupoBemPub == '99'){
+                    $oEndereco->setSubGrupoBemPublico('9900');
+                }else{
+                    $oEndereco->setSubGrupoBemPublico(intval($oParam->endereco->subGrupoBemPub));
+                }
                 $oEndereco->setBdi($oParam->endereco->bdi);
                 $oEndereco->setLicita($oParam->endereco->licitacao);
                 $oEndereco->setSequencial($oParam->endereco->sequencial);
@@ -473,7 +477,7 @@ switch ($oParam->exec) {
             $oRetorno->status = 2;
         }
 
-        echo json_encode($oRetorno);
+        echo $oJson->encode($oRetorno);
     break;
 
     case 'excluiDadosObra':

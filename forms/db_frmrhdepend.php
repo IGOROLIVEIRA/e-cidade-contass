@@ -35,7 +35,7 @@ $clrotulo->label("rh31_depend");
 $clrotulo->label("rh31_gparen");
 $clrotulo->label("rh31_cpf");
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" enctype="multipart/form-data">
 <center>
 <table border="0">
   <tr>
@@ -164,8 +164,19 @@ $clrotulo->label("rh31_cpf");
                                   'C'=>'Cálculo',
                                   'S'=>'Sempre dependente'
                                  );
-              db_select("rh31_especi",$arr_especi,true,$db_opcao);
+              db_select("rh31_especi",$arr_especi,true,$db_opcao, "onchange='js_informarLaudoDependente()'");
               ?>
+
+              <span id="laudodependente" <? echo ($GLOBALS['rh31_especi'] == 'C' || $GLOBALS['rh31_especi'] == 'S') ? '' : 'style="display: none;"' ?>>
+                  <?=@$Lrh31_laudodependente?>
+                  <?
+                  db_input('rh31_laudodependente_file', 10, 0, true, 'file', $db_opcao, "", "", "", "height: 29px;");
+                  if (!empty($GLOBALS['rh31_laudodependente'])) {
+                      db_input('rh31_laudodependente', 10, 0, true, 'hidden', $db_opcao, "", "", "", "");
+                      ?> <input type="button" name="imprimir_laudodependente" value="Imprimir" onclick="js_imprimir_laudo('rh31_laudodependente');"> <?
+                  }
+                  ?>
+              </span>
            </td>
          </tr>
         </table>
@@ -235,7 +246,8 @@ if(isset($opcao)){
                                                     'Não dependente'
                                                end
                                           end
-                                          as rh31_especi
+                                          as rh31_especi,
+                                          rh31_laudodependente
                                         ",
                                         "rh31_nome",
                                         $dbwhere
@@ -270,5 +282,26 @@ function js_preenchepesquisa(chave){
     echo "  location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+/**
+ * Habilita campo para informar o laudo médico
+ */
+function js_informarLaudoDependente() {
+
+    var nodeDependente      = $("rh31_especi");
+    var nodeLaudoDependente = $("laudodependente");
+
+    if (nodeDependente.value != 'N') {
+        nodeLaudoDependente.show();
+    } else {
+        nodeLaudoDependente.hide();
+    }
+}
+
+function js_imprimir_laudo(laudo) {
+    let iOid = document.getElementById(laudo).value;
+    jan = window.open('pes2_imprimirlaudo002.php?oid='+iOid,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
 }
 </script>
