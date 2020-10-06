@@ -236,7 +236,7 @@ class cl_rhdepend {
                                ,'$this->rh31_irf'
                                ,'$this->rh31_especi'
                                ,'$this->rh31_cpf'
-                               ,$this->rh31_laudodependente
+                               ,".($this->rh31_laudodependente == "null" || $this->rh31_laudodependente == ""?"null":$this->rh31_laudodependente)."
                       )";
      $result = db_query($sql);
      if($result==false){
