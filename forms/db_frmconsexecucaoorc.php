@@ -389,7 +389,9 @@ function js_pesquisao58_subfuncao(mostra){
 
           } else {
 
-              alert("Nenhuma registro de Execução Orçamentária Encontrado para o Consórcio.");
+              if (iMes != 1) {
+                    alert("Nenhuma registro de Execução Orçamentária Encontrado para o Consórcio.");
+              }
               js_limpaTabela();   
 
           }
