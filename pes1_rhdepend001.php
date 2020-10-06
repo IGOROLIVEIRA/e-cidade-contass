@@ -32,6 +32,7 @@ include("libs/db_usuariosonline.php");
 include("classes/db_rhdepend_classe.php");
 include("classes/db_rhpessoal_classe.php");
 include("dbforms/db_funcoes.php");
+require_once("std/DBLargeObject.php");
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 $clrhdepend = new cl_rhdepend;
@@ -41,30 +42,64 @@ $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
   $sqlerro = false;
-  $clrhdepend->incluir($rh31_codigo);
-  if($clrhdepend->erro_status=="0"){
-  	$erro_msg = $clrhdepend->erro_msg;
-  	$sqlerro = true;
+  try {
+    if (($rh31_especi == 'C' || $rh31_especi == 'S') && !empty($_FILES['rh31_laudodependente_file']['tmp_name'])) {
+      $clrhdepend->rh31_laudodependente = ServidorRepository::persistLaudoMedico($_FILES['rh31_laudodependente_file'], $rh31_laudodependente);
+    }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Dependente: ".$oException->getMessage();
+    $sqlerro=true;
+  }
+  if ($sqlerro == false) {
+    $clrhdepend->incluir($rh31_codigo);
+    if($clrhdepend->erro_status=="0"){
+    	$erro_msg = $clrhdepend->erro_msg;
+    	$sqlerro = true;
+    }
   }
   db_fim_transacao($sqlerro);
 }else if(isset($alterar)){
   db_inicio_transacao();
   $sqlerro = false;
-  $clrhdepend->alterar($rh31_codigo);
-  if($clrhdepend->erro_status=="0"){
-  	$erro_msg = $clrhdepend->erro_msg;
-  	$sqlerro = true;
-  	$opcao = "alterar";
+  try {
+    if (($rh31_especi == 'C' || $rh31_especi == 'S') && !empty($_FILES['rh31_laudodependente_file']['tmp_name'])) {
+      $clrhdepend->rh31_laudodependente = ServidorRepository::persistLaudoMedico($_FILES['rh31_laudodependente_file'], $rh31_laudodependente);
+    } else if ($rh31_especi == 'N' && !empty($rh31_laudodependente)) {
+      $clrhdepend->rh31_laudodependente = ServidorRepository::removeLaudoMedico($rh31_laudodependente);
+    }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Dependente: ".$oException->getMessage();
+    $sqlerro=true;
+  }
+
+  if ($sqlerro == false) {
+    $clrhdepend->alterar($rh31_codigo);
+    if($clrhdepend->erro_status=="0"){
+    	$erro_msg = $clrhdepend->erro_msg;
+    	$sqlerro = true;
+    	$opcao = "alterar";
+    }
   }
   db_fim_transacao($sqlerro);
 }else if(isset($excluir)){
   db_inicio_transacao();
   $sqlerro = false;
-  $clrhdepend->excluir($rh31_codigo);
-  if($clrhdepend->erro_status=="0"){
-  	$erro_msg = $clrhdepend->erro_msg;
-  	$sqlerro = true;
-  	$opcao = "excluir";
+  try {
+    if (!empty($rh31_laudodependente)) {
+      $clrhdepend->rh31_laudodependente = ServidorRepository::removeLaudoMedico($rh31_laudodependente);
+    }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Dependente: ".$oException->getMessage();
+    $sqlerro=true;
+  }
+  
+  if ($sqlerro == false) {
+    $clrhdepend->excluir($rh31_codigo);
+    if($clrhdepend->erro_status=="0"){
+    	$erro_msg = $clrhdepend->erro_msg;
+    	$sqlerro = true;
+    	$opcao = "excluir";
+    }
   }
   db_fim_transacao($sqlerro);
 }
@@ -82,6 +117,7 @@ if((isset($alterar) || isset($excluir) || isset($incluir)) && $sqlerro == false)
   $rh31_irf    = "";
   $rh31_especi = "";
   $rh31_cpf = "";
+  $rh31_laudodependente = "";
 }
 
 if(isset($opcao)){
@@ -91,7 +127,7 @@ if(isset($opcao)){
   	$db_opcao = 3;
   }
   // echo("<BR><BR>".$clrhdepend->sql_query_cgm($rh31_codigo,"rh31_codigo,rh31_regist,z01_nome,rh31_nome,rh31_dtnasc,rh31_gparen,rh31_depend,rh31_irf,rh31_especi"));
-  $result_dados = $clrhdepend->sql_record($clrhdepend->sql_query_cgm($rh31_codigo,"rh31_codigo,rh31_regist,z01_nome,rh31_nome,rh31_dtnasc,rh31_gparen,rh31_depend,rh31_irf,rh31_especi,rh31_cpf"));
+  $result_dados = $clrhdepend->sql_record($clrhdepend->sql_query_cgm($rh31_codigo,"rh31_codigo,rh31_regist,z01_nome,rh31_nome,rh31_dtnasc,rh31_gparen,rh31_depend,rh31_irf,rh31_especi,rh31_cpf,rh31_laudodependente"));
   if($clrhdepend->numrows > 0){
   	db_fieldsmemory($result_dados,0);
   }
@@ -107,7 +143,11 @@ if(isset($opcao)){
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<?
+      db_app::load("scripts.js");
+      db_app::load("prototype.js"); 
+      db_app::load("strings.js");
+?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

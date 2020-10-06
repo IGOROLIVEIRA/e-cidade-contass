@@ -33,6 +33,7 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_app.utils.php");
+require_once("std/DBLargeObject.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -78,29 +79,48 @@ if (isset($incluir) && !$lErro) {
   db_inicio_transacao();
 
   $sqlerro = false;
-
-  $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
-  $clrhpessoalmov->rh02_funcao         = $rh02_funcao;
-  $clrhpessoalmov->rh02_instit         = db_getsession("DB_instit");
-  $clrhpessoalmov->rh02_equip          = "false";
-  $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
-  $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
-  $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
-  $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
-
-  if($rh02_diasgozoferias >= 30) {
-
-    $clrhpessoalmov->incluir(null,db_getsession("DB_instit"));
-    $rh02_seqpes    = $clrhpessoalmov->rh02_seqpes; 
-    $erro_msg       = $clrhpessoalmov->erro_msg;
-
-    if($clrhpessoalmov->erro_status==0){
-      $sqlerro=true;
+  try {
+    if ($rh02_deficientefisico == 't' && !empty($_FILES['rh02_laudodeficiencia_file']['tmp_name'])) {
+      $clrhpessoalmov->rh02_laudodeficiencia = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudodeficiencia_file'], $rh02_laudodeficiencia);
     }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Deficiente Físico: ".$oException->getMessage();
+    $sqlerro=true;
+  }
+
+  try {
+    if ($rh02_portadormolestia == 't' && !empty($_FILES['rh02_laudoportadormolestia_file']['tmp_name'])) {
+      $clrhpessoalmov->rh02_laudoportadormolestia = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudoportadormolestia_file'], $rh02_laudoportadormolestia);
+    }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Portador de Moléstia: ".$oException->getMessage();
+    $sqlerro=true;
+  }
   
-  } else {
-    $sqlerro  = true;
-    $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
+  if ($sqlerro == false) {
+    $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
+    $clrhpessoalmov->rh02_funcao         = $rh02_funcao;
+    $clrhpessoalmov->rh02_instit         = db_getsession("DB_instit");
+    $clrhpessoalmov->rh02_equip          = "false";
+    $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
+    $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
+    $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
+    $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
+
+    if($rh02_diasgozoferias >= 30) {
+
+      $clrhpessoalmov->incluir(null,db_getsession("DB_instit"));
+      $rh02_seqpes    = $clrhpessoalmov->rh02_seqpes; 
+      $erro_msg       = $clrhpessoalmov->erro_msg;
+
+      if($clrhpessoalmov->erro_status==0){
+        $sqlerro=true;
+      }
+    
+    } else {
+      $sqlerro  = true;
+      $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
+    }
   }
 
   if ($sqlerro == false) {
@@ -235,30 +255,54 @@ if (isset($incluir) && !$lErro) {
   db_inicio_transacao();
 
   $sqlerro = false;
-  $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
-  $clrhpessoalmov->rh02_instit         = db_getsession('DB_instit');
-  $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
-  $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
-  $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
-  $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
-
-  if($rh02_diasgozoferias >= 30) {
-
-    $oRetorno = ServidorRepository::persistServidor(ServidorRepository::getInstanciaByCodigo($rh02_regist, 
-                                                                                    DBPessoal::getAnoFolha(), 
-                                                                                    DBPessoal::getMesFolha()));
-      
-    $clrhpessoalmov->erro_status = $oRetorno->erro_status;
-    $clrhpessoalmov->erro_msg    = $oRetorno->erro_msg;
-    $erro_msg = $clrhpessoalmov->erro_msg;
-  
-    if($clrhpessoalmov->erro_status==0){
-      $sqlerro=true;
+  try {
+    if ($rh02_deficientefisico == 't' && !empty($_FILES['rh02_laudodeficiencia_file']['tmp_name'])) {
+      $_POST["rh02_laudodeficiencia"] = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudodeficiencia_file'], $rh02_laudodeficiencia);
+    } else if ($rh02_deficientefisico == 'f' && !empty($rh02_laudodeficiencia)) {
+      $_POST["rh02_laudodeficiencia"] = ServidorRepository::removeLaudoMedico($rh02_laudodeficiencia);
     }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Deficiente Físico: ".$oException->getMessage();
+    $sqlerro=true;
+  }
 
-  } else {
-    $sqlerro  = true;
-    $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
+  try {
+    if ($rh02_portadormolestia == 't' && !empty($_FILES['rh02_laudoportadormolestia_file']['tmp_name'])) {
+      $_POST["rh02_laudoportadormolestia"] = ServidorRepository::persistLaudoMedico($_FILES['rh02_laudoportadormolestia_file'], $rh02_laudoportadormolestia);
+    } else if ($rh02_portadormolestia == 'f' && !empty($rh02_laudoportadormolestia)) {
+      $_POST["rh02_laudoportadormolestia"] = ServidorRepository::removeLaudoMedico($rh02_laudoportadormolestia);
+    }
+  } catch (Exception $oException) {
+    $erro_msg = "Erro Laudo Portador de Moléstia: ".$oException->getMessage();
+    $sqlerro=true;
+  }
+
+  if ($sqlerro == false) {
+    $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
+    $clrhpessoalmov->rh02_instit         = db_getsession('DB_instit');
+    $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
+    $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
+    $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
+    $clrhpessoalmov->rh02_desctipoparentescoinst = $rh02_desctipoparentescoinst;
+
+    if($rh02_diasgozoferias >= 30) {
+
+      $oRetorno = ServidorRepository::persistServidor(ServidorRepository::getInstanciaByCodigo($rh02_regist, 
+                                                                                      DBPessoal::getAnoFolha(), 
+                                                                                      DBPessoal::getMesFolha()));
+        
+      $clrhpessoalmov->erro_status = $oRetorno->erro_status;
+      $clrhpessoalmov->erro_msg    = $oRetorno->erro_msg;
+      $erro_msg = $clrhpessoalmov->erro_msg;
+    
+      if($clrhpessoalmov->erro_status==0){
+        $sqlerro=true;
+      }
+
+    } else {
+      $sqlerro  = true;
+      $erro_msg = 'Informe no mínimo 30 dias de férias padrão para o funcionário.';
+    }
   }
 
   if ($sqlerro == false) {
