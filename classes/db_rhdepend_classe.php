@@ -54,6 +54,7 @@ class cl_rhdepend {
    var $rh31_irf = null;
    var $rh31_especi = null;
    var $rh31_cpf = null;
+   var $rh31_laudodependente = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  rh31_codigo = int8 = Código
@@ -65,6 +66,7 @@ class cl_rhdepend {
                  rh31_irf = varchar(1) = IRF
                  rh31_especi = varchar(1) = Especial
                  rh31_cpf = varchar(11) = CPF do Dependente
+                 rh31_laudodependente = oid = Laudo Médico
                  ";
    //funcao construtor da classe
    function cl_rhdepend() {
@@ -100,6 +102,7 @@ class cl_rhdepend {
        $this->rh31_irf = ($this->rh31_irf == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_irf"]:$this->rh31_irf);
        $this->rh31_especi = ($this->rh31_especi == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_especi"]:$this->rh31_especi);
        $this->rh31_cpf = ($this->rh31_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_cpf"]:$this->rh31_cpf);
+       $this->rh31_laudodependente = ($this->rh31_laudodependente == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_laudodependente"]:$this->rh31_laudodependente);
      }else{
        $this->rh31_codigo = ($this->rh31_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh31_codigo"]:$this->rh31_codigo);
      }
@@ -221,6 +224,7 @@ class cl_rhdepend {
                                       ,rh31_irf
                                       ,rh31_especi
                                       ,rh31_cpf
+                                      ,rh31_laudodependente
                        )
                 values (
                                 $this->rh31_codigo
@@ -232,6 +236,7 @@ class cl_rhdepend {
                                ,'$this->rh31_irf'
                                ,'$this->rh31_especi'
                                ,'$this->rh31_cpf'
+                               ,$this->rh31_laudodependente
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -409,6 +414,15 @@ class cl_rhdepend {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->rh31_laudodependente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh31_laudodependente"])){
+        if($this->rh31_especi == "N") {
+          $sql  .= $virgula." rh31_laudodependente = null";
+          $virgula = ",";
+        } else {
+          $sql  .= $virgula." rh31_laudodependente = $this->rh31_laudodependente";
+          $virgula = ",";
+        }
      }
      $sql .= " where ";
      if($rh31_codigo!=null){
