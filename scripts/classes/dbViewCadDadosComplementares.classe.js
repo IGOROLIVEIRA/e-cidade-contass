@@ -942,16 +942,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             me.setMunicipio(iCodigoMunicipio);
         }
 
-        // let municipio = codigoMunicipio;
-        // let estado = codigoEstado;
-
-        // if(municipio && estado){
-        //   console.log('1s ', municipio);
-        //   console.log('2s ', estado);
         me.buscaDescricoes();
-        //   codigoMunicipio = '';
-        //   codigoEstado = '';
-        // }
 
     }
 
@@ -2491,6 +2482,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeGrausLatitude = (event) => {
+        let valor = event.target.value;
+        if(valor < 14 || valor > 24){
+            alert('Informe um valor entre o intervalo 14 a 24.');
+            $('txtGrausLatitude' + sId).value = '';
+            return;
+        }
         me.setGrausLatitude(event.target.value);
     }
 
@@ -2521,6 +2518,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtMinutoLatitude'+sId).value = '';
+        }
         me.setMinutosLatitude(event.target.value);
     }
 
@@ -2550,6 +2550,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeSegundoLatitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtSegundoLatitude'+sId).value = '';
+        }
         me.setSegundosLatitude(event.target.value);
     }
 
@@ -2591,6 +2594,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeGrausLongitude = (event) => {
+        let valor = event.target.value;
+        if(valor < 39 || valor > 51){
+            alert('Informe um valor entre o intervalo 39 a 51.');
+            $('txtGrausLongitude' + sId).value = '';
+            return;
+        }
         me.setGrausLongitude(event.target.value);
     }
 
@@ -2620,6 +2629,9 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     }
 
     this.changeMinutoLongitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtMinutoLongitude'+sId).value = '';
+        }
         me.setMinutoLongitude(event.target.value);
     }
 
@@ -2649,8 +2661,20 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iSegundoLongitude;
     }
 
+    this.checaValor = (valor) => {
+        if(valor < 0 || valor > 60){
+            alert('Valor informado não está no intervalo entre 0 e 60.');
+            return false;
+        }
+        return true;
+    }
+
     this.changeSegundoLongitude = (event) => {
+        if(!me.checaValor(event.target.value)){
+            $('txtSegundoLongitude'+sId).value = '';
+        }
         me.setSegundosLongitude(event.target.value);
+
     }
 
     me.oSegundoLongitude = new DBTextField('txtSegundoLongitude' + sId, 'txtSegundoLongitude' + sId, '');
@@ -3997,6 +4021,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         js_removeObj('msgBox');
         var oRetorno = eval('(' + oAjax.responseText + ')');
         let dadoscomplementares = oRetorno.dadoscomplementares[0];
+        me.setSequencial(dadoscomplementares.sequencial);
         $('cboCodigoMunicipio' + sId).value = dadoscomplementares.municipio;
         $('txtLogradouro' + sId).value = decodeURI(dadoscomplementares.logradouro).replace(/\+/g, ' ');
         me.setLogradouro(dadoscomplementares.logradouro);
@@ -4035,11 +4060,6 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         document.getElementById('trAtividadeServicoEsp'+sId).style.display = (me.getAtividadeServicoEspecializado() == '99') ? '' : 'none';
         $('cboGrupoBemPub' + sId).value = dadoscomplementares.grupobempublico;
         me.setGrupoBemPublico(dadoscomplementares.grupobempublico);
-        if(me.getGrupoBemPublico() == '99'){
-            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
-            $('cboSubGrupoBemPub'+sId).disabled = true;
-            me.oCboSubGrupoBemPub.show();
-        }
         me.preencheSubGrupo(dadoscomplementares.grupobempublico);
         $('cboSubGrupoBemPub' + sId).value = dadoscomplementares.subgrupobempublico;
         me.setSubGrupoBemPublico(dadoscomplementares.subgrupobempublico);
@@ -4047,8 +4067,12 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         $('txtCep' + sId).value = dadoscomplementares.cep;
         $('txtDescrAtividadeServico' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservico).replace(/\+/g, ' '));
         $('txtDescrAtividadeServicoEsp' + sId).value = unescape(decodeURI(dadoscomplementares.descratividadeservicoesp).replace(/\+/g, ' '));
-        me.setSequencial(dadoscomplementares.sequencial);
 
+        if(me.getGrupoBemPublico() == '99'){
+            me.oCboSubGrupoBemPub.addItem(0, 'Selecione');
+            $('cboSubGrupoBemPub'+sId).disabled = true;
+            me.oCboSubGrupoBemPub.show();
+        }
         let params = eval('('+oAjax.request.parameters.json+')');
         me.checkFirstRegister(params.iSequencial);
 

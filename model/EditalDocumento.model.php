@@ -37,7 +37,6 @@ class EditalDocumento
 	protected $iEdital;
 	protected $sArquivo;
 	protected $sNomeArquivo;
-	protected $sCaminho;
 	protected $iLicLicita;
 
 
@@ -50,7 +49,7 @@ class EditalDocumento
 	{
 		$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
 		if(isset($iCodigo)) {
-			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo, 'l48_sequencial, l48_nomearquivo, l48_tipo, l20_nroedital, l48_liclicita, l48_caminho');
+			$sSQL = $oDaoEditalDocumento->sql_query_file($iCodigo, 'l48_sequencial, l48_nomearquivo, l48_tipo, l20_nroedital, l48_liclicita, l48_arquivo');
 			$rsEditalDocumento = $oDaoEditalDocumento->sql_record($sSQL);
 
 			if ($oDaoEditalDocumento->numrows > 0) {
@@ -62,7 +61,7 @@ class EditalDocumento
 				$this->setTipo($oEditalDocumento->l48_tipo);
 				$this->setEdital($oEditalDocumento->l20_nroedital);
 				$this->setLiclicita($oEditalDocumento->l48_liclicita);
-				$this->setCaminho($oEditalDocumento->l48_caminho);
+				$this->setArquivo($oEditalDocumento->l48_arquivo);
 				unset($oEditalDocumento);
 			}
 		}
@@ -90,23 +89,34 @@ class EditalDocumento
 	{
 
 		global $conn;
-		if (!file_exists($this->getCaminho())) {
-			throw new Exception("Arquivo do Documento não Encontrado.");
-		}
 
 		db_inicio_transacao();
 		try {
+			/**
+			 * Abre um arquivo em formato binario somente leitura
+			 */
+			$rsDocumento      = fopen($this->getArquivo(), "rb");
+			/**
+			 * Pega  o conteúdo do arquivo e coloca no resource
+			 */
+			$rsDadosDocumento = fread($rsDocumento, filesize($this->getArquivo()));
+			$oOidBanco       = pg_lo_create();
+			fclose($rsDocumento);
+
 			$oDaoEditalDocumento = db_utils::getDao("editaldocumento");
-			$oDaoEditalDocumento->l48_tipo = $this->getTipo();
+			$oDaoEditalDocumento->l48_tipo 		  = $this->getTipo();
 			$oDaoEditalDocumento->l48_nomearquivo = $this->getNomeArquivo();
-			$oDaoEditalDocumento->l48_caminho = $this->getCaminho();
 			$oDaoEditalDocumento->l48_liclicita = $this->getLiclicita();
+			$oDaoEditalDocumento->l48_arquivo	= $oOidBanco;
 			$oDaoEditalDocumento->incluir(null);
 
 			if ($oDaoEditalDocumento->erro_status == '0') {
 				throw new Exception($oDaoEditalDocumento->erro_msg);
 			}
 
+			$oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
+			pg_lo_write($oObjetoBanco, $rsDadosDocumento);
+			pg_lo_close($oObjetoBanco);
 			db_fim_transacao();
 
 		} catch (Exception $oErro) {
@@ -235,15 +245,6 @@ class EditalDocumento
 
 	/**
 	 *
-	 * Retorna o caminho do arquivo salvo
-	 * @return String
-	 */
-	public function getCaminho()
-	{
-		return $this->sCaminho;
-	}
-	/**
-	 *
 	 * Seta o numero da licitação
 	 */
 	public function setLicLicita($iLicLicita)
@@ -263,15 +264,6 @@ class EditalDocumento
 
 	/**
 	 *
-	 * Seta uma String com caminho/nome do arquivo
-	 */
-	public function setCaminho($sCaminho)
-	{
-		$this->sCaminho = $sCaminho;
-	}
-
-	/**
-	 *
 	 * Seta o Nome do arquivo com sua extensão
 	 */
 	public function setNomeArquivo($sNomeArquivo)
@@ -287,5 +279,22 @@ class EditalDocumento
 	public function getNomeArquivo()
 	{
 		return $this->sNomeArquivo;
+	}
+
+	/**
+	 *
+	 * Seta o arquivo
+	 */
+	public function setArquivo($sArquivo){
+		$this->sArquivo = $sArquivo;
+	}
+
+	/**
+	 *
+	 * Retorna o arquivo
+	 * @return String
+	 */
+	public function getArquivo(){
+		return $this->sArquivo;
 	}
 }

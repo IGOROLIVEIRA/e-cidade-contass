@@ -466,7 +466,7 @@ ORDER BY nroprocessolicitatorio
               $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
               $clralic11->si181_codfuncao = $oResult11->codfuncao;
               $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;
-              $clralic11->si181_codbempublico = $oResult11->codbempublico;
+              $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;
               $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
               $clralic11->si181_reg10 = $clralic10->si180_sequencial;// chave estrangeira
               $clralic11->si181_instit = db_getsession("DB_instit");

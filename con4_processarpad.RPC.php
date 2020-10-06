@@ -977,7 +977,7 @@ case "processarBalancete" :
 			$oEscritorProgramasCSV = new padArquivoEscritorCSV();
 
 			/*
-			* instanciar cada arqivo selecionado e gerar o CSV correspondente
+			* instanciar cada arquivo selecionado e gerar o CSV correspondente
 			*/
 			$aArrayArquivos = array();
 			$sDataFinal = $oParam->diaReferencia;
@@ -1010,12 +1010,14 @@ case "processarBalancete" :
 					}
 				}
 			}
+
 			if(in_array('ResumoAberturaLicitacao', $oParam->arquivos) || in_array('ResumoDispensaInexigibilidade', $oParam->arquivos)) {
 				/*    Consulta os arquivos anexos */
 				$dia = join('-', array_reverse(explode('/', $oParam->diaReferencia)));
-				$sSql = "
+				$sql = "
 					SELECT l47_dataenvio AS dataenvio,
-						   editaldocumentos.l48_caminho AS caminho,
+						   editaldocumentos.l48_arquivo AS arquivo,
+						   editaldocumentos.l48_nomearquivo AS nomearquivo,
 						   editaldocumentos.l48_tipo as tipo,
 						   editaldocumentos.l48_sequencial as sequencial,
 						   liclicita.l20_edital AS nroprocesso,
@@ -1068,7 +1070,7 @@ case "processarBalancete" :
 					WHERE liclancedital.l47_dataenvio = '$dia'
 				";
 
-				$rsAnexos = db_query($sSql);
+				$rsAnexos = db_query($sql);
 
 				$aListaAnexos = " ";
 
@@ -1105,13 +1107,19 @@ case "processarBalancete" :
 							$novoNome .= 'FOTO_LOCAL_';
 							break;
 					}
-					$valores = explode('/', $oAnexo->caminho);
-					$nomeArq = $valores[5] != null ? $valores[5] : $valores[4];
-					$extensao = explode('.', $nomeArq);
+
+					$aNomeArquivo = explode('.', $oAnexo->nomearquivo);
+
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
-					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$extensao[1]";
+
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[1]";
+
+					db_inicio_transacao();
+					pg_lo_export($conn, $oAnexo->arquivo, $novoNome);
+					db_fim_transacao();
+
 					$aListaAnexos .= $novoNome . ' ';
-					system("cp {$oAnexo->caminho} ./{$novoNome}");
+
 				}
 
 				$ano = explode('/', $oParam->diaReferencia);
@@ -1135,6 +1143,7 @@ case "processarBalancete" :
 				}
 			}
 			$aListaArquivos = " ";
+
 			foreach ($aArrayArquivos as $oArquivo){
 				$aListaArquivos .= " ".$oArquivo->caminho;
 			}
