@@ -362,4 +362,5 @@ function js_retornoVerificaforn(oAjax) {
         document.getElementById('l206_datavalidadecndt').style.background = '#ffffff';
     }
 }
+js_verificaforn();
 </script>

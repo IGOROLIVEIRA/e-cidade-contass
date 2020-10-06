@@ -59,11 +59,16 @@ try{
                 $rsItem = $clcredenciamento->sql_record($clcredenciamento->sql_query(null,"*",null,"l205_item = {$item->l205_item} and l205_fornecedor={$item->l205_fornecedor}"));
                 db_fieldsmemory($rsItem,0)->l205_sequencial;
 
+              if($item->l205_datacreditem == ""){
+                  throw new Exception ("Usuário: Campo Data de Credenciamento não informado.");
+              }
 
-                if($item->l205_datacreditem < $dtHabilitacaoforne){
+//              if($item->l205_datacreditem != ""){
+                  if($item->l205_datacreditem < $dtHabilitacaoforne){
 
-                   throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
-                }
+                      throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
+                  }
+//              }
 
                 if($dtLimitecredenciamento != ""){
                   if($item->l205_datacred > $dtLimitecredenciamento){

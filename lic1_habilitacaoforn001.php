@@ -57,44 +57,44 @@ if(isset($incluir) || isset($alterar)){
   }
 
 }
-
-if(isset($incluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->incluir($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
+if($sqlerro == false) {
+    if (isset($incluir)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->incluir($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($alterar)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->alterar($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($excluir)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->excluir($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($opcao)) {
+        $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($l206_sequencial));
+        if ($result != false && $clhabilitacaoforn->numrows > 0) {
+            db_fieldsmemory($result, 0);
+        }
     }
-    db_fim_transacao($sqlerro);
- }
-}else if(isset($alterar)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->alterar($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($excluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->excluir($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($opcao)){
-   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($l206_sequencial));
-   if($result!=false && $clhabilitacaoforn->numrows>0){
-     db_fieldsmemory($result,0);
-   }
 }
-
 ?>
 <html>
 <head>
