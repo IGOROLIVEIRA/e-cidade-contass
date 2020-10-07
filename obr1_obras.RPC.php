@@ -16,8 +16,6 @@ require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_licobras_classe.php");
 include("classes/db_condataconf_classe.php");
 
-
-
 db_app::import("configuracao.DBDepartamento");
 
 $oJson             = new services_json();
@@ -50,25 +48,22 @@ switch($oParam->exec) {
     break;
 
   case 'excluirAnexo':
+    try{
+        db_inicio_transacao();
 
-    $cllicobrasanexos = new cl_licobrasanexo();
-    $resultAnexos = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_sequencial = $oParam->codAnexo"));
-    db_fieldsmemory($resultAnexos,0);
+        $cllicobrasanexos = new cl_licobrasanexo();
+        $cllicobrasanexos->excluir($oParam->codAnexo);
 
-    //cria caminho para o arquivo
-    $anexo = 'imagens/obras/'.$obr04_codimagem;
+        if ($cllicobrasanexo->erro_status == '0') {
+            throw new Exception($cllicobrasanexo->erro_msg);
+        }
 
-    //apaga o arquivo no diretorio
-    if(!unlink($anexo)){
-      $erro = true;
-    };
-
-    if($erro == false){
-      $cllicobrasanexos->excluir($obr04_sequencial);
+        db_fim_transacao();
+    }catch (Exception $eErro){
+        $oRetorno->status = 2;
+        $oRetorno->message = urlencode($eErro->getMessage());
     }
-    if($erro == true){
-      $oRetorno->message = "Erro ! Arquivo nao excluido contate o Suporte.";
-    }
+
     break;
 
   case 'alterarAnexo':
@@ -236,6 +231,65 @@ switch($oParam->exec) {
       $oRetorno->dados[] = $oDadosResponsavel;
     }
 
+  case 'salvarDocumento':
+
+      try {
+          db_inicio_transacao();
+
+          global $conn;
+
+          if (!file_exists($oParam->arquivo)) {
+              throw new Exception("Arquivo do Documento não Encontrado.");
+          }
+
+          $cllicobrasanexo = new cl_licobrasanexo();
+          $sqlanexo = $cllicobrasanexo->sql_query(null, "*", null, "obr04_licobrasmedicao = $oParam->medicao");
+          $rsAnexo = $cllicobrasanexo->sql_record($sqlanexo);
+          db_fieldsmemory($rsAnexo,0);
+
+          if (pg_num_rows($rsAnexo) > 0) {
+              throw new Exception("Já existe anexo para esta Medição.");
+          } else {
+
+              if (!file_exists($oParam->arquivo)) {
+                  throw new Exception("Arquivo da foto não Encontrado.");
+              }
+              $aNomeArquivo = explode("/", $oParam->arquivo);
+              $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
+
+              /**
+               * Abre um arquivo em formato binario somente leitura
+               */
+              $rDocumento = fopen($oParam->arquivo, "rb");
+              /**
+               * Pega todo o conteúdo do arquivo e coloca no resource
+               */
+              $rDadosDocumento = fread($rDocumento, filesize($oParam->arquivo));
+              fclose($rDocumento);
+              $oOidBanco = pg_lo_create();
+
+              $cllicobrasanexo->obr04_licobrasmedicao = $oParam->medicao;
+              $cllicobrasanexo->obr04_legenda = $oParam->legenda;
+              $cllicobrasanexo->obr04_anexo = $oOidBanco;
+              $cllicobrasanexo->incluir();
+
+              if ($cllicobrasanexo->erro_status == '0') {
+                  throw new Exception($cllicobrasanexo->erro_msg);
+              }
+
+              $oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
+              pg_lo_write($oObjetoBanco, $rDadosDocumento);
+              pg_lo_close($oObjetoBanco);
+          }
+          db_fim_transacao();
+
+      }catch (Exception $oErro) {
+          $oRetorno->status = 2;
+          $oRetorno->message = urlencode($oErro->getMessage());
+          db_fim_transacao(true);
+      }
+      break;
+
   case 'downloadDocumento':
 
     $cllicobrasanexos = new cl_licobrasanexo();
@@ -246,11 +300,11 @@ switch($oParam->exec) {
     db_inicio_transacao();
 
     // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
-    $sNomeArquivo = "imagens/obras/$obr04_codimagem";
-//    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
-    db_fim_transacao(true);
+    $sNomeArquivo = "tmp/$obr04_anexo.pdf";
+    pg_lo_export($conn, $obr04_anexo, $sNomeArquivo);
+
+    db_fim_transacao();
     $oRetorno->nomearquivo = $sNomeArquivo;
-    // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
 
     break;
 }
