@@ -158,7 +158,7 @@ require_once("dbforms/db_classesgenericas.php");
 	  iCompilacao      = iIdSolicita;  
 		var sHtmlDepart  = "<fieldset>";
 		sHtmlDepart     += "  <legend><b>Departamentos da Compilação<b></legend>";
-		sHtmlDepart     += "  <div id='ctnDepartCompilacao'></div>";
+		sHtmlDepart     += "  <div id='ctnDepartCompilacao' style=\"width: 845px;\"></div>";
 		sHtmlDepart     += "</fieldset>";
     lWindowCompilacoes = true;
 	  /**
@@ -167,12 +167,10 @@ require_once("dbforms/db_classesgenericas.php");
 		oWindowDepart = new windowAux("winId_"+iIdSolicita, "Departamentos Participantes", 900, 500);
 		oWindowDepart.setContent(sHtmlDepart);
 		oWindowDepart.allowCloseWithEsc(false);
-    $("windowwinId_"+iIdSolicita+"_btnclose").onclick= function () {
-     
-      lWindowCompilacoes = false;
-     	oWindowDepart.destroy();
-    	
-    }
+        $("windowwinId_"+iIdSolicita+"_btnclose").onclick= function () {
+            lWindowCompilacoes = false;
+            oWindowDepart.destroy();
+    	}
 
 	  /**
 	   *  Message Board
@@ -194,7 +192,7 @@ require_once("dbforms/db_classesgenericas.php");
 		oGridDepartamento.setCellWidth(new Array("10%","80%","10%"));
 		oGridDepartamento.setHeader(new Array("Departamento","Descrição","Estimativa"));
 		oGridDepartamento.show($('ctnDepartCompilacao'));
-		js_getDepartamentos(iIdSolicita);
+        js_getDepartamentos(iIdSolicita);
   }
 
 	/**
