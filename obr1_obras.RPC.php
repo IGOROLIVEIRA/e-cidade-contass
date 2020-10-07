@@ -300,7 +300,7 @@ switch($oParam->exec) {
     db_inicio_transacao();
 
     // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
-    $sNomeArquivo = "tmp/$obr04_nomearquivo";
+    $sNomeArquivo = "tmp/$obr04_anexo.pdf";
     pg_lo_export($conn, $obr04_anexo, $sNomeArquivo);
 
     db_fim_transacao();
