@@ -32,6 +32,7 @@ require_once("std/DBArray.php");
 require_once("model/pessoal/relatorios/resumoFolha.model.php");
 require_once("model/pessoal/ServidorRepository.model.php");
 require_once("libs/JSON.php");
+require_once("phplot/PHPlotReport.php");
 
 $oJson        = new services_json();
 $oGet         = db_utils::postMemory($HTTP_GET_VARS);
@@ -277,6 +278,7 @@ try {
   $aTotalServidores   = array();
   $aRubricasOrdenacao = array();
   $lExisteCalculo     = false;
+  $aDadosGrafico      = array();
   /**
    * Agrupa servidores pelo tipo de relatório
    */
@@ -347,8 +349,35 @@ try {
         $aTotalServidoresRubrica   [$agrupador][$sRubrica][$iMatricula] = $iMatricula;
         $aTotalServidoresEstrutural[$agrupador][$iMatricula]            = $iMatricula;
         $aRubricas                 [$agrupador][$sRubrica][]            = $oEventoFinanceiro;
+        if ($oParametros->lGrafico == 't') {
+          if ($oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::PROVENTO
+              && ($oParametros->sTipoGrafico == 'bruto' || $oParametros->sTipoGrafico == 'liquido')) {
+
+            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->getValor();
+          } else if($oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::DESCONTO
+                    && $oParametros->sTipoGrafico == 'liquido') {
+
+            $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->getValor();
+          } else if($oParametros->sTipoGrafico == 'empenhos') {
+
+            $oRubrica = RubricaRepository::getInstanciaByCodigo($sRubrica);
+            if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::PROVENTO) {
+              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] += $oEventoFinanceiro->getValor();
+            } else if ($oRubrica->getTipoEmpenho() == 'e' && $oEventoFinanceiro->getNatureza() == EventoFinanceiroFolha::DESCONTO) {
+              $aDadosGrafico["$oDadosPesquisados->rh02_mesusu/$oDadosPesquisados->rh02_anousu"] -= $oEventoFinanceiro->getValor();
+            }
+          }
+        }
       }
     }
+  }
+
+  /**
+   * Caso seja o relatório de gráfico, não precisa executar o restante
+   */
+  if ($oParametros->lGrafico == 't') {
+    mostrarGrafico($aDadosGrafico, $oParametros->sTipoGrafico);
+    exit;
   }
 
 
@@ -828,4 +857,43 @@ function nomeFolhaAtual ($sNomeTabela) {
 
   return $sNomeFolhaAtual;
 
+}
+
+/**
+ * Gerar o gráfico e importar a imagem do gráfico para o relatório pdf
+ * @param array $aDados
+ * @param string $sTipoGrafico
+ */
+function mostrarGrafico($aDados, $sTipoGrafico) {
+
+  $aTipoGrafico = array("bruto" => "Bruto",
+                        "liquido" => "Líquido",
+                        "empenhos" => "Empenhos");
+
+  $aMeses = array("1"=>"JAN",
+                  "2"=>"FEV",
+                  "3"=>"MAR",
+                  "4"=>"ABR",
+                  "5"=>"MAI",
+                  "6"=>"JUN",
+                  "7"=>"JUL",
+                  "8"=>"AGO",
+                  "9"=>"SET",
+                  "10"=>"OUT",
+                  "11"=>"NOV",
+                  "12"=>"DEZ");
+  $aDadosPHPlot = array();
+  foreach ($aDados as $iChave => $nValor) {
+    $aIndex = explode("/", $iChave);
+    $sIndex = $aMeses[$aIndex[0]]."/".$aIndex[1];
+    $aDadosPHPlot[] = array($sIndex, $nValor);
+  }
+  
+  $oPHPlotReport = new PHPlotReport("Gráfico de Gastos com Folha de Pagamento - ".$aTipoGrafico[$sTipoGrafico]);
+  $oPHPlotReport->DrawGraphReport($aDadosPHPlot);
+  $oPdf = new PDF();
+  $oPdf->Open();
+  $oPdf->addpage('L');
+  $oPdf->Image(PHPlotReport::IMAGE,10 , 40, 278 , 150, strtoupper(PHPlotReport::IMAGE_TYPE));
+  $oPdf->Output();
 }
