@@ -292,40 +292,63 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
+                                $sHashCgm = $sHash10.$sHash11.$oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura;
 
-                                if($sHashCgm != ''){
-                                    $sHashCgm = $sHashCgm . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
-                                    $oDados11->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
+                                if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
+                                    
+                                    $oDados11 = new stdClass();
+                                    $oDados11->si26_tiporegistro = 11;
+                                    $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                                    $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
+                                        $oDados11->si26_tipodocumento = 1;
+                                    } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
+                                        $oDados11->si26_tipodocumento = 2;
+                                    }else{
+                                        $oDados11->si26_tipodocumento = "";
+                                    }
+                                    $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                                    $oDados11->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                                    $oDados11->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                    $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
                                     $aDadosCgm11[$sHashCgm] = $oDados11;
-                                } else {
-                                    $oDados11->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
-                                    $aDadosCgm11[$sHash10.$sHash11] = $oDados11;
+
+                                } 
+
+                                if($oCodFontRecursos->z01_cgccpf != ''){
+                                    $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
                                 }
 
                             }
 
-                            $aDados = new stdClass();
-                            $aDados->si26_tiporegistro = 11;
-                            $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                            $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
-                            if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
-                                $aDados->si26_tipodocumento = 1;
-                            } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
-                                $aDados->si26_tipodocumento = 2;
-                            }else{
-                                $aDados->si26_tipodocumento = "";
+                            $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
+                                
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                       
+                                
+                                $aDados = new stdClass();
+                                $aDados->si26_tiporegistro = 11;
+                                $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
+                                $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
+                                if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
+                                    $aDados->si26_tipodocumento = 1;
+                                } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
+                                    $aDados->si26_tipodocumento = 2;
+                                }else{
+                                    $aDados->si26_tipodocumento = "";
+                                }
+                                $aDados->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+                                $aDados->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
+                                $aDados->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
+                                $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
+                                $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+                                $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
+
                             }
-                            $aDados->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
-                            $aDados->si26_nroconvenio = $oCodFontRecursos->c206_nroconvenio;
-                            $aDados->si26_dataassinatura = $oCodFontRecursos->c206_dataassinatura;
-                            $aDados->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
-                            $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
-                            $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
-
-                        } else {
-
+                        } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+                            
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]->si26_vlarrecadadofonte += $oCodDoc2->c70_valor;
 
                         }
