@@ -37,47 +37,39 @@ if(!$data_ini && !$data_fim){
 	$head5 = "Período: de {$data_ini} a {$data_fim}";
 }
 
+$head6 = "Filtrar por: ";
 switch ($tipo_fornecedor){
 	case 't':
+        $head6 .= "Todos";
 
-	    if($data_ini){
-			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
-        }
-
-	    if($data_fim){
-	        $where = $where ? $where . " AND " : $where;
-			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
-        }
-
-	    $where = $where ? $where . ' AND ' : '';
-		$where .= " pc60_bloqueado = 't'";
+        $where .= ' (pc60_databloqueio_ini is not null) or (pc60_databloqueio_fim is not null) ';
 		break;
 
 	case 'a':
-
+		/* Impedimentos não vigentes */
+		$head6 .= "Impedimentos não vigentes";
 	    if($data_ini){
-			$where .= " '{$dataInicial}' > pc60_databloqueio_ini OR '{$dataInicial}' < pc60_databloqueio_fim ";
+			$where = " NOT (('{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataInicial}' <= pc60_databloqueio_ini) ";
         }
 
 	    if($data_fim){
-			$where = $where ? $where . '     OR ' : '';
-	        $where .= " '{$dataFinal}' > pc60_databloqueio_ini OR '{$dataFinal}' < pc60_databloqueio_fim";
+	        $where = $where ? $where . ' AND ' : '';
+			$where .= " NOT (('{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataFinal}' <= pc60_databloqueio_fim) ";
         }
 
-	    $where = $where ? "(" . $where . ') AND ' : '';
-		$where .= " pc60_bloqueado = 'f'";
 		break;
 
 	case 'i':
+        /* Impedimentos vigentes */
+		$head6 .= "Impedimentos vigentes";
+		if($data_ini){
+			$where = " (('{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataInicial}' <= pc60_databloqueio_ini) ";
+		}
 
-	    if($data_ini){
-			$where .= " '{$dataInicial}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim";
-        }
-
-	    if($data_fim){
-			$where = $where ? $where . ' OR ' : $where;
-			$where .= " '{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim ";
-        }
+		if($data_fim){
+			$where = $where ? $where . ' AND ' : '';
+			$where .= "  (('{$dataFinal}' BETWEEN pc60_databloqueio_ini AND pc60_databloqueio_fim) OR '{$dataFinal}' >= pc60_databloqueio_fim)";
+		}
 
 		$where = $where ? " (".$where.") " . " AND " : $where;
 
@@ -90,8 +82,6 @@ switch ($tipo_fornecedor){
 
 $orderBy .= 'z01_nome asc ';
 
-$head4 = "";
-$head6 = "";
 $mPDF  = new Relatorio('', 'A4'); //RELATORIO LANDSCAPE, PARA PORTRAIT, DEIXE SOMENTE A4
 $mPDF->addInfo($head1, 1);
 $mPDF->addInfo($head3, 3);
