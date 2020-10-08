@@ -131,6 +131,16 @@ db_input('h06_nrproc',28,$Ih06_nrproc,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="<?=@$Th06_fundamentacaolegal?>">
+       <?=@$Lh06_fundamentacaolegal?>
+    </td>
+    <td> 
+      <?
+      db_input('h06_fundamentacaolegal',28,$Ih06_fundamentacaolegal,true,'text',$db_opcao,"")
+      ?>
+    </td>
+  </tr>
 </table>
 </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -138,7 +148,7 @@ db_input('h06_nrproc',28,$Ih06_nrproc,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_concur','func_concur.php?funcao_js=parent.js_preenchepesquisa|h06_refer','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_concur','func_concur.php?funcao_js=parent.js_preenchepesquisa|h06_refer','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_concur.hide();
