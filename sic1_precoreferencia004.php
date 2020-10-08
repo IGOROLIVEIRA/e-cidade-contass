@@ -273,9 +273,9 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-    if($quant_casas){
-        $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
-    }
+//    if($quant_casas){
+        $lTotal = round($oResult->si02_vlprecoreferencia,4) * $oResult->pc11_quant;
+//    }
     // if($quant_casas == 2){
     //    $lTotal = round($oResult->si02_vlprecoreferencia * $oResult->pc11_quant, 2);
     // }
@@ -297,7 +297,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
         $oDadosDaLinha->unidadeDeMedida = "-";
         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
     }else{
-        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
+        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
         if($oResult->mediapercentual == 0){
             $oDadosDaLinha->mediapercentual = "-";
