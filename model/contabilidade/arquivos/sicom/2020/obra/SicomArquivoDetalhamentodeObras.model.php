@@ -63,26 +63,30 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
 
   public function gerarPDFobra($iCodMedicao)
   {
-
-    $sql = "select *,infocomplementaresinstit.si09_codorgaotce AS si197_codorgao from licobrasmedicao
+      db_inicio_transacao();
+      global $conn;
+      $sql = "select *,infocomplementaresinstit.si09_codorgaotce AS si197_codorgao from licobrasmedicao
             inner join licobras on obr03_seqobra = obr01_sequencial
             inner join liclicita on l20_codigo = obr01_licitacao
             INNER JOIN licobrasanexo on obr04_licobrasmedicao = obr03_sequencial
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             where obr03_sequencial = $iCodMedicao";
-    $rsMedicao = db_query($sql);
+      $rsMedicao = db_query($sql);
 
-    for ($iContMed = 0; $iContMed < pg_numrows($rsMedicao); $iContMed++) {
-      $aMedicao = db_utils::fieldsMemory($rsMedicao, $iContMed);
-      $sOrgao  = str_pad($aMedicao->si197_codorgao, 2,"0",STR_PAD_LEFT);
-      $nomearq = 'FOTO_MEDICAO' ."_" . $sOrgao . "_" . $aMedicao->obr01_numeroobra . "_" . $aMedicao->obr03_tipomedicao . "_" . $aMedicao->obr03_nummedicao . ".pdf";
+      for ($iContMed = 0; $iContMed < pg_numrows($rsMedicao); $iContMed++) {
+        $aMedicao = db_utils::fieldsMemory($rsMedicao, $iContMed);
+        $sOrgao  = str_pad($aMedicao->si197_codorgao, 2,"0",STR_PAD_LEFT);
 
-      $arq_origem = "imagens/obras/".$aMedicao->obr04_codimagem;
-      $arq_destino = $nomearq;
+        $nomearq = 'FOTO_MEDICAO' ."_" . $sOrgao . "_" . $aMedicao->obr01_numeroobra . "_" . $aMedicao->obr03_tipomedicao . "_" . $aMedicao->obr03_nummedicao . ".pdf";
+        $arq_origem = "tmp/".$nomearq;
+        $arq_destino = $nomearq;
 
-      copy($arq_origem,$arq_destino);
-    }
+        pg_lo_export($conn, $aMedicao->obr04_anexo, $arq_origem);
+        copy($arq_origem,$arq_destino);
+
+      }
+      db_fim_transacao();
 
   }
 
