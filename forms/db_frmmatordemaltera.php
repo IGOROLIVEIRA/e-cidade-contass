@@ -319,7 +319,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 									$observacao = preg_replace('/[^A-Z a-z]/', '', $m51_obs);
 									$descrAutomatica = strlen($observacao) == 25 ? 'ordem de compra automtica' : 'ordem de compra automatica';
 
-									if ($m51_codordem != "" && strcmp(strtolower($observacao), $descrAutomatica)) {
+									if ($m51_codordem != "" && strcmp(strtolower($observacao), $descrAutomatica) && !$clmatestoqueitemoc->numrows) {
 										?>
                                         <input name="altera" type="button" value="Alterar" onclick="js_buscavalores();">
 									<? } else {
