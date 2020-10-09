@@ -148,9 +148,9 @@ $iAnoSessao = db_getsession("DB_anousu");
                         liclicita.l20_objeto,
                         liclicita.l20_naturezaobjeto dl_Natureza_objeto,
                         (CASE 
-                        WHEN pc50_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
+                        WHEN l03_pctipocompratribunal in (48, 49, 50, 52, 53, 54) and liclicita.l20_dtpublic is not null 
                           THEN liclicita.l20_dtpublic
-                        WHEN pc50_pctipocompratribunal in (100, 101, 102, 103, 106) and liclicita.l20_datacria is not null 
+                        WHEN l03_pctipocompratribunal in (100, 101, 102, 103, 106) and liclicita.l20_datacria is not null 
                           THEN liclicita.l20_datacria
                         WHEN liclancedital.l47_dataenvio is not null
                           THEN liclancedital.l47_dataenvio
@@ -177,9 +177,9 @@ $iAnoSessao = db_getsession("DB_anousu");
                     LEFT JOIN liclancedital on liclancedital.l47_liclicita = liclicita.l20_codigo
                     INNER JOIN editalsituacao on editalsituacao.l10_sequencial = liclicita.l20_cadinicial 
                     WHERE l20_instit = ".db_getsession('DB_instit')."
-                       AND (CASE WHEN pc50_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
+                       AND (CASE WHEN l03_pctipocompratribunal IN (48, 49, 50, 52, 53, 54) 
                        AND liclicita.l20_dtpublic IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_dtpublic)
-                       WHEN pc50_pctipocompratribunal IN (100, 101, 102, 103, 106) 
+                       WHEN l03_pctipocompratribunal IN (100, 101, 102, 103, 106) 
                        AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                        END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto in (1, 7)
                        AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
