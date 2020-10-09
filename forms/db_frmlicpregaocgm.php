@@ -161,7 +161,7 @@ function js_pesquisal46_numcgm(mostra){
      }
   }
 }
-function js_mostracgm(chave,erro){
+function js_mostracgm(erro,chave){
   document.form1.z01_nome.value = chave; 
   if(erro==true){ 
     document.form1.l46_numcgm.focus(); 
