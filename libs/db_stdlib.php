@@ -3642,16 +3642,16 @@ function db_removeAcentuacao($sRemover){
 
   $var = $sRemover;
 
-  $var = ereg_replace("[ÁÀÂÃ]","A",$var);
-  $var = ereg_replace("[áàâãª]","a",$var);
+  $var = ereg_replace("[ÁÀÂÃÄ]","A",$var);
+  $var = ereg_replace("[áàâãäª]","a",$var);
   $var = ereg_replace("[ÉÈÊ]","E",$var);
   $var = ereg_replace("[éèê]","e",$var);
-  $var = ereg_replace("[íì]","i",$var);
-  $var = ereg_replace("[ÍÌ]","I",$var);
-  $var = ereg_replace("[ÓÒÔÕ]","O",$var);
+  $var = ereg_replace("[íìï?]","i",$var);
+  $var = ereg_replace("[ÍÌ?Ï]","I",$var);
+  $var = ereg_replace("[ÓÒÔÕÖ]","O",$var);
   $var = ereg_replace("[óòôõº]","o",$var);
-  $var = ereg_replace("[ÚÙÛ]","U",$var);
-  $var = ereg_replace("[úùû]","u",$var);
+  $var = ereg_replace("[ÚÙÛ?Ü]","U",$var);
+  $var = ereg_replace("[úùû?ü]","u",$var);
   $var = str_replace("Ç","C",$var);
   $var = str_replace("ç","c",$var);
 

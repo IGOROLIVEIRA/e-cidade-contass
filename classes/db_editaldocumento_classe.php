@@ -47,15 +47,15 @@ class cl_editaldocumento
 	var $l48_tipo = null;
 	var $l48_nomearquivo = null;
 	var $l48_liclicita = 0;
-	var $l48_caminho = '';
+	var $l48_arquivo = '';
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
                  l48_sequencial = int4 = Sequencia 
                  l48_tipo = varchar(2) = Tipo do Edital 
                  l48_nomearquivo = varchar(100) = Nome do Arquivo 
-                 l48_caminho = varchar(150) = Caminho do Arquivo
                  l48_liclicita = bigint = Número do edital 
+                 l48_arquivo = oid = Arquivo anexo 
                  ";
 
 	//funcao construtor da classe
@@ -82,12 +82,10 @@ class cl_editaldocumento
 	{
 		if ($exclusao == false) {
 			$this->l48_sequencial = ($this->l48_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_sequencial"] : $this->l48_sequencial);
-//			$this->l48_edital = ($this->l48_edital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_edital"] : $this->l48_edital);
 			$this->l48_tipo = ($this->l48_tipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_tipo"] : $this->l48_tipo);
 			$this->l48_nomearquivo = ($this->l48_nomearquivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_nomearquivo"] : $this->l48_nomearquivo);
-			$this->l48_caminho = ($this->l48_caminho == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_caminho"] : $this->l48_caminho);
 			$this->l48_liclicita = ($this->l48_liclicita == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_liclicita"] : $this->l48_liclicita);
-//			$this->l48_liclancedital = ($this->l48_liclancedital == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_liclancedital"] : $this->l48_liclancedital);
+			$this->l48_arquivo = ($this->l48_arquivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_arquivo"] : $this->l48_arquivo);
 		} else {
 			$this->l48_sequencial = ($this->l48_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l48_sequencial"] : $this->l48_sequencial);
 		}
@@ -105,17 +103,8 @@ class cl_editaldocumento
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
-//			return false;
+			return false;
 		}
-		if ($this->l48_caminho == null) {
-            $this->erro_sql = " Caminho do Arquivo não Informado.";
-            $this->erro_campo = "l48_caminho";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-//            return false;
-        }
 		if ($l48_sequencial == "" || $l48_sequencial == null) {
 			$result = db_query("select nextval('editaldocumentos_l48_sequencial_seq')");
 			if ($result == false) {
@@ -146,7 +135,7 @@ class cl_editaldocumento
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
-//			return false;
+			return false;
 		}
 		if (($this->l48_liclicita == null) || ($this->l48_liclicita == "")) {
 			$this->erro_sql = " Campo l48_liclicita nao declarado.";
@@ -154,22 +143,31 @@ class cl_editaldocumento
 			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
 			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
 			$this->erro_status = "0";
-//			return false;
+			return false;
+		}
+
+		if (($this->l48_arquivo == null) || ($this->l48_arquivo == "")) {
+			$this->erro_sql = " Campo l48_arquivo nao declarado.";
+			$this->erro_banco = $this->erro_banco = str_replace("\n", "", @pg_last_error());
+			$this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+			$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+			$this->erro_status = "0";
+			return false;
 		}
 
 		$sql = "insert into editaldocumentos(
                                        l48_sequencial 
                                       ,l48_tipo 
                                       ,l48_nomearquivo 
-                                      ,l48_caminho
                                       ,l48_liclicita 
+                                      ,l48_arquivo 
                        )
                 values (
                                 $this->l48_sequencial 
                                ,'$this->l48_tipo' 
                                ,'$this->l48_nomearquivo' 
-                               ,'$this->l48_caminho' 
                                ,$this->l48_liclicita 
+                               ,$this->l48_arquivo 
                       )";
 		$result = db_query($sql);
 		if ($result == false) {
@@ -235,20 +233,11 @@ class cl_editaldocumento
 			$sql .= $virgula . " l48_nomearquivo = '$this->l48_nomearquivo' ";
 			$virgula = ",";
 		}
-		if (trim($this->l48_caminho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l48_caminho"])) {
-            $sql .= $virgula . " l48_caminho = '$this->l48_caminho' ";
-            $virgula = ",";
-            if (trim($this->l48_caminho) == null) {
-                $this->erro_sql = " Caminho do Arquivo não Informado.";
-                $this->erro_campo = "l48_caminho";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
 
+		if (trim($this->l48_arquivo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l48_arquivo"])) {
+			$sql .= $virgula . " l48_arquivo = '$this->l48_arquivo' ";
+			$virgula = ",";
+		}
 //    $resaco = $this->sql_record($this->sql_query_file($this->l48_sequencial));
 //    if($this->numrows>0){
 //      for($conresaco=0;$conresaco<$this->numrows;$conresaco++){

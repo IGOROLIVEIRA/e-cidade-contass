@@ -398,10 +398,11 @@ $db_botao = true;
         let oRetorno    = eval("("+oAjax.responseText+")");
         oRetorno.dadoscomplementares.forEach((dado) => {
             let descMunicipio = unescape(dado.descrmunicipio).replace(/\+/g, ' ');
+            let bairro        = decodeURI(dado.bairro).replace(/\+/g, ' ');
             let linhas = oDBGrid.aRows.length;
             let descricaoLinha = `Obra: ${dado.codigoobra},`;
             descricaoLinha += `${descMunicipio},`;
-            descricaoLinha += dado.bairro ? ` ${dado.bairro.replace(/\+/g, ' ')}` : '';
+            descricaoLinha += bairro ? ` ${bairro}` : '';
 
             let aLinha = new Array();
             aLinha[0] = linhas+1;

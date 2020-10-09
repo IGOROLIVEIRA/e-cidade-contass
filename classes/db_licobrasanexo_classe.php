@@ -18,13 +18,13 @@ class cl_licobrasanexo {
   // cria variaveis do arquivo
   public $obr04_sequencial = 0;
   public $obr04_licobrasmedicao = 0;
-  public $obr04_codimagem = 0;
+  public $obr04_anexo = 0;
   public $obr04_legenda = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  obr04_sequencial = int8 = Cód. Sequencial
                  obr04_licobrasmedicao = int8 = Obras Medição
-                 obr04_codimagem = Varchar = codigo da imagem
+                 obr04_anexo = oid = anexo
                  obr04_legenda = Varchar = Legenda
                  ";
 
@@ -50,10 +50,10 @@ class cl_licobrasanexo {
     if ($exclusao==false) {
       $this->obr04_sequencial = ($this->obr04_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_sequencial"]:$this->obr04_sequencial);
       $this->obr04_licobrasmedicao = ($this->obr04_licobrasmedicao == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_licobrasmedicao"]:$this->obr04_licobrasmedicao);
-      $this->obr04_codimagem = ($this->obr04_codimagem == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"]:$this->obr04_codimagem);
+      $this->obr04_anexo = ($this->obr04_anexo == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_anexo"]:$this->obr04_anexo);
       $this->obr04_legenda = ($this->obr04_legenda == ""?@$GLOBALS["HTTP_POST_VARS"]["obr04_legenda"]:$this->obr04_legenda);
-    } else {
     }
+
   }
 
   // funcao para inclusao
@@ -80,9 +80,9 @@ class cl_licobrasanexo {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr04_codimagem == null ) {
+    if ($this->obr04_anexo == null ) {
       $this->erro_sql = " Campo codigo da imagem não informado.";
-      $this->erro_campo = "obr04_codimagem";
+      $this->erro_campo = "obr04_anexo";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -102,14 +102,14 @@ class cl_licobrasanexo {
     $sql = "insert into licobrasanexo(
                                        obr04_sequencial
                                       ,obr04_licobrasmedicao
-                                      ,obr04_codimagem
                                       ,obr04_legenda
+                                      ,obr04_anexo
                        )
                 values (
                                 $this->obr04_sequencial
                                ,$this->obr04_licobrasmedicao
-                               ,'$this->obr04_codimagem'
                                ,'$this->obr04_legenda'
+                               ,$this->obr04_anexo
                       )";
     $result = db_query($sql);
     if ($result==false) {
@@ -173,12 +173,12 @@ class cl_licobrasanexo {
         return false;
       }
     }
-    if (trim($this->obr04_codimagem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_codimagem"])) {
-      $sql  .= $virgula." obr04_codimagem = $this->obr04_codimagem ";
+    if (trim($this->obr04_anexo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr04_anexo"])) {
+      $sql  .= $virgula." obr04_anexo = $this->obr04_anexo ";
       $virgula = ",";
-      if (trim($this->obr04_codimagem) == null ) {
+      if (trim($this->obr04_anexo) == null ) {
         $this->erro_sql = " Campo codigo da imagem não informado.";
-        $this->erro_campo = "obr04_codimagem";
+        $this->erro_campo = "obr04_anexo";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

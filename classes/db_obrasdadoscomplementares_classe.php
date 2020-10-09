@@ -388,9 +388,15 @@ class cl_obrasdadoscomplementares
 		if (trim($this->db150_distrito) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_distrito"])) {
 			$sql .= $virgula . " db150_distrito = '$this->db150_distrito' ";
 			$virgula = ",";
+		}else{
+			$sql .= $virgula . " db150_distrito = null ";
+			$virgula = ",";
 		}
 		if (trim($this->db150_bairro) != null || isset($GLOBALS["HTTP_POST_VARS"]["db150_bairro"])) {
 			$sql .= $virgula . " db150_bairro = '$this->db150_bairro' ";
+			$virgula = ",";
+		}else{
+			$sql .= $virgula . " db150_bairro = null ";
 			$virgula = ",";
 		}
 //		if (trim($this->db150_numero) != "" || isset($GLOBALS["HTTP_POST_VARS"]["db150_numero"])) {
@@ -446,6 +452,7 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_grupobempublico = $this->db150_grupobempublico ";
 			$virgula = ",";
 		}
+
 		if (trim($this->db150_subgrupobempublico) != "" || isset($GLOBALS["HTTP_POST_VARS"]["$this->db150_subgrupobempublico"])) {
 			$sql .= $virgula . " db150_subgrupobempublico = $this->db150_subgrupobempublico ";
 			$virgula = ",";
@@ -459,10 +466,10 @@ class cl_obrasdadoscomplementares
 			$sql .= $virgula . " db150_cep = $this->db150_cep ";
 		}
 		$sql .= " where ";
+
 		if ($db150_sequencial != null) {
 			$sql .= " db150_sequencial = $db150_sequencial";
 		}
-;
 		$result = db_query($sql);
 		if ($result == false) {
 			$this->erro_banco = str_replace("\n", "", @pg_last_error());
