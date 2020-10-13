@@ -68,7 +68,7 @@ class cl_questaoaudit {
      }
    }
    // funcao para inclusao
-   function incluir ($ci02_codquestao){ 
+   function incluir ($ci02_codquestao=null){ 
       $this->atualizacampos();
      if($ci02_codquestao == null || $ci02_codquestao == ""){ 
       $result = db_query("select nextval('contint_ci02_codquestao_seq')");
@@ -373,7 +373,7 @@ class cl_questaoaudit {
      return $result;
    }
    // funcao do sql 
-   function sql_query ( $ci02_codquestao = null,$campos="questaoaudit.ci02_codquestao,*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $ci02_codquestao = null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -386,6 +386,7 @@ class cl_questaoaudit {
        $sql .= $campos;
      }
      $sql .= " from questaoaudit ";
+     $sql .= "    inner join tipoquestaoaudit on ci01_codtipo = ci02_codtipo ";
      $sql2 = "";
      if($dbwhere==""){
        if( $ci02_codquestao != "" && $ci02_codquestao != null){

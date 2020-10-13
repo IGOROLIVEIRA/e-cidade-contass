@@ -123,8 +123,9 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
     </tr>
   </table>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
 <input name="imprimir" type="button" id="imprimir" value="Imprimir" onclick="js_imprime();" >
+<input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
+<input name="ci02_codtipo" type="hidden" value="<?= $ci02_codtipo ?>" >
 <table>
     <tr>
       <td>&nbsp;</td>
@@ -167,7 +168,15 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+
 function js_imprime() {
-  alert('imprime');
+
+  var sUrl   = 'cin2_relquestaoaudit002.php';
+  var sQuery = '?iCodTipo='+document.form1.ci02_codtipo.value;  
+
+  jan = window.open(sUrl+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+
+  jan.moveTo(0,0);
+
 }
 </script>
