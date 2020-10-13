@@ -36,7 +36,7 @@ class PHPlotReport extends PHPlot {
      * Linux path to the TruType font
      * @var string
      */
-	protected $sDefaultFont = '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf';
+	protected $sDefaultFont = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf';
 
     /**
      * Image path/file to be saved
