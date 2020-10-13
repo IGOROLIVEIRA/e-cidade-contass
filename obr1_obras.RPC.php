@@ -15,6 +15,7 @@ require_once("classes/db_licobrasresponsaveis_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_licobras_classe.php");
 include("classes/db_condataconf_classe.php");
+include("classes/db_historicocgm_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -88,6 +89,7 @@ switch($oParam->exec) {
     $clhomologacaoadjudica = new cl_homologacaoadjudica();
     $clcondataconf = new cl_condataconf;
     $cllicobras = new cl_licobras();
+    $clhistoricocgm = new cl_historicocgm();
 
     $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $oParam->licitacao"));
     db_fieldsmemory($resulthomologacao,0);
@@ -131,6 +133,21 @@ switch($oParam->exec) {
         if ($datainicioatividades <= $dtencerramento) {
           throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         }
+      }
+
+      $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","z09_sequencial desc","z09_numcgm = $oParam->obr05_responsavel"));
+      db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+      $datacgm = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
+      $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
+      $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
+      $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
+
+      if($z09_datacadastro < $dtencerramento){
+          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      }
+
+      if($dtsessao < $z09_datacadastro){
+        throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
       }
 
       if(pg_num_rows($resultresp) > 0){
