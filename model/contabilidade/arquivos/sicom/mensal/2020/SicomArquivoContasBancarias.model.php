@@ -715,7 +715,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                      substr(o57_fonte,0,3) AS rubrica,
                                      conlancamval.c69_valor AS valorentrsaida,
                                      CASE
-                                         WHEN c71_coddoc IN (140, 141) THEN contadebito.c61_reduz
+                                         WHEN c71_coddoc IN (140, 141) AND (contadebito.c61_codtce IS NULL OR contadebito.c61_codtce = 0) THEN contadebito.c61_reduz
+                                         WHEN c71_coddoc IN (140, 141) AND (contadebito.c61_codtce IS NOT NULL AND contadebito.c61_codtce != 0) THEN contadebito.c61_codtce
                                          ELSE 0
                                      END AS codctbtransf,
                                      CASE
@@ -782,7 +783,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                     substr(o57_fonte,0,3) AS rubrica,
                                     conlancamval.c69_valor AS valorentrsaida,
                                     CASE
-                                        WHEN c71_coddoc IN (140, 141) THEN contacredito.c61_reduz
+                                        WHEN c71_coddoc IN (140, 141) AND (contacredito.c61_codtce IS NULL OR contacredito.c61_codtce = 0) THEN contacredito.c61_reduz
+                                        WHEN c71_coddoc IN (140, 141) AND (contacredito.c61_codtce IS NOT NULL AND contacredito.c61_codtce != 0) THEN contacredito.c61_codtce
                                         ELSE 0
                                     END AS codctbtransf,
                                     CASE
@@ -890,15 +892,15 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
 
               $sHash = $oMovi->tiporegistro;
-              $sHash .= $oCtb20->si96_codctb;
-              $sHash .= $oCtb20->si96_codfontrecursos;
+              $sHash .= $oMovi->codctbtransf;
+              $sHash .= $oMovi->codfontectbtransf;
               $sHash .= $oMovi->tipomovimentacao;
               /**
                * quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99
                */
               $sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) ? '99' : $oMovi->tipoentrsaida);
               $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
-                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0);
+                && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codctbtransf : 0);
               $sHash .= ((($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9)
                 && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0);
 
@@ -916,7 +918,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                 $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra-Orçamentário' : ' ');
                 $oDadosMovi21->si97_valorentrsaida = $nValor;
                 $oDadosMovi21->si97_codctbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
-                  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+                  && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codctbtransf : 0;
                 $oDadosMovi21->si97_codfontectbtransf = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9)
                   && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
