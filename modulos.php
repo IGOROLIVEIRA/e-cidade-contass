@@ -494,6 +494,7 @@ if(pg_numrows($result) == 0) {
                                                 from db_permissao p
                             inner join db_itensmenu m on m.id_item = p .id_item
                             where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
+                            $result = db_query($sqlPermissao);
 
                             if($modulo == 604 && pg_numrows($result) > 0):
                                 ?>
