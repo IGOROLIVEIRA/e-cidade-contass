@@ -76,10 +76,14 @@ $cltipoquestaoaudit->rotulo->label("ci01_tipoaudit");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query($pesquisa_chave));
+          $result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query(null,"*", null, "ci01_codtipo = {$pesquisa_chave} AND ci01_instit = ".db_getsession('DB_instit')));
           if($cltipoquestaoaudit->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+            if (isset($tipo) && $tipo == true) {
+              echo "<script>".$funcao_js."('$ci01_tipoaudit',false);</script>";
+            } else {
+              echo "<script>".$funcao_js."('$ci01_codtipo',false);</script>";
+            }
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

@@ -41,13 +41,16 @@ $iInstit        = db_getsession('DB_instit');
 $oInstit        = new Instituicao($iInstit);
 
 if (isset($iCodTipo) && $iCodTipo != null) {
-    $sSqlQuestoes = $clquestaoaudit->sql_query(null, "*", "ci02_numquestao", "ci02_codtipo = {$iCodTipo}");
+    $sSqlQuestoes = $clquestaoaudit->sql_query(null, "*", "ci02_numquestao", "ci02_codtipo = {$iCodTipo} AND ci02_instit = {$iInstit}");
 } else {
-    $sSqlQuestoes = $clquestaoaudit->sql_query(null, "*", "ci02_numquestao", "ci02_instit = {$iInstit}");
+    $sSqlQuestoes = $clquestaoaudit->sql_query(null, "*", "ci02_codtipo, ci02_numquestao", "ci02_instit = {$iInstit}");
 }
 
 $rsQuestoes = $clquestaoaudit->sql_record($sSqlQuestoes);
 
+if ($clquestaoaudit->numrows == 0) {
+  db_redireciona('db_erros.php?fechar=true&db_erro=Não há questões para esse tipo.');
+}
 
 /**
  * mPDF
@@ -65,25 +68,78 @@ $rsQuestoes = $clquestaoaudit->sql_record($sSqlQuestoes);
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 23.5, 15, 5, 11);
+$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
 
+if(file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
+  $sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
+} else {
+  $sLogo = "";
+}
+
+$sComplento = substr( trim($oInstit->getComplemento()), 0, 20);
+
+if (!empty($sComplento)) {
+  $sComplento = ", " . substr( trim($oInstit->getComplemento()), 0, 20);
+}
+
+$sEndCompleto = trim($oInstit->getLogradouro()) . ", " . trim($oInstit->getNumero()) . $sComplento;
+$sMunicipio   = trim($oInstit->getMunicipio()) . " - " . trim($oInstit->getUF());
+$sTelCnpj     = trim($oInstit->getTelefone()) . "   -    CNPJ : " . db_formatar($oInstit->getCNPJ(), "cnpj");
+$sEmail       = trim($oInstit->getEmail());
+$sSite        = $oInstit->getSite();
+
+/*<table style="width:100%; border-bottom:1px solid #000; font-family:sans-serif; border-collapse: inherit; table-layout: fixed;">    
+    <tbody>
+      <tr>        
+        <td style="width: 80px; height: 80px;">      
+          {$sLogo}
+        </td>        
+        <td style="font-size: 8pt; font-style: italic; padding-left: 10px" >
+          <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
+          <span>{$sEndCompleto}</span><br>
+          <span>{$sMunicipio}</span><br>
+          <span>{$sTelCnpj}</span><br>
+          <span>{$sEmail}</span><br>
+          <span>{$sSite}</span><br>
+        </td>        
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>        
+        <td style="text-align:center; font-size: 8pt; border: 1px solid #000; border-radius: 10px; border-collapse: separate; background-color: #ccc;">
+          <div>Relatório das Questões Cadastradas</div>
+        </td>
+      </tr>
+      </tbody>
+  </table>*/
 
 $header = <<<HEADER
 <header>
-  <table style="width:100%;text-align:center;font-family:sans-serif;border-bottom:1px solid #000;padding-bottom:6px;">
-    <tr>
-      <th>{$oInstit->getDescricao()}</th>
-    </tr>
-    <tr>
-      <th>Relatório de Questões Cadastradas</th>
-    </tr>
-  </table>
+  <div style="width: 100%; border-bottom: 1px solid #000; border-collapse: inherit; table-layout: fixed; font-family:sans-serif;">
+    <div style="border: 0px solid #000; float: left; width: 80px;">
+      <div style="width: 80px; height: 80px">
+        {$sLogo}
+      </div>
+    </div>
+    <div style="float: left; width: 394px; font-size: 8pt; font-style: italic; padding-left: 10px">
+      <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
+      <span>{$sEndCompleto}</span><br>
+      <span>{$sMunicipio}</span><br>
+      <span>{$sTelCnpj}</span><br>
+      <span>{$sEmail}</span><br>
+      <span>{$sSite}</span><br>
+    </div>
+    <div style="float: left; width: 160px;">&nbsp;</div>
+    <div style="border: 1px solid #000; float: left; width: 400px; height: 90px; text-align: center; border-radius: 10px 10px 10px 0px; background-color: #eee;">
+      <div style="padding-top: 35px; font-size: 8pt;">
+        Relatório das Questões Cadastradas
+      </div>
+    </div>
+  </div>
 </header>
 HEADER;
 
 $footer = <<<FOOTER
 <div style='border-top:1px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
-  {PAGENO}
+  {PAGENO}/{nb}
 </div>
 FOOTER;
 
@@ -97,77 +153,79 @@ ob_start();
 ?>
 
 <html>
-<head>
-    <style type="text/css">
-        .ritz .waffle a { color: inherit; }
-        .ritz .waffle .s0 {background-color: #d8d8d8; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; }
-        .ritz .waffle .s1 { background-color: #ffffff; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
-        .ritz .waffle .s2 {background-color: #ffffff; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
-        .ritz .waffle .s9 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom;
-        .column-headers-background { background-color: #d8d8d8; }
-    </style>
-</head>
+    <head>
+        <style type="text/css">
+            .ritz .waffle a { color: inherit; }
+            .ritz .waffle .s0 {background-color: #d8d8d8; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; }
+            .ritz .waffle .s1 { background-color: #ffffff; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
+            .ritz .waffle .s2 {background-color: #ffffff; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
+            .ritz .waffle .s9 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom;
+            .column-headers-background { background-color: #d8d8d8; }
+        </style>
+    </head>
 
-<body>
-  <div class="ritz">
-  <table class="waffle">
-    <tr style='height: 40px;'><td colspan="7" class="s2"><?= db_utils::fieldsMemory($rsQuestoes,0)->ci01_tipoaudit ?></td></tr>
-  </table>
-  </div>
-<div class="ritz grid-container" dir="ltr">
-    <table class="waffle" cellspacing="0" cellpadding="0">
-      <thead>
-      <tr>
-          <th class="s0" style="width:10px">Nº QUESTÃO</th>
-          <th class="s0" style="width:180px">QUESTÃO DE AUDITORIA</th>
-          <th class="s0" style="width:180px">INFORMAÇÕES REQUERIDAS</th>
-          <th class="s0" style="width:180px">FONTE DAS INFORMAÇÕES</th>
-          <th class="s0" style="width:180px">PROCEDIMENTO DETALHADO</th>
-          <th class="s0" style="width:180px">OBJETOS</th>
-          <th class="s0" style="width:180px">POSSÍVEIS ACHADOS NEGATIVOS</th>
-        </tr>
-        </thead>
-      
-      <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) {
-        
-        db_fieldsmemory($rsQuestoes,$i); ?>
+    <body>
+        <div class="ritz">
+          <table class="waffle">
+            <tr style='height: 40px;'><td colspan="7" class="s2"><?= db_utils::fieldsMemory($rsQuestoes,0)->ci01_tipoaudit ?></td></tr>
+          </table>
+        </div>
+        <div class="ritz grid-container" dir="ltr">
+            <table class="waffle" cellspacing="0" cellpadding="0">
+              <thead>
+              <tr>
+                  <th class="s0" style="width:10px">Nº QUESTÃO</th>
+                  <th class="s0" style="width:180px">QUESTÃO DE AUDITORIA</th>
+                  <th class="s0" style="width:180px">INFORMAÇÕES REQUERIDAS</th>
+                  <th class="s0" style="width:180px">FONTE DAS INFORMAÇÕES</th>
+                  <th class="s0" style="width:180px">PROCEDIMENTO DETALHADO</th>
+                  <th class="s0" style="width:180px">OBJETOS</th>
+                  <th class="s0" style="width:180px">POSSÍVEIS ACHADOS NEGATIVOS</th>
+                </tr>
+                </thead>
 
-        <? if($repete != $ci01_codtipo && $i > 0) {  ?>
-          
-          <tr><td>&nbsp;</td></tr>
-          <tr style='height: 40px;'><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>          
-          
-        <? } ?>
-        
-        <tbody>       
+                <tbody>
+              
+                <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) {
+                
+                    db_fieldsmemory($rsQuestoes,$i); ?>
 
-        <tr>
-          <td class="s1"><?= $ci02_numquestao ?></td>
-          <td class="s1"><?= $ci02_questao ?></td>
-          <td class="s1"><?= $ci02_inforeq ?></td>
-          <td class="s1"><?= $ci02_fonteinfo ?></td>
-          <td class="s1"><?= $ci02_procdetal ?></td>
-          <td class="s1"><?= $ci02_objeto ?></td>
-          <td class="s1"><?= $ci02_possivachadneg ?></td>
-        </tr>
-      
-        <? $repete = $ci01_codtipo;
-      
-      } ?>
-          
-      </tbody>
+                    <? if($repete != $ci01_codtipo && $i > 0) {  ?>
+                  
+                      <tr><td>&nbsp;</td></tr>
+                      <tr style='height: 40px;'><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>          
+                  
+                    <? } ?>       
 
-    </table>
+                    <tr>
+                        <td class="s1"><?= $ci02_numquestao ?></td>
+                        <td class="s1"><?= $ci02_questao ?></td>
+                        <td class="s1"><?= $ci02_inforeq ?></td>
+                        <td class="s1"><?= $ci02_fonteinfo ?></td>
+                        <td class="s1"><?= $ci02_procdetal ?></td>
+                        <td class="s1"><?= $ci02_objeto ?></td>
+                        <td class="s1"><?= $ci02_possivachadneg ?></td>
+                    </tr>
+                  
+                    <?             
+                    $repete = $ci01_codtipo;
+              
+                }         
+                ?>
+                  
+                </tbody>
 
-</div>
-</body>
+            </table>
+
+        </div>
+    </body>
 </html>
 
 <?php
 
 $html = ob_get_contents();
 echo $html;
-
+// die();
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
