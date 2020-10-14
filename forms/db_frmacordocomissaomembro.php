@@ -414,6 +414,7 @@ var sUrl = 'con4_contratos.RPC.php';
 	   var strJson  = '{';
 	       strJson += '"exec":"alteraMembro",';
 	       strJson += '"iCodigo":"'+iCodigo+'",';       
+	       strJson += '"iCodigoComissao":"'+$F('ac07_acordocomissao')+'",';
 	       strJson += '"iCodigoCgm":"'+$F('ac07_numcgm')+'",';
 	       strJson += '"iResponsabilidade":"'+$F('ac07_tipomembro')+'"';       
 	       strJson += '}';

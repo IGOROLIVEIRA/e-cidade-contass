@@ -87,17 +87,40 @@ if (isset($incluir)) {
      */
     if($l200_tipoparecer == "2") {
 
-            $dtDataEmissao      = $oLicitacao->l20_dataaber;
-            $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
+        $dtDataEmissao      = $oLicitacao->l20_dataaber;
+        $dtDataEmissaoShow  = str_replace('-', '/', date('d-m-Y', strtotime($dtDataEmissao)));
 
-            if($dtDataParecer < $dtDataEmissao){
+        if($dtDataParecer < $dtDataEmissao){
 
-                $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.'. A data do parecer do tipo (2- Jurdico-Edital) não pode ser anterior a data de emissão do edital.';
-                echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
-                db_redireciona('lic1_parecerlicitacao001.php');
+            $clliclicitasituacao->erro_msg = 'Edital emitido em '.$dtDataEmissaoShow.'. A data do parecer do tipo (2- Jurdico-Edital) não pode ser anterior a data de emissão do edital.';
+            echo "<script>alert('{$clliclicitasituacao->erro_msg}');</script>";
+            db_redireciona('lic1_parecerlicitacao001.php');
 
-            }
+        }
 
+    }
+
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l200_numcgm} order by z09_sequencial desc");
+    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+    $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+
+    if($dtsession < $z09_datacadastro){
+       $msg_erro = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+       echo "<script>alert('{$msg_erro}');</script>";
+       db_redireciona('lic1_parecerlicitacao001.php');
+    }
+
+    /**
+    * controle de encerramento peri. Patrimonial
+    */
+    $clcondataconf = new cl_condataconf;
+    $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+    db_fieldsmemory($resultControle,0);
+
+    if($dtsession <= $c99_datapat){
+       $msg_erro = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+        echo "<script>alert('{$msg_erro}');</script>";
+        db_redireciona('lic1_parecerlicitacao001.php');
     }
 
   $rsResult = db_query("select l20_codtipocom from liclicita where l20_codigo = $l200_licitacao");
@@ -133,17 +156,7 @@ if (isset($incluir)) {
       $clparecerlicitacao->incluir($l200_sequencial);  
       db_fim_transacao();
   }
-  
-  /*
-  $sql = db_query("select z01_cgccpf as cpf from cgm where z01_numcgm = $l200_numcgm");
-  $cgm = db_utils::fieldsMemory($sql, 0)->cpf;
-  if (strlen($cgm) <= 11) {
-    db_inicio_transacao();
-    $clparecerlicitacao->incluir($l200_sequencial);  
-	  db_fim_transacao();
-  }else {
-      echo "<script>alert('O CGM selecionado deverá ser de Pessoa Física.');</script>";
-  }*/
+
 }
 ?>
 <html>
