@@ -67,7 +67,7 @@ if ($ordenar == "depart") {
     $info .= "Departamento";
 } else if ($ordenar == "placa") {
     if ($t07_confplaca == 1 or $t07_confplaca == 4) {
-        $ordem = "regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g')";
+        $ordem = "cast( regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g') as numeric)";
     } else {
         $ordem = "t52_ident";
     }
@@ -213,7 +213,7 @@ $where_instit .= "t52_instit = " . db_getsession("DB_instit");
 
 
 if ($t07_confplaca == 1 or $t07_confplaca == 4) {
-    $campos = "t53_ntfisc, t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g') as t52_ident,
+    $campos = "t53_ntfisc, t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, cast( regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g') as numeric) as t52_ident,
   					 t52_depart, descrdepto, t52_numcgm, z01_nome, t52_obs, t64_class, t64_descr, t33_divisao, departdiv.t30_descr,
   					 (select count(*)
                      from bensplaca
