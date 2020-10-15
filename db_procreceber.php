@@ -36,6 +36,11 @@ require_once("classes/db_proctransand_classe.php");
 require_once("dbforms/db_funcoes.php");
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
+//echo "<pre>";
+//var_dump($HTTP_POST_VARS);
+//echo "<br>";
+//var_dump($HTTP_SERVER_VARS);
+//exit;
 $clprocandam    = new cl_procandam;
 $clproctransfer = new cl_proctransfer;
 $clprotprocesso = new cl_protprocesso;
@@ -114,7 +119,6 @@ $db_botao = true;
 							 where p63_codtran = $p63_codtran
 								 and p64_codtran is null
 								 and p68_codproc is null
-								 and p62_coddeptorec   = ".db_getsession("DB_coddepto")."
 								 and ( p62_id_usorec   = ".db_getsession("DB_id_usuario")."
 								  or   p62_id_usorec   = 0 )";
 
@@ -232,8 +236,7 @@ $db_botao = true;
 				 inner join db_usuarios  on id_usuario  = p62_id_usuario
 					left join proctransand on p64_codtran = p62_codtran
 					left join arqproc      on p68_codproc = p63_codproc
-							where	p62_coddeptorec   = ".db_getsession("DB_coddepto")."
-								and ( p62_id_usorec   = ".db_getsession("DB_id_usuario")."
+							where ( p62_id_usorec   = ".db_getsession("DB_id_usuario")."
 								 or   p62_id_usorec   = 0 )
 								and p64_codtran is null
 								and p68_codproc is null

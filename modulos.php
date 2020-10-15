@@ -495,8 +495,9 @@ if(pg_numrows($result) == 0) {
                             inner join db_itensmenu m on m.id_item = p .id_item
                             where p.anousu = ".db_getsession("DB_anousu")." and p.id_item =2182 and id_usuario = ".db_getsession("DB_id_usuario");
                             $result = db_query($sqlPermissao);
+                            $db_modulo = db_getsession("DB_modulo");
 
-                            if($modulo == 604 && pg_numrows($result) > 0):
+                            if($db_modulo == 604 && pg_numrows($result) > 0):
                                 ?>
                                 <tr>
                                     <hr style="color:#000; size: 25px;">
