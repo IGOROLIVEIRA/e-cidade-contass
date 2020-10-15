@@ -598,7 +598,7 @@ ORDER BY pc11_seq";
                 "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
 
             $result_valor = $clpcorcamval->sql_record($sSqlJulg);
-            db_criatabela($result_valor);
+//            db_criatabela($result_valor);
             if ($clpcorcamval->numrows > 0) {
                 db_fieldsmemory($result_valor, 0);
                 if ($pc24_pontuacao == 1) {
