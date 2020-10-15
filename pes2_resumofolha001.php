@@ -141,6 +141,21 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             <td>
               <?php db_input('DBtxt24', 4, $IDBtxt24, true, 'text', 2, 'class="field-size1"'); ?>
               <?php db_input('DBtxt26', 2, $IDBtxt26, true, 'text', 2, 'class="field-size1"'); ?>
+
+              <label>Gerar Gráfico:</label>
+              <select name="grafico" id="grafico" onchange="js_tipo_grafico()" style="width: 24%">
+                <option value='f'>Não</option>
+                <option value='t'>Sim</option>
+              </select>
+              
+              <span id="tipoGrafico">
+                <label>Valor:</label>
+                <select name="tipo_grafico" id="tipo_grafico" style="width: 20%">
+                  <option value='bruto'>Bruto</option>
+                  <option value='liquido'>Líquido</option>
+                  <option value='empenhos'>Empenhos</option>
+                </select>
+              </span>
             </td>
           </tr>     
           <tr title="Seleção">
@@ -335,7 +350,7 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     }
 
     if (($F('periodo') == 't') 
-        && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || ($F('DBtxt26') <= $F('DBtxt25') && $F('DBtxt24') == $F('DBtxt23')))) {
+        && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || (Number($F('DBtxt26')) <= Number($F('DBtxt25')) && Number($F('DBtxt24')) == Number($F('DBtxt23'))))) {
 
       alert('Mês Final da folha informado é invalido.');
       return false;
@@ -456,6 +471,14 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     });
 
     oQuery.aTiposFolhas = aTipoFolhas;
+
+    if ($F('periodo') == 't') {
+      oQuery.lGrafico = $F('grafico');
+      if (oQuery.lGrafico == 't') {
+        oQuery.sTipoGrafico = $F('tipo_grafico');
+      }
+    }
+
     var oJanela = window.open(
        'pes2_resumofolha002.php?json=' + Object.toJSON(oQuery),
        '',
@@ -630,6 +653,17 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     }
   }
   js_periodo();
+
+  function js_tipo_grafico() {
+    let elementoGrafico = $("grafico");
+    let elementoMostrar = $('tipoGrafico');
+    if (elementoGrafico.value == 't') {
+      elementoMostrar.show();
+    } else {
+      elementoMostrar.hide();
+    }
+  }
+  js_tipo_grafico();
 </script>
 
 </html>
