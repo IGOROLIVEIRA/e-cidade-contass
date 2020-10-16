@@ -71,7 +71,7 @@ class Oc13351 extends PostgresMigration
         CREATE TABLE tipoquestaoaudit(
         ci01_codtipo		int4 not null default 0,
         ci01_tipoaudit		varchar(150) not null,
-        ci01_instit		int4 not null default null);
+        ci01_instit		    int4 not null);
 
         -- Criando  sequences
         CREATE SEQUENCE contint_ci01_codtipo_seq
@@ -186,6 +186,132 @@ class Oc13351 extends PostgresMigration
             1, 
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );
+
+        --Cria menu para processo de auditoria
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Processo de Auditoria', 'Processo de Auditoria', '', 1, 1, 'Processo de Auditoria', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            (SELECT CASE
+                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos')) = 0 THEN 1 
+                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Relatórios')) 
+            END), 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
+
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Inclusão', 'Inclusão', 'cin4_procaudit001.php', 1, 1, 'Inclusão', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            1, 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
+
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Alteração', 'Alteração', 'cin4_procaudit002.php', 1, 1, 'Alteração', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            2, 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
+
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Exclusão', 'Exclusão', 'cin4_procaudit003.php', 1, 1, 'Exclusão', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Processo de Auditoria'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            3, 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
+
+        -- CRIA TABELA PROCESSO DE AUDITORIA
+        
+        -- INSERE db_sysarquivo
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'processoaudit','Processo de Auditoria','ci03','2020-10-15','Tipo da Auditoria',0,'f','f','f','f');
+
+        -- INSERE db_sysarqmod
+        INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
+
+        -- INSERE db_syscampo
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codproc','int4','Código','','Código',11,false,false,false,0,'int4','Código');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_numproc','int4','Número do processo da auditoria','','Número do Processo',11,false,false,false,1,'text','Número do Processo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_anoproc','int4','Ano do processo da auditoria','','Ano do Processo',4,false,false,false,1,'text','Ano do Processo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_grupoaudit','int4','Grupo de Auditoria','','Grupo de Auditoria',1,false,false,false,1,'text','Grupo de Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_objaudit','varchar(500)','Descrever qual é o foco da auditoria em questão','','Objetivo da Auditoria',500,false,false,false,0,'text','Objetivo da Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_dataini','date','Data Inicial','','Data Inicial',10,false,false,false,1,'text','Data Inicial');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_datafim','date','Data Final','','Data Final',10,false,false,false,1,'text','Data Final');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codtipoquest','int4','Tipo da Auditoria','','Tipo da Auditoria',11,true,false,false,1,'int4','Tipo da Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+
+        -- INSERE db_sysarqcamp
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_codproc'),      1, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_numproc'), 	    2, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_anoproc'), 		3, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_grupoaudit'),   4, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_objaudit'),     5, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_dataini'),      6, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_datafim'),      7, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_codtipoquest'), 8, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_instit'),       9, 0);
+
+        --DROP TABLE:
+        DROP TABLE IF EXISTS processoaudit CASCADE;
+        --Criando drop sequences
+
+        -- TABELAS E ESTRUTURA
+
+        -- Módulo: Controle Interno
+        CREATE TABLE processoaudit(
+        ci03_codproc        int4 not null default 0,
+        ci03_numproc        int4 not null,
+        ci03_anoproc        int4 not null,
+        ci03_grupoaudit     int4 not null,
+        ci03_objaudit       varchar(500) not null,
+        ci03_dataini        date not null,
+        ci03_datafim        date not null,
+        ci03_codtipoquest   int4 default null,
+        ci03_instit         int4 not null);
+
+        -- Criando  sequences
+        CREATE SEQUENCE contint_ci03_codproc_seq
+        INCREMENT 1
+        MINVALUE 1
+        MAXVALUE 9223372036854775807
+        START 1
+        CACHE 1;
+
+        -- CHAVE ESTRANGEIRA
+        ALTER TABLE processoaudit ADD PRIMARY KEY (ci03_codproc);
+
+        ALTER TABLE processoaudit ADD CONSTRAINT processoaudit_tipoquestao_fk FOREIGN KEY (ci03_codtipoquest) REFERENCES tipoquestaoaudit (ci01_codtipo);
+
+        DROP TABLE IF EXISTS processoauditdepart CASCADE;
+
+        -- CRIA TABELA PROCESSO DE AUDITORIA DEPARTAMENTO
+        
+        -- INSERE db_sysarquivo
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'processoauditdepart','Processo de Auditoria Departamento','ci04','2020-10-15','Processo de Auditoria Departamento',0,'f','f','f','f');
+
+        -- INSERE db_sysarqmod
+        INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
+
+        -- INSERE db_syscampo
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_codproc','int4','Código do Processo','','Código do Processo',11,false,false,false,0,'int4','Código do Processo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci04_depto','int4','Código do Departamento','','Código do Departamento',11,false,false,false,1,'text','Código do Departamento');
+
+        CREATE TABLE processoauditdepart(
+        ci04_codproc    int4 not null,
+        ci04_depto     int4 not null
+        );
+
+        ALTER TABLE processoauditdepart ADD PRIMARY KEY (ci04_codproc, ci04_depto);
+
+        ALTER TABLE processoauditdepart ADD CONSTRAINT processoauditdepart_codproc_fk FOREIGN KEY (ci04_codproc) REFERENCES processoaudit (ci03_codproc);
+
+        ALTER TABLE processoauditdepart ADD CONSTRAINT processoauditdepart_depto_fk FOREIGN KEY (ci04_depto) REFERENCES db_depart (coddepto);
           
         COMMIT;
 

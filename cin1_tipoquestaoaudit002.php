@@ -61,7 +61,7 @@ if(isset($alterar)){
       echo "<script> document.form1.".$cltipoquestaoaudit->erro_campo.".focus();</script>";
     }
   }else{
-    $cltipoquestaoaudit->erro(true,true);
+    db_msgbox($cltipoquestaoaudit->erro_msg);
   }
 }
 if($db_opcao==22){

@@ -43,6 +43,9 @@ $cltipoquestaoaudit->rotulo->label("ci01_tipoaudit");
 		       ?>
             </td>
           </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
           <tr> 
             <td colspan="2" align="center"> 
               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
