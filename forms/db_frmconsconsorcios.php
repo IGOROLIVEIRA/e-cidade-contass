@@ -47,7 +47,7 @@ db_input('c200_codconsorcio',10,$Ic200_codconsorcio,true,'text',$db_opcao,"")
 db_input('c200_numcgm',10,$Ic200_numcgm,true,'text',$db_opcao," onchange='js_pesquisac200_numcgm(false);'")
 ?>
        <?
-db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
+db_input('z01_nome',60,$Iz01_nome,true,'text',3,'')
        ?>
     </td>
   </tr>
