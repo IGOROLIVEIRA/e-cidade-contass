@@ -122,8 +122,12 @@ db_fieldsmemory($rsCgm, 0);
  <td>
   <?
 //db_input('pc60_orgaoreg',10,$Ipc60_orgaoreg,true,'text',$db_opcao,"")
-  $x = array("1"=>"Cartório de Registro Civil de Pessoas Jurídicas","2"=>"Junta Comercial","3"=>"Ordem dos Advogados do Brasil-OAB","4"=>"Portal do Empreendedor (MEI)");
-  db_select("pc60_orgaoreg",$x,true,$db_opcao);
+  $x = array("0"=>"Selecione",
+             "1"=>"Cartório de Registro Civil de Pessoas Jurídicas",
+             "2"=>"Junta Comercial",
+             "3"=>"Ordem dos Advogados do Brasil-OAB",
+             "4"=>"Portal do Empreendedor (MEI)");
+  db_select("pc60_orgaoreg",$x,true,$db_opcao,"onchange = 'js_verificaorgaoreg()';");
 
   ?>
 </td>
@@ -289,5 +293,14 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+function js_verificaorgaoreg() {
+   let orgreg = document.form1.pc60_orgaoreg.value;
+
+   if(orgreg == 4){
+       document.form1.pc60_numeroregistro.disabled = true;
+   }else{
+       document.form1.pc60_numeroregistro.disabled = false;
+   }
 }
 </script>
