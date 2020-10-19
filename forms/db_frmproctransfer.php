@@ -114,18 +114,18 @@ $clrotulo->label("descrdepto");
                      ?>
                   </td>
                 </tr>
-<!--                <tr>-->
-<!--                  <td  nowrap title="--><?//=@$Tp62_id_usorec?><!--">-->
-<!--                     --><?//=@$Lp62_id_usorec; ?>
-<!--                  </td>-->
-<!--                  <td nowrap>-->
-<!--                  --><?//
-//                   $aUsuarios = array("0" => "Selecione o Usuário");
-//                   db_select("p62_id_usorec",$aUsuarios,true,$db_opcao);
-//                  ?>
-<!---->
-<!--                  </td>-->
-<!--                </tr>-->
+                <tr>
+                  <td  nowrap title="<?=@$Tp62_id_usorec?>">
+                     <?=@$Lp62_id_usorec; ?>
+                  </td>
+                  <td nowrap>
+                  <?
+                   $aUsuarios = array("0" => "Selecione o Usuário");
+                   db_select("p62_id_usorec",$aUsuarios,true,$db_opcao);
+                  ?>
+
+                  </td>
+                </tr>
                 <tr id="trdespacho">
                     <td>
                         <?php
