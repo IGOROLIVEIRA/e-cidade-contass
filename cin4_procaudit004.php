@@ -16,7 +16,21 @@ $db_botao = false;
 $sqlerro = false;
 
 if (isset($incluir) || isset($alterar)) {
-  
+
+    $sSqlVerifica = $clquestaoaudit->sql_query(null, "*", null, "ci02_codtipo = {$ci01_codtipo} AND ci02_instit = ".db_getsession('DB_instit'));
+    $clquestaoaudit->sql_record($sSqlVerifica);
+
+    if ($clquestaoaudit->numrows == 0) {
+
+        $sqlerro = true;
+        $clprocessoaudit->erro_msg 		= "Auditoria sem questões cadastradas.";
+        $clprocessoaudit->erro_status 	= 0;
+      
+        $ci01_codtipo 	= "";
+        $ci01_tipoaudit = "";
+
+    }
+    
     if ($sqlerro==false) {
     
         db_inicio_transacao();
@@ -52,8 +66,8 @@ if (isset($incluir) || isset($alterar)) {
 
     db_fim_transacao($sqlerro);
     $ci03_codtipoquest = null;
-    $ci01_codtipo = '';
-    $ci01_tipoaudit = '';
+    $ci01_codtipo = "";
+    $ci01_tipoaudit = "";
 
 } else {
     
@@ -79,11 +93,11 @@ if (isset($incluir) || isset($alterar)) {
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
-	<?
-	include("forms/db_frmprocessoquestaoaudit.php");
-	?>
+  <?
+  include("forms/db_frmprocessoquestaoaudit.php");
+  ?>
     </center>
-	</td>
+  </td>
   </tr>
 </table>
 </body>

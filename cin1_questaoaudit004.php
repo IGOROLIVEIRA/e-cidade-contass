@@ -12,42 +12,74 @@ $db_botao = false;
 $sqlerro = false;
 $ci02_codtipo = $ci01_codtipo;
 
-if(isset($incluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clquestaoaudit->ci02_instit = db_getsession('DB_instit');
-    $clquestaoaudit->ci02_codtipo = $ci02_codtipo;
-    $clquestaoaudit->incluir($ci02_codquestao);
-    if($clquestaoaudit->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
+if (isset($incluir)) {
+
+	$sSqlVerifica = $clquestaoaudit->sql_query(null, "*", null, "ci02_numquestao = {$ci02_numquestao} AND ci02_codtipo = {$ci02_codtipo} AND ci02_instit = ".db_getsession('DB_instit'));
+	$clquestaoaudit->sql_record($sSqlVerifica);
+
+	if ($clquestaoaudit->numrows > 0) {
+
+		$sqlerro = true;
+		$clquestaoaudit->erro_msg 	= "Número de questão já existe.";		
+		$clquestaoaudit->erro_campo = "ci02_numquestao";
+
+	}
+	  
+	if($sqlerro==false){
+	
+		db_inicio_transacao();
+    	$clquestaoaudit->ci02_instit = db_getsession('DB_instit');
+    	$clquestaoaudit->ci02_codtipo = $ci02_codtipo;
+    	$clquestaoaudit->incluir($ci02_codquestao);
+		
+		if ($clquestaoaudit->erro_status == 0) {
+      		$sqlerro=true;
+		}
+		
+		db_fim_transacao($sqlerro);
+		
+  	} else {
+		$clquestaoaudit->erro_status = 0;
+	}
+
+} else if (isset($alterar)) {
+	  
+	if($sqlerro==false){
+	
+		db_inicio_transacao();
+    	$clquestaoaudit->alterar($ci02_codquestao);
+    	$erro_msg = $clquestaoaudit->erro_msg;
+		
+		if($clquestaoaudit->erro_status==0){
+      		$sqlerro=true;
+		}
+		
+		db_fim_transacao($sqlerro);
+		
   }
-}else if(isset($alterar)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clquestaoaudit->alterar($ci02_codquestao);
-    $erro_msg = $clquestaoaudit->erro_msg;
-    if($clquestaoaudit->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($excluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clquestaoaudit->excluir($ci02_codquestao);
-    $erro_msg = $clquestaoaudit->erro_msg;
-    if($clquestaoaudit->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($opcao)){
-   $result = $clquestaoaudit->sql_record($clquestaoaudit->sql_query($ci02_codquestao));
-   if($result!=false && $clquestaoaudit->numrows>0){
-     db_fieldsmemory($result,0);
-   }
+  
+} else if (isset($excluir)) {
+  
+	if ($sqlerro==false) {
+		
+		db_inicio_transacao();
+    	$clquestaoaudit->excluir($ci02_codquestao);
+    	$erro_msg = $clquestaoaudit->erro_msg;
+		
+		if ($clquestaoaudit->erro_status == 0) {
+      		$sqlerro=true;
+	    }
+	
+		db_fim_transacao($sqlerro);
+  	}
+
+} else if(isset($opcao)) {
+	   
+	$result = $clquestaoaudit->sql_record($clquestaoaudit->sql_query($ci02_codquestao));
+   	if( $result != false && $clquestaoaudit->numrows>0) {
+     	db_fieldsmemory($result,0);
+	}
+	   
 }
 ?>
 <html>
@@ -76,17 +108,20 @@ if(isset($incluir)){
 </body>
 </html>
 <?
-if(isset($alterar) || isset($excluir) || isset($incluir)){
-  if($clquestaoaudit->erro_status=="0"){
-    $clquestaoaudit->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clquestaoaudit->erro_campo!=""){
-      echo "<script> document.form1.".$clquestaoaudit->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clquestaoaudit->erro_campo.".focus();</script>";
-    }
-  }else{
-    db_msgbox($clquestaoaudit->erro_msg);
-  }
+if (isset($alterar) || isset($excluir) || isset($incluir)) {
+	
+	if ($clquestaoaudit->erro_status == "0") {
+		
+		$clquestaoaudit->erro(true,false);
+	    $db_botao=true;
+    	echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    	if ($clquestaoaudit->erro_campo != "") {
+		  
+			echo "<script> document.form1.".$clquestaoaudit->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      		echo "<script> document.form1.".$clquestaoaudit->erro_campo.".focus();</script>";
+    	}
+  	} else {
+    	db_msgbox($clquestaoaudit->erro_msg);
+  	}
 }
 ?>

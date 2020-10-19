@@ -156,9 +156,9 @@ ob_start();
     <head>
         <style type="text/css">
             .ritz .waffle a { color: inherit; }
-            .ritz .waffle .s0 {background-color: #d8d8d8; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; }
-            .ritz .waffle .s1 { background-color: #ffffff; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
-            .ritz .waffle .s2 {background-color: #ffffff; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; vertical-align: center; }
+            .ritz .waffle .s0 { background-color: #d8d8d8; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; }
+            .ritz .waffle .s1 { background-color: #ffffff; border: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 10pt; padding: 0px 3px 0px 3px; text-align: center; }
+            .ritz .waffle .s2 { background-color: #ffffff; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; vertical-align: middle; height: 50px; vertical-align: middle; }
             .ritz .waffle .s9 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom;
             .column-headers-background { background-color: #d8d8d8; }
         </style>
@@ -167,7 +167,7 @@ ob_start();
     <body>
         <div class="ritz">
           <table class="waffle">
-            <tr style='height: 40px;'><td colspan="7" class="s2"><?= db_utils::fieldsMemory($rsQuestoes,0)->ci01_tipoaudit ?></td></tr>
+            <tr><td colspan="7" class="s2"><?= db_utils::fieldsMemory($rsQuestoes,0)->ci01_tipoaudit ?></td></tr>
           </table>
         </div>
         <div class="ritz grid-container" dir="ltr">
@@ -193,7 +193,7 @@ ob_start();
                     <? if($repete != $ci01_codtipo && $i > 0) {  ?>
                   
                       <tr><td>&nbsp;</td></tr>
-                      <tr style='height: 40px;'><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>          
+                      <tr><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>          
                   
                     <? } ?>       
 

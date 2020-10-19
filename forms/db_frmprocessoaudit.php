@@ -58,7 +58,7 @@ $clprocessoaudit->rotulo->label();
                             2 => "Auditoria Operacional",
                             3 => "Demanda Extraordinária"
                         );
-                        db_select("ci03_grupoaudit", $aGrupo, true, 4, "style='width:445;'");
+                        db_select("ci03_grupoaudit", $aGrupo, true, $db_opcao, "style='width:445;'");
                         ?>
                     </td>
                 </tr>

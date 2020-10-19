@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("classes/db_processoaudit_classe.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
+include("classes/db_processoauditdepart_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprocessoaudit = new cl_processoaudit;
@@ -19,7 +20,7 @@ if(isset($alterar)){
     $clprocessoaudit->alterar($ci03_codproc);
 
     if($clprocessoaudit->erro_status==0){
-		$sqlerro=true;
+		  $sqlerro=true;
     }
     db_fim_transacao($sqlerro);
 
