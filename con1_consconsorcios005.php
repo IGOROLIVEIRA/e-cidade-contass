@@ -94,6 +94,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?c203_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consretiradaexclusao.disabled=false;
          top.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?c204_consconsorcios=".@$c200_sequencial."';
+         parent.document.formaba.consmesreferencia.disabled=false;
+         top.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=2&c202_consconsorcios=".@$c200_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('consvalorestransf');";
