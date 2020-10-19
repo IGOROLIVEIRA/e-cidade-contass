@@ -113,7 +113,6 @@ if(isset($incluir)){
       echo "<script> document.form1.".$clpcforne->erro_campo.".focus();</script>";
     };
   }else{
-   db_msgbox($erro_msg);
    db_redireciona("com1_pcforne005.php?liberaaba=true&chavepesquisa=$pc60_numcgm");
   }
 }

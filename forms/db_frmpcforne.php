@@ -298,9 +298,12 @@ function js_verificaorgaoreg() {
    let orgreg = document.form1.pc60_orgaoreg.value;
 
    if(orgreg == 4){
+       document.form1.pc60_numeroregistro.style.background = '#DEB887';
        document.form1.pc60_numeroregistro.disabled = true;
    }else{
        document.form1.pc60_numeroregistro.disabled = false;
+       document.form1.pc60_numeroregistro.style.background = '#ffffff';
+
    }
 }
 </script>
