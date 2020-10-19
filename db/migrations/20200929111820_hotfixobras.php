@@ -70,5 +70,6 @@ class Hotfixobras extends AbstractMigration
             COMMIT;
 
 SQL;
+        $this->execute($sql);
     }
 }

@@ -247,6 +247,7 @@ switch($oParam->exec) {
 
       $oRetorno->dados[] = $oDadosResponsavel;
     }
+    break;
 
   case 'salvarDocumento':
 
