@@ -29,7 +29,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
   }
 } 
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" <?= (isset($aProcesso) && $aProcesso != null) ? "onsubmit='js_submit()'" : "" ?>>
 <center>
   <fieldset class="fildset-principal">
   <table border="0">
@@ -180,3 +180,47 @@ function js_imprime() {
 
 }
 </script>
+
+<? if (isset($aProcesso)) { ?>
+<script>
+function js_submit() {
+	
+	var aProcessos  = <?= $aProcesso ?>;
+
+	if (aProcessos.length > 0) {
+		
+		var iOpcao 		= <?= $db_opcao ?>;
+		var sMensagem 	= '';
+		var sOpcao 		= iOpcao == 2 ? 'alterar' : 'excluir';
+
+		sMensagem += 'A questão que deseja '+sOpcao+' já está vinculada ao(s) seguinte(s) Processo(s) de Auditoria: ';
+
+		sProcessos = '';
+
+		for (var i = 0; i < aProcessos.length; i++) {
+			
+			sProcessos += aProcessos[i].ci03_numproc+'/'+aProcessos[i].ci03_anoproc;
+
+			if (i < (aProcessos.length - 1)) {
+				sProcessos += ', ';
+			}
+			
+		}
+
+		sMensagem += sProcessos;
+
+		if (iOpcao == 2) {
+			sMensagem += '. As modificações aqui realizadas também serão atualizadas no(s) processo(s), tem certeza que deseja prosseguir com a alteração?';
+		} else if (iOpcao == 3) {
+			sMensagem += '. A exclusão implicará também na remoção destes registros no(s) processo(s). Tem certeza que deseja excluir?';
+		}
+
+		if ( !confirm(sMensagem) ) {
+			event.preventDefault();
+		} 
+
+	}
+
+}
+</script>
+<? } ?>

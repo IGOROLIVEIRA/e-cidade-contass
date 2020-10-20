@@ -4,6 +4,7 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_questaoaudit_classe.php");
+include("classes/db_processoaudit_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clquestaoaudit = new cl_questaoaudit;
@@ -77,7 +78,21 @@ if (isset($incluir)) {
 	   
 	$result = $clquestaoaudit->sql_record($clquestaoaudit->sql_query($ci02_codquestao));
    	if( $result != false && $clquestaoaudit->numrows>0) {
-     	db_fieldsmemory($result,0);
+		
+		db_fieldsmemory($result,0);
+		
+		$clprocessoaudit 	= new cl_processoaudit;
+		$sSqlProcesso 		= $clprocessoaudit->sql_query(null, "ci03_numproc, ci03_anoproc", null, "ci03_codtipoquest = {$ci02_codtipo}");
+		$rsProcesso			= $clprocessoaudit->sql_record($sSqlProcesso);
+		
+		if ($clprocessoaudit->numrows > 0) {
+		
+			include("libs/JSON.php");
+			$oJson = new services_json();
+			$aProcesso = $oJson->encode(db_utils::getCollectionByRecord($rsProcesso, true, false, true));
+
+		}
+
 	}
 	   
 }
