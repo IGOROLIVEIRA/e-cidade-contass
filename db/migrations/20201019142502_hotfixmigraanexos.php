@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Hotfixobras extends AbstractMigration
+class Hotfixmigraanexos extends AbstractMigration
 {
     /**
      * Change Method.

@@ -35,29 +35,45 @@ include("classes/db_pcforne_classe.php");
 include("classes/db_pcfornecon_classe.php");
 include("classes/db_pcfornemov_classe.php");
 include("classes/db_pcfornecert_classe.php");
+include("classes/db_condataconf_classe.php");
 $clpcforne = new cl_pcforne;
-  /*
-$clpcfornecon = new cl_pcfornecon;
-$clpcfornemov = new cl_pcfornemov;
-$clpcfornecert = new cl_pcfornecert;
-  */
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  $sqlerro=false;
-  db_inicio_transacao();
-  $clpcforne->pc60_usuario=db_getsession("DB_id_usuario");
-  $clpcforne->pc60_hora=db_hora();
-  $clpcforne->incluir($pc60_numcgm);
-  if($clpcforne->erro_status==0){
-    $sqlerro=true;
-  } 
-  $erro_msg = $clpcforne->erro_msg; 
-  db_fim_transacao($sqlerro);
-   $pc60_numcgm= $clpcforne->pc60_numcgm;
-   $db_opcao = 1;
-   $db_botao = true;
+    $sqlerro=false;
+    db_inicio_transacao();
+
+    if($sqlerro==false){
+
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$pc60_numcgm} order by z09_sequencial desc");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+
+        if($dtsession < $z09_datacadastro){
+            db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+            $sqlerro = true;
+        }
+
+        /**
+         * controle de encerramento peri. Patrimonial
+         */
+        $clcondataconf = new cl_condataconf;
+        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+        db_fieldsmemory($resultControle,0);
+
+        if($dtsession <= $c99_datapat){
+            db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            $sqlerro = true;
+        }
+    }
+    if($sqlerro == false){
+        $clpcforne->pc60_usuario=db_getsession("DB_id_usuario");
+        $clpcforne->pc60_hora=db_hora();
+        $clpcforne->incluir($pc60_numcgm);
+    }
+    db_fim_transacao();
+    $db_opcao = 1;
 }
 ?>
 <html>
@@ -92,7 +108,6 @@ oAutoComplete.show();
 <?
 if(isset($incluir)){
   if($sqlerro==true){
-    db_msgbox($erro_msg);
     if($clpcforne->erro_campo!=""){
       echo "<script> document.form1.".$clpcforne->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clpcforne->erro_campo.".focus();</script>";

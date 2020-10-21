@@ -44,8 +44,8 @@ try{
             $rsLimiteCred = $clliclicita->sql_record($clliclicita->sql_query_file($oParam->licitacao,"l20_dtlimitecredenciamento,l20_datacria,l20_dtpubratificacao",null,null));
             db_fieldsmemory($rsLimiteCred,0);
             $dtLimitecredenciamento = (implode("/",(array_reverse(explode("-",$l20_dtlimitecredenciamento)))));
-            $dtCriacaoProcAdm = (implode("/",(array_reverse(explode("-",$l20_datacria)))));
-            $dtpubratificacao = (implode("/",(array_reverse(explode("-",$l20_dtpubratificacao)))));
+            $l20_datacria = (implode("/",(array_reverse(explode("-",$l20_datacria)))));
+            $l20_dtpubratificacao = (implode("/",(array_reverse(explode("-",$l20_dtpubratificacao)))));
           foreach ($oParam->itens as $item){
                 $rsHabilitacao = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query_file(null,"l206_datahab",null,"l206_fornecedor = $item->l205_fornecedor and l206_licitacao = $item->l205_licitacao"));
                 db_fieldsmemory($rsHabilitacao,0);
@@ -62,6 +62,8 @@ try{
 
               $dtcred = DateTime::createFromFormat('d/m/Y', $item->l205_datacreditem);
               $dthabilitacao = DateTime::createFromFormat('d/m/Y', $dtHabilitacaoforne);
+              $dtCriacaoProcAdm = DateTime::createFromFormat('d/m/Y', $l20_datacria);
+              $dtpubratificacao = DateTime::createFromFormat('d/m/Y', $l20_dtpubratificacao);
 
               if($dtcred < $dthabilitacao){
                   throw new Exception ("Usuário: Campo Data de Credenciamento menor que Data de Habilitação do Fornecedor. Item: $item->l205_item");
@@ -73,12 +75,12 @@ try{
                   }
               }
 
-              if($item->l205_datacred < $dtCriacaoProcAdm){
+              if($dtcred < $dtCriacaoProcAdm){
                   throw new Exception ("Erro: Data de credenciamento menor que a data de abertura do procedimento adm.");
               }
 
               if($dtpubratificacao != ""){
-                  if($item->l205_datacred < $dtpubratificacao){
+                  if($dtcred < $dtpubratificacao){
                       throw new Exception ("Erro: A data de credenciamento deve ser maior ou igual a data de publicação do Termo de Ratificação");
                   }
               }

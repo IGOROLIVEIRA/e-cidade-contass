@@ -102,6 +102,7 @@ $anousu = db_getsession("DB_anousu");
             db_input('vercom',10,"",true,"hidden",1);
             db_input('listacom',10,"",true,"hidden",1);
             db_input('listalicita',10,"",true,"hidden",1);
+            db_input('listaacordo',10,"",true,"hidden",1);
             db_input('datacredor',10,"",true,"hidden",1);
             db_input('datacredor1',10,"",true,"hidden",1);
             db_input('dataesp11',10,"",true,"hidden",1);
@@ -202,6 +203,7 @@ $anousu = db_getsession("DB_anousu");
                     <td>
                         <?php
                         $aAgruparPor = array("oo"    => "Não Agrupar",
+                            "c"     => "Contrato",
                             "a"     => "Fornecedor",
                             "orgao" => "Orgão",
                             "r"     => "Recurso",
@@ -387,6 +389,13 @@ $anousu = db_getsession("DB_anousu");
         }
 
         vir="";
+        listaacordo="";
+        for(x=0;x< parent.iframe_g4.document.form1.acordo.length;x++){
+          listaacordo+=vir+ parent.iframe_g4.document.form1.acordo.options[x].value;
+          vir=",";
+        }
+
+        vir="";
         listaitem="";
         listasub ="";
         for(x=0;x<parent.iframe_g5.document.form1.item.length;x++){
@@ -415,6 +424,7 @@ $anousu = db_getsession("DB_anousu");
 
         document.form1.listacom.value = listacom;
         document.form1.listalicita.value = listalicita;
+        document.form1.listaacordo.value = listaacordo;
 
         document.form1.datacredor.value=document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
         document.form1.datacredor1.value=document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value;
@@ -486,6 +496,7 @@ $anousu = db_getsession("DB_anousu");
             +'&listatipoanulacao='+listatipoanulacao
             +'&listacom='+listacom
             +'&listalicita='+listalicita
+            +'&listaacordo='+listaacordo
             +'&datacredor='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value
             +'&datacredor1='+document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value
             +'&dataesp1='+document.form1.dataesp1_ano.value+'-'+document.form1.dataesp1_mes.value+'-'+document.form1.dataesp1_dia.value
@@ -511,6 +522,7 @@ $anousu = db_getsession("DB_anousu");
             +'&listatipoanulacao='+listatipoanulacao
             +'&listacom='+listacom
             +'&listalicita='+listalicita
+            +'&listaacordo='+listaacordo
             +'&datacredor='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value
             +'&datacredor1='+document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value
             +'&processar='+document.form1.processar.value
