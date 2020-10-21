@@ -259,6 +259,13 @@ function js_pesquisao58_subfuncao(mostra){
 
               var elemento = 'aItensConsExecOrc[' + i + ']';
 
+              valorEmpenhado    = document.form1[elemento+'[c202_valorempenhado]'].getAttribute('value');
+              valorEmpenhadoAnu = document.form1[elemento+'[c202_valorempenhadoanu]'].getAttribute('value');
+              valorLiquidado    = document.form1[elemento+'[c202_valorliquidado]'].getAttribute('value');
+              valorLiquidadoAnu = document.form1[elemento+'[c202_valorliquidadoanu]'].getAttribute('value');
+              valorPago         = document.form1[elemento+'[c202_valorpago]'].getAttribute('value');
+              valorPagoAnu      = document.form1[elemento+'[c202_valorpagoanu]'].getAttribute('value');
+
               var novoItem = {
                 iItem:                    Number(i),
                 c202_mescompetencia:      document.form1.c202_mescompetencia.value,
@@ -267,12 +274,12 @@ function js_pesquisao58_subfuncao(mostra){
                 c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
                 c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
                 c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
-                c202_valorempenhado:      document.form1[elemento+'[c202_valorempenhado]'].getAttribute('value'),
-                c202_valorempenhadoanu:   document.form1[elemento+'[c202_valorempenhadoanu]'].getAttribute('value'),
-                c202_valorliquidado:      document.form1[elemento+'[c202_valorliquidado]'].getAttribute('value'),
-                c202_valorliquidadoanu:   document.form1[elemento+'[c202_valorliquidadoanu]'].getAttribute('value'),
-                c202_valorpago:           document.form1[elemento+'[c202_valorpago]'].getAttribute('value'),
-                c202_valorpagoanu:        document.form1[elemento+'[c202_valorpagoanu]'].getAttribute('value'),
+                c202_valorempenhado:      typeof(valorEmpenhado)    == 'string' ? valorEmpenhado.replace(/\,/, '.')     : valorEmpenhado,
+                c202_valorempenhadoanu:   typeof(valorEmpenhadoAnu) == 'string' ? valorEmpenhadoAnu.replace(/\,/, '.')  : valorEmpenhadoAnu,
+                c202_valorliquidado:      typeof(valorLiquidado)    == 'string' ? valorLiquidado.replace(/\,/, '.')     : valorLiquidado,
+                c202_valorliquidadoanu:   typeof(valorLiquidadoAnu) == 'string' ? valorLiquidadoAnu.replace(/\,/, '.')  : valorLiquidadoAnu,
+                c202_valorpago:           typeof(valorPago)         == 'string' ? valorPago.replace(/\,/, '.')          : valorPago,
+                c202_valorpagoanu:        typeof(valorPagoAnu)      == 'string' ? valorPagoAnu.replace(/\,/, '.')       : valorPagoAnu,
               };
 
               itensEnviar.push(novoItem);
@@ -437,40 +444,40 @@ function js_pesquisao58_subfuncao(mostra){
       sLinhaTabela +=         oItem.c202_elemento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_elemento]' value='"+ oItem.c202_elemento +"'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorempenhado]' value='"+ js_moeda(oItem.c202_valorempenhado,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorempenhado\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorempenhado]' value='"+ js_formatar(oItem.c202_valorempenhado, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorempenhado\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorempenhadoanu]' value='"+ js_moeda(oItem.c202_valorempenhadoanu,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorempenhadoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorempenhadoanu]' value='"+ js_formatar(oItem.c202_valorempenhadoanu, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorempenhadoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorliquidado]' value='"+ js_moeda(oItem.c202_valorliquidado,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorliquidado\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorliquidado]' value='"+ js_formatar(oItem.c202_valorliquidado, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorliquidado\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorliquidadoanu]' value='"+ js_moeda(oItem.c202_valorliquidadoanu,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorliquidadoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorliquidadoanu]' value='"+ js_formatar(oItem.c202_valorliquidadoanu, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorliquidadoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorpago]' value='"+ js_moeda(oItem.c202_valorpago,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorpago\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorpago]' value='"+ js_formatar(oItem.c202_valorpago, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorpago\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorpagoanu]' value='"+ js_moeda(oItem.c202_valorpagoanu,2,".","") +"' onchange='js_atualizaValorTotal(\"c202_valorpagoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
+      sLinhaTabela += "       <input type='text' "+sStyle+" name='aItensConsExecOrc["+ iLinha +"][c202_valorpagoanu]' value='"+ js_formatar(oItem.c202_valorpagoanu, 'f') +"' onchange='js_atualizaValorTotal(\"c202_valorpagoanu\", "+ iLinha +", this.value);' onKeyUp='js_ValidaCampos(this,4,\"valor\",\"f\",\"f\",event);' >";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][empenhado_ate_mes]' value='"+ js_moeda(oItem.empenhado_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][empenhado_ate_mes]' value='"+ js_formatar(oItem.empenhado_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][empenhado_anulado_ate_mes]' value='"+ js_moeda(oItem.empenhado_anulado_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][empenhado_anulado_ate_mes]' value='"+ js_formatar(oItem.empenhado_anulado_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][liquidado_ate_mes]' value='"+ js_moeda(oItem.liquidado_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][liquidado_ate_mes]' value='"+ js_formatar(oItem.liquidado_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][liquidado_anulado_ate_mes]' value='"+ js_moeda(oItem.liquidado_anulado_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][liquidado_anulado_ate_mes]' value='"+ js_formatar(oItem.liquidado_anulado_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][pago_ate_mes]' value='"+ js_moeda(oItem.pago_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][pago_ate_mes]' value='"+ js_formatar(oItem.pago_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
-      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][pago_anulado_ate_mes]' value='"+ js_moeda(oItem.pago_anulado_ate_mes,2,",",".") +"' readonly='true'>";
+      sLinhaTabela += "       <input type='text' style='width: 70px; background: #DEB887;' name='aItensConsExecOrc["+ iLinha +"][pago_anulado_ate_mes]' value='"+ js_formatar(oItem.pago_anulado_ate_mes, 'f') +"' readonly='true'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "</tr>";
       
@@ -484,18 +491,18 @@ function js_pesquisao58_subfuncao(mostra){
           
           sLinhaTotalizador = "<tr id='totalizador'>";
           sLinhaTotalizador += "  <th class='table_header' colspan='5'>TOTAL</th>";      
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhado_total'>"+ js_moeda(oTotalizador.iTotEmpMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhadoanu_total'>"+ js_moeda(oTotalizador.iTotEmpAnuMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidado_total'>"+ js_moeda(oTotalizador.iTotLiqMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidadoanu_total'>"+ js_moeda(oTotalizador.iTotLiqAnuMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorpago_total'>"+ js_moeda(oTotalizador.iTotPagMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorpagoanu_total'>"+ js_moeda(oTotalizador.iTotPagAnuMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotEmpAteMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotEmpAnuAteMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotLiqAteMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotLiqAnulAteMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotPagAteMes,2,",",".") +"</th>";
-          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_moeda(oTotalizador.iTotPagAnuAteMes,2,",",".") +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhado_total'>"+ js_formatar(oTotalizador.iTotEmpMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhadoanu_total'>"+ js_formatar(oTotalizador.iTotEmpAnuMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidado_total'>"+ js_formatar(oTotalizador.iTotLiqMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidadoanu_total'>"+ js_formatar(oTotalizador.iTotLiqAnuMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorpago_total'>"+ js_formatar(oTotalizador.iTotPagMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorpagoanu_total'>"+ js_formatar(oTotalizador.iTotPagAnuMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotEmpAteMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotEmpAnuAteMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotLiqAteMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotLiqAnulAteMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotPagAteMes, 'f') +"</th>";
+          sLinhaTotalizador += "  <th class='table_header' style='width: 100px;'>"+ js_formatar(oTotalizador.iTotPagAnuAteMes, 'f') +"</th>";
           sLinhaTotalizador += "</tr>";
           
           document.getElementById("gridConsExecOrc").innerHTML += sLinhaTotalizador;
@@ -761,39 +768,6 @@ function js_pesquisao58_subfuncao(mostra){
 
   }
 
-  function js_moeda(valor, casas, separdor_decimal, separador_milhar) {
-      
-      var valor_total   = parseInt(valor * (Math.pow(10,casas)));
-      var inteiros      =  parseInt(parseInt(valor * (Math.pow(10,casas))) / parseFloat(Math.pow(10,casas)));
-      var centavos      = parseInt(parseInt(valor * (Math.pow(10,casas))) % parseFloat(Math.pow(10,casas)));	 
-      
-      if(centavos%10 == 0 && centavos+"".length<2 ) {
-          centavos = centavos+"0";
-      }else if(centavos<10) {
-          centavos = "0"+centavos;
-      }
-      
-      var milhares = parseInt(inteiros/1000);
-      inteiros = inteiros % 1000; 
-      
-      var retorno = "";
-      
-      if(milhares>0){
-          retorno = milhares+""+separador_milhar+""+retorno
-          if(inteiros == 0){
-              inteiros = "000";
-          } else if(inteiros < 10){
-              inteiros = "00"+inteiros; 
-          } else if(inteiros < 100){
-              inteiros = "0"+inteiros; 
-          }
-		  }
-		  retorno += inteiros+""+separdor_decimal+""+centavos;		 
-      
-      return retorno;
-		 
-  }
-
   function js_atualizaValorTotal(sNome, iLinha, iValue) {
 
       if (iLinha != null && iValue) {
@@ -808,12 +782,12 @@ function js_pesquisao58_subfuncao(mostra){
       for (i = 0; i < parseInt(document.form1.iNumItensGrid.value); i++) {
 
           if (typeof document.form1['aItensConsExecOrc['+i+']['+sNome+']'] != "undefined") {
-              iTotal += Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value);
+              iTotal += Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value.replace(/\,/, '.'));
           } 
 
       }
       
-      linha.innerHTML = js_moeda(iTotal,2,",",".");
+      linha.innerHTML = js_formatar(iTotal, 'f');
   }
 
   function js_atualizaTotalizadores() {
