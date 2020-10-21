@@ -77,7 +77,7 @@ $clprocessoaudit->rotulo->label("ci03_objaudit");
            		if(file_exists("funcoes/db_func_processoaudit.php")==true){
              		include("funcoes/db_func_processoaudit.php");
            	}else{
-           		$campos = "processoaudit.oid,processoaudit.*";
+           		$campos = "processoaudit.*";
            	}
 		}
 		
@@ -99,10 +99,14 @@ $clprocessoaudit->rotulo->label("ci03_objaudit");
         echo '</div>';
       	}else{
         	if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          	$result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_codproc = {$pesquisa_chave} AND ci03_instit = ".db_getsession('DB_instit')));
+			  $result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query(null, "*", "ci03_codproc", "ci03_codproc = {$pesquisa_chave} AND ci03_instit = ".db_getsession('DB_instit')));
           	if($clprocessoaudit->numrows!=0){
-            	db_fieldsmemory($result,0);
-            	echo "<script>".$funcao_js."('$oid',false);</script>";
+				db_fieldsmemory($result,0);
+				if (isset($objetivo) && $objetivo == true) {
+					echo "<script>".$funcao_js."('$ci03_objaudit',false);</script>";
+				} else {
+					echo "<script>".$funcao_js."('$ci03_codproc',false);</script>";
+				}
           	}else{
 	         	echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           	}

@@ -89,7 +89,7 @@ if (isset($incluir)) {
 		
 			include("libs/JSON.php");
 			$oJson = new services_json();
-			$aProcesso = $oJson->encode(db_utils::getCollectionByRecord($rsProcesso, true, false, true));
+			$aProcesso = $oJson->encode(db_utils::getCollectionByRecord($rsProcesso));
 
 		}
 
