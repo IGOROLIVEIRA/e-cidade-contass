@@ -312,7 +312,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         if (bDataValida) {
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = false;
         } else {
-             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = true;
+            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[0].selected = true;
+            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = true;
         }
 
     }
@@ -405,6 +406,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             if (document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].value == 2) {
                 document.form1['aQuestoes['+i+'][ci05_achados_btn]'].disabled = bStatus;
             }
+            document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].disabled = bStatus;
         }
 
         document.form1.salvar.disabled      = bStatus;
