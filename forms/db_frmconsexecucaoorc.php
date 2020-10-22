@@ -274,12 +274,12 @@ function js_pesquisao58_subfuncao(mostra){
                 c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
                 c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
                 c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
-                c202_valorempenhado:      typeof(valorEmpenhado)    == 'string' ? valorEmpenhado.replace(/\,/, '.')     : valorEmpenhado,
-                c202_valorempenhadoanu:   typeof(valorEmpenhadoAnu) == 'string' ? valorEmpenhadoAnu.replace(/\,/, '.')  : valorEmpenhadoAnu,
-                c202_valorliquidado:      typeof(valorLiquidado)    == 'string' ? valorLiquidado.replace(/\,/, '.')     : valorLiquidado,
-                c202_valorliquidadoanu:   typeof(valorLiquidadoAnu) == 'string' ? valorLiquidadoAnu.replace(/\,/, '.')  : valorLiquidadoAnu,
-                c202_valorpago:           typeof(valorPago)         == 'string' ? valorPago.replace(/\,/, '.')          : valorPago,
-                c202_valorpagoanu:        typeof(valorPagoAnu)      == 'string' ? valorPagoAnu.replace(/\,/, '.')       : valorPagoAnu,
+                c202_valorempenhado:      isNaN(Number(valorEmpenhado))    ? valorEmpenhado.replaceAll(/\./g, '').replace(/\,/, '.')     : valorEmpenhado,
+                c202_valorempenhadoanu:   isNaN(Number(valorEmpenhadoAnu)) ? valorEmpenhadoAnu.replaceAll(/\./g, '').replace(/\,/, '.')  : valorEmpenhadoAnu,
+                c202_valorliquidado:      isNaN(Number(valorLiquidado))    ? valorLiquidado.replaceAll(/\./g, '').replace(/\,/, '.')     : valorLiquidado,
+                c202_valorliquidadoanu:   isNaN(Number(valorLiquidadoAnu)) ? valorLiquidadoAnu.replaceAll(/\./g, '').replace(/\,/, '.')  : valorLiquidadoAnu,
+                c202_valorpago:           isNaN(Number(valorPago))         ? valorPago.replaceAll(/\./g, '').replace(/\,/, '.')          : valorPago,
+                c202_valorpagoanu:        isNaN(Number(valorPagoAnu))      ? valorPagoAnu.replaceAll(/\./g, '').replace(/\,/, '.')       : valorPagoAnu,
               };
 
               itensEnviar.push(novoItem);
@@ -782,7 +782,11 @@ function js_pesquisao58_subfuncao(mostra){
       for (i = 0; i < parseInt(document.form1.iNumItensGrid.value); i++) {
 
           if (typeof document.form1['aItensConsExecOrc['+i+']['+sNome+']'] != "undefined") {
-              iTotal += Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value.replace(/\,/, '.'));
+              if (isNaN(Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value))) {
+                iTotal += Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value.replaceAll(/\./g, '').replace(/\,/, '.'));
+              } else {
+                  iTotal += Number(document.form1['aItensConsExecOrc['+i+']['+sNome+']'].value);
+              }
           } 
 
       }
