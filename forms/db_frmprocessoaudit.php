@@ -71,13 +71,14 @@ $clprocessoaudit->rotulo->label();
                     </td>
                 </tr>
                 <tr>
-                <td colspan="4" align="center">
+                <td colspan="4" align="right">
                     <table>
                         <tr>
                             <td align="center">
                             <?
                             $aux = new cl_arquivo_auxiliar;
                             $aux->Labelancora = "Setor(es):";
+                            $aux->cabecalho = "<strong>Setores</strong>";
                             $aux->codigo = "coddepto";
                             $aux->descr  = "descrdepto";
                             $aux->nomeobjeto = 'depart';
@@ -91,8 +92,7 @@ $clprocessoaudit->rotulo->label();
                             $aux->tipo = 2;
                             $aux->top = 2;
                             $aux->linhas = 4;
-                            $aux->vwidth = 380;
-                            $aux->mostra_fieldset = false;
+                            $aux->vwidth = 520;
                             $aux->funcao_gera_formulario();
                             ?>
                             </td>

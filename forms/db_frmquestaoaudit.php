@@ -137,7 +137,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
     <?
   $chavepri= array("ci02_codquestao"=>@$ci02_codquestao);
   $cliframe_alterar_excluir->chavepri=$chavepri;
-  $cliframe_alterar_excluir->sql     = $clquestaoaudit->sql_query_file(null,"*","ci02_codquestao","ci02_codtipo = $ci02_codtipo and ci02_instit = ".db_getsession('DB_instit'));
+  $cliframe_alterar_excluir->sql     = $clquestaoaudit->sql_query_file(null,"*","ci02_numquestao","ci02_codtipo = $ci02_codtipo and ci02_instit = ".db_getsession('DB_instit'));
   $cliframe_alterar_excluir->campos  ="ci02_numquestao,ci02_questao,ci02_inforeq,ci02_fonteinfo,ci02_procdetal,ci02_objeto,ci02_possivachadneg";
   $cliframe_alterar_excluir->legenda="QUESTÕES LANÇADAS";
   $cliframe_alterar_excluir->iframe_height ="320";

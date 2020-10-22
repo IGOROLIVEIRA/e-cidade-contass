@@ -1086,9 +1086,6 @@ class cl_arquivo_auxiliar {
    var $nomejanela = "Pesquisa";
 // Quando preenchido usado para passar como parameto ao campo func_arquivo
 
-// Mostra fieldset. Se false não mostrará o fieldset
-   var $mostra_fieldset = true;
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //|30|//
 //|30|//VARIÁVEIS ABAIXO, CRIADAS ESPECIALMENTE PARA UTILIZAÇÃO NO MÓDULO PESSOAL
@@ -1112,9 +1109,7 @@ class cl_arquivo_auxiliar {
     echo "<table align=\"center\" $sClassAuxiliar>\n";
     echo "  <tr>\n";
     echo "    <td nowrap title=\"\" > \n";
-    if ($this->mostra_fieldset) {
-      echo "    <fieldset id='fieldset_{$this->nomeobjeto}'><Legend>".$this->cabecalho."</legend>\n";
-    }
+    echo "    <fieldset id='fieldset_{$this->nomeobjeto}'><Legend>".$this->cabecalho."</legend>\n";
     echo "      <table border=\"0\">\n";
     echo "        <tr>\n";
     echo "          <td nowrap >\n<b>";
@@ -1162,9 +1157,7 @@ class cl_arquivo_auxiliar {
     echo "          </td>\n";
     echo "        </tr>\n";
     echo "      </table>\n";
-    if (!$this->mostra_fieldset) {
-      echo "  </fieldset>\n";
-    }
+    echo "  </fieldset>\n";
     echo "    </td>\n";
     echo "  </tr>\n";
     echo "</table>\n";

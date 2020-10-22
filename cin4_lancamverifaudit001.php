@@ -30,8 +30,17 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+include("libs/JSON.php");
+include("classes/db_lancamverifaudit_classe.php");
 
-db_postmemory($HTTP_POST_VARS)
+db_postmemory($HTTP_POST_VARS);
+
+$cllancamverifaudit = new cl_lancamverifaudit;
+$clrotulo = new rotulocampo;
+$clrotulo->label('ci05_achados');
+
+$oJson = new services_json();
+$Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
 ?>
 <html>
@@ -45,6 +54,8 @@ db_postmemory($HTTP_POST_VARS)
 <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .linhagrid.center {
@@ -125,7 +136,10 @@ db_postmemory($HTTP_POST_VARS)
     </table>
 <br>
 <center>
-    <input name="processar" id="processar" type="submit" value="Processar">
+    <input name="salvar" id="salvar" type="button" value="Salvar" onclick="js_salvarGeral()">
+    <input name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limpar()">
+    <input name="imprimir" id="imprimir" type="button" value="Imprimir" onclick="js_imprimir()">
+    <input name="iNumQuestoes" id="iNumQuestoes" type="hidden" value="0">
 </center>
 </form>
 <?
@@ -169,6 +183,8 @@ db_postmemory($HTTP_POST_VARS)
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {
+
+            document.form1.iNumQuestoes.value = oRetorno.aQuestoes.length;
 
             oRetorno.aQuestoes.each(function (oQuestao, iLinha) {
 
@@ -215,14 +231,15 @@ db_postmemory($HTTP_POST_VARS)
         sLinhaTabela +=         js_inputdata("aQuestoes"+ iLinha +"ci05_inianalise", oQuestao.ci05_inianalise,iLinha);
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
-        sLinhaTabela += "       <select name='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' value = '"+ oQuestao.ci05_atendquestaudit+"' style='width: 120px;' onchange='js_liberaAchados("+ iLinha +", this.value);' disabled='true'>";
+        sLinhaTabela += "       <select name='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' value = '"+ oQuestao.ci05_atendquestaudit +"' style='width: 120px;' onchange='js_liberaAchados("+ iLinha +", this.value);' disabled='true'>";
         sLinhaTabela += "           <option value=''>Selecione</option>";
         sLinhaTabela += "           <option value=1>Sim</option>";
         sLinhaTabela += "           <option value=2>Não</option>";        
         sLinhaTabela += "       </select>";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
-        sLinhaTabela +=         "<input type='button' name='aQuestoes["+ iLinha +"][ci05_achados]' value ='Achados' disabled='true'";
+        sLinhaTabela +=         "<input type='button' name='aQuestoes["+ iLinha +"][ci05_achados_btn]' class='btnAddAchado' value ='Achados' disabled='true' onclick='js_mostraJanelaAchado("+iLinha+");' >";
+        sLinhaTabela +=         "<input type='hidden' name='aQuestoes["+ iLinha +"][ci05_achados_input]' value ='Achados' >";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "</tr>";
 
@@ -302,7 +319,97 @@ db_postmemory($HTTP_POST_VARS)
 
     function js_liberaAchados(iLinha, iValue) {
 
-        //libera botão de achados e chama popup para digitar texto
+        if (iValue == 2) {
+            document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = false;
+            js_mostraJanelaAchado(iLinha);
+        } else {
+            document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = true;
+        }
+
+    }
+
+    function js_mostraJanelaAchado(iLinha) {
+
+        windowDotacaoItem = new windowAux('wndAchadosItem', 'Achados', 530, 280);
+
+        sDisabled = '';
+
+        var sLegenda = <?= $Tci05_achados ?>;        
+
+        var sContent = "<div class=\"subcontainer\">";
+        sContent += "   <br>";
+        sContent += "   <fieldset><legend>Descreva aqui os achados da auditoria</legend>";
+        sContent += "       <table>";
+        sContent += "           <tr>";
+        sContent += "               <td>";
+        sContent += "                   <textarea title='"+sLegenda.urlDecode()+"' id='aQuestoes"+iLinha+"ci05_achados' title='teste' name='aQuestoes"+iLinha+"ci05_achados' rows='6' cols='60' autocomplete='off' onkeyup='js_maxlenghttextarea(this,event,500);' oninput='js_maxlenghttextarea(this,event,500);' ></textarea>";
+        sContent += "               </td>";
+        sContent += "               <br>";
+        sContent += "               <tr>";
+        sContent += "                   <td>";
+        sContent += "                       <div align='right'>";
+        sContent += "                           <span style='float:left;color:red;font-weight:bold' id='aQuestoes"+iLinha+"ci05_achadoserrobar'></span>";
+        sContent += "                           <b> Caracteres Digitados : </b> ";
+        sContent += "                           <input type='text' name='aQuestoes"+iLinha+"ci05_achadosobsdig' id='aQuestoes"+iLinha+"ci05_achadosobsdig' size='3' value='' style='color: #000;' disabled> ";
+        sContent += "                           <b> - Limite 500 </b> ";
+        sContent += "                       </div> ";
+        sContent += "                   </td>";
+        sContent += "               </tr>";
+        sContent += "           </tr>";
+        sContent += "           <tr>";
+        sContent += "               <td id='inputvalordotacao'></td>";
+        sContent += "           </tr>";
+        sContent += "       </table>";
+        sContent += "   </fieldset>";
+        sContent += "   <input type='button' "+sDisabled+" value='Salvar' id='btnSalvarAchado' >";
+        sContent += "</div>";
+
+        windowDotacaoItem.setContent(sContent);
+
+        windowDotacaoItem.setShutDownFunction(function () {
+            windowDotacaoItem.destroy();
+            js_ativaDesativaBotoes(false);
+        });
+
+        $('btnSalvarAchado').observe("click", function () {
+            js_salvarLancamento(iLinha);
+        });
+
+        js_ativaDesativaBotoes(true);
+        windowDotacaoItem.show();
+
+    }
+
+    function js_salvarLancamento(iLinha) {
+        
+        windowDotacaoItem.destroy();
+        js_ativaDesativaBotoes(false);
+
+    }
+
+    function js_salvarGeral() {
+        alert('salvar geral');
+    }
+
+    function js_limpar() {
+        alert('limpar');
+    }
+
+    function js_imprimir() {
+        alert('imprimir');
+    }
+    
+    function js_ativaDesativaBotoes(bStatus = true) {
+
+        for (var i = 0; i < parseInt(document.form1.iNumQuestoes.value); i++) {
+            if (document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].value == 2) {
+                document.form1['aQuestoes['+i+'][ci05_achados_btn]'].disabled = bStatus;
+            }
+        }
+
+        document.form1.salvar.disabled      = bStatus;
+        document.form1.limpar.disabled      = bStatus;
+        document.form1.imprimir.disabled    = bStatus;
 
     }
 

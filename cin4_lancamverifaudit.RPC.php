@@ -76,7 +76,7 @@ try {
                 $sWhere = "ci03_codproc = {$oParam->iCodProc} AND ci02_instit = {$iInstit}";
             }
 
-            $sSqlQuestoes = $clquestaoaudit->sql_questao_processo(null, "*", "ci02_codquestao", $sWhere);
+            $sSqlQuestoes = $clquestaoaudit->sql_questao_processo(null, "*", "ci02_numquestao", $sWhere);
             $rsQuestoes = db_query($sSqlQuestoes);
             
             if(pg_num_rows($rsQuestoes) > 0) {

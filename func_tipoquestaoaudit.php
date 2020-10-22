@@ -69,7 +69,7 @@ $cltipoquestaoaudit->rotulo->label("ci01_tipoaudit");
            }
         }
         if(isset($chave_ci01_codtipo) && (trim($chave_ci01_codtipo)!="") ){
-          $sql = $cltipoquestaoaudit->sql_query($chave_ci01_codtipo,$campos,"ci01_codtipo", "ci01_instit = ".db_getsession('DB_instit'));
+          $sql = $cltipoquestaoaudit->sql_query("",$campos,"ci01_codtipo", "ci01_codtipo = {$chave_ci01_codtipo} AND ci01_instit = ".db_getsession('DB_instit'));
         }else if(isset($chave_ci01_tipoaudit) && (trim($chave_ci01_tipoaudit)!="") ){
           $sql = $cltipoquestaoaudit->sql_query("",$campos,"ci01_tipoaudit"," ci01_tipoaudit like '$chave_ci01_tipoaudit%' AND ci01_instit = ".db_getsession('DB_instit'));
         }else{
