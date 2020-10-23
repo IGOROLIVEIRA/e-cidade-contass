@@ -454,7 +454,7 @@ class cl_questaoaudit {
     $sql .= " from questaoaudit ";
     $sql .= "    inner join tipoquestaoaudit  on ci01_codtipo = ci02_codtipo ";
     $sql .= "    inner join processoaudit     on ci01_codtipo = ci03_codtipoquest ";
-    $sql .= "    left join  lancamverifaudit  on ci03_codproc = ci05_codproc ";
+    $sql .= "    left join  lancamverifaudit  on ci03_codproc = ci05_codproc and ci02_codquestao = ci05_codquestao ";
     $sql2 = "";
     if($dbwhere==""){
       if( $ci02_codquestao != "" && $ci02_codquestao != null){

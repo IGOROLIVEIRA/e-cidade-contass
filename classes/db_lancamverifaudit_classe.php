@@ -32,7 +32,7 @@ class cl_lancamverifaudit {
                  ci05_codproc = int4 = Código do Processo de Auditoria 
                  ci05_codquestao = int4 = Código do Processo da Questão 
                  ci05_inianalise = date = Início Análise 
-                 ci05_atendquestaudit = int4 = Atende à questão de auditoria 
+                 ci05_atendquestaudit = bool = Atende à questão de auditoria 
                  ci05_achados = varchar(500) = Achados 
                  ci05_instit = int4 = Instituição 
                  ";
@@ -76,7 +76,7 @@ class cl_lancamverifaudit {
    }
 
   // funcao para inclusao
-  function incluir ($ci05_codlan) { 
+  function incluir ($ci05_codlan=null) { 
       $this->atualizacampos();
 
       if($ci05_codlan == null || $ci05_codlan == ""){ 
@@ -171,7 +171,7 @@ class cl_lancamverifaudit {
                                ,$this->ci05_codproc 
                                ,$this->ci05_codquestao 
                                ,".($this->ci05_inianalise == "null" || $this->ci05_inianalise == ""?"null":"'".$this->ci05_inianalise."'")." 
-                               ,$this->ci05_atendquestaudit 
+                               ,'$this->ci05_atendquestaudit' 
                                ,'$this->ci05_achados' 
                                ,$this->ci05_instit 
                       )";
@@ -278,7 +278,7 @@ class cl_lancamverifaudit {
        }
      }
      if (trim($this->ci05_atendquestaudit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci05_atendquestaudit"])) { 
-       $sql  .= $virgula." ci05_atendquestaudit = $this->ci05_atendquestaudit ";
+       $sql  .= $virgula." ci05_atendquestaudit = '$this->ci05_atendquestaudit' ";
        $virgula = ",";
        if (trim($this->ci05_atendquestaudit) == null ) { 
          $this->erro_sql = " Campo Atende à questão de auditoria não informado.";

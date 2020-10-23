@@ -339,7 +339,7 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codquestao','int4','Código do Processo da Questão','','Código do Processo da Questão',11,false,false,false,1,'text','Código do Processo da Questão');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_inianalise','date','Início Análise','','Início Análise',10,false,false,false,1,'text','Início Análise');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_atendquestaudit','int4','Atende à questão de auditoria','','Atende à questão de auditoria',1,false,false,false,1,'text','Atende à questão de auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_atendquestaudit','bool','Atende à questão de auditoria','','Atende à questão de auditoria',1,false,false,false,1,'','Atende à questão de auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_achados','varchar(500)','São fatos que resultam da aplicação dos programas elaborados para as diversas áreas em análise, referindo-se às deficiências encontradas durante o exame e suportadas por informações disponíveis no órgão auditado','','Achados',500,false,false,false,0,'text','Achados');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
 
@@ -364,7 +364,7 @@ class Oc13351 extends PostgresMigration
         ci05_codproc            int4 not null,
         ci05_codquestao         int4 not null,
         ci05_inianalise         date not null,
-        ci05_atendquestaudit    int4 not null,
+        ci05_atendquestaudit    boolean not null,
         ci05_achados            varchar(500) not null,
         ci05_instit             int4 not null);
 

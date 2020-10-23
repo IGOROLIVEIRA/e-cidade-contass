@@ -184,6 +184,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
         if (oRetorno.status == 1) {
 
+            document.getElementById("gridQuestoesLancam").innerHTML = '';
             document.form1.iNumQuestoes.value = oRetorno.aQuestoes.length;
 
             oRetorno.aQuestoes.each(function (oQuestao, iLinha) {
@@ -205,6 +206,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         sLinhaTabela += "       <input type='checkbox' class='marca_itens' name='aItensMarcados[]' value='"+ iLinha +"' >";
         sLinhaTabela += "       <input type='hidden' name='aQuestoes["+ iLinha +"][ci02_codquestao]' value='"+ oQuestao.ci02_codquestao +"'>";
         sLinhaTabela += "       <input type='hidden' name='aQuestoes["+ iLinha +"][ci03_codproc]' value='"+ oQuestao.ci03_codproc +"'>";
+        sLinhaTabela += "       <input type='hidden' name='aQuestoes["+ iLinha +"][ci05_codlan]' value='"+ oQuestao.ci05_codlan +"'>";
         sLinhaTabela += "   </th>";
         sLinhaTabela += "   <td class='linhagrid center'>";
         sLinhaTabela +=         oQuestao.ci02_numquestao +"<input type='hidden' name='aQuestoes["+ iLinha +"][ci02_numquestao]' value='"+ oQuestao.ci02_numquestao +"'>";
@@ -228,22 +230,30 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         sLinhaTabela +=         oQuestao.ci02_possivachadneg.urlDecode();
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
-        sLinhaTabela +=         js_inputdata("aQuestoes"+ iLinha +"ci05_inianalise", oQuestao.ci05_inianalise,iLinha);
+        sLinhaTabela +=         js_inputdata("aQuestoes"+ iLinha +"ci05_inianalise", oQuestao.ci05_inianalise, iLinha);
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
-        sLinhaTabela += "       <select name='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' value = '"+ oQuestao.ci05_atendquestaudit +"' style='width: 120px;' onchange='js_liberaAchados("+ iLinha +", this.value);' disabled='true'>";
-        sLinhaTabela += "           <option value=''>Selecione</option>";
-        sLinhaTabela += "           <option value=1>Sim</option>";
-        sLinhaTabela += "           <option value=2>Não</option>";        
+        sLinhaTabela += "       <select name='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' id='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' value = '"+ oQuestao.ci05_atendquestaudit +"' style='width: 120px;' onchange='js_liberaAchados("+ iLinha +", this.value, true);' disabled='true'>";
+        sLinhaTabela += "           <option>Selecione</option>";
+        sLinhaTabela += "           <option value='t'>Sim</option>";
+        sLinhaTabela += "           <option value='f'>Não</option>";        
         sLinhaTabela += "       </select>";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
         sLinhaTabela +=         "<input type='button' name='aQuestoes["+ iLinha +"][ci05_achados_btn]' class='btnAddAchado' value ='Achados' disabled='true' onclick='js_mostraJanelaAchado("+iLinha+");' >";
-        sLinhaTabela +=         "<input type='hidden' name='aQuestoes["+ iLinha +"][ci05_achados_input]' value ='Achados' >";
+        sLinhaTabela +=         "<input type='hidden' name='aQuestoes["+ iLinha +"][ci05_achados_input]' value ='"+oQuestao.ci05_achados+"' >";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "</tr>";
 
         document.getElementById("gridQuestoesLancam").innerHTML += sLinhaTabela;
+
+        if (oQuestao.ci05_codlan != '') {
+            
+            iOpcao = oQuestao.ci05_atendquestaudit == 'f' ? 2 : 1;
+            js_liberaQuestao(iLinha, document.getElementById("aQuestoes"+iLinha+"ci05_inianalise"), iOpcao);
+            js_liberaAchados(iLinha, oQuestao.ci05_atendquestaudit, false);
+
+        }
 
     }
 
@@ -277,14 +287,18 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     function js_inputdata(sNomeInput, strData = null, iLinha){
 
-        sValue = '';
+        var sValue = '';
         
         if (strData != null) {
+            
             var aData = strData.split('-');
-            var sValue = aData[2]+'/'+aData[1]+'/'+aData[0];
+            if(aData.length > 1) {
+                sValue = aData[2]+'/'+aData[1]+'/'+aData[0];
+            }
+
         }
-        
-	    var	strData  = '<input type="text" id="'+sNomeInput+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" onChange="js_liberaQuestao('+iLinha+', this);" style="width: 70px;" >';
+
+	    var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+sValue+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" onChange="js_liberaQuestao('+iLinha+', this);" style="width: 70px;" >';
             strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\');" >';
 	        strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[2]+'" size="2"  maxlength="2" >';
 			strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >'; 
@@ -305,24 +319,34 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     }
 
-    function js_liberaQuestao(iLinha, oObj = null) {
-        
+    function js_liberaQuestao(iLinha, oObj = null, iOpcao = 0) {
+
         var bDataValida = (oObj != null) ? js_validaDbData(oObj) : true;
 
         if (bDataValida) {
+            
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = false;
+            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[iOpcao].selected = 'selected';
+
         } else {
+            
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[0].selected = true;
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = true;
+
         }
 
     }
 
-    function js_liberaAchados(iLinha, iValue) {
+    function js_liberaAchados(iLinha, iValue, bMostra) {
 
-        if (iValue == 2) {
+        if (iValue == 'f') {
+            
             document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = false;
-            js_mostraJanelaAchado(iLinha);
+            
+            if (bMostra) {
+                js_mostraJanelaAchado(iLinha);
+            }
+
         } else {
             document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = true;
         }
@@ -343,7 +367,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         sContent += "       <table>";
         sContent += "           <tr>";
         sContent += "               <td>";
-        sContent += "                   <textarea title='"+sLegenda.urlDecode()+"' id='aQuestoes"+iLinha+"ci05_achados' title='teste' name='aQuestoes"+iLinha+"ci05_achados' rows='6' cols='60' autocomplete='off' onkeyup='js_maxlenghttextarea(this,event,500);' oninput='js_maxlenghttextarea(this,event,500);' ></textarea>";
+        sContent += "                   <textarea title='"+sLegenda.urlDecode()+"' id='aQuestoes"+iLinha+"ci05_achados' value='' name='aQuestoes"+iLinha+"ci05_achados' rows='6' cols='60' autocomplete='off' onkeyup='js_maxlenghttextarea(this,event,500);' oninput='js_maxlenghttextarea(this,event,500);' ></textarea>";
         sContent += "               </td>";
         sContent += "               <br>";
         sContent += "               <tr>";
@@ -377,14 +401,69 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         });
 
         js_ativaDesativaBotoes(true);
-        windowDotacaoItem.show();
+        windowDotacaoItem.show();        
+
+        sAchado = document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value != '' ? document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value : '';
+        document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value      = sAchado;
+        document.getElementById('aQuestoes'+iLinha+'ci05_achadosobsdig').value  = sAchado.length;        
 
     }
 
     function js_salvarLancamento(iLinha) {
         
+        sAchado = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
+
+        if (sAchado == '') {
+            alert('Informe os achados da auditoria!');
+            return false;
+        }
+
+        document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value = sAchado;
+
+        try{
+
+            js_divCarregando("Aguarde, salvando lançamento...", "msgBox");
+
+            var oParametro  = new Object();
+            oParametro.exec = 'salvaLancamento';
+            
+            
+            oParametro.iCodProc     = document.form1['aQuestoes['+iLinha+'][ci03_codproc]'].value; 
+            oParametro.iCodQuestao  = document.form1['aQuestoes['+iLinha+'][ci02_codquestao]'].value;            
+            oParametro.dtDataIniDia = document.form1['aQuestoes'+iLinha+'ci05_inianalise_dia'].value;
+            oParametro.dtDataIniMes = document.form1['aQuestoes'+iLinha+'ci05_inianalise_mes'].value;
+            oParametro.dtDataIniAno = document.form1['aQuestoes'+iLinha+'ci05_inianalise_ano'].value;
+            oParametro.bAtendeQuest = document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].value;            
+            oParametro.sAchado      = sAchado;
+            oParametro.iLinha       = iLinha;
+
+            new Ajax.Request(sRPC,
+                            {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParametro),
+                                onComplete: js_completaSalvarLancamento
+                            });
+
+            } catch (e) {
+                alert(e.toString());
+        }
+        
         windowDotacaoItem.destroy();
         js_ativaDesativaBotoes(false);
+
+    }
+
+    function js_completaSalvarLancamento(oAjax) {
+
+        js_removeObj('msgBox');
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {
+
+            alert(oRetorno.sMensagem.urlDecode());
+            document.form1['aQuestoes['+oRetorno.iLinha+'][ci05_codlan]'].value = oRetorno.iCodLan;
+
+        }
 
     }
 
@@ -402,11 +481,18 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
     
     function js_ativaDesativaBotoes(bStatus = true) {
 
-        for (var i = 0; i < parseInt(document.form1.iNumQuestoes.value); i++) {
-            if (document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].value == 2) {
-                document.form1['aQuestoes['+i+'][ci05_achados_btn]'].disabled = bStatus;
+        var iNumQuestoes = parseInt(document.form1.iNumQuestoes.value);
+
+        for (var iLinha = 0; iLinha <= iNumQuestoes-1; iLinha++) {
+            
+            if (document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].value == 'f') {
+                document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = bStatus;
             }
-            document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].disabled = bStatus;
+
+            if ( js_validaDbData(document.form1['aQuestoes'+iLinha+'ci05_inianalise']) ) {
+                document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = bStatus;
+            }
+            
         }
 
         document.form1.salvar.disabled      = bStatus;

@@ -26,17 +26,6 @@
  */
 
 
-// require_once("std/db_stdClass.php");
-// require_once("libs/db_stdlib.php");
-// require_once("libs/db_conecta.php");
-// require_once("libs/db_sessoes.php");
-// require_once("libs/db_utils.php");
-// require_once("libs/db_usuariosonline.php");
-// require_once("dbforms/db_funcoes.php");
-// require_once("libs/JSON.php");
-// require_once("libs/db_app.utils.php");
-
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -44,6 +33,7 @@ require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_tipoquestaoaudit_classe.php");
 require_once("classes/db_questaoaudit_classe.php");
+require_once("classes/db_lancamverifaudit_classe.php");
 
 $cltipoquestaoaudit = new cl_tipoquestaoaudit;
 $clquestaoaudit     = new cl_questaoaudit;
@@ -86,6 +76,7 @@ try {
                     $oQuestaoBusca = db_utils::fieldsMemory($rsQuestoes, $iCont);
                     
                     $oQuestao = new stdClass();
+                    $oQuestao->ci05_codlan            = $oQuestaoBusca->ci05_codlan;
                     $oQuestao->ci02_codquestao        = $oQuestaoBusca->ci02_codquestao;
                     $oQuestao->ci02_numquestao        = $oQuestaoBusca->ci02_numquestao;
                     $oQuestao->ci03_codproc           = $oQuestaoBusca->ci03_codproc;
@@ -104,6 +95,32 @@ try {
                 }
                 
             }
+
+        break;
+
+        case "salvaLancamento":
+
+            db_inicio_transacao();
+
+            $cllancamverifaudit = new cl_lancamverifaudit;
+            $cllancamverifaudit->ci05_codproc           = $oParam->iCodProc;
+            $cllancamverifaudit->ci05_codquestao        = $oParam->iCodQuestao;
+            $cllancamverifaudit->ci05_inianalise_dia    = $oParam->dtDataIniDia;
+            $cllancamverifaudit->ci05_inianalise_mes    = $oParam->dtDataIniMes;
+            $cllancamverifaudit->ci05_inianalise_ano    = $oParam->dtDataIniAno;
+            $cllancamverifaudit->ci05_atendquestaudit   = $oParam->bAtendeQuest;
+            $cllancamverifaudit->ci05_achados           = $oParam->sAchado;
+            $cllancamverifaudit->ci05_instit            = $iInstit;
+
+            $cllancamverifaudit->incluir();
+
+            if ($cllancamverifaudit->erro_status == "0") {
+                throw new Exception("Erro ao criar lançamento. \n".$cllancamverifaudit->erro_sql, null);
+            }
+
+            $oRetorno->iLinha       = $oParam->iLinha;
+            $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
+            $oRetorno->sMensagem    = "Lançamento criado com sucesso!";            
 
         break;
 
