@@ -82,7 +82,7 @@ class GerarCONSOR extends GerarAM
 
         $aCSVCONSOR30['si18_tiporegistro']              = $this->padLeftZero($aCONSOR30['si18_tiporegistro'], 2);
         $aCSVCONSOR30['si18_cnpjconsorcio']             = $this->padLeftZero($aCONSOR30['si18_cnpjconsorcio'], 14);
-        $aCSVCONSOR30['si18_mesreferencia']             = $this->padLeftZero($aCONSOR30['si18_mes'], 2);
+        $aCSVCONSOR30['si18_mesreferencia']             = $this->padLeftZero($aCONSOR30['si18_mesreferencia'], 2);
         $aCSVCONSOR30['si18_codfuncao']                 = $this->padLeftZero($aCONSOR30['si18_codfuncao'], 2);
         $aCSVCONSOR30['si18_codsubfuncao']              = $this->padLeftZero($aCONSOR30['si18_codsubfuncao'], 3);
         $aCSVCONSOR30['si18_naturezadespesa']           = $this->padLeftZero($aCONSOR30['si18_naturezadespesa'], 6);

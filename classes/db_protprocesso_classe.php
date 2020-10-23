@@ -329,7 +329,7 @@ class cl_protprocesso {
         if(($resaco!=false)||($this->numrows!=0)){
             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
             $acount = pg_result($resac,0,0);
-            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
             $resac = db_query("insert into db_acountkey values($acount,2454,'$this->p58_codproc','I')");
             $resac = db_query("insert into db_acount values($acount,403,2454,'','".AddSlashes(pg_result($resaco,0,'p58_codproc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             $resac = db_query("insert into db_acount values($acount,403,2455,'','".AddSlashes(pg_result($resaco,0,'p58_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -557,7 +557,7 @@ class cl_protprocesso {
             for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
                 $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
                 $resac = db_query("insert into db_acountkey values($acount,2454,'$this->p58_codproc','A')");
                 if(isset($GLOBALS["HTTP_POST_VARS"]["p58_codproc"]) || $this->p58_codproc != "")
                     $resac = db_query("insert into db_acount values($acount,403,2454,'".AddSlashes(pg_result($resaco,$conresaco,'p58_codproc'))."','$this->p58_codproc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -636,7 +636,7 @@ class cl_protprocesso {
             for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
                 $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+//                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
                 $resac = db_query("insert into db_acountkey values($acount,2454,'$p58_codproc','E')");
                 $resac = db_query("insert into db_acount values($acount,403,2454,'','".AddSlashes(pg_result($resaco,$iresaco,'p58_codproc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,403,2455,'','".AddSlashes(pg_result($resaco,$iresaco,'p58_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
