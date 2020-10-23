@@ -54,7 +54,7 @@ try {
 
     switch ($oParam->exec) {
 
-        case "getQuestoes":
+        case "buscaQuestoes":
 
             db_inicio_transacao();
 
@@ -121,6 +121,92 @@ try {
             $oRetorno->iLinha       = $oParam->iLinha;
             $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
             $oRetorno->sMensagem    = "Lançamento criado com sucesso!";            
+
+        break;
+
+        case "atualizaLancamento":
+            
+            db_inicio_transacao();
+
+            $cllancamverifaudit = new cl_lancamverifaudit;
+            $sSql = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codproc = {$oParam->iCodLan}");
+            $cllancamverifaudit->sql_record($sSql);
+
+            $cllancamverifaudit->ci05_codproc           = $oParam->iCodProc;
+            $cllancamverifaudit->ci05_codquestao        = $oParam->iCodQuestao;
+            $cllancamverifaudit->ci05_inianalise_dia    = $oParam->dtDataIniDia;
+            $cllancamverifaudit->ci05_inianalise_mes    = $oParam->dtDataIniMes;
+            $cllancamverifaudit->ci05_inianalise_ano    = $oParam->dtDataIniAno;
+            $cllancamverifaudit->ci05_atendquestaudit   = $oParam->bAtendeQuest;
+            $cllancamverifaudit->ci05_achados           = $oParam->sAchado;
+
+            $cllancamverifaudit->alterar($oParam->iCodLan);
+
+            if ($cllancamverifaudit->erro_status == "0") {
+                throw new Exception("Erro ao alterar o lançamento. \n".$cllancamverifaudit->erro_sql, null);
+            }
+
+            $oRetorno->iLinha       = $oParam->iLinha;
+            $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
+            $oRetorno->sMensagem    = "Lançamento alterado com sucesso!"; 
+
+        break;
+
+        case "salvaGeral":
+            
+            db_inicio_transacao();
+
+            foreach ($oParam->questoesEnviar as $oQuestao) {
+
+                $cllancamverifaudit = new cl_lancamverifaudit;
+
+                $iNumLancamentos = 0;
+
+                if (isset($oQuestao->iCodLan) && $oQuestao->iCodLan != "") {
+                    
+                    $sSql = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codlan = {$oQuestao->iCodLan}");
+                    $rsLancam = $cllancamverifaudit->sql_record($sSql);
+                    $iNumLancamentos = $cllancamverifaudit->numrows;
+
+                }
+
+                if ($iNumLancamentos > 0) {
+
+                    $cllancamverifaudit->ci05_inianalise_dia    = $oQuestao->dtDataIniDia;
+                    $cllancamverifaudit->ci05_inianalise_mes    = $oQuestao->dtDataIniMes;
+                    $cllancamverifaudit->ci05_inianalise_ano    = $oQuestao->dtDataIniAno;
+                    $cllancamverifaudit->ci05_atendquestaudit   = $oQuestao->bAtendeQuest;
+                    $cllancamverifaudit->ci05_achados           = $oQuestao->sAchado;
+
+                    $cllancamverifaudit->alterar($oQuestao->iCodLan);
+
+                    if ($cllancamverifaudit->erro_status == "0") {
+                        throw new Exception("Erro ao alterar o lançamento. \n".$cllancamverifaudit->erro_sql, null);
+                    }
+
+                } else {
+
+                    $cllancamverifaudit = new cl_lancamverifaudit;
+                    $cllancamverifaudit->ci05_codproc           = $oQuestao->iCodProc;
+                    $cllancamverifaudit->ci05_codquestao        = $oQuestao->iCodQuestao;
+                    $cllancamverifaudit->ci05_inianalise_dia    = $oQuestao->dtDataIniDia;
+                    $cllancamverifaudit->ci05_inianalise_mes    = $oQuestao->dtDataIniMes;
+                    $cllancamverifaudit->ci05_inianalise_ano    = $oQuestao->dtDataIniAno;
+                    $cllancamverifaudit->ci05_atendquestaudit   = $oQuestao->bAtendeQuest;
+                    $cllancamverifaudit->ci05_achados           = $oQuestao->sAchado;
+                    $cllancamverifaudit->ci05_instit            = $iInstit;
+
+                    $cllancamverifaudit->incluir();
+
+                    if ($cllancamverifaudit->erro_status == "0") {
+                        throw new Exception("Erro ao criar lançamento. \n".$cllancamverifaudit->erro_sql, null);
+                    }
+
+                }
+
+            }
+            
+            $oRetorno->sMensagem    = "Lançamentos criados com sucesso!"; 
 
         break;
 

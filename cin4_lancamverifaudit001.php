@@ -160,7 +160,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             js_divCarregando("Aguarde, buscando questões...", "msgBox");
 
             var oParametro    = new Object();
-            oParametro.exec   = 'getQuestoes';
+            oParametro.exec   = 'buscaQuestoes';
             oParametro.iOpcao = iOpcao;
             oParametro.iCodProc = document.form1.iCodProc.value;
 
@@ -168,7 +168,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
                             {
                                 method: 'post',
                                 parameters: 'json='+Object.toJSON(oParametro),
-                                onComplete: js_completaGetQuestoes
+                                onComplete: js_completaBuscaQuestoes
                             });
 
         } catch (e) {
@@ -177,7 +177,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     }
 
-    function js_completaGetQuestoes(oAjax) {
+    function js_completaBuscaQuestoes(oAjax) {
 
         js_removeObj('msgBox');
         var oRetorno = eval("("+oAjax.responseText+")");
@@ -187,11 +187,22 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             document.getElementById("gridQuestoesLancam").innerHTML = '';
             document.form1.iNumQuestoes.value = oRetorno.aQuestoes.length;
 
-            oRetorno.aQuestoes.each(function (oQuestao, iLinha) {
+            if (oRetorno.aQuestoes.length == 0) {
+                
+                js_ativaDesativaBotoes(true);
+                js_adicionaLinhaVazia();
 
-                js_adicionaLinhaQuestao(oQuestao, iLinha);
+            } else {
+                
+                oRetorno.aQuestoes.each(function (oQuestao, iLinha) {
 
-            });
+                    js_adicionaLinhaQuestao(oQuestao, iLinha);
+
+                });
+
+                js_ativaDesativaBotoes(false);
+
+            }            
 
         }
 
@@ -234,14 +245,14 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
         sLinhaTabela += "       <select name='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' id='aQuestoes["+ iLinha +"][ci05_atendquestaudit]' value = '"+ oQuestao.ci05_atendquestaudit +"' style='width: 120px;' onchange='js_liberaAchados("+ iLinha +", this.value, true);' disabled='true'>";
-        sLinhaTabela += "           <option>Selecione</option>";
+        sLinhaTabela += "           <option value=''>Selecione</option>";
         sLinhaTabela += "           <option value='t'>Sim</option>";
         sLinhaTabela += "           <option value='f'>Não</option>";        
         sLinhaTabela += "       </select>";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "   <td class='linhagrid center'>";
         sLinhaTabela +=         "<input type='button' name='aQuestoes["+ iLinha +"][ci05_achados_btn]' class='btnAddAchado' value ='Achados' disabled='true' onclick='js_mostraJanelaAchado("+iLinha+");' >";
-        sLinhaTabela +=         "<input type='hidden' name='aQuestoes["+ iLinha +"][ci05_achados_input]' value ='"+oQuestao.ci05_achados+"' >";
+        sLinhaTabela +=         "<input type='hidden' name='aQuestoes["+ iLinha +"][ci05_achados_input]' value ='"+oQuestao.ci05_achados.urlDecode()+"' >";
         sLinhaTabela += "   </td>";
         sLinhaTabela += "</tr>";
 
@@ -250,10 +261,23 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         if (oQuestao.ci05_codlan != '') {
             
             iOpcao = oQuestao.ci05_atendquestaudit == 'f' ? 2 : 1;
-            js_liberaQuestao(iLinha, document.getElementById("aQuestoes"+iLinha+"ci05_inianalise"), iOpcao);
+            js_liberaQuestao(iLinha, null, iOpcao);
             js_liberaAchados(iLinha, oQuestao.ci05_atendquestaudit, false);
 
         }
+
+    }
+
+    function js_adicionaLinhaVazia() {
+
+        var sLinhaTabela = '';
+
+        sLinhaTabela += "<tr class='normal'>";
+        sLinhaTabela += "   <td colspan='11' class='table_header'>Nenhuma questão encontrada.</th>";
+        sLinhaTabela += "   </th>";
+        sLinhaTabela += "</tr>";
+
+        document.getElementById("gridQuestoesLancam").innerHTML += sLinhaTabela;
 
     }
 
@@ -326,7 +350,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         if (bDataValida) {
             
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = false;
-            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[iOpcao].selected = 'selected';
+            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[iOpcao].setAttribute('selected', false);
 
         } else {
             
@@ -338,6 +362,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
     }
 
     function js_liberaAchados(iLinha, iValue, bMostra) {
+        
+        document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].setAttribute('value', iValue);
 
         if (iValue == 'f') {
             
@@ -349,6 +375,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
         } else {
             document.form1['aQuestoes['+iLinha+'][ci05_achados_btn]'].disabled = true;
+            document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value = '';
         }
 
     }
@@ -411,10 +438,11 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     function js_salvarLancamento(iLinha) {
         
-        sAchado = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
+        var sAchado = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
+        var iCodLan = null;
 
         if (sAchado == '') {
-            alert('Informe os achados da auditoria!');
+            alert('Para item que não atende à questão de auditoria é obrigatório informar os achados.');
             return false;
         }
 
@@ -425,8 +453,17 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             js_divCarregando("Aguarde, salvando lançamento...", "msgBox");
 
             var oParametro  = new Object();
-            oParametro.exec = 'salvaLancamento';
+
+            iCodLan = document.form1['aQuestoes['+iLinha+'][ci05_codlan]'].value;
+
+            if (iCodLan != '') {
             
+                oParametro.exec = 'atualizaLancamento';
+                oParametro.iCodLan = iCodLan;
+
+            } else {
+                oParametro.exec = 'salvaLancamento';
+            }
             
             oParametro.iCodProc     = document.form1['aQuestoes['+iLinha+'][ci03_codproc]'].value; 
             oParametro.iCodQuestao  = document.form1['aQuestoes['+iLinha+'][ci02_codquestao]'].value;            
@@ -436,7 +473,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             oParametro.bAtendeQuest = document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].value;            
             oParametro.sAchado      = sAchado;
             oParametro.iLinha       = iLinha;
-
+            
             new Ajax.Request(sRPC,
                             {
                                 method: 'post',
@@ -468,7 +505,89 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
     }
 
     function js_salvarGeral() {
-        alert('salvar geral');
+
+        var iNumQuestoes = parseInt(document.form1.iNumQuestoes.value);
+
+        var questoesEnviar = [];
+
+        try {
+
+            for (i = 0; i <= iNumQuestoes-1; i++) {
+
+                dtIniAnalise = document.form1['aQuestoes'+i+'ci05_inianalise'].value;
+                bAtendeQuest = document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].getAttribute('value');
+                sAchados     = document.form1['aQuestoes['+i+'][ci05_achados_input]'].value;   
+                
+                if (dtIniAnalise != "" && bAtendeQuest == "") {
+                    alert('Para salvar é obrigatório informar se atende ou não à questão de auditoria.');
+                    return false;
+                }
+
+                if (dtIniAnalise != "" && bAtendeQuest == "f" && sAchados == "") {
+                    alert("Para item que não atende à questão de auditoria é obrigatório informar os achados.");
+                    return false;
+                }
+
+                if (dtIniAnalise != "" && bAtendeQuest != "") {
+                
+                    var novoLancamento = {
+                        iCodLan:      document.form1['aQuestoes['+i+'][ci05_codlan]'].value,
+                        iCodProc:     document.form1['aQuestoes['+i+'][ci03_codproc]'].value, 
+                        iCodQuestao:  document.form1['aQuestoes['+i+'][ci02_codquestao]'].value,            
+                        dtDataIniDia: document.form1['aQuestoes'+i+'ci05_inianalise_dia'].value,
+                        dtDataIniMes: document.form1['aQuestoes'+i+'ci05_inianalise_mes'].value,
+                        dtDataIniAno: document.form1['aQuestoes'+i+'ci05_inianalise_ano'].value,
+                        bAtendeQuest: bAtendeQuest,            
+                        sAchado:      sAchados,
+                    };
+
+                    questoesEnviar.push(novoLancamento);
+
+                }
+
+            }
+
+            if (questoesEnviar.length == 0) {
+
+                alert("Informe a data de início da Análise.");
+                return false;
+
+            }
+
+            var oParam = new Object();
+            oParam.exec = 'salvaGeral';
+            oParam.questoesEnviar = questoesEnviar;
+            
+            js_divCarregando("Aguarde, salvando lançamentos...", "msgBox");
+
+            new Ajax.Request(sRPC, 
+                            {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParam),
+                                onComplete: js_completaSalvarGeral
+                            });
+
+        } catch(e) {
+
+            alert(e.toString());
+
+        }
+        
+    }
+
+    function js_completaSalvarGeral(oAjax) {
+
+        js_removeObj('msgBox');
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {
+
+            alert(oRetorno.sMensagem.urlDecode());
+            document.form1['select'].options[2].setAttribute('selected', false);
+            js_buscaQuestoes(3);
+
+        }
+
     }
 
     function js_limpar() {

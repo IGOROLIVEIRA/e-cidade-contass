@@ -139,15 +139,6 @@ class cl_lancamverifaudit {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->ci05_achados == null ) { 
-       $this->erro_sql = " Campo Achados não informado.";
-       $this->erro_campo = "ci05_achados";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if ($this->ci05_instit == null ) { 
        $this->erro_sql = " Campo Instituição não informado.";
        $this->erro_campo = "ci05_instit";
@@ -293,15 +284,6 @@ class cl_lancamverifaudit {
      if (trim($this->ci05_achados)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci05_achados"])) { 
        $sql  .= $virgula." ci05_achados = '$this->ci05_achados' ";
        $virgula = ",";
-       if (trim($this->ci05_achados) == null ) { 
-         $this->erro_sql = " Campo Achados não informado.";
-         $this->erro_campo = "ci05_achados";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if (trim($this->ci05_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci05_instit"])) { 
        $sql  .= $virgula." ci05_instit = $this->ci05_instit ";
