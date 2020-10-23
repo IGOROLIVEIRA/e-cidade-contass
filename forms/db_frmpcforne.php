@@ -306,4 +306,5 @@ function js_verificaorgaoreg() {
 
    }
 }
+  js_verificaorgaoreg();
 </script>
