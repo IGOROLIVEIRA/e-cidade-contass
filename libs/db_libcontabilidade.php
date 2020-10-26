@@ -5901,7 +5901,7 @@ class cl_estrutura_sistema {
                     INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
                     INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
                     INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
-                WHERE CORRENTE.K12_INSTIT = {$instit} AND C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
         
         return db_utils::getColectionByRecord(db_query($sql));
 
