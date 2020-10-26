@@ -26,10 +26,11 @@ class gerarCADOBRAS extends GerarAM
 
     $sSql = "select * from cadobras202020 where si199_mes = " . $this->iMes . " and si199_instit=" . db_getsession("DB_instit");
     $rscadobras202020 = db_query($sSql);
-
+//db_criatabela($rscadobras202020);
     $sSql = "select * from cadobras212020 where si200_mes = " . $this->iMes . " and si200_instit=" . db_getsession("DB_instit");
     $rscadobras212020 = db_query($sSql);
-
+//      db_criatabela($rscadobras212020);
+//      exit;
     $sSql = "select * from cadobras302020 where si201_mes = " . $this->iMes . " and si201_instit=" . db_getsession("DB_instit");
     $rscadobras302020 = db_query($sSql);
 
@@ -65,9 +66,9 @@ class gerarCADOBRAS extends GerarAM
          * Registros 20
          */
 
-        for ($iCont = 0; $iCont < pg_num_rows($rscadobras202020); $iCont++) {
+        for ($iCont20 = 0; $iCont20 < pg_num_rows($rscadobras202020); $iCont20++) {
 
-            $aCADORBRAS20 = pg_fetch_array($rscadobras202020, $iCont);
+            $aCADORBRAS20 = pg_fetch_array($rscadobras202020, $iCont20);
 
             $aCSVCADOBRAS20['si199_tiporegistro'] = $aCADORBRAS20['si199_tiporegistro'];
             $aCSVCADOBRAS20['si199_codorgaoresp'] = str_pad($aCADORBRAS20['si199_codorgaoresp'], 3, "0", STR_PAD_LEFT);
@@ -79,26 +80,30 @@ class gerarCADOBRAS extends GerarAM
             $aCSVCADOBRAS20['si199_descsituacao'] = $aCADORBRAS20['si199_descsituacao'];
             $this->sLinha = $aCSVCADOBRAS20;
             $this->adicionaLinha();
-        }
 
-        /**
-         *
-         * Registros 21
-         */
 
-        for ($iCont = 0; $iCont < pg_num_rows($rscadobras212020); $iCont++) {
+            /**
+             *
+             * Registros 21
+             */
 
-            $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont);
+            for ($iCont21 = 0; $iCont21 < pg_num_rows($rscadobras212020); $iCont21++) {
 
-            $aCSVCADOBRAS21['si200_tiporegistro'] = $aCADORBRAS21['si200_tiporegistro'];
-            $aCSVCADOBRAS21['si200_codorgaoresp'] = str_pad($aCADORBRAS21['si200_codorgaoresp'], 3, "0",STR_PAD_LEFT);
-            $aCSVCADOBRAS21['si200_codobra'] = $aCADORBRAS21['si200_codobra'];
-            $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
-            $aCSVCADOBRAS21['si200_motivoparalisacap'] = $aCADORBRAS21['si200_motivoparalisacap'];
-            $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
-            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
-            $this->sLinha = $aCSVCADOBRAS21;
-            $this->adicionaLinha();
+                $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont21);
+                if($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
+                    if ($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
+                        $aCSVCADOBRAS21['si200_tiporegistro'] = $aCADORBRAS21['si200_tiporegistro'];
+                        $aCSVCADOBRAS21['si200_codorgaoresp'] = str_pad($aCADORBRAS21['si200_codorgaoresp'], 3, "0", STR_PAD_LEFT);
+                        $aCSVCADOBRAS21['si200_codobra'] = $aCADORBRAS21['si200_codobra'];
+                        $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
+                        $aCSVCADOBRAS21['si200_motivoparalisacap'] = $aCADORBRAS21['si200_motivoparalisacap'];
+                        $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
+                        $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
+                        $this->sLinha = $aCSVCADOBRAS21;
+                        $this->adicionaLinha();
+                    }
+                }
+            }
         }
 
         /**
