@@ -101,7 +101,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
                             <b>Questões: </b>
                         </td>
                         <td>
-                            <select id="select" style="width: 300px;" onchange="js_buscaQuestoes(this.value)">
+                            <select id="iFiltroQuestoes" style="width: 300px;" onchange="js_buscaQuestoes(this.value)">
                                 <option value="1">Pendentes</option>
                                 <option value="2">Respondidas</option>
                                 <option value="3">Todas</option>
@@ -186,7 +186,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
             document.getElementById("gridQuestoesLancam").innerHTML = '';
             document.form1.iNumQuestoes.value = oRetorno.aQuestoes.length;
-
+            
             if (oRetorno.aQuestoes.length == 0) {
                 
                 js_ativaDesativaBotoes(true);
@@ -442,6 +442,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
     function js_salvarLancamento(iLinha) {
         
         var sAchado = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
+        
         var iCodLan = null;
 
         if (sAchado == '') {
@@ -457,12 +458,10 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
             var oParametro  = new Object();
 
-            iCodLan = document.form1['aQuestoes['+iLinha+'][ci05_codlan]'].value;
-
-            if (iCodLan != '') {
+            if (document.form1['aQuestoes['+iLinha+'][ci05_codlan]'].value != '') {
             
                 oParametro.exec = 'atualizaLancamento';
-                oParametro.iCodLan = iCodLan;
+                oParametro.iCodLan = document.form1['aQuestoes['+iLinha+'][ci05_codlan]'].value;
 
             } else {
                 oParametro.exec = 'salvaLancamento';
@@ -521,7 +520,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
                 dtIniAnalise = document.form1['aQuestoes'+i+'ci05_inianalise'].value;
                 bAtendeQuest = document.form1['aQuestoes['+i+'][ci05_atendquestaudit]'].getAttribute('value');
-                sAchados     = document.form1['aQuestoes['+i+'][ci05_achados_input]'].value;   
+                sAchados     = document.form1['aQuestoes['+i+'][ci05_achados_input]'].getAttribute('value');   
                 
                 if (dtIniAnalise != "" && bAtendeQuest == "") {
                     alert('Para salvar é obrigatório informar se atende ou não à questão de auditoria.');
@@ -562,6 +561,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             var oParam = new Object();
             oParam.exec = 'salvaGeral';
             oParam.questoesEnviar = questoesEnviar;
+            oParam.iFiltroQuestoes = document.form1.iFiltroQuestoes.value;
             
             js_divCarregando("Aguarde, salvando lançamentos...", "msgBox");
 
@@ -588,8 +588,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         if (oRetorno.status == 1) {
 
             alert(oRetorno.sMensagem.urlDecode());
-            document.form1['select'].options[2].setAttribute('selected', false);
-            js_buscaQuestoes(3);
+            document.form1['iFiltroQuestoes'].options[2].setAttribute('selected', false);
+            js_buscaQuestoes(oRetorno.iFiltroQuestoes);
 
         } else {
             alert(oRetorno.sMensagem.urlDecode());
@@ -629,6 +629,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             var oParam    = new Object();
             oParam.exec   = 'excluiLancamento';
             oParam.aItens = itensExcluir;
+            
+            oParam.iFiltroQuestoes = document.form1.iFiltroQuestoes.value;
 
             js_divCarregando('Aguarde', 'div_aguarde');
 
@@ -653,7 +655,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
         if (oRetorno.status == 1) {
             alert(oRetorno.sMensagem.urlDecode());
-            js_buscaQuestoes(3);
+            js_buscaQuestoes(oRetorno.iFiltroQuestoes);
         } else {
             alert(oRetorno.sMensagem.urlDecode());
         }
@@ -671,7 +673,14 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
 
     function js_imprimir() {
-        alert('imprimir');
+        
+        var sUrl    = 'cin2_relancamferifaudit002.php';
+        var sQuery  =  '?iCodProc='+<?= $ci03_codproc ?>;
+        sQuery      += '&iFiltroQuestoes='+document.form1.iFiltroQuestoes.value;
+
+        jan = window.open(sUrl+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+
+        jan.moveTo(0,0);
     }
     
     function js_ativaDesativaBotoes(bStatus = true) {

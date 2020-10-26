@@ -111,7 +111,7 @@ try {
             $cllancamverifaudit->ci05_atendquestaudit   = $oParam->bAtendeQuest;
             $cllancamverifaudit->ci05_achados           = $oParam->sAchado;
             $cllancamverifaudit->ci05_instit            = $iInstit;
-
+            
             $cllancamverifaudit->incluir();
 
             if ($cllancamverifaudit->erro_status == "0") {
@@ -176,7 +176,7 @@ try {
                     $cllancamverifaudit->ci05_inianalise_mes    = $oQuestao->dtDataIniMes;
                     $cllancamverifaudit->ci05_inianalise_ano    = $oQuestao->dtDataIniAno;
                     $cllancamverifaudit->ci05_atendquestaudit   = $oQuestao->bAtendeQuest;
-                    $cllancamverifaudit->ci05_achados           = $oQuestao->sAchado;
+                    $cllancamverifaudit->ci05_achados           = $oQuestao->bAtendeQuest == "t" ? 'null' : $oQuestao->sAchado;
 
                     $cllancamverifaudit->alterar($oQuestao->iCodLan);
 
@@ -206,6 +206,7 @@ try {
 
             }
             
+            $oRetorno->iFiltroQuestoes = $oParam->iFiltroQuestoes;
             $oRetorno->sMensagem = "Lançamentos salvos com sucesso!"; 
 
         break;
@@ -231,6 +232,7 @@ try {
 
                 }
 
+                $oRetorno->iFiltroQuestoes = $oParam->iFiltroQuestoes;
                 $oRetorno->sMensagem = "Lançamentos excluídos com sucesso!"; 
 
             }
