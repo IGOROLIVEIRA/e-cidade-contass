@@ -86,6 +86,76 @@ class cl_desdobramento {
     return analiseQueryPlanoOrcamento($sql);
   }
 
+  function sql_liquidacao($where = "", $dtini, $dtfim, $w_instit = "(1) ", $w_elemento = "") {
+
+    $sql = "select
+    c60_estrut,
+    c60_descr,
+    substr(o56_elemento||'00',1,15) as o56_elemento,
+    o56_descr,
+    sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhado,
+    sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornado,
+    sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidado,
+    sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornado,
+    sum(case when c53_tipo = 20 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as liquidado_mes_origem,
+    sum(case when c53_tipo = 21 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as liquidado_estornado_mes_origem,
+    sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamento,
+    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado,
+    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornado,
+    sum(case when c53_tipo = 11 and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end) as estornado_mes_origem,
+    sum(case when c53_tipo = 11 and mes_origem_empenho != date_part('month',c70_data) then c70_valor else 0 end) as estornado_mes_diferente,
+    sum(case when c53_coddoc in (200, 208, 210) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as em_liquidacao_mes_origem,
+	  sum(case when c53_coddoc in (202, 204, 206) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as liquidacao_mes_origem,
+	  sum(case when c53_coddoc in (201, 209, 211) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as estorno_em_liquidacao_mes_origem,
+	  sum(case when c53_coddoc in (203, 205, 207) and mes_origem_empenho = date_part('month',c70_data) then c70_valor else 0 end ) as estorno_liquidacao_mes_origem
+    from
+    (select *,
+      (select date_part('month', c75_data)
+        from conlancamemp
+          inner join conlancamdoc on c71_codlan = c75_codlan
+          inner join conhistdoc on c71_coddoc = c53_coddoc
+        where c75_numemp = e60_numemp
+          and c53_tipo = 10 limit 1) as mes_origem_empenho
+          from
+          (select conplanoorcamento.c60_estrut,
+                  conplanoorcamento.c60_descr,
+                  substr(ele.o56_elemento||'00',1,15) AS o56_elemento,
+                  ele.o56_descr,
+                  e60_numemp,
+                  c53_tipo,
+                  c70_valor,
+                  c70_data,
+                  c53_coddoc
+          from conlancamele
+          inner join conlancam on c67_codlan=c70_codlan
+          inner join conlancamemp on c75_codlan = c70_codlan
+          inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
+          inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
+          $w_elemento
+          inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
+          inner join conlancamdoc on c71_codlan=c70_codlan
+          inner join conhistdoc on c71_coddoc=c53_coddoc
+          inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
+          ele.o56_anousu = o58_anousu
+          where ";
+          if ($where != "") {
+            $sql .= " $where and ";
+          }
+          $sql .= "
+          empempenho.e60_instit in $w_instit
+          and ( conlancam.c70_data >='$dtini' and conlancam.c70_data <='$dtfim' )
+          and conhistdoc.c53_tipo in (10,11,20,21,30,31,32,200,201) ) as x ) as xx
+      group by
+        c60_estrut,
+        c60_descr,
+        o56_elemento,
+        o56_descr
+      order by
+        o56_elemento
+    ";
+    return analiseQueryPlanoOrcamento($sql);
+  }
+
     function sql2($where = "", $dtini, $dtfim, $w_instit = "(1) "){
         $sql = "select
     /* orcdotacao.o58_codele,*/
@@ -128,6 +198,53 @@ class cl_desdobramento {
     o56_elemento
     ";
         return analiseQueryPlanoOrcamento($sql);
+    }
+
+    function sql_em_liquidacao_ate_mes($where = "", $dtini, $dtfim, $w_instit = "(1) "){
+          $sql = "select
+      conplano.c60_estrut,
+      conplano.c60_descr,
+      substr(ele.o56_elemento||'00',1,15) as o56_elemento,
+      ele.o56_descr,
+      sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhadoa,
+      sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornadoa,
+      sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidadoa,
+      sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornadoa,
+      sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamentoa,
+      sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa,
+      sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornadoa,
+      sum(case when c53_coddoc in (200, 208, 210) then c70_valor else 0 end ) as em_liquidacaoa,
+      sum(case when c53_coddoc in (202, 204, 206) then c70_valor else 0 end ) as liquidacaoa,
+      sum(case when c53_coddoc in (201, 209, 211) then c70_valor else 0 end ) as estorno_em_liquidacaoa,
+      sum(case when c53_coddoc in (203, 205, 207) then c70_valor else 0 end ) as estorno_liquidacaoa
+      from conlancamele
+      inner join conlancam on c67_codlan=c70_codlan
+      inner join conlancamemp on c75_codlan = c70_codlan
+      inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
+      inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
+      $w_elemento
+      inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
+      inner join conlancamdoc on c71_codlan=c70_codlan
+      inner join conhistdoc on c71_coddoc=c53_coddoc
+      inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
+      ele.o56_anousu = o58_anousu
+      where ";
+          if ($where != "") {
+              $sql .= " $where and ";
+          }
+          $sql .= "
+      empempenho.e60_instit in $w_instit
+      and ( conlancam.c70_data >='".db_getsession("DB_anousu")."-01-01' and conlancam.c70_data <='$dtfim' )
+      and conhistdoc.c53_tipo in (10,11,20,21,30,31,32,200,201)
+      group by /* o58_codele, */
+      c60_estrut,
+      c60_descr,
+      o56_elemento,
+      o56_descr
+      order by
+      o56_elemento
+      ";
+          return analiseQueryPlanoOrcamento($sql);
     }
 }
 
