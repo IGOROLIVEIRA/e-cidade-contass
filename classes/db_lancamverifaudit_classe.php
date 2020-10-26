@@ -170,12 +170,12 @@ class cl_lancamverifaudit {
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "Tipo da Auditoria () nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "Lançamento de verificação () nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Tipo da Auditoria já Cadastrado";
+         $this->erro_banco = "Lançamento de verificação já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        } else {
-         $this->erro_sql   = "Tipo da Auditoria () nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "Lançamento de verificação () nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
@@ -299,10 +299,11 @@ class cl_lancamverifaudit {
        }
      }
      $sql .= " where ";
-$sql .= "ci05_codlan = '$ci05_codlan'";     $result = db_query($sql);
+     $sql .= "ci05_codlan = $ci05_codlan";   
+     $result = @pg_exec($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Tipo da Auditoria nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "Lançamento de verificação nao Alterado. Alteracao Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -311,7 +312,7 @@ $sql .= "ci05_codlan = '$ci05_codlan'";     $result = db_query($sql);
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "Tipo da Auditoria nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "Lançamento de verificação nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
@@ -343,7 +344,7 @@ $sql .= "ci05_codlan = '$ci05_codlan'";     $result = db_query($sql);
      $result = db_query($sql.$sql2);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Tipo da Auditoria nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Lançamento de verificação nao Excluído. Exclusão Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -352,7 +353,7 @@ $sql .= "ci05_codlan = '$ci05_codlan'";     $result = db_query($sql);
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "Tipo da Auditoria nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Lançamento de verificação nao Encontrado. Exclusão não Efetuada.\\n";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";

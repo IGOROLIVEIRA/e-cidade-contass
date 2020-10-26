@@ -204,6 +204,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
             }            
 
+        } else {
+            alert("Erro ao buscar questões.");
         }
 
     }
@@ -355,6 +357,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
         } else {
             
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].options[0].selected = true;
+            document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].setAttribute('value', '');
             document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].disabled = true;
 
         }
@@ -500,6 +503,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             alert(oRetorno.sMensagem.urlDecode());
             document.form1['aQuestoes['+oRetorno.iLinha+'][ci05_codlan]'].value = oRetorno.iCodLan;
 
+        } else {
+            alert(oRetorno.sMensagem.urlDecode());
         }
 
     }
@@ -586,13 +591,84 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             document.form1['select'].options[2].setAttribute('selected', false);
             js_buscaQuestoes(3);
 
+        } else {
+            alert(oRetorno.sMensagem.urlDecode());
         }
 
     }
 
     function js_limpar() {
-        alert('limpar');
+        
+        var itens = getItensMarcados();
+
+        if (itens.length < 1) {
+
+            alert('Selecione pelo menos um item da lista.');
+            return;
+
+        }
+
+        itens = itens.map(function (iItem) {
+            return Number(iItem.value);
+        });
+
+        try {
+
+            var itensExcluir = [];
+            
+            itens.forEach(function (iItem) {
+
+                var oItemExcluir = {
+                    iCodLan:      document.form1['aQuestoes['+iItem+'][ci05_codlan]'].value,
+                };
+
+                itensExcluir.push(oItemExcluir);
+
+            });
+
+            var oParam    = new Object();
+            oParam.exec   = 'excluiLancamento';
+            oParam.aItens = itensExcluir;
+
+            js_divCarregando('Aguarde', 'div_aguarde');
+
+            var oAjax = new Ajax.Request(sRPC, {
+              
+                method:'post',
+                parameters:'json='+Object.toJSON(oParam),
+                onComplete: js_retornoExclui
+
+            });
+
+      } catch(e) {
+          alert(e.toString());
+      }
+
     }
+
+    function js_retornoExclui(oAjax) {
+      
+        js_removeObj('div_aguarde');
+        var oRetorno = eval("("+oAjax.responseText+")");
+
+        if (oRetorno.status == 1) {
+            alert(oRetorno.sMensagem.urlDecode());
+            js_buscaQuestoes(3);
+        } else {
+            alert(oRetorno.sMensagem.urlDecode());
+        }
+
+  }
+
+
+    function getItensMarcados() {
+
+        return aItens().filter(function (item) {
+        return item.checked;
+        });
+
+    }
+
 
     function js_imprimir() {
         alert('imprimir');

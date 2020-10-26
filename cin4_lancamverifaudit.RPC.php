@@ -115,12 +115,12 @@ try {
             $cllancamverifaudit->incluir();
 
             if ($cllancamverifaudit->erro_status == "0") {
-                throw new Exception("Erro ao criar lançamento. \n".$cllancamverifaudit->erro_sql, null);
+                throw new Exception("Erro ao adicionar achado ao lançamento (1). \n".$cllancamverifaudit->erro_sql, null);
             }
 
             $oRetorno->iLinha       = $oParam->iLinha;
             $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
-            $oRetorno->sMensagem    = "Lançamento criado com sucesso!";            
+            $oRetorno->sMensagem    = "Achado adicionado ao lançamento com sucesso!";            
 
         break;
 
@@ -143,12 +143,12 @@ try {
             $cllancamverifaudit->alterar($oParam->iCodLan);
 
             if ($cllancamverifaudit->erro_status == "0") {
-                throw new Exception("Erro ao alterar o lançamento. \n".$cllancamverifaudit->erro_sql, null);
+                throw new Exception("Erro ao adicionar achado ao lançamento (2). \n".$cllancamverifaudit->erro_sql, null);
             }
 
             $oRetorno->iLinha       = $oParam->iLinha;
-            $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
-            $oRetorno->sMensagem    = "Lançamento alterado com sucesso!"; 
+            $oRetorno->iCodLan      = $oParam->iCodLan;
+            $oRetorno->sMensagem    = "Achado adicionado ao lançamento com sucesso!"; 
 
         break;
 
@@ -199,14 +199,41 @@ try {
                     $cllancamverifaudit->incluir();
 
                     if ($cllancamverifaudit->erro_status == "0") {
-                        throw new Exception("Erro ao criar lançamento. \n".$cllancamverifaudit->erro_sql, null);
+                        throw new Exception("Erro ao salvar lançamento. \n".$cllancamverifaudit->erro_sql, null);
                     }
 
                 }
 
             }
             
-            $oRetorno->sMensagem    = "Lançamentos criados com sucesso!"; 
+            $oRetorno->sMensagem = "Lançamentos salvos com sucesso!"; 
+
+        break;
+
+        case "excluiLancamento":
+
+            db_inicio_transacao();
+
+            foreach ($oParam->aItens as $oItem) {
+
+                $cllancamverifaudit = new cl_lancamverifaudit;
+                    
+                $sSql = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codlan = {$oItem->iCodLan}");
+                $cllancamverifaudit->sql_record($sSql);
+
+                if ($cllancamverifaudit->numrows > 0) {
+                    
+                    $cllancamverifaudit->excluir($oItem->iCodLan);
+
+                    if ($cllancamverifaudit->erro_status == "0") {
+                        throw new Exception("Erro ao limpar lançamentos. \n".$cllancamverifaudit->erro_sql, null);
+                    }
+
+                }
+
+                $oRetorno->sMensagem = "Lançamentos excluídos com sucesso!"; 
+
+            }
 
         break;
 
