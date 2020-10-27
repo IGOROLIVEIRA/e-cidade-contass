@@ -144,8 +144,10 @@ switch($oParam->exec) {
       $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
       $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
 
-      if($z09_datacadastro > $dtencerramento){
-          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      if ($dtencerramento != false){
+          if($z09_datacadastro < $dtencerramento){
+              throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+          }
       }
 
       if($dtsessao < $z09_datacadastro){
