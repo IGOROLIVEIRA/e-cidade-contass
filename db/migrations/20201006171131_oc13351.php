@@ -382,6 +382,17 @@ class Oc13351 extends PostgresMigration
         ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codproc_fk FOREIGN KEY (ci05_codproc) REFERENCES processoaudit (ci03_codproc);
 
         ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codquestao_fk FOREIGN KEY (ci05_codproc) REFERENCES questaoaudit (ci02_codquestao);
+
+        --CRIA MENU PARA RELATÓRIO DE VERIFICAÇÕES
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Relatório de Verificações', 'Relatório de Verificações', 'cin2_rellancamverifaudit001.php', 1, 1, 'Relatório de Verificações', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Auditoria'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            2, 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );		
+
                 
         COMMIT;
 

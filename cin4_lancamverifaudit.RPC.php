@@ -50,6 +50,10 @@ $oRetorno->aQuestoes = array();
 
 $iInstit = db_getsession('DB_instit');
 
+if (isset($oParam->sAchados) && !empty($oParam->sAchados)) {
+    $oParam->sAchados = str_replace("<contrabarra>", "\\", $oParam->sAchados);            
+}
+
 try {
 
     switch ($oParam->exec) {
@@ -109,9 +113,9 @@ try {
             $cllancamverifaudit->ci05_inianalise_mes    = $oParam->dtDataIniMes;
             $cllancamverifaudit->ci05_inianalise_ano    = $oParam->dtDataIniAno;
             $cllancamverifaudit->ci05_atendquestaudit   = $oParam->bAtendeQuest;
-            $cllancamverifaudit->ci05_achados           = $oParam->sAchado;
+            $cllancamverifaudit->ci05_achados           = addslashes(db_stdClass::normalizeStringJson($oParam->sAchados));
             $cllancamverifaudit->ci05_instit            = $iInstit;
-            
+
             $cllancamverifaudit->incluir();
 
             if ($cllancamverifaudit->erro_status == "0") {
@@ -120,7 +124,7 @@ try {
 
             $oRetorno->iLinha       = $oParam->iLinha;
             $oRetorno->iCodLan      = $cllancamverifaudit->ci05_codlan;
-            $oRetorno->sMensagem    = "Achado adicionado ao lançamento com sucesso!";            
+            $oRetorno->sMensagem    = "Achado adicionado ao lançamento com sucesso!";   
 
         break;
 
@@ -138,7 +142,7 @@ try {
             $cllancamverifaudit->ci05_inianalise_mes    = $oParam->dtDataIniMes;
             $cllancamverifaudit->ci05_inianalise_ano    = $oParam->dtDataIniAno;
             $cllancamverifaudit->ci05_atendquestaudit   = $oParam->bAtendeQuest;
-            $cllancamverifaudit->ci05_achados           = $oParam->sAchado;
+            $cllancamverifaudit->ci05_achados           = addslashes(db_stdClass::normalizeStringJson($oParam->sAchados));
 
             $cllancamverifaudit->alterar($oParam->iCodLan);
 
@@ -176,7 +180,7 @@ try {
                     $cllancamverifaudit->ci05_inianalise_mes    = $oQuestao->dtDataIniMes;
                     $cllancamverifaudit->ci05_inianalise_ano    = $oQuestao->dtDataIniAno;
                     $cllancamverifaudit->ci05_atendquestaudit   = $oQuestao->bAtendeQuest;
-                    $cllancamverifaudit->ci05_achados           = $oQuestao->bAtendeQuest == "t" ? 'null' : $oQuestao->sAchado;
+                    $cllancamverifaudit->ci05_achados           = $oQuestao->bAtendeQuest == "t" ? 'null' : addslashes(db_stdClass::normalizeStringJson($oParam->sAchados));
 
                     $cllancamverifaudit->alterar($oQuestao->iCodLan);
 

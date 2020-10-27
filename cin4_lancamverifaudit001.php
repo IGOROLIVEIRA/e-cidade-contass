@@ -441,16 +441,16 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     function js_salvarLancamento(iLinha) {
         
-        var sAchado = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
+        var sAchados = document.getElementById('aQuestoes'+ iLinha +'ci05_achados').value;
         
         var iCodLan = null;
 
-        if (sAchado == '') {
+        if (sAchados == '') {
             alert('Para item que não atende à questão de auditoria é obrigatório informar os achados.');
             return false;
         }
 
-        document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value = sAchado;
+        document.form1['aQuestoes['+iLinha+'][ci05_achados_input]'].value = sAchados;
 
         try{
 
@@ -473,7 +473,7 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
             oParametro.dtDataIniMes = document.form1['aQuestoes'+iLinha+'ci05_inianalise_mes'].value;
             oParametro.dtDataIniAno = document.form1['aQuestoes'+iLinha+'ci05_inianalise_ano'].value;
             oParametro.bAtendeQuest = document.form1['aQuestoes['+iLinha+'][ci05_atendquestaudit]'].value;            
-            oParametro.sAchado      = sAchado;
+            oParametro.sAchados     = encodeURIComponent(sAchados.replace(/\\/g,  "<contrabarra>"));            
             oParametro.iLinha       = iLinha;
             
             new Ajax.Request(sRPC,
@@ -584,11 +584,11 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
         js_removeObj('msgBox');
         var oRetorno = eval("("+oAjax.responseText+")");
-
+        
         if (oRetorno.status == 1) {
 
             alert(oRetorno.sMensagem.urlDecode());
-            document.form1['iFiltroQuestoes'].options[2].setAttribute('selected', false);
+            document.form1['iFiltroQuestoes'].options[oRetorno.iFiltroQuestoes-1].setAttribute('selected', false);
             js_buscaQuestoes(oRetorno.iFiltroQuestoes);
 
         } else {
@@ -674,8 +674,8 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 
     function js_imprimir() {
         
-        var sUrl    = 'cin2_relancamferifaudit002.php';
-        var sQuery  =  '?iCodProc='+<?= $ci03_codproc ?>;
+        var sUrl    = 'cin2_rellancamverifaudit002.php';
+        var sQuery  =  '?iCodProc='+document.form1.iCodProc.value;
         sQuery      += '&iFiltroQuestoes='+document.form1.iFiltroQuestoes.value;
 
         jan = window.open(sUrl+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');

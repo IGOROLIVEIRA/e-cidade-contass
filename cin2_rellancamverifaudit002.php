@@ -39,24 +39,39 @@ $clquestaoaudit = new cl_questaoaudit;
 $iInstit        = db_getsession('DB_instit');
 $oInstit        = new Instituicao($iInstit);
 
-$sWhere = '';
+$sWhere = "ci02_instit = {$iInstit}";
 
-if (isset($iFiltroQuestoes) && $iFiltroQuestoes != null && isset($iCodProc) && $iCodProc != null) {
-
-    if ($iFiltroQuestoes == 1) {
-        $sWhere = "ci03_codproc = {$iCodProc} AND ci02_instit = {$iInstit} AND ci05_codlan IS NULL";
-    } elseif ($iFiltroQuestoes == 2) {
-        $sWhere = "ci03_codproc = {$iCodProc} AND ci02_instit = {$iInstit} AND ci05_codlan IS NOT NULL";
-    } else {
-        $sWhere = "ci03_codproc = {$iCodProc} AND ci02_instit = {$iInstit}";
-    }
+if (isset($iCodProc) && $iCodProc != null) {
+	$sWhere .= "AND ci03_codproc = {$iCodProc}";
 }
 
-$sSqlLancamentos = $clquestaoaudit->sql_questao_processo(null, "*", "ci02_numquestao, ci03_codproc", $sWhere);
+/**
+ * 1 PENDENTES
+ * 2 RESPONDIDAS
+ * 3 TODAS
+ * 4 NÃO ATENDIDAS
+ * 5 ATENDIDAS
+ */
+
+if (isset($iFiltroQuestoes) && $iFiltroQuestoes != null) {
+
+    if ($iFiltroQuestoes == 1) {
+        $sWhere .= " AND ci05_codlan IS NULL";
+    } elseif ($iFiltroQuestoes == 4) {
+		$sWhere .= " AND ci05_atendquestaudit = 'f'";
+	} elseif ($iFiltroQuestoes == 5) { 
+		$sWhere .= " AND ci05_atendquestaudit = 't'";
+	} elseif ($iFiltroQuestoes == 2) {
+        $sWhere .= " AND ci05_codlan IS NOT NULL";
+	}
+	
+}
+
+$sSqlLancamentos = $clquestaoaudit->sql_questao_processo(null, "*", "ci03_codproc, ci02_numquestao", $sWhere);
 $rsLancamentos   = $clquestaoaudit->sql_record($sSqlLancamentos);
 
 if ($clquestaoaudit->numrows == 0) {
-  	db_redireciona('db_erros.php?fechar=true&db_erro=Não há lançamentos para esse processo.');
+  	db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum lançamento encontrado.');
 }
 
 $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
@@ -158,8 +173,8 @@ ob_start();
     <body>
         <div class="ritz">
           	<table class="waffle">
-				  <? $oLancamento = db_utils::fieldsMemory($rsLancamentos,0); ?>
-            	<tr>
+				<? //$oLancamento = db_utils::fieldsMemory($rsLancamentos,0); ?>
+            	<!-- <tr>
 					<td colspan="7" class="s2"><b>Processo: </b><?= $oLancamento->ci03_numproc.'/'.$oLancamento->ci03_anoproc ?></td>
 				</tr>
 				<tr>
@@ -168,11 +183,23 @@ ob_start();
 				<tr>
 					<td colspan="7" class="s2"><b>Objetivos:</b> <?= $oLancamento->ci03_objaudit ?></td>
 				</tr>
+				<tr>
+					<th class="s0" style="width:10px">Nº QUESTÃO</th>
+					<th class="s0" style="width:120px">QUESTÃO DE AUDITORIA</th>
+					<th class="s0" style="width:120px">INFORMAÇÕES REQUERIDAS</th>
+					<th class="s0" style="width:120px">FONTE DAS INFORMAÇÕES</th>
+					<th class="s0" style="width:120px">PROCEDIMENTO DETALHADO</th>
+					<th class="s0" style="width:120px">OBJETOS</th>
+					<th class="s0" style="width:120px">POSSÍVEIS ACHADOS NEGATIVOS</th>
+					<th class="s0" style="width:70px">INÍCIO DA ANÁLISE</th>
+					<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
+					<th class="s0" style="width:120px">ACHADOS</th>
+				</tr> -->
           	</table>
         </div>
         <div class="ritz grid-container" dir="ltr">
             <table class="waffle" cellspacing="0" cellpadding="0">
-              	<thead>
+              	<!-- <thead>
 					<tr>
 						<th class="s0" style="width:10px">Nº QUESTÃO</th>
 						<th class="s0" style="width:120px">QUESTÃO DE AUDITORIA</th>
@@ -185,7 +212,7 @@ ob_start();
 						<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
 						<th class="s0" style="width:120px">ACHADOS</th>
 					</tr>
-				</thead>
+				</thead> -->
 
                 <tbody>
               
@@ -193,11 +220,10 @@ ob_start();
                 
                     db_fieldsmemory($rsLancamentos,$i); ?>
 
-                    <? if($repete != $ci03_codproc && $i > 0) {  ?>
+                    <? if($repete != $ci03_codproc /*&& $i > 0*/) {  ?>
                   
                       	<tr><td>&nbsp;</td></tr>
-						  <!-- <tr><td colspan="7" class="s2"><?= $ci01_tipoaudit ?></td></tr>           -->
-						<? $oLancamento = db_utils::fieldsMemory($rsLancamentos,0); ?>
+						<? $oLancamento = db_utils::fieldsMemory($rsLancamentos,$i); ?>
 						<tr>
 							<td colspan="7" class="s2"><b>Processo: </b><?= $oLancamento->ci03_numproc.'/'.$oLancamento->ci03_anoproc ?></td>
 						</tr>
@@ -206,6 +232,18 @@ ob_start();
 						</tr>
 						<tr>
 							<td colspan="7" class="s2"><b>Objetivos:</b> <?= $oLancamento->ci03_objaudit ?></td>
+						</tr>
+						<tr>
+							<th class="s0" style="width:10px">Nº QUESTÃO</th>
+							<th class="s0" style="width:120px">QUESTÃO DE AUDITORIA</th>
+							<th class="s0" style="width:120px">INFORMAÇÕES REQUERIDAS</th>
+							<th class="s0" style="width:120px">FONTE DAS INFORMAÇÕES</th>
+							<th class="s0" style="width:120px">PROCEDIMENTO DETALHADO</th>
+							<th class="s0" style="width:120px">OBJETOS</th>
+							<th class="s0" style="width:120px">POSSÍVEIS ACHADOS NEGATIVOS</th>
+							<th class="s0" style="width:70px">INÍCIO DA ANÁLISE</th>
+							<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
+							<th class="s0" style="width:120px">ACHADOS</th>
 						</tr>
 						
                     <? } ?>       
@@ -241,7 +279,7 @@ ob_start();
 
 $html = ob_get_contents();
 echo $html;
-// die();
+
 $mPDF->WriteHTML(utf8_encode($html));
 ob_end_clean();
 $mPDF->Output();
