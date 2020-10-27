@@ -130,7 +130,7 @@ switch($oParam->exec) {
                 FROM cadobras302020
                 INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
                 INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
-                WHERE si201_mes = $oParam->mesReferencia";
+                WHERE si201_instit = ".db_getsession("DB_instit")." and si201_mes = $oParam->mesReferencia";
       $rsRegistro30 = db_query($sql);
 
       $arquivosgerados = array();

@@ -878,7 +878,7 @@ ob_start();
                 
                 if ($oDataFim->getAno() >= 2020) {
                     
-                    $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim, $oInstit->getCodigo());
+                    $aSaldoArrecadadoEmenda = getSaldoArrecadadoEmendaParlamentar($dtini, $dtfim);
                     $fCFRP += $aSaldoArrecadadoEmenda[0]->arrecadado_emenda_parlamentar;
                     
                 }
