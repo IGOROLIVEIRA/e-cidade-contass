@@ -159,7 +159,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
             INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
             LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
             INNER JOIN cgm on z01_numcgm = obr05_responsavel
-            WHERE DATE_PART('YEAR',licobrasresponsaveis.obr05_dtcadastrores)= " . db_getsession("DB_anousu") . "
+            WHERE obr01_instit = ".db_getsession("DB_instit")." 
+                AND DATE_PART('YEAR',licobrasresponsaveis.obr05_dtcadastrores)= " . db_getsession("DB_anousu") . "
                 AND DATE_PART('MONTH',licobrasresponsaveis.obr05_dtcadastrores)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult10 = db_query($sql);
 
@@ -196,7 +197,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               INNER JOIN liclicita ON l20_codigo = obr01_licitacao
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-              WHERE DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
+              WHERE obr01_instit = ".db_getsession("DB_instit")."
+              AND DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
               AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult20 = db_query($sql);
 
@@ -228,10 +230,13 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
     $sql = "SELECT *
               FROM licobras
               INNER JOIN licobrasituacao ON obr02_seqobra = obr01_sequencial
+              INNER JOIN db_config ON (licobras.obr01_instit=db_config.codigo)
+              LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
               WHERE obr02_situacao IN (3,4)
+                  AND obr01_instit = ".db_getsession("DB_instit")."
                   AND DATE_PART('YEAR',licobrasituacao.obr02_dtsituacao)=  " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',licobrasituacao.obr02_dtsituacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $rsResult21 = db_query($sql);
+    $rsResult21 = db_query($sql);//db_criatabela($rsResult21);die($sql);
 
     for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
       $clcadobras212020 = new cl_cadobras212020();
@@ -263,7 +268,8 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
               inner join liclicita on l20_codigo = obr01_licitacao
               INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
               LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
-              WHERE DATE_PART('YEAR',licobrasmedicao.obr03_dtentregamedicao)=  " . db_getsession("DB_anousu") . "
+              WHERE obr01_instit = ".db_getsession("DB_instit")."
+                  AND DATE_PART('YEAR',licobrasmedicao.obr03_dtentregamedicao)=  " . db_getsession("DB_anousu") . "
                   AND DATE_PART('MONTH',licobrasmedicao.obr03_dtentregamedicao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $rsResult30 = db_query($sql);//echo $sql; db_criatabela($rsResult30);die();
 
