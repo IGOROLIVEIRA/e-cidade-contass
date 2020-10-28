@@ -40,9 +40,9 @@ $sOrder     = "";
 $agrupaForne = false;
 
 if (isset($lFiltro) && $lFiltro == "t") {
-    $sWhere .= " WHERE m51_valortotal::numeric > valorlancado::numeric AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}' ";
+    $sWhere .= " WHERE m51_valortotal::numeric > (valorlancado + m36_vrlanu)::numeric AND (m51_data+{$iDiasPrazo}) < '{$dtDataUsu}' ";
 } else {
-    $sWhere .= " WHERE m51_valortotal::numeric > valorlancado::numeric ";
+    $sWhere .= " WHERE m51_valortotal::numeric > (valorlancado + m36_vrlanu)::numeric ";
 }
 
 if (isset($iCgm) && $iCgm != null) {
@@ -76,7 +76,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                 descdeptodestino,  
                                 ('{$dtDataUsu}'::date - m51_data::date)||' DIAS' as dias_atraso,
                                 m51_valortotal,
-                                valorlancado
+                                (valorlancado + m36_vrlanu) AS valorlancadoanulado
                         FROM
                             (SELECT m51_codordem,
                                     z01_numcgm,
@@ -93,7 +93,8 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                                     INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
                                                     INNER JOIN matestoque AS a ON a.m70_codigo = matestoqueitem.m71_codmatestoque
                                                 WHERE m52_codordem = x.m51_codordem
-                                                        AND m73_cancelado IS FALSE),0) AS valorlancado
+                                                        AND m73_cancelado IS FALSE),0) AS valorlancado,
+									sum(coalesce(m36_vrlanu,0)) AS m36_vrlanu
                                 FROM 
                                     (SELECT DISTINCT
                                         m51_codordem,
@@ -104,7 +105,8 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                         m51_data,
                                         m51_valortotal,
                                         m51_depto as deptodestino,     
-                                        descrdepto as descdeptodestino  
+                                        descrdepto as descdeptodestino,
+										m36_vrlanu
                                     FROM matordem
                                         INNER JOIN matordemitem ON matordemitem.m52_codordem = matordem.m51_codordem
                                         LEFT JOIN empnotaord ON empnotaord.m72_codordem = matordem.m51_codordem
@@ -112,6 +114,7 @@ $sSqlOrdemPendente = "  SELECT  m51_codordem as cod_ordem,
                                         LEFT JOIN empempenho ON empempenho.e60_numemp = matordemitem.m52_numemp
                                         INNER JOIN cgm ON cgm.z01_numcgm = matordem.m51_numcgm
                                         LEFT JOIN matordemanu ON matordemanu.m53_codordem = matordem.m51_codordem
+										LEFT JOIN matordemitemanu ON m52_codlanc = m36_matordemitem
                                         LEFT JOIN db_depart ON matordem.m51_depto = coddepto
                                         WHERE e60_anousu = {$iAnoUsu}
                                             AND (m51_obs != 'Ordem de Compra Automatica' OR m51_obs IS NULL)
@@ -216,7 +219,7 @@ for ($i = 0; $i < $clmatordem->numrows; $i++) {
     $pdf->cell(49,$alt,substr($deptodestino.' - '.$descdeptodestino,0,33),0,0,"L",$prenc);
     $pdf->cell(35,$alt,$dias_atraso,0,0,"C",$prenc);
     $pdf->cell(25,$alt,db_formatar($m51_valortotal,'f'),0,0,"C",$prenc);
-    $pdf->cell(25,$alt,db_formatar(($m51_valortotal-$valorlancado),'f'),0,0,"C",$prenc);
+    $pdf->cell(25,$alt,db_formatar(($m51_valortotal-$valorlancadoanulado),'f'),0,0,"C",$prenc);
     $pdf->Ln(4);
     
     if ($agrupaForne) {
