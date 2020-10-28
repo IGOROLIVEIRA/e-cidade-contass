@@ -418,7 +418,7 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_seq','int4','Sequencial','','Sequencial',11,false,false,false,0,'int4','Sequencial');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codquestao','int4','Código da Questão','','Código da Questão',11,false,false,false,1,'text','Código da Questão');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,true,false,false,0,'text','Situação Encontrada');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,false,false,false,0,'text','Situação Encontrada');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,true,false,false,0,'text','Objetos');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,true,false,false,0,'text','Critério');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opinião da equipe','','Evidência',500,true,false,false,0,'text','Evidência');
@@ -451,14 +451,14 @@ class Oc13351 extends PostgresMigration
         ci06_seq             	int4 not null default 0,
         ci06_codproc            int4 not null,
         ci06_codquestao         int4 not null,
-        ci06_situencont         varchar(500),
+        ci06_situencont         varchar(500) not null,
         ci06_objetos            varchar(500),
         ci06_criterio           varchar(500),
         ci06_evidencia          varchar(500),
         ci06_causa            	varchar(500),
         ci06_efeito            	varchar(500),
         ci06_recomendacoes      varchar(500),
-        ci05_instit             int4 not null);
+        ci06_instit             int4 not null);
 
         -- Criando  sequences
         CREATE SEQUENCE contint_ci06_seq_seq

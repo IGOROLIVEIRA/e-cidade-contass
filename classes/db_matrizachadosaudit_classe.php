@@ -1,34 +1,34 @@
-<?php
+<?
 //MODULO: Controle Interno
 //CLASSE DA ENTIDADE matrizachadosaudit
 class cl_matrizachadosaudit { 
   // cria variaveis de erro 
-  public $rotulo     = null; 
-  public $query_sql  = null; 
-  public $numrows    = 0; 
-  public $numrows_incluir = 0; 
-  public $numrows_alterar = 0; 
-  public $numrows_excluir = 0; 
-  public $erro_status= null; 
-  public $erro_sql   = null; 
-  public $erro_banco = null;  
-  public $erro_msg   = null;  
-  public $erro_campo = null;  
-  public $pagina_retorno = null; 
+  var $rotulo     = null; 
+  var $query_sql  = null; 
+  var $numrows    = 0; 
+  var $numrows_incluir = 0; 
+  var $numrows_alterar = 0; 
+  var $numrows_excluir = 0; 
+  var $erro_status= null; 
+  var $erro_sql   = null; 
+  var $erro_banco = null;  
+  var $erro_msg   = null;  
+  var $erro_campo = null;  
+  var $pagina_retorno = null; 
   // cria variaveis do arquivo 
-  public $ci06_seq = 0; 
-  public $ci06_codproc = 0; 
-  public $ci06_codquestao = 0; 
-  public $ci06_situencont = null; 
-  public $ci06_objetos = null; 
-  public $ci06_criterio = null; 
-  public $ci06_evidencia = null; 
-  public $ci06_causa = null; 
-  public $ci06_efeito = null; 
-  public $ci06_recomendacoes = null; 
-  public $ci06_instit = 0; 
+  var $ci06_seq = 0; 
+  var $ci06_codproc = 0; 
+  var $ci06_codquestao = 0; 
+  var $ci06_situencont = null; 
+  var $ci06_objetos = null; 
+  var $ci06_criterio = null; 
+  var $ci06_evidencia = null; 
+  var $ci06_causa = null; 
+  var $ci06_efeito = null; 
+  var $ci06_recomendacoes = null; 
+  var $ci06_instit = 0; 
   // cria propriedade com as variaveis do arquivo 
-  public $campos = "
+  var $campos = "
                  ci06_seq = int4 = Sequencial 
                  ci06_codproc = int4 = Código do Processo de Auditoria 
                  ci06_codquestao = int4 = Código da Questão 
@@ -43,7 +43,7 @@ class cl_matrizachadosaudit {
                  ";
 
   //funcao construtor da classe 
-  function __construct() { 
+  function cl_matrizachadosaudit() { 
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("matrizachadosaudit"); 
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
@@ -104,6 +104,15 @@ class cl_matrizachadosaudit {
          $this->ci06_seq = $ci06_seq; 
        }
      }
+     if($this->ci06_situencont == null ){ 
+      $this->erro_sql = " Campo Situação Encontrada nao Informado.";
+      $this->erro_campo = "ci06_situencont";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if ($this->ci06_codproc == null ) { 
        $this->erro_sql = " Campo Código do Processo de Auditoria não informado.";
        $this->erro_campo = "ci06_codproc";
@@ -232,10 +241,19 @@ class cl_matrizachadosaudit {
          return false;
        }
      }
-     if (trim($this->ci06_situencont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_situencont"])) { 
-       $sql  .= $virgula." ci06_situencont = '$this->ci06_situencont' ";
-       $virgula = ",";
-     }
+     if(trim($this->ci06_situencont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_situencont"])){ 
+      $sql  .= $virgula." ci06_situencont = '$this->ci06_situencont' ";
+      $virgula = ",";
+      if(trim($this->ci06_situencont) == null ){ 
+        $this->erro_sql = " Campo Situação Encontrada nao Informado.";
+        $this->erro_campo = "ci06_situencont";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if (trim($this->ci06_objetos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_objetos"])) { 
        $sql  .= $virgula." ci06_objetos = '$this->ci06_objetos' ";
        $virgula = ",";
@@ -274,7 +292,8 @@ class cl_matrizachadosaudit {
        }
      }
      $sql .= " where ";
-$sql .= "ci06_seq = '$ci06_seq'";     $result = db_query($sql);
+     $sql .= "ci06_seq = '$ci06_seq'";     
+     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Matriz de Achados nao Alterado. Alteracao Abortada.\\n";

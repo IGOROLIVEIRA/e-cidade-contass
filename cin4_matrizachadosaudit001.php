@@ -42,11 +42,51 @@ $cllancamverifaudit = new cl_lancamverifaudit;
 $clmatrizachadosaudit = new cl_matrizachadosaudit;
 
 $sCampos    = "ci02_numquestao, ci02_questao::text, ci05_atendquestaudit, ci05_achados::text";
-$sWhere     = "ci03_codproc = {$ci03_codproc} AND ci02_instit = {$iInstit} AND ci05_atendquestaudit ='f'";
+$sWhere     = "ci03_codproc = {$ci06_codproc} AND ci02_instit = {$iInstit} AND ci05_atendquestaudit ='f'";
 
 $clquestaoaudit = new cl_questaoaudit;
 $sSqlQuestoes   = $clquestaoaudit->sql_questao_processo(null, $sCampos, "ci02_numquestao", $sWhere);
 $rsQuestoes     = db_query($sSqlQuestoes);
+
+$db_opcao = 1;
+$db_botao = true;
+
+if (isset($incluir)){
+    
+    $sqlerro  = false;
+
+    db_inicio_transacao();
+    $clmatrizachadosaudit->ci06_instit = db_getsession('DB_instit');
+    
+    $clmatrizachadosaudit->incluir($ci06_seq);
+
+    if($clmatrizachadosaudit->erro_status=="0"){
+        $sqlerro = true;
+    }
+    db_fim_transacao($sqlerro);
+    
+    $ci06_seq           = $clmatrizachadosaudit->ci06_seq;
+    $ci02_codquestao    = $clmatrizachadosaudit->ci06_codquestao;
+    $db_opcao = 1;
+    $db_botao = true;
+    
+}
+
+if (isset($alterar)) {
+
+    $sqlerro  = false;
+
+    db_inicio_transacao();
+
+    $clmatrizachadosaudit->alterar($ci06_seq);
+
+    if($clmatrizachadosaudit->erro_status=="0"){
+        $sqlerro = true;
+    }
+
+    db_fim_transacao($sqlerro);
+
+}
 
 ?>
 <html>
@@ -92,3 +132,24 @@ $rsQuestoes     = db_query($sSqlQuestoes);
 ?>
 </body>
 </html>
+<?
+if(isset($incluir) || isset($alterar)){
+  if($clmatrizachadosaudit->erro_status=="0"){
+    $clmatrizachadosaudit->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.btnSubmit.disabled=false;</script>  ";
+    if($clmatrizachadosaudit->erro_campo!=""){
+      echo "<script> document.form1.".$clmatrizachadosaudit->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clmatrizachadosaudit->erro_campo.".focus();</script>";
+    }
+    if ( isset($alterar) && isset($ci06_seq) ) {
+        echo "<script> document.form1.btnSubmit.value = 'Alterar';</script>  ";
+        echo "<script> document.form1.btnSubmit.name = 'alterar';</script>  ";
+    }
+  }else{
+    db_msgbox($clmatrizachadosaudit->erro_msg);
+    echo "<script> document.form1.btnSubmit.value = 'Alterar';</script>  ";
+    echo "<script> document.form1.btnSubmit.name = 'alterar';</script>  ";
+  }
+}
+?>

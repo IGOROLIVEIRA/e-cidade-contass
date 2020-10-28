@@ -66,7 +66,7 @@ $clrotulo->label('ci03_objaudit');
         <td>
             <fieldset>
                 <legend>
-                <b>Lançamento de Verificações</b>
+                <b>Matriz de Achados</b>
                 </legend>
                 <table>
                     <form name="form1">
@@ -133,7 +133,7 @@ function js_processa() {
         return;
     }
 
-    sParams = '?ci03_codproc='+document.form1.ci03_codproc.value;
+    sParams = '?ci06_codproc='+document.form1.ci03_codproc.value;
 
     document.location.href = sUrl + sParams;
 

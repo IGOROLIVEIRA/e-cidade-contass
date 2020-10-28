@@ -475,5 +475,43 @@ class cl_questaoaudit {
     }
     return $sql;
  }
+
+ function sql_questao_matriz ( $ci02_codquestao = null,$campos="*",$ordem=null,$dbwhere=""){ 
+  $sql = "select ";
+  if($campos != "*" ){
+    $campos_sql = split("#",$campos);
+    $virgula = "";
+    for($i=0;$i<sizeof($campos_sql);$i++){
+      $sql .= $virgula.$campos_sql[$i];
+      $virgula = ",";
+    }
+  }else{
+    $sql .= $campos;
+  }
+  $sql .= " from questaoaudit ";
+  $sql .= "    inner join tipoquestaoaudit   on ci01_codtipo = ci02_codtipo ";
+  $sql .= "    inner join processoaudit      on ci01_codtipo = ci03_codtipoquest ";
+  $sql .= "    left join  lancamverifaudit   on ci03_codproc = ci05_codproc and ci02_codquestao = ci05_codquestao ";
+  $sql .= "    left  join matrizachadosaudit on ci03_codproc = ci06_codproc and ci02_codquestao = ci06_codquestao ";
+  $sql2 = "";
+  if($dbwhere==""){
+    if( $ci02_codquestao != "" && $ci02_codquestao != null){
+       $sql2 = " where questaoaudit.ci02_codquestao = $ci02_codquestao";
+    }
+  }else if($dbwhere != ""){
+    $sql2 = " where $dbwhere";
+  }
+  $sql .= $sql2;
+  if($ordem != null ){
+    $sql .= " order by ";
+    $campos_sql = split("#",$ordem);
+    $virgula = "";
+    for($i=0;$i<sizeof($campos_sql);$i++){
+      $sql .= $virgula.$campos_sql[$i];
+      $virgula = ",";
+    }
+  }
+  return $sql;
+}
 }
 ?>
