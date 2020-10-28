@@ -230,7 +230,7 @@ class Oc13351 extends PostgresMigration
         -- CRIA TABELA PROCESSO DE AUDITORIA
         
         -- INSERE db_sysarquivo
-        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'processoaudit','Processo de Auditoria','ci03','2020-10-15','Tipo da Auditoria',0,'f','f','f','f');
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'processoaudit','Processo de Auditoria','ci03','2020-10-15','Processo de Auditoria',0,'f','f','f','f');
 
         -- INSERE db_sysarqmod
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
@@ -329,7 +329,7 @@ class Oc13351 extends PostgresMigration
         -- CRIA TABELA LANÇAMENTO DE VERIFICAÇÕES
         
         -- INSERE db_sysarquivo
-        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'lancamverifaudit','Processo de Auditoria','ci05','2020-10-19','Tipo da Auditoria',0,'f','f','f','f');
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'lancamverifaudit','Processo de Auditoria','ci05','2020-10-19','Processo de Auditoria',0,'f','f','f','f');
 
         -- INSERE db_sysarqmod
         INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
@@ -337,7 +337,7 @@ class Oc13351 extends PostgresMigration
         -- INSERE db_syscampo
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codlan','int4','Código','','Código',11,false,false,false,0,'int4','Código');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codquestao','int4','Código do Processo da Questão','','Código do Processo da Questão',11,false,false,false,1,'text','Código do Processo da Questão');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_codquestao','int4','Código da Questão','','Código da Questão',11,false,false,false,1,'text','Código da Questão');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_inianalise','date','Início Análise','','Início Análise',10,false,false,false,1,'text','Início Análise');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_atendquestaudit','bool','Atende à questão de auditoria','','Atende à questão de auditoria',1,false,false,false,1,'','Atende à questão de auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci05_achados','varchar(500)','São fatos que resultam da aplicação dos programas elaborados para as diversas áreas em análise, referindo-se às deficiências encontradas durante o exame e suportadas por informações disponíveis no órgão auditado','','Achados',500,true,false,false,0,'text','Achados');
@@ -381,7 +381,7 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codproc_fk FOREIGN KEY (ci05_codproc) REFERENCES processoaudit (ci03_codproc);
 
-        ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codquestao_fk FOREIGN KEY (ci05_codproc) REFERENCES questaoaudit (ci02_codquestao);
+        ALTER TABLE lancamverifaudit ADD CONSTRAINT lancamverifaudit_codquestao_fk FOREIGN KEY (ci05_codquestao) REFERENCES questaoaudit (ci02_codquestao);
 
         --CRIA MENU PARA RELATÓRIO DE VERIFICAÇÕES
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Relatório de Verificações', 'Relatório de Verificações', 'cin2_rellancamverifaudit001.php', 1, 1, 'Relatório de Verificações', 't');
@@ -393,7 +393,88 @@ class Oc13351 extends PostgresMigration
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );		
 
-                
+        -- CRIA MENU PARA MATRIZ DE ACHADOS
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Matriz de Achados', 'Matriz de Achados', 'cin4_matrizachadosaudit.php', 1, 1, 'Matriz de Achados', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            (SELECT CASE
+                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos')) = 0 THEN 1 
+                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Procedimentos')) 
+            END), 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
+
+        --CRIA TABELA MATRIZ DE ACHADOS 
+
+        -- INSERE db_sysarquivo
+        INSERT INTO db_sysarquivo VALUES((SELECT max(codarq)+1 FROM db_sysarquivo),'matrizachadosaudit','Matriz de Achados','ci06','2020-10-27','Matriz de Achados',0,'f','f','f','f');
+
+        -- INSERE db_sysarqmod
+        INSERT INTO db_sysarqmod (codmod, codarq) VALUES ((SELECT codmod FROM db_sysmodulo WHERE nomemod='Controle Interno'), (SELECT max(codarq) FROM db_sysarquivo));
+
+        -- INSERE db_syscampo
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_seq','int4','Sequencial','','Sequencial',11,false,false,false,0,'int4','Sequencial');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codquestao','int4','Código da Questão','','Código da Questão',11,false,false,false,1,'text','Código da Questão');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,true,false,false,0,'text','Situação Encontrada');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,true,false,false,0,'text','Objetos');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,true,false,false,0,'text','Critério');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opinião da equipe','','Evidência',500,true,false,false,0,'text','Evidência');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_causa','varchar(500)','Deve ser conclusiva e fornecer elementos para a correta responsabilização','','Causa',500,true,false,false,0,'text','Causa');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_efeito','varchar(500)','Avaliar quais foram ou podem ser as consequências para o órgão, erário ou sociedade','','Efeito',500,true,false,false,0,'text','Efeito');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_recomendacoes','varchar(500)','As recomendações decorrem dos achados e consistem em ações que a equipe de auditoria indica às unidades auditadas, visando corrigir desconformidades, a tratar riscos e a aperfeiçoar processos de trabalhos e controles','','Recomendações',500,true,false,false,0,'text','Recomendações');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
+
+        -- INSERE db_sysarqcamp
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_seq'),              1, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_codproc'), 	        2, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_codquestao'), 	    3, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_situencont'),       4, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_objetos'),      	5, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_criterio'),         6, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_evidencia'),        7, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_causa'),            8, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_efeito'),           9, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_recomendacoes'),    10, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_instit'),           11, 0);
+
+        --DROP TABLE:
+        DROP TABLE IF EXISTS matrizachadosaudit CASCADE;
+        --Criando drop sequences
+
+        -- TABELAS E ESTRUTURA
+
+        -- Módulo: Controle Interno
+        CREATE TABLE matrizachadosaudit(
+        ci06_seq             	int4 not null default 0,
+        ci06_codproc            int4 not null,
+        ci06_codquestao         int4 not null,
+        ci06_situencont         varchar(500),
+        ci06_objetos            varchar(500),
+        ci06_criterio           varchar(500),
+        ci06_evidencia          varchar(500),
+        ci06_causa            	varchar(500),
+        ci06_efeito            	varchar(500),
+        ci06_recomendacoes      varchar(500),
+        ci05_instit             int4 not null);
+
+        -- Criando  sequences
+        CREATE SEQUENCE contint_ci06_seq_seq
+        INCREMENT 1
+        MINVALUE 1
+        MAXVALUE 9223372036854775807
+        START 1
+        CACHE 1;
+
+        -- CHAVE ESTRANGEIRA
+        ALTER TABLE matrizachadosaudit ADD PRIMARY KEY (ci06_seq);
+
+        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codproc_fk FOREIGN KEY (ci06_codproc) REFERENCES processoaudit (ci03_codproc);
+
+        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codquestao_fk FOREIGN KEY (ci06_codquestao) REFERENCES questaoaudit (ci02_codquestao);        
+                        
         COMMIT;
 
 SQL;

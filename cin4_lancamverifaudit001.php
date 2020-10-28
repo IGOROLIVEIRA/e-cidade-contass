@@ -55,7 +55,6 @@ $Tci05_achados = $oJson->encode(urlencode($Tci05_achados));
 <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .linhagrid.center {
