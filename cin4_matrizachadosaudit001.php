@@ -42,7 +42,7 @@ $cllancamverifaudit = new cl_lancamverifaudit;
 $clmatrizachadosaudit = new cl_matrizachadosaudit;
 
 $sCampos    = "ci02_numquestao, ci02_questao::text, ci05_atendquestaudit, ci05_achados::text";
-$sWhere     = "ci03_codproc = {$ci06_codproc} AND ci02_instit = {$iInstit} AND ci05_atendquestaudit ='f'";
+$sWhere     = "ci03_codproc = {$ci06_codproc} AND ci02_instit = {$iInstit} AND ci05_atendquestaudit = 'f'";
 
 $clquestaoaudit = new cl_questaoaudit;
 $sSqlQuestoes   = $clquestaoaudit->sql_questao_processo(null, $sCampos, "ci02_numquestao", $sWhere);

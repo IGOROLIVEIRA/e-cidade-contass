@@ -70,7 +70,7 @@ db_postmemory($_GET);
         <td>
             <fieldset>
                 <legend>
-                <b>Relatório de Verificações</b>
+                <b>Relatório de Matriz de Achados</b>
                 </legend>
                 <table>
                     <form name="form1">
@@ -81,20 +81,6 @@ db_postmemory($_GET);
                             <td colspan="2">
                                 <? db_input('ci03_codproc',10,$Ici03_codproc,true,'text',1," onchange='js_pesquisaProcessoAuditoria(false);'");
                                    db_input('ci03_objaudit',50,$Ic50_descr,true,'text',3); ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
-                                <b>Questões: </b>
-                            </td>
-                            <td>
-                                <select id="iFiltroQuestoes" style="width: 449px;">
-                                    <option value="3">Todas</option>
-                                    <option value="4">Questões não atendidas</option>
-                                    <option value="5">Questões atendidas</option>
-                                    <option value="1">Pendentes</option>
-                                </select>
-                                <input type="hidden" name="iCodProc" id="iCodProc" value="<?= $ci03_codproc ?>">
                             </td>
                         </tr>
                     </form>
@@ -143,9 +129,15 @@ db_iframe_processoaudit.hide();
 
 function js_emite() {
 
-    var sUrl    = 'cin2_rellancamverifaudit002.php';
-    var sQuery  =  '?iCodProc='+document.form1.ci03_codproc.value;
-    sQuery      += '&iFiltroQuestoes='+document.form1.iFiltroQuestoes.value;
+    iCodProc = document.form1.ci03_codproc.value;
+
+    if (iCodProc == '') {
+        alert("Informe o processo de auditoria.");
+        return false;
+    }
+
+    var sUrl    = 'cin2_relmatrizachadosaudit002.php';
+    var sQuery  =  '?iCodProc='+iCodProc;
 
     jan = window.open(sUrl+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
 

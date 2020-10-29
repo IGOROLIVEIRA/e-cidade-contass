@@ -473,7 +473,17 @@ class Oc13351 extends PostgresMigration
 
         ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codproc_fk FOREIGN KEY (ci06_codproc) REFERENCES processoaudit (ci03_codproc);
 
-        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codquestao_fk FOREIGN KEY (ci06_codquestao) REFERENCES questaoaudit (ci02_codquestao);        
+        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codquestao_fk FOREIGN KEY (ci06_codquestao) REFERENCES questaoaudit (ci02_codquestao);   
+
+        --CRIA MENU PARA RELATÓRIO DE MATRIZ DE ACHADOS
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Matriz de Achados', 'Matriz de Achados', 'cin2_relmatrizachadosaudit001.php', 1, 1, 'Matriz de Achados', 't'); 
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Auditoria'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            2, 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );	     
                         
         COMMIT;
 
