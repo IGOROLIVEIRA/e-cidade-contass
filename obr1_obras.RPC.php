@@ -130,8 +130,8 @@ switch($oParam->exec) {
         $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
         $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-        if($dtencerramento != null || $dtencerramento != ""){
-            if ($datainicioatividades <= $dtencerramento) {
+          if($dtencerramento != null || $dtencerramento != ""){
+              if ($datainicioatividades <= $dtencerramento) {
                 throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
             }
         }
@@ -145,7 +145,7 @@ switch($oParam->exec) {
       $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
 
       if ($dtencerramento != false){
-          if($z09_datacadastro < $dtencerramento){
+          if($z09_datacadastro > $dtencerramento){
               throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
           }
       }
