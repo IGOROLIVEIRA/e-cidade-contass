@@ -55,7 +55,7 @@ try {
             db_inicio_transacao();
 
             $sWhere     = " ci02_numquestao = {$oParam->iNumQuest} AND ci03_codproc = {$oParam->iCodProc} AND ci03_instit = {$iInstit}";
-            $sCampos    = " ci02_codquestao, ci02_numquestao, ci02_questao, ci03_codproc, ci05_achados, matrizachadosaudit.*";
+            $sCampos    = " ci05_codlan, ci02_numquestao, ci02_questao, ci03_codproc, ci05_achados, matrizachadosaudit.*";
             $sSql       = $clquestaoaudit->sql_questao_matriz(null, $sCampos, null, $sWhere);
             $rsResult = $clquestaoaudit->sql_record($sSql);
 
@@ -66,7 +66,7 @@ try {
                 $oQuestaoMatriz = new stdClass();
 
                 $oQuestaoMatriz->ci06_seq           = $oQuestMat->ci06_seq;
-                $oQuestaoMatriz->ci02_codquestao    = $oQuestMat->ci02_codquestao;
+                $oQuestaoMatriz->ci05_codlan        = $oQuestMat->ci05_codlan;
                 $oQuestaoMatriz->ci02_numquestao    = $oQuestMat->ci02_numquestao;
                 $oQuestaoMatriz->ci02_questao       = urlencode($oQuestMat->ci02_questao);
                 $oQuestaoMatriz->ci05_achados       = urlencode($oQuestMat->ci05_achados);

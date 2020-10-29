@@ -17,8 +17,7 @@ class cl_matrizachadosaudit {
   var $pagina_retorno = null; 
   // cria variaveis do arquivo 
   var $ci06_seq = 0; 
-  var $ci06_codproc = 0; 
-  var $ci06_codquestao = 0; 
+  var $ci06_codlan = 0; 
   var $ci06_situencont = null; 
   var $ci06_objetos = null; 
   var $ci06_criterio = null; 
@@ -30,8 +29,7 @@ class cl_matrizachadosaudit {
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  ci06_seq = int4 = Sequencial 
-                 ci06_codproc = int4 = Código do Processo de Auditoria 
-                 ci06_codquestao = int4 = Código da Questão 
+                 ci06_codlan = int4 = Código do Lançamento de Verificação 
                  ci06_situencont = varchar(500) = Situação Encontrada 
                  ci06_objetos = varchar(500) = Objetos 
                  ci06_criterio = varchar(500) = Critério 
@@ -63,8 +61,7 @@ class cl_matrizachadosaudit {
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
        $this->ci06_seq = ($this->ci06_seq == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_seq"]:$this->ci06_seq);
-       $this->ci06_codproc = ($this->ci06_codproc == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_codproc"]:$this->ci06_codproc);
-       $this->ci06_codquestao = ($this->ci06_codquestao == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_codquestao"]:$this->ci06_codquestao);
+       $this->ci06_codlan = ($this->ci06_codlan == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_codlan"]:$this->ci06_codlan);
        $this->ci06_situencont = ($this->ci06_situencont == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_situencont"]:$this->ci06_situencont);
        $this->ci06_objetos = ($this->ci06_objetos == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_objetos"]:$this->ci06_objetos);
        $this->ci06_criterio = ($this->ci06_criterio == ""?@$GLOBALS["HTTP_POST_VARS"]["ci06_criterio"]:$this->ci06_criterio);
@@ -113,18 +110,9 @@ class cl_matrizachadosaudit {
       $this->erro_status = "0";
       return false;
     }
-     if ($this->ci06_codproc == null ) { 
-       $this->erro_sql = " Campo Código do Processo de Auditoria não informado.";
-       $this->erro_campo = "ci06_codproc";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->ci06_codquestao == null ) { 
-       $this->erro_sql = " Campo Código da Questão não informado.";
-       $this->erro_campo = "ci06_codquestao";
+     if ($this->ci06_codlan == null ) { 
+       $this->erro_sql = " Campo Código do Lançamento de Verificação não informado.";
+       $this->erro_campo = "ci06_codlan";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -142,8 +130,7 @@ class cl_matrizachadosaudit {
      }
      $sql = "insert into matrizachadosaudit(
                                        ci06_seq 
-                                      ,ci06_codproc 
-                                      ,ci06_codquestao 
+                                      ,ci06_codlan 
                                       ,ci06_situencont 
                                       ,ci06_objetos 
                                       ,ci06_criterio 
@@ -155,8 +142,7 @@ class cl_matrizachadosaudit {
                        )
                 values (
                                 $this->ci06_seq 
-                               ,$this->ci06_codproc 
-                               ,$this->ci06_codquestao 
+                               ,$this->ci06_codlan 
                                ,'$this->ci06_situencont' 
                                ,'$this->ci06_objetos' 
                                ,'$this->ci06_criterio' 
@@ -215,25 +201,12 @@ class cl_matrizachadosaudit {
          return false;
        }
      }
-     if (trim($this->ci06_codproc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_codproc"])) { 
-       $sql  .= $virgula." ci06_codproc = $this->ci06_codproc ";
+     if (trim($this->ci06_codlan)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_codlan"])) { 
+       $sql  .= $virgula." ci06_codlan = $this->ci06_codlan ";
        $virgula = ",";
-       if (trim($this->ci06_codproc) == null ) { 
-         $this->erro_sql = " Campo Código do Processo de Auditoria não informado.";
-         $this->erro_campo = "ci06_codproc";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->ci06_codquestao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci06_codquestao"])) { 
-       $sql  .= $virgula." ci06_codquestao = $this->ci06_codquestao ";
-       $virgula = ",";
-       if (trim($this->ci06_codquestao) == null ) { 
-         $this->erro_sql = " Campo Código da Questão não informado.";
-         $this->erro_campo = "ci06_codquestao";
+       if (trim($this->ci06_codlan) == null ) { 
+         $this->erro_sql = " Campo Código do Lançamento de Verificação não informado.";
+         $this->erro_campo = "ci06_codlan";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -402,6 +375,7 @@ class cl_matrizachadosaudit {
        $sql .= $campos;
      }
      $sql .= " from matrizachadosaudit ";
+     $sql .= "    inner join lancamverifaudit on ci05_codlan = ci06_codlan ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $ci06_seq != "" && $ci06_seq != null) {

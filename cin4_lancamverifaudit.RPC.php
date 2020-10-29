@@ -34,9 +34,11 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_tipoquestaoaudit_classe.php");
 require_once("classes/db_questaoaudit_classe.php");
 require_once("classes/db_lancamverifaudit_classe.php");
+require_once("classes/db_matrizachadosaudit_classe.php");
 
 $cltipoquestaoaudit = new cl_tipoquestaoaudit;
 $clquestaoaudit     = new cl_questaoaudit;
+$clmatrizachadosaudit = new cl_matrizachadosaudit;
 
 include("libs/JSON.php");
 
@@ -208,6 +210,29 @@ try {
 
                 }
 
+                if ($oParam->bExcluiMatriz) {
+                    
+                    $aCodLanExcluir = explode(",", $oParam->sCodLanExcluir);
+
+                    foreach ($aCodLanExcluir as $iCodLan) {
+
+                        $sSqlExcluiMatriz = $clmatrizachadosaudit->sql_query(null, "*", null, "ci06_codlan = {$iCodLan}");
+                        $clmatrizachadosaudit->sql_record($sSqlExcluiMatriz);
+                        
+                        if ($clmatrizachadosaudit->numrows > 0) {
+                            
+                            $clmatrizachadosaudit->excluir(null, "ci06_codlan = {$iCodLan}");
+
+                            if ($clmatrizachadosaudit->erro_status == "0") {
+                                throw new Exception("Erro ao excluir matriz de achados. \n".$clmatrizachadosaudit->erro_msg, null);
+                            }
+
+                        }                        
+
+                    }
+
+                }
+
             }
             
             $oRetorno->iFiltroQuestoes = $oParam->iFiltroQuestoes;
@@ -219,16 +244,28 @@ try {
 
             db_inicio_transacao();
 
-            foreach ($oParam->aItens as $oItem) {
+            $aItens = explode(",", $oParam->sItens);
+
+            foreach ($aItens as $iItem) {
 
                 $cllancamverifaudit = new cl_lancamverifaudit;
                     
-                $sSql = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codlan = {$oItem->iCodLan}");
+                $sSql = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codlan = {$iItem}");
                 $cllancamverifaudit->sql_record($sSql);
 
                 if ($cllancamverifaudit->numrows > 0) {
                     
-                    $cllancamverifaudit->excluir($oItem->iCodLan);
+                    if ($oParam->bExcluiMatriz) {
+                        
+                        $clmatrizachadosaudit->excluir(null, "ci06_codlan = {$iItem}");
+
+                        if ($clmatrizachadosaudit->erro_status == "0") {
+                            throw new Exception("Erro ao excluir matriz de achados. \n".$clmatrizachadosaudit->erro_msg, null);
+                        }
+
+                    }
+
+                    $cllancamverifaudit->excluir($iItem);
 
                     if ($cllancamverifaudit->erro_status == "0") {
                         throw new Exception("Erro ao limpar lançamentos. \n".$cllancamverifaudit->erro_sql, null);
@@ -240,6 +277,25 @@ try {
                 $oRetorno->sMensagem = "Lançamentos excluídos com sucesso!"; 
 
             }
+
+        break;
+
+        case "verificaQuestaoMatriz":
+
+            $sCodsLan = implode(",", $oParam->aItens);
+
+            $sWhere = " ci05_codlan in ({$sCodsLan}) AND ci06_seq IS NOT NULL";
+
+            $sSql = $clquestaoaudit->sql_questao_matriz(null, "*", "ci02_numquestao", $sWhere);
+            $clquestaoaudit->sql_record($sSql);
+            
+            if ($clquestaoaudit->numrows > 0) {
+                $oRetorno->bExisteMatriz = true;
+            } else {
+                $oRetorno->bExisteMatriz = false;
+            }
+
+            $oRetorno->sCodsLan = $sCodsLan;
 
         break;
 

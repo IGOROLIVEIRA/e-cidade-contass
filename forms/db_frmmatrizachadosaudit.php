@@ -25,8 +25,8 @@ $clrotulo->label('ci05_achados');
             <tr>
                 <td>&nbsp;</td>
             </tr>
-            <input name="ci06_codproc" value="<?= $ci06_codproc ?>" type="hidden" >
-            <input name="ci06_codquestao" id="ci06_codquestao" value="<?= $ci06_codquestao ?>" type="hidden">
+            <input name="ci03_codproc" value="<?= $ci03_codproc ?>" type="hidden" >
+            <input name="ci06_codlan" id="ci06_codlan" value="<?= $ci06_codlan ?>" type="hidden" >
             <tr>
                 <td align="left" nowrap title="<?=@$Tci06_seq?>">
                     <?=@$Lci06_seq?>
@@ -153,7 +153,7 @@ $clrotulo->label('ci05_achados');
             var oParametro        = new Object();
             oParametro.exec       = 'buscaQuestoes';
             oParametro.iNumQuest  = iNumQuestao;
-            oParametro.iCodProc   = document.form1.ci06_codproc.value;
+            oParametro.iCodProc   = document.form1.ci03_codproc.value;
 
             new Ajax.Request(sRPC,
                             {
@@ -174,8 +174,8 @@ $clrotulo->label('ci05_achados');
         var oRetorno = eval("("+oAjax.responseText+")");
 
         if (oRetorno.status == 1) {    
-            
-            document.getElementById("ci06_codquestao").setAttribute('value', oRetorno.questaoMatriz.ci02_codquestao);
+
+            document.getElementById("ci06_codlan").setAttribute('value', oRetorno.questaoMatriz.ci05_codlan);
 
             document.form1.ci06_seq.value           = oRetorno.questaoMatriz.ci06_seq;
             document.form1.ci06_numquestao.value    = oRetorno.questaoMatriz.ci02_numquestao;

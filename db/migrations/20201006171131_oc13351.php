@@ -416,8 +416,7 @@ class Oc13351 extends PostgresMigration
 
         -- INSERE db_syscampo
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_seq','int4','Sequencial','','Sequencial',11,false,false,false,0,'int4','Sequencial');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codproc','int4','Código do Processo de Auditoria','','Código do Processo de Auditoria',11,false,false,false,1,'text','Código do Processo de Auditoria');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codquestao','int4','Código da Questão','','Código da Questão',11,false,false,false,1,'text','Código da Questão');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codlan','int4','Código do Lançamento de Verificação','','Código do Lançamento de Verificação',11,false,false,false,1,'text','Código do Lançamento de Verificação');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,false,false,false,0,'text','Situação Encontrada');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,true,false,false,0,'text','Objetos');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,true,false,false,0,'text','Critério');
@@ -429,16 +428,15 @@ class Oc13351 extends PostgresMigration
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_seq'),              1, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_codproc'), 	        2, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_codquestao'), 	    3, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_situencont'),       4, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_objetos'),      	5, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_criterio'),         6, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_evidencia'),        7, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_causa'),            8, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_efeito'),           9, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_recomendacoes'),    10, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_instit'),           11, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_codlan'), 	        2, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_situencont'),       3, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_objetos'),      	4, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_criterio'),         5, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_evidencia'),        6, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_causa'),            7, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_efeito'),           8, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_recomendacoes'),    9, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci06_instit'),           10, 0);
 
         --DROP TABLE:
         DROP TABLE IF EXISTS matrizachadosaudit CASCADE;
@@ -449,8 +447,7 @@ class Oc13351 extends PostgresMigration
         -- Módulo: Controle Interno
         CREATE TABLE matrizachadosaudit(
         ci06_seq             	int4 not null default 0,
-        ci06_codproc            int4 not null,
-        ci06_codquestao         int4 not null,
+        ci06_codlan             int4 not null,
         ci06_situencont         varchar(500) not null,
         ci06_objetos            varchar(500),
         ci06_criterio           varchar(500),
@@ -471,9 +468,7 @@ class Oc13351 extends PostgresMigration
         -- CHAVE ESTRANGEIRA
         ALTER TABLE matrizachadosaudit ADD PRIMARY KEY (ci06_seq);
 
-        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codproc_fk FOREIGN KEY (ci06_codproc) REFERENCES processoaudit (ci03_codproc);
-
-        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codquestao_fk FOREIGN KEY (ci06_codquestao) REFERENCES questaoaudit (ci02_codquestao);   
+        ALTER TABLE matrizachadosaudit ADD CONSTRAINT matrizachadosaudit_codlan_fk FOREIGN KEY (ci06_codlan) REFERENCES lancamverifaudit (ci05_codlan);
 
         --CRIA MENU PARA RELATÓRIO DE MATRIZ DE ACHADOS
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Matriz de Achados', 'Matriz de Achados', 'cin2_relmatrizachadosaudit001.php', 1, 1, 'Matriz de Achados', 't'); 

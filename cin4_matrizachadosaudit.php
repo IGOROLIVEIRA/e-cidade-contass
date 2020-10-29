@@ -133,7 +133,7 @@ function js_processa() {
         return;
     }
 
-    sParams = '?ci06_codproc='+document.form1.ci03_codproc.value;
+    sParams = '?ci03_codproc='+document.form1.ci03_codproc.value;
 
     document.location.href = sUrl + sParams;
 
