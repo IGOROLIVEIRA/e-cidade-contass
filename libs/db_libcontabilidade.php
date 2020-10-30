@@ -5948,7 +5948,7 @@ class cl_estrutura_sistema {
                       INNER JOIN empempenho ON o58_coddot = e60_coddot AND o58_anousu = e60_anousu
                       INNER JOIN pagordem ON e50_numemp = e60_numemp
                       WHERE o58_elemento LIKE '{$sElemento}'
-                          AND o58_instit = 1 
+                          AND o58_instit = {$instit}
                           AND (e60_datasentenca < '{$dtIni}' OR e50_compdesp < '{$dtIni}')) AS x) as xx GROUP BY 1, 2";
         
         return db_utils::getColectionByRecord(db_query($sql));
