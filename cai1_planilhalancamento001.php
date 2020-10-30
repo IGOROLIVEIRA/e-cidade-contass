@@ -1710,8 +1710,11 @@ function js_verificaEmendaParlamentar() {
     var naoSeAplica = ( ($('estrutural').value.substr(0, 9) == '417189911' && $('recurso').value == '161') 
                     || ($('estrutural').value.substr(0, 9) == '417289911' && $('recurso').value == '106') 
                     || ($('estrutural').value.substr(0, 9) == '417181021' && $('recurso').value == '122')
-                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') );
+                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') 
+                    || ($('estrutural').value.substr(0, 9) == '417180911')
+                    || ($('estrutural').value.substr(0, 9) == '417580111') );
 
+  
     if (naoSeAplica) {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
     } else if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {
