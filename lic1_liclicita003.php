@@ -88,10 +88,15 @@ if(isset($excluir)){
 	$erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
 	if(!$sqlerro) {
-	    $sqlAnexos = $cleditaldocumentos->sql_query('','l48_arquivo', '', 'l48_liclicita = '.$l20_codigo);
+	    $sqlAnexos = $cleditaldocumentos->sql_query('','l48_caminho', '', 'l48_liclicita = '.$l20_codigo);
 	    $rsAnexos = $cleditaldocumentos->sql_record($sqlAnexos);
 
 	    if($cleditaldocumentos->numrows){
+            $aCaminho = explode('/', db_utils::fieldsMemory($rsAnexos, 0)->l48_caminho);
+            array_pop($aCaminho);
+            $caminhoPasta = join('/', $aCaminho).'/';
+            system('rm '.$caminhoPasta.' -R ');
+
             $cleditaldocumentos->excluir('', 'l48_liclicita = ' . $l20_codigo);
             if ($cleditaldocumentos->erro_status == 0) {
                 $sqlerro = true;
