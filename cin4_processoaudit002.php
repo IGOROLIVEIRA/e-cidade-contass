@@ -7,6 +7,7 @@ include("classes/db_processoaudit_classe.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 include("classes/db_processoauditdepart_classe.php");
+include("classes/db_protprocesso_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprocessoaudit = new cl_processoaudit;
@@ -17,10 +18,18 @@ if(isset($alterar)){
 
     db_inicio_transacao();
     $db_opcao = 2;
+	
+    if (isset($ci03_protprocesso_cod) && !empty($ci03_protprocesso_cod)) {
+		
+		$clprocessoaudit->ci03_protprocesso = $ci03_protprocesso_cod;
+		unset($ci03_protprocesso_cod);
+
+	} 
+
     $clprocessoaudit->alterar($ci03_codproc);
 
     if($clprocessoaudit->erro_status==0){
-		  $sqlerro=true;
+		$sqlerro=true;
     }
     db_fim_transacao($sqlerro);
 
@@ -58,8 +67,13 @@ if(isset($alterar)){
 } else if (isset($chavepesquisa)) {
     
     $db_opcao = 2;
-    $result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($chavepesquisa)); 
-    db_fieldsmemory($result,0);
+	$result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($chavepesquisa)); 
+	db_fieldsmemory($result,0);
+	
+	if (isset($ci03_protprocesso) && !empty($ci03_protprocesso)) {
+		$ci03_protprocesso = $p58_numero . '/' . $p58_ano;
+	}
+	
     $db_botao = true;   
 
 }

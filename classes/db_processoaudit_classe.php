@@ -30,6 +30,7 @@ class cl_processoaudit {
   public $ci03_datafim_ano = null; 
   public $ci03_datafim = null; 
   public $ci03_codtipoquest = 0; 
+  public $ci03_protprocesso = 0;
   public $ci03_instit = 0; 
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
@@ -41,6 +42,7 @@ class cl_processoaudit {
                  ci03_dataini = date = Data Inicial 
                  ci03_datafim = date = Data Final 
                  ci03_codtipoquest = int4 = Tipo de Auditoria 
+                 ci03_protprocesso = int4 = Protocolo
                  ci03_instit = int4 = Instituição 
                  ";
 
@@ -86,6 +88,7 @@ class cl_processoaudit {
          }
        }
        $this->ci03_codtipoquest = ($this->ci03_codtipoquest == ""?@$GLOBALS["HTTP_POST_VARS"]["ci03_codtipoquest"]:$this->ci03_codtipoquest);
+       $this->ci03_protprocesso = ($this->ci03_protprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["ci03_protprocesso"]:$this->ci03_protprocesso);
        $this->ci03_instit = ($this->ci03_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["ci03_instit"]:$this->ci03_instit);
      } else {
      }
@@ -181,6 +184,9 @@ class cl_processoaudit {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->ci03_protprocesso == null ) { 
+      $this->ci03_protprocesso = 'NULL';
+     }
      $sql = "insert into processoaudit(
                                        ci03_codproc 
                                       ,ci03_numproc 
@@ -190,6 +196,7 @@ class cl_processoaudit {
                                       ,ci03_dataini 
                                       ,ci03_datafim 
                                       ,ci03_codtipoquest 
+                                      ,ci03_protprocesso
                                       ,ci03_instit 
                        )
                 values (
@@ -201,9 +208,10 @@ class cl_processoaudit {
                                ,".($this->ci03_dataini == "null" || $this->ci03_dataini == ""?"null":"'".$this->ci03_dataini."'")." 
                                ,".($this->ci03_datafim == "null" || $this->ci03_datafim == ""?"null":"'".$this->ci03_datafim."'")." 
                                ,null 
+                               ,$this->ci03_protprocesso
                                ,$this->ci03_instit 
                       )";
-
+                  
      $result = db_query($sql); 
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -366,6 +374,13 @@ class cl_processoaudit {
        $sql  .= $virgula." ci03_codtipoquest = $this->ci03_codtipoquest ";
        $virgula = ",";
      }
+     if (trim($this->ci03_protprocesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci03_protprocesso"])) { 
+        if (trim($this->ci03_protprocesso)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ci03_protprocesso"])) { 
+          $this->ci03_protprocesso = 'NULL' ; 
+        } 
+      $sql  .= $virgula." ci03_protprocesso = $this->ci03_protprocesso ";
+      $virgula = ",";
+    }
      if (trim($this->ci03_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ci03_instit"])) { 
        $sql  .= $virgula." ci03_instit = $this->ci03_instit ";
        $virgula = ",";
@@ -380,8 +395,8 @@ class cl_processoaudit {
        }
      }
      $sql .= " where ";
-     $sql .= "ci03_codproc = '$ci03_codproc'";     
-     
+     $sql .= "ci03_codproc = '$ci03_codproc'";    
+
      $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -491,6 +506,7 @@ class cl_processoaudit {
        $sql .= $campos;
      }
      $sql .= " from processoaudit ";
+     $sql .= "  left join protprocesso on p58_codproc = ci03_protprocesso ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $ci03_codproc != "" && $ci03_codproc != null) {

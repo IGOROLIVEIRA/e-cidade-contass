@@ -243,6 +243,7 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_objaudit','varchar(500)','Descrever qual é o foco da auditoria em questão','','Objetivo da Auditoria',500,false,false,false,0,'text','Objetivo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_dataini','date','Data Inicial','','Data Inicial',10,false,false,false,1,'text','Data Inicial');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_datafim','date','Data Final','','Data Final',10,false,false,false,1,'text','Data Final');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_protprocesso','int4','Protocolo','','Protocolo',10,true,false,false,0,'text','Protocolo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codtipoquest','int4','Tipo da Auditoria','','Tipo da Auditoria',11,true,false,false,1,'int4','Tipo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
 
@@ -254,8 +255,9 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_objaudit'),     5, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_dataini'),      6, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_datafim'),      7, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_codtipoquest'), 8, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_instit'),       9, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_protprocesso'), 8, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_codtipoquest'), 9, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci03_instit'),       10, 0);
 
         --DROP TABLE:
         DROP TABLE IF EXISTS processoaudit CASCADE;
@@ -272,6 +274,7 @@ class Oc13351 extends PostgresMigration
         ci03_objaudit       varchar(500) not null,
         ci03_dataini        date not null,
         ci03_datafim        date not null,
+        ci03_protprocesso   int4 default null,
         ci03_codtipoquest   int4 default null,
         ci03_instit         int4 not null);
 
@@ -287,6 +290,8 @@ class Oc13351 extends PostgresMigration
         ALTER TABLE processoaudit ADD PRIMARY KEY (ci03_codproc);
 
         ALTER TABLE processoaudit ADD CONSTRAINT processoaudit_tipoquestao_fk FOREIGN KEY (ci03_codtipoquest) REFERENCES tipoquestaoaudit (ci01_codtipo);
+
+        ALTER TABLE processoaudit ADD CONSTRAINT processoaudit_protprocesso_fk FOREIGN KEY (ci03_protprocesso) REFERENCES protprocesso (p58_codproc);
 
         DROP TABLE IF EXISTS processoauditdepart CASCADE;
 
@@ -345,7 +350,7 @@ class Oc13351 extends PostgresMigration
 
         -- INSERE db_sysarqcamp
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_codlan'),               1, 0);
-        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_codproc'), 	        2, 0);
+        INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_codproc'), 	            2, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_codquestao'), 	        3, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_inianalise'),           4, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((SELECT max(codarq) FROM db_sysarquivo), (SELECT codcam FROM db_syscampo WHERE nomecam = 'ci05_atendquestaudit'),      5, 0);

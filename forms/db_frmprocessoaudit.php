@@ -1,6 +1,10 @@
 <?
 //MODULO: Controle Interno
 $clprocessoaudit->rotulo->label();
+
+$rotulo = new rotulocampo();
+$rotulo->label("p58_requer");
+
 ?>
 <form name="form1" method="post" action="" onsubmit='js_submit()'>
     <center>
@@ -10,7 +14,7 @@ $clprocessoaudit->rotulo->label();
             </legend>
             <table border="0">
                 <tr>
-                    <td nowrap title="<?=@$Tci03_codproc?>">
+                    <td nowrap title="<?=@$Tci03_codproc?>" align="right">
                         <input name="ci03_codproc" type="hidden" value="<?=@$ci03_codproc?>">
                         <?=@$Lci03_codproc?>
                     </td>
@@ -19,7 +23,7 @@ $clprocessoaudit->rotulo->label();
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?=@$Tci03_numproc?>">
+                    <td nowrap title="<?=@$Tci03_numproc?>" align="right">
                         <?=@$Lci03_numproc?>
                     </td>
                     <td> 
@@ -33,7 +37,7 @@ $clprocessoaudit->rotulo->label();
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?=@$Tci03_anoproc?>">
+                    <td nowrap title="<?=@$Tci03_anoproc?>" align="right">
                         <?=@$Lci03_anoproc?>
                     </td>
                     <td> 
@@ -47,7 +51,7 @@ $clprocessoaudit->rotulo->label();
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?=@$Tci03_grupoaudit?>">
+                    <td nowrap title="<?=@$Tci03_grupoaudit?>" align="right">
                         <?=@$Lci03_grupoaudit?>
                     </td>
                     <td colspan="3"> 
@@ -63,11 +67,25 @@ $clprocessoaudit->rotulo->label();
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?=@$Tci03_objaudit?>">
+                    <td nowrap title="<?=@$Tci03_objaudit?>" align="right">
                     <?=@$Lci03_objaudit?>
                     </td>
                     <td colspan="3"> 
                         <? db_textarea('ci03_objaudit',5,60,$Ici03_objaudit,true,'text',$db_opcao,"","","",500) ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Tci03_protprocesso?>" align="right">
+                    <?
+                        db_ancora(@$Lci03_protprocesso,"js_pesquisap58_codprotprocesso(true);",$db_opcao);
+                    ?>
+                    </td>
+                    <td colspan="4"> 
+                            <?php
+                            db_input('ci03_protprocesso',10,$Ici03_protprocesso,true,'text',$db_opcao," onchange='js_pesquisap58_codprotprocesso(false);'");
+                            db_input('p58_requer',40,$Ip58_requer,true,'text',3,'');
+                            ?>
+                            <input type="hidden" name="ci03_protprocesso_cod" id="ci03_protprocesso_cod" value="<?= $ci03_protprocesso ?>">
                     </td>
                 </tr>
                 <tr>
@@ -209,10 +227,119 @@ function js_completaGetDepartamentos(oAjax) {
 
 }
 
+function js_pesquisap58_codprotprocesso(mostra) {
+
+    if(mostra) {
+        js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_protprocesso_protocolo.php?funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social|p58_codproc', 'Pesquisa de Processos', true);
+    } else {
+
+        /**
+        * Valida formatacao do campo numero processo 
+        */
+        if ( !empty($('ci03_protprocesso').value) && !js_validarNumero($('ci03_protprocesso').value) ) {
+
+            var sMensagemErro  = "Formatação do campo inválida\n";
+                sMensagemErro += "Informe número do processo / ano"; 
+
+            alert(sMensagemErro);
+            $('ci03_protprocesso').value = '';
+            return false;
+
+        } 
+
+        js_OpenJanelaIframe('','db_iframe_cgm', 'func_protprocesso_protocolo.php?bCodproc=true&pesquisa_chave='+$F('ci03_protprocesso')+'&funcao_js=parent.js_mostraprotprocesso', 'Pesquisa', false);
+    }
+}
+
+function js_mostraprotprocesso(chave, chave1, chave2, erro) {
+    
+    if (chave != '' && chave1 != '' && chave2 != '') {
+     
+        document.form1.p58_requer.value = chave1; 
+        document.form1.ci03_protprocesso.value = chave;
+        document.getElementById('ci03_protprocesso_cod').setAttribute('value', chave2);
+
+    } else {
+
+        document.form1.p58_requer.value = ''; 
+        document.getElementById('ci03_protprocesso_cod').setAttribute('value', '');
+        
+    }
+
+    if (erro) { 
+    
+        document.form1.ci03_protprocesso.focus(); 
+        document.form1.ci03_protprocesso.value = ''; 
+
+    }
+}
+
+function js_mostraprotprocesso1(sNumero, sNome, iNumProt) {
+
+    document.getElementById('ci03_protprocesso').value  = sNumero;
+    document.getElementById('p58_requer').value         = sNome;
+    document.getElementById('ci03_protprocesso_cod').setAttribute('value', iNumProt);
+
+    db_iframe_cgm.hide();
+
+}
+
+/**
+ * Valida formatacao do campo numero do processo
+ * - aceita somente numeros e o caracter /
+ *
+ * @param string $sNumero
+ * @access public
+ * @return bool
+ */
+function js_validarNumero(sNumero) {
+
+    var lCaracteresValidos = new RegExp(/^[0-9\/]+$/).test(sNumero);
+    var iPosicaoBarra      = sNumero.indexOf('/');
+    var iQuantidadeBarras  = iPosicaoBarra > 0 ? sNumero.match(/\//g).length : 0;
+
+    /**
+    * Contem caracter difernete de 0-9 e / 
+    */
+    if ( !lCaracteresValidos ) {
+        return false;
+    }
+
+    /**
+    * Informou primeiro caracter / 
+    */
+    if ( iPosicaoBarra == 0 ) {
+        return false;
+    }
+
+    /**
+    * Informou mais de uma barra
+    */
+    if ( iQuantidadeBarras > 1 ) {
+        return false;
+    }
+
+    /**
+    * Não informou nenhum numero apos a barra
+    */
+    if ( iPosicaoBarra > 0 && empty(sNumero.split('/')[1]) ) {
+        return false;
+    }
+
+    return true;
+    
+}
+
 </script>
 
 <? if ($db_opcao != 1 || isset($ci03_codproc)) { ?>
    <script>
         js_pesquisaDepts(<?= $ci03_codproc ?>);
+   </script>
+<? } ?>
+
+<? if ($db_opcao != 1 || isset($ci03_protprocesso)) { ?>
+   <script>
+        js_pesquisap58_codprotprocesso(false);
    </script>
 <? } ?>

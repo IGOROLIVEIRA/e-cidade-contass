@@ -44,7 +44,12 @@ if (isset($excluir)) {
 	
 	$db_opcao = 3;
    	$result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($chavepesquisa)); 
-   	db_fieldsmemory($result,0);
+	db_fieldsmemory($result,0);
+	
+	if (isset($ci03_protprocesso) && !empty($ci03_protprocesso)) {
+		$ci03_protprocesso = $p58_numero . '/' . $p58_ano;
+	}
+
 	$db_botao = true;
 	   
 }

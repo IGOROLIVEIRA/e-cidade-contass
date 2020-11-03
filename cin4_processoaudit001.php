@@ -15,7 +15,15 @@ $sqlerro = false;
 if(isset($incluir)){
 
 	db_inicio_transacao();
-	$clprocessoaudit->ci03_instit = db_getsession('DB_instit');
+  $clprocessoaudit->ci03_instit = db_getsession('DB_instit');
+  
+  if (isset($ci03_protprocesso_cod) && !empty($ci03_protprocesso_cod)) {
+		
+		$clprocessoaudit->ci03_protprocesso = $ci03_protprocesso_cod;
+		unset($ci03_protprocesso_cod);
+
+  } 
+  
 	$clprocessoaudit->incluir($ci03_codproc);
 
 	if($clprocessoaudit->erro_status==0){
