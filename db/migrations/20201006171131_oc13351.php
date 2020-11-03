@@ -484,6 +484,49 @@ class Oc13351 extends PostgresMigration
             2, 
             (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
         );	     
+
+        --CRIA ITEM DE MENU PARA CONSULTA
+        UPDATE db_menu SET menusequencia = menusequencia+1 WHERE menusequencia > 1 AND id_item = 
+            (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno') AND NOT EXISTS
+                (SELECT 1 FROM db_menu 
+                        inner join db_itensmenu on db_menu.id_item_filho = db_itensmenu.id_item
+                    WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno')
+                        AND descricao = 'Consultas');
+
+        INSERT INTO db_itensmenu (id_item, descricao, help, funcao, itemativo, manutencao, desctec, libcliente) 
+            SELECT (SELECT max(id_item)+1 FROM db_itensmenu),'Consultas','Consultas','',1,1,'Consultas do módulo controle interno','t'
+        WHERE NOT EXISTS 
+            (SELECT 1 FROM db_menu 
+                    INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item
+                WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno')
+                    AND descricao = 'Consultas');
+
+        INSERT INTO db_menu (id_item, id_item_filho, menusequencia, modulo) 
+            SELECT  (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno'), 
+                    (SELECT max(id_item) FROM db_itensmenu), 
+                    (SELECT CASE
+                        WHEN (SELECT count(*) FROM db_menu WHERE id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno')) = 0 THEN 1 
+                        ELSE 2
+                    END), 
+                    (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+            WHERE NOT EXISTS ( 
+                (SELECT 1 FROM db_menu 
+                    INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item
+                WHERE db_menu.id_item = (SELECT id_item FROM db_itensmenu WHERE descricao = 'Controle Interno')
+                    AND descricao = 'Consultas')
+            );	
+
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu), 'Processo de Auditoria', 'Processo de Auditoria', 'cin3_procaudit001.php', 1, 1, 'Processo de Auditoria', 't');
+
+        INSERT INTO db_menu VALUES (
+            (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Consultas'), 
+            (SELECT max(id_item) FROM db_itensmenu), 
+            (SELECT CASE
+                WHEN (SELECT count(*) FROM db_menu WHERE db_menu.id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Consultas')) = 0 THEN 1 
+                ELSE (SELECT max(menusequencia)+1 as count FROM db_menu WHERE id_item = (SELECT db_menu.id_item_filho FROM db_menu INNER JOIN db_itensmenu ON db_menu.id_item_filho = db_itensmenu.id_item WHERE modulo = (SELECT db_modulos.id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno') AND descricao = 'Consultas')) 
+            END), 
+            (SELECT id_item FROM db_modulos WHERE nome_modulo = 'Controle Interno')
+        );
                         
         COMMIT;
 

@@ -230,7 +230,7 @@ function js_completaGetDepartamentos(oAjax) {
 function js_pesquisap58_codprotprocesso(mostra) {
 
     if(mostra) {
-        js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_protprocesso_protocolo.php?funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social|p58_codproc', 'Pesquisa de Processos', true);
+        js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_protprocesso_protocolo.php?funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social|p58_codproc', 'Pesquisa de Processos', true,0);
     } else {
 
         /**
