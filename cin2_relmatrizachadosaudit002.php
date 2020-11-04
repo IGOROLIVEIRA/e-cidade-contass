@@ -169,15 +169,15 @@ ob_start();
               	<thead>
 					<tr>
 						<th class="s0" style="width:10px">Nº QUESTÃO</th>
-                        <th class="s0" style="width:115px">QUESTÃO DE AUDITORIA</th>
-                        <th class="s0" style="width:115px">ACHADOS</th>
-                        <th class="s0" style="width:115px">SITUAÇÃO ENCONTRADA</th>
-                        <th class="s0" style="width:115px">OBJETOS</th>
-                        <th class="s0" style="width:115px">CRITÉRIO</th>
-                        <th class="s0" style="width:115px">EVIDÊNCIA</th>
-                        <th class="s0" style="width:115px">CAUSA</th>
-                        <th class="s0" style="width:115px">EFEITO</th>
-                        <th class="s0" style="width:115px">ENCAMINHAMENTO</th>
+            <th class="s0" style="width:115px">QUESTÃO DE AUDITORIA</th>
+            <th class="s0" style="width:115px">ACHADOS</th>
+            <th class="s0" style="width:115px">SITUAÇÃO ENCONTRADA</th>
+            <th class="s0" style="width:115px">OBJETOS</th>
+            <th class="s0" style="width:115px">CRITÉRIO</th>
+            <th class="s0" style="width:115px">EVIDÊNCIA</th>
+            <th class="s0" style="width:115px">CAUSA</th>
+            <th class="s0" style="width:115px">EFEITO</th>
+            <th class="s0" style="width:115px">ENCAMINHAMENTO</th>
 					</tr>
 				</thead>
 

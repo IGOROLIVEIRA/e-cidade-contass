@@ -82,15 +82,15 @@ $clprocessoaudit->rotulo->label("ci03_objaudit");
 		}
 		
 		if(isset($chave_ci03_codproc) && (trim($chave_ci03_codproc)!="") ){
-			$sql = $clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_codproc = {$chave_ci03_codproc} AND ci03_instit = ".db_getsession('DB_instit'));
+			$sql = $clprocessoaudit->sql_query_file(null, $campos, "ci03_codproc", "ci03_codproc = {$chave_ci03_codproc} AND ci03_instit = ".db_getsession('DB_instit'));
 		} elseif(isset($chave_ci03_numproc) && (trim($chave_ci03_numproc)!="") ){
-			$sql = $clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_numproc = {$chave_ci03_numproc} AND ci03_instit = ".db_getsession('DB_instit'));
+			$sql = $clprocessoaudit->sql_query_file(null, $campos, "ci03_codproc", "ci03_numproc = {$chave_ci03_numproc} AND ci03_instit = ".db_getsession('DB_instit'));
 		} elseif(isset($chave_ci03_anoproc) && (trim($chave_ci03_anoproc)!="") ){
-			$sql = $clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_anoproc = {$chave_ci03_anoproc} AND ci03_instit = ".db_getsession('DB_instit'));
+			$sql = $clprocessoaudit->sql_query_file(null, $campos, "ci03_codproc", "ci03_anoproc = {$chave_ci03_anoproc} AND ci03_instit = ".db_getsession('DB_instit'));
 		} elseif(isset($chave_ci03_objaudit) && (trim($chave_ci03_objaudit)!="") ){
-			$sql = $clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_objaudit like '{$chave_ci03_objaudit}%' AND ci03_instit = ".db_getsession('DB_instit'));
+			$sql = $clprocessoaudit->sql_query_file(null, $campos, "ci03_codproc", "ci03_objaudit like '{$chave_ci03_objaudit}%' AND ci03_instit = ".db_getsession('DB_instit'));
 		} else {
-			$sql = $clprocessoaudit->sql_query(null, $campos, "ci03_codproc", "ci03_instit = ".db_getsession('DB_instit'));
+			$sql = $clprocessoaudit->sql_query_file(null, $campos, "ci03_codproc", "ci03_instit = ".db_getsession('DB_instit'));
 		}
 
 		$repassa = array();
@@ -99,7 +99,7 @@ $clprocessoaudit->rotulo->label("ci03_objaudit");
         echo '</div>';
       	}else{
         	if($pesquisa_chave!=null && $pesquisa_chave!=""){
-			  $result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query(null, "*", "ci03_codproc", "ci03_codproc = {$pesquisa_chave} AND ci03_instit = ".db_getsession('DB_instit')));
+			  $result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query_file(null, "*", "ci03_codproc", "ci03_codproc = {$pesquisa_chave} AND ci03_instit = ".db_getsession('DB_instit')));
           	if($clprocessoaudit->numrows!=0){
 				db_fieldsmemory($result,0);
 				if (isset($objetivo) && $objetivo == true) {

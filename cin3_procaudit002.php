@@ -38,6 +38,8 @@ require_once("dbforms/verticalTab.widget.php");
 $clprocessoaudit = new cl_processoaudit;
 $clprocessoaudit->rotulo->label();
 
+$oGet = db_utils::postMemory($_GET);
+
 $sSqlProcAudit  = $clprocessoaudit->sql_query($ci03_codproc);
 $rsProcAudit    = $clprocessoaudit->sql_record($sSqlProcAudit);
 
@@ -73,7 +75,6 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/tab.style.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-
     .dado {
         background-color: #FFF;
         text-align: left;
@@ -91,14 +92,6 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                 <td nowrap="nowrap" class="dado" style="width: 500px;">
                     <?= $ci03_codproc ?>
                 </td>
-            </tr>
-            <tr>
-                <td title="<?= $Tci03_numproc ?>">
-                    <?= $Lci03_numproc ?>
-                </td>
-                <td nowrap="nowrap" class="dado">
-                    <?= $ci03_numproc ?>
-                </td>
                 <td nowrap title="<?=@$Tci03_dataini?>" align="left" style="width: 30px;">
                     <?=@$Lci03_dataini?>
                 </td>
@@ -107,11 +100,11 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tci03_anoproc?>">
-                    <?=@$Lci03_anoproc?>
+                <td title="<?= $Tci03_numproc ?>">
+                    <?= $Lci03_numproc ?>
                 </td>
-                <td class="dado"> 
-                    <?= $ci03_anoproc ?>
+                <td nowrap="nowrap" class="dado">
+                    <?= $ci03_numproc ?>
                 </td>
                 <td nowrap title="<?=@$Tci03_datafim?>" align="left">
                     <?=@$Lci03_datafim?>
@@ -121,18 +114,20 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                 </td>
             </tr>
             <tr>
+                <td nowrap title="<?=@$Tci03_anoproc?>">
+                    <?=@$Lci03_anoproc?>
+                </td>
+                <td colspan="3" class="dado"> 
+                    <?= $ci03_anoproc ?>
+                </td>                
+            </tr>
+            <tr>
                 <td nowrap title="<?=@$Tci03_grupoaudit?>">
                     <?=@$Lci03_grupoaudit?>
                 </td>
                 <td colspan="3" class="dado"> 
-                    <?
-                    $aGrupo = array(
-                        1 => "Auditoria de Regularidade",
-                        2 => "Auditoria Operacional",
-                        3 => "Demanda Extraordinária"
-                    );
-                    echo $aGrupo[$ci03_grupoaudit];
-                    ?>
+                    <? $aGrupo = array( 1 => "Auditoria de Regularidade", 2 => "Auditoria Operacional", 3 => "Demanda Extraordinária" ); ?>
+                    <?= $aGrupo[$ci03_grupoaudit]; ?>
                 </td>
             </tr>
             <tr>
@@ -144,14 +139,6 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tci03_protprocesso?>">
-                    <?=@$Lci03_protprocesso?>
-                </td>
-                <td colspan="3" class="dado"> 
-                    <?= $ci03_protprocesso != '' ? $p58_numero.'/'.$p58_ano : '' ?>
-                </td>
-            </tr>
-            <tr>
                 <td nowrap title="Setor(es)">
                     <b>Setor(es):</b>
                 </td>
@@ -159,6 +146,30 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                     <?= $sDeptos ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?=@$Tci03_protprocesso?>">
+                    <?=@$Lci03_protprocesso?>
+                </td>
+                <td colspan="3" class="dado"> 
+                    <?= $ci03_protprocesso != '' ? $p58_numero.'/'.$p58_ano : '' ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
+
+<?php
+    /**
+     * Configuramos e exibimos as "abas verticais" (componente verticalTab)
+     */
+    
+    $oVerticalTab = new verticalTab('detalhesProcessoAuditoria', 350);
+    $sGetUrl      = "ci03_codproc={$oGet->ci03_codproc}";
+
+    $oVerticalTab->add('dadosQuestoesAuditoria', 'Questões', "cin3_procauditquest001.php?{$sGetUrl}");
+    $oVerticalTab->add('dadosProtocoloProcessoAuditoria', 'Protocolo', "cin3_procauditprot001.php?{$sGetUrl}");
+    $oVerticalTab->add('impressao', 'Imprimir Consulta', "cin3_procauditconsulta001.php?{$sGetUrl}");
+
+    $oVerticalTab->show();
+
+?>
 </body>

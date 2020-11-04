@@ -87,7 +87,7 @@ $clrotulo->label('ci03_objaudit');
 </table>
 <br>
 <center>
-    <input  name="processar" id="processar" type="button" value="Processar" onclick="js_processa();">
+    <input  name="consultar" id="consultar" type="button" value="Consultar" onclick="js_consulta();">
 </center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -123,7 +123,7 @@ function js_mostraProcessoAuditoria1(chave1, chave2) {
 
 }
 
-function js_processa() {
+function js_consulta() {
     
     var ci03_codproc = document.form1.ci03_codproc.value;
 
