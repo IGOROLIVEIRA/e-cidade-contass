@@ -374,6 +374,8 @@ class cl_rhlotavincele {
      $sql .= "      left  join orcsubfuncao   on  orcsubfuncao.o53_subfuncao = rhlotavincativ.rh39_subfuncao   ";
 	   $sql .= "      left  join orcprograma    on  orcprograma.o54_anousu     = rhlotavincativ.rh39_anousu      ";
 	   $sql .= "								               and  orcprograma.o54_programa   = rhlotavincativ.rh39_programa    ";
+     $sql .= "      left join orcorgao on (rhlotavincativ.rh39_anousu, rhlotavincativ.rh39_orgao) = (orcorgao.o40_anousu, orcorgao.o40_orgao)";
+     $sql .= "      left join orcunidade on (rhlotavincativ.rh39_unidade, rhlotavincativ.rh39_anousu, rhlotavincativ.rh39_orgao) = (orcunidade.o41_unidade,orcunidade.o41_anousu,orcunidade.o41_orgao)";
 
 		 /*
      $sql .= "      inner join orcdotacao on orcdotacao.o58_codele = orcelemento.o56_codele";
