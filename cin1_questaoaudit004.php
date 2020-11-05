@@ -5,6 +5,8 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_questaoaudit_classe.php");
 include("classes/db_processoaudit_classe.php");
+include("classes/db_lancamverifaudit_classe.php");
+include("classes/db_matrizachadosaudit_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clquestaoaudit = new cl_questaoaudit;
@@ -34,7 +36,7 @@ if (isset($incluir)) {
     	$clquestaoaudit->incluir($ci02_codquestao);
 		
 		if ($clquestaoaudit->erro_status == 0) {
-      		$sqlerro=true;
+      		$sqlerro = true;
 		}
 		
 		db_fim_transacao($sqlerro);
@@ -49,10 +51,9 @@ if (isset($incluir)) {
 	
 		db_inicio_transacao();
     	$clquestaoaudit->alterar($ci02_codquestao);
-    	$erro_msg = $clquestaoaudit->erro_msg;
 		
-		if($clquestaoaudit->erro_status==0){
-      		$sqlerro=true;
+		if ($clquestaoaudit->erro_status == 0){
+      		$sqlerro = true;
 		}
 		
 		db_fim_transacao($sqlerro);
@@ -64,8 +65,42 @@ if (isset($incluir)) {
 	if ($sqlerro==false) {
 		
 		db_inicio_transacao();
+
+		$cllancamverifaudit = new cl_lancamverifaudit;
+		$sSqlLancanVerif 	= $cllancamverifaudit->sql_query(null, "*", null, "ci05_codquestao = {$ci02_codquestao}");
+		$rsLancanVerif 		= $cllancamverifaudit->sql_record($sSqlLancanVerif);
+
+		if ($cllancamverifaudit->numrows > 0) {
+
+			$clmatrizachadosaudit = new cl_matrizachadosaudit;
+
+			for ($i = 0; $i < $cllancamverifaudit->numrows; $i++) {
+
+				$iCodLan = db_utils::fieldsMemory($rsLancanVerif, $i)->ci05_codlan;
+				
+				$clmatrizachadosaudit->excluir(null, "ci06_codlan = {$iCodLan}");
+
+				if ($clmatrizachadosaudit->erro_status == 0) {
+					$sqlerro = true;
+					$clquestaoaudit->erro_msg .= $clmatrizachadosaudit->erro_msg;
+				}
+
+				if (!$sqlerro) {
+
+					$cllancamverifaudit->excluir($iCodLan);
+					
+					if ($cllancamverifaudit->erro_status == 0) {
+						$sqlerro = true;
+						$clquestaoaudit->erro_msg .= $cllancamverifaudit->erro_msg;
+					}
+
+				}				
+				
+			}
+	
+		}
+
     	$clquestaoaudit->excluir($ci02_codquestao);
-    	$erro_msg = $clquestaoaudit->erro_msg;
 		
 		if ($clquestaoaudit->erro_status == 0) {
       		$sqlerro=true;

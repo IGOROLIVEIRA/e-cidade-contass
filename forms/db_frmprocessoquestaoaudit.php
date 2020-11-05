@@ -7,13 +7,23 @@ $cltipoquestaoaudit->rotulo->label("ci01_tipoaudit");
 if (isset($ci03_codtipoquest) && $ci03_codtipoquest != null) {
     $db_botao = true;
     $db_opcao = 2;
+
+    $cllancamverifaudit = new cl_lancamverifaudit;
+    $sSqlLancanVerif 	= $cllancamverifaudit->sql_query(null, "*", null, "ci05_codproc = {$ci03_codproc}");
+    $rsLancanVerif 		= $cllancamverifaudit->sql_record($sSqlLancanVerif);
+    
+    if ($cllancamverifaudit->numrows > 0) {
+        $iNumLancamentos = $cllancamverifaudit->numrows;
+    }
+
 } else {
     $db_opcao = 1;
     $db_botao =true;
 } 
 ?>
 
-<form name="form1" method="post" action="" >
+
+<form name="form1" method="post" action="" onsubmit="js_submit(<?= $iNumLancamentos ?>);" >
     <center>
         <fieldset class="fildset-principal">
             <legend>
@@ -92,6 +102,32 @@ if (isset($ci03_codtipoquest) && $ci03_codtipoquest != null) {
         document.form1.ci01_tipoaudit.value = chave2;
         db_iframe_tipoquestaoaudit.hide();
     
+    }
+
+    function js_submit(iNumLancamentos = 0) {
+
+        if (document.form1.ci01_codtipo.value == '') {
+            
+            alert("Informe o Tipo da Auditoria.");
+            document.form1.ci01_codtipo.focus();
+            event.preventDefault();
+
+        }
+        
+        if (iNumLancamentos > 0) {
+
+            var iOpcao 		= <?= $db_opcao ?>;
+            var sMensagem 	= '';
+            var sOpcao 		= iOpcao == 2 ? 'alterar' : 'excluir';
+
+            sMensagem += 'A questão que deseja alterar/excluir já está vinculada a '+iNumLancamentos+' lançamento(s) de verificação. Isso implicará na exclusão dos lançamentos. Tem certeza que deseja prosseguir?';
+
+            if ( !confirm(sMensagem) ) {
+                event.preventDefault();
+            }
+
+        }
+
     }
 </script>
 

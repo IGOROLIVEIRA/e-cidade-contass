@@ -6,6 +6,8 @@ include("libs/db_usuariosonline.php");
 include("classes/db_processoaudit_classe.php");
 include("classes/db_tipoquestaoaudit_classe.php");
 include("classes/db_questaoaudit_classe.php");
+include("classes/db_lancamverifaudit_classe.php");
+include("classes/db_matrizachadosaudit_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clprocessoaudit    = new cl_processoaudit;
@@ -33,9 +35,51 @@ if (isset($incluir) || isset($alterar)) {
     
     if ($sqlerro==false) {
     
-        db_inicio_transacao();
+		db_inicio_transacao();
+
+		$rsProcesso = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($ci03_codproc));
+		
+		$iCodQuestao = db_utils::fieldsMemory($rsProcesso, 0)->ci03_codtipoquest;
+
+		//exclui lançamentos de verificação e matriz existentes
+		if ($iCodQuestao != $ci01_codtipo) {
+			
+			$cllancamverifaudit = new cl_lancamverifaudit;
+			$sSqlLancanVerif 	= $cllancamverifaudit->sql_query(null, "*", null, "ci05_codproc = {$ci03_codproc}");
+			$rsLancanVerif 		= $cllancamverifaudit->sql_record($sSqlLancanVerif);
+			
+			if ($cllancamverifaudit->numrows > 0) {
+
+				$clmatrizachadosaudit = new cl_matrizachadosaudit;
+
+				for ($i = 0; $i < $cllancamverifaudit->numrows; $i++) {
+
+					$iCodLan = db_utils::fieldsMemory($rsLancanVerif, $i)->ci05_codlan;
+					
+					$clmatrizachadosaudit->excluir(null, "ci06_codlan = {$iCodLan}");
+	
+					if ($clmatrizachadosaudit->erro_status == 0) {
+						$sqlerro = true;
+						$clprocessoaudit->erro_msg .= $clmatrizachadosaudit->erro_msg;
+					}
+	
+					if (!$sqlerro) {
+	
+						$cllancamverifaudit->excluir($iCodLan);
+						
+						if ($cllancamverifaudit->erro_status == 0) {
+							$sqlerro = true;
+							$clprocessoaudit->erro_msg .= $cllancamverifaudit->erro_msg;
+						}
+	
+					}				
+					
+				}
+
+			}
+
+		}        
         
-        $clprocessoaudit->sql_record($clprocessoaudit->sql_query($ci03_codproc));
         $clprocessoaudit->ci03_codtipoquest = $ci01_codtipo;
         $clprocessoaudit->alterar($ci03_codproc);
         
@@ -52,7 +96,43 @@ if (isset($incluir) || isset($alterar)) {
 
 } else if(isset($excluir)){
     
-    db_inicio_transacao();
+	db_inicio_transacao();
+	
+	$cllancamverifaudit = new cl_lancamverifaudit;
+	
+	//exclui lançamentos de verificação e matriz existentes
+	$sSqlLancanVerif 	= $cllancamverifaudit->sql_query(null, "*", null, "ci05_codproc = {$ci03_codproc}");
+	$rsLancanVerif 		= $cllancamverifaudit->sql_record($sSqlLancanVerif);
+	
+	if ($cllancamverifaudit->numrows > 0) {
+
+		$clmatrizachadosaudit = new cl_matrizachadosaudit;
+
+		for ($i = 0; $i < $cllancamverifaudit->numrows; $i++) {
+
+			$iCodLan = db_utils::fieldsMemory($rsLancanVerif, $i)->ci05_codlan;
+			
+			$clmatrizachadosaudit->excluir(null, "ci06_codlan = {$iCodLan}");
+
+			if ($clmatrizachadosaudit->erro_status == 0) {
+				$sqlerro = true;
+				$clprocessoaudit->erro_msg .= $clmatrizachadosaudit->erro_msg;
+			}
+
+			if (!$sqlerro) {
+
+				$cllancamverifaudit->excluir($iCodLan);
+				
+				if ($cllancamverifaudit->erro_status == 0) {
+					$sqlerro = true;
+					$clprocessoaudit->erro_msg .= $cllancamverifaudit->erro_msg;
+				}
+
+			}				
+			
+		}
+
+	}
     
     $clprocessoaudit->sql_record($clprocessoaudit->sql_query($ci03_codproc));
     $clprocessoaudit->ci03_codtipoquest = 'null';

@@ -125,7 +125,7 @@ ob_start();
         <div class="ritz">                    
             <table class="waffle" cellspacing="0" cellpadding="0">
                 <tr>
-                    <th class="s0">Dados do Processo de Auditoria</th>
+                    <th class="s0">DADOS DO PROCESSO DE AUDITORIA</th>
                 </tr>
                 <tr>
                     <td class="s1"><?= @$Lci03_codproc ?> <?= $oProcesso->ci03_codproc ?> </td>
@@ -134,13 +134,13 @@ ob_start();
                     <td class="s1"><?= $Lci03_numproc ?> <?= $oProcesso->ci03_numproc ?> </td>
                 </tr>
                 <tr>
+                    <td class="s1"><?=@$Lci03_anoproc?> <?= $oProcesso->ci03_anoproc ?> </td>
+                </tr>
+                <tr>
                     <td class="s1"><?= @$Lci03_dataini ?> <?= db_formatar($oProcesso->ci03_dataini, 'd') ?> </td>
                 </tr>
                 <tr>
                     <td class="s1"><?=@$Lci03_datafim?> <?= db_formatar($oProcesso->ci03_datafim, 'd') ?> </td>
-                </tr>
-                <tr>
-                    <td class="s1"><?=@$Lci03_anoproc?> <?= $oProcesso->ci03_anoproc ?> </td>
                 </tr>
                 <tr>
                     <td class="s1">                            
@@ -176,7 +176,7 @@ ob_start();
                             <? if ($repeteProcLan != $ci03_codproc) { ?>
                                 
                                 <tr>
-                                    <th class="s0" colspan="10">Lançamentos de Verificação</th>
+                                    <th class="s0" colspan="10">LANÇAMENTOS DE VERIFICAÇÃO</th>
                                 </tr>
                                 <tr>
                                     <th class="s2" style="width:10px">Nº QUESTÃO</th>
@@ -229,7 +229,7 @@ ob_start();
                             <? if ($repeteProcMat != $ci03_codproc) { ?>
                                 
                                 <tr>
-                                    <th class="s0" colspan="10">Matriz de Achados</th>
+                                    <th class="s0" colspan="10">MATRIZ DE ACHADOS</th>
                                 </tr>
                                 <tr>
                                     <th class="s2" style="width:10px">Nº QUESTÃO</th>
