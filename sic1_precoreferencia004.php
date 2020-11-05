@@ -115,9 +115,20 @@ $sWhere .= " AND db03_instit = db02_instit ";
 $sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
 
 $cl_docparag = new cl_db_docparag;
+
 $sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
 $rs = $cl_docparag->sql_record($sAssinatura);
 $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+
+$sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
+//$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = ".db_getsession('DB_instit');
+
+$sSqlCotacao = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
+$sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
 //echo $sSql; db_criatabela($rsResult);exit;
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
@@ -196,10 +207,10 @@ ob_start();
         .linha-vertical {
             border-top: 2px solid;
             text-align: center;
-            margin-top: 100px;
+            margin-top: 80px;
             margin-left: 19%;
             width: 50%;
-
+            line-height: 1.3em;
         }
 
 
@@ -377,20 +388,59 @@ HTML;
 
 </table>
 </div>
-<div class="linha-vertical">
-    <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
-</div>
+    <?php
+
+    $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
+    $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
+
+    $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
+    $sCotacao = '';
+
+    if(count($dadosAssinatura) > 1){
+        $sCotacao = '<div class="linha-vertical">';
+        for($count=0; $count < count($dadosAssinatura); $count++){
+			$sCotacao .= "<strong>".strtoupper(str_replace($chars, $byChars, $dadosAssinatura[$count]))."</strong>";
+			$sCotacao .= $count ? '' : "<br/>";
+        }
+		$sCotacao .= "</div>";
+		echo <<<HTML
+            $sCotacao
+HTML;
+	}else{
+		echo <<<HTML
+                <div class="linha-vertical">
+                    <strong>{$dadosAssinatura}</strong>
+                </div>   
+HTML;
+    }
+
+    ?>
 
 
 <?php
 if($oLinha!=null || trim($oLinha)!=""){
+    $dadosLinha = explode('\n', $oLinha);
+    $stringHtml = '';
 
-    echo <<<HTML
-            <div class="linha-vertical">
-                <strong>{$oLinha}</strong>
-            </div>   
-
+    if(count($dadosLinha) > 1){
+		$stringHtml = '<div class="linha-vertical">';
+        for($count=0; $count < count($dadosLinha); $count++){
+            $stringHtml .= "<strong>".strtoupper(str_replace($chars, $byChars, $dadosLinha[$count]))."</strong>";
+            $stringHtml .= $count ? '' : "<br/>";
+        }
+    $stringHtml .= "</div>";
+        echo <<<HTML
+            $stringHtml
 HTML;
+    }else{
+        echo <<<HTML
+                <div class="linha-vertical">
+                    <strong>{$dadosLinha}</strong>
+                </div>   
+HTML;
+
+    }
+
 
 }
 ?>
