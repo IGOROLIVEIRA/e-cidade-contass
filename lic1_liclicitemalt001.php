@@ -32,17 +32,132 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liclicitem_classe.php");
+require_once("classes/db_liclicitemlote_classe.php");
+require_once("classes/db_pcproc_classe.php");
+require_once("classes/db_pcprocitem_classe.php");
+require_once("classes/db_pcorcamitemproc_classe.php");
+require_once("classes/db_itensregpreco_classe.php");
+require_once("classes/db_adesaoregprecos_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 $clliclicita  = new cl_liclicita;
 $clliclicitem = new cl_liclicitem;
+$clliclicitemlote = new cl_liclicitemlote;
+$clpcproc = new cl_pcproc;
+$clpcprocitem = new cl_pcprocitem;
+$clpcorcamitemproc = new cl_pcorcamitemproc;
+$clitensregpreco = new cl_itensregpreco;
+$cladesaoregprecos = new cl_adesaoregprecos;
+
+$sqlerro = false;
+$erro_msg = '';
+
+if(isset($codprocesso) && $codprocesso != ''){
+    //liclicitem
+
+    $sSqlLicita = $clliclicita->sql_query_pco($licitacao, ' DISTINCT liclicita.* ');
+    $rsLicita = $clliclicita->sql_record($sSqlLicita);
+    $oLicitacao = db_utils::fieldsMemory($rsLicita, 0);
+
+    if($oLicitacao->l20_cadinicial != 1 && pg_num_rows($rsLicita)){
+        $sqlerro = true;
+    }
+
+    $sSqlFornec = $clliclicita->sql_query($licitacao, " DISTINCT pcorcamforne.* ", '',
+        " l20_codigo = $licitacao and pc21_orcamforne IS NOT NULL ");
+    $rsFornec = $clliclicita->sql_record($sSqlFornec);
+
+    if(pg_num_rows($rsFornec)){
+        $sqlerro = true;
+    }
+
+}
+
+if(!$sqlerro && $codprocesso){
+
+	$clpcorcamitemproc->excluir('', '', 'pc31_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
+
+	if($clpcorcamitemproc->erro_status == '0'){
+		$sqlerro = true;
+		$erro_msg = $clpcprocitem->erro_msg;
+    }
+
+	if(!$sqlerro){
+	    $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
+	        where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
+
+	    if($clliclicitemlote->erro_status == '0'){
+			$sqlerro = true;
+			$erro_msg = $clpcprocitem->erro_msg;
+        }
+    }
+
+    if(!$sqlerro){
+	    $clliclicitem->excluir('',
+            'l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
+
+	    if($clliclicitem->erro_status == '0'){
+	        $sqlerro = true;
+	        $erro_msg = $clliclicitem->erro_msg;
+        }
+
+    }
+
+    if(!$sqlerro){
+        $clpcprocitem->excluir('', 'pc81_codproc = ' . $codprocesso);
+
+        if($clpcprocitem->erro_status == '0'){
+            $sqlerro = true;
+            $erro_msg = $clpcprocitem->erro_msg;
+        }
+    }
+
+    if(!$sqlerro){
+		$clitensregpreco->excluir('',
+            'si07_sequencialadesao = (select si06_sequencial from adesaoregprecos where si06_processocompra = '.$codprocesso.')');
+		if($clitensregpreco->erro_status = '0'){
+		    $sqlerro = true;
+		    $erro_msg = $clitensregpreco->erro_msg;
+        }
+    }
+
+    if(!$sqlerro){
+		$cladesaoregprecos->excluir('', 'si06_processocompra = '.$codprocesso);
+		if($cladesaoregprecos->erro_status = '0'){
+			$sqlerro = true;
+			$erro_msg = $cladesaoregprecos->erro_msg;
+		}
+    }
+
+    if(!$sqlerro){
+	    $clpcproc->excluir($codprocesso);
+	    if($clpcproc->erro_status == '0'){
+	        $sqlerro = true;
+	        $erro_msg = $clpcproc->erro_msg;
+        }
+    }
+
+}
+
+if($codprocesso){
+    if($sqlerro){
+        if(!$erro_msg){
+            echo "<script>alert('Processo de Compra $codprocesso não pode ser excluído.');</script>";
+        }else{
+            echo "<script>alert('$erro_msg');</script>";
+        }
+    }else{
+        echo "<script>alert('Processo de Compra $codprocesso excluído com sucesso!');</script>";
+    }
+}
+
 
 $db_opcao = 1;
 $db_botao = true;
 $lRegistroPreco = false;
-if (isset($licitacao)&&trim($licitacao)!=""){
+if (isset($licitacao) && trim($licitacao)!="" && !$sqlerro){
      $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco, l20_nroedital, l20_naturezaobjeto"));
      if ($clliclicita->numrows > 0){
           db_fieldsmemory($result,0);
@@ -74,7 +189,7 @@ $db_botao = true;
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
+<table width="790" border="0" cellspacing="0" cellpadding="0" style="margin:0 auto;">
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
