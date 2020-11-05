@@ -2819,6 +2819,7 @@ class empenho {
           $oContaCorrenteDetalhe->setCredor($oEmpenhoFinanceiro->getCgm());
           $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
           $oContaCorrenteDetalhe->setRecurso($oEmpenhoFinanceiro->getDotacao()->getDadosRecurso());
+          $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
 
           $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
           $oEventoContabil     = new EventoContabil($iCodigoDocumento, $iAnoUsu);

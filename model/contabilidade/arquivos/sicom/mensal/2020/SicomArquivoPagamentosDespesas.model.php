@@ -314,7 +314,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              AND e50_codord = {$oEmpPago->ordem}
                              AND c71_codlan = {$oEmpPago->lancamento}
                            ORDER BY c71_codlan) AS pagamentos
-                      GROUP BY tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao, 
+                      GROUP BY tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao,
                                dtliquidacao, codfontrecursos, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade ";
 
           $rsPagOrd11 = db_query($sSql11);
@@ -581,7 +581,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $sSqlContaPagFont = "select * from (select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+            $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
                       join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
@@ -699,7 +699,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                   WHEN substr(k02_estorc,1,9) IN ('411130311', '411130341') THEN 3
                                   ELSE c60_subtipolancamento
                               END AS c60_subtipolancamento,
-                              CASE 
+                              CASE
                                  WHEN k02_reduz IS NULL THEN k02_codrec
                                  ELSE k02_reduz
                               END AS k02_reduz,
@@ -964,7 +964,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              e50_data AS dtemissao,
                              k12_valor AS vldocumento,
                              c23_conlancam AS codlan,
-                             e81_codmov                             
+                             e81_codmov
                       FROM empagemov
                       INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
                       INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
@@ -1280,7 +1280,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                                   WHEN substr(k02_estorc,1,9) IN ('411130311', '411130341') THEN 3
                                   ELSE c60_subtipolancamento
                               END AS c60_subtipolancamento,
-                              CASE 
+                              CASE
                                  WHEN k02_reduz IS NULL THEN k02_codrec
                                  ELSE k02_reduz
                               END AS k02_reduz,

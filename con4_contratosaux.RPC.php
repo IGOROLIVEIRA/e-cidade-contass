@@ -169,6 +169,17 @@ switch($oParam->exec) {
 
         try {
 
+            $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
+
+            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+            db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+            $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+            $dtcadastro = $oAcordo->getDataInicial();
+
+            if($dtcadastro < $z09_datacadastro){
+                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+            }
+
             $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
             $oMembro->setCodigoCgm($oParam->iCodigoCgm);
             $oMembro->setResponsabilidade($oParam->iResponsabilidade);
@@ -194,6 +205,15 @@ switch($oParam->exec) {
 
             $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
+            $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+            db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+            $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+            $dtcadastro = $oAcordo->getDataInicial();
+
+            if($dtcadastro < $z09_datacadastro){
+                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+            }
+
             if(!$oAcordo->membroExists($oParam->iCodigoCgm)) {
 
                 $oMembro = new AcordoComissaoMembro();
@@ -215,7 +235,6 @@ switch($oParam->exec) {
             }
         } catch (Exception  $eErro) {
 
-            //db_fim_transacao(true);
             $oRetorno->status  = 2;
             $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
 
@@ -560,6 +579,29 @@ switch($oParam->exec) {
             if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
                 $lAcordoValido = false;
                 $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+            }
+
+            if($lAcordoValido){
+                $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} order by z09_sequencial desc");
+                db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+                $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
+
+                if($dtsession < $z09_datacadastro){
+                    $sMessagemInvalido = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+                    $lAcordoValido = true;
+                }
+
+                /**
+                 * controle de encerramento peri. Patrimonial
+                 */
+                $clcondataconf = new cl_condataconf;
+                $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+                db_fieldsmemory($resultControle,0);
+
+                if($dtsession <= $c99_datapat){
+                    $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+                    $lAcordoValido = true;
+                }
             }
 
             if ($lAcordoValido) {

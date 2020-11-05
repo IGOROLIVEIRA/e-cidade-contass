@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -78,8 +78,9 @@ $clempempenho->rotulo->label();
                             <td >
                                 <strong>Filtar por:</strong>
                                 <select id="filtrapor">
-                                    <option  value="lic">Licitação</option>
+                                    <option  value="acordo">Contrato</option>
                                     <option  value="tipocom">Tipo de compra</option>
+                                    <option  value="lic">Licitação</option>
                                 </select>
                             </td>
                         </tr>
@@ -133,6 +134,30 @@ $clempempenho->rotulo->label();
                                 $aux2->funcao_gera_formulario();
                                 ?>
                             </td>
+
+                            <td nowrap><table border="0">
+                                 <?
+                                 $aux2 = new cl_arquivo_auxiliar;
+                                 $aux2->nome_botao     = "db_acordo";
+                                 $aux2->cabecalho = "<strong> Contrato </strong>";
+                                 $aux2->codigo = "ac16_sequencial"; //chave de retorno da func
+                                 $aux2->descr  = "ac16_resumoobjeto";   //chave de retorno
+                                 $aux2->nomeobjeto = 'acordo';
+                                 $aux2->funcao_js = 'js_mostraacordo';
+                                 $aux2->funcao_js_hide = 'js_mostraacordo1';
+                                 $aux2->sql_exec  = "";
+                                 $aux2->func_arquivo = "func_acordoinstit.php";  //func a executar
+                                 $aux2->nomeiframe = "db_iframe_acordo";
+                                 $aux2->localjan = "";
+                                 $aux2->onclick = "";
+                                 $aux2->db_opcao = 2;
+                                 $aux2->tipo = 2;
+                                 $aux2->top = 1;
+                                 $aux2->linhas = 10;
+                                 $aux2->vwhidth = 400;
+                                 $aux2->funcao_gera_formulario();
+                                 ?>
+                            </td>
                         </tr>
                     </table>
                     <table border="0" width="48%">
@@ -157,16 +182,31 @@ $clempempenho->rotulo->label();
 </table>
 <script>
 
+    top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
     top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+    top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
 
     top.corpo.iframe_g4.document.getElementById('filtrapor').onchange=function(){
-        if(top.corpo.iframe_g4.document.getElementById('filtrapor').value == 'lic'){
+        switch (top.corpo.iframe_g4.document.getElementById('filtrapor').value) {
+          case 'lic' :
             top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
             top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'inline';
-        }else{
-            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+          break;
+
+          case 'tipocom' :
             top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'inline';
+            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
+            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+          break;
+
+          case 'acordo' :
+            top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
+            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+          break;
         }
+
     }
 
 </script>

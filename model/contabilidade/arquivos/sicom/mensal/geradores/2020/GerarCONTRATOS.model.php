@@ -243,7 +243,7 @@ class GerarCONTRATOS extends GerarAM {
               $aCSVCONTRATOS21['si88_coditemsinapi']         =   $aCONTRATOS21['si88_coditemsinapi']        == "0" ? '' : $aCONTRATOS21['si88_coditemsinapi'];
               $aCSVCONTRATOS21['si88_coditemsimcro']         =   $aCONTRATOS21['si88_coditemsimcro']        == "0" ? '' : $aCONTRATOS21['si88_coditemsimcro'];
               $aCSVCONTRATOS21['si88_descoutrosmateriais']   =   $aCONTRATOS21['si88_descoutrosmateriais']  == "0" ? '' : $aCONTRATOS21['si88_descoutrosmateriais'];
-              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha']         == "0" ? '' : $aCONTRATOS21['si88_itemplanilha'];
+              $aCSVCONTRATOS21['si88_itemplanilha']          =   $aCONTRATOS21['si88_itemplanilha']         == "0" ? '' : substr($aCONTRATOS21['si88_itemplanilha'],0,15);
               $aCSVCONTRATOS21['si88_tipoalteracaoitem']    =  str_pad($aCONTRATOS21['si88_tipoalteracaoitem'], 1, "0", STR_PAD_LEFT);
               $aCSVCONTRATOS21['si88_quantacrescdecresc']   =  number_format($aCONTRATOS21['si88_quantacrescdecresc'], 4, ",", "");
               $aCSVCONTRATOS21['si88_valorunitarioitem']    =  number_format($aCONTRATOS21['si88_valorunitarioitem'], 4, ",", "");

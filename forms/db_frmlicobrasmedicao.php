@@ -390,51 +390,7 @@ $cllicobrasmedicao->rotulo->label();
 
   $('btnAnexar').observe("click",js_salvarDocumento);
 
-  function js_alterarAnexo() {
 
-    if ($F('uploadfile') == '') {
-
-      alert('Escolha uma Foto!');
-      return false;
-    }
-
-    if ($F('obr04_legenda') == '') {
-
-      alert('Informe uma Legenda para a foto!');
-      return false;
-    }
-
-    var oParam        = new Object();
-    oParam.exec       = 'alterarAnexo';
-    oParam.codmedicao = $F('obr03_sequencial');
-    oParam.legenda    = $F('obr04_legenda');
-    js_divCarregando('Aguarde... Anexando Foto','msgbox');
-    var oAjax         = new Ajax.Request(
-      'obr1_obras.RPC.php',
-      { parameters: 'json='+Object.toJSON(oParam),
-        asynchronous:false,
-        method: 'post',
-        onComplete : js_retornoAlterarAnexo
-      });
-  }
-
-  function js_retornoAlterarAnexo(oAjax) {
-    js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
-
-    if (oRetorno.status == 2) {
-      alert("ja existe Anexo Salvo");
-        $('uploadfile').value     = '';
-        $('namefile').value       = '';
-        $("obr04_legenda").value  = "";
-    }else {
-      alert("Anexo Salvo com Sucesso !");
-      $('uploadfile').value     = '';
-      $('namefile').value       = '';
-      $("obr04_legenda").value  = "";
-      js_getAnexo();
-    }
-  }
 
   function js_excluirAnexo(iCodigoDocumento) {
 
