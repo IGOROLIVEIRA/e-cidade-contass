@@ -114,20 +114,18 @@ function js_liberaexclusao(value){
         $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query(
                                            null,"distinct pc80_codproc",null,"l21_codliclicita = $licitacao"));
         if ($clliclicitem->numrows>0){
-			echo"<select name='codprocanu' id='codprocanu' onchange='js_liberaexclusao(this.value)'>";
-			echo "<option value=''></option>\n";
+			echo"<select name='codprocanu' id='codprocanu' onchange='js_liberaexclusao(this.value)' ".($clliclicitem->numrows == 1 ? 'disabled' : '').">";
             for($count=0; $count < $clliclicitem->numrows; $count++){
                 db_fieldsmemory($result_liclicitem, $count);
-				echo " <option value = $pc80_codproc ".($clliclicitem->numrows == 1 ? "selected" : "")." >$pc80_codproc</option>\n";
+				echo " <option value = $pc80_codproc ".(($clliclicitem->numrows == 1 || $clliclicitem->numrows && !$count) ? "selected" : "")." >$pc80_codproc</option>\n";
+				$ultimoProc = $pc80_codproc;
             }
-			echo " </select>";
+            echo " </select>";
 
-            if($clliclicitem->numrows == 1){
-                echo "<script>";
-				echo "parent.document.form1.excluir.disabled = false;";
-				echo "parent.document.form1.codprocesso.value = $pc80_codproc;";
-                echo "</script>";
-            }
+            echo "<script>";
+            echo "parent.document.form1.excluir.disabled = false;";
+            echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
+            echo "</script>";
 
         }else{
             echo "Nenhum Processo de Compra incluído.";
