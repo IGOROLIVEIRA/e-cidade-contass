@@ -94,29 +94,6 @@ $sTelCnpj     = trim($oInstit->getTelefone()) . "   -    CNPJ : " . db_formatar(
 $sEmail       = trim($oInstit->getEmail());
 $sSite        = $oInstit->getSite();
 
-/*<table style="width:100%; border-bottom:1px solid #000; font-family:sans-serif; border-collapse: inherit; table-layout: fixed;">    
-    <tbody>
-      <tr>        
-        <td style="width: 80px; height: 80px;">      
-          {$sLogo}
-        </td>        
-        <td style="font-size: 8pt; font-style: italic; padding-left: 10px" >
-          <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
-          <span>{$sEndCompleto}</span><br>
-          <span>{$sMunicipio}</span><br>
-          <span>{$sTelCnpj}</span><br>
-          <span>{$sEmail}</span><br>
-          <span>{$sSite}</span><br>
-        </td>        
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>        
-        <td style="text-align:center; font-size: 8pt; border: 1px solid #000; border-radius: 10px; border-collapse: separate; background-color: #ccc;">
-          <div>Relatório das Questões Cadastradas</div>
-        </td>
-      </tr>
-      </tbody>
-  </table>*/
-
 $header = <<<HEADER
 <header>
   	<div style="width: 100%; border-bottom: 1px solid #000; border-collapse: inherit; table-layout: fixed; font-family:sans-serif;">
@@ -171,67 +148,26 @@ ob_start();
     </head>
 
     <body>
-        <div class="ritz">
-          	<table class="waffle">
-				<? //$oLancamento = db_utils::fieldsMemory($rsLancamentos,0); ?>
-            	<!-- <tr>
-					<td colspan="7" class="s2"><b>Processo: </b><?= $oLancamento->ci03_numproc.'/'.$oLancamento->ci03_anoproc ?></td>
-				</tr>
-				<tr>
-					<td colspan="7" class="s2"><b>Unidades(s) Auditada(s): </b><?= buscaDepartamentos($oLancamento->ci03_codproc) ?></td>
-				</tr>
-				<tr>
-					<td colspan="7" class="s2"><b>Objetivos:</b> <?= $oLancamento->ci03_objaudit ?></td>
-				</tr>
-				<tr>
-					<th class="s0" style="width:10px">Nº QUESTÃO</th>
-					<th class="s0" style="width:120px">QUESTÃO DE AUDITORIA</th>
-					<th class="s0" style="width:120px">INFORMAÇÕES REQUERIDAS</th>
-					<th class="s0" style="width:120px">FONTE DAS INFORMAÇÕES</th>
-					<th class="s0" style="width:120px">PROCEDIMENTO DETALHADO</th>
-					<th class="s0" style="width:120px">OBJETOS</th>
-					<th class="s0" style="width:120px">POSSÍVEIS ACHADOS NEGATIVOS</th>
-					<th class="s0" style="width:70px">INÍCIO DA ANÁLISE</th>
-					<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
-					<th class="s0" style="width:120px">ACHADOS</th>
-				</tr> -->
-          	</table>
-        </div>
         <div class="ritz grid-container" dir="ltr">
             <table class="waffle" cellspacing="0" cellpadding="0">
-              	<!-- <thead>
-					<tr>
-						<th class="s0" style="width:10px">Nº QUESTÃO</th>
-						<th class="s0" style="width:120px">QUESTÃO DE AUDITORIA</th>
-						<th class="s0" style="width:120px">INFORMAÇÕES REQUERIDAS</th>
-						<th class="s0" style="width:120px">FONTE DAS INFORMAÇÕES</th>
-						<th class="s0" style="width:120px">PROCEDIMENTO DETALHADO</th>
-						<th class="s0" style="width:120px">OBJETOS</th>
-						<th class="s0" style="width:120px">POSSÍVEIS ACHADOS NEGATIVOS</th>
-						<th class="s0" style="width:70px">INÍCIO DA ANÁLISE</th>
-						<th class="s0" style="width:120px">ATENDE À QUESTÃO DE AUDITORIA</th>
-						<th class="s0" style="width:120px">ACHADOS</th>
-					</tr>
-				</thead> -->
-
                 <tbody>
               
                 <? for ($i = 0; $i < $clquestaoaudit->numrows; $i++) {
                 
                     db_fieldsmemory($rsLancamentos,$i); ?>
 
-                    <? if($repete != $ci03_codproc /*&& $i > 0*/) {  ?>
+                    <? if($repete != $ci03_codproc) {  ?>
                   
                       	<tr><td>&nbsp;</td></tr>
 						<? $oLancamento = db_utils::fieldsMemory($rsLancamentos,$i); ?>
 						<tr>
-							<td colspan="7" class="s2"><b>Processo: </b><?= $oLancamento->ci03_numproc.'/'.$oLancamento->ci03_anoproc ?></td>
+							<td colspan="10" class="s2"><b>Processo: </b><?= $oLancamento->ci03_numproc.'/'.$oLancamento->ci03_anoproc ?></td>
 						</tr>
 						<tr>
-							<td colspan="7" class="s2"><b>Unidades(s) Auditada(s): </b><?= buscaDepartamentos($oLancamento->ci03_codproc) ?></td>
+							<td colspan="10" class="s2"><b>Unidades(s) Auditada(s): </b><?= buscaDepartamentos($oLancamento->ci03_codproc) ?></td>
 						</tr>
 						<tr>
-							<td colspan="7" class="s2"><b>Objetivos:</b> <?= $oLancamento->ci03_objaudit ?></td>
+							<td colspan="10" class="s2"><b>Objetivos:</b> <?= $oLancamento->ci03_objaudit ?></td>
 						</tr>
 						<tr>
 							<th class="s0" style="width:10px">Nº QUESTÃO</th>

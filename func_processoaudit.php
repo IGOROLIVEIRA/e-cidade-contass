@@ -103,7 +103,7 @@ $clprocessoaudit->rotulo->label("ci03_objaudit");
           	if($clprocessoaudit->numrows!=0){
 				db_fieldsmemory($result,0);
 				if (isset($objetivo) && $objetivo == true) {
-					echo "<script>".$funcao_js."('$ci03_objaudit',false);</script>";
+					echo "<script>".$funcao_js."('$ci03_objaudit', '$ci03_numproc', '$ci03_anoproc', false);</script>";
 				} else {
 					echo "<script>".$funcao_js."('$ci03_codproc',false);</script>";
 				}

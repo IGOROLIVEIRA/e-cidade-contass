@@ -82,20 +82,21 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
 </style>
 </head>
 <body>
+<form name='form1'>
     <fieldset>
         <legend><b>Dados do Processo de Auditoria</b></legend>
-        <table style="" border="0">
+        <table style="" border="0" cellspacing="1">
             <tr>
-                <td title="<?= $Tci03_codproc ?>">
+                <td title="<?= $Tci03_codproc ?>" style="width: 10%;">
                     <?= $Lci03_codproc ?>
                 </td>
-                <td nowrap="nowrap" class="dado" style="width: 500px;">
+                <td nowrap="nowrap" class="dado" style="width: 40%;">
                     <?= $ci03_codproc ?>
                 </td>
-                <td nowrap title="<?=@$Tci03_dataini?>" align="left" style="width: 30px;">
+                <td nowrap title="<?=@$Tci03_dataini?>" align="left" style="width: 10%;">
                     <?=@$Lci03_dataini?>
                 </td>
-                <td align="left" class="dado" style="width: 500px;"> 
+                <td align="left" class="dado" style="width: 40%;"> 
                     <?= db_formatar($ci03_dataini, 'd') ?>
                 </td>
             </tr>
@@ -131,7 +132,7 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tci03_objaudit?>" align="right">
+                <td nowrap title="<?=@$Tci03_objaudit?>" align="left">
                     <?=@$Lci03_objaudit?>
                 </td>
                 <td colspan="3" class="dado"> 
@@ -156,6 +157,7 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
             </tr>
         </table>
     </fieldset>
+    <fieldset><legend><b>Detalhamento</b></legend>
 
 <?php
     /**
@@ -172,4 +174,6 @@ for ($i = 0; $i < pg_num_rows($rsResult); $i++) {
     $oVerticalTab->show();
 
 ?>
+</fieldset>
+</form>
 </body>

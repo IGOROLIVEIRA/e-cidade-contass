@@ -83,7 +83,7 @@ $rotulo->label("p58_requer");
                     <td colspan="4"> 
                             <?php
                             db_input('ci03_protprocesso',10,$Ici03_protprocesso,true,'text',$db_opcao," onchange='js_pesquisap58_codprotprocesso(false);'");
-                            db_input('p58_requer',40,$Ip58_requer,true,'text',3,'');
+                            db_input('p58_requer',49,$Ip58_requer,true,'text',3,'');
                             ?>
                             <input type="hidden" name="ci03_protprocesso_cod" id="ci03_protprocesso_cod" value="<?= $ci03_protprocesso ?>">
                     </td>

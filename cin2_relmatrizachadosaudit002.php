@@ -73,29 +73,6 @@ $sTelCnpj     = trim($oInstit->getTelefone()) . "   -    CNPJ : " . db_formatar(
 $sEmail       = trim($oInstit->getEmail());
 $sSite        = $oInstit->getSite();
 
-/*<table style="width:100%; border-bottom:1px solid #000; font-family:sans-serif; border-collapse: inherit; table-layout: fixed;">    
-    <tbody>
-      <tr>        
-        <td style="width: 80px; height: 80px;">      
-          {$sLogo}
-        </td>        
-        <td style="font-size: 8pt; font-style: italic; padding-left: 10px" >
-          <span style="font-weight: bold;">{$oInstit->getDescricao()}</span><br>
-          <span>{$sEndCompleto}</span><br>
-          <span>{$sMunicipio}</span><br>
-          <span>{$sTelCnpj}</span><br>
-          <span>{$sEmail}</span><br>
-          <span>{$sSite}</span><br>
-        </td>        
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>        
-        <td style="text-align:center; font-size: 8pt; border: 1px solid #000; border-radius: 10px; border-collapse: separate; background-color: #ccc;">
-          <div>Relatório das Questões Cadastradas</div>
-        </td>
-      </tr>
-      </tbody>
-  </table>*/
-
 $header = <<<HEADER
 <header>
   	<div style="width: 100%; border-bottom: 1px solid #000; border-collapse: inherit; table-layout: fixed; font-family:sans-serif;">
@@ -115,7 +92,7 @@ $header = <<<HEADER
     	<div style="float: left; width: 160px;">&nbsp;</div>
     	<div style="border: 1px solid #000; float: left; width: 400px; height: 90px; text-align: center; border-radius: 10px 10px 10px 0px; background-color: #eee;">
       		<div style="padding-top: 35px; font-size: 8pt;">
-        		Relatório de Verificações
+        		Relatório de Matriz de Achados
       		</div>
 		</div>
   	</div>

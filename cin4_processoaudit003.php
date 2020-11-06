@@ -7,6 +7,7 @@ include("classes/db_processoaudit_classe.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 include("classes/db_processoauditdepart_classe.php");
+include("classes/db_lancamverifaudit_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprocessoaudit = new cl_processoaudit;
@@ -16,26 +17,39 @@ $sqlerro = false;
 
 if (isset($excluir)) {
 
-	//Valida se o processo possui verificações lançadas
-
 	db_inicio_transacao();
-	$db_opcao = 3;
+	//Valida se o processo possui verificações lançadas
+	$cllancamverifaudit = new cl_lancamverifaudit;
+	$sSqlVeririca = $cllancamverifaudit->sql_query(null, "*", null, "ci05_codproc = {$ci03_codproc}");
+	$cllancamverifaudit->sql_record($sSqlVeririca);
 
-	$clprocessoauditdepart = new cl_processoauditdepart;
-	$clprocessoauditdepart->excluir($ci03_codproc);
+	if ($cllancamverifaudit->numrows > 0) {
+		
+		$sqlerro = true;
+		$clprocessoaudit->erro_msg = "Não é possível excluir um processo que possua verificações lançadas!";
+		$clprocessoaudit->erro_status = 0;
 
-	if($clprocessoauditdepart->erro_status==0){
-        $sqlerro=true;
-        $clprocessoaudit->erro_msg = $clprocessoaudit->erro_msg;
-	}
+	} else {
+
+		$db_opcao = 3;
+
+		$clprocessoauditdepart = new cl_processoauditdepart;
+		$clprocessoauditdepart->excluir($ci03_codproc);
+
+		if($clprocessoauditdepart->erro_status==0){
+			$sqlerro=true;
+			$clprocessoaudit->erro_msg = $clprocessoaudit->erro_msg;
+		}
+		
+		if (!$sqlerro) {
+			$clprocessoaudit->excluir($ci03_codproc);
+		}
+
+		if ($clprocessoaudit->erro_status==0) {
+			$sqlerro=true;
+		}
 	
-	if (!$sqlerro) {
-		$clprocessoaudit->excluir($ci03_codproc);
 	}
-
-	if ($clprocessoaudit->erro_status==0) {
-		$sqlerro=true;
-    }
 
 	db_fim_transacao($sqlerro);
   

@@ -78,6 +78,8 @@ $clrotulo->label('ci03_objaudit');
                                 <? db_input('ci03_codproc',10,$Ici03_codproc,true,'text',1," onchange='js_pesquisaProcessoAuditoria(false);'");
                                    db_input('ci03_objaudit',80,$Ic50_descr,true,'text',3); ?>
                             </td>
+                            <input type="hidden" name="ci03_numproc" id="ci03_numproc" value="">
+                            <input type="hidden" name="ci03_anoproc" id="ci03_anoproc" value="">
                         </tr>
                     </form>
                 </table>
@@ -99,15 +101,17 @@ $clrotulo->label('ci03_objaudit');
 function js_pesquisaProcessoAuditoria(lMostra) {
 
     if (lMostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit','Pesquisa',true);
+        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit|ci03_numproc|ci03_anoproc','Pesquisa',true);
     } else {
         js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
     }
 }
 
-function js_mostraProcessoAuditoria(chave, erro) {
+function js_mostraProcessoAuditoria(chave, chave1, chave2, erro) {
     
     document.form1.ci03_objaudit.value = chave;
+    document.getElementById('ci03_numproc').setAttribute('value', chave1);
+    document.getElementById('ci03_anoproc').setAttribute('value', chave2);
     if(erro == true) {
         document.form1.ci03_codproc.focus();
         document.form1.ci03_objaudit = '';
@@ -115,10 +119,12 @@ function js_mostraProcessoAuditoria(chave, erro) {
     
 }
 
-function js_mostraProcessoAuditoria1(chave1, chave2) {
+function js_mostraProcessoAuditoria1(chave1, chave2, chave3, chave4) {
     
     document.form1.ci03_codproc.value = chave1;
     document.form1.ci03_objaudit.value = chave2;
+    document.getElementById('ci03_numproc').setAttribute('value', chave3);
+    document.getElementById('ci03_anoproc').setAttribute('value', chave4);
     db_iframe_processoaudit.hide();
 
 }
@@ -134,6 +140,8 @@ function js_processa() {
     }
 
     sParams = '?ci03_codproc='+document.form1.ci03_codproc.value;
+    sParams += '&ci03_numproc='+document.form1.ci03_numproc.value;
+    sParams += '&ci03_anoproc='+document.form1.ci03_anoproc.value;
 
     document.location.href = sUrl + sParams;
 

@@ -243,7 +243,7 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_objaudit','varchar(500)','Descrever qual é o foco da auditoria em questão','','Objetivo da Auditoria',500,false,false,false,0,'text','Objetivo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_dataini','date','Data Inicial','','Data Inicial',10,false,false,false,1,'text','Data Inicial');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_datafim','date','Data Final','','Data Final',10,false,false,false,1,'text','Data Final');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_protprocesso','int4','Protocolo','','Protocolo',10,true,false,false,0,'text','Protocolo');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_protprocesso','int4','Protocolo','','Protocolo',10,false,false,false,0,'text','Protocolo');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_codtipoquest','int4','Tipo da Auditoria','','Tipo da Auditoria',11,true,false,false,1,'int4','Tipo da Auditoria');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci03_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
 
@@ -423,12 +423,12 @@ class Oc13351 extends PostgresMigration
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_seq','int4','Sequencial','','Sequencial',11,false,false,false,0,'int4','Sequencial');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_codlan','int4','Código do Lançamento de Verificação','','Código do Lançamento de Verificação',11,false,false,false,1,'text','Código do Lançamento de Verificação');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_situencont','varchar(500)','Descrever toda a situação existente, deixando claro os diversos aspectos do achado','','Situação Encontrada',500,false,false,false,0,'text','Situação Encontrada');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,true,false,false,0,'text','Objetos');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,true,false,false,0,'text','Critério');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opinião da equipe','','Evidência',500,true,false,false,0,'text','Evidência');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_causa','varchar(500)','Deve ser conclusiva e fornecer elementos para a correta responsabilização','','Causa',500,true,false,false,0,'text','Causa');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_efeito','varchar(500)','Avaliar quais foram ou podem ser as consequências para o órgão, erário ou sociedade','','Efeito',500,true,false,false,0,'text','Efeito');
-        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_recomendacoes','varchar(500)','As recomendações decorrem dos achados e consistem em ações que a equipe de auditoria indica às unidades auditadas, visando corrigir desconformidades, a tratar riscos e a aperfeiçoar processos de trabalhos e controles','','Recomendações',500,true,false,false,0,'text','Recomendações');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_objetos','varchar(500)','Indicar todos os objetos nos quais o achado foi contatado','','Objetos',500,false,false,false,0,'text','Objetos');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_criterio','varchar(500)','Indicar os critérios que refletem como a gestão deveria ser','','Critério',500,false,false,false,0,'text','Critério');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_evidencia','varchar(500)','Indicar precisamente os documentos que respaldam a opinião da equipe','','Evidência',500,false,false,false,0,'text','Evidência');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_causa','varchar(500)','Deve ser conclusiva e fornecer elementos para a correta responsabilização','','Causa',500,false,false,false,0,'text','Causa');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_efeito','varchar(500)','Avaliar quais foram ou podem ser as consequências para o órgão, erário ou sociedade','','Efeito',500,false,false,false,0,'text','Efeito');
+        INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_recomendacoes','varchar(500)','As recomendações decorrem dos achados e consistem em ações que a equipe de auditoria indica às unidades auditadas, visando corrigir desconformidades, a tratar riscos e a aperfeiçoar processos de trabalhos e controles','','Recomendações',500,false,false,false,0,'text','Recomendações');
         INSERT INTO db_syscampo VALUES ((SELECT max(codcam)+1 FROM db_syscampo), 'ci06_instit','int4','Instituição','','Instituição',11,false,false,false,0,'int4','Instituição');
 
         -- INSERE db_sysarqcamp

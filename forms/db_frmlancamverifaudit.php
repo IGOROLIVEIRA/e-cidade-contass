@@ -1,5 +1,9 @@
 <?
 //MODULO: Controle Interno
+if (isset($ci03_numproc) && $ci03_numproc != '' && isset($ci03_anoproc) && $ci03_anoproc != '') {
+    $ci03_numproc = $ci03_numproc.'/'.$ci03_anoproc;
+}
+
 ?>
 
 <form name="form1">
@@ -14,11 +18,19 @@
                     <b>Lançamento de Verificações</b>
                     </legend>
                     <table align="center">
-                        <td align="left">
+                        <tr>
+                            <td align="right" nowrap title="Processo">
+                                <b>Processo:</b>
+                            </td>
+                            <td> 
+                                <? db_input('ci03_numproc',26,$Ici03_numproc,true,'text',3,"") ?>
+                            </td>
+                        </tr> 
+                        <td align="right">
                             <b>Questões: </b>
                         </td>
                         <td>
-                            <select id="iFiltroQuestoes" style="width: 300px;" onchange="js_buscaQuestoes(this.value)">
+                            <select id="iFiltroQuestoes" style="width: 196px;" onchange="js_buscaQuestoes(this.value)">
                                 <option value="1">Pendentes</option>
                                 <option value="2">Respondidas</option>
                                 <option value="3">Todas</option>
@@ -57,6 +69,7 @@
     <input name="limpar" id="limpar" type="button" value="Limpar" onclick="js_verificaQuestaoMatrizLimpa()">
     <input name="imprimir" id="imprimir" type="button" value="Imprimir" onclick="js_imprimir()">
     <input name="iNumQuestoes" id="iNumQuestoes" type="hidden" value="0">
+    <input name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisa()">
 </center>
 </form>
 <script>
@@ -694,7 +707,12 @@
         document.form1.salvar.disabled      = bStatus;
         document.form1.limpar.disabled      = bStatus;
         document.form1.imprimir.disabled    = bStatus;
+        document.form1.pesquisar.disabled   = bStatus;
 
+    }
+
+    function js_pesquisa() {
+        document.location.href = 'cin4_lancamverifaudit.php';
     }
 
 </script>

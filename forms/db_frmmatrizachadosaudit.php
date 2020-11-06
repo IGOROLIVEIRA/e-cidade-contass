@@ -6,6 +6,10 @@ $clrotulo->label('ci02_questao');
 $clrotulo->label('ci02_numquestao');
 $clrotulo->label('ci05_achados');
 
+if (isset($ci03_numproc) && $ci03_numproc != '' && isset($ci03_anoproc) && $ci03_anoproc != '') {
+    $ci03_numproc = $ci03_numproc.'/'.$ci03_anoproc;
+}
+
 ?>
 
 <fieldset>
@@ -13,8 +17,9 @@ $clrotulo->label('ci05_achados');
         <b>Matriz de Achados</b>
     </legend>
     <table>
+        <tr><th>Selecione a questão de auditoria no quadro abaixo e em seguida preencha os campos em branco.</th></tr>
         <tr>
-            <td><? db_lovrot($sSqlQuestoes,15,"()","","js_buscaQuestao|ci02_numquestao", "", "NoMe", array('teste'=>'teste')); ?></td>
+            <td><? db_lovrot($sSqlQuestoes,15,"()","","js_buscaQuestao|ci02_numquestao", "", "NoMe"); ?></td>
         </tr> 
     </table>
     <form name="form1" method="post" action="">  
@@ -28,91 +33,101 @@ $clrotulo->label('ci05_achados');
             <input name="ci03_codproc" value="<?= $ci03_codproc ?>" type="hidden" >
             <input name="ci06_codlan" id="ci06_codlan" value="<?= $ci06_codlan ?>" type="hidden" >
             <tr>
-                <td align="left" nowrap title="<?=@$Tci06_seq?>">
+                <td align="right" nowrap title="Processo">
+                    <b>Processo:</b>
+                </td>
+                <td style="width: 80px;"> 
+                    <? db_input('ci03_numproc',11,$Ici03_numproc,true,'text',3,"") ?>
+                </td>
+                <td align="right" nowrap title="<?=@$Tci06_seq?>" style="width: 80px;">
                     <?=@$Lci06_seq?>
                 </td>
-                <td> 
+                <td style="width: 80px;"> 
                     <? db_input('ci06_seq',11,$Ici06_seq,true,'text',3,"") ?>
                 </td>
-            </tr>    
-            <tr>
-                <td nowrap title="<?=@$Tci02_numquestao?>">
+                <td nowrap title="<?=@$Tci02_numquestao?>" align="right" style="width: 80px;">
                     <?=@$Lci02_numquestao?>
                 </td>
-                <td> 
+                <td style="width: 80px;" align="right"> 
                     <? db_input('ci06_numquestao',11,$Ici02_numquestao,true,'text',3,"") ?>
                 </td>
+            </tr>    
+            <tr>
+                
+            </tr>    
+            <tr>
+                
             </tr>   
             <tr>
-                <td nowrap title="<?=@$Tci02_questao?>">
+                <td nowrap title="<?=@$Tci02_questao?>" align="right">
                     <?=@$Lci02_questao?>
                 </td>
-                <td> 
-                    <? db_textarea("ci02_questao",3,100, "", true, "text", 3, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci02_questao",3,75, "", true, "text", 3, "", "", "",500); ?>
                 </td>
             </tr>    
             <tr>
-                <td nowrap title="<?=@$Tci05_achados?>">
+                <td nowrap title="<?=@$Tci05_achados?>" align="right">
                     <b>Descrição do Achado:</b>
                 </td>
-                <td> 
-                    <? db_textarea("ci05_achados",3,100, "", true, "text", 3, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci05_achados",3,75, "", true, "text", 3, "", "", "",500); ?>
                 </td>
             </tr>    
             <tr>
-                <td nowrap title="<?=@$Tci06_situencont?>">
+                <td nowrap title="<?=@$Tci06_situencont?>" align="right">
                     <?=@$Lci06_situencont?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_situencont",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_situencont",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>   
             <tr>
-                <td nowrap title="<?=@$Tci06_objetos?>">
+                <td nowrap title="<?=@$Tci06_objetos?>" align="right">
                     <?=@$Lci06_objetos?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_objetos",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_objetos",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr> 
             <tr>
-                <td nowrap title="<?=@$Tci06_criterio?>">
+                <td nowrap title="<?=@$Tci06_criterio?>" align="right">
                     <?=@$Lci06_criterio?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_criterio",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_criterio",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>  
             <tr>
-                <td nowrap title="<?=@$Tci06_evidencia?>">
+                <td nowrap title="<?=@$Tci06_evidencia?>" align="right">
                     <?=@$Lci06_evidencia?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_evidencia",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_evidencia",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>   
             <tr>
-                <td nowrap title="<?=@$Tci06_causa?>">
+                <td nowrap title="<?=@$Tci06_causa?>" align="right">
                     <?=@$Lci06_causa?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_causa",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_causa",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>  
             <tr>
-                <td nowrap title="<?=@$Tci06_efeito?>">
+                <td nowrap title="<?=@$Tci06_efeito?>" align="right">
                     <?=@$Lci06_efeito?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_efeito",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_efeito",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>  
             <tr>
-                <td nowrap title="<?=@$Tci06_recomendacoes?>">
+                <td nowrap title="<?=@$Tci06_recomendacoes?>" align="right">
                     <?=@$Lci06_recomendacoes?>
                 </td>
-                <td> 
-                    <? db_textarea("ci06_recomendacoes",3,100, "", true, "text", $db_opcao, "", "", "",500); ?>
+                <td colspan="5"> 
+                    <? db_textarea("ci06_recomendacoes",3,75, "", true, "text", $db_opcao, "", "", "",500); ?>
                 </td>
             </tr>   
             <tr>
@@ -120,6 +135,7 @@ $clrotulo->label('ci05_achados');
             </tr>
         </table>
         <input name="incluir" type="submit" id="btnSubmit" value="Salvar" <?=($db_botao==false?"disabled":"")?>>
+        <input name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisa()">
     </form>
 </fieldset>
 
@@ -205,6 +221,10 @@ $clrotulo->label('ci05_achados');
 
         }
     }   
+
+    function js_pesquisa() {
+        document.location.href = 'cin4_matrizachadosaudit.php';
+    }
 
 
 </script>
