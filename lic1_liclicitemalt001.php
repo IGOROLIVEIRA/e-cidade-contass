@@ -77,13 +77,6 @@ if(isset($codprocesso) && $codprocesso != ''){
 
 if(!$sqlerro && $codprocesso){
 
-	$clpcorcamitemproc->excluir('', '', 'pc31_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.')');
-
-	if($clpcorcamitemproc->erro_status == '0'){
-		$sqlerro = true;
-		$erro_msg = $clpcprocitem->erro_msg;
-    }
-
 	if(!$sqlerro){
 	    $clliclicitemlote->excluir('', ' l04_liclicitem in (select l21_codigo from liclicitem
 	        where l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = '.$codprocesso.'))');
@@ -106,36 +99,11 @@ if(!$sqlerro && $codprocesso){
     }
 
     if(!$sqlerro){
-        $clpcprocitem->excluir('', 'pc81_codproc = ' . $codprocesso);
-
-        if($clpcprocitem->erro_status == '0'){
-            $sqlerro = true;
-            $erro_msg = $clpcprocitem->erro_msg;
-        }
-    }
-
-    if(!$sqlerro){
 		$clitensregpreco->excluir('',
             'si07_sequencialadesao = (select si06_sequencial from adesaoregprecos where si06_processocompra = '.$codprocesso.')');
 		if($clitensregpreco->erro_status = '0'){
 		    $sqlerro = true;
 		    $erro_msg = $clitensregpreco->erro_msg;
-        }
-    }
-
-    if(!$sqlerro){
-		$cladesaoregprecos->excluir('', 'si06_processocompra = '.$codprocesso);
-		if($cladesaoregprecos->erro_status = '0'){
-			$sqlerro = true;
-			$erro_msg = $cladesaoregprecos->erro_msg;
-		}
-    }
-
-    if(!$sqlerro){
-	    $clpcproc->excluir($codprocesso);
-	    if($clpcproc->erro_status == '0'){
-	        $sqlerro = true;
-	        $erro_msg = $clpcproc->erro_msg;
         }
     }
 
