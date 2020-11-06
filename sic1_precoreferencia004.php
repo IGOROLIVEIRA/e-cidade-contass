@@ -409,7 +409,7 @@ HTML;
 	}else{
 		echo <<<HTML
                 <div class="linha-vertical">
-                    <strong>{$dadosAssinatura}</strong>
+                    <strong>{$dadosAssinatura[0]}</strong>
                 </div>   
 HTML;
     }
@@ -435,7 +435,7 @@ HTML;
     }else{
         echo <<<HTML
                 <div class="linha-vertical">
-                    <strong>{$dadosLinha}</strong>
+                    <strong>{$dadosLinha[0]}</strong>
                 </div>   
 HTML;
 
