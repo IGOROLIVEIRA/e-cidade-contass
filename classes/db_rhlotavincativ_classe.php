@@ -49,6 +49,8 @@ class cl_rhlotavincativ {
    var $rh39_programa = 0; 
    var $rh39_subfuncao = 0; 
    var $rh39_funcao = 0; 
+   var $rh39_orgao = 0; 
+   var $rh39_unidade = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh39_codlotavinc = int8 = Código 
@@ -58,6 +60,8 @@ class cl_rhlotavincativ {
                  rh39_programa = int4 = Programa 
                  rh39_subfuncao = int4 = Subfunção 
                  rh39_funcao = int4 = Função 
+                 rh39_orgao = int4 = Orgão 
+                 rh39_unidade = int4 = Unidade 
                  ";
    //funcao construtor da classe 
    function cl_rhlotavincativ() { 
@@ -84,6 +88,8 @@ class cl_rhlotavincativ {
        $this->rh39_programa = ($this->rh39_programa == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_programa"]:$this->rh39_programa);
        $this->rh39_subfuncao = ($this->rh39_subfuncao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_subfuncao"]:$this->rh39_subfuncao);
        $this->rh39_funcao = ($this->rh39_funcao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_funcao"]:$this->rh39_funcao);
+       $this->rh39_orgao = ($this->rh39_orgao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_orgao"]:$this->rh39_orgao);
+       $this->rh39_unidade = ($this->rh39_unidade == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_unidade"]:$this->rh39_unidade);
      }else{
        $this->rh39_codlotavinc = ($this->rh39_codlotavinc == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_codlotavinc"]:$this->rh39_codlotavinc);
        $this->rh39_codelenov = ($this->rh39_codelenov == ""?@$GLOBALS["HTTP_POST_VARS"]["rh39_codelenov"]:$this->rh39_codelenov);
@@ -136,6 +142,8 @@ class cl_rhlotavincativ {
                                       ,rh39_programa 
                                       ,rh39_subfuncao 
                                       ,rh39_funcao 
+                                      ,rh39_orgao 
+                                      ,rh39_unidade 
                        )
                 values (
                                 $this->rh39_codlotavinc 
@@ -145,6 +153,8 @@ class cl_rhlotavincativ {
                                ,$this->rh39_programa 
                                ,$this->rh39_subfuncao 
                                ,$this->rh39_funcao 
+                               ,$this->rh39_orgao 
+                               ,$this->rh39_unidade 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -263,6 +273,20 @@ class cl_rhlotavincativ {
            $this->rh39_funcao = "null" ; 
         } 
        $sql  .= $virgula." rh39_funcao = $this->rh39_funcao ";
+       $virgula = ",";
+     }
+     if(trim($this->rh39_orgao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh39_orgao"])){ 
+        if(trim($this->rh39_orgao)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh39_orgao"])){ 
+           $this->rh39_orgao = "null" ; 
+        } 
+       $sql  .= $virgula." rh39_orgao = $this->rh39_orgao ";
+       $virgula = ",";
+     }
+     if(trim($this->rh39_unidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh39_unidade"])){ 
+        if(trim($this->rh39_unidade)=="" && isset($GLOBALS["HTTP_POST_VARS"]["rh39_unidade"])){ 
+           $this->rh39_unidade = "null" ; 
+        } 
+       $sql  .= $virgula." rh39_unidade = $this->rh39_unidade ";
        $virgula = ",";
      }
      $sql .= " where ";
@@ -452,6 +476,8 @@ class cl_rhlotavincativ {
      $sql .= "      inner join orcprograma  as b on   b.o54_anousu = rhlotavinc.rh25_anousu and   b.o54_programa = rhlotavinc.rh25_programa";
      $sql .= "      inner join orcprojativ  as c on   c.o55_anousu = rhlotavinc.rh25_anousu and   c.o55_projativ = rhlotavinc.rh25_projativ";
      $sql .= "      inner join rhlota  as d on   d.r70_codigo = rhlotavinc.rh25_codigo";
+     $sql .= "      inner join orcorgao on (rh39_anousu, rh39_orgao) = (o40_anousu, o40_orgao)";
+     $sql .= "      inner join orcunidade on rh39_unidade = o41_unidade";
      $sql2 = "";
      if($dbwhere==""){
        if($rh39_codlotavinc!=null ){
