@@ -296,7 +296,7 @@ $oGet = db_utils::postMemory($_GET);
 
                                 case 'saldo':
 
-                                    let aRow = new Array();
+                                    var aRow = new Array();
 
                                     aRow[0] = oDado.codigo;
                                     aRow[1] = oDado.descricao.urlDecode();
@@ -304,7 +304,7 @@ $oGet = db_utils::postMemory($_GET);
                                     aRow[3] = js_formatar(oDado.vlrTotal, 'f');
                                     oGrvDetalhes.addRow(aRow);
 
-                                    let oDadosHint           = new Object();
+                                    var oDadosHint           = new Object();
                                     oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
                                     oDadosHint.sText     = sTextEvent;
                                     aDadosHintGrid.push(oDadosHint);
