@@ -192,11 +192,11 @@ DBViewContaBancariaServidor = function(iCodigoContaBancaria, sInstance, lReadOnl
   me.inputNumeroAgencia.setMaxLength(5);
   me.inputNumeroAgencia.addEvent("onChange", ";" + me.instance+ "js_pesquisaAgencia(false);");
   me.inputDvAgencia     = new DBTextField('inputDvAgencia', me.instance+ "inputDvAgencia", '', 4);
-  me.inputDvAgencia.setMaxLength(2);
+  me.inputDvAgencia.setMaxLength(1);
   me.inputNumeroConta   = new DBTextField('inputNumeroConta', me.instance+ "inputNumeroConta", '', 9);
   me.inputNumeroConta.setMaxLength(15);
   me.inputDvConta       = new DBTextField('inputDvConta', me.instance+ "inputDvConta", '', 4);
-  me.inputDvConta.setMaxLength(2);
+  me.inputDvConta.setMaxLength(1);
   me.inputOperacao      = new DBTextField('inputOperacao', me.instance+ "inputOperacao", '', 9);
   me.inputOperacao.setMaxLength(4);
 
