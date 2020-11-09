@@ -88,6 +88,8 @@ function js_inclui(){
 	itens.js_submit_form();
 	itens.document.form1.incluir.value='incluir';
 	itens.document.form1.submit();
+	procs.document.form1.submit();
+
 }
 
 function js_excluir(){
