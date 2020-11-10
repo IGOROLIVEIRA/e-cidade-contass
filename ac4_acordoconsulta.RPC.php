@@ -459,7 +459,8 @@ switch($oParam->exec) {
 								 AND ac26_sequencial =
 									 (SELECT max(ac26_sequencial)
 									  FROM acordoposicao
-									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '))');
+									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '))
+					  	AND ac26_acordo = ' . $oParam->ac16_sequencial);
 
 					$rsItem = $oDaoItem->sql_record($sSqlItem);
 					$valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
