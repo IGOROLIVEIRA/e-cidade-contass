@@ -163,7 +163,7 @@
             <table class="DBGrid">
 
                 <th class="table_header" style="width: 33px">
-                    <input type="checkbox" class="marca_itens[<?= $iFonte ?>]" name="aItonsMarcados" value="<?= $iEmpenho ?>" id="<?= $iEmpenho?>">
+                    <input type="checkbox" class="marca_itens[<?= $iFonte ?>]" name="aItensMarcados" value="<?= $iEmpenho ?>" id="<?= $iEmpenho?>">
                 </th>
 
                 <td class="linhagrid" style="width: 70px">
@@ -187,11 +187,11 @@
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPNP][<?= $iFonte ?>]" value="0" onKeyUp="return sem_virgula(this);" onchange="adicionarEdicaoRPNP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
                 </td>
 
                 <td class="linhagrid">
-                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
+                    <input type="text" style="width: 100px" name="aEmpenho[<?= $iEmpenho ?>][vlr_dispRPP][<?= $iFonte ?>]" onKeyUp="return sem_virgula(this);" value="0" onchange="adicionarEdicaoRPP(<?= $iEmpenho ?>,<?= $iFonte?>)" id="<?= $iFonte?>">
                 </td>
 
                 <td class="linhagrid" style="width: 100px">
@@ -223,13 +223,39 @@
 </div>
 <script>
 
-    js_carregafonte();
-    carregaritens(document.getElementById('o15_codtri').value);
-    js_buscarVlrDisp(document.getElementById('o15_codtri').value);
-    js_buscarDisponibilidade(document.getElementById('o15_codtri').value);
+    function resolverDepoisDe2Segundos() {
+      js_divCarregando('finalizando carregamento', 'div_aguarde');
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve('resolved');
+          js_removeObj('div_aguarde');
+        }, 3000);
+      });
+    }
+
+     js_carregafonte();
+     js_buscarDisponibilidade(document.getElementById('o15_codtri').value);
+     js_buscarVlrDisp(document.getElementById('o15_codtri').value);
+     carregaritens(document.getElementById('o15_codtri').value);
+
+
+    /**
+     * bloquear virgula
+     */
+    function sem_virgula(campo){
+      var digits=".1234567890"
+      var campo_temp
+      for (var i=0;i<campo.value.length;i++){
+        campo_temp=campo.value.substring(i,i+1)
+        if (digits.indexOf(campo_temp)==-1){
+          campo.value = campo.value.substring(0,i);
+          break;
+        }
+      }
+    }
 
     function aItens() {
-        var itensNum = document.getElementsByName("aItonsMarcados");
+        var itensNum = document.getElementsByName("aItensMarcados");
 
         return Array.prototype.map.call(itensNum, function (item) {
             return item;
@@ -273,7 +299,7 @@
      * função para carregar a fonte
      */
 
-    function js_carregafonte() {
+    async function js_carregafonte() {
         document.getElementById('o15_codtri').value = <?= $fonte?>;
         document.getElementById('o15_codtridescr').value = <?= $fonte?>;
     }
@@ -289,7 +315,8 @@
         let vlr_disponivel     = document.form1['aFonte['+fonte+'][vlr_disponivel]'].value;
         let vlr_dispCaixa      = document.form1['aFonte['+fonte+'][disp_total]'].value;
         let vlr_utilizado      = document.form1['aFonte['+fonte+'][vlr_utilizado]'].value;
-
+        console.log('passou aqui');
+        console.log(vlr_utilizado);
         if(vlr_n_lqd == 0){
             alert("Não existe saldo não liquidado para este empenho!");
             // document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].style.background = '#DEB887';
@@ -304,11 +331,23 @@
                 let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
                 if(vlr_dispRPNP > vlr_disponivel){
                     alert("Erro! Não existe saldo disponivel para essa operação.");
+                    document.form1['aEmpenho[' + codigo + '][vlr_dispRPNP]['+fonte+']'].value = 0;
                     document.getElementById(codigo).checked = false;
                 }else {
                     document.form1['aEmpenho[' + codigo + '][vlr_semRPNP]['+fonte+']'].value = js_roundDecimal(resultvlrsemRPNP,2);
                     document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = js_roundDecimal(Number(vlr_disponivel) - Number(vlr_dispRPNP),2);
                     document.getElementById(codigo).checked = true;
+
+                    let VlrUtilizadoFonte = 0;
+                    aItensFonte(fonte).forEach(function (itens, key) {
+                      // itens.checked = true;
+                      let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                      let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                      VlrUtilizadoFonte += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+                    });
+
+                    document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
+
                 }
             }
         }
@@ -329,22 +368,33 @@
             alert("Não existe saldo liquidado para este empenho!");
             // document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].style.background = '#DEB887';
             document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].value = 0;
-            document.form1['aItonsMarcados['+ codigo +']'].checked = false;
+            document.form1['aItensMarcados['+ codigo +']'].checked = false;
         }else{
             if(Number(vlr_dispRPP) > Number(vlr_lqd)){
                 alert("Erro! Valor de Disp. RPP maior que valor liquidado.");
                 document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].value = 0;
-                document.form1['aItonsMarcados['+ codigo +']'].checked = false;
+                document.form1['aItensMarcados['+ codigo +']'].checked = false;
             }else {
                 let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
                 if(vlr_dispRPP > vlr_disponivel) {
                     alert("Erro! Não existe saldo disponivel para essa operação.");
+                    document.form1['aEmpenho[' + codigo + '][vlr_dispRPP]['+fonte+']'].value = 0;
                     document.getElementById(codigo).checked = false;
                 }else {
                     document.form1['aEmpenho[' + codigo + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP,2);
                     document.form1['aFonte['+fonte+'][vlr_disponivel]'].value = js_roundDecimal(Number(vlr_disponivel) - Number(vlr_dispRPP),2);
                     document.getElementById(codigo).checked = true;
                 }
+
+                let VlrUtilizadoFonte = 0;
+                aItensFonte(fonte).forEach(function (itens, key) {
+                  // itens.checked = true;
+                  let vlr_dispRPNP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPNP][' + fonte + ']'].value;
+                  let vlr_dispRPP = document.form1['aEmpenho[' + itens.value + '][vlr_dispRPP][' + fonte + ']'].value;
+                  VlrUtilizadoFonte += Number(vlr_dispRPNP) + Number(vlr_dispRPP);
+                });
+
+                document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
             }
         }
     }
@@ -447,7 +497,7 @@
             alert(response.erro);
         } else if (!!response.sucesso) {
             alert('Salvo com Sucesso !');
-            location.reload();
+            window.location.reload();
         }
     }
 
@@ -455,38 +505,43 @@
      * função para carregar valores dos itens na tela
      */
 
-    function carregaritens(fonte) {
+    async function carregaritens(fonte) {
         buscaritens({
             exec: 'getItens',
             fonte: fonte
         }, js_carregaritens);
     }
 
-    function js_carregaritens(oRetorno){
+    async function js_carregaritens(oRetorno){
+
         var itens = JSON.parse(oRetorno.responseText.urlDecode());
-        // console.log(itens);
-        itens.itens.forEach(function (item, b) {
+        if(typeof itens.itens !== 'undefined') {
+          itens.itens.forEach(function (item, b) {
             // console.log(item);
-            if(document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP]['+item.c223_fonte+']'] != undefined ){
-                document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP]['+item.c223_fonte+']'].value = item.c223_vlrdisrpnp;
-                document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPP]['+item.c223_fonte+']'].value = item.c223_vlrdisrpp;
-                document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPP]['+item.c223_fonte+']'].value = item.c223_vlrsemdisrpp;
-                document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPNP]['+item.c223_fonte+']'].value = item.c223_vlrsemdisrpnp;
-                if(document.form1['aFonte  [' + item.c223_fonte +  '][vlr_disponivel]'] != undefined){
-                    document.form1['aFonte  [' + item.c223_fonte +  '][vlr_disponivel]'].value = item.c223_vlrdisponivel;
-                }
+            if (document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP][' + item.c223_fonte + ']'] != undefined) {
+              document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPNP][' + item.c223_fonte + ']'].value = item.c223_vlrdisrpnp;
+              document.form1['aEmpenho[' + item.c223_codemp + '][vlr_dispRPP][' + item.c223_fonte + ']'].value = item.c223_vlrdisrpp;
+              document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPP][' + item.c223_fonte + ']'].value = item.c223_vlrsemdisrpp;
+              document.form1['aEmpenho[' + item.c223_codemp + '][vlr_semRPNP][' + item.c223_fonte + ']'].value = item.c223_vlrsemdisrpnp;
+              if (document.form1['aFonte  [' + item.c223_fonte + '][vlr_disponivel]'] != undefined) {
+                document.form1['aFonte  [' + item.c223_fonte + '][vlr_disponivel]'].value = item.c223_vlrdisponivel;
+              }
             }
-        });
+          });
+        }
     }
 
-    function buscaritens(params, onComplete) {
+    async function buscaritens(params, onComplete) {
         js_divCarregando('Carregando Novas Informações', 'div_aguarde');
         var request = new Ajax.Request('despesainscritarp.RPC.php', {
             method:'post',
             parameters:'json=' + JSON.stringify(params),
-            onComplete: function(res) {
-                js_removeObj('div_aguarde');
-                onComplete(res);
+            onComplete: async function (res) {
+              console.log('calling');
+              const result = await resolverDepoisDe2Segundos();
+              console.log(result);
+              js_removeObj('div_aguarde');
+              onComplete(res);
             }
         });
     }
@@ -495,6 +550,7 @@
      * funcao para carregar o valor Utilizado
      *
      * */
+
 
     function js_buscarVlrDisp(fonte) {
         buscaritens({
@@ -506,7 +562,7 @@
     function js_carregarVlorDisp(oRetorno) {
         var vlrDispFonte = JSON.parse(oRetorno.responseText.urlDecode());
 
-        if (vlrDispFonte != null) {
+        if (typeof vlrDispFonte.fontes !== 'undefined') {
 
             vlrDispFonte.fontes.forEach(function (fonte, key) {
                 let VlrUtilizado = Number(fonte.saldoUtilizado);
@@ -540,8 +596,10 @@
         }, js_carregarDisponibilidade);
     }
 
-    function js_carregarDisponibilidade(oRetorno){
-
+   async function js_carregarDisponibilidade(oRetorno){
+        console.log('calling');
+        const result = await resolverDepoisDe2Segundos();
+        console.log(result);
         var oDisponiblidade = JSON.parse(oRetorno.responseText.urlDecode());
         oDisponiblidade.dispobilidade.forEach(function (dispfonte, key) {
 
@@ -551,9 +609,12 @@
 
             if(document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'] != undefined ){
                 document.form1['aFonte[' + dispfonte.c224_fonte + '][disp_total]'].value = dispfonte.c224_vlrdisponibilidadecaixa;
-                document.form1['aFonte[' + dispfonte.c224_fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(dispfonte.c224_vlrdisponibilidadecaixa) - Number(VlrUtilizado),2);
+
+                document.form1['aFonte[' + dispfonte.c224_fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(js_roundDecimal(dispfonte.c224_vlrdisponibilidadecaixa,2)) - Number(js_roundDecimal(VlrUtilizado,2)),2);
             }
         });
+
+
     }
 
     function js_Disponibilidadetotal(params, onComplete) {
@@ -569,6 +630,9 @@
     }
 
     function js_aplicardisptotal(fonte) {
+
+        console.log('aplic total');
+
         let VlrDispTotal = document.form1['aFonte[' + fonte + '][disp_total]'].value;
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
 
@@ -599,11 +663,10 @@
             }
             document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte,2);
             document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte),2);
-
         }
     }
 
-    function js_aplicar(fonte,emp) {
+    async function js_aplicar(fonte,emp) {
 
         let vlr_dispRPNP = document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value;
         let vlr_dispRPP  = document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value;
@@ -613,8 +676,12 @@
         let VlrTotalRP   = document.form1['aFonte[' + fonte + '][vlr_totalrp]'].value;
         let VlrDisponivel   = document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value;
         document.getElementById(emp).checked = true;
-
-        if(Number(VlrDisponivel) == 0 || Number(vlr_lqd) > Number(VlrDisponivel) || Number(vlr_n_lqd) > Number(VlrDisponivel)){
+        // console.log('vlr_dispRPNP',vlr_dispRPNP);
+        // console.log('vlr_n_lqd',vlr_n_lqd);
+        // console.log('vlr_lqd',vlr_lqd);
+        // console.log('VlrDisponivel',VlrDisponivel);
+        let saldo = Number(vlr_n_lqd) + Number(vlr_lqd);
+        if(Number(VlrDisponivel) == 0 || Number(saldo) > Number(VlrDisponivel) ){
             alert("Erro! Não existe saldo Disponivel para essa Operação");
             document.getElementById(emp).checked = false;
         }else {
@@ -623,6 +690,9 @@
                 document.getElementById(emp).checked = false;
             } else {
 
+                console.log('calling');
+                const result = await resolverDepoisDe2Segundos();
+                console.log(result);
                 if (Number(vlr_lqd) == 0) {
                     // alert("Não existe saldo liquidado para este empenho!");
                     document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].style.background = '#DEB887';
@@ -632,8 +702,8 @@
                         // alert("Erro! Valor de Disp. RPP maior que valor liquidado.");
                         document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = 0;
                     } else {
-                        let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
-                        document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP, 2);
+                        //let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
+                        //document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPP, 2);
                         if (vlr_dispRPP == 0 || vlr_dispRPP == '') {
                             document.form1['aEmpenho[' + emp + '][vlr_dispRPP][' + fonte + ']'].value = vlr_lqd;
                         } else {
@@ -651,14 +721,26 @@
                         // alert("Erro! Valor de Disp. RPNP maior que valor não liquidado");
                         document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = 0;
                     } else {
-                        let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
-                        document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPNP, 2);
+                        console.log('calling');
+                        const result = await resolverDepoisDe2Segundos();
+                        console.log(result);
+
+                        // let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
+                        // document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = js_roundDecimal(resultvlrsemRPNP, 2);
                         if (vlr_dispRPNP == 0 || vlr_dispRPNP == '') {
                             document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_n_lqd, 2);
                         } else {
                             document.form1['aEmpenho[' + emp + '][vlr_dispRPNP][' + fonte + ']'].value = js_roundDecimal(vlr_dispRPNP, 2);
                         }
                     }
+                }
+                if(document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value !== null || document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value !== null) {
+                  if(document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value !== 0 || document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value !== 0) {
+                    //let resultvlrsemRPP = vlr_lqd - vlr_dispRPP;
+                    document.form1['aEmpenho[' + emp + '][vlr_semRPP][' + fonte + ']'].value = 0;
+                    let resultvlrsemRPNP = vlr_n_lqd - vlr_dispRPNP;
+                    document.form1['aEmpenho[' + emp + '][vlr_semRPNP][' + fonte + ']'].value = 0;
+                  }
                 }
             }
             /**
@@ -673,7 +755,7 @@
             });
 
             document.form1['aFonte[' + fonte + '][vlr_utilizado]'].value = js_roundDecimal(VlrUtilizadoFonte, 2);
-            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(VlrUtilizadoFonte), 2);
+            document.form1['aFonte[' + fonte + '][vlr_disponivel]'].value = js_roundDecimal(Number(VlrDispTotal) - Number(js_roundDecimal(VlrUtilizadoFonte,2)), 2);
         }
     }
 
