@@ -374,6 +374,7 @@ if (!empty($chaves) && isset($chaves)){
           db_input('codproc'   ,10,'',true,'hidden',3);
           db_input('codprocant',10,'',true,'hidden',3);
           db_input('cods'      ,10,'',true,'hidden',3);
+          db_input('codprocanu',10,'',true,'hidden',3);
 
           if (isset($codproc)&&$codproc!=""){
             $sql = $clpcprocitem->sql_query_pcmater(null,
