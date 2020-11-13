@@ -1742,7 +1742,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete15->si182_naturezasaldofinalsf = $obalancete15->si182_saldofinalsf >= 0 ? 'D' : 'C';
                             $obalancete15->si182_instit = db_getsession("DB_instit");
                             $obalancete15->si182_mes = $nMes;
-
                             $aContasReg10[$reg10Hash]->reg15[$sHash15] = $obalancete15;
 
                         } else{
@@ -3013,9 +3012,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg15->si182_naturezasaldoinicialsf = $reg15->si182_saldoinicialsf == 0 ? $oDado10->naturezasaldo : ($reg15->si182_saldoinicialsf > 0 ? 'D' : 'C');
                 $obalreg15->si182_totaldebitossf = number_format(abs($reg15->si182_totaldebitossf), 2, ".", "");
                 $obalreg15->si182_totalcreditossf = number_format(abs($reg15->si182_totalcreditossf), 2, ".", "");
+//
                 $saldoFinal = ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf) == '' ? 0 : ($reg15->si182_saldoinicialsf + $reg15->si182_totaldebitossf - $reg15->si182_totalcreditossf);
+
                 $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal), 2, ".", "");
-                $obalreg15->si182_naturezasaldofinalsf = $obalreg15->si182_naturezasaldoinicialsf;
+                $obalreg15->si182_naturezasaldofinalsf = $obalancete10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : ($saldoFinal > 0 ? 'D' : 'C');//$obalreg15->si182_naturezasaldoinicialsf;
                 $obalreg15->si182_instit = $reg15->si182_instit;
                 $obalreg15->si182_mes = $reg15->si182_mes;
                 $obalreg15->si182_reg10 = $obalancete10->si177_sequencial;
