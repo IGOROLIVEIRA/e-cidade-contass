@@ -1458,7 +1458,7 @@ if($x->consultarDataDoSistema == true){
                 var nValorDotacao = 0;
 
                 oDadosItem.dotacoes.each(function(oDotacao, id) {
-                    nValorDotacao += oDotacao.valorexecutar;
+                    nValorDotacao += oDotacao.valor;
                 });
 
                 oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);
