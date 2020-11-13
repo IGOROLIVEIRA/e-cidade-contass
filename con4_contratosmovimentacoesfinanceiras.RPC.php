@@ -329,7 +329,7 @@ switch($oParam->exec) {
 
                 foreach ($oItem->dotacoes as $iDotacoes => $oDotacoes) {
 
-                    $nTotalExecutar += $oDotacoes->valorexecutar;
+                    $nTotalExecutar += $oDotacoes->valor;
                 }
 
                 if (round($nTotalExecutar, 2) > round($nValorTotalItem, 2)) {

@@ -1088,7 +1088,7 @@ if($x->consultarDataDoSistema == true){
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
             // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f",2);
+            nValorDotacao = js_formatar(oDotacao.valor.toFixed(2), "f",2);
 
 
             aLinha    = new Array();
@@ -1349,7 +1349,7 @@ if($x->consultarDataDoSistema == true){
                     aLinha[1] = sImg+oItem.descricao.urlDecode();
                     aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
                     aLinha[3] = js_formatar(oItem.valorunitario, "f",iCasasDecimais);
-                    aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
+                    aLinha[4] = js_formatar((oItem.quantidade * oItem.valorunitario).toFixed(2),"f", 2);
                     oGridAutorizacoes.addRow(aLinha);
                     iLinha++;
                 });
