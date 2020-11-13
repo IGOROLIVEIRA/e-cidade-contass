@@ -839,7 +839,7 @@ class MSC {
                              LEFT OUTER JOIN consistema 
                                  ON c60_codsis = c52_codsis
                              LEFT JOIN vinculopcaspmsc 
-                                 ON (substr(p.c60_estrut,2,8), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
+                                 ON (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
                              LEFT JOIN orctiporec 
                                  ON c19_orctiporec = o15_codigo
                              LEFT JOIN natdespmsc 

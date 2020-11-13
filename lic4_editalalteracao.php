@@ -120,7 +120,7 @@ if(isset($alterar)){
 		}
 
 	}else{
-        if(!$cleditaldocumento->numrows){
+        if(!$cleditaldocumento->numrows && !$sqlerro){
 			$sqlerro = true;
 			$erro_msg = 'Existem documentes anexos faltantes, verifique o cadastro na aba de Documentos!';
 		}

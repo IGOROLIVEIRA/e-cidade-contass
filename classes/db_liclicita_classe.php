@@ -1471,7 +1471,6 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($tribunal != 50) {
                 if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
                     $sql .= $virgula . " l20_recdocumentacao = null ";
                     $virgula = ",";
@@ -1487,7 +1486,6 @@ class cl_liclicita
                     $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                     $virgula = ",";
                 }
-            }
         }
 
         if (trim($this->l20_dataaber != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
@@ -2585,6 +2583,7 @@ class cl_liclicita
         $sql .= "       left join protprocesso          on protprocesso.p58_codproc    = liclicitaproc.l34_protprocesso";
         $sql .= "       left join liclicitem            on liclicita.l20_codigo        = l21_codliclicita ";
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
+        $sql .= "       left join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -2639,6 +2638,7 @@ class cl_liclicita
         $sql .= "       left join acordoliclicitem      on liclicitem.l21_codigo       = acordoliclicitem.ac24_liclicitem ";
         $sql .= "      inner join parecerlicitacao     on parecerlicitacao.l200_licitacao     = liclicita.l20_codigo ";
         $sql .= "      inner join liclicitasituacao     on liclicitasituacao.l11_liclicita     = liclicita.l20_codigo ";
+        $sql .= "      left  join liclancedital         on liclancedital.l47_liclicita = liclicita.l20_codigo ";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -3507,7 +3507,7 @@ class cl_liclicita
                   inner join solicitem on pc11_codigo = pc81_solicitem
                   inner join solicitempcmater on pc16_solicitem = pc11_codigo
                   inner join pcmater on pc01_codmater = pc16_codmater
-                  where l21_codliclicita = $liclicita and pc01_obras = 't'";
+                  where l21_codliclicita = $liclicita";
         $rsResult = db_query($sql);
         $aItensPcmater = array();
         for ($icont = 0; $icont < pg_num_rows($rsResult); $icont++) {

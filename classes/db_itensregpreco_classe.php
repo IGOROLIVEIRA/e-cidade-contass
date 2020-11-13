@@ -445,13 +445,7 @@ class cl_itensregpreco {
        }
      }
      $resultLote = db_query("select si06_processoporlote from adesaoregprecos where si06_sequencial = $this->si07_sequencialadesao");
-     if(trim($this->si07_numerolote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])) {
-       if (trim($this->si07_numerolote) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])) {
-         $this->si07_numerolote = "0";
-       }
-       $sql .= $virgula . " si07_numerolote = $this->si07_numerolote ";
-       $virgula = ",";
-       if (($this->si07_numerolote == null || $this->si07_numerolote == "0") && pg_result($resultLote, 0, 0) == 1) {
+       if (($this->si07_numerolote == null || !$this->si07_numerolote) && pg_result($resultLote, 0, 0) == 1) {
          $this->erro_sql = " Campo Descrição e Número do Lote devem ser Informados.";
          $this->erro_campo = "si07_numerolote";
          $this->erro_banco = "";
@@ -459,12 +453,16 @@ class cl_itensregpreco {
          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
          $this->erro_status = "0";
          return false;
-       }
+       }else{
+         if(pg_result($resultLote, 0, 0) == 2){
+           $sql .= $virgula . " si07_numerolote = null ";
+           $virgula = ",";
+         }else{
+            $sql .= $virgula . " si07_numerolote = $this->si07_numerolote ";
+            $virgula = ",";
+         }
      }
-     if(trim($this->si07_descricaolote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_descricaolote"])) {
-       $sql .= $virgula . " si07_descricaolote = '$this->si07_descricaolote' ";
-       $virgula = ",";
-       if (($this->si07_descricaolote == null) && pg_result($resultLote, 0, 0) == 1) {
+     if((trim($this->si07_descricaolote) == null || !$this->si07_descricaolote) && pg_result($resultLote, 0, 0) == 1) {
          $this->erro_sql = " Campo Descrição e Número do Lote devem ser Informados.";
          $this->erro_campo = "si07_descricaolote";
          $this->erro_banco = "";
@@ -472,12 +470,18 @@ class cl_itensregpreco {
          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
          $this->erro_status = "0";
          return false;
-       }
+     }else{
+        if(pg_result($resultLote, 0, 0) == 2){
+            $sql .= $virgula . " si07_descricaolote = null ";
+        }else{
+            $sql .= $virgula . " si07_descricaolote = '$this->si07_descricaolote' ";
+        }
+
      }
 
      $sql .= " where ";
      if($si07_sequencial!=null){
-       $sql .= " si07_sequencial = $this->si07_sequencial";
+       $sql .= " si07_sequencial = $si07_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->si07_sequencial));
      if($this->numrows>0){

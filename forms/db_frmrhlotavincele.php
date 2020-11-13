@@ -41,6 +41,10 @@ $clrotulo->label("o15_descr");
 $clrotulo->label("o54_descr");
 $clrotulo->label("o53_descr");
 $clrotulo->label("o52_descr"); 
+$clrotulo->label("o58_coddot");
+$clrotulo->label("o56_descr");
+$clrotulo->label("o40_descr");
+$clrotulo->label("o41_descr");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -74,6 +78,47 @@ db_input('rh25_descr',50,$Ir70_descr,true,'text',3);
   </tr>
 
   <tr>
+    <td nowrap title="<?=@$To58_coddot?>">
+      <?php 
+        db_ancora($Lo58_coddot, "js_pesquisaReduzido(true);", 1);
+      ?>
+    </td>
+    <td>
+      <?php 
+        db_input("o58_coddot", 8, $Io58_coddot, true, "text", 1, "onchange='js_pesquisaReduzido(false);'");
+        db_input("o56_descrReduzido",40, $Io56_descr,true,"text",3);
+      ?>
+    </td>
+  </tr>
+
+  <tr>
+    <td nowrap title="<?=@$Trh39_orgao?>" >
+      <?
+      db_ancora(@$Lrh39_orgao,"js_pesquisaorgunid(true);",$db_opcao);
+      ?>
+    </td>
+    <td> 
+      <?
+      db_input('rh39_orgao',8,$Irh39_orgao,true,'text',3,"");
+      db_input('o40_descr',40,$Io40_descr,true,'text',3,"");
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$To41_unidade?>">
+      <?
+      db_ancora(@$Lrh39_unidade,"js_pesquisaorgunid(true);",$db_opcao);
+      ?>
+    </td>
+    <td> 
+      <?
+      db_input('rh39_unidade',8,$Irh39_unidade,true,'text',3,"");
+      db_input('o41_descr',40,$Io41_descr,true,'text',3,"");
+      ?>
+    </td>
+  </tr>
+
+  <tr>
     <td nowrap title="<?=@$Trh39_projativ?>">
        <?
        db_ancora(@$Lrh39_projativ,"js_pesquisarh39_projativ(true)",$db_opcao);
@@ -81,6 +126,7 @@ db_input('rh25_descr',50,$Ir70_descr,true,'text',3);
     </td>
     <td> 
 <?
+$rh39_anousu = db_getsession("DB_anousu");
 db_input('rh39_projativ',8,$Irh39_projativ,true,'text',$db_opcao,"onchange='js_pesquisarh39_projativ(false)'");
 db_input('rh39_anousu',4,$Irh39_anousu,true,'text',3);
 db_input('o55_descr',44,$Io55_descr,true,'text',3);
@@ -187,10 +233,10 @@ db_input('o56_descr',50,$Io56_descr,true,'text',3,"","o56_descrnov");
 	 $chavepri= array("rh28_codlotavinc"=>@$rh28_codlotavinc,"rh28_codeledef"=>@$rh28_codeledef);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
 	 $sCampos  = " DISTINCT rh28_codlotavinc, rh28_codeledef, orcelemento.o56_descr, rh28_codelenov, a.o56_descr";
-	 $sCampos .= " ,rh43_recurso, o15_codigo, o15_descr, o55_projativ, o55_descr, o55_anousu";
+	 $sCampos .= " ,rh43_recurso, o15_codigo, o15_descr, o55_projativ, o55_descr, o55_anousu,(rh39_orgao||' - '||o40_descr) as rh39_orgao,(rh39_unidade||' - '||o41_descr) as rh39_unidade";
 	 $sOrder   = "rh28_codlotavinc, rh28_codeledef";
 	 $cliframe_alterar_excluir->sql = $clrhlotavincele->sql_query_ele(null, null, $sCampos, $sOrder, $where);
-	 $cliframe_alterar_excluir->campos  = "rh28_codeledef,o56_descr,rh28_codelenov,o56_descr,o15_codigo,o15_descr,o55_projativ,o55_descr,o55_anousu";
+	 $cliframe_alterar_excluir->campos  = "rh28_codeledef,o56_descr,rh28_codelenov,rh39_orgao,rh39_unidade,o15_codigo,o15_descr,o55_projativ,o55_descr,o55_anousu";
 	 $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height = "200";
 	 $cliframe_alterar_excluir->iframe_width  = "100%";
@@ -587,5 +633,82 @@ function js_preenchePesquisaFuncaoInput(sDescricao, lErro) {
 	if (lErro) {
 		$('rh39_funcao').value = '';
 	}
+}
+
+function js_pesquisaReduzido (lMostra) {
+  var sUrlOpen = "func_orcdotacaorhlota.php?pesquisa_chave="+document.form1.o58_coddot.value+"&funcao_js=parent.js_completaReduzido";
+  if (lMostra) {
+    sUrlOpen = "func_orcdotacaorhlota.php?funcao_js=parent.js_preencheReduzido|o58_coddot|o55_descr|o40_orgao|o40_descr|o41_unidade|o41_descr|o55_projativ|o55_descr|o15_codigo|o15_descr|o54_programa|o54_descr|o52_funcao|o52_descr|o53_subfuncao|o53_descr";
+  }
+  js_OpenJanelaIframe('', 'db_iframe_orcdotacao', sUrlOpen, 'Pesquisa Reduzido Dotação', lMostra);
+}
+function js_preencheReduzido (iCodigoReduzido, sDescricao, o40_orgao, o40_descr, o41_unidade, o41_descr, o55_projativ,o55_descr,o15_codigo,o15_descr,o54_programa,o54_descr,o52_funcao,o52_descr,o53_subfuncao,o53_descr) {
+  document.form1.o58_coddot.value = iCodigoReduzido;
+  document.form1.o56_descrReduzido.value = sDescricao;
+  document.form1.rh39_projativ.value = o55_projativ;
+  document.form1.o55_descr.value = o55_descr;
+  document.form1.rh43_recurso.value = o15_codigo;
+  document.form1.o15_descr.value = o15_descr;
+  document.form1.rh39_programa.value = o54_programa;
+  document.form1.o54_descr.value = o54_descr;
+  document.form1.rh39_funcao.value = o52_funcao;
+  document.form1.o52_descr.value = o52_descr;
+  document.form1.rh39_subfuncao.value = o53_subfuncao;
+  document.form1.o53_descr.value = o53_descr;
+  document.form1.rh39_orgao.value = o40_orgao;
+  document.form1.o40_descr.value = o40_descr;
+  document.form1.rh39_unidade.value = o41_unidade;
+  document.form1.o41_descr.value = o41_descr;
+  db_iframe_orcdotacao.hide();
+}
+function js_completaReduzido (sDescricao, lErro, o40_orgao, o40_descr, o41_unidade, o41_descr, o55_projativ,o55_descr,o15_codigo,o15_descr,o54_programa,o54_descr,o52_funcao,o52_descr,o53_subfuncao,o53_descr) {
+  document.form1.o56_descrReduzido.value = sDescricao;
+  if (lErro || typeof(o40_orgao) === "undefined") {
+    document.form1.o58_coddot.value = "";
+    document.form1.rh39_projativ.value = "";
+    document.form1.o55_descr.value = "";
+    document.form1.rh43_recurso.value = "";
+    document.form1.o15_descr.value = "";
+    document.form1.rh39_programa.value = "";
+    document.form1.o54_descr.value = "";
+    document.form1.rh39_funcao.value = "";
+    document.form1.o52_descr.value = "";
+    document.form1.rh39_subfuncao.value = "";
+    document.form1.o53_descr.value = "";
+    document.form1.rh39_orgao.value = "";
+    document.form1.o40_descr.value = "";
+    document.form1.rh39_unidade.value = "";
+    document.form1.o41_descr.value = "";
+  } else {
+    document.form1.rh39_projativ.value = o55_projativ;
+    document.form1.o55_descr.value = o55_descr;
+    document.form1.rh43_recurso.value = o15_codigo;
+    document.form1.o15_descr.value = o15_descr;
+    document.form1.rh39_programa.value = o54_programa;
+    document.form1.o54_descr.value = o54_descr;
+    document.form1.rh39_funcao.value = o52_funcao;
+    document.form1.o52_descr.value = o52_descr;
+    document.form1.rh39_subfuncao.value = o53_subfuncao;
+    document.form1.o53_descr.value = o53_descr;
+    document.form1.rh39_orgao.value = o40_orgao;
+    document.form1.o40_descr.value = o40_descr;
+    document.form1.rh39_unidade.value = o41_unidade;
+    document.form1.o41_descr.value = o41_descr;
+  }
+}
+function js_pesquisaorgunid(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo.iframe_rhlotavinc.IFdb_iframe_cadele','db_iframe_orcunidade','func_orcunidaderhlotavincele.php?funcao_js=top.corpo.iframe_rhlotavinc.IFdb_iframe_cadele.js_mostraorgunid1|o41_orgao|o41_unidade|o40_descr|o41_descr','Pesquisa',true,'0');
+  }else{
+    js_OpenJanelaIframe('top.corpo.iframe_rhlotavinc.IFdb_iframe_cadele','db_iframe_orcunidade','func_orcunidaderhlotavincele.php?funcao_js=top.corpo.iframe_rhlotavinc.IFdb_iframe_cadele.js_mostraorgunid1|o41_orgao|o41_unidade|o40_descr|o41_descr','Pesquisa',false,'0');
+  }
+}
+function js_mostraorgunid1(chave1,chave2,chave3,chave4){
+  console.log(chave3);
+  document.form1.rh39_orgao.value = chave1;
+  document.form1.rh39_unidade.value = chave2;
+  document.form1.o40_descr.value = chave3;
+  document.form1.o41_descr.value = chave4;
+  db_iframe_orcunidade.hide();
 }
 </script>

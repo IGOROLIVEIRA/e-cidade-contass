@@ -823,6 +823,8 @@ abstract class ServidorRepository {
     $GLOBALS["HTTP_POST_VARS"]['rh02_equip']            = $oDaoRHPessoalMov->rh02_equip;
     $GLOBALS["HTTP_POST_VARS"]['rh02_deficientefisico'] = $oDaoRHPessoalMov->rh02_deficientefisico;
     $GLOBALS["HTTP_POST_VARS"]['rh02_portadormolestia'] = $oDaoRHPessoalMov->rh02_portadormolestia;
+    $GLOBALS["HTTP_POST_VARS"]['rh02_laudodeficiencia'] = $oDaoRHPessoalMov->rh02_laudodeficiencia;
+    $GLOBALS["HTTP_POST_VARS"]['rh02_laudoportadormolestia'] = $oDaoRHPessoalMov->rh02_laudoportadormolestia;
 
     /**
      * Persist a tabela rhpessoalmov na base de dados chamando o método 
@@ -1010,5 +1012,39 @@ abstract class ServidorRepository {
 
     return $aServidores;
     
+  }
+
+  public static function persistLaudoMedico($aFile, $iOidAnterior = null) {
+    if (empty($aFile["type"]) || $aFile["type"] != 'application/pdf') {
+        throw new Exception("Tipo do Arquivo inválido!");
+    }
+    if (move_uploaded_file($aFile['tmp_name'], "tmp/".$aFile['name'])) {
+      try {
+        if (!empty($iOidAnterior)) {
+          self::removeLaudoMedico($iOidAnterior);
+        }
+        $iOid = DBLargeObject::gerarArquivoOid("tmp/".$aFile['name'], true);
+        if (!$iOid) {
+          throw new Exception("Houve um erro ao salvar Laudo Médico.");
+        }
+        return $iOid;
+      } catch ( Exception $oException ) { 
+        throw new Exception("Erro ao salvar Laudo Médico. " . $oException->getMessage());
+      }
+    } else {
+      throw new Exception("Erro no upload do Laudo Médico.");
+    }
+  }
+
+  public static function removeLaudoMedico($iOid) {
+    try {
+      $retornoExclusao = DBLargeObject::exclusao($iOid);
+      if (!$retornoExclusao) {
+        throw new Exception("Houve um erro ao excluir Laudo Médico. $iOid");
+      }
+      return null;
+    } catch ( Exception $oException ) {
+      throw new Exception("Erro ao excluir Laudo Médico. ". $oException->getMessage());
+    }
   }
 }

@@ -296,7 +296,7 @@ try {
           $oLancamentoAuxiliarEmLiquidacao->setGrupoMaterial($oGrupo);
           $oLancamentoAuxiliarEmLiquidacao->setNumeroEmpenho($oStdBuscaLancamento->c75_numemp);
           $oLancamentoAuxiliarEmLiquidacao->setValorTotal($oDadosItem->nValor);
-          $oLancamentoAuxiliarEmLiquidacao->setCodigoElemento($oGrupo->getConta());
+          $oLancamentoAuxiliarEmLiquidacao->setCodigoElemento($oEmpenhoFinanceiro->getDesdobramentoEmpenho());
           $oLancamentoAuxiliarEmLiquidacao->setCodigoNotaLiquidacao($oStdBuscaLancamento->m72_codnota);
           $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico('Lançamento em liquidação da ordem de compra ' . $oDadosItem->iOrdemCompra);
           $oLancamentoAuxiliarEmLiquidacao->setCodigoDotacao($oEmpenhoFinanceiro->getDotacao()->getCodigo());

@@ -102,6 +102,14 @@ $db_opcao_inf=1;
               <?php db_input('e03_numeroprocesso', 13, '', true, 'text', $db_opcao_inf, null, null, null, null, 15)?>
             </td>
           </tr>
+           <!-- OC 12746 -->
+           <tr>
+               <td nowrap id="competDespLabel" style="display: none"><b>Competência da Despesa: </b></td>
+               <td style="display: none" id="competDespInput">
+                  <?db_inputData('e50_compdesp', '', '', '', true, 'text', 1); ?>
+                  <input type="hidden" name="sEstrutElemento" id="sEstrutElemento"/>
+               </td>
+           </tr>
 
           <!--[Extensao OrdenadorDespesa] inclusao_ordenador-->
 
@@ -290,9 +298,12 @@ function js_saida(oAjax){
     $('e60_vlrliq').value = obj.e60_vlrliq;
     $('historico').value  = obj.e60_resumo.urlDecode();
     $('saldo_disp').value = obj.saldo_dis;
+    $('sEstrutElemento').value = obj.sEstrutural;    
     saida                 = '';
     iTotNotas             = 0;
     $('dados').innerHTML  = '';
+    estrutural            = obj.sEstrutural;
+    $('e50_compdesp').value = '';
 
     if (obj.aItensPendentesPatrimonio.length > 0) {
 
@@ -318,6 +329,16 @@ function js_saida(oAjax){
 
           var nSaldoNota = (js_strToFloat(obj.data[i].e70_valor)-js_strToFloat(obj.data[i].e70_vlrliq) -
 		                        js_strToFloat(obj.data[i].e70_vlranu)-js_strToFloat(obj.data[i].e53_vlrpag)).toFixed(2);
+
+          aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
+        
+            if (aMatrizEntrada.indexOf(estrutural) !== -1) {
+               document.getElementById('competDespLabel').style.display = "table-cell";
+               document.getElementById('competDespInput').style.display = "table-cell";
+            } else {
+                document.getElementById('competDespLabel').style.display = "none";
+                document.getElementById('competDespInput').style.display = "none";
+            }
 
         } else if (iOperacao == 2) { //estorno
           if (js_strToFloat(obj.data[i].e53_vlrpag) > 0) {
@@ -422,6 +443,22 @@ function js_marcaLinha(obj){
 
 function js_liquidar(metodo){
 
+   if (metodo == "liquidarAjax") {
+       
+       aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
+       
+       if (aMatrizEntrada.indexOf($F('sEstrutElemento')) !== -1) {
+       
+           if ($F('e50_compdesp') == ''){
+               alert('Campo Competência da Despesa deve ser informado.');
+               $('e50_compdesp').focus();
+               $('pesquisar').disabled = false;
+               $('confirmar').disabled = false;
+               return false;
+           }
+       }
+   }  
+
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
    sV    = '';
@@ -462,6 +499,8 @@ function js_liquidar(metodo){
 
      oParam.pars       = $F('e60_numemp');
      oParam.z01_credor = $F('e49_numcgm');
+
+     oParam.e50_compdesp = $F('e50_compdesp');
 
      url      = 'emp4_liquidacao004.php';
      oAjax    = new Ajax.Request(

@@ -480,6 +480,11 @@ class cl_acordo {
             $this->erro_status = "0";
             return false;
         }
+
+        if(($this->ac16_tipocadastro == null) || ($this->ac16_tipocadastro == "") ){
+            $this->ac16_tipocadastro = 1;
+        }
+
         $sql = "insert into acordo(
       ac16_sequencial
      ,ac16_acordosituacao
@@ -693,8 +698,12 @@ class cl_acordo {
                 return false;
             }
         }
+
         if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
             $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
+            $virgula = ",";
+        }else{
+            $sql  .= $virgula." ac16_dataassinatura = null ";
             $virgula = ",";
         }
 

@@ -304,3 +304,22 @@ body.imagem04 {
 .ui-autocomplete-loading {
   background: transparent url('jQueryUI/images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
+
+#status-versao {
+  padding-top: 20;
+  height: 40px;
+  /*border: 1px solid #000;*/
+  text-align: center;
+}
+
+#status {
+  margin-top: -20px;
+  font-weight: bold;
+}
+
+#tag {
+    padding: 5px;
+    color: white;
+    border-radius: 15%;
+    display: inline-block;
+}

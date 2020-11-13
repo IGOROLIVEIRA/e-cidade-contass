@@ -351,6 +351,13 @@ switch($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+          if ( $oTransferencia->getContaCredito() != "" ) {
+              
+              $oContaTesouraria = new contaTesouraria($oTransferencia->getContaCredito());
+              $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+
+          }
+
           $oTransferencia->executaAutenticacao();
 
           if (USE_PCASP) {
@@ -402,6 +409,13 @@ switch($oParam->exec) {
 
 
         $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar);
+
+        if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
+            
+            $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
+            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
+
+        }
 
         $iCodForma = $oMovimento->iCodForma;
         $iCodMov   = $oMovimento->iCodMov;

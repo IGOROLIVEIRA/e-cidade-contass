@@ -94,9 +94,10 @@ $clrotulo->label("c61_reduz");
           </tr>
           <tr> 
             <td colspan="4" align="center"> 
+              <input type="hidden" value="1" name="pesquisa_geral">
               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_conplano.hide();">
+              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_conta.hide();">
              </td>
           </tr>
         </form>
@@ -138,7 +139,7 @@ $clrotulo->label("c61_reduz");
 	         $sql = $clconplano->sql_query_geral("",null,$campos,"c60_descr"," c60_anousu=$anousu and   upper(c60_descr) like '$chave_c60_descr%' ");
         }else if( isset($tipo_sql) ){         
              $sql = $clconplano->sql_query_reduz("",$campos.",c61_reduz as db_c61_reduz,c60_estrut as db_c60_estrut","c60_estrut","c60_anousu=$anousu");
-        }else{        	
+        }elseif($pesquisa_geral == 1){        	
              $sql = $clconplano->sql_query_geral("",$anousu,$campos,"c60_estrut","c60_anousu=".db_getsession("DB_anousu"));
         }
 

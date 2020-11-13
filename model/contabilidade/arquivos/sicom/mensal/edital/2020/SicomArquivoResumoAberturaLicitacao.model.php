@@ -253,7 +253,7 @@ FROM
                      liclicita.l20_naturezaobjeto AS naturezaObjeto,
                      liclicita.l20_objeto AS Objeto,
                      CASE
-                         WHEN liclicita.l20_naturezaobjeto = '1' THEN liclicita.l20_regimexecucao
+                         WHEN liclicita.l20_naturezaobjeto in ('1', '7') THEN liclicita.l20_regimexecucao
                          ELSE 0
                      END AS regimeExecucaoObras,
                      obrasdadoscomplementares.db150_bdi AS bdi,
@@ -323,7 +323,6 @@ GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exe
 ORDER BY nroprocessolicitatorio
 
                   ";
-//	print_r($sSql);
     $rsResult10 = db_query($sSql);
 
     /**
@@ -467,7 +466,7 @@ ORDER BY nroprocessolicitatorio
               $clralic11->si181_dscatividadeservespecializado = $oResult11->dscatividadeservespecializado;
               $clralic11->si181_codfuncao = $oResult11->codfuncao;
               $clralic11->si181_codsubfuncao = $oResult11->codsubfuncao;
-              $clralic11->si181_codbempublico = $oResult11->codbempublico;
+              $clralic11->si181_codbempublico = $oResult11->codbempublico ? $oResult11->codbempublico : 9900;
               $clralic11->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
               $clralic11->si181_reg10 = $clralic10->si180_sequencial;// chave estrangeira
               $clralic11->si181_instit = db_getsession("DB_instit");

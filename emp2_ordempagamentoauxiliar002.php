@@ -191,8 +191,8 @@ if ($oDaoOrdemAuxiliar->numrows > 0) {
                 $oPdf->cell(18, 4,db_formatar($oMovimento->e43_valor-$oMovimento->vlrretencao,"f"),0,1,"R",$iPreencher);
 
                 $subgrupo = $oMovimento->e50_obs;
-                if (strlen($subgrupo) > 115) {
-                    $aSubgrupo = quebrar_texto($subgrupo,115);
+                if (strlen($subgrupo) > 112) {
+                    $aSubgrupo = quebrar_texto($subgrupo,112);
                     $alt_novo = count($aSubgrupo);
                 } else {
                     $alt_novo = 4;
@@ -204,16 +204,16 @@ if ($oDaoOrdemAuxiliar->numrows > 0) {
                 }else{
                     $oPdf->cell(30, 4, '', 0, 0, "C", $iPreencher);
                 }
-                if (strlen($subgrupo) > 110) {
+                if (strlen($subgrupo) > 112) {
                     $pos_x = $oPdf->x;
                     $pos_y = $oPdf->y;
                     foreach ($aSubgrupo as $subgrupo_novo) {
-                        $oPdf->cell(110,$alt_novo,substr($subgrupo_novo,0,110),0,1,"L",$iPreencher);
+                        $oPdf->cell(112,$alt_novo,substr($subgrupo_novo,0,112),0,1,"L",$iPreencher);
                         $oPdf->x=$pos_x;
                     }
-                    $oPdf->x = $pos_x+110;
+                    $oPdf->x = $pos_x+112;
                 } else {
-                    $oPdf->cell(110,$alt_novo,substr($subgrupo,0,110),0,0,"L",$iPreencher);
+                    $oPdf->cell(112,$alt_novo,substr($subgrupo,0,112),0,0,"L",$iPreencher);
                 }
 
                 for ($y = 0; $y <= count($aRetencoes); $y++) {

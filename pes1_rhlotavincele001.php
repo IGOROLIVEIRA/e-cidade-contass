@@ -165,6 +165,8 @@ if(isset($incluir)){
 																											rh39_programa,
 																											rh39_subfuncao,
 																											rh39_funcao,
+                                                      rh39_orgao,
+                                                      rh39_unidade,
 																											o55_descr,
 																											rh28_codeledef,
 																											orcelemento.o56_descr	as o56_descr,
@@ -175,7 +177,9 @@ if(isset($incluir)){
 																											o15_descr,
 																											o54_descr,
 																											o53_descr,
-																											o52_descr"); 
+																											o52_descr,
+                                                      o40_descr,
+                                                      o41_descr"); 
   $result = $clrhlotavincele->sql_record($sSqlLotavincele);
   if($clrhlotavinc->numrows>0){
     $db_botao = true;

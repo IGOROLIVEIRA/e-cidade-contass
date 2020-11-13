@@ -37,12 +37,12 @@ require_once("classes/db_db_cgmruas_classe.php");
 require_once("classes/db_db_cgmbairro_classe.php");
 require_once("classes/db_db_cgmcgc_classe.php");
 require_once("classes/db_db_cgmcpf_classe.php");
-require_once("classes/db_db_cgmcpf_classe.php");
 require_once("classes/db_cgmendereco_classe.php");
 require_once("classes/db_db_cepmunic_classe.php");
 require_once("classes/db_cgmdocumento_classe.php");
 require_once("classes/db_ruascep_classe.php");
 require_once("classes/db_cgmtipoempresa_classe.php");
+require_once("classes/db_historicocgm_classe.php");
 
 
 db_postmemory($HTTP_POST_VARS);
@@ -56,6 +56,7 @@ $cldb_cgmcgc    = new cl_db_cgmcgc();
 $clcgmdocumento = new cl_cgmdocumento();
 $clcgmendereco  = new cl_cgmendereco();
 $clcgmtipoempresa  = new cl_cgmtipoempresa();
+$clhistoricocgm    = new cl_historicocgm;
 
 $db_opcao = 3;
 $db_botao = false;
@@ -208,6 +209,10 @@ if (isset ($HTTP_POST_VARS ["db_opcao"]) && $HTTP_POST_VARS ["db_opcao"] == "Exc
     }
   
   }
+
+    if(!$lSqlErro) {
+        $clhistoricocgm->excluir('', 'z09_numcgm = '.$z01_numcgm);
+    }
   
   if (!$lSqlErro) {
      

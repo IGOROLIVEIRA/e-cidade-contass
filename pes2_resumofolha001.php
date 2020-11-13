@@ -38,7 +38,9 @@ $clgerfcom = new cl_gerfcom;
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
+$clrotulo->label('DBtxt24');
 $clrotulo->label('DBtxt25');
+$clrotulo->label('DBtxt26');
 $clrotulo->label('DBtxt27');
 $clrotulo->label('DBtxt28');
 
@@ -63,6 +65,8 @@ if (isset($mesfolha) && !empty($mesfolha)) {
 
 $DBtxt23 = DBPessoal::getAnoFolha();
 $DBtxt25 = DBPessoal::getMesFolha();
+$DBtxt24 = NULL;
+$DBtxt26 = NULL;
 
 $oDaoInss = db_utils::getDao('inssirf');
         
@@ -84,12 +88,27 @@ $sWhere  .=  "   and r33_instit = ".db_getsession('DB_instit');
         
 $sQueryInss  = $oDaoInss->sql_query_file('r33_codtab',null, $sCampos, null, $sWhere);
 $rsPrevidencia = db_query($sQueryInss);
+
+$js_buscaSuplementar = '';
+if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
+  $js_buscaSuplementar = 'js_buscaSuplementar()';
+}
 ?>
 <html>
 <head>
   <title>DBSeller Informática Ltda - Página Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" content="0">
+  <script src="scripts/scripts.js"></script>
+  <script src="scripts/strings.js"></script>
+  <script src="scripts/prototype.js"></script>
+  <script src="scripts/arrays.js"></script>
+  <script src="scripts/datagrid.widget.js"></script>
+  <script src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <script src="scripts/widgets/dbtextField.widget.js"></script>
+  <script src="scripts/classes/DBViewTipoFiltrosFolha.js"></script>
+  <script src="scripts/classes/DBViewFormularioFolha/ComboRegime.js"></script>
+  <script src="scripts/classes/DBViewFormularioFolha/ComboVinculo.js"></script>
   <link rel="stylesheet" href="estilos.css">
   <link rel="stylesheet" href="estilos/grid.style.css">
 </head>
@@ -105,8 +124,38 @@ $rsPrevidencia = db_query($sQueryInss);
               <label>Ano / Mês:</label>
             </td>
             <td>
-              <?php db_input('DBtxt23', 4, $IDBtxt23, true, 'text', 2, 'class="field-size1" onchange="js_buscaComplementar(); js_buscaSuplementar();"'); ?>
-              <?php db_input('DBtxt25', 2, $IDBtxt25, true, 'text', 2, 'class="field-size1" onchange="js_buscaComplementar(); js_buscaSuplementar();"'); ?>
+              <?php db_input('DBtxt23', 4, $IDBtxt23, true, 'text', 2, "class='field-size1' onchange='js_buscaComplementar(); {$js_buscaSuplementar};'"); ?>
+              <?php db_input('DBtxt25', 2, $IDBtxt25, true, 'text', 2, "class='field-size1' onchange='js_buscaComplementar(); {$js_buscaSuplementar};'"); ?>
+              
+              <label>Informar Período:</label>
+              <select name="periodo" id="periodo" onchange="js_periodo()" style="width: 20%">
+                <option value='f'>Não</option>
+                <option value='t'>Sim</option>
+              </select>
+            </td>
+          </tr>  
+          <tr id="rowPeriodo">
+            <td nowrap width="130" title="Ano / Mês de competência">
+              <label>Ano Final / Mês Final:</label>
+            </td>
+            <td>
+              <?php db_input('DBtxt24', 4, $IDBtxt24, true, 'text', 2, 'class="field-size1"'); ?>
+              <?php db_input('DBtxt26', 2, $IDBtxt26, true, 'text', 2, 'class="field-size1"'); ?>
+
+              <label>Gerar Gráfico:</label>
+              <select name="grafico" id="grafico" onchange="js_tipo_grafico()" style="width: 24%">
+                <option value='f'>Não</option>
+                <option value='t'>Sim</option>
+              </select>
+              
+              <span id="tipoGrafico">
+                <label>Valor:</label>
+                <select name="tipo_grafico" id="tipo_grafico" style="width: 20%">
+                  <option value='bruto'>Bruto</option>
+                  <option value='liquido'>Líquido</option>
+                  <option value='empenhos'>Empenhos</option>
+                </select>
+              </span>
             </td>
           </tr>     
           <tr title="Seleção">
@@ -173,16 +222,6 @@ $rsPrevidencia = db_query($sQueryInss);
   </form>
   <?php db_menu(); ?>
 </body>
-<script src="scripts/scripts.js"></script>
-<script src="scripts/strings.js"></script>
-<script src="scripts/prototype.js"></script>
-<script src="scripts/arrays.js"></script>
-<script src="scripts/datagrid.widget.js"></script>
-<script src="scripts/widgets/dbcomboBox.widget.js"></script>
-<script src="scripts/widgets/dbtextField.widget.js"></script>
-<script src="scripts/classes/DBViewTipoFiltrosFolha.js"></script>
-<script src="scripts/classes/DBViewFormularioFolha/ComboRegime.js"></script>
-<script src="scripts/classes/DBViewFormularioFolha/ComboVinculo.js"></script>
 <script>
   var oTiposFiltrosFolha;
 
@@ -303,7 +342,20 @@ $rsPrevidencia = db_query($sQueryInss);
       alert('Mês da folha informado é invalido.');
       return false;
     }
-      
+
+    if (($F('periodo') == 't') && ($F('DBtxt24') <= 0 || $F('DBtxt24') < $F('DBtxt23'))) {
+
+      alert('Ano Final da folha informado é invalido.');
+      return false;
+    }
+
+    if (($F('periodo') == 't') 
+        && (($F('DBtxt26') <= 0 || $F('DBtxt26') > 12) || (Number($F('DBtxt26')) <= Number($F('DBtxt25')) && Number($F('DBtxt24')) == Number($F('DBtxt23'))))) {
+
+      alert('Mês Final da folha informado é invalido.');
+      return false;
+    }
+    
     /**
      * Valida se tem pelo menos uma folha selecionada
      */
@@ -350,6 +402,8 @@ $rsPrevidencia = db_query($sQueryInss);
     var oQuery = {};
     oQuery.iAno           = $F('DBtxt23');
     oQuery.iMes           = $F('DBtxt25');
+    oQuery.iAnoFinal      = $F('DBtxt24');
+    oQuery.iMesFinal      = $F('DBtxt26');
     oQuery.iSelecao       = $F('r44_selec');
     oQuery.iRegime        = $F('Regime');
     oQuery.iTipoRelatorio = $F('oCboTipoRelatorio');
@@ -417,6 +471,14 @@ $rsPrevidencia = db_query($sQueryInss);
     });
 
     oQuery.aTiposFolhas = aTipoFolhas;
+
+    if ($F('periodo') == 't') {
+      oQuery.lGrafico = $F('grafico');
+      if (oQuery.lGrafico == 't') {
+        oQuery.sTipoGrafico = $F('tipo_grafico');
+      }
+    }
+
     var oJanela = window.open(
        'pes2_resumofolha002.php?json=' + Object.toJSON(oQuery),
        '',
@@ -574,12 +636,34 @@ $rsPrevidencia = db_query($sQueryInss);
     oGridTipoFolha.renderRows();
     
     js_buscaComplementar();
-    js_buscaSuplementar();
+    <?php echo $js_buscaSuplementar; ?>
     
     $('selectComplementar').observe("change", function() {
       oGridTipoFolha.aRows[1].select(true);
     })
   })();
+
+  function js_periodo() {
+    if($F('periodo') == 'f') {
+      $('DBtxt24').value = '';
+      $('DBtxt26').value = '';
+      $('rowPeriodo').setAttribute('style', 'display: none');
+    } else {
+      $('rowPeriodo').removeAttribute('style', 'display: none');
+    }
+  }
+  js_periodo();
+
+  function js_tipo_grafico() {
+    let elementoGrafico = $("grafico");
+    let elementoMostrar = $('tipoGrafico');
+    if (elementoGrafico.value == 't') {
+      elementoMostrar.show();
+    } else {
+      elementoMostrar.hide();
+    }
+  }
+  js_tipo_grafico();
 </script>
 
 </html>

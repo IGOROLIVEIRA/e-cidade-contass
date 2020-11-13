@@ -64,9 +64,9 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_tipolicitacao']              = $this->padLeftZero($aRALIC10['si180_tipolicitacao'], 1);
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
                 $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
-                $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? ' ' : $aRALIC10['si180_regimeexecucaoobras'];
+                $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? '' : $aRALIC10['si180_regimeexecucaoobras'];
                 $aCSVRALIC10['si180_vlcontratacao']              = $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
-                $aCSVRALIC10['si180_bdi']                        = $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
+                $aCSVRALIC10['si180_bdi']                        = $aRALIC10['si180_naturezaobjeto'] == '7' ? '' : $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
                 $aCSVRALIC10['si180_origemrecurso']              = $aRALIC10['si180_origemrecurso'];
                 $aCSVRALIC10['si180_dscorigemrecurso']           = substr($aRALIC10['si180_dscorigemrecurso'], 0, 150);

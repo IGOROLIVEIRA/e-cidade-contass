@@ -93,7 +93,7 @@ function js_limpa(){
   </tr>
   <tr>
   <td colspan="2" align="center">
-    <input name="processar" type="submit"   value="Processar" >
+    <input name="processar" type="submit"   value="Processar" disabled>
     <input name="limpa" type="button" onclick='js_limpa();'  value="Limpar" >
   </td>
   </tr>
@@ -105,6 +105,7 @@ function js_limpa(){
 <? db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));?>
 <script>
 //--------------------------------
+document.getElementsByName('processar')[0].disabled = 'disabled';
 function js_pesquisa_matordem(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_matordem','func_matordem.php?funcao_js=parent.js_mostramatordem1|m51_codordem|','Pesquisa',true);
@@ -112,19 +113,24 @@ function js_pesquisa_matordem(mostra){
      if(document.form1.m51_codordem.value != ''){ 
         js_OpenJanelaIframe('top.corpo','db_iframe_matordem','func_matordem.php?pesquisa_chave='+document.form1.m51_codordem.value+'&funcao_js=parent.js_mostramatordem','Pesquisa',false);
      }else{
-       document.form1.m51_codordem.value = ''; 
+       document.form1.m51_codordem.value = '';
+       document.getElementsByName('processar')[0].disabled = 'disabled';
      }
   }
 }
 function js_mostramatordem(chave,erro){
-  document.form1.m51_codordem.value = chave; 
-  if(erro==true){ 
+  document.form1.m51_codordem.value = chave;
+  if(erro==true){
+      document.getElementsByName('processar')[0].disabled = 'disabled';
     document.form1.m51_codordem.value = ''; 
     document.form1.m51_codordem.focus();     
+  }else{
+    document.getElementsByName('processar')[0].disabled = '';
   }
 }
 function js_mostramatordem1(chave1){
-   document.form1.m51_codordem.value = chave1;  
+   document.form1.m51_codordem.value = chave1;
+   document.getElementsByName('processar')[0].disabled = '';
    db_iframe_matordem.hide();
 }
 //--------------------------------

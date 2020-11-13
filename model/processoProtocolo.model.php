@@ -126,7 +126,7 @@ class processoProtocolo {
    * Departamento atual do processo
    * @var DBDepartamento
    */
-  private $oDepartamentoAtual;
+  protected $oDepartamentoAtual;
 
   /**
    * Método Construtor
@@ -671,7 +671,7 @@ class processoProtocolo {
 
   /**
    * Retorna os processos que estão apensados ao processo
-   * @return Array
+   * @return processoProtocolo[]
    */
   public function getProcessosApensados() {
 
@@ -762,22 +762,22 @@ class processoProtocolo {
 
 
   /**
-   * Retorna o departamento em que o processo se encontra no momento
+   * Retorna o departamento em que o processo se encontra no momento.
+   * Se um processo estiver apensado a outro, busca o departamento atual
+   * do processo principal
    * @return DBDepartamento
    */
   public function getDepartamentoAtual() {
 
-    $oDaoProtProcesso   = db_utils::getDao('protprocesso');
-    $sCampo = "case when p61_coddepto is not null then p61_coddepto else p58_coddepto end as departamento";
-    $sSqlBuscaAndamento = $oDaoProtProcesso->sql_query_andamento($this->iCodProcesso, $sCampo, "p61_codandam desc limit 1");
-    $rsBuscaAndamento   = $oDaoProtProcesso->sql_record($sSqlBuscaAndamento);
+    $oProcessoPrincipal = $this->getProcessoPrincipal();
 
-    if ($oDaoProtProcesso->erro_status == "0") {
-
-      $oStdErro = (object)array("sNumeroProcesso" => "{$this->getNumeroProcesso()}/{$this->getAnoProcesso()}");
-      throw new BusinessException(_M(URL_MENSAGEM_PROCESSOPROTOCOLO."departamento_atual_nao_encontrado", $oStdErro));
+    if($oProcessoPrincipal){
+      $this->oDepartamentoAtual = $this->_getDepartamentoAtual($oProcessoPrincipal);
+    } else {
+      $this->oDepartamentoAtual = $this->_getDepartamentoAtual($this);
     }
-    return new DBDepartamento(db_utils::fieldsMemory($rsBuscaAndamento, 0)->departamento);
+
+    return $this->oDepartamentoAtual;
   }
 
   /**
@@ -832,5 +832,48 @@ class processoProtocolo {
       return false;
     }
     return new processoProtocolo(db_utils::fieldsMemory($rsBuscaProcesso, 0)->p58_codproc);
+  }
+
+  /**
+   * Retorna o departamento atual de um determinado protocolo
+   * @param processoProtocolo $oProcessoProtocolo
+   * @return DBDepartamento
+   * @throws BusinessException
+   */
+  private function _getDepartamentoAtual(processoProtocolo $oProcessoProtocolo)
+  {
+    $oDaoProtProcesso   = db_utils::getDao('protprocesso');
+    $sCampo = "case when p61_coddepto is not null then p61_coddepto else p58_coddepto end as departamento";
+    $sSqlBuscaAndamento = $oDaoProtProcesso->sql_query_andamento($oProcessoProtocolo->iCodProcesso, $sCampo, "p61_codandam desc limit 1");
+    $rsBuscaAndamento   = $oDaoProtProcesso->sql_record($sSqlBuscaAndamento);
+
+    if ($oDaoProtProcesso->erro_status == "0") {
+
+      $oStdErro = (object)array("sNumeroProcesso" => "{$oProcessoProtocolo->getNumeroProcesso()}/{$oProcessoProtocolo->getAnoProcesso()}");
+      throw new BusinessException(_M(URL_MENSAGEM_PROCESSOPROTOCOLO."departamento_atual_nao_encontrado", $oStdErro));
+    }
+    return new DBDepartamento(db_utils::fieldsMemory($rsBuscaAndamento, 0)->departamento);
+  }
+
+  /**
+   * Retorna o processo principal no qual um processo está apensado
+   * @return processoProtocolo
+   */
+  public function getProcessoPrincipal()
+  {
+      $oDaoProtProcessoApensados = new cl_processosapensados;
+      $sSqlProcessos             = $oDaoProtProcessoApensados->sql_query_file(null,
+          "p30_procprincipal",
+          'p30_procprincipal',
+          "p30_procapensado ={$this->iCodProcesso}");
+
+      $rsProcessosApensados = $oDaoProtProcessoApensados->sql_record($sSqlProcessos);
+
+      if($oDaoProtProcessoApensados->numrows > 0) {
+        $iCodigoProcesso = db_utils::fieldsMemory($rsProcessosApensados, 0)->p30_procprincipal;
+        return new processoProtocolo($iCodigoProcesso);
+      }
+
+    return null;
   }
 }

@@ -564,19 +564,19 @@ class cl_licobrasituacao {
       }
     }
 
-    if (trim($this->obr02_descrisituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_descrisituacao"])) {
-      $sql  .= $virgula." obr02_descrisituacao = '$this->obr02_descrisituacao' ";
-      $virgula = ",";
-      if (trim($this->obr02_descrisituacao) == null ) {
-        $this->erro_sql = " Campo Desc. Situação da Obra não informado.";
-        $this->erro_campo = "obr02_descrisituacao";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+//    if (trim($this->obr02_descrisituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_descrisituacao"])) {
+//      $sql  .= $virgula." obr02_descrisituacao = '$this->obr02_descrisituacao' ";
+//      $virgula = ",";
+//      if (trim($this->obr02_descrisituacao) == null ) {
+//        $this->erro_sql = " Campo Desc. Situação da Obra não informado.";
+//        $this->erro_campo = "obr02_descrisituacao";
+//        $this->erro_banco = "";
+//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//        $this->erro_status = "0";
+//        return false;
+//      }
+//    }
 
     if (trim($this->obr02_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_instit"])) {
       $sql  .= $virgula." obr02_instit = $this->obr02_instit ";

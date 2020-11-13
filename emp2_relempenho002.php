@@ -103,6 +103,10 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $lSepararGestor = $agrupar === 'gest' ? true : false;
 $sGestorAtual   = "";
 
+/// Para o caso de ter filtro de Contratos
+$lSepararAcordo = $agrupar === 'c' ? true : false;
+$sAcordoAtual   = "";
+
 
 $clselorcdotacao = new cl_selorcdotacao();
 $clorcelemento   = new cl_orcelemento;
@@ -129,6 +133,39 @@ $clorcdotacao->rotulo->label();
 $clorcorgao->rotulo->label();
 $clempelemento->rotulo->label();
 $clrotulo = new rotulocampo;
+
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo,$lCor='') {
+  $pos_x = $oPdf->x;
+  $pos_y = $oPdf->y;
+  $oPdf->cell($iTamCampo, $iTam, "", 0, 0, 'L', $lCor);
+  $oPdf->x = $pos_x;
+  $oPdf->y = $pos_y;
+  foreach ($aTexto as $sProcedimento) {
+    $sProcedimento=ltrim($sProcedimento);
+    $oPdf->cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 'L', $lCor);
+    $oPdf->x=$pos_x;
+  }
+  $oPdf->x = $pos_x+$iTamCampo;
+  $oPdf->y = $pos_y;
+}
+
+function quebrar_texto($texto,$tamanho){
+
+  $aTexto = explode(" ", $texto);
+  $string_atual = "";
+  foreach ($aTexto as $word) {
+    $string_ant = $string_atual;
+    $string_atual .= " ".$word;
+    if (strlen($string_atual) > $tamanho) {
+      $aTextoNovo[] = $string_ant;
+      $string_ant   = "";
+      $string_atual = $word;
+    }
+  }
+  $aTextoNovo[] = $string_atual;
+  return $aTextoNovo;
+
+}
 
 $tipo = "a"; // sempre analitico
 
@@ -162,6 +199,7 @@ $sCamposPosicaoAtual .= ", e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlre
 $sCamposPosicaoAtual .= ", e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr";
 $sCamposPosicaoAtual .= ", o15_codigo, o15_descr, fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural, e60_codcom";
 $sCamposPosicaoAtual .= ", pc50_descr,e60_concarpeculiar,e60_numerol,e54_gestaut,descrdepto,e94_empanuladotipo,e38_descr,l20_edital,l20_anousu";
+$sCamposPosicaoAtual .= ", ac16_sequencial, ac16_resumoobjeto, (acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero";
 
 //---------
 // monta sql
@@ -239,6 +277,14 @@ if ($listacom != "" ) {
     } else {
         $sWhereSQL = $sWhereSQL." and e60_codcom not in  ($listacom)";
     }
+}
+
+if ($listaacordo != "") {
+  if (isset ($vercom) and $vercom == "com") {
+    $sWhereSQL = $sWhereSQL." and ac16_sequencial in  ($listaacordo)";
+  } else {
+    $sWhereSQL = $sWhereSQL." and ac16_sequencial not in  ($listaacordo)";
+  }
 }
 
 if ($listalicita != "" ) {
@@ -446,6 +492,9 @@ if ($processar == "a") {
             x.e60_numerol,
             x.e54_gestaut,
             x.descrdepto,
+            x.ac16_sequencial,
+            x.ac16_resumoobjeto,
+            x.ac16_numero,
             e94_empanuladotipo,
             e38_descr,
             x.l20_edital,
@@ -492,6 +541,9 @@ if ($processar == "a") {
                 x.e60_numerol,
                 x.e54_gestaut,
                 x.descrdepto,
+                x.ac16_sequencial,
+                x.ac16_resumoobjeto,
+                x.ac16_numero,
                 e94_empanuladotipo,
             	  e38_descr,
                 x.l20_edital,
@@ -501,8 +553,12 @@ if ($processar == "a") {
     $sqlrelemp = "select * from ($sqlrelemp) as x " . (
         $agrupar == "d"
             ? " order by e64_codele, e60_emiss "
-            : " order by $sOrderSQL "
+            : $agrupar == "c"
+              ? " order by  x.ac16_sequencial "
+              : " order by $sOrderSQL "
+
         );
+
     $res = $clempempenho->sql_record($sqlrelemp);
     if ($clempempenho->numrows > 0) {
         $rows = $clempempenho->numrows;
@@ -815,6 +871,10 @@ if ($lSepararGestor && !empty($listagestor)) {
     $head8 = "Gestor do Empenho: {$listagestor}";
 }
 
+if ($lSepararAcordo && !empty($listaacordo)) {
+  $head8 = "Contrato do Empenho: {$listaacordo}";
+}
+
 $pdf = new PDF(); // abre a classe
 $pdf->Open(); // abre o relatorio
 $pdf->AliasNbPages(); // gera alias para as paginas
@@ -1051,7 +1111,7 @@ if ($tipo == "a" or 1 == 1) {
                         }
                 }
 
-                if ($agrupar == "r") {
+                if ($agrupar == "r" || $agrupar == "c") {
                     if ($mostrar == "r") {
                         $pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1); // recurso
                     } else
@@ -1083,7 +1143,8 @@ if ($tipo == "a" or 1 == 1) {
                         $pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
                     }
                 } else {
-                    $pdf->Cell(62, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                    //strtoupper($RLe60_coddot)
+                    $pdf->Cell(62, $tam, 'DOTA플O', 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
                 }
                 //$pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
@@ -1104,10 +1165,10 @@ if ($tipo == "a" or 1 == 1) {
                 if ($mostraritem == "m") {
                     $pdf->Cell(40, $tam, "", 0, 0, "C", 0);
                     $pdf->Cell(20, $tam, "ITEM", 1, 0, "C", 1);
-                    $pdf->Cell(75, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
+                    $pdf->Cell(150, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
                     $pdf->Cell(20, $tam, "QUANTIDADE", 1, 0, "C", 1);
-                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 0, "C", 1);
-                    $pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
+                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 1, "C", 1);
+                    //$pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
                 }
             } else if ($tipo == "a" and $sememp == "s" and ( $agrupar == "oo" || $agrupar == 'gest' )) {
 
@@ -1134,10 +1195,10 @@ if ($tipo == "a" or 1 == 1) {
 
                     $pdf->Cell(40, $tam, "", 0, 0, "C", 0);
                     $pdf->Cell(20, $tam, "ITEM", 1, 0, "C", 1);
-                    $pdf->Cell(75, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
+                    $pdf->Cell(150, $tam, "DESCRI플O DO ITEM", 1, 0, "C", 1);
                     $pdf->Cell(20, $tam, "QUANTIDADE", 1, 0, "C", 1);
-                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 0, "C", 1);
-                    $pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
+                    $pdf->Cell(20, $tam, "VALOR TOTAL", 1, 1, "C", 1);
+                    //$pdf->Cell(102, $tam, "COMPLEMENTO", 1, 1, "C", 1); // quebra linha1
 
                 }
 
@@ -1478,40 +1539,41 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', '', 7);
         }
 
-        /* ----------- AGRUPAR POR GEST ----------- */
-        if ($sGestorAtual != "{$e54_gestaut} :: {$descrdepto}" and $agrupar == 'gest') {
+          /* ----------- AGRUPAR POR GEST ----------- */
+          if ($sGestorAtual != "{$e54_gestaut} :: {$descrdepto}" and $agrupar == 'gest') {
 
             $sGestorAtual = "{$e54_gestaut} :: {$descrdepto}";
 
             if ($quantimp >= 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp >= 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
-                    //$pdf->setX(125);
-                    $pdf->SetFont('Arial', 'B', 7);
-                    if ($sememp == "n") {
-                        $base = "B";
-                        $preenche = 1;
-                        $iTamanhoCelula = 40;
-                    } else {
-                        $base = "";
-                        $preenche = 0;
-                        $iTamanhoCelula = 25;
-                    }
-                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
-                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
-                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
-                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
-                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
-                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-                    if ($saldopagar == "s") {
-                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
-                    } else {
-                        $pdf->Ln();
-                    }
-                    $pdf->SetFont('Arial', '', 7);
+              if (($quantimp >= 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+                //$pdf->setX(125);
+                $pdf->SetFont('Arial', 'B', 7);
+                if ($sememp == "n") {
+                  $base = "B";
+                  $preenche = 1;
+                  $iTamanhoCelula = 40;
+                } else {
+                  $base = "";
+                  $preenche = 0;
+                  $iTamanhoCelula = 25;
                 }
+                $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                if ($saldopagar == "s") {
+                  $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                  $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                  $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                } else {
+                  $pdf->Ln();
+                }
+                $pdf->SetFont('Arial', '', 7);
+              }
             }
+
             $t_emp = 0;
             $t_liq = 0;
             $t_anu = 0;
@@ -1532,6 +1594,65 @@ if ($tipo == "a" or 1 == 1) {
 
             $pdf->SetFont('Arial', '', 7);
         }
+
+      /* ----------- AGRUPAR POR CONTRATO ----------- */
+      if ($sContratoAtual != "{$ac16_sequencial}" and $agrupar == "c") {
+
+        $sContratoAtual = "{$ac16_sequencial}";
+
+        if ($quantimp >= 1 or ($sememp == "s" and $quantimp > 0)) {
+          if (($quantimp >= 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            //$pdf->setX(125);
+            $pdf->SetFont('Arial', 'B', 7);
+            if ($sememp == "n") {
+              $base = "B";
+              $preenche = 1;
+              $iTamanhoCelula = 40;
+            } else {
+              $base = "";
+              $preenche = 0;
+              $iTamanhoCelula = 25;
+            }
+            $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+            $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "").db_formatar($quantimp, "s")." EMPENHO". ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+            $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+            $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+            $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+            $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+            if ($saldopagar == "s") {
+              $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+              $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+              $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+            } else {
+              $pdf->Ln();
+            }
+            $pdf->SetFont('Arial', '', 7);
+          }
+        }
+
+        $t_emp = 0;
+        $t_liq = 0;
+        $t_anu = 0;
+        $t_pag = 0;
+        $t_total = 0;
+        $repete = $e60_numcgm;
+        $repete_r = $o15_codigo;
+        $quantimp = 0;
+        if ($sememp == "n") {
+          $pdf->Ln();
+        }
+        $pdf->SetFont('Arial', 'B', 8);
+        $totalforne ++;
+
+        // imprime resumo obj do contrato
+        if(!empty($ac16_sequencial)) {
+          $pdf->Cell(30, $tam, "Contrato:", $iBorda, 0, "L", 0);
+          $pdf->Cell(120, $tam, "{$ac16_sequencial} - {$ac16_numero} :: {$ac16_resumoobjeto}", $iBorda, 1, "L", 0);
+        }else{
+          $pdf->Cell(30, $tam, "Sem Contrato Vinculado ", $iBorda, 1, "1", 0);
+        }
+        $pdf->SetFont('Arial', '', 7);
+      }
 
         /* ----------- AGRUPAR POR TIPO DE ANULA플O ----------- */
         if ($repete_ta != $e94_empanuladotipo and $agrupar == 'ta') {
@@ -1658,7 +1779,7 @@ if ($tipo == "a" or 1 == 1) {
                     $pdf->Cell(40, $tam, $e60_codcom." - $pc50_descr", $iBorda, 0, "L", $preenche); // tipo de compra
                 }
             }
-            if ($agrupar == "r") {
+            if ($agrupar == "r" || $agrupar == "c") {
                 if ($mostrar == "r") {
                     $pdf->Cell(46, $tam, substr($z01_nome, 0, 28), $iBorda, 0, "L", $preenche); // recurso
                 } else
@@ -1776,6 +1897,7 @@ if ($tipo == "a" or 1 == 1) {
             }
 
             if ($mostraritem == "m") {
+
                 $dbwhere = "e62_numemp = $e60_numemp ";
                 if ($listaitem != "" or $listasub != "") {
                     if ($listaitem != ""){
@@ -1790,14 +1912,23 @@ if ($tipo == "a" or 1 == 1) {
                 $rows_item = $clempempitem->numrows;
                 for ($item = 0; $item < $rows_item; $item ++) {
                     db_fieldsmemory($resitem, $item, true);
-                    $preenche = ($item % 2 == 0 ? 0 : 1);
+                    //$preenche = ($item % 2 == 0 ? 0 : 1);
+                    $preenche = 1;
                     $pdf->Cell(40, $tam, "", $iBorda, 0, "R", $preenche);
                     $pdf->Cell(20, $tam, "$e62_item", $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(75, $tam, "$pc01_descrmater", $iBorda, 0, "L", $preenche);
+                    //$pdf->Cell(75, $tam, $descrmatersub, $iBorda, 0, "L", $preenche);
+                    $aDescrmater = quebrar_texto($pc01_descrmater,150);
+                    $iTamFixo = 5;
+                    $iTam = $iTamFixo*(count($aDescrmater));
+                    if (strlen($pc01_descrmater) > 150) {
+                      multiCell($pdf, $aDescrmater, $iTamFixo, $iTam, 150,$preenche);
+                    } else {
+                      $pdf->Cell(150, $tam, $pc01_descrmater, $iBorda, 0, "L", $preenche);
+                    }
                     $pdf->Cell(20, $tam, db_formatar($e62_quant, 'f'), $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(20, $tam, db_formatar($e62_vltot, 'f'), $iBorda, 0, "R", $preenche);
-                    $pdf->Cell(80, $tam, substr($e62_descr, 0, 100), $iBorda, 1, "L", $preenche);
-                    $pdf->Cell(20, $tam, "", 0, 1, "R", $preenche);
+                    $pdf->Cell(20, $tam, db_formatar($e62_vltot, 'f'), $iBorda, 1, "R", $preenche);
+                    //$pdf->Cell(80, $tam, substr($e62_descr, 0, 100), $iBorda, 0, "L", $preenche);
+                    //$pdf->Cell(20, $tam, "", 0, 1, "R", 0);
 
                 }
             }

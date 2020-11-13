@@ -223,6 +223,11 @@ $sWhereContratos = " and 1 = 1 ";
 				$dbwhere .= " l20_dtpubratificacao IS NULL AND ";
             }
 
+			if($enviada == 'true'){
+				$dbwhere .= " (case when l20_naturezaobjeto in (1, 7) and l20_cadinicial in (1, 2) then false
+                                      else true end) AND ";
+            }
+
 			if(!isset($pesquisa_chave)){
 
                 if(isset($campos)==false){
@@ -234,9 +239,22 @@ $sWhereContratos = " and 1 = 1 ";
                     }
                 }
 
-                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
-                $campos .= ", l03_codcom as tipcom";
-                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                if($dispensas){
+					$campos = "distinct liclicita.l20_codigo,
+					                    liclicita.l20_edital,
+                                        l20_anousu,
+                                        pctipocompra.pc50_descr,
+                                        liclicita.l20_numero,
+                                        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
+                                        liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+                                        liclicita.l20_objeto";
+                }
+
+//                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
+//                $campos .= ", l03_codcom as tipcom";
+//                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
+                $campos .= ', l08_descr as dl_Situação';
                 if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
                     $sql = $clliclicita->sql_queryContratos(null,$campos,"l20_codigo","$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                 }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
@@ -322,7 +340,9 @@ $sWhereContratos = " and 1 = 1 ";
                     $sql = "
                       SELECT DISTINCT liclicita.l20_codigo,
                             liclicita.l20_edital,
-                            liclicita.l20_nroedital,
+                            (CASE WHEN l20_nroedital IS NULL THEN '-'
+                                ELSE l20_nroedital::varchar
+                            END) as l20_nroedital,
                             liclicita.l20_anousu,
                             pctipocompra.pc50_descr,
                             liclicita.l20_numero,
@@ -371,7 +391,6 @@ $sWhereContratos = " and 1 = 1 ";
                 }
                 $aRepassa = array();
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
-
 
             } else {
 

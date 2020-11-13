@@ -122,7 +122,7 @@ $lValidaRepr = isset($validaRepresentante);
       <?
       if (!isset($pesquisa_chave)) {
         if (isset($campos) == false) {
-          $campos = "pc60_numcgm,pc60_dtlanc,z01_nome,z01_cgccpf";
+          $campos = "pc60_numcgm,pc60_dtlanc,trim(from z01_nome) as z01_nome,z01_cgccpf";
         }
         if ($lValidaRepr) {
           $campos = ' DISTINCT ' . $campos;
@@ -136,7 +136,8 @@ $lValidaRepr = isset($validaRepresentante);
         } else if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
           $sql = $clpcforne->sql_query("",$campos,"z01_cgccpf"," z01_cgccpf like '$chave_z01_cgccpf%' ", $lValidaRepr);
         } else {
-          $sql = $clpcforne->sql_query("",$campos,"pc60_numcgm","", $lValidaRepr);
+			$orderName = isset($orderName) ? ' z01_nome ' : 'pc60_numcgm';
+          $sql = $clpcforne->sql_query("",$campos, $orderName,"", $lValidaRepr);
         }
         db_lovrot($sql,15,"()","",$funcao_js);
       } else {

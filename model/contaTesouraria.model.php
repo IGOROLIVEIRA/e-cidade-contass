@@ -358,6 +358,35 @@ class contaTesouraria {
      
     return $this;
   }
+
+  /**
+   * Verifica se a data passada esta entre a data de implantacao e data limite
+   */
+  public function validaContaPorDataMovimento($dtMovimento = null, $iTipoConta = null) {
+
+      if ($dtMovimento != null) {
+          
+          $dtMovimento  = implode("-",array_reverse(explode("/", $dtMovimento)));
+
+          if ($iTipoConta == 1) {
+              $sTipoConta = "(Débito)";
+          } elseif ($iTipoConta == 2) {
+              $sTipoConta = "(Crédito)";
+          } else {
+              $sTipoConta = "";
+          }
+
+          if ( $this->getDataImplantacao() != "" && db_strtotime($this->getDataImplantacao()) > db_strtotime($dtMovimento) ) {
+              throw new Exception("Usuário: A conta bancária {$sTipoConta} informada está cadastrada em data posterior a este lançamento. Altere a data do procedimento ou data de cadastro da conta e tente novamente!");
+          }
+
+          if ( $this->getDataLimite() != "" && db_strtotime($this->getDataLimite()) < db_strtotime($dtMovimento) ) {
+              throw new Exception("Usuário: A conta bancária {$sTipoConta} informada está com data de encerramento anterior a este lançamento. Altere a data do procedimento ou data de encerramento da conta e tente novamente!");
+          }
+
+      }
+
+  }
 }
 
 ?>

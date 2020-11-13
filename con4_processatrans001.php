@@ -370,6 +370,7 @@ if (isset ($processar)) {
             break;
 
           case 2   : //ESTORNAR EMPENHO
+          case 25  : // Estorno de liquidacao - documento criado OC12836
           case 411 : //ESTORNO DE EMPENHO SUPRIMENTO DE FUNDOS
           case 501 : //ESTORNO DE EMPENHO DE PRECATÓRIOS
           case 505 : //ESTORNO AMORT. DÍVIDA

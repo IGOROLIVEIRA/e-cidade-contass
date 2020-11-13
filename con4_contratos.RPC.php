@@ -169,21 +169,31 @@ switch($oParam->exec) {
 
     try {
 
-      $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
-      $oMembro->setCodigoCgm($oParam->iCodigoCgm);
-      $oMembro->setResponsabilidade($oParam->iResponsabilidade);
+        $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-      db_inicio_transacao();
-      $erromsg = $oMembro->save();
-      db_fim_transacao(false);
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+        $dtcadastro = $oAcordo->getDataInicial();
 
-      $oRetorno->message = urlencode("Membro Alterado com sucesso.");
-      $oRetorno->iCodigo = $oMembro->getCodigoComissao();
+        if($dtcadastro < $z09_datacadastro){
+            throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+        }
+        $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
+        $oMembro->setCodigoCgm($oParam->iCodigoCgm);
+        $oMembro->setResponsabilidade($oParam->iResponsabilidade);
+
+        db_inicio_transacao();
+        $erromsg = $oMembro->save();
+        db_fim_transacao(false);
+
+        $oRetorno->message = urlencode("Membro Alterado com sucesso.");
+        $oRetorno->iCodigo = $oMembro->getCodigoComissao();
 
     } catch (Exception  $eErro) {
 
-      $oRetorno->status  = 2;
-      $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
 
     }
     break;
@@ -192,30 +202,38 @@ switch($oParam->exec) {
 
     try {
 
-      $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
+        $oAcordo = new AcordoComissao($oParam->iCodigoComissao);
 
-      if(!$oAcordo->membroExists($oParam->iCodigoCgm)) {
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->iCodigoCgm} order by z09_sequencial desc");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $z09_datacadastro   = implode("/",(array_reverse(explode("-",$z09_datacadastro))));
+        $dtcadastro = $oAcordo->getDataInicial();
 
-        $oMembro = new AcordoComissaoMembro();
-        $oMembro->setCodigoComissao($oParam->iCodigoComissao);
-        $oMembro->setCodigoCgm($oParam->iCodigoCgm);
-        $oMembro->setResponsabilidade($oParam->iResponsabilidade);
+        if($dtcadastro < $z09_datacadastro){
+            throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+        }
 
-        db_inicio_transacao();
-        $erromsg = $oMembro->save();
-        db_fim_transacao(false);
+        if(!$oAcordo->membroExists($oParam->iCodigoCgm)) {
 
-        $oRetorno->message = urlencode("Membro incluido com sucesso.");
-        $oRetorno->iCodigo = $oMembro->getCodigoComissao();
+            $oMembro = new AcordoComissaoMembro();
+            $oMembro->setCodigoComissao($oParam->iCodigoComissao);
+            $oMembro->setCodigoCgm($oParam->iCodigoCgm);
+            $oMembro->setResponsabilidade($oParam->iResponsabilidade);
 
-      } else {
+            db_inicio_transacao();
+            $erromsg = $oMembro->save();
+            db_fim_transacao(false);
 
-        $oRetorno->message = urlencode("Membro já está presente na comissão.");
-        $oRetorno->iCodigo = $oParam->iCodigoComissao;
-      }
+            $oRetorno->message = urlencode("Membro incluido com sucesso.");
+            $oRetorno->iCodigo = $oMembro->getCodigoComissao();
+
+        } else {
+
+            $oRetorno->message = urlencode("Membro já está presente na comissão.");
+            $oRetorno->iCodigo = $oParam->iCodigoComissao;
+        }
     } catch (Exception  $eErro) {
 
-      //db_fim_transacao(true);
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
 
@@ -434,13 +452,15 @@ switch($oParam->exec) {
 
     break;
 
-  case "getLicitacoesContratado":
-
-    if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
-      $aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true);
-    }else{
-      $aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true);
-    }
+	case "getLicitacoesContratado":
+		if($oParam->tipoCompras){
+  			$filtro = $oParam->addNegation . ' in (' . $oParam->tipoCompras . ')';
+		}
+    	if($oParam->iTipoOrigem == 3 && $oParam->credenciamento == 1){
+      		$aItens = licitacao::getLicByFornecedorCredenciamento($oParam->iContratado, true, true);
+    	}else{
+      		$aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true, $filtro);
+    	}
 
     $aItensDevolver = array();
     foreach ($aItens as $oStdDadosLicitacao) {
@@ -535,136 +555,180 @@ switch($oParam->exec) {
 
   case "salvarContrato":
 
-    try {
+      try {
 
-      db_inicio_transacao();
+          db_inicio_transacao();
 
-      $lAcordoValido            = true;
-      $sMessagemInvalido        = '';
+          $lAcordoValido            = true;
+          $sMessagemInvalido        = '';
 
-      if($oParam->contrato->iOrigem != "1"){
-        if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
-          $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
-          $oParam->contrato->iLicitacao = $oLicitacao;
-        }
-      }
+          if($oParam->contrato->iOrigem != "1"){
+              if($oParam->contrato->iLicitacao == "" || $oParam->contrato->iLicitacao == null){
+                  $oLicitacao = $_SESSION["dadosSelecaoAcordo"][0];
+                  $oParam->contrato->iLicitacao = $oLicitacao;
+              }
+          }
 
-      if ($oParam->contrato->iOrigem == 1 || $oParam->contrato->iOrigem == 2) {
-        if (!isset($_SESSION["dadosSelecaoAcordo"]) ) {
+          if ($oParam->contrato->iOrigem == 1 || $oParam->contrato->iOrigem == 2) {
+              if (!isset($_SESSION["dadosSelecaoAcordo"]) ) {
 
-          $lAcordoValido = false;
-          $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
-        }
-      } else if (isset($_SESSION["dadosSelecaoAcordo"]) && trim(isset($_SESSION["dadosSelecaoAcordo"])) == "") {
+                  $lAcordoValido = false;
+                  $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
+              }
+          } else if (isset($_SESSION["dadosSelecaoAcordo"]) && trim(isset($_SESSION["dadosSelecaoAcordo"])) == "") {
 
-        $lAcordoValido = false;
-        $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
-      }
+              $lAcordoValido = false;
+              $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
+          }
 
           if($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2){
-             if($oParam->contrato->iLicitacao == ""){
-               $lAcordoValido = false;
-               $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
-             }
+              if($oParam->contrato->iLicitacao == ""){
+                  $lAcordoValido = false;
+                  $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+              }
           }
 
           if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
-            $lAcordoValido = false;
-            $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+              $lAcordoValido = false;
+              $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
           }
 
-      if ($lAcordoValido) {
+          if($lAcordoValido) {
+              $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$oParam->contrato->iContratado} order by z09_sequencial desc");
+              db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+              $dtsession = date("Y-m-d", db_getsession("DB_datausu"));
 
-        $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
-        if($oParam->contrato->iContratado !="" && $oParam->contrato->iContratado!=null){
-          $oDaoAcordo = db_utils::getDao('acordo');
-          $oParamContrato = db_utils::getDao('parametroscontratos');
-          $oParamContrato = $oParamContrato->sql_query(null,'*');
-          $oParamContrato = db_query($oParamContrato);
-          $oParamContrato = db_utils::fieldsMemory($oParamContrato);
-          $oParamContrato = $oParamContrato->pc01_liberarcadastrosemvigencia;
-          if($oParamContrato == 't'){
-            $oDaoAcordo->ac16_semvigencia = 'f';
+              if ($dtsession < $z09_datacadastro) {
+                  $sMessagemInvalido = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+                  $lAcordoValido = true;
+              }
+
+              /**
+               * controle de encerramento peri. Patrimonial
+               */
+              $clcondataconf = new cl_condataconf;
+              $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat'));
+              db_fieldsmemory($resultControle, 0);
+
+              if ($dtsession <= $c99_datapat) {
+                  $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+                  $lAcordoValido = true;
+              }
           }
-          $oDaoAcordo->ac16_sequencial = $oParam->contrato->iContratado;
-          $oDaoAcordo->alterar($oParam->contrato->iContratado);
 
-        }
+          $oLicitacao = db_utils::getDao('liclicita');
+          $rsLicitacao   = $oLicitacao->sql_record($oLicitacao->sql_query_file($oParam->contrato->iLicitacao, 'l20_naturezaobjeto'));
+          $iNatureza     = db_utils::fieldsMemory($rsLicitacao, 0)->l20_naturezaobjeto;
 
-        $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
-        $oContrato = new Acordo($oParam->contrato->iCodigo);
-        $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
-        $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
-        $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
-        $oContrato->setDataInicial($oParam->contrato->dtInicio);
-        $oContrato->setDataFinal($oParam->contrato->dtTermino);
-        $oContrato->setGrupo($oParam->contrato->iGrupo);
-        $oContrato->setSituacao(1);
-        $oContrato->setInstit(db_getsession("DB_instit"));
-        $oContrato->setLei($oParam->contrato->iLei);
-        $oContrato->setLei($oParam->contrato->sLei);
-        $oContrato->setNumero($oParam->contrato->iNumero);
-        $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
-        $oContrato->setOrigem($oParam->contrato->iOrigem);
-        $oContrato->setTipoOrigem($oParam->contrato->iTipoOrigem);
-        $oContrato->setObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto) );
-        $oContrato->setResumoObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sResumoObjeto) );
-        $oContrato->setDepartamento(db_getsession("DB_coddepto"));
-        $oContrato->setQuantidadeRenovacao($oParam->contrato->iQtdRenovacao);
-        $oContrato->setTipoRenovacao($oParam->contrato->iUnidRenovacao);
-        $oContrato->setDepartamentoResponsavel($oParam->contrato->iDepartamentoResponsavel);
-        $oContrato->setEmergencial($oParam->contrato->lEmergencial);
-        $oContrato->setContratado($oContratado);
-        $oContrato->setProcesso($oParam->contrato->sProcesso);
-        $oContrato->setFormaFornecimento($oParam->contrato->sFormaFornecimento);
-        $oContrato->setVeiculoDivulgacao($oParam->contrato->sVeiculoDivulgacao);
-        $oContrato->setFormaPagamento($oParam->contrato->sFormaPagamento);
-        $oContrato->setCpfsignatariocontratante();
-        $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
-        $oContrato->setPeriodoComercial($oParam->contrato->lPeriodoComercial);
-        $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
-        $oContrato->setTipoUnidadeTempoVigencia($oParam->contrato->iTipoUnidadeTempoVigencia);
-        $oContrato->setQtdPeriodoVigencia($oParam->contrato->iQtdPeriodoVigencia);
-        $oContrato->setLicitacao($oParam->contrato->iLicitacao);
-        $oContrato->setiLicoutroorgao($oParam->contrato->iLicoutroorgao);
-        $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
-        $oContrato->setValorContrato($oParam->contrato->nValorContrato);
-        $oContrato->setDataInclusao(date("Y-m-d"));
-        $oContrato->setITipocadastro(1);
-        $oContrato->save();
+          $rsSql = db_query('SELECT ac02_acordonatureza from acordogrupo where ac02_sequencial = '.$oParam->contrato->iGrupo);
+          $iNaturezaAcordo = db_utils::fieldsMemory($rsSql, 0)->ac02_acordonatureza;
 
-        /*
-         * verificamos se existe empenhos a serem vinculados na seção
-         */
-        $oDaoEmpEmpenhoContrato   = db_utils::getDao("empempenhocontrato");
-        $oDaoAcordoPosicao        = db_utils::getDao("acordoposicao");
-        $oDaoAcordoItem           = db_utils::getDao("acordoitem");
-        $oDaoAcordoEmpEmpitem     = db_utils::getDao("acordoempempitem");
-        $oDaoEmpEmpitem           = db_utils::getDao("empempitem");
-        $oDaoAcordoPosicaoPeriodo = db_utils::getDao("acordoposicaoperiodo");
-        $oDaoAcordoVigencia       = db_utils::getDao("acordovigencia");
-        $oDaoAcordoItemPeriodo    = db_utils::getDao("acordoitemperiodo");
-        $oDaoAcordo               = db_utils::getDao("acordo");
-        $oDaAcordoItemPrevisao    = db_utils::getDao("acordoitemprevisao");
-        $iContrato                = $oContrato->getCodigoAcordo();
+          if(in_array($oParam->contrato->iTipoOrigem, array(2, 3))){
+              if($iNatureza != $iNaturezaAcordo){
+                  throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
+              }
+          }
 
-        $aSessaoEmpenhos = db_getsession("oEmpenhosSalvar", false);
+          if ($lAcordoValido) {
 
-        /*
-         * verificamos se a origem nao for empenhos
-         * devemos desfazer todos possiveis antigos vinculos
-         *  deletar acordoempempitem
-         *  deletar acordoitem
-         *  deletar acordoposicao
-         *  deletar empempenhocontrato
-         *  $oDaoEmpEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-         *  $oDaoAcordoPosicao      = db_utils::getDao("acordoposicao");
-         *  $oDaoAcordoItem         = db_utils::getDao("acordoitem");
-         *  $oDaoAcordoEmpEmpitem   = db_utils::getDao("acordoempempitem");
-         *  $oDaoEmpEmpitem         = db_utils::getDao("empempitem");
-         *
-         *  buscamos possiveis vinculos existentes entre o contrato e empenhos
-         */
+              $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
+              if($oParam->contrato->iContratado !="" && $oParam->contrato->iContratado!=null){
+                  $oDaoAcordo = db_utils::getDao('acordo');
+                  $oParamContrato = db_utils::getDao('parametroscontratos');
+                  $oParamContrato = $oParamContrato->sql_query(null,'*');
+                  $oParamContrato = db_query($oParamContrato);
+                  $oParamContrato = db_utils::fieldsMemory($oParamContrato);
+                  $oParamContrato = $oParamContrato->pc01_liberarcadastrosemvigencia;
+                  if($oParamContrato == 't'){
+                      $oDaoAcordo->ac16_semvigencia = 'f';
+                  }
+                  $oDaoAcordo->ac16_sequencial = $oParam->contrato->iContratado;
+                  $oDaoAcordo->alterar($oParam->contrato->iContratado);
+
+              }
+
+              $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
+              $oContrato = new Acordo($oParam->contrato->iCodigo);
+              $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
+
+              if(!$oParam->contrato->dtAssinatura && $oParam->contrato->iCodigo){
+                  $sSql = 'SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oParam->contrato->iCodigo;
+                  $rsSql = db_query($sSql);
+                  $dataAssinatura = db_utils::fieldsMemory($rsSql, 0)->ac16_dataassinatura;
+                  $oContrato->setDataAssinatura($dataAssinatura ? $dataAssinatura : '');
+              }else{
+                  $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+              }
+              $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
+              $oContrato->setDataInicial($oParam->contrato->dtInicio);
+              $oContrato->setDataFinal($oParam->contrato->dtTermino);
+              $oContrato->setGrupo($oParam->contrato->iGrupo);
+              $oContrato->setSituacao(1);
+              $oContrato->setInstit(db_getsession("DB_instit"));
+              $oContrato->setLei($oParam->contrato->iLei);
+              $oContrato->setLei($oParam->contrato->sLei);
+              $oContrato->setNumero($oParam->contrato->iNumero);
+              $oContrato->setNumeroAcordo($oParam->contrato->iNumero);
+              $oContrato->setOrigem($oParam->contrato->iOrigem);
+              $oContrato->setTipoOrigem($oParam->contrato->iTipoOrigem);
+              $oContrato->setObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto) );
+              $oContrato->setResumoObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sResumoObjeto) );
+              $oContrato->setDepartamento(db_getsession("DB_coddepto"));
+              $oContrato->setQuantidadeRenovacao($oParam->contrato->iQtdRenovacao);
+              $oContrato->setTipoRenovacao($oParam->contrato->iUnidRenovacao);
+              $oContrato->setDepartamentoResponsavel($oParam->contrato->iDepartamentoResponsavel);
+              $oContrato->setEmergencial($oParam->contrato->lEmergencial);
+              $oContrato->setContratado($oContratado);
+              $oContrato->setProcesso($oParam->contrato->sProcesso);
+              $oContrato->setFormaFornecimento($oParam->contrato->sFormaFornecimento);
+              $oContrato->setVeiculoDivulgacao($oParam->contrato->sVeiculoDivulgacao);
+              $oContrato->setFormaPagamento($oParam->contrato->sFormaPagamento);
+              $oContrato->setCpfsignatariocontratante();
+              $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
+              $oContrato->setPeriodoComercial($oParam->contrato->lPeriodoComercial);
+              $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
+              $oContrato->setTipoUnidadeTempoVigencia($oParam->contrato->iTipoUnidadeTempoVigencia);
+              $oContrato->setQtdPeriodoVigencia($oParam->contrato->iQtdPeriodoVigencia);
+              $oContrato->setLicitacao($oParam->contrato->iLicitacao);
+              $oContrato->setiLicoutroorgao($oParam->contrato->iLicoutroorgao);
+              $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
+              $oContrato->setValorContrato($oParam->contrato->nValorContrato);
+              $oContrato->setDataInclusao(date("Y-m-d"));
+              $oContrato->setITipocadastro(1);
+              $oContrato->save();
+
+              /*
+               * verificamos se existe empenhos a serem vinculados na seção
+               */
+              $oDaoEmpEmpenhoContrato   = db_utils::getDao("empempenhocontrato");
+              $oDaoAcordoPosicao        = db_utils::getDao("acordoposicao");
+              $oDaoAcordoItem           = db_utils::getDao("acordoitem");
+              $oDaoAcordoEmpEmpitem     = db_utils::getDao("acordoempempitem");
+              $oDaoEmpEmpitem           = db_utils::getDao("empempitem");
+              $oDaoAcordoPosicaoPeriodo = db_utils::getDao("acordoposicaoperiodo");
+              $oDaoAcordoVigencia       = db_utils::getDao("acordovigencia");
+              $oDaoAcordoItemPeriodo    = db_utils::getDao("acordoitemperiodo");
+              $oDaoAcordo               = db_utils::getDao("acordo");
+              $oDaAcordoItemPrevisao    = db_utils::getDao("acordoitemprevisao");
+              $iContrato                = $oContrato->getCodigoAcordo();
+
+              $aSessaoEmpenhos = db_getsession("oEmpenhosSalvar", false);
+
+              /*
+               * verificamos se a origem nao for empenhos
+               * devemos desfazer todos possiveis antigos vinculos
+               *  deletar acordoempempitem
+               *  deletar acordoitem
+               *  deletar acordoposicao
+               *  deletar empempenhocontrato
+               *  $oDaoEmpEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+               *  $oDaoAcordoPosicao      = db_utils::getDao("acordoposicao");
+               *  $oDaoAcordoItem         = db_utils::getDao("acordoitem");
+               *  $oDaoAcordoEmpEmpitem   = db_utils::getDao("acordoempempitem");
+               *  $oDaoEmpEmpitem         = db_utils::getDao("empempitem");
+               *
+               *  buscamos possiveis vinculos existentes entre o contrato e empenhos
+               */
 //        if ($oParam->contrato->iOrigem != 6) {
 //
 //          $sSqlEmpenhosVinculados = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, "e100_acordo = {$iContrato}");
@@ -746,24 +810,24 @@ switch($oParam->exec) {
 //          }
 //        }
 
-        db_fim_transacao(false);
-        $_SESSION["oContrato"]     = $oContrato;
-        $oRetorno->iCodigoContrato = $oContrato->getCodigoAcordo();
-        $oRetorno->sDataInclusao = $oContrato->getDataInclusao();
-        $oRetorno->iAnousu = $oContrato->getAno();
-      } else {
+              db_fim_transacao(false);
+              $_SESSION["oContrato"]     = $oContrato;
+              $oRetorno->iCodigoContrato = $oContrato->getCodigoAcordo();
+              $oRetorno->sDataInclusao = $oContrato->getDataInclusao();
+              $oRetorno->iAnousu = $oContrato->getAno();
+          } else {
 
-        db_fim_transacao(true);
-        $oRetorno->status  = 2;
-        $oRetorno->message = urlencode(str_replace("\\n", "\n",$sMessagemInvalido));
+              db_fim_transacao(true);
+              $oRetorno->status  = 2;
+              $oRetorno->message = urlencode(str_replace("\\n", "\n",$sMessagemInvalido));
+          }
+      } catch (Exception $eErro) {
+
+          db_fim_transacao(true);
+          $oRetorno->status  = 2;
+          $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+
       }
-    } catch (Exception $eErro) {
-
-      db_fim_transacao(true);
-      $oRetorno->status  = 2;
-      $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
-
-    }
 
     break;
 

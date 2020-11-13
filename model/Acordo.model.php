@@ -2290,7 +2290,6 @@ class Acordo
                 if (isset($aItensEmpempItem[$oItem->ac20_pcmater])) {
                     $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->quantidade;
                     $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->vlrtot;
-
                     /**
                      * incluirmos na tabela acordoitemexecutado
                      */
@@ -3837,6 +3836,37 @@ class Acordo
 
     }
 
+    public function getSaldoItemPosicao($iPcmater,$iPosicao){
+        $oSaldo                             = new stdClass();
+
+        $sSqlSaldos  = "SELECT coalesce(sum(case when ac29_tipo = 1 then ac29_valor end), 0) as valorAutorizado,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 then  ac29_quantidade end), 0) as quantidadeautorizada,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 2 then ac29_valor end),0) as valorExecutado,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 2 then  ac29_quantidade end),0) as quantidadeexecutada,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 and ac29_automatico is false ";
+        $sSqlSaldos .= "                         then ac29_valor end), 0) as valorAutorizadoManual,";
+        $sSqlSaldos .= "       coalesce(sum(case when ac29_tipo = 1 and ac29_automatico is false ";
+        $sSqlSaldos .= "                         then  ac29_quantidade end), 0) as quantidadeautorizadaManual";
+        $sSqlSaldos .= "  from acordoitemexecutado ";
+        $sSqlSaldos .= "  inner join acordoitem on ac29_acordoitem = ac20_sequencial ";
+        $sSqlSaldos .= "  inner join acordoposicao on ac20_acordoposicao = ac26_sequencial ";
+        $sSqlSaldos .= " where ac20_pcmater = $iPcmater and ac26_sequencial = $iPosicao";
+        $rsSaldos    = db_query($sSqlSaldos);
+
+          $oCalculoSaldo                       = db_utils::fieldsMemory($rsSaldos, 0);
+//        $oSaldo->valorautorizado             = $oCalculoSaldo->valorautorizado;
+//        $oSaldo->valorexecutado              = $oCalculoSaldo->valorexecutado;
+        $oSaldo->quantidadeautorizada        = $oCalculoSaldo->quantidadeautorizada;
+        $oSaldo->quantidadeexecutada         = $oCalculoSaldo->quantidadeexecutada;
+//        $oSaldo->valorautorizar             -= $oSaldo->valorautorizado;
+//        $oSaldo->quantidadeautorizar        -= $oSaldo->quantidadeautorizada;
+//        $oSaldo->valorexecutar              -= $oSaldo->valorexecutado;
+//        $oSaldo->quantidadeexecutar         -= $oSaldo->quantidadeexecutada;
+//        $oSaldo->quantidadeautorizadamanual  = $oCalculoSaldo->quantidadeautorizadamanual;
+//        $oSaldo->valorautorizadomanual       = $oCalculoSaldo->valorautorizado;
+        return $oSaldo->quantidadeautorizada;
+    }
+
     /**
      * retorna os itens na possição inicial
      * @return Acordoitem[]
@@ -4026,4 +4056,49 @@ class Acordo
 
         return $this;
     }
+
+    function getObras($iAcordo)
+    {
+        $sCampo          = "*";
+        $sSql            = "SELECT $sCampo
+                              FROM acordo
+                              INNER JOIN liclicita ON l20_codigo = ac16_licitacao
+                              INNER JOIN licobras ON obr01_licitacao = l20_codigo
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsObras = db_query($sSql);
+        $obra = db_utils::fieldsMemory($rsObras, 0)->obr01_sequencial;
+        return $obra;
+    }
+
+    function getNaturezaAcordo($iAcordo)
+    {
+        $sSql            = "SELECT ac02_acordonatureza
+                              FROM acordo
+                            INNER JOIN acordogrupo on ac16_acordogrupo = ac02_sequencial
+                            WHERE ac16_sequencial = $iAcordo";
+        $rsNatureza = db_query($sSql);
+        $sNatureza = db_utils::fieldsMemory($rsNatureza, 0)->ac02_acordonatureza;
+        return $sNatureza;
+    }
+//
+//    function getSaldosItens($iAcordo,$iPosicao){
+//            $oContrato = new Acordo($iAcordo);
+//            $aItens    = array();
+//
+//            foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
+//
+//                if ($oPosicaoContrato->getCodigo() == $iPosicao) {
+//
+//                    foreach ($oPosicaoContrato->getItens() as $oItem) {
+//                        $oItemRetorno                 = new stdClass();
+//                        $oItemRetorno->saldos         = $oItem->getSaldosItem($oItem->getCodigo());
+//                        echo "<pre>";
+//                        print_r($oItemRetorno);
+//                        $itens[]                      = $oItemRetorno;
+//                    }
+//                }
+//            }
+////            exit;
+//    }
+
 }

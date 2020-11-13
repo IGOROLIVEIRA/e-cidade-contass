@@ -80,6 +80,8 @@ class cl_rhpessoalmov {
     var $rh02_dtobitoinstituidor = null;
     var $rh02_tipoparentescoinst = null;
     var $rh02_desctipoparentescoinst = null;
+    var $rh02_laudodeficiencia = 0;
+    var $rh02_laudoportadormolestia = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  rh02_instit = int4 = Cod. Instituição
@@ -114,6 +116,8 @@ class cl_rhpessoalmov {
                  rh02_dtobitoinstituidor = int4 = Data de Obito do Instituidor
                  rh02_tipoparentescoinst = int4 = Tipo de Parentesco
                  rh02_desctipoparentescoinst = Text = Descrição do Tipo de Parentesco
+                 rh02_laudodeficiencia = oid = Laudo Médico
+                 rh02_laudoportadormolestia = oid = Laudo Médico
                  ";
     //funcao construtor da classe
     function cl_rhpessoalmov() {
@@ -179,6 +183,8 @@ class cl_rhpessoalmov {
             $this->rh02_dtobitoinstituidor = ($this->rh02_dtobitoinstituidor == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_dtobitoinstituidor"]:$this->rh02_dtobitoinstituidor);
             $this->rh02_tipoparentescoinst = ($this->rh02_tipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_tipoparentescoinst"]:$this->rh02_tipoparentescoinst);
             $this->rh02_desctipoparentescoinst = ($this->rh02_desctipoparentescoinst == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"]:$this->rh02_desctipoparentescoinst);
+            $this->rh02_laudodeficiencia = ($this->rh02_laudodeficiencia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudodeficiencia"]:$this->rh02_laudodeficiencia);
+            $this->rh02_laudoportadormolestia = ($this->rh02_laudoportadormolestia == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_laudoportadormolestia"]:$this->rh02_laudoportadormolestia);
         }else{
             $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
             $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
@@ -358,6 +364,12 @@ class cl_rhpessoalmov {
         if($this->rh02_abonopermanencia == null ){
             $this->rh02_abonopermanencia = "f";
         }
+        if($this->rh02_laudodeficiencia == null ){
+            $this->rh02_laudodeficiencia = "null";
+        }
+        if($this->rh02_laudoportadormolestia == null ){
+            $this->rh02_laudoportadormolestia = "null";
+        }
         /*if($this->rh02_diasgozoferias == null ){
           $this->erro_sql = " Campo Dias padrão a Gozar não informado.";
           $this->erro_campo = "rh02_diasgozoferias";
@@ -451,6 +463,8 @@ class cl_rhpessoalmov {
                                       ,rh02_dtobitoinstituidor
                                       ,rh02_tipoparentescoinst
                                       ,rh02_desctipoparentescoinst
+                                      ,rh02_laudodeficiencia
+                                      ,rh02_laudoportadormolestia
                        )
                 values (
                                 $this->rh02_instit
@@ -485,6 +499,8 @@ class cl_rhpessoalmov {
                                ,".($this->rh02_dtobitoinstituidor == "null" || $this->rh02_dtobitoinstituidor == ""?"null":"'".$this->rh02_dtobitoinstituidor."'")."
                                ,".($this->rh02_tipoparentescoinst == "null" || $this->rh02_tipoparentescoinst == ""?"null":"'".$this->rh02_tipoparentescoinst."'")."
                                ,".($this->rh02_desctipoparentescoinst == "null" || $this->rh02_desctipoparentescoinst == ""?"null":"'".$this->rh02_desctipoparentescoinst."'")."
+                               ,".($this->rh02_laudodeficiencia == "null" || $this->rh02_laudodeficiencia == ""?"null":"'".$this->rh02_laudodeficiencia."'")."
+                               ,".($this->rh02_laudoportadormolestia == "null" || $this->rh02_laudoportadormolestia == ""?"null":"'".$this->rh02_laudoportadormolestia."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -893,6 +909,25 @@ class cl_rhpessoalmov {
                 $virgula = ",";
             }else{
                 $sql  .= $virgula." rh02_dtobitoinstituidor = '$this->rh02_dtobitoinstituidor'";
+                $virgula = ",";
+            }
+        }
+
+        if(trim($this->rh02_laudodeficiencia)=="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_laudodeficiencia"])){
+            if($this->rh02_laudodeficiencia == "") {
+                $sql  .= $virgula." rh02_laudodeficiencia = null";
+                $virgula = ",";
+            }else{
+                $sql  .= $virgula." rh02_laudodeficiencia = $this->rh02_laudodeficiencia";
+                $virgula = ",";
+            }
+        }
+        if(trim($this->rh02_laudoportadormolestia)=="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_laudoportadormolestia"])){
+            if($this->rh02_laudoportadormolestia == "") {
+                $sql  .= $virgula." rh02_laudoportadormolestia = null";
+                $virgula = ",";
+            }else{
+                $sql  .= $virgula." rh02_laudoportadormolestia = $this->rh02_laudoportadormolestia";
                 $virgula = ",";
             }
         }
@@ -1546,7 +1581,7 @@ class cl_rhpessoalmov {
 
     }
 
-    function sql_query_baseServidores( $iMesFolha, $iAnoFolha, $iInstituicao, $sCampos = "", $sWhere = "", $sOrdem = "", $sAgrupamento = ""  ) {
+    function sql_query_baseServidores( $iMesFolha, $iAnoFolha, $iInstituicao, $sCampos = "", $sWhere = "", $sOrdem = "", $sAgrupamento = "", $iMesFinal = NULL, $iAnoFinal = NULL  ) {
 
         if ( empty($sCampos) ) {
             $sCampos = "*";
@@ -1594,9 +1629,12 @@ class cl_rhpessoalmov {
         $sSQLBase.= "                  ) as rhipe           on rh01_regist                   = rhipe.rh62_regist                    \n";
         $sSQLBase.= "       left  join rhinstrucao          on rhinstrucao.rh21_instru       = rhpessoal.rh01_instru                \n";
         $sSQLBase.= "       left  join rhestcivil           on rhestcivil.rh08_estciv        = rhpessoal.rh01_estciv                \n";
-
-        $sSQLBase.= " where rh02_anousu = $iAnoFolha                                                                                \n";
-        $sSQLBase.= "   and rh02_mesusu = $iMesFolha                                                                                \n";
+        if (empty($iMesFinal)) {
+            $sSQLBase.= " where rh02_anousu = $iAnoFolha                                                                                \n";
+            $sSQLBase.= "   and rh02_mesusu = $iMesFolha                                                                                \n";
+        } else {
+            $sSQLBase.= " where fc_anousu_mesusu(rh02_anousu,rh02_mesusu) between fc_anousu_mesusu($iAnoFolha, $iMesFolha) and fc_anousu_mesusu($iAnoFinal, $iMesFinal)  \n";
+        }
         $sSQLBase.= "   and rh02_instit = $iInstituicao                                                                             \n";
         if ( !empty($sWhere) ) {
             $sSQLBase.= "   and {$sWhere}                                                                                             \n";

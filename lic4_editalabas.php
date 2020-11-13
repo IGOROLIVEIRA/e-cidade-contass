@@ -36,10 +36,6 @@ include("classes/db_liclancedital_classe.php");
 $oGet = db_utils::postMemory($_GET);
 $clliclancedital = new cl_liclancedital;
 
-//$sqlLicita = $clliclicita->sql_query('', 'l20_codigo', '', '');
-////$sqlLicita = $clliclicita->sql_query('', 'l20_codigo', '', 'l20_nroedital = '.$l20_nroedital);
-//$rsLicita = $clliclicita->sql_record($sqlLicita);
-
 $clcriaabas     = new cl_criaabas;
 
 if ($oGet->edital){

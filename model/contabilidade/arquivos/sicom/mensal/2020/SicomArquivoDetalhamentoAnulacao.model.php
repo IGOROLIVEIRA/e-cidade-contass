@@ -119,6 +119,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    e60_anousu,
                    e60_numemp,
                    e60_datasentenca,
+                   e50_compdesp,
                    lpad((CASE
                              WHEN o40_codtri = '0'
                                   OR NULL THEN o40_orgao::varchar
@@ -169,12 +170,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                 AND e60_instit IN (" . db_getsession('DB_instit') . ")
             GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu, 
                      e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
-                     c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento
+                     c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento, e50_compdesp
             ORDER BY e60_numemp, c70_codlan";
-    // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
-//    echo $sSql;
+    //    echo $sSql."<br>";
     $rsDetalhamentos = db_query($sSql);
-//    db_criatabela($rsDetalhamentos);echo pg_last_error();
+    //    db_criatabela($rsDetalhamentos);echo pg_last_error();
 
     $clalq10 = new cl_alq102020();
     $clalq11 = new cl_alq112020();
@@ -268,6 +268,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosDetalhamento->si121_instit = db_getsession("DB_instit");
         $oDadosDetalhamento->o56_elemento = $oDetalhamento->o56_elemento;
+        $oDadosDetalhamento->e50_compdesp = $oDetalhamento->e50_compdesp;
         $oDadosDetalhamento->e60_datasentenca = $oDetalhamento->e60_datasentenca;
 
         $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
@@ -335,14 +336,17 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         throw new Exception($oDados11->erro_msg);
       }
 
-      if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319092') {
+      $aMatrizCompDesp = array('3319092', '3319192', '3319592', '3319692');
+      $aMatrizDespSentenca = array('3319091', '3319191','3319591','3319691');
 
+      if (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizCompDesp)) {
+          
         $oDados12 = new cl_alq122020();
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
-        $oDados12->si123_mescompetencia = 12;
-        $oDados12->si123_exerciciocompetencia = db_getsession("DB_anousu") - 1;
+        $oDados12->si123_mescompetencia = substr($oDadosAgrupados->e50_compdesp, 5, 2);
+        $oDados12->si123_exerciciocompetencia = substr($oDadosAgrupados->e50_compdesp, 0, 4);
         $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
         $oDados12->si123_mes = $oDados10->si121_mes;
         $oDados12->si123_instit = db_getsession("DB_instit");
@@ -351,9 +355,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
           throw new Exception($oDados12->erro_msg);
         }
 
-      }
-
-      if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319091') {
+      } elseif (in_array(substr($oDadosAgrupados->o56_elemento, 0, 7), $aMatrizDespSentenca)) {
         
         $oDados12 = new cl_alq122020();
         $oDados12->si123_tiporegistro = 12;
@@ -368,7 +370,6 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         if ($oDados12->erro_status == 0) {
           throw new Exception($oDados12->erro_msg);
         }
-
       }
 
     }

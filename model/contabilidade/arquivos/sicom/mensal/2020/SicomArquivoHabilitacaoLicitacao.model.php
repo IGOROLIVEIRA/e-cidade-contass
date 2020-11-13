@@ -255,7 +255,11 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
       $clhablic10->si57_objetosocial = $oDados10->tipodocumento == 1 ? '' : $this->removeCaracteres(substr($oDados10->objetosocial, 0, 2000));
       $clhablic10->si57_orgaorespregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->orgaorespregistro;
       $clhablic10->si57_dataregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->dataregistro;
-      $clhablic10->si57_nroregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->nroregistro;
+      if($oDados10->orgaorespregistro == 4){
+          $clhablic10->si57_nroregistro = '';
+      }else{
+          $clhablic10->si57_nroregistro = $oDados10->tipodocumento == 1 ? '' : $oDados10->nroregistro;
+      }
       $clhablic10->si57_dataregistrocvm = $oDados10->tipodocumento == 1 ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->dataregistrocvm : "";
       $clhablic10->si57_nroregistrocvm = $oDados10->tipodocumento == 1 ? '' : ($oDados10->dataregistrocvm != "" && $oDados10->nroregistrocvm != "") ? $oDados10->nroregistrocvm : "";
       $clhablic10->si57_nroinscricaoestadual = $oDados10->nroinscricaoestadual;

@@ -67,6 +67,7 @@ class cl_concur {
    var $h06_dpubl_ano = null; 
    var $h06_dpubl = null; 
    var $h06_nrproc = null; 
+   var $h06_fundamentacaolegal = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  h06_refer = int4 = Codigo do Concurso 
@@ -79,6 +80,7 @@ class cl_concur {
                  h06_dprorr = date = Prorrogação 
                  h06_dpubl = date = Publicação 
                  h06_nrproc = varchar(16) = No. Processo 
+                 h06_fundamentacaolegal = varchar(255) = Fundamentação Legal
                  ";
    //funcao construtor da classe 
    function cl_concur() { 
@@ -143,6 +145,7 @@ class cl_concur {
          }
        }
        $this->h06_nrproc = ($this->h06_nrproc == ""?@$GLOBALS["HTTP_POST_VARS"]["h06_nrproc"]:$this->h06_nrproc);
+       $this->h06_fundamentacaolegal = ($this->h06_fundamentacaolegal == ""?@$GLOBALS["HTTP_POST_VARS"]["h06_fundamentacaolegal"]:$this->h06_fundamentacaolegal);
      }else{
        $this->h06_refer = ($this->h06_refer == ""?@$GLOBALS["HTTP_POST_VARS"]["h06_refer"]:$this->h06_refer);
      }
@@ -209,6 +212,7 @@ class cl_concur {
                                       ,h06_dprorr 
                                       ,h06_dpubl 
                                       ,h06_nrproc 
+                                      ,h06_fundamentacaolegal
                        )
                 values (
                                 $this->h06_refer 
@@ -221,6 +225,7 @@ class cl_concur {
                                ,".($this->h06_dprorr == "null" || $this->h06_dprorr == ""?"null":"'".$this->h06_dprorr."'")." 
                                ,".($this->h06_dpubl == "null" || $this->h06_dpubl == ""?"null":"'".$this->h06_dpubl."'")." 
                                ,'$this->h06_nrproc' 
+                               ,".($this->h06_fundamentacaolegal == "null" || $this->h06_dpubl == ""?"null":"'".$this->h06_fundamentacaolegal."'")." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -379,6 +384,15 @@ class cl_concur {
      if(trim($this->h06_nrproc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h06_nrproc"])){ 
        $sql  .= $virgula." h06_nrproc = '$this->h06_nrproc' ";
        $virgula = ",";
+     }
+     if(trim($this->h06_fundamentacaolegal)!="" || !empty($GLOBALS["HTTP_POST_VARS"]["h06_fundamentacaolegal"])){ 
+       $sql  .= $virgula." h06_fundamentacaolegal = '$this->h06_fundamentacaolegal' ";
+       $virgula = ",";
+     } else { 
+       if(isset($GLOBALS["HTTP_POST_VARS"]["h06_fundamentacaolegal"])){ 
+         $sql  .= $virgula." h06_fundamentacaolegal = null ";
+         $virgula = ",";
+       }
      }
      $sql .= " where ";
      if($h06_refer!=null){

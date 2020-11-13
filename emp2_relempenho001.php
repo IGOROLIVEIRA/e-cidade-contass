@@ -65,13 +65,13 @@ $anousu  = db_getsession("DB_anousu");
      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
      <?
        if ($anousu <= 2007){
-         $clcriaabas->identifica = array("g1"=>"Principal","g2"=>"Credor/Gestor","g3"=>"Histórico/Evento/Tipo","g4"=>"Tipo de Compra","g5"=>"Material/Serviço","filtro"=>"Filtro");
+         $clcriaabas->identifica = array("g1"=>"Principal","g2"=>"Credor/Gestor","g3"=>"Histórico/Evento/Tipo","g4"=>"Contrato/Tipo de Compra","g5"=>"Material/Serviço","filtro"=>"Filtro");
          $clcriaabas->title      = array("g1"=>"Principal","g2"=>"Selecionar credores","g3"=>"Selecionar evento ou histórico","g4"=>"Selecionar tipo de compra","g5"=>"Selecionar material ou serviço","filtro"=>"Filtro");
          $clcriaabas->src        = array("g1"=>"emp2_relempenho011.php","g2"=>"emp2_relempcredor001.php","g3"=>"emp2_relemphist001.php","g4"=>"emp2_relempcom001.php","g5"=>"emp2_relempitem001.php","filtro"=>"func_selorcdotacao_aba.php?desdobramento=true");
          $clcriaabas->funcao_js  = array("g1"=>"","g2"=>"","g3"=>"","g4"=>"","g5"=>"","filtro"=>"js_atualizar_instit();");
          $clcriaabas->sizecampo  = array("g1"=>"20","g2"=>"20","g3"=>"20","g4"=>"20","g5"=>"20","filtro"=>"20");
        } else {
-         $clcriaabas->identifica = array("g1"=>"Principal","g2"=>"Credor/Gestor","g3"=>"Histórico/Evento/Tipo","g4"=>"Tipo de Compra","g5"=>"Material/Serviço","g6"=>"Característica Peculiar","filtro"=>"Filtro");
+         $clcriaabas->identifica = array("g1"=>"Principal","g2"=>"Credor/Gestor","g3"=>"Histórico/Evento/Tipo","g4"=>"Contrato/Tipo de Compra","g5"=>"Material/Serviço","g6"=>"Característica Peculiar","filtro"=>"Filtro");
          $clcriaabas->title      = array("g1"=>"Principal","g2"=>"Selecionar credores","g3"=>"Selecionar evento ou histórico","g4"=>"Selecionar tipo de compra","g5"=>"Selecionar serviço ou material","g6"=>"Selecione característica peculiar","filtro"=>"Filtro");
          $clcriaabas->src        = array("g1"=>"emp2_relempenho011.php","g2"=>"emp2_relempcredor001.php","g3"=>"emp2_relemphist001.php","g4"=>"emp2_relempcom001.php","g5"=>"emp2_relempitem001.php","g6"=>"emp2_relempconcarpeculiar001.php","filtro"=>"func_selorcdotacao_aba.php?desdobramento=true");
          $clcriaabas->funcao_js  = array("g1"=>"","g2"=>"","g3"=>"","g4"=>"","g5"=>"","g6"=>"","filtro"=>"js_atualizar_instit();");

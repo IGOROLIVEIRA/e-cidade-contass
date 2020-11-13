@@ -92,6 +92,7 @@ echo "Preço de Referência \n";
 echo "Processo de Compra: $codigo_preco \n";
 echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao))) ." \n";
 
+echo "SEQ;";
 echo "ITEM;";
 echo "DESCRICAO DO ITEM;";
 echo "VALOR UN;";
@@ -113,7 +114,8 @@ $nTotalItens = 0;
     $nTotalItens += $lTotal;
 
     $oDadosDaLinha = new stdClass();
-    $oDadosDaLinha->item = $iCont + 1;
+    $oDadosDaLinha->seq = $iCont + 1;
+    $oDadosDaLinha->item = $oResult->pc01_codmater;
     $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
     $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$quant_casas, ",", ".");
     $oDadosDaLinha->quantidade = $oResult->pc11_quant;
@@ -121,6 +123,7 @@ $nTotalItens = 0;
     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
 
+    echo "$oDadosDaLinha->seq;";
     echo "$oDadosDaLinha->item;";
     echo "$oDadosDaLinha->descricao;";
     echo "R$ $oDadosDaLinha->valorUnitario;";

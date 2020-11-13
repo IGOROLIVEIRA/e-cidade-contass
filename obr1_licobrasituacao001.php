@@ -111,6 +111,10 @@ if(isset($incluir)){
       }
     }
 
+    if($dtsituacao < $dtalancamento){
+       throw new Exception ("Usuário: Data de Situação deve ser maior ou igual a data de lançamento da Obra.");
+    }
+
     if($dtpublicacao < $dtsituacao){
       throw new Exception ("Usuário: Data de Publicação deve ser maior ou igual a data de Situação da Obra.");
     }

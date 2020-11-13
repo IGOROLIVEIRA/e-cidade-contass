@@ -69,6 +69,24 @@ $oRotuloSaltes->label();
       #z01_numcgm{
         width:92px;
       }
+
+      #fieldset_acordos, #fieldset_saltes, #fieldset_acordos {
+        width: 500px;
+        text-align: center;
+      }
+
+      #fieldset_acordos table, #fieldset_saltes table, #fieldset_acordos table {
+        margin: 0 auto;
+      }
+
+      #ac16_sequencial{
+        width:94px;
+      }
+      #ac16_resumoobjeto{
+        width:92px;
+      }
+
+
     </style>
   </head>
   <body style="margin-top: 25px; background-color: #cccccc;z-index: 99">
@@ -162,6 +180,34 @@ $oRotuloSaltes->label();
             </td>
           </tr>
 
+          <tr>
+            <td>
+
+              <?
+              $oFiltroAcordo = new cl_arquivo_auxiliar;
+              $oFiltroAcordo->cabecalho = "<strong> Contrato </strong>";
+              $oFiltroAcordo->codigo = "ac16_sequencial"; //chave de retorno da func
+              $oFiltroAcordo->descr  = "ac16_resumoobjeto";   //chave de retorno
+              $oFiltroAcordo->nomeobjeto = 'acordos';
+              $oFiltroAcordo->funcao_js = 'js_mostraacordos';
+              $oFiltroAcordo->funcao_js_hide       = 'js_mostraacordosHide';
+              $oFiltroAcordo->func_arquivo         = "func_acordoinstit.php";
+              $oFiltroAcordo->nomeiframe           = "db_iframe_acordos";
+              $oFiltroAcordo->vwidth               = '400';
+              $oFiltroAcordo->db_opcao             = 2;
+              $oFiltroAcordo->tipo                 = 2;
+              $oFiltroAcordo->top                  = 0;
+              $oFiltroAcordo->linhas               = 5;
+              $oFiltroAcordo->nome_botao           = 'lancarAcordo';
+              $oFiltroAcordo->lFuncaoPersonalizada = true;
+              $oFiltroAcordo->obrigarselecao       = false;
+              $oFiltroAcordo->Labelancora          = "Acordo:";
+              $oFiltroAcordo->localjan       = '';
+              $oFiltroAcordo->funcao_gera_formulario();
+              ?>
+            </td>
+          </tr>
+
            <tr>
               <td>
                <fieldset style="margin:0 auto 0 auto; width: 500px;">
@@ -193,7 +239,7 @@ $oRotuloSaltes->label();
                           <td><b>Quebra por Conta:</b></td>
                           <td>
                             <?php
-                              $aQuebraConta = array("t" => "Sim", "f" => "Não");
+                              $aQuebraConta = array("f" => "Não", "t" => "Sim");
                               db_select("lQuebraConta", $aQuebraConta, true, 1);
                             ?>
                           </td>
@@ -202,7 +248,7 @@ $oRotuloSaltes->label();
                           <td><b>Quebra por Credor:</b></td>
                           <td>
                             <?php
-                              $aQuebraCredor = array("t" => "Sim", "f" => "Não");
+                              $aQuebraCredor = array("f" => "Não", "t" => "Sim");
                               db_select("lQuebraCredor", $aQuebraCredor, true, 1);
                             ?>
                           </td>
@@ -211,8 +257,17 @@ $oRotuloSaltes->label();
                           <td><b>Quebra por Recurso:</b></td>
                           <td>
                             <?php
-                              $aQuebraRecurso = array("t" => "Sim", "f" => "Não");
+                              $aQuebraRecurso = array("f" => "Não", "t" => "Sim");
                               db_select("lQuebraRecurso", $aQuebraRecurso, true, 1);
+                            ?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><b>Quebra por Contrato:</b></td>
+                          <td>
+                            <?php
+                            $aQuebraAcordo = array("f" => "Não", "t" => "Sim");
+                            db_select("lQuebraAcordo", $aQuebraAcordo, true, 1);
                             ?>
                           </td>
                         </tr>
@@ -234,6 +289,15 @@ $oRotuloSaltes->label();
                             ?>
                           </td>
                         </tr>
+                        <tr>
+                          <td><b>Prestação de Contas:</b></td>
+                          <td>
+                            <?php
+                            $aPrestacaoConta = array(1 => "Não", 2 => "Sim");
+                            db_select("iPrestacaoConta", $aPrestacaoConta, true, 1);
+                            ?>
+                          </td>
+                        </tr>
                       </table>
                     </fieldset>
                   </td>
@@ -251,6 +315,7 @@ $oRotuloSaltes->label();
   oDBToogleCredores = new DBToogle('fieldset_credor', false);
   oDBToogleCredores = new DBToogle('fieldset_saltes', false);
   oDBToogleCredores = new DBToogle('fieldset_recursos', false);
+  oDBToogleCredores = new DBToogle('fieldset_acordos', false);
 
   $('btnImprimir').observe('click', function() {
 
@@ -287,6 +352,15 @@ $oRotuloSaltes->label();
       sVirgula = ", ";
     }
 
+    var aAcordosSelecionados = $('acordos');
+    var sAcordosSelecionados = "";
+    sVirgula = "";
+
+    for(var iRowAcordos = 0; iRowAcordos < $('acordos').length; iRowAcordos++){
+      var oDadosAcordos = aAcordosSelecionados[iRowAcordos];
+      sAcordosSelecionados += sVirgula+oDadosAcordos.value;
+      sVirgula = ", ";
+    }
     var sDataInicialBanco = js_formatar($F('dtDataInicial'), 'd');
     var sDataFinalBanco   = js_formatar($F('dtDataFinal'), 'd');
 
@@ -316,7 +390,7 @@ $oRotuloSaltes->label();
       var map = window.open("", name, windowfeature);
       if (map) {
           mapForm.submit();
-      } 
+      }
     }
 
     filtra_despesa = parent.iframe_filtro.js_atualiza_variavel_retorno();
@@ -325,14 +399,17 @@ $oRotuloSaltes->label();
     dados['sCredoresSelecionados']       = sCredoresSelecionados;
     dados['sContasSelecionadas']         = sContasSelecionadas;
     dados['sRecursosSelecionados']       = sRecursosSelecionados;
+    dados['sAcordosSelecionados']        = sAcordosSelecionados;
     dados['dtDataInicial']               = $F('dtDataInicial');
     dados['dtDataFinal']                 = $F('dtDataFinal');
     dados['sTipoOrdem']                  = $F('sTipoOrdem');
     dados['lQuebraConta']                = $F('lQuebraConta');
     dados['lQuebraCredor']               = $F('lQuebraCredor');
     dados['lQuebraRecurso']              = $F('lQuebraRecurso');
+    dados['lQuebraAcordo']               = $F('lQuebraAcordo');
     dados['iListaEmpenho']               = $F('iListaEmpenho');
     dados['iTipoBaixa']                  = $F('iTipoBaixa');
+    dados['iPrestacaoConta']             = $F('iPrestacaoConta');
     dados['filtra_despesa']              = filtra_despesa;
 
     var name = new Date().getTime();

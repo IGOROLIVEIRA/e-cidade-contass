@@ -13,9 +13,9 @@ require_once("classes/db_licobrasmedicao_classe.php");
 require_once("classes/db_licobrasanexo_classe.php");
 require_once("classes/db_licobrasresponsaveis_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
+require_once("classes/db_licobras_classe.php");
 include("classes/db_condataconf_classe.php");
-
-
+include("classes/db_historicocgm_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -49,25 +49,22 @@ switch($oParam->exec) {
     break;
 
   case 'excluirAnexo':
+    try{
+        db_inicio_transacao();
 
-    $cllicobrasanexos = new cl_licobrasanexo();
-    $resultAnexos = $cllicobrasanexos->sql_record($cllicobrasanexos->sql_query(null,"*",null,"obr04_sequencial = $oParam->codAnexo"));
-    db_fieldsmemory($resultAnexos,0);
+        $cllicobrasanexos = new cl_licobrasanexo();
+        $cllicobrasanexos->excluir($oParam->codAnexo);
 
-    //cria caminho para o arquivo
-    $anexo = 'imagens/obras/'.$obr04_codimagem;
+        if ($cllicobrasanexo->erro_status == '0') {
+            throw new Exception($cllicobrasanexo->erro_msg);
+        }
 
-    //apaga o arquivo no diretorio
-    if(!unlink($anexo)){
-      $erro = true;
-    };
-
-    if($erro == false){
-      $cllicobrasanexos->excluir($obr04_sequencial);
+        db_fim_transacao();
+    }catch (Exception $eErro){
+        $oRetorno->status = 2;
+        $oRetorno->message = urlencode($eErro->getMessage());
     }
-    if($erro == true){
-      $oRetorno->message = "Erro ! Arquivo nao excluido contate o Suporte.";
-    }
+
     break;
 
   case 'alterarAnexo':
@@ -91,6 +88,8 @@ switch($oParam->exec) {
     $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
     $clhomologacaoadjudica = new cl_homologacaoadjudica();
     $clcondataconf = new cl_condataconf;
+    $cllicobras = new cl_licobras();
+    $clhistoricocgm = new cl_historicocgm();
 
     $resulthomologacao = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_file(null,"l202_datahomologacao",null,"l202_licitacao = $oParam->licitacao"));
     db_fieldsmemory($resulthomologacao,0);
@@ -98,16 +97,26 @@ switch($oParam->exec) {
     $datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
     $datainicioatividades = DateTime::createFromFormat('d/m/Y', $oParam->obr05_dtcadastrores);
 
-      $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
-      $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
-      $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
-      db_fieldsmemory($resultresp,0);
+    $rsObra = $cllicobras->sql_record($cllicobras->sql_query($oParam->obr05_seqobra));
+    db_fieldsmemory($rsObra,0);
+    $dtObra = (implode("/",(array_reverse(explode("-",$obr01_dtlancamento)))));
+    $dtLancObra = DateTime::createFromFormat('d/m/Y', $dtObra);
+
+    $sWhere = "obr05_seqobra = $oParam->obr05_seqobra and obr05_responsavel = $oParam->obr05_responsavel and obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel";
+    $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
+    $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+    db_fieldsmemory($resultresp,0);
 
     try{
+
       if($datahomologacao != null){
         if($datainicioatividades < $datahomologacao){
           throw new Exception("Usuário: Campo Data de Inicio das atividades deve ser maior que data de Homologação da Licitação.");
         }
+      }
+
+      if($datainicioatividades < $dtLancObra){
+          throw new Exception("Usuário: Campo Data de início das atividades deve ser igual ou maior do que a data de lançamento da obra.");
       }
 
       /**
@@ -121,60 +130,79 @@ switch($oParam->exec) {
         $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
         $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-        if ($datainicioatividades <= $dtencerramento) {
-          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+          if($dtencerramento != null || $dtencerramento != ""){
+              if ($datainicioatividades <= $dtencerramento) {
+                throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            }
         }
       }
+
+      $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","z09_sequencial desc","z09_numcgm = $oParam->obr05_responsavel"));
+      db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+      $datacgm = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
+      $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
+      $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
+      $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
+
+      if ($dtencerramento != false){
+          if($z09_datacadastro > $dtencerramento){
+              throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+          }
+      }
+
+      if($dtsessao < $z09_datacadastro){
+        throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+      }
+
+      if(pg_num_rows($resultresp) > 0){
+          $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+          $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+          $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+          $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+          $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+          $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+          $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+          $cllicobrasresponsaveis->alterar($obr05_sequencial);
+
+          if ($cllicobrasresponsaveis->erro_status == 0) {
+              $erro = $cllicobrasresponsaveis->erro_msg;
+              $oRetorno->message = urlencode($erro);
+              $oRetorno->status = 2;
+          } else {
+              $oRetorno->status = 1;
+              $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
+          }
+
+      }else {
+          $cllicobrasresponsaveis->obr05_seqobra = $oParam->obr05_seqobra;
+          $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
+          $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
+          $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
+          $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
+          if($oParam->obr05_numartourrt == ""){
+              $cllicobrasresponsaveis->obr05_numartourrt =  NULL;
+          }else{
+              $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
+          }
+          $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
+          $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
+          $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
+          $cllicobrasresponsaveis->incluir();
+
+          if ($cllicobrasresponsaveis->erro_status == 0) {
+              $erro = $cllicobrasresponsaveis->erro_msg;
+              $oRetorno->message = urlencode($erro);
+              $oRetorno->status = 2;
+          } else {
+              $oRetorno->status = 1;
+              $oRetorno->message = urlencode("Responsável salvo com sucesso.");
+          }
+      }
     }catch (Exception $eErro){
+      $oRetorno->status = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
     }
 
-    if(pg_num_rows($resultresp) > 0){
-      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
-      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
-      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
-      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
-      $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
-      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
-      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
-      $cllicobrasresponsaveis->alterar($obr05_sequencial);
-
-      if ($cllicobrasresponsaveis->erro_status == 0) {
-        $erro = $cllicobrasresponsaveis->erro_msg;
-        $oRetorno->message = urlencode($erro);
-        $oRetorno->status = 2;
-
-      } else {
-        $oRetorno->status = 1;
-        $oRetorno->message = urlencode("Responsável Alterado com Sucesso.");
-      }
-
-    }else {
-
-      $cllicobrasresponsaveis->obr05_seqobra = $oParam->obr05_seqobra;
-      $cllicobrasresponsaveis->obr05_responsavel = $oParam->obr05_responsavel;
-      $cllicobrasresponsaveis->obr05_tiporesponsavel = $oParam->obr05_tiporesponsavel;
-      $cllicobrasresponsaveis->obr05_tiporegistro = $oParam->obr05_tiporegistro;
-      $cllicobrasresponsaveis->obr05_numregistro = $oParam->obr05_numregistro;
-      if($oParam->obr05_numartourrt == ""){
-        $cllicobrasresponsaveis->obr05_numartourrt =  NULL;
-      }else{
-        $cllicobrasresponsaveis->obr05_numartourrt = $oParam->obr05_numartourrt;
-      }
-      $cllicobrasresponsaveis->obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional;
-      $cllicobrasresponsaveis->obr05_dtcadastrores = $oParam->obr05_dtcadastrores;
-      $cllicobrasresponsaveis->obr05_instit = db_getsession("DB_instit");
-      $cllicobrasresponsaveis->incluir();
-
-      if ($cllicobrasresponsaveis->erro_status == 0) {
-        $erro = $cllicobrasresponsaveis->erro_msg;
-        $oRetorno->message = urlencode($erro);
-        $oRetorno->status = 2;
-      } else {
-        $oRetorno->status = 1;
-        $oRetorno->message = urlencode("Responsável salvo com sucesso.");
-      }
-    }
     break;
 
   case 'getResponsaveis':
@@ -223,6 +251,66 @@ switch($oParam->exec) {
 
       $oRetorno->dados[] = $oDadosResponsavel;
     }
+    break;
+
+  case 'salvarDocumento':
+
+      try {
+          db_inicio_transacao();
+
+          global $conn;
+
+          if (!file_exists($oParam->arquivo)) {
+              throw new Exception("Arquivo do Documento não Encontrado.");
+          }
+
+          $cllicobrasanexo = new cl_licobrasanexo();
+          $sqlanexo = $cllicobrasanexo->sql_query(null, "*", null, "obr04_licobrasmedicao = $oParam->medicao");
+          $rsAnexo = $cllicobrasanexo->sql_record($sqlanexo);
+          db_fieldsmemory($rsAnexo,0);
+
+          if (pg_num_rows($rsAnexo) > 0) {
+              throw new Exception("Já existe anexo para esta Medição.");
+          } else {
+
+              if (!file_exists($oParam->arquivo)) {
+                  throw new Exception("Arquivo da foto não Encontrado.");
+              }
+              $aNomeArquivo = explode("/", $oParam->arquivo);
+              $sNomeArquivo = str_replace(" ", "_", $aNomeArquivo[1]);
+
+              /**
+               * Abre um arquivo em formato binario somente leitura
+               */
+              $rDocumento = fopen($oParam->arquivo, "rb");
+              /**
+               * Pega todo o conteúdo do arquivo e coloca no resource
+               */
+              $rDadosDocumento = fread($rDocumento, filesize($oParam->arquivo));
+              fclose($rDocumento);
+              $oOidBanco = pg_lo_create();
+
+              $cllicobrasanexo->obr04_licobrasmedicao = $oParam->medicao;
+              $cllicobrasanexo->obr04_legenda = $oParam->legenda;
+              $cllicobrasanexo->obr04_anexo = $oOidBanco;
+              $cllicobrasanexo->incluir();
+
+              if ($cllicobrasanexo->erro_status == '0') {
+                  throw new Exception($cllicobrasanexo->erro_msg);
+              }
+
+              $oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
+              pg_lo_write($oObjetoBanco, $rDadosDocumento);
+              pg_lo_close($oObjetoBanco);
+          }
+          db_fim_transacao();
+
+      }catch (Exception $oErro) {
+          $oRetorno->status = 2;
+          $oRetorno->message = urlencode($oErro->getMessage());
+          db_fim_transacao(true);
+      }
+      break;
 
   case 'downloadDocumento':
 
@@ -234,11 +322,11 @@ switch($oParam->exec) {
     db_inicio_transacao();
 
     // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
-    $sNomeArquivo = "imagens/obras/$obr04_codimagem";
-//    pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
-    db_fim_transacao(true);
+    $sNomeArquivo = "tmp/$obr04_anexo.pdf";
+    pg_lo_export($conn, $obr04_anexo, $sNomeArquivo);
+
+    db_fim_transacao();
     $oRetorno->nomearquivo = $sNomeArquivo;
-    // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
 
     break;
 }
