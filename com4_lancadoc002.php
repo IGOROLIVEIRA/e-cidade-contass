@@ -32,6 +32,7 @@ require_once("classes/db_pctipodoccertif_classe.php");
 require_once("classes/db_pcdoccertif_classe.php");
 require_once("classes/db_pcparam_classe.php");
 require_once("classes/db_pcfornecertifrenovacao_classe.php");
+require_once("classes/db_condataconf_classe.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
@@ -51,114 +52,140 @@ $DB_coddepto = db_getsession("DB_coddepto");
 $oParam = db_utils::fieldsMemory($clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"))),0);
 
 if (isset ($atualizar)) {
-	db_inicio_transacao();
-	$sqlerro = false;
-	$clpcfornecertif->pc74_data         = date('Y-m-d', db_getsession("DB_datausu"));
-	$clpcfornecertif->pc74_hora         = db_hora();
-	$clpcfornecertif->pc74_usuario      = db_getsession("DB_id_usuario");
-	$clpcfornecertif->pc74_pcforne      = $pc74_pcforne;
-	$clpcfornecertif->pc74_pctipocertif = $pc72_pctipocertif;
-	$clpcfornecertif->pc74_solicitante  = "$pc74_solicitante";
-  $clpcfornecertif->pc74_observacao   = htmlentities($pc74_observacao);
-	$clpcfornecertif->pc74_coddepto     = $DB_coddepto;
-	$clpcfornecertif->pc74_validade     = implode("-", array_reverse(explode("/",$pc74_validade)));
-	if ($oParam->pc30_validadepadraocertificado > 0 && $clpcfornecertif->pc74_validade == "") {
-    $sqlerro = true;
-    $erro_msg = "AVISO: Campo: Validade do Certificado não informado!";
-  }
-  if ($sqlerro == false) {
-	  $clpcfornecertif->incluir(null);
-	  if(isset($pc74_codigo) && $pc74_codigo!="") {
-	  	$oPcRenovacao = new cl_pcfornecertifrenovacao();
-	  	$oPcRenovacao->pc35_pcfornecertiforiginal = $pc74_codigo;
-	  	$oPcRenovacao->pc35_fornecertffilho       = $clpcfornecertif->pc74_codigo;
-	  	$oPcRenovacao->pc35_datarenovacao         = date('Y-m-d', db_getsession("DB_datausu"));
-	  	$oPcRenovacao->incluir(null);
-	  }
+    db_inicio_transacao();
+    $sqlerro = false;
+    $clpcfornecertif->pc74_data         = date('Y-m-d', db_getsession("DB_datausu"));
+    $clpcfornecertif->pc74_hora         = db_hora();
+    $clpcfornecertif->pc74_usuario      = db_getsession("DB_id_usuario");
+    $clpcfornecertif->pc74_pcforne      = $pc74_pcforne;
+    $clpcfornecertif->pc74_pctipocertif = $pc72_pctipocertif;
+    $clpcfornecertif->pc74_solicitante  = "$pc74_solicitante";
+    $clpcfornecertif->pc74_observacao   = htmlentities($pc74_observacao);
+    $clpcfornecertif->pc74_coddepto     = $DB_coddepto;
+    $clpcfornecertif->pc74_validade     = implode("-", array_reverse(explode("/",$pc74_validade)));
+    if ($oParam->pc30_validadepadraocertificado > 0 && $clpcfornecertif->pc74_validade == "") {
+        $sqlerro = true;
+        $erro_msg = "AVISO: Campo: Validade do Certificado não informado!";
+    }
 
-	  $erro_msg = $clpcfornecertif->erro_msg;
-	  $codigo = $clpcfornecertif->pc74_codigo;
-	  if ($clpcfornecertifdoc->erro_status == '0') {
-	 	  $sqlerro = true;
-	  }
-  }
-	$vt = $HTTP_POST_VARS;
-	$ta = sizeof($vt);
-	reset($vt);
-	$dadosant = "";
+    if($sqlerro==false){
 
-	for ($i = 0; $i < $ta; $i ++) {
-		$chave = key($vt);
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$pc74_pcforne} order by z09_sequencial desc");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+        $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
 
-		if (substr($chave, 0, 4) == "DATA") {
-			$dados = split("_", $chave);
- 		  if ($dados[1] != $dadosant) {
+        if($dtsession < $z09_datacadastro){
+            $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
 
-			  $dadosant = $dados[1];
-				$obtes = $HTTP_POST_VARS;
-				if (array_key_exists("OBS_".$dados[1], $obtes)) {
-					$obs = $obtes["OBS_".$dados[1]];
-				} else {
-					$obs = "";
-				}
+        /**
+         * controle de encerramento peri. Patrimonial
+         */
+        $clcondataconf = new cl_condataconf;
+        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+        db_fieldsmemory($resultControle,0);
 
-				if ($sqlerro == false) {
+        if($dtsession <= $c99_datapat){
+            db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            $sqlerro = true;
+        }
+    }
 
-					$result_ob = $clpctipodoccertif->sql_record($clpctipodoccertif->sql_query(null, "pc72_obrigatorio", null, "pc72_pctipocertif=$pc72_pctipocertif and pc72_pcdoccertif=".$dados[1]));
-					db_fieldsmemory($result_ob, 0);
-					$valid = $vt["DATA_".$dados[1]."_ano"]."-".$vt["DATA_".$dados[1]."_mes"]."-".$vt["DATA_".$dados[1]."_dia"];
-					if ($pc72_obrigatorio == 't') {
-						$ob = 1;
-						if ($valid=="--"){
-							$sqlerro=true;
-							$erro_msg = "O documento ".$dados[1]." é obrigatório!!";
-							break;
-						}
-					} else {
-						$ob = 0;
 
-              //Se a validade está em branco concatena a observação com a expressão "- DOCUMENTO NÃO ATUALIZADO"
-              if($valid == "--"){
+    if ($sqlerro == false) {
+        $clpcfornecertif->incluir(null);
+        if(isset($pc74_codigo) && $pc74_codigo!="") {
+            $oPcRenovacao = new cl_pcfornecertifrenovacao();
+            $oPcRenovacao->pc35_pcfornecertiforiginal = $pc74_codigo;
+            $oPcRenovacao->pc35_fornecertffilho       = $clpcfornecertif->pc74_codigo;
+            $oPcRenovacao->pc35_datarenovacao         = date('Y-m-d', db_getsession("DB_datausu"));
+            $oPcRenovacao->incluir(null);
+        }
 
-                if ( isset($pc75_obs) && (trim(substr($pc75_obs,-26)) == "- DOCUMENTO NÃO ATUALIZADO" || trim(substr($obs,-26)) == "- DOCUMENTO NÃO ATUALIZADO") ) {
-                  $clpcfornecertifdoc->pc75_obs         = $obs;
+        $erro_msg = $clpcfornecertif->erro_msg;
+        $codigo = $clpcfornecertif->pc74_codigo;
+        if ($clpcfornecertifdoc->erro_status == '0') {
+            $sqlerro = true;
+        }
+    }
+    $vt = $HTTP_POST_VARS;
+    $ta = sizeof($vt);
+    reset($vt);
+    $dadosant = "";
+
+    for ($i = 0; $i < $ta; $i ++) {
+        $chave = key($vt);
+
+        if (substr($chave, 0, 4) == "DATA") {
+            $dados = split("_", $chave);
+            if ($dados[1] != $dadosant) {
+
+                $dadosant = $dados[1];
+                $obtes = $HTTP_POST_VARS;
+                if (array_key_exists("OBS_".$dados[1], $obtes)) {
+                    $obs = $obtes["OBS_".$dados[1]];
                 } else {
-                  $clpcfornecertifdoc->pc75_obs         = $obs."- DOCUMENTO NÃO ATUALIZADO";
+                    $obs = "";
                 }
-                $valid = "null";
 
-              } else {
-                $valid = $vt["DATA_".$dados[1]."_ano"]."-".$vt["DATA_".$dados[1]."_mes"]."-".$vt["DATA_".$dados[1]."_dia"];
-              }
-					}
+                if ($sqlerro == false) {
 
-				  $dataemissao = $vt["EMISSAO_{$dados[1]}_ano"]."-".$vt["EMISSAO_{$dados[1]}_mes"]."-".$vt["EMISSAO_{$dados[1]}_dia"];
-          if ($dataemissao == "--") {
-            $dataemissao = null;
-          }
+                    $result_ob = $clpctipodoccertif->sql_record($clpctipodoccertif->sql_query(null, "pc72_obrigatorio", null, "pc72_pctipocertif=$pc72_pctipocertif and pc72_pcdoccertif=".$dados[1]));
+                    db_fieldsmemory($result_ob, 0);
+                    $valid = $vt["DATA_".$dados[1]."_ano"]."-".$vt["DATA_".$dados[1]."_mes"]."-".$vt["DATA_".$dados[1]."_dia"];
+                    if ($pc72_obrigatorio == 't') {
+                        $ob = 1;
+                        if ($valid=="--"){
+                            $sqlerro=true;
+                            $erro_msg = "O documento ".$dados[1]." é obrigatório!!";
+                            break;
+                        }
+                    } else {
+                        $ob = 0;
 
-          $clpcfornecertifdoc->pc75_obrigatorio   = "$ob";
-					$clpcfornecertifdoc->pc75_obs           = "$obs";
-					$clpcfornecertifdoc->pc75_pcfornecertif = $codigo;
-					$clpcfornecertifdoc->pc75_pcdoccertif   = $dados[1];
-					$clpcfornecertifdoc->pc75_validade      = $valid;
-					$clpcfornecertifdoc->pc75_dataemissao   = $dataemissao;
-          $clpcfornecertifdoc->pc75_apresentado   = $vt["APRESENTADO_{$dados[1]}"];
-          $clpcfornecertifdoc->pc75_numdocumento  = $vt["NUMDOC_{$dados[1]}"];
+                        //Se a validade está em branco concatena a observação com a expressão "- DOCUMENTO NÃO ATUALIZADO"
+                        if($valid == "--"){
+
+                            if ( isset($pc75_obs) && (trim(substr($pc75_obs,-26)) == "- DOCUMENTO NÃO ATUALIZADO" || trim(substr($obs,-26)) == "- DOCUMENTO NÃO ATUALIZADO") ) {
+                                $clpcfornecertifdoc->pc75_obs         = $obs;
+                            } else {
+                                $clpcfornecertifdoc->pc75_obs         = $obs."- DOCUMENTO NÃO ATUALIZADO";
+                            }
+                            $valid = "null";
+
+                        } else {
+                            $valid = $vt["DATA_".$dados[1]."_ano"]."-".$vt["DATA_".$dados[1]."_mes"]."-".$vt["DATA_".$dados[1]."_dia"];
+                        }
+                    }
+
+                    $dataemissao = $vt["EMISSAO_{$dados[1]}_ano"]."-".$vt["EMISSAO_{$dados[1]}_mes"]."-".$vt["EMISSAO_{$dados[1]}_dia"];
+                    if ($dataemissao == "--") {
+                        $dataemissao = null;
+                    }
+
+                    $clpcfornecertifdoc->pc75_obrigatorio   = "$ob";
+                    $clpcfornecertifdoc->pc75_obs           = "$obs";
+                    $clpcfornecertifdoc->pc75_pcfornecertif = $codigo;
+                    $clpcfornecertifdoc->pc75_pcdoccertif   = $dados[1];
+                    $clpcfornecertifdoc->pc75_validade      = $valid;
+                    $clpcfornecertifdoc->pc75_dataemissao   = $dataemissao;
+                    $clpcfornecertifdoc->pc75_apresentado   = $vt["APRESENTADO_{$dados[1]}"];
+                    $clpcfornecertifdoc->pc75_numdocumento  = $vt["NUMDOC_{$dados[1]}"];
 
 
-					$clpcfornecertifdoc->incluir(null);
-					if ($clpcfornecertifdoc->erro_status == '0') {
-						$erro_msg = $clpcfornecertifdoc->erro_msg;
-						$sqlerro = true;
-						break;
-					}
-				}
-		  }
-		}
-		$proximo = next($vt);
-	}
-	db_fim_transacao($sqlerro);
+                    $clpcfornecertifdoc->incluir(null);
+                    if ($clpcfornecertifdoc->erro_status == '0') {
+                        $erro_msg = $clpcfornecertifdoc->erro_msg;
+                        $sqlerro = true;
+                        break;
+                    }
+                }
+            }
+        }
+        $proximo = next($vt);
+    }
+    db_fim_transacao($sqlerro);
 }
 ?>
 <html>

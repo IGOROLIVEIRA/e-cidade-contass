@@ -2819,6 +2819,7 @@ class empenho {
           $oContaCorrenteDetalhe->setCredor($oEmpenhoFinanceiro->getCgm());
           $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
           $oContaCorrenteDetalhe->setRecurso($oEmpenhoFinanceiro->getDotacao()->getDadosRecurso());
+          $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
 
           $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
           $oEventoContabil     = new EventoContabil($iCodigoDocumento, $iAnoUsu);
@@ -3101,7 +3102,7 @@ class empenho {
   }
 
   function estornarRP($iTipo, $aNotas = null, $nValorEstornado, $sMotivo='',
-                      $aItens = null, $iTipoAnulacao = null) {
+                      $aItens = null, $iTipoAnulacao = null, $sAto='', $dData_ato='') {
 
     if (!db_utils::inTransaction()){
       throw new exception("Não foi possível iniciar Procedimento.Nao foi possível achar uma transacao valida");
@@ -3379,6 +3380,8 @@ class empenho {
         /*OC 4401*/
         $oEmpAnulado->e94_id_usuario     = db_getsession("DB_id_usuario");
         /*Fim OC 4401*/
+        $oEmpAnulado->e94_ato            = $sAto;
+        $oEmpAnulado->e94_dataato        = $dData_ato;
         $oEmpAnulado->incluir(null);
         $iCodAnu                         = $oEmpAnulado->e94_codanu;
         if ($oEmpAnulado->erro_status == 0) {
@@ -3392,23 +3395,25 @@ class empenho {
         /*
          * Incluimos os itens anulados;
          */
-        if (is_array($aItens) && count($aItens) > 0) {
+        if($iTipo != 2) {
+          if (is_array($aItens) && count($aItens) > 0) {
 
-          $oEmpAnuladoItem = $this->usarDao("empanuladoitem", true);
-          for ($iInd = 0; $iInd < count($aItens); $iInd++) {
+            $oEmpAnuladoItem = $this->usarDao("empanuladoitem", true);
+            for ($iInd = 0; $iInd < count($aItens); $iInd++) {
 
-            $oEmpAnuladoItem->e37_empempitem = $aItens[$iInd]->iCodItem;
-            $oEmpAnuladoItem->e37_empanulado = $iCodAnu;
-            $oEmpAnuladoItem->e37_vlranu     = $aItens[$iInd]->vlrtot;
-            $oEmpAnuladoItem->e37_qtd        = $aItens[$iInd]->quantidade;
-            $oEmpAnuladoItem->incluir(null);
-            if ($oEmpAnuladoItem->erro_status == 0) {
+              $oEmpAnuladoItem->e37_empempitem = $aItens[$iInd]->iCodItem;
+              $oEmpAnuladoItem->e37_empanulado = $iCodAnu;
+              $oEmpAnuladoItem->e37_vlranu = $aItens[$iInd]->vlrtot;
+              $oEmpAnuladoItem->e37_qtd = $aItens[$iInd]->quantidade;
+              $oEmpAnuladoItem->incluir(null);
+              if ($oEmpAnuladoItem->erro_status == 0) {
 
-              $this->lSqlErro  = true;
-              $this->sErroMsg  = "Erro[24]\nNão Foi possível estornar RP.Erro incluir item como anulado.";
-              $this->sErroMsg .= "\nErro:{$oEmpAnuladoItem->erro_msg}";
-              throw new exception($this->sErroMsg);
-              return false;
+                $this->lSqlErro = true;
+                $this->sErroMsg = "Erro[24]\nNão Foi possível estornar RP.Erro incluir item como anulado.";
+                $this->sErroMsg .= "\nErro:{$oEmpAnuladoItem->erro_msg} {$oEmpAnuladoItem->erro_sql}";
+                throw new exception($this->sErroMsg);
+                return false;
+              }
             }
           }
         }

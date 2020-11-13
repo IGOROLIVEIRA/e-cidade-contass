@@ -308,7 +308,7 @@ AND e60_codemp = '$codemp'";
                 $iderp102020->si179_codunidadesub = $this->getCodUnidSub($empliq->c223_codemp, $empliq->c223_anousu);
                 $iderp102020->si179_nroempenho = $empliq->c223_codemp;
                 $iderp102020->si179_tiporestospagar = 1;
-                $iderp102020->si179_disponibilidadecaixa = 2; 
+                $iderp102020->si179_disponibilidadecaixa = 2;
                 $iderp102020->si179_codiderp = $this->getSeqEmpenho($empliq->c223_codemp, $empliq->c223_anousu).$iderp102020->si179_tiporestospagar.$iderp102020->si179_disponibilidadecaixa;
                 $iderp102020->si179_vlinscricao = $empliq->c223_vlrsemdisrpp;
                 $iderp102020->si179_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -327,7 +327,7 @@ AND e60_codemp = '$codemp'";
                 $iderp112020->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $iderp112020->si180_instit = db_getsession('DB_instit');
                 $iderp112020->incluir(null);
-                
+
                 if ($iderp112020->erro_status == 0) {
                     throw new Exception($iderp112020->erro_msg);
                 }
@@ -345,7 +345,7 @@ AND e60_codemp = '$codemp'";
             $iderp102020->si179_instit = db_getsession('DB_instit');
 
             $iderp102020->incluir(null);
-            
+
             if ($iderp102020->erro_status == 0) {
                 throw new Exception($iderp102020->erro_msg);
             }
@@ -359,7 +359,7 @@ AND e60_codemp = '$codemp'";
             $iderp112020->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $iderp112020->si180_instit = db_getsession('DB_instit');
             $iderp112020->incluir(null);
-            
+
             if ($iderp112020->erro_status == 0) {
                 throw new Exception($iderp112020->erro_msg);
             }
@@ -380,7 +380,7 @@ AND e60_codemp = '$codemp'";
             $iderp102020->si179_disponibilidadecaixa = $empnaoliq->c223_vlrdisrpnp > 0 ? 1 : 2;
 
             if ($empnaoliq->c223_vlrdisrpnp > 0 && $empnaoliq->c223_vlrdisrpnp != $empnaoliq->c223_vlrnaoliquidado && ($empnaoliq->c223_vlrdisrpnp > 0 ? 1 : 2) == 1) {
-                $iderp102020->si179_tiporegistro = 10; 
+                $iderp102020->si179_tiporegistro = 10;
                 $iderp102020->si179_codorgao = $sCodorgao;
                 $iderp102020->si179_codunidadesub = $this->getCodUnidSub($empnaoliq->c223_codemp, $empnaoliq->c223_anousu);
                 $iderp102020->si179_nroempenho = $empnaoliq->c223_codemp;
@@ -391,7 +391,7 @@ AND e60_codemp = '$codemp'";
                 $iderp102020->si179_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $iderp102020->si179_instit = db_getsession('DB_instit');
                 $iderp102020->incluir(null);
-                
+
                 if ($iderp102020->erro_status == 0) {
                     throw new Exception($iderp102020->erro_msg);
                 }
@@ -405,7 +405,7 @@ AND e60_codemp = '$codemp'";
                 $iderp112020->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $iderp112020->si180_instit = db_getsession('DB_instit');
                 $iderp112020->incluir(null);
-                
+
                 if ($iderp112020->erro_status == 0) {
                     throw new Exception($iderp112020->erro_msg);
                 }
@@ -437,7 +437,7 @@ AND e60_codemp = '$codemp'";
             $iderp112020->si180_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $iderp112020->si180_instit = db_getsession('DB_instit');
             $iderp112020->incluir(null);
-            
+
             if ($iderp112020->erro_status == 0) {
                 throw new Exception($iderp112020->erro_msg);
             }
@@ -452,14 +452,15 @@ AND e60_codemp = '$codemp'";
          *
          */
 
-        $sSql20 = "SELECT *
+        $sSql20 = "SELECT distinct c224_fonte, c224_vlrcaixabruta, c224_rpexercicioanterior, c224_vlrdisponibilidadecaixa, c224_anousu, c224_instit
         FROM disponibilidadecaixa
         WHERE c224_anousu = ". db_getsession('DB_anousu')."
         AND c224_instit = ". db_getsession('DB_instit')."
         AND (c224_vlrcaixabruta != 0
         OR c224_rpexercicioanterior != 0
         OR c224_vlrrestoarecolher != 0
-        OR c224_vlrdisponibilidadecaixa != 0)";
+        OR c224_vlrdisponibilidadecaixa != 0) order by c224_fonte";
+
         $rsResult20 = db_query($sSql20);
 
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -475,8 +476,8 @@ AND e60_codemp = '$codemp'";
             $iderp202020->si181_codfontrecursos = $reg20->c224_fonte;
             $iderp202020->si181_vlcaixabruta = $reg20->c224_vlrcaixabruta;
             $iderp202020->si181_vlrspexerciciosanteriores = $reg20->c224_rpexercicioanterior;
-            $iderp202020->si181_vlrestituiveisrecolher = $reg20->c224_vlrrestoarecolher;
-            $iderp202020->si181_vlrestituiveisativofinanceiro = $reg20->c224_vlrrestoregativofinanceiro;
+            $iderp202020->si181_vlrestituiveisrecolher = 0;
+            $iderp202020->si181_vlrestituiveisativofinanceiro = 0;
             $iderp202020->si181_vlsaldodispcaixa = $reg20->vlRdispCaixa < 0 ? 0 : $reg20->c224_vlrdisponibilidadecaixa;
             $iderp202020->si181_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
             $iderp202020->si181_instit = $reg20->c224_instit;

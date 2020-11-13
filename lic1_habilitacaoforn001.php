@@ -36,82 +36,65 @@ if(isset($incluir) || isset($alterar)){
   $rsCgm = $clcgm->sql_record($sqlCgm);
   $cgm = db_utils::fieldsMemory($rsCgm, 0);
 
-//    if(strlen($cgm->z01_cgccpf) == 14) {
-//
-//        if ($modalid == '49' || $modalid == '50' || $modalid == '53' || $modalid == '103') {
-//            if ($l206_datavalidadefgts == '')
-//                $erro_msg = 'Campo Data de Validade FGTS não informado';
-//            if ($l206_dataemissaofgts == '')
-//                $erro_msg = 'Campo Data de Emissão FGTS não informado';
-//            if ($l206_numcertidaofgts == "")
-//                $erro_msg = 'Campo Número de Certidão FGTS não informado';
-//            if ($l206_datavalidadeinss == "")
-//                $erro_msg = 'Campo Data de Validade INSS não informado';
-//            if ($l206_dataemissaoinss == "")
-//                $erro_msg = 'Campo Data de Emissão INSS não informado';
-//            if ($l206_numcertidaoinss == "")
-//                $erro_msg = 'Campo Número de Certidão INSS não informado';
-//            if ($dthabilitacao == false)
-//                $erro_msg = 'Campo Data de Habilitação não informado';
-//            if ($dthabilitacao != false) {
-//                if ($dthabilitacao < $dtabertura)
-//                    $erro_msg = 'Data da habilitação deve ser igual ou maior que a data da abertura!';
-//            }
-//        }
-//    }else{
+  if($dthabilitacao == false || $dthabilitacao == "" ){
+      $erro_msg = 'Campo Data de Habilitação não informado';
+      $sqlerro = true;
+  }
 
-//    }
-    //    if($modalid == '48' || $modalid == '52' || $modalid == '53' || $modalid == '51'){
-    //
-    //    }
+    if($sqlerro == false){
+      $rsTipoCompra = $clliclicita->sql_record($clliclicita->getTipocomTribunal($l20_codigo));
+      db_fieldsmemory($rsTipoCompra, 0)->l03_pctipocompratribunal;
 
-    if($dthabilitacao == false || $dthabilitacao == "" ){
-        $erro_msg = 'Campo Data de Habilitação não informado';
-    }
+      $rsDataabert = $clliclicita->sql_record($clliclicita->sql_query_file($l20_codigo));
+      db_fieldsmemory($rsDataabert, 0)->l20_datacria;
 
-  if($erro_msg){
-    $sqlerro = true;
+      if($l03_pctipocompratribunal == "100" || $l03_pctipocompratribunal == "101" || $l03_pctipocompratribunal == "103" || $l03_pctipocompratribunal == "104"){
+          if($dthabilitacao < $dtabertura){
+              $erro_msg = 'Erro: Data de habilitação menor que a data de abertura do procedimento adm.';
+              $sqlerro = true;
+          }
+      }
   }
 
 }
-
-if(isset($incluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->incluir($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
+if($sqlerro == false) {
+    if (isset($incluir)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->incluir($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($alterar)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->alterar($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($excluir)) {
+        if ($sqlerro == false) {
+            db_inicio_transacao();
+            $clhabilitacaoforn->excluir($l206_sequencial);
+            $erro_msg = $clhabilitacaoforn->erro_msg;
+            if ($clhabilitacaoforn->erro_status == 0) {
+                $sqlerro = true;
+            }
+            db_fim_transacao($sqlerro);
+        }
+    } else if (isset($opcao)) {
+        $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($l206_sequencial));
+        if ($result != false && $clhabilitacaoforn->numrows > 0) {
+            db_fieldsmemory($result, 0);
+        }
     }
-    db_fim_transacao($sqlerro);
- }
-}else if(isset($alterar)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->alterar($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($excluir)){
-  if($sqlerro==false){
-    db_inicio_transacao();
-    $clhabilitacaoforn->excluir($l206_sequencial);
-    $erro_msg = $clhabilitacaoforn->erro_msg;
-    if($clhabilitacaoforn->erro_status==0){
-      $sqlerro=true;
-    }
-    db_fim_transacao($sqlerro);
-  }
-}else if(isset($opcao)){
-   $result = $clhabilitacaoforn->sql_record($clhabilitacaoforn->sql_query($l206_sequencial));
-   if($result!=false && $clhabilitacaoforn->numrows>0){
-     db_fieldsmemory($result,0);
-   }
 }
-
 ?>
 <html>
 <head>

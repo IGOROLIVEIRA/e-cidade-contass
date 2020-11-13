@@ -225,6 +225,16 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?=@$Te30_prazoentordcompra?>">
+                    <?=@$Le30_prazoentordcompra?>
+                </td>
+                <td>
+                    <?
+                    db_input('e30_prazoentordcompra',15,$Ie30_prazoentordcompra,true,'text',$db_opcao,"")
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <center>

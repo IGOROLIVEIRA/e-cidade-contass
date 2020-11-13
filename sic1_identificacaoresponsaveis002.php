@@ -10,11 +10,27 @@ db_postmemory($HTTP_POST_VARS);
 $clidentificacaoresponsaveis = new cl_identificacaoresponsaveis;
 $db_opcao = 22;
 $db_botao = false;
+$sqlerro  = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $clidentificacaoresponsaveis->alterar($si166_sequencial);
-  db_fim_transacao();
+    db_inicio_transacao();
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$si166_numcgm} order by z09_sequencial desc");
+    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+    $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
+    if($sqlerro==false){
+        $dtinicial = DateTime::createFromFormat('d/m/Y', $si166_dataini);
+        $dtcadastrocgm =   DateTime::createFromFormat('d/m/Y', $z09_datacadastro);
+
+        if($dtinicial < $dtcadastrocgm){
+            db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+            $sqlerro = true;
+            $db_opcao = 2;
+        }
+    }
+    if($sqlerro==false) {
+
+        $clidentificacaoresponsaveis->alterar($si166_sequencial);
+    }
+    db_fim_transacao();
 }else if(isset($chavepesquisa)){
   if(db_getsession("DB_modulo") != 952) {
     $db_opcao = 2;

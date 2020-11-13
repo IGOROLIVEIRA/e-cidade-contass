@@ -69,7 +69,7 @@ if (isset($dados->altera)) {
 
 	$itensAcordo = db_utils::getCollectionByRecord($rsItens);
 
-	for ($count = 0; $count < sizeof($itensAcordo); $count++){
+	for ($count = 0; $count < count($itensAcordo); $count++){
 
 		$objeto = $itensAcordo[$count];
 
@@ -96,7 +96,7 @@ if (isset($dados->altera)) {
 	 *
 	 * */
 	$sItens = '';
-	for($i=0;$i<sizeof($dados->itens);$i++){
+	for($i=0; $i < count($dados->itens); $i++){
 	    $sItens .= $dados->itens[$i]->sequen . ',';
     }
 
@@ -105,34 +105,30 @@ if (isset($dados->altera)) {
 	$result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
 	db_fieldsmemory($result_ordem, 0);
 
-	if (!$sqlerro && count($dados->itens)) {
-
-		$clmatordem->m51_codordem   = $m51_codordem;
-		$clmatordem->m51_data       = $m51_data;
-        $clmatordem->m51_depto      = $coddepto;
-		$clmatordem->m51_numcgm     = $m51_numcgm;
-		$clmatordem->m51_obs        = $dados->obs;
-		$clmatordem->m51_valortotal = $valor_total;
-		$clmatordem->m51_prazoent   = $dados->m51_prazoent;
+		$clmatordem->m51_codordem    = $m51_codordem;
+		$clmatordem->m51_data        = $m51_data;
+        $clmatordem->m51_depto       = $dados->coddepto;
+        $clmatordem->m51_deptoorigem = $m51_depto;
+		$clmatordem->m51_numcgm      = $m51_numcgm;
+		$clmatordem->m51_obs         = $dados->obs;
+		$clmatordem->m51_valortotal  = $valor_total;
+		$clmatordem->m51_prazoent    = $dados->m51_prazoent;
 		$clmatordem->alterar($m51_codordem);
 
-		$erro_msg = 'Ordem de Compra alterada com sucesso!';
 		if ($clmatordem->erro_status == 0) {
 			$sqlerro = true;
 			$erro_msg = $clmatordem->erro_msg;
-		}
-	}else{
-	    $sqlerro = true;
-	    $erro_msg = 'Ordem de Compra não pode ser alterada!';
-    }
+		}else{
+			$erro_msg = 'Ordem de Compra alterada com sucesso!';
+        }
 
-	for ($count = 0; $count < sizeof($dados->itens); $count++) {
+	for ($count = 0; $count < count($dados->itens); $count++) {
 
-		$objeto = $dados->itens[$count];
-		$numemp = $objeto->numemp;
-		$quantidade = $objeto->quantidade;
-		$sequen = $objeto->sequen;
-		$valor_item = $objeto->valortotal;
+		$objeto         = $dados->itens[$count];
+		$numemp         = $objeto->numemp;
+		$quantidade     = $objeto->quantidade;
+		$sequen         = $objeto->sequen;
+		$valor_item     = $objeto->valortotal;
 		$valor_unitario = $objeto->valorunitario;
 
         if (strpos(trim($valor_item), ',') != "") {
@@ -200,12 +196,14 @@ if (isset($dados->altera)) {
 	 *
 	 * */
 
-	$result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "m52_codlanc", null,
-		" m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen not in ($sItens) "));
+    if($sItens){
+        $result_item = $clmatordemitem->sql_record($clmatordemitem->sql_query_file(null, "m52_codlanc", null,
+            " m52_codordem = $dados->m51_codordem and m52_numemp = $numemp and m52_sequen not in ($sItens) "));
 
-	for($contador=0; $contador < pg_num_rows($result_item); $contador++){
-	    $iCodLanc = db_utils::fieldsMemory($result_item, 0)->m52_codlanc;
-	    $clmatordemitem->excluir($iCodLanc);
+        for($contador=0; $contador < pg_num_rows($result_item); $contador++){
+            $iCodLanc = db_utils::fieldsMemory($result_item, 0)->m52_codlanc;
+            $clmatordemitem->excluir($iCodLanc);
+        }
     }
 
 	db_fim_transacao($sqlerro);

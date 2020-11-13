@@ -5752,6 +5752,14 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
          grava_ajuste_irrf($pessoal[$Ipessoal]["r01_numcgm"],$r110_regist,strtolower($pessoal[$Ipessoal]["r01_tpvinc"]));
       }
     }
+
+    $condicaoaux    = " r95_anousu = {$anousu} and r95_mesusu = {$mesusu} and r95_regist = " . db_sqlformat($pessoal[$Ipessoal]["r01_regist"]);
+    $rsFeriasPremio = db_query("select * from cadferiaspremio where " . $condicaoaux);
+    if ($opcao_geral == 1 && pg_num_rows($rsFeriasPremio) > 0 && !empty($cfpess[0]['r11_feriaspremio'])) {
+
+        $oFeriasPremio = db_utils::fieldsMemory($rsFeriasPremio, 0);
+        inserirFeriasPremio($pessoal[$Ipessoal]["r01_regist"], $cfpess[0]['r11_feriaspremio'], $oFeriasPremio, $anousu, $mesusu);
+    }
 }
 
   if ($db_debug == "true"){
@@ -12042,9 +12050,10 @@ function calc_irf($r20_rubr_=null, $area=null, $sigla=null, $sigla2=null, $nro_d
       }
     }
 
-    if ($db_debug == true) { echo "[calc_irf] 32 - Chamando a função grava_gerf() <br>"; }
-    grava_gerf($area);
-
+    if(!($pessoal[$Ipessoal]["rh02_portadormolestia"] == 't' && in_array($r20_rubr, array('R913','R915','R914')))) {
+      if ($db_debug == true) { echo "[calc_irf] 32 - Chamando a função grava_gerf() <br>"; }
+      grava_gerf($area);
+    }
     if( ($area == "pontof13" || $area == "pontoprovf13" ) && $mesusu < $cfpess[0]["r11_mes13"]){
         // controle p/ nao calc prev e irf no adto do 13o salario (04/04/96)
         $base_irf = 0;
@@ -14388,5 +14397,109 @@ function insertRubricasEspeciaisAviso($matriz1, $matriz2, $cfpess, $arrValoresAv
     db_insert( "gerfres",$matriz1, $matriz_especifica );
   }
 
+}
+
+function inserirFeriasPremio($regist, $r11_feriaspremio, $oFeriasPremio, $anousu, $mesusu) {
+
+    $condicaoaux = " and rh27_calcp = 't' and rh27_pd = 1 and r53_regist = " . db_sqlformat($regist);
+    $rsGerffx    = db_query("select gerffx.*,rh27_rubric,rh27_pd,rh27_calcp,rh27_propq from gerffx inner join rhrubricas on r53_instit = rh27_instit and r53_rubric = rh27_rubric " . bb_condicaosubpes("r53_") . $condicaoaux);
+
+    $matriz_update1[1] = "r14_valor";
+    $matriz_update1[2] = "r14_quant";
+    $valor             = 0;
+
+    $quantidade = $oFeriasPremio->r95_ndias;
+    $oData = new DateTime("$anousu-$mesusu-01");
+    $oData->modify("last day of this month");
+    $oDataFim = new DateTime($oFeriasPremio->r95_per1f);
+    $oDataInicio = new DateTime($oFeriasPremio->r95_per1i);
+    if ($oData->format('d') == $quantidade && $quantidade != 30) {
+      $quantidade = 30;
+    } else if ($oData->format('Ym') == $oDataFim->format('Ym')) {
+      $quantidade = $oDataFim->format('d');
+    } else if ($oData->format('Ym') == $oDataInicio->format('Ym') && $oData->format('d') == 31) {
+      $quantidade = $oFeriasPremio->r95_ndias-1;
+    } else if ($oData->format('d') < 30) {
+      $quantidade = 30-$oData->format('d')+$quantidade;
+    }
+
+    if ($quantidade == 0) {
+      return;
+    }
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsGerffx); $iCont++) {
+
+        $oGerffx = db_utils::fieldsMemory($rsGerffx, $iCont);
+        if ($quantidade == 30) {
+
+            $condicaoaux = " and r14_regist = {$oGerffx->r53_regist} and r14_rubric = '{$oGerffx->r53_rubric}'";
+            db_delete("gerfsal", bb_condicaosubpes("r14_") . $condicaoaux);
+
+        } else {
+
+            $matriz_update2[1] = round((($oGerffx->r53_valor / 30) * (30 - $quantidade)), 2);
+            $matriz_update2[2] = $oGerffx->r53_quant;
+            if (!empty($oGerffx->r53_quant) && $oGerffx->rh27_propq == 't') {
+                $matriz_update2[2] = round((($oGerffx->r53_quant / 30) * (30 - $quantidade)), 2);
+            }
+            $condicaoaux = " and r14_regist = {$oGerffx->r53_regist} and r14_rubric = '{$oGerffx->r53_rubric}'";
+            db_update("gerfsal", $matriz_update1, $matriz_update2, bb_condicaosubpes("r14_") . $condicaoaux);
+        }
+        $valor += $oGerffx->r53_valor;
+    }
+
+    $condicaoaux = " and r10_regist = {$regist}
+                       and r10_rubric = '{$r11_feriaspremio}'";
+    $result = db_query("select * from pontofs " . bb_condicaosubpes("r10_") . $condicaoaux);
+    if (pg_num_rows($result) > 0) {
+        $oPontofs = db_utils::fieldsMemory($result, 0);
+    }
+    if (pg_num_rows($result) == 0 || empty($oPontofs->r10_valor)) {
+
+        $matriz_insert1[1]  = "r14_regist";
+        $matriz_insert1[2]  = "r14_rubric";
+        $matriz_insert1[3]  = "r14_lotac";
+        $matriz_insert1[4]  = "r14_valor";
+        $matriz_insert1[5]  = "r14_quant";
+        $matriz_insert1[6]  = "r14_pd";
+        $matriz_insert1[7]  = "r14_semest";
+        $matriz_insert1[8]  = "r14_anousu";
+        $matriz_insert1[9]  = "r14_mesusu";
+        $matriz_insert1[10] = "r14_instit";
+
+        $matriz_insert2[1]  = $regist;
+        $matriz_insert2[2]  = $r11_feriaspremio;
+        $matriz_insert2[3]  = $oGerffx->r53_lotac;
+        $matriz_insert2[4]  = round($valor / 30 * $quantidade, 2);
+        $matriz_insert2[5]  = $quantidade;
+        $matriz_insert2[6]  = 1;
+        $matriz_insert2[7]  = 0;
+        $matriz_insert2[8]  = $anousu;
+        $matriz_insert2[9]  = $mesusu;
+        $matriz_insert2[10] = db_getsession("DB_instit");
+        db_insert("gerfsal", $matriz_insert1, $matriz_insert2);
+
+        if (pg_num_rows($result) == 0) {
+            unset($matriz_insert1);
+            $matriz_insert1[1] = "r10_regist";
+            $matriz_insert1[2] = "r10_rubric";
+            $matriz_insert1[3] = "r10_lotac";
+            $matriz_insert1[4] = "r10_valor";
+            $matriz_insert1[5] = "r10_quant";
+            $matriz_insert1[6] = "r10_anousu";
+            $matriz_insert1[7] = "r10_mesusu";
+            $matriz_insert1[8] = "r10_instit";
+            unset($matriz_insert2);
+            $matriz_insert2[1] = $regist;
+            $matriz_insert2[2] = $r11_feriaspremio;
+            $matriz_insert2[3] = $oGerffx->r53_lotac;
+            $matriz_insert2[4] = 0;
+            $matriz_insert2[5] = $quantidade;
+            $matriz_insert2[6] = $anousu;
+            $matriz_insert2[7] = $mesusu;
+            $matriz_insert2[8] = db_getsession("DB_instit");
+            db_insert("pontofs", $matriz_insert1, $matriz_insert2);
+        }
+    }
 }
 ?>

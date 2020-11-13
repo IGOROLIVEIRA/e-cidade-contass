@@ -143,16 +143,15 @@ $clrotulo->label("o15_codigo");
     function js_retornoProcessamento(oAjax) {
 
         js_removeObj('msgBox');
-        // $('debug').innerHTML = oAjax.responseText;
-        var oRetorno = eval("(" + oAjax.responseText + ")");
+        let oRetorno = eval("(" + oAjax.responseText + ")");
         if (oRetorno.status == 1) {
             if(oRetorno.erro){
                 $('retorno').innerHTML = '';
                 alert(oRetorno.erro.urlDecode());
             }else{
                 alert("Processo concluído com sucesso!");
-                var sRetorno = "<b>Arquivos Gerados:</b><br>";
-                for (var i = 0; i < oRetorno.itens.length; i++) {
+                let sRetorno = "<b>Arquivos Gerados:</b><br>";
+                for (let i = 0; i < oRetorno.itens.length; i++) {
 
                     with (oRetorno.itens[i]) {
 

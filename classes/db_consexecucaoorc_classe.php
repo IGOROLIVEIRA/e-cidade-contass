@@ -28,6 +28,7 @@ class cl_consexecucaoorc {
    var $c202_valorliquidadoanu = 0;  
    var $c202_valorpago = 0; 
    var $c202_valorpagoanu = 0; 
+   var $c202_mesreferenciasicom = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  c202_sequencial = int8 = Código Sequencial 
@@ -43,6 +44,7 @@ class cl_consexecucaoorc {
                  c202_valorliquidadoanu = float8 = Valor Liquidado Anulado no Mês
                  c202_valorpago = float8 = Valor Pago no Mês 
                  c202_valorpagoanu = float8 = Valor Pago Anulado no Mês 
+                 c202_mesreferenciasicom = int8 = Mês de Referência SICOM
                  ";
    //funcao construtor da classe 
    function cl_consexecucaoorc() { 
@@ -75,6 +77,7 @@ class cl_consexecucaoorc {
        $this->c202_valorliquidadoanu = ($this->c202_valorliquidadoanu == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_valorliquidadoanu"]:$this->c202_valorliquidadoanu);
        $this->c202_valorpago = ($this->c202_valorpago == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_valorpago"]:$this->c202_valorpago);
        $this->c202_valorpagoanu = ($this->c202_valorpagoanu == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_valorpagoanu"]:$this->c202_valorpagoanu);
+       $this->c202_mesreferenciasicom = ($this->c202_mesreferenciasicom == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_mesreferenciasicom"]:$this->c202_mesreferenciasicom);
      }else{
        $this->c202_sequencial = ($this->c202_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_sequencial"]:$this->c202_sequencial);
      }
@@ -100,6 +103,15 @@ class cl_consexecucaoorc {
        $this->erro_status = "0";
        return false;
      }
+     if($this->c202_mesreferenciasicom == null ){ 
+      $this->erro_sql = " Campo Mês de Referência SICOM nao Informado.";
+      $this->erro_campo = "c202_mesreferenciasicom";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($this->c202_funcao == null ){ 
        $this->erro_sql = " Campo Código da Função nao Informado.";
        $this->erro_campo = "c202_funcao";
@@ -261,6 +273,7 @@ class cl_consexecucaoorc {
                                       ,c202_valorpago 
                                       ,c202_valorpagoanu 
                                       ,c202_anousu
+                                      ,c202_mesreferenciasicom
                        )
                 values (
                                 $this->c202_sequencial 
@@ -277,6 +290,7 @@ class cl_consexecucaoorc {
                                ,$this->c202_valorpago 
                                ,$this->c202_valorpagoanu
                                ,".db_getsession("DB_anousu")." 
+                               ,$this->c202_mesreferenciasicom 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -366,6 +380,19 @@ class cl_consexecucaoorc {
          return false;
        }
      }
+     if(trim($this->c202_mesreferenciasicom)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c202_mesreferenciasicom"])){ 
+      $sql  .= $virgula." c202_mesreferenciasicom = $this->c202_mesreferenciasicom ";
+      $virgula = ",";
+      if(trim($this->c202_mesreferenciasicom) == null ){ 
+        $this->erro_sql = " Campo Mês de Referência SICOM nao Informado.";
+        $this->erro_campo = "c202_mesreferenciasicom";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if(trim($this->c202_funcao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c202_funcao"])){ 
        $sql  .= $virgula." c202_funcao = $this->c202_funcao ";
        $virgula = ",";

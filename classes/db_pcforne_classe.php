@@ -222,7 +222,7 @@ function incluir ($pc60_numcgm){
    return false;
  }
  if($this->pc60_obs == null && $this->fisica_juridica == 'j'){
-  $this->erro_sql = " Campo Objeto Social nao Informadooooooooooooooooooo.";
+  $this->erro_sql = " Campo Objeto Social nao Informado.";
   $this->erro_campo = "pc60_obs";
   $this->erro_banco = "";
   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -462,15 +462,17 @@ if($this->pc60_cnpjcpf == '00000000000000' || $this->pc60_cnpjcpf == '0000000000
    if(trim($this->pc60_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_obs"])) {
      $sql .= $virgula . " pc60_obs = '$this->pc60_obs' ";
      $virgula = ",";
-     if (strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
-       $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
-       $this->erro_campo = "pc60_obs";
-       $this->erro_banco = "";
-       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+       if($this->fisica_juridica == 'j'){
+           if (strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
+               $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
+               $this->erro_campo = "pc60_obs";
+               $this->erro_banco = "";
+               $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+               $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
    }
    if(trim($this->pc60_bloqueado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_bloqueado"])){
      $sql  .= $virgula." pc60_bloqueado = '$this->pc60_bloqueado' ";
@@ -514,7 +516,7 @@ if($this->pc60_cnpjcpf == '00000000000000' || $this->pc60_cnpjcpf == '0000000000
    if(trim($this->pc60_objsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_objsocial"])){
     $sql  .= $virgula." pc60_objsocial = '$this->pc60_objsocial' ";
     $virgula = ",";
-    if(trim($this->pc60_objsocial) == null ){
+    if(trim($this->pc60_objsocial) == null && $this->fisica_juridica == 'j'){
       $this->erro_sql = " Campo Objeto Social nao Informado.";
       $this->erro_campo = "pc60_objsocial";
       $this->erro_banco = "";

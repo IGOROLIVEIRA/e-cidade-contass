@@ -96,7 +96,7 @@ db_app::load("estilos.css, grid.style.css");
               </tr>
               <tr>
                 <td colspan="3" style="text-align: center">
-                  <input type="button" value='Pesquisar' id='btnPesquisarAutorizacoes'>
+                  <input type="button" value='Pesquisar' id='btnPesquisarAutorizacoes' disabled>
                 </td>
               </tr>
             </table>
@@ -124,6 +124,7 @@ db_app::load("estilos.css, grid.style.css");
 </html>
 <script type="text/javascript">
 var sUrlRpc = 'con4_contratosmovimentacoesfinanceiras.RPC.php';
+numeroAcordo = '';
 /**
  * Pesquisa acordos
  */
@@ -151,6 +152,8 @@ function js_pesquisaac16_sequencial(lMostrar) {
                           false);
      } else {
        oTxtCodigoAcordo.setValue('');
+        oTxtDescricaoAcordo.setValue('');
+        numeroAcordo = '';
      }
   }
 }
@@ -166,7 +169,8 @@ function js_mostraacordo(chave1,chave2,erro) {
     oTxtDescricaoAcordo.setValue('');
     $('oTxtDescricaoAcordo').focus(); 
   } else {
-  
+    document.getElementById('btnPesquisarAutorizacoes').disabled = false;
+    numeroAcordo = chave1;
     oTxtCodigoAcordo.setValue(chave1);
     oTxtDescricaoAcordo.setValue(chave2);
   }
@@ -179,6 +183,8 @@ function js_mostraacordo1(chave1,chave2) {
 
   oTxtCodigoAcordo.setValue(chave1);
   oTxtDescricaoAcordo.setValue(chave2);
+  document.getElementById('btnPesquisarAutorizacoes').disabled = false;
+  numeroAcordo = chave1;
   db_iframe_acordo.hide();
 }
 function js_pesquisarAutorizacoesContrato() {
@@ -227,6 +233,7 @@ function js_main() {
 
    oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', 'oTxtCodigoAcordo','', 10);
    oTxtCodigoAcordo.addEvent("onChange",";js_pesquisaac16_sequencial(false);");
+   oTxtCodigoAcordo.addEvent("onKeyUp",";js_verificaAcordo(this.value);");
    oTxtCodigoAcordo.show($('ctnTxtCodigoAcordo'));
    
    oTxtDescricaoAcordo = new DBTextField('oTxtDescricaoAcordo', 'oTxtDescricaoAcordo','', 80);
@@ -292,7 +299,11 @@ function js_retornoAnularAutorizacoes(oResponse) {
     alert(oRetorno.message.urlDecode());
   }
 }
-js_main()
+js_main();
+
+function js_verificaAcordo(valor){
+    document.getElementById('btnPesquisarAutorizacoes').disabled = (valor && valor != numeroAcordo) ? true : (!valor) ? true : false;
+}
 </script>
 <? 
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));

@@ -265,7 +265,25 @@ function js_imprime(virada){
 
     db_fim_transacao($sqlerro);
 
-		?>
+    $sSqlInstit = "select cgc from db_config where codigo = " . db_getsession("DB_instit");
+    $rsResultCnpj = db_query($sSqlInstit);
+    $sCnpj = db_utils::fieldsMemory($rsResultCnpj, 0)->cgc;
+
+    /**
+     * Copia arquivos XML de dados dos elementos da despesa e da receita para o ano destino da virada
+     * após processamento de qualquer item.
+     */
+    $sArquivoDesp = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+    $sArquivoRec = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+
+    if (file_exists($sArquivoDesp) || file_exists($sArquivoRec)){
+
+      passthru("mkdir config/sicom/{$iAnoDestino}");
+      passthru("cp config/sicom/{$iAnoOrigem}/*.xml config/sicom/{$iAnoDestino}/");
+    }
+
+
+    ?>
   </td>
 	</tr>
 	<tr>
@@ -276,7 +294,7 @@ function js_imprime(virada){
       $virada = $cldb_virada->c30_sequencial;
       echo "
             <script>
-              var confirmar = confirm('O procedimento de virada foi realizado com sucesso. Visualizar o relatório de logs das inconsistências desta operação.'); 
+              var confirmar = confirm('O procedimento de virada do(s) item(s) foi realizado com sucesso.\\nVisualizar o relatório de logs das inconsistências desta operação?');
               if(confirmar==true){
                 js_imprime($virada);
               }else{

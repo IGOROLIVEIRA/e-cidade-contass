@@ -379,6 +379,7 @@ if ($oInstit->db21_usasisagua == "t") {
 <input type="button" value='Excluir Selecionados' id='excluir' style="margin-top: 10px;" onclick='js_excluiSelecionados();' />
 <input type="button" value='Nova Planilha'        id='excluir' style="margin-top: 10px;" onclick='js_novaReceita()' />
 <input type="hidden" value="<?= db_getsession("DB_anousu") ?>" id="anoUsu" />
+<input type="hidden" value="0" id="bAtualiza" />
 </form>
 </center>
 
@@ -694,7 +695,9 @@ function js_preencheSaltes(iCodigoConta,sDescricao,iCodigoRecurso,lErro) {
     $('k81_conta')  .value = '';
 
   } else {
-    js_getCgmConta(iCodigoConta);
+    if($('estrutural').value.substr(0,7) != '4121004' && $('estrutural').value.substr(0,7) != '4721004' && $('estrutural').value.substr(0,5) != '41218' && $('estrutural').value.substr(0,5) != '47218'){
+      js_getCgmConta(iCodigoConta);
+    }
   }
 
   if(iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142){
@@ -797,8 +800,10 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    }
 
    if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'|| $('estrutural').value.substr(0,5) == '41218' || $('estrutural').value.substr(0,5) == '47218'){
-     $('k81_numcgm')   .value = '';
-     $('z01_nome')   .value = '';
+    if($('bAtualiza').value == 0) {
+      $('k81_numcgm')   .value = '';
+      $('z01_nome')   .value = '';
+    }
    }else{
        console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
@@ -826,8 +831,10 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    $('k02_tipo')   .value = chave5;
 
    if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004' || $('estrutural').value.substr(0,5) == '41218' || $('estrutural').value.substr(0,5) == '47218'){
-     $('k81_numcgm')   .value = '';
-     $('z01_nome')   .value = '';
+     if($('bAtualiza').value == 0) {
+      $('k81_numcgm')   .value = '';
+      $('z01_nome')   .value = '';
+     }
    }else{
        console.log($('estrutural').value.substr(0,4));
     js_getCgmConta($('k81_conta').value);
@@ -1299,6 +1306,7 @@ function js_mostraReceita(iIndice) {
   $('iEmParlamentarAux').value = aReceitas[iIndice].k81_emparlamentar;
   $('k81_operbanco').value   = aReceitas[iIndice].k81_operbanco;
   $('k81_convenio').value    = aReceitas[iIndice].k81_convenio;
+  $('bAtualiza').value       = 1;
 
   js_pesquisaReceita(false);
   js_pesquisaCgm(false);
@@ -1702,8 +1710,11 @@ function js_verificaEmendaParlamentar() {
     var naoSeAplica = ( ($('estrutural').value.substr(0, 9) == '417189911' && $('recurso').value == '161') 
                     || ($('estrutural').value.substr(0, 9) == '417289911' && $('recurso').value == '106') 
                     || ($('estrutural').value.substr(0, 9) == '417181021' && $('recurso').value == '122')
-                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') );
+                    || ($('estrutural').value.substr(0, 9) == '417180311' && $('recurso').value == '159') 
+                    || ($('estrutural').value.substr(0, 9) == '417180911')
+                    || ($('estrutural').value.substr(0, 9) == '417580111') );
 
+  
     if (naoSeAplica) {
         document.getElementById("k81_emparlamentar").options[3].selected = true;
     } else if ($('estrutural').value.substr(0, 3) == '417' || $('estrutural').value.substr(0, 3) == '424') {

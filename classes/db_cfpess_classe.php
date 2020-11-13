@@ -160,6 +160,7 @@ class cl_cfpess {
   var $r11_avisoprevio13 = null; 
   var $r11_avisoprevioferias = null; 
   var $r11_avisoprevio13ferias = null; 
+  var $r11_feriaspremio = null; 
 
   /**
    * Cria propriedade com as variáveis do arquivo.
@@ -257,6 +258,7 @@ class cl_cfpess {
     r11_avisoprevio13 = varchar(4) = Aviso Prévio 13
     r11_avisoprevioferias = varchar(4) = Aviso Prévio Férias
     r11_avisoprevio13ferias = varchar(4) = Aviso Prévio 1/3 Férias
+    r11_feriaspremio = varchar(4) = Férias Prêmio
   ";
 
   /**
@@ -416,6 +418,7 @@ class cl_cfpess {
        $this->r11_avisoprevio13 = ($this->r11_avisoprevio13 == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13"]:$this->r11_avisoprevio13);
        $this->r11_avisoprevioferias = ($this->r11_avisoprevioferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevioferias"]:$this->r11_avisoprevioferias);
        $this->r11_avisoprevio13ferias = ($this->r11_avisoprevio13ferias == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13ferias"]:$this->r11_avisoprevio13ferias);
+       $this->r11_feriaspremio = ($this->r11_feriaspremio == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_feriaspremio"]:$this->r11_feriaspremio);
      }else{
        $this->r11_instit = ($this->r11_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_instit"]:$this->r11_instit);
        $this->r11_anousu = ($this->r11_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["r11_anousu"]:$this->r11_anousu);
@@ -740,6 +743,7 @@ class cl_cfpess {
                                       ,r11_avisoprevio13
                                       ,r11_avisoprevioferias 
                                       ,r11_avisoprevio13ferias
+                                      ,r11_feriaspremio
                        )
                 values (
                                 $this->r11_instit 
@@ -834,6 +838,7 @@ class cl_cfpess {
                                ,'$this->r11_avisoprevio13' 
                                ,'$this->r11_avisoprevioferias' 
                                ,'$this->r11_avisoprevio13ferias' 
+                               ,'$this->r11_feriaspremio' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -1540,6 +1545,10 @@ class cl_cfpess {
      }
      if(trim($this->r11_avisoprevio13ferias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_avisoprevio13ferias"])){ 
        $sql  .= $virgula." r11_avisoprevio13ferias = '$this->r11_avisoprevio13ferias' ";
+       $virgula = ",";
+     }
+     if(trim($this->r11_feriaspremio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["r11_feriaspremio"])){ 
+       $sql  .= $virgula." r11_feriaspremio = '$this->r11_feriaspremio' ";
        $virgula = ",";
      }
      $sql .= " where ";

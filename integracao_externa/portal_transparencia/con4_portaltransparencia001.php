@@ -2472,30 +2472,12 @@ try {
     $sSqlServidores .= "       left  join rhlocaltrab    on rh55_codigo = rh56_localtrab";
     $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} AND rh01_sicom = 1";
     $sSqlServidores .= " AND
-
-  ((
-  rh02_anousu <
-  (SELECT r11_anousu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1)
-  AND rh02_mesusu <= 12
-  )
-
-  OR
-  (
-  rh02_anousu =
-  (SELECT r11_anousu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1)
-
-  AND rh02_mesusu <
-  (SELECT r11_mesusu
-  FROM cfpess
-  ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1))
-  )
+    (rh02_anousu::varchar||lpad(rh02_mesusu::varchar, 2, '0'))::integer <
+    (SELECT (r11_anousu::varchar||lpad(r11_mesusu::varchar, 2, '0'))::integer AS competencia
+                        FROM cfpess
+                        WHERE r11_instit = rh01_instit
+                        ORDER BY r11_anousu DESC, r11_mesusu DESC
+                        LIMIT 1)
   ";
 
     $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
@@ -3108,6 +3090,24 @@ try {
         }
 
         // ****************************************************************************************************************//
+
+        // DAR PERMISSÕES PARA O USUÁRIO TRANSPARÊNCIA EM PMPIRAPORA ******************************************************//
+        $sSqlInstitCgc  = " SELECT cgc FROM db_config WHERE prefeitura='t' ";
+        $rsInstitCgc    = db_query($connOrigem, $sSqlInstitCgc);
+
+        if (pg_num_rows($rsInstitCgc) > 0 && db_utils::fieldsMemory($rsInstitCgc, 0)->cgc == "23539463000121") {
+
+            $sSqlPermissao = "GRANT USAGE ON SCHEMA cms TO transparencia;GRANT SELECT ON cms.configuracoes TO transparencia;GRANT SELECT ON cms.menus TO transparencia;GRANT SELECT ON cms.users TO transparencia;GRANT SELECT ON cms.visitantes TO transparencia;
+
+            GRANT USAGE ON SCHEMA transparencia TO transparencia;
+
+            GRANT SELECT ON transparencia.acordo_aditamento_itens TO transparencia;GRANT SELECT ON transparencia.acordo_aditamentos TO transparencia;GRANT SELECT ON transparencia.acordo_documentos TO transparencia;GRANT SELECT ON transparencia.acordo_empenhos TO transparencia;GRANT SELECT ON transparencia.acordos TO transparencia;GRANT SELECT ON transparencia.assentamentos TO transparencia;GRANT SELECT ON transparencia.database_version TO transparencia;GRANT SELECT ON transparencia.database_version_sql TO transparencia;GRANT SELECT ON transparencia.dotacoes TO transparencia;GRANT SELECT ON transparencia.empenhos TO transparencia;GRANT SELECT ON transparencia.empenhos_itens TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes_exercicios TO transparencia;GRANT SELECT ON transparencia.empenhos_movimentacoes_tipos TO transparencia;GRANT SELECT ON transparencia.empenhos_processos TO transparencia;GRANT SELECT ON transparencia.folha_pagamento TO transparencia;GRANT SELECT ON transparencia.funcoes TO transparencia;GRANT SELECT ON transparencia.glossarios TO transparencia;GRANT SELECT ON transparencia.glossarios_tipos TO transparencia;GRANT SELECT ON transparencia.importacoes TO transparencia;GRANT SELECT ON transparencia.instituicoes TO transparencia;GRANT SELECT ON transparencia.licitacoes TO transparencia;GRANT SELECT ON transparencia.licitacoes_documentos TO transparencia;GRANT SELECT ON transparencia.licitacoes_itens TO transparencia;GRANT SELECT ON transparencia.orgaos TO transparencia;GRANT SELECT ON transparencia.paginaprincipalitens TO transparencia;GRANT SELECT ON transparencia.pessoas TO transparencia;GRANT SELECT ON transparencia.planocontas TO transparencia;GRANT SELECT ON transparencia.programas TO transparencia;GRANT SELECT ON transparencia.projetos TO transparencia;GRANT SELECT ON transparencia.receitas TO transparencia;GRANT SELECT ON transparencia.receitas_movimentacoes TO transparencia;GRANT SELECT ON transparencia.recursos TO transparencia;GRANT SELECT ON transparencia.repasses TO transparencia;GRANT SELECT ON transparencia.requisitantes TO transparencia;GRANT SELECT ON transparencia.resumos_tipos TO transparencia;GRANT SELECT ON transparencia.servidor_movimentacoes TO transparencia;GRANT SELECT ON transparencia.servidores TO transparencia;GRANT SELECT ON transparencia.subfuncoes TO transparencia;GRANT SELECT ON transparencia.unidades TO transparencia;GRANT SELECT ON transparencia.visitantes TO transparencia;";
+            $rsPermissao = db_query($connDestino, $sSqlPermissao);
+
+            if ( !$rsPermissao ) {
+                throw new Exception("ERRO-0: Erro ao dar permissão ao usuário transparência! ".pg_last_error());
+            }
+        }
 
     }
 

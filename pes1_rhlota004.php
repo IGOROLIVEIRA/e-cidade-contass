@@ -90,6 +90,14 @@ $sqlerro = true;
 $erro_msg="CNPJ Inválido";
 }
 //
+  if($sqlerro == false){
+    $result = $clrhlota->sql_record($clrhlota->sql_query_file(null, "*", null, "r70_ativo = 't' and r70_estrut = '".str_replace(".","",(isset($r70_estrut) ? $r70_estrut : ""))."'"));
+    if (pg_num_rows($result) > 0) {
+      $sqlerro = true;
+      $erro_msg = "Já existe o estrutural {$r70_estrut} ";
+    }
+  }
+
 
   if($sqlerro == false){
     $clrhlota->r70_codestrut      = $r11_codestrut;
