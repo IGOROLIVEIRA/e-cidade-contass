@@ -460,18 +460,16 @@ switch ($oParam->exec) {
                     $sqlErro  = true;
                 }
             }
-            $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 1"));
-            if(pg_num_rows($result) > 0 ){
-                db_fieldsmemory($result,0);
-                $cl_historicocgm->excluir($z09_sequencial);
-            }
+
+            //HISTORICOCGM OC12852
 
             $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
             $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
             $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
             $clhistoricocgm->z09_datacadastro  = $oParam->pessoa->z01_cadast;
-            $clhistoricocgm->z09_tipo          = 1;
+            $clhistoricocgm->z09_tipo          = 2;
             $clhistoricocgm->incluir();
+            //fim OC12852
 
             if (!$sqlErro) {
                 try {
@@ -640,18 +638,14 @@ switch ($oParam->exec) {
                 }
             }
 
-            $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 1"));
-            if(pg_num_rows($result) > 0 ){
-                db_fieldsmemory($result,0);
-                $cl_historicocgm->excluir($z09_sequencial);
-            }
-
+            //HISTORICOCGM OC12852
             $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
             $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
             $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
             $clhistoricocgm->z09_datacadastro  = $oParam->pessoa->z01_cadast;
-            $clhistoricocgm->z09_tipo          = 1;
+            $clhistoricocgm->z09_tipo          = 2;
             $clhistoricocgm->incluir();
+            //fim OC12852
 
             if (!$sqlErro) {
                 try {
