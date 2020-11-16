@@ -1111,8 +1111,9 @@ case "processarBalancete" :
 					$aNomeArquivo = explode('.', $oAnexo->nomearquivo);
 
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
+					$ext_position = count($aNomeArquivo) - 1;
 
-					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[1]";
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[$ext_position]";
 
 					db_inicio_transacao();
 					pg_lo_export($conn, $oAnexo->arquivo, $novoNome);

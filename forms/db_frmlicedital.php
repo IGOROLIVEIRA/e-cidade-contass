@@ -146,7 +146,7 @@ $db_botao = true;
                     </tr>
                   <?php endif;?>
 
-                  <tr id="td_obras" style="display: <?= in_array($natureza_objeto, array(1, 7)) ? '' : 'none' ?>;">
+                  <tr id="td_obras" style="display: <?= $natureza_objeto == 1 ? '' : 'none' ?>;">
                     <td colspan="3">
                       <fieldset>
                         <legend>Obras e Serviços</legend>
