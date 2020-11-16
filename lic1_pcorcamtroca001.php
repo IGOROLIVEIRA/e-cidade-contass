@@ -209,13 +209,13 @@ if (isset($confirmar) && trim($confirmar) != "") {
 			 */
 
 			$iModalidade = $oDadosLicitacao->l20_codtipocom;
-			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
+//			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
 			$iItem = trim($vetor[0]);
 
 			if ($iItem != null) {
 				try {
 
-					$oVerificaSaldo = licitacao::verificaSaldoModalidade($iModalidade, $iItem, $dtJulgamento);
+					$oVerificaSaldo = licitacao::verificaSaldoModalidade($iModalidade, $iItem, $dtjulgamento);
 				} catch (Exception $oErro) {
 
 					$erro_msg = $oErro->getMessage();
@@ -335,7 +335,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
     $oDaoLogJulgamento->pc92_sequencial      = null ;
     $oDaoLogJulgamento->pc92_usuario         = db_getsession('DB_id_usuario');
-    $oDaoLogJulgamento->pc92_datajulgamento  = $dtData;
+    $oDaoLogJulgamento->pc92_datajulgamento  = $dtjulgamento;
     $oDaoLogJulgamento->pc92_hora            = $sHora;
     $oDaoLogJulgamento->pc92_ativo           = "true";
     $oDaoLogJulgamento->incluir(null);
