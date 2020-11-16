@@ -162,8 +162,13 @@ if(isset($incluir)){
         if ($clpccfeditalnum->numrows>0){
             db_fieldsmemory($result_numedital,0);
             $aModalidades = array(48, 49, 50, 52, 53, 54);
+
+            if(db_getsession('DB_anousu') >= 2021){
+                array_push($aModalidades, 102, 103);
+            }
+
             if(in_array($modalidade_tribunal, $aModalidades)){
-                $l20_nroedital=$l47_numero+1;
+                $l20_nroedital = $l47_numero + 1;
             }
         } else {
             $erro_msg="Configure a numeração do edital.";
