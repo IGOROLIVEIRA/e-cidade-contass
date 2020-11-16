@@ -187,7 +187,7 @@ $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFo
 $sheet->getStyle('E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 
 //itens orcamento
-$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_itens = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcamitem->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){
