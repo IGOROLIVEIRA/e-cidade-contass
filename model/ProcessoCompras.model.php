@@ -350,6 +350,7 @@ class ProcessoCompras {
 
         $oDaoPCprocItem = db_utils::getDao("pcprocitem");
         $sWhere = '';
+        $datausu = date("Y-m-d", db_getsession('DB_datausu'));
         if ($lValidaAutorizadas) {
 
             $sWhere .= " and not exists (";
@@ -362,6 +363,7 @@ class ProcessoCompras {
             $sWhere .= "                  where pc81_codproc = pc80_codproc";
             $sWhere .= "                    and e54_anulad is null";
             $sWhere .= " )";
+            $sWhere .= "and pc80_data <= '$datausu'";
         }
         $sCampos        = "distinct pc81_codproc as licitacao, pc10_resumo as objeto, '' as numero, pc21_numcgm as cgm";
         $sCampos       .= ", pc11_numero as numero_exercicio, pc80_data as data";
