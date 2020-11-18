@@ -31,7 +31,6 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_pccflicitanum_classe.php");
 include("classes/db_pccfeditalnum_classe.php");
-include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_utils.php");
 include("std/db_stdClass.php");
