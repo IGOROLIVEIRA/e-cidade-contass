@@ -130,7 +130,7 @@ switch($oParam->exec) {
                 FROM cadobras302020
                 INNER JOIN licobrasmedicao ON obr03_nummedicao::int = si201_nummedicao::int
                 INNER JOIN licobrasanexo ON obr03_sequencial = obr04_licobrasmedicao
-                WHERE si201_mes = $oParam->mesReferencia";
+                WHERE si201_instit = ".db_getsession("DB_instit")." and si201_mes = $oParam->mesReferencia";
       $rsRegistro30 = db_query($sql);
 
       $arquivosgerados = array();
@@ -1111,8 +1111,9 @@ case "processarBalancete" :
 					$aNomeArquivo = explode('.', $oAnexo->nomearquivo);
 
 					$unidade = $oAnexo->unidade != '' ? $oAnexo->unidade : '0';
+					$ext_position = count($aNomeArquivo) - 1;
 
-					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[1]";
+					$novoNome .= "{$iMunicipio}_{$sOrgao}_{$unidade}_{$oAnexo->exercicio}_{$oAnexo->nroprocesso}{$tipoProcesso}.$aNomeArquivo[$ext_position]";
 
 					db_inicio_transacao();
 					pg_lo_export($conn, $oAnexo->arquivo, $novoNome);

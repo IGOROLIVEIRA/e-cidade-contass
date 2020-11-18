@@ -78,8 +78,8 @@ class GerarIDERP extends GerarAM
                 $aIDERP20['si181_codfontrecursos']          = $oiderp20['si181_codfontrecursos'];
                 $aIDERP20['si181_vlcaixabruta']             = $this->sicomNumberReal($oiderp20['si181_vlcaixabruta'], 2);
                 $aIDERP20['si181_vlrspexerciciosanteriores']= $this->sicomNumberReal($oiderp20['si181_vlrspexerciciosanteriores'], 2);
-                $aIDERP20['si181_vlrestituiveisrecolher']   = $this->sicomNumberReal($oiderp20['si181_vlrestituiveisrecolher'], 2);
-                $aIDERP20['si181_vlrestituiveisativofinanceiro']= $this->sicomNumberReal($oiderp20['si181_vlrestituiveisativofinanceiro'], 2);
+//                $aIDERP20['si181_vlrestituiveisrecolher']   = $this->sicomNumberReal($oiderp20['si181_vlrestituiveisrecolher'], 2);
+//                $aIDERP20['si181_vlrestituiveisativofinanceiro']= $this->sicomNumberReal($oiderp20['si181_vlrestituiveisativofinanceiro'], 2);
                 $aIDERP20['si181_vlsaldodispcaixa']             = $this->sicomNumberReal($oiderp20['si181_vlsaldodispcaixa'], 2);
                 $this->sLinha = $aIDERP20;
                 $this->adicionaLinha();

@@ -37,6 +37,8 @@ require_once("classes/db_rhlotaexe_classe.php");
 require_once("classes/db_rhlotacalend_classe.php");
 require_once("classes/db_cfpess_classe.php");
 require_once("classes/db_rhlotavinc_classe.php");
+require_once("classes/db_rhlotavincativ_classe.php");
+require_once("classes/db_rhlotavincele_classe.php");
 
 require_once("dbforms/db_funcoes.php");
 require_once("dbforms/db_classesgenericas.php");
@@ -51,6 +53,8 @@ $cldb_estrut    = new cl_db_estrut;
 $clorcorgao     = new cl_orcorgao;
 $clorcunidade   = new cl_orcunidade;
 $oDaoRhlotavinc = new cl_rhlotavinc;
+$oDaoRhlotavincAtiv = new cl_rhlotavincativ;
+$oDaoRhlotavincEle = new cl_rhlotavincele;
 
 if(isset($r70_codigo)){
 
@@ -92,18 +96,46 @@ if ( isset($excluir) ) {
   } 
 
 	/**
-	 * Exclui da tabela rhlotavinc
-	 */	 
-	if ( !$sqlerro ) {
+   * Exclui da tabela rhlotavincativ
+   */  
+  if ( !$sqlerro ) {
 
-		$oDaoRhlotavinc->excluir(null, "rh25_codigo = {$r70_codigo}");
+    $oDaoRhlotavincAtiv->excluir("(select rh25_codlotavinc from rhlotavinc where rh25_codigo = {$r70_codigo} limit 1)");
+
+    if ( $oDaoRhlotavincAtiv->erro_status == 0 ) {
+
+      $sqlerro  = true;
+      $erro_msg = $oDaoRhlotavincAtiv->erro_msg;
+    }
+  }
+
+  /**
+   * Exclui da tabela rhlotavincele
+   */  
+  if ( !$sqlerro ) {
+
+    $oDaoRhlotavincEle->excluir("(select rh25_codlotavinc from rhlotavinc where rh25_codigo = {$r70_codigo} limit 1)");
+
+    if ( $oDaoRhlotavincEle->erro_status == 0 ) {
+
+      $sqlerro  = true;
+      $erro_msg = $oDaoRhlotavincEle->erro_msg;
+    }
+  }
+
+  /**
+   * Exclui da tabela rhlotavinc
+   */  
+  if ( !$sqlerro ) {
+
+    $oDaoRhlotavinc->excluir(null, "rh25_codigo = {$r70_codigo}");
 
     if ( $oDaoRhlotavinc->erro_status == 0 ) {
 
       $sqlerro  = true;
       $erro_msg = $oDaoRhlotavinc->erro_msg;
     }
-	}
+  }
 
 	/**
 	 * Excluir da tabela rhlota

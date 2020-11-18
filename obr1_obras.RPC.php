@@ -130,8 +130,10 @@ switch($oParam->exec) {
         $data = (implode("/",(array_reverse(explode("-",$c99_datapat)))));
         $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
-        if ($datainicioatividades <= $dtencerramento) {
-          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+          if($dtencerramento != null || $dtencerramento != ""){
+              if ($datainicioatividades <= $dtencerramento) {
+                throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            }
         }
       }
 
@@ -142,8 +144,10 @@ switch($oParam->exec) {
       $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
       $z09_datacadastro = DateTime::createFromFormat('d/m/Y', $datacgm);
 
-      if($z09_datacadastro < $dtencerramento){
-          throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      if ($dtencerramento != false){
+          if($z09_datacadastro > $dtencerramento){
+              throw new Exception("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+          }
       }
 
       if($dtsessao < $z09_datacadastro){
@@ -247,6 +251,7 @@ switch($oParam->exec) {
 
       $oRetorno->dados[] = $oDadosResponsavel;
     }
+    break;
 
   case 'salvarDocumento':
 

@@ -27,14 +27,14 @@ class cl_caixa112019
   var $si166_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si166_sequencial = int8 = sequencial 
-                 si166_tiporegistro = int8 = Tipo do  registro 
-                 si166_codfontecaixa = int8 = Código da fonte de recursos 
-                 si166_vlsaldoinicialfonte = float8 = Valor do saldo no  início do mês 
-                 si166_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês 
-                 si166_mes = int8 = Mês 
-                 si166_reg10 = int8 = reg10 
-                 si166_instit = int8 = Instituição 
+                 si166_sequencial = int8 = sequencial
+                 si166_tiporegistro = int8 = Tipo do  registro
+                 si166_codfontecaixa = int8 = Código da fonte de recursos
+                 si166_vlsaldoinicialfonte = float8 = Valor do saldo no  início do mês
+                 si166_vlsaldofinalfonte = float8 = Valor do Saldo do  Final do Mês
+                 si166_mes = int8 = Mês
+                 si166_reg10 = int8 = reg10
+                 si166_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -152,24 +152,24 @@ class cl_caixa112019
       return false;
     }
     $sql = "insert into caixa112019(
-                                       si166_sequencial 
-                                      ,si166_tiporegistro 
-                                      ,si166_codfontecaixa 
-                                      ,si166_vlsaldoinicialfonte 
-                                      ,si166_vlsaldofinalfonte 
-                                      ,si166_mes 
+                                       si166_sequencial
+                                      ,si166_tiporegistro
+                                      ,si166_codfontecaixa
+                                      ,si166_vlsaldoinicialfonte
+                                      ,si166_vlsaldofinalfonte
+                                      ,si166_mes
                                       ,si166_reg10
-                                      ,si166_instit 
+                                      ,si166_instit
                        )
                 values (
-                                $this->si166_sequencial 
-                               ,$this->si166_tiporegistro 
-                               ,$this->si166_codfontecaixa 
-                               ,$this->si166_vlsaldoinicialfonte 
-                               ,$this->si166_vlsaldofinalfonte 
-                               ,$this->si166_mes 
-                               ,$this->si166_reg10 
-                               ,$this->si166_instit 
+                                $this->si166_sequencial
+                               ,$this->si166_tiporegistro
+                               ,$this->si166_codfontecaixa
+                               ,$this->si166_vlsaldoinicialfonte
+                               ,$this->si166_vlsaldofinalfonte
+                               ,$this->si166_mes
+                               ,$this->si166_reg10
+                               ,$this->si166_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -448,7 +448,7 @@ class cl_caixa112019
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
 
-      return false;
+      //return false;
     }
 
     return $result;

@@ -293,6 +293,23 @@ $oGet = db_utils::postMemory($_GET);
                                     aLinha[3]  = oDado.observacao.urlDecode();
                                     oGrvDetalhes.addRow(aLinha);
                                     break;
+
+                                case 'saldo':
+
+                                    var aRow = new Array();
+
+                                    aRow[0] = oDado.codigo;
+                                    aRow[1] = oDado.descricao.urlDecode();
+                                    aRow[2] = js_formatar(oDado.quantidade, 'f');
+                                    aRow[3] = js_formatar(oDado.vlrTotal, 'f');
+                                    oGrvDetalhes.addRow(aRow);
+
+                                    var oDadosHint           = new Object();
+                                    oDadosHint.idLinha   = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText     = sTextEvent;
+                                    aDadosHintGrid.push(oDadosHint);
+
+                                    break;
                             }
 
                         }
@@ -495,6 +512,20 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes.clearAll(true);
                 oGrvDetalhes.renderRows();
 
+                break;
+
+            case 'saldo':
+
+                oGrvDetalhes = new DBGrid('detalhes');
+                oGrvDetalhes.nameInstance = 'oGrvDetalhes';
+                oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
+                oGrvDetalhes.setCellAlign(['left', 'left', 'left' , 'left']);
+                oGrvDetalhes.setHeader(['Código','Descrição','Quantidade', 'Valor']);
+                oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.hasTotalizador = true;
+                oGrvDetalhes.show($('grvDetalhes'));
+                oGrvDetalhes.clearAll(true);
+                oGrvDetalhes.renderRows();
                 break;
         }
 

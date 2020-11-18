@@ -71,6 +71,11 @@ if(isset($incluir)){
         $clpcforne->pc60_usuario=db_getsession("DB_id_usuario");
         $clpcforne->pc60_hora=db_hora();
         $clpcforne->incluir($pc60_numcgm);
+        if($clpcforne->erro_status==0){
+            $sqlerro=true;
+        }
+        $erro_msg = $clpcforne->erro_msg;
+        db_msgbox($erro_msg);
     }
     db_fim_transacao();
     $db_opcao = 1;
@@ -113,7 +118,6 @@ if(isset($incluir)){
       echo "<script> document.form1.".$clpcforne->erro_campo.".focus();</script>";
     };
   }else{
-   db_msgbox($erro_msg);
    db_redireciona("com1_pcforne005.php?liberaaba=true&chavepesquisa=$pc60_numcgm");
   }
 }

@@ -38,6 +38,8 @@ $clrotulo->label("o15_descr");
 $clrotulo->label("o54_descr");
 $clrotulo->label("o53_descr");
 $clrotulo->label("o52_descr");
+$clrotulo->label("o58_coddot");
+$clrotulo->label("o56_descr");
 
 if ( isset($opcao) && $opcao == "alterar" ) {
   $db_opcao = 2;
@@ -76,6 +78,20 @@ if ( isset($opcao) && $opcao == "alterar" ) {
 					?>
 			  </td>
 		  </tr>
+
+			<tr>
+			  <td nowrap title="<?=@$To58_coddot?>">
+			    <?php 
+			      db_ancora($Lo58_coddot, "js_pesquisaReduzido(true);", 1);
+			    ?>
+			  </td>
+			  <td>
+			    <?php 
+			      db_input("o58_coddot", 8, $Io58_coddot, true, "text", 1, "onchange='js_pesquisaReduzido(false);'");
+			      db_input("o56_descr",40, $Io56_descr,true,"text",3);
+			    ?>
+			  </td>
+			</tr>
 
 			<tr>
 				<td nowrap title="<?=@$Trh25_projativ?>">
@@ -634,20 +650,90 @@ function js_geraQueryStringElementosSecundarios() {
 	}
 
 	var frameDoc   = oFrame.contentDocument || oFrame.contentWindow.document;
+	var iProjativ  = frameDoc.getElementById('rh39_projativ').value;
+	var iRecurso   = frameDoc.getElementById('rh43_recurso').value;
 	var iPrograma  = frameDoc.getElementById('rh39_programa').value;
 	var iSubfuncao = frameDoc.getElementById('rh39_subfuncao').value;
 	var iFuncao    = frameDoc.getElementById('rh39_funcao').value;
+	var sProjativ  = frameDoc.getElementById('o55_descr').value;
+	var sRecurso   = frameDoc.getElementById('o15_descr').value;
 	var sPrograma  = frameDoc.getElementById('o54_descr').value;
 	var sSubfuncao = frameDoc.getElementById('o53_descr').value;
 	var sFuncao    = frameDoc.getElementById('o53_descr').value;
+	var iReduzido  = frameDoc.getElementById('o58_coddot').value;
+	var sReduzido  = frameDoc.getElementById('o56_descrReduzido').value;
+	var iOrgao  = frameDoc.getElementById('rh39_orgao').value;
+	var sOrgao  = frameDoc.getElementById('o40_descr').value;
+	var iUnidade  = frameDoc.getElementById('rh39_unidade').value;
+	var sUnidade  = frameDoc.getElementById('o41_descr').value;
 
-	sQueryString  = '&rh39_programa='  + iPrograma; 
-  sQueryString += '&rh39_subfuncao=' + iSubfuncao;
-  sQueryString += '&rh39_funcao='    + iFuncao;
-  sQueryString += '&o54_descr='      + sPrograma;
-  sQueryString += '&o53_descr='      + sSubfuncao;
-  sQueryString += '&o52_descr='      + sFuncao; 
+	sQueryString  = '&rh39_projativ='  + iProjativ; 
+	sQueryString  += '&rh43_recurso='  + iRecurso; 
+	sQueryString  += '&rh39_programa='  + iPrograma; 
+    sQueryString  += '&rh39_subfuncao=' + iSubfuncao;
+    sQueryString  += '&rh39_funcao='    + iFuncao;
+    sQueryString  += '&o55_descr='      + sProjativ;
+    sQueryString  += '&o15_descr='      + sRecurso;
+    sQueryString  += '&o54_descr='      + sPrograma;
+    sQueryString  += '&o53_descr='      + sSubfuncao;
+    sQueryString  += '&o52_descr='      + sFuncao; 
+    sQueryString  += '&o58_coddot='      + iReduzido; 
+    sQueryString  += '&o56_descrReduzido=' + sReduzido; 
+    sQueryString  += '&rh39_orgao='      + iOrgao; 
+    sQueryString  += '&o40_descr=' + sOrgao;
+    sQueryString  += '&rh39_unidade='      + iUnidade; 
+    sQueryString  += '&o41_descr=' + sUnidade; 
 
 	return sQueryString;
+}
+
+function js_pesquisaReduzido (lMostra) {
+  var sUrlOpen = "func_orcdotacaorhlota.php?pesquisa_chave="+document.form1.o58_coddot.value+"&funcao_js=parent.js_completaReduzido";
+  if (lMostra) {
+    sUrlOpen = "func_orcdotacaorhlota.php?funcao_js=parent.js_preencheReduzido|o58_coddot|o55_descr|o40_orgao|o40_descr|o41_unidade|o41_descr|o55_projativ|o55_descr|o15_codigo|o15_descr|o54_programa|o54_descr|o52_funcao|o52_descr|o53_subfuncao|o53_descr";
+  }
+  js_OpenJanelaIframe('', 'db_iframe_orcdotacao', sUrlOpen, 'Pesquisa Reduzido Dotação', lMostra);
+}
+function js_preencheReduzido (iCodigoReduzido, sDescricao, o40_orgao, o40_descr, o41_unidade, o41_descr, o55_projativ,o55_descr,o15_codigo,o15_descr,o54_programa,o54_descr,o52_funcao,o52_descr,o53_subfuncao,o53_descr) {
+  document.form1.o58_coddot.value = iCodigoReduzido;
+  document.form1.o56_descr.value = sDescricao;
+  document.form1.rh25_projativ.value = o55_projativ;
+  document.form1.o55_descr.value = o55_descr;
+  document.form1.rh25_recurso.value = o15_codigo;
+  document.form1.o15_descr.value = o15_descr;
+  document.form1.rh25_programa.value = o54_programa;
+  document.form1.o54_descr.value = o54_descr;
+  document.form1.rh25_funcao.value = o52_funcao;
+  document.form1.o52_descr.value = o52_descr;
+  document.form1.rh25_subfuncao.value = o53_subfuncao;
+  document.form1.o53_descr.value = o53_descr;
+  db_iframe_orcdotacao.hide();
+}
+function js_completaReduzido (sDescricao, lErro, o40_orgao, o40_descr, o41_unidade, o41_descr, o55_projativ,o55_descr,o15_codigo,o15_descr,o54_programa,o54_descr,o52_funcao,o52_descr,o53_subfuncao,o53_descr) {
+  document.form1.o56_descr.value = sDescricao;
+  if (lErro || typeof(o40_orgao) === "undefined") {
+    document.form1.o58_coddot.value = "";
+    document.form1.rh25_projativ.value = "";
+    document.form1.o55_descr.value = "";
+    document.form1.rh25_recurso.value = "";
+    document.form1.o15_descr.value = "";
+    document.form1.rh25_programa.value = "";
+    document.form1.o54_descr.value = "";
+    document.form1.rh25_funcao.value = "";
+    document.form1.o52_descr.value = "";
+    document.form1.rh25_subfuncao.value = "";
+    document.form1.o53_descr.value = "";
+  } else {
+    document.form1.rh25_projativ.value = o55_projativ;
+    document.form1.o55_descr.value = o55_descr;
+    document.form1.rh25_recurso.value = o15_codigo;
+    document.form1.o15_descr.value = o15_descr;
+    document.form1.rh25_programa.value = o54_programa;
+    document.form1.o54_descr.value = o54_descr;
+    document.form1.rh25_funcao.value = o52_funcao;
+    document.form1.o52_descr.value = o52_descr;
+    document.form1.rh25_subfuncao.value = o53_subfuncao;
+    document.form1.o53_descr.value = o53_descr;
+  }
 }
 </script>
