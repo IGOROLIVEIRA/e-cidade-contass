@@ -160,10 +160,12 @@ if (isset($confirmar) && trim($confirmar) != "") {
                 $rsHomoAdjudica = $clhomologadjudica->sql_record($sqlHomoAdjudica);
                 $oHomoAdjudica = db_utils::fieldsMemory($rsHomoAdjudica, 0);
 
-                if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao &&
-                    $dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
-                    $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
-                    $sqlerro = true;
+                if($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao){
+                    if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao &&
+                        $dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
+                        $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+                        $sqlerro = true;
+                    }
                 }
             }
         }
@@ -176,11 +178,12 @@ if (isset($confirmar) && trim($confirmar) != "") {
 		$rsParecer = $clparecerlicitacao->sql_record($sqlParecer);
 		$dataParecer = db_utils::fieldsMemory($rsParecer, 0)->l200_data;
 
-		if($dtjulgamento > $dataParecer || is_null($dataParecer)){
-		    $erro_msg = 'Data de Julgamento maior que data do Parecer. Verifique!';
-		    $sqlerro = true;
+		if($dataParecer){
+            if($dtjulgamento > $dataParecer || is_null($dataParecer)){
+                $erro_msg = 'Data de Julgamento maior que data do Parecer. Verifique!';
+                $sqlerro = true;
+            }
         }
-
     }
 
 //    5ª validação
