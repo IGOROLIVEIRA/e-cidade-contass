@@ -188,7 +188,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
 //    5ª validação
     if(in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro){
-		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao){
+		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao){
 		    $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
 		    $sqlerro = true;
         }
