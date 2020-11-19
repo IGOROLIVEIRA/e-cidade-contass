@@ -85,22 +85,23 @@ class gerarCADOBRAS extends GerarAM
              *
              * Registros 21
              */
+            if($aCADORBRAS20['si199_situacaodaobra'] == "4" || $aCADORBRAS20['si199_situacaodaobra'] == "3") {
+                for ($iCont21 = 0; $iCont21 < pg_num_rows($rscadobras212020); $iCont21++) {
 
-            for ($iCont21 = 0; $iCont21 < pg_num_rows($rscadobras212020); $iCont21++) {
+                    $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont21);
 
-                $aCADORBRAS21 = pg_fetch_array($rscadobras212020, $iCont21);
-
-                if($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
                     if ($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
-                        $aCSVCADOBRAS21['si200_tiporegistro'] = $aCADORBRAS21['si200_tiporegistro'];
-                        $aCSVCADOBRAS21['si200_codorgaoresp'] = str_pad($aCADORBRAS21['si200_codorgaoresp'], 3, "0", STR_PAD_LEFT);
-                        $aCSVCADOBRAS21['si200_codobra'] = $aCADORBRAS21['si200_codobra'];
-                        $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
-                        $aCSVCADOBRAS21['si200_motivoparalisacap'] = str_pad($aCADORBRAS21['si200_motivoparalisacap'], 2, "0", STR_PAD_LEFT);
-                        $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
-                        $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
-                        $this->sLinha = $aCSVCADOBRAS21;
-                        $this->adicionaLinha();
+                        if ($aCADORBRAS21['si200_codobra'] == $aCADORBRAS20['si199_codobra']) {
+                            $aCSVCADOBRAS21['si200_tiporegistro'] = $aCADORBRAS21['si200_tiporegistro'];
+                            $aCSVCADOBRAS21['si200_codorgaoresp'] = str_pad($aCADORBRAS21['si200_codorgaoresp'], 3, "0", STR_PAD_LEFT);
+                            $aCSVCADOBRAS21['si200_codobra'] = $aCADORBRAS21['si200_codobra'];
+                            $aCSVCADOBRAS21['si200_dtparalisacao'] = $this->sicomDate($aCADORBRAS21['si200_dtparalisacao']);
+                            $aCSVCADOBRAS21['si200_motivoparalisacap'] = str_pad($aCADORBRAS21['si200_motivoparalisacap'], 2, "0", STR_PAD_LEFT);
+                            $aCSVCADOBRAS21['si200_descoutrosparalisacao'] = $aCADORBRAS21['si200_descoutrosparalisacao'];
+                            $aCSVCADOBRAS21['si200_dtretomada'] = $this->sicomDate($aCADORBRAS21['si200_dtretomada']) == "" ? " ;" : $this->sicomDate($aCADORBRAS21['si200_dtretomada']);
+                            $this->sLinha = $aCSVCADOBRAS21;
+                            $this->adicionaLinha();
+                        }
                     }
                 }
             }
