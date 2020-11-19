@@ -83,6 +83,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
                     WHERE z09_datacadastro <='{$this->sDataFinal}'
                         AND z09_datacadastro >= '{$this->sDataInicial}'
                         AND z09_tipo is not null
+                        order by z09_tipo;
                 ";
 
         $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
@@ -110,23 +111,27 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
             $clpessoa = new cl_pessoa102020();
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-            $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
+            $aHash = $oDados->z01_cgccpf;
 
-            $clpessoa->si12_tiporegistro = 10;
-            $clpessoa->si12_tipodocumento = strlen($oDados->z01_cgccpf) <= 11 ? 1 : 2;
-            $clpessoa->si12_nrodocumento = $oDados->z01_cgccpf;
-            $clpessoa->si12_nomerazaosocial = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
-            $clpessoa->si12_tipocadastro = $oDados->z09_tipo;
-            if($oDados->z09_tipo == 2){
-                $clpessoa->si12_justificativaalteracao = 'Cadastro alterado';
-            }else{
-                $clpessoa->si12_justificativaalteracao = '';
+            if (!isset($aPessoas[$aHash])) {
+                $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
+
+                $clpessoa->si12_tiporegistro = 10;
+                $clpessoa->si12_tipodocumento = strlen($oDados->z01_cgccpf) <= 11 ? 1 : 2;
+                $clpessoa->si12_nrodocumento = $oDados->z01_cgccpf;
+                $clpessoa->si12_nomerazaosocial = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
+                $clpessoa->si12_tipocadastro = $oDados->z09_tipo;
+                if ($oDados->z09_tipo == 2) {
+                    $clpessoa->si12_justificativaalteracao = $oDados->z01_obs;
+                } else {
+                    $clpessoa->si12_justificativaalteracao = '';
+                }
+                $clpessoa->si12_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $clpessoa->si12_instit = db_getsession("DB_instit");
+
+                $clpessoa->incluir(null);
+                $aPessoas[$aHash] = $clpessoa;
             }
-            $clpessoa->si12_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clpessoa->si12_instit = db_getsession("DB_instit");
-
-            $clpessoa->incluir(null);
-
         }
         db_fim_transacao();
 
