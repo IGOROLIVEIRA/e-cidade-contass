@@ -234,7 +234,7 @@ $db_botao = true;
 					left join arqproc      on p68_codproc = p63_codproc
 							where ( p62_id_usorec   = ".db_getsession("DB_id_usuario")."
 								 or   p62_id_usorec   = 0 )
-								and p62_coddepto = ".db_getsession("DB_coddepto")." 
+								and p62_coddeptorec = ".db_getsession("DB_coddepto")." 
 								and p64_codtran is null
 								and p68_codproc is null
 					 group by p62_dttran,
