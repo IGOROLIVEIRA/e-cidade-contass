@@ -583,7 +583,7 @@ function js_saida(oAjax) {
     }
 
     aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-        
+
     if (aMatrizEntrada.indexOf(estrutural) !== -1) {
         document.getElementById('competDespLabel').style.display = "table-cell";
         document.getElementById('competDespInput').style.display = "table-cell";
@@ -843,7 +843,7 @@ function js_liquidar(metodo) {
        valorTotal = valorTotal.toFixed(2);
      }
    }
-    
+
    if (aNotas.length != 0){
 
 
@@ -902,9 +902,9 @@ function js_liquidar(metodo) {
      }
 
     aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
-       
+
     if (aMatrizEntrada.indexOf($F('sEstrutElemento')) !== -1) {
-    
+
         if ($F('e50_compdesp') == ''){
             alert('Campo Competência da Despesa deve ser informado.');
             $('e50_compdesp').focus();
@@ -949,7 +949,7 @@ function js_liquidar(metodo) {
          oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
          oParam.verificaChave = 1;
          oParam.e50_compdesp = $F('e50_compdesp');
-         
+
 
      var oInfoNota                      = new Object();
          oInfoNota.iCfop                = iCfop;
@@ -1039,7 +1039,7 @@ function js_calculaValor(id,tipo){
        nTotal = new Number(nVlrTotal/nVlrUni);
        if ((nVlrTotal <= iSaldovlr)) {
           if (nVlrTotal > 0){
-             //$('qtdesol'+id).value = nTotal.toFixed(2);
+             $('qtdesol'+id).value = nTotal.toFixed(2);
              $('confirmar').disabled = false;
              if ($('chk'+id).checked == false ){
                  $('chk'+id).click();
@@ -1324,13 +1324,13 @@ function verificaChave() {
         tipo: $('e69_notafiscaleletronica').value,
         nfe: $('e69_numnota').value
       };
-      
+
       novoAjax(params, function(e) {//31181004930131000129550010000123431322590654 12343
         var oRetorno = JSON.parse(e.responseText);
           if (oRetorno.status == 0) {
             alert(oRetorno.erro);
             $('e69_chaveacesso').value = '';
-          } 
+          }
       });
   }
 }
