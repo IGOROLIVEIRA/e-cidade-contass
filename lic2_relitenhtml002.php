@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("classes/db_liclicitem_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS, 2);
+$oGet = db_utils::postMemory($HTTP_GET_VARS);
+
 $clliclicitem = new cl_liclicitem;
 $clrotulo = new rotulocampo;
 $clrotulo->label("l20_codigo");
@@ -49,10 +51,15 @@ function lic2_relitenhtml002_formatar($valor, $separador, $delimitador) {
   return "{$del}{$valor}{$del}{$separador}";
 }
 
-$campos = "l21_ordem,pc11_codigo,pc01_descrmater,pc11_resum,m61_descr,pc11_quant,pc11_vlrun,pcprocitem.pc81_codprocitem";
+$campos = "l21_ordem,";
+$campos .= ($oGet->itens ? 'si02_vlprecoreferencia,' : 'pc11_codigo,');
+
+$campos .= "pc01_descrmater,pc11_resum,m61_descr,pc11_quant,pc11_vlrun,pcprocitem.pc81_codprocitem";
+
 $campos = "distinct ".$campos;
 
 $result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null, "$campos", "l21_ordem", "l21_codliclicita = $l20_codigo and l20_instit = ".db_getsession("DB_instit")));
+
 if ($clliclicitem->numrows == 0) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Itens cadastrados para Licitação.');
   exit;
@@ -62,9 +69,10 @@ $clabre_arquivo = new cl_abre_arquivo("/tmp/licitacao_$l20_codigo.csv");
 if ($clabre_arquivo->arquivo != false) {
   $vir = $separador;
   $del = $delimitador;
+
   fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
 
-  if ( $layout != 2 ) {
+  if ( $layout != 2 && !$oGet->itens) {
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("SEQ ITEM", $vir, $del));
   }
   fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("PRODUTO",  $vir, $del));
@@ -74,15 +82,19 @@ if ($clabre_arquivo->arquivo != false) {
   fputs($clabre_arquivo->arquivo, "\n");
   
   for ($w = 0; $w < $clliclicitem->numrows; $w ++) {
-    db_fieldsmemory($result_itens, $w);
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($l21_ordem                        , $vir, $del));
-    if ( $layout != 2 ) {
-      fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc81_codprocitem                 , $vir, $del));
+
+	db_fieldsmemory($result_itens, $w);
+
+	$ordem = $oGet->itens ? $w + 1 : $l21_ordem;
+	$precounitario = $oGet->itens ? $si02_vlprecoreferencia : $pc11_vlrun;
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($ordem, $vir, $del));
+    if ( $layout != 2 && !$oGet->itens) {
+      fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc81_codprocitem, $vir, $del));
     }
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("{$pc01_descrmater} {$pc11_resum}", $vir, $del));
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc11_quant                       , $vir, $del));
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($m61_descr                        , $vir, $del));
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar(db_formatar($pc11_vlrun,"v")      , $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc11_quant, $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($m61_descr, $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar(db_formatar($precounitario, ($oGet->itens ? 'p' : "v")), $vir, $del));
     fputs($clabre_arquivo->arquivo, "\n");
   }
   

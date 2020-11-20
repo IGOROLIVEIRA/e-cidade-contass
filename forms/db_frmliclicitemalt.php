@@ -63,6 +63,7 @@ $clrotulo->label("nome");
 
         <input name='incluir' type='button' value='Incluir' onclick='js_inclui();' >
         <input name='excluir' type='button' value='Excluir' onclick='js_excluir();' disabled>
+        <input name='exportarcsv' type='button' value='Exportar CSV' onclick='js_exportarcsv();'>
       </td>
     </tr>
     <tr colspan="2">
@@ -100,4 +101,17 @@ function js_excluir(){
 
     document.form1.submit();
 }
+
+function js_exportarcsv(){
+    let licitacao = <?=$licitacao;?>;
+    jan = window.open('lic2_relitenhtml002.php?l20_codigo='+licitacao+'&separador=;&delimitador=1&layout=1&itens=true',
+        '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+
+    setTimeout(()=>{
+        jan.close();
+    },1000);
+
+}
+
 </script>
