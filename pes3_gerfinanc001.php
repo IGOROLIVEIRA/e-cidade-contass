@@ -1165,6 +1165,11 @@ $iMesImplantacao = $aImplantacao[1];
         </fieldset>
                     </td>
                     <td valign="top" style="font-size:11px" width="33,3%" height="100%">
+                      <?php 
+                      include("pes3_consultesocialsicom001.php");
+                      ?>
+                    </td>
+                    <td valign="top" style="font-size:11px" width="33,3%" height="100%">
                       <fieldset style="height: 120px">
                         <legend><strong>Legendas</strong></legend>
                         <table width="100%" border="0">

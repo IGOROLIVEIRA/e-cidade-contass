@@ -182,7 +182,7 @@ $sheet->getProtection()->setInsertRows(true);
 $sheet->getProtection()->setFormatCells(true);
 $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 //itens orcamento
-$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcam->numrows;
 
 for ($i = 0; $i < $numrows_itens; $i ++){

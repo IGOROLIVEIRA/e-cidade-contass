@@ -63,7 +63,8 @@ $val = false;
                 }
               }
               $sWhereSolicitaAnulada = " not exists (select 1 from solicitaanulada where pc67_solicita = pc10_numero) ";
-              $sql_solicita = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null,"distinct pc10_numero,pc10_data,pc10_resumo,descrdepto","pc10_numero desc","pc81_solicitem is null $where_liberado and pc10_correto='t' and {$sWhereSolicitaAnulada} and pc10_solicitacaotipo in(1,2) and extract(year from pc10_data) >= ".db_getsession("DB_anousu")));
+              $datausu = date("Y-m-d", db_getsession('DB_datausu'));
+              $sql_solicita = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null,"distinct pc10_numero,pc10_data,pc10_resumo,descrdepto","pc10_numero desc","pc81_solicitem is null $where_liberado and pc10_correto='t' and {$sWhereSolicitaAnulada} and pc10_solicitacaotipo in(1,2) and pc10_data <= '$datausu' and extract(year from pc10_data) >= ".db_getsession("DB_anousu")));
               for ($i=0;$i<$clsolicitem->numrows;$i++) {
 
                 db_fieldsmemory($sql_solicita,$i,true);

@@ -31,7 +31,6 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_pccflicitapar_classe.php");
 include("classes/db_cflicita_classe.php");
-include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);

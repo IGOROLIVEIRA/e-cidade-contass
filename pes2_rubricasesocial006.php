@@ -48,9 +48,17 @@ if(isset($salvar)){
 
   db_inicio_transacao();
   $clbaserubricasesocial->excluir(null,$e990_sequencial,db_getsession("DB_instit"));
+  $aBaseManter = null;
+  if ($e990_sequencial == '1000' || $e990_sequencial == '6000') {
+    $aBaseManter = array("'1000'","'6000'");
+  } else if ($e990_sequencial == '1020' || $e990_sequencial == '6006' || $e990_sequencial == '6007') {
+    $aBaseManter = array("'1020'","'6006'","'6007'");
+  }
   foreach($basesSelecionados as $cod){
-    //tira a base de outra tabela
-    $clbaserubricasesocial->excluir($cod,null,db_getsession("DB_instit"));
+    //tira a rubrica de outra tabela exceto as rubricas 2000 e 4000 e base 1000
+    if ($cod[0] != '2' && $cod[0] != '4') {
+      $clbaserubricasesocial->excluir($cod,null,db_getsession("DB_instit"), $aBaseManter);
+    }
     //insere na tabela pivô
     $clbaserubricasesocial->e991_rubricasesocial = $e990_sequencial;
     $clbaserubricasesocial->e991_rubricas = $cod;
@@ -96,7 +104,13 @@ if(isset($chavepesquisa)){
  $result = $clbaserubricasesocial->sql_record("SELECT * FROM baserubricasesocial WHERE e991_rubricasesocial = '{$chavepesquisa}' AND e991_instit = ".db_getsession('DB_instit')."");
  $aBasesEsocial = db_utils::getColectionByRecord($result);
  //bases vinculadas à outras tabela da consulta
- $result = $clbaserubricasesocial->sql_record("SELECT e991_rubricas FROM baserubricasesocial WHERE e991_rubricasesocial <> '{$chavepesquisa}' AND e991_instit = ".db_getsession('DB_instit')."");
+ $sWhere = "<> '{$chavepesquisa}'";
+ if ($chavepesquisa == '1000' || $chavepesquisa == '6000') {
+   $sWhere = "NOT IN ('1000','6000')";
+ } else if ($chavepesquisa == '1020' || $chavepesquisa == '6006' || $chavepesquisa == '6007') {
+   $sWhere = "NOT IN ('1020','6006','6007')";
+ }
+ $result = $clbaserubricasesocial->sql_record("SELECT e991_rubricas FROM baserubricasesocial WHERE e991_rubricasesocial {$sWhere} AND e991_instit = ".db_getsession('DB_instit')."");
  $aBasesEsocialOutras = db_utils::getColectionByRecord($result);
  $JSONaBasesEsocialOutras = "";
  foreach ($aBasesEsocialOutras as $b) {

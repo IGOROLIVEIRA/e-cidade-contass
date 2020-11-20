@@ -244,8 +244,14 @@ $sWhereContratos = " and 1 = 1 ";
 					                    liclicita.l20_edital,
                                         l20_anousu,
                                         pctipocompra.pc50_descr,
-                                        liclicita.l20_numero,
-                                        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_numero, ";
+
+					if(db_getsession('DB_anousu') >= 2021){
+					    $campos .= " case when l20_nroedital is not null then l20_nroedital::varchar
+                                        else '-' END as l20_nroedital, ";
+                    }
+
+                    $campos .= "        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
                                         liclicita.l20_dtpublic as dl_Data_Publicação_DO,
                                         liclicita.l20_objeto";
