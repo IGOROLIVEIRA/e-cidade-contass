@@ -369,6 +369,10 @@ db_app::import("configuracao.DBDepartamento");
 
         $oTabDetalhes->add("Apostilamentos","Apostilamentos",
             "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=apostilamentos");
+
+		$oTabDetalhes->add("Saldo","Saldo",
+			"con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=saldo");
+
         $oTabDetalhes->show();
 
 

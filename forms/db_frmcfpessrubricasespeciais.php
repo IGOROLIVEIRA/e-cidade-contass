@@ -437,6 +437,32 @@ $clrotulo->label("r08_descr");
     </td>
   </tr>
 
+  <tr>
+    <td>
+      <fieldset id="FeriasPremio">
+        <legend><strong>Férias Prêmio</strong></legend>
+        <table width="100%">
+          <tr>
+            <td title="<?=$Tr11_feriaspremio?>" width="110">
+              <a href="javascript:void(0)" id="oLabelFeriasPremio" title=""><?=$Lr11_feriaspremio?></a>
+            </td>
+            <td>
+            <?php
+
+              if ($r11_feriaspremio) {
+                $oDescricaoFeriasPremio = RubricaRepository::getInstanciaByCodigo($r11_feriaspremio)->getDescricao();
+              }
+
+              db_input('r11_feriaspremio',4,$Ir11_feriaspremio,true,'text',$db_opcao,"lang='rh27_rubric'");
+              db_input("oDescricaoFeriasPremio",30,$Irh27_descr,true,"text",3,"lang='rh27_descr'");             
+              ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
+
 </table>
 </fieldset>
 </br>
@@ -471,6 +497,7 @@ $clrotulo->label("r08_descr");
   var oTooglePensaoAlimenticia     = new DBToogle('PensaoAlimenticia', false);
   var oToogleRubricaSubstituicao   = new DBToogle('RubricaSubstituicao', false);
   var oToogleAvisoPrevio           = new DBToogle('AvisoPrevio', false);
+  var oToogleFeriasPremio           = new DBToogle('FeriasPremio', false);
 
   // Mensagem para sugestão da base de rubricas do recebimento integral
   const ARQUIVO_MENSAGEM = 'recursoshumanos.pessoal.pes1_cfpessrubricasespeciais.';
@@ -493,6 +520,7 @@ $clrotulo->label("r08_descr");
   var oLookupAvisoPrevio13    = new DBLookUp($('oLabelAvisoPrevio13'), $('r11_avisoprevio13'), $('oDescricaoAvisoPrevio13'), oParametrosSubstituicao);
   var oLookupAvisoPrevioFerias = new DBLookUp($('oLabelAvisoPrevioFerias'), $('r11_avisoprevioferias'), $('oDescricaoAvisoPrevioFerias'), oParametrosSubstituicao);
   var oLookupAvisoPrevio13Ferias = new DBLookUp($('oLabelAvisoPrevio13Ferias'), $('r11_avisoprevio13ferias'), $('oDescricaoAvisoPrevio13Ferias'), oParametrosSubstituicao);
+  var oLookupFeriasPremio = new DBLookUp($('oLabelFeriasPremio'), $('r11_feriaspremio'), $('oDescricaoFeriasPremio'), oParametrosSubstituicao);
 })();
 
 function js_pesquisar11_rubdec(mostra){
