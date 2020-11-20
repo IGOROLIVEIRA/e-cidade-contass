@@ -69,6 +69,7 @@ class GerarPARPPS extends GerarAM
                 $aCSVPARPPS20['si155_codorgao']                 = $this->padLeftZero($aPARPPS20['si155_codorgao'], 2);
                 $aCSVPARPPS20['si155_tipoplano']                = $this->padLeftZero($aPARPPS20['si155_tipoplano'], 1);
                 $aCSVPARPPS20['si155_exercicio']                = $this->padLeftZero($aPARPPS20['si155_exercicio'], 4);
+                $aCSVPARPPS20['si155_dtavaliacao']              = $this->sicomDate($aPARPPS20['si155_dtavaliacao']) == null ? " " : $this->sicomDate($aPARPPS20['si155_dtavaliacao']);
                 $aCSVPARPPS20['si155_vlreceitaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vlreceitaprevidenciaria'], 2);
                 $aCSVPARPPS20['si155_vldespesaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vldespesaprevidenciaria'], 2);
 

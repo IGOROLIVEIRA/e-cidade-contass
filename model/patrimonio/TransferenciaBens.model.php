@@ -244,6 +244,7 @@ class TransferenciaBens {
       $oDaoBensTransf->t93_instit     = $this->getInstit();
       $oDaoBensTransf->t93_clabens    = $this->getClabens();
       $oDaoBensTransf->t93_divisao    = $this->getDivisaoDestino();
+      $oDaoBensTransf->t93_tipo       = 2;
       $oDaoBensTransf->incluir($this->getTransferencia(), $oDaoBensTransf->t93_depart);
       if ($oDaoBensTransf->erro_status == "0") {
         throw new DBException(" [ 2 -  transferenciaAutomatica ] -  " . $oDaoBensTransf->erro_msg);
