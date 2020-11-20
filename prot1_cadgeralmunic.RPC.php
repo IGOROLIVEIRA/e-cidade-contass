@@ -460,19 +460,25 @@ switch ($oParam->exec) {
                     $sqlErro  = true;
                 }
             }
-
-            //HISTORICOCGM OC12852
-            $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
-            if(pg_num_rows($result) > 0 ) {
-                db_fieldsmemory($result, 0);
-                $clhistoricocgm->excluir($z09_sequencial);
+            if ($oParam->action == "alterar") {
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null, "z09_sequencial", "", "z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if (pg_num_rows($result) > 0) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
             }
+
             $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
             $clhistoricocgm->z09_motivo        = utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_obs));
             $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
             $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
             $clhistoricocgm->z09_datacadastro  = $date;
-            $clhistoricocgm->z09_tipo          = 2;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
             $clhistoricocgm->incluir();
             //fim OC12852
 
@@ -643,11 +649,13 @@ switch ($oParam->exec) {
                 }
             }
 
-            //HISTORICOCGM OC12852
-            $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
-            if(pg_num_rows($result) > 0 ) {
-                db_fieldsmemory($result, 0);
-                $clhistoricocgm->excluir($z09_sequencial);
+            if ($oParam->action == 'alterar'){
+                //HISTORICOCGM OC12852
+                $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
+                if(pg_num_rows($result) > 0 ) {
+                    db_fieldsmemory($result, 0);
+                    $clhistoricocgm->excluir($z09_sequencial);
+                }
             }
             $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));;
 
@@ -655,7 +663,11 @@ switch ($oParam->exec) {
             $clhistoricocgm->z09_usuario       = db_getsession('DB_id_usuario');
             $clhistoricocgm->z09_numcgm        = $oParam->pessoa->z01_numcgm;
             $clhistoricocgm->z09_datacadastro  = $date;
-            $clhistoricocgm->z09_tipo          = 2;
+            if($oParam->action == 'incluir'){
+                $clhistoricocgm->z09_tipo          = 1;
+            }else{
+                $clhistoricocgm->z09_tipo          = 2;
+            }
             $clhistoricocgm->incluir();
             //fim OC12852
 
