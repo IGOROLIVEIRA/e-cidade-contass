@@ -112,7 +112,7 @@ class cl_baserubricasesocial {
      return true;
    }
    // funcao para exclusao
-   function excluir($e991_rubricas=null, $e991_rubricasesocial=null, $e991_instit=null) {
+   function excluir($e991_rubricas=null, $e991_rubricasesocial=null, $e991_instit=null, $basesManter=null) {
      $this->atualizacampos(true);
      $sql = " delete from baserubricasesocial
                     where ";
@@ -127,6 +127,9 @@ class cl_baserubricasesocial {
      }
      if($e991_instit!=null){
         $sql2 .= " and e991_instit = '$e991_instit'";
+     }
+     if($basesManter!=null){
+        $sql2 .= " and e991_rubricasesocial not in (".implode(",",$basesManter).")";
      }
      $result = @pg_exec($sql.$sql2);
      if($result==false){
