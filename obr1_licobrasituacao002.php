@@ -67,41 +67,61 @@ if(isset($alterar)){
     }
 
     if($obr02_situacao == "1"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) > 0){
         throw new Exception ("Obra já iniciada!");
       }
     }
 
     if($obr02_situacao == "2"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Obra sem cadastro inicial informado!");
       }
+
+        db_fieldsmemory($resultSituacao,0);
+        $data1 = (implode("/",(array_reverse(explode("-",$dtsituacao1)))));
+        $datasituacao1 = DateTime::createFromFormat('d/m/Y', $data1);
+
+        if($dtSituacao <= $datasituacao1){
+            throw new Exception ("Data da Inicio deve ser maior que data de não iniciada.");
+        }
     }
 
     if($obr02_situacao == "3" || $obr02_situacao == "4"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja paralisada deve existir o registro de inicio da obra!");
       }
     }
 
     if($obr02_situacao == "5" || $obr02_situacao == "6" || $obr02_situacao == "7"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja concluída ela deve ter sido iniciada!");
       }
     }
 
     if($obr02_situacao == "8"){
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao in (3,4)"));
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao in (3,4)"));
       if(pg_num_rows($resultSituacao) <= 0){
         throw new Exception ("Para que uma obra seja Reiniciada ela deve ter sido Paralisada!");
       }
     }
 
-    $cllicobrasituacao->alterar($obr02_sequencial);
+        $cllicobrasituacao->obr02_seqobra                  = $obr02_seqobra;
+        $cllicobrasituacao->obr02_dtlancamento             = $obr02_dtlancamento;
+        $cllicobrasituacao->obr02_situacao                 = $obr02_situacao;
+        $cllicobrasituacao->obr02_dtsituacao               = $obr02_dtsituacao;
+        $cllicobrasituacao->obr02_veiculopublicacao        = $obr02_veiculopublicacao;
+        $cllicobrasituacao->obr02_dtpublicacao             = $obr02_dtpublicacao;
+        $cllicobrasituacao->obr02_descrisituacao           = $obr02_descrisituacao;
+        $cllicobrasituacao->obr02_motivoparalisacao        = $obr02_motivoparalisacao;
+        $cllicobrasituacao->obr02_dtparalisacao            = $obr02_dtparalisacao;
+        $cllicobrasituacao->obr02_outrosmotivos            = $obr02_outrosmotivos;
+        $cllicobrasituacao->obr02_dtretomada               = $obr02_dtretomada;
+        $cllicobrasituacao->obr02_instit                   = db_getsession('DB_instit');
+        $cllicobrasituacao->alterar($obr02_sequencial);
 
     if($cllicobrasituacao->erro_status == 0){
       $erro = $cllicobrasituacao->erro_msg;

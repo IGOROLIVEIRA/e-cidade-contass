@@ -24,7 +24,7 @@ class gerarCADOBRAS extends GerarAM
     $sSql = "select * from cadobras102020 where si198_mes = " . $this->iMes . " and si198_instit=" . db_getsession("DB_instit");
     $rscadobras102020 = db_query($sSql);
 
-    $sSql = "select * from cadobras202020 where si199_mes = " . $this->iMes . " and si199_instit=" . db_getsession("DB_instit");
+    $sSql = "select * from cadobras202020 where si199_mes = " . $this->iMes . " and si199_instit=" . db_getsession("DB_instit") ." order by si199_codobra";
     $rscadobras202020 = db_query($sSql);
 
     $sSql = "select * from cadobras212020 where si200_mes = " . $this->iMes . " and si200_instit=" . db_getsession("DB_instit");
