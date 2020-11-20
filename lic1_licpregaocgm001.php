@@ -26,7 +26,7 @@ if(isset($incluir)){
         $result_comissao = $cllicpregao->sql_record($cllicpregao->sql_query($l46_licpregao));
         db_fieldsmemory($result_comissao, 0);
 
-        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l46_numcgm} order by z09_sequencial desc");
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l46_numcgm} and z09_tipo = 1");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
         if($l45_data < $z09_datacadastro){
