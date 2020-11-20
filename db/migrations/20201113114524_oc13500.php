@@ -6,7 +6,7 @@ class Oc13500 extends AbstractMigration
 {
     public function up()
     {
-        $rsResult = db_query($sSql = "SELECT * FROM orcsuplemtipo WHERE o48_tiposup IN (1018, 1019)");
+        $rsResult = pg_query($sSql = "SELECT * FROM orcsuplemtipo WHERE o48_tiposup IN (1018, 1019)");
 
         if(pg_num_rows($rsResult) == 0)
         {
