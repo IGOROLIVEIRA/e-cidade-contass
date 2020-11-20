@@ -25,7 +25,7 @@ if(isset($incluir)){
     $clconsconsorcios->c200_instit = db_getsession("DB_instit");
     if($clconsconsorcios->valida_inclusao_consorcio($c200_numcgm)) {
 
-        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$c200_numcgm} order by z09_sequencial desc");
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$c200_numcgm} and z09_tipo = 1");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
         $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
 

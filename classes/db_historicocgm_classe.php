@@ -59,6 +59,7 @@ class cl_historicocgm
 
 	var $z09_numcgm = null;
 	var $z09_horaalt = null;
+	var $z09_tipo = null;
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -69,6 +70,7 @@ class cl_historicocgm
                  z09_dataservidor = date = Data do servidor
                  z09_numcgm = int4 = Número do CGM
                  z09_horaalt varchar(5) = Hora da alteração do CGM
+                 z09_tipo = int4 = tipo sicom
                   ";
 
 	//funcao construtor da classe
@@ -98,6 +100,7 @@ class cl_historicocgm
 			$this->z09_usuario = ($this->z09_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->z09_usuario"] : $this->z09_usuario);
 			$this->z09_numcgm = ($this->z09_numcgm == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->z09_numcgm"] : $this->z09_numcgm);
 			$this->z09_datacadastro = ($this->z09_datacadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->z09_datacadastro"] : $this->z09_datacadastro);
+			$this->z09_tipo = ($this->z09_tipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["$this->z09_tipo"] : $this->z09_tipo);
 
 			if ($this->z09_datacadastro == "") {
 				$this->z09_datacadastro_dia = ($this->z09_datacadastro_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["z09_datacadastro_dia"] : $this->z09_datacadastro_dia);
@@ -169,6 +172,9 @@ class cl_historicocgm
 			$this->erro_status = "0";
 			return false;
 		}
+        if ($this->z09_tipo == "" || $this->z09_tipo == null) {
+            $this->z09_tipo = 1;
+        }
 
         if ($this->z09_dataservidor == "" || $this->z09_dataservidor == null) {
         	$this->z09_dataservidor = date('Y-m-d');
@@ -186,6 +192,7 @@ class cl_historicocgm
                          ,z09_datacadastro
                          ,z09_dataservidor
                          ,z09_horaalt
+                         ,z09_tipo
                 )
                 values (
                 		  $this->z09_sequencial
@@ -194,7 +201,8 @@ class cl_historicocgm
                         ,$this->z09_usuario
                         ,'$this->z09_datacadastro'
                         ,'$this->z09_dataservidor' 
-                        ,'$this->z09_horaalt' 
+                        ,'$this->z09_horaalt'
+                        ,$this->z09_tipo 
                 )";
 
 		$result = db_query($sql);
