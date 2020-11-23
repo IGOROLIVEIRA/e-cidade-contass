@@ -557,12 +557,13 @@ function js_emitexls() {
     sQuery += '&departs='+sDepartamentos;
 
     if (lQuebraDepartamento == "t") {
-        sUrl = "com2_relposicaoregpreco002.php?";
+        sUrl = "com2_gerarxlsposicaoregprecoquebra.php?";
     } else {
-        sUrl = "com2_relposicaoregpreco_agrupado002.php?";
+        sUrl = "com2_gerarxlsposicaoregpreco.php?";
     }
 
-    const jan = window.open('com2_gerarxlsposicaoregpreco.php?'+sQuery);
+    const jan = window.open(sUrl+sQuery,'',
+        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 }
 
 </script>
