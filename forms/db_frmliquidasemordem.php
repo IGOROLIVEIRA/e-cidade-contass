@@ -623,6 +623,9 @@ if (USE_PCASP) {
         if (obj.data[i].pc01_servico == 't'  && obj.data[i].servicoquantidade == "t") {
           sDesabilitaValor  = 'disabled';
         }
+        if (servico == false && lFraciona == false) {
+          sDesabilitaValor  = 'disabled';
+        }
 
         if (lBloquearItens || !lLiberaItemLiquidacao) {
           obj.data[i].libera = 'disabled';
@@ -1026,9 +1029,9 @@ if (USE_PCASP) {
         $('vlrtot'+id).value    = nTotal.toFixed(2);
       }
 
-      if(fraciona == false && servico == false) {
-        $('qtdesol' + id).value = 1;
-      }
+      // if(fraciona == false && servico == false) {
+      //   $('qtdesol' + id).value = 1;
+      // }
       if ((nQtde <= iSaldo)){
         if (nTotal > 0){
           $('vlrtot'+id).value    = nTotal.toFixed(2);
