@@ -246,7 +246,7 @@ if ($db_opcao == 1) {
 		 
 		  <tr>
 		    <td nowrap title="<?=@$Tcgc?>">
-		       <?=@$Lcgc?>
+                <strong>CGC / CNPJ</strong>
 		    </td>
 		    <td> 
 		      <?
