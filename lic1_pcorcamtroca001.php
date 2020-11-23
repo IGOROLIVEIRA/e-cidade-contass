@@ -41,6 +41,9 @@ require_once("classes/db_liclicitaata_classe.php");
 require_once("classes/db_liclicitasituacao_classe.php");
 require_once("classes/db_registroprecojulgamento_classe.php");
 require_once("classes/db_atatemplategeral_classe.php");
+require_once("classes/db_parecerlicitacao_classe.php");
+require_once("classes/db_cflicita_classe.php");
+require_once("classes/db_homologacaoadjudica_classe.php");
 
 require_once('dbagata/classes/core/AgataAPI.class');
 require_once("model/documentoTemplate.model.php");
@@ -62,6 +65,9 @@ $clliclicitaata        = new cl_liclicitaata;
 $clliclicitasituacao   = new cl_liclicitasituacao;
 $oDaoRegistroPrecoJulg = new cl_registroprecojulgamento;
 $clAtaTemplateGeral    = new cl_atatemplategeral;
+$clparecerlicitacao    = new cl_parecerlicitacao;
+$clcflicita            = new cl_cflicita;
+$clhomologadjudica     = new cl_homologacaoadjudica;
 
 $clpcorcam->rotulo->label();
 $clrotulo->label("l20_codigo");
@@ -113,59 +119,136 @@ if (isset($l20_codigo) && $l20_codigo) {
 
 if (isset($confirmar) && trim($confirmar) != "") {
 
+	if(!$dtjulgamento){
+		$erro_msg = 'Data do Julgamento não informada. Verifique!';
+		$sqlerro = true;
+	}
 
-  $vitens       = split(":",$itens);
-  $vpcorcamjulg = array(array());
-  $linha        = 0;
+	$dtjulgamento = join('-', array_reverse(explode('/', $dtjulgamento)));
 
-  $_SESSION["modeloataselecionadojulgamento"] = $documentotemplateata;
+	if(!$sqlerro){
+        $sqlTribunal = $clcflicita->sql_query_file($oDadosLicitacao->l20_codtipocom,'l03_pctipocompratribunal', '');
+        $rsTribunal = $clcflicita->sql_record($sqlTribunal);
+        $iTribunal = db_utils::fieldsMemory($rsTribunal, 0)->l03_pctipocompratribunal;
 
-  for ($i = 0; $i < count($vitens); $i++) {
+        // 1ª validação
+        if($dtjulgamento < $oDadosLicitacao->l20_datacria){
+            $erro_msg = 'Data de Julgamento menor que a data de Abertura de Procedimento Administrativo!';
+            $sqlerro = true;
+        }
+    }
 
-    $str   = $vitens[$i];
-    $vetor = split(",",$str);
+    // 2ª validação
+    if(!$sqlerro){
+        if(in_array($iTribunal, array(49, 50, 51, 52, 53, 54))){
+            $dataaber = $oDadosLicitacao->l20_dataaber;
+            $dtpublic = $oDadosLicitacao->l20_dtpublic;
+            $recdocumentacao = $oDadosLicitacao->l20_recdocumentacao;
+            $public1 = $oDadosLicitacao->l20_datapublicacao1;
+            $public2 = $oDadosLicitacao->l20_datapublicacao2;
 
-    /**
-     * verificamos saldo modalidade para cada item da licitacao
-     */
+            if($dtjulgamento < $dataaber || $dtjulgamento < $dtpublic || $dtjulgamento < $recdocumentacao ||
+                $dtjulgamento < $public1 || $dtjulgamento < $public2){
+                $erro_msg = 'Data de Julgamento inválida para esse tipo de modalidade.\nInforme uma data superior!';
+                $sqlerro = true;
+            }
 
-    $iModalidade  = $oDadosLicitacao->l20_codtipocom;
-    $dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
-    $iItem        = trim($vetor[0]);
+//            4ª validação
+            if(!$sqlerro){
+                $sqlHomoAdjudica = $clhomologadjudica->sql_query('', 'l202_datahomologacao, l202_dataadjudicacao',
+                    '', 'l202_licitacao = ' . $l20_codigo);
+                $rsHomoAdjudica = $clhomologadjudica->sql_record($sqlHomoAdjudica);
+                $oHomoAdjudica = db_utils::fieldsMemory($rsHomoAdjudica, 0);
 
-    if ($iItem != null) {
-      try {
+                if($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao){
+                    if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao &&
+                        $dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
+                        $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+                        $sqlerro = true;
+                    }
+                }
+            }
+        }
+    }
 
-      $oVerificaSaldo = licitacao::verificaSaldoModalidade( $iModalidade, $iItem, $dtJulgamento);
-      } catch ( Exception $oErro) {
+//     3ª validação
+    if(!$sqlerro){
+		$sqlParecer = $clparecerlicitacao->sql_query('', 'l200_data', '',
+			'l200_licitacao = ' . $l20_codigo);
+		$rsParecer = $clparecerlicitacao->sql_record($sqlParecer);
+		$dataParecer = db_utils::fieldsMemory($rsParecer, 0)->l200_data;
 
-        $erro_msg = $oErro->getMessage();
+		if($dataParecer){
+            if($dtjulgamento > $dataParecer || is_null($dataParecer)){
+                $erro_msg = 'Data de Julgamento maior que data do Parecer. Verifique!';
+                $sqlerro = true;
+            }
+        }
+    }
+
+//    5ª validação
+    if(in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro){
+		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao){
+		    $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
+		    $sqlerro = true;
+        }
+    }
+
+    if(!$sqlerro) {
+
+		$vitens = split(":", $itens);
+		$vpcorcamjulg = array(array());
+		$linha = 0;
+
+		$_SESSION["modeloataselecionadojulgamento"] = $documentotemplateata;
+
+		for ($i = 0; $i < count($vitens); $i++) {
+
+			$str = $vitens[$i];
+			$vetor = split(",", $str);
+
+			/**
+			 * verificamos saldo modalidade para cada item da licitacao
+			 */
+
+			$iModalidade = $oDadosLicitacao->l20_codtipocom;
+//			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
+			$iItem = trim($vetor[0]);
+
+			if ($iItem != null) {
+				try {
+
+					$oVerificaSaldo = licitacao::verificaSaldoModalidade($iModalidade, $iItem, $dtjulgamento);
+				} catch (Exception $oErro) {
+
+					$erro_msg = $oErro->getMessage();
+					$sqlerro = true;
+				}
+			}
+
+			if (!$sqlerro) {
+
+				if (!$oVerificaSaldo->lPossuiSaldo && $iItem != null) {
+
+					$sqlerro = true;
+					$erro_msg = $oVerificaSaldo->sMensagem;
+				}
+			}
+
+			if (trim($vetor[0]) != "" && trim($vetor[1]) != "") {
+
+				$vpcorcamjulg[$linha]["item"] = $vetor[0];
+				$vpcorcamjulg[$linha]["forne"] = $vetor[1];
+				$linha++;
+			}
+		}
+	}
+
+    if ($linha == 0 && !$sqlerro) {
+
         $sqlerro  = true;
-      }
+        $erro_msg = "Nenhum item a ser julgado.";
     }
-
-    if (!$sqlerro) {
-
-      if (!$oVerificaSaldo->lPossuiSaldo && $iItem != null) {
-
-        $sqlerro  = true;
-        $erro_msg = $oVerificaSaldo->sMensagem;
-      }
-    }
-
-    if (trim($vetor[0]) != "" && trim($vetor[1]) != "") {
-
-      $vpcorcamjulg[$linha]["item"]  = $vetor[0];
-      $vpcorcamjulg[$linha]["forne"] = $vetor[1];
-      $linha++;
-    }
-  }
-
-  if ($linha == 0) {
-
-    $sqlerro  = true;
-    $erro_msg = "Nenhum item a ser julgado.";
-  }
 
   if (isset($documentotemplateata) && !empty($documentotemplateata)) {
 
@@ -255,7 +338,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
     $oDaoLogJulgamento->pc92_sequencial      = null ;
     $oDaoLogJulgamento->pc92_usuario         = db_getsession('DB_id_usuario');
-    $oDaoLogJulgamento->pc92_datajulgamento  = $dtData;
+    $oDaoLogJulgamento->pc92_datajulgamento  = $dtjulgamento;
     $oDaoLogJulgamento->pc92_hora            = $sHora;
     $oDaoLogJulgamento->pc92_ativo           = "true";
     $oDaoLogJulgamento->incluir(null);

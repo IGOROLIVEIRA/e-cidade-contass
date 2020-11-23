@@ -458,13 +458,6 @@ ORDER BY $ordem";
 
                         echo "<center>";
                         echo "<table border='0' align='center'>\n";
-                        echo "<tr>";
-                        echo "  <td colspan='9' nowrap align='center' height='30'>";
-                        echo "    <strong>";
-                        echo "      <font size='3'>Julgamento de Itens da Licitação N".chr(176)." ".$l21_codliclicita."</font>";
-                        echo "    </strong>";
-                        echo " </td>";
-                        echo "</tr>";
 
                         if ($tipojulg == 3) {
 
