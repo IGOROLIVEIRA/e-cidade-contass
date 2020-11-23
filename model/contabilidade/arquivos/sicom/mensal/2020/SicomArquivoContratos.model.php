@@ -644,7 +644,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
             $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
             if ($oDados10->ac02_acordonatureza == "1"){
-                if($oDadosItensObra->obr06_tabela == "3"){
+                if($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4"){
                     $oContrato11->si84_coditem = $iCodItem;
                 }else{
                     $oContrato11->si84_coditem = null;
