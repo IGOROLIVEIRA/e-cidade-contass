@@ -52,7 +52,7 @@ function lic2_relitenhtml002_formatar($valor, $separador, $delimitador) {
 }
 
 $campos = "l21_ordem,";
-$campos .= ($oGet->itens ? 'si02_vlprecoreferencia,' : 'pc11_codigo,');
+$campos .= ($oGet->ocultaCabecalho ? 'si02_vlprecoreferencia,' : 'pc11_codigo,');
 
 $campos .= "pc01_descrmater,pc11_resum,m61_descr,pc11_quant,pc11_vlrun,pcprocitem.pc81_codprocitem";
 
@@ -70,31 +70,33 @@ if ($clabre_arquivo->arquivo != false) {
   $vir = $separador;
   $del = $delimitador;
 
-  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
+  if(!$oGet->ocultaCabecalho){
+	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
 
-  if ( $layout != 2 && !$oGet->itens) {
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("SEQ ITEM", $vir, $del));
+	  if ( $layout != 2) {
+		fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("SEQ ITEM", $vir, $del));
+	  }
+	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("PRODUTO",  $vir, $del));
+	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("QUANT.",   $vir, $del));
+	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("UNID.",    $vir, $del));
+	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("VALOR UNITÁRIO (R$)", $vir, $del));
+	  fputs($clabre_arquivo->arquivo, "\n");
   }
-  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("PRODUTO",  $vir, $del));
-  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("QUANT.",   $vir, $del));
-  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("UNID.",    $vir, $del));
-  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("VALOR UNITÁRIO (R$)", $vir, $del));
-  fputs($clabre_arquivo->arquivo, "\n");
-  
+
   for ($w = 0; $w < $clliclicitem->numrows; $w ++) {
 
 	db_fieldsmemory($result_itens, $w);
 
-	$ordem = $oGet->itens ? $w + 1 : $l21_ordem;
-	$precounitario = $oGet->itens ? $si02_vlprecoreferencia : $pc11_vlrun;
+	$ordem = $oGet->ocultaCabecalho ? $w + 1 : $l21_ordem;
+	$precounitario = $oGet->ocultaCabecalho ? $si02_vlprecoreferencia : $pc11_vlrun;
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($ordem, $vir, $del));
-    if ( $layout != 2 && !$oGet->itens) {
+    if ( $layout != 2 && !$oGet->ocultaCabecalho) {
       fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc81_codprocitem, $vir, $del));
     }
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("{$pc01_descrmater} {$pc11_resum}", $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc11_quant, $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($m61_descr, $vir, $del));
-    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar(db_formatar($precounitario, ($oGet->itens ? 'p' : "v")), $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar(db_formatar($precounitario, ($oGet->ocultaCabecalho ? 'p' : "v")), $vir, $del));
     fputs($clabre_arquivo->arquivo, "\n");
   }
   

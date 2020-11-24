@@ -113,7 +113,7 @@ function js_excluir(){
 
 function js_exportarcsv(){
     let licitacao = <?=$licitacao;?>;
-    jan = window.open('lic2_relitenhtml002.php?l20_codigo='+licitacao+'&separador=;&delimitador=1&layout=1&itens=true',
+    jan = window.open('lic2_relitenhtml002.php?l20_codigo='+licitacao+'&separador=;&delimitador=1&layout=1&ocultaCabecalho=true',
         '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
 
