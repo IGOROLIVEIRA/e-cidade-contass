@@ -758,8 +758,8 @@ switch ($oParam->exec) {
 
 			$oParecer->sequencial = $oDados->l200_sequencial;
 			$oParecer->dataparecer = $oDados->l200_data;
-			$oParecer->tipoparecer = $oDados->l200_tipoparecer;
-			$oParecer->nomeresp = $oDados->z01_nome;
+			$oParecer->tipoparecer = urlencode($oDados->l200_tipoparecer);
+			$oParecer->nomeresp = urlencode($oDados->z01_nome);
 
 			$oRetorno->itens[] = $oParecer;
 		}

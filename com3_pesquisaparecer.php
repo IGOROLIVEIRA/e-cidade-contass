@@ -109,7 +109,7 @@ $clparecerlicitacao->rotulo->label();
         if (oRetorno.itens.length == 0) {
             let node = document.createElement('b');
 
-            node.appendChild(document.createTextNode('Nenhum registro retornado para a licitação ' + oGet.l20_codigo));
+            node.appendChild(document.createTextNode('Nenhum registro retornado. '));
 
             document.getElementById('ctnGridParecer').appendChild(node);
         }else{
@@ -124,8 +124,8 @@ $clparecerlicitacao->rotulo->label();
             let aLinha = [
                 oItem.sequencial,
                 oItem.dataparecer.split('-').reverse().join('/'),
-                oItem.tipoparecer,
-                oItem.nomeresp
+                oItem.tipoparecer.urlDecode(),
+                oItem.nomeresp.urlDecode()
             ];
 
             oGridItens.addRow(aLinha);
