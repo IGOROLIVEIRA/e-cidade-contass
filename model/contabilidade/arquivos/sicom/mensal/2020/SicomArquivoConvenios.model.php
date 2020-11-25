@@ -316,7 +316,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $clconv31->si204_tiporegistro = 31;
                     $clconv31->si204_codreceita = $oDados31->o70_codrec;
-                    $clconv31->si204_prevorcamentoassin = 1;
+                    $clconv31->si204_prevorcamentoassin = $oDados31->c229_arrecadado == 't' ? 1 : 2;
                     $clconv31->si204_nroconvenio = "'{$oDados31->c206_nroconvenio}'";
                     $clconv31->si204_dataassinatura = "'{$oDados31->c206_dataassinatura}'";
                     $clconv31->si204_vlprevisaoconvenio = $oDados31->c229_vlprevisto;

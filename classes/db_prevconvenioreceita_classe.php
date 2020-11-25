@@ -46,12 +46,14 @@ class cl_prevconvenioreceita {
     var $c229_convenio      = 0;
     var $c229_vlprevisto    = 0;
     var $c229_anousu        = 0;
+    var $c229_arrecadado    = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  c229_fonte         = int4      = Receita
                  c229_convenio      = int4      = Convênio 
                  c229_vlprevisto    = float8    = Valor Previsto 
                  c229_anousu        = int4      = Ano 
+                 c229_arrecadado    = bool      = Convênio possui valor arrecadado
                  ";
     //funcao construtor da classe
     function cl_prevconvenioreceita() {
@@ -75,11 +77,13 @@ class cl_prevconvenioreceita {
             $this->c229_convenio = ($this->c229_convenio == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_convenio"]:$this->c229_convenio);
             $this->c229_vlprevisto = ($this->c229_vlprevisto == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_vlprevisto"]:$this->c229_vlprevisto);
             $this->c229_anousu = ($this->c229_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_anousu"]:$this->c229_anousu);
+            $this->c229_arrecadado = ($this->c229_arrecadado == "f"?@$GLOBALS["HTTP_POST_VARS"]["c229_arrecadado"]:$this->c229_arrecadado);
         }else{
             $this->c229_fonte = ($this->c229_fonte == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_fonte"]:$this->c229_fonte);
             $this->c229_convenio = ($this->c229_convenio == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_convenio"]:$this->c229_convenio);
             $this->c229_vlprevisto = ($this->c229_vlprevisto == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_vlprevisto"]:$this->c229_vlprevisto);
             $this->c229_anousu = ($this->c229_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c229_anousu"]:$this->c229_anousu);
+            $this->c229_arrecadado = ($this->c229_arrecadado == "f"?@$GLOBALS["HTTP_POST_VARS"]["c229_arrecadado"]:$this->c229_arrecadado);
         }
     }
     // funcao para inclusao
@@ -112,18 +116,23 @@ class cl_prevconvenioreceita {
             $this->erro_status = "0";
             return false;
         }
+        if($this->c229_arrecadado == null ){
+            $this->c229_arrecadado = 'f';
+        }
 
         $sql = "insert into prevconvenioreceita(
                                        c229_fonte 
                                       ,c229_convenio 
                                       ,c229_vlprevisto 
                                       ,c229_anousu 
+                                      ,c229_arrecadado
                        )
                 values (
                                 $this->c229_fonte 
                                ,$this->c229_convenio 
                                ,$this->c229_vlprevisto 
                                ,$this->c229_anousu 
+                               ,'$this->c229_arrecadado'
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -195,16 +204,20 @@ class cl_prevconvenioreceita {
                 return false;
             }
         }
+        if(trim($this->c229_arrecadado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c229_arrecadado"])){ 
+            $sql  .= $virgula." c229_arrecadado = '$this->c229_arrecadado' ";
+            $virgula = ",";
+        }
 
         $sql .= " where ";
         if($c229_convenio!=null){
             $sql .= " c229_convenio = $c229_convenio";
         }
         if($c229_fonte!=null){
-            $sql .= " and c229_fonte = $this->c229_fonte";
+            $sql .= " and c229_fonte = $c229_fonte";
         }
         if($c229_anousu!=null){
-            $sql .= " and c229_anousu = $this->c229_anousu";
+            $sql .= " and c229_anousu = $c229_anousu";
         }
 
         $result = db_query($sql);
