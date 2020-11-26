@@ -498,7 +498,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         $clliclicitasituacao->l11_licsituacao = 1;
         $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
         $clliclicitasituacao->l11_obs         = "Licitação Julgada";
-        $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
+        $clliclicitasituacao->l11_data        = $dtjulgamento;
         $clliclicitasituacao->l11_hora        = DB_hora();
         //db_inicio_transacao();
         $clliclicitasituacao->incluir($l11_sequencial);
