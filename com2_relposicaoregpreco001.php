@@ -557,7 +557,7 @@ function js_emitexls() {
     sQuery += '&departs='+sDepartamentos;
 
     if (lQuebraDepartamento == "t") {
-        sUrl = "com2_gerarxlsposicaoregprecoquebra.php?";
+        sUrl = "com2_gerarxlsposicaoregpreco.php?";
     } else {
         sUrl = "com2_gerarxlsposicaoregpreco.php?";
     }
