@@ -100,7 +100,7 @@ if (isset($incluir)) {
 
     }
 
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l200_numcgm} order by z09_sequencial desc");
+    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$l200_numcgm} and z09_tipo = 1");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
     $dtsession   = date("Y-m-d",db_getsession("DB_datausu"));
 

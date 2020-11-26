@@ -118,11 +118,18 @@ if($sqlerro==false) {
             if ($rh39_funcao == '') {
             	$rh39_funcao = "null";
             }
-            
+
             if ($rh39_subfuncao == '') {
             	$rh39_subfuncao = "null";
             }
-            
+            if ($rh39_orgao == '') {
+            	$rh39_orgao = "null";
+            }
+
+            if ($rh39_unidade == '') {
+            	$rh39_unidade = "null";
+            }
+
             $clrhlotavincativ->rh39_codlotavinc = $clrhlotavinc->rh25_codlotavinc;
             $clrhlotavincativ->rh39_codelenov   = $rh39_codelenov;
             $clrhlotavincativ->rh39_anousu      = $anodestino;
@@ -130,6 +137,8 @@ if($sqlerro==false) {
             $clrhlotavincativ->rh39_programa    = $rh39_programa;
             $clrhlotavincativ->rh39_funcao      = $rh39_funcao;
             $clrhlotavincativ->rh39_subfuncao   = $rh39_subfuncao;
+            $clrhlotavincativ->rh39_orgao       = $rh39_orgao;
+            $clrhlotavincativ->rh39_unidade     = $rh39_unidade;
             $clrhlotavincativ->incluir($clrhlotavinc->rh25_codlotavinc,$rh39_codelenov);
             if ($clrhlotavincativ->erro_status==0) {
               $sqlerro   = true;

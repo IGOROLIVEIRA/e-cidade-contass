@@ -94,7 +94,7 @@ db_postmemory($HTTP_POST_VARS);
           options = basesSelecionados.getElementsByTagName('option');
           for(i=0;i<options.length;i++){
             options[i].selected = 'selected';
-            if(outros.indexOf(options[i].value)!=-1){
+            if(outros.indexOf(options[i].value)!=-1 && options[i].value[0] != '2' && options[i].value[0] != '4'){
               baseVinculada = true;
              }
           }
