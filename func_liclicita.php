@@ -251,10 +251,16 @@ $sWhereContratos = " and 1 = 1 ";
                                         else '-' END as l20_nroedital, ";
                     }
 
-                    $campos .= "        liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+					if(!$ocultacampos) {
+
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
                                         liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
                                         liclicita.l20_dtpublic as dl_Data_Publicação_DO,
                                         liclicita.l20_objeto";
+					}else{
+						$campos .= "    liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                                        liclicita.l20_objeto";
+                    }
                 }
 
 //                $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
