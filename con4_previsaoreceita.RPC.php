@@ -103,7 +103,6 @@ try {
                     $oConv->c206_dataassinatura = $oConvenio->c206_dataassinatura;
                     $oConv->c229_vlprevisto     = $oConvenio->c229_vlprevisto;
                     $oConv->valor_arrecadado    = $oConvenio->valor_arrecadado;
-                    $oConv->bArrecadado         = $oConvenio->valor_arrecadado > 0 ? true : false;
 
                     $oRetorno->aItens[] = $oConv;
 
@@ -124,7 +123,7 @@ try {
             $rsVerifica     = db_query($sSqlVerifica); 
             
             if (pg_num_rows($rsVerifica) > 0) {
-                throw new Exception("Convênio já associado a esta receita");
+                throw new Exception("Convênio já associado a esta receita!");
             }
 
             $clprevconvenioreceita = new cl_prevconvenioreceita;
@@ -152,7 +151,6 @@ try {
             $oRetorno->c206_dataassinatura = $oConv->c206_dataassinatura;
             $oRetorno->c229_vlprevisto     = 0;
             $oRetorno->valor_arrecadado    = 0;
-            $oRetorno->bArrecadado         = false;
 
         break;
 
@@ -179,7 +177,6 @@ try {
                 if (pg_num_rows($rsVerifica) > 0) {
                     
                     $clprevconvenioreceita->c229_vlprevisto = $aItem->c229_vlprevisto;
-                    $clprevconvenioreceita->c229_arrecadado = $aItem->c229_arrecadado;
                     $clprevconvenioreceita->alterar($aItem->c229_fonte, $aItem->c229_convenio, $iAnoUsu);
 
                     if ($clprevconvenioreceita->erro_status == 0) {
@@ -194,7 +191,6 @@ try {
                     $clprevconvenioreceita->c229_convenio   = $aItem->c229_convenio;
                     $clprevconvenioreceita->c229_anousu     = $iAnoUsu;
                     $clprevconvenioreceita->c229_vlprevisto = $aItem->c229_vlprevisto;
-                    $clprevconvenioreceita->c229_arrecadado = $aItem->c229_arrecadado;
                         
                     $clprevconvenioreceita->incluir();
 

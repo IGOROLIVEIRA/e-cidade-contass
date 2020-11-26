@@ -161,24 +161,43 @@ $valor_atribuir = ($fValorPrevAno - $total_assinado);
             return false;
         }
 
-        try {
+        var iNumItensGrid = parseInt(document.form1.iNumItensGrid.value);
+        var bContinua = true;
 
-            var oParam = new Object();
+        for (i = 0; i <= iNumItensGrid-1; i++) {
 
-            oParam.exec      = 'salvaNovo';
-            oParam.iFonte    = document.form1.c229_fonte.value;
-            oParam.iConvenio = document.form1.c229_convenio.value;
+            if (document.form1.c229_convenio.value == document.form1['aItensConv['+i+'][c229_convenio]'].getAttribute('value')) {
 
-            js_divCarregando('Aguarde', 'div_aguarde');
+                alert("Convênio já associado a esta receita!");
+                bContinua = false;
+                return false;
+                
+            }
 
-            var oAjax = new Ajax.Request(sRPC, {
-                method: 'post',
-                parameters: 'json='+Object.toJSON(oParam),
-                onComplete: js_retornoInclui
-            });
+        }
 
-        } catch(e) {
-            alert(e.toString());
+        if (bContinua) {
+
+            try {
+
+                var oParam = new Object();
+
+                oParam.exec      = 'salvaNovo';
+                oParam.iFonte    = document.form1.c229_fonte.value;
+                oParam.iConvenio = document.form1.c229_convenio.value;
+
+                js_divCarregando('Aguarde', 'div_aguarde');
+
+                var oAjax = new Ajax.Request(sRPC, {
+                    method: 'post',
+                    parameters: 'json='+Object.toJSON(oParam),
+                    onComplete: js_retornoInclui
+                });
+
+            } catch(e) {
+                alert(e.toString());
+            }
+        
         }
 
     }

@@ -276,18 +276,44 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
        */
       if ($this->sDataInicial[5].$this->sDataInicial[6] == 12) {
 
-        $sSql = "select o57_fonte, o57_descr, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto, case when (COALESCE(SUM(c229_vlprevisto),0) > 0) then (o70_valor - COALESCE(SUM(c229_vlprevisto),0)) else 0 end as c229_semassinatura
-                    from orcfontes 
-                        left join orcreceita on o57_codfon = o70_codfon and o57_anousu = o70_anousu 
-                        left join prevconvenioreceita on c229_anousu = o70_anousu and c229_fonte = o70_codrec 
-                    where o70_codigo in ('122', '123', '124', '142') and o70_anousu = ".db_getsession("DB_anousu")." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5 ";
+		$iAnoUsu = db_getsession('DB_anousu');
+		$iInstit = db_getsession("DB_instit");
 
+		$sSql = " 	SELECT  o57_fonte,
+							o57_descr,
+							o70_codigo,
+							o70_valor,
+							o70_codrec,
+							c229_vlprevisto,
+							CAST(coalesce(nullif(substr(fc_receitasaldo,55,12),''),'0') AS float8) AS saldo_arrecadado,
+							c229_semassinatura
+					FROM
+						(SELECT o57_fonte,
+								o57_descr,
+								o70_codigo,
+								o70_valor,
+								o70_codrec,
+								COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto,
+								fc_receitasaldo({$iAnoUsu},o70_codrec,3,'{$iAnoUsu}-01-01','{$iAnoUsu}-12-31'),
+								CASE
+									WHEN (COALESCE(SUM(c229_vlprevisto),0) > 0) THEN (o70_valor - COALESCE(SUM(c229_vlprevisto),0))
+									ELSE 0
+								END AS c229_semassinatura
+						FROM orcfontes
+							LEFT JOIN orcreceita ON o57_codfon = o70_codfon AND o57_anousu = o70_anousu
+							LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
+						WHERE o70_codigo IN ('122','123','124','142')
+							AND o70_anousu = {$iAnoUsu}
+							AND o70_instit = {$iInstit}
+							AND o70_valor > 0
+						GROUP BY 1,2,3,4,5) AS x";
+		
         $rsResult30 = db_query($sSql);
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
             $clconv30 = new cl_conv302020();
-            $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+			$oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
             $clconv30->si203_tiporegistro = 30;
             $clconv30->si203_codreceita = $oDados30->o70_codrec;
@@ -303,72 +329,113 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
                 throw new Exception($clconv30->erro_msg);
             }
 
-            $sSql31 = "select * from prevconvenioreceita left join orcreceita on (o70_anousu, o70_codrec) = (c229_anousu, c229_fonte) left join convconvenios on c229_convenio = c206_sequencial where (o70_anousu, o70_codrec) = (".db_getsession('DB_anousu').", {$oDados30->o70_codrec})";
+			if ($oDados30->saldo_arrecadado > 0) {
+						
+				$sSql31 = " SELECT  o70_codrec,
+									c206_sequencial,
+									c206_nroconvenio,
+									c229_convenio,
+									c206_objetoconvenio,
+									c206_dataassinatura,
+									sum(c229_vlprevisto) AS c229_vlprevisto,
+									sum(valor_arrecadado) as valor_arrecadado
+							FROM 
+								(SELECT	o70_codrec,
+										c206_sequencial,
+										c206_nroconvenio,
+										c229_convenio,
+										c206_objetoconvenio,
+										c206_dataassinatura,
+										sum(c229_vlprevisto) AS c229_vlprevisto,
+										0 AS valor_arrecadado
+								FROM prevconvenioreceita
+									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec 
+									LEFT JOIN convconvenios ON c206_sequencial = c229_convenio
+								WHERE o70_codigo IN ('122','123','124','142')
+									AND o70_anousu = {$iAnoUsu}
+									AND o70_instit = {$iInstit}
+									AND o70_valor > 0
+									AND o70_codrec = {$oDados30->o70_codrec}                    
+								GROUP BY 1,2,3,4,5
+								UNION
+								SELECT *
+								FROM
+									(SELECT o70_codrec,
+											c206_sequencial,
+											c206_nroconvenio,
+											c229_convenio,
+											c206_objetoconvenio,
+											c206_dataassinatura,
+											0 AS c229_vlprevisto,
+											round(sum(CASE WHEN c71_coddoc = 100 THEN c70_valor ELSE c70_valor * -1 END),2) AS valor_arrecadado
+									FROM orcreceita 
+										LEFT JOIN conlancamrec ON c74_anousu = o70_anousu AND c74_codrec = o70_codrec
+										INNER JOIN conlancam ON c70_codlan = c74_codlan
+										LEFT JOIN conlancamdoc ON c74_codlan = c71_codlan
+										LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
+										LEFT JOIN corplacaixa ON (k82_id,k82_data,k82_autent) = (c86_id,c86_data,c86_autent)
+										LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
+										LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
+										LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec AND c229_convenio = c206_sequencial
+									WHERE o70_codigo IN ('122','123','124','142')
+										AND o70_anousu = {$iAnoUsu}
+										AND o70_instit = {$iInstit}
+										AND o70_valor > 0
+										AND o70_codrec = {$oDados30->o70_codrec}
+										AND c206_sequencial IS NOT NULL
+									GROUP BY 1,2,3,4,5,6) AS x
+								WHERE valor_arrecadado > 0) AS xx GROUP BY 1,2,3,4,5,6 ";						
+				
+				$rsResult31 = db_query($sSql31);
 
-            $rsResult31 = db_query($sSql31);
+				if (pg_num_rows($rsResult31) > 0) {
 
-            if (pg_num_rows($rsResult31) > 0) {
+					for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
 
-                for ($iCont31 = 0; $iCont31 < pg_num_rows($rsResult31); $iCont31++) {
+						$clconv31 = new cl_conv312020();
+						$oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
 
-                    $clconv31 = new cl_conv312020();
-                    $oDados31 = db_utils::fieldsMemory($rsResult31, $iCont31);
+						$clconv31->si204_tiporegistro = 31;
+						$clconv31->si204_codreceita = $oDados31->o70_codrec;
+						$clconv31->si204_prevorcamentoassin = $oDados31->valor_arrecadado > 0 ? 1 : 2;
+						$clconv31->si204_nroconvenio = "'{$oDados31->c206_nroconvenio}'";
+						$clconv31->si204_dataassinatura = "'{$oDados31->c206_dataassinatura}'";
+						$clconv31->si204_vlprevisaoconvenio = $oDados31->c229_vlprevisto;
+						$clconv31->si204_mes = 12;
+						$clconv31->si204_instit = db_getsession("DB_instit");
 
-                    $clconv31->si204_tiporegistro = 31;
-                    $clconv31->si204_codreceita = $oDados31->o70_codrec;
-                    $clconv31->si204_prevorcamentoassin = $oDados31->c229_arrecadado == 't' ? 1 : 2;
-                    $clconv31->si204_nroconvenio = "'{$oDados31->c206_nroconvenio}'";
-                    $clconv31->si204_dataassinatura = "'{$oDados31->c206_dataassinatura}'";
-                    $clconv31->si204_vlprevisaoconvenio = $oDados31->c229_vlprevisto;
-                    $clconv31->si204_mes = 12;
-                    $clconv31->si204_instit = db_getsession("DB_instit");
+						$clconv31->incluir(null);
+						if ($clconv31->erro_status == 0) {
+							throw new Exception($clconv31->erro_msg);
+						}
 
-                    $clconv31->incluir(null);
-                    if ($clconv31->erro_status == 0) {
-                        throw new Exception($clconv31->erro_msg);
-                    }
+					}
 
-                }
+				} 
 
-            } else {
+			}
 
-                $clconv31 = new cl_conv312020();
+			$clconv31 = new cl_conv312020();
 
-                $clconv31->si204_tiporegistro = 31;
-                $clconv31->si204_codreceita = $oDados30->o70_codrec;
-                $clconv31->si204_prevorcamentoassin = 2;
-                $clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor - $oDados31->c229_vlprevisto;
-                $clconv31->si204_mes = 12;
-                $clconv31->si204_instit = db_getsession("DB_instit");
+			$clconv31->si204_tiporegistro = 31;
+			$clconv31->si204_codreceita = $oDados30->o70_codrec;
+			$clconv31->si204_prevorcamentoassin = 2;
+			if ($oDados30->c229_semassinatura > 0 && $oDados30->saldo_arrecadado > 0) {
+				$clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
+			} else {
+				$clconv31->si204_vlprevisaoconvenio = $oDados30->o70_valor;
+			}
+			$clconv31->si204_mes = 12;
+			$clconv31->si204_instit = db_getsession("DB_instit");
 
-                $clconv31->incluir(null);
-                if ($clconv31->erro_status == 0) {
-                    throw new Exception($clconv31->erro_msg);
-                }
-
-            }
-
-            if ($oDados30->c229_semassinatura > 0) {
-
-                $clconv31 = new cl_conv312020();
-
-                $clconv31->si204_tiporegistro = 31;
-                $clconv31->si204_codreceita = $oDados30->o70_codrec;
-                $clconv31->si204_prevorcamentoassin = 2;
-                $clconv31->si204_vlprevisaoconvenio = $oDados30->c229_semassinatura;
-                $clconv31->si204_mes = 12;
-                $clconv31->si204_instit = db_getsession("DB_instit");
-
-                $clconv31->incluir(null);
-                if ($clconv31->erro_status == 0) {
-                    throw new Exception($clconv31->erro_msg);
-                }
-
-            }
+			$clconv31->incluir(null);
+			if ($clconv31->erro_status == 0) {
+				throw new Exception($clconv31->erro_msg);
+			}
 
         }
 
-      }
+	}
 
     db_fim_transacao();
 
