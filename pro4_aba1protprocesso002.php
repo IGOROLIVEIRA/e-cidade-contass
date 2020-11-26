@@ -43,7 +43,6 @@ include("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
-
 $oPost = db_utils::postMemory($_POST,0);
 $oGet  = db_utils::postMemory($_GET,0);
 
@@ -77,6 +76,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   if (count($aPartesNumero) == 2) {
     $p58_numero = $aPartesNumero[0];
   }
+  $clprotprocesso->p58_numeracao = $p58_numeracao;
   $clprotprocesso->p58_numero = $p58_numero;
   $clprotprocesso->alterar($p58_codproc);
   $chaves = split("#",$docs);
