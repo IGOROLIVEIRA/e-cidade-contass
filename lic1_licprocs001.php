@@ -125,9 +125,14 @@ function js_liberaexclusao(value){
             echo "<script>";
             echo "parent.document.form1.excluir.disabled = false;";
             echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
+			echo "parent.document.form1.exportarcsv.disabled = false; ";
             echo "</script>";
 
         }else{
+            echo "<script>";
+			echo "parent.document.form1.exportarcsv.disabled = true; ";
+			echo "</script>";
+
             echo "Nenhum Processo de Compra incluído.";
         }
     ?>

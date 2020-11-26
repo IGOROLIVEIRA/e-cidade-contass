@@ -739,5 +739,31 @@ switch ($oParam->exec) {
 		$oRetorno->dadosLicitacao = $oDados;
 	break;
 
+	case 'parecerLicitacao':
+
+		$oDaoParecer = db_utils::getDao('parecerlicitacao');
+		$sql = $oDaoParecer->sql_query('', "l200_sequencial, l200_data, 
+		(CASE 
+			WHEN l200_tipoparecer = 1 THEN 'Técnico'
+			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
+			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
+			ELSE 						   'Juridico - Outros'
+		END) as l200_tipoparecer, z01_nome", "",
+			"l200_licitacao = $oParam->iCodigoLicitacao");
+		$result = $oDaoParecer->sql_record($sql);
+
+		for($count = 0; $count < pg_num_rows($result); $count++){
+			$oDados = db_utils::fieldsMemory($result, $count);
+			$oParecer = new stdClass();
+
+			$oParecer->sequencial = $oDados->l200_sequencial;
+			$oParecer->dataparecer = $oDados->l200_data;
+			$oParecer->tipoparecer = urlencode($oDados->l200_tipoparecer);
+			$oParecer->nomeresp = urlencode($oDados->z01_nome);
+
+			$oRetorno->itens[] = $oParecer;
+		}
+
+		break;
 }
 echo $oJson->encode($oRetorno);
