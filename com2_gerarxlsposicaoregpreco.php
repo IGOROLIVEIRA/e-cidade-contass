@@ -393,7 +393,7 @@ foreach ($aDadosPosRegPreco as $iNroSolicitacao => $aDados ) {
     $nTotalGeralEmpenhar    += $nTotalEmpenhar;
 
     // Rename sheet
-    $abertura = $aDados['oAbertura'];
+    $abertura = "Abertura".$aDados['oAbertura'];
 
     $objWorkSheet->setTitle("$abertura");
 
