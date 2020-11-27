@@ -61,7 +61,7 @@ switch ($oParam->exec){
 
             if ($vVeiculos != null) {
                 $oRetorno->status   = 3;
-                throw new Exception("Erro ao realizar Transferência!\nMOTIVO: Não é permitido mais de uma transferência de um veículo na mesma competência,\nou com datas menores a última transferência do veículo!\nCódigo(s) do(s) Veículo(s): ".implode(", ",$vVeiculos));
+                throw new Exception("Erro ao realizar Transferência!\nMOTIVO: Não é permitido mais de uma transferência de um veículo na mesma competência,\nou com datas menores a última transferência do veículo!\nCódigo(s) do(s) Veículo(s): ".implode(", ",$oParam->veiculos));
             }
 
             $oRetorno->veiculos[] = $oParam->veiculos;
@@ -300,6 +300,15 @@ function verificaTransferenciaVeicMes($veiculos, $data) {
         else $vVeiculos[] = $uTransferencia->ve81_codigo;
     }
 
+    foreach ($uTransferencias as $uTransferencia) {
+        if($anoAtual == $uTransferencia->ano_transferencia){
+              if($mesAtual == $uTransferencia->ve80_dt_transferencia)
+                $vVeiculos = $uTransferencia->ve81_codigo;
+            else $vVeiculos = null;
+        } else {
+                $vVeiculos = null;
+        }
+    }
 
     return $vVeiculos;
 }

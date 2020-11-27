@@ -147,9 +147,24 @@ if (isset($confirmar) && trim($confirmar) != "") {
             $public1 = $oDadosLicitacao->l20_datapublicacao1;
             $public2 = $oDadosLicitacao->l20_datapublicacao2;
 
-            if($dtjulgamento < $dataaber || $dtjulgamento < $dtpublic || $dtjulgamento < $recdocumentacao ||
-                $dtjulgamento < $public1 || $dtjulgamento < $public2){
-                $erro_msg = 'Data de Julgamento inválida para esse tipo de modalidade.\nInforme uma data superior!';
+            if($dtjulgamento < $dataaber){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Abertura da Licitação\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $dtpublic){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Publicação da Licitação\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $recdocumentacao){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Recebimento da Documentação.\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $public1){
+				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 1 .\nVerifique!';
+				$sqlerro = true;
+            }
+            if($dtjulgamento < $public2){
+                $erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 2.\nVerifique!';
                 $sqlerro = true;
             }
 
@@ -161,8 +176,12 @@ if (isset($confirmar) && trim($confirmar) != "") {
                 $oHomoAdjudica = db_utils::fieldsMemory($rsHomoAdjudica, 0);
 
                 if($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao){
-                    if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao &&
-                        $dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
+                    if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao){
+						$erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+						$sqlerro = true;
+                    }
+
+                    if($dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
                         $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
                         $sqlerro = true;
                     }
@@ -479,7 +498,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         $clliclicitasituacao->l11_licsituacao = 1;
         $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
         $clliclicitasituacao->l11_obs         = "Licitação Julgada";
-        $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
+        $clliclicitasituacao->l11_data        = $dtjulgamento;
         $clliclicitasituacao->l11_hora        = DB_hora();
         //db_inicio_transacao();
         $clliclicitasituacao->incluir($l11_sequencial);
