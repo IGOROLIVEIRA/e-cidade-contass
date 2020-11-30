@@ -214,6 +214,10 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $sWhere .= " and ac10_acordomovimentacaotipo = {$iTipo} ";
           }
 
+          if(!empty($aditamentos)){
+              $sWhere .= " AND ac26_acordoposicaotipo in (2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14) ";
+          }
+
         }
 
         if (!isset($pesquisa_chave)) {
@@ -275,6 +279,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
             $repassa = array("chave_ac16_sequencial"=>$chave_ac16_sequencial,"chave_ac16_sequencial"=>$chave_ac16_sequencial);
           }
 
+          print_r($sql);
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
 
         } else {
