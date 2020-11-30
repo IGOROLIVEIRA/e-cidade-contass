@@ -288,6 +288,7 @@ td {
 			  <tr>
 			    <td colspan="2" align = "center">
 			      <input  name="emiterel" id="emiterel" type="button" value="Emitir Relátorio" onclick="js_emite();" >
+			      <input  name="emiterelxls" id="emiterelxls" type="button" value="Exportar xls" onclick="js_emitexls();" >
 			    </td>
 			  </tr>
 			</table>
@@ -484,5 +485,85 @@ document.getElementById('btn-lancar').addEventListener('click', function(e) {
     document.form1.descrdepto.value
   );
 });
+
+function js_emitexls() {
+    var dtinicrg            = $F('dtinicrg');
+    var dtfimcrg            = $F('dtfimcrg');
+    var dtinivlrg           = $F('dtinivlrg');
+    var dtfimvlrg           = $F('dtfimvlrg');
+    var pc10_numero_ini     = $('pc10_numero_ini').value;
+    var pc10_numero_fim     = $('pc10_numero_fim').value;
+    var iItens              = $('pcmater').options.length;
+    var iDepartamentos      = $('departamento').options.length;
+    var lQuebraDepartamento = $("lQuebraDepartamento").value;
+    var sQuery              = '';
+
+    if (dtinicrg != "" && dtfimcrg != "") {
+
+        if (!js_comparadata(dtinicrg, dtfimcrg, '<=')) {
+            alert('Datas de criação do registro inválidas. Verifique!');
+            return false;
+        }
+    }
+
+    if (dtinivlrg != "" && dtfimvlrg != "") {
+
+        if (!js_comparadata(dtinivlrg, dtfimvlrg, '<=')) {
+
+            alert('Datas de validade do Registro inválidas. Verifique!');
+            return false;
+        }
+    }
+
+    if (pc10_numero_ini != "" && pc10_numero_fim != "") {
+
+        if (pc10_numero_fim < pc10_numero_ini) {
+
+            alert('Números da solicitacao inválidos. Verifique!');
+            return false;
+        }
+    }
+
+    if(lQuebraDepartamento == 't' && iDepartamentos == 0){
+        alert('Nenhum departamento selecionado. Verifique!')
+        return false;
+    }
+
+    var vrg    = '';
+    var sItens = '';
+    for (i = 0; i < iItens; i++) {
+
+        sItens = sItens+vrg+$('pcmater').options[i].value;
+        vrg =',';
+    }
+
+    var vrg    = '';
+    var sDepartamentos = '';
+    for (i = 0; i < iDepartamentos; i++) {
+
+        sDepartamentos = sDepartamentos+vrg+$('departamento').options[i].value;
+        vrg =',';
+    }
+
+    sQuery += '&dtinicrg='+dtinicrg;
+    sQuery += '&dtfimcrg='+dtfimcrg;
+
+    sQuery += '&dtinivlrg='+dtinivlrg;
+    sQuery += '&dtfimvlrg='+dtfimvlrg;
+
+    sQuery += '&numini='+pc10_numero_ini;
+    sQuery += '&numfim='+pc10_numero_fim;
+    sQuery += '&itens='+sItens;
+    sQuery += '&departs='+sDepartamentos;
+
+    if (lQuebraDepartamento == "t") {
+        sUrl = "com2_gerarxlsposicaoregpreco.php?";
+    } else {
+        sUrl = "com2_gerarxlsposicaoregpreco.php?";
+    }
+
+    const jan = window.open(sUrl+sQuery,'',
+        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+}
 
 </script>
