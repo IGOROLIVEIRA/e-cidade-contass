@@ -63,11 +63,21 @@ $clrotulo->label("nome");
 
         <input name='incluir' type='button' value='Incluir' onclick='js_inclui();' >
         <input name='excluir' type='button' value='Excluir' onclick='js_excluir();' disabled>
+        <?php
+            $rsSql = db_query('SELECT l03_pctipocompratribunal
+                                FROM liclicita
+                                JOIN cflicita ON l20_codtipocom = l03_codigo
+                                WHERE l20_codigo = ' . $licitacao);
+            $iTribunal = db_utils::fieldsMemory($rsSql, 0)->l03_pctipocompratribunal;
+        ?>
+        <?php if($iTribunal == 53) :?>
+            <input name='exportarcsv' type='button' value='Exportar CSV' onclick='js_exportarcsv();'>
+        <?php endif;?>
       </td>
     </tr>
     <tr colspan="2">
         <td>
-        <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&redireciona=<?=$redireciona_edital?>" width="1000" height="230" marginwidth="0" marginheight="0" frameborder="0">
+        <iframe name="itens" id="itens" src="lic1_licitensifra.php?licitacao=<?=@$licitacao?>&tipojulg=<?=$tipojulg?>&redireciona=<?=$redireciona_edital?> " width="1000" height="230" marginwidth="0" marginheight="0" frameborder="0">
         </iframe>
         </td>
     </tr>
@@ -100,4 +110,13 @@ function js_excluir(){
 
     document.form1.submit();
 }
+
+function js_exportarcsv(){
+    let licitacao = <?=$licitacao;?>;
+    jan = window.open('lic2_relitenhtml002.php?l20_codigo='+licitacao+'&separador=;&delimitador=1&layout=1&ocultaCabecalho=true',
+        '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+
+}
+
 </script>
