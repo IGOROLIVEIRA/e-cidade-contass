@@ -483,9 +483,9 @@ if($x->consultarDataDoSistema == true){
         oGridItens.setCheckbox(0);
         //oGridItens.allowSelectColumns(true);
         oGridItens.setCellWidth(new Array('10%', '40%',  "15%", "15%","15%", "15%", "15%","15%"));
-        oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Val. Unitário",
+        oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Vlr. Unit.",
             "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
-        oGridItens.aHeaders[4].lDisplayed = false;
+        // oGridItens.aHeaders[4].lDisplayed = false;
         oGridItens.aHeaders[9].lDisplayed = false;
         //oGridItens.aHeaders[8].lDisplayed = false;
         oGridItens.setHeight(160);
@@ -752,7 +752,7 @@ if($x->consultarDataDoSistema == true){
             aLinha[2] = js_formatar(oItem.quantidade, 'f',iCasasDecimais);
 
             // Valor unitário
-            aLinha[3] = oItem.valorunitario;
+            aLinha[3] = js_formatar(oItem.valorunitario.replace(',', '.'), 'f', 4);
 
             // Valor total
             //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
@@ -1348,7 +1348,7 @@ if($x->consultarDataDoSistema == true){
                     aLinha[0] = oItem.codigo;
                     aLinha[1] = sImg+oItem.descricao.urlDecode();
                     aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
-                    aLinha[3] = js_formatar(oItem.valorunitario, "f",iCasasDecimais);
+                    aLinha[3] = js_formatar(oItem.valorunitario, "f", 4);
                     aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
                     oGridAutorizacoes.addRow(aLinha);
                     iLinha++;
